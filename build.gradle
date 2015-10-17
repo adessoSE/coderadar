@@ -1,0 +1,12 @@
+apply plugin: 'idea'
+
+version= '1.0.0-SNAPSHOT'
+
+subprojects{
+    apply plugin: 'idea';
+
+    repositories {
+        mavenCentral()
+    }
+
+}

@@ -1,5 +1,13 @@
-/node_modules
 /dist
 /.tmp
 /.sass-cache
-/bower_components
+/.idea
+/.gradle
+*.iws
+.gradle
+/analyzer/coderadar-analyzer/build
+*.iml
+/client/coderadar-app/bower_components
+/client/coderadar-app/dist
+/client/coderadar-app/node_modules
+/server/coderadar-webapp/coderadar-webapp.iml

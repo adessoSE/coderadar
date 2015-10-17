@@ -1,0 +1,24 @@
+.table-hover > tbody > tr:hover {
+    cursor:pointer;
+    background-color: #f8efc0;
+}
+
+.table-hover > tbody > tr.active {
+    background-color: #ffe87c;
+    font-weight: bold;
+}
+
+.table-hover > tbody > tr.active > td {
+    background-color: #ffe87c ;
+    font-weight: bold;
+}
+
+ol.breadcrumb{
+    padding: 0 5px;
+    margin-bottom: 5px;
+    background-color:#ffffff;
+}
+
+.breadcrumb>li+li:before {
+    padding: 0;
+}

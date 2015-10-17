@@ -1,0 +1,44 @@
+<section class="content-header">
+    <h1>
+        Metrics Dashboard
+        <small>Click on a metric to drill down</small>
+    </h1>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-body">
+                    <table datatable="ng" dt-options="options" id="metricsList"
+                           class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Language</th>
+                            <th>Category</th>
+                            <th>Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="metric in metrics">
+                            <td>{{metric.name}}</td>
+                            <td>{{metric.language}}</td>
+                            <td>{{metric.category}}</td>
+                            <td>{{metric.value}}</td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Language</th>
+                            <th>Category</th>
+                            <th>Value</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

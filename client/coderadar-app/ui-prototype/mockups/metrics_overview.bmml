@@ -1,0 +1,19 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="788" measuredH="397" mockupW="541" mockupH="193">
+  <controls>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::DataGrid" x="247" y="262" w="541" h="135" measuredW="460" measuredH="154" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <rowHeight>23</rowHeight>
+        <text>Action%2CMetric%2C%20Tags%2C%20Value%2C%20Change%2C%20Trend%0A%5BBrowse%5D%2C%5BLines%20of%20Code%5D%2C%20Java%5C%2CSize%2C%20%5B500%5C%2C000%5D%2C%20%5B+500%5D%2C%20%0A%5BBrowse%5D%2C%20Lines%20of%20Code%2C%20XML%5C%2CSize%2C%202%5C%2C000%2C%20+20%2C%0A%5BDrilldown%5D%5Cr%5BBrowse%5D%2C%20Major%20Violations%2C%20Java%5C%2CCompliance%2C%20423%2C%20+10%2C%0A%5BDrilldown%5D%5Cr%5BBrowse%5D%2C%20Critical%20Violations%2C%20Java%5C%2CCompliance%2C%2014%2C%20-3%2C%20%0A...%2C...%2C...%2C...%2C...%0A%7B15%2C20%2C20%2C15%2C10%2C20%7D</text>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::LineChart" x="676" y="285" w="103" h="16" measuredW="187" measuredH="175" zOrder="1" locked="false" isInGroup="-1"/>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::LineChart" x="676" y="316" w="103" h="19" measuredW="187" measuredH="175" zOrder="2" locked="false" isInGroup="-1"/>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::LineChart" x="676" y="343" w="103" h="19" measuredW="187" measuredH="175" zOrder="3" locked="false" isInGroup="-1"/>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::LineChart" x="676" y="368" w="103" h="19" measuredW="187" measuredH="175" zOrder="4" locked="false" isInGroup="-1"/>
+    <control controlID="6" controlTypeID="com.balsamiq.mockups::Title" x="247" y="204" w="-1" h="-1" measuredW="321" measuredH="43" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Metrics%20Overview</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
