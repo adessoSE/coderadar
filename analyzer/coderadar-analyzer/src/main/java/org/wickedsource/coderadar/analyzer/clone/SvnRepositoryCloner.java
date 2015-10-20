@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer;
+package org.wickedsource.coderadar.analyzer.clone;
 
 import org.apache.commons.exec.*;
 import org.apache.commons.io.FileUtils;
