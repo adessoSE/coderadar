@@ -1,4 +1,4 @@
-include 'analyzer:coderadar-analyzer'
+include 'analyzer:coderadar-annotator'
 include 'analyzer:coderadar-analyzer-plugin-api'
 include 'analyzer:plugins:coderadar-loc-plugin'
 
