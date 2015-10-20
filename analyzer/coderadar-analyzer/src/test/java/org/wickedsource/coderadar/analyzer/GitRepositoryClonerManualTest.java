@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.analyzer;
 
+import org.wickedsource.coderadar.analyzer.clone.GitRepositoryCloner;
+
 import java.io.File;
 import java.io.IOException;
 

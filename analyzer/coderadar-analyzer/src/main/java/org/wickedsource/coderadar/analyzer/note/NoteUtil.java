@@ -1,20 +1,43 @@
 package org.wickedsource.coderadar.analyzer.note;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.lib.AnyObjectId;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.notes.Note;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.gitective.core.BlobUtils;
+import org.gitective.core.CommitUtils;
 
 public class NoteUtil {
 
+    private static final String NAMESPACE = "coderadar";
+
+    private static NoteUtil INSTANCE = new NoteUtil();
+
+    public static NoteUtil getInstance() {
+        return INSTANCE;
+    }
+
+    private NoteUtil() {
+    }
+
     /**
-     * Retrieves the coderadar-specific note previously added to the given git object. Only the part of the note within the
-     * tags {coderadar} and {/coderadar} is returned.
+     * Retrieves the note within the coderadar namespace of the specified commit.
      *
      * @param gitClient the git client.
-     * @param objectId  id of the object whose note to read.
+     * @param commit    SHA1 hash of the commit to read the note from.
      * @return the coderadar-specific note of the specified git object or null if no such note exists.
      */
-    public String getNote(Git gitClient, AnyObjectId objectId) {
-
+    public String getCoderadarNote(Git gitClient, String commit) {
+        try {
+            RevCommit commitObject = CommitUtils.getCommit(gitClient.getRepository(), commit);
+            Note note = gitClient.notesShow()
+                    .setNotesRef(NAMESPACE)
+                    .setObjectId(commitObject)
+                    .call();
+            return BlobUtils.getContent(gitClient.getRepository(), note.getData());
+        } catch (GitAPIException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -22,11 +45,20 @@ public class NoteUtil {
      * If a note already exists that is not within the tags {coderadar} and {/coderadar}, it will be ignored.
      *
      * @param gitClient the git client.
-     * @param objectId  id of the object whose note to set.
+     * @param commit    SHA1 hash of the commit to add the note to.
      * @param note      the coderadar-specific note to set.
      */
-    public void setNote(Git gitClient, AnyObjectId objectId, String note) {
-
+    public void setCoderadarNote(Git gitClient, String commit, String note) {
+        try {
+            RevCommit commitObject = CommitUtils.getCommit(gitClient.getRepository(), commit);
+            gitClient.notesAdd()
+                    .setNotesRef(NAMESPACE)
+                    .setObjectId(commitObject)
+                    .setMessage(note)
+                    .call();
+        } catch (GitAPIException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

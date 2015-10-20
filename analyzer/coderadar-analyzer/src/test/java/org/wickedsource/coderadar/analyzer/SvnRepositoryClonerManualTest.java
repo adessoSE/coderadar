@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.analyzer;
 
 import org.eclipse.jgit.api.Git;
+import org.wickedsource.coderadar.analyzer.clone.SvnRepositoryCloner;
 
 import java.io.File;
 
