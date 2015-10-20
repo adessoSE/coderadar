@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.analyzer;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.wickedsource.coderadar.analyzer.walk.GitCommitWalker;
 
 import java.io.File;
 import java.io.IOException;

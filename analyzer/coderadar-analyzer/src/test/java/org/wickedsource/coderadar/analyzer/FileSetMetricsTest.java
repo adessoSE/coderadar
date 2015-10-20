@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.analyzer;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.wickedsource.coderadar.analyzer.analyze.FileSetMetrics;
 import org.wickedsource.coderadar.analyzer.plugin.api.FileMetrics;
 import org.wickedsource.coderadar.analyzer.plugin.api.Metric;
 import org.wickedsource.coderadar.analyzer.plugin.api.MetricType;

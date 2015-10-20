@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer;
+package org.wickedsource.coderadar.analyzer.analyze;
 
 import org.wickedsource.coderadar.analyzer.plugin.api.FileMetrics;
 

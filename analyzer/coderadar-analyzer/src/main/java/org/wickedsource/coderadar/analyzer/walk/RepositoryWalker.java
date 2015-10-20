@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.analyzer.walk;
 
 import org.eclipse.jgit.api.Git;
+import org.wickedsource.coderadar.analyzer.annotate.MetricsProcessor;
 import org.wickedsource.coderadar.analyzer.plugin.api.AnalyzerPlugin;
 
 import java.util.List;

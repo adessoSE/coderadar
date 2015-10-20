@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer;
+package org.wickedsource.coderadar.analyzer.walk;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.LogCommand;

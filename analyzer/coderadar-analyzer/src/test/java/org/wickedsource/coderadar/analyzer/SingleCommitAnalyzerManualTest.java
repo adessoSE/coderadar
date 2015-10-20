@@ -1,14 +1,13 @@
 package org.wickedsource.coderadar.analyzer;
 
 import org.eclipse.jgit.api.Git;
-import org.junit.Test;
+import org.wickedsource.coderadar.analyzer.analyze.FileSetMetrics;
+import org.wickedsource.coderadar.analyzer.analyze.SingleCommitAnalyzer;
 import org.wickedsource.coderadar.analyzer.plugin.api.AnalyzerPlugin;
 import org.wickedsource.coderadar.plugin.loc.LocAnalyzerPlugin;
 
 import java.io.File;
 import java.util.Arrays;
-
-import static org.junit.Assert.*;
 
 public class SingleCommitAnalyzerManualTest {
 

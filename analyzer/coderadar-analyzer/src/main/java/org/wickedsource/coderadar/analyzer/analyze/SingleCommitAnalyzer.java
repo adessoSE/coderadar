@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer;
+package org.wickedsource.coderadar.analyzer.analyze;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.AnyObjectId;
@@ -8,7 +8,6 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.gitective.core.BlobUtils;
 import org.gitective.core.CommitUtils;
-import org.gitective.core.PathFilterUtils;
 import org.gitective.core.TreeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

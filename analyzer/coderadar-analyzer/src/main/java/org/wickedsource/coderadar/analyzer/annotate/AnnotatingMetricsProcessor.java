@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.walk;
+package org.wickedsource.coderadar.analyzer.annotate;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.AnyObjectId;
