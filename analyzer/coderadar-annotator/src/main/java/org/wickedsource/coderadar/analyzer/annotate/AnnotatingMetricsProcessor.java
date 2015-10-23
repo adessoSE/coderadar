@@ -1,8 +1,9 @@
 package org.wickedsource.coderadar.analyzer.annotate;
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.lib.AbbreviatedObjectId;
 import org.eclipse.jgit.lib.AnyObjectId;
-import org.wickedsource.coderadar.analyzer.plugin.api.FileMetrics;
+import org.wickedsource.coderadar.analyzer.walk.FileMetricsWithChangeType;
 
 /**
  * Stores a file's metrics as a git note on the file in the git repository.
@@ -10,7 +11,7 @@ import org.wickedsource.coderadar.analyzer.plugin.api.FileMetrics;
 public class AnnotatingMetricsProcessor implements MetricsProcessor {
 
     @Override
-    public void processMetrics(FileMetrics fileMetrics, Git gitClient, AnyObjectId commitId, AnyObjectId fileId, String filePath) {
+    public void processMetrics(FileMetricsWithChangeType fileMetrics, Git gitClient, AnyObjectId commitId, AbbreviatedObjectId fileId, String filePath) {
 
     }
 }

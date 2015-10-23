@@ -58,7 +58,7 @@ public abstract class GitTestTemplate extends Assert {
         Git.init().setDirectory(dir).setBare(false).call();
         File repo = new File(dir, Constants.DOT_GIT);
         assertTrue(repo.exists());
-        repo.deleteOnExit();
+
         return repo;
     }
 
@@ -130,6 +130,13 @@ public abstract class GitTestTemplate extends Assert {
                 .setObjectId(commitObject)
                 .call();
         return BlobUtils.getContent(git.getRepository(), note.getData());
+    }
+
+    protected RevCommit addAndCommitTestData() throws Exception {
+        add("dir/file1.txt", "file1");
+        add("dir/file2.java", "file2");
+        add("mainfile.sh", "mainfile");
+        return commit();
     }
 
 }

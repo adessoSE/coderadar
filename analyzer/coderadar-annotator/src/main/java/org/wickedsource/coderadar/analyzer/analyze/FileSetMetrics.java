@@ -1,9 +1,9 @@
 package org.wickedsource.coderadar.analyzer.analyze;
 
 import org.wickedsource.coderadar.analyzer.plugin.api.FileMetrics;
+import org.wickedsource.coderadar.analyzer.walk.FileMetricsWithChangeType;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,13 +12,13 @@ import java.util.Set;
  */
 public class FileSetMetrics {
 
-    private Map<String, FileMetrics> fileMap = new HashMap<>();
+    private Map<String, FileMetricsWithChangeType> fileMap = new HashMap<>();
 
-    public FileMetrics getFileMetrics(String file) {
+    public FileMetricsWithChangeType getFileMetrics(String file) {
         return fileMap.get(file);
     }
 
-    public void addMetricsToFile(String file, FileMetrics metrics) {
+    public void addMetricsToFile(String file, FileMetricsWithChangeType metrics) {
         FileMetrics fileMetrics = fileMap.get(file);
         if (fileMetrics == null) {
             fileMap.put(file, metrics);

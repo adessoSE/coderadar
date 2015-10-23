@@ -1,8 +1,9 @@
 package org.wickedsource.coderadar.analyzer.annotate;
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.lib.AbbreviatedObjectId;
 import org.eclipse.jgit.lib.AnyObjectId;
-import org.wickedsource.coderadar.analyzer.plugin.api.FileMetrics;
+import org.wickedsource.coderadar.analyzer.walk.FileMetricsWithChangeType;
 
 public interface MetricsProcessor {
 
@@ -16,6 +17,6 @@ public interface MetricsProcessor {
      * @param fileId      id of the analyzed file within the git repository.
      * @param filePath    path of the analyzed file within the git repository.
      */
-    public void processMetrics(FileMetrics fileMetrics, Git gitClient, AnyObjectId commitId, AnyObjectId fileId, String filePath);
+    public void processMetrics(FileMetricsWithChangeType fileMetrics, Git gitClient, AnyObjectId commitId, AbbreviatedObjectId fileId, String filePath);
 
 }
