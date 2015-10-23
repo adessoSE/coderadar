@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Stores metrics to each of a set of source code files.
+ * Stores metrics to each file of a commit.
  */
-public class FileSetMetrics {
+public class CommitMetrics {
 
     private Map<String, FileMetricsWithChangeType> metrics = new HashMap<>();
 
@@ -37,7 +37,7 @@ public class FileSetMetrics {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        FileSetMetrics that = (FileSetMetrics) o;
+        CommitMetrics that = (CommitMetrics) o;
 
         if (metrics != null ? !metrics.equals(that.metrics) : that.metrics != null) return false;
 

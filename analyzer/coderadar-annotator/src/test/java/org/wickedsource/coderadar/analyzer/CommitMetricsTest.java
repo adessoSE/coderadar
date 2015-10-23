@@ -3,12 +3,12 @@ package org.wickedsource.coderadar.analyzer;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.junit.Assert;
 import org.junit.Test;
-import org.wickedsource.coderadar.analyzer.analyze.FileSetMetrics;
+import org.wickedsource.coderadar.analyzer.analyze.CommitMetrics;
 import org.wickedsource.coderadar.analyzer.plugin.api.FileMetrics;
 import org.wickedsource.coderadar.analyzer.plugin.api.Metric;
 import org.wickedsource.coderadar.analyzer.walk.FileMetricsWithChangeType;
 
-public class FileSetMetricsTest {
+public class CommitMetricsTest {
 
     private static final Metric METRIC1 = new Metric("metric1");
 
@@ -22,12 +22,12 @@ public class FileSetMetricsTest {
 
         FileMetricsWithChangeType fileMetrics2 = new FileMetricsWithChangeType(DiffEntry.ChangeType.ADD);
         fileMetrics2.setMetricValue(METRIC1, 300l);
-        FileSetMetrics fileSetMetrics = new FileSetMetrics();
+        CommitMetrics commitMetrics = new CommitMetrics();
 
-        fileSetMetrics.addMetricsToFile("file1", fileMetrics1);
-        fileSetMetrics.addMetricsToFile("file1", fileMetrics2);
+        commitMetrics.addMetricsToFile("file1", fileMetrics1);
+        commitMetrics.addMetricsToFile("file1", fileMetrics2);
 
-        FileMetrics file1Metrics = fileSetMetrics.getFileMetrics("file1");
+        FileMetrics file1Metrics = commitMetrics.getFileMetrics("file1");
         Assert.assertEquals(800, (long) file1Metrics.getMetricValue(METRIC1));
         Assert.assertEquals(250, (long) file1Metrics.getMetricValue(METRIC2));
     }
