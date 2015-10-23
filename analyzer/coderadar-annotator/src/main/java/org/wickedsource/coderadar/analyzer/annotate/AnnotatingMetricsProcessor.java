@@ -7,7 +7,7 @@ import org.eclipse.jgit.lib.AnyObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.analyzer.analyze.CommitMetrics;
-import org.wickedsource.coderadar.analyzer.json.GsonFactory;
+import org.wickedsource.coderadar.analyzer.serialize.GsonFactory;
 import org.wickedsource.coderadar.analyzer.walk.FileMetricsWithChangeType;
 
 /**
@@ -36,7 +36,7 @@ public class AnnotatingMetricsProcessor implements MetricsProcessor {
             try {
                 commitMetrics = gson.fromJson(json, CommitMetrics.class);
             } catch (JsonSyntaxException e) {
-                logger.warn(String.format("Encountered invalid JSON in note of commit %s! Overwriting the note with new metrics.", commitId.getName()));
+                logger.warn("Encountered invalid JSON in note of commit {}! Overwriting the note with new metrics.", commitId.getName());
                 commitMetrics = new CommitMetrics();
             }
         }

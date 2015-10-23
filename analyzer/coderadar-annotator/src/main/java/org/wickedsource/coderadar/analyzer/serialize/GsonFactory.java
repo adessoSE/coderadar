@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.json;
+package org.wickedsource.coderadar.analyzer.serialize;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

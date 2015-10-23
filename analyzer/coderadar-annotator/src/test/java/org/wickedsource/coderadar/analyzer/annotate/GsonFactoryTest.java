@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.wickedsource.coderadar.analyzer.analyze.CommitMetrics;
 import org.wickedsource.coderadar.analyzer.api.Metric;
-import org.wickedsource.coderadar.analyzer.json.GsonFactory;
+import org.wickedsource.coderadar.analyzer.serialize.GsonFactory;
 import org.wickedsource.coderadar.analyzer.walk.FileMetricsWithChangeType;
 
 public class GsonFactoryTest {
