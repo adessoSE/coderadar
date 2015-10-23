@@ -11,9 +11,12 @@ public class NoteUtil {
 
     private static final String NAMESPACE = "coderadar";
 
-    private static NoteUtil INSTANCE = new NoteUtil();
+    private static NoteUtil INSTANCE;
 
     public static NoteUtil getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new NoteUtil();
+        }
         return INSTANCE;
     }
 
@@ -34,7 +37,11 @@ public class NoteUtil {
                     .setNotesRef(NAMESPACE)
                     .setObjectId(commitObject)
                     .call();
-            return BlobUtils.getContent(gitClient.getRepository(), note.getData());
+            if(note != null) {
+                return BlobUtils.getContent(gitClient.getRepository(), note.getData());
+            }else{
+                return null;
+            }
         } catch (GitAPIException e) {
             throw new RuntimeException(e);
         }

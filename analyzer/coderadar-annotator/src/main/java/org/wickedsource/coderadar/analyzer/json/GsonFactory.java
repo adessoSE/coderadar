@@ -6,6 +6,19 @@ import org.wickedsource.coderadar.analyzer.plugin.api.Metric;
 
 public class GsonFactory {
 
+    private static GsonFactory INSTANCE;
+
+    private GsonFactory() {
+
+    }
+
+    public static GsonFactory getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new GsonFactory();
+        }
+        return INSTANCE;
+    }
+
     /**
      * Creates a JSON-Parser configured for serializing and deserializing coderadar metrics.
      */

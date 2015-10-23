@@ -12,7 +12,7 @@ import org.wickedsource.coderadar.analyzer.walk.FileMetricsWithChangeType;
 public class GsonFactoryTest {
 
     @Test
-    public void test(){
+    public void test() {
         FileSetMetrics fileSetMetrics = new FileSetMetrics();
 
         Metric metric1 = new Metric("123");
@@ -26,7 +26,7 @@ public class GsonFactoryTest {
         metrics1.setMetricValue(metric2, 12l);
         fileSetMetrics.addMetricsToFile("file2", metrics2);
 
-        Gson gson = new GsonFactory().createGson();
+        Gson gson = GsonFactory.getInstance().createGson();
 
         // test java to json
         String json = gson.toJson(fileSetMetrics);

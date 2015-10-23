@@ -66,7 +66,7 @@ public class AllCommitsWalker implements RepositoryWalker {
             byte[] fileContent = BlobUtils.getRawContent(gitClient.getRepository(), commit.getId(), filePath);
             FileMetrics metrics = fileAnalyzer.analyzeFile(analyzers, filePath, fileContent);
             FileMetricsWithChangeType metricsWithChangeType = new FileMetricsWithChangeType(metrics, diff.getChangeType());
-            metricsProcessor.processMetrics(metricsWithChangeType, gitClient, commit.getId(), diff.getNewId(), filePath);
+            metricsProcessor.processMetrics(metricsWithChangeType, gitClient, commit.getId(), filePath);
         }
     }
 }

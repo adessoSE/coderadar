@@ -1,7 +1,6 @@
 package org.wickedsource.coderadar.analyzer.walk;
 
 import org.eclipse.jgit.diff.DiffEntry;
-import org.eclipse.jgit.lib.AbbreviatedObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -10,7 +9,6 @@ import org.wickedsource.coderadar.analyzer.annotate.MetricsProcessor;
 import org.wickedsource.coderadar.analyzer.plugin.api.AnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.plugin.api.DefaultFilter;
 import org.wickedsource.coderadar.analyzer.plugin.api.Metric;
-import org.wickedsource.coderadar.analyzer.plugin.api.MetricType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -56,8 +54,8 @@ public class AllCommitsWalkerTest extends GitTestTemplate {
         // verify that each analysis result is passed into the MetricsProcessor
         FileMetricsWithChangeType aggregatedMetrics = metrics1;
         aggregatedMetrics.add(metrics2);
-        verify(processor).processMetrics(eq(aggregatedMetrics), eq(git), eq(commit.getId()), any(AbbreviatedObjectId.class), eq("file1.txt"));
-        verify(processor).processMetrics(eq(aggregatedMetrics), eq(git), eq(commit.getId()), any(AbbreviatedObjectId.class), eq("dir1/File2.java"));
+        verify(processor).processMetrics(eq(aggregatedMetrics), eq(git), eq(commit.getId()), eq("file1.txt"));
+        verify(processor).processMetrics(eq(aggregatedMetrics), eq(git), eq(commit.getId()), eq("dir1/File2.java"));
     }
 
 }
