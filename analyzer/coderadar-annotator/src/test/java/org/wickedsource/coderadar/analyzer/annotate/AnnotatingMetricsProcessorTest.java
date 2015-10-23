@@ -5,7 +5,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Assert;
 import org.junit.Test;
 import org.wickedsource.coderadar.analyzer.GitTestTemplate;
-import org.wickedsource.coderadar.analyzer.plugin.api.Metric;
+import org.wickedsource.coderadar.analyzer.api.Metric;
 import org.wickedsource.coderadar.analyzer.walk.FileMetricsWithChangeType;
 
 public class AnnotatingMetricsProcessorTest extends GitTestTemplate{

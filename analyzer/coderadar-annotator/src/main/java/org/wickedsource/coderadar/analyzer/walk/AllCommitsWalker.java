@@ -11,8 +11,8 @@ import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.gitective.core.BlobUtils;
 import org.wickedsource.coderadar.analyzer.analyze.FileAnalyzer;
 import org.wickedsource.coderadar.analyzer.annotate.MetricsProcessor;
-import org.wickedsource.coderadar.analyzer.plugin.api.AnalyzerPlugin;
-import org.wickedsource.coderadar.analyzer.plugin.api.FileMetrics;
+import org.wickedsource.coderadar.analyzer.api.Analyzer;
+import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,7 +25,7 @@ public class AllCommitsWalker implements RepositoryWalker {
     private FileAnalyzer fileAnalyzer = new FileAnalyzer();
 
     @Override
-    public void walk(Git gitClient, List<AnalyzerPlugin> analyzers, MetricsProcessor metricsProcessor) {
+    public void walk(Git gitClient, List<Analyzer> analyzers, MetricsProcessor metricsProcessor) {
         try {
             RevCommit currentCommit = getLatestCommit(gitClient);
             while (currentCommit != null) {
@@ -48,7 +48,7 @@ public class AllCommitsWalker implements RepositoryWalker {
         return commits.iterator().next();
     }
 
-    private void walkFilesInCommit(Git gitClient, RevCommit commit, List<AnalyzerPlugin> analyzers, MetricsProcessor metricsProcessor) throws IOException {
+    private void walkFilesInCommit(Git gitClient, RevCommit commit, List<Analyzer> analyzers, MetricsProcessor metricsProcessor) throws IOException {
         DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
         diffFormatter.setRepository(gitClient.getRepository());
         diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);

@@ -1,7 +1,7 @@
 package org.wickedsource.coderadar.analyzer.walk;
 
 import org.eclipse.jgit.diff.DiffEntry;
-import org.wickedsource.coderadar.analyzer.plugin.api.FileMetrics;
+import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 
 public class FileMetricsWithChangeType extends FileMetrics {
 

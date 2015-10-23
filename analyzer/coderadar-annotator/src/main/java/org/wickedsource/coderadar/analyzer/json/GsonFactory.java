@@ -2,7 +2,7 @@ package org.wickedsource.coderadar.analyzer.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.wickedsource.coderadar.analyzer.plugin.api.Metric;
+import org.wickedsource.coderadar.analyzer.api.Metric;
 
 public class GsonFactory {
 

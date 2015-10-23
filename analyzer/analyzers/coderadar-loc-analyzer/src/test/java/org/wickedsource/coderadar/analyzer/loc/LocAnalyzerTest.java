@@ -1,0 +1,23 @@
+package org.wickedsource.coderadar.analyzer.loc;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
+import org.junit.Test;
+import org.wickedsource.coderadar.analyzer.api.FileMetrics;
+
+import java.io.InputStream;
+
+public class LocAnalyzerTest {
+
+    @Test
+    public void testAnalyzeFile() throws Exception {
+
+        InputStream in = getClass().getResourceAsStream("AcceptedFile.java");
+        byte[] fileContent = IOUtils.toByteArray(in);
+
+        LocAnalyzer analyzer = new LocAnalyzer();
+        FileMetrics results = analyzer.analyzeFile(fileContent);
+
+        Assert.assertEquals(16, (long) results.getMetricValue(LocAnalyzer.JAVA_LOC_METRIC));
+    }
+}

@@ -11,8 +11,8 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
     compile group: 'org.gitective', name: 'gitective-core', version: '0.9.10'
     compile group: 'com.google.code.gson', name: 'gson', version:'2.4'
-    compile project(':analyzer:coderadar-analyzer-plugin-api')
-    compile project(':analyzer:plugins:coderadar-loc-plugin')
+    compile project(':analyzer:coderadar-analyzer-api')
+    compile project(':analyzer:plugins:coderadar-loc-analyzer')
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.4.1'
     testCompile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.4.1'

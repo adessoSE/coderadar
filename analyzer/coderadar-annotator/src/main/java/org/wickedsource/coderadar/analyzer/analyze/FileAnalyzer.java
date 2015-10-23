@@ -2,9 +2,9 @@ package org.wickedsource.coderadar.analyzer.analyze;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wickedsource.coderadar.analyzer.plugin.api.AnalyzerFilter;
-import org.wickedsource.coderadar.analyzer.plugin.api.AnalyzerPlugin;
-import org.wickedsource.coderadar.analyzer.plugin.api.FileMetrics;
+import org.wickedsource.coderadar.analyzer.api.Analyzer;
+import org.wickedsource.coderadar.analyzer.api.AnalyzerFilter;
+import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 
 import java.util.List;
 
@@ -24,9 +24,9 @@ public class FileAnalyzer {
      * @param fileContent the content of the file to be analyzed
      * @return the metrics calculated by all AnalyzerPlugins.
      */
-    public FileMetrics analyzeFile(List<AnalyzerPlugin> analyzers, String filePath, byte[] fileContent) {
+    public FileMetrics analyzeFile(List<Analyzer> analyzers, String filePath, byte[] fileContent) {
         FileMetrics fileMetrics = new FileMetrics();
-        for (AnalyzerPlugin plugin : analyzers) {
+        for (Analyzer plugin : analyzers) {
             if (acceptFile(plugin.getFilter(), filePath)) {
                 try {
                     fileMetrics.add(plugin.analyzeFile(fileContent));
