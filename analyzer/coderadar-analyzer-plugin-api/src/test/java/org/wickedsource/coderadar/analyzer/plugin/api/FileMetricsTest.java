@@ -7,9 +7,9 @@ import static org.junit.Assert.*;
 
 public class FileMetricsTest {
 
-    private static final Metric METRIC1 = new Metric("metric1", MetricType.INTEGER);
+    private static final Metric METRIC1 = new Metric("metric1");
 
-    private static final Metric METRIC2 = new Metric("metric2", MetricType.INTEGER);
+    private static final Metric METRIC2 = new Metric("metric2");
 
     @Test
     public void testAdd() throws Exception {

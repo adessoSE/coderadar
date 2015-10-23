@@ -12,24 +12,40 @@ import java.util.Set;
  */
 public class FileSetMetrics {
 
-    private Map<String, FileMetricsWithChangeType> fileMap = new HashMap<>();
+    private Map<String, FileMetricsWithChangeType> metrics = new HashMap<>();
 
     public FileMetricsWithChangeType getFileMetrics(String file) {
-        return fileMap.get(file);
+        return metrics.get(file);
     }
 
     public void addMetricsToFile(String file, FileMetricsWithChangeType metrics) {
-        FileMetrics fileMetrics = fileMap.get(file);
+        FileMetrics fileMetrics = this.metrics.get(file);
         if (fileMetrics == null) {
-            fileMap.put(file, metrics);
+            this.metrics.put(file, metrics);
         } else {
-            fileMetrics = fileMap.get(file);
+            fileMetrics = this.metrics.get(file);
             fileMetrics.add(metrics);
         }
     }
 
     public Set<String> getFiles() {
-        return fileMap.keySet();
+        return metrics.keySet();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FileSetMetrics that = (FileSetMetrics) o;
+
+        if (metrics != null ? !metrics.equals(that.metrics) : that.metrics != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return metrics != null ? metrics.hashCode() : 0;
+    }
 }

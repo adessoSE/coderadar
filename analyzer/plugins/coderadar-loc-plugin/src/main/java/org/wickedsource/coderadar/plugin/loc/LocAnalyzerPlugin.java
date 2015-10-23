@@ -14,7 +14,7 @@ public class LocAnalyzerPlugin implements AnalyzerPlugin {
 
     private LocCounter locCounter = new LocCounter();
 
-    public static final Metric JAVA_LOC_METRIC = new Metric("org.wickedsource.coderadar.analyzer.plugin.api.AnalyzerPlugin.javaLoc", MetricType.INTEGER);
+    public static final Metric JAVA_LOC_METRIC = new Metric("org.wickedsource.coderadar.analyzer.plugin.api.AnalyzerPlugin.javaLoc");
 
     @Override
     public void configure(Properties properties) {

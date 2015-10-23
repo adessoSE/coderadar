@@ -6,14 +6,13 @@ import org.junit.Test;
 import org.wickedsource.coderadar.analyzer.analyze.FileSetMetrics;
 import org.wickedsource.coderadar.analyzer.plugin.api.FileMetrics;
 import org.wickedsource.coderadar.analyzer.plugin.api.Metric;
-import org.wickedsource.coderadar.analyzer.plugin.api.MetricType;
 import org.wickedsource.coderadar.analyzer.walk.FileMetricsWithChangeType;
 
 public class FileSetMetricsTest {
 
-    private static final Metric METRIC1 = new Metric("metric1", MetricType.INTEGER);
+    private static final Metric METRIC1 = new Metric("metric1");
 
-    private static final Metric METRIC2 = new Metric("metric2", MetricType.INTEGER);
+    private static final Metric METRIC2 = new Metric("metric2");
 
     @Test
     public void testAddMetricsToFile() throws Exception {

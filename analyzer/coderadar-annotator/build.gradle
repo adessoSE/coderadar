@@ -10,6 +10,7 @@ dependencies {
     compile group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '4.1.0.201509280440-r'
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
     compile group: 'org.gitective', name: 'gitective-core', version: '0.9.10'
+    compile group: 'com.google.code.gson', name: 'gson', version:'2.4'
     compile project(':analyzer:coderadar-analyzer-plugin-api')
     compile project(':analyzer:plugins:coderadar-loc-plugin')
     testCompile group: 'junit', name: 'junit', version: '4.11'

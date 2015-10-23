@@ -1,17 +1,18 @@
 package org.wickedsource.coderadar.analyzer.plugin.api;
 
-public class Metric<T> {
+public class Metric {
 
     private final String id;
 
-    private MetricType type;
-
-    public Metric(String id, MetricType type){
+    public Metric(String id) {
         this.id = id;
-        this.type = type;
     }
 
     public String getId() {
+        return id;
+    }
+
+    public String toString() {
         return id;
     }
 

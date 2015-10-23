@@ -7,6 +7,10 @@ public class FileMetricsWithChangeType extends FileMetrics {
 
     private DiffEntry.ChangeType changeType;
 
+    public FileMetricsWithChangeType(){
+
+    }
+
     public FileMetricsWithChangeType(DiffEntry.ChangeType changeType){
         this.changeType = changeType;
     }
