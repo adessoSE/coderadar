@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.annotate;
+package org.wickedsource.coderadar.annotator.annotate;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -6,9 +6,9 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wickedsource.coderadar.analyzer.analyze.CommitMetrics;
-import org.wickedsource.coderadar.analyzer.serialize.GsonFactory;
-import org.wickedsource.coderadar.analyzer.walk.FileMetricsWithChangeType;
+import org.wickedsource.coderadar.annotator.analyze.CommitMetrics;
+import org.wickedsource.coderadar.annotator.serialize.GsonFactory;
+import org.wickedsource.coderadar.annotator.walk.FileMetricsWithChangeType;
 
 /**
  * Stores a file's metrics as a git note on the file in the git repository.

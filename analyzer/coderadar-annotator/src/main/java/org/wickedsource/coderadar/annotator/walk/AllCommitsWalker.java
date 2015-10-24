@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.walk;
+package org.wickedsource.coderadar.annotator.walk;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -9,10 +9,10 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.gitective.core.BlobUtils;
-import org.wickedsource.coderadar.analyzer.analyze.FileAnalyzer;
-import org.wickedsource.coderadar.analyzer.annotate.MetricsProcessor;
 import org.wickedsource.coderadar.analyzer.api.Analyzer;
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
+import org.wickedsource.coderadar.annotator.analyze.FileAnalyzer;
+import org.wickedsource.coderadar.annotator.annotate.MetricsProcessor;
 
 import java.io.IOException;
 import java.util.List;

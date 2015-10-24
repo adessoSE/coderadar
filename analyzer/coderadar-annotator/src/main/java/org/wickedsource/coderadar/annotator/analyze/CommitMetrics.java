@@ -1,7 +1,7 @@
-package org.wickedsource.coderadar.analyzer.analyze;
+package org.wickedsource.coderadar.annotator.analyze;
 
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
-import org.wickedsource.coderadar.analyzer.walk.FileMetricsWithChangeType;
+import org.wickedsource.coderadar.annotator.walk.FileMetricsWithChangeType;
 
 import java.util.HashMap;
 import java.util.Map;

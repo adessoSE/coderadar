@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.serialize;
+package org.wickedsource.coderadar.annotator.serialize;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

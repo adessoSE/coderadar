@@ -1,14 +1,14 @@
-package org.wickedsource.coderadar.analyzer.walk;
+package org.wickedsource.coderadar.annotator.walk;
 
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.wickedsource.coderadar.analyzer.GitTestTemplate;
-import org.wickedsource.coderadar.analyzer.annotate.MetricsProcessor;
 import org.wickedsource.coderadar.analyzer.api.Analyzer;
 import org.wickedsource.coderadar.analyzer.api.DefaultFilter;
 import org.wickedsource.coderadar.analyzer.api.Metric;
+import org.wickedsource.coderadar.annotator.annotate.MetricsProcessor;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.annotate;
+package org.wickedsource.coderadar.annotator.annotate;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Assert;

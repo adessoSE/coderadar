@@ -1,13 +1,13 @@
-package org.wickedsource.coderadar.analyzer.annotate;
+package org.wickedsource.coderadar.annotator.annotate;
 
 import com.google.gson.Gson;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.junit.Assert;
 import org.junit.Test;
-import org.wickedsource.coderadar.analyzer.analyze.CommitMetrics;
 import org.wickedsource.coderadar.analyzer.api.Metric;
-import org.wickedsource.coderadar.analyzer.serialize.GsonFactory;
-import org.wickedsource.coderadar.analyzer.walk.FileMetricsWithChangeType;
+import org.wickedsource.coderadar.annotator.analyze.CommitMetrics;
+import org.wickedsource.coderadar.annotator.serialize.GsonFactory;
+import org.wickedsource.coderadar.annotator.walk.FileMetricsWithChangeType;
 
 public class GsonFactoryTest {
 
