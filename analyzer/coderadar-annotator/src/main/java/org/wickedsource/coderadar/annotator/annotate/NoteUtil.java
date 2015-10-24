@@ -9,7 +9,7 @@ import org.gitective.core.CommitUtils;
 
 public class NoteUtil {
 
-    private static final String NAMESPACE = "coderadar";
+    public static final String CODERADAR_NAMESPACE = "refs/notes/coderadar";
 
     private static NoteUtil INSTANCE;
 
@@ -34,7 +34,7 @@ public class NoteUtil {
         try {
             RevCommit commitObject = CommitUtils.getCommit(gitClient.getRepository(), commit);
             Note note = gitClient.notesShow()
-                    .setNotesRef(NAMESPACE)
+                    .setNotesRef(CODERADAR_NAMESPACE)
                     .setObjectId(commitObject)
                     .call();
             if (note != null) {
@@ -48,8 +48,7 @@ public class NoteUtil {
     }
 
     /**
-     * Sets the coderadar-specific note on the given git object. Replaces an old coderadar-specific note, if one exists.
-     * If a note already exists that is not within the tags {coderadar} and {/coderadar}, it will be ignored.
+     * Sets the coderadar-specific note on the given git commit. Replaces an old coderadar-specific note, if one exists.
      *
      * @param gitClient the git client.
      * @param commit    SHA1 hash of the commit to add the note to.
@@ -59,7 +58,7 @@ public class NoteUtil {
         try {
             RevCommit commitObject = CommitUtils.getCommit(gitClient.getRepository(), commit);
             gitClient.notesAdd()
-                    .setNotesRef(NAMESPACE)
+                    .setNotesRef(CODERADAR_NAMESPACE)
                     .setObjectId(commitObject)
                     .setMessage(note)
                     .call();

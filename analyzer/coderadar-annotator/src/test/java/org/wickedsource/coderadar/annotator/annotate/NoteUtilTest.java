@@ -14,7 +14,7 @@ public class NoteUtilTest extends GitTestTemplate {
         RevCommit commit = commit();
 
         NoteUtil.getInstance().setCoderadarNote(git, commit.getName(), noteContent);
-        String namespacedNote = getNote(commit.getName(), "coderadar");
+        String namespacedNote = getNote(commit.getName(), NoteUtil.CODERADAR_NAMESPACE);
 
         Assert.assertEquals(noteContent, namespacedNote);
     }
@@ -30,7 +30,7 @@ public class NoteUtilTest extends GitTestTemplate {
         NoteUtil.getInstance().setCoderadarNote(git, commit.getName(), coderadarNoteContent);
 
         String externalNote = getNote(commit.getName(), "otherNamespace");
-        String coderadarNote = getNote(commit.getName(), "coderadar");
+        String coderadarNote = getNote(commit.getName(), NoteUtil.CODERADAR_NAMESPACE);
 
         Assert.assertEquals(externalNoteContent, externalNote);
         Assert.assertEquals(coderadarNoteContent, coderadarNote);
@@ -42,10 +42,25 @@ public class NoteUtilTest extends GitTestTemplate {
         add("myTestFile.txt", "testLine");
         RevCommit commit = commit();
 
-        addNote(commit.getName(), "coderadar", noteContent);
+        addNote(commit.getName(), NoteUtil.CODERADAR_NAMESPACE, noteContent);
         String namespacedNote = NoteUtil.getInstance().getCoderadarNote(git, commit.getName());
 
         Assert.assertEquals(noteContent, namespacedNote);
     }
+
+    @Test
+    public void noteReplacesOldNote() throws Exception {
+        String noteContent1 = "some file metrics...";
+        String noteContent2 = "some replacement metrics...";
+        add("myTestFile.txt", "testLine");
+        RevCommit commit = commit();
+
+        NoteUtil.getInstance().setCoderadarNote(git, commit.getName(), noteContent1);
+        NoteUtil.getInstance().setCoderadarNote(git, commit.getName(), noteContent2);
+        String namespacedNote = getNote(commit.getName(), NoteUtil.CODERADAR_NAMESPACE);
+
+        Assert.assertEquals(noteContent2, namespacedNote);
+    }
+
 
 }

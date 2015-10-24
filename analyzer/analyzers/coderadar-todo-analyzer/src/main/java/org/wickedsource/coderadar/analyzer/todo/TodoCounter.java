@@ -17,15 +17,19 @@ public class TodoCounter {
     }
 
     public int count(byte[] fileContent) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(fileContent)));
-        String line;
-        int count = 0;
-        while ((line = reader.readLine()) != null) {
-            for (String pattern : todoPatterns) {
-                count += StringUtils.countMatches(line, pattern);
+        if(fileContent != null){
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(fileContent)));
+            String line;
+            int count = 0;
+            while ((line = reader.readLine()) != null) {
+                for (String pattern : todoPatterns) {
+                    count += StringUtils.countMatches(line, pattern);
+                }
             }
+            return count;
+        }else{
+            return 0;
         }
-        return count;
     }
 
 }
