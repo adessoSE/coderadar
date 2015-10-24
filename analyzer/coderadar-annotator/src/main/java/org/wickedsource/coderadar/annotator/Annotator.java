@@ -1,9 +1,12 @@
 package org.wickedsource.coderadar.annotator;
 
 import org.eclipse.jgit.api.Git;
+import org.wickedsource.coderadar.annotator.annotate.AnnotatingMetricsProcessor;
+import org.wickedsource.coderadar.annotator.annotate.MetricsProcessor;
 import org.wickedsource.coderadar.annotator.clone.GitRepositoryCloner;
 import org.wickedsource.coderadar.annotator.clone.RepositoryCloner;
 import org.wickedsource.coderadar.annotator.clone.SvnRepositoryCloner;
+import org.wickedsource.coderadar.annotator.walk.AllCommitsWalker;
 
 import java.io.File;
 import java.util.Properties;
@@ -13,10 +16,16 @@ import java.util.Properties;
  * the analysis results as notes into the git repository.
  */
 public class Annotator {
+
     private final Properties properties;
+
     private final VcsType vcsType;
+
     private final String repositoryUrl;
+
     private final File localRepositoryFolder;
+
+    private final AnalyzerRegistry analyzerRegistry;
 
     /*
      * parameters:
@@ -42,9 +51,12 @@ public class Annotator {
         this.vcsType = vcsType;
         this.repositoryUrl = repositoryUrl;
         this.localRepositoryFolder = localRepositoryFolder;
+        this.analyzerRegistry = new AnalyzerRegistry();
+        analyzerRegistry.initializeAnalyzers(properties);
     }
 
     public void annotate() {
+        // TODO: progress monitoring of each step
         Git gitClient = cloneRepository();
         annotateRepository(gitClient);
     }
@@ -59,9 +71,10 @@ public class Annotator {
         return cloner.cloneRepository(repositoryUrl, localRepositoryFolder);
     }
 
-    private void annotateRepository(Git gitClient){
-//        AllCommitsWalker walker = new AllCommitsWalker();
-//        walker.walk(gitClient, );
+    private void annotateRepository(Git gitClient) {
+        AllCommitsWalker walker = new AllCommitsWalker();
+        MetricsProcessor processor = new AnnotatingMetricsProcessor();
+        walker.walk(gitClient, analyzerRegistry.getRegisteredAnalyzers(), processor);
     }
 
 }
