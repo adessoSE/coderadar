@@ -1,6 +1,9 @@
 package org.wickedsource.coderadar.annotator;
 
+import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.annotator.annotate.AnnotatingMetricsProcessor;
 import org.wickedsource.coderadar.annotator.annotate.MetricsProcessor;
 import org.wickedsource.coderadar.annotator.clone.GitRepositoryCloner;
@@ -9,6 +12,7 @@ import org.wickedsource.coderadar.annotator.clone.SvnRepositoryCloner;
 import org.wickedsource.coderadar.annotator.walk.AllCommitsWalker;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -16,6 +20,8 @@ import java.util.Properties;
  * the analysis results as notes into the git repository.
  */
 public class Annotator {
+
+    private Logger logger = LoggerFactory.getLogger(Annotator.class);
 
     private final Properties properties;
 
@@ -56,9 +62,17 @@ public class Annotator {
     }
 
     public void annotate() {
-        // TODO: progress monitoring of each step
-        Git gitClient = cloneRepository();
-        annotateRepository(gitClient);
+        try {
+            // TODO: progress monitoring of each step
+            if (localRepositoryFolder.exists()) {
+                logger.warn("Target folder {} already exists. Deleting it now.", localRepositoryFolder);
+                FileUtils.deleteDirectory(localRepositoryFolder);
+            }
+            Git gitClient = cloneRepository();
+            annotateRepository(gitClient);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Git cloneRepository() {

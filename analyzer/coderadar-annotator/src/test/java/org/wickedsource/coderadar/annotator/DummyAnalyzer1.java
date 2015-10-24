@@ -1,9 +1,6 @@
 package org.wickedsource.coderadar.annotator;
 
-import org.wickedsource.coderadar.analyzer.api.Analyzer;
-import org.wickedsource.coderadar.analyzer.api.AnalyzerException;
-import org.wickedsource.coderadar.analyzer.api.AnalyzerFilter;
-import org.wickedsource.coderadar.analyzer.api.FileMetrics;
+import org.wickedsource.coderadar.analyzer.api.*;
 
 import java.util.Properties;
 
@@ -18,12 +15,12 @@ public class DummyAnalyzer1 implements Analyzer {
 
     @Override
     public AnalyzerFilter getFilter() {
-        return null;
+        return new DefaultFilter();
     }
 
     @Override
     public FileMetrics analyzeFile(byte[] fileContent) throws AnalyzerException {
-        return null;
+        return new FileMetrics();
     }
 
     public Properties getProperties() {

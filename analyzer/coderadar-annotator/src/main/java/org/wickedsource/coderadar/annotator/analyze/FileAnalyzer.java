@@ -25,14 +25,18 @@ public class FileAnalyzer {
      * @return the metrics calculated by all AnalyzerPlugins.
      */
     public FileMetrics analyzeFile(List<Analyzer> analyzers, String filePath, byte[] fileContent) {
+        logger.debug("analyzing file {}", filePath);
         FileMetrics fileMetrics = new FileMetrics();
-        for (Analyzer plugin : analyzers) {
-            if (acceptFile(plugin.getFilter(), filePath)) {
+        for (Analyzer analyzer : analyzers) {
+            if (analyzer.getFilter() == null) {
+                throw new IllegalStateException(String.format("Analyzer %s returns an empty AnalyzerFilter! All Analyzers MUST return a valid filter!", analyzer.getClass()));
+            }
+            if (acceptFile(analyzer.getFilter(), filePath)) {
                 try {
-                    fileMetrics.add(plugin.analyzeFile(fileContent));
+                    fileMetrics.add(analyzer.analyzeFile(fileContent));
                 } catch (Exception e) {
                     // catching all exceptions since the plugin is potentially evil
-                    logger.warn(String.format("AnalyzerPlugin of class %s threw an exception while analyzing the file %s ... skipping this plugin.", plugin.getClass(), filePath), e);
+                    logger.warn(String.format("AnalyzerPlugin of class %s threw an exception while analyzing the file %s ... skipping this plugin.", analyzer.getClass(), filePath), e);
                 }
             }
         }

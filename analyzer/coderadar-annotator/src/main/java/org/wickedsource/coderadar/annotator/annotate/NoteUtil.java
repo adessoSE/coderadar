@@ -37,9 +37,9 @@ public class NoteUtil {
                     .setNotesRef(NAMESPACE)
                     .setObjectId(commitObject)
                     .call();
-            if(note != null) {
+            if (note != null) {
                 return BlobUtils.getContent(gitClient.getRepository(), note.getData());
-            }else{
+            } else {
                 return null;
             }
         } catch (GitAPIException e) {
