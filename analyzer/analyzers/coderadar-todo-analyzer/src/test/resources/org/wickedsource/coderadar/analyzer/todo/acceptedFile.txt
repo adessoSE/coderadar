@@ -1,0 +1,5 @@
+//TODO: fix this bug
+lorem ipsum....
+FIXME: this should be fixed
+
+and another line //FIXME

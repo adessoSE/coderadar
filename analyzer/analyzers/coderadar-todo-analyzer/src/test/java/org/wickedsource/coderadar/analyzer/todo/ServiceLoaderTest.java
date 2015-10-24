@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.loc;
+package org.wickedsource.coderadar.analyzer.todo;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,6 +14,6 @@ public class ServiceLoaderTest {
         ServiceLoader<Analyzer> loader = ServiceLoader.load(Analyzer.class);
         Iterator<Analyzer> plugins = loader.iterator();
         Analyzer plugin = plugins.next();
-        Assert.assertTrue(plugin instanceof LocAnalyzer);
+        Assert.assertTrue(plugin instanceof TodoAnalyzer);
     }
 }

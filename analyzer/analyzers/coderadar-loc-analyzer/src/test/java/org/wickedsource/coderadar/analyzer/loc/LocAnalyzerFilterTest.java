@@ -7,7 +7,7 @@ import org.wickedsource.coderadar.analyzer.api.AnalyzerFilter;
 public class LocAnalyzerFilterTest {
 
     @Test
-    public void test(){
+    public void filterAcceptsTheCorrectFiles(){
         AnalyzerFilter filter = new LocAnalyzerFilter();
 
         Assert.assertFalse(filter.acceptBinary());

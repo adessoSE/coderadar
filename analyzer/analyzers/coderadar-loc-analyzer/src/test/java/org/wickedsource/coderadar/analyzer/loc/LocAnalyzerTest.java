@@ -10,7 +10,7 @@ import java.io.InputStream;
 public class LocAnalyzerTest {
 
     @Test
-    public void testAnalyzeFile() throws Exception {
+    public void metricIsCalculatedCorrectly() throws Exception {
 
         InputStream in = getClass().getResourceAsStream("AcceptedFile.java");
         byte[] fileContent = IOUtils.toByteArray(in);
