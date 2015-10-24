@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer;
+package org.wickedsource.coderadar.annotator;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;

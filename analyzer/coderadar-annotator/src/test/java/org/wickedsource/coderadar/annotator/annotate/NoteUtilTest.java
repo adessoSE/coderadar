@@ -3,7 +3,7 @@ package org.wickedsource.coderadar.annotator.annotate;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Assert;
 import org.junit.Test;
-import org.wickedsource.coderadar.analyzer.GitTestTemplate;
+import org.wickedsource.coderadar.annotator.GitTestTemplate;
 
 public class NoteUtilTest extends GitTestTemplate {
 

@@ -4,8 +4,8 @@ import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Assert;
 import org.junit.Test;
-import org.wickedsource.coderadar.analyzer.GitTestTemplate;
 import org.wickedsource.coderadar.analyzer.api.Metric;
+import org.wickedsource.coderadar.annotator.GitTestTemplate;
 import org.wickedsource.coderadar.annotator.walk.FileMetricsWithChangeType;
 
 public class AnnotatingMetricsProcessorTest extends GitTestTemplate{

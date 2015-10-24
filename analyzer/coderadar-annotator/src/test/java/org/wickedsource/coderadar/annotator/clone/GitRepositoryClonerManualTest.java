@@ -1,6 +1,4 @@
-package org.wickedsource.coderadar.analyzer;
-
-import org.wickedsource.coderadar.annotator.clone.GitRepositoryCloner;
+package org.wickedsource.coderadar.annotator.clone;
 
 import java.io.File;
 import java.io.IOException;

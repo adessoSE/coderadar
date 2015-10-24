@@ -1,11 +1,10 @@
-package org.wickedsource.coderadar.analyzer;
+package org.wickedsource.coderadar.annotator.analyze;
 
 import org.eclipse.jgit.diff.DiffEntry;
 import org.junit.Assert;
 import org.junit.Test;
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 import org.wickedsource.coderadar.analyzer.api.Metric;
-import org.wickedsource.coderadar.annotator.analyze.CommitMetrics;
 import org.wickedsource.coderadar.annotator.walk.FileMetricsWithChangeType;
 
 public class CommitMetricsTest {
