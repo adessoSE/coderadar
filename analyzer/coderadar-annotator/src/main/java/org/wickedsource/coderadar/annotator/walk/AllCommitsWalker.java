@@ -82,5 +82,6 @@ public class AllCommitsWalker implements RepositoryWalker {
             FileMetricsWithChangeType metricsWithChangeType = new FileMetricsWithChangeType(metrics, diff.getChangeType());
             metricsProcessor.processMetrics(metricsWithChangeType, gitClient, commit.getId(), filePath);
         }
+        metricsProcessor.onCommitFinished(gitClient, commit.getId());
     }
 }

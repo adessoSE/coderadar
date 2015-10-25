@@ -1,7 +1,6 @@
 package org.wickedsource.coderadar.annotator.annotate;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.slf4j.Logger;
@@ -9,6 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.annotator.analyze.CommitMetrics;
 import org.wickedsource.coderadar.annotator.serialize.GsonFactory;
 import org.wickedsource.coderadar.annotator.walk.FileMetricsWithChangeType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Stores a file's metrics as a git note on the file in the git repository.
@@ -19,33 +21,32 @@ public class AnnotatingMetricsProcessor implements MetricsProcessor {
 
     private Gson gson;
 
+    private Map<String, CommitMetrics> metricsForCommit = new HashMap<>();
+
     public AnnotatingMetricsProcessor() {
         gson = GsonFactory.getInstance().createGson();
     }
 
     @Override
     public void processMetrics(FileMetricsWithChangeType fileMetrics, Git gitClient, AnyObjectId commitId, String filePath) {
-        String json = NoteUtil.getInstance().getCoderadarNote(gitClient, commitId.getName());
-
-        CommitMetrics commitMetrics;
-        if (json == null || "".equals(json)) {
-            logger.info("No note found for commit {}. Creating a new one.", commitId.getName());
+        CommitMetrics commitMetrics = metricsForCommit.get(commitId.getName());
+        if (commitMetrics == null) {
             commitMetrics = new CommitMetrics();
-        } else {
-            // reading existing metrics from commit note
-            try {
-                commitMetrics = gson.fromJson(json, CommitMetrics.class);
-            } catch (JsonSyntaxException e) {
-                logger.warn("Encountered invalid JSON in note of commit {}! Overwriting the note with new metrics.", commitId.getName());
-                commitMetrics = new CommitMetrics();
-            }
+            metricsForCommit.put(commitId.getName(), commitMetrics);
         }
 
         // adding to existing metrics
         commitMetrics.addMetricsToFile(filePath, fileMetrics);
+    }
 
-        // writing new metrics back to commit note
-        String newJson = gson.toJson(commitMetrics);
-        NoteUtil.getInstance().setCoderadarNote(gitClient, commitId.getName(), newJson);
+    @Override
+    public void onCommitFinished(Git gitClient, AnyObjectId commitId) {
+        CommitMetrics commitMetrics = metricsForCommit.get(commitId.getName());
+        if (commitMetrics == null) {
+            commitMetrics = new CommitMetrics();
+        }
+        String json = gson.toJson(commitMetrics);
+        NoteUtil.getInstance().setCoderadarNote(gitClient, commitId.getName(), json);
+        metricsForCommit.remove(commitId.getName());
     }
 }

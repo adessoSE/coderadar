@@ -8,7 +8,7 @@ import org.wickedsource.coderadar.analyzer.api.Metric;
 import org.wickedsource.coderadar.annotator.GitTestTemplate;
 import org.wickedsource.coderadar.annotator.walk.FileMetricsWithChangeType;
 
-public class AnnotatingMetricsProcessorTest extends GitTestTemplate{
+public class AnnotatingMetricsProcessorTest extends GitTestTemplate {
 
     @Test
     public void metricsAreAnnotatedToGitCommit() throws Exception {
@@ -25,6 +25,7 @@ public class AnnotatingMetricsProcessorTest extends GitTestTemplate{
         AnnotatingMetricsProcessor processor = new AnnotatingMetricsProcessor();
         processor.processMetrics(metrics1, git, commit.getId(), "file1");
         processor.processMetrics(metrics2, git, commit.getId(), "dir1/file2");
+        processor.onCommitFinished(git, commit.getId());
 
         String note = getNote(commit.getName(), NoteUtil.CODERADAR_NAMESPACE);
 
