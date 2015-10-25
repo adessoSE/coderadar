@@ -18,6 +18,6 @@ public class LocAnalyzerTest {
         LocAnalyzer analyzer = new LocAnalyzer();
         FileMetrics results = analyzer.analyzeFile(fileContent);
 
-        Assert.assertEquals(16, (long) results.getMetricValue(LocAnalyzer.JAVA_LOC_METRIC));
+        Assert.assertEquals(16, (long) results.getMetricCount(LocAnalyzer.JAVA_LOC_METRIC));
     }
 }

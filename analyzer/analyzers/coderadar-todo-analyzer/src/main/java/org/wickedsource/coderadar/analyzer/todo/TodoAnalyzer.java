@@ -11,7 +11,7 @@ public class TodoAnalyzer implements Analyzer {
 
     private String patternPropertyPrefix = TodoAnalyzer.class.getName() + ".pattern";
 
-    private TodoCounter todoCounter;
+    private TodoFinder todoFinder;
 
     @Override
     public void configure(Properties properties) {
@@ -26,7 +26,7 @@ public class TodoAnalyzer implements Analyzer {
         if (todoPatterns.isEmpty()) {
             todoPatterns = getDefaultPatterns();
         }
-        todoCounter = new TodoCounter(todoPatterns);
+        todoFinder = new TodoFinder(todoPatterns.toArray(new String[todoPatterns.size()]));
     }
 
     private List<String> getDefaultPatterns() {
@@ -41,8 +41,10 @@ public class TodoAnalyzer implements Analyzer {
     @Override
     public FileMetrics analyzeFile(byte[] fileContent) throws AnalyzerException {
         try {
+            List<Finding> findings = todoFinder.findTodos(fileContent);
             FileMetrics metrics = new FileMetrics();
-            metrics.setMetricValue(TODO_METRIC, (long) todoCounter.count(fileContent));
+            metrics.addFindings(TODO_METRIC, findings);
+            metrics.setMetricCount(TODO_METRIC, (long) findings.size());
             return metrics;
         } catch (IOException e) {
             throw new AnalyzerException(e);

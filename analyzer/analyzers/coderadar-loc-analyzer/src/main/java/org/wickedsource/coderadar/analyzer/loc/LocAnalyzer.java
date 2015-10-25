@@ -30,7 +30,7 @@ public class LocAnalyzer implements Analyzer {
     public FileMetrics analyzeFile(byte[] fileContent) throws AnalyzerException {
         try {
             FileMetrics results = new FileMetrics();
-            results.setMetricValue(JAVA_LOC_METRIC, (long) locCounter.count(fileContent));
+            results.setMetricCount(JAVA_LOC_METRIC, (long) locCounter.count(fileContent));
             return results;
         }catch(IOException e){
             throw new AnalyzerException(e);

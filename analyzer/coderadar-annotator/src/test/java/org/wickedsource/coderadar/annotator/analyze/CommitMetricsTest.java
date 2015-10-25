@@ -16,18 +16,18 @@ public class CommitMetricsTest {
     @Test
     public void testAddMetricsToFile() throws Exception {
         FileMetricsWithChangeType fileMetrics1 = new FileMetricsWithChangeType(DiffEntry.ChangeType.ADD);
-        fileMetrics1.setMetricValue(METRIC1, 500l);
-        fileMetrics1.setMetricValue(METRIC2, 250l);
+        fileMetrics1.setMetricCount(METRIC1, 500l);
+        fileMetrics1.setMetricCount(METRIC2, 250l);
 
         FileMetricsWithChangeType fileMetrics2 = new FileMetricsWithChangeType(DiffEntry.ChangeType.ADD);
-        fileMetrics2.setMetricValue(METRIC1, 300l);
+        fileMetrics2.setMetricCount(METRIC1, 300l);
         CommitMetrics commitMetrics = new CommitMetrics();
 
         commitMetrics.addMetricsToFile("file1", fileMetrics1);
         commitMetrics.addMetricsToFile("file1", fileMetrics2);
 
         FileMetrics file1Metrics = commitMetrics.getFileMetrics("file1");
-        Assert.assertEquals(800, (long) file1Metrics.getMetricValue(METRIC1));
-        Assert.assertEquals(250, (long) file1Metrics.getMetricValue(METRIC2));
+        Assert.assertEquals(800, (long) file1Metrics.getMetricCount(METRIC1));
+        Assert.assertEquals(250, (long) file1Metrics.getMetricCount(METRIC2));
     }
 }
