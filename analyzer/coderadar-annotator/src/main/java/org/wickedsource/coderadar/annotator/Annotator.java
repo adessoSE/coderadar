@@ -33,20 +33,6 @@ public class Annotator {
 
     private final AnalyzerRegistry analyzerRegistry;
 
-    /*
-     * parameters:
-     * - properties containing configuration for analyzers
-     * - url of remote vcs repository
-     * - type of vcs (git or svn)
-     * - path to local repository
-     *
-     * later:
-     * - update mode ("incremental" or "complete")
-     * - complete mode: number of commits to clone locally
-     * - push metrics to remote repository
-     * -
-     */
-
     public enum VcsType {
         SVN,
         GIT;
