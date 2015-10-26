@@ -1,12 +1,9 @@
 package org.wickedsource.coderadar.annotator.walk;
 
-import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.wickedsource.coderadar.analyzer.api.Analyzer;
-import org.wickedsource.coderadar.analyzer.api.DefaultFilter;
-import org.wickedsource.coderadar.analyzer.api.Metric;
+import org.wickedsource.coderadar.analyzer.api.*;
 import org.wickedsource.coderadar.annotator.GitTestTemplate;
 import org.wickedsource.coderadar.annotator.annotate.MetricsProcessor;
 
@@ -24,14 +21,14 @@ public class AllCommitsWalkerTest extends GitTestTemplate {
         RevCommit commit = commit();
 
         // mocking analyzer plugin 1
-        final FileMetricsWithChangeType metrics1 = new FileMetricsWithChangeType(DiffEntry.ChangeType.ADD);
+        final FileMetricsWithChangeType metrics1 = new FileMetricsWithChangeType(ChangeType.ADD);
         metrics1.setMetricCount(new Metric("123"), 5l);
         Analyzer plugin1 = Mockito.mock(Analyzer.class);
         when(plugin1.analyzeFile(any(byte[].class))).thenReturn(metrics1);
         when(plugin1.getFilter()).thenReturn(new DefaultFilter());
 
         // mocking analyzer plugin 2
-        final FileMetricsWithChangeType metrics2 = new FileMetricsWithChangeType(DiffEntry.ChangeType.ADD);
+        final FileMetricsWithChangeType metrics2 = new FileMetricsWithChangeType(ChangeType.ADD);
         metrics1.setMetricCount(new Metric("321"), 10l);
         Analyzer plugin2 = Mockito.mock(Analyzer.class);
         when(plugin2.analyzeFile(any(byte[].class))).thenReturn(metrics2);

@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.analyzer.api.Analyzer;
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
+import org.wickedsource.coderadar.analyzer.api.FileMetricsWithChangeType;
 import org.wickedsource.coderadar.annotator.analyze.FileAnalyzer;
 import org.wickedsource.coderadar.annotator.annotate.MetricsProcessor;
 
@@ -28,6 +29,8 @@ import java.util.List;
 public class AllCommitsWalker implements RepositoryWalker {
 
     private Logger logger = LoggerFactory.getLogger(AllCommitsWalker.class);
+
+    private ChangeTypeMapper changeTypeMapper = new ChangeTypeMapper();
 
     private FileAnalyzer fileAnalyzer = new FileAnalyzer();
 
@@ -79,7 +82,7 @@ public class AllCommitsWalker implements RepositoryWalker {
             String filePath = diff.getPath(DiffEntry.Side.NEW);
             byte[] fileContent = BlobUtils.getRawContent(gitClient.getRepository(), commit.getId(), filePath);
             FileMetrics metrics = fileAnalyzer.analyzeFile(analyzers, filePath, fileContent);
-            FileMetricsWithChangeType metricsWithChangeType = new FileMetricsWithChangeType(metrics, diff.getChangeType());
+            FileMetricsWithChangeType metricsWithChangeType = new FileMetricsWithChangeType(metrics, changeTypeMapper.jgitToCoderadar(diff.getChangeType()));
             metricsProcessor.processMetrics(metricsWithChangeType, gitClient, commit.getId(), filePath);
         }
         metricsProcessor.onCommitFinished(gitClient, commit.getId());

@@ -5,9 +5,9 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.AnyObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wickedsource.coderadar.annotator.analyze.CommitMetrics;
+import org.wickedsource.coderadar.analyzer.api.CommitMetrics;
+import org.wickedsource.coderadar.analyzer.api.FileMetricsWithChangeType;
 import org.wickedsource.coderadar.annotator.serialize.GsonFactory;
-import org.wickedsource.coderadar.annotator.walk.FileMetricsWithChangeType;
 
 import java.util.HashMap;
 import java.util.Map;

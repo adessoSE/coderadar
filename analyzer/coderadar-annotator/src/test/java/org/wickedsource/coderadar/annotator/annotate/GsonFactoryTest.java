@@ -1,14 +1,10 @@
 package org.wickedsource.coderadar.annotator.annotate;
 
 import com.google.gson.Gson;
-import org.eclipse.jgit.diff.DiffEntry;
 import org.junit.Assert;
 import org.junit.Test;
-import org.wickedsource.coderadar.analyzer.api.Finding;
-import org.wickedsource.coderadar.analyzer.api.Metric;
-import org.wickedsource.coderadar.annotator.analyze.CommitMetrics;
+import org.wickedsource.coderadar.analyzer.api.*;
 import org.wickedsource.coderadar.annotator.serialize.GsonFactory;
-import org.wickedsource.coderadar.annotator.walk.FileMetricsWithChangeType;
 
 public class GsonFactoryTest {
 
@@ -18,13 +14,13 @@ public class GsonFactoryTest {
 
         Metric metric1 = new Metric("123");
         Metric metric2 = new Metric("321");
-        FileMetricsWithChangeType metrics1 = new FileMetricsWithChangeType(DiffEntry.ChangeType.ADD);
+        FileMetricsWithChangeType metrics1 = new FileMetricsWithChangeType(ChangeType.ADD);
         metrics1.setMetricCount(metric1, 5l);
         metrics1.setMetricCount(metric2, 10l);
         metrics1.addFinding(metric1, new Finding(4, 5));
         commitMetrics.addMetricsToFile("file1", metrics1);
 
-        FileMetricsWithChangeType metrics2 = new FileMetricsWithChangeType(DiffEntry.ChangeType.COPY);
+        FileMetricsWithChangeType metrics2 = new FileMetricsWithChangeType(ChangeType.COPY);
         metrics2.setMetricCount(metric2, 12l);
         metrics2.addFinding(metric2, new Finding(1, 2, 3, 4));
         commitMetrics.addMetricsToFile("file2", metrics2);

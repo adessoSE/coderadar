@@ -1,5 +1,6 @@
 include 'analyzer:coderadar-annotator'
 include 'analyzer:coderadar-analyzer-api'
+include 'analyzer:coderadar-annotation-api'
 include 'analyzer:analyzers:coderadar-loc-analyzer'
 include 'analyzer:analyzers:coderadar-todo-analyzer'
 

@@ -1,12 +1,12 @@
 package org.wickedsource.coderadar.annotator.annotate;
 
-import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Assert;
 import org.junit.Test;
+import org.wickedsource.coderadar.analyzer.api.ChangeType;
+import org.wickedsource.coderadar.analyzer.api.FileMetricsWithChangeType;
 import org.wickedsource.coderadar.analyzer.api.Metric;
 import org.wickedsource.coderadar.annotator.GitTestTemplate;
-import org.wickedsource.coderadar.annotator.walk.FileMetricsWithChangeType;
 
 public class AnnotatingMetricsProcessorTest extends GitTestTemplate {
 
@@ -16,10 +16,10 @@ public class AnnotatingMetricsProcessorTest extends GitTestTemplate {
         add("dir1/file2", "content2");
         RevCommit commit = commit();
 
-        FileMetricsWithChangeType metrics1 = new FileMetricsWithChangeType(DiffEntry.ChangeType.ADD);
+        FileMetricsWithChangeType metrics1 = new FileMetricsWithChangeType(ChangeType.ADD);
         metrics1.setMetricCount(new Metric("123"), 5l);
 
-        FileMetricsWithChangeType metrics2 = new FileMetricsWithChangeType(DiffEntry.ChangeType.COPY);
+        FileMetricsWithChangeType metrics2 = new FileMetricsWithChangeType(ChangeType.COPY);
         metrics2.setMetricCount(new Metric("321"), 3l);
 
         AnnotatingMetricsProcessor processor = new AnnotatingMetricsProcessor();

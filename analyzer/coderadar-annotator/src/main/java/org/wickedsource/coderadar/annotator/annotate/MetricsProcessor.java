@@ -2,7 +2,7 @@ package org.wickedsource.coderadar.annotator.annotate;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.AnyObjectId;
-import org.wickedsource.coderadar.annotator.walk.FileMetricsWithChangeType;
+import org.wickedsource.coderadar.analyzer.api.FileMetricsWithChangeType;
 
 public interface MetricsProcessor {
 

@@ -1,30 +1,28 @@
-package org.wickedsource.coderadar.annotator.walk;
+package org.wickedsource.coderadar.analyzer.api;
 
-import org.eclipse.jgit.diff.DiffEntry;
-import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 
 public class FileMetricsWithChangeType extends FileMetrics {
 
-    private DiffEntry.ChangeType changeType;
+    private ChangeType changeType;
 
     public FileMetricsWithChangeType(){
 
     }
 
-    public FileMetricsWithChangeType(DiffEntry.ChangeType changeType){
+    public FileMetricsWithChangeType(ChangeType changeType){
         this.changeType = changeType;
     }
 
-    public FileMetricsWithChangeType(FileMetrics copyFrom, DiffEntry.ChangeType changeType){
+    public FileMetricsWithChangeType(FileMetrics copyFrom, ChangeType changeType){
         super(copyFrom);
         this.changeType = changeType;
     }
 
-    public DiffEntry.ChangeType getChangeType() {
+    public ChangeType getChangeType() {
         return changeType;
     }
 
-    public void setChangeType(DiffEntry.ChangeType changeType) {
+    public void setChangeType(ChangeType changeType) {
         this.changeType = changeType;
     }
 

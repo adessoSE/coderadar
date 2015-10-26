@@ -1,11 +1,8 @@
 package org.wickedsource.coderadar.annotator.analyze;
 
-import org.eclipse.jgit.diff.DiffEntry;
 import org.junit.Assert;
 import org.junit.Test;
-import org.wickedsource.coderadar.analyzer.api.FileMetrics;
-import org.wickedsource.coderadar.analyzer.api.Metric;
-import org.wickedsource.coderadar.annotator.walk.FileMetricsWithChangeType;
+import org.wickedsource.coderadar.analyzer.api.*;
 
 public class CommitMetricsTest {
 
@@ -15,11 +12,11 @@ public class CommitMetricsTest {
 
     @Test
     public void testAddMetricsToFile() throws Exception {
-        FileMetricsWithChangeType fileMetrics1 = new FileMetricsWithChangeType(DiffEntry.ChangeType.ADD);
+        FileMetricsWithChangeType fileMetrics1 = new FileMetricsWithChangeType(ChangeType.ADD);
         fileMetrics1.setMetricCount(METRIC1, 500l);
         fileMetrics1.setMetricCount(METRIC2, 250l);
 
-        FileMetricsWithChangeType fileMetrics2 = new FileMetricsWithChangeType(DiffEntry.ChangeType.ADD);
+        FileMetricsWithChangeType fileMetrics2 = new FileMetricsWithChangeType(ChangeType.ADD);
         fileMetrics2.setMetricCount(METRIC1, 300l);
         CommitMetrics commitMetrics = new CommitMetrics();
 
