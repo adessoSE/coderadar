@@ -28,4 +28,8 @@ public interface AnnotationReader {
 
     List<CommitAssociatedMetricValue> getMetricSeries(Metric metric, Date fromDate, Date toDate);
 
+    RepositoryMetrics getRepositoryMetrics();
+
+    RepositoryMetrics getRepositoryMetrics(Date date);
+
 }
