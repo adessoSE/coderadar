@@ -24,7 +24,7 @@ public class AnalyzerRegistry {
     public synchronized void initializeAnalyzers(Properties properties) throws AnalyzerConfigurationException {
         ServiceLoader<Analyzer> loader = ServiceLoader.load(Analyzer.class);
         for (Analyzer analyzer : loader) {
-            logger.info("initializing Analyzer plugin {}", analyzer.getClass());
+            logger.info("initializing Analyzer {}", analyzer.getClass());
             Properties propertiesForThisAnalyzer = extractPropertiesForAnalyzer(analyzer, properties);
             analyzer.configure(propertiesForThisAnalyzer);
             analyzers.add(analyzer);

@@ -14,6 +14,7 @@ dependencies {
     compile project(':analyzer:coderadar-analyzer-api')
     compile project(':analyzer:analyzers:coderadar-loc-analyzer')
     compile project(':analyzer:analyzers:coderadar-todo-analyzer')
+    compile project(':analyzer:analyzers:coderadar-checkstyle-analyzer')
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.4.1'
     testCompile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.4.1'

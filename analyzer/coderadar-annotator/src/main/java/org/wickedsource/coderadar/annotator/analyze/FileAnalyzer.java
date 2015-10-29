@@ -36,7 +36,7 @@ public class FileAnalyzer {
                     fileMetrics.add(analyzer.analyzeFile(fileContent));
                 } catch (Exception e) {
                     // catching all exceptions since the plugin is potentially evil
-                    logger.warn(String.format("AnalyzerPlugin of class %s threw an exception while analyzing the file %s ... skipping this plugin.", analyzer.getClass(), filePath), e);
+                    logger.warn(String.format("Analyzer of class %s threw an exception while analyzing the file %s ... skipping this analyzer.", analyzer.getClass().getName(), filePath), e);
                 }
             }
         }

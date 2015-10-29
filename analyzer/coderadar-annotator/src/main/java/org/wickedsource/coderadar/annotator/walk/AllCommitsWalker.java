@@ -1,7 +1,6 @@
 package org.wickedsource.coderadar.annotator.walk;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
@@ -56,16 +55,9 @@ public class AllCommitsWalker implements RepositoryWalker {
         }
     }
 
-    private RevCommit getLatestCommit(Git gitClient) throws GitAPIException {
-        Iterable<RevCommit> commits = gitClient.log()
-                .setMaxCount(1)
-                .call();
-        return commits.iterator().next();
-    }
-
     private void walkFilesInCommit(Git gitClient, RevCommit commit, List<Analyzer> analyzers, MetricsProcessor metricsProcessor) throws IOException {
         commit = CommitUtils.getCommit(gitClient.getRepository(), commit.getId());
-        logger.info("analyzing commit {}", commit.getName());
+        logger.info("starting analysis of commit {}", commit.getName());
         DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
         diffFormatter.setRepository(gitClient.getRepository());
         diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * A simple plugin counting java lines of code (loc) in a naive way.
+ * A simple analyzer counting java lines of code (loc) in a naive way.
  */
 public class LocAnalyzer implements Analyzer {
 
@@ -14,7 +14,7 @@ public class LocAnalyzer implements Analyzer {
 
     private LocCounter locCounter = new LocCounter();
 
-    public static final Metric JAVA_LOC_METRIC = new Metric("org.wickedsource.coderadar.analyzer.plugin.api.AnalyzerPlugin.javaLoc");
+    public static final Metric JAVA_LOC_METRIC = new Metric("org.wickedsource.coderadar.analyzer.AnalyzerPlugin.javaLoc");
 
     @Override
     public void configure(Properties properties) {

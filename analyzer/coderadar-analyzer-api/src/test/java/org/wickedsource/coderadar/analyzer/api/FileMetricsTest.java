@@ -1,9 +1,7 @@
-package org.wickedsource.coderadar.analyzer.plugin.api;
+package org.wickedsource.coderadar.analyzer.api;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.wickedsource.coderadar.analyzer.api.FileMetrics;
-import org.wickedsource.coderadar.analyzer.api.Metric;
 
 public class FileMetricsTest {
 

@@ -27,6 +27,9 @@ public class CheckstyleAnalyzerConfiguration {
             throw new AnalyzerConfigurationException(String.format("Checkstyle configuration missing. Please configure the location to the checkstyle config file via configuration parameter %s", PARAM_CONFIG_LOCATION));
         } else {
             configLocation = new File(configLocationPath);
+            if (!configLocation.exists()) {
+                throw new AnalyzerConfigurationException(String.format("Checkstyle configuration file %s does not exist.", configLocationPath));
+            }
         }
     }
 
