@@ -49,4 +49,8 @@ public class CoderadarAuditListener implements AuditListener {
     protected FileMetrics getMetrics() {
         return this.metrics;
     }
+
+    public void reset() {
+        metrics = new FileMetrics();
+    }
 }

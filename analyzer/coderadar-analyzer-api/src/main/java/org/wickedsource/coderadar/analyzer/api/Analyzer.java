@@ -33,4 +33,9 @@ public interface Analyzer {
      */
     FileMetrics analyzeFile(byte[] fileContent) throws AnalyzerException;
 
+    /**
+     * This method is called after all files have been analyzed and can be used to free resources.
+     */
+    void destroy();
+
 }

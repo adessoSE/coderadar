@@ -63,6 +63,8 @@ public class Annotator {
             annotateRepository(gitClient);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } finally {
+            analyzerRegistry.destroyAnalyzers();
         }
     }
 

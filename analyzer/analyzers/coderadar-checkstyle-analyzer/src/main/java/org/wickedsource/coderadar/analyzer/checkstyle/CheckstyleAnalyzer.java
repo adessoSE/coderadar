@@ -20,9 +20,24 @@ public class CheckstyleAnalyzer implements Analyzer {
 
     private CheckstyleAnalyzerConfiguration analyzerConfig;
 
+    private Checker checker;
+
+    private CoderadarAuditListener auditListener;
+
     @Override
     public void configure(Properties properties) throws AnalyzerConfigurationException {
         this.analyzerConfig = new CheckstyleAnalyzerConfiguration(properties);
+        checker = new Checker();
+        try {
+            auditListener = new CoderadarAuditListener();
+            Configuration checkstyleConfig = createCheckstyleConfiguration();
+            final ClassLoader moduleClassLoader = Checker.class.getClassLoader();
+            checker.setModuleClassLoader(moduleClassLoader);
+            checker.configure(checkstyleConfig);
+            checker.addListener(auditListener);
+        } catch (CheckstyleException e) {
+            throw new AnalyzerConfigurationException(e);
+        }
     }
 
     @Override
@@ -48,18 +63,10 @@ public class CheckstyleAnalyzer implements Analyzer {
 
     @Override
     public FileMetrics analyzeFile(byte[] fileContent) throws AnalyzerException {
-
-        Checker checker = new Checker();
         File fileToAnalyze = null;
-
         try {
             fileToAnalyze = createTempFile(fileContent);
-            CoderadarAuditListener auditListener = new CoderadarAuditListener();
-            Configuration checkstyleConfig = createCheckstyleConfiguration();
-            final ClassLoader moduleClassLoader = Checker.class.getClassLoader();
-            checker.setModuleClassLoader(moduleClassLoader);
-            checker.configure(checkstyleConfig); // TODO: configure takes awfully long ... let Checker live over multiple calls
-            checker.addListener(auditListener);
+            auditListener.reset();
             checker.process(Arrays.asList(fileToAnalyze));
             return auditListener.getMetrics();
         } catch (CheckstyleException | IOException e) {
@@ -68,8 +75,12 @@ public class CheckstyleAnalyzer implements Analyzer {
             if (fileToAnalyze != null && !fileToAnalyze.delete()) {
                 logger.warn("Could not delete temporary file {}", fileToAnalyze);
             }
-            checker.destroy(); //TODO: let Checker live over mutliple calls of analyzerFile() and destroy after all files are finished.
         }
+    }
+
+    @Override
+    public void destroy() {
+        checker.destroy();
     }
 
     private File createTempFile(byte[] fileContent) throws IOException {

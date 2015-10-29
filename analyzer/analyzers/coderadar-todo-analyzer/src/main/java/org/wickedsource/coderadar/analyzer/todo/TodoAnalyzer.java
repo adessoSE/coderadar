@@ -50,4 +50,9 @@ public class TodoAnalyzer implements Analyzer {
             throw new AnalyzerException(e);
         }
     }
+
+    @Override
+    public void destroy() {
+        // nothing to destroy
+    }
 }

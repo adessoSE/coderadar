@@ -33,6 +33,15 @@ public class AnalyzerRegistry {
     }
 
     /**
+     * Calls the destroy() method of all registered analyzers.
+     */
+    public synchronized void destroyAnalyzers() {
+        for (Analyzer analyzer : analyzers) {
+            analyzer.destroy();
+        }
+    }
+
+    /**
      * Extracts the properties directed at the given analyzer from the global properties
      *
      * @param analyzer         the analyzer whose properties to extract.

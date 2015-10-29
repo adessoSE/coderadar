@@ -23,6 +23,11 @@ public class DummyAnalyzer1 implements Analyzer {
         return new FileMetrics();
     }
 
+    @Override
+    public void destroy() {
+        // nothing to destroy
+    }
+
     public Properties getProperties() {
         return this.properties;
     }
