@@ -3,6 +3,7 @@ package org.wickedsource.coderadar.annotator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.analyzer.api.Analyzer;
+import org.wickedsource.coderadar.analyzer.api.AnalyzerConfigurationException;
 
 import java.util.*;
 
@@ -20,7 +21,7 @@ public class AnalyzerRegistry {
      * @param properties The properties used to configure the analyzers. Each analyzer will be configured with the
      *                   properties whose names start with the fully qualified name of the analyzer class.
      */
-    public synchronized void initializeAnalyzers(Properties properties) {
+    public synchronized void initializeAnalyzers(Properties properties) throws AnalyzerConfigurationException {
         ServiceLoader<Analyzer> loader = ServiceLoader.load(Analyzer.class);
         for (Analyzer analyzer : loader) {
             logger.info("initializing Analyzer plugin {}", analyzer.getClass());

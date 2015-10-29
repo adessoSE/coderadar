@@ -7,12 +7,15 @@ public interface Analyzer {
     /**
      * This method is called right after construction of the plugin to pass in configuration parameters.
      * The configuration parameters are read from the central analyzer configuration. Only those properties
-     * starting with the fully qualified name of the plugin class are passed into this method.
+     * starting with the fully qualified name of the plugin class are passed into this method. This method is expected
+     * to throw an AnalyzerConfigurationException when any configuration parameter within the passed properties
+     * is invalid.
      *
      * @param properties the properties targeted at this plugin (i.e. the properties whose names start with the
      *                   fully qualified name of the plugin class).
+     * @throws AnalyzerConfigurationException in case of an error during configuration (i.e. when some configuration parameter is invalid).
      */
-    void configure(Properties properties);
+    void configure(Properties properties) throws AnalyzerConfigurationException;
 
     /**
      * Returns a filter that defines which files the plugin is interested in. Only the files that pass this filter

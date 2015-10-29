@@ -14,6 +14,7 @@ public class FileMetrics {
 
     /**
      * Copy constructor.
+     *
      * @param copyFrom the object whose state to copy into this object.
      */
     public FileMetrics(FileMetrics copyFrom) {
@@ -44,13 +45,26 @@ public class FileMetrics {
     }
 
     /**
-     * SEts the count for the given metric.
+     * Sets the count for the given metric.
      *
      * @param metric the metric whose count to set.
      * @param count  the value to which to set the count.
      */
     public void setMetricCount(Metric metric, Long count) {
         counts.put(metric, count);
+    }
+
+    /**
+     * Increments the count of the specified metric for this file by one.
+     *
+     * @param metric the metric whose count to increment by one.
+     */
+    public void incrementMetricCount(Metric metric) {
+        Long count = counts.get(metric);
+        if (count == null) {
+            count = 0l;
+        }
+        counts.put(metric, count + 1);
     }
 
     /**

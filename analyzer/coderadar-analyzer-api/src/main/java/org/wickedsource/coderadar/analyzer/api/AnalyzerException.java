@@ -5,11 +5,15 @@ package org.wickedsource.coderadar.analyzer.api;
  */
 public class AnalyzerException extends Exception {
 
-    public AnalyzerException(Throwable cause){
+    public AnalyzerException(Throwable cause) {
         super(cause);
     }
 
-    public AnalyzerException(String message, Throwable cause){
+    public AnalyzerException(String message) {
+        super(message);
+    }
+
+    public AnalyzerException(String message, Throwable cause) {
         super(message, cause);
     }
 

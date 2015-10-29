@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.wickedsource.coderadar.analyzer.api.AnalyzerConfigurationException;
 import org.wickedsource.coderadar.annotator.annotate.AnnotatingMetricsProcessor;
 import org.wickedsource.coderadar.annotator.annotate.MetricsProcessor;
 import org.wickedsource.coderadar.annotator.clone.GitRepositoryCloner;
@@ -44,7 +45,11 @@ public class Annotator {
         this.repositoryUrl = repositoryUrl;
         this.localRepositoryFolder = localRepositoryFolder;
         this.analyzerRegistry = new AnalyzerRegistry();
-        analyzerRegistry.initializeAnalyzers(properties);
+        try {
+            analyzerRegistry.initializeAnalyzers(properties);
+        } catch (AnalyzerConfigurationException e) {
+            throw new RuntimeException("An analyzer could not be initialized correctly!", e);
+        }
     }
 
     public void annotate() {

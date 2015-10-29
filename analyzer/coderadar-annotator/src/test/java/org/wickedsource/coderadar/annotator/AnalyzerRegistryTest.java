@@ -3,6 +3,7 @@ package org.wickedsource.coderadar.annotator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.wickedsource.coderadar.analyzer.api.Analyzer;
+import org.wickedsource.coderadar.analyzer.api.AnalyzerConfigurationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Properties;
 public class AnalyzerRegistryTest {
 
     @Test
-    public void dummyAnalyzersAreRegistered() {
+    public void dummyAnalyzersAreRegistered() throws AnalyzerConfigurationException {
         AnalyzerRegistry registry = new AnalyzerRegistry();
         registry.initializeAnalyzers(new Properties());
         List<Analyzer> analyzers = registry.getRegisteredAnalyzers();
@@ -30,7 +31,7 @@ public class AnalyzerRegistryTest {
     }
 
     @Test
-    public void dummyAnalyzersAreConfiguredCorrected() {
+    public void dummyAnalyzersAreConfiguredCorrected() throws AnalyzerConfigurationException {
         Properties properties = new Properties();
         properties.setProperty(DummyAnalyzer1.class.getName() + ".testProperty1", "value1");
         properties.setProperty(DummyAnalyzer1.class.getName() + ".testProperty2", "value2");
