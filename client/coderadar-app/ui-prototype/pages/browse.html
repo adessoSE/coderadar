@@ -45,8 +45,11 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Dashboard <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">Settings</a></li>
+                    <li><a href="dashboard.html">Dashboard <span class="sr-only">(current)</span></a></li>
+                    <li class="active"><a href="browse.html">Browse</a></li>
+                    <li><a href="hotspots.html">Hotspots</a></li>
+                    <li><a href="changes.html">Changes</a></li>
+                    <li><a href="commits.html">Commits</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -56,213 +59,281 @@
 </header>
 <!-- Full Width Column -->
 <div class="content-wrapper">
-    <div class="container">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>
-                Browse
-                <small>Find out about "Java Lines of Code" in your codebase.</small>
-            </h1>
-        </section>
+<div class="container">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Browse
+        <small>Find out about a selected metric in your codebase.</small>
+                 <span class="pull-right">
+                </span>
+    </h1>
+</section>
 
-        <!-- Main content -->
-        <section class="content">
+<!-- Main content -->
+<section class="content">
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="box">
-                        <ol class="breadcrumb">
-                            <li><a href="#">root</a></li>
-                            <li><a>subFolder</a></li>
-                            <li><a>anotherSubFolder</a></li>
-                            <li><a>NullPointerException.java</a></li>
-                        </ol>
-                    </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header"><h3 class="box-title">Display Parameters</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
                 </div>
             </div>
-
-
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="box">
-                        <div class="box-body no-padding" id="fileList">
-                            <table class="table table-condensed table-hover">
-                                <tbody>
-                                <tr>
-                                    <td><i class="fa fa-folder-o"></i></td>
-                                    <td>folder1</td>
-                                    <td>
-                                        123
-                                    </td>
-                                    <td>
-                                        <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fa fa-folder-o"></i></td>
-                                    <td>folder2</td>
-                                    <td>
-                                        456
-                                    </td>
-                                    <td>
-                                        <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><i class="fa fa-folder-o"></i></td>
-                                    <td>folder3</td>
-                                    <td>
-                                        2
-                                    </td>
-                                    <td>
-                                        <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
-                                    </td>
-                                </tr>
-                                <tr class="active">
-                                    <td></td>
-                                    <td>NullPointerException.java</td>
-                                    <td>
-                                        45
-                                    </td>
-                                    <td>
-                                        <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
-                                    </td>
-                                </tr>
-
-                                </tbody>
-                            </table>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Metric to display</label>
+                            <select class="form-control" style="width: 100%;" tabindex="-1"
+                                    aria-hidden="true">
+                                <option selected="selected">Java Lines of Code</option>
+                                <option>Major Violations</option>
+                                <option>Minor Violations</option>
+                            </select>
                         </div>
-                        <!-- /.box-body -->
                     </div>
-                    <!-- /.box -->
-                </div>
-                <!-- /.col -->
-
-                <div class="col-md-8">
-                    <div class="box">
-                        <div class="box-body no-padding" id="codeEditor" style="height:650px">var editor =
-                            ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-                            var editor = ace.edit("codeEditor");
-                            editor.setTheme("ace/theme/monokai");
-                            editor.getSession().setMode("ace/mode/javascript");
-
-
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Baseline Commit</label>
+                            <select class="form-control" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                <option selected="selected">HEAD (2015/10/30 12:01 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Previous Commit to compare with</label>
+                            <select class="form-control" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                <option selected="selected">dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-
             </div>
-
-        </section>
-        <!-- /.content -->
+        </div>
     </div>
-    <!-- /.container -->
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <ol class="breadcrumb">
+                <li><a href="#">root</a></li>
+                <li><a>subFolder</a></li>
+                <li><a>anotherSubFolder</a></li>
+                <li><a>NullPointerException.java</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="box">
+            <div class="box-body no-padding" id="fileList">
+                <table class="table table-condensed table-hover">
+                    <tbody>
+                    <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>../</td>
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder1</td>
+                        <td>
+                            123
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder2</td>
+                        <td>
+                            456
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr>
+                    <tr class="active">
+                        <td></td>
+                        <td>NullPointerException.java</td>
+                        <td>
+                            45
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+    <!-- /.col -->
+
+    <div class="col-md-8">
+        <div class="box">
+            <div class="box-body no-padding" id="codeEditor" style="height:650px">var editor =
+                ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</section>
+<!-- /.content -->
+</div>
+<!-- /.container -->
 </div>
 <!-- /.content-wrapper -->
 <footer class="main-footer">

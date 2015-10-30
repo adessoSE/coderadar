@@ -45,8 +45,11 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Dashboard <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">Settings</a></li>
+                    <li><a href="dashboard.html">Dashboard <span class="sr-only">(current)</span></a></li>
+                    <li><a href="browse.html">Browse</a></li>
+                    <li class="active"><a href="hotspots.html">Hotspots</a></li>
+                    <li><a href="changes.html">Changes</a></li>
+                    <li><a href="commits.html">Commits</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -67,7 +70,61 @@
 
 <!-- Main content -->
 <section class="content">
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <div class="box-header"><h3 class="box-title">Display Parameters</h3>
 
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Metric to display</label>
+                            <select class="form-control" style="width: 100%;" tabindex="-1"
+                                    aria-hidden="true">
+                                <option selected="selected">Java Lines of Code</option>
+                                <option>Major Violations</option>
+                                <option>Minor Violations</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Baseline Commit</label>
+                            <select class="form-control" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                <option selected="selected">HEAD (2015/10/30 12:01 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Previous Commit to compare with</label>
+                            <select class="form-control" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                <option selected="selected">dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <div class="box">
