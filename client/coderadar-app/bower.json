@@ -2,16 +2,15 @@
   "name": "coderadar",
   "version": "1.0.0-SNAPSHOT",
   "dependencies": {
-    "AdminLTE": "admin-lte#~2.3.0",
     "angular": "1.4.6",
     "angular-animate": "1.4.6",
     "angular-cookies": "1.4.6",
-    "angular-datatables": "~0.5.0",
     "angular-resource": "1.4.6",
     "angular-route": "1.4.6",
     "angular-sanitize": "1.4.6",
     "angular-touch": "1.4.6",
     "bootstrap": "3.3.4",
+    "AdminLTE": "admin-lte#~2.3.0",
     "gitgraph.js": "~1.0.3"
   },
   "devDependencies": {

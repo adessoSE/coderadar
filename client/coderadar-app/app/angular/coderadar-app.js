@@ -1,5 +1,7 @@
 'use strict';
 
+var Coderadar = {};
+
 /**
  * @ngdoc overview
  * @name coderadarApp
@@ -16,5 +18,4 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'datatables'
   ]);
