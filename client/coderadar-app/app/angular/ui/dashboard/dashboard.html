@@ -13,27 +13,14 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Baseline Commit</label>
-                            <select class="form-control" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                <option selected="selected">HEAD (2015/10/30 12:01 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                            <select class="form-control" tabindex="1" ng-options="item as getLabelForCommit(item) for item in commits track by item.id" ng-model="baselineCommit" ng-change="onCommitSelectionChanged()">
                             </select>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Previous Commit to compare with</label>
-                            <select class="form-control" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                <option selected="selected">dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                            <select class="form-control" tabindex="2" ng-options="item as getLabelForCommit(item) for item in commits track by item.id" ng-model="deltaCommit" ng-change="onCommitSelectionChanged()">
                             </select>
                         </div>
                     </div>
@@ -49,16 +36,11 @@
                 <span class="info-box-text"><a href="browse.html">{{metric.displayName}}</a></span>
                 <a href="hotspots.html"><span class="info-box-number">{{metric.score}}</span></a>
                 <a href="delta-hotspots.html">
-                    <span class="info-box-number text-{{metric.trendColor}}">
+                    <span class="info-box-number text-{{getTrendColor(metric)}}">
                         <i ng-class="{'fa fa-caret-up': metric.delta > 0, 'fa fa-caret-down': metric.delta < 0, 'fa fa-caret-right': metric.delta == 0}"></i>
                         {{metric.delta}}
                     </span></a>
-
-                <div class="pull-right clearfix" id="chart"
-                     style="cursor:pointer; margin-top:-50px; height:50px; width:150px; padding:0px; position:relative"></div>
             </div>
-            <!-- /.info-box-content -->
         </div>
-        <!-- /.info-box -->
     </div>
 </div>

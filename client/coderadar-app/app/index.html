@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="coderadarApp" ng-controller="PageController" ng-cloak>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="assets/css/AdminLTE/skin-green.css"/>
     <link rel="stylesheet" href="assets/css/coderadar/coderadar.css"/>
 </head>
-<body ng-app="coderadarApp" ng-cloak class="hold-transition skin-green layout-top-nav">
+<body class="hold-transition skin-green layout-top-nav">
 <div class="wrapper">
 
     <header class="main-header">
@@ -54,9 +54,8 @@
         <div class="container">
             <section class="content-header">
                 <h1>
-                    Dashboard
-                    <small>View the metrics at the time of a commit and compare them with those of an earlier commit.
-                    </small>
+                    {{Page.headline}}
+                    <small>{{Page.subline}}</small>
                 </h1>
             </section>
 
@@ -102,6 +101,8 @@
 <script src="angular/service/metric/metricService.js"></script>
 <script src="angular/service/metric/metricsResource.js"></script>
 <script src="angular/ui/dashboard/dashboardController.js"></script>
+<script src="angular/ui/page/pageState.js"></script>
+<script src="angular/ui/page/pageController.js"></script>
 <script src="assets/js/datatables/jquery.datatables.min.js"></script>
 <script src="assets/js/slimScroll/jquery.slimscroll.min.js"></script>
 <script src="assets/js/fastclick/fastclick.min.js"></script>

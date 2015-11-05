@@ -4,7 +4,7 @@ angular.module('coderadarApp')
 
             .when('/', {
                 templateUrl: 'angular/ui/dashboard/dashboard.html',
-                controller: 'dashboardController'
+                controller: 'DashboardController'
             })
 
         ;
