@@ -9,16 +9,10 @@ describe('DashboardController', function () {
         $controller = _$controller_;
     }));
 
-    describe('$scope.getLabelForCommit()', function(){
-       it('returns a human readable label for a commit', function(){
-           var $scope = {};
-           var controller = $controller('DashboardController', { $scope: $scope });
-           var commit = {
-               id: 'commitId',
-               timestamp: 1234567891234
-           };
-           expect($scope.getLabelForCommit(commit)).toBe('February 14, 2009 at 00:31:31 - commitId');
-       })
+    it('exposes getLabelForCommit to $scope', function(){
+        var $scope = {};
+        var controller = $controller('DashboardController', { $scope: $scope });
+        expect($scope.getLabelForCommit).toBeAFunction();
     });
 
     describe('$scope.getTrendColor()', function () {

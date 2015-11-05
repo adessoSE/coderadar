@@ -15,6 +15,19 @@ beforeEach(function () {
                     };
                 }
             };
+        },
+
+        /**
+         * Asserts that a given object is a function.
+         */
+        toBeAFunction: function () {
+            return{
+                compare: function (actual, expected) {
+                    return {
+                        pass: typeof actual === 'function'
+                    };
+                }
+            };
         }
     });
 });

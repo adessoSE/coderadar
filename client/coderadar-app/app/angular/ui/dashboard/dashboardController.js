@@ -7,10 +7,15 @@ angular.module('coderadarApp')
         'CommitService',
         '$filter',
         'PageState',
-        function ($scope, metricService, commitService, $filter, pageState) {
+        'LabelProvider',
+        function ($scope, metricService, commitService, $filter, pageState, labelProvider) {
 
             pageState.setHeadline("Dashboard");
             pageState.setSubline("View the metrics at the time of a commit and compare them with those of an earlier commit.");
+
+            $scope.getLabelForCommit = function(commit){
+                return labelProvider.getLabelForCommit(commit);
+            }
 
             /**
              * Function to return the color for the trend of a metric: 'green' for good, 'red' for bad and 'yellow' for
@@ -28,16 +33,6 @@ angular.module('coderadarApp')
                     trendColor = 'red';
                 }
                 return trendColor;
-            };
-
-            /**
-             * Creates a human readable label for a commit.
-             * @param {Commit} commit The commit for which to create a label.
-             * @returns {string} The label for the specified commit.
-             */
-            $scope.getLabelForCommit = function (commit) {
-                var date = new Date(commit.timestamp);
-                return $filter('date')(date, 'MMMM dd, yyyy \'at\' HH:mm:ss') + " - " + commit.id;
             };
 
             /**
