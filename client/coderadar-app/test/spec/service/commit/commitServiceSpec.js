@@ -23,28 +23,31 @@ describe('CommitService', function () {
         expect(commitService).toBeDefined();
     });
 
-    it('should load the correct number of commits', function (done) {
-        commitService.loadLatestCommits(2, function (commits) {
-            expect(commits).toBeDefined();
-            expect(commits.length).toBe(2);
-            done();
+    describe('getLatestCommits()', function () {
+
+        it('should load the correct number of commits', function (done) {
+            commitService.loadLatestCommits(2, function (commits) {
+                expect(commits).toBeDefined();
+                expect(commits.length).toBe(2);
+                done();
+            });
+
+            // trigger resolving of promises
+            $rootScope.$digest();
         });
 
-        // trigger resolving of promises
-        $rootScope.$digest();
-    });
+        it('should load objects of the correct type', function (done) {
+            commitService.loadLatestCommits(2, function (commits) {
+                expect(commits[0].id).toBe("HEAD");
+                expect(commits[0].timestamp).toBe(175010121254);
+                expect(commits[0].committer).toBe("Tom");
+                expect(commits[0].message).toBe("commit message");
+                done();
+            });
 
-    it('should load objects of the correct type', function (done) {
-        commitService.loadLatestCommits(2, function (commits) {
-            expect(commits[0].id).toBe("HEAD");
-            expect(commits[0].timestamp).toBe(175010121254);
-            expect(commits[0].committer).toBe("Tom");
-            expect(commits[0].message).toBe("commit message");
-            done();
+            // trigger resolving of promises
+            $rootScope.$digest();
         });
-
-        // trigger resolving of promises
-        $rootScope.$digest();
     });
 });
 

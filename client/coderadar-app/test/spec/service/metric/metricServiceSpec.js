@@ -36,33 +36,37 @@ describe('MetricService', function () {
         expect(metricService).toBeDefined();
     });
 
-    it('should load the correct number of metrics', function (done) {
-        metricService.loadMetricsWithScore('HEAD', 'cafebabe', function (metricsWithScore) {
-            expect(metricsWithScore).toBeDefined();
-            expect(metricsWithScore.length).toBe(5);
-            expect(metricsWithScore[0].id).toBe('javaLoc');
-            expect(metricsWithScore[0].displayName).toBe('Java Lines of Code');
-            expect(metricsWithScore[0].valuationType).toBe(Coderadar.MetricsResource.ValuationType.UNVALUED);
-            expect(metricsWithScore[0].score).toBe(115000);
-            expect(metricsWithScore[0].delta).toBe(10000);
-            done();
+    describe('loadMetricsWithScore()', function () {
+
+        it('should load the correct number of metrics', function (done) {
+            metricService.loadMetricsWithScore('HEAD', 'cafebabe', function (metricsWithScore) {
+                expect(metricsWithScore).toBeDefined();
+                expect(metricsWithScore.length).toBe(5);
+                expect(metricsWithScore[0].id).toBe('javaLoc');
+                expect(metricsWithScore[0].displayName).toBe('Java Lines of Code');
+                expect(metricsWithScore[0].valuationType).toBe(Coderadar.MetricsResource.ValuationType.UNVALUED);
+                expect(metricsWithScore[0].score).toBe(115000);
+                expect(metricsWithScore[0].delta).toBe(10000);
+                done();
+            });
+
+            // trigger resolving of promises
+            $rootScope.$digest();
         });
 
-        // trigger resolving of promises
-        $rootScope.$digest();
-    });
+        it('should load objects of the correct type', function (done) {
+            metricService.loadMetricsWithScore('HEAD', 'cafebabe', function (metricsWithScore) {
+                expect(metricsWithScore[0].id).toBe('javaLoc');
+                expect(metricsWithScore[0].displayName).toBe('Java Lines of Code');
+                expect(metricsWithScore[0].score).toBe(115000);
+                expect(metricsWithScore[0].delta).toBe(10000);
+                done();
+            });
 
-    it('should load objects of the correct type', function (done) {
-        metricService.loadMetricsWithScore('HEAD', 'cafebabe', function (metricsWithScore) {
-            expect(metricsWithScore[0].id).toBe('javaLoc');
-            expect(metricsWithScore[0].displayName).toBe('Java Lines of Code');
-            expect(metricsWithScore[0].score).toBe(115000);
-            expect(metricsWithScore[0].delta).toBe(10000);
-            done();
+            // trigger resolving of promises
+            $rootScope.$digest();
         });
 
-        // trigger resolving of promises
-        $rootScope.$digest();
     });
 
 });
