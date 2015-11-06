@@ -35,9 +35,11 @@ Coderadar.MetricService = function (_$q_, _MetricsResource_, _ScoreResource_) {
  * baseline commit another specified commit.
  * @param {string} baselineCommitId ID of the commit in which to count the score.
  * @param {string} deltaCommitId ID of a commit previous to the baseline commit against which to calculate a score delta.
- * @param {MetricsWithScoreLoadedCallback} successCallback Callback to be called after loading is finished.
+ * @returns {Promise<MetricWithScore>} Promise to load the metrics.
  */
-Coderadar.MetricService.prototype.loadMetricsWithScore = function (baselineCommitId, deltaCommitId, successCallback) {
+Coderadar.MetricService.prototype.loadMetricsWithScore = function (baselineCommitId, deltaCommitId) {
+
+    var deferred = this.$q.defer();
 
     var self = this;
 
@@ -53,8 +55,10 @@ Coderadar.MetricService.prototype.loadMetricsWithScore = function (baselineCommi
         metrics = addScoreToMetrics(metrics, baselineCommitScore);
         metrics = addDeltaToMetrics(metrics, deltaCommitScore);
 
-        successCallback(metrics);
+        deferred.resolve(metrics);
     });
+
+    return deferred.promise;
 
     function addScoreToMetrics(metrics, score) {
         metrics.forEach(function (metric) {

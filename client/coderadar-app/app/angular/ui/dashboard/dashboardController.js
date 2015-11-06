@@ -36,7 +36,8 @@ angular.module('coderadarApp')
              * To be called when the user selected a new baselineCommit or a new deltaCommit.
              */
             $scope.onCommitSelectionChanged = function () {
-                metricService.loadMetricsWithScore($scope.baselineCommit.id, $scope.deltaCommit.id, function (metrics) {
+                var promise = metricService.loadMetricsWithScore($scope.baselineCommit.id, $scope.deltaCommit.id);
+                promise.then(function (metrics) {
                     $scope.metrics = chunkArray(metrics, 4);
                     function chunkArray(array, chunkSize) {
                         var resultArray = [];
@@ -53,7 +54,8 @@ angular.module('coderadarApp')
             /**
              * Load the latest commits to populate the commit dropdown.
              */
-            commitService.loadLatestCommits(10, function (commits) {
+            var commitsPromise = commitService.loadLatestCommits(10);
+            commitsPromise.then(function (commits) {
                 $scope.commits = commits;
                 $scope.baselineCommit = commits[0];
                 $scope.deltaCommit = commits[1];

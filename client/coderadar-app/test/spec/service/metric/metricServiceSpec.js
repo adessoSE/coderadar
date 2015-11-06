@@ -39,7 +39,9 @@ describe('MetricService', function () {
     describe('loadMetricsWithScore()', function () {
 
         it('should load the correct number of metrics', function (done) {
-            metricService.loadMetricsWithScore('HEAD', 'cafebabe', function (metricsWithScore) {
+            var promise = metricService.loadMetricsWithScore('HEAD', 'cafebabe');
+            console.log(promise);
+            promise.then(function (metricsWithScore) {
                 expect(metricsWithScore).toBeDefined();
                 expect(metricsWithScore.length).toBe(5);
                 expect(metricsWithScore[0].id).toBe('javaLoc');
@@ -55,7 +57,8 @@ describe('MetricService', function () {
         });
 
         it('should load objects of the correct type', function (done) {
-            metricService.loadMetricsWithScore('HEAD', 'cafebabe', function (metricsWithScore) {
+            var promise = metricService.loadMetricsWithScore('HEAD', 'cafebabe');
+            promise.then(function (metricsWithScore) {
                 expect(metricsWithScore[0].id).toBe('javaLoc');
                 expect(metricsWithScore[0].displayName).toBe('Java Lines of Code');
                 expect(metricsWithScore[0].score).toBe(115000);

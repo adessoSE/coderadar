@@ -43,3 +43,41 @@ MetricServiceSpec.deltaCommitScore = {
     "javaCoverage": 75.5,
     "javaViolations": 150
 };
+
+MetricServiceSpec.metricsWithScore = [
+    {
+        "id": "javaLoc",
+        "displayName": "Java Lines of Code",
+        "valuationType": "unvalued",
+        "score": 115000,
+        "delta": 100
+    },
+    {
+        "id": "xmlLoc",
+        "displayName": "XML Lines of Code",
+        "valuationType": "unvalued",
+        "score": 115000,
+        "delta": 100
+    },
+    {
+        "id": "htmlLoc",
+        "displayName": "Html Lines of Code",
+        "valuationType": "unvalued",
+        "score": 115000,
+        "delta": 100
+    },
+    {
+        "id": "javaCoverage",
+        "displayName": "Java Test Coverage",
+        "valuationType": "positive",
+        "score": 115000,
+        "delta": 100
+    },
+    {
+        "id": "javaViolations",
+        "displayName": "Java Coding Violations",
+        "valuationType": "negative",
+        "score": 115000,
+        "delta": 100
+    }
+];
