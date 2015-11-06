@@ -3,7 +3,7 @@ angular.module('coderadarApp')
         $routeProvider
 
             .when('/', {
-                templateUrl: 'angular/ui/dashboard/dashboard.html',
+                templateUrl: 'angular/ui/dashboard/dashboardView.html',
                 controller: 'DashboardController'
             })
 
