@@ -7,6 +7,11 @@ angular.module('coderadarApp')
                 controller: 'DashboardController'
             })
 
+            .when('/browse', {
+                templateUrl: 'angular/ui/browse/browseView.html',
+                controller: 'BrowseController'
+            })
+
         ;
 
     }]);
