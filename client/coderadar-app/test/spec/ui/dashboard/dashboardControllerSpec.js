@@ -46,6 +46,7 @@ describe('DashboardController', function () {
     it('exposes metrics to $scope (as an array of arrays with length 4)', function () {
         $rootScope.$digest();
         expect($scope.metrics[0]).toBeAnArrayOfMetricWithScore();
+        expect($scope.metrics[0].length).toBe(4);
     });
 
     describe('$scope.getTrendColor()', function () {
