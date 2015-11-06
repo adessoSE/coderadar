@@ -4,6 +4,8 @@ angular.module('coderadarApp')
     .controller('PageController', [
         '$scope',
         'PageState',
-        function ($scope, pageState) {
+        'LabelProvider',
+        function ($scope, pageState, labelProvider) {
             $scope.Page = pageState;
+            $scope.labelProvider = labelProvider;
         }]);

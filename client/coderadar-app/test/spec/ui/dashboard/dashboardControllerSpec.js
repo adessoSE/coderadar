@@ -9,12 +9,6 @@ describe('DashboardController', function () {
         $controller = _$controller_;
     }));
 
-    it('exposes getLabelForCommit to $scope', function(){
-        var $scope = {};
-        var controller = $controller('DashboardController', { $scope: $scope });
-        expect($scope.getLabelForCommit).toBeAFunction();
-    });
-
     describe('$scope.getTrendColor()', function () {
         it('returns the right trend color for a metric', function () {
             var $scope = {};

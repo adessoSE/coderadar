@@ -13,10 +13,6 @@ angular.module('coderadarApp')
             pageState.setHeadline("Dashboard");
             pageState.setSubline("View the metrics at the time of a commit and compare them with those of an earlier commit.");
 
-            $scope.getLabelForCommit = function(commit){
-                return labelProvider.getLabelForCommit(commit);
-            }
-
             /**
              * Function to return the color for the trend of a metric: 'green' for good, 'red' for bad and 'yellow' for
              * undefined.
