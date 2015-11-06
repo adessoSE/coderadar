@@ -30,9 +30,30 @@ Coderadar.CommitsResource.prototype.loadLatestCommits = function (count) {
     this.commitsResource.query(function (commits) {
         // in offline mode we only have ONE json file so we have to slice the first <count> commits out of it
         var latestCommits = commits.slice(0, count);
+
+        // check if all elements are of type Commit
+        latestCommits.forEach(function(commit){
+           if(!Coderadar.CommitsResource.isCommit(commit)){
+               throw 'Loaded object is not a Commit: ' + commit;
+           }
+        });
+
         deferred.resolve(latestCommits);
     });
     return deferred.promise;
+};
+
+/**
+ * Static function to test if an object has all the fields needed to be a Commit.
+ * @param object The object to test.
+ * @returns {boolean} true if the object under test is a Commit, false if not.
+ */
+Coderadar.CommitsResource.isCommit = function(object){
+    return angular.isObject(object) &&
+        typeof object.id === 'string' &&
+        typeof object.timestamp === 'number' &&
+        typeof object.committer === 'string' &&
+        typeof object.message === 'string';
 };
 
 // registering service with angular

@@ -44,10 +44,6 @@ beforeEach(function () {
     });
 
     function isCommit(object) {
-        return angular.isObject(object) &&
-            typeof object.id === 'string' &&
-            typeof object.timestamp === 'number' &&
-            typeof object.committer === 'string' &&
-            typeof object.message === 'string';
+        return Coderadar.CommitsResource.isCommit(object);
     }
 });

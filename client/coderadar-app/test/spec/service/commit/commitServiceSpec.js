@@ -40,7 +40,6 @@ describe('CommitService', function () {
         it('should load the correct number of Commit objects', function (done) {
             var promise = commitService.loadLatestCommits(2);
             promise.then(function (commits) {
-                expect(commits).toBeDefined();
                 expect(commits.length).toBe(2);
                 done();
             });

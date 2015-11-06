@@ -45,11 +45,6 @@ beforeEach(function () {
     });
 
     function isMetricWithScore(object) {
-        return angular.isObject(object) &&
-            typeof object.id === 'string' &&
-            typeof object.displayName === 'string' &&
-            typeof object.valuationType === 'string' &&
-            typeof object.score === 'number' &&
-            typeof object.delta === 'number';
+        return Coderadar.MetricsResource.isMetricWithScore(object);
     }
 });

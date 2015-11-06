@@ -48,9 +48,43 @@ Coderadar.MetricsResource.ValuationType = {
 Coderadar.MetricsResource.prototype.loadAllMetrics = function () {
     var deferred = this.$q.defer();
     this.metricsResource.query(function (metrics) {
+
+        // check if all elements are of type MEtric
+        metrics.forEach(function(metric){
+            if(!Coderadar.MetricsResource.isMetric(metric)){
+                throw 'Loaded object is not a Metric: ' + metric;
+            }
+        });
+
         deferred.resolve(metrics);
     });
     return deferred.promise;
+};
+
+/**
+ * Static function to test if an object possesses all fields needed to make it a MetricWithScore.
+ * @param object The object to test.
+ * @returns {boolean} true if the object is a MetricWithScore, false if not.
+ */
+Coderadar.MetricsResource.isMetricWithScore = function (object) {
+    return angular.isObject(object) &&
+        typeof object.id === 'string' &&
+        typeof object.displayName === 'string' &&
+        typeof object.valuationType === 'string' &&
+        typeof object.score === 'number' &&
+        typeof object.delta === 'number';
+};
+
+/**
+ * Static function to test if an object possesses all fields needed to make it a Metric.
+ * @param object The object to test.
+ * @returns {boolean} true if the object is a Metric, false if not.
+ */
+Coderadar.MetricsResource.isMetric = function (object) {
+    return angular.isObject(object) &&
+        typeof object.id === 'string' &&
+        typeof object.displayName === 'string' &&
+        typeof object.valuationType === 'string';
 };
 
 // registering service with angular
