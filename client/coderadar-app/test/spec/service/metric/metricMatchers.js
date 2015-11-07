@@ -3,7 +3,7 @@ beforeEach(function () {
     jasmine.addMatchers({
 
         /**
-         * Asserts that a given object is a Promise.
+         * Asserts that a given object is a MetricWithScore.
          */
         toBeAMetricWithScore: function () {
             return {
@@ -12,6 +12,22 @@ beforeEach(function () {
                     result.pass = isMetricWithScore(object);
                     if (!result.pass) {
                         result.message = "Expected object to be a MetricWithScore: " + object;
+                    }
+                    return result;
+                }
+            };
+        },
+
+        /**
+         * Asserts that a given object is a Metric.
+         */
+        toBeAMetric: function () {
+            return {
+                compare: function (object) {
+                    var result = {};
+                    result.pass = isMetric(object);
+                    if (!result.pass) {
+                        result.message = "Expected object to be a Metric: " + object;
                     }
                     return result;
                 }
@@ -46,5 +62,9 @@ beforeEach(function () {
 
     function isMetricWithScore(object) {
         return Coderadar.MetricsResource.isMetricWithScore(object);
+    }
+
+    function isMetric(object) {
+        return Coderadar.MetricsResource.isMetric(object);
     }
 });

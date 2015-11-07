@@ -32,7 +32,7 @@ angular.module('coderadarApp')
             };
 
             /**
-             * Updates the displayed metrics depending on which commits are selected by the user for comparison.
+             * Updates the view depending on which commits are selected by the user for comparison.
              * To be called when the user selected a new baselineCommit or a new deltaCommit.
              */
             $scope.onCommitSelectionChanged = function () {

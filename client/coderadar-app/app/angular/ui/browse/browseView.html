@@ -13,41 +13,23 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Metric to display</label>
-                            <select class="form-control" style="width: 100%;" tabindex="-1"
-                                    aria-hidden="true">
-                                <option selected="selected">Java Lines of Code</option>
-                                <option>Major Violations</option>
-                                <option>Minor Violations</option>
+                            <select class="form-control" tabindex="1" ng-options="item as labelProvider.getLabelForMetric(item) for item in metrics track by item.id" ng-model="selectedMetric" ng-change="onParametersChanged()">
                             </select>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Baseline Commit</label>
-                            <select class="form-control" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                <option selected="selected">HEAD (2015/10/30 12:01 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                            <select class="form-control" tabindex="2" ng-options="item as labelProvider.getLabelForCommit(item) for item in commits track by item.id" ng-model="baselineCommit" ng-change="onParametersChanged()">
                             </select>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Previous Commit to compare with</label>
-                            <select class="form-control" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                <option selected="selected">dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
-                                <option>dde2efd (2015/10/29 03:42 PM)</option>
+                            <select class="form-control" tabindex="3" ng-options="item as labelProvider.getLabelForCommit(item) for item in commits track by item.id" ng-model="deltaCommit" ng-change="onParametersChanged()">
                             </select>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>

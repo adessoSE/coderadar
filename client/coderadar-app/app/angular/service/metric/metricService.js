@@ -75,6 +75,10 @@ Coderadar.MetricService.prototype.loadMetricsWithScore = function (baselineCommi
     }
 };
 
+Coderadar.MetricService.prototype.loadAllMetrics = function(){
+    return this.metricsResource.loadAllMetrics();
+};
+
 // registering service with angular
 angular.module('coderadarApp')
     .service('MetricService', ['$q', 'MetricsResource', 'ScoreResource', Coderadar.MetricService]);
