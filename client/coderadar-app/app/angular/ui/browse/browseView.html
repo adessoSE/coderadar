@@ -13,24 +13,428 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Metric to display</label>
-                            <select class="form-control" tabindex="1" ng-options="item as labelProvider.getLabelForMetric(item) for item in metrics track by item.id" ng-model="selectedMetric" ng-change="onParametersChanged()">
+                            <select class="form-control" tabindex="1"
+                                    ng-options="item as labelProvider.getLabelForMetric(item) for item in metrics track by item.id"
+                                    ng-model="selectedMetric" ng-change="onParametersChanged()">
                             </select>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Baseline Commit</label>
-                            <select class="form-control" tabindex="2" ng-options="item as labelProvider.getLabelForCommit(item) for item in commits track by item.id" ng-model="baselineCommit" ng-change="onParametersChanged()">
+                            <select class="form-control" tabindex="2"
+                                    ng-options="item as labelProvider.getLabelForCommit(item) for item in commits track by item.id"
+                                    ng-model="baselineCommit" ng-change="onParametersChanged()">
                             </select>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Previous Commit to compare with</label>
-                            <select class="form-control" tabindex="3" ng-options="item as labelProvider.getLabelForCommit(item) for item in commits track by item.id" ng-model="deltaCommit" ng-change="onParametersChanged()">
+                            <select class="form-control" tabindex="3"
+                                    ng-options="item as labelProvider.getLabelForCommit(item) for item in commits track by item.id"
+                                    ng-model="deltaCommit" ng-change="onParametersChanged()">
                             </select>
                         </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box">
+            <ol class="breadcrumb">
+                <li><a href="#">root</a></li>
+                <li><a>subFolder</a></li>
+                <li><a>anotherSubFolder</a></li>
+                <li><a>NullPointerException.java</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="box">
+            <div class="box-body no-padding" id="fileList" cr-slim-scroll cr-slim-scroll-height="630">
+                <table class="table table-condensed table-hover">
+                    <tbody>
+                    <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>../</td>
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder1</td>
+                        <td>
+                            123
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder2</td>
+                        <td>
+                            456
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr> <tr>
+                        <td><i class="fa fa-folder-o"></i></td>
+                        <td>folder3</td>
+                        <td>
+                            2
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr>
+                    <tr class="active">
+                        <td></td>
+                        <td>NullPointerException.java</td>
+                        <td>
+                            45
+                        </td>
+                        <td>
+                            <span class="text-yellow"><i class="fa fa-caret-up"></i> 145</span>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+
+    <div class="col-md-8">
+        <div class="box">
+            <div class="box-body no-padding" id="codeEditor" style="height:650px">var editor =
+                ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+                var editor = ace.edit("codeEditor");
+                editor.setTheme("ace/theme/monokai");
+                editor.getSession().setMode("ace/mode/javascript");
+
+
             </div>
         </div>
     </div>
