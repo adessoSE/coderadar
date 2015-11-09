@@ -36,7 +36,7 @@
                 <span class="info-box-text"><a href="browse.html">{{metric.displayName}}</a></span>
                 <a href="hotspots.html"><span class="info-box-number">{{metric.score}}</span></a>
                 <a href="delta-hotspots.html">
-                    <span class="info-box-number text-{{getTrendColor(metric)}}">
+                    <span class="info-box-number text-{{getTrendColor(metric, metric.delta)}}">
                         <i ng-class="{'fa fa-caret-up': metric.delta > 0, 'fa fa-caret-down': metric.delta < 0, 'fa fa-caret-right': metric.delta == 0}"></i>
                         {{metric.delta}}
                     </span></a>
