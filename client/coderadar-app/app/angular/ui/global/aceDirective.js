@@ -53,11 +53,17 @@ angular.module('coderadarApp')
                         $http({
                             method: 'GET',
                             url: filePath
-                        }).then(function (response) {
-                            var fileContent = response.data;
-                            editor.setValue(fileContent, -1); // -1 sets the cursor to the start of the editor
-                            editor.getSession().setMode(getEditorModeForFile(filePath));
-                        });
+                        }).then(
+                            function (response) {
+                                var fileContent = response.data;
+                                editor.setValue(fileContent, -1); // -1 sets the cursor to the start of the editor
+                                editor.getSession().setMode(getEditorModeForFile(filePath));
+                            },
+                            function (errorResponse) {
+                                var fileContent = 'Error while loading file \'' + filePath + '\'!';
+                                editor.setValue(fileContent, -1);
+                                editor.getSession().setMode(getEditorModeForFile('default'));
+                            });
                     }
                 });
             }

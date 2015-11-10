@@ -2,7 +2,6 @@
     <div class="col-md-12">
         <div class="box">
             <div class="box-header"><h3 class="box-title">Display Parameters</h3>
-
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -47,7 +46,7 @@
     <div class="col-md-12">
         <div class="box">
             <ol class="breadcrumb">
-                <li ng-repeat="item in filePathArray"><a>{{item}}</a></li>
+                <li ng-repeat="file in fileStack"><a ng-click="onFileClicked(file)">{{file.name}}</a></li>
             </ol>
         </div>
     </div>
@@ -60,18 +59,16 @@
             <div class="box-body no-padding" cr-slim-scroll cr-slim-scroll-height="630">
                 <table class="table table-condensed table-hover">
                     <tbody>
-                    <tr ng-repeat="file in fileList">
-                        <td><i ng-class="{'fa fa-folder-o': file.isFolder, 'fa fa-file-o': !file.isFolder}"></i></td>
-                        <td>{{file.name}}</td>
-                        <td>{{file.score}}</td>
-                        <td> <span class="text-{{getTrendColor(metric, file.delta)}}"><i ng-class="{'fa fa-caret-up': file.delta > 0, 'fa fa-caret-down': file.delta < 0, 'fa fa-caret-right': file.delta == 0}"></i> {{file.delta}}</span></td>
+                    <tr ng-repeat="item in fileList" ng-click="onFileClicked(item)" ng-class="{'active' : item.name === file.name}">
+                        <td width="10%"><i ng-class="{'fa fa-folder-open-o': item.isFolder, 'fa fa-file-text-o': !item.isFolder}" style="font-size:20px"></i></td>
+                        <td width="60%">{{item.name}}</td>
+                        <td width="15%">{{item.score}}</td>
+                        <td width="15%"> <span class="text-{{getTrendColor(metric, item.delta)}}"><i ng-class="{'fa fa-caret-up': item.delta > 0, 'fa fa-caret-down': item.delta < 0, 'fa fa-caret-right': item.delta == 0}"></i> {{item.delta}}</span></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <!-- /.box-body -->
         </div>
-        <!-- /.box -->
     </div>
 
     <div class="col-md-8">

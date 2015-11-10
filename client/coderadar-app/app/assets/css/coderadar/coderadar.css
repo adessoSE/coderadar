@@ -1,3 +1,7 @@
+
+/*
+ * BREADBRUMBS
+ */
 ol.breadcrumb{
     background-color:#ffffff;
 }
@@ -6,6 +10,13 @@ ol.breadcrumb{
     padding: 0;
 }
 
+.breadcrumb a {
+    cursor:pointer;
+}
+
+/*
+ * METRIC DASHBOARD
+ */
 .metric-box{
     display: block;
     min-height: 70px;
@@ -22,4 +33,22 @@ ol.breadcrumb{
 
 .metric-box .info-box-content{
     margin-left: 0px;
+}
+
+/*
+ * FILE LIST
+ */
+.table-hover > tbody > tr:hover {
+    cursor:pointer;
+    background-color: #f8efc0;
+}
+
+.table-hover > tbody > tr.active {
+    background-color: #ffe87c;
+    font-weight: bold;
+}
+
+.table-hover > tbody > tr.active > td {
+    background-color: #ffe87c ;
+    font-weight: bold;
 }

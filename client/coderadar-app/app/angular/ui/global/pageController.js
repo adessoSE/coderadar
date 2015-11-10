@@ -17,6 +17,9 @@ angular.module('coderadarApp')
              * @returns {string} the color as string, either 'red', 'green' or 'yellow'.
              */
             $scope.getTrendColor = function (metric, delta) {
+                if(! typeof delta === 'number'){
+                    throw new Error('Expected parameter \'delta\' is missing!');
+                }
                 var trendColor = 'yellow';
                 if ((delta > 0 && metric.valuationType == Coderadar.MetricsResource.ValuationType.POSITIVE)
                     || (delta < 0 && metric.valuationType == Coderadar.MetricsResource.ValuationType.NEGATIVE)) {

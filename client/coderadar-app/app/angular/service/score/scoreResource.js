@@ -7,7 +7,7 @@
  * @constructor
  */
 Coderadar.ScoreResource = function ($resource, _$q_) {
-    this.scoreResource = $resource("/offline-data/score/score-:commitId.json");
+    this.scoreResource = $resource("/offline-data/commits/score/score-:commitId.json");
     this.$q = _$q_;
 };
 

@@ -1,0 +1,54 @@
+{
+    "/": [
+        {
+            "name": "folder1",
+            "fullPath": "/folder1",
+            "isFolder": true,
+            "score": {
+                "javaLoc": 0,
+                "xmlLoc": 550,
+                "htmlLoc": 0,
+                "javaCoverage": 0,
+                "javaViolations": 0
+            }
+        },
+        {
+            "name": "test.java",
+            "fullPath": "/test.java",
+            "isFolder": false,
+            "score": {
+                "javaLoc": 115,
+                "xmlLoc": 0,
+                "htmlLoc": 0,
+                "javaCoverage": 70.5,
+                "javaViolations": 3
+            }
+        },
+        {
+            "name": "test.js",
+            "fullPath": "/test.js",
+            "isFolder": false,
+            "score": {
+                "javaLoc": 0,
+                "xmlLoc": 550,
+                "htmlLoc": 0,
+                "javaCoverage": 0,
+                "javaViolations": 0
+            }
+        }
+    ],
+    "/folder1": [
+        {
+            "name": "test.html",
+            "fullPath": "/folder1/test.html",
+            "isFolder": false,
+            "score": {
+                "javaLoc": 0,
+                "xmlLoc": 0,
+                "htmlLoc": 50,
+                "javaCoverage": 0,
+                "javaViolations": 0
+            }
+        }
+    ]
+}
