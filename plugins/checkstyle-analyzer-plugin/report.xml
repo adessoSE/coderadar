@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="6.11.2">
+<file name="D:\data\workspaces\coderadar\analyzer\analyzers\coderadar-checkstyle-analyzer\src\main\java\org\wickedsource\coderadar\analyzer\checkstyle\CheckstyleAnalyzer.java">
+<error line="0" severity="error" message="package-info.java fehlt." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocPackageCheck"/>
+<error line="7" severity="error" message="Falsche Reihenfolge für import von &apos;org.slf4j.Logger&apos;." source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="7" severity="error" message="Import-Anweisung für &apos;org.slf4j.Logger&apos; ist in der falschen Reihenfolge. Sollte in der &apos; sein, SPECIAL_IMPORTS&apos; Gruppe, in der Erwartung nicht belegt Einfuhren auf dieser Linie." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="8" severity="error" message="Import-Anweisung für &apos;org.slf4j.LoggerFactory&apos; ist in der falschen Reihenfolge. Sollte in der &apos; sein, SPECIAL_IMPORTS&apos; Gruppe, in der Erwartung nicht belegt Einfuhren auf dieser Linie." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="9" severity="error" message="Die Form &apos;.*&apos; für import-Anweisungen sollte vermieden werden - org.wickedsource.coderadar.analyzer.api.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+<error line="9" severity="error" message="Import-Anweisung für &apos;org.wickedsource.coderadar.analyzer.api.*&apos; ist in der falschen Reihenfolge. Sollte in der &apos; sein, SPECIAL_IMPORTS&apos; Gruppe, in der Erwartung nicht belegt Einfuhren auf dieser Linie." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="11" severity="error" message="Falsche Reihenfolge für import von &apos;java.io.File&apos;." source="com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"/>
+<error line="11" severity="error" message="Import-Anweisung für &apos;java.io.File&apos; ist in der falschen Reihenfolge. Sollte in der &apos; sein, STANDARD_JAVA_PACKAGE&apos; Gruppe, in der Erwartung nicht belegt Einfuhren auf dieser Linie." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="12" severity="error" message="Import-Anweisung für &apos;java.io.FileOutputStream&apos; ist in der falschen Reihenfolge. Sollte in der &apos; sein, STANDARD_JAVA_PACKAGE&apos; Gruppe, in der Erwartung nicht belegt Einfuhren auf dieser Linie." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="13" severity="error" message="Import-Anweisung für &apos;java.io.IOException&apos; ist in der falschen Reihenfolge. Sollte in der &apos; sein, STANDARD_JAVA_PACKAGE&apos; Gruppe, in der Erwartung nicht belegt Einfuhren auf dieser Linie." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="14" severity="error" message="Import-Anweisung für &apos;java.util.Arrays&apos; ist in der falschen Reihenfolge. Sollte in der &apos; sein, STANDARD_JAVA_PACKAGE&apos; Gruppe, in der Erwartung nicht belegt Einfuhren auf dieser Linie." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="15" severity="error" message="Import-Anweisung für &apos;java.util.Properties&apos; ist in der falschen Reihenfolge. Sollte in der &apos; sein, STANDARD_JAVA_PACKAGE&apos; Gruppe, in der Erwartung nicht belegt Einfuhren auf dieser Linie." source="com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"/>
+<error line="17" severity="error" message="In der Klassen-Dokumentation fehlt ein null-Tag." source="com.puppycrawl.tools.checkstyle.checks.javadoc.WriteTagCheck"/>
+<error line="17" severity="error" message="Javadoc-Kommentar fehlt." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocTypeCheck"/>
+<error line="19" column="5" severity="error" message="Javadoc-Kommentar fehlt." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="21" column="5" severity="error" message="Javadoc-Kommentar fehlt." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"/>
+<error line="31" severity="error" message="Unnecessary consecutive lines" source="com.puppycrawl.tools.checkstyle.checks.regexp.RegexpMultilineCheck"/>
+<error line="34" column="5" severity="error" message="Javadoc-Kommentar fehlt." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="36" severity="error" message="Zeile länger als 100 Zeichen" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="42" column="17" severity="error" message="Variable &apos;checker&apos; sollte als final deklariert werden." source="com.puppycrawl.tools.checkstyle.checks.coding.FinalLocalVariableCheck"/>
+<error line="47" column="36" severity="error" message="Variable &apos;auditListener&apos; sollte als final deklariert werden." source="com.puppycrawl.tools.checkstyle.checks.coding.FinalLocalVariableCheck"/>
+<error line="48" column="27" severity="error" message="Variable &apos;checkstyleConfig&apos; sollte als final deklariert werden." source="com.puppycrawl.tools.checkstyle.checks.coding.FinalLocalVariableCheck"/>
+<error line="55" column="9" severity="error" message="&apos;}&apos; in Spalten 9 sollte allein in der Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="57" column="9" severity="error" message="&apos;}&apos; in Spalten 9 sollte allein in der Zeile stehen." source="com.puppycrawl.tools.checkstyle.checks.blocks.RightCurlyCheck"/>
+<error line="61" severity="error" message="Kommentar entspricht to-do-Format &apos;(TODO)|(FIXME)&apos;." source="com.puppycrawl.tools.checkstyle.checks.TodoCommentCheck"/>
+<error line="61" severity="error" message="Kommentare und Code sollten nicht in einer Zeile gemischt werden." source="com.puppycrawl.tools.checkstyle.checks.TrailingCommentCheck"/>
+<error line="61" severity="error" message="Zeile länger als 100 Zeichen" source="com.puppycrawl.tools.checkstyle.checks.sizes.LineLengthCheck"/>
+<error line="65" column="5" severity="error" message="Javadoc-Kommentar fehlt." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
+<error line="66" column="14" severity="error" message="Variable &apos;file&apos; sollte als final deklariert werden." source="com.puppycrawl.tools.checkstyle.checks.coding.FinalLocalVariableCheck"/>
+<error line="68" column="26" severity="error" message="Variable &apos;out&apos; sollte als final deklariert werden." source="com.puppycrawl.tools.checkstyle.checks.coding.FinalLocalVariableCheck"/>
+</file>
+</checkstyle>
