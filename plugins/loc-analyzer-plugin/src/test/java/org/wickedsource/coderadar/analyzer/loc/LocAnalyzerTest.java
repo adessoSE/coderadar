@@ -12,7 +12,7 @@ public class LocAnalyzerTest {
     @Test
     public void metricIsCalculatedCorrectly() throws Exception {
 
-        InputStream in = getClass().getResourceAsStream("AcceptedFile.java");
+        InputStream in = getClass().getResourceAsStream("AcceptedJavaFile.txt");
         byte[] fileContent = IOUtils.toByteArray(in);
 
         LocAnalyzer analyzer = new LocAnalyzer();
