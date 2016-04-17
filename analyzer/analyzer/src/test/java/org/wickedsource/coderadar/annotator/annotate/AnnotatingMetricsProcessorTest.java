@@ -1,12 +1,15 @@
 package org.wickedsource.coderadar.annotator.annotate;
 
+import com.google.gson.Gson;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Assert;
 import org.junit.Test;
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
+import org.wickedsource.coderadar.analyzer.api.CommitMetrics;
 import org.wickedsource.coderadar.analyzer.api.FileMetricsWithChangeType;
 import org.wickedsource.coderadar.analyzer.api.Metric;
 import org.wickedsource.coderadar.annotator.GitTestTemplate;
+import org.wickedsource.coderadar.annotator.serialize.GsonFactory;
 
 public class AnnotatingMetricsProcessorTest extends GitTestTemplate {
 
@@ -30,6 +33,15 @@ public class AnnotatingMetricsProcessorTest extends GitTestTemplate {
         String note = getNote(commit.getName(), NoteUtil.CODERADAR_NAMESPACE);
 
         // assert that note contains the metrics as JSON
-        Assert.assertEquals("{\"metrics\":{\"file1\":{\"changeType\":\"ADD\",\"counts\":{\"123\":5},\"findings\":{}},\"dir1/file2\":{\"changeType\":\"COPY\",\"counts\":{\"321\":3},\"findings\":{}}}}", note);
+
+        Gson gson = GsonFactory.getInstance().createGson();
+        CommitMetrics metrics = gson.fromJson(note, CommitMetrics.class);
+        Assert.assertTrue(metrics.getFiles().contains("file1"));
+        Assert.assertEquals(ChangeType.ADD, metrics.getFileMetrics("file1").getChangeType());
+        Assert.assertEquals(Long.valueOf(5), metrics.getFileMetrics("file1").getMetricCount(new Metric("123")));
+
+        Assert.assertTrue(metrics.getFiles().contains("dir1/file2"));
+        Assert.assertEquals(ChangeType.COPY, metrics.getFileMetrics("dir1/file2").getChangeType());
+        Assert.assertEquals(Long.valueOf(3), metrics.getFileMetrics("dir1/file2").getMetricCount(new Metric("321")));
     }
 }
