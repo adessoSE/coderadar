@@ -5,6 +5,7 @@ version= '1.0.0-SNAPSHOT'
 subprojects{
     apply plugin: 'idea';
     apply plugin: 'java';
+    apply plugin: 'findbugs';
 
     sourceCompatibility = 1.8
 

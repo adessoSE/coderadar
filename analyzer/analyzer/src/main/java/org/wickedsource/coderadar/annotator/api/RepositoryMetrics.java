@@ -1,4 +1,4 @@
-package api;
+package org.wickedsource.coderadar.annotator.api;
 
 import org.wickedsource.coderadar.analyzer.api.Metric;
 

@@ -1,4 +1,4 @@
-package api;
+package org.wickedsource.coderadar.annotator.api;
 
 public class CommitAssociatedMetricValue extends MetricValue {
 
