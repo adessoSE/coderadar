@@ -10,17 +10,17 @@ import org.wickedsource.coderadar.analyzer.api.Metric;
 import java.io.IOException;
 import java.util.Properties;
 
-public class CheckstyleAnalyzerTest {
+public class CheckstyleAnalyzerPluginTest {
 
     @Test
     public void metricsAreCalculatedCorrectly() throws AnalyzerException, IOException {
 
         Properties properties = new Properties();
-        properties.setProperty(CheckstyleAnalyzer.class.getName() + ".configLocation", "src/test/resources/checkstyle.xml");
+        properties.setProperty(CheckstyleAnalyzerPlugin.class.getName() + ".configLocation", "src/test/resources/checkstyle.xml");
 
         byte[] fileContent = IOUtils.toByteArray(getClass().getResourceAsStream("/CheckstyleAnalyzer.java.txt"));
 
-        CheckstyleAnalyzer analyzer = new CheckstyleAnalyzer();
+        CheckstyleAnalyzerPlugin analyzer = new CheckstyleAnalyzerPlugin();
         analyzer.configure(properties);
         FileMetrics metrics = analyzer.analyzeFile(fileContent);
 

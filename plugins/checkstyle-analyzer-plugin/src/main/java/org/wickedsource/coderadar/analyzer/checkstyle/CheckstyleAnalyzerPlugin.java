@@ -14,9 +14,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class CheckstyleAnalyzer implements Analyzer {
+public class CheckstyleAnalyzerPlugin implements AnalyzerPlugin {
 
-    private Logger logger = LoggerFactory.getLogger(CheckstyleAnalyzer.class);
+    private Logger logger = LoggerFactory.getLogger(CheckstyleAnalyzerPlugin.class);
 
     private CheckstyleAnalyzerConfiguration analyzerConfig;
 

@@ -5,7 +5,7 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
-import org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleAnalyzer;
+import org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleAnalyzerPlugin;
 import org.wickedsource.coderadar.annotator.annotate.NoteUtil;
 
 import java.io.File;
@@ -17,7 +17,7 @@ public class AnnotatorManualTest {
     public static void main(String[] args) throws IOException {
 
         Properties properties = new Properties();
-        properties.put(CheckstyleAnalyzer.class.getName() + ".configLocation", "src/test/resources/checkstyle.xml");
+        properties.put(CheckstyleAnalyzerPlugin.class.getName() + ".configLocation", "src/test/resources/checkstyle.xml");
 
         AnnotatorBuilder builder = new AnnotatorBuilder();
         Annotator annotator = builder

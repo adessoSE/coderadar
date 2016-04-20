@@ -23,24 +23,24 @@ public class AllCommitsWalkerTest extends GitTestTemplate {
         // mocking analyzer plugin 1
         final FileMetricsWithChangeType metrics1 = new FileMetricsWithChangeType(ChangeType.ADD);
         metrics1.setMetricCount(new Metric("123"), 5l);
-        Analyzer plugin1 = Mockito.mock(Analyzer.class);
+        AnalyzerPlugin plugin1 = Mockito.mock(AnalyzerPlugin.class);
         when(plugin1.analyzeFile(any(byte[].class))).thenReturn(metrics1);
         when(plugin1.getFilter()).thenReturn(new DefaultFilter());
 
         // mocking analyzer plugin 2
         final FileMetricsWithChangeType metrics2 = new FileMetricsWithChangeType(ChangeType.ADD);
         metrics1.setMetricCount(new Metric("321"), 10l);
-        Analyzer plugin2 = Mockito.mock(Analyzer.class);
+        AnalyzerPlugin plugin2 = Mockito.mock(AnalyzerPlugin.class);
         when(plugin2.analyzeFile(any(byte[].class))).thenReturn(metrics2);
         when(plugin2.getFilter()).thenReturn(new DefaultFilter());
 
-        List<Analyzer> analyzers = Arrays.asList(plugin1, plugin2);
+        List<AnalyzerPlugin> analyzerPlugins = Arrays.asList(plugin1, plugin2);
 
         // mocking metrics processor
         MetricsProcessor processor = Mockito.mock(MetricsProcessor.class);
 
         AllCommitsWalker walker = new AllCommitsWalker();
-        walker.walk(git, analyzers, processor);
+        walker.walk(git, analyzerPlugins, processor);
 
         // verify that each file is passed into all analyzers
         verify(plugin1).analyzeFile("testFile".getBytes());

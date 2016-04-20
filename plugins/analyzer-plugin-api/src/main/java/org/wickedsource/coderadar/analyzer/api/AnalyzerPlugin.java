@@ -2,7 +2,7 @@ package org.wickedsource.coderadar.analyzer.api;
 
 import java.util.Properties;
 
-public interface Analyzer {
+public interface AnalyzerPlugin {
 
     /**
      * This method is called right after construction of the analyzer to pass in configuration parameters.

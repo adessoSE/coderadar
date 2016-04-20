@@ -2,8 +2,8 @@ package org.wickedsource.coderadar.annotator.analyze;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wickedsource.coderadar.analyzer.api.Analyzer;
 import org.wickedsource.coderadar.analyzer.api.AnalyzerFilter;
+import org.wickedsource.coderadar.analyzer.api.AnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 
 import java.util.List;
@@ -19,24 +19,24 @@ public class FileAnalyzer {
      * Analyzes a single file. Lets all AnalyzerPlugins run over the given file to calculate their metrics. The aggregated
      * metrics are returned.
      *
-     * @param analyzers   the analyzers to calculate metrics for the given file.
+     * @param analyzerPlugins   the analyzers to calculate metrics for the given file.
      * @param filePath    the path of the file to be analyzed (only needed for purpose of meaningful log messages)
      * @param fileContent the content of the file to be analyzed
      * @return the metrics calculated by all AnalyzerPlugins.
      */
-    public FileMetrics analyzeFile(List<Analyzer> analyzers, String filePath, byte[] fileContent) {
+    public FileMetrics analyzeFile(List<AnalyzerPlugin> analyzerPlugins, String filePath, byte[] fileContent) {
         logger.debug("analyzing file {}", filePath);
         FileMetrics fileMetrics = new FileMetrics();
-        for (Analyzer analyzer : analyzers) {
-            if (analyzer.getFilter() == null) {
-                throw new IllegalStateException(String.format("Analyzer %s returns an empty AnalyzerFilter! All Analyzers MUST return a valid filter!", analyzer.getClass()));
+        for (AnalyzerPlugin analyzerPlugin : analyzerPlugins) {
+            if (analyzerPlugin.getFilter() == null) {
+                throw new IllegalStateException(String.format("Analyzer %s returns an empty AnalyzerFilter! All Analyzers MUST return a valid filter!", analyzerPlugin.getClass()));
             }
-            if (acceptFile(analyzer.getFilter(), filePath)) {
+            if (acceptFile(analyzerPlugin.getFilter(), filePath)) {
                 try {
-                    fileMetrics.add(analyzer.analyzeFile(fileContent));
+                    fileMetrics.add(analyzerPlugin.analyzeFile(fileContent));
                 } catch (Exception e) {
                     // catching all exceptions since the plugin is potentially evil
-                    logger.warn(String.format("Analyzer of class %s threw an exception while analyzing the file %s ... skipping this analyzer.", analyzer.getClass().getName(), filePath), e);
+                    logger.warn(String.format("Analyzer of class %s threw an exception while analyzing the file %s ... skipping this analyzer.", analyzerPlugin.getClass().getName(), filePath), e);
                 }
             }
         }
