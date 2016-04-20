@@ -1,0 +1,44 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.github.jacobono:gradle-jaxb-plugin:1.3.6"
+    }
+}
+
+apply plugin: 'com.github.jacobono.jaxb'
+
+dependencies {
+    jaxb 'com.sun.xml.bind:jaxb-core:2.2.11'
+    jaxb 'com.sun.xml.bind:jaxb-xjc:2.2.11'
+    jaxb 'com.sun.xml.bind:jaxb-impl:2.2.11'
+    jaxb 'javax.xml.bind:jaxb-api:2.2.12-b141001.1542'
+}
+
+sourceSets{
+    main{
+        java{
+            srcDirs = ['src/main/generated', 'src/main/java']
+        }
+    }
+}
+
+jaxb {
+    xsdDir = 'plugins/findbugs-adapter-plugin/src/main/resources/xsd'
+    xjc {
+        destinationDir = 'src/main/generated'
+        generatePackage = 'org.wickedsource.coderadar.analyzer.findbugs.xsd'
+    }
+}
+
+compileJava{
+    dependsOn(xjc)
+}
+
+task cleanGeneratedSources(type: Delete){
+    delete 'src/main/generated'
+}
+clean.dependsOn(cleanGeneratedSources)

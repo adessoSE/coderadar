@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BugCollection version="3.0.1" sequence="0" timestamp="1461183776468" analysisTimestamp="1461183776488" release=""
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        >
+    <Project projectName="">
+        <Jar>D:\data\workspaces\coderadar\plugins\checkstyle-analyzer-plugin\build\classes\main\org\wickedsource\coderadar\analyzer\checkstyle\CheckstyleAnalyzerConfiguration.class</Jar>
+        <Jar>D:\data\workspaces\coderadar\plugins\checkstyle-analyzer-plugin\build\classes\main\org\wickedsource\coderadar\analyzer\checkstyle\CheckstyleAnalyzerPlugin$1.class</Jar>
+        <Jar>D:\data\workspaces\coderadar\plugins\checkstyle-analyzer-plugin\build\classes\main\org\wickedsource\coderadar\analyzer\checkstyle\CheckstyleAnalyzerPlugin.class</Jar>
+        <Jar>D:\data\workspaces\coderadar\plugins\checkstyle-analyzer-plugin\build\classes\main\org\wickedsource\coderadar\analyzer\checkstyle\CheckstylePropertiesResolver.class</Jar>
+        <Jar>D:\data\workspaces\coderadar\plugins\checkstyle-analyzer-plugin\build\classes\main\org\wickedsource\coderadar\analyzer\checkstyle\CoderadarAuditListener.class</Jar>
+        <AuxClasspathEntry>D:\data\workspaces\coderadar\plugins\analyzer-plugin-api\build\libs\analyzer-plugin-api.jar</AuxClasspathEntry>
+        <AuxClasspathEntry>C:\Users\Tom\.gradle\caches\modules-2\files-2.1\commons-lang\commons-lang\2.6\ce1edb914c94ebc388f086c6827e8bdeec71ac2\commons-lang-2.6.jar</AuxClasspathEntry>
+        <AuxClasspathEntry>C:\Users\Tom\.gradle\caches\modules-2\files-2.1\com.puppycrawl.tools\checkstyle\6.11.2\2705f014697ac0219de0bb2bfc33afb7ec6d22c6\checkstyle-6.11.2.jar</AuxClasspathEntry>
+        <AuxClasspathEntry>C:\Users\Tom\.gradle\caches\modules-2\files-2.1\commons-io\commons-io\2.4\b1b6ea3b7e4aa4f492509a4952029cd8e48019ad\commons-io-2.4.jar</AuxClasspathEntry>
+        <AuxClasspathEntry>C:\Users\Tom\.gradle\caches\modules-2\files-2.1\org.slf4j\slf4j-api\1.7.12\8e20852d05222dc286bf1c71d78d0531e177c317\slf4j-api-1.7.12.jar</AuxClasspathEntry>
+        <AuxClasspathEntry>C:\Users\Tom\.gradle\caches\modules-2\files-2.1\org.apache.commons\commons-lang3\3.4\5fe28b9518e58819180a43a850fbc0dd24b7c050\commons-lang3-3.4.jar</AuxClasspathEntry>
+        <AuxClasspathEntry>C:\Users\Tom\.gradle\caches\modules-2\files-2.1\antlr\antlr\2.7.7\83cd2cd674a217ade95a4bb83a8a14f351f48bd0\antlr-2.7.7.jar</AuxClasspathEntry>
+        <AuxClasspathEntry>C:\Users\Tom\.gradle\caches\modules-2\files-2.1\org.antlr\antlr4-runtime\4.5.1-1\66144204f9d6d7d3f3f775622c2dd7e9bd511d97\antlr4-runtime-4.5.1-1.jar</AuxClasspathEntry>
+        <AuxClasspathEntry>C:\Users\Tom\.gradle\caches\modules-2\files-2.1\commons-beanutils\commons-beanutils\1.9.2\7a87d845ad3a155297e8f67d9008f4c1e5656b71\commons-beanutils-1.9.2.jar</AuxClasspathEntry>
+        <AuxClasspathEntry>C:\Users\Tom\.gradle\caches\modules-2\files-2.1\commons-cli\commons-cli\1.3.1\1303efbc4b181e5a58bf2e967dc156a3132b97c0\commons-cli-1.3.1.jar</AuxClasspathEntry>
+        <AuxClasspathEntry>C:\Users\Tom\.gradle\caches\modules-2\files-2.1\com.google.guava\guava\18.0\cce0823396aa693798f8882e64213b1772032b09\guava-18.0.jar</AuxClasspathEntry>
+        <AuxClasspathEntry>C:\Users\Tom\.gradle\caches\modules-2\files-2.1\commons-logging\commons-logging\1.1.1\5043bfebc3db072ed80fbd362e7caf00e885d8ae\commons-logging-1.1.1.jar</AuxClasspathEntry>
+        <AuxClasspathEntry>C:\Users\Tom\.gradle\caches\modules-2\files-2.1\commons-collections\commons-collections\3.2.1\761ea405b9b37ced573d2df0d1e3a4e0f9edc668\commons-collections-3.2.1.jar</AuxClasspathEntry>
+        <SrcDir>D:\data\workspaces\coderadar\plugins\checkstyle-analyzer-plugin\src\main\java\org\wickedsource\coderadar\analyzer\checkstyle\CheckstyleAnalyzerConfiguration.java</SrcDir>
+        <SrcDir>D:\data\workspaces\coderadar\plugins\checkstyle-analyzer-plugin\src\main\java\org\wickedsource\coderadar\analyzer\checkstyle\CheckstyleAnalyzerPlugin.java</SrcDir>
+        <SrcDir>D:\data\workspaces\coderadar\plugins\checkstyle-analyzer-plugin\src\main\java\org\wickedsource\coderadar\analyzer\checkstyle\CheckstylePropertiesResolver.java</SrcDir>
+        <SrcDir>D:\data\workspaces\coderadar\plugins\checkstyle-analyzer-plugin\src\main\java\org\wickedsource\coderadar\analyzer\checkstyle\CoderadarAuditListener.java</SrcDir>
+    </Project>
+    <BugInstance type="OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE" priority="2" rank="20" abbrev="OBL" category="EXPERIMENTAL">
+        <Class classname="org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleAnalyzerPlugin">
+            <SourceLine classname="org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleAnalyzerPlugin" start="17" end="92" sourcefile="CheckstyleAnalyzerPlugin.java" sourcepath="org/wickedsource/coderadar/analyzer/checkstyle/CheckstyleAnalyzerPlugin.java"/>
+        </Class>
+        <Method classname="org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleAnalyzerPlugin" name="createTempFile" signature="([B)Ljava/io/File;" isStatic="false">
+            <SourceLine classname="org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleAnalyzerPlugin" start="87" end="92" startBytecode="0" endBytecode="123" sourcefile="CheckstyleAnalyzerPlugin.java" sourcepath="org/wickedsource/coderadar/analyzer/checkstyle/CheckstyleAnalyzerPlugin.java"/>
+        </Method>
+        <Class classname="java.io.OutputStream" role="CLASS_REFTYPE">
+            <SourceLine classname="java.io.OutputStream" start="46" end="152" sourcefile="OutputStream.java" sourcepath="java/io/OutputStream.java"/>
+        </Class>
+        <Int value="1" role="INT_OBLIGATIONS_REMAINING"/>
+        <SourceLine classname="org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleAnalyzerPlugin" start="89" end="89" startBytecode="17" endBytecode="17" sourcefile="CheckstyleAnalyzerPlugin.java" sourcepath="org/wickedsource/coderadar/analyzer/checkstyle/CheckstyleAnalyzerPlugin.java" role="SOURCE_LINE_OBLIGATION_CREATED"/>
+        <SourceLine classname="org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleAnalyzerPlugin" start="90" end="90" startBytecode="21" endBytecode="21" sourcefile="CheckstyleAnalyzerPlugin.java" sourcepath="org/wickedsource/coderadar/analyzer/checkstyle/CheckstyleAnalyzerPlugin.java" role="SOURCE_LINE_PATH_CONTINUES"/>
+        <String value="{OutputStream x 1}" role="STRING_REMAINING_OBLIGATIONS"/>
+    </BugInstance>
+    <Errors errors="0" missingClasses="0"></Errors>
+    <FindBugsSummary timestamp="Wed, 20 Apr 2016 22:22:56 +0200" total_classes="5" referenced_classes="39" total_bugs="1" total_size="110" num_packages="1" java_version="1.8.0_77" vm_version="25.77-b03" cpu_seconds="7.08" clock_seconds="1.63" peak_mbytes="116.32" alloc_mbytes="1817.00" gc_seconds="0.06" priority_2="1">
+        <PackageStats package="org.wickedsource.coderadar.analyzer.checkstyle" total_bugs="1" total_types="5" total_size="110" priority_2="1">
+            <ClassStats class="org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleAnalyzerConfiguration" sourceFile="CheckstyleAnalyzerConfiguration.java" interface="false" size="22" bugs="0"/>
+            <ClassStats class="org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleAnalyzerPlugin" sourceFile="CheckstyleAnalyzerPlugin.java" interface="false" size="46" bugs="1" priority_2="1"/>
+            <ClassStats class="org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleAnalyzerPlugin$1" sourceFile="CheckstyleAnalyzerPlugin.java" interface="false" size="8" bugs="0"/>
+            <ClassStats class="org.wickedsource.coderadar.analyzer.checkstyle.CheckstylePropertiesResolver" sourceFile="CheckstylePropertiesResolver.java" interface="false" size="8" bugs="0"/>
+            <ClassStats class="org.wickedsource.coderadar.analyzer.checkstyle.CoderadarAuditListener" sourceFile="CoderadarAuditListener.java" interface="false" size="26" bugs="0"/>
+        </PackageStats>
+        <FindBugsProfile>
+            <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="289" invocations="486" avgMicrosecondsPerInvocation="596" maxMicrosecondsPerInvocation="25564" standardDeviationMircosecondsPerInvocation="1943"/>
+            <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="99" invocations="39" avgMicrosecondsPerInvocation="2550" maxMicrosecondsPerInvocation="15943" standardDeviationMircosecondsPerInvocation="4136"/>
+            <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="78" invocations="39" avgMicrosecondsPerInvocation="2002" maxMicrosecondsPerInvocation="13250" standardDeviationMircosecondsPerInvocation="3207"/>
+            <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="76" invocations="186" avgMicrosecondsPerInvocation="409" maxMicrosecondsPerInvocation="4372" standardDeviationMircosecondsPerInvocation="562"/>
+            <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="68" invocations="451" avgMicrosecondsPerInvocation="150" maxMicrosecondsPerInvocation="21745" standardDeviationMircosecondsPerInvocation="1036"/>
+            <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="36" invocations="487" avgMicrosecondsPerInvocation="74" maxMicrosecondsPerInvocation="1137" standardDeviationMircosecondsPerInvocation="65"/>
+            <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.JavaClassAnalysisEngine" totalMilliseconds="35" invocations="69" avgMicrosecondsPerInvocation="521" maxMicrosecondsPerInvocation="16834" standardDeviationMircosecondsPerInvocation="2059"/>
+            <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.MethodGenFactory" totalMilliseconds="34" invocations="26" avgMicrosecondsPerInvocation="1317" maxMicrosecondsPerInvocation="30439" standardDeviationMircosecondsPerInvocation="5827"/>
+            <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="28" invocations="39" avgMicrosecondsPerInvocation="729" maxMicrosecondsPerInvocation="6339" standardDeviationMircosecondsPerInvocation="1300"/>
+            <ClassProfile name="edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase" totalMilliseconds="25" invocations="39" avgMicrosecondsPerInvocation="660" maxMicrosecondsPerInvocation="5223" standardDeviationMircosecondsPerInvocation="1165"/>
+            <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.TypeDataflowFactory" totalMilliseconds="25" invocations="28" avgMicrosecondsPerInvocation="919" maxMicrosecondsPerInvocation="8066" standardDeviationMircosecondsPerInvocation="1607"/>
+            <ClassProfile name="edu.umd.cs.findbugs.detect.OverridingEqualsNotSymmetrical" totalMilliseconds="25" invocations="39" avgMicrosecondsPerInvocation="655" maxMicrosecondsPerInvocation="10502" standardDeviationMircosecondsPerInvocation="1740"/>
+            <ClassProfile name="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures" totalMilliseconds="25" invocations="39" avgMicrosecondsPerInvocation="651" maxMicrosecondsPerInvocation="7908" standardDeviationMircosecondsPerInvocation="1465"/>
+            <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.IsNullValueDataflowFactory" totalMilliseconds="23" invocations="26" avgMicrosecondsPerInvocation="912" maxMicrosecondsPerInvocation="7846" standardDeviationMircosecondsPerInvocation="1557"/>
+            <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.ValueNumberDataflowFactory" totalMilliseconds="23" invocations="28" avgMicrosecondsPerInvocation="846" maxMicrosecondsPerInvocation="7679" standardDeviationMircosecondsPerInvocation="1462"/>
+            <ClassProfile name="edu.umd.cs.findbugs.detect.BuildStringPassthruGraph" totalMilliseconds="23" invocations="39" avgMicrosecondsPerInvocation="590" maxMicrosecondsPerInvocation="7057" standardDeviationMircosecondsPerInvocation="1260"/>
+            <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.CFGFactory" totalMilliseconds="21" invocations="26" avgMicrosecondsPerInvocation="835" maxMicrosecondsPerInvocation="10375" standardDeviationMircosecondsPerInvocation="1976"/>
+        </FindBugsProfile>
+    </FindBugsSummary>
+    <ClassFeatures></ClassFeatures>
+    <History></History>
+</BugCollection>

@@ -1,13 +1,6 @@
-/dist
-/.tmp
-/.sass-cache
 /.idea
 /.gradle
 *.iws
 .gradle
-/analyzer/coderadar-analyzer/build
 *.iml
-/client/coderadar-app/bower_components
-/client/coderadar-app/dist
-/client/coderadar-app/node_modules
-/server/coderadar-webapp/coderadar-webapp.iml
+/plugins/findbugs-adapter-plugin/src/main/generated

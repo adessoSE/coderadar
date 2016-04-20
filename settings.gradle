@@ -1,7 +1,8 @@
-include 'plugins:analyzer-plugin-api'
 include 'analyzer:analyzer'
+include 'plugins:analyzer-plugin-api'
 include 'plugins:loc-analyzer-plugin'
 include 'plugins:todo-analyzer-plugin'
 include 'plugins:checkstyle-analyzer-plugin'
+include 'plugins:findbugs-adapter-plugin'
 
 
