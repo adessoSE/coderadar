@@ -19,7 +19,7 @@ public class CheckstyleAnalyzerConfiguration {
     }
 
     private String getPropertyWithoutPrefix(String propertyName) {
-        return (String) backingProperties.get(CheckstyleAnalyzerPlugin.class.getName() + "." + propertyName);
+        return (String) backingProperties.get(CheckstyleFileAnalyzerPlugin.class.getName() + "." + propertyName);
     }
 
     private void initializeConfigLocation(String configLocationPath) throws AnalyzerConfigurationException {

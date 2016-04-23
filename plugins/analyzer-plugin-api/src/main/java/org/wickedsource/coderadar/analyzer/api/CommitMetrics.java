@@ -10,13 +10,13 @@ import java.util.Set;
  */
 public class CommitMetrics {
 
-    private Map<String, FileMetricsWithChangeType> metrics = new HashMap<>();
+    private Map<String, FileMetrics> metrics = new HashMap<>();
 
-    public FileMetricsWithChangeType getFileMetrics(String file) {
+    public FileMetrics getFileMetrics(String file) {
         return metrics.get(file);
     }
 
-    public void addMetricsToFile(String file, FileMetricsWithChangeType metrics) {
+    public void addMetricsToFile(String file, FileMetrics metrics) {
         FileMetrics fileMetrics = this.metrics.get(file);
         if (fileMetrics == null) {
             this.metrics.put(file, metrics);

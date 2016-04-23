@@ -1,4 +1,4 @@
-include 'analyzer:analyzer'
+include 'client:analyzer'
 include 'plugins:analyzer-plugin-api'
 include 'plugins:loc-analyzer-plugin'
 include 'plugins:todo-analyzer-plugin'

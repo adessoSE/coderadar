@@ -3,7 +3,6 @@ package org.wickedsource.coderadar.analyzer.api;
 import java.util.Properties;
 
 public interface AnalyzerPlugin {
-
     /**
      * This method is called right after construction of the analyzer to pass in configuration parameters.
      * The configuration parameters are read from the central analyzer configuration. Only those properties
@@ -13,29 +12,12 @@ public interface AnalyzerPlugin {
      *
      * @param properties the properties targeted at this analyzer (i.e. the properties whose names start with the
      *                   fully qualified name of the analyzer class).
-     * @throws AnalyzerConfigurationException in case of an error during configuration (i.e. when some configuration parameter is invalid).
+     * @throws org.wickedsource.coderadar.analyzer.api.AnalyzerConfigurationException in case of an error during configuration (i.e. when some configuration parameter is invalid).
      */
     void configure(Properties properties) throws AnalyzerConfigurationException;
-
-    /**
-     * Returns a filter that defines which files the analyzer is interested in. Only the files that pass this filter
-     * will be passed into analyzeFile().
-     *
-     * @return a filter defining which files the analyzer wants to analyze.
-     */
-    AnalyzerFilter getFilter();
-
-    /**
-     * Analyzes a single file.
-     *
-     * @param fileContent the content of the file.
-     * @return a set of metric values calculated for the given file.
-     */
-    FileMetrics analyzeFile(byte[] fileContent) throws AnalyzerException;
 
     /**
      * This method is called after all files have been analyzed and can be used to free resources.
      */
     void destroy();
-
 }
