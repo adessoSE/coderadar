@@ -32,7 +32,7 @@ public class GsonFactoryTest {
 
         // test java to json
         String json = gson.toJson(fileSetMetrics);
-        Assert.assertEquals("{\"metrics\":{\"file2\":{\"counts\":{\"321\":12},\"findings\":{\"321\":[{\"lineStart\":1,\"lineEnd\":2,\"charStart\":3,\"charEnd\":4}]}},\"file1\":{\"counts\":{\"123\":5,\"321\":10},\"findings\":{\"123\":[{\"lineStart\":4,\"lineEnd\":5}]}}}}", json);
+        Assert.assertEquals("{\"metrics\":{\"file2\":{\"counts\":{\"321\":13},\"findings\":{\"321\":[{\"lineStart\":1,\"lineEnd\":2,\"charStart\":3,\"charEnd\":4}]}},\"file1\":{\"counts\":{\"123\":6,\"321\":10},\"findings\":{\"123\":[{\"lineStart\":4,\"lineEnd\":5}]}}}}", json);
 
         // test json to java
         FileSetMetrics fromJson = gson.fromJson(json, FileSetMetrics.class);
