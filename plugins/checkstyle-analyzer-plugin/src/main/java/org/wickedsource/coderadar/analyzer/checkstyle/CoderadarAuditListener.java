@@ -38,7 +38,6 @@ public class CoderadarAuditListener implements AuditListener {
         Metric metric = new Metric("checkstyle:" + evt.getSourceName());
         Finding finding = new Finding(evt.getLine(), evt.getLine()); //TODO add column / char position
         metrics.addFinding(metric, finding);
-        metrics.incrementMetricCount(metric);
     }
 
     @Override

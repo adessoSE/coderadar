@@ -78,6 +78,8 @@ public class FileMetrics {
 
     /**
      * Adds a finding for the specified metric to this FileMetrics object.
+     * <strong>This method also increments the metric count so that incrementMetricCount() should not be called
+     * for the findings passed into addFinding()!</strong>
      *
      * @param metric  the metric for which to add the finding.
      * @param finding the finding to add.
@@ -94,6 +96,8 @@ public class FileMetrics {
 
     /**
      * Adds a collection of findings for the specified metric to this FileMetrics object.
+     * <strong>This method also increments the metric count so that incrementMetricCount() should not be called
+     * for the findings passed into addFinding()!</strong>
      *
      * @param metric        the metric for which to add the findings.
      * @param findingsToAdd the findings to add.
