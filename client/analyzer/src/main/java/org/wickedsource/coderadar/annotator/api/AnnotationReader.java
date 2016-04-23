@@ -1,7 +1,7 @@
 package org.wickedsource.coderadar.annotator.api;
 
-import org.wickedsource.coderadar.analyzer.api.CommitMetrics;
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
+import org.wickedsource.coderadar.analyzer.api.FileSetMetrics;
 import org.wickedsource.coderadar.analyzer.api.Metric;
 
 import java.util.Date;
@@ -16,7 +16,7 @@ public interface AnnotationReader {
 
     List<Commit> getLatestCommits(int count, int offset);
 
-    CommitMetrics getMetricsForCommit(String commitId);
+    FileSetMetrics getMetricsForCommit(String commitId);
 
     FileMetrics getMetricsForFile(String commitId, String filePath);
 

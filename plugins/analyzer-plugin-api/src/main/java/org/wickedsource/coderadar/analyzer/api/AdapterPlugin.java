@@ -4,6 +4,6 @@ import java.io.InputStream;
 
 public interface AdapterPlugin extends AnalyzerPlugin {
 
-    CommitMetrics mapResultsFile(String modulePath, InputStream resultFile);
+    FileSetMetrics mapResultsFile(InputStream resultFile);
 
 }

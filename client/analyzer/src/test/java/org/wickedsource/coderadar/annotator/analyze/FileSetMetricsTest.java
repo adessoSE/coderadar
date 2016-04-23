@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.wickedsource.coderadar.analyzer.api.*;
 
-public class CommitMetricsTest {
+public class FileSetMetricsTest {
 
     private static final Metric METRIC1 = new Metric("metric1");
 
@@ -18,12 +18,12 @@ public class CommitMetricsTest {
 
         FileMetricsWithChangeType fileMetrics2 = new FileMetricsWithChangeType(ChangeType.ADD);
         fileMetrics2.setMetricCount(METRIC1, 300l);
-        CommitMetrics commitMetrics = new CommitMetrics();
+        FileSetMetrics fileSetMetrics = new FileSetMetrics();
 
-        commitMetrics.addMetricsToFile("file1", fileMetrics1);
-        commitMetrics.addMetricsToFile("file1", fileMetrics2);
+        fileSetMetrics.addMetricsToFile("file1", fileMetrics1);
+        fileSetMetrics.addMetricsToFile("file1", fileMetrics2);
 
-        FileMetrics file1Metrics = commitMetrics.getFileMetrics("file1");
+        FileMetrics file1Metrics = fileSetMetrics.getFileMetrics("file1");
         Assert.assertEquals(800, (long) file1Metrics.getMetricCount(METRIC1));
         Assert.assertEquals(250, (long) file1Metrics.getMetricCount(METRIC2));
     }

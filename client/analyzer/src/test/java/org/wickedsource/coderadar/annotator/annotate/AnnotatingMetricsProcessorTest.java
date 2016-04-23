@@ -5,8 +5,8 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Assert;
 import org.junit.Test;
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
-import org.wickedsource.coderadar.analyzer.api.CommitMetrics;
 import org.wickedsource.coderadar.analyzer.api.FileMetricsWithChangeType;
+import org.wickedsource.coderadar.analyzer.api.FileSetMetrics;
 import org.wickedsource.coderadar.analyzer.api.Metric;
 import org.wickedsource.coderadar.annotator.GitTestTemplate;
 import org.wickedsource.coderadar.annotator.serialize.GsonFactory;
@@ -35,7 +35,7 @@ public class AnnotatingMetricsProcessorTest extends GitTestTemplate {
         // assert that note contains the metrics as JSON
 
         Gson gson = GsonFactory.getInstance().createGson();
-        CommitMetrics metrics = gson.fromJson(note, CommitMetrics.class);
+        FileSetMetrics metrics = gson.fromJson(note, FileSetMetrics.class);
         Assert.assertTrue(metrics.getFiles().contains("file1"));
         Assert.assertEquals(Long.valueOf(5), metrics.getFileMetrics("file1").getMetricCount(new Metric("123")));
 
