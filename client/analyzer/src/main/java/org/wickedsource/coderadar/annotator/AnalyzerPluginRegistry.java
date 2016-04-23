@@ -23,22 +23,24 @@ public class AnalyzerPluginRegistry {
      *                   properties whose names start with the fully qualified name of the analyzer class.
      */
     public synchronized void initializeAnalyzers(Properties properties) throws AnalyzerConfigurationException {
-        ServiceLoader<FileAnalyzerPlugin> loader = ServiceLoader.load(FileAnalyzerPlugin.class);
-        for (FileAnalyzerPlugin analyzerPlugin : loader) {
-            logger.info("initializing analyzer plugin {}", analyzerPlugin.getClass());
-            Properties propertiesForThisAnalyzer = extractPropertiesForAnalyzer(analyzerPlugin, properties);
+        if (!initialized) {
+            ServiceLoader<FileAnalyzerPlugin> loader = ServiceLoader.load(FileAnalyzerPlugin.class);
+            for (FileAnalyzerPlugin analyzerPlugin : loader) {
+                logger.info("initializing analyzer plugin {}", analyzerPlugin.getClass());
+                Properties propertiesForThisAnalyzer = extractPropertiesForAnalyzer(analyzerPlugin, properties);
 
-            // only register explicitly enabled analyzer plugins
-            if (isAnalyzerEnabled(analyzerPlugin, properties)) {
-                analyzerPlugin.configure(propertiesForThisAnalyzer);
-                fileAnalyzerPlugins.add(analyzerPlugin);
-                logger.info("successfully registered analyzer plugin {}", analyzerPlugin.getClass());
-                logger.debug("configured analyzer plugin {} with the following properties: {}", analyzerPlugin.getClass(), propertiesForThisAnalyzer);
-            }else{
-                logger.info("skipped registration of analyzer plugin {}, since property {}.enabled is not set to true", analyzerPlugin.getClass(), analyzerPlugin.getClass());
+                // only register explicitly enabled analyzer plugins
+                if (isAnalyzerEnabled(analyzerPlugin, properties)) {
+                    analyzerPlugin.configure(propertiesForThisAnalyzer);
+                    fileAnalyzerPlugins.add(analyzerPlugin);
+                    logger.info("successfully registered analyzer plugin {}", analyzerPlugin.getClass());
+                    logger.debug("configured analyzer plugin {} with the following properties: {}", analyzerPlugin.getClass(), propertiesForThisAnalyzer);
+                } else {
+                    logger.info("skipped registration of analyzer plugin {}, since property {}.enabled is not set to true", analyzerPlugin.getClass(), analyzerPlugin.getClass());
+                }
             }
+            initialized = true;
         }
-        initialized = true;
     }
 
     /**
@@ -53,7 +55,7 @@ public class AnalyzerPluginRegistry {
     /**
      * Extracts the properties directed at the given analyzer from the global properties
      *
-     * @param analyzerPlugin         the analyzer whose properties to extract.
+     * @param analyzerPlugin   the analyzer whose properties to extract.
      * @param globalProperties the global properties.
      * @return the properties directed at the given analyzer.
      */
@@ -71,9 +73,9 @@ public class AnalyzerPluginRegistry {
 
     private boolean isAnalyzerEnabled(AnalyzerPlugin analyzerPlugin, Properties properties) {
         Object enabledProperty = properties.get(analyzerPlugin.getClass().getName() + ".enabled");
-        if(enabledProperty != null){
+        if (enabledProperty != null) {
             return Boolean.valueOf(String.valueOf(enabledProperty));
-        }else{
+        } else {
             return false;
         }
     }

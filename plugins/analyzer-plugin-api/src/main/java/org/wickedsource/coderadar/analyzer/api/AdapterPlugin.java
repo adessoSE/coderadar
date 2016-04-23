@@ -4,6 +4,6 @@ import java.io.InputStream;
 
 public interface AdapterPlugin extends AnalyzerPlugin {
 
-    FileSetMetrics mapResultsFile(InputStream resultFile);
+    FileSetMetrics mapReportFile(InputStream resultFile) throws AnalyzerException;
 
 }

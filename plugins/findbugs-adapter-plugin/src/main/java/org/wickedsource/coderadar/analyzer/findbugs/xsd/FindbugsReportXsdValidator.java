@@ -10,6 +10,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -23,6 +24,20 @@ public class FindbugsReportXsdValidator {
         ERROR,
 
         WARNING;
+    }
+
+    /**
+     * Validates that the given byte array is a valid report XML file of findbugs.
+     *
+     * @param findbugsReport  the byte array to validate.
+     * @param validationLevel the level of validation errors to report. The result list will only contain validation
+     *                        errors of this level or the levels above (i.e. if you pass level ERROR, the result list
+     *                        will contain ERRORs and FATALs).
+     * @return list of validation errors. Validation is successful if this list is empty.
+     */
+    public List<SAXParseException> validate(byte[] findbugsReport, final ValidationLevel validationLevel) {
+        ByteArrayInputStream in = new ByteArrayInputStream(findbugsReport);
+        return validate(in, validationLevel);
     }
 
     /**

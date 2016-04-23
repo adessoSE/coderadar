@@ -41,7 +41,12 @@ public class FileMetrics {
      * @return count of the specified metric.
      */
     public Long getMetricCount(Metric metric) {
-        return counts.get(metric);
+        Long result = counts.get(metric);
+        if (result != null) {
+            return result;
+        } else {
+            return 0L;
+        }
     }
 
     /**
@@ -59,12 +64,16 @@ public class FileMetrics {
      *
      * @param metric the metric whose count to increment by one.
      */
-    public void incrementMetricCount(Metric metric) {
+    public void incrementMetricCount(Metric metric, Long increment) {
         Long count = counts.get(metric);
         if (count == null) {
             count = 0l;
         }
-        counts.put(metric, count + 1);
+        counts.put(metric, count + increment);
+    }
+
+    public void incrementMetricCount(Metric metric) {
+        incrementMetricCount(metric, 1L);
     }
 
     /**
@@ -79,6 +88,7 @@ public class FileMetrics {
             findingsForMetric = new ArrayList<>();
             findings.put(metric, findingsForMetric);
         }
+        incrementMetricCount(metric);
         findingsForMetric.add(finding);
     }
 
@@ -94,6 +104,7 @@ public class FileMetrics {
             findingsForMetric = new ArrayList<>();
             findings.put(metric, findingsForMetric);
         }
+        incrementMetricCount(metric, (long) findingsToAdd.size());
         findingsForMetric.addAll(findingsToAdd);
     }
 
@@ -119,6 +130,7 @@ public class FileMetrics {
                 currentValue = 0l;
             }
             counts.put(metric, currentValue + metrics.getMetricCount(metric));
+            findings.put(metric, metrics.getFindings(metric));
         }
     }
 

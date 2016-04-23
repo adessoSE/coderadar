@@ -5,7 +5,7 @@ version= '1.0.0-SNAPSHOT'
 subprojects{
     apply plugin: 'idea'
     apply plugin: 'java'
-//    apply plugin: 'findbugs'
+    apply plugin: 'findbugs'
 //    apply plugin: 'jacoco'
 //    apply plugin: 'pmd'
 
@@ -16,10 +16,10 @@ subprojects{
         mavenLocal()
     }
 
-//    findbugs{
-//        sourceSets = [sourceSets.main]
-//        ignoreFailures = true
-//    }
+    findbugs{
+        sourceSets = [sourceSets.main]
+        ignoreFailures = true
+    }
 
 //    jacocoTestReport{
 //        reports{

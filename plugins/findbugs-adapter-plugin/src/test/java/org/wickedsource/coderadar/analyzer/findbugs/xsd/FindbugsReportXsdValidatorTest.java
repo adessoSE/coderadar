@@ -5,30 +5,23 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.SAXParseException;
 
-import java.io.InputStream;
 import java.util.List;
 
-public class FindbugsReportXsdValidatorTest {
+public class FindbugsReportXsdValidatorTest extends TestReportAccessor {
 
     @Test
     public void testValidate() throws Exception {
-        InputStream findbugsReport = getClass().getResourceAsStream("valid-findbugs-report.xml");
-        if(findbugsReport == null){
-            throw new IllegalStateException("XML not found!");
-        }
+        byte[] report = getValidReport();
         FindbugsReportXsdValidator validator = new FindbugsReportXsdValidator();
-        List<SAXParseException> validationErrors = validator.validate(findbugsReport, FindbugsReportXsdValidator.ValidationLevel.FATAL);
+        List<SAXParseException> validationErrors = validator.validate(report, FindbugsReportXsdValidator.ValidationLevel.FATAL);
         Assert.assertEquals(0, validationErrors.size());
     }
 
     @Test
     public void testValidationError() throws Exception {
-        InputStream findbugsReport = getClass().getResourceAsStream("invalid-findbugs-report.xml");
-        if(findbugsReport == null){
-            throw new IllegalStateException("XML not found!");
-        }
+        byte[] report = getInvalidReport();
         FindbugsReportXsdValidator validator = new FindbugsReportXsdValidator();
-        List<SAXParseException> validationErrors = validator.validate(findbugsReport, FindbugsReportXsdValidator.ValidationLevel.ERROR);
+        List<SAXParseException> validationErrors = validator.validate(report, FindbugsReportXsdValidator.ValidationLevel.ERROR);
         Assert.assertTrue(validationErrors.size() > 0);
     }
 }
