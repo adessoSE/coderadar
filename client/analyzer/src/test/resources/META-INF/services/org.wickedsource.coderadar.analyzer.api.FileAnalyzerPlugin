@@ -1,2 +1,2 @@
-org.wickedsource.coderadar.annotator.DummyFileAnalyzerPlugin1
-org.wickedsource.coderadar.annotator.DummyFileAnalyzerPlugin2
+org.wickedsource.coderadar.analyzer.DummyFileAnalyzerPlugin1
+org.wickedsource.coderadar.analyzer.DummyFileAnalyzerPlugin2
