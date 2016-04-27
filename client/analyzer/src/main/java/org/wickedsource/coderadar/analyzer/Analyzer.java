@@ -43,7 +43,7 @@ public class Analyzer {
                             Files.copy(file, byteOut);
                             byte[] fileContent = byteOut.toByteArray();
                             FileMetrics fileMetrics = fileAnalyzer.analyzeFile(fileAnalyzerPlugins, file.toAbsolutePath().toString(), fileContent);
-                            fileSetMetrics.addMetricsToFile(file.toString(), fileMetrics);
+                            fileSetMetrics.addMetricsToFile(file.toString().replaceAll("\\\\", "/"), fileMetrics);
                         } catch (IOException e) {
                             logger.warn("skipping analysis of file {} due to IOException: {}", file, e);
                         }
