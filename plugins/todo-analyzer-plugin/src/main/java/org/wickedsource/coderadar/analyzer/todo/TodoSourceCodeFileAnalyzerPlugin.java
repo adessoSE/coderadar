@@ -5,11 +5,11 @@ import org.wickedsource.coderadar.analyzer.api.*;
 import java.io.IOException;
 import java.util.*;
 
-public class TodoFileAnalyzerPlugin implements FileAnalyzerPlugin {
+public class TodoSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin {
 
     public static final Metric TODO_METRIC = new Metric("org.wickedsource.coderadar.analyzer.todo.TodoAnalyzer.todo");
 
-    private String patternPropertyPrefix = TodoFileAnalyzerPlugin.class.getName() + ".pattern";
+    private String patternPropertyPrefix = TodoSourceCodeFileAnalyzerPlugin.class.getName() + ".pattern";
 
     private TodoFinder todoFinder;
 

@@ -8,7 +8,7 @@ import java.util.Properties;
 /**
  * A simple analyzer counting java lines of code (loc) in a naive way.
  */
-public class LocFileAnalyzerPlugin implements FileAnalyzerPlugin {
+public class LocSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin {
 
     private Properties properties;
 

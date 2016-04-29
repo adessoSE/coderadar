@@ -23,6 +23,6 @@ public class CheckstylePropertiesResolver implements PropertyResolver {
 
     @Override
     public String resolve(String name) {
-        return (String) backingProperties.get(CheckstyleFileAnalyzerPlugin.class.getName() + "." + name);
+        return (String) backingProperties.get(CheckstyleSourceCodeFileAnalyzerPlugin.class.getName() + "." + name);
     }
 }

@@ -4,7 +4,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.analyzer.api.AnalyzerException;
-import org.wickedsource.coderadar.analyzer.api.FileAnalyzerPlugin;
+import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 import org.wickedsource.coderadar.analyzer.api.FileSetMetrics;
 import org.wickedsource.coderadar.analyzer.match.FileMatchingPattern;
@@ -28,7 +28,7 @@ public class Analyzer {
         return metrics;
     }
 
-    private FileSetMetrics analyzeSourceCodeFiles(FileMatchingPattern sourceCodeFiles, final List<FileAnalyzerPlugin> fileAnalyzerPlugins) {
+    private FileSetMetrics analyzeSourceCodeFiles(FileMatchingPattern sourceCodeFiles, final List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins) {
         final FileSetMetrics fileSetMetrics = new FileSetMetrics();
         try {
             if (sourceCodeFiles == null) {
@@ -42,7 +42,7 @@ public class Analyzer {
                             ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
                             Files.copy(file, byteOut);
                             byte[] fileContent = byteOut.toByteArray();
-                            FileMetrics fileMetrics = fileAnalyzer.analyzeFile(fileAnalyzerPlugins, file.toAbsolutePath().toString(), fileContent);
+                            FileMetrics fileMetrics = fileAnalyzer.analyzeFile(sourceCodeFileAnalyzerPlugins, file.toAbsolutePath().toString(), fileContent);
                             fileSetMetrics.addMetricsToFile(file.toString().replaceAll("\\\\", "/"), fileMetrics);
                         } catch (IOException e) {
                             logger.warn("skipping analysis of file {} due to IOException: {}", file, e);

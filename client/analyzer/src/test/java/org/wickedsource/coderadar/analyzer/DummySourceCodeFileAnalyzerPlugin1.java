@@ -4,7 +4,7 @@ import org.wickedsource.coderadar.analyzer.api.*;
 
 import java.util.Properties;
 
-public class DummyFileAnalyzerPlugin2 implements FileAnalyzerPlugin {
+public class DummySourceCodeFileAnalyzerPlugin1 implements SourceCodeFileAnalyzerPlugin {
 
     private Properties properties;
 

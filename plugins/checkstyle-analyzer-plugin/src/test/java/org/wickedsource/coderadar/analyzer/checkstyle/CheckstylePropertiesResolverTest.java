@@ -10,7 +10,7 @@ public class CheckstylePropertiesResolverTest {
     @Test
     public void existingPropertiesAreResolved() {
         Properties properties = new Properties();
-        properties.put(CheckstyleFileAnalyzerPlugin.class.getName() + ".property1", "value1");
+        properties.put(CheckstyleSourceCodeFileAnalyzerPlugin.class.getName() + ".property1", "value1");
         CheckstylePropertiesResolver resolver = new CheckstylePropertiesResolver(properties);
         Assert.assertEquals("value1", resolver.resolve("property1"));
     }
@@ -18,7 +18,7 @@ public class CheckstylePropertiesResolverTest {
     @Test
     public void missingPropertiesAreNotResolved() {
         Properties properties = new Properties();
-        properties.put(CheckstyleFileAnalyzerPlugin.class.getName() + ".existingProperty", "existingValue");
+        properties.put(CheckstyleSourceCodeFileAnalyzerPlugin.class.getName() + ".existingProperty", "existingValue");
         CheckstylePropertiesResolver resolver = new CheckstylePropertiesResolver(properties);
         Assert.assertNull(resolver.resolve("missingProperty"));
     }

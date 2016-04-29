@@ -1,6 +1,9 @@
 package org.wickedsource.coderadar.analyzer.api;
 
-public interface FileAnalyzerPlugin extends AnalyzerPlugin {
+/**
+ * Interface for analyzer plugins that analyze source code files.
+ */
+public interface SourceCodeFileAnalyzerPlugin extends AnalyzerPlugin {
 
     /**
      * Returns a filter that defines which files the analyzer is interested in. Only the files that pass this filter

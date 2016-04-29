@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
-public class TodoFileAnalyzerPluginTest {
+public class TodoSourceCodeFileAnalyzerPluginTest {
 
     @Test
     public void metricIsCalculatedCorrectly() throws Exception {
@@ -21,12 +21,12 @@ public class TodoFileAnalyzerPluginTest {
         patterns.setProperty("org.wickedsource.coderadar.analyzer.todo.TodoAnalyzer.pattern1", "TODO");
         patterns.setProperty("org.wickedsource.coderadar.analyzer.todo.TodoAnalyzer.pattern2", "FIXME");
 
-        TodoFileAnalyzerPlugin analyzer = new TodoFileAnalyzerPlugin();
+        TodoSourceCodeFileAnalyzerPlugin analyzer = new TodoSourceCodeFileAnalyzerPlugin();
         analyzer.configure(patterns);
         FileMetrics results = analyzer.analyzeFile(fileContent);
 
-        List<Finding> findings = results.getFindings(TodoFileAnalyzerPlugin.TODO_METRIC);
-        Assert.assertEquals(3, (long) results.getMetricCount(TodoFileAnalyzerPlugin.TODO_METRIC));
+        List<Finding> findings = results.getFindings(TodoSourceCodeFileAnalyzerPlugin.TODO_METRIC);
+        Assert.assertEquals(3, (long) results.getMetricCount(TodoSourceCodeFileAnalyzerPlugin.TODO_METRIC));
         Assert.assertEquals(3, findings.size());
         assertFinding(findings.get(0), 1, 1, 3, 6);
         assertFinding(findings.get(1), 3, 3, 1, 5);

@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.analyzer.api.AnalyzerConfigurationException;
 import org.wickedsource.coderadar.analyzer.api.AnalyzerPlugin;
-import org.wickedsource.coderadar.analyzer.api.FileAnalyzerPlugin;
+import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 
 import java.util.*;
 
@@ -14,7 +14,7 @@ public class AnalyzerPluginRegistry {
 
     private boolean initialized = false;
 
-    private List<FileAnalyzerPlugin> fileAnalyzerPlugins = new ArrayList<>();
+    private List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins = new ArrayList<>();
 
     /**
      * Initializes all Analyzers that are in the classpath and registered via Java's ServiceLoader mechanism.
@@ -24,15 +24,15 @@ public class AnalyzerPluginRegistry {
      */
     public synchronized void initializeAnalyzers(Properties properties) throws AnalyzerConfigurationException {
         if (!initialized) {
-            ServiceLoader<FileAnalyzerPlugin> loader = ServiceLoader.load(FileAnalyzerPlugin.class);
-            for (FileAnalyzerPlugin analyzerPlugin : loader) {
+            ServiceLoader<SourceCodeFileAnalyzerPlugin> loader = ServiceLoader.load(SourceCodeFileAnalyzerPlugin.class);
+            for (SourceCodeFileAnalyzerPlugin analyzerPlugin : loader) {
                 logger.info("initializing analyzer plugin {}", analyzerPlugin.getClass());
                 Properties propertiesForThisAnalyzer = extractPropertiesForAnalyzer(analyzerPlugin, properties);
 
                 // only register explicitly enabled analyzer plugins
                 if (isAnalyzerEnabled(analyzerPlugin, properties)) {
                     analyzerPlugin.configure(propertiesForThisAnalyzer);
-                    fileAnalyzerPlugins.add(analyzerPlugin);
+                    sourceCodeFileAnalyzerPlugins.add(analyzerPlugin);
                     logger.info("successfully registered analyzer plugin {}", analyzerPlugin.getClass());
                     logger.debug("configured analyzer plugin {} with the following properties: {}", analyzerPlugin.getClass(), propertiesForThisAnalyzer);
                 } else {
@@ -47,7 +47,7 @@ public class AnalyzerPluginRegistry {
      * Calls the destroy() method of all registered analyzers.
      */
     public synchronized void destroyAnalyzers() {
-        for (AnalyzerPlugin analyzerPlugin : fileAnalyzerPlugins) {
+        for (AnalyzerPlugin analyzerPlugin : sourceCodeFileAnalyzerPlugins) {
             analyzerPlugin.destroy();
         }
     }
@@ -80,11 +80,11 @@ public class AnalyzerPluginRegistry {
         }
     }
 
-    public List<FileAnalyzerPlugin> getRegisteredFileAnalyzers() {
+    public List<SourceCodeFileAnalyzerPlugin> getRegisteredFileAnalyzers() {
         if (!initialized) {
             throw new IllegalStateException("registry has not yet been initialized! call initialize() first!");
         }
-        return this.fileAnalyzerPlugins;
+        return this.sourceCodeFileAnalyzerPlugins;
     }
 
 }
