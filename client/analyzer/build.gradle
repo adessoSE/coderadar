@@ -21,3 +21,9 @@ dependencies {
     testCompile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.4.1'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
 }
+
+task printClasspath {
+    doLast {
+        configurations.compile.each { println it }
+    }
+}
