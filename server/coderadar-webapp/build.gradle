@@ -1,0 +1,25 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.4.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.3.3.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-web:1.3.3.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-hateoas:1.3.3.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-thymeleaf:1.3.3.RELEASE'
+    compile 'com.h2database:h2:1.4.191'
+    compile 'org.springframework.boot:spring-boot-starter-test:1.3.3.RELEASE'
+    compile 'org.springframework.boot:spring-boot-devtools'
+    compile 'org.hibernate:hibernate-validator:5.2.4.Final'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
