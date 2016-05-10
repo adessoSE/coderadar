@@ -17,15 +17,15 @@ public class ProjectResourceAssembler extends ResourceAssemblerSupport<Project, 
 
     @Override
     public ProjectResource toResource(Project project) {
-        assert project.getVcsCoordinates() != null;
-
         ProjectResource resource = createResourceWithId(project.getId(), project);
         resource.setName(project.getName());
         resource.setEntityId(project.getId());
-        resource.setVcsType(project.getVcsCoordinates().getType());
-        resource.setVcsUrl(project.getVcsCoordinates().getUrl().toString());
-        resource.setVcsUser(project.getVcsCoordinates().getUsername());
-        resource.setVcsPassword(project.getVcsCoordinates().getPassword());
+        if (project.getVcsCoordinates() != null) {
+            resource.setVcsType(project.getVcsCoordinates().getType());
+            resource.setVcsUrl(project.getVcsCoordinates().getUrl().toString());
+            resource.setVcsUser(project.getVcsCoordinates().getUsername());
+            resource.setVcsPassword(project.getVcsCoordinates().getPassword());
+        }
 
         return resource;
     }

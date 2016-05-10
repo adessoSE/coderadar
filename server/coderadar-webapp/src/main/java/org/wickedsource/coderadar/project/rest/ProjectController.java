@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,14 +23,15 @@ import javax.validation.Valid;
 @Transactional
 public class ProjectController {
 
-    @Autowired
-    private EntityLinks entityLinks;
-
-    @Autowired
     private ProjectRepository projectRepository;
 
-    @Autowired
     private ProjectResourceAssembler projectAssembler;
+
+    @Autowired
+    public ProjectController(ProjectRepository projectRepository, ProjectResourceAssembler projectAssembler) {
+        this.projectRepository = projectRepository;
+        this.projectAssembler = projectAssembler;
+    }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<ProjectResource> createProject(@Valid @RequestBody ProjectResource projectResource) {
@@ -37,6 +39,18 @@ public class ProjectController {
         Project savedProject = projectRepository.save(project);
         ProjectResource resultResource = projectAssembler.toResource(savedProject);
         return new ResponseEntity<>(resultResource, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<ProjectResource> getProject(@PathVariable Long id) {
+        Project project = projectRepository.findOne(id);
+        if (project != null) {
+            ProjectResource resultResource = projectAssembler.toResource(project);
+            return new ResponseEntity<>(resultResource, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
 }

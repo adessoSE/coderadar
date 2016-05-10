@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,21 +24,22 @@ import java.io.IOException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@SpringApplicationConfiguration(classes = Coderadar.class)
+@SpringApplicationConfiguration(classes = {Coderadar.class, MockedRepositoriesConfiguration.class})
 @DirtiesContext
 public abstract class WebIntegrationTestTemplate {
 
     private Logger logger = LoggerFactory.getLogger(WebIntegrationTestTemplate.class);
 
-    @Autowired
-    protected WebApplicationContext context;
-
-    protected MockMvc mvc;
-
-    @Before
-    public void setUp() {
-        mvc = MockMvcBuilders.webAppContextSetup(context).build();
-    }
+//    @Autowired
+//    protected WebApplicationContext context;
+//
+//    protected MockMvc mvc;
+//
+//    @Before
+//    public void setUp() {
+//        MockitoAnnotations.initMocks(this);
+//        mvc = MockMvcBuilders.standaloneSetup(context).build();
+//    }
 
     public <T> T fromJson(String json, Class<T> toClass) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
