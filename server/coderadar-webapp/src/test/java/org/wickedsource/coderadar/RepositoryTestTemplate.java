@@ -8,5 +8,5 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Coderadar.class)
 @WebAppConfiguration
-public abstract class IntegrationTestTemplate {
+public abstract class RepositoryTestTemplate {
 }

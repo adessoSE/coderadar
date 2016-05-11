@@ -7,22 +7,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.wickedsource.coderadar.WebIntegrationTestTemplate;
+import org.wickedsource.coderadar.ControllerTestTemplate;
+import org.wickedsource.coderadar.core.domain.validation.ValidationExceptionHandler;
+import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
-import org.wickedsource.coderadar.project.domain.VcsType;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class ProjectControllerWebIntegrationTest extends WebIntegrationTestTemplate {
+public class ProjectControllerTest extends ControllerTestTemplate {
 
     @InjectMocks
     private ProjectController projectController;
@@ -31,19 +32,23 @@ public class ProjectControllerWebIntegrationTest extends WebIntegrationTestTempl
     private ProjectRepository projectRepository;
 
     @Spy
-    private ProjectResourceAssembler projectResourceAssembler;
+    private ProjectResourceAssembler projectAssembler;
 
     private MockMvc mvc;
 
     @Before
-    public void setup(){
+    public void setup() {
         MockitoAnnotations.initMocks(this);
-        mvc = MockMvcBuilders.standaloneSetup(projectController).build();
+        mvc = MockMvcBuilders.standaloneSetup(projectController)
+                .setControllerAdvice(new ValidationExceptionHandler())
+                .build();
     }
 
     @Test
     public void createProjectSuccessfully() throws Exception {
-        ProjectResource project = createValidProjectResource();
+        ProjectResource project = Factories.projectResource().validProjectResource();
+
+        when(projectRepository.save(any(Project.class))).thenReturn(Factories.project().validProject());
 
         mvc.perform(post("/projects")
                 .content(toJson(project))
@@ -54,13 +59,13 @@ public class ProjectControllerWebIntegrationTest extends WebIntegrationTestTempl
 
     @Test
     public void createProjectWithValidationError() throws Exception {
-        ProjectResource project = createValidProjectResource();
-        project.setName(null);
-        project.setVcsUrl("invalid url");
-        project.setEntityId(-1L);
+        ProjectResource projectResource = Factories.projectResource().validProjectResource();
+        projectResource.setName(null);
+        projectResource.setVcsUrl("invalid url");
+        projectResource.setEntityId(-1L);
 
         mvc.perform(post("/projects")
-                .content(toJson(project))
+                .content(toJson(projectResource))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(validationErrorForField("name"))
@@ -81,17 +86,6 @@ public class ProjectControllerWebIntegrationTest extends WebIntegrationTestTempl
     public void getProjectError() throws Exception {
         mvc.perform(get("/projects/1"))
                 .andExpect(status().isNotFound());
-    }
-
-    private ProjectResource createValidProjectResource() {
-        ProjectResource project = new ProjectResource();
-        project.setEntityId(1L);
-        project.setVcsUser("user");
-        project.setVcsPassword("pass");
-        project.setVcsUrl("http://valid.url");
-        project.setName("name");
-        project.setVcsType(VcsType.GIT);
-        return project;
     }
 
     private ResultMatcher containsProjectResource() {

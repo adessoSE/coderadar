@@ -1,7 +1,6 @@
 package org.wickedsource.coderadar.project.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,4 +52,11 @@ public class ProjectController {
 
     }
 
+    public ProjectRepository getProjectRepository() {
+        return projectRepository;
+    }
+
+    public ProjectResourceAssembler getProjectAssembler() {
+        return projectAssembler;
+    }
 }

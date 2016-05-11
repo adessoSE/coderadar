@@ -5,8 +5,8 @@ version= '1.0.0-SNAPSHOT'
 subprojects{
     apply plugin: 'idea'
     apply plugin: 'java'
-    apply plugin: 'findbugs'
-    apply plugin: 'jacoco'
+//    apply plugin: 'findbugs'
+//    apply plugin: 'jacoco'
 //    apply plugin: 'pmd'
 
     sourceCompatibility = 1.8
@@ -16,21 +16,21 @@ subprojects{
         mavenLocal()
     }
 
-    findbugs{
-        sourceSets = [sourceSets.main]
-        ignoreFailures = true
-    }
-
-    jacocoTestReport{
-        reports{
-            xml{
-                enabled true
-            }
-            html{
-                enabled true
-            }
-        }
-    }
+//    findbugs{
+//        sourceSets = [sourceSets.main]
+//        ignoreFailures = true
+//    }
+//
+//    jacocoTestReport{
+//        reports{
+//            xml{
+//                enabled true
+//            }
+//            html{
+//                enabled true
+//            }
+//        }
+//    }
 
 }
 // this task has been automatically added by coderadar to access all JAR dependencies for bytecode analysis
