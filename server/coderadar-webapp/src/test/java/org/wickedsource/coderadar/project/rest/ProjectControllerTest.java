@@ -62,15 +62,13 @@ public class ProjectControllerTest extends ControllerTestTemplate {
         ProjectResource projectResource = Factories.projectResource().validProjectResource();
         projectResource.setName(null);
         projectResource.setVcsUrl("invalid url");
-        projectResource.setEntityId(-1L);
 
         mvc.perform(post("/projects")
                 .content(toJson(projectResource))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(validationErrorForField("name"))
-                .andExpect(validationErrorForField("vcsUrl"))
-                .andExpect(validationErrorForField("entityId"));
+                .andExpect(validationErrorForField("vcsUrl"));
     }
 
     @Test

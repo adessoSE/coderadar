@@ -14,11 +14,11 @@ import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @Controller
 @ExposesResourceFor(Project.class)
-@RequestMapping("/projects")
 @Transactional
 public class ProjectController {
 
@@ -32,7 +32,13 @@ public class ProjectController {
         this.projectAssembler = projectAssembler;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(path = "/projects", method = RequestMethod.GET)
+    public ResponseEntity<List<ProjectResource>> getProjects() {
+        Iterable<Project> projects = projectRepository.findAll();
+        return new ResponseEntity<>(projectAssembler.toResourceList(projects), HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/projects", method = RequestMethod.POST)
     public ResponseEntity<ProjectResource> createProject(@Valid @RequestBody ProjectResource projectResource) {
         Project project = projectAssembler.toEntity(projectResource);
         Project savedProject = projectRepository.save(project);
@@ -40,7 +46,7 @@ public class ProjectController {
         return new ResponseEntity<>(resultResource, HttpStatus.CREATED);
     }
 
-    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/projects/{id}", method = RequestMethod.GET)
     public ResponseEntity<ProjectResource> getProject(@PathVariable Long id) {
         Project project = projectRepository.findOne(id);
         if (project != null) {
@@ -49,14 +55,21 @@ public class ProjectController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
     }
 
-    public ProjectRepository getProjectRepository() {
-        return projectRepository;
+    @RequestMapping(path = "/projects/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteProject(@PathVariable Long id) {
+        projectRepository.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ProjectResourceAssembler getProjectAssembler() {
-        return projectAssembler;
+    @RequestMapping(path = "/projects/{id}", method = RequestMethod.POST)
+    public ResponseEntity<ProjectResource> updateProject(@Valid @RequestBody ProjectResource projectResource, @PathVariable Long id) {
+        Project project = projectAssembler.toEntity(projectResource);
+        project.setId(id);
+        Project savedProject = projectRepository.save(project);
+        ProjectResource resultResource = projectAssembler.toResource(savedProject);
+        return new ResponseEntity<>(resultResource, HttpStatus.CREATED);
     }
+
 }

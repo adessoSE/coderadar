@@ -5,14 +5,9 @@ import org.hibernate.validator.constraints.URL;
 import org.springframework.hateoas.ResourceSupport;
 import org.wickedsource.coderadar.project.domain.VcsType;
 
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 public class ProjectResource extends ResourceSupport {
-
-    @NotNull
-    @DecimalMin("0")
-    private Long entityId;
 
     @NotNull
     @Length(max = 100)
@@ -71,11 +66,4 @@ public class ProjectResource extends ResourceSupport {
         this.vcsPassword = vcsPassword;
     }
 
-    public Long getEntityId() {
-        return entityId;
-    }
-
-    public void setEntityId(Long entityId) {
-        this.entityId = entityId;
-    }
 }
