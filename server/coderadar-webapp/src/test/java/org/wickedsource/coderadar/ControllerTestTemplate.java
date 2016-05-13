@@ -15,7 +15,7 @@ import org.wickedsource.coderadar.core.domain.validation.ValidationErrorsDTO;
 import java.io.IOException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {Coderadar.class})
+@SpringApplicationConfiguration(classes = {TestCoderadar.class})
 public abstract class ControllerTestTemplate {
 
     private Logger logger = LoggerFactory.getLogger(ControllerTestTemplate.class);

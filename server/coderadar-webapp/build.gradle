@@ -23,3 +23,8 @@ dependencies {
     compile 'org.hibernate:hibernate-validator:5.2.4.Final'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
+
+bootRun {
+    jvmArgs = ["-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
+               "-Dlogging.level.org.wickedsource=DEBUG"]
+}
