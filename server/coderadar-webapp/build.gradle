@@ -17,10 +17,16 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web:1.3.3.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-hateoas:1.3.3.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-thymeleaf:1.3.3.RELEASE'
+    compile group: 'org.apache.commons', name: 'commons-exec', version: '1.3'
+    compile group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '4.1.0.201509280440-r'
+    compile group: 'commons-io', name: 'commons-io', version: '2.4'
+    compile group: 'io.fabric8', name: 'gitective-core', version: '0.9.10'
     compile 'com.h2database:h2:1.4.191'
     testCompile 'org.springframework.boot:spring-boot-starter-test:1.3.3.RELEASE'
     compile 'org.springframework.boot:spring-boot-devtools'
     compile 'org.hibernate:hibernate-validator:5.2.4.Final'
+    compile project(":plugins:analyzer-plugin-api")
+    compile project(":client:analyzer")
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 

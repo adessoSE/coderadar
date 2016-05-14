@@ -5,8 +5,8 @@ package org.wickedsource.coderadar.analyzer.api;
  */
 public interface AnalyzerFileFilter {
 
-    public boolean acceptFilename(String filename);
+    boolean acceptFilename(String filename);
 
-    public boolean acceptBinary();
+    boolean acceptBinary();
 
 }
