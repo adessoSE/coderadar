@@ -29,7 +29,7 @@ public class JobQueueService {
         int attemptCount = 1;
         while (attemptCount <= maxDequeueAttempts) {
             try {
-                return dequeuer.dequeueUpdateJob();
+                return dequeuer.dequeue();
             } catch (ObjectOptimisticLockingFailureException e) {
                 // Another transaction has already dequeued the job we just wanted to dequeue ourselves.
                 // Thus, we try again.

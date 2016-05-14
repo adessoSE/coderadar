@@ -27,7 +27,7 @@ public class JobDequeuer {
      * conflict with other queue clients.
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Job dequeueUpdateJob() {
+    public Job dequeue() {
         Job job = jobRepository.findTop1ByProcessingStatusOrderByQueuedDate(ProcessingStatus.WAITING);
         if (job == null) {
             return null;
