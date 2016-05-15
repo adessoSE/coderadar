@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.domain.execute;
+package org.wickedsource.coderadar.job.execute;
 
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.job.domain.SweepJob;

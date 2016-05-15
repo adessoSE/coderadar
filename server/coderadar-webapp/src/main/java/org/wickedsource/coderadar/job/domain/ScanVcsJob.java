@@ -3,7 +3,7 @@ package org.wickedsource.coderadar.job.domain;
 import javax.persistence.Entity;
 
 @Entity
-public class PullJob extends Job {
+public class ScanVcsJob extends Job {
 
     private Long projectId;
 

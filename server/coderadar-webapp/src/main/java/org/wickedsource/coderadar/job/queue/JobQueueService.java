@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.domain.queue;
+package org.wickedsource.coderadar.job.queue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -37,10 +37,6 @@ public class JobQueueService {
             }
         }
         return null;
-    }
-
-    public void requeue() {
-
     }
 
 }

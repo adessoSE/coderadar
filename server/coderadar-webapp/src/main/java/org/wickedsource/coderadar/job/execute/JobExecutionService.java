@@ -1,20 +1,22 @@
-package org.wickedsource.coderadar.job.domain.execute;
+package org.wickedsource.coderadar.job.execute;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.job.domain.Job;
 import org.wickedsource.coderadar.job.domain.JobRepository;
 import org.wickedsource.coderadar.job.domain.ProcessingStatus;
 import org.wickedsource.coderadar.job.domain.ResultStatus;
-import org.wickedsource.coderadar.job.domain.queue.JobQueueService;
-import org.wickedsource.coderadar.job.domain.queue.JobUpdater;
+import org.wickedsource.coderadar.job.queue.JobQueueService;
+import org.wickedsource.coderadar.job.queue.JobUpdater;
 
 import java.util.Date;
 
 @Service
+@Transactional
 public class JobExecutionService {
 
     private Logger logger = LoggerFactory.getLogger(JobExecutionService.class);

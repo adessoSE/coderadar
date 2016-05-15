@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.domain.execute;
+package org.wickedsource.coderadar.job.execute;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,8 +11,8 @@ import org.wickedsource.coderadar.job.domain.Job;
 import org.wickedsource.coderadar.job.domain.JobRepository;
 import org.wickedsource.coderadar.job.domain.ProcessingStatus;
 import org.wickedsource.coderadar.job.domain.ResultStatus;
-import org.wickedsource.coderadar.job.domain.queue.JobQueueService;
-import org.wickedsource.coderadar.job.domain.queue.JobUpdater;
+import org.wickedsource.coderadar.job.queue.JobQueueService;
+import org.wickedsource.coderadar.job.queue.JobUpdater;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -30,7 +30,7 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
     private JobUpdater jobUpdater;
 
     @Mock
-    private JobExecutor jobExecutor = new JobExecutor();
+    private JobExecutor jobExecutor;
 
 
     @Test

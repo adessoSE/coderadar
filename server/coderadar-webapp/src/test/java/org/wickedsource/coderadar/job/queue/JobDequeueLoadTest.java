@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.domain.queue;
+package org.wickedsource.coderadar.job.queue;
 
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -8,7 +8,7 @@ import org.wickedsource.coderadar.IntegrationTestTemplate;
 import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.job.domain.Job;
 import org.wickedsource.coderadar.job.domain.JobRepository;
-import org.wickedsource.coderadar.job.domain.PullJob;
+import org.wickedsource.coderadar.job.domain.ScanVcsJob;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,7 +27,7 @@ public class JobDequeueLoadTest extends IntegrationTestTemplate {
     @Test
     public void loadTestDequeueJob() throws InterruptedException {
         for (int i = 0; i < 100; i++) {
-            PullJob job = Factories.job().waitingPullJob();
+            ScanVcsJob job = Factories.job().waitingPullJob();
             job.setId(null);
             repository.save(job);
         }

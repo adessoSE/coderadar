@@ -1,58 +1,50 @@
-package org.wickedsource.coderadar.vcs.git;
+package org.wickedsource.coderadar.vcs.git.walk;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
-import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.gitective.core.BlobUtils;
 import org.gitective.core.CommitUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.analyzer.FileAnalyzer;
-import org.wickedsource.coderadar.analyzer.api.AnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 import org.wickedsource.coderadar.analyzer.api.FileMetricsWithChangeType;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.vcs.MetricsProcessor;
+import org.wickedsource.coderadar.vcs.git.ChangeTypeMapper;
 
 import java.io.IOException;
 import java.util.List;
 
-/**
- * A RepositoryWalker that walks through ALL commits of a repository.
- */
-public class AllCommitsWalker implements RepositoryWalker {
+public class AnalyzingCommitProcessor implements CommitProcessor {
 
-    private Logger logger = LoggerFactory.getLogger(AllCommitsWalker.class);
+    private Logger logger = LoggerFactory.getLogger(AnalyzingCommitProcessor.class);
 
     private ChangeTypeMapper changeTypeMapper = new ChangeTypeMapper();
 
     private FileAnalyzer fileAnalyzer = new FileAnalyzer();
 
+    private List<SourceCodeFileAnalyzerPlugin> analyzers;
+
+    private MetricsProcessor metricsProcessor;
+
+    public AnalyzingCommitProcessor(List<SourceCodeFileAnalyzerPlugin> analyzers, MetricsProcessor metricsProcessor) {
+        this.analyzers = analyzers;
+        this.metricsProcessor = metricsProcessor;
+    }
+
     @Override
-    public void walk(Git gitClient, List<SourceCodeFileAnalyzerPlugin> analyzers, MetricsProcessor metricsProcessor) {
+    public void processCommit(Git gitClient, RevCommit commit) {
         try {
-            ObjectId lastCommitId = gitClient.getRepository().resolve(Constants.HEAD);
-            RevWalk revWalk = new RevWalk(gitClient.getRepository());
-            RevCommit currentCommit = revWalk.parseCommit(lastCommitId);
-
-            while (currentCommit != null) {
-                walkFilesInCommit(gitClient, currentCommit, analyzers, metricsProcessor);
-                if (currentCommit.getParentCount() > 0) {
-                    currentCommit = revWalk.parseCommit(currentCommit.getParent(0).getId()); //TODO: support multiple parents
-                } else {
-                    currentCommit = null;
-                }
-            }
-
-            revWalk.dispose();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            walkFilesInCommit(gitClient, commit, analyzers, metricsProcessor);
+        }catch(IOException e){
+            throw new IllegalStateException(String.format("error while processing GIT commit %s", commit.name()));
         }
     }
 

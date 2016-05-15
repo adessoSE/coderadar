@@ -5,6 +5,9 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.wickedsource.coderadar.analyzer.api.*;
 import org.wickedsource.coderadar.vcs.MetricsProcessor;
+import org.wickedsource.coderadar.vcs.git.walk.AllCommitsWalker;
+import org.wickedsource.coderadar.vcs.git.walk.AnalyzingCommitProcessor;
+import org.wickedsource.coderadar.vcs.git.walk.CommitProcessor;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,10 +39,11 @@ public class AllCommitsWalkerTest extends GitTestTemplate {
         List<SourceCodeFileAnalyzerPlugin> analyzers = Arrays.asList(plugin1, plugin2);
 
         // mocking metrics processor
-        MetricsProcessor processor = Mockito.mock(MetricsProcessor.class);
+        MetricsProcessor metricsProcessor = Mockito.mock(MetricsProcessor.class);
 
         AllCommitsWalker walker = new AllCommitsWalker();
-        walker.walk(git, analyzers, processor);
+        CommitProcessor commitProcessor = new AnalyzingCommitProcessor(analyzers, metricsProcessor);
+        walker.walk(git, commitProcessor);
 
         // verify that each file is passed into all analyzers
         verify(plugin1).analyzeFile("testFile".getBytes());
@@ -50,8 +54,8 @@ public class AllCommitsWalkerTest extends GitTestTemplate {
         // verify that each analysis result is passed into the MetricsProcessor
         FileMetricsWithChangeType aggregatedMetrics = metrics1;
         aggregatedMetrics.add(metrics2);
-        verify(processor).processMetrics(eq(aggregatedMetrics), eq(git), eq(commit.getId()), eq("file1.txt"));
-        verify(processor).processMetrics(eq(aggregatedMetrics), eq(git), eq(commit.getId()), eq("dir1/File2.java"));
+        verify(metricsProcessor).processMetrics(eq(aggregatedMetrics), eq(git), eq(commit.getId()), eq("file1.txt"));
+        verify(metricsProcessor).processMetrics(eq(aggregatedMetrics), eq(git), eq(commit.getId()), eq("dir1/File2.java"));
     }
 
 }

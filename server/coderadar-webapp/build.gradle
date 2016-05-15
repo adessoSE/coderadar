@@ -28,9 +28,15 @@ dependencies {
     compile project(":plugins:analyzer-plugin-api")
     compile project(":client:analyzer")
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'org.slf4j', name: 'slf4j-ext', version: '1.7.21'
 }
 
 bootRun {
-    jvmArgs = ["-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
-               "-Dlogging.level.org.wickedsource=DEBUG"]
+    jvmArgs =
+            [
+                    "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
+                    "-Dlogging.level.org.wickedsource=DEBUG",
+                    "-Dcoderadar.master=true",
+                    "-Dcoderadar.slave=true"
+            ]
 }
