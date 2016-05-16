@@ -17,7 +17,7 @@ public class GitRepositoryUpdater implements RepositoryUpdater {
             FileRepositoryBuilder builder = new FileRepositoryBuilder();
             Repository repository = builder.setWorkTree(repositoryRoot.toFile()).build();
             Git git = new Git(repository);
-            git.fetch().setCheckFetchedObjects(true).call();
+            git.pull().call();
             return git;
         } catch (Exception e) {
             throw new IllegalStateException(String.format("error accessing local GIT repository at %s", repositoryRoot));
