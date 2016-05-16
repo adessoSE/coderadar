@@ -1,6 +1,8 @@
 package org.wickedsource.coderadar.job.execute.scan;
 
 import org.eclipse.jgit.api.Git;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.CoderadarConfiguration;
@@ -12,12 +14,13 @@ import org.wickedsource.coderadar.vcs.git.GitRepositoryChecker;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryCloner;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryUpdater;
 import org.wickedsource.coderadar.vcs.git.walk.AllCommitsWalker;
-import org.wickedsource.coderadar.vcs.git.walk.CommitProcessor;
 
 import java.nio.file.Path;
 
 @Service
 public class ScanVcsJobExecutor {
+
+    private Logger logger = LoggerFactory.getLogger(ScanVcsJobExecutor.class);
 
     private CoderadarConfiguration config;
 
@@ -64,8 +67,9 @@ public class ScanVcsJobExecutor {
         if (latestCommit != null) {
             walker.stopAtCommit(latestCommit.getName());
         }
-        CommitProcessor commitProcessor = new DatabaseUpdatingCommitProcessor(commitRepository, project);
+        DatabaseUpdatingCommitProcessor commitProcessor = new DatabaseUpdatingCommitProcessor(commitRepository, project);
         walker.walk(gitClient, commitProcessor);
+        logger.info("scan result for project {}: {} new commits", project.getId(), commitProcessor.getUpdatedCommitsCount());
     }
 
     private Git updateLocalRepository(Project project) {

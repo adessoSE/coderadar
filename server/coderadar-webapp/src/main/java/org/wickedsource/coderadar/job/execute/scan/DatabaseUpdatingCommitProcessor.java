@@ -18,6 +18,8 @@ class DatabaseUpdatingCommitProcessor implements CommitProcessor {
 
     private Project project;
 
+    private int updatedCommits;
+
     DatabaseUpdatingCommitProcessor(CommitRepository commitRepository, Project project) {
         this.commitRepository = commitRepository;
         this.project = project;
@@ -32,6 +34,11 @@ class DatabaseUpdatingCommitProcessor implements CommitProcessor {
         commit.setProject(project);
         commit.setTimestamp(new Date(gitCommit.getCommitTime() * 1000L));
         commitRepository.save(commit);
+        updatedCommits++;
+    }
+
+    public int getUpdatedCommitsCount(){
+        return updatedCommits;
     }
 
 }
