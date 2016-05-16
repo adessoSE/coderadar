@@ -1,5 +1,8 @@
 package org.wickedsource.coderadar.project.domain;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 
 @Entity
@@ -39,5 +42,10 @@ public class Project {
 
     public void setVcsCoordinates(VcsCoordinates vcsCoordinates) {
         this.vcsCoordinates = vcsCoordinates;
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 }

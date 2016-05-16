@@ -35,7 +35,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class ScanVcsJobExecutorTest extends GitTestTemplate {
+public class VcsScannerTest extends GitTestTemplate {
 
     private Logger logger = LoggerFactory.getLogger(ScanVcsJob.class);
 
@@ -78,7 +78,7 @@ public class ScanVcsJobExecutorTest extends GitTestTemplate {
     public void scan() {
         Profiler profiler = new Profiler("Scanner");
         profiler.setLogger(logger);
-        ScanVcsJobExecutor scanner = new ScanVcsJobExecutor(config, projectRepository, commitRepository, gitCloner, gitChecker, gitUpdater);
+        VcsScanner scanner = new VcsScanner(config, projectRepository, commitRepository, gitCloner, gitChecker, gitUpdater);
         when(projectRepository.findOne(1L)).thenReturn(createProject());
         profiler.start("scanning without local repository present");
         scanner.scanVcs(1L);

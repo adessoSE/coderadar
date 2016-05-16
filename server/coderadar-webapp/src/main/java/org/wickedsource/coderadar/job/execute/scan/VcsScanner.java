@@ -18,9 +18,9 @@ import org.wickedsource.coderadar.vcs.git.walk.AllCommitsWalker;
 import java.nio.file.Path;
 
 @Service
-public class ScanVcsJobExecutor {
+public class VcsScanner {
 
-    private Logger logger = LoggerFactory.getLogger(ScanVcsJobExecutor.class);
+    private Logger logger = LoggerFactory.getLogger(VcsScanner.class);
 
     private CoderadarConfiguration config;
 
@@ -36,7 +36,7 @@ public class ScanVcsJobExecutor {
 
 
     @Autowired
-    public ScanVcsJobExecutor(CoderadarConfiguration config, ProjectRepository projectRepository, CommitRepository commitRepository, GitRepositoryCloner gitCloner, GitRepositoryChecker gitChecker, GitRepositoryUpdater gitUpdater) {
+    public VcsScanner(CoderadarConfiguration config, ProjectRepository projectRepository, CommitRepository commitRepository, GitRepositoryCloner gitCloner, GitRepositoryChecker gitChecker, GitRepositoryUpdater gitUpdater) {
         this.config = config;
         this.projectRepository = projectRepository;
         this.commitRepository = commitRepository;

@@ -1,5 +1,8 @@
 package org.wickedsource.coderadar.job.domain;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -100,6 +103,11 @@ public class Job {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.MULTI_LINE_STYLE);
     }
 
 }
