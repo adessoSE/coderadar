@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.wickedsource.coderadar.ControllerTestTemplate;
-import org.wickedsource.coderadar.core.domain.validation.ValidationExceptionHandler;
+import org.wickedsource.coderadar.core.rest.validation.ValidationExceptionHandler;
 import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.ResultMatcher;
-import org.wickedsource.coderadar.core.domain.validation.ValidationErrorsDTO;
+import org.wickedsource.coderadar.core.rest.validation.ValidationErrorsDTO;
 
 import java.io.IOException;
 

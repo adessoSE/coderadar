@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.core.domain.validation;
+package org.wickedsource.coderadar.core.rest.validation;
 
 public class FieldErrorDTO {
 
