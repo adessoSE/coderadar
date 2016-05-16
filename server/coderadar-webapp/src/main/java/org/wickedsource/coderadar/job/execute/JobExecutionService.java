@@ -17,7 +17,7 @@ import java.util.Date;
 
 @Service
 @Transactional
-public class JobExecutionService {
+class JobExecutionService {
 
     private Logger logger = LoggerFactory.getLogger(JobExecutionService.class);
 
@@ -43,20 +43,23 @@ public class JobExecutionService {
      */
     @Scheduled(fixedDelay = 5000)
     public void executeNextJobInQueue() {
+        if(queueService.isQueueEmpty()){
+            logger.info("no jobs in queue...laying back and enjoying the sun!");
+            return;
+        }
         Job job = queueService.dequeue();
         if (job == null) {
-            logger.info("could not load a job from queue: queue is empty or another node snatched the next job away");
+            logger.info("could not obtain the next job in queue due to contention with another transaction...trying again next time!");
         } else {
-            logger.info("starting to process job {}", job.getId());
+            logger.info("starting to process job {} of type {}", job.getId(), job.getClass());
             try {
                 executor.execute(job);
                 job.setEndDate(new Date());
                 job.setProcessingStatus(ProcessingStatus.PROCESSED);
                 job.setResultStatus(ResultStatus.SUCCESS);
                 jobRepository.save(job);
-                logger.info("successfully processed job {}", job.getId());
+                logger.info("successfully processed job {} of type {}", job.getId(), job.getClass());
             } catch (Exception e) {
-                logger.error(String.format("error while processing job with id %d", job.getId()));
                 job.setResultStatus(ResultStatus.FAILED);
                 job.setProcessingStatus(ProcessingStatus.PROCESSED);
                 job.setEndDate(new Date());
@@ -64,6 +67,7 @@ public class JobExecutionService {
                 // storing the failed job back into the database in a separate transaction because the current
                 // transaction may be marked for rollback
                 jobUpdater.updateJob(job);
+                logger.error(String.format("error while processing job with id %d. marking job as FAILED", job.getId()), e);
             }
         }
     }

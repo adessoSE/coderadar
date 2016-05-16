@@ -12,13 +12,13 @@ import java.util.Date;
 /**
  * Takes a GIT commit and stores it in the database.
  */
-public class DatabaseUpdatingCommitProcessor implements CommitProcessor {
+class DatabaseUpdatingCommitProcessor implements CommitProcessor {
 
     private CommitRepository commitRepository;
 
     private Project project;
 
-    public DatabaseUpdatingCommitProcessor(CommitRepository commitRepository, Project project) {
+    DatabaseUpdatingCommitProcessor(CommitRepository commitRepository, Project project) {
         this.commitRepository = commitRepository;
         this.project = project;
     }
@@ -27,10 +27,10 @@ public class DatabaseUpdatingCommitProcessor implements CommitProcessor {
     public void processCommit(Git gitClient, RevCommit gitCommit) {
         Commit commit = new Commit();
         commit.setName(gitCommit.getName());
-        commit.setAuthor(gitCommit.getCommitterIdent().getName());
+        commit.setAuthor(gitCommit.getAuthorIdent().getName());
         commit.setComment(gitCommit.getShortMessage());
         commit.setProject(project);
-        commit.setTimestamp(new Date(gitCommit.getCommitTime()));
+        commit.setTimestamp(new Date(gitCommit.getCommitTime() * 1000L));
         commitRepository.save(commit);
     }
 

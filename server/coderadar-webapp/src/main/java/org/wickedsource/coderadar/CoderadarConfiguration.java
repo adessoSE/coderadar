@@ -41,7 +41,8 @@ public class CoderadarConfiguration {
      * Returns the folder in which Coderadar puts local vcs data.
      */
     public Path getWorkdir() {
-        return Paths.get(System.getProperty(CONFIG_WORKDIR));
+        String path = System.getProperty(CONFIG_WORKDIR);
+        return Paths.get(path);
     }
 
     public int getScanIntervalInSeconds() {

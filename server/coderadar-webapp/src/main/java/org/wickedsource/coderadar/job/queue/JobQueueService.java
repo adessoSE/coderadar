@@ -4,17 +4,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.job.domain.Job;
+import org.wickedsource.coderadar.job.domain.JobRepository;
+import org.wickedsource.coderadar.job.domain.ProcessingStatus;
 
 @Service
 public class JobQueueService {
 
     private JobDequeuer dequeuer;
 
+    private JobRepository jobRepository;
+
     private static final int maxDequeueAttempts = 5;
 
     @Autowired
-    public JobQueueService(JobDequeuer dequeuer) {
+    public JobQueueService(JobDequeuer dequeuer, JobRepository jobRepository) {
         this.dequeuer = dequeuer;
+        this.jobRepository = jobRepository;
     }
 
     /**
@@ -37,6 +42,13 @@ public class JobQueueService {
             }
         }
         return null;
+    }
+
+    /**
+     * Returns true if the job queue is currently empty (i.e. there are no jobs waiting for execution).
+     */
+    public boolean isQueueEmpty(){
+        return jobRepository.countByProcessingStatus(ProcessingStatus.WAITING) == 0;
     }
 
 }

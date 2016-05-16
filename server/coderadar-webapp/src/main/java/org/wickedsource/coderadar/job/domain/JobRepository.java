@@ -9,4 +9,9 @@ public interface JobRepository extends CrudRepository<Job, Long> {
      */
     Job findTop1ByProcessingStatusOrderByQueuedDate(ProcessingStatus status);
 
+    /**
+     * Returns the number of jobs in the database with the given processing status.
+     */
+    int countByProcessingStatus(ProcessingStatus status);
+
 }

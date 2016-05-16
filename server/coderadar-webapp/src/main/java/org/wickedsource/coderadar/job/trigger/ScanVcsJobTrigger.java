@@ -7,17 +7,17 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.CoderadarConfiguration;
 import org.wickedsource.coderadar.job.domain.Job;
-import org.wickedsource.coderadar.job.domain.JobRepository;
 import org.wickedsource.coderadar.job.domain.ProcessingStatus;
 import org.wickedsource.coderadar.job.domain.ScanVcsJob;
+import org.wickedsource.coderadar.job.domain.ScanVcsJobRepository;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
-import java.util.Calendar;
+import java.util.Arrays;
 import java.util.Date;
 
 @Service
-public class ScanVcsJobTrigger {
+class ScanVcsJobTrigger {
 
     private Logger logger = LoggerFactory.getLogger(ScanVcsJobTrigger.class);
 
@@ -25,10 +25,10 @@ public class ScanVcsJobTrigger {
 
     private ProjectRepository projectRepository;
 
-    private JobRepository jobRepository;
+    private ScanVcsJobRepository jobRepository;
 
     @Autowired
-    public ScanVcsJobTrigger(CoderadarConfiguration config, ProjectRepository projectRepository, JobRepository jobRepository) {
+    public ScanVcsJobTrigger(CoderadarConfiguration config, ProjectRepository projectRepository, ScanVcsJobRepository jobRepository) {
         this.config = config;
         this.projectRepository = projectRepository;
         this.jobRepository = jobRepository;
@@ -38,8 +38,7 @@ public class ScanVcsJobTrigger {
     public void trigger() {
         if (config.isMaster()) {
             for (Project project : projectRepository.findAll()) {
-                Job lastJob = jobRepository.findTop1ByProcessingStatusOrderByQueuedDate(ProcessingStatus.PROCESSED);
-                if (lastJob == null || isIntervalPassed(lastJob)) {
+                if (shouldJobBeQueuedForProject(project)) {
                     ScanVcsJob newJob = new ScanVcsJob();
                     newJob.setProcessingStatus(ProcessingStatus.WAITING);
                     newJob.setQueuedDate(new Date());
@@ -51,11 +50,27 @@ public class ScanVcsJobTrigger {
         }
     }
 
-    private boolean isIntervalPassed(Job lastJob) {
-        Calendar lastDate = Calendar.getInstance();
-        lastDate.setTime(lastJob.getQueuedDate());
-        lastDate.add(Calendar.SECOND, config.getScanIntervalInSeconds());
-        return lastDate.before(new Date());
+    private boolean isJobCurrentlyQueuedForProject(Project project) {
+        int count = jobRepository.countByProcessingStatusInAndProjectId(Arrays.asList(ProcessingStatus.PROCESSING, ProcessingStatus.WAITING), project.getId());
+        return count > 0;
+    }
+
+    private boolean shouldJobBeQueuedForProject(Project project){
+        if (isJobCurrentlyQueuedForProject(project)){
+            logger.info("there is already a VCS scanning job queued for project {}. not queueing another job.");
+            return false;
+        }else{
+            Job lastJob = jobRepository.findTop1ByProcessingStatusAndProjectIdOrderByQueuedDateDesc(ProcessingStatus.PROCESSED, project.getId());
+            return lastJob == null || hasIntervalPassedSince(lastJob);
+        }
+    }
+
+    private boolean hasIntervalPassedSince(Job lastJob) {
+        long lastRun = lastJob.getQueuedDate().getTime();
+        long nextRun = lastRun + config.getScanIntervalInSeconds() * 1000;
+        long now = new Date().getTime();
+
+        return now > nextRun;
     }
 
 }

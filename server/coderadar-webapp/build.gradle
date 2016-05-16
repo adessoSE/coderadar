@@ -34,9 +34,12 @@ dependencies {
 bootRun {
     jvmArgs =
             [
-                    "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
+                    "-Xdebug",
+                    "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
                     "-Dlogging.level.org.wickedsource=DEBUG",
                     "-Dcoderadar.master=true",
-                    "-Dcoderadar.slave=true"
+                    "-Dcoderadar.slave=true",
+                    "-Dcoderadar.scanIntervalInSeconds=30",
+                    "-Dcoderadar.workdir=C:/coderadar"
             ]
 }
