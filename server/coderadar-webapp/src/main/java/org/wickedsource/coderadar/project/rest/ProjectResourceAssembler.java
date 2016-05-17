@@ -31,9 +31,9 @@ public class ProjectResourceAssembler extends ResourceAssemblerSupport<Project, 
         return resource;
     }
 
-    public List<ProjectResource> toResourceList(Iterable<Project> projects){
+    public List<ProjectResource> toResourceList(Iterable<Project> projects) {
         List<ProjectResource> resourceList = new ArrayList<>();
-        for(Project project : projects){
+        for (Project project : projects) {
             resourceList.add(toResource(project));
         }
         return resourceList;

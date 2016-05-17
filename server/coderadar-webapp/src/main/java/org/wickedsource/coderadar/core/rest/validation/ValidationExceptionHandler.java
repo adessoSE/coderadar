@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.core.rest.validation;
 
+import org.apache.el.util.Validation;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,6 +29,16 @@ public class ValidationExceptionHandler {
         BindingResult bindingResult = e.getBindingResult();
         List<org.springframework.validation.FieldError> fieldErrors = bindingResult.getFieldErrors();
         return map(fieldErrors);
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ValidationException.class)
+    @ResponseBody
+    public ValidationErrorsDTO handleValidationException(ValidationException e){
+        ValidationErrorsDTO errors = new ValidationErrorsDTO();
+        FieldErrorDTO fieldError = new FieldErrorDTO(e.getField(), e.getValidationMessage());
+        errors.addFieldError(fieldError);
+        return errors;
     }
 
     private ValidationErrorsDTO map(List<org.springframework.validation.FieldError> fieldErrors) {

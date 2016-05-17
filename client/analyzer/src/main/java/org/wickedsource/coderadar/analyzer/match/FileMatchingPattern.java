@@ -7,23 +7,8 @@ import java.util.List;
 
 /**
  * This class allows to specify a set of include patterns and exclude patterns that define a set of files from
- * a given starting folder. The patterns are Ant-style patterns. The exclude patterns are applied AFTER of
+ * a given starting folder. The patterns are Ant-style patterns. The exclude patterns are applied AFTER
  * the include patterns so that excludes can be used to override certain includes.
- * <p>
- * <h3>Examples</h3>
- * <ul>
- * <li>{@code com/t?st.jsp} &mdash; matches {@code com/test.jsp} but also
- * {@code com/tast.jsp} or {@code com/txst.jsp}</li>
- * <li>{@code com/*.jsp} &mdash; matches all {@code .jsp} files in the
- * {@code com} directory</li>
- * <li><code>com/&#42;&#42;/test.jsp</code> &mdash; matches all {@code test.jsp}
- * files underneath the {@code com} path</li>
- * <li><code>org/springframework/&#42;&#42;/*.jsp</code> &mdash; matches all
- * {@code .jsp} files underneath the {@code org/springframework} path</li>
- * <li><code>org/&#42;&#42;/servlet/bla.jsp</code> &mdash; matches
- * {@code org/springframework/servlet/bla.jsp} but also
- * {@code org/springframework/testing/servlet/bla.jsp} and {@code org/servlet/bla.jsp}</li>
- * </ul>
  */
 public class FileMatchingPattern {
 

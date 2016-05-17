@@ -6,6 +6,8 @@ import org.springframework.hateoas.ResourceSupport;
 import org.wickedsource.coderadar.project.domain.VcsType;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectResource extends ResourceSupport {
 
