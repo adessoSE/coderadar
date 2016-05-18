@@ -67,7 +67,7 @@ public class VcsCoordinates {
 
     @Override
     public String toString(){
-        ReflectionToStringBuilder builder = new ReflectionToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE);
+        ReflectionToStringBuilder builder = new ReflectionToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
         builder.setExcludeFieldNames("password");
         return builder.toString();
     }
