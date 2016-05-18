@@ -22,43 +22,43 @@ import java.util.List;
 @Controller
 @ExposesResourceFor(ProjectFiles.class)
 @Transactional
+@RequestMapping(path = "/projects/{projectId}/files")
 public class ProjectFilesController {
 
     private ProjectFilesRepository projectFilesRepository;
 
-    private ProjectFilesResourceAssembler projectFilesResourceAssembler;
-
     private ProjectRepository projectRepository;
 
     @Autowired
-    public ProjectFilesController(ProjectFilesRepository projectFilesRepository, ProjectFilesResourceAssembler projectFilesResourceAssembler, ProjectRepository projectRepository) {
+    public ProjectFilesController(ProjectFilesRepository projectFilesRepository, ProjectRepository projectRepository) {
         this.projectFilesRepository = projectFilesRepository;
-        this.projectFilesResourceAssembler = projectFilesResourceAssembler;
         this.projectRepository = projectRepository;
     }
 
-    @RequestMapping(path = "/projects/{projectId}/files", method = RequestMethod.GET)
-    public ResponseEntity<List<ProjectFilesResource>> getProjectFiles(@PathVariable Long projectId) {
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<ProjectFilesResource> getProjectFiles(@PathVariable Long projectId) {
         if (projectRepository.countById(projectId) == 0) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ValidationException("projectId", "Project does not exist");
         } else {
+            ProjectFilesResourceAssembler assembler = new ProjectFilesResourceAssembler(projectId);
             List<ProjectFiles> projectFilesList = projectFilesRepository.findByProjectId(projectId);
-            List<ProjectFilesResource> resourceList = projectFilesResourceAssembler.toResourceList(projectFilesList);
-            return new ResponseEntity<>(resourceList, HttpStatus.OK);
+            ProjectFilesResource resource = assembler.toResource(projectFilesList);
+            return new ResponseEntity<>(resource, HttpStatus.OK);
         }
     }
 
-    @RequestMapping(path = "/projects/{projectId}/files", method = RequestMethod.POST)
-    public ResponseEntity<List<ProjectFilesResource>> setProjectFiles(@PathVariable Long projectId, @Valid @RequestBody List<ProjectFilesResource> projectFilesResourceList) {
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<ProjectFilesResource> setProjectFiles(@PathVariable Long projectId, @Valid @RequestBody ProjectFilesResource resource) {
         Project project = projectRepository.findOne(projectId);
         if (project == null) {
             throw new ValidationException("projectId", "Project does not exist");
         } else {
+            ProjectFilesResourceAssembler assembler = new ProjectFilesResourceAssembler(projectId);
             projectFilesRepository.deleteByProjectId(projectId);
-            List<ProjectFiles> projectFiles = projectFilesResourceAssembler.toEntityList(projectFilesResourceList, project);
+            List<ProjectFiles> projectFiles = assembler.toEntity(resource, project);
             Iterable<ProjectFiles> savedProjectFiles = projectFilesRepository.save(projectFiles);
-            List<ProjectFilesResource> resources = projectFilesResourceAssembler.toResourceList(savedProjectFiles);
-            return new ResponseEntity<>(resources, HttpStatus.CREATED);
+            ProjectFilesResource savedResource = assembler.toResource(savedProjectFiles);
+            return new ResponseEntity<>(savedResource, HttpStatus.CREATED);
         }
     }
 

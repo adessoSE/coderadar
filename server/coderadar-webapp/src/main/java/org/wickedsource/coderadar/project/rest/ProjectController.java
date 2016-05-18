@@ -20,6 +20,7 @@ import java.util.List;
 @Controller
 @ExposesResourceFor(Project.class)
 @Transactional
+@RequestMapping(path="/projects")
 public class ProjectController {
 
     private ProjectRepository projectRepository;
@@ -32,13 +33,13 @@ public class ProjectController {
         this.projectAssembler = projectAssembler;
     }
 
-    @RequestMapping(path = "/projects", method = RequestMethod.GET)
+    @RequestMapping(path = "/", method = RequestMethod.GET)
     public ResponseEntity<List<ProjectResource>> getProjects() {
         Iterable<Project> projects = projectRepository.findAll();
         return new ResponseEntity<>(projectAssembler.toResourceList(projects), HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/projects", method = RequestMethod.POST)
+    @RequestMapping(path = "/", method = RequestMethod.POST)
     public ResponseEntity<ProjectResource> createProject(@Valid @RequestBody ProjectResource projectResource) {
         Project project = projectAssembler.toEntity(projectResource);
         Project savedProject = projectRepository.save(project);
@@ -46,7 +47,7 @@ public class ProjectController {
         return new ResponseEntity<>(resultResource, HttpStatus.CREATED);
     }
 
-    @RequestMapping(path = "/projects/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<ProjectResource> getProject(@PathVariable Long id) {
         Project project = projectRepository.findOne(id);
         if (project != null) {
@@ -57,13 +58,13 @@ public class ProjectController {
         }
     }
 
-    @RequestMapping(path = "/projects/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteProject(@PathVariable Long id) {
         projectRepository.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/projects/{id}", method = RequestMethod.POST)
+    @RequestMapping(path = "/{id}", method = RequestMethod.POST)
     public ResponseEntity<ProjectResource> updateProject(@Valid @RequestBody ProjectResource projectResource, @PathVariable Long id) {
         Project project = projectAssembler.toEntity(projectResource);
         project.setId(id);

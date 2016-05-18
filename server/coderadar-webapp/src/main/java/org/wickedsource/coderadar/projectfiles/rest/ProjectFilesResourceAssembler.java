@@ -1,52 +1,49 @@
 package org.wickedsource.coderadar.projectfiles.rest;
 
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
-import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.project.domain.Project;
-import org.wickedsource.coderadar.project.rest.ProjectController;
 import org.wickedsource.coderadar.projectfiles.domain.ProjectFiles;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-public class ProjectFilesResourceAssembler extends ResourceAssemblerSupport<ProjectFiles, ProjectFilesResource> {
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-    public ProjectFilesResourceAssembler() {
-        super(ProjectController.class, ProjectFilesResource.class);
+public class ProjectFilesResourceAssembler extends ResourceAssemblerSupport<Iterable<ProjectFiles>, ProjectFilesResource> {
+
+    private Long projectId;
+
+    ProjectFilesResourceAssembler(Long projectId) {
+        super(ProjectFilesController.class, ProjectFilesResource.class);
+        this.projectId = projectId;
     }
 
     @Override
-    public ProjectFilesResource toResource(ProjectFiles entity) {
+    public ProjectFilesResource toResource(Iterable<ProjectFiles> entities) {
         ProjectFilesResource resource = new ProjectFilesResource();
-        resource.setFileType(entity.getFileType());
-        resource.setInclusionType(entity.getInclusionType());
-        resource.setPattern(entity.getPattern());
+        for (ProjectFiles entity : entities) {
+            ProjectFilesDTO dto = new ProjectFilesDTO();
+            dto.setFileType(entity.getFileType());
+            dto.setInclusionType(entity.getInclusionType());
+            dto.setPattern(entity.getPattern());
+            resource.addProjectFiles(dto);
+        }
+        resource.add(linkTo(methodOn(ProjectFilesController.class).getProjectFiles(projectId)).withSelfRel());
         return resource;
     }
 
-    public List<ProjectFilesResource> toResourceList(Iterable<ProjectFiles> entities) {
-        List<ProjectFilesResource> resourceList = new ArrayList<>();
-        for (ProjectFiles entity : entities) {
-            resourceList.add(toResource(entity));
-        }
-        return resourceList;
-    }
-
-    public ProjectFiles toEntity(ProjectFilesResource resource, Project project) {
-        ProjectFiles entity = new ProjectFiles();
-        entity.setPattern(resource.getPattern());
-        entity.setInclusionType(resource.getInclusionType());
-        entity.setFileType(resource.getFileType());
-        entity.setProject(project);
-        return entity;
-    }
-
-    public List<ProjectFiles> toEntityList(Iterable<ProjectFilesResource> resourceList, Project project) {
+    List<ProjectFiles> toEntity(ProjectFilesResource resource, Project project) {
         List<ProjectFiles> entities = new ArrayList<>();
-        for (ProjectFilesResource resource : resourceList) {
-            entities.add(toEntity(resource, project));
+        for (ProjectFilesDTO dto : resource.getProjectFilesList()) {
+            ProjectFiles entity = new ProjectFiles();
+            entity.setPattern(dto.getPattern());
+            entity.setInclusionType(dto.getInclusionType());
+            entity.setFileType(dto.getFileType());
+            entity.setProject(project);
+            entities.add(entity);
         }
         return entities;
     }
+
 }

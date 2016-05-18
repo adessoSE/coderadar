@@ -1,44 +1,23 @@
 package org.wickedsource.coderadar.projectfiles.rest;
 
 import org.springframework.hateoas.ResourceSupport;
-import org.wickedsource.coderadar.project.domain.FileType;
-import org.wickedsource.coderadar.project.domain.InclusionType;
 
-import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectFilesResource extends ResourceSupport {
 
-    @NotNull
-    private String pattern;
+    private List<ProjectFilesDTO> projectFilesList = new ArrayList<>();
 
-    @NotNull
-    private InclusionType inclusionType;
-
-    @NotNull
-    private FileType fileType;
-
-    public String getPattern() {
-        return pattern;
+    List<ProjectFilesDTO> getProjectFilesList() {
+        return projectFilesList;
     }
 
-    public void setPattern(String pattern) {
-        this.pattern = pattern;
+    public void setProjectFilesList(List<ProjectFilesDTO> projectFilesList) {
+        this.projectFilesList = projectFilesList;
     }
 
-    public InclusionType getInclusionType() {
-        return inclusionType;
+    void addProjectFiles(ProjectFilesDTO projectFiles){
+        this.projectFilesList.add(projectFiles);
     }
-
-    public void setInclusionType(InclusionType inclusionType) {
-        this.inclusionType = inclusionType;
-    }
-
-    public FileType getFileType() {
-        return fileType;
-    }
-
-    public void setFileType(FileType fileType) {
-        this.fileType = fileType;
-    }
-
 }

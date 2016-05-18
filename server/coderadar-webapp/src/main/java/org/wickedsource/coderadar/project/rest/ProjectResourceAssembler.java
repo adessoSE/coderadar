@@ -4,11 +4,15 @@ import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
+import org.wickedsource.coderadar.projectfiles.rest.ProjectFilesController;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Component
 public class ProjectResourceAssembler extends ResourceAssemblerSupport<Project, ProjectResource> {
@@ -27,11 +31,11 @@ public class ProjectResourceAssembler extends ResourceAssemblerSupport<Project, 
             resource.setVcsUser(project.getVcsCoordinates().getUsername());
             resource.setVcsPassword(project.getVcsCoordinates().getPassword());
         }
-
+        resource.add(linkTo(methodOn(ProjectFilesController.class).getProjectFiles(project.getId())).withRel("files"));
         return resource;
     }
 
-    public List<ProjectResource> toResourceList(Iterable<Project> projects) {
+    List<ProjectResource> toResourceList(Iterable<Project> projects) {
         List<ProjectResource> resourceList = new ArrayList<>();
         for (Project project : projects) {
             resourceList.add(toResource(project));
@@ -39,7 +43,7 @@ public class ProjectResourceAssembler extends ResourceAssemblerSupport<Project, 
         return resourceList;
     }
 
-    public Project toEntity(ProjectResource resource) {
+    Project toEntity(ProjectResource resource) {
         try {
             Project project = new Project();
             project.setName(resource.getName());

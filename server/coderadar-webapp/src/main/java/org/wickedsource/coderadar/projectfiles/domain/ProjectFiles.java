@@ -7,7 +7,7 @@ import org.wickedsource.coderadar.project.domain.Project;
 import javax.persistence.*;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"pattern", "inclusionType", "fileType"}))
+@Table
 public class ProjectFiles {
 
     @Id
