@@ -1,5 +1,8 @@
 package org.wickedsource.coderadar.project.domain;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.net.URL;
@@ -60,5 +63,12 @@ public class VcsCoordinates {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString(){
+        ReflectionToStringBuilder builder = new ReflectionToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE);
+        builder.setExcludeFieldNames("password");
+        return builder.toString();
     }
 }
