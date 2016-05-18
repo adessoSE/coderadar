@@ -37,7 +37,7 @@ public class ProjectFilesController {
         this.projectRepository = projectRepository;
     }
 
-    @RequestMapping(path = "/projects/{id}/files", method = RequestMethod.GET)
+    @RequestMapping(path = "/projects/{projectId}/files", method = RequestMethod.GET)
     public ResponseEntity<List<ProjectFilesResource>> getProjectFiles(@PathVariable Long projectId) {
         if (projectRepository.countById(projectId) == 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -48,18 +48,18 @@ public class ProjectFilesController {
         }
     }
 
-    @RequestMapping(path = "/projects/{id}/files", method = RequestMethod.POST)
-    public ResponseEntity<ProjectFilesResource> addFilesToProject(@Valid @RequestBody ProjectFilesResource projectFilesResource) {
-        Project project = projectRepository.findOne(projectFilesResource.getProjectId());
+    @RequestMapping(path = "/projects/{projectId}/files", method = RequestMethod.POST)
+    public ResponseEntity<List<ProjectFilesResource>> setProjectFiles(@PathVariable Long projectId, @Valid @RequestBody List<ProjectFilesResource> projectFilesResourceList) {
+        Project project = projectRepository.findOne(projectId);
         if (project == null) {
             throw new ValidationException("projectId", "Project does not exist");
         } else {
-            ProjectFiles projectFiles = projectFilesResourceAssembler.toEntity(projectFilesResource, project);
-            ProjectFiles savedProjectFiles = projectFilesRepository.save(projectFiles);
-            ProjectFilesResource resource = projectFilesResourceAssembler.toResource(savedProjectFiles);
-            return new ResponseEntity<>(resource, HttpStatus.CREATED);
+            projectFilesRepository.deleteByProjectId(projectId);
+            List<ProjectFiles> projectFiles = projectFilesResourceAssembler.toEntityList(projectFilesResourceList, project);
+            Iterable<ProjectFiles> savedProjectFiles = projectFilesRepository.save(projectFiles);
+            List<ProjectFilesResource> resources = projectFilesResourceAssembler.toResourceList(savedProjectFiles);
+            return new ResponseEntity<>(resources, HttpStatus.CREATED);
         }
     }
-
 
 }

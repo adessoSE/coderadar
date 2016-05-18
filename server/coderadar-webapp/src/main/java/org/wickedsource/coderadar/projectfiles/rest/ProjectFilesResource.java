@@ -4,7 +4,6 @@ import org.springframework.hateoas.ResourceSupport;
 import org.wickedsource.coderadar.project.domain.FileType;
 import org.wickedsource.coderadar.project.domain.InclusionType;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 public class ProjectFilesResource extends ResourceSupport {
@@ -17,10 +16,6 @@ public class ProjectFilesResource extends ResourceSupport {
 
     @NotNull
     private FileType fileType;
-
-    @NotNull
-    @Min(0)
-    private long projectId;
 
     public String getPattern() {
         return pattern;
@@ -46,11 +41,4 @@ public class ProjectFilesResource extends ResourceSupport {
         this.fileType = fileType;
     }
 
-    public long getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(long projectId) {
-        this.projectId = projectId;
-    }
 }

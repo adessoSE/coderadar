@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.ResultMatcher;
-import org.wickedsource.coderadar.core.rest.validation.ValidationErrorsDTO;
+import org.wickedsource.coderadar.core.rest.validation.ErrorDTO;
 
 import java.io.IOException;
 
@@ -35,7 +35,7 @@ public abstract class ControllerTestTemplate {
         return result -> {
             String json = result.getResponse().getContentAsString();
             try {
-                ValidationErrorsDTO errors = fromJson(json, ValidationErrorsDTO.class);
+                ErrorDTO errors = fromJson(json, ErrorDTO.class);
                 Assert.assertTrue(String.format("expected at least one validation error for field %s", fieldName), errors.getErrorsForField(fieldName).size() > 0);
             } catch (Exception e) {
                 logger.error(String.format("expected JSON representation of ValidationErrorsDTO but found '%s'", json), e);

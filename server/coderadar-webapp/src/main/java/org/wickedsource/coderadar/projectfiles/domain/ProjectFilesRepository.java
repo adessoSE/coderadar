@@ -7,4 +7,6 @@ import java.util.List;
 public interface ProjectFilesRepository extends CrudRepository<ProjectFiles, Long> {
 
     List<ProjectFiles> findByProjectId(Long projectId);
+
+    void deleteByProjectId(Long projectId);
 }
