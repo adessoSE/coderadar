@@ -69,6 +69,7 @@ public class VcsScanner {
         }
         DatabaseUpdatingCommitProcessor commitProcessor = new DatabaseUpdatingCommitProcessor(commitRepository, project);
         walker.walk(gitClient, commitProcessor);
+        gitClient.getRepository().close();
         logger.info("scan result for project {}: {} new commits", project.getId(), commitProcessor.getUpdatedCommitsCount());
     }
 

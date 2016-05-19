@@ -30,6 +30,8 @@ public class GitCommitFetcher {
             gitClient.checkout()
                     .setName(commitName)
                     .call();
+
+            gitClient.getRepository().close();
         } catch (GitAPIException e) {
             throw new IllegalStateException(String.format("error while fetching commit into directory %s from vcs coordinates %s", localDir, vcsCoordinates), e);
         }

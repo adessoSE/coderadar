@@ -35,7 +35,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class VcsScannerTest extends GitTestTemplate {
+public class VcsScannerIntegrationTest extends GitTestTemplate {
 
     private Logger logger = LoggerFactory.getLogger(ScanVcsJob.class);
 
