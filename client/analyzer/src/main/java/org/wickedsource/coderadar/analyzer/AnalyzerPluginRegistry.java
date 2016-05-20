@@ -36,7 +36,7 @@ public class AnalyzerPluginRegistry {
                     logger.info("successfully registered analyzer plugin {}", analyzerPlugin.getClass());
                     logger.debug("configured analyzer plugin {} with the following properties: {}", analyzerPlugin.getClass(), propertiesForThisAnalyzer);
                 } else {
-                    logger.info("skipped registration of analyzer plugin {}, since property {}.enabled is not set to true", analyzerPlugin.getClass(), analyzerPlugin.getClass());
+                    logger.info("skipped registration of analyzer plugin {}, since property {}.enabled is not set to true", analyzerPlugin.getClass().getName(), analyzerPlugin.getClass().getName());
                 }
             }
             initialized = true;
