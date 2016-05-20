@@ -1,8 +1,6 @@
 package org.wickedsource.coderadar.job.domain;
 
 
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-
 import javax.persistence.Entity;
 
 @Entity

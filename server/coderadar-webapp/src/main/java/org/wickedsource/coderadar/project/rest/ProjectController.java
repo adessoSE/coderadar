@@ -33,13 +33,13 @@ public class ProjectController {
         this.projectAssembler = projectAssembler;
     }
 
-    @RequestMapping(path = "/", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<ProjectResource>> getProjects() {
         Iterable<Project> projects = projectRepository.findAll();
         return new ResponseEntity<>(projectAssembler.toResourceList(projects), HttpStatus.OK);
     }
 
-    @RequestMapping(path = "/", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<ProjectResource> createProject(@Valid @RequestBody ProjectResource projectResource) {
         Project project = projectAssembler.toEntity(projectResource);
         Project savedProject = projectRepository.save(project);

@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.execute.scan;
+package org.wickedsource.coderadar.job.scan;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -13,9 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.profiler.Profiler;
 import org.wickedsource.coderadar.CoderadarConfiguration;
+import org.wickedsource.coderadar.GitTestTemplate;
 import org.wickedsource.coderadar.IntegrationTest;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
+import org.wickedsource.coderadar.core.WorkdirManager;
 import org.wickedsource.coderadar.job.domain.ScanVcsJob;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
@@ -24,15 +26,12 @@ import org.wickedsource.coderadar.project.domain.VcsType;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryChecker;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryCloner;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryUpdater;
-import org.wickedsource.coderadar.vcs.git.GitTestTemplate;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class VcsScannerIntegrationTest extends GitTestTemplate {
@@ -54,12 +53,16 @@ public class VcsScannerIntegrationTest extends GitTestTemplate {
     @Spy
     private GitRepositoryUpdater gitUpdater;
 
+    @Mock
+    private WorkdirManager workdirManager;
+
     private CoderadarConfiguration config;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
         config = createConfig();
+        mock(workdirManager);
     }
 
     @After
@@ -78,25 +81,22 @@ public class VcsScannerIntegrationTest extends GitTestTemplate {
     public void scan() {
         Profiler profiler = new Profiler("Scanner");
         profiler.setLogger(logger);
-        VcsScanner scanner = new VcsScanner(config, projectRepository, commitRepository, gitCloner, gitChecker, gitUpdater);
+        VcsScanner scanner = new VcsScanner(config, projectRepository, commitRepository, gitCloner, gitChecker, gitUpdater, workdirManager);
         when(projectRepository.findOne(1L)).thenReturn(createProject());
         profiler.start("scanning without local repository present");
-        scanner.scanVcs(1L);
-        Assert.assertTrue(gitChecker.isRepository(config.getWorkdir().resolve("project-1")));
+        File repoRoot = scanner.scanVcs(1L).getParentFile();
+        Assert.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
         // scanning again should be fairly quick, since the repository is already cloned
         profiler.start("re-scanning with local repository present from last test");
         scanner.scanVcs(1L);
-        Assert.assertTrue(gitChecker.isRepository(config.getWorkdir().resolve("project-1")));
+        Assert.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
 
         verify(commitRepository, atLeast(50)).save(any(Commit.class));
         profiler.stop().log();
     }
 
     private CoderadarConfiguration createConfig() {
-        String tmpDir = System.getProperty("java.io.tmpdir");
-        assertNotNull("java.io.tmpdir was null", tmpDir);
-        File dir = new File(tmpDir, "ScanVcsJobExecutorTest" + System.nanoTime());
-        assertTrue(dir.mkdir());
+        File dir = createTempDir();
 
         CoderadarConfiguration config = new CoderadarConfiguration();
         config.setMaster(true);

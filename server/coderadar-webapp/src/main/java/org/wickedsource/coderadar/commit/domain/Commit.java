@@ -29,6 +29,9 @@ public class Commit {
     @Column(nullable = false)
     private String author;
 
+    @Column
+    private boolean sweeped;
+
     public Long getId() {
         return id;
     }
@@ -75,5 +78,13 @@ public class Commit {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public boolean isSweeped() {
+        return sweeped;
+    }
+
+    public void setSweeped(boolean sweeped) {
+        this.sweeped = sweeped;
     }
 }

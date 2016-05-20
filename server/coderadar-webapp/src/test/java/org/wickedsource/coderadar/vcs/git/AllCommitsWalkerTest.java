@@ -3,6 +3,7 @@ package org.wickedsource.coderadar.vcs.git;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.wickedsource.coderadar.GitTestTemplate;
 import org.wickedsource.coderadar.analyzer.api.*;
 import org.wickedsource.coderadar.vcs.MetricsProcessor;
 import org.wickedsource.coderadar.vcs.git.walk.AllCommitsWalker;

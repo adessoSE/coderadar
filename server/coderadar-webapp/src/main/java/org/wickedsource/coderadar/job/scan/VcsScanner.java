@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.execute.scan;
+package org.wickedsource.coderadar.job.scan;
 
 import org.eclipse.jgit.api.Git;
 import org.slf4j.Logger;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.CoderadarConfiguration;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
+import org.wickedsource.coderadar.core.WorkdirManager;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryChecker;
@@ -15,6 +16,7 @@ import org.wickedsource.coderadar.vcs.git.GitRepositoryCloner;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryUpdater;
 import org.wickedsource.coderadar.vcs.git.walk.AllCommitsWalker;
 
+import java.io.File;
 import java.nio.file.Path;
 
 @Service
@@ -34,18 +36,21 @@ public class VcsScanner {
 
     private GitRepositoryUpdater gitUpdater;
 
+    private WorkdirManager workdirManager;
+
 
     @Autowired
-    public VcsScanner(CoderadarConfiguration config, ProjectRepository projectRepository, CommitRepository commitRepository, GitRepositoryCloner gitCloner, GitRepositoryChecker gitChecker, GitRepositoryUpdater gitUpdater) {
+    public VcsScanner(CoderadarConfiguration config, ProjectRepository projectRepository, CommitRepository commitRepository, GitRepositoryCloner gitCloner, GitRepositoryChecker gitChecker, GitRepositoryUpdater gitUpdater, WorkdirManager workdirManager) {
         this.config = config;
         this.projectRepository = projectRepository;
         this.commitRepository = commitRepository;
         this.gitCloner = gitCloner;
         this.gitChecker = gitChecker;
         this.gitUpdater = gitUpdater;
+        this.workdirManager = workdirManager;
     }
 
-    public void scanVcs(Long projectId) {
+    public File scanVcs(Long projectId) {
         if (config.isSlave()) {
             Project project = projectRepository.findOne(projectId);
             if (project == null) {
@@ -58,6 +63,9 @@ public class VcsScanner {
                 gitClient = updateLocalRepository(project);
             }
             scanLocalRepository(project, gitClient);
+            return gitClient.getRepository().getDirectory();
+        }else{
+            return null;
         }
     }
 
@@ -70,32 +78,27 @@ public class VcsScanner {
         DatabaseUpdatingCommitProcessor commitProcessor = new DatabaseUpdatingCommitProcessor(commitRepository, project);
         walker.walk(gitClient, commitProcessor);
         gitClient.getRepository().close();
-        logger.info("scan result for project {}: {} new commits", project.getId(), commitProcessor.getUpdatedCommitsCount());
+        logger.info("scanned {} new commits for project {}", commitProcessor.getUpdatedCommitsCount(), project);
     }
 
     private Git updateLocalRepository(Project project) {
-        return gitUpdater.updateRepository(getProjectWorkdir(project));
+        return gitUpdater.updateRepository(getWorkdir(project));
     }
 
     private Git cloneRepository(Project project) {
         if (project.getVcsCoordinates() == null) {
             throw new IllegalStateException(String.format("vcsCoordinates of Project with ID %d are null!", project.getId()));
         }
-        return gitCloner.cloneRepository(project.getVcsCoordinates().getUrl().toString(), getProjectWorkdir(project).toFile());
+        return gitCloner.cloneRepository(project.getVcsCoordinates().getUrl().toString(), getWorkdir(project).toFile());
     }
 
     private boolean isRepositoryAlreadyCheckedOut(Project project) {
-        Path projectWorkdir = getProjectWorkdir(project);
+        Path projectWorkdir = getWorkdir(project);
         return gitChecker.isRepository(projectWorkdir);
     }
 
-    private Path getProjectWorkdir(Project project) {
-        Path globalWorkdir = config.getWorkdir();
-        Path projectWorkdir = globalWorkdir.resolve("project-" + project.getId());
-        if (!projectWorkdir.toFile().exists()) {
-            projectWorkdir.toFile().mkdirs();
-        }
-        return projectWorkdir;
+    private Path getWorkdir(Project project) {
+       return workdirManager.getWorkdirForVcsScan(project.getId());
     }
 
 }

@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.execute.scan;
+package org.wickedsource.coderadar.job.scan;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.revwalk.RevCommit;

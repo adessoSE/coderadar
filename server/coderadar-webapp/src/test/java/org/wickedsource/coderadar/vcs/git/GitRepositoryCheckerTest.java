@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.vcs.git;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.wickedsource.coderadar.GitTestTemplate;
 
 import java.io.File;
 

@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.vcs.git;
+package org.wickedsource.coderadar;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
@@ -17,24 +17,23 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
  * Template for test cases that need a git repository.
  */
-public abstract class GitTestTemplate {
+public abstract class GitTestTemplate extends TestTemplate {
 
     private Logger logger = LoggerFactory.getLogger(GitTestTemplate.class);
 
-    protected File testRepo;
+    private File testRepo;
 
     protected Git git;
 
-    protected PersonIdent author = new PersonIdent("Test Author",
+    private PersonIdent author = new PersonIdent("Test Author",
             "author@test.com");
 
-    protected PersonIdent committer = new PersonIdent("Test Committer",
+    private PersonIdent committer = new PersonIdent("Test Committer",
             "committer@test.com");
 
     @Before
@@ -52,10 +51,7 @@ public abstract class GitTestTemplate {
     }
 
     protected File initRepo() throws Exception {
-        String tmpDir = System.getProperty("java.io.tmpdir");
-        assertNotNull("java.io.tmpdir was null", tmpDir);
-        File dir = new File(tmpDir, "git-test-case-" + System.nanoTime());
-        assertTrue(dir.mkdir());
+        File dir = createTempDir();
 
         Git.init().setDirectory(dir).setBare(false).call();
         File repo = new File(dir, Constants.DOT_GIT);
