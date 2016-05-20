@@ -26,7 +26,7 @@ public class AnalyzerPluginRegistry {
         if (!initialized) {
             ServiceLoader<SourceCodeFileAnalyzerPlugin> loader = ServiceLoader.load(SourceCodeFileAnalyzerPlugin.class);
             for (SourceCodeFileAnalyzerPlugin analyzerPlugin : loader) {
-                logger.info("initializing analyzer plugin {}", analyzerPlugin.getClass());
+                logger.info("initializing analyzer plugin {}", analyzerPlugin.getClass().getName());
                 Properties propertiesForThisAnalyzer = extractPropertiesForAnalyzer(analyzerPlugin, properties);
 
                 // only register explicitly enabled analyzer plugins
@@ -34,7 +34,7 @@ public class AnalyzerPluginRegistry {
                     analyzerPlugin.configure(propertiesForThisAnalyzer);
                     sourceCodeFileAnalyzerPlugins.add(analyzerPlugin);
                     logger.info("successfully registered analyzer plugin {}", analyzerPlugin.getClass());
-                    logger.debug("configured analyzer plugin {} with the following properties: {}", analyzerPlugin.getClass(), propertiesForThisAnalyzer);
+                    logger.debug("configured analyzer plugin {} with the following properties: {}", analyzerPlugin.getClass().getName(), propertiesForThisAnalyzer);
                 } else {
                     logger.info("skipped registration of analyzer plugin {}, since property {}.enabled is not set to true", analyzerPlugin.getClass().getName(), analyzerPlugin.getClass().getName());
                 }
