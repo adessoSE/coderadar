@@ -70,10 +70,10 @@ public class VcsScanner {
     }
 
     private void scanLocalRepository(Project project, Git gitClient) {
-        Commit latestCommit = commitRepository.findTop1ByProjectIdOrderByTimestampDesc(project.getId());
+        Commit lastKnownCommit = commitRepository.findTop1ByProjectIdOrderByTimestampDesc(project.getId());
         AllCommitsWalker walker = new AllCommitsWalker();
-        if (latestCommit != null) {
-            walker.stopAtCommit(latestCommit.getName());
+        if (lastKnownCommit != null) {
+            walker.stopAtCommit(lastKnownCommit.getName());
         }
         DatabaseUpdatingCommitProcessor commitProcessor = new DatabaseUpdatingCommitProcessor(commitRepository, project);
         walker.walk(gitClient, commitProcessor);
