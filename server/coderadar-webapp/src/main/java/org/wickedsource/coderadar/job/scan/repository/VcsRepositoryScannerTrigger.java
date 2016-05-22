@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.scan;
+package org.wickedsource.coderadar.job.scan.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,7 +33,7 @@ class VcsRepositoryScannerTrigger {
         this.jobRepository = jobRepository;
     }
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 1000)
     public void trigger() {
         if (config.isMaster()) {
             for (Project project : projectRepository.findAll()) {
@@ -51,7 +51,7 @@ class VcsRepositoryScannerTrigger {
 
     private boolean shouldJobBeQueuedForProject(Project project) {
         if (isJobCurrentlyQueuedForProject(project)) {
-            jobLogger.alreadyQueued(ScanVcsJob.class, project);
+            jobLogger.alreadyQueuedForProject(ScanVcsJob.class, project);
             return false;
         } else {
             Job lastJob = jobRepository.findTop1ByProcessingStatusAndProjectIdOrderByQueuedDateDesc(ProcessingStatus.PROCESSED, project.getId());

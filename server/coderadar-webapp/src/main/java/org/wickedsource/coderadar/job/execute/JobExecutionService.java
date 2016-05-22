@@ -40,7 +40,7 @@ class JobExecutionService {
      * Loads the next job from the queue and passes it to the executor to process it. The job will be marked as
      * successfully processed after execution. If an exception occurs, the job will be marked as failed but processed.
      */
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 1000)
     public void executeNextJobInQueue() {
         if (queueService.isQueueEmpty()) {
             jobLogger.emptyQueue();

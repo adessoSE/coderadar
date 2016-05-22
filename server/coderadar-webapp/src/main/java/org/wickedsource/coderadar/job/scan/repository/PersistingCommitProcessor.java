@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.scan;
+package org.wickedsource.coderadar.job.scan.repository;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Takes a GIT commit and stores it in the database.
  */
-class DatabaseUpdatingCommitProcessor implements CommitProcessor {
+class PersistingCommitProcessor implements CommitProcessor {
 
     private CommitRepository commitRepository;
 
@@ -20,7 +20,7 @@ class DatabaseUpdatingCommitProcessor implements CommitProcessor {
 
     private int updatedCommits;
 
-    DatabaseUpdatingCommitProcessor(CommitRepository commitRepository, Project project) {
+    PersistingCommitProcessor(CommitRepository commitRepository, Project project) {
         this.commitRepository = commitRepository;
         this.project = project;
     }

@@ -38,7 +38,7 @@ bootRun {
                     "-Xdebug",
                     "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
                     "-Dlogging.level.org.wickedsource.coderadar=DEBUG",
-                    "-Dlogging.level.org.wickedsource.coderadar.job.JobLogger=DEBUG",
+                    "-Dlogging.level.org.wickedsource.coderadar.job.JobLogger=INFO",
                     "-Dcoderadar.master=true",
                     "-Dcoderadar.slave=true",
                     "-Dcoderadar.scanIntervalInSeconds=30",

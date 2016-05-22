@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.commit.domain;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.wickedsource.coderadar.project.domain.Project;
 
 import javax.persistence.*;
@@ -109,4 +111,10 @@ public class Commit {
     public void setAnalyzed(boolean analyzed) {
         this.analyzed = analyzed;
     }
+
+    @Override
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
 }

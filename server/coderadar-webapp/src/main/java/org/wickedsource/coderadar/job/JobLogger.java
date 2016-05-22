@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.job;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.job.domain.Job;
 import org.wickedsource.coderadar.project.domain.Project;
 
@@ -17,8 +18,12 @@ public class JobLogger {
         logger.info("Queued new job {} for project {}", job, project);
     }
 
-    public void alreadyQueued(Class<? extends Job> jobClass, Project project){
+    public void alreadyQueuedForProject(Class<? extends Job> jobClass, Project project){
         logger.debug("Not queueing a new job of type {} since there already is one in queue for project {}", jobClass.getSimpleName(), project);
+    }
+
+    public void alreadyQueuedForCommit(Class<? extends Job> jobClass, Commit commit){
+        logger.debug("Not queueing a new job of type {} since there already is one in queue for commit {}", jobClass.getSimpleName(), commit);
     }
 
     public void couldNotObtainJob(){

@@ -4,10 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
-import org.eclipse.jgit.notes.Note;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.gitective.core.BlobUtils;
-import org.gitective.core.CommitUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.slf4j.Logger;
@@ -15,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
@@ -77,64 +73,13 @@ public abstract class GitTestTemplate extends TestTemplate {
         git.add().addFilepattern(path).call();
     }
 
-    protected RevCommit commit(File repo) throws Exception {
+    protected RevCommit commit() throws Exception {
         RevCommit commit = git.commit()
                 .setMessage("test commit")
                 .setAuthor(author)
                 .setCommitter(committer)
                 .call();
         return commit;
-    }
-
-    protected RevCommit commit() throws Exception {
-        return commit(testRepo);
-    }
-
-    protected void add(File repo, List<String> paths,
-                       List<String> contents) throws Exception {
-        for (int i = 0; i < paths.size(); i++) {
-            String path = paths.get(i);
-            String content = contents.get(i);
-            File file = new File(repo.getParentFile(), path);
-            if (!file.getParentFile().exists())
-                assertTrue(file.getParentFile().mkdirs());
-            if (!file.exists())
-                assertTrue(file.createNewFile());
-            PrintWriter writer = new PrintWriter(file);
-            if (content == null)
-                content = "";
-            try {
-                writer.print(content);
-            } finally {
-                writer.close();
-            }
-            git.add().addFilepattern(path).call();
-        }
-    }
-
-    protected void addNote(String commit, String namespace, String note) throws Exception {
-        RevCommit commitObject = CommitUtils.getCommit(git.getRepository(), commit);
-        git.notesAdd()
-                .setMessage(note)
-                .setNotesRef(namespace)
-                .setObjectId(commitObject)
-                .call();
-    }
-
-    protected String getNote(String commit, String namespace) throws Exception {
-        RevCommit commitObject = CommitUtils.getCommit(git.getRepository(), commit);
-        Note note = git.notesShow()
-                .setNotesRef(namespace)
-                .setObjectId(commitObject)
-                .call();
-        return BlobUtils.getContent(git.getRepository(), note.getData());
-    }
-
-    protected RevCommit addAndCommitTestData() throws Exception {
-        add("dir/file1.txt", "file1");
-        add("dir/file2.java", "file2");
-        add("mainfile.sh", "mainfile");
-        return commit();
     }
 
 }

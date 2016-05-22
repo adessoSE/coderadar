@@ -1,11 +1,13 @@
 package org.wickedsource.coderadar.job.domain;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
-public class SweepJob extends Job {
+public class ScanCommitJob extends Job {
 
+    @Column
     private Long commitId;
 
     public Long getCommitId() {

@@ -46,7 +46,7 @@ public class Project {
 
     @Override
     public String toString() {
-        ReflectionToStringBuilder builder = new ReflectionToStringBuilder(this, ToStringStyle.NO_CLASS_NAME_STYLE);
+        ReflectionToStringBuilder builder = new ReflectionToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
         builder.setExcludeFieldNames("sourceFilePatterns");
         return builder.toString();
     }
