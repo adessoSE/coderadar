@@ -19,20 +19,15 @@ public class WorkdirManager {
         this.config = config;
     }
 
-    public Path getWorkdirForProject(Long projectId) {
+    /**
+     * Returns the path to the local GIT repository for the specified project. Creates the folder
+     * if it does not exist.
+     *
+     * @param projectId ID of the project for which to return the path.
+     * @return path to the local GIT repository of the specified project.
+     */
+    public Path getLocalGitRoot(Long projectId) {
         Path workdir = config.getWorkdir().resolve("projects/" + projectId);
-        createDirIfNecessary(workdir);
-        return workdir;
-    }
-
-    public Path getWorkdirForVcsScan(Long projectId) {
-        Path workdir = getWorkdirForProject(projectId).resolve("scans/" + timestamp());
-        createDirIfNecessary(workdir);
-        return workdir;
-    }
-
-    public Path getWorkdirForCommitSweep(Long projectId) {
-        Path workdir = getWorkdirForProject(projectId).resolve("sweeps/" + timestamp());
         createDirIfNecessary(workdir);
         return workdir;
     }

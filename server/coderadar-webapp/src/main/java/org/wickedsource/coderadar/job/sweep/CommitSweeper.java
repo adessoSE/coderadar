@@ -11,8 +11,6 @@ import org.wickedsource.coderadar.analyzer.match.FileMatchingPattern;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.WorkdirManager;
-import org.wickedsource.coderadar.project.domain.Project;
-import org.wickedsource.coderadar.project.domain.VcsCoordinates;
 import org.wickedsource.coderadar.projectfiles.domain.ProjectFiles;
 import org.wickedsource.coderadar.projectfiles.domain.ProjectFilesRepository;
 import org.wickedsource.coderadar.vcs.git.GitCommitFetcher;
@@ -43,25 +41,25 @@ public class CommitSweeper {
     }
 
     public void sweepCommit(Long commitId) {
-        long start = System.currentTimeMillis();
-        logger.debug("starting sweep of commit {}", commitId);
-        Commit commit = commitRepository.findOne(commitId);
-        if (commit == null) {
-            throw new IllegalArgumentException(String.format("Commit with ID %d does not exist!", commitId));
-        }
-        Project project = commit.getProject();
-        VcsCoordinates vcsCoordinates = project.getVcsCoordinates();
-        Path workdir = workdirManager.getWorkdirForCommitSweep(project.getId());
-        fetcher.fetchCommit(commit.getName(), vcsCoordinates, workdir);
-        FileSetMetrics metrics = analyze(commit, workdir);
-
-        // TODO: store metrics to database
-
-        commit.setSweeped(true);
-        commitRepository.save(commit);
-
-        long duration = System.currentTimeMillis() - start;
-        logger.info("finished sweep of commit {} in {} milliseconds", commitId, duration);
+//        long start = System.currentTimeMillis();
+//        logger.debug("starting sweep of commit {}", commitId);
+//        Commit commit = commitRepository.findOne(commitId);
+//        if (commit == null) {
+//            throw new IllegalArgumentException(String.format("Commit with ID %d does not exist!", commitId));
+//        }
+//        Project project = commit.getProject();
+//        VcsCoordinates vcsCoordinates = project.getVcsCoordinates();
+//        Path workdir = workdirManager.getWorkdirForCommitSweep(project.getId());
+//        fetcher.fetchCommit(commit.getName(), vcsCoordinates, workdir);
+//        FileSetMetrics metrics = analyze(commit, workdir);
+//
+//        // TODO: store metrics to database
+//
+//        commit.setSweeped(true);
+//        commitRepository.save(commit);
+//
+//        long duration = System.currentTimeMillis() - start;
+//        logger.info("finished sweep of commit {} in {} milliseconds", commitId, duration);
     }
 
     private FileSetMetrics analyze(Commit commit, Path workdir) {

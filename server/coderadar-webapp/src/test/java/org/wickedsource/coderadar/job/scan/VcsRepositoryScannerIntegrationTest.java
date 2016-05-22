@@ -34,7 +34,7 @@ import java.net.URL;
 
 import static org.mockito.Mockito.*;
 
-public class VcsScannerIntegrationTest extends GitTestTemplate {
+public class VcsRepositoryScannerIntegrationTest extends GitTestTemplate {
 
     private Logger logger = LoggerFactory.getLogger(ScanVcsJob.class);
 
@@ -81,14 +81,14 @@ public class VcsScannerIntegrationTest extends GitTestTemplate {
     public void scan() {
         Profiler profiler = new Profiler("Scanner");
         profiler.setLogger(logger);
-        VcsScanner scanner = new VcsScanner(config, projectRepository, commitRepository, gitCloner, gitChecker, gitUpdater, workdirManager);
+        VcsRepositoryScanner scanner = new VcsRepositoryScanner(projectRepository, commitRepository, gitCloner, gitChecker, gitUpdater, workdirManager);
         when(projectRepository.findOne(1L)).thenReturn(createProject());
         profiler.start("scanning without local repository present");
-        File repoRoot = scanner.scanVcs(1L).getParentFile();
+        File repoRoot = scanner.scan(1L).getParentFile();
         Assert.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
         // scanning again should be fairly quick, since the repository is already cloned
         profiler.start("re-scanning with local repository present from last test");
-        scanner.scanVcs(1L);
+        scanner.scan(1L);
         Assert.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
 
         verify(commitRepository, atLeast(50)).save(any(Commit.class));

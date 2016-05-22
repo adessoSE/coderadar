@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wickedsource.coderadar.CoderadarConfiguration;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.WorkdirManager;
@@ -20,11 +19,9 @@ import java.io.File;
 import java.nio.file.Path;
 
 @Service
-public class VcsScanner {
+public class VcsRepositoryScanner {
 
-    private Logger logger = LoggerFactory.getLogger(VcsScanner.class);
-
-    private CoderadarConfiguration config;
+    private Logger logger = LoggerFactory.getLogger(VcsRepositoryScanner.class);
 
     private ProjectRepository projectRepository;
 
@@ -40,8 +37,7 @@ public class VcsScanner {
 
 
     @Autowired
-    public VcsScanner(CoderadarConfiguration config, ProjectRepository projectRepository, CommitRepository commitRepository, GitRepositoryCloner gitCloner, GitRepositoryChecker gitChecker, GitRepositoryUpdater gitUpdater, WorkdirManager workdirManager) {
-        this.config = config;
+    public VcsRepositoryScanner(ProjectRepository projectRepository, CommitRepository commitRepository, GitRepositoryCloner gitCloner, GitRepositoryChecker gitChecker, GitRepositoryUpdater gitUpdater, WorkdirManager workdirManager) {
         this.projectRepository = projectRepository;
         this.commitRepository = commitRepository;
         this.gitCloner = gitCloner;
@@ -50,23 +46,27 @@ public class VcsScanner {
         this.workdirManager = workdirManager;
     }
 
-    public File scanVcs(Long projectId) {
-        if (config.isSlave()) {
-            Project project = projectRepository.findOne(projectId);
-            if (project == null) {
-                throw new IllegalArgumentException(String.format("Project with ID %d does not exist!", projectId));
-            }
-            Git gitClient;
-            if (!isRepositoryAlreadyCheckedOut(project)) {
-                gitClient = cloneRepository(project);
-            } else {
-                gitClient = updateLocalRepository(project);
-            }
-            scanLocalRepository(project, gitClient);
-            return gitClient.getRepository().getDirectory();
-        }else{
-            return null;
+    /**
+     * Scans the local GIT repository of the specified project and stores metadata about each commit in the database.
+     * If the local GIT repository does not exist, the remote repository of the project is cloned into a
+     * local repository first. If it exists, it will be updated to the state of the remote repository.
+     *
+     * @param projectId ID of the project whose repository to scan.
+     * @return File object of the local GIT repository.
+     */
+    public File scan(Long projectId) {
+        Project project = projectRepository.findOne(projectId);
+        if (project == null) {
+            throw new IllegalArgumentException(String.format("Project with ID %d does not exist!", projectId));
         }
+        Git gitClient;
+        if (!isRepositoryAlreadyCheckedOut(project)) {
+            gitClient = cloneRepository(project);
+        } else {
+            gitClient = updateLocalRepository(project);
+        }
+        scanLocalRepository(project, gitClient);
+        return gitClient.getRepository().getDirectory();
     }
 
     private void scanLocalRepository(Project project, Git gitClient) {
@@ -98,7 +98,7 @@ public class VcsScanner {
     }
 
     private Path getWorkdir(Project project) {
-       return workdirManager.getWorkdirForVcsScan(project.getId());
+        return workdirManager.getLocalGitRoot(project.getId());
     }
 
 }

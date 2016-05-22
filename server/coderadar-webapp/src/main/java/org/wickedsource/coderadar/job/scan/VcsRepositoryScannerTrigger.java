@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 @Service
-class ScanVcsJobTrigger {
+class VcsRepositoryScannerTrigger {
 
     private JobLogger jobLogger = new JobLogger();
 
@@ -27,7 +27,7 @@ class ScanVcsJobTrigger {
     private ScanVcsJobRepository jobRepository;
 
     @Autowired
-    public ScanVcsJobTrigger(CoderadarConfiguration config, ProjectRepository projectRepository, ScanVcsJobRepository jobRepository) {
+    public VcsRepositoryScannerTrigger(CoderadarConfiguration config, ProjectRepository projectRepository, ScanVcsJobRepository jobRepository) {
         this.config = config;
         this.projectRepository = projectRepository;
         this.jobRepository = jobRepository;

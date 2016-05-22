@@ -8,5 +8,5 @@ public interface CommitRepository extends CrudRepository<Commit, Long> {
 
     Commit findTop1ByProjectIdOrderByTimestampDesc(Long projectId);
 
-    List<Commit> findByProjectIdAndSweepedFalseOrderByTimestamp(Long projectId);
+    List<Commit> findByProjectIdAndAnalyzedFalseOrderByTimestamp(Long projectId);
 }

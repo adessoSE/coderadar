@@ -29,8 +29,14 @@ public class Commit {
     @Column(nullable = false)
     private String author;
 
-    @Column
-    private boolean sweeped;
+    @Column(nullable = false)
+    private boolean scanned = false;
+
+    @Column(nullable = false)
+    private boolean identityMerged = false;
+
+    @Column(nullable = false)
+    private boolean analyzed = false;
 
     public Long getId() {
         return id;
@@ -80,11 +86,27 @@ public class Commit {
         this.author = author;
     }
 
-    public boolean isSweeped() {
-        return sweeped;
+    public boolean isScanned() {
+        return scanned;
     }
 
-    public void setSweeped(boolean sweeped) {
-        this.sweeped = sweeped;
+    public void setScanned(boolean scanned) {
+        this.scanned = scanned;
+    }
+
+    public boolean isIdentityMerged() {
+        return identityMerged;
+    }
+
+    public void setIdentityMerged(boolean identityMerged) {
+        this.identityMerged = identityMerged;
+    }
+
+    public boolean isAnalyzed() {
+        return analyzed;
+    }
+
+    public void setAnalyzed(boolean analyzed) {
+        this.analyzed = analyzed;
     }
 }

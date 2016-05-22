@@ -12,9 +12,7 @@ import static org.mockito.Mockito.when;
 public class TestTemplate {
 
     protected void mock(WorkdirManager workdirManagerMock){
-        when(workdirManagerMock.getWorkdirForCommitSweep(any(Long.class))).thenReturn(createTempDir().toPath());
-        when(workdirManagerMock.getWorkdirForProject(any(Long.class))).thenReturn(createTempDir().toPath());
-        when(workdirManagerMock.getWorkdirForVcsScan(any(Long.class))).thenReturn(createTempDir().toPath());
+        when(workdirManagerMock.getLocalGitRoot(any(Long.class))).thenReturn(createTempDir().toPath());
     }
 
     protected void mock(CoderadarConfiguration configMock){

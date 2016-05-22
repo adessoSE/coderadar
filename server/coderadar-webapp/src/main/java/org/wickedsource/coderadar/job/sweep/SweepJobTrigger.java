@@ -41,7 +41,7 @@ public class SweepJobTrigger {
         if (config.isMaster()) {
             for (Project project : projectRepository.findAll()) {
                 // TODO: check project's sweep strategy instead of just sweeping ALL commits
-                for (Commit commit : commitRepository.findByProjectIdAndSweepedFalseOrderByTimestamp(project.getId())) {
+                for (Commit commit : commitRepository.findByProjectIdAndAnalyzedFalseOrderByTimestamp(project.getId())) {
                     if (sweepJobRepository.countByCommitIdAndProcessingStatus(commit.getId(), ProcessingStatus.WAITING) == 0) {
                         SweepJob job = new SweepJob();
                         job.setQueuedDate(new Date());

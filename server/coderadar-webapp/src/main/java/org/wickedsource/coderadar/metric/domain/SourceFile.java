@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.metric.domain;
 
+import org.wickedsource.coderadar.analyzer.api.ChangeType;
 import org.wickedsource.coderadar.commit.domain.Commit;
 
 import javax.persistence.*;
@@ -12,20 +13,23 @@ public class SourceFile {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column
-    private String filename;
+    @Column(nullable = false)
+    private String filepath;
 
     @Column
-    private String parentPath;
+    private String filepathBeforeRename;
 
-    @ManyToOne
+    @Column(nullable = false)
+    private ChangeType changeType;
+
+    @ManyToOne(optional = false)
     private Commit commit;
 
-    @Column
+    @Column(nullable = false)
     private String commitName;
 
-    @Column
-    private Long identity;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private SourceFileIdentity identity;
 
     public Long getId() {
         return id;
@@ -35,20 +39,12 @@ public class SourceFile {
         this.id = id;
     }
 
-    public String getFilename() {
-        return filename;
+    public String getFilepath() {
+        return filepath;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public String getParentPath() {
-        return parentPath;
-    }
-
-    public void setParentPath(String parentPath) {
-        this.parentPath = parentPath;
+    public void setFilepath(String filepath) {
+        this.filepath = filepath;
     }
 
     public Commit getCommit() {
@@ -67,11 +63,27 @@ public class SourceFile {
         this.commitName = commitName;
     }
 
-    public Long getIdentity() {
+    public SourceFileIdentity getIdentity() {
         return identity;
     }
 
-    public void setIdentity(Long identity) {
+    public void setIdentity(SourceFileIdentity identity) {
         this.identity = identity;
+    }
+
+    public String getFilepathBeforeRename() {
+        return filepathBeforeRename;
+    }
+
+    public void setFilepathBeforeRename(String filepathBeforeRename) {
+        this.filepathBeforeRename = filepathBeforeRename;
+    }
+
+    public ChangeType getChangeType() {
+        return changeType;
+    }
+
+    public void setChangeType(ChangeType changeType) {
+        this.changeType = changeType;
     }
 }
