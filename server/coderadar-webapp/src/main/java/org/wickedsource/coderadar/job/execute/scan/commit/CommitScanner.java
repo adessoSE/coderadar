@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.scan.commit;
+package org.wickedsource.coderadar.job.execute.scan.commit;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;

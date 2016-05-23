@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.scan.repository;
+package org.wickedsource.coderadar.job.execute.scan.repository;
 
 import org.eclipse.jgit.api.Git;
 import org.slf4j.Logger;

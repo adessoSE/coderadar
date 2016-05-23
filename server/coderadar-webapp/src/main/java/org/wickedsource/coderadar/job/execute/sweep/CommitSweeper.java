@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.sweep;
+package org.wickedsource.coderadar.job.execute.sweep;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

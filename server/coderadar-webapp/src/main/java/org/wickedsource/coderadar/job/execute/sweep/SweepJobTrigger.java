@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.sweep;
+package org.wickedsource.coderadar.job.execute.sweep;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

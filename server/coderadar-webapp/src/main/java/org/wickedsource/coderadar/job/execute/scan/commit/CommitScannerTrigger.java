@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.scan.commit;
+package org.wickedsource.coderadar.job.execute.scan.commit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

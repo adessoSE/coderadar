@@ -6,8 +6,8 @@ import org.wickedsource.coderadar.CoderadarConfiguration;
 import org.wickedsource.coderadar.job.domain.Job;
 import org.wickedsource.coderadar.job.domain.ScanCommitJob;
 import org.wickedsource.coderadar.job.domain.ScanVcsJob;
-import org.wickedsource.coderadar.job.scan.commit.CommitScanner;
-import org.wickedsource.coderadar.job.scan.repository.VcsRepositoryScanner;
+import org.wickedsource.coderadar.job.execute.scan.commit.CommitScanner;
+import org.wickedsource.coderadar.job.execute.scan.repository.VcsRepositoryScanner;
 
 @Service
 class JobExecutor {

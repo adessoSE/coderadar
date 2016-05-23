@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.scan;
+package org.wickedsource.coderadar.job.execute.scan;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -20,7 +20,7 @@ import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.WorkdirManager;
 import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
 import org.wickedsource.coderadar.job.domain.ScanVcsJob;
-import org.wickedsource.coderadar.job.scan.repository.VcsRepositoryScanner;
+import org.wickedsource.coderadar.job.execute.scan.repository.VcsRepositoryScanner;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
