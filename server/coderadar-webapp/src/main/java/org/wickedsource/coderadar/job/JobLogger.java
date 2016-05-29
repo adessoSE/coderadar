@@ -43,7 +43,7 @@ public class JobLogger {
     }
 
     public void jobFailed(Job job, Throwable cause){
-        logger.error(String.format("Error while processing job: %s", job), cause);
+        logger.error(String.format("Job failed due to error: %s", job), cause);
     }
 
 

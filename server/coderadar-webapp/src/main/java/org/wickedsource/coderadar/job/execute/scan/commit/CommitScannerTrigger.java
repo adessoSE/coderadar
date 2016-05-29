@@ -33,7 +33,7 @@ public class CommitScannerTrigger {
         this.config = config;
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
     public void trigger() {
         if (config.isMaster()) {
             List<Commit> unscannedCommits = commitRepository.findByScannedFalse();

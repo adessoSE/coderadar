@@ -13,4 +13,12 @@ public class Factories {
     public static JobFactory job() {
         return new JobFactory();
     }
+
+    public static CommitFactory commit() {
+        return new CommitFactory();
+    }
+
+    public static SourceFileFactory sourceFile() {
+        return new SourceFileFactory();
+    }
 }

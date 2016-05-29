@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.wickedsource.coderadar.CoderadarConfiguration;
 import org.wickedsource.coderadar.job.JobLogger;
 import org.wickedsource.coderadar.job.domain.Job;
 import org.wickedsource.coderadar.job.domain.JobRepository;
@@ -40,7 +41,7 @@ class JobExecutionService {
      * Loads the next job from the queue and passes it to the executor to process it. The job will be marked as
      * successfully processed after execution. If an exception occurs, the job will be marked as failed but processed.
      */
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
     public void executeNextJobInQueue() {
         if (queueService.isQueueEmpty()) {
             jobLogger.emptyQueue();
@@ -52,14 +53,15 @@ class JobExecutionService {
         } else {
             jobLogger.startingJob(job);
             try {
-                job.setStartDate(new Date());
+                Date startDate = new Date();
                 executor.execute(job);
+                job.setStartDate(startDate);
                 job.setEndDate(new Date());
                 job.setProcessingStatus(ProcessingStatus.PROCESSED);
                 job.setResultStatus(ResultStatus.SUCCESS);
-                jobRepository.save(job);
+                jobUpdater.updateJob(job);
                 jobLogger.successfullyFinishedJob(job);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 job.setResultStatus(ResultStatus.FAILED);
                 job.setProcessingStatus(ProcessingStatus.PROCESSED);
                 job.setEndDate(new Date());

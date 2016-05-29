@@ -33,6 +33,10 @@ class PersistingCommitProcessor implements CommitProcessor {
         commit.setComment(gitCommit.getShortMessage());
         commit.setProject(project);
         commit.setTimestamp(new Date(gitCommit.getCommitTime() * 1000L));
+        if(gitCommit.getParentCount() > 0){
+            // TODO: support multiple parents
+            commit.setParentCommitName(gitCommit.getParent(0).getName());
+        }
         commitRepository.save(commit);
         updatedCommits++;
     }

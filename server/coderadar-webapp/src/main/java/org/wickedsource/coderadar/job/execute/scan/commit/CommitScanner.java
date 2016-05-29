@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
-import org.wickedsource.coderadar.metric.domain.SourceFile;
-import org.wickedsource.coderadar.metric.domain.SourceFileRepository;
+import org.wickedsource.coderadar.metric.domain.ScannedSourceFile;
+import org.wickedsource.coderadar.metric.domain.ScannedSourceFileRepository;
 import org.wickedsource.coderadar.vcs.git.ChangeTypeMapper;
 import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
 
@@ -35,10 +35,10 @@ public class CommitScanner {
 
     private ChangeTypeMapper changeTypeMapper = new ChangeTypeMapper();
 
-    private SourceFileRepository sourceFileRepository;
+    private ScannedSourceFileRepository sourceFileRepository;
 
     @Autowired
-    public CommitScanner(LocalGitRepositoryUpdater updater, CommitRepository commitRepository, GitCommitFinder commitFinder, SourceFileRepository sourceFileRepository) {
+    public CommitScanner(LocalGitRepositoryUpdater updater, CommitRepository commitRepository, GitCommitFinder commitFinder, ScannedSourceFileRepository sourceFileRepository) {
         this.updater = updater;
         this.commitRepository = commitRepository;
         this.commitFinder = commitFinder;
@@ -75,17 +75,17 @@ public class CommitScanner {
         List<DiffEntry> diffs = diffFormatter.scan(parentId, gitCommit);
         int fileCounter = 0;
         for (DiffEntry diff : diffs) {
-            SourceFile sourceFile = new SourceFile();
+            ScannedSourceFile sourceFile = new ScannedSourceFile();
             sourceFile.setCommitName(commit.getName());
-            sourceFile.setCommit(commit);
-            sourceFile.setChangeType(changeTypeMapper.jgitToCoderadar(diff.getChangeType()));
+            sourceFile.setParentCommitName(commit.getParentCommitName());
+            sourceFile.setFilepathBeforeRename(diff.getOldPath());
             sourceFile.setFilepath(diff.getNewPath());
-            if (diff.getChangeType() == DiffEntry.ChangeType.RENAME) {
-                sourceFile.setFilepathBeforeRename(diff.getOldPath());
-            }
+            sourceFile.setChangeType(changeTypeMapper.jgitToCoderadar(diff.getChangeType()));
             sourceFileRepository.save(sourceFile);
             fileCounter++;
         }
+        commit.setScanned(true);
+        commitRepository.save(commit);
         logger.info("scanned {} files in commit {}", fileCounter, commit);
     }
 

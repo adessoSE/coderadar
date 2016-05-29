@@ -10,6 +10,8 @@ public enum ChangeType {
 
     RENAME,
 
-    COPY;
+    COPY,
+
+    UNCHANGED
 
 }

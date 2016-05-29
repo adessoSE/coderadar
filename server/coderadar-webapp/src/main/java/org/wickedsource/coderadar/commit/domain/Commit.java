@@ -6,13 +6,15 @@ import org.wickedsource.coderadar.project.domain.Project;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table
 public class Commit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
@@ -26,6 +28,9 @@ public class Commit {
     private Date timestamp;
 
     @Column
+    private String parentCommitName;
+
+    @Column
     private String comment;
 
     @Column(nullable = false)
@@ -35,10 +40,13 @@ public class Commit {
     private boolean scanned = false;
 
     @Column(nullable = false)
-    private boolean identityMerged = false;
+    private boolean merged = false;
 
     @Column(nullable = false)
     private boolean analyzed = false;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "id.commit")
+    private Set<CommitToSourceFileAssociation> sourceFiles = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -96,12 +104,12 @@ public class Commit {
         this.scanned = scanned;
     }
 
-    public boolean isIdentityMerged() {
-        return identityMerged;
+    public boolean isMerged() {
+        return merged;
     }
 
-    public void setIdentityMerged(boolean identityMerged) {
-        this.identityMerged = identityMerged;
+    public void setMerged(boolean merged) {
+        this.merged = merged;
     }
 
     public boolean isAnalyzed() {
@@ -114,7 +122,24 @@ public class Commit {
 
     @Override
     public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        ReflectionToStringBuilder builder = new ReflectionToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        builder.setExcludeFieldNames("project", "sourceFiles");
+        return builder.build();
     }
 
+    public Set<CommitToSourceFileAssociation> getSourceFiles() {
+        return sourceFiles;
+    }
+
+    public void setSourceFiles(Set<CommitToSourceFileAssociation> sourceFiles) {
+        this.sourceFiles = sourceFiles;
+    }
+
+    public String getParentCommitName() {
+        return parentCommitName;
+    }
+
+    public void setParentCommitName(String parentCommitName) {
+        this.parentCommitName = parentCommitName;
+    }
 }

@@ -1,7 +1,7 @@
 package org.wickedsource.coderadar.metric.domain;
 
-import org.wickedsource.coderadar.analyzer.api.ChangeType;
-import org.wickedsource.coderadar.commit.domain.Commit;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 
@@ -10,23 +10,11 @@ import javax.persistence.*;
 public class SourceFile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
     private String filepath;
-
-    @Column
-    private String filepathBeforeRename;
-
-    @Column(nullable = false)
-    private ChangeType changeType;
-
-    @ManyToOne(optional = false)
-    private Commit commit;
-
-    @Column(nullable = false)
-    private String commitName;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private SourceFileIdentity identity;
@@ -47,22 +35,6 @@ public class SourceFile {
         this.filepath = filepath;
     }
 
-    public Commit getCommit() {
-        return commit;
-    }
-
-    public void setCommit(Commit commit) {
-        this.commit = commit;
-    }
-
-    public String getCommitName() {
-        return commitName;
-    }
-
-    public void setCommitName(String commitName) {
-        this.commitName = commitName;
-    }
-
     public SourceFileIdentity getIdentity() {
         return identity;
     }
@@ -71,19 +43,28 @@ public class SourceFile {
         this.identity = identity;
     }
 
-    public String getFilepathBeforeRename() {
-        return filepathBeforeRename;
+    @Override
+    public String toString() {
+        ReflectionToStringBuilder builder = new ReflectionToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return builder.build();
     }
 
-    public void setFilepathBeforeRename(String filepathBeforeRename) {
-        this.filepathBeforeRename = filepathBeforeRename;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SourceFile that = (SourceFile) o;
+
+        if (!filepath.equals(that.filepath)) return false;
+        return identity.equals(that.identity);
+
     }
 
-    public ChangeType getChangeType() {
-        return changeType;
-    }
-
-    public void setChangeType(ChangeType changeType) {
-        this.changeType = changeType;
+    @Override
+    public int hashCode() {
+        int result = filepath.hashCode();
+        result = 31 * result + identity.hashCode();
+        return result;
     }
 }

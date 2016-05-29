@@ -11,6 +11,8 @@ import java.nio.file.Paths;
 @Service
 public class CoderadarConfiguration {
 
+    public static final int TIMER_INTERVAL = 100;
+
     private static final String CONFIG_MASTER = "coderadar.master";
 
     private static final String CONFIG_SLAVE = "coderadar.slave";

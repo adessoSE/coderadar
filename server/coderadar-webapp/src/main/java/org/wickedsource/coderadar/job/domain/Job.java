@@ -13,7 +13,7 @@ import java.util.Date;
 public class Job {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column
@@ -32,9 +32,11 @@ public class Job {
     @Temporal(TemporalType.TIMESTAMP)
     private Date endDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ProcessingStatus processingStatus;
 
+    @Enumerated(EnumType.STRING)
     @Column
     private ResultStatus resultStatus;
 
@@ -107,7 +109,7 @@ public class Job {
 
     @Override
     public String toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
 }
