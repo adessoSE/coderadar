@@ -6,6 +6,10 @@ import org.wickedsource.coderadar.project.domain.Project;
 
 import javax.persistence.*;
 
+/**
+ * Contains an Ant-style path pattern to define a certain set of files that is of
+ * importance to a coderadar Project.
+ */
 @Entity
 @Table
 public class FilePattern {

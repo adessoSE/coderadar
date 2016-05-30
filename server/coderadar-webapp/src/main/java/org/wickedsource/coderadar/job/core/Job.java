@@ -6,6 +6,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * The Job entity defines a task in the coderadar application that is run asynchronously.
+ */
 @Entity
 @Table
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

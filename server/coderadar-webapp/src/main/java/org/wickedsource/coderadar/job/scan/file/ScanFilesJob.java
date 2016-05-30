@@ -6,6 +6,10 @@ import org.wickedsource.coderadar.job.core.Job;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+/**
+ * A Job that scans all files of a single Commit to a VCS and stores metadata about them
+ * in the database.
+ */
 @Entity
 public class ScanFilesJob extends Job {
 

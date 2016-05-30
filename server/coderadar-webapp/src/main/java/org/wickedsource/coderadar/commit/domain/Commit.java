@@ -9,6 +9,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Metadata about a commit to a VCS.
+ */
 @Entity
 @Table
 public class Commit {

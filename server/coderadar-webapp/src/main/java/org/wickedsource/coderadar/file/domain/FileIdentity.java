@@ -5,6 +5,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 
+/**
+ * A FileIdentity connects Files that have been renamed at some point in time. Two Files
+ * with the same FileIdentity mark the same File, except that the file now has a new name.
+ * If a file has not been renamed in its history, it has a unique FileIdentity.
+ */
 @Entity
 @Table
 public class FileIdentity {

@@ -6,6 +6,9 @@ import org.wickedsource.coderadar.job.core.Job;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+/**
+* A Job that analyzes a single commit.
+ */
 @Entity
 public class AnalyzeCommitJob extends Job {
 

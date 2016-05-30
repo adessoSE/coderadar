@@ -4,6 +4,11 @@ import org.wickedsource.coderadar.analyzer.api.ChangeType;
 
 import javax.persistence.*;
 
+/**
+ * Stores metadata about a file that has been part of a commit to a VCS (i.e. metadata
+ * of a log entry of that VCS). This metadata is temporary and will be deleted once
+ * it has been processed and migrated into the final data structure (see {@link File}).
+ */
 @Entity
 public class CommitLogEntry {
 

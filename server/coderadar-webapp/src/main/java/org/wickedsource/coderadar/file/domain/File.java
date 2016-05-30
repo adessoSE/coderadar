@@ -5,6 +5,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 
+/**
+ * Represents a file in a VCS repository.
+ */
 @Entity
 @Table
 public class File {

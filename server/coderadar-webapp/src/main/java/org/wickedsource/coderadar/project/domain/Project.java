@@ -5,6 +5,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 
+/**
+ * A coderadar project that defines the source of files that are to be analyzed.
+ */
 @Entity
 @Table
 public class Project {
