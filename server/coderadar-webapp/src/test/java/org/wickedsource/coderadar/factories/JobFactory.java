@@ -1,14 +1,14 @@
 package org.wickedsource.coderadar.factories;
 
-import org.wickedsource.coderadar.job.domain.ProcessingStatus;
-import org.wickedsource.coderadar.job.domain.ScanVcsJob;
+import org.wickedsource.coderadar.job.core.ProcessingStatus;
+import org.wickedsource.coderadar.job.scan.commit.ScanCommitsJob;
 
 import java.util.Date;
 
 public class JobFactory {
 
-    public ScanVcsJob waitingPullJob() {
-        ScanVcsJob job = new ScanVcsJob();
+    public ScanCommitsJob waitingPullJob() {
+        ScanCommitsJob job = new ScanCommitsJob();
         job.setId(1L);
         job.setProjectId(1L);
         job.setEndDate(null);

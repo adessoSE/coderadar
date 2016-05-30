@@ -46,7 +46,7 @@ public class Commit {
     private boolean analyzed = false;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "id.commit")
-    private Set<CommitToSourceFileAssociation> sourceFiles = new HashSet<>();
+    private Set<CommitToFileAssociation> files = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -123,16 +123,16 @@ public class Commit {
     @Override
     public String toString() {
         ReflectionToStringBuilder builder = new ReflectionToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
-        builder.setExcludeFieldNames("project", "sourceFiles");
+        builder.setExcludeFieldNames("project", "files");
         return builder.build();
     }
 
-    public Set<CommitToSourceFileAssociation> getSourceFiles() {
-        return sourceFiles;
+    public Set<CommitToFileAssociation> getFiles() {
+        return files;
     }
 
-    public void setSourceFiles(Set<CommitToSourceFileAssociation> sourceFiles) {
-        this.sourceFiles = sourceFiles;
+    public void setFiles(Set<CommitToFileAssociation> files) {
+        this.files = files;
     }
 
     public String getParentCommitName() {

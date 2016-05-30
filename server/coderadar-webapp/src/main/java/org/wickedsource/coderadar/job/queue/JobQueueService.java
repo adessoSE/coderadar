@@ -3,9 +3,9 @@ package org.wickedsource.coderadar.job.queue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-import org.wickedsource.coderadar.job.domain.Job;
-import org.wickedsource.coderadar.job.domain.JobRepository;
-import org.wickedsource.coderadar.job.domain.ProcessingStatus;
+import org.wickedsource.coderadar.job.core.Job;
+import org.wickedsource.coderadar.job.core.JobRepository;
+import org.wickedsource.coderadar.job.core.ProcessingStatus;
 
 @Service
 public class JobQueueService {

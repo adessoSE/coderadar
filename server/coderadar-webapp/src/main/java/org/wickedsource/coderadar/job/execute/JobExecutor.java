@@ -5,29 +5,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.CoderadarConfiguration;
-import org.wickedsource.coderadar.job.domain.FileIdentityMergeJob;
-import org.wickedsource.coderadar.job.domain.Job;
-import org.wickedsource.coderadar.job.domain.ScanCommitJob;
-import org.wickedsource.coderadar.job.domain.ScanVcsJob;
-import org.wickedsource.coderadar.job.execute.merge.FileIdentityMerger;
-import org.wickedsource.coderadar.job.execute.scan.commit.CommitScanner;
-import org.wickedsource.coderadar.job.execute.scan.repository.VcsRepositoryScanner;
+import org.wickedsource.coderadar.job.core.Job;
+import org.wickedsource.coderadar.job.merge.LogMerger;
+import org.wickedsource.coderadar.job.merge.MergeLogJob;
+import org.wickedsource.coderadar.job.scan.commit.CommitScanner;
+import org.wickedsource.coderadar.job.scan.commit.ScanCommitsJob;
+import org.wickedsource.coderadar.job.scan.file.FileScanner;
+import org.wickedsource.coderadar.job.scan.file.ScanFilesJob;
 
 @Service
 class JobExecutor {
 
-    private VcsRepositoryScanner vcsScanner;
-
     private CommitScanner commitScanner;
 
-    private FileIdentityMerger merger;
+    private FileScanner fileScanner;
+
+    private LogMerger merger;
 
     private CoderadarConfiguration config;
 
     @Autowired
-    public JobExecutor(VcsRepositoryScanner vcsScanner, CommitScanner commitScanner, FileIdentityMerger merger, CoderadarConfiguration config) {
-        this.vcsScanner = vcsScanner;
+    public JobExecutor(CommitScanner commitScanner, FileScanner fileScanner, LogMerger merger, CoderadarConfiguration config) {
         this.commitScanner = commitScanner;
+        this.fileScanner = fileScanner;
         this.merger = merger;
         this.config = config;
     }
@@ -35,12 +35,12 @@ class JobExecutor {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void execute(Job job) {
         if (config.isSlave()) {
-            if (job instanceof ScanVcsJob) {
-                vcsScanner.scan(((ScanVcsJob) job).getProjectId());
-            } else if (job instanceof ScanCommitJob) {
-                commitScanner.scan(((ScanCommitJob) job).getCommitId());
-            } else if (job instanceof FileIdentityMergeJob) {
-                merger.merge(((FileIdentityMergeJob) job).getProjectId());
+            if (job instanceof ScanCommitsJob) {
+                commitScanner.scan(((ScanCommitsJob) job).getProjectId());
+            } else if (job instanceof ScanFilesJob) {
+                fileScanner.scan(((ScanFilesJob) job).getCommitId());
+            } else if (job instanceof MergeLogJob) {
+                merger.merge(((MergeLogJob) job).getProjectId());
             } else {
                 throw new IllegalArgumentException(String.format("unsupported job type %s", job.getClass()));
             }

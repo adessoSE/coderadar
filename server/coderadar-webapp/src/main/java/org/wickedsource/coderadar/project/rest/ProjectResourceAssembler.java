@@ -2,9 +2,9 @@ package org.wickedsource.coderadar.project.rest;
 
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
+import org.wickedsource.coderadar.filepattern.rest.FilePatternController;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
-import org.wickedsource.coderadar.projectfiles.rest.ProjectFilesController;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,7 +31,7 @@ public class ProjectResourceAssembler extends ResourceAssemblerSupport<Project, 
             resource.setVcsUser(project.getVcsCoordinates().getUsername());
             resource.setVcsPassword(project.getVcsCoordinates().getPassword());
         }
-        resource.add(linkTo(methodOn(ProjectFilesController.class).getProjectFiles(project.getId())).withRel("files"));
+        resource.add(linkTo(methodOn(FilePatternController.class).getProjectFiles(project.getId())).withRel("files"));
         return resource;
     }
 

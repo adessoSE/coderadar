@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.wickedsource.coderadar.IntegrationTestTemplate;
 import org.wickedsource.coderadar.factories.Factories;
-import org.wickedsource.coderadar.job.domain.Job;
-import org.wickedsource.coderadar.job.domain.JobRepository;
-import org.wickedsource.coderadar.job.domain.ProcessingStatus;
-import org.wickedsource.coderadar.job.domain.ResultStatus;
+import org.wickedsource.coderadar.job.core.Job;
+import org.wickedsource.coderadar.job.core.JobRepository;
+import org.wickedsource.coderadar.job.core.ProcessingStatus;
+import org.wickedsource.coderadar.job.core.ResultStatus;
 import org.wickedsource.coderadar.job.queue.JobQueueService;
 import org.wickedsource.coderadar.job.queue.JobUpdater;
 

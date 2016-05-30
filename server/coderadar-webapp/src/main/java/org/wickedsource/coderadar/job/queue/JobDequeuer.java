@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.wickedsource.coderadar.job.domain.Job;
-import org.wickedsource.coderadar.job.domain.JobRepository;
-import org.wickedsource.coderadar.job.domain.ProcessingStatus;
+import org.wickedsource.coderadar.job.core.Job;
+import org.wickedsource.coderadar.job.core.JobRepository;
+import org.wickedsource.coderadar.job.core.ProcessingStatus;
 
 @Service
 public class JobDequeuer {

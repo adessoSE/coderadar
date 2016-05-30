@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.CoderadarConfiguration;
 import org.wickedsource.coderadar.job.JobLogger;
-import org.wickedsource.coderadar.job.domain.Job;
-import org.wickedsource.coderadar.job.domain.JobRepository;
-import org.wickedsource.coderadar.job.domain.ProcessingStatus;
-import org.wickedsource.coderadar.job.domain.ResultStatus;
+import org.wickedsource.coderadar.job.core.Job;
+import org.wickedsource.coderadar.job.core.JobRepository;
+import org.wickedsource.coderadar.job.core.ProcessingStatus;
+import org.wickedsource.coderadar.job.core.ResultStatus;
 import org.wickedsource.coderadar.job.queue.JobQueueService;
 import org.wickedsource.coderadar.job.queue.JobUpdater;
 

@@ -3,7 +3,7 @@ package org.wickedsource.coderadar.job;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.commit.domain.Commit;
-import org.wickedsource.coderadar.job.domain.Job;
+import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.project.domain.Project;
 
 /**
