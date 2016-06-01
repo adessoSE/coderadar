@@ -44,11 +44,11 @@ public class AnalyzerPluginRegistry {
     }
 
     /**
-     * Calls the destroy() method of all registered analyzers.
+     * Calls the releaseResources() method of all registered analyzers.
      */
     public synchronized void destroyAnalyzers() {
         for (AnalyzerPlugin analyzerPlugin : sourceCodeFileAnalyzerPlugins) {
-            analyzerPlugin.destroy();
+            analyzerPlugin.releaseResources();
         }
     }
 

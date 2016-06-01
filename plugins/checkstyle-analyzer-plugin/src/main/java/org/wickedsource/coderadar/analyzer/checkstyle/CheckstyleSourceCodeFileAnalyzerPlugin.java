@@ -7,6 +7,7 @@ import com.puppycrawl.tools.checkstyle.api.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.analyzer.api.*;
+import org.xml.sax.InputSource;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,19 +19,16 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
 
     private Logger logger = LoggerFactory.getLogger(CheckstyleSourceCodeFileAnalyzerPlugin.class);
 
-    private CheckstyleAnalyzerConfiguration analyzerConfig;
-
     private Checker checker;
 
     private CoderadarAuditListener auditListener;
 
     @Override
     public void configure(Properties properties) throws AnalyzerConfigurationException {
-        this.analyzerConfig = new CheckstyleAnalyzerConfiguration(properties);
         checker = new Checker();
         try {
             auditListener = new CoderadarAuditListener();
-            Configuration checkstyleConfig = createCheckstyleConfiguration();
+            Configuration checkstyleConfig = createCheckstyleConfiguration(properties);
             final ClassLoader moduleClassLoader = Checker.class.getClassLoader();
             checker.setModuleClassLoader(moduleClassLoader);
             checker.configure(checkstyleConfig);
@@ -56,9 +54,12 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
     }
 
 
-    private Configuration createCheckstyleConfiguration() throws CheckstyleException {
+    private Configuration createCheckstyleConfiguration(Properties properties) throws CheckstyleException {
         return ConfigurationLoader.loadConfiguration(
-                analyzerConfig.getConfigLocation().getAbsolutePath(), new CheckstylePropertiesResolver(analyzerConfig.getBackingProperties()));
+                new InputSource(
+                        getClass().getResourceAsStream("/checkstyle.xml")),
+                new CheckstylePropertiesResolver(properties),
+                true);
     }
 
     @Override
@@ -79,7 +80,7 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
     }
 
     @Override
-    public void destroy() {
+    public void releaseResources() {
         checker.destroy();
     }
 

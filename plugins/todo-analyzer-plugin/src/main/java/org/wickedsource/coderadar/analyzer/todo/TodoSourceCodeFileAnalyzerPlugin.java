@@ -52,7 +52,7 @@ public class TodoSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerP
     }
 
     @Override
-    public void destroy() {
-        // nothing to destroy
+    public void releaseResources() {
+        // nothing to releaseResources
     }
 }

@@ -41,7 +41,7 @@ bootRun {
                     "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
                     "-Dlogging.level.org.wickedsource.coderadar=DEBUG",
                     "-Dlogging.level.org.wickedsource.coderadar.job.JobLogger=INFO",
-                    "-Dlogging.level.org.hibernate.SQL=DEBUG",
+                    "-Dlogging.level.org.hibernate.SQL=ERROR",
                     "-Dlogging.level.org.hibernate.type=ERROR",
                     "-Dlogging.file=coderadar.log",
 

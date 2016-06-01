@@ -38,7 +38,7 @@ public class LocSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerPl
     }
 
     @Override
-    public void destroy() {
-        // nothing to destroy
+    public void releaseResources() {
+        // nothing to releaseResources
     }
 }

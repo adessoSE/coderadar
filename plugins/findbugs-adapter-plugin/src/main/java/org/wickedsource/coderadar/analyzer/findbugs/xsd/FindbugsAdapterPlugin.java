@@ -22,7 +22,7 @@ public class FindbugsAdapterPlugin implements AdapterPlugin {
     }
 
     @Override
-    public void destroy() {
+    public void releaseResources() {
         // implement as soon as memory-clearing is needed
     }
 

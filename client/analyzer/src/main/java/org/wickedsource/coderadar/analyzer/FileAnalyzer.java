@@ -3,8 +3,8 @@ package org.wickedsource.coderadar.analyzer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.analyzer.api.AnalyzerFileFilter;
-import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
+import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class FileAnalyzer {
     }
 
     private boolean acceptFile(AnalyzerFileFilter filter, String filePath) {
-        return (filter.acceptBinary() | !isBinary(filePath)) && filter.acceptFilename(filePath);
+        return (filter.acceptBinary() || !isBinary(filePath)) && filter.acceptFilename(filePath);
     }
 
     /**

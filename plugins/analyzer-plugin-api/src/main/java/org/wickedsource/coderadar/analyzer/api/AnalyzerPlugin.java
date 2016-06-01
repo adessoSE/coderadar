@@ -17,7 +17,7 @@ public interface AnalyzerPlugin {
     void configure(Properties properties) throws AnalyzerConfigurationException;
 
     /**
-     * This method is called after all files have been analyzed and can be used to free resources.
+     * This method is called after all files have been analyzed and can be used to free system resources.
      */
-    void destroy();
+    void releaseResources();
 }

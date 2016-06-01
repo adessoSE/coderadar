@@ -16,7 +16,6 @@ public class CheckstyleSourceCodeFileAnalyzerPluginTest {
     public void metricsAreCalculatedCorrectly() throws AnalyzerException, IOException {
 
         Properties properties = new Properties();
-        properties.setProperty(CheckstyleSourceCodeFileAnalyzerPlugin.class.getName() + ".configLocation", "src/test/resources/checkstyle.xml");
 
         byte[] fileContent = IOUtils.toByteArray(getClass().getResourceAsStream("/CheckstyleAnalyzer.java.txt"));
 
@@ -24,6 +23,6 @@ public class CheckstyleSourceCodeFileAnalyzerPluginTest {
         analyzer.configure(properties);
         FileMetrics metrics = analyzer.analyzeFile(fileContent);
 
-        Assert.assertEquals(Long.valueOf(5l), metrics.getMetricCount(new Metric("checkstyle:com.puppycrawl.tools.checkstyle.checks.coding.RequireThisCheck")));
+        Assert.assertEquals(Long.valueOf(11L), metrics.getMetricCount(new Metric("checkstyle:com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck")));
     }
 }

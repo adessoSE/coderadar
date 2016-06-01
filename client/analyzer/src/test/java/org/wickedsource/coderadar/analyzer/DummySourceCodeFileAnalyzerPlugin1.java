@@ -24,8 +24,8 @@ public class DummySourceCodeFileAnalyzerPlugin1 implements SourceCodeFileAnalyze
     }
 
     @Override
-    public void destroy() {
-        // nothing to destroy
+    public void releaseResources() {
+        // nothing to releaseResources
     }
 
     public Properties getProperties() {
