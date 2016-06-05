@@ -31,7 +31,7 @@ public class ProjectResourceAssembler extends ResourceAssemblerSupport<Project, 
             resource.setVcsUser(project.getVcsCoordinates().getUsername());
             resource.setVcsPassword(project.getVcsCoordinates().getPassword());
         }
-        resource.add(linkTo(methodOn(FilePatternController.class).getProjectFiles(project.getId())).withRel("files"));
+        resource.add(linkTo(methodOn(FilePatternController.class).getFilePatterns(project.getId())).withRel("files"));
         return resource;
     }
 

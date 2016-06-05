@@ -36,7 +36,7 @@ public class FilePatternController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<FilePatternResource> getProjectFiles(@PathVariable Long projectId) {
+    public ResponseEntity<FilePatternResource> getFilePatterns(@PathVariable Long projectId) {
         if (projectRepository.countById(projectId) == 0) {
             throw new ValidationException("projectId", "Project does not exist");
         } else {
@@ -48,7 +48,7 @@ public class FilePatternController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<FilePatternResource> setProjectFiles(@PathVariable Long projectId, @Valid @RequestBody FilePatternResource resource) {
+    public ResponseEntity<FilePatternResource> setFilePatterns(@PathVariable Long projectId, @Valid @RequestBody FilePatternResource resource) {
         Project project = projectRepository.findOne(projectId);
         if (project == null) {
             throw new ValidationException("projectId", "Project does not exist");

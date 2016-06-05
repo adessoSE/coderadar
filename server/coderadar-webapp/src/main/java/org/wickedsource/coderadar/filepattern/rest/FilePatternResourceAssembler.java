@@ -29,7 +29,7 @@ public class FilePatternResourceAssembler extends ResourceAssemblerSupport<Itera
             dto.setPattern(entity.getPattern());
             resource.addProjectFiles(dto);
         }
-        resource.add(linkTo(methodOn(FilePatternController.class).getProjectFiles(projectId)).withSelfRel());
+        resource.add(linkTo(methodOn(FilePatternController.class).getFilePatterns(projectId)).withSelfRel());
         return resource;
     }
 
