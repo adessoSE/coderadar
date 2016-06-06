@@ -7,7 +7,7 @@ import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 
 import java.io.InputStream;
 
-public class LocSourceCodeFileAnalyzerPluginTest {
+public class LocAnalyzerPluginTest {
 
     @Test
     public void metricIsCalculatedCorrectly() throws Exception {
@@ -15,9 +15,9 @@ public class LocSourceCodeFileAnalyzerPluginTest {
         InputStream in = getClass().getResourceAsStream("AcceptedJavaFile.txt");
         byte[] fileContent = IOUtils.toByteArray(in);
 
-        LocSourceCodeFileAnalyzerPlugin analyzer = new LocSourceCodeFileAnalyzerPlugin();
+        LocAnalyzerPlugin analyzer = new LocAnalyzerPlugin();
         FileMetrics results = analyzer.analyzeFile(fileContent);
 
-        Assert.assertEquals(16, (long) results.getMetricCount(LocSourceCodeFileAnalyzerPlugin.JAVA_LOC_METRIC));
+        Assert.assertEquals(16, (long) results.getMetricCount(LocAnalyzerPlugin.JAVA_LOC_METRIC));
     }
 }

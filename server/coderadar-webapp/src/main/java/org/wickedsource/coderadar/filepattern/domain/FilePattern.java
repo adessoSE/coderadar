@@ -1,6 +1,5 @@
 package org.wickedsource.coderadar.filepattern.domain;
 
-import org.wickedsource.coderadar.project.domain.FileType;
 import org.wickedsource.coderadar.project.domain.InclusionType;
 import org.wickedsource.coderadar.project.domain.Project;
 

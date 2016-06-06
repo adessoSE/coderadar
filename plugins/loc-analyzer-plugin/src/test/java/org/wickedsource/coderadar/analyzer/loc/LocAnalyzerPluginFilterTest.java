@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.wickedsource.coderadar.analyzer.api.AnalyzerFileFilter;
 
-public class LocSourceCodeFileAnalyzerPluginFilterTest {
+public class LocAnalyzerPluginFilterTest {
 
     @Test
     public void filterAcceptsTheCorrectFiles(){

@@ -8,13 +8,13 @@ import java.util.Properties;
 /**
  * A simple analyzer counting java lines of code (loc) in a naive way.
  */
-public class LocSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin {
+public class LocAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin {
 
     private Properties properties;
 
     private LocCounter locCounter = new LocCounter();
 
-    public static final Metric JAVA_LOC_METRIC = new Metric("org.wickedsource.coderadar.analyzer.AnalyzerPlugin.javaLoc");
+    public static final Metric JAVA_LOC_METRIC = new Metric("coderadar:javaLoc");
 
     @Override
     public void configure(Properties properties) {
@@ -39,6 +39,6 @@ public class LocSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerPl
 
     @Override
     public void releaseResources() {
-        // nothing to releaseResources
+        // nothing to release
     }
 }

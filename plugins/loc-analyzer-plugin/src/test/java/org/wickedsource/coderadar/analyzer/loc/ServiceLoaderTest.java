@@ -14,6 +14,6 @@ public class ServiceLoaderTest {
         ServiceLoader<SourceCodeFileAnalyzerPlugin> loader = ServiceLoader.load(SourceCodeFileAnalyzerPlugin.class);
         Iterator<SourceCodeFileAnalyzerPlugin> plugins = loader.iterator();
         SourceCodeFileAnalyzerPlugin plugin = plugins.next();
-        Assert.assertTrue(plugin instanceof LocSourceCodeFileAnalyzerPlugin);
+        Assert.assertTrue(plugin instanceof LocAnalyzerPlugin);
     }
 }

@@ -1,6 +1,6 @@
 package org.wickedsource.coderadar.filepattern.rest;
 
-import org.wickedsource.coderadar.project.domain.FileType;
+import org.wickedsource.coderadar.filepattern.domain.FileType;
 import org.wickedsource.coderadar.project.domain.InclusionType;
 
 import javax.validation.constraints.NotNull;
