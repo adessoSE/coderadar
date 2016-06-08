@@ -6,16 +6,15 @@ import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.util.IO;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.gitective.core.BlobUtils;
 import org.gitective.core.CommitUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wickedsource.coderadar.analyzer.FileAnalyzer;
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 import org.wickedsource.coderadar.analyzer.api.FileMetricsWithChangeType;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
+import org.wickedsource.coderadar.job.analyze.FileAnalyzer;
 import org.wickedsource.coderadar.vcs.MetricsProcessor;
 import org.wickedsource.coderadar.vcs.git.ChangeTypeMapper;
 

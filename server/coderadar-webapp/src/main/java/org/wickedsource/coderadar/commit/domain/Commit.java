@@ -48,7 +48,7 @@ public class Commit {
     @Column(nullable = false)
     private boolean analyzed = false;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "id.commit")
+    @OneToMany(mappedBy = "id.commit")
     private Set<CommitToFileAssociation> files = new HashSet<>();
 
     public Long getId() {

@@ -3,7 +3,6 @@ package org.wickedsource.coderadar.analyzer.findbugs.xsd;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.wickedsource.coderadar.analyzer.api.AdapterPlugin;
-import org.wickedsource.coderadar.analyzer.api.AnalyzerConfigurationException;
 import org.wickedsource.coderadar.analyzer.api.AnalyzerException;
 import org.wickedsource.coderadar.analyzer.api.FileSetMetrics;
 import org.xml.sax.SAXParseException;
@@ -12,19 +11,8 @@ import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
 
 public class FindbugsAdapterPlugin implements AdapterPlugin {
-
-    @Override
-    public void configure(Properties properties) throws AnalyzerConfigurationException {
-        // implement as soon as configuration parameters are needed
-    }
-
-    @Override
-    public void releaseResources() {
-        // implement as soon as memory-clearing is needed
-    }
 
     @Override
     public FileSetMetrics mapReportFile(InputStream reportFile) throws AnalyzerException {
@@ -46,5 +34,10 @@ public class FindbugsAdapterPlugin implements AdapterPlugin {
         if (!validationErrors.isEmpty()) {
             throw new AnalyzerException("Not a valid Findbugs report! First XSD validation error:", validationErrors.get(0));
         }
+    }
+
+    @Override
+    public String getName() {
+        return "findbugs";
     }
 }

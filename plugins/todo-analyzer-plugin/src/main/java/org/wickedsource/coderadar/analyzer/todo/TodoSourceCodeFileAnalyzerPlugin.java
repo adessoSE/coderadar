@@ -3,7 +3,8 @@ package org.wickedsource.coderadar.analyzer.todo;
 import org.wickedsource.coderadar.analyzer.api.*;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class TodoSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin {
 
@@ -12,22 +13,6 @@ public class TodoSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerP
     private String patternPropertyPrefix = TodoSourceCodeFileAnalyzerPlugin.class.getName() + ".pattern";
 
     private TodoFinder todoFinder;
-
-    @Override
-    public void configure(Properties properties) {
-        List<String> todoPatterns = new ArrayList<>();
-        for (Map.Entry entry : properties.entrySet()) {
-            String key = (String) entry.getKey();
-            String value = (String) entry.getValue();
-            if (key.startsWith(patternPropertyPrefix)) {
-                todoPatterns.add(value);
-            }
-        }
-        if (todoPatterns.isEmpty()) {
-            todoPatterns = getDefaultPatterns();
-        }
-        todoFinder = new TodoFinder(todoPatterns.toArray(new String[todoPatterns.size()]));
-    }
 
     private List<String> getDefaultPatterns() {
         return Arrays.asList("TODO", "FIXME", "todo", "fixme");
@@ -52,7 +37,7 @@ public class TodoSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerP
     }
 
     @Override
-    public void releaseResources() {
-        // nothing to releaseResources
+    public String getName() {
+        return "coderadar:todo";
     }
 }

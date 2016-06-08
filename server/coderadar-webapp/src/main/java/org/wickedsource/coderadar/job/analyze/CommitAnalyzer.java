@@ -1,30 +1,48 @@
 package org.wickedsource.coderadar.job.analyze;
 
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.diff.DiffFormatter;
+import org.eclipse.jgit.diff.RawTextComparator;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.util.io.DisabledOutputStream;
+import org.gitective.core.BlobUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wickedsource.coderadar.analyzer.Analyzer;
-import org.wickedsource.coderadar.analyzer.AnalyzerConfiguration;
-import org.wickedsource.coderadar.analyzer.api.FileSetMetrics;
+import org.wickedsource.coderadar.analyzer.api.FileMetrics;
+import org.wickedsource.coderadar.analyzer.api.Metric;
+import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
+import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
+import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationRepository;
+import org.wickedsource.coderadar.analyzer.domain.AnalyzerPluginRegistry;
 import org.wickedsource.coderadar.analyzer.match.FileMatchingPattern;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.WorkdirManager;
+import org.wickedsource.coderadar.file.domain.File;
+import org.wickedsource.coderadar.file.domain.FileRepository;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
-import org.wickedsource.coderadar.vcs.git.GitCommitFetcher;
+import org.wickedsource.coderadar.metric.domain.MetricValue;
+import org.wickedsource.coderadar.metric.domain.MetricValueId;
+import org.wickedsource.coderadar.metric.domain.MetricValueRepository;
+import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
 
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
-import java.util.Properties;
+import java.util.Set;
 
 @Service
 public class CommitAnalyzer {
 
     private Logger logger = LoggerFactory.getLogger(CommitAnalyzer.class);
-
-    private GitCommitFetcher fetcher;
 
     private CommitRepository commitRepository;
 
@@ -32,51 +50,106 @@ public class CommitAnalyzer {
 
     private FilePatternRepository filePatternRepository;
 
+    private GitCommitFinder commitFinder;
+
+    private AnalyzerPluginRegistry analyzerRegistry;
+
+    private AnalyzerConfigurationRepository analyzerConfigurationRepository;
+
+    private FileAnalyzer fileAnalyzer;
+
+    private FileRepository fileRepository;
+
+    private MetricValueRepository metricValueRepository;
+
+    private static final Set<DiffEntry.ChangeType> CHANGES_TO_ANALYZE = EnumSet.of(DiffEntry.ChangeType.ADD, DiffEntry.ChangeType.COPY, DiffEntry.ChangeType.MODIFY);
+
     @Autowired
-    public CommitAnalyzer(GitCommitFetcher fetcher, CommitRepository commitRepository, WorkdirManager workdirManager, FilePatternRepository filePatternRepository) {
-        this.fetcher = fetcher;
+    public CommitAnalyzer(CommitRepository commitRepository, WorkdirManager workdirManager, FilePatternRepository filePatternRepository, GitCommitFinder commitFinder, AnalyzerPluginRegistry analyzerRegistry, AnalyzerConfigurationRepository analyzerConfigurationRepository, FileAnalyzer fileAnalyzer, FileRepository fileRepository, MetricValueRepository metricValueRepository) {
         this.commitRepository = commitRepository;
         this.workdirManager = workdirManager;
         this.filePatternRepository = filePatternRepository;
+        this.commitFinder = commitFinder;
+        this.analyzerRegistry = analyzerRegistry;
+        this.analyzerConfigurationRepository = analyzerConfigurationRepository;
+        this.fileAnalyzer = fileAnalyzer;
+        this.fileRepository = fileRepository;
+        this.metricValueRepository = metricValueRepository;
     }
 
-    public void sweepCommit(Long commitId) {
-//        long start = System.currentTimeMillis();
-//        logger.debug("starting sweep of commit {}", commitId);
-//        Commit commit = commitRepository.findOne(commitId);
-//        if (commit == null) {
-//            throw new IllegalArgumentException(String.format("Commit with ID %d does not exist!", commitId));
-//        }
-//        Project project = commit.getProject();
-//        VcsCoordinates vcsCoordinates = project.getVcsCoordinates();
-//        Path workdir = workdirManager.getWorkdirForCommitSweep(project.getId());
-//        fetcher.fetchCommit(commit.getName(), vcsCoordinates, workdir);
-//        FileSetMetrics metrics = analyze(commit, workdir);
-//
-//        // TODO: store metrics to database
-//
-//        commit.setSweeped(true);
-//        commitRepository.save(commit);
-//
-//        long duration = System.currentTimeMillis() - start;
-//        logger.info("finished sweep of commit {} in {} milliseconds", commitId, duration);
+    public void analyzeCommit(Long commitId) {
+        Commit commit = commitRepository.findOne(commitId);
+        if (commit == null) {
+            throw new IllegalArgumentException(String.format("commit with ID %d does not exist!", commitId));
+        }
+
+        Path gitRoot = workdirManager.getLocalGitRoot(commit.getProject().getId());
+        try {
+            Git gitClient = Git.open(gitRoot.toFile());
+            walkFilesInCommit(gitClient, commit, getAnalyzersForProject(commit.getProject()));
+        } catch (IOException e) {
+            throw new IllegalStateException(String.format("error opening git root %s", gitRoot));
+        }
+        commit.setAnalyzed(Boolean.TRUE);
     }
 
-    private FileSetMetrics analyze(Commit commit, Path workdir) {
-        AnalyzerConfiguration config = new AnalyzerConfiguration();
-        // TODO: load pluginProperties from project configuration instead of hard coding them
-        Properties pluginProperties = new Properties();
-        pluginProperties.setProperty("org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin.enabled", String.valueOf(Boolean.FALSE));
-        pluginProperties.setProperty("org.wickedsource.coderadar.analyzer.findbugs.xsd.FindbugsAnalyzerPlugin.enabled", String.valueOf(Boolean.FALSE));
-        pluginProperties.setProperty("org.wickedsource.coderadar.analyzer.loc.LocSourceCodeFileAnalyzerPlugin.enabled", String.valueOf(Boolean.TRUE));
-        pluginProperties.setProperty("org.wickedsource.coderadar.analyzer.todo.TodoSourceCodeFileAnalyzerPlugin.enabled", String.valueOf(Boolean.TRUE));
-        config.setPluginProperties(pluginProperties);
+    private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Project project) {
+        List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>();
+        List<AnalyzerConfiguration> configs = analyzerConfigurationRepository.findByProjectId(project.getId());
+        for (AnalyzerConfiguration config : configs) {
+            analyzers.add(analyzerRegistry.getAnalyzer(config.getAnalyzerName()));
+        }
+        return analyzers;
+    }
 
-        List<FilePattern> filePatternList = filePatternRepository.findByProjectId(commit.getProject().getId());
-        config.setSourceCodeFiles(sourceCodeFiles(workdir, filePatternList));
+    private void walkFilesInCommit(Git gitClient, Commit commit, List<SourceCodeFileAnalyzerPlugin> analyzers) throws IOException {
+        if(analyzers.isEmpty()){
+            logger.warn("skipping analysis of commit {} since there are no analyzers configured for project {}!", commit.getName(), commit.getProject().getName());
+            return;
+        }
+        logger.info("starting analysis of commit {}", commit.getName());
 
-        Analyzer analyzer = new Analyzer();
-        return analyzer.analyze(config);
+        RevCommit gitCommit = commitFinder.findCommit(gitClient, commit.getName());
+        if (gitCommit == null) {
+            throw new IllegalArgumentException(String.format("commit with name %s was not found in git root %s", commit.getName(), gitClient.getRepository().getDirectory()));
+        }
+
+        DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
+        diffFormatter.setRepository(gitClient.getRepository());
+        diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
+        diffFormatter.setDetectRenames(true);
+
+        ObjectId parentId = null;
+        if (gitCommit.getParentCount() > 0) {
+            // TODO: support multiple parents
+            parentId = gitCommit.getParent(0).getId();
+        }
+
+        // TODO: only analyze files within the source code filesets of the project!
+
+        List<DiffEntry> diffs = diffFormatter.scan(parentId, gitCommit);
+        for (DiffEntry diff : diffs) {
+            if (CHANGES_TO_ANALYZE.contains(diff.getChangeType())) {
+                String filePath = diff.getPath(DiffEntry.Side.NEW);
+                byte[] fileContent = BlobUtils.getRawContent(gitClient.getRepository(), gitCommit.getId(), filePath);
+                FileMetrics metrics = fileAnalyzer.analyzeFile(analyzers, filePath, fileContent);
+                storeMetrics(commit, filePath, metrics);
+                // TODO: store findings (i.e. code pointers)
+            }
+        }
+    }
+
+    private void storeMetrics(Commit commit, String filePath, FileMetrics metrics) {
+        File file = fileRepository.findInCommit(filePath, commit.getName());
+        if(file == null){
+            throw new IllegalStateException(String.format("file %s not found for commit %s in database!", filePath, commit.getName()));
+        }
+
+        for(Metric metric : metrics.getMetrics()){
+            MetricValueId id = new MetricValueId(commit, file, metric.getId());
+            MetricValue metricValue = new MetricValue(id, metrics.getMetricCount(metric));
+            metricValueRepository.save(metricValue);
+        }
     }
 
     private FileMatchingPattern sourceCodeFiles(Path workdir, List<FilePattern> filePatternList) {

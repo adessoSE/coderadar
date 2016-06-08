@@ -23,12 +23,11 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
 
     private CoderadarAuditListener auditListener;
 
-    @Override
-    public void configure(Properties properties) throws AnalyzerConfigurationException {
+    public CheckstyleSourceCodeFileAnalyzerPlugin() {
         checker = new Checker();
         try {
             auditListener = new CoderadarAuditListener();
-            Configuration checkstyleConfig = createCheckstyleConfiguration(properties);
+            Configuration checkstyleConfig = createCheckstyleConfiguration();
             final ClassLoader moduleClassLoader = Checker.class.getClassLoader();
             checker.setModuleClassLoader(moduleClassLoader);
             checker.configure(checkstyleConfig);
@@ -54,11 +53,11 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
     }
 
 
-    private Configuration createCheckstyleConfiguration(Properties properties) throws CheckstyleException {
+    private Configuration createCheckstyleConfiguration() throws CheckstyleException {
         return ConfigurationLoader.loadConfiguration(
                 new InputSource(
                         getClass().getResourceAsStream("/checkstyle.xml")),
-                new CheckstylePropertiesResolver(properties),
+                new CheckstylePropertiesResolver(new Properties()), // TODO: pass real properties
                 true);
     }
 
@@ -79,11 +78,6 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
         }
     }
 
-    @Override
-    public void releaseResources() {
-        checker.destroy();
-    }
-
     private File createTempFile(byte[] fileContent) throws IOException {
         File file = File.createTempFile("coderadar-", ".java");
         file.deleteOnExit();
@@ -91,5 +85,10 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
         out.write(fileContent);
         out.close();
         return file;
+    }
+
+    @Override
+    public String getName() {
+        return "checkstyle";
     }
 }

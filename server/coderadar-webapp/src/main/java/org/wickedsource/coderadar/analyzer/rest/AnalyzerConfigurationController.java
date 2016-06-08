@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationRepository;
+import org.wickedsource.coderadar.analyzer.domain.AnalyzerPluginRegistry;
 import org.wickedsource.coderadar.core.rest.validation.ValidationException;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
@@ -31,8 +33,12 @@ public class AnalyzerConfigurationController {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private AnalyzerPluginRegistry analyzerRegistry;
+
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<AnalyzerConfigurationResource> setAnalyzerConfigurationForProject(@PathVariable Long projectId, @Valid @RequestBody AnalyzerConfigurationResource resource) {
+        checkAnalyzerExistsOrThrowException(resource.getAnalyzerName());
         AnalyzerConfigurationResourceAssembler assembler = new AnalyzerConfigurationResourceAssembler();
         Project project = loadProjectOrThrowException(projectId);
         AnalyzerConfiguration entity = analyzerConfigurationRepository.findByProjectIdAndAnalyzerName(projectId, resource.getAnalyzerName());
@@ -59,6 +65,13 @@ public class AnalyzerConfigurationController {
             throw new ValidationException("projectId", "Project does not exist");
         } else {
             return project;
+        }
+    }
+
+    private void checkAnalyzerExistsOrThrowException(String analyzerName) {
+        SourceCodeFileAnalyzerPlugin analyzer = analyzerRegistry.getAnalyzer(analyzerName);
+        if (analyzer == null) {
+            throw new ValidationException("analyzerName", "No analyzer plugin with this name exists!");
         }
     }
 

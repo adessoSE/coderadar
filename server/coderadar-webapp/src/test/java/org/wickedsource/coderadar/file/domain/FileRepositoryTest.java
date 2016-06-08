@@ -9,6 +9,7 @@ import org.wickedsource.coderadar.analyzer.api.ChangeType;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociation;
+import org.wickedsource.coderadar.commit.domain.CommitToFileAssociationRepository;
 import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
@@ -25,6 +26,9 @@ public class FileRepositoryTest extends IntegrationTestTemplate {
     @Autowired
     private CommitRepository commitRepository;
 
+    @Autowired
+    private CommitToFileAssociationRepository commitToFileAssociationRepository;
+
     @Test
     public void testFindInCommit() {
         Project project = Factories.project().validProject();
@@ -34,7 +38,9 @@ public class FileRepositoryTest extends IntegrationTestTemplate {
         commit = commitRepository.save(commit);
         File file = Factories.sourceFile().withPath("123");
         file = fileRepository.save(file);
-        commit.getFiles().add(new CommitToFileAssociation(commit, file, ChangeType.MODIFY));
+        CommitToFileAssociation association = new CommitToFileAssociation(commit, file, ChangeType.MODIFY);
+        commit.getFiles().add(association);
+        commitToFileAssociationRepository.save(association);
 
         File foundFile = fileRepository.findInCommit(file.getFilepath(), commit.getName());
         Assert.assertEquals(file.getId(), foundFile.getId());

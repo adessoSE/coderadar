@@ -21,6 +21,7 @@ dependencies {
     compile group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '4.1.0.201509280440-r'
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
     compile group: 'io.fabric8', name: 'gitective-core', version: '0.9.10'
+    compile project(':plugins:loc-analyzer-plugin')
     runtime group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
 
     compile 'com.h2database:h2:1.4.191'
@@ -29,7 +30,6 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-devtools'
     compile 'org.hibernate:hibernate-validator:5.2.4.Final'
     compile project(":plugins:analyzer-plugin-api")
-    compile project(":client:analyzer")
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile group: 'org.slf4j', name: 'slf4j-ext', version: '1.7.21'
 }

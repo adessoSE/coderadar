@@ -34,7 +34,6 @@ public class LogMerger {
         List<Commit> commitsToMerge = commitRepository.findByProjectIdAndScannedTrueAndMergedFalseOrderByTimestamp(project.getId());
         for (Commit commit : commitsToMerge) {
             commitLogMerger.mergeCommit(commit);
-
         }
         logger.info("processed {} commits for project {}", commitsToMerge.size(), project);
     }

@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
 import org.wickedsource.coderadar.commit.domain.Commit;
+import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociation;
+import org.wickedsource.coderadar.commit.domain.CommitToFileAssociationRepository;
 import org.wickedsource.coderadar.file.domain.*;
 
 import java.util.*;
@@ -23,12 +25,18 @@ public class CommitLogMerger {
 
     private FileRepository fileRepository;
 
+    private CommitRepository commitRepository;
+
+    private CommitToFileAssociationRepository commitToFileAssociationRepository;
+
     private static List<ChangeType> ALL_BUT_DELETED = Arrays.asList(ChangeType.ADD, ChangeType.RENAME, ChangeType.COPY, ChangeType.MODIFY, ChangeType.UNCHANGED);
 
     @Autowired
-    public CommitLogMerger(CommitLogEntryRepository commitLogEntryRepository, FileRepository fileRepository) {
+    public CommitLogMerger(CommitLogEntryRepository commitLogEntryRepository, FileRepository fileRepository, CommitRepository commitRepository, CommitToFileAssociationRepository commitToFileAssociationRepository) {
         this.commitLogEntryRepository = commitLogEntryRepository;
         this.fileRepository = fileRepository;
+        this.commitRepository = commitRepository;
+        this.commitToFileAssociationRepository = commitToFileAssociationRepository;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -40,6 +48,7 @@ public class CommitLogMerger {
         List<File> renamedFiles = associateWithRenamedFiles(commit);
         associateWithUnchangedFiles(commit, modifiedFiles, renamedFiles);
         commit.setMerged(true);
+        commitRepository.save(commit);
         // commit entity is updated in database implicitly
     }
 
@@ -64,6 +73,7 @@ public class CommitLogMerger {
             fileRepository.save(newFile);
             CommitToFileAssociation association = new CommitToFileAssociation(commit, newFile, ChangeType.RENAME);
             commit.getFiles().add(association);
+            commitToFileAssociationRepository.save(association);
         }
         return filesToAssociate;
     }
@@ -79,6 +89,7 @@ public class CommitLogMerger {
         for (File file : filesToAssociate) {
             CommitToFileAssociation association = new CommitToFileAssociation(commit, file, ChangeType.MODIFY);
             commit.getFiles().add(association);
+            commitToFileAssociationRepository.save(association);
         }
         return filesToAssociate;
     }
@@ -94,6 +105,7 @@ public class CommitLogMerger {
             CommitToFileAssociation association = new CommitToFileAssociation(commit, file, addedFile.getChangeType());
             if (!commit.getFiles().contains(association)) {
                 commit.getFiles().add(association);
+                commitToFileAssociationRepository.save(association);
             }
         }
     }
@@ -107,6 +119,7 @@ public class CommitLogMerger {
             CommitToFileAssociation association = new CommitToFileAssociation(commit, file, ChangeType.UNCHANGED);
             if (!commit.getFiles().contains(association)) {
                 commit.getFiles().add(association);
+                commitToFileAssociationRepository.save(association);
             }
         }
     }

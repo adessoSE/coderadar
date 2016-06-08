@@ -1,6 +1,9 @@
 package org.wickedsource.coderadar.commit.domain;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.wickedsource.coderadar.job.core.ProcessingStatus;
 
 import java.util.List;
 
@@ -16,4 +19,6 @@ public interface CommitRepository extends CrudRepository<Commit, Long> {
 
     int countByProjectId(Long id);
 
+    @Query("select c from Commit c where c.merged = true and c.analyzed = false and c.id not in (select j.commitId from AnalyzeCommitJob j where j.processingStatus in (:ignoredProcessingStatus))")
+    List<Commit> findCommitsToBeAnalyzed(@Param("ignoredProcessingStatus") List<ProcessingStatus> ignoredProcessingStatus);
 }

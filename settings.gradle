@@ -1,4 +1,3 @@
-include 'client:analyzer'
 include 'client:gradle-runner'
 include 'plugins:analyzer-plugin-api'
 include 'plugins:loc-analyzer-plugin'
