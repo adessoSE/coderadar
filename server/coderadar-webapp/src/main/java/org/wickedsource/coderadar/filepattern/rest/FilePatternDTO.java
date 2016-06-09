@@ -16,7 +16,7 @@ public class FilePatternDTO {
     @NotNull
     private FileType fileType;
 
-    String getPattern() {
+    public String getPattern() {
         return pattern;
     }
 
@@ -24,7 +24,7 @@ public class FilePatternDTO {
         this.pattern = pattern;
     }
 
-    InclusionType getInclusionType() {
+    public InclusionType getInclusionType() {
         return inclusionType;
     }
 
@@ -32,7 +32,7 @@ public class FilePatternDTO {
         this.inclusionType = inclusionType;
     }
 
-    FileType getFileType() {
+    public FileType getFileType() {
         return fileType;
     }
 

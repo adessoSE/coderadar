@@ -35,7 +35,7 @@ public class FilePatternResourceAssembler extends ResourceAssemblerSupport<Itera
 
     List<FilePattern> toEntity(FilePatternResource resource, Project project) {
         List<FilePattern> entities = new ArrayList<>();
-        for (FilePatternDTO dto : resource.getProjectFilesList()) {
+        for (FilePatternDTO dto : resource.getProjectFiles()) {
             FilePattern entity = new FilePattern();
             entity.setPattern(dto.getPattern());
             entity.setInclusionType(dto.getInclusionType());

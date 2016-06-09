@@ -26,6 +26,7 @@ import org.wickedsource.coderadar.file.domain.File;
 import org.wickedsource.coderadar.file.domain.FileRepository;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
+import org.wickedsource.coderadar.filepattern.domain.FileType;
 import org.wickedsource.coderadar.metric.domain.MetricValue;
 import org.wickedsource.coderadar.metric.domain.MetricValueId;
 import org.wickedsource.coderadar.metric.domain.MetricValueRepository;
@@ -103,7 +104,7 @@ public class CommitAnalyzer {
     }
 
     private void walkFilesInCommit(Git gitClient, Commit commit, List<SourceCodeFileAnalyzerPlugin> analyzers) throws IOException {
-        if(analyzers.isEmpty()){
+        if (analyzers.isEmpty()) {
             logger.warn("skipping analysis of commit {} since there are no analyzers configured for project {}!", commit.getName(), commit.getProject().getName());
             return;
         }
@@ -125,35 +126,48 @@ public class CommitAnalyzer {
             parentId = gitCommit.getParent(0).getId();
         }
 
-        // TODO: only analyze files within the source code filesets of the project!
+        List<FilePattern> sourceFilePatterns = filePatternRepository.findByProjectIdAndFileType(commit.getProject().getId(), FileType.SOURCE);
+        FileMatchingPattern pattern = toFileMatchingPattern(sourceFilePatterns);
 
         List<DiffEntry> diffs = diffFormatter.scan(parentId, gitCommit);
         for (DiffEntry diff : diffs) {
-            if (CHANGES_TO_ANALYZE.contains(diff.getChangeType())) {
-                String filePath = diff.getPath(DiffEntry.Side.NEW);
-                byte[] fileContent = BlobUtils.getRawContent(gitClient.getRepository(), gitCommit.getId(), filePath);
-                FileMetrics metrics = fileAnalyzer.analyzeFile(analyzers, filePath, fileContent);
-                storeMetrics(commit, filePath, metrics);
-                // TODO: store findings (i.e. code pointers)
+            String filepath = diff.getPath(DiffEntry.Side.NEW);
+
+            if (!shouldBeAnalyzed(diff.getChangeType())) {
+                logger.debug("skipping analysis of file {} because of changetype {}", filepath, diff.getChangeType());
+                continue;
             }
+            if (!pattern.matches(filepath)) {
+                logger.debug("skipping analysis of file {} because it does not match source file pattern of project {}", filepath, commit.getProject().getName());
+                continue;
+            }
+
+            byte[] fileContent = BlobUtils.getRawContent(gitClient.getRepository(), gitCommit.getId(), filepath);
+            FileMetrics metrics = fileAnalyzer.analyzeFile(analyzers, filepath, fileContent);
+            storeMetrics(commit, filepath, metrics);
+            // TODO: store findings (i.e. code pointers)
         }
+    }
+
+    private boolean shouldBeAnalyzed(DiffEntry.ChangeType changeType) {
+        return CHANGES_TO_ANALYZE.contains(changeType);
     }
 
     private void storeMetrics(Commit commit, String filePath, FileMetrics metrics) {
         File file = fileRepository.findInCommit(filePath, commit.getName());
-        if(file == null){
+        if (file == null) {
             throw new IllegalStateException(String.format("file %s not found for commit %s in database!", filePath, commit.getName()));
         }
 
-        for(Metric metric : metrics.getMetrics()){
+        for (Metric metric : metrics.getMetrics()) {
             MetricValueId id = new MetricValueId(commit, file, metric.getId());
             MetricValue metricValue = new MetricValue(id, metrics.getMetricCount(metric));
             metricValueRepository.save(metricValue);
         }
     }
 
-    private FileMatchingPattern sourceCodeFiles(Path workdir, List<FilePattern> filePatternList) {
-        FileMatchingPattern pattern = new FileMatchingPattern(workdir);
+    private FileMatchingPattern toFileMatchingPattern(List<FilePattern> filePatternList) {
+        FileMatchingPattern pattern = new FileMatchingPattern();
         for (FilePattern files : filePatternList) {
             switch (files.getInclusionType()) {
                 case INCLUDE:
