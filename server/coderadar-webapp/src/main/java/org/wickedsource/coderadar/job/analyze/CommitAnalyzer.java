@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
+import org.wickedsource.coderadar.analyzer.api.Finding;
 import org.wickedsource.coderadar.analyzer.api.Metric;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
@@ -27,6 +28,7 @@ import org.wickedsource.coderadar.file.domain.FileRepository;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.filepattern.domain.FileType;
+import org.wickedsource.coderadar.metric.domain.FindingRepository;
 import org.wickedsource.coderadar.metric.domain.MetricValue;
 import org.wickedsource.coderadar.metric.domain.MetricValueId;
 import org.wickedsource.coderadar.metric.domain.MetricValueRepository;
@@ -63,10 +65,12 @@ public class CommitAnalyzer {
 
     private MetricValueRepository metricValueRepository;
 
+    private FindingRepository findingRepository;
+
     private static final Set<DiffEntry.ChangeType> CHANGES_TO_ANALYZE = EnumSet.of(DiffEntry.ChangeType.ADD, DiffEntry.ChangeType.COPY, DiffEntry.ChangeType.MODIFY);
 
     @Autowired
-    public CommitAnalyzer(CommitRepository commitRepository, WorkdirManager workdirManager, FilePatternRepository filePatternRepository, GitCommitFinder commitFinder, AnalyzerPluginRegistry analyzerRegistry, AnalyzerConfigurationRepository analyzerConfigurationRepository, FileAnalyzer fileAnalyzer, FileRepository fileRepository, MetricValueRepository metricValueRepository) {
+    public CommitAnalyzer(CommitRepository commitRepository, WorkdirManager workdirManager, FilePatternRepository filePatternRepository, GitCommitFinder commitFinder, AnalyzerPluginRegistry analyzerRegistry, AnalyzerConfigurationRepository analyzerConfigurationRepository, FileAnalyzer fileAnalyzer, FileRepository fileRepository, MetricValueRepository metricValueRepository, FindingRepository findingRepository) {
         this.commitRepository = commitRepository;
         this.workdirManager = workdirManager;
         this.filePatternRepository = filePatternRepository;
@@ -76,6 +80,7 @@ public class CommitAnalyzer {
         this.fileAnalyzer = fileAnalyzer;
         this.fileRepository = fileRepository;
         this.metricValueRepository = metricValueRepository;
+        this.findingRepository = findingRepository;
     }
 
     public void analyzeCommit(Long commitId) {
@@ -145,7 +150,6 @@ public class CommitAnalyzer {
             byte[] fileContent = BlobUtils.getRawContent(gitClient.getRepository(), gitCommit.getId(), filepath);
             FileMetrics metrics = fileAnalyzer.analyzeFile(analyzers, filepath, fileContent);
             storeMetrics(commit, filepath, metrics);
-            // TODO: store findings (i.e. code pointers)
         }
     }
 
@@ -163,6 +167,16 @@ public class CommitAnalyzer {
             MetricValueId id = new MetricValueId(commit, file, metric.getId());
             MetricValue metricValue = new MetricValue(id, metrics.getMetricCount(metric));
             metricValueRepository.save(metricValue);
+
+
+            for(Finding finding : metrics.getFindings(metric)){
+                org.wickedsource.coderadar.metric.domain.Finding entity = new org.wickedsource.coderadar.metric.domain.Finding();
+                entity.setLineStart(finding.getLineStart());
+                entity.setLineEnd(finding.getLineEnd());
+                entity.setCharStart(finding.getCharStart());
+                entity.setLineEnd(finding.getLineEnd());
+                findingRepository.save(entity);
+            }
         }
     }
 

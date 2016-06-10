@@ -119,7 +119,12 @@ public class FileMetrics {
      * @return the findings of the specified metric.
      */
     public List<Finding> getFindings(Metric metric) {
-        return findings.get(metric);
+        List<Finding> resultList = findings.get(metric);
+        if(resultList == null){
+            return Collections.emptyList();
+        }else{
+            return resultList;
+        }
     }
 
     /**
