@@ -1,12 +1,9 @@
 # coderadar
 
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 0.12.1.
+coderadar aims to be a continuous source code analysis tool. Point coderadar at your version control system and it analyzes your code for you.
 
-## Build & development
+## coderadar server
+The coderadar server is a web application that provides a REST API to interact with it. Via the REST API, you can configure your project and retrieve source code metrics for each commit in your version control system.
 
-Run `grunt` for building and `grunt serve` for preview.
+Browse the current snapshot version of the REST API documentation [[here|https://rawgit.com/thombergs/coderadar/master/server/coderadar-webapp/doc/restapi/html5/index.html]].
 
-## Testing
-
-Running `grunt test` will run the unit tests with karma.
