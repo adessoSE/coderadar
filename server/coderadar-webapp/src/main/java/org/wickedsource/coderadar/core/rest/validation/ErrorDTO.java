@@ -8,8 +8,6 @@ public class ErrorDTO {
 
     private List<FieldErrorDTO> fieldErrors = new ArrayList<>();
 
-    private String message;
-
     public void addFieldError(FieldErrorDTO fieldError) {
         this.fieldErrors.add(fieldError);
     }
@@ -22,11 +20,4 @@ public class ErrorDTO {
         return this.fieldErrors.stream().filter(error -> error.getField().equals(fieldName)).collect(Collectors.toList());
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

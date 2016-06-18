@@ -13,7 +13,7 @@ import org.springframework.hateoas.config.EnableHypermediaSupport;
 public class TestCoderadar {
 
     public static void main(String[] args) {
-        SpringApplication.run(Coderadar.class, args);
+        SpringApplication.run(TestCoderadar.class, args);
     }
 
 }

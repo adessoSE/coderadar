@@ -24,4 +24,17 @@ public class ProjectFactory {
         }
     }
 
+    public Project validProject2() {
+        try {
+            Project project = new Project();
+            project.setId(2L);
+            project.setName("Another project");
+            VcsCoordinates vcs = new VcsCoordinates(new URL("http://your.url"), VcsType.SVN);
+            project.setVcsCoordinates(vcs);
+            return project;
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("error!", e);
+        }
+    }
+
 }

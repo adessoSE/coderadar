@@ -47,11 +47,9 @@ public class ValidationExceptionHandler {
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public ErrorDTO handleInternalError(Exception e){
+    public String handleInternalError(Exception e){
         logger.error("Returned HTTP Status 500 due to the following exception:", e);
-        ErrorDTO error = new ErrorDTO();
-        error.setMessage("Internal Server Error.");
-        return error;
+        return "Internal Server Error";
     }
 
     private ErrorDTO map(List<org.springframework.validation.FieldError> fieldErrors) {
