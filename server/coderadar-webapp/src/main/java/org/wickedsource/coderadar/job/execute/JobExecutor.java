@@ -39,18 +39,16 @@ class JobExecutor {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void execute(Job job) {
-        if (config.isSlave()) {
-            if (job instanceof ScanCommitsJob) {
-                commitScanner.scan(((ScanCommitsJob) job).getProjectId());
-            } else if (job instanceof ScanFilesJob) {
-                fileScanner.scan(((ScanFilesJob) job).getCommitId());
-            } else if (job instanceof MergeLogJob) {
-                merger.merge(((MergeLogJob) job).getProjectId());
-            } else if(job instanceof AnalyzeCommitJob){
-                commitAnalyzer.analyzeCommit(((AnalyzeCommitJob) job).getCommitId());
-            } else {
-                throw new IllegalArgumentException(String.format("unsupported job type %s", job.getClass()));
-            }
+        if (job instanceof ScanCommitsJob) {
+            commitScanner.scan(((ScanCommitsJob) job).getProjectId());
+        } else if (job instanceof ScanFilesJob) {
+            fileScanner.scan(((ScanFilesJob) job).getCommitId());
+        } else if (job instanceof MergeLogJob) {
+            merger.merge(((MergeLogJob) job).getProjectId());
+        } else if (job instanceof AnalyzeCommitJob) {
+            commitAnalyzer.analyzeCommit(((AnalyzeCommitJob) job).getCommitId());
+        } else {
+            throw new IllegalArgumentException(String.format("unsupported job type %s", job.getClass()));
         }
     }
 

@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.job.analyze;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.CoderadarConfiguration;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 @Service
+@ConditionalOnProperty(CoderadarConfiguration.MASTER)
 public class AnalyzeCommitJobTrigger {
 
     private JobLogger jobLogger = new JobLogger();
@@ -36,15 +38,13 @@ public class AnalyzeCommitJobTrigger {
 
     @Scheduled(fixedDelay = 5000)
     private void trigger() {
-        if (config.isMaster()) {
-            for (Commit commit : commitRepository.findCommitsToBeAnalyzed(Arrays.asList(ProcessingStatus.PROCESSING, ProcessingStatus.WAITING))) {
-                AnalyzeCommitJob job = new AnalyzeCommitJob();
-                job.setQueuedDate(new Date());
-                job.setProcessingStatus(ProcessingStatus.WAITING);
-                job.setCommitId(commit.getId());
-                analyzeCommitJobRepository.save(job);
-                jobLogger.queuedNewJob(job, commit.getProject());
-            }
+        for (Commit commit : commitRepository.findCommitsToBeAnalyzed(Arrays.asList(ProcessingStatus.PROCESSING, ProcessingStatus.WAITING))) {
+            AnalyzeCommitJob job = new AnalyzeCommitJob();
+            job.setQueuedDate(new Date());
+            job.setProcessingStatus(ProcessingStatus.WAITING);
+            job.setCommitId(commit.getId());
+            analyzeCommitJobRepository.save(job);
+            jobLogger.queuedNewJob(job, commit.getProject());
         }
     }
 }

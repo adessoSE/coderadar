@@ -13,13 +13,13 @@ public class CoderadarConfiguration {
 
     public static final int TIMER_INTERVAL = 100;
 
-    private static final String CONFIG_MASTER = "coderadar.master";
+    public static final String MASTER = "coderadar.master";
 
-    private static final String CONFIG_SLAVE = "coderadar.slave";
+    public static final String SLAVE = "coderadar.slave";
 
-    private static final String CONFIG_WORKDIR = "coderadar.workdir";
+    public static final String WORKDIR = "coderadar.workdir";
 
-    private static final String CONFIG_SCAN_INTERVAL_IN_SECONDS = "coderadar.scanIntervalInSeconds";
+    public static final String SCAN_INTERVAL_IN_SECONDS = "coderadar.scanIntervalInSeconds";
 
     /**
      * Returns if the Coderadar application is configured as a master node in a Coderadar cluster.
@@ -27,7 +27,7 @@ public class CoderadarConfiguration {
      * in a cluster.
      */
     public boolean isMaster() {
-        return Boolean.valueOf(System.getProperty(CONFIG_MASTER));
+        return Boolean.valueOf(System.getProperty(MASTER));
     }
 
     /**
@@ -36,19 +36,19 @@ public class CoderadarConfiguration {
      * in a cluster.
      */
     public boolean isSlave() {
-        return Boolean.valueOf(System.getProperty(CONFIG_SLAVE));
+        return Boolean.valueOf(System.getProperty(SLAVE));
     }
 
     /**
      * Returns the folder in which Coderadar puts local vcs data.
      */
     public Path getWorkdir() {
-        String path = System.getProperty(CONFIG_WORKDIR);
+        String path = System.getProperty(WORKDIR);
         return Paths.get(path);
     }
 
     public int getScanIntervalInSeconds() {
-        String stringValue = System.getProperty(CONFIG_SCAN_INTERVAL_IN_SECONDS);
+        String stringValue = System.getProperty(SCAN_INTERVAL_IN_SECONDS);
         if (stringValue == null) {
             return 60;
         } else {
@@ -57,15 +57,15 @@ public class CoderadarConfiguration {
     }
 
     public void setMaster(boolean value) {
-        System.setProperty(CONFIG_MASTER, String.valueOf(value));
+        System.setProperty(MASTER, String.valueOf(value));
     }
 
     public void setSlave(boolean value) {
-        System.setProperty(CONFIG_SLAVE, String.valueOf(value));
+        System.setProperty(SLAVE, String.valueOf(value));
     }
 
     public void setWorkdir(Path workdir) {
-        System.setProperty(CONFIG_WORKDIR, workdir.toString());
+        System.setProperty(WORKDIR, workdir.toString());
     }
 
 

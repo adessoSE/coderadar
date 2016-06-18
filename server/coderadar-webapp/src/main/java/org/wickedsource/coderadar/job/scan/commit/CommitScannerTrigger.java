@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.job.scan.commit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.CoderadarConfiguration;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 @Service
+@ConditionalOnProperty(CoderadarConfiguration.MASTER)
 class CommitScannerTrigger {
 
     private JobLogger jobLogger = new JobLogger();
@@ -33,16 +35,14 @@ class CommitScannerTrigger {
 
     @Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
     public void trigger() {
-        if (config.isMaster()) {
-            for (Project project : projectRepository.findAll()) {
-                if (shouldJobBeQueuedForProject(project)) {
-                    ScanCommitsJob newJob = new ScanCommitsJob();
-                    newJob.setProcessingStatus(ProcessingStatus.WAITING);
-                    newJob.setQueuedDate(new Date());
-                    newJob.setProjectId(project.getId());
-                    jobRepository.save(newJob);
-                    jobLogger.queuedNewJob(newJob, project);
-                }
+        for (Project project : projectRepository.findAll()) {
+            if (shouldJobBeQueuedForProject(project)) {
+                ScanCommitsJob newJob = new ScanCommitsJob();
+                newJob.setProcessingStatus(ProcessingStatus.WAITING);
+                newJob.setQueuedDate(new Date());
+                newJob.setProjectId(project.getId());
+                jobRepository.save(newJob);
+                jobLogger.queuedNewJob(newJob, project);
             }
         }
     }

@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.job.merge;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.CoderadarConfiguration;
@@ -14,6 +15,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 @Service
+@ConditionalOnProperty(CoderadarConfiguration.MASTER)
 public class LogMergerTrigger {
 
     private JobLogger jobLogger = new JobLogger();
@@ -36,16 +38,14 @@ public class LogMergerTrigger {
 
     @Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
     public void trigger() {
-        if (config.isMaster()) {
-            for (Project project : projectRepository.findAll()) {
-                if (shouldJobBeQueuedForProject(project)) {
-                    MergeLogJob newJob = new MergeLogJob();
-                    newJob.setProcessingStatus(ProcessingStatus.WAITING);
-                    newJob.setQueuedDate(new Date());
-                    newJob.setProjectId(project.getId());
-                    jobRepository.save(newJob);
-                    jobLogger.queuedNewJob(newJob, project);
-                }
+        for (Project project : projectRepository.findAll()) {
+            if (shouldJobBeQueuedForProject(project)) {
+                MergeLogJob newJob = new MergeLogJob();
+                newJob.setProcessingStatus(ProcessingStatus.WAITING);
+                newJob.setQueuedDate(new Date());
+                newJob.setProjectId(project.getId());
+                jobRepository.save(newJob);
+                jobLogger.queuedNewJob(newJob, project);
             }
         }
     }

@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.job.scan.file;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.CoderadarConfiguration;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@ConditionalOnProperty(CoderadarConfiguration.MASTER)
 public class FileScannerTrigger {
 
     private JobLogger jobLogger = new JobLogger();
@@ -33,19 +35,17 @@ public class FileScannerTrigger {
 
     @Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
     public void trigger() {
-        if (config.isMaster()) {
-            List<Commit> unscannedCommits = commitRepository.findByScannedFalse();
-            for (Commit commit : unscannedCommits) {
-                if (isJobCurrentlyQueuedForCommit(commit)) {
-                    jobLogger.alreadyQueuedForCommit(ScanFilesJob.class, commit);
-                } else {
-                    ScanFilesJob job = new ScanFilesJob();
-                    job.setCommitId(commit.getId());
-                    job.setProcessingStatus(ProcessingStatus.WAITING);
-                    job.setQueuedDate(new Date());
-                    jobRepository.save(job);
-                    jobLogger.queuedNewJob(job, commit.getProject());
-                }
+        List<Commit> unscannedCommits = commitRepository.findByScannedFalse();
+        for (Commit commit : unscannedCommits) {
+            if (isJobCurrentlyQueuedForCommit(commit)) {
+                jobLogger.alreadyQueuedForCommit(ScanFilesJob.class, commit);
+            } else {
+                ScanFilesJob job = new ScanFilesJob();
+                job.setCommitId(commit.getId());
+                job.setProcessingStatus(ProcessingStatus.WAITING);
+                job.setQueuedDate(new Date());
+                jobRepository.save(job);
+                jobLogger.queuedNewJob(job, commit.getProject());
             }
         }
     }
