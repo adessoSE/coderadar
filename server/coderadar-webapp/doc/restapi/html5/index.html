@@ -433,15 +433,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#_project">Project</a>
 <ul class="sectlevel2">
-<li><a href="#_listing_projects">Listing projects</a></li>
-<li><a href="#_creating_a_project">Creating a project</a>
+<li><a href="#_listing_projects">Listing Projects</a></li>
+<li><a href="#_creating_a_project">Creating a Project</a>
 <ul class="sectlevel3">
 <li><a href="#_request">Request</a></li>
 <li><a href="#_response">Response</a></li>
 </ul>
 </li>
-<li><a href="#_updating_a_project">Updating a project</a></li>
-<li><a href="#_deleting_a_project">Deleting a project</a></li>
+<li><a href="#_updating_a_project">Updating a Project</a></li>
+<li><a href="#_deleting_a_project">Deleting a Project</a></li>
+</ul>
+</li>
+<li><a href="#_file_patterns">File Patterns</a></li>
+<li><a href="#_listing_a_project_s_file_patterns">Listing a Project&#8217;s File Patterns</a>
+<ul class="sectlevel2">
+<li><a href="#_request_2">Request</a></li>
+<li><a href="#_response_2">Response</a></li>
+</ul>
+</li>
+<li><a href="#_setting_a_project_s_file_patterns">Setting a Project&#8217;s File Patterns</a>
+<ul class="sectlevel2">
+<li><a href="#_request_3">Request</a></li>
+<li><a href="#_response_3">Response</a></li>
 </ul>
 </li>
 </ul>
@@ -472,16 +485,17 @@ describes the REST API of the coderadar server.</p>
 <h2 id="_project"><a class="link" href="#_project">Project</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A project resource defines some metadata about the project you want coderadar to analyze.
-The coderadar API allows to list, create, update and delete projects as well as some sub-resources
-of projects.</p>
+<p>A project defines some metadata about the project you want coderadar to analyze. With a project resource
+and its sub-resources you provide coderadar with the information it needs to analyze the source code.</p>
 </div>
 <div class="sect2">
-<h3 id="_listing_projects"><a class="link" href="#_listing_projects">Listing projects</a></h3>
-
+<h3 id="_listing_projects"><a class="link" href="#_listing_projects">Listing Projects</a></h3>
+<div class="paragraph">
+<p>TODO</p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_creating_a_project"><a class="link" href="#_creating_a_project">Creating a project</a></h3>
+<h3 id="_creating_a_project"><a class="link" href="#_creating_a_project">Creating a Project</a></h3>
 <div class="sect3">
 <h4 id="_request"><a class="link" href="#_request">Request</a></h4>
 <div class="listingblock">
@@ -591,12 +605,180 @@ Content-Length: 313
 </div>
 </div>
 <div class="sect2">
-<h3 id="_updating_a_project"><a class="link" href="#_updating_a_project">Updating a project</a></h3>
-
+<h3 id="_updating_a_project"><a class="link" href="#_updating_a_project">Updating a Project</a></h3>
+<div class="paragraph">
+<p>TODO</p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_deleting_a_project"><a class="link" href="#_deleting_a_project">Deleting a project</a></h3>
+<h3 id="_deleting_a_project"><a class="link" href="#_deleting_a_project">Deleting a Project</a></h3>
+<div class="paragraph">
+<p>TODO</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_file_patterns"><a class="link" href="#_file_patterns">File Patterns</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A file pattern describes a set of files within a project&#8217;s code base. Each project can have several file patterns
+defines, each matching a set of files that may be handled differently by coderadar during analysis.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_listing_a_project_s_file_patterns"><a class="link" href="#_listing_a_project_s_file_patterns">Listing a Project&#8217;s File Patterns</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_request_2"><a class="link" href="#_request_2">Request</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/projects/1/files' -i -H 'Content-Type: application/json' -d '{
+  "filePatterns" : [ {
+    "pattern" : "src/main/java/**/*.java",
+    "inclusionType" : "INCLUDE",
+    "fileType" : "SOURCE"
+  }, {
+    "pattern" : "src/main/java/**/generated/**/*.java",
+    "inclusionType" : "EXCLUDE",
+    "fileType" : "SOURCE"
+  } ]
+}'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_response_2"><a class="link" href="#_response_2">Response</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 210
 
+{
+  "filePatterns" : [ ],
+  "links" : [ {
+    "rel" : "self",
+    "href" : "http://localhost:8080/projects/1/files"
+  }, {
+    "rel" : "project",
+    "href" : "http://localhost:8080/projects/1"
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_setting_a_project_s_file_patterns"><a class="link" href="#_setting_a_project_s_file_patterns">Setting a Project&#8217;s File Patterns</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You can only set all File Patterns of a project at once.</p>
+</div>
+<div class="sect2">
+<h3 id="_request_3"><a class="link" href="#_request_3">Request</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/projects/1/files' -i -X POST -H 'Content-Type: application/json' -d '{
+  "filePatterns" : [ {
+    "pattern" : "src/main/java/**/*.java",
+    "inclusionType" : "INCLUDE",
+    "fileType" : "SOURCE"
+  }, {
+    "pattern" : "src/main/java/**/generated/**/*.java",
+    "inclusionType" : "EXCLUDE",
+    "fileType" : "SOURCE"
+  } ]
+}'</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">filePatterns[].pattern</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ant-style file pattern matching a set of files in the project&#8217;s code base.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">filePatterns[].inclusionType</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Either 'INCLUDE' if the matching set of files is to be included or 'EXCLUDE' if it is to be excluded.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">filePatterns[].fileType</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The type of files described by this pattern. Currently, the only available value is 'SOURCE' describing source code files.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_response_3"><a class="link" href="#_response_3">Response</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
+Content-Type: application/json;charset=UTF-8
+Content-Length: 448
+
+{
+  "filePatterns" : [ {
+    "pattern" : "src/main/java/**/*.java",
+    "inclusionType" : "INCLUDE",
+    "fileType" : "SOURCE"
+  }, {
+    "pattern" : "src/main/java/**/generated/**/*.java",
+    "inclusionType" : "EXCLUDE",
+    "fileType" : "SOURCE"
+  } ],
+  "links" : [ {
+    "rel" : "self",
+    "href" : "http://localhost:8080/projects/1/files"
+  }, {
+    "rel" : "project",
+    "href" : "http://localhost:8080/projects/1"
+  } ]
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Relation</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the file patterns resource just created.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project these file patterns belong to.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -680,7 +862,7 @@ Content-Length: 164
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-06-18 22:28:20 +02:00
+Last updated 2016-06-19 23:33:33 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

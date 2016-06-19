@@ -7,11 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.hypermedia.Link;
@@ -19,7 +17,6 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.snippet.Snippet;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -34,8 +31,6 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.snippet.Attributes.key;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = {TestCoderadar.class})
 public abstract class ControllerTestTemplate {
 
     private Logger logger = LoggerFactory.getLogger(ControllerTestTemplate.class);
@@ -132,5 +127,17 @@ public abstract class ControllerTestTemplate {
     }
 
     protected abstract Object getController();
+
+    protected <T> ResultMatcher contains(Class<T> clazz) {
+        return result -> {
+            String json = result.getResponse().getContentAsString();
+            try {
+                T object = fromJson(json, clazz);
+                Assert.assertNotNull(object);
+            } catch (Exception e) {
+                Assert.fail(String.format("expected JSON representation of class %s but found '%s'", clazz,  json));
+            }
+        };
+    }
 
 }

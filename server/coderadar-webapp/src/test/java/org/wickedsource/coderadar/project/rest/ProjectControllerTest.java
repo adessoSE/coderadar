@@ -1,13 +1,12 @@
 package org.wickedsource.coderadar.project.rest;
 
-import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.wickedsource.coderadar.ControllerTestTemplate;
 import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.project.domain.Project;
@@ -41,6 +40,11 @@ public class ProjectControllerTest extends ControllerTestTemplate {
         return projectController;
     }
 
+    @Before
+    public void setUp() throws Exception {
+
+    }
+
     @Test
     public void createProjectSuccessfully() throws Exception {
         ProjectResource project = Factories.projectResource().validProjectResource();
@@ -51,7 +55,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
                 .content(toJsonWithoutLinks(project))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(containsProjectResource())
+                .andExpect(contains(ProjectResource.class))
                 .andDo(documentCreateProject());
     }
 
@@ -85,8 +89,8 @@ public class ProjectControllerTest extends ControllerTestTemplate {
                 .andExpect(validationErrorForField("vcsUrl"))
                 .andDo(document("projects/post/error400",
                         responseFields(
-                           fields.withPath("fieldErrors").description("List of fields in the JSON payload of a request that had invalid values. May be empty. In this case, the 'message' field should contain an explanation of what went wrong."),
-                           fields.withPath("fieldErrors[].field").description("Name of the field in the JSON payload of the request that had an invalid value."),
+                                fields.withPath("fieldErrors").description("List of fields in the JSON payload of a request that had invalid values. May be empty. In this case, the 'message' field should contain an explanation of what went wrong."),
+                                fields.withPath("fieldErrors[].field").description("Name of the field in the JSON payload of the request that had an invalid value."),
                                 fields.withPath("fieldErrors[].message").description("Reason why the value is invalid."))));
     }
 
@@ -116,18 +120,6 @@ public class ProjectControllerTest extends ControllerTestTemplate {
         mvc().perform(get("/projects/1"))
                 .andExpect(status().isNotFound())
                 .andDo(document("projects/get/error404"));
-    }
-
-    private ResultMatcher containsProjectResource() {
-        return result -> {
-            String json = result.getResponse().getContentAsString();
-            try {
-                ProjectResource project = fromJson(json, ProjectResource.class);
-                Assert.assertNotNull(project);
-            } catch (Exception e) {
-                Assert.fail(String.format("expected JSON representation of ProjectResource but found '%s'", json));
-            }
-        };
     }
 
 }

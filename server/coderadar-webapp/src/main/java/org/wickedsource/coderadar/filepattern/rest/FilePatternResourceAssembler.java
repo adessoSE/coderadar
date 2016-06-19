@@ -3,6 +3,7 @@ package org.wickedsource.coderadar.filepattern.rest;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.project.rest.ProjectController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +28,16 @@ public class FilePatternResourceAssembler extends ResourceAssemblerSupport<Itera
             dto.setFileType(entity.getFileType());
             dto.setInclusionType(entity.getInclusionType());
             dto.setPattern(entity.getPattern());
-            resource.addProjectFiles(dto);
+            resource.addFilePattern(dto);
         }
         resource.add(linkTo(methodOn(FilePatternController.class).getFilePatterns(projectId)).withSelfRel());
+        resource.add(linkTo(methodOn(ProjectController.class).getProject(projectId)).withRel("project"));
         return resource;
     }
 
     List<FilePattern> toEntity(FilePatternResource resource, Project project) {
         List<FilePattern> entities = new ArrayList<>();
-        for (FilePatternDTO dto : resource.getProjectFiles()) {
+        for (FilePatternDTO dto : resource.getFilePatterns()) {
             FilePattern entity = new FilePattern();
             entity.setPattern(dto.getPattern());
             entity.setInclusionType(dto.getInclusionType());

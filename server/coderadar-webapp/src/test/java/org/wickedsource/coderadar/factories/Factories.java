@@ -21,4 +21,12 @@ public class Factories {
     public static SourceFileFactory sourceFile() {
         return new SourceFileFactory();
     }
+
+    public static FilePatternResourceFactory filePatternResource() {
+        return new FilePatternResourceFactory();
+    }
+
+    public static FilePatternFactory filePattern() {
+        return new FilePatternFactory();
+    }
 }

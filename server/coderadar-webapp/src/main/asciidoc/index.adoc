@@ -16,23 +16,50 @@ describes the REST API of the coderadar server.
 = Resources
 
 == Project
-A project resource defines some metadata about the project you want coderadar to analyze.
-The coderadar API allows to list, create, update and delete projects as well as some sub-resources
-of projects.
+A project defines some metadata about the project you want coderadar to analyze. With a project resource
+and its sub-resources you provide coderadar with the information it needs to analyze the source code.
 
-=== Listing projects
+=== Listing Projects
+TODO
 
-=== Creating a project
+=== Creating a Project
+
 ==== Request
 include::{snippets}/projects/post/curl-request.adoc[]
 include::{snippets}/projects/post/request-fields.adoc[]
+
 ==== Response
 include::{snippets}/projects/post/http-response.adoc[]
 include::{snippets}/projects/post/links.adoc[]
 
-=== Updating a project
+=== Updating a Project
+TODO
 
-=== Deleting a project
+=== Deleting a Project
+TODO
+
+== File Patterns
+A file pattern describes a set of files within a project's code base. Each project can have several file patterns
+defined, each matching a set of files that may be handled differently by coderadar during analysis.
+
+=== Listing a Project's File Patterns
+
+==== Request
+include::{snippets}/filepatterns/get/curl-request.adoc[]
+
+==== Response
+include::{snippets}/filepatterns/get/http-response.adoc[]
+
+=== Setting a Project's File Patterns
+You can only set all File Patterns of a project at once.
+
+==== Request
+include::{snippets}/filepatterns/post/curl-request.adoc[]
+include::{snippets}/filepatterns/post/request-fields.adoc[]
+
+==== Response
+include::{snippets}/filepatterns/post/http-response.adoc[]
+include::{snippets}/filepatterns/post/links.adoc[]
 
 = Error Handling
 

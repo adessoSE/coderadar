@@ -20,7 +20,7 @@ public class FilePatternDTO {
         return pattern;
     }
 
-    void setPattern(String pattern) {
+    public void setPattern(String pattern) {
         this.pattern = pattern;
     }
 
@@ -28,7 +28,7 @@ public class FilePatternDTO {
         return inclusionType;
     }
 
-    void setInclusionType(InclusionType inclusionType) {
+    public void setInclusionType(InclusionType inclusionType) {
         this.inclusionType = inclusionType;
     }
 
@@ -36,7 +36,7 @@ public class FilePatternDTO {
         return fileType;
     }
 
-    void setFileType(FileType fileType) {
+    public void setFileType(FileType fileType) {
         this.fileType = fileType;
     }
 

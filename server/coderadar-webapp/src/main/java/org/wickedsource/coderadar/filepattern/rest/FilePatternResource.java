@@ -7,17 +7,17 @@ import java.util.List;
 
 public class FilePatternResource extends ResourceSupport {
 
-    private List<FilePatternDTO> projectFiles = new ArrayList<>();
+    private List<FilePatternDTO> filePatterns = new ArrayList<>();
 
-    List<FilePatternDTO> getProjectFiles() {
-        return projectFiles;
+    public List<FilePatternDTO> getFilePatterns() {
+        return filePatterns;
     }
 
-    public void setProjectFiles(List<FilePatternDTO> projectFiles) {
-        this.projectFiles = projectFiles;
+    public void setFilePatterns(List<FilePatternDTO> filePatterns) {
+        this.filePatterns = filePatterns;
     }
 
-    void addProjectFiles(FilePatternDTO projectFiles){
-        this.projectFiles.add(projectFiles);
+    public void addFilePattern(FilePatternDTO filePatterns){
+        this.filePatterns.add(filePatterns);
     }
 }
