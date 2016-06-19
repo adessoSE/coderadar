@@ -1,12 +1,27 @@
 # coderadar
 
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 0.12.1.
+coderadar aims to be a continuous source code analysis tool. Point coderadar at your version control system and it analyzes your code for you.
 
-## Build & development
+## coderadar server (work in progress)
+The coderadar server is a web application that provides a REST API to interact with it. Via the REST API, you can configure your project and retrieve source code metrics for each commit in your version control system.
 
-Run `grunt` for building and `grunt serve` for preview.
+Browse the current snapshot version of the REST API documentation [here](https://rawgit.com/thombergs/coderadar/master/server/coderadar-webapp/doc/restapi/html5/index.html).
 
-## Testing
+## coderadar app (planned)
+The coderadar app connects to the coderadar server REST API and provides a user interface to configure your project and view the source code metrics via web browser. Features planned for the app include:
+* comparison of source code metrics between two commits
+* charting source code metrics history over time
+* defining your own quality profiles by combining metrics of your choice
+* gamification features like highscores where each committer can view his or her source code quality score
+* ...
 
-Running `grunt test` will run the unit tests with karma.
+## coderadar analyzer plugins (planned)
+coderadar is meant to be extensible in that you can implement your own analyzer plugins that provide the metrics you need for your own definition of quality. Plugins that are planned to be bundled with the coderadar server are:
+* PMD plugin
+* Checkstyle plugin
+* Findbugs plugin
+* Java metrics (LOC, #classes, ...)
+* ...
+* 
+
+
