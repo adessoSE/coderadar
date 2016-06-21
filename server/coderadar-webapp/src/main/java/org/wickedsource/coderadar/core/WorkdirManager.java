@@ -10,12 +10,12 @@ import java.nio.file.Path;
  * Centralizes the access to local working directories needed for some tasks.
  */
 @Service
-public class WorkdirManager1 {
+public class WorkdirManager {
 
     private CoderadarConfiguration config;
 
     @Autowired
-    public WorkdirManager1(CoderadarConfiguration config) {
+    public WorkdirManager(CoderadarConfiguration config) {
         this.config = config;
     }
 
