@@ -1,0 +1,4 @@
+coderadar:
+  image: "thombergs/coderadar:latest"
+  ports:
+    - "8080:8080"
