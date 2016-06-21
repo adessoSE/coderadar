@@ -94,7 +94,7 @@ public class CommitScannerIntegrationTest extends GitTestTemplate {
         scanner.scan(1L);
         Assert.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
 
-        verify(commitRepository, atLeast(50)).save(any(Commit.class));
+        verify(commitRepository, atLeast(20)).save(any(Commit.class));
         profiler.stop().log();
     }
 
@@ -114,7 +114,7 @@ public class CommitScannerIntegrationTest extends GitTestTemplate {
             project.setId(1L);
             project.setName("coderadar");
             VcsCoordinates vcs = new VcsCoordinates();
-            vcs.setUrl(new URL("https://github.com/thombergs/coderadar.git"));
+            vcs.setUrl(new URL("https://github.com/thombergs/diffparser.git"));
             vcs.setType(VcsType.GIT);
             project.setVcsCoordinates(vcs);
             return project;

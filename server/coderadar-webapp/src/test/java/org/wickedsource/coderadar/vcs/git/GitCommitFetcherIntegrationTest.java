@@ -45,10 +45,10 @@ public class GitCommitFetcherIntegrationTest {
 
     @Test
     @Category(IntegrationTest.class)
-    public void fetchFirstCoderadarCommit() throws MalformedURLException {
-        VcsCoordinates vcs = new VcsCoordinates(new URL("https://github.com/thombergs/coderadar.git"), VcsType.GIT);
+    public void fetchCommit() throws MalformedURLException {
+        VcsCoordinates vcs = new VcsCoordinates(new URL("https://github.com/thombergs/diffparser.git"), VcsType.GIT);
         GitCommitFetcher fetcher = new GitCommitFetcher();
-        fetcher.fetchCommit("5412226262a0968ddf8a98d02f34c50dd91b7f5a", vcs, tempDir.toPath());
+        fetcher.fetchCommit("729fa5085a8c40afc100592da98df86b356088a1", vcs, tempDir.toPath());
 
         File licenseFile = new File(tempDir, "LICENSE");
         Assert.assertTrue(licenseFile.exists());
