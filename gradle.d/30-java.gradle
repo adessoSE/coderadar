@@ -1,0 +1,34 @@
+subprojects {
+
+    if (file('src/main/java').exists()) {
+        apply plugin: 'jacoco'
+        apply plugin: 'java'
+
+        repositories {
+            jcenter()
+        }
+
+        jacoco {
+            toolVersion = version_jacoco
+        }
+
+        compileJava {
+            sourceCompatibility = version_java
+            targetCompatibility = version_java
+
+            options.fork = true
+        }
+
+        test {
+            jacoco {
+                append = false
+                includes = [
+                        "org/wickedsource/**/*"
+                ]
+            }
+        }
+    } else {
+        apply plugin: 'base'
+    }
+
+}

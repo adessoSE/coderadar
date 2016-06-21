@@ -1,0 +1,41 @@
+def getEnv(String envVarName, Object defaultValue) {
+
+    Map<String, String> env = System.getenv();
+    if (env.containsKey(envVarName)) {
+        return env.get(envVarName)
+    }
+
+    return defaultValue
+}
+
+boolean getBoolEnv(String envVarName, boolean defaultValue) {
+    Boolean.valueOf(getEnv(envVarName, defaultValue))
+}
+
+def getBuildVersion(String baseVersion) {
+    def version = baseVersion;
+
+    if (project.isCiBuild) {
+        if (project.isPullRequest) {
+            version += "-PR${project.pullRequestNumber}"
+        }
+        version += "-${project.buildNumber}"
+        version += "-${project.gitCommit}"
+
+    } else {
+        version += "-local"
+    }
+}
+
+ext {
+// reads environment variables when running on snap-ci.com
+    isCiBuild = getBoolEnv('CI', false)
+
+    buildNumber = getEnv('CIRCLE_BUILD_NUM', null)
+    gitCommit = getEnv('CIRCLE_SHA1', null)
+    pullRequestNumber = getEnv('CIRCLE_PR_NUMBER', null)
+    isPullRequest = pullRequestNumber != null
+
+    // export method as closure to make it available for all projects
+    getBuildVersion = this.&getBuildVersion
+}

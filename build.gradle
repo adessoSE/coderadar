@@ -1,15 +1,24 @@
-apply plugin: 'idea'
+apply plugin: 'base'
 
-version= '1.0.0-SNAPSHOT'
+// alle Skripte aus ./gradle.d in sortierter Reihenfolge einbinden
+file('gradle.d').listFiles().sort().each {
+    if (it =~ /.*\.gradle$/) {
+        apply from: relativePath(it)
+    }
+}
+allprojects {
+    group = 'org.wickedsource'
+    version = getBuildVersion('1.0.0')
+}
+
+ext {
+    dockerGroup = 'thombergs'
+}
 
 subprojects{
-    apply plugin: 'idea'
-    apply plugin: 'java'
 //    apply plugin: 'findbugs'
 //    apply plugin: 'jacoco'
 //    apply plugin: 'pmd'
-
-    sourceCompatibility = 1.8
 
     repositories {
         mavenCentral()

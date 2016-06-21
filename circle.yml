@@ -1,0 +1,56 @@
+machine:
+  java:
+    version: oraclejdk8
+  python:
+    version: 2.7.3
+
+  services:
+    - docker
+
+dependencies:
+  pre:
+    - sudo pip install docker-compose==1.5.2
+  cache_directories:
+    - "~/docker"
+
+  override:
+    - docker version
+    - docker info
+    - docker-compose version
+    - if [[ -e ~/docker/java.tar ]]; then docker load --input ~/docker/java.tar; fi
+
+    - ./gradlew --console=plain buildDocker
+
+    # pull image here to cache it and speed up the test
+    - docker images
+
+    - mkdir -p ~/docker
+    - docker save java:8 > ~/docker/java.tar
+
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+
+    - mkdir -p $CIRCLE_ARTIFACTS/build-artifacts
+    - cp -a server/coderadar-webapp/build/libs/coderadar-webapp-*.jar $CIRCLE_ARTIFACTS/build-artifacts/
+
+test:
+  pre:
+    - docker-compose up -d coderadar-server
+    - echo "waiting 50 seconds for applications to boot ..."; echo "50..."; sleep 10; echo "40..."; sleep 10; echo "30..."; sleep 10; echo "20..."; sleep 10; echo "10..."; sleep 10; echo "done.";
+
+  override:
+    - echo ">> REST API <<"; curl --retry 10 --retry-delay 5 -v http://localhost:8080/projects
+
+  post:
+    - echo "Running Docker containers"; docker ps -a
+    - echo "Stopping all Docker containers"; docker stop $(docker ps -a -q)
+    - mkdir -p $CIRCLE_TEST_REPORTS/docker/
+    - docker logs coderadar_coderadar-server_1 > $CIRCLE_TEST_REPORTS/docker/coderadar-server.log
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - if [ "$CIRCLE_PR_NUMBER" = ""  ]; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS; fi
+      - if [ "$CIRCLE_PR_NUMBER" = ""  ]; then docker push thombergs/coderadar-server; else echo 'Skipping Docker deployment for PRs!'; fi
