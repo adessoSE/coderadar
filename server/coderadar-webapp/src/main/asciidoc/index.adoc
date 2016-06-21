@@ -95,9 +95,21 @@ include::{snippets}/analyzerConfiguration/post/http-request.adoc[]
 ==== Example Response
 include::{snippets}/analyzerConfiguration/post/http-response.adoc[]
 
-=== Deleting an AnalyzerConfiguration from a Project
+=== Deleting an AnalyzerConfiguration
+
+==== Example Request
+include::{snippets}/analyzerConfiguration/delete/http-request.adoc[]
+
+==== Example Response
+include::{snippets}/analyzerConfiguration/delete/http-response.adoc[]
 
 === Listing a Project's AnalyzerConfigurations
+
+==== Example Request
+include::{snippets}/analyzerConfiguration/get/http-request.adoc[]
+
+==== Example Response
+include::{snippets}/analyzerConfiguration/get/http-response.adoc[]
 
 = Error Handling
 

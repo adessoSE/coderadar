@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_structure_3">Structure</a></li>
 <li><a href="#_hypermedia_links_3">Hypermedia Links</a></li>
 <li><a href="#_adding_updating_an_analyzerconfiguration">Adding / Updating an AnalyzerConfiguration</a></li>
-<li><a href="#_deleting_an_analyzerconfiguration_from_a_project">Deleting an AnalyzerConfiguration from a Project</a></li>
+<li><a href="#_deleting_an_analyzerconfiguration">Deleting an AnalyzerConfiguration</a></li>
 <li><a href="#_listing_a_project_s_analyzerconfigurations">Listing a Project&#8217;s AnalyzerConfigurations</a></li>
 </ul>
 </li>
@@ -926,12 +926,71 @@ Content-Length: 262
 </div>
 </div>
 <div class="sect2">
-<h3 id="_deleting_an_analyzerconfiguration_from_a_project"><a class="link" href="#_deleting_an_analyzerconfiguration_from_a_project">Deleting an AnalyzerConfiguration from a Project</a></h3>
+<h3 id="_deleting_an_analyzerconfiguration"><a class="link" href="#_deleting_an_analyzerconfiguration">Deleting an AnalyzerConfiguration</a></h3>
+<div class="sect3">
+<h4 id="_example_request_5"><a class="link" href="#_example_request_5">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/analyzers HTTP/1.1
+Host: localhost
+Content-Length: 28
 
+org.wickedsource.locAnalyzer</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_5"><a class="link" href="#_example_response_5">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_listing_a_project_s_analyzerconfigurations"><a class="link" href="#_listing_a_project_s_analyzerconfigurations">Listing a Project&#8217;s AnalyzerConfigurations</a></h3>
+<div class="sect3">
+<h4 id="_example_request_6"><a class="link" href="#_example_request_6">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_6"><a class="link" href="#_example_response_6">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 531
 
+[ {
+  "analyzerName" : "org.wickedsource.locAnalyzer",
+  "enabled" : true,
+  "links" : [ {
+    "rel" : "project",
+    "href" : "http://localhost:8080/projects/1"
+  }, {
+    "rel" : "list",
+    "href" : "http://localhost:8080/projects/1/analyzers"
+  } ]
+}, {
+  "analyzerName" : "org.wickedsource.fooAnalyzer",
+  "enabled" : false,
+  "links" : [ {
+    "rel" : "project",
+    "href" : "http://localhost:8080/projects/1"
+  }, {
+    "rel" : "list",
+    "href" : "http://localhost:8080/projects/1/analyzers"
+  } ]
+} ]</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -961,11 +1020,11 @@ Content-Length: 164
 
 {
   "fieldErrors" : [ {
-    "field" : "name",
-    "message" : "may not be null"
-  }, {
     "field" : "vcsUrl",
     "message" : "must be a valid URL"
+  }, {
+    "field" : "name",
+    "message" : "may not be null"
   } ]
 }</code></pre>
 </div>
@@ -1015,7 +1074,7 @@ Content-Length: 164
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-06-21 21:38:08 +02:00
+Last updated 2016-06-21 23:29:36 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

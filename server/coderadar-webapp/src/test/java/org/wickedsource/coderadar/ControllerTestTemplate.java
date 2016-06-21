@@ -144,4 +144,18 @@ public abstract class ControllerTestTemplate {
         };
     }
 
+    protected <T> ResultMatcher containsList(Class<T> clazz) {
+        return result -> {
+            String json = result.getResponse().getContentAsString();
+            try {
+                List<T> list = fromJson(json, List.class);
+                for (T object : list) {
+                    Assert.assertNotNull(object);
+                }
+            } catch (Exception e) {
+                Assert.fail(String.format("expected JSON representation of class %s but found '%s'", clazz, json));
+            }
+        };
+    }
+
 }
