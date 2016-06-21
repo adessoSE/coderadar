@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 buildscript {
     repositories {
         mavenCentral()
@@ -30,7 +32,8 @@ test{
 
 asciidoctor {
     attributes  'snippets': snippetsDir,
-                'version': version
+                'version': version,
+                'date': new SimpleDateFormat("yyyy-MM-dd").format(new Date())
     inputs.dir snippetsDir
     dependsOn test
     sourceDir 'src/main/asciidoc'

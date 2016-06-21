@@ -29,4 +29,12 @@ public class Factories {
     public static FilePatternFactory filePattern() {
         return new FilePatternFactory();
     }
+
+    public static AnalyzerConfigurationResourceFactory analyzerConfigurationResource(){
+        return new AnalyzerConfigurationResourceFactory();
+    }
+
+    public static AnalyzerConfigurationFactory analyzerConfiguration(){
+        return new AnalyzerConfigurationFactory();
+    }
 }

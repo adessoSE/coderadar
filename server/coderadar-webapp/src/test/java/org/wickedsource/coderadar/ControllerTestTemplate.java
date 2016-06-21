@@ -59,10 +59,14 @@ public abstract class ControllerTestTemplate {
      * hypermedia links. This method should be used for mapping request payload only,
      * since the hypermedia links are expected in response payloads.
      */
-    public <T> String toJsonWithoutLinks(T object) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.addMixIn(object.getClass(), IgnoreLinksMixin.class);
-        return mapper.writeValueAsString(object);
+    public <T> String toJsonWithoutLinks(T object) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.addMixIn(object.getClass(), IgnoreLinksMixin.class);
+            return mapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public ResultMatcher validationErrorForField(String fieldName) {
@@ -135,7 +139,7 @@ public abstract class ControllerTestTemplate {
                 T object = fromJson(json, clazz);
                 Assert.assertNotNull(object);
             } catch (Exception e) {
-                Assert.fail(String.format("expected JSON representation of class %s but found '%s'", clazz,  json));
+                Assert.fail(String.format("expected JSON representation of class %s but found '%s'", clazz, json));
             }
         };
     }

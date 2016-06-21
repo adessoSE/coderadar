@@ -1,10 +1,10 @@
-= coderadar API {version}
-Tom Hombergs
+= coderadar REST API
+v{version}, Tom Hombergs, {date}
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
-:toclevels: 3
+:toclevels: 2
 :sectlinks:
 
 [introduction]
@@ -19,18 +19,22 @@ describes the REST API of the coderadar server.
 A project defines some metadata about the project you want coderadar to analyze. With a project resource
 and its sub-resources you provide coderadar with the information it needs to analyze the source code.
 
+=== Structure
+include::{snippets}/projects/post/request-fields.adoc[]
+
+=== Hypermedia Links
+include::{snippets}/projects/post/links.adoc[]
+
 === Listing Projects
 TODO
 
 === Creating a Project
 
-==== Request
+==== Example Request
 include::{snippets}/projects/post/curl-request.adoc[]
-include::{snippets}/projects/post/request-fields.adoc[]
 
-==== Response
+==== Example Response
 include::{snippets}/projects/post/http-response.adoc[]
-include::{snippets}/projects/post/links.adoc[]
 
 === Updating a Project
 TODO
@@ -40,26 +44,57 @@ TODO
 
 == File Patterns
 A file pattern describes a set of files within a project's code base. Each project can have several file patterns
-defined, each matching a set of files that may be handled differently by coderadar during analysis.
+defined. Each file pattern belongs to a certain file set, the most important of which is the SOURCE file set that
+is supposed to contain all source code files of your project.
+
+File patterns may either define a pattern for files to be INCLUDED or files to be EXCLUDED. To compile the list of files
+contained in a certain file set (like the SOURCE file set), coderadar will first apply all INCLUDE patterns of that file set and then apply all EXCLUDE
+patterns. Thus, the file set will include all INCLUDED files except those that were part of an EXCLUDE pattern.
+
+=== Structure
+include::{snippets}/filepatterns/post/request-fields.adoc[]
+
+=== Hypermedia Links
+include::{snippets}/filepatterns/post/links.adoc[]
 
 === Listing a Project's File Patterns
 
-==== Request
+==== Example Request
 include::{snippets}/filepatterns/get/curl-request.adoc[]
 
-==== Response
+==== Example Response
 include::{snippets}/filepatterns/get/http-response.adoc[]
 
 === Setting a Project's File Patterns
-You can only set all File Patterns of a project at once.
+Coderadar views a project's list of file patterns as a single resource. Hence, you can only list and save
+all file patterns of a project at once.
 
-==== Request
+==== Example Request
 include::{snippets}/filepatterns/post/curl-request.adoc[]
-include::{snippets}/filepatterns/post/request-fields.adoc[]
 
-==== Response
+==== Example Response
 include::{snippets}/filepatterns/post/http-response.adoc[]
-include::{snippets}/filepatterns/post/links.adoc[]
+
+== Analyzer Configuration
+
+Coderadar has a plugin system for source code analyzers so you can implement your own analyzers that produce the metrics
+you need (or you can use the analyzer plugins that are shipped with coderadar). For each project, you can configure each analyzer
+plugin via the AnalyzerConfiguration resource.
+
+=== Structure
+include::{snippets}/analyzerConfiguration/post/request-fields.adoc[]
+
+=== Adding / Updating an AnalyzerConfiguration
+
+==== Example Request
+include::{snippets}/analyzerConfiguration/post/curl-request.adoc[]
+
+==== Example Response
+include::{snippets}/analyzerConfiguration/post/http-response.adoc[]
+
+=== Deleting an AnalyzerConfiguration from a Project
+
+=== Listing a Project's AnalyzerConfigurations
 
 = Error Handling
 

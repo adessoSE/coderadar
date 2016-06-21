@@ -5,8 +5,8 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="Tom Hombergs">
-<title>coderadar API 1.0.0.SNAPSHOT</title>
+<meta name="author" content="v1.0.0.SNAPSHOT, Tom Hombergs, 2016-06-21">
+<title>coderadar REST API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -421,9 +421,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>coderadar API 1.0.0.SNAPSHOT</h1>
+<h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">Tom Hombergs</span><br>
+<span id="author" class="author">v1.0.0.SNAPSHOT, Tom Hombergs, 2016-06-21</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -434,27 +434,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_project">Project</a>
 <ul class="sectlevel2">
 <li><a href="#_listing_projects">Listing Projects</a></li>
-<li><a href="#_creating_a_project">Creating a Project</a>
-<ul class="sectlevel3">
-<li><a href="#_request">Request</a></li>
-<li><a href="#_response">Response</a></li>
-</ul>
-</li>
+<li><a href="#_creating_a_project">Creating a Project</a></li>
 <li><a href="#_updating_a_project">Updating a Project</a></li>
 <li><a href="#_deleting_a_project">Deleting a Project</a></li>
 </ul>
 </li>
-<li><a href="#_file_patterns">File Patterns</a></li>
-<li><a href="#_listing_a_project_s_file_patterns">Listing a Project&#8217;s File Patterns</a>
+<li><a href="#_file_patterns">File Patterns</a>
 <ul class="sectlevel2">
-<li><a href="#_request_2">Request</a></li>
-<li><a href="#_response_2">Response</a></li>
+<li><a href="#_listing_a_project_s_file_patterns">Listing a Project&#8217;s File Patterns</a></li>
+<li><a href="#_setting_a_project_s_file_patterns">Setting a Project&#8217;s File Patterns</a></li>
 </ul>
 </li>
-<li><a href="#_setting_a_project_s_file_patterns">Setting a Project&#8217;s File Patterns</a>
+<li><a href="#_analyzer_configuration">Analyzer Configuration</a>
 <ul class="sectlevel2">
-<li><a href="#_request_3">Request</a></li>
-<li><a href="#_response_3">Response</a></li>
+<li><a href="#_structure_2">Structure</a></li>
+<li><a href="#_adding_updating_an_analyzerconfiguration">Adding / Updating an AnalyzerConfiguration</a></li>
+<li><a href="#_deleting_an_analyzerconfiguration_from_a_project">Deleting an AnalyzerConfiguration from a Project</a></li>
+<li><a href="#_listing_a_project_s_analyzerconfigurations">Listing a Project&#8217;s AnalyzerConfigurations</a></li>
 </ul>
 </li>
 </ul>
@@ -497,18 +493,7 @@ and its sub-resources you provide coderadar with the information it needs to ana
 <div class="sect2">
 <h3 id="_creating_a_project"><a class="link" href="#_creating_a_project">Creating a Project</a></h3>
 <div class="sect3">
-<h4 id="_request"><a class="link" href="#_request">Request</a></h4>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/projects' -i -X POST -H 'Content-Type: application/json' -d '{
-  "name" : "name",
-  "vcsType" : "GIT",
-  "vcsUrl" : "http://valid.url",
-  "vcsUser" : "user",
-  "vcsPassword" : "pass"
-}'</code></pre>
-</div>
-</div>
+<h4 id="_structure"><a class="link" href="#_structure">Structure</a></h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 25%;">
@@ -557,7 +542,21 @@ and its sub-resources you provide coderadar with the information it needs to ana
 </table>
 </div>
 <div class="sect3">
-<h4 id="_response"><a class="link" href="#_response">Response</a></h4>
+<h4 id="_example_request"><a class="link" href="#_example_request">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/projects' -i -X POST -H 'Content-Type: application/json' -d '{
+  "name" : "name",
+  "vcsType" : "GIT",
+  "vcsUrl" : "http://valid.url",
+  "vcsUser" : "user",
+  "vcsPassword" : "pass"
+}'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response"><a class="link" href="#_example_response">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
@@ -623,33 +622,36 @@ Content-Length: 313
 <div class="sectionbody">
 <div class="paragraph">
 <p>A file pattern describes a set of files within a project&#8217;s code base. Each project can have several file patterns
-defines, each matching a set of files that may be handled differently by coderadar during analysis.</p>
+defined. Each file pattern belongs to a certain file set, the most important of which is the SOURCE file set that
+is supposed to contain all source code files of your project.</p>
 </div>
+<div class="paragraph">
+<p>File patterns may either define a pattern for files to be INCLUDED or files to be EXCLUDED. To compile the list of files
+contained in a certain file set (like the SOURCE file set), coderadar will first apply all INCLUDE patterns of that file set and then apply all EXCLUDE
+patterns. Thus, the file set will include all INCLUDED files except those that were part of an EXCLUDE pattern.</p>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_listing_a_project_s_file_patterns"><a class="link" href="#_listing_a_project_s_file_patterns">Listing a Project&#8217;s File Patterns</a></h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_request_2"><a class="link" href="#_request_2">Request</a></h3>
+<h3 id="_listing_a_project_s_file_patterns"><a class="link" href="#_listing_a_project_s_file_patterns">Listing a Project&#8217;s File Patterns</a></h3>
+<div class="sect3">
+<h4 id="_example_request_2"><a class="link" href="#_example_request_2">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/projects/1/files' -i -H 'Content-Type: application/json' -d '{
   "filePatterns" : [ {
     "pattern" : "src/main/java/**/*.java",
     "inclusionType" : "INCLUDE",
-    "fileType" : "SOURCE"
+    "fileSet" : "SOURCE"
   }, {
     "pattern" : "src/main/java/**/generated/**/*.java",
     "inclusionType" : "EXCLUDE",
-    "fileType" : "SOURCE"
+    "fileSet" : "SOURCE"
   } ]
 }'</code></pre>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_response_2"><a class="link" href="#_response_2">Response</a></h3>
+<div class="sect3">
+<h4 id="_example_response_2"><a class="link" href="#_example_response_2">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -670,26 +672,25 @@ Content-Length: 210
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_setting_a_project_s_file_patterns"><a class="link" href="#_setting_a_project_s_file_patterns">Setting a Project&#8217;s File Patterns</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>You can only set all File Patterns of a project at once.</p>
-</div>
 <div class="sect2">
-<h3 id="_request_3"><a class="link" href="#_request_3">Request</a></h3>
+<h3 id="_setting_a_project_s_file_patterns"><a class="link" href="#_setting_a_project_s_file_patterns">Setting a Project&#8217;s File Patterns</a></h3>
+<div class="paragraph">
+<p>Coderadar views a project&#8217;s list of file patterns as a single resource. Hence, you can only list and save
+all file patterns of a project at once.</p>
+</div>
+<div class="sect3">
+<h4 id="_example_request_3"><a class="link" href="#_example_request_3">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/projects/1/files' -i -X POST -H 'Content-Type: application/json' -d '{
   "filePatterns" : [ {
     "pattern" : "src/main/java/**/*.java",
     "inclusionType" : "INCLUDE",
-    "fileType" : "SOURCE"
+    "fileSet" : "SOURCE"
   }, {
     "pattern" : "src/main/java/**/generated/**/*.java",
     "inclusionType" : "EXCLUDE",
-    "fileType" : "SOURCE"
+    "fileSet" : "SOURCE"
   } ]
 }'</code></pre>
 </div>
@@ -721,31 +722,31 @@ Content-Length: 210
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">filePatterns[].fileType</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">filePatterns[].fileSet</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The type of files described by this pattern. Currently, the only available value is 'SOURCE' describing source code files.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The set of files the files matching this pattern belong to. Currently, the only available value is 'SOURCE' describing source code files.</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="sect2">
-<h3 id="_response_3"><a class="link" href="#_response_3">Response</a></h3>
+<div class="sect3">
+<h4 id="_example_response_3"><a class="link" href="#_example_response_3">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 448
+Content-Length: 446
 
 {
   "filePatterns" : [ {
     "pattern" : "src/main/java/**/*.java",
     "inclusionType" : "INCLUDE",
-    "fileType" : "SOURCE"
+    "fileSet" : "SOURCE"
   }, {
     "pattern" : "src/main/java/**/generated/**/*.java",
     "inclusionType" : "EXCLUDE",
-    "fileType" : "SOURCE"
+    "fileSet" : "SOURCE"
   } ],
   "links" : [ {
     "rel" : "self",
@@ -782,6 +783,92 @@ Content-Length: 448
 </div>
 </div>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_analyzer_configuration"><a class="link" href="#_analyzer_configuration">Analyzer Configuration</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Coderadar has a plugin system for source code analyzers so you can implement your own analyzers that produce the metrics
+you need (or you can use the analyzer plugins that are shipped with coderadar). For each project, you can configure each analyzer
+plugin via the AnalyzerConfiguration resource.</p>
+</div>
+<div class="sect2">
+<h3 id="_structure_2"><a class="link" href="#_structure_2">Structure</a></h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">analyzerName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the analyzer plugin to which the AnalyzerConfiguration is applied. This should always be the fully qualified class name of the class that implements the plugin interface.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set to TRUE if you want the analyzer plugin to be enabled and to FALSE if not. You have to specify each analyzer plugin you want to have enabled. If a project does not have a configuration for a certain plugin, that plugin is NOT enabled by default.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_adding_updating_an_analyzerconfiguration"><a class="link" href="#_adding_updating_an_analyzerconfiguration">Adding / Updating an AnalyzerConfiguration</a></h3>
+<div class="sect3">
+<h4 id="_example_request_4"><a class="link" href="#_example_request_4">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/projects/1/analyzers' -i -X POST -H 'Content-Type: application/json' -d '{
+  "analyzerName" : "org.wickedsource.locAnalyzer",
+  "enabled" : true
+}'</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_4"><a class="link" href="#_example_response_4">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
+Content-Type: application/json;charset=UTF-8
+Content-Length: 262
+
+{
+  "analyzerName" : "org.wickedsource.locAnalyzer",
+  "enabled" : true,
+  "links" : [ {
+    "rel" : "project",
+    "href" : "http://localhost:8080/projects/1"
+  }, {
+    "rel" : "list",
+    "href" : "http://localhost:8080/projects/1/analyzers"
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deleting_an_analyzerconfiguration_from_a_project"><a class="link" href="#_deleting_an_analyzerconfiguration_from_a_project">Deleting an AnalyzerConfiguration from a Project</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_listing_a_project_s_analyzerconfigurations"><a class="link" href="#_listing_a_project_s_analyzerconfigurations">Listing a Project&#8217;s AnalyzerConfigurations</a></h3>
+
+</div>
+</div>
+</div>
 <h1 id="_error_handling" class="sect0"><a class="link" href="#_error_handling">Error Handling</a></h1>
 <div class="sect1">
 <h2 id="_successful_requests"><a class="link" href="#_successful_requests">Successful Requests</a></h2>
@@ -808,11 +895,11 @@ Content-Length: 164
 
 {
   "fieldErrors" : [ {
-    "field" : "vcsUrl",
-    "message" : "must be a valid URL"
-  }, {
     "field" : "name",
     "message" : "may not be null"
+  }, {
+    "field" : "vcsUrl",
+    "message" : "must be a valid URL"
   } ]
 }</code></pre>
 </div>
@@ -862,7 +949,7 @@ Content-Length: 164
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-06-19 23:33:33 +02:00
+Last updated 2016-06-21 21:16:13 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

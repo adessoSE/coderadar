@@ -1,6 +1,6 @@
 package org.wickedsource.coderadar.filepattern.rest;
 
-import org.wickedsource.coderadar.filepattern.domain.FileType;
+import org.wickedsource.coderadar.filepattern.domain.FileSet;
 import org.wickedsource.coderadar.project.domain.InclusionType;
 
 import javax.validation.constraints.NotNull;
@@ -14,7 +14,7 @@ public class FilePatternDTO {
     private InclusionType inclusionType;
 
     @NotNull
-    private FileType fileType;
+    private FileSet fileSet;
 
     public String getPattern() {
         return pattern;
@@ -32,12 +32,12 @@ public class FilePatternDTO {
         this.inclusionType = inclusionType;
     }
 
-    public FileType getFileType() {
-        return fileType;
+    public FileSet getFileSet() {
+        return fileSet;
     }
 
-    public void setFileType(FileType fileType) {
-        this.fileType = fileType;
+    public void setFileSet(FileSet fileSet) {
+        this.fileSet = fileSet;
     }
 
 }

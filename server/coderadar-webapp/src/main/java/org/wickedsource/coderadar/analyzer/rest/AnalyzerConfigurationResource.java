@@ -4,7 +4,7 @@ import org.springframework.hateoas.ResourceSupport;
 
 import javax.validation.constraints.NotNull;
 
-class AnalyzerConfigurationResource extends ResourceSupport {
+public class AnalyzerConfigurationResource extends ResourceSupport {
 
     @NotNull
     private String analyzerName;

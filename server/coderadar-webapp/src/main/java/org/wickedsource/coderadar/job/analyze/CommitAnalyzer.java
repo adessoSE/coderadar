@@ -27,7 +27,7 @@ import org.wickedsource.coderadar.file.domain.File;
 import org.wickedsource.coderadar.file.domain.FileRepository;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
-import org.wickedsource.coderadar.filepattern.domain.FileType;
+import org.wickedsource.coderadar.filepattern.domain.FileSet;
 import org.wickedsource.coderadar.metric.domain.FindingRepository;
 import org.wickedsource.coderadar.metric.domain.MetricValue;
 import org.wickedsource.coderadar.metric.domain.MetricValueId;
@@ -131,7 +131,7 @@ public class CommitAnalyzer {
             parentId = gitCommit.getParent(0).getId();
         }
 
-        List<FilePattern> sourceFilePatterns = filePatternRepository.findByProjectIdAndFileType(commit.getProject().getId(), FileType.SOURCE);
+        List<FilePattern> sourceFilePatterns = filePatternRepository.findByProjectIdAndFileSet(commit.getProject().getId(), FileSet.SOURCE);
         FileMatchingPattern pattern = toFileMatchingPattern(sourceFilePatterns);
 
         List<DiffEntry> diffs = diffFormatter.scan(parentId, gitCommit);

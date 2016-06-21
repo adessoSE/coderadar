@@ -1,7 +1,7 @@
 package org.wickedsource.coderadar.factories;
 
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
-import org.wickedsource.coderadar.filepattern.domain.FileType;
+import org.wickedsource.coderadar.filepattern.domain.FileSet;
 import org.wickedsource.coderadar.project.domain.InclusionType;
 
 public class FilePatternFactory {
@@ -10,7 +10,7 @@ public class FilePatternFactory {
         FilePattern pattern = new FilePattern();
         pattern.setPattern("src/main/java/**/*.java");
         pattern.setInclusionType(InclusionType.INCLUDE);
-        pattern.setFileType(FileType.SOURCE);
+        pattern.setFileSet(FileSet.SOURCE);
         return pattern;
     }
 
@@ -18,7 +18,7 @@ public class FilePatternFactory {
         FilePattern pattern = new FilePattern();
         pattern.setPattern("src/main/java/**/generated/**/*.java");
         pattern.setInclusionType(InclusionType.EXCLUDE);
-        pattern.setFileType(FileType.SOURCE);
+        pattern.setFileSet(FileSet.SOURCE);
         return pattern;
     }
 

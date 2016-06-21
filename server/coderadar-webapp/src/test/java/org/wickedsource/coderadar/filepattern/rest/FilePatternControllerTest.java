@@ -60,7 +60,7 @@ public class FilePatternControllerTest extends ControllerTestTemplate {
                         requestFields(
                                 fields.withPath("filePatterns[].pattern").description("Ant-style file pattern matching a set of files in the project's code base."),
                                 fields.withPath("filePatterns[].inclusionType").description("Either 'INCLUDE' if the matching set of files is to be included or 'EXCLUDE' if it is to be excluded."),
-                                fields.withPath("filePatterns[].fileType").description("The type of files described by this pattern. Currently, the only available value is 'SOURCE' describing source code files."))));
+                                fields.withPath("filePatterns[].fileSet").description("The set of files the files matching this pattern belong to. Currently, the only available value is 'SOURCE' describing source code files."))));
     }
 
     @Test

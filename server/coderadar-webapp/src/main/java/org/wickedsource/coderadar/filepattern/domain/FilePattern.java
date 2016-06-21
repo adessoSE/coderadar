@@ -24,7 +24,7 @@ public class FilePattern {
     private InclusionType inclusionType;
 
     @Column
-    private FileType fileType;
+    private FileSet fileSet;
 
     @ManyToOne
     private Project project;
@@ -56,12 +56,12 @@ public class FilePattern {
         this.inclusionType = inclusionType;
     }
 
-    public FileType getFileType() {
-        return fileType;
+    public FileSet getFileSet() {
+        return fileSet;
     }
 
-    public void setFileType(FileType fileType) {
-        this.fileType = fileType;
+    public void setFileSet(FileSet fileSet) {
+        this.fileSet = fileSet;
     }
 
     public Project getProject() {

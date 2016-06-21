@@ -39,7 +39,7 @@ public class AnalyzerConfigurationController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<AnalyzerConfigurationResource> setAnalyzerConfigurationForProject(@PathVariable Long projectId, @Valid @RequestBody AnalyzerConfigurationResource resource) {
         checkAnalyzerExistsOrThrowException(resource.getAnalyzerName());
-        AnalyzerConfigurationResourceAssembler assembler = new AnalyzerConfigurationResourceAssembler();
+        AnalyzerConfigurationResourceAssembler assembler = new AnalyzerConfigurationResourceAssembler(projectId);
         Project project = loadProjectOrThrowException(projectId);
         AnalyzerConfiguration entity = analyzerConfigurationRepository.findByProjectIdAndAnalyzerName(projectId, resource.getAnalyzerName());
         if (entity == null) {
@@ -48,14 +48,20 @@ public class AnalyzerConfigurationController {
         }
         assembler.updateEntity(entity, resource);
         AnalyzerConfiguration savedEntity = analyzerConfigurationRepository.save(entity);
-        return new ResponseEntity<>(assembler.toResource(savedEntity), HttpStatus.OK);
+        return new ResponseEntity<>(assembler.toResource(savedEntity), HttpStatus.CREATED);
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteAnalyzerConfigurationFromProject(@PathVariable Long projectId, @Valid @RequestBody String analyzerName) {
+        analyzerConfigurationRepository.deleteByProjectIdAndAnalyzerName(projectId, analyzerName);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<AnalyzerConfigurationResource>> getAnalyzerConfigurationsForProject(@PathVariable Long projectId) {
         checkProjectExistsOrThrowException(projectId);
         List<AnalyzerConfiguration> configurations = analyzerConfigurationRepository.findByProjectId(projectId);
-        AnalyzerConfigurationResourceAssembler assembler = new AnalyzerConfigurationResourceAssembler();
+        AnalyzerConfigurationResourceAssembler assembler = new AnalyzerConfigurationResourceAssembler(projectId);
         return new ResponseEntity<>(assembler.toResourceList(configurations), HttpStatus.OK);
     }
 

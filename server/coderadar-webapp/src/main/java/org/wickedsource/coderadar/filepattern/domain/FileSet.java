@@ -1,6 +1,6 @@
 package org.wickedsource.coderadar.filepattern.domain;
 
-public enum FileType {
+public enum FileSet {
 
     SOURCE;
 
