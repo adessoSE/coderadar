@@ -46,7 +46,7 @@ test:
     - echo "Running Docker containers"; docker ps -a
     - echo "Stopping all Docker containers"; docker stop $(docker ps -a -q)
     - mkdir -p $CIRCLE_TEST_REPORTS/docker/
-    - docker logs coderadar_coderadarserver_1 > $CIRCLE_TEST_REPORTS/docker/coderadar-server.log
+    - docker logs coderadar_coderadar-server_1 > $CIRCLE_TEST_REPORTS/docker/coderadar-server.log
 
 deployment:
   hub:
