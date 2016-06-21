@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.scan;
+package org.wickedsource.coderadar.job.scan.commit;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -19,8 +19,6 @@ import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.WorkdirManager;
 import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
-import org.wickedsource.coderadar.job.scan.commit.CommitScanner;
-import org.wickedsource.coderadar.job.scan.commit.ScanCommitsJob;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
@@ -36,7 +34,7 @@ import java.net.URL;
 
 import static org.mockito.Mockito.*;
 
-public class FileScannerIntegrationTest extends GitTestTemplate {
+public class CommitScannerIntegrationTest extends GitTestTemplate {
 
     private Logger logger = LoggerFactory.getLogger(ScanCommitsJob.class);
 

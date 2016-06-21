@@ -28,6 +28,17 @@ ext{
 
 test{
     outputs.dir snippetsDir
+
+    useJUnit{
+        // disable long-running integration tests by default
+        excludeCategories 'org.wickedsource.coderadar.IntegrationTest'
+    }
+}
+
+task integrationTest(type: Test){
+    useJUnit{
+        includeCategories 'org.wickedsource.coderadar.IntegrationTest'
+    }
 }
 
 asciidoctor {
