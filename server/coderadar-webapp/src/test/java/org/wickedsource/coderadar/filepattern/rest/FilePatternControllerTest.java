@@ -55,8 +55,8 @@ public class FilePatternControllerTest extends ControllerTestTemplate {
                 .andExpect(contains(FilePatternResource.class))
                 .andDo(document("filepatterns/post",
                         links(atomLinks(),
-                                linkWithRel("self").description("Link to the file patterns resource just created."),
-                                linkWithRel("project").description("Link to the project these file patterns belong to.")),
+                                linkWithRel("self").description("Link to GET the list of file patterns of a project."),
+                                linkWithRel("project").description("Link to GET the project these file patterns belong to.")),
                         requestFields(
                                 fields.withPath("filePatterns[].pattern").description("Ant-style file pattern matching a set of files in the project's code base."),
                                 fields.withPath("filePatterns[].inclusionType").description("Either 'INCLUDE' if the matching set of files is to be included or 'EXCLUDE' if it is to be excluded."),

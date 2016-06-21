@@ -452,6 +452,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_analyzer_configuration">Analyzer Configuration</a>
 <ul class="sectlevel2">
 <li><a href="#_structure_3">Structure</a></li>
+<li><a href="#_hypermedia_links_3">Hypermedia Links</a></li>
 <li><a href="#_adding_updating_an_analyzerconfiguration">Adding / Updating an AnalyzerConfiguration</a></li>
 <li><a href="#_deleting_an_analyzerconfiguration_from_a_project">Deleting an AnalyzerConfiguration from a Project</a></li>
 <li><a href="#_listing_a_project_s_analyzerconfigurations">Listing a Project&#8217;s AnalyzerConfigurations</a></li>
@@ -553,11 +554,15 @@ and its sub-resources you provide coderadar with the information it needs to ana
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project resource just created.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to GET the project.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>files</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project&#8217;s file patterns.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to GET the project&#8217;s file patterns.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>analyzers</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to GET the project&#8217;s analyzer configurations.</p></td>
 </tr>
 </tbody>
 </table>
@@ -574,13 +579,18 @@ and its sub-resources you provide coderadar with the information it needs to ana
 <h4 id="_example_request"><a class="link" href="#_example_request">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/projects' -i -X POST -H 'Content-Type: application/json' -d '{
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 129
+
+{
   "name" : "name",
   "vcsType" : "GIT",
   "vcsUrl" : "http://valid.url",
   "vcsUser" : "user",
   "vcsPassword" : "pass"
-}'</code></pre>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -590,7 +600,7 @@ and its sub-resources you provide coderadar with the information it needs to ana
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 313
+Content-Length: 406
 
 {
   "name" : "Testproject",
@@ -604,6 +614,9 @@ Content-Length: 313
   }, {
     "rel" : "files",
     "href" : "http://localhost:8080/projects/1/files"
+  }, {
+    "rel" : "analyzers",
+    "href" : "http://localhost:8080/projects/1/analyzers"
   } ]
 }</code></pre>
 </div>
@@ -690,11 +703,11 @@ patterns. Thus, the file set will include all INCLUDED files except those that w
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the file patterns resource just created.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to GET the list of file patterns of a project.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project these file patterns belong to.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to GET the project these file patterns belong to.</p></td>
 </tr>
 </tbody>
 </table>
@@ -705,7 +718,12 @@ patterns. Thus, the file set will include all INCLUDED files except those that w
 <h4 id="_example_request_2"><a class="link" href="#_example_request_2">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/projects/1/files' -i -H 'Content-Type: application/json' -d '{
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/files HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 264
+
+{
   "filePatterns" : [ {
     "pattern" : "src/main/java/**/*.java",
     "inclusionType" : "INCLUDE",
@@ -715,7 +733,7 @@ patterns. Thus, the file set will include all INCLUDED files except those that w
     "inclusionType" : "EXCLUDE",
     "fileSet" : "SOURCE"
   } ]
-}'</code></pre>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -751,7 +769,12 @@ all file patterns of a project at once.</p>
 <h4 id="_example_request_3"><a class="link" href="#_example_request_3">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/projects/1/files' -i -X POST -H 'Content-Type: application/json' -d '{
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/files HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 264
+
+{
   "filePatterns" : [ {
     "pattern" : "src/main/java/**/*.java",
     "inclusionType" : "INCLUDE",
@@ -761,7 +784,7 @@ all file patterns of a project at once.</p>
     "inclusionType" : "EXCLUDE",
     "fileSet" : "SOURCE"
   } ]
-}'</code></pre>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -837,15 +860,45 @@ plugin via the AnalyzerConfiguration resource.</p>
 </table>
 </div>
 <div class="sect2">
+<h3 id="_hypermedia_links_3"><a class="link" href="#_hypermedia_links_3">Hypermedia Links</a></h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Relation</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>list</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to GET the list of AnalyzerConfigurations for this project.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to GET the project to which the AnalyzerConfiguration belongs.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
 <h3 id="_adding_updating_an_analyzerconfiguration"><a class="link" href="#_adding_updating_an_analyzerconfiguration">Adding / Updating an AnalyzerConfiguration</a></h3>
 <div class="sect3">
 <h4 id="_example_request_4"><a class="link" href="#_example_request_4">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/projects/1/analyzers' -i -X POST -H 'Content-Type: application/json' -d '{
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 76
+
+{
   "analyzerName" : "org.wickedsource.locAnalyzer",
   "enabled" : true
-}'</code></pre>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -908,11 +961,11 @@ Content-Length: 164
 
 {
   "fieldErrors" : [ {
-    "field" : "vcsUrl",
-    "message" : "must be a valid URL"
-  }, {
     "field" : "name",
     "message" : "may not be null"
+  }, {
+    "field" : "vcsUrl",
+    "message" : "must be a valid URL"
   } ]
 }</code></pre>
 </div>
@@ -962,7 +1015,7 @@ Content-Length: 164
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-06-21 21:20:04 +02:00
+Last updated 2016-06-21 21:38:08 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

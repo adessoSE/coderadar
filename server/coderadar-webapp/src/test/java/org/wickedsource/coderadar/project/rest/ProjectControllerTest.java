@@ -63,8 +63,9 @@ public class ProjectControllerTest extends ControllerTestTemplate {
         ConstrainedFields fields = fields(ProjectResource.class);
         return document("projects/post",
                 links(atomLinks(),
-                        linkWithRel("self").description("Link to the project resource just created."),
-                        linkWithRel("files").description("Link to the project's file patterns.")),
+                        linkWithRel("self").description("Link to GET the project."),
+                        linkWithRel("files").description("Link to GET the project's file patterns."),
+                        linkWithRel("analyzers").description("Link to GET the project's analyzer configurations.")),
                 requestFields(
                         fields.withPath("name").description("The name of the project to be analyzed."),
                         fields.withPath("vcsUrl").description("The URL to the version control repository where the project's source files are kept."),
