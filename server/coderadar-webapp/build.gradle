@@ -122,7 +122,7 @@ bootRun {
 task buildDocker(type: Docker, dependsOn: build) {
     push = false
     tagVersion = 'latest'
-    tag = "${project.dockerGroup}/coderadar"
+    tag = "${project.dockerGroup}/coderadar-server"
 
     dockerfile = file('src/main/docker/Dockerfile')
     doFirst {
