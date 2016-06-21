@@ -20,7 +20,7 @@ def getBuildVersion(String baseVersion) {
             version += "-PR${project.pullRequestNumber}"
         }
         version += "-${project.buildNumber}"
-        version += "-${project.gitCommitShort}"
+        version += "-${project.gitCommit}"
 
     } else {
         version += "-local"
