@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
@@ -20,7 +21,7 @@ import java.util.List;
 @Controller
 @ExposesResourceFor(Project.class)
 @Transactional
-@RequestMapping(path="/projects")
+@RequestMapping(path = "/projects")
 public class ProjectController {
 
     private ProjectRepository projectRepository;
@@ -50,12 +51,13 @@ public class ProjectController {
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<ProjectResource> getProject(@PathVariable Long id) {
         Project project = projectRepository.findOne(id);
-        if (project != null) {
-            ProjectResource resultResource = projectAssembler.toResource(project);
-            return new ResponseEntity<>(resultResource, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        if (project == null) {
+            throw new ResourceNotFoundException();
         }
+
+        ProjectResource resultResource = projectAssembler.toResource(project);
+        return new ResponseEntity<>(resultResource, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)

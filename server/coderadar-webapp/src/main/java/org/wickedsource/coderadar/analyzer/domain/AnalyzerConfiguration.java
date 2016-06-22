@@ -4,6 +4,10 @@ import org.wickedsource.coderadar.project.domain.Project;
 
 import javax.persistence.*;
 
+/**
+ * An AnalyzerConfiguration stores the configuration for a single analyzer plugin
+ * in a project.
+ */
 @Entity
 @Table
 public class AnalyzerConfiguration {

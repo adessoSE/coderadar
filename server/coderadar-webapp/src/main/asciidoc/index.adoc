@@ -127,6 +127,14 @@ include::{snippets}/analyzerConfiguration/get/http-request.adoc[]
 ==== Example Response
 include::{snippets}/analyzerConfiguration/get/http-response.adoc[]
 
+=== Loading a single AnalyzerConfiguration
+
+==== Example Request
+include::{snippets}/analyzerConfiguration/getSingle/http-request.adoc[]
+
+==== Example Response
+include::{snippets}/analyzerConfiguration/getSingle/http-response.adoc[]
+
 = Error Handling
 
 == Successful Requests

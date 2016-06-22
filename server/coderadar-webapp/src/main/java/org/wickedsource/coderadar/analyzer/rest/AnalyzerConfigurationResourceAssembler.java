@@ -24,6 +24,7 @@ public class AnalyzerConfigurationResourceAssembler extends ResourceAssemblerSup
         AnalyzerConfigurationResource resource = new AnalyzerConfigurationResource(entity.getAnalyzerName(), entity.getEnabled());
         resource.add(linkTo(methodOn(ProjectController.class).getProject(projectId)).withRel("project"));
         resource.add(linkTo(methodOn(AnalyzerConfigurationController.class).getAnalyzerConfigurationsForProject(projectId)).withRel("list"));
+        resource.add(linkTo(methodOn(AnalyzerConfigurationController.class).getSingleAnalyzerConfigurationForProject(projectId, entity.getId())).withRel("self"));
         return resource;
     }
 

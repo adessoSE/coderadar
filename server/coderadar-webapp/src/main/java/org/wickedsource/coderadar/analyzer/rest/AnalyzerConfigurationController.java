@@ -14,6 +14,7 @@ import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationRepository;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerPluginRegistry;
+import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
 import org.wickedsource.coderadar.core.rest.validation.ValidationException;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
@@ -65,6 +66,17 @@ public class AnalyzerConfigurationController {
         return new ResponseEntity<>(assembler.toResourceList(configurations), HttpStatus.OK);
     }
 
+    @RequestMapping(path="/{analyzerConfigurationId}", method = RequestMethod.GET)
+    public ResponseEntity<AnalyzerConfigurationResource> getSingleAnalyzerConfigurationForProject(@PathVariable Long projectId, @PathVariable Long analyzerConfigurationId){
+        checkProjectExistsOrThrowException(projectId);
+        AnalyzerConfiguration configuration = analyzerConfigurationRepository.findByProjectIdAndId(projectId, analyzerConfigurationId);
+        if(configuration == null){
+            throw new ResourceNotFoundException();
+        }
+        AnalyzerConfigurationResourceAssembler assembler = new AnalyzerConfigurationResourceAssembler(projectId);
+        return new ResponseEntity<>(assembler.toResource(configuration), HttpStatus.OK);
+    }
+
     private Project loadProjectOrThrowException(Long projectId) {
         Project project = projectRepository.findOne(projectId);
         if (project == null) {
@@ -77,7 +89,7 @@ public class AnalyzerConfigurationController {
     private void checkAnalyzerExistsOrThrowException(String analyzerName) {
         SourceCodeFileAnalyzerPlugin analyzer = analyzerRegistry.getAnalyzer(analyzerName);
         if (analyzer == null) {
-            throw new ValidationException("analyzerName", "No analyzer plugin with this name exists!");
+            throw new ValidationException("analyzerName", String.format("No analyzer plugin with the name %s exists!", analyzerName));
         }
     }
 

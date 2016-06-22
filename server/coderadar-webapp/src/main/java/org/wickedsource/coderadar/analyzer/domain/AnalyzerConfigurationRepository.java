@@ -11,4 +11,6 @@ public interface AnalyzerConfigurationRepository extends CrudRepository<Analyzer
     List<AnalyzerConfiguration> findByProjectId(Long projectId);
 
     AnalyzerConfiguration deleteByProjectIdAndAnalyzerName(Long projectId, String analyzerName);
+
+    AnalyzerConfiguration findByProjectIdAndId(Long projectId, Long analyzerConfigurationId);
 }

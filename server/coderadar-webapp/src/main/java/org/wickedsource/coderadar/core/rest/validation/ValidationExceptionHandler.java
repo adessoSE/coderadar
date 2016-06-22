@@ -44,6 +44,13 @@ public class ValidationExceptionHandler {
         return errors;
     }
 
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseBody
+    public String handleNotFound(Exception e){
+        return "Resource not found!";
+    }
+
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     @ResponseBody
@@ -51,6 +58,7 @@ public class ValidationExceptionHandler {
         logger.error("Returned HTTP Status 500 due to the following exception:", e);
         return "Internal Server Error";
     }
+
 
     private ErrorDTO map(List<org.springframework.validation.FieldError> fieldErrors) {
         ErrorDTO error = new ErrorDTO();

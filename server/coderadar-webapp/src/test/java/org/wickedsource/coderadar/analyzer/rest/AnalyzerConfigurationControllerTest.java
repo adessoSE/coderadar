@@ -62,8 +62,9 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
                 .andExpect(contains(AnalyzerConfigurationResource.class))
                 .andDo(document("analyzerConfiguration/post",
                         links(atomLinks(),
-                                linkWithRel("list").description("Link to GET the list of AnalyzerConfigurations for this project."),
-                                linkWithRel("project").description("Link to GET the project to which the AnalyzerConfiguration belongs.")),
+                                linkWithRel("self").description("Link to the AnalyzerConfiguration itself."),
+                                linkWithRel("list").description("Link to the list of AnalyzerConfigurations for this project."),
+                                linkWithRel("project").description("Link to the project to which the AnalyzerConfiguration belongs.")),
                         requestFields(
                                 fields.withPath("analyzerName").description("Name of the analyzer plugin to which the AnalyzerConfiguration is applied. This should always be the fully qualified class name of the class that implements the plugin interface."),
                                 fields.withPath("enabled").description("Set to TRUE if you want the analyzer plugin to be enabled and to FALSE if not. You have to specify each analyzer plugin you want to have enabled. If a project does not have a configuration for a certain plugin, that plugin is NOT enabled by default."))));
@@ -84,6 +85,21 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
                 .andExpect(status().isOk())
                 .andExpect(containsList(AnalyzerConfigurationResource.class))
                 .andDo(document("analyzerConfiguration/get"));
+    }
+
+
+    @Test
+    public void getAnalyzerConfiguration() throws Exception {
+
+        AnalyzerConfiguration config1 = Factories.analyzerConfiguration().analyzerConfiguration();
+
+        when(analyzerConfigurationRepository.findByProjectIdAndId(1L, 1L)).thenReturn(config1);
+        when(projectRepository.countById(1L)).thenReturn(1);
+
+        mvc().perform(get("/projects/1/analyzers/1"))
+                .andExpect(status().isOk())
+                .andExpect(contains(AnalyzerConfigurationResource.class))
+                .andDo(document("analyzerConfiguration/getSingle"));
     }
 
     @Test
