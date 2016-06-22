@@ -20,8 +20,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ProjectControllerTest extends ControllerTestTemplate {
@@ -96,6 +95,19 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     }
 
     @Test
+    public void updateProject() throws Exception {
+        ProjectResource projectResource = Factories.projectResource().validProjectResource();
+
+        when(projectRepository.save(any(Project.class))).thenReturn(Factories.project().validProject());
+
+        mvc().perform(post("/projects/1")
+                .content(toJson(projectResource))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("projects/update"));
+    }
+
+    @Test
     public void getProjectSuccessfully() throws Exception {
         Project project = new Project();
         project.setId(5L);
@@ -103,6 +115,13 @@ public class ProjectControllerTest extends ControllerTestTemplate {
         mvc().perform(get("/projects/5"))
                 .andExpect(status().isOk())
                 .andDo(document("projects/get"));
+    }
+
+    @Test
+    public void deleteProject() throws Exception {
+        mvc().perform(delete("/projects/1"))
+                .andExpect(status().isOk())
+                .andDo(document("projects/delete"));
     }
 
     @Test

@@ -26,7 +26,12 @@ include::{snippets}/projects/post/request-fields.adoc[]
 include::{snippets}/projects/post/links.adoc[]
 
 === Listing Projects
-TODO
+
+==== Example Request
+include::{snippets}/projects/list/http-request.adoc[]
+
+==== Example Response
+include::{snippets}/projects/list/http-response.adoc[]
 
 === Creating a Project
 
@@ -37,10 +42,21 @@ include::{snippets}/projects/post/http-request.adoc[]
 include::{snippets}/projects/post/http-response.adoc[]
 
 === Updating a Project
-TODO
+
+==== Example Request
+include::{snippets}/projects/update/http-request.adoc[]
+
+==== Example Response
+include::{snippets}/projects/update/http-response.adoc[]
 
 === Deleting a Project
-TODO
+
+==== Example Request
+include::{snippets}/projects/delete/http-request.adoc[]
+
+==== Example Response
+include::{snippets}/projects/delete/http-response.adoc[]
+
 
 == File Patterns
 A file pattern describes a set of files within a project's code base. Each project can have several file patterns

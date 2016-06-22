@@ -70,7 +70,7 @@ public class ProjectController {
         project.setId(id);
         Project savedProject = projectRepository.save(project);
         ProjectResource resultResource = projectAssembler.toResource(savedProject);
-        return new ResponseEntity<>(resultResource, HttpStatus.CREATED);
+        return new ResponseEntity<>(resultResource, HttpStatus.OK);
     }
 
 }
