@@ -10,12 +10,12 @@ import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationRepositor
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerPluginRegistry;
 import org.wickedsource.coderadar.analyzer.loc.LocAnalyzerPlugin;
 import org.wickedsource.coderadar.factories.Factories;
+import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
 import java.util.Arrays;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -48,7 +48,7 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
         AnalyzerConfiguration entity = Factories.analyzerConfiguration().analyzerConfiguration();
 
         when(analyzerConfigurationRepository.findByProjectIdAndAnalyzerName(1L, resource.getAnalyzerName())).thenReturn(entity);
-        when(analyzerConfigurationRepository.save(entity)).thenReturn(entity);
+        when(analyzerConfigurationRepository.save(any(AnalyzerConfiguration.class))).thenReturn(entity);
         when(analyzerRegistry.getAnalyzer(resource.getAnalyzerName())).thenReturn(new LocAnalyzerPlugin());
         when(projectRepository.countById(1L)).thenReturn(1);
         when(projectRepository.findOne(1L)).thenReturn(Factories.project().validProject());
@@ -100,6 +100,25 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
                 .andExpect(status().isOk())
                 .andExpect(contains(AnalyzerConfigurationResource.class))
                 .andDo(document("analyzerConfiguration/getSingle"));
+    }
+
+    @Test
+    public void updateAnalyzerConfiguration() throws Exception {
+
+        AnalyzerConfiguration config1 = Factories.analyzerConfiguration().analyzerConfiguration();
+        Project project = Factories.project().validProject();
+        AnalyzerConfigurationResource resource = Factories.analyzerConfigurationResource().analyzerConfiguration();
+
+        when(analyzerConfigurationRepository.findByProjectIdAndId(1L, 1L)).thenReturn(config1);
+        when(projectRepository.findOne(1L)).thenReturn(project);
+        when(analyzerRegistry.getAnalyzer(resource.getAnalyzerName())).thenReturn(new LocAnalyzerPlugin());
+
+        mvc().perform(post("/projects/1/analyzers/1")
+                .content(toJsonWithoutLinks(resource))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(contains(AnalyzerConfigurationResource.class))
+                .andDo(document("analyzerConfiguration/update"));
     }
 
     @Test

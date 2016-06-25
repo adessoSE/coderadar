@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.analyzer.rest;
 
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
+import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectController;
 
 import java.util.ArrayList;
@@ -28,6 +29,13 @@ public class AnalyzerConfigurationResourceAssembler extends ResourceAssemblerSup
         return resource;
     }
 
+    public AnalyzerConfiguration updateEntity(AnalyzerConfiguration entity, AnalyzerConfigurationResource resource, Project project){
+        entity.setProject(project);
+        entity.setEnabled(resource.isEnabled());
+        entity.setAnalyzerName(resource.getAnalyzerName());
+        return entity;
+    }
+
     public List<AnalyzerConfigurationResource> toResourceList(List<AnalyzerConfiguration> entities) {
         List<AnalyzerConfigurationResource> resultList = new ArrayList<>();
         for (AnalyzerConfiguration entity : entities) {
@@ -36,9 +44,11 @@ public class AnalyzerConfigurationResourceAssembler extends ResourceAssemblerSup
         return resultList;
     }
 
-    public AnalyzerConfiguration updateEntity(AnalyzerConfiguration entity, AnalyzerConfigurationResource resource) {
+    public AnalyzerConfiguration toEntity(AnalyzerConfigurationResource resource, Project project) {
+        AnalyzerConfiguration entity = new AnalyzerConfiguration();
         entity.setAnalyzerName(resource.getAnalyzerName());
         entity.setEnabled(resource.isEnabled());
+        entity.setProject(project);
         return entity;
     }
 }

@@ -38,16 +38,11 @@ public class AnalyzerConfigurationController {
     private AnalyzerPluginRegistry analyzerRegistry;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<AnalyzerConfigurationResource> setAnalyzerConfigurationForProject(@PathVariable Long projectId, @Valid @RequestBody AnalyzerConfigurationResource resource) {
+    public ResponseEntity<AnalyzerConfigurationResource> addAnalyzerConfigurationToProject(@PathVariable Long projectId, @Valid @RequestBody AnalyzerConfigurationResource resource) {
         checkAnalyzerExistsOrThrowException(resource.getAnalyzerName());
         AnalyzerConfigurationResourceAssembler assembler = new AnalyzerConfigurationResourceAssembler(projectId);
         Project project = loadProjectOrThrowException(projectId);
-        AnalyzerConfiguration entity = analyzerConfigurationRepository.findByProjectIdAndAnalyzerName(projectId, resource.getAnalyzerName());
-        if (entity == null) {
-            entity = new AnalyzerConfiguration();
-            entity.setProject(project);
-        }
-        assembler.updateEntity(entity, resource);
+        AnalyzerConfiguration entity = assembler.toEntity(resource, project);
         AnalyzerConfiguration savedEntity = analyzerConfigurationRepository.save(entity);
         return new ResponseEntity<>(assembler.toResource(savedEntity), HttpStatus.CREATED);
     }
@@ -75,6 +70,16 @@ public class AnalyzerConfigurationController {
         }
         AnalyzerConfigurationResourceAssembler assembler = new AnalyzerConfigurationResourceAssembler(projectId);
         return new ResponseEntity<>(assembler.toResource(configuration), HttpStatus.OK);
+    }
+
+    @RequestMapping(path="/{analyzerConfigurationId}", method = RequestMethod.POST)
+    public ResponseEntity<AnalyzerConfigurationResource> updateAnalyzerConfiguration(@PathVariable Long projectId, @PathVariable Long analyzerConfigurationId, @RequestBody @Valid AnalyzerConfigurationResource resource){
+        checkAnalyzerExistsOrThrowException(resource.getAnalyzerName());
+        AnalyzerConfigurationResourceAssembler assembler = new AnalyzerConfigurationResourceAssembler(projectId);
+        Project project = loadProjectOrThrowException(projectId);
+        AnalyzerConfiguration entity = analyzerConfigurationRepository.findByProjectIdAndId(projectId, analyzerConfigurationId);
+        AnalyzerConfiguration savedEntity = assembler.updateEntity(entity, resource, project);
+        return new ResponseEntity<>(assembler.toResource(savedEntity), HttpStatus.OK);
     }
 
     private Project loadProjectOrThrowException(Long projectId) {

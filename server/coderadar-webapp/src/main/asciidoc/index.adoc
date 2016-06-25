@@ -103,7 +103,7 @@ include::{snippets}/analyzerConfiguration/post/request-fields.adoc[]
 === Hypermedia Links
 include::{snippets}/analyzerConfiguration/post/links.adoc[]
 
-=== Adding / Updating an AnalyzerConfiguration
+=== Adding an AnalyzerConfiguration
 
 ==== Example Request
 include::{snippets}/analyzerConfiguration/post/http-request.adoc[]
@@ -118,6 +118,14 @@ include::{snippets}/analyzerConfiguration/delete/http-request.adoc[]
 
 ==== Example Response
 include::{snippets}/analyzerConfiguration/delete/http-response.adoc[]
+
+=== Updating an AnalyzerConfiguration
+
+==== Example Request
+include::{snippets}/analyzerConfiguration/update/http-request.adoc[]
+
+==== Example Response
+include::{snippets}/analyzerConfiguration/update/http-response.adoc[]
 
 === Listing a Project's AnalyzerConfigurations
 
