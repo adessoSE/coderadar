@@ -19,6 +19,7 @@ dependencies:
     - docker-compose version
     - if [[ -e ~/docker/java.tar ]]; then docker load --input ~/docker/java.tar; fi
 
+    - chmod +x gradlew
     - ./gradlew --console=plain buildDocker
 
     # pull image here to cache it and speed up the test
