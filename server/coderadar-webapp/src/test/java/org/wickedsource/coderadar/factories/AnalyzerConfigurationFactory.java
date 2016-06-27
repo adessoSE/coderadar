@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.factories;
 
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
+import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationFile;
 
 public class AnalyzerConfigurationFactory {
 
@@ -18,5 +19,14 @@ public class AnalyzerConfigurationFactory {
         configuration.setEnabled(Boolean.FALSE);
         configuration.setId(2L);
         return configuration;
+    }
+
+    public AnalyzerConfigurationFile analyzerConfigurationFile(){
+        AnalyzerConfigurationFile file = new AnalyzerConfigurationFile();
+        file.setFileData("<config><param1>value1</param1></config>".getBytes());
+        file.setFileName("testconfig.xml");
+        file.setAnalyzerConfiguration(analyzerConfiguration());
+        file.setContentType("text/xml");
+        return file;
     }
 }

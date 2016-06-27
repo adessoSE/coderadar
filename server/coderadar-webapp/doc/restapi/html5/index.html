@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v1.0.0.SNAPSHOT, Tom Hombergs, 2016-06-25">
+<meta name="author" content="v1.0.0.SNAPSHOT, Tom Hombergs, 2016-06-27">
 <title>coderadar REST API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -423,7 +423,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v1.0.0.SNAPSHOT, Tom Hombergs, 2016-06-25</span><br>
+<span id="author" class="author">v1.0.0.SNAPSHOT, Tom Hombergs, 2016-06-27</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -456,6 +456,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_adding_an_analyzerconfiguration">Adding an AnalyzerConfiguration</a></li>
 <li><a href="#_deleting_an_analyzerconfiguration">Deleting an AnalyzerConfiguration</a></li>
 <li><a href="#_updating_an_analyzerconfiguration">Updating an AnalyzerConfiguration</a></li>
+</ul>
+</li>
+<li><a href="#_analyzerconfigurationfile">AnalyzerConfigurationFile</a>
+<ul class="sectlevel2">
+<li><a href="#_uploading_an_analyzerconfigurationfile">Uploading an AnalyzerConfigurationFile</a></li>
+<li><a href="#_downloading_an_analyzerconfigurationfile">Downloading an AnalyzerConfigurationFile</a></li>
 <li><a href="#_listing_a_project_s_analyzerconfigurations">Listing a Project&#8217;s AnalyzerConfigurations</a></li>
 <li><a href="#_loading_a_single_analyzerconfiguration">Loading a single AnalyzerConfiguration</a></li>
 </ul>
@@ -1110,6 +1116,40 @@ Content-Length: 352
 </div>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_analyzerconfigurationfile"><a class="link" href="#_analyzerconfigurationfile">AnalyzerConfigurationFile</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An AnalyzerConfiguration can be supplied with a configuration file. For example, the Checkstyle analyzer
+can be supplied with a checkstyle configuration xml file to define which rules to check. The content of
+the configuration file can be text, xml, or even a binary format, depending on the configuration format
+the analyzer needs.</p>
+</div>
+<div class="sect2">
+<h3 id="_uploading_an_analyzerconfigurationfile"><a class="link" href="#_uploading_an_analyzerconfigurationfile">Uploading an AnalyzerConfigurationFile</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_downloading_an_analyzerconfigurationfile"><a class="link" href="#_downloading_an_analyzerconfigurationfile">Downloading an AnalyzerConfigurationFile</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Length: 90
+Content-Type: text/xml
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;config&gt;
+    &lt;param1&gt;value1&lt;/param1&gt;
+&lt;/config&gt;</code></pre>
+</div>
+</div>
+</div>
 <div class="sect2">
 <h3 id="_listing_a_project_s_analyzerconfigurations"><a class="link" href="#_listing_a_project_s_analyzerconfigurations">Listing a Project&#8217;s AnalyzerConfigurations</a></h3>
 <div class="sect3">
@@ -1279,7 +1319,7 @@ Content-Length: 164
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-06-25 21:42:10 +02:00
+Last updated 2016-06-27 21:49:48 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
