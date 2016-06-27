@@ -453,17 +453,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_structure_3">Structure</a></li>
 <li><a href="#_hypermedia_links_3">Hypermedia Links</a></li>
-<li><a href="#_adding_an_analyzerconfiguration">Adding an AnalyzerConfiguration</a></li>
-<li><a href="#_deleting_an_analyzerconfiguration">Deleting an AnalyzerConfiguration</a></li>
-<li><a href="#_updating_an_analyzerconfiguration">Updating an AnalyzerConfiguration</a></li>
+<li><a href="#_adding_an_analyzer_configuration">Adding an Analyzer Configuration</a></li>
+<li><a href="#_deleting_an_analyzer_configuration">Deleting an Analyzer Configuration</a></li>
+<li><a href="#_updating_an_analyzer_configuration">Updating an Analyzer Configuration</a></li>
+<li><a href="#_listing_a_project_s_analyzer_configurations">Listing a Project&#8217;s Analyzer Configurations</a></li>
+<li><a href="#_loading_a_single_analyzer_configuration">Loading a single Analyzer Configuration</a></li>
 </ul>
 </li>
-<li><a href="#_analyzerconfigurationfile">AnalyzerConfigurationFile</a>
+<li><a href="#_analyzer_configuration_file">Analyzer Configuration File</a>
 <ul class="sectlevel2">
-<li><a href="#_uploading_an_analyzerconfigurationfile">Uploading an AnalyzerConfigurationFile</a></li>
-<li><a href="#_downloading_an_analyzerconfigurationfile">Downloading an AnalyzerConfigurationFile</a></li>
-<li><a href="#_listing_a_project_s_analyzerconfigurations">Listing a Project&#8217;s AnalyzerConfigurations</a></li>
-<li><a href="#_loading_a_single_analyzerconfiguration">Loading a single AnalyzerConfiguration</a></li>
+<li><a href="#_uploading_an_analyzer_configuration_file">Uploading an Analyzer Configuration File</a></li>
+<li><a href="#_downloading_an_analyzer_configuration_file">Downloading an Analyzer Configuration File</a></li>
 </ul>
 </li>
 </ul>
@@ -1006,7 +1006,7 @@ plugin via the AnalyzerConfiguration resource.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_adding_an_analyzerconfiguration"><a class="link" href="#_adding_an_analyzerconfiguration">Adding an AnalyzerConfiguration</a></h3>
+<h3 id="_adding_an_analyzer_configuration"><a class="link" href="#_adding_an_analyzer_configuration">Adding an Analyzer Configuration</a></h3>
 <div class="sect3">
 <h4 id="_example_request_7"><a class="link" href="#_example_request_7">Example Request</a></h4>
 <div class="listingblock">
@@ -1050,7 +1050,7 @@ Content-Length: 352
 </div>
 </div>
 <div class="sect2">
-<h3 id="_deleting_an_analyzerconfiguration"><a class="link" href="#_deleting_an_analyzerconfiguration">Deleting an AnalyzerConfiguration</a></h3>
+<h3 id="_deleting_an_analyzer_configuration"><a class="link" href="#_deleting_an_analyzer_configuration">Deleting an Analyzer Configuration</a></h3>
 <div class="sect3">
 <h4 id="_example_request_8"><a class="link" href="#_example_request_8">Example Request</a></h4>
 <div class="listingblock">
@@ -1073,7 +1073,7 @@ org.wickedsource.locAnalyzer</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_updating_an_analyzerconfiguration"><a class="link" href="#_updating_an_analyzerconfiguration">Updating an AnalyzerConfiguration</a></h3>
+<h3 id="_updating_an_analyzer_configuration"><a class="link" href="#_updating_an_analyzer_configuration">Updating an Analyzer Configuration</a></h3>
 <div class="sect3">
 <h4 id="_example_request_9"><a class="link" href="#_example_request_9">Example Request</a></h4>
 <div class="listingblock">
@@ -1116,42 +1116,8 @@ Content-Length: 352
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_analyzerconfigurationfile"><a class="link" href="#_analyzerconfigurationfile">AnalyzerConfigurationFile</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>An AnalyzerConfiguration can be supplied with a configuration file. For example, the Checkstyle analyzer
-can be supplied with a checkstyle configuration xml file to define which rules to check. The content of
-the configuration file can be text, xml, or even a binary format, depending on the configuration format
-the analyzer needs.</p>
-</div>
 <div class="sect2">
-<h3 id="_uploading_an_analyzerconfigurationfile"><a class="link" href="#_uploading_an_analyzerconfigurationfile">Uploading an AnalyzerConfigurationFile</a></h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_downloading_an_analyzerconfigurationfile"><a class="link" href="#_downloading_an_analyzerconfigurationfile">Downloading an AnalyzerConfigurationFile</a></h3>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Length: 90
-Content-Type: text/xml
-
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;config&gt;
-    &lt;param1&gt;value1&lt;/param1&gt;
-&lt;/config&gt;</code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_listing_a_project_s_analyzerconfigurations"><a class="link" href="#_listing_a_project_s_analyzerconfigurations">Listing a Project&#8217;s AnalyzerConfigurations</a></h3>
+<h3 id="_listing_a_project_s_analyzer_configurations"><a class="link" href="#_listing_a_project_s_analyzer_configurations">Listing a Project&#8217;s Analyzer Configurations</a></h3>
 <div class="sect3">
 <h4 id="_example_request_10"><a class="link" href="#_example_request_10">Example Request</a></h4>
 <div class="listingblock">
@@ -1201,7 +1167,7 @@ Content-Length: 711
 </div>
 </div>
 <div class="sect2">
-<h3 id="_loading_a_single_analyzerconfiguration"><a class="link" href="#_loading_a_single_analyzerconfiguration">Loading a single AnalyzerConfiguration</a></h3>
+<h3 id="_loading_a_single_analyzer_configuration"><a class="link" href="#_loading_a_single_analyzer_configuration">Loading a single Analyzer Configuration</a></h3>
 <div class="sect3">
 <h4 id="_example_request_11"><a class="link" href="#_example_request_11">Example Request</a></h4>
 <div class="listingblock">
@@ -1234,6 +1200,40 @@ Content-Length: 352
   } ]
 }</code></pre>
 </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_analyzer_configuration_file"><a class="link" href="#_analyzer_configuration_file">Analyzer Configuration File</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An AnalyzerConfiguration can be supplied with a configuration file. For example, the Checkstyle analyzer
+can be supplied with a checkstyle configuration xml file to define which rules to check. The content of
+the configuration file can be text, xml, or even a binary format, depending on the configuration format
+the analyzer needs.</p>
+</div>
+<div class="sect2">
+<h3 id="_uploading_an_analyzer_configuration_file"><a class="link" href="#_uploading_an_analyzer_configuration_file">Uploading an Analyzer Configuration File</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_downloading_an_analyzer_configuration_file"><a class="link" href="#_downloading_an_analyzer_configuration_file">Downloading an Analyzer Configuration File</a></h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Length: 90
+Content-Type: text/xml
+
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;config&gt;
+    &lt;param1&gt;value1&lt;/param1&gt;
+&lt;/config&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -1319,7 +1319,7 @@ Content-Length: 164
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-06-27 21:49:48 +02:00
+Last updated 2016-06-27 21:56:38 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

@@ -1,0 +1,63 @@
+allprojects {
+
+    apply plugin: 'idea'
+
+    idea {
+        module {
+            inheritOutputDirs = true
+            downloadJavadoc = false
+            downloadSources = true
+            outputDir = file('build/classes/main')
+            testOutputDir = file('build/classes/test')
+        }
+    }
+
+}
+
+idea {
+    project {
+        jdkName = version_java
+        languageLevel = '8'
+        vcs = 'Git'
+    }
+}
+
+
+subprojects {
+
+    if (plugins.hasPlugin("java")) {
+
+        idea.module.iml {
+            withXml {
+                // mark resource directories as such
+                // cf. https://discuss.gradle.org/t/the-idea-plugin-breaks-the-new-intellij-13-iml-configuration/2456/10
+                def sourceFolder = it.asNode().component.content.sourceFolder
+
+                def mainResourceFolder = sourceFolder.find { it.@url == 'file://$MODULE_DIR$/src/main/resources' }
+                // in case there is no src/main/resources in this module
+                if (mainResourceFolder != null) {
+                    def atts = mainResourceFolder.attributes()
+                    atts.remove('isTestSource')
+                    atts.put('type', 'java-resource')
+                }
+
+                def testResourceFolder = sourceFolder.find { it.@url == 'file://$MODULE_DIR$/src/test/resources' }
+                // in case there is no src/test/resources in this module
+                if (testResourceFolder != null) {
+                    def atts = testResourceFolder.attributes()
+                    atts.remove('isTestSource')
+                    atts.put('type', 'java-test-resource')
+                }
+
+                // spring facet
+                def springFacet = '''<component name="FacetManager">
+                <facet type="Spring" name="Spring">
+                  <configuration />
+                </facet>
+              </component>'''
+
+                it.asNode().append((new XmlParser()).parseText(springFacet))
+            }
+        }
+    }
+}
