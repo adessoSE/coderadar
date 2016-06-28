@@ -49,7 +49,7 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
 
         when(analyzerConfigurationRepository.findByProjectIdAndAnalyzerName(1L, resource.getAnalyzerName())).thenReturn(entity);
         when(analyzerConfigurationRepository.save(any(AnalyzerConfiguration.class))).thenReturn(entity);
-        when(analyzerRegistry.getAnalyzer(resource.getAnalyzerName())).thenReturn(new LocAnalyzerPlugin());
+        when(analyzerRegistry.createAnalyzer(resource.getAnalyzerName())).thenReturn(new LocAnalyzerPlugin());
         when(projectRepository.countById(1L)).thenReturn(1);
         when(projectRepository.findOne(1L)).thenReturn(Factories.project().validProject());
 
@@ -111,7 +111,7 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
 
         when(analyzerConfigurationRepository.findByProjectIdAndId(1L, 1L)).thenReturn(config1);
         when(projectRepository.findOne(1L)).thenReturn(project);
-        when(analyzerRegistry.getAnalyzer(resource.getAnalyzerName())).thenReturn(new LocAnalyzerPlugin());
+        when(analyzerRegistry.createAnalyzer(resource.getAnalyzerName())).thenReturn(new LocAnalyzerPlugin());
 
         mvc().perform(post("/projects/1/analyzers/1")
                 .content(toJsonWithoutLinks(resource))

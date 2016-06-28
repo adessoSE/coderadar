@@ -30,8 +30,4 @@ public class LocAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin {
     }
 
 
-    @Override
-    public String getName() {
-        return "coderadar:loc";
-    }
 }

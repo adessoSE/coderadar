@@ -36,8 +36,4 @@ public class TodoSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerP
         }
     }
 
-    @Override
-    public String getName() {
-        return "coderadar:todo";
-    }
 }

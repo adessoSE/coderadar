@@ -9,19 +9,19 @@ import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.analyzer.api.*;
 import org.xml.sax.InputSource;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin {
+public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin, ConfigurableAnalyzerPlugin {
 
     private Logger logger = LoggerFactory.getLogger(CheckstyleSourceCodeFileAnalyzerPlugin.class);
 
     private Checker checker;
 
     private CoderadarAuditListener auditListener;
+
+    private byte[] checkstyleConfigurationXml;
 
     public CheckstyleSourceCodeFileAnalyzerPlugin() {
         checker = new Checker();
@@ -54,11 +54,12 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
 
 
     private Configuration createCheckstyleConfiguration() throws CheckstyleException {
-        return ConfigurationLoader.loadConfiguration(
-                new InputSource(
-                        getClass().getResourceAsStream("/checkstyle.xml")),
-                new CheckstylePropertiesResolver(new Properties()), // TODO: pass real properties
-                true);
+        if (this.checkstyleConfigurationXml != null) {
+            return getConfigurationFromStream(new ByteArrayInputStream(this.checkstyleConfigurationXml));
+        } else {
+            // load default configuration file
+            return getConfigurationFromStream(getClass().getResourceAsStream("/checkstyle.xml"));
+        }
     }
 
     @Override
@@ -88,7 +89,24 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
     }
 
     @Override
-    public String getName() {
-        return "checkstyle";
+    public boolean isValidConfigurationFile(byte[] configurationFile) {
+        try {
+            Configuration config = getConfigurationFromStream(new ByteArrayInputStream(configurationFile));
+            return true;
+        } catch (CheckstyleException e) {
+            return false;
+        }
+    }
+
+    private Configuration getConfigurationFromStream(InputStream in) throws CheckstyleException {
+        return ConfigurationLoader.loadConfiguration(
+                new InputSource(in),
+                new CheckstylePropertiesResolver(new Properties()), // TODO: pass real properties
+                true);
+    }
+
+    @Override
+    public void configure(byte[] configurationFile) {
+        this.checkstyleConfigurationXml = configurationFile;
     }
 }

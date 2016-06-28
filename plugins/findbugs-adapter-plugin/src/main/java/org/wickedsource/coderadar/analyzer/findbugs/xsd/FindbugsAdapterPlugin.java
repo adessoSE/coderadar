@@ -36,8 +36,4 @@ public class FindbugsAdapterPlugin implements AdapterPlugin {
         }
     }
 
-    @Override
-    public String getName() {
-        return "findbugs";
-    }
 }

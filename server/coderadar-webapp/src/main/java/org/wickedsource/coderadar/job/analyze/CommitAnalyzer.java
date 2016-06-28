@@ -16,9 +16,7 @@ import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 import org.wickedsource.coderadar.analyzer.api.Finding;
 import org.wickedsource.coderadar.analyzer.api.Metric;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
-import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
-import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationRepository;
-import org.wickedsource.coderadar.analyzer.domain.AnalyzerPluginRegistry;
+import org.wickedsource.coderadar.analyzer.domain.*;
 import org.wickedsource.coderadar.analyzer.match.FileMatchingPattern;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
@@ -59,6 +57,8 @@ public class CommitAnalyzer {
 
     private AnalyzerConfigurationRepository analyzerConfigurationRepository;
 
+    private AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository;
+
     private FileAnalyzer fileAnalyzer;
 
     private FileRepository fileRepository;
@@ -70,13 +70,14 @@ public class CommitAnalyzer {
     private static final Set<DiffEntry.ChangeType> CHANGES_TO_ANALYZE = EnumSet.of(DiffEntry.ChangeType.ADD, DiffEntry.ChangeType.COPY, DiffEntry.ChangeType.MODIFY);
 
     @Autowired
-    public CommitAnalyzer(CommitRepository commitRepository, WorkdirManager workdirManager, FilePatternRepository filePatternRepository, GitCommitFinder commitFinder, AnalyzerPluginRegistry analyzerRegistry, AnalyzerConfigurationRepository analyzerConfigurationRepository, FileAnalyzer fileAnalyzer, FileRepository fileRepository, MetricValueRepository metricValueRepository, FindingRepository findingRepository) {
+    public CommitAnalyzer(CommitRepository commitRepository, WorkdirManager workdirManager, FilePatternRepository filePatternRepository, GitCommitFinder commitFinder, AnalyzerPluginRegistry analyzerRegistry, AnalyzerConfigurationRepository analyzerConfigurationRepository, AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository, FileAnalyzer fileAnalyzer, FileRepository fileRepository, MetricValueRepository metricValueRepository, FindingRepository findingRepository) {
         this.commitRepository = commitRepository;
         this.workdirManager = workdirManager;
         this.filePatternRepository = filePatternRepository;
         this.commitFinder = commitFinder;
         this.analyzerRegistry = analyzerRegistry;
         this.analyzerConfigurationRepository = analyzerConfigurationRepository;
+        this.analyzerConfigurationFileRepository = analyzerConfigurationFileRepository;
         this.fileAnalyzer = fileAnalyzer;
         this.fileRepository = fileRepository;
         this.metricValueRepository = metricValueRepository;
@@ -103,7 +104,12 @@ public class CommitAnalyzer {
         List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>();
         List<AnalyzerConfiguration> configs = analyzerConfigurationRepository.findByProjectId(project.getId());
         for (AnalyzerConfiguration config : configs) {
-            analyzers.add(analyzerRegistry.getAnalyzer(config.getAnalyzerName()));
+            AnalyzerConfigurationFile configFile = analyzerConfigurationFileRepository.findByAnalyzerConfigurationProjectIdAndAnalyzerConfigurationId(project.getId(), config.getId());
+            if(configFile != null){
+                analyzers.add(analyzerRegistry.createAnalyzer(config.getAnalyzerName(), configFile.getFileData()));
+            }else {
+                analyzers.add(analyzerRegistry.createAnalyzer(config.getAnalyzerName()));
+            }
         }
         return analyzers;
     }

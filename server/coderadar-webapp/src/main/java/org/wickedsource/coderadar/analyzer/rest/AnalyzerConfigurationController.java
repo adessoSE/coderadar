@@ -92,7 +92,7 @@ public class AnalyzerConfigurationController {
     }
 
     private void checkAnalyzerExistsOrThrowException(String analyzerName) {
-        SourceCodeFileAnalyzerPlugin analyzer = analyzerRegistry.getAnalyzer(analyzerName);
+        SourceCodeFileAnalyzerPlugin analyzer = analyzerRegistry.createAnalyzer(analyzerName);
         if (analyzer == null) {
             throw new ValidationException("analyzerName", String.format("No analyzer plugin with the name %s exists!", analyzerName));
         }
