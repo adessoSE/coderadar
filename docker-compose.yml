@@ -1,4 +1,4 @@
-coderadar:
-  image: "thombergs/coderadar:latest"
+coderadar-server:
+  image: "thombergs/coderadar-server:latest"
   ports:
     - "8080:8080"
