@@ -21,16 +21,21 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
 
     private CoderadarAuditListener auditListener;
 
-    private byte[] checkstyleConfigurationXml;
-
     public CheckstyleSourceCodeFileAnalyzerPlugin() {
+        try {
+            init(createDefaultConfiguration());
+        }catch(CheckstyleException e){
+            throw new AnalyzerException(e);
+        }
+    }
+
+    private void init(Configuration configuration){
         checker = new Checker();
         try {
             auditListener = new CoderadarAuditListener();
-            Configuration checkstyleConfig = createCheckstyleConfiguration();
             final ClassLoader moduleClassLoader = Checker.class.getClassLoader();
             checker.setModuleClassLoader(moduleClassLoader);
-            checker.configure(checkstyleConfig);
+            checker.configure(configuration);
             checker.addListener(auditListener);
         } catch (CheckstyleException e) {
             throw new AnalyzerConfigurationException(e);
@@ -53,13 +58,12 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
     }
 
 
-    private Configuration createCheckstyleConfiguration() throws CheckstyleException {
-        if (this.checkstyleConfigurationXml != null) {
-            return getConfigurationFromStream(new ByteArrayInputStream(this.checkstyleConfigurationXml));
-        } else {
-            // load default configuration file
-            return getConfigurationFromStream(getClass().getResourceAsStream("/checkstyle.xml"));
-        }
+    private Configuration createConfiguration(byte[] configurationFile) throws CheckstyleException {
+        return getConfigurationFromStream(new ByteArrayInputStream(configurationFile));
+    }
+
+    private Configuration createDefaultConfiguration() throws CheckstyleException {
+        return getConfigurationFromStream(getClass().getResourceAsStream("/checkstyle.xml"));
     }
 
     @Override
@@ -107,6 +111,11 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
 
     @Override
     public void configure(byte[] configurationFile) {
-        this.checkstyleConfigurationXml = configurationFile;
+        try {
+            init(getConfigurationFromStream(new ByteArrayInputStream(configurationFile)));
+        }catch(CheckstyleException e){
+            throw new AnalyzerException(e);
+        }
+
     }
 }

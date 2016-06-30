@@ -75,9 +75,10 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-devtools'
     compile 'org.hibernate:hibernate-validator:5.2.4.Final'
     compile 'org.reflections:reflections:0.9.10'
+    compile 'commons-fileupload:commons-fileupload:1.3'
 
     compile project(':plugins:loc-analyzer-plugin')
-    compile project(":plugins:analyzer-plugin-api")
+    compile project(':plugins:checkstyle-analyzer-plugin')
 
     runtime 'mysql:mysql-connector-java:5.1.6'
 
@@ -97,10 +98,11 @@ bootRun {
                     "-Dlogging.level.org.wickedsource.coderadar.job.JobLogger=INFO",
                     "-Dlogging.level.org.hibernate.SQL=ERROR",
                     "-Dlogging.level.org.hibernate.type=ERROR",
+                    "-Dlogging.level.org.reflections=ERROR",
                     "-Dlogging.file=coderadar.log",
 
-                    "-Dcoderadar.master=false",
-                    "-Dcoderadar.slave=false",
+                    "-Dcoderadar.master=true",
+                    "-Dcoderadar.slave=true",
                     "-Dcoderadar.scanIntervalInSeconds=30",
                     "-Dcoderadar.workdir=C:/coderadar",
 

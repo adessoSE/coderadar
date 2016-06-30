@@ -151,9 +151,19 @@ the configuration file can be text, xml, or even a binary format, depending on t
 the analyzer needs.
 
 === Uploading an Analyzer Configuration File
+
+==== Example Request
+include::{snippets}/analyzerConfigurationFile/upload/http-request.adoc[]
+
+==== Example Response
 include::{snippets}/analyzerConfigurationFile/upload/http-response.adoc[]
 
+
 === Downloading an Analyzer Configuration File
+==== Example Request
+include::{snippets}/analyzerConfigurationFile/download/http-request.adoc[]
+
+==== Example Response
 include::{snippets}/analyzerConfigurationFile/download/http-response.adoc[]
 
 = Error Handling

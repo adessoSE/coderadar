@@ -11,12 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
-import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationFile;
-import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationFileRepository;
-import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationRepository;
+import org.wickedsource.coderadar.analyzer.api.ConfigurableAnalyzerPlugin;
+import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
+import org.wickedsource.coderadar.analyzer.domain.*;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
+import org.wickedsource.coderadar.core.rest.validation.ValidationException;
 
 import java.io.IOException;
 
@@ -32,19 +33,23 @@ public class AnalyzerConfigurationFileController {
     @Autowired
     private AnalyzerConfigurationRepository analyzerConfigurationRepository;
 
-    @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity<String> uploadConfigurationFile(@PathVariable Long projectId, @PathVariable Long analyzerConfigurationId, MultipartFile file) {
-        AnalyzerConfiguration configuration = analyzerConfigurationRepository.findByProjectIdAndId(projectId, analyzerConfigurationId);
-        if (configuration == null) {
-            throw new ResourceNotFoundException();
-        }
+    @Autowired
+    private AnalyzerPluginRegistry analyzerRegistry;
 
-        AnalyzerConfigurationFile configFile = analyzerConfigurationFileRepository.findByAnalyzerConfigurationProjectIdAndAnalyzerConfigurationId(projectId, analyzerConfigurationId);
-        if (configFile == null) {
-            configFile = new AnalyzerConfigurationFile();
-        }
-
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<String> uploadConfigurationFile(@PathVariable Long projectId, @PathVariable Long analyzerConfigurationId, @RequestParam("file") MultipartFile file) {
         try {
+            AnalyzerConfiguration configuration = analyzerConfigurationRepository.findByProjectIdAndId(projectId, analyzerConfigurationId);
+            if (configuration == null) {
+                throw new ResourceNotFoundException();
+            }
+            checkAnalyzer(configuration.getAnalyzerName(), file.getBytes());
+
+            AnalyzerConfigurationFile configFile = analyzerConfigurationFileRepository.findByAnalyzerConfigurationProjectIdAndAnalyzerConfigurationId(projectId, analyzerConfigurationId);
+            if (configFile == null) {
+                configFile = new AnalyzerConfigurationFile();
+            }
+
             configFile.setAnalyzerConfiguration(configuration);
             configFile.setContentType(file.getContentType());
             configFile.setFileName(file.getOriginalFilename());
@@ -70,6 +75,20 @@ public class AnalyzerConfigurationFileController {
                 .contentType(MediaType.parseMediaType(configFile.getContentType()))
                 .body(new ByteArrayResource(configFile.getFileData()));
 
+    }
+
+    private void checkAnalyzer(String analyzerName, byte[] configurationFile) {
+        SourceCodeFileAnalyzerPlugin analyzer = analyzerRegistry.createAnalyzer(analyzerName);
+        if (analyzer == null) {
+            throw new ValidationException("file", String.format("No analyzer plugin with the name %s exists!", analyzerName));
+        }
+        if (!(analyzer instanceof ConfigurableAnalyzerPlugin)) {
+            throw new ValidationException("file", String.format("Analyzer with name %s is not configurable with a configuration file!", analyzerName));
+        }
+        ConfigurableAnalyzerPlugin configurableAnalyzer = (ConfigurableAnalyzerPlugin) analyzer;
+        if (!configurableAnalyzer.isValidConfigurationFile(configurationFile)) {
+            throw new ValidationException("file", String.format("The provided configuration file is not a valid file for analyzer %s!", analyzerName));
+        }
     }
 
 

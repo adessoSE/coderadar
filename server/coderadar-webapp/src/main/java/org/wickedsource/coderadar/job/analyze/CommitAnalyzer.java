@@ -177,6 +177,7 @@ public class CommitAnalyzer {
 
             for(Finding finding : metrics.getFindings(metric)){
                 org.wickedsource.coderadar.metric.domain.Finding entity = new org.wickedsource.coderadar.metric.domain.Finding();
+                entity.setId(id);
                 entity.setLineStart(finding.getLineStart());
                 entity.setLineEnd(finding.getLineEnd());
                 entity.setCharStart(finding.getCharStart());

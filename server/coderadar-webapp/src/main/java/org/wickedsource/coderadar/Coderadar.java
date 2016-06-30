@@ -20,5 +20,4 @@ public class Coderadar {
         SpringApplication.run(Coderadar.class, args);
     }
 
-
 }

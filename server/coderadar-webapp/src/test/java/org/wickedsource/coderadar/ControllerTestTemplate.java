@@ -21,8 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.StringUtils;
+import org.wickedsource.coderadar.core.rest.validation.ControllerExceptionHandler;
 import org.wickedsource.coderadar.core.rest.validation.ErrorDTO;
-import org.wickedsource.coderadar.core.rest.validation.ValidationExceptionHandler;
 
 import java.io.IOException;
 import java.util.List;
@@ -86,7 +86,7 @@ public abstract class ControllerTestTemplate {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         mvc = MockMvcBuilders.standaloneSetup(getController())
-                .setControllerAdvice(new ValidationExceptionHandler())
+                .setControllerAdvice(new ControllerExceptionHandler())
                 .apply(MockMvcRestDocumentation.documentationConfiguration(this.restDocumentation))
                 .build();
     }

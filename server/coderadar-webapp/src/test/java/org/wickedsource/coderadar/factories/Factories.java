@@ -37,4 +37,8 @@ public class Factories {
     public static AnalyzerConfigurationFactory analyzerConfiguration(){
         return new AnalyzerConfigurationFactory();
     }
+
+    public static AnalyzerFactory analyzer(){
+        return new AnalyzerFactory();
+    }
 }

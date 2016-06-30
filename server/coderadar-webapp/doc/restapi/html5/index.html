@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v1.0.0.SNAPSHOT, Tom Hombergs, 2016-06-27">
+<meta name="author" content="v1.0.0.SNAPSHOT, Tom Hombergs, 2016-06-30">
 <title>coderadar REST API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -423,7 +423,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v1.0.0.SNAPSHOT, Tom Hombergs, 2016-06-27</span><br>
+<span id="author" class="author">v1.0.0.SNAPSHOT, Tom Hombergs, 2016-06-30</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1216,14 +1216,45 @@ the analyzer needs.</p>
 </div>
 <div class="sect2">
 <h3 id="_uploading_an_analyzer_configuration_file"><a class="link" href="#_uploading_an_analyzer_configuration_file">Uploading an Analyzer Configuration File</a></h3>
+<div class="sect3">
+<h4 id="_example_request_12"><a class="link" href="#_example_request_12">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers/1/file HTTP/1.1
+Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Host: localhost
+
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Content-Disposition: form-data; name=file
+Content-Type: text/xml
+
+&lt;configuration&gt;&lt;param1&gt;value1&lt;/param1&gt;&lt;param2&gt;value2&gt;&lt;/param2&gt;&lt;/configuration&gt;
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_12"><a class="link" href="#_example_response_12">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
 </div>
 </div>
 </div>
+</div>
 <div class="sect2">
 <h3 id="_downloading_an_analyzer_configuration_file"><a class="link" href="#_downloading_an_analyzer_configuration_file">Downloading an Analyzer Configuration File</a></h3>
+<div class="sect3">
+<h4 id="_example_request_13"><a class="link" href="#_example_request_13">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers/1/file HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_13"><a class="link" href="#_example_response_13">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -1234,6 +1265,7 @@ Content-Type: text/xml
 &lt;config&gt;
     &lt;param1&gt;value1&lt;/param1&gt;
 &lt;/config&gt;</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1265,11 +1297,11 @@ Content-Length: 164
 
 {
   "fieldErrors" : [ {
-    "field" : "vcsUrl",
-    "message" : "must be a valid URL"
-  }, {
     "field" : "name",
     "message" : "may not be null"
+  }, {
+    "field" : "vcsUrl",
+    "message" : "must be a valid URL"
   } ]
 }</code></pre>
 </div>
@@ -1319,7 +1351,7 @@ Content-Length: 164
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-06-27 21:56:38 +02:00
+Last updated 2016-06-29 21:30:35 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

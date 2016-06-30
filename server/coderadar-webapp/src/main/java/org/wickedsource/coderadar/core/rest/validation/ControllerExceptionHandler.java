@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.List;
 
 @ControllerAdvice
-public class ValidationExceptionHandler {
+public class ControllerExceptionHandler {
 
-    private Logger logger = LoggerFactory.getLogger(ValidationExceptionHandler.class);
+    private Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     /**
      * Handles the MethodArgumentNotValidException that is thrown by Spring when a parameter passed into a controller

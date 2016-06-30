@@ -15,6 +15,7 @@ public class AnalyzerConfigurationFile {
     private Long id;
 
     @Column
+    @Lob
     private byte[] fileData;
 
     @Column
