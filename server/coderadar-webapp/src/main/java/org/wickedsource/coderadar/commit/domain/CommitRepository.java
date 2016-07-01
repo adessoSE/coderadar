@@ -21,4 +21,6 @@ public interface CommitRepository extends CrudRepository<Commit, Long> {
 
     @Query("select c from Commit c where c.merged = true and c.analyzed = false and c.id not in (select j.commitId from AnalyzeCommitJob j where j.processingStatus in (:ignoredProcessingStatus))")
     List<Commit> findCommitsToBeAnalyzed(@Param("ignoredProcessingStatus") List<ProcessingStatus> ignoredProcessingStatus);
+
+    void deleteByProjectId();
 }
