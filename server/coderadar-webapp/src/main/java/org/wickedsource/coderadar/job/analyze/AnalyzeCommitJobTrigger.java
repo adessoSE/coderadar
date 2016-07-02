@@ -9,7 +9,6 @@ import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.job.JobLogger;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
-import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -20,18 +19,12 @@ public class AnalyzeCommitJobTrigger {
 
     private JobLogger jobLogger = new JobLogger();
 
-    private CoderadarConfiguration config;
-
-    private ProjectRepository projectRepository;
-
     private CommitRepository commitRepository;
 
     private AnalyzeCommitJobRepository analyzeCommitJobRepository;
 
     @Autowired
-    public AnalyzeCommitJobTrigger(CoderadarConfiguration config, ProjectRepository projectRepository, CommitRepository commitRepository, AnalyzeCommitJobRepository analyzeCommitJobRepository) {
-        this.config = config;
-        this.projectRepository = projectRepository;
+    public AnalyzeCommitJobTrigger(CommitRepository commitRepository, AnalyzeCommitJobRepository analyzeCommitJobRepository) {
         this.commitRepository = commitRepository;
         this.analyzeCommitJobRepository = analyzeCommitJobRepository;
     }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
+import org.wickedsource.coderadar.project.domain.AnalyzingStrategyRepository;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
@@ -32,13 +33,16 @@ public class ProjectController {
 
     private CommitRepository commitRepository;
 
+    private AnalyzingStrategyRepository analyzingStrategyRepository;
+
     private FilePatternRepository filePatternRepository;
 
     @Autowired
-    public ProjectController(ProjectRepository projectRepository, ProjectResourceAssembler projectAssembler, CommitRepository commitRepository, FilePatternRepository filePatternRepository) {
+    public ProjectController(ProjectRepository projectRepository, ProjectResourceAssembler projectAssembler, CommitRepository commitRepository, AnalyzingStrategyRepository analyzingStrategyRepository, FilePatternRepository filePatternRepository) {
         this.projectRepository = projectRepository;
         this.projectAssembler = projectAssembler;
         this.commitRepository = commitRepository;
+        this.analyzingStrategyRepository = analyzingStrategyRepository;
         this.filePatternRepository = filePatternRepository;
     }
 
@@ -70,6 +74,7 @@ public class ProjectController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteProject(@PathVariable Long id) {
+        analyzingStrategyRepository.deleteByProjectId(id);
         commitRepository.deleteByProjectId();
         filePatternRepository.deleteByProjectId(id);
         projectRepository.delete(id);
