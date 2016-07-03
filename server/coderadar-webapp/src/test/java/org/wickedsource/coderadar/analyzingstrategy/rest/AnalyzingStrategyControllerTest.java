@@ -43,7 +43,7 @@ public class AnalyzingStrategyControllerTest extends ControllerTestTemplate {
                                 linkWithRel("project").description("Link to the project resource this AnalyzingStrategy belongs to.")),
                         requestFields(
                                 fields.withPath("active").description("Defines if this analyzing strategy is active. If it is not active (or there is no strategy for the project at all), no commits of the project will be analyzed. Analyses of commits that are already queued will be finished, however."),
-                                fields.withPath("fromDate").description("Date (in milleseconds since epoch) from which to start analyzing commits. Commits before this date are ignored during analysis."))));
+                                fields.withPath("fromDate").description("Date (in milliseconds since epoch) from which to start analyzing commits. Commits before this date are ignored during analysis."))));
 
     }
 
