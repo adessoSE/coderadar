@@ -27,14 +27,18 @@ import java.io.IOException;
 @RequestMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}/file")
 public class AnalyzerConfigurationFileController {
 
-    @Autowired
     private AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository;
 
-    @Autowired
     private AnalyzerConfigurationRepository analyzerConfigurationRepository;
 
-    @Autowired
     private AnalyzerPluginRegistry analyzerRegistry;
+
+    @Autowired
+    public AnalyzerConfigurationFileController(AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository, AnalyzerConfigurationRepository analyzerConfigurationRepository, AnalyzerPluginRegistry analyzerRegistry) {
+        this.analyzerConfigurationFileRepository = analyzerConfigurationFileRepository;
+        this.analyzerConfigurationRepository = analyzerConfigurationRepository;
+        this.analyzerRegistry = analyzerRegistry;
+    }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<String> uploadConfigurationFile(@PathVariable Long projectId, @PathVariable Long analyzerConfigurationId, @RequestParam("file") MultipartFile file) {

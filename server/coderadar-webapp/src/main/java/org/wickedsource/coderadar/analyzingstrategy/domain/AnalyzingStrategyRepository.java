@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.project.domain;
+package org.wickedsource.coderadar.analyzingstrategy.domain;
 
 import org.springframework.data.repository.CrudRepository;
 

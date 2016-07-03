@@ -12,6 +12,7 @@ import org.wickedsource.coderadar.analyzer.loc.LocAnalyzerPlugin;
 import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
+import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
 import java.util.Arrays;
 
@@ -34,6 +35,12 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
 
     @Mock
     private AnalyzerPluginRegistry analyzerRegistry;
+
+    @Mock
+    private AnalyzerVerifier analyzerVerifier;
+
+    @Mock
+    private ProjectVerifier projectVerifier;
 
 
     @Override

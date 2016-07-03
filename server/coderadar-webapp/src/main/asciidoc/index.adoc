@@ -166,6 +166,33 @@ include::{snippets}/analyzerConfigurationFile/download/http-request.adoc[]
 ==== Example Response
 include::{snippets}/analyzerConfigurationFile/download/http-response.adoc[]
 
+== Analyzing Strategy
+An Analyzing Strategy defines which commits of a project are to be analyzed. If there is no active
+Analyzing Strategy present for a project, no analysis will be performed at all. Once you provide
+an Analyzing Strategy, analysis jobs will be queued automatically for the commits defined within the strategy.
+
+=== Structure
+include::{snippets}/strategy/set/request-fields.adoc[]
+
+=== Hypermedia Links
+include::{snippets}/strategy/set/links.adoc[]
+
+=== Setting a Project's Analyzing Strategy
+
+==== Example Request
+include::{snippets}/strategy/set/http-request.adoc[]
+
+==== Example Response
+include::{snippets}/strategy/set/http-response.adoc[]
+
+=== Getting a Project's Analyzing Strategy
+
+==== Example Request
+include::{snippets}/strategy/get/http-request.adoc[]
+
+==== Example Response
+include::{snippets}/strategy/get/http-response.adoc[]
+
 = Error Handling
 
 == Successful Requests

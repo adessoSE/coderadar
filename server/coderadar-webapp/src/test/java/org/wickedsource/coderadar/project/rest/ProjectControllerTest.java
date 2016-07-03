@@ -8,7 +8,11 @@ import org.mockito.Spy;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.wickedsource.coderadar.ControllerTestTemplate;
+import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategyRepository;
+import org.wickedsource.coderadar.commit.domain.CommitRepository;
+import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
 import org.wickedsource.coderadar.factories.Factories;
+import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
@@ -31,8 +35,20 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     @Mock
     private ProjectRepository projectRepository;
 
+    @Mock
+    private ProjectVerifier projectVerifier;
+
     @Spy
     private ProjectResourceAssembler projectAssembler;
+
+    @Mock
+    private AnalyzingStrategyRepository analyzingStrategyRepository;
+
+    @Mock
+    private CommitRepository commitRepository;
+
+    @Mock
+    private FilePatternRepository filePatternRepository;
 
     @Override
     protected ProjectController getController() {
@@ -49,6 +65,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
         ProjectResource project = Factories.projectResource().validProjectResource();
 
         when(projectRepository.save(any(Project.class))).thenReturn(Factories.project().validProject());
+        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(Factories.project().validProject());
 
         mvc().perform(post("/projects")
                 .content(toJsonWithoutLinks(project))
@@ -62,9 +79,10 @@ public class ProjectControllerTest extends ControllerTestTemplate {
         ConstrainedFields fields = fields(ProjectResource.class);
         return document("projects/post",
                 links(atomLinks(),
-                        linkWithRel("self").description("Link to GET the project."),
-                        linkWithRel("files").description("Link to GET the project's file patterns."),
-                        linkWithRel("analyzers").description("Link to GET the project's analyzer configurations.")),
+                        linkWithRel("self").description("Link to the project."),
+                        linkWithRel("files").description("Link to the project's file patterns."),
+                        linkWithRel("analyzers").description("Link to the project's analyzer configurations."),
+                        linkWithRel("strategy").description("Link to the project's analyzing strategy.")),
                 requestFields(
                         fields.withPath("name").description("The name of the project to be analyzed."),
                         fields.withPath("vcsUrl").description("The URL to the version control repository where the project's source files are kept."),
@@ -80,6 +98,8 @@ public class ProjectControllerTest extends ControllerTestTemplate {
         projectResource.setVcsUrl("invalid url");
 
         ConstrainedFields fields = fields(ProjectResource.class);
+
+        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(Factories.project().validProject());
 
         mvc().perform(post("/projects")
                 .content(toJson(projectResource))
@@ -111,7 +131,10 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     public void getProjectSuccessfully() throws Exception {
         Project project = new Project();
         project.setId(5L);
+
         when(projectRepository.findOne(5L)).thenReturn(project);
+        when(projectVerifier.loadProjectOrThrowException(5L)).thenReturn(project);
+
         mvc().perform(get("/projects/5"))
                 .andExpect(status().isOk())
                 .andDo(document("projects/get"));
@@ -119,6 +142,8 @@ public class ProjectControllerTest extends ControllerTestTemplate {
 
     @Test
     public void deleteProject() throws Exception {
+        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(Factories.project().validProject());
+
         mvc().perform(delete("/projects/1"))
                 .andExpect(status().isOk())
                 .andDo(document("projects/delete"));
@@ -129,7 +154,10 @@ public class ProjectControllerTest extends ControllerTestTemplate {
         List<Project> projects = new ArrayList<>();
         projects.add(Factories.project().validProject());
         projects.add(Factories.project().validProject2());
+
         when(projectRepository.findAll()).thenReturn(projects);
+        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(Factories.project().validProject());
+
         mvc().perform(get("/projects"))
                 .andExpect(status().isOk())
                 .andDo(document("projects/list"));
@@ -137,6 +165,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
 
     @Test
     public void getProjectError() throws Exception {
+        when(projectVerifier.loadProjectOrThrowException(1L)).thenThrow(new ResourceNotFoundException());
         mvc().perform(get("/projects/1"))
                 .andExpect(status().isNotFound())
                 .andDo(document("projects/get/error404"));

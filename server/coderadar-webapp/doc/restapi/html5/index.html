@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v1.0.0.SNAPSHOT, Tom Hombergs, 2016-06-30">
+<meta name="author" content="v1.0.0.SNAPSHOT, Tom Hombergs, 2016-07-03">
 <title>coderadar REST API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -423,7 +423,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v1.0.0.SNAPSHOT, Tom Hombergs, 2016-06-30</span><br>
+<span id="author" class="author">v1.0.0.SNAPSHOT, Tom Hombergs, 2016-07-03</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -464,6 +464,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_uploading_an_analyzer_configuration_file">Uploading an Analyzer Configuration File</a></li>
 <li><a href="#_downloading_an_analyzer_configuration_file">Downloading an Analyzer Configuration File</a></li>
+</ul>
+</li>
+<li><a href="#_analyzing_strategy">Analyzing Strategy</a>
+<ul class="sectlevel2">
+<li><a href="#_setting_a_project_s_analyzing_strategy">Setting a Project&#8217;s Analyzing Strategy</a></li>
+<li><a href="#_structure_4">Structure</a></li>
+<li><a href="#_hypermedia_links_4">Hypermedia Links</a></li>
+<li><a href="#_getting_a_project_s_analyzing_strategy">Getting a Project&#8217;s Analyzing Strategy</a></li>
 </ul>
 </li>
 </ul>
@@ -1271,6 +1279,148 @@ Content-Type: text/xml
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_analyzing_strategy"><a class="link" href="#_analyzing_strategy">Analyzing Strategy</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>An Analyzing Strategy defines which commits of a projects are to be analyzed. If there is no active
+Analyzing Strategy present for a project, no analysis will be performed at all. Once you provide
+an Analyzing Strategy, analysis jobs will be queued automatically for the commits defined within the strategy.</p>
+</div>
+<div class="sect2">
+<h3 id="_setting_a_project_s_analyzing_strategy"><a class="link" href="#_setting_a_project_s_analyzing_strategy">Setting a Project&#8217;s Analyzing Strategy</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_structure_4"><a class="link" href="#_structure_4">Structure</a></h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">active</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines if this analyzing strategy is active. If it is not active (or there is no strategy for the project), no commits of the project will be analyzed. Analyses of commits that are already queued will be finished, however.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fromDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date from which to start analyzing commits. Commits before this date are ignored during analysis.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_hypermedia_links_4"><a class="link" href="#_hypermedia_links_4">Hypermedia Links</a></h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Relation</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to this AnalyzingStrategy resource.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project resource this AnalyzingStrategy belongs to.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect3">
+<h4 id="_example_request_14"><a class="link" href="#_example_request_14">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/strategy HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 54
+
+{
+  "fromDate" : 1467560653273,
+  "active" : true
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_14"><a class="link" href="#_example_response_14">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 239
+
+{
+  "fromDate" : 1467560653273,
+  "active" : true,
+  "links" : [ {
+    "rel" : "self",
+    "href" : "http://localhost:8080/projects/1/strategy"
+  }, {
+    "rel" : "project",
+    "href" : "http://localhost:8080/projects/1"
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_getting_a_project_s_analyzing_strategy"><a class="link" href="#_getting_a_project_s_analyzing_strategy">Getting a Project&#8217;s Analyzing Strategy</a></h3>
+<div class="sect3">
+<h4 id="_example_request_15"><a class="link" href="#_example_request_15">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/strategy HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_15"><a class="link" href="#_example_response_15">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 239
+
+{
+  "fromDate" : 1467560653343,
+  "active" : true,
+  "links" : [ {
+    "rel" : "self",
+    "href" : "http://localhost:8080/projects/1/strategy"
+  }, {
+    "rel" : "project",
+    "href" : "http://localhost:8080/projects/1"
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <h1 id="_error_handling" class="sect0"><a class="link" href="#_error_handling">Error Handling</a></h1>
 <div class="sect1">
 <h2 id="_successful_requests"><a class="link" href="#_successful_requests">Successful Requests</a></h2>
@@ -1351,7 +1501,7 @@ Content-Length: 164
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-06-29 21:30:35 +02:00
+Last updated 2016-07-03 17:43:21 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

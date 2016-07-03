@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategyRepository;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
-import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
-import org.wickedsource.coderadar.project.domain.AnalyzingStrategyRepository;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
@@ -37,13 +36,16 @@ public class ProjectController {
 
     private FilePatternRepository filePatternRepository;
 
+    private ProjectVerifier projectVerifier;
+
     @Autowired
-    public ProjectController(ProjectRepository projectRepository, ProjectResourceAssembler projectAssembler, CommitRepository commitRepository, AnalyzingStrategyRepository analyzingStrategyRepository, FilePatternRepository filePatternRepository) {
+    public ProjectController(ProjectRepository projectRepository, ProjectResourceAssembler projectAssembler, CommitRepository commitRepository, AnalyzingStrategyRepository analyzingStrategyRepository, FilePatternRepository filePatternRepository, ProjectVerifier projectVerifier) {
         this.projectRepository = projectRepository;
         this.projectAssembler = projectAssembler;
         this.commitRepository = commitRepository;
         this.analyzingStrategyRepository = analyzingStrategyRepository;
         this.filePatternRepository = filePatternRepository;
+        this.projectVerifier = projectVerifier;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -62,20 +64,16 @@ public class ProjectController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<ProjectResource> getProject(@PathVariable Long id) {
-        Project project = projectRepository.findOne(id);
-
-        if (project == null) {
-            throw new ResourceNotFoundException();
-        }
-
+        Project project = projectVerifier.loadProjectOrThrowException(id);
         ProjectResource resultResource = projectAssembler.toResource(project);
         return new ResponseEntity<>(resultResource, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteProject(@PathVariable Long id) {
+        projectVerifier.checkProjectExistsOrThrowException(id);
         analyzingStrategyRepository.deleteByProjectId(id);
-        commitRepository.deleteByProjectId();
+        commitRepository.deleteByProjectId(id);
         filePatternRepository.deleteByProjectId(id);
         projectRepository.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

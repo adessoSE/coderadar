@@ -1,4 +1,6 @@
-package org.wickedsource.coderadar.project.domain;
+package org.wickedsource.coderadar.analyzingstrategy.domain;
+
+import org.wickedsource.coderadar.project.domain.Project;
 
 import javax.persistence.*;
 import java.util.Date;

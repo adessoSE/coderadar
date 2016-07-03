@@ -3,6 +3,7 @@ package org.wickedsource.coderadar.project.rest;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.analyzer.rest.AnalyzerConfigurationController;
+import org.wickedsource.coderadar.analyzingstrategy.rest.AnalyzingStrategyController;
 import org.wickedsource.coderadar.filepattern.rest.FilePatternController;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
@@ -34,6 +35,7 @@ public class ProjectResourceAssembler extends ResourceAssemblerSupport<Project, 
         }
         resource.add(linkTo(methodOn(FilePatternController.class).getFilePatterns(project.getId())).withRel("files"));
         resource.add(linkTo(methodOn(AnalyzerConfigurationController.class).getAnalyzerConfigurationsForProject(project.getId())).withRel("analyzers"));
+        resource.add(linkTo(methodOn(AnalyzingStrategyController.class).getAnalyzingStrategy(project.getId())).withRel("strategy"));
         return resource;
     }
 

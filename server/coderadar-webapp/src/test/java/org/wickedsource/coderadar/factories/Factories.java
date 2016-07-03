@@ -41,4 +41,8 @@ public class Factories {
     public static AnalyzerFactory analyzer(){
         return new AnalyzerFactory();
     }
+
+    public static AnalyzingStrategyFactory analyzingStrategy(){
+        return new AnalyzingStrategyFactory();
+    }
 }
