@@ -6,6 +6,6 @@ public interface AnalyzingStrategyRepository extends CrudRepository<AnalyzingStr
 
     AnalyzingStrategy findByProjectId(long projectId);
 
-    void deleteByProjectId(long projectId);
+    int deleteByProjectId(long projectId);
 
 }

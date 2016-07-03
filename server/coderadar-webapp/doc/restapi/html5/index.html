@@ -468,9 +468,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_analyzing_strategy">Analyzing Strategy</a>
 <ul class="sectlevel2">
-<li><a href="#_setting_a_project_s_analyzing_strategy">Setting a Project&#8217;s Analyzing Strategy</a></li>
 <li><a href="#_structure_4">Structure</a></li>
 <li><a href="#_hypermedia_links_4">Hypermedia Links</a></li>
+<li><a href="#_setting_a_project_s_analyzing_strategy">Setting a Project&#8217;s Analyzing Strategy</a></li>
 <li><a href="#_getting_a_project_s_analyzing_strategy">Getting a Project&#8217;s Analyzing Strategy</a></li>
 </ul>
 </li>
@@ -570,15 +570,19 @@ and its sub-resources you provide coderadar with the information it needs to ana
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to GET the project.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>files</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to GET the project&#8217;s file patterns.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project&#8217;s file patterns.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>analyzers</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to GET the project&#8217;s analyzer configurations.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project&#8217;s analyzer configurations.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>strategy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project&#8217;s analyzing strategy.</p></td>
 </tr>
 </tbody>
 </table>
@@ -600,7 +604,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 820
+Content-Length: 1002
 
 [ {
   "name" : "Testproject",
@@ -617,6 +621,9 @@ Content-Length: 820
   }, {
     "rel" : "analyzers",
     "href" : "http://localhost:8080/projects/1/analyzers"
+  }, {
+    "rel" : "strategy",
+    "href" : "http://localhost:8080/projects/1/strategy"
   } ]
 }, {
   "name" : "Another project",
@@ -633,6 +640,9 @@ Content-Length: 820
   }, {
     "rel" : "analyzers",
     "href" : "http://localhost:8080/projects/2/analyzers"
+  }, {
+    "rel" : "strategy",
+    "href" : "http://localhost:8080/projects/2/strategy"
   } ]
 } ]</code></pre>
 </div>
@@ -666,7 +676,7 @@ Content-Length: 129
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 406
+Content-Length: 497
 
 {
   "name" : "Testproject",
@@ -683,6 +693,9 @@ Content-Length: 406
   }, {
     "rel" : "analyzers",
     "href" : "http://localhost:8080/projects/1/analyzers"
+  }, {
+    "rel" : "strategy",
+    "href" : "http://localhost:8080/projects/1/strategy"
   } ]
 }</code></pre>
 </div>
@@ -717,7 +730,7 @@ Content-Length: 147
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 406
+Content-Length: 497
 
 {
   "name" : "Testproject",
@@ -734,6 +747,9 @@ Content-Length: 406
   }, {
     "rel" : "analyzers",
     "href" : "http://localhost:8080/projects/1/analyzers"
+  }, {
+    "rel" : "strategy",
+    "href" : "http://localhost:8080/projects/1/strategy"
   } ]
 }</code></pre>
 </div>
@@ -828,11 +844,11 @@ patterns. Thus, the file set will include all INCLUDED files except those that w
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to GET the list of file patterns of a project.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the list of file patterns of this project.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to GET the project these file patterns belong to.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project these file patterns belong to.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1283,13 +1299,9 @@ Content-Type: text/xml
 <h2 id="_analyzing_strategy"><a class="link" href="#_analyzing_strategy">Analyzing Strategy</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>An Analyzing Strategy defines which commits of a projects are to be analyzed. If there is no active
+<p>An Analyzing Strategy defines which commits of a project are to be analyzed. If there is no active
 Analyzing Strategy present for a project, no analysis will be performed at all. Once you provide
 an Analyzing Strategy, analysis jobs will be queued automatically for the commits defined within the strategy.</p>
-</div>
-<div class="sect2">
-<h3 id="_setting_a_project_s_analyzing_strategy"><a class="link" href="#_setting_a_project_s_analyzing_strategy">Setting a Project&#8217;s Analyzing Strategy</a></h3>
-
 </div>
 <div class="sect2">
 <h3 id="_structure_4"><a class="link" href="#_structure_4">Structure</a></h3>
@@ -1310,13 +1322,13 @@ an Analyzing Strategy, analysis jobs will be queued automatically for the commit
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">active</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Defines if this analyzing strategy is active. If it is not active (or there is no strategy for the project), no commits of the project will be analyzed. Analyses of commits that are already queued will be finished, however.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines if this analyzing strategy is active. If it is not active (or there is no strategy for the project at all), no commits of the project will be analyzed. Analyses of commits that are already queued will be finished, however.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">fromDate</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date from which to start analyzing commits. Commits before this date are ignored during analysis.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date (in milleseconds since epoch) from which to start analyzing commits. Commits before this date are ignored during analysis.</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
@@ -1346,6 +1358,9 @@ an Analyzing Strategy, analysis jobs will be queued automatically for the commit
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect2">
+<h3 id="_setting_a_project_s_analyzing_strategy"><a class="link" href="#_setting_a_project_s_analyzing_strategy">Setting a Project&#8217;s Analyzing Strategy</a></h3>
 <div class="sect3">
 <h4 id="_example_request_14"><a class="link" href="#_example_request_14">Example Request</a></h4>
 <div class="listingblock">
@@ -1356,7 +1371,7 @@ Host: localhost
 Content-Length: 54
 
 {
-  "fromDate" : 1467560653273,
+  "fromDate" : 1467565070290,
   "active" : true
 }</code></pre>
 </div>
@@ -1371,7 +1386,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 239
 
 {
-  "fromDate" : 1467560653273,
+  "fromDate" : 1467565070290,
   "active" : true,
   "links" : [ {
     "rel" : "self",
@@ -1405,7 +1420,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 239
 
 {
-  "fromDate" : 1467560653343,
+  "fromDate" : 1467565070367,
   "active" : true,
   "links" : [ {
     "rel" : "self",
@@ -1447,11 +1462,11 @@ Content-Length: 164
 
 {
   "fieldErrors" : [ {
-    "field" : "name",
-    "message" : "may not be null"
-  }, {
     "field" : "vcsUrl",
     "message" : "must be a valid URL"
+  }, {
+    "field" : "name",
+    "message" : "may not be null"
   } ]
 }</code></pre>
 </div>
@@ -1501,7 +1516,7 @@ Content-Length: 164
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-07-03 17:43:21 +02:00
+Last updated 2016-07-03 18:12:43 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

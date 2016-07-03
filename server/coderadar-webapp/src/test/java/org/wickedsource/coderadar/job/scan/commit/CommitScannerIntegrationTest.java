@@ -18,6 +18,7 @@ import org.wickedsource.coderadar.IntegrationTest;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.WorkdirManager;
+import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
@@ -82,16 +83,17 @@ public class CommitScannerIntegrationTest extends GitTestTemplate {
     @Test
     @Category(IntegrationTest.class)
     public void scan() {
+        Project project = Factories.project().validProject();
         Profiler profiler = new Profiler("Scanner");
         profiler.setLogger(logger);
         CommitScanner scanner = new CommitScanner(commitRepository, updater, projectRepository);
-        when(projectRepository.findOne(1L)).thenReturn(createProject());
+        when(projectRepository.findOne(project.getId())).thenReturn(createProject());
         profiler.start("scanning without local repository present");
-        File repoRoot = scanner.scan(1L).getParentFile();
+        File repoRoot = scanner.scan(project).getParentFile();
         Assert.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
         // scanning again should be fairly quick, since the repository is already cloned
         profiler.start("re-scanning with local repository present from last test");
-        scanner.scan(1L);
+        scanner.scan(project);
         Assert.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
 
         verify(commitRepository, atLeast(20)).save(any(Commit.class));

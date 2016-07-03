@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.wickedsource.coderadar.CoderadarConfiguration;
 import org.wickedsource.coderadar.job.analyze.AnalyzeCommitJob;
 import org.wickedsource.coderadar.job.analyze.CommitAnalyzer;
 import org.wickedsource.coderadar.job.core.Job;
@@ -26,27 +25,24 @@ class JobExecutor {
 
     private CommitAnalyzer commitAnalyzer;
 
-    private CoderadarConfiguration config;
-
     @Autowired
-    public JobExecutor(CommitScanner commitScanner, FileScanner fileScanner, LogMerger merger, CommitAnalyzer commitAnalyzer, CoderadarConfiguration config) {
+    public JobExecutor(CommitScanner commitScanner, FileScanner fileScanner, LogMerger merger, CommitAnalyzer commitAnalyzer) {
         this.commitScanner = commitScanner;
         this.fileScanner = fileScanner;
         this.merger = merger;
         this.commitAnalyzer = commitAnalyzer;
-        this.config = config;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void execute(Job job) {
         if (job instanceof ScanCommitsJob) {
-            commitScanner.scan(((ScanCommitsJob) job).getProjectId());
+            commitScanner.scan(job.getProject());
         } else if (job instanceof ScanFilesJob) {
-            fileScanner.scan(((ScanFilesJob) job).getCommitId());
+            fileScanner.scan(((ScanFilesJob) job).getCommit());
         } else if (job instanceof MergeLogJob) {
-            merger.merge(((MergeLogJob) job).getProjectId());
+            merger.merge(job.getProject());
         } else if (job instanceof AnalyzeCommitJob) {
-            commitAnalyzer.analyzeCommit(((AnalyzeCommitJob) job).getCommitId());
+            commitAnalyzer.analyzeCommit(((AnalyzeCommitJob) job).getCommit());
         } else {
             throw new IllegalArgumentException(String.format("unsupported job type %s", job.getClass()));
         }

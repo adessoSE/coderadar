@@ -37,11 +37,10 @@ public class CommitScanner {
      * If the local GIT repository does not exist, the remote repository of the project is cloned into a
      * local repository first. If it exists, it will be updated to the state of the remote repository.
      *
-     * @param projectId ID of the project whose repository to scan.
+     * @param project he project whose repository to scan.
      * @return File object of the local GIT repository.
      */
-    public File scan(Long projectId) {
-        Project project = projectRepository.findOne(projectId);
+    public File scan(Project project) {
         Git gitClient = updater.updateLocalGitRepository(project);
         scanLocalRepository(project, gitClient);
         return gitClient.getRepository().getDirectory();

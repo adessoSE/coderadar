@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategyRepository;
-import org.wickedsource.coderadar.commit.domain.CommitRepository;
-import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.project.domain.ProjectDeleter;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
 import javax.validation.Valid;
@@ -30,22 +28,16 @@ public class ProjectController {
 
     private ProjectResourceAssembler projectAssembler;
 
-    private CommitRepository commitRepository;
-
-    private AnalyzingStrategyRepository analyzingStrategyRepository;
-
-    private FilePatternRepository filePatternRepository;
-
     private ProjectVerifier projectVerifier;
 
+    private ProjectDeleter projectDeleter;
+
     @Autowired
-    public ProjectController(ProjectRepository projectRepository, ProjectResourceAssembler projectAssembler, CommitRepository commitRepository, AnalyzingStrategyRepository analyzingStrategyRepository, FilePatternRepository filePatternRepository, ProjectVerifier projectVerifier) {
+    public ProjectController(ProjectRepository projectRepository, ProjectResourceAssembler projectAssembler, ProjectVerifier projectVerifier, ProjectDeleter projectDeleter) {
         this.projectRepository = projectRepository;
         this.projectAssembler = projectAssembler;
-        this.commitRepository = commitRepository;
-        this.analyzingStrategyRepository = analyzingStrategyRepository;
-        this.filePatternRepository = filePatternRepository;
         this.projectVerifier = projectVerifier;
+        this.projectDeleter = projectDeleter;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -72,10 +64,7 @@ public class ProjectController {
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteProject(@PathVariable Long id) {
         projectVerifier.checkProjectExistsOrThrowException(id);
-        analyzingStrategyRepository.deleteByProjectId(id);
-        commitRepository.deleteByProjectId(id);
-        filePatternRepository.deleteByProjectId(id);
-        projectRepository.delete(id);
+        projectDeleter.deleteProject(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

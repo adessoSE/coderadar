@@ -45,16 +45,15 @@ public class FileScanner {
         this.logEntryRepository = logEntryRepository;
     }
 
-    public void scan(Long commitId) {
+    public void scan(Commit commit) {
         try {
-            Commit commit = commitRepository.findOne(commitId);
             if (commit == null) {
-                throw new IllegalArgumentException(String.format("Commit with ID %d does not exist!", commitId));
+                throw new IllegalArgumentException(String.format("Commit with ID %d does not exist!", commit.getId()));
             }
             Git gitClient = updater.updateLocalGitRepository(commit.getProject());
             walkFilesInCommit(gitClient, commit);
         } catch (IOException e) {
-            throw new IllegalStateException(String.format("error while scanning commit %d", commitId));
+            throw new IllegalStateException(String.format("error while scanning commit %d", commit.getId()));
         }
     }
 
@@ -81,6 +80,7 @@ public class FileScanner {
             logEntry.setOldFilepath(diff.getOldPath());
             logEntry.setFilepath(diff.getNewPath());
             logEntry.setChangeType(changeTypeMapper.jgitToCoderadar(diff.getChangeType()));
+            logEntry.setProject(commit.getProject());
             logEntryRepository.save(logEntry);
             fileCounter++;
         }

@@ -13,5 +13,6 @@
     </root>
 
     <logger name="org.reflections" level="INFO"/>
+    <logger name="org.wickedsource" level="DEBUG"/>
 
 </configuration>

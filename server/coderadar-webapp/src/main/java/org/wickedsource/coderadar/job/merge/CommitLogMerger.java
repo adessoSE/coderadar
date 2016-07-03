@@ -111,7 +111,7 @@ public class CommitLogMerger {
     }
 
     private void associateWithUnchangedFiles(Commit commit, List<File> modifiedFiles, List<File> renamedFiles) {
-        List<File> unchangedFiles = fileRepository.findInCommit(ALL_BUT_DELETED, commit.getParentCommitName());
+        List<File> unchangedFiles = fileRepository.findInCommit(ALL_BUT_DELETED, commit.getParentCommitName(), commit.getProject().getId());
         unchangedFiles.removeAll(modifiedFiles);
         unchangedFiles.removeAll(renamedFiles);
         logger.debug("found {} UNCHANGED files", unchangedFiles.size());

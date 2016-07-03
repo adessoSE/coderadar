@@ -14,4 +14,6 @@ public interface JobRepository extends CrudRepository<Job, Long> {
      */
     int countByProcessingStatus(ProcessingStatus status);
 
+    int deleteByProjectId(Long projectId);
+
 }

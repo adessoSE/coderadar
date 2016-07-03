@@ -41,7 +41,8 @@ public class FileScannerTrigger {
                 jobLogger.alreadyQueuedForCommit(ScanFilesJob.class, commit);
             } else {
                 ScanFilesJob job = new ScanFilesJob();
-                job.setCommitId(commit.getId());
+                job.setCommit(commit);
+                job.setProject(commit.getProject());
                 job.setProcessingStatus(ProcessingStatus.WAITING);
                 job.setQueuedDate(new Date());
                 jobRepository.save(job);

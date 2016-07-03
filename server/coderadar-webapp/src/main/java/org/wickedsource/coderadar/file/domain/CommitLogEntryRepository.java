@@ -9,4 +9,6 @@ public interface CommitLogEntryRepository extends CrudRepository<CommitLogEntry,
 
     List<CommitLogEntry> findByCommitNameAndChangeTypeIn(String commitName, List<ChangeType> changeTypes);
 
+    int deleteByProjectId(Long projectId);
+
 }

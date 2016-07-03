@@ -10,7 +10,7 @@ public class JobFactory {
     public ScanCommitsJob waitingPullJob() {
         ScanCommitsJob job = new ScanCommitsJob();
         job.setId(1L);
-        job.setProjectId(1L);
+        job.setProject(Factories.project().validProject());
         job.setEndDate(null);
         job.setMessage(null);
         job.setProcessingStatus(ProcessingStatus.WAITING);

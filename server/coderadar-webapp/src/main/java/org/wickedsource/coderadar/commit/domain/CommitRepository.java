@@ -19,8 +19,8 @@ public interface CommitRepository extends CrudRepository<Commit, Long> {
 
     int countByProjectId(Long id);
 
-    @Query("select c from Commit c where c.merged = true and c.analyzed = false and c.id not in (select j.commitId from AnalyzeCommitJob j where j.processingStatus in (:ignoredProcessingStatus)) and c.project.id in (select s.project.id from AnalyzingStrategy s where s.active=true and s.fromDate < c.timestamp)")
+    @Query("select c from Commit c where c.merged = true and c.analyzed = false and c.id not in (select j.commit.id from AnalyzeCommitJob j where j.processingStatus in (:ignoredProcessingStatus)) and c.project.id in (select s.project.id from AnalyzingStrategy s where s.active=true and s.fromDate < c.timestamp)")
     List<Commit> findCommitsToBeAnalyzed(@Param("ignoredProcessingStatus") List<ProcessingStatus> ignoredProcessingStatus);
 
-    void deleteByProjectId(Long projectId);
+    int deleteByProjectId(Long projectId);
 }

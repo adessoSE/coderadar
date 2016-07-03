@@ -14,6 +14,7 @@ import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException
 import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.project.domain.ProjectDeleter;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
 import java.util.ArrayList;
@@ -49,6 +50,9 @@ public class ProjectControllerTest extends ControllerTestTemplate {
 
     @Mock
     private FilePatternRepository filePatternRepository;
+
+    @Mock
+    private ProjectDeleter projectDeleter;
 
     @Override
     protected ProjectController getController() {

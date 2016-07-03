@@ -84,10 +84,9 @@ public class CommitAnalyzer {
         this.findingRepository = findingRepository;
     }
 
-    public void analyzeCommit(Long commitId) {
-        Commit commit = commitRepository.findOne(commitId);
+    public void analyzeCommit(Commit commit) {
         if (commit == null) {
-            throw new IllegalArgumentException(String.format("commit with ID %d does not exist!", commitId));
+            throw new IllegalArgumentException(String.format("commit with ID %d does not exist!", commit.getId()));
         }
 
         Path gitRoot = workdirManager.getLocalGitRoot(commit.getProject().getId());
@@ -98,6 +97,7 @@ public class CommitAnalyzer {
             throw new IllegalStateException(String.format("error opening git root %s", gitRoot));
         }
         commit.setAnalyzed(Boolean.TRUE);
+        commitRepository.save(commit);
     }
 
     private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Project project) {
@@ -164,7 +164,7 @@ public class CommitAnalyzer {
     }
 
     private void storeMetrics(Commit commit, String filePath, FileMetrics metrics) {
-        File file = fileRepository.findInCommit(filePath, commit.getName());
+        File file = fileRepository.findInCommit(filePath, commit.getName(), commit.getProject().getId());
         if (file == null) {
             throw new IllegalStateException(String.format("file %s not found for commit %s in database!", filePath, commit.getName()));
         }

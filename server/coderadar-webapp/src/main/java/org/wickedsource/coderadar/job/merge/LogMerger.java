@@ -29,8 +29,7 @@ public class LogMerger {
         this.commitLogMerger = commitLogMerger;
     }
 
-    public void merge(Long projectId) {
-        Project project = projectRepository.findOne(projectId);
+    public void merge(Project project) {
         List<Commit> commitsToMerge = commitRepository.findByProjectIdAndScannedTrueAndMergedFalseOrderByTimestamp(project.getId());
         for (Commit commit : commitsToMerge) {
             commitLogMerger.mergeCommit(commit);

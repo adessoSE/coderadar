@@ -40,7 +40,7 @@ class CommitScannerTrigger {
                 ScanCommitsJob newJob = new ScanCommitsJob();
                 newJob.setProcessingStatus(ProcessingStatus.WAITING);
                 newJob.setQueuedDate(new Date());
-                newJob.setProjectId(project.getId());
+                newJob.setProject(project);
                 jobRepository.save(newJob);
                 jobLogger.queuedNewJob(newJob, project);
             }

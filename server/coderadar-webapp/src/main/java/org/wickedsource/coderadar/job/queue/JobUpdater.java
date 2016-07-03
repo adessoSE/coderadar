@@ -6,12 +6,17 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.job.core.JobRepository;
+import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
 @Service
 public class JobUpdater {
 
     @Autowired
     private JobRepository updateJobRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     /**
      * Embeds updating a Job in a separate transaction so it can be updated in the database even if the outer
@@ -20,8 +25,14 @@ public class JobUpdater {
      * @param job the job to update in the database.
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Job updateJob(Job job) {
-        return updateJobRepository.save(job);
+    public void updateJob(Job job) {
+        if(projectExists(job.getProject())) {
+            updateJobRepository.save(job);
+        }
+    }
+
+    private boolean projectExists(Project project){
+        return projectRepository.countById(project.getId()) > 0;
     }
 
 }

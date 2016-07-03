@@ -8,4 +8,5 @@ import java.util.List;
 public interface ScanFilesJobRepository extends CrudRepository<ScanFilesJob, Long>{
 
     int countByProcessingStatusInAndCommitId(List<ProcessingStatus> status, Long commitId);
+
 }

@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.job.core;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.wickedsource.coderadar.project.domain.Project;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -45,6 +46,9 @@ public class Job {
 
     @Column
     private String message;
+
+    @ManyToOne
+    private Project project;
 
     public Long getId() {
         return id;
@@ -115,4 +119,11 @@ public class Job {
         return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 }

@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.file.domain;
 
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
+import org.wickedsource.coderadar.project.domain.Project;
 
 import javax.persistence.*;
 
@@ -31,6 +32,9 @@ public class CommitLogEntry {
 
     @Column
     private String parentCommitName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Project project;
 
     public Long getId() {
         return id;
@@ -78,5 +82,13 @@ public class CommitLogEntry {
 
     public void setParentCommitName(String parentCommitName) {
         this.parentCommitName = parentCommitName;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

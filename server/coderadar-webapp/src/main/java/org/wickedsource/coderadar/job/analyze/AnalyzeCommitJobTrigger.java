@@ -35,7 +35,8 @@ public class AnalyzeCommitJobTrigger {
             AnalyzeCommitJob job = new AnalyzeCommitJob();
             job.setQueuedDate(new Date());
             job.setProcessingStatus(ProcessingStatus.WAITING);
-            job.setCommitId(commit.getId());
+            job.setCommit(commit);
+            job.setProject(commit.getProject());
             analyzeCommitJobRepository.save(job);
             jobLogger.queuedNewJob(job, commit.getProject());
         }

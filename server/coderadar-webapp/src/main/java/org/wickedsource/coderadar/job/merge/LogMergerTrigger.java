@@ -43,7 +43,7 @@ public class LogMergerTrigger {
                 MergeLogJob newJob = new MergeLogJob();
                 newJob.setProcessingStatus(ProcessingStatus.WAITING);
                 newJob.setQueuedDate(new Date());
-                newJob.setProjectId(project.getId());
+                newJob.setProject(project);
                 jobRepository.save(newJob);
                 jobLogger.queuedNewJob(newJob, project);
             }
