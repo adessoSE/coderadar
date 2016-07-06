@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.analyzingstrategy.rest;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.hateoas.ResourceSupport;
 
 import javax.validation.constraints.NotNull;
@@ -10,7 +12,10 @@ public class AnalyzingStrategyResource extends ResourceSupport {
     private Date fromDate;
 
     @NotNull
-    private boolean active;
+    private Boolean active;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean rescan;
 
     public AnalyzingStrategyResource() {
 
@@ -35,5 +40,21 @@ public class AnalyzingStrategyResource extends ResourceSupport {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    /**
+     * Careful! Can be null!
+     */
+    public Boolean isRescan() {
+        return rescan;
+    }
+
+    public void setRescan(Boolean rescan) {
+        this.rescan = rescan;
+    }
+
+    @JsonIgnore
+    public boolean isRescanNullsafe() {
+        return rescan != null && rescan;
     }
 }

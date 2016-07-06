@@ -42,7 +42,7 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
     public void testSuccessfulExecution() {
         Job jobBeforeExecution = initJob();
 
-        JobExecutionService executionService = new JobExecutionService(jobQueueService, jobUpdater, jobExecutor, jobRepository);
+        JobExecutionService executionService = new JobExecutionService(jobQueueService, jobUpdater, jobExecutor);
         executionService.executeNextJobInQueue();
 
         Job jobAfterExecution = jobRepository.findOne(jobBeforeExecution.getId());
@@ -67,7 +67,7 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
 
         doThrow(new RuntimeException("bwaaah")).when(jobExecutor).execute(any(Job.class));
 
-        JobExecutionService executionService = new JobExecutionService(jobQueueService, jobUpdater, jobExecutor, jobRepository);
+        JobExecutionService executionService = new JobExecutionService(jobQueueService, jobUpdater, jobExecutor);
         executionService.executeNextJobInQueue();
 
         Job jobAfterExecution = jobRepository.findOne(jobBeforeExecution.getId());

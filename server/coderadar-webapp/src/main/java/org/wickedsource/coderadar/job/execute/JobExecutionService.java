@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.CoderadarConfiguration;
 import org.wickedsource.coderadar.job.JobLogger;
 import org.wickedsource.coderadar.job.core.Job;
-import org.wickedsource.coderadar.job.core.JobRepository;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
 import org.wickedsource.coderadar.job.core.ResultStatus;
+import org.wickedsource.coderadar.job.queue.JobDeletedException;
 import org.wickedsource.coderadar.job.queue.JobQueueService;
 import org.wickedsource.coderadar.job.queue.JobUpdater;
 
@@ -29,14 +29,11 @@ class JobExecutionService {
 
     private JobExecutor executor;
 
-    private JobRepository jobRepository;
-
     @Autowired
-    public JobExecutionService(JobQueueService queueService, JobUpdater jobUpdater, JobExecutor executor, JobRepository jobRepository) {
+    public JobExecutionService(JobQueueService queueService, JobUpdater jobUpdater, JobExecutor executor) {
         this.queueService = queueService;
         this.jobUpdater = jobUpdater;
         this.executor = executor;
-        this.jobRepository = jobRepository;
     }
 
     /**
@@ -63,6 +60,10 @@ class JobExecutionService {
                 job.setResultStatus(ResultStatus.SUCCESS);
                 jobUpdater.updateJob(job);
                 jobLogger.successfullyFinishedJob(job);
+            } catch (JobDeletedException e) {
+                // the job was deleted while it was processing
+                // transaction must be rolled back
+                throw e;
             } catch (Throwable e) {
                 job.setResultStatus(ResultStatus.FAILED);
                 job.setProcessingStatus(ProcessingStatus.PROCESSED);

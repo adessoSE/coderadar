@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategy;
 import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategyRepository;
+import org.wickedsource.coderadar.analyzingstrategy.domain.ProjectResetException;
+import org.wickedsource.coderadar.analyzingstrategy.domain.ProjectResetter;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
+import org.wickedsource.coderadar.core.rest.validation.UserException;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
@@ -28,10 +31,13 @@ public class AnalyzingStrategyController {
 
     private AnalyzingStrategyRepository analyzingStrategyRepository;
 
+    private ProjectResetter analysisResetter;
+
     @Autowired
-    public AnalyzingStrategyController(ProjectVerifier projectVerifier, AnalyzingStrategyRepository analyzingStrategyRepository) {
+    public AnalyzingStrategyController(ProjectVerifier projectVerifier, AnalyzingStrategyRepository analyzingStrategyRepository, ProjectResetter analysisResetter) {
         this.projectVerifier = projectVerifier;
         this.analyzingStrategyRepository = analyzingStrategyRepository;
+        this.analysisResetter = analysisResetter;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -48,10 +54,20 @@ public class AnalyzingStrategyController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<AnalyzingStrategyResource> setAnalyzingStrategy(@PathVariable("projectId") Long projectId, @Valid @RequestBody AnalyzingStrategyResource resource) {
         Project project = projectVerifier.loadProjectOrThrowException(projectId);
+
+        if(resource.isRescanNullsafe()){
+            try {
+                analysisResetter.resetProject(project);
+            }catch(ProjectResetException e){
+                throw new UserException("Cannot re-scan project while there are analyzer jobs waiting or running.");
+            }
+        }
+
         AnalyzingStrategy strategy = analyzingStrategyRepository.findByProjectId(projectId);
         if(strategy == null){
             strategy = new AnalyzingStrategy();
         }
+
         AnalyzingStrategyResourceAssembler assembler = new AnalyzingStrategyResourceAssembler(projectId);
         strategy = assembler.updateEntity(strategy, resource, project);
         analyzingStrategyRepository.save(strategy);

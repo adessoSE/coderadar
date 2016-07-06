@@ -12,11 +12,18 @@ import org.wickedsource.coderadar.project.domain.ProjectRepository;
 @Service
 public class JobUpdater {
 
-    @Autowired
     private JobRepository updateJobRepository;
 
-    @Autowired
     private ProjectRepository projectRepository;
+
+    private JobRepository jobRepository;
+
+    @Autowired
+    public JobUpdater(JobRepository updateJobRepository, ProjectRepository projectRepository, JobRepository jobRepository) {
+        this.updateJobRepository = updateJobRepository;
+        this.projectRepository = projectRepository;
+        this.jobRepository = jobRepository;
+    }
 
     /**
      * Embeds updating a Job in a separate transaction so it can be updated in the database even if the outer
@@ -26,13 +33,21 @@ public class JobUpdater {
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateJob(Job job) {
-        if(projectExists(job.getProject())) {
+        if(!jobExists(job)){
+            throw new JobDeletedException(job);
+        }
+
+        if (projectExists(job.getProject())) {
             updateJobRepository.save(job);
         }
     }
 
-    private boolean projectExists(Project project){
+    private boolean projectExists(Project project) {
         return projectRepository.countById(project.getId()) > 0;
+    }
+
+    private boolean jobExists(Job job) {
+        return jobRepository.countById(job.getId()) > 0;
     }
 
 }

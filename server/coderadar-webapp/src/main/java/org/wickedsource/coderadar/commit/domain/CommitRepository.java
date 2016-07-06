@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.commit.domain;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -23,4 +24,8 @@ public interface CommitRepository extends CrudRepository<Commit, Long> {
     List<Commit> findCommitsToBeAnalyzed(@Param("ignoredProcessingStatus") List<ProcessingStatus> ignoredProcessingStatus);
 
     int deleteByProjectId(Long projectId);
+
+    @Query("update Commit c set c.analyzed=false where c.project.id = :projectId")
+    @Modifying
+    int resetAnalyzedFlagForProjectId(@Param("projectId") Long projectId);
 }

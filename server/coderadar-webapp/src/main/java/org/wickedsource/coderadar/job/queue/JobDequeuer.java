@@ -19,7 +19,7 @@ public class JobDequeuer {
      * <p>
      * Technical Note: this method must run in it's own transaction (transaction propagation
      * REQUIRES_NEW). This is to minimize the time between loading the next job from the queue and marking it as
-     * being processed. Multiple concurrent calls to the dequeue methods may result in optimistic locking exceptions
+     * being processed. Multiple concurrent calls to the dequeue method may result in optimistic locking exceptions
      * which should be handled by the client, for example by just trying again.
      * </p>
      *

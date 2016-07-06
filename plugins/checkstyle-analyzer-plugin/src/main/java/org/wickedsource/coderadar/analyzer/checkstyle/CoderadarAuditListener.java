@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.analyzer.checkstyle;
 
 import com.puppycrawl.tools.checkstyle.api.AuditEvent;
 import com.puppycrawl.tools.checkstyle.api.AuditListener;
+import com.puppycrawl.tools.checkstyle.api.SeverityLevel;
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 import org.wickedsource.coderadar.analyzer.api.Finding;
 import org.wickedsource.coderadar.analyzer.api.Metric;
@@ -35,9 +36,11 @@ public class CoderadarAuditListener implements AuditListener {
 
     @Override
     public void addError(AuditEvent evt) {
-        Metric metric = new Metric("checkstyle:" + evt.getSourceName());
-        Finding finding = new Finding(evt.getLine(), evt.getLine()); //TODO add column / char position
-        metrics.addFinding(metric, finding);
+        if(evt.getSeverityLevel() != SeverityLevel.IGNORE) {
+            Metric metric = new Metric("checkstyle:" + evt.getSourceName());
+            Finding finding = new Finding(evt.getLine(), evt.getLine(), evt.getColumn(), evt.getColumn());
+            metrics.addFinding(metric, finding);
+        }
     }
 
     @Override

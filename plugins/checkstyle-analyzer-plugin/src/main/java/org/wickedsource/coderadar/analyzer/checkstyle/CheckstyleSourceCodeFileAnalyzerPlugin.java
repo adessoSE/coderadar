@@ -57,11 +57,6 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
         };
     }
 
-
-    private Configuration createConfiguration(byte[] configurationFile) throws CheckstyleException {
-        return getConfigurationFromStream(new ByteArrayInputStream(configurationFile));
-    }
-
     private Configuration createDefaultConfiguration() throws CheckstyleException {
         return getConfigurationFromStream(getClass().getResourceAsStream("/checkstyle.xml"));
     }

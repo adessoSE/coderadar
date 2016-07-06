@@ -41,6 +41,16 @@ public class ControllerExceptionHandler {
         ErrorDTO errors = new ErrorDTO();
         FieldErrorDTO fieldError = new FieldErrorDTO(e.getField(), e.getValidationMessage());
         errors.addFieldError(fieldError);
+        errors.setErrorMessage("Validation Error");
+        return errors;
+    }
+
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(UserException.class)
+    @ResponseBody
+    public ErrorDTO handleUserException(UserException e){
+        ErrorDTO errors = new ErrorDTO();
+        errors.setErrorMessage(e.getMessage());
         return errors;
     }
 
@@ -65,6 +75,7 @@ public class ControllerExceptionHandler {
         for (org.springframework.validation.FieldError fieldError : fieldErrors) {
             error.addFieldError(new FieldErrorDTO(fieldError.getField(), fieldError.getDefaultMessage()));
         }
+        error.setErrorMessage("Validation Error");
         return error;
     }
 }

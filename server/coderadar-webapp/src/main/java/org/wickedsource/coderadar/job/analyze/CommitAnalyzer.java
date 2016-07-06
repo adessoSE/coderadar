@@ -155,6 +155,7 @@ public class CommitAnalyzer {
 
             byte[] fileContent = BlobUtils.getRawContent(gitClient.getRepository(), gitCommit.getId(), filepath);
             FileMetrics metrics = fileAnalyzer.analyzeFile(analyzers, filepath, fileContent);
+
             storeMetrics(commit, filepath, metrics);
         }
     }

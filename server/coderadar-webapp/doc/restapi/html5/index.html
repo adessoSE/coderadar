@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v1.0.0.SNAPSHOT, Tom Hombergs, 2016-07-03">
+<meta name="author" content="v1.0.0.SNAPSHOT, Tom Hombergs, 2016-07-06">
 <title>coderadar REST API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -423,7 +423,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v1.0.0.SNAPSHOT, Tom Hombergs, 2016-07-03</span><br>
+<span id="author" class="author">v1.0.0.SNAPSHOT, Tom Hombergs, 2016-07-06</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1326,9 +1326,15 @@ an Analyzing Strategy, analysis jobs will be queued automatically for the commit
 <td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">rescan</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set this to true when updating an AnalyzingStrategy when you want to delete all existing analysis results and restart analysis with the new strategy.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">fromDate</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date (in milleseconds since epoch) from which to start analyzing commits. Commits before this date are ignored during analysis.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date (in milliseconds since epoch) from which to start analyzing commits. Commits before this date are ignored during analysis.</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
@@ -1368,11 +1374,12 @@ an Analyzing Strategy, analysis jobs will be queued automatically for the commit
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/strategy HTTP/1.1
 Content-Type: application/json
 Host: localhost
-Content-Length: 54
+Content-Length: 75
 
 {
-  "fromDate" : 1467565070290,
-  "active" : true
+  "fromDate" : 1467830023144,
+  "active" : true,
+  "rescan" : false
 }</code></pre>
 </div>
 </div>
@@ -1383,11 +1390,12 @@ Content-Length: 54
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 239
+Content-Length: 260
 
 {
-  "fromDate" : 1467565070290,
+  "fromDate" : 1467830023144,
   "active" : true,
+  "rescan" : false,
   "links" : [ {
     "rel" : "self",
     "href" : "http://localhost:8080/projects/1/strategy"
@@ -1417,11 +1425,12 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 239
+Content-Length: 260
 
 {
-  "fromDate" : 1467565070367,
+  "fromDate" : 1467830023209,
   "active" : true,
+  "rescan" : false,
   "links" : [ {
     "rel" : "self",
     "href" : "http://localhost:8080/projects/1/strategy"
@@ -1458,9 +1467,10 @@ an error JSON structure object that looks like this:</p>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 400 Bad Request
 Content-Type: application/json;charset=UTF-8
-Content-Length: 164
+Content-Length: 204
 
 {
+  "errorMessage" : "Validation Error",
   "fieldErrors" : [ {
     "field" : "vcsUrl",
     "message" : "must be a valid URL"
@@ -1485,6 +1495,11 @@ Content-Length: 164
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>errorMessage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Short message describing what went wrong. In case of validation errors, the detailed validation error messages can be found in the fieldErrors array.</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>fieldErrors</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>

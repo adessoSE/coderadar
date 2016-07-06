@@ -68,7 +68,7 @@ public class ProjectDeleter {
     public void deleteProject(Long id) {
         logger.debug("deleted {} AnalyzerConfigurationFile entities", analyzerConfigurationFileRepository.deleteByProjectId(id));
         logger.debug("deleted {} AnalyzerConfiguration entities", analyzerConfigurationRepository.deleteByProjectId(id));
-        logger.debug("deleted {} Jon entities", jobRepository.deleteByProjectId(id));
+        logger.debug("deleted {} Job entities", jobRepository.deleteByProjectId(id));
         logger.debug("deleted {} AnalyzingStrategy entities", analyzingStrategyRepository.deleteByProjectId(id));
         logger.debug("deleted {} CommitLogEntry entities", commitLogEntryRepository.deleteByProjectId(id));
         logger.debug("deleted {} MetricValue entities", metricValueRepository.deleteByProjectId(id));
