@@ -1,23 +1,21 @@
 package org.wickedsource.coderadar.project.rest;
 
-import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.analyzer.rest.AnalyzerConfigurationController;
 import org.wickedsource.coderadar.analyzingstrategy.rest.AnalyzingStrategyController;
+import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
 import org.wickedsource.coderadar.filepattern.rest.FilePatternController;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Component
-public class ProjectResourceAssembler extends ResourceAssemblerSupport<Project, ProjectResource> {
+public class ProjectResourceAssembler extends AbstractResourceAssembler<Project, ProjectResource> {
 
     public ProjectResourceAssembler() {
         super(ProjectController.class, ProjectResource.class);
@@ -37,14 +35,6 @@ public class ProjectResourceAssembler extends ResourceAssemblerSupport<Project, 
         resource.add(linkTo(methodOn(AnalyzerConfigurationController.class).getAnalyzerConfigurationsForProject(project.getId())).withRel("analyzers"));
         resource.add(linkTo(methodOn(AnalyzingStrategyController.class).getAnalyzingStrategy(project.getId())).withRel("strategy"));
         return resource;
-    }
-
-    List<ProjectResource> toResourceList(Iterable<Project> projects) {
-        List<ProjectResource> resourceList = new ArrayList<>();
-        for (Project project : projects) {
-            resourceList.add(toResource(project));
-        }
-        return resourceList;
     }
 
     Project toEntity(ProjectResource resource) {

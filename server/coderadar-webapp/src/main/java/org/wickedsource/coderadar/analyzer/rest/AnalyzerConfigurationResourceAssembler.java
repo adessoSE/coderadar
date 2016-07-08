@@ -1,17 +1,14 @@
 package org.wickedsource.coderadar.analyzer.rest;
 
-import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
+import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectController;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-public class AnalyzerConfigurationResourceAssembler extends ResourceAssemblerSupport<AnalyzerConfiguration, AnalyzerConfigurationResource> {
+public class AnalyzerConfigurationResourceAssembler extends AbstractResourceAssembler<AnalyzerConfiguration, AnalyzerConfigurationResource> {
 
     private Long projectId;
 
@@ -27,14 +24,6 @@ public class AnalyzerConfigurationResourceAssembler extends ResourceAssemblerSup
         resource.add(linkTo(methodOn(AnalyzerConfigurationController.class).getAnalyzerConfigurationsForProject(projectId)).withRel("list"));
         resource.add(linkTo(methodOn(AnalyzerConfigurationController.class).getSingleAnalyzerConfigurationForProject(projectId, entity.getId())).withRel("self"));
         return resource;
-    }
-
-    public List<AnalyzerConfigurationResource> toResourceList(List<AnalyzerConfiguration> entities) {
-        List<AnalyzerConfigurationResource> resultList = new ArrayList<>();
-        for (AnalyzerConfiguration entity : entities) {
-            resultList.add(toResource(entity));
-        }
-        return resultList;
     }
 
     public AnalyzerConfiguration toEntity(AnalyzerConfigurationResource resource, Project project) {
