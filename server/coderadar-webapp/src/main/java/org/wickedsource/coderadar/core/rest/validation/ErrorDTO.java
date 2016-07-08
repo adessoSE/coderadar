@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.core.rest.validation;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,6 +10,7 @@ public class ErrorDTO {
 
     private String errorMessage;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<FieldErrorDTO> fieldErrors;
 
     public void addFieldError(FieldErrorDTO fieldError) {
