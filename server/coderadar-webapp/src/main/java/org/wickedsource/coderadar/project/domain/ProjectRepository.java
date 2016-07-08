@@ -8,4 +8,6 @@ public interface ProjectRepository extends CrudRepository<Project, Long> {
 
     int deleteById(Long id);
 
+    int countByName(String name);
+
 }

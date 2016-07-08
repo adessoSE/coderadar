@@ -23,11 +23,11 @@ public class WorkdirManager {
      * Returns the path to the local GIT repository for the specified project. Creates the folder
      * if it does not exist.
      *
-     * @param projectId ID of the project for which to return the path.
+     * @param projectName name of the project
      * @return path to the local GIT repository of the specified project.
      */
-    public Path getLocalGitRoot(Long projectId) {
-        Path workdir = config.getWorkdir().resolve("projects/" + projectId);
+    public Path getLocalGitRoot(String projectName) {
+        Path workdir = config.getWorkdir().resolve("projects/" + projectName);
         createDirIfNecessary(workdir);
         return workdir;
     }

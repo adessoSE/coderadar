@@ -9,7 +9,6 @@ import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
 import org.wickedsource.coderadar.project.domain.Project;
-import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.vcs.git.walk.AllCommitsWalker;
 
 import java.io.File;
@@ -23,13 +22,10 @@ public class CommitScanner {
 
     private LocalGitRepositoryUpdater updater;
 
-    private ProjectRepository projectRepository;
-
     @Autowired
-    public CommitScanner(CommitRepository commitRepository, LocalGitRepositoryUpdater updater, ProjectRepository projectRepository) {
+    public CommitScanner(CommitRepository commitRepository, LocalGitRepositoryUpdater updater) {
         this.commitRepository = commitRepository;
         this.updater = updater;
-        this.projectRepository = projectRepository;
     }
 
     /**

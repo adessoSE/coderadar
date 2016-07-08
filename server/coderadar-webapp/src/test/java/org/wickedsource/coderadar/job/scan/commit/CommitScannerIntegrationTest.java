@@ -86,7 +86,7 @@ public class CommitScannerIntegrationTest extends GitTestTemplate {
         Project project = Factories.project().validProject();
         Profiler profiler = new Profiler("Scanner");
         profiler.setLogger(logger);
-        CommitScanner scanner = new CommitScanner(commitRepository, updater, projectRepository);
+        CommitScanner scanner = new CommitScanner(commitRepository, updater);
         when(projectRepository.findOne(project.getId())).thenReturn(createProject());
         profiler.start("scanning without local repository present");
         File repoRoot = scanner.scan(project).getParentFile();

@@ -89,7 +89,7 @@ public class CommitAnalyzer {
             throw new IllegalArgumentException(String.format("commit with ID %d does not exist!", commit.getId()));
         }
 
-        Path gitRoot = workdirManager.getLocalGitRoot(commit.getProject().getId());
+        Path gitRoot = workdirManager.getLocalGitRoot(commit.getProject().getName());
         try {
             Git gitClient = Git.open(gitRoot.toFile());
             walkFilesInCommit(gitClient, commit, getAnalyzersForProject(commit.getProject()));

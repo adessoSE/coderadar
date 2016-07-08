@@ -9,7 +9,7 @@ import javax.persistence.*;
  * A coderadar project that defines the source of files that are to be analyzed.
  */
 @Entity
-@Table
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "name")})
 public class Project {
 
     @Id
