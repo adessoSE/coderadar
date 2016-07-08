@@ -29,13 +29,6 @@ public class AnalyzerConfigurationResourceAssembler extends ResourceAssemblerSup
         return resource;
     }
 
-    public AnalyzerConfiguration updateEntity(AnalyzerConfiguration entity, AnalyzerConfigurationResource resource, Project project){
-        entity.setProject(project);
-        entity.setEnabled(resource.isEnabled());
-        entity.setAnalyzerName(resource.getAnalyzerName());
-        return entity;
-    }
-
     public List<AnalyzerConfigurationResource> toResourceList(List<AnalyzerConfiguration> entities) {
         List<AnalyzerConfigurationResource> resultList = new ArrayList<>();
         for (AnalyzerConfiguration entity : entities) {
@@ -45,7 +38,10 @@ public class AnalyzerConfigurationResourceAssembler extends ResourceAssemblerSup
     }
 
     public AnalyzerConfiguration toEntity(AnalyzerConfigurationResource resource, Project project) {
-        AnalyzerConfiguration entity = new AnalyzerConfiguration();
+        return updateEntity(resource, project, new AnalyzerConfiguration());
+    }
+
+    public AnalyzerConfiguration updateEntity(AnalyzerConfigurationResource resource, Project project, AnalyzerConfiguration entity) {
         entity.setAnalyzerName(resource.getAnalyzerName());
         entity.setEnabled(resource.isEnabled());
         entity.setProject(project);

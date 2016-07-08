@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationRepository;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
+import org.wickedsource.coderadar.core.rest.validation.UserException;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
@@ -39,10 +40,14 @@ public class AnalyzerConfigurationController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<AnalyzerConfigurationResource> addAnalyzerConfigurationToProject(@PathVariable Long projectId, @Valid @RequestBody AnalyzerConfigurationResource resource) {
+    public ResponseEntity<AnalyzerConfigurationResource> setAnalyzerConfiguration(@PathVariable Long projectId, @Valid @RequestBody AnalyzerConfigurationResource resource) {
+        // TODO: overwrite, if existing
         analyzerVerifier.checkAnalyzerExistsOrThrowException(resource.getAnalyzerName());
         AnalyzerConfigurationResourceAssembler assembler = new AnalyzerConfigurationResourceAssembler(projectId);
         Project project = projectVerifier.loadProjectOrThrowException(projectId);
+        if(analyzerConfigurationRepository.countByProjectIdAndAnalyzerName(projectId, resource.getAnalyzerName()) > 0){
+            throw new UserException(String.format("AnalyzerConfiguration for analyzer %s is already configured for this project!", resource.getAnalyzerName()));
+        }
         AnalyzerConfiguration entity = assembler.toEntity(resource, project);
         AnalyzerConfiguration savedEntity = analyzerConfigurationRepository.save(entity);
         return new ResponseEntity<>(assembler.toResource(savedEntity), HttpStatus.CREATED);
@@ -79,7 +84,7 @@ public class AnalyzerConfigurationController {
         AnalyzerConfigurationResourceAssembler assembler = new AnalyzerConfigurationResourceAssembler(projectId);
         Project project = projectVerifier.loadProjectOrThrowException(projectId);
         AnalyzerConfiguration entity = analyzerConfigurationRepository.findByProjectIdAndId(projectId, analyzerConfigurationId);
-        AnalyzerConfiguration savedEntity = assembler.updateEntity(entity, resource, project);
+        AnalyzerConfiguration savedEntity = assembler.updateEntity(resource, project, entity);
         return new ResponseEntity<>(assembler.toResource(savedEntity), HttpStatus.OK);
     }
 

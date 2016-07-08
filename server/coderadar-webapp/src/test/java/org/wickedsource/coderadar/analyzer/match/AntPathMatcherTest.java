@@ -29,6 +29,8 @@ public class AntPathMatcherTest {
         Assert.assertTrue(matcher.match("org/**/servlet/bla.jsp", "org/servlet/bla.jsp"));
         Assert.assertTrue(matcher.match("org/**/servlet/bla.jsp", "org/springframework/servlet/bla.jsp"));
         Assert.assertFalse(matcher.match("org/**/servlet/bla.jsp", "org/springframework/servlet/test.jsp"));
+
+        Assert.assertTrue(matcher.match("**/src/main/java/**/*.java", "diffparser/src/main/java/org/wickedsource/Test.java"));
     }
 
 }

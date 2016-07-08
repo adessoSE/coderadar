@@ -8,6 +8,8 @@ public interface AnalyzerConfigurationRepository extends CrudRepository<Analyzer
 
     AnalyzerConfiguration findByProjectIdAndAnalyzerName(Long projectId, String analyzerName);
 
+    int countByProjectIdAndAnalyzerName(Long projectId, String analyzerName);
+
     List<AnalyzerConfiguration> findByProjectId(Long projectId);
 
     int deleteByProjectIdAndAnalyzerName(Long projectId, String analyzerName);
