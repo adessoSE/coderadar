@@ -8,7 +8,9 @@ import java.util.Date;
 public class AnalyzingStrategyFactory {
 
     public AnalyzingStrategyResource analyzingStrategyResource(){
-        return new AnalyzingStrategyResource(new Date(), true);
+        AnalyzingStrategyResource strategy = new AnalyzingStrategyResource(new Date(), true);
+        strategy.setRescan(Boolean.TRUE);
+        return strategy;
     }
 
     public AnalyzingStrategy analyzingStrategy() {

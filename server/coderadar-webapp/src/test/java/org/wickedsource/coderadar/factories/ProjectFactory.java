@@ -14,7 +14,7 @@ public class ProjectFactory {
             Project project = new Project();
             project.setId(1L);
             project.setName("Testproject");
-            VcsCoordinates vcs = new VcsCoordinates(new URL("http://my.url"), VcsType.GIT);
+            VcsCoordinates vcs = new VcsCoordinates(new URL("https://github.com/thombergs/diffparser.git"), VcsType.GIT);
             vcs.setUsername("user");
             vcs.setPassword("pass");
             project.setVcsCoordinates(vcs);

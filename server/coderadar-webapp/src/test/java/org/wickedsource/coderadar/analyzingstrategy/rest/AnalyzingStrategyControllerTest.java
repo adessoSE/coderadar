@@ -6,6 +6,7 @@ import org.mockito.Mock;
 import org.springframework.http.MediaType;
 import org.wickedsource.coderadar.ControllerTestTemplate;
 import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategyRepository;
+import org.wickedsource.coderadar.analyzingstrategy.domain.ProjectResetter;
 import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
@@ -23,6 +24,9 @@ public class AnalyzingStrategyControllerTest extends ControllerTestTemplate {
 
     @Mock
     private AnalyzingStrategyRepository analyzingStrategyRepository;
+
+    @Mock
+    private ProjectResetter projectResetter;
 
     @InjectMocks
     private AnalyzingStrategyController controller;
