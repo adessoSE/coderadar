@@ -1,7 +1,9 @@
 package org.wickedsource.coderadar.factories;
 
+import org.springframework.data.domain.*;
 import org.wickedsource.coderadar.commit.domain.Commit;
 
+import java.util.Arrays;
 import java.util.Date;
 
 public class CommitFactory {
@@ -13,5 +15,11 @@ public class CommitFactory {
         commit.setTimestamp(new Date());
         commit.setAuthor("max");
         return commit;
+    }
+
+    public Page<Commit> commitPage() {
+        Pageable pageRequest = new PageRequest(1,10, Sort.Direction.ASC, "name");
+        Page page = new PageImpl(Arrays.asList(unprocessedCommit(), unprocessedCommit()), pageRequest, 100);
+        return page;
     }
 }

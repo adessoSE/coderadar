@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.wickedsource.coderadar.ControllerTestTemplate;
@@ -165,7 +166,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
 
         mvc().perform(get("/projects"))
                 .andExpect(status().isOk())
-                .andExpect(containsResources())
+                .andExpect(contains(Resources.class))
                 .andDo(document("projects/list"));
     }
 

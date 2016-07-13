@@ -2,13 +2,13 @@ package org.wickedsource.coderadar.commit.domain;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
 
 import java.util.List;
 
-public interface CommitRepository extends CrudRepository<Commit, Long> {
+public interface CommitRepository extends PagingAndSortingRepository<Commit, Long> {
 
     Commit findTop1ByProjectIdOrderByTimestampDesc(Long projectId);
 

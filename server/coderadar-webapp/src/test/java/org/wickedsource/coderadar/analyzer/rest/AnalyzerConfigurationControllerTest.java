@@ -3,6 +3,7 @@ package org.wickedsource.coderadar.analyzer.rest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.wickedsource.coderadar.ControllerTestTemplate;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
@@ -90,7 +91,7 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
 
         mvc().perform(get("/projects/1/analyzers"))
                 .andExpect(status().isOk())
-                .andExpect(containsResources())
+                .andExpect(contains(Resources.class))
                 .andDo(document("analyzerConfiguration/get"));
     }
 
