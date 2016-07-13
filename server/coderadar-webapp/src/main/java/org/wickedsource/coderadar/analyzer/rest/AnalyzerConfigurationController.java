@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.analyzer.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -59,12 +60,12 @@ public class AnalyzerConfigurationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<AnalyzerConfigurationResource>> getAnalyzerConfigurationsForProject(@PathVariable Long projectId) {
+    @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
+    public ResponseEntity<Resources<AnalyzerConfigurationResource>> getAnalyzerConfigurationsForProject(@PathVariable Long projectId) {
         projectVerifier.checkProjectExistsOrThrowException(projectId);
         List<AnalyzerConfiguration> configurations = analyzerConfigurationRepository.findByProjectId(projectId);
         AnalyzerConfigurationResourceAssembler assembler = new AnalyzerConfigurationResourceAssembler(projectId);
-        return new ResponseEntity<>(assembler.toResourceList(configurations), HttpStatus.OK);
+        return new ResponseEntity<>(new Resources(assembler.toResourceList(configurations)), HttpStatus.OK);
     }
 
     @RequestMapping(path="/{analyzerConfigurationId}", method = RequestMethod.GET)

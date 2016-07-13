@@ -165,6 +165,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
 
         mvc().perform(get("/projects"))
                 .andExpect(status().isOk())
+                .andExpect(containsResources())
                 .andDo(document("projects/list"));
     }
 

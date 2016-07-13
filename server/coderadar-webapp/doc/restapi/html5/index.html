@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v1.0.0.SNAPSHOT, Tom Hombergs, 2016-07-06">
+<meta name="author" content="v1.0.0.SNAPSHOT, Tom Hombergs, 2016-07-14">
 <title>coderadar REST API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -423,7 +423,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v1.0.0.SNAPSHOT, Tom Hombergs, 2016-07-06</span><br>
+<span id="author" class="author">v1.0.0.SNAPSHOT, Tom Hombergs, 2016-07-14</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -603,48 +603,51 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 1002
+Content-Type: application/hal+json
+Content-Length: 1146
 
-[ {
-  "name" : "Testproject",
-  "vcsType" : "GIT",
-  "vcsUrl" : "http://my.url",
-  "vcsUser" : "user",
-  "vcsPassword" : "pass",
-  "links" : [ {
-    "rel" : "self",
-    "href" : "http://localhost:8080/projects/1"
+{
+  "links" : [ ],
+  "content" : [ {
+    "name" : "Testproject",
+    "vcsType" : "GIT",
+    "vcsUrl" : "https://github.com/thombergs/diffparser.git",
+    "vcsUser" : "user",
+    "vcsPassword" : "pass",
+    "links" : [ {
+      "rel" : "self",
+      "href" : "http://localhost:8080/projects/1"
+    }, {
+      "rel" : "files",
+      "href" : "http://localhost:8080/projects/1/files"
+    }, {
+      "rel" : "analyzers",
+      "href" : "http://localhost:8080/projects/1/analyzers"
+    }, {
+      "rel" : "strategy",
+      "href" : "http://localhost:8080/projects/1/strategy"
+    } ]
   }, {
-    "rel" : "files",
-    "href" : "http://localhost:8080/projects/1/files"
-  }, {
-    "rel" : "analyzers",
-    "href" : "http://localhost:8080/projects/1/analyzers"
-  }, {
-    "rel" : "strategy",
-    "href" : "http://localhost:8080/projects/1/strategy"
+    "name" : "Another project",
+    "vcsType" : "SVN",
+    "vcsUrl" : "http://your.url",
+    "vcsUser" : null,
+    "vcsPassword" : null,
+    "links" : [ {
+      "rel" : "self",
+      "href" : "http://localhost:8080/projects/2"
+    }, {
+      "rel" : "files",
+      "href" : "http://localhost:8080/projects/2/files"
+    }, {
+      "rel" : "analyzers",
+      "href" : "http://localhost:8080/projects/2/analyzers"
+    }, {
+      "rel" : "strategy",
+      "href" : "http://localhost:8080/projects/2/strategy"
+    } ]
   } ]
-}, {
-  "name" : "Another project",
-  "vcsType" : "SVN",
-  "vcsUrl" : "http://your.url",
-  "vcsUser" : null,
-  "vcsPassword" : null,
-  "links" : [ {
-    "rel" : "self",
-    "href" : "http://localhost:8080/projects/2"
-  }, {
-    "rel" : "files",
-    "href" : "http://localhost:8080/projects/2/files"
-  }, {
-    "rel" : "analyzers",
-    "href" : "http://localhost:8080/projects/2/analyzers"
-  }, {
-    "rel" : "strategy",
-    "href" : "http://localhost:8080/projects/2/strategy"
-  } ]
-} ]</code></pre>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -676,12 +679,12 @@ Content-Length: 129
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 497
+Content-Length: 527
 
 {
   "name" : "Testproject",
   "vcsType" : "GIT",
-  "vcsUrl" : "http://my.url",
+  "vcsUrl" : "https://github.com/thombergs/diffparser.git",
   "vcsUser" : "user",
   "vcsPassword" : "pass",
   "links" : [ {
@@ -730,12 +733,12 @@ Content-Length: 147
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 497
+Content-Length: 527
 
 {
   "name" : "Testproject",
   "vcsType" : "GIT",
-  "vcsUrl" : "http://my.url",
+  "vcsUrl" : "https://github.com/thombergs/diffparser.git",
   "vcsUser" : "user",
   "vcsPassword" : "pass",
   "links" : [ {
@@ -1156,36 +1159,39 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 711
+Content-Type: application/hal+json
+Content-Length: 801
 
-[ {
-  "analyzerName" : "org.wickedsource.locAnalyzer",
-  "enabled" : true,
-  "links" : [ {
-    "rel" : "project",
-    "href" : "http://localhost:8080/projects/1"
+{
+  "links" : [ ],
+  "content" : [ {
+    "analyzerName" : "org.wickedsource.locAnalyzer",
+    "enabled" : true,
+    "links" : [ {
+      "rel" : "project",
+      "href" : "http://localhost:8080/projects/1"
+    }, {
+      "rel" : "list",
+      "href" : "http://localhost:8080/projects/1/analyzers"
+    }, {
+      "rel" : "self",
+      "href" : "http://localhost:8080/projects/1/analyzers/1"
+    } ]
   }, {
-    "rel" : "list",
-    "href" : "http://localhost:8080/projects/1/analyzers"
-  }, {
-    "rel" : "self",
-    "href" : "http://localhost:8080/projects/1/analyzers/1"
+    "analyzerName" : "org.wickedsource.fooAnalyzer",
+    "enabled" : false,
+    "links" : [ {
+      "rel" : "project",
+      "href" : "http://localhost:8080/projects/1"
+    }, {
+      "rel" : "list",
+      "href" : "http://localhost:8080/projects/1/analyzers"
+    }, {
+      "rel" : "self",
+      "href" : "http://localhost:8080/projects/1/analyzers/2"
+    } ]
   } ]
-}, {
-  "analyzerName" : "org.wickedsource.fooAnalyzer",
-  "enabled" : false,
-  "links" : [ {
-    "rel" : "project",
-    "href" : "http://localhost:8080/projects/1"
-  }, {
-    "rel" : "list",
-    "href" : "http://localhost:8080/projects/1/analyzers"
-  }, {
-    "rel" : "self",
-    "href" : "http://localhost:8080/projects/1/analyzers/2"
-  } ]
-} ]</code></pre>
+}</code></pre>
 </div>
 </div>
 </div>
@@ -1328,13 +1334,13 @@ an Analyzing Strategy, analysis jobs will be queued automatically for the commit
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">rescan</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set this to true when updating an AnalyzingStrategy when you want to delete all existing analysis results and restart analysis with the new strategy.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set this to true when updating an AnalyzingStrategy if you want to delete all existing analysis results and restart analysis with the new strategy. You will get an error response if you try rescanning a project while there are running or queued analysis jobs (i.e. when the previous scan over all commits is not yet finished).</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">fromDate</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date (in milliseconds since epoch) from which to start analyzing commits. Commits before this date are ignored during analysis.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date (in milliseconds since epoch) from which to start analyzing commits. Commits before this date are ignored during analysis. If no date is specified, all commits will be analyzed.</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
@@ -1374,12 +1380,12 @@ an Analyzing Strategy, analysis jobs will be queued automatically for the commit
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/strategy HTTP/1.1
 Content-Type: application/json
 Host: localhost
-Content-Length: 75
+Content-Length: 74
 
 {
-  "fromDate" : 1467830023144,
+  "fromDate" : 1468447984818,
   "active" : true,
-  "rescan" : false
+  "rescan" : true
 }</code></pre>
 </div>
 </div>
@@ -1390,12 +1396,11 @@ Content-Length: 75
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 260
+Content-Length: 239
 
 {
-  "fromDate" : 1467830023144,
+  "fromDate" : 1468447984818,
   "active" : true,
-  "rescan" : false,
   "links" : [ {
     "rel" : "self",
     "href" : "http://localhost:8080/projects/1/strategy"
@@ -1425,12 +1430,11 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 260
+Content-Length: 239
 
 {
-  "fromDate" : 1467830023209,
+  "fromDate" : 1468447984887,
   "active" : true,
-  "rescan" : false,
   "links" : [ {
     "rel" : "self",
     "href" : "http://localhost:8080/projects/1/strategy"
@@ -1531,7 +1535,7 @@ Content-Length: 204
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-07-03 18:12:43 +02:00
+Last updated 2016-07-13 23:33:39 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

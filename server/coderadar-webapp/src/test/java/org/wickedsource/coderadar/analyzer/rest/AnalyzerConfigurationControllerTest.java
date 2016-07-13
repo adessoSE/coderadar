@@ -90,7 +90,7 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
 
         mvc().perform(get("/projects/1/analyzers"))
                 .andExpect(status().isOk())
-                .andExpect(containsList(AnalyzerConfigurationResource.class))
+                .andExpect(containsResources())
                 .andDo(document("analyzerConfiguration/get"));
     }
 

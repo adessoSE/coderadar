@@ -10,6 +10,7 @@ import org.junit.Rule;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.Resources;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.hypermedia.Link;
@@ -34,6 +35,8 @@ import static org.springframework.restdocs.snippet.Attributes.key;
 public abstract class ControllerTestTemplate {
 
     private Logger logger = LoggerFactory.getLogger(ControllerTestTemplate.class);
+
+    private ObjectMapper halObjectMapper;
 
     private MockMvc mvc;
 
@@ -144,16 +147,21 @@ public abstract class ControllerTestTemplate {
         };
     }
 
-    protected <T> ResultMatcher containsList(Class<T> clazz) {
+    /**
+     * Asserts that the result contains a Resources object.
+     * @TODO: assert the type of the contained resources. For this, we need Spring's halObjectMapper
+     * which is only available in a Spring context, which we do not want in controller unit tests.
+     */
+    protected <T> ResultMatcher containsResources() {
         return result -> {
             String json = result.getResponse().getContentAsString();
             try {
-                List<T> list = fromJson(json, List.class);
-                for (T object : list) {
+                Resources<T> list = fromJson(json, Resources.class);
+                for (T object : list.getContent()) {
                     Assert.assertNotNull(object);
                 }
             } catch (Exception e) {
-                Assert.fail(String.format("expected JSON representation of class %s but found '%s'", clazz, json));
+                Assert.fail(String.format("expected Resources in JSON: %s", json));
             }
         };
     }
