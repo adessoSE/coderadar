@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.StringUtils;
 import org.wickedsource.coderadar.core.rest.validation.ControllerExceptionHandler;
 import org.wickedsource.coderadar.core.rest.validation.ErrorDTO;
+import org.wickedsource.coderadar.testframework.ControllerTestConfiguration;
 
 import java.io.IOException;
 import java.util.List;
