@@ -12,7 +12,6 @@ import org.wickedsource.coderadar.ControllerTestTemplate;
 import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategyRepository;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
-import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectDeleter;
@@ -28,6 +27,8 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
+import static org.wickedsource.coderadar.factories.resources.ResourceFactory.projectResource;
 
 public class ProjectControllerTest extends ControllerTestTemplate {
 
@@ -67,10 +68,10 @@ public class ProjectControllerTest extends ControllerTestTemplate {
 
     @Test
     public void createProjectSuccessfully() throws Exception {
-        ProjectResource project = Factories.projectResource().validProjectResource();
+        ProjectResource project = projectResource().validProjectResource();
 
-        when(projectRepository.save(any(Project.class))).thenReturn(Factories.project().validProject());
-        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(Factories.project().validProject());
+        when(projectRepository.save(any(Project.class))).thenReturn(project().validProject());
+        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(project().validProject());
 
         mvc().perform(post("/projects")
                 .content(toJsonWithoutLinks(project))
@@ -98,13 +99,13 @@ public class ProjectControllerTest extends ControllerTestTemplate {
 
     @Test
     public void createProjectWithValidationError() throws Exception {
-        ProjectResource projectResource = Factories.projectResource().validProjectResource();
+        ProjectResource projectResource = projectResource().validProjectResource();
         projectResource.setName(null);
         projectResource.setVcsUrl("invalid url");
 
         ConstrainedFields fields = fields(ProjectResource.class);
 
-        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(Factories.project().validProject());
+        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(project().validProject());
 
         mvc().perform(post("/projects")
                 .content(toJson(projectResource))
@@ -122,9 +123,9 @@ public class ProjectControllerTest extends ControllerTestTemplate {
 
     @Test
     public void updateProject() throws Exception {
-        ProjectResource projectResource = Factories.projectResource().validProjectResource();
+        ProjectResource projectResource = projectResource().validProjectResource();
 
-        when(projectRepository.save(any(Project.class))).thenReturn(Factories.project().validProject());
+        when(projectRepository.save(any(Project.class))).thenReturn(project().validProject());
 
         mvc().perform(post("/projects/1")
                 .content(toJson(projectResource))
@@ -148,7 +149,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
 
     @Test
     public void deleteProject() throws Exception {
-        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(Factories.project().validProject());
+        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(project().validProject());
 
         mvc().perform(delete("/projects/1"))
                 .andExpect(status().isOk())
@@ -158,11 +159,11 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     @Test
     public void getProjectsSuccessfully() throws Exception {
         List<Project> projects = new ArrayList<>();
-        projects.add(Factories.project().validProject());
-        projects.add(Factories.project().validProject2());
+        projects.add(project().validProject());
+        projects.add(project().validProject2());
 
         when(projectRepository.findAll()).thenReturn(projects);
-        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(Factories.project().validProject());
+        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(project().validProject());
 
         mvc().perform(get("/projects"))
                 .andExpect(status().isOk())

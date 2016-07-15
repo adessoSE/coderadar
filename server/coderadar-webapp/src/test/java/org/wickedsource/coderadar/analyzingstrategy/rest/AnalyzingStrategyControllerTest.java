@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.wickedsource.coderadar.ControllerTestTemplate;
 import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategyRepository;
 import org.wickedsource.coderadar.analyzingstrategy.domain.ProjectResetter;
-import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
 import static org.mockito.Mockito.when;
@@ -16,6 +15,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.analyzingStrategy;
 
 public class AnalyzingStrategyControllerTest extends ControllerTestTemplate {
 
@@ -33,7 +33,7 @@ public class AnalyzingStrategyControllerTest extends ControllerTestTemplate {
 
     @Test
     public void setAnalyzingStrategy() throws Exception {
-        AnalyzingStrategyResource resource = Factories.analyzingStrategy().analyzingStrategyResource();
+        AnalyzingStrategyResource resource = analyzingStrategy().analyzingStrategyResource();
 
         ConstrainedFields fields = fields(AnalyzingStrategyResource.class);
         mvc().perform(post("/projects/1/strategy")
@@ -55,7 +55,7 @@ public class AnalyzingStrategyControllerTest extends ControllerTestTemplate {
     @Test
     public void getAnalyzingStrategy() throws Exception {
 
-        when(analyzingStrategyRepository.findByProjectId(1L)).thenReturn(Factories.analyzingStrategy().analyzingStrategy());
+        when(analyzingStrategyRepository.findByProjectId(1L)).thenReturn(analyzingStrategy().analyzingStrategy());
 
         mvc().perform(get("/projects/1/strategy"))
                 .andExpect(status().isOk())

@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.springframework.http.MediaType;
 import org.wickedsource.coderadar.ControllerTestTemplate;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
-import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
@@ -24,6 +23,9 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
+import static org.wickedsource.coderadar.factories.resources.ResourceFactory.filePattern;
+import static org.wickedsource.coderadar.factories.resources.ResourceFactory.filePatternResource;
 
 public class FilePatternControllerTest extends ControllerTestTemplate {
 
@@ -46,12 +48,12 @@ public class FilePatternControllerTest extends ControllerTestTemplate {
 
     @Test
     public void setFilePatterns() throws Exception {
-        FilePatternResource filepatterns = Factories.filePatternResource().filePatterns();
+        FilePatternResource filepatterns = filePatternResource().filePatterns();
 
-        when(projectRepository.findOne(1L)).thenReturn(Factories.project().validProject());
+        when(projectRepository.findOne(1L)).thenReturn(project().validProject());
         when(filePatternRepository.save(any(List.class))).thenReturn(Arrays.asList(
-                Factories.filePattern().filePattern(),
-                Factories.filePattern().filePattern2()));
+                filePattern().filePattern(),
+                filePattern().filePattern2()));
 
         ConstrainedFields fields = fields(FilePatternResource.class);
 
@@ -72,7 +74,7 @@ public class FilePatternControllerTest extends ControllerTestTemplate {
 
     @Test
     public void setFilePatternsWithInvalidProject() throws Exception {
-        FilePatternResource filepatterns = Factories.filePatternResource().filePatterns();
+        FilePatternResource filepatterns = filePatternResource().filePatterns();
         when(projectVerifier.loadProjectOrThrowException(1L)).thenThrow(new ResourceNotFoundException());
         mvc().perform(post("/projects/1/files")
                 .content(toJsonWithoutLinks(filepatterns))
@@ -82,13 +84,13 @@ public class FilePatternControllerTest extends ControllerTestTemplate {
 
     @Test
     public void getFilePatterns() throws Exception {
-        FilePatternResource filepatterns = Factories.filePatternResource().filePatterns();
+        FilePatternResource filepatterns = filePatternResource().filePatterns();
 
-        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(Factories.project().validProject());
+        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(project().validProject());
         when(projectRepository.countById(1L)).thenReturn(1);
         when(filePatternRepository.save(any(List.class))).thenReturn(Arrays.asList(
-                Factories.filePattern().filePattern(),
-                Factories.filePattern().filePattern2()));
+                filePattern().filePattern(),
+                filePattern().filePattern2()));
 
         mvc().perform(get("/projects/1/files")
                 .content(toJsonWithoutLinks(filepatterns))
@@ -100,7 +102,7 @@ public class FilePatternControllerTest extends ControllerTestTemplate {
 
     @Test
     public void getFilePatternsWithInvalidProject() throws Exception {
-        FilePatternResource filepatterns = Factories.filePatternResource().filePatterns();
+        FilePatternResource filepatterns = filePatternResource().filePatterns();
         doThrow(new ResourceNotFoundException()).when(projectVerifier).checkProjectExistsOrThrowException(eq(1L));
         mvc().perform(get("/projects/1/files")
                 .content(toJsonWithoutLinks(filepatterns))

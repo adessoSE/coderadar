@@ -10,7 +10,6 @@ import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationRepository;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerPluginRegistry;
 import org.wickedsource.coderadar.analyzer.loc.LocAnalyzerPlugin;
-import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
@@ -22,6 +21,9 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.analyzerConfiguration;
+import static org.wickedsource.coderadar.factories.resources.ResourceFactory.analyzerConfigurationResource;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
 public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate {
 
@@ -52,14 +54,14 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
     @Test
     public void createAnalyzerConfiguration() throws Exception {
 
-        AnalyzerConfigurationResource resource = Factories.analyzerConfigurationResource().analyzerConfiguration();
-        AnalyzerConfiguration entity = Factories.analyzerConfiguration().analyzerConfiguration();
+        AnalyzerConfigurationResource resource = analyzerConfigurationResource().analyzerConfiguration();
+        AnalyzerConfiguration entity = analyzerConfiguration().analyzerConfiguration();
 
         when(analyzerConfigurationRepository.findByProjectIdAndAnalyzerName(1L, resource.getAnalyzerName())).thenReturn(entity);
         when(analyzerConfigurationRepository.save(any(AnalyzerConfiguration.class))).thenReturn(entity);
         when(analyzerRegistry.createAnalyzer(resource.getAnalyzerName())).thenReturn(new LocAnalyzerPlugin());
         when(projectRepository.countById(1L)).thenReturn(1);
-        when(projectRepository.findOne(1L)).thenReturn(Factories.project().validProject());
+        when(projectRepository.findOne(1L)).thenReturn(project().validProject());
 
         ConstrainedFields<AnalyzerConfigurationResource> fields = fields(AnalyzerConfigurationResource.class);
 
@@ -82,12 +84,12 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
     @Test
     public void listAnalyzerConfigurations() throws Exception {
 
-        AnalyzerConfiguration config1 = Factories.analyzerConfiguration().analyzerConfiguration();
-        AnalyzerConfiguration config2 = Factories.analyzerConfiguration().analyzerConfiguration2();
+        AnalyzerConfiguration config1 = analyzerConfiguration().analyzerConfiguration();
+        AnalyzerConfiguration config2 = analyzerConfiguration().analyzerConfiguration2();
 
         when(analyzerConfigurationRepository.findByProjectId(1L)).thenReturn(Arrays.asList(config1, config2));
         when(projectRepository.countById(1L)).thenReturn(1);
-        when(projectRepository.findOne(1L)).thenReturn(Factories.project().validProject());
+        when(projectRepository.findOne(1L)).thenReturn(project().validProject());
 
         mvc().perform(get("/projects/1/analyzers"))
                 .andExpect(status().isOk())
@@ -99,7 +101,7 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
     @Test
     public void getAnalyzerConfiguration() throws Exception {
 
-        AnalyzerConfiguration config1 = Factories.analyzerConfiguration().analyzerConfiguration();
+        AnalyzerConfiguration config1 = analyzerConfiguration().analyzerConfiguration();
 
         when(analyzerConfigurationRepository.findByProjectIdAndId(1L, 1L)).thenReturn(config1);
         when(projectRepository.countById(1L)).thenReturn(1);
@@ -113,9 +115,9 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
     @Test
     public void updateAnalyzerConfiguration() throws Exception {
 
-        AnalyzerConfiguration config1 = Factories.analyzerConfiguration().analyzerConfiguration();
-        Project project = Factories.project().validProject();
-        AnalyzerConfigurationResource resource = Factories.analyzerConfigurationResource().analyzerConfiguration();
+        AnalyzerConfiguration config1 = analyzerConfiguration().analyzerConfiguration();
+        Project project = project().validProject();
+        AnalyzerConfigurationResource resource = analyzerConfigurationResource().analyzerConfiguration();
 
         when(analyzerConfigurationRepository.findByProjectIdAndId(1L, 1L)).thenReturn(config1);
         when(projectRepository.findOne(1L)).thenReturn(project);

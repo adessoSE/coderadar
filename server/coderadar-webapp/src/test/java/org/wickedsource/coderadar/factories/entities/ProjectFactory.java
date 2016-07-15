@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.factories;
+package org.wickedsource.coderadar.factories.entities;
 
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;

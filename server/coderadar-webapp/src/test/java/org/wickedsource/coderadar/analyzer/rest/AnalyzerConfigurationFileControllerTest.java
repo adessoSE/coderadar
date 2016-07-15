@@ -10,13 +10,14 @@ import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationFileRepository;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationRepository;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerPluginRegistry;
-import org.wickedsource.coderadar.factories.Factories;
 
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.analyzer;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.analyzerConfiguration;
 
 public class AnalyzerConfigurationFileControllerTest extends ControllerTestTemplate {
 
@@ -45,9 +46,9 @@ public class AnalyzerConfigurationFileControllerTest extends ControllerTestTempl
                 "<param2>value2></param2>" +
                 "</configuration>").getBytes());
 
-        AnalyzerConfiguration configuration = Factories.analyzerConfiguration().analyzerConfiguration();
+        AnalyzerConfiguration configuration = analyzerConfiguration().analyzerConfiguration();
         when(analyzerConfigurationRepository.findByProjectIdAndId(eq(1L), eq(1L))).thenReturn(configuration);
-        when(analyzerRegistry.createAnalyzer(eq(configuration.getAnalyzerName()))).thenReturn((SourceCodeFileAnalyzerPlugin) Factories.analyzer().configurableAnalyzer());
+        when(analyzerRegistry.createAnalyzer(eq(configuration.getAnalyzerName()))).thenReturn((SourceCodeFileAnalyzerPlugin) analyzer().configurableAnalyzer());
 
         mvc().perform(fileUpload("/projects/1/analyzers/1/file")
                 .file(file))
@@ -59,7 +60,7 @@ public class AnalyzerConfigurationFileControllerTest extends ControllerTestTempl
     public void downloadConfigurationFile() throws Exception{
 
         when(analyzerConfigurationFileRepository.findByAnalyzerConfigurationProjectIdAndAnalyzerConfigurationId(eq(1L), eq(1L)))
-                .thenReturn(Factories.analyzerConfiguration().analyzerConfigurationFile());
+                .thenReturn(analyzerConfiguration().analyzerConfigurationFile());
 
         mvc().perform(get("/projects/1/analyzers/1/file"))
                 .andExpect(status().isOk())

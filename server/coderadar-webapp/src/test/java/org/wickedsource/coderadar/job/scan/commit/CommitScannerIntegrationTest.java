@@ -18,7 +18,6 @@ import org.wickedsource.coderadar.IntegrationTest;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.WorkdirManager;
-import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
@@ -27,6 +26,8 @@ import org.wickedsource.coderadar.project.domain.VcsType;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryChecker;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryCloner;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryUpdater;
+
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,7 +84,7 @@ public class CommitScannerIntegrationTest extends GitTestTemplate {
     @Test
     @Category(IntegrationTest.class)
     public void scan() {
-        Project project = Factories.project().validProject();
+        Project project = project().validProject();
         Profiler profiler = new Profiler("Scanner");
         profiler.setLogger(logger);
         CommitScanner scanner = new CommitScanner(commitRepository, updater);

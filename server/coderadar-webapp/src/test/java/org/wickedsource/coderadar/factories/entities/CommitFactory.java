@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.factories;
+package org.wickedsource.coderadar.factories.entities;
 
 import org.springframework.data.domain.*;
 import org.wickedsource.coderadar.commit.domain.Commit;

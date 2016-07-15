@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.factories;
+package org.wickedsource.coderadar.factories.resources;
 
 
 import org.wickedsource.coderadar.analyzer.rest.AnalyzerConfigurationResource;

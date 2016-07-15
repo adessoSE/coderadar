@@ -10,9 +10,12 @@ import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociation;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociationRepository;
-import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
+
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.sourceFile;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.commit;
 
 @Transactional
 public class FileRepositoryTest extends IntegrationTestTemplate {
@@ -31,12 +34,12 @@ public class FileRepositoryTest extends IntegrationTestTemplate {
 
     @Test
     public void testFindInCommit() {
-        Project project = Factories.project().validProject();
+        Project project = project().validProject();
         project = projectRepository.save(project);
-        Commit commit = Factories.commit().unprocessedCommit();
+        Commit commit = commit().unprocessedCommit();
         commit.setProject(project);
         commit = commitRepository.save(commit);
-        File file = Factories.sourceFile().withPath("123");
+        File file = sourceFile().withPath("123");
         file = fileRepository.save(file);
         CommitToFileAssociation association = new CommitToFileAssociation(commit, file, ChangeType.MODIFY);
         commit.getFiles().add(association);

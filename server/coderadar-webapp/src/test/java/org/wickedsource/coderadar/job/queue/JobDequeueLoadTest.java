@@ -5,12 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.IntegrationTestTemplate;
-import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.job.core.JobRepository;
 import org.wickedsource.coderadar.job.scan.commit.ScanCommitsJob;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.*;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,8 +32,8 @@ public class JobDequeueLoadTest extends IntegrationTestTemplate {
     @Test
     public void loadTestDequeueJob() throws InterruptedException {
         for (int i = 0; i < 100; i++) {
-            Project project = projectRepository.save(Factories.project().validProject());
-            ScanCommitsJob job = Factories.job().waitingPullJob();
+            Project project = projectRepository.save(project().validProject());
+            ScanCommitsJob job = job().waitingPullJob();
             job.setId(null);
             job.setProject(project);
             repository.save(job);

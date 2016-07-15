@@ -5,12 +5,14 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.wickedsource.coderadar.IntegrationTestTemplate;
-import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.job.scan.commit.ScanCommitsJob;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
 import java.util.Date;
+
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.job;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
 public class JobRepositoryTest extends IntegrationTestTemplate {
 
@@ -24,15 +26,15 @@ public class JobRepositoryTest extends IntegrationTestTemplate {
     @DirtiesContext
     public void findTop1() {
 
-        Project project = projectRepository.save(Factories.project().validProject());
+        Project project = projectRepository.save(project().validProject());
 
-        ScanCommitsJob job1 = Factories.job().waitingPullJob();
+        ScanCommitsJob job1 = job().waitingPullJob();
         job1.setId(null);
         job1.setQueuedDate(new Date(System.currentTimeMillis() - 600));
         job1.setProject(project);
         job1 = repository.save(job1);
 
-        ScanCommitsJob job2 = Factories.job().waitingPullJob();
+        ScanCommitsJob job2 = job().waitingPullJob();
         job2.setId(null);
         job2.setProject(project);
         repository.save(job2);

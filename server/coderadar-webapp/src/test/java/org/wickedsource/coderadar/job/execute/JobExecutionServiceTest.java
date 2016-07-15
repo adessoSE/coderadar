@@ -6,7 +6,6 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.wickedsource.coderadar.IntegrationTestTemplate;
-import org.wickedsource.coderadar.factories.Factories;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.job.core.JobRepository;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
@@ -18,6 +17,8 @@ import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.job;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
 @DirtiesContext
 public class JobExecutionServiceTest extends IntegrationTestTemplate {
@@ -51,8 +52,8 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
     }
 
     private Job initJob() {
-        Project project = projectRepository.save(Factories.project().validProject());
-        Job jobBeforeExecution = Factories.job().waitingPullJob();
+        Project project = projectRepository.save(project().validProject());
+        Job jobBeforeExecution = job().waitingPullJob();
         jobBeforeExecution.setId(null);
         jobBeforeExecution.setProject(project);
         jobBeforeExecution = jobRepository.save(jobBeforeExecution);
