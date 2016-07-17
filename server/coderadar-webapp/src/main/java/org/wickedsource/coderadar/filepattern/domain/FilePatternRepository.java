@@ -8,7 +8,7 @@ public interface FilePatternRepository extends CrudRepository<FilePattern, Long>
 
     List<FilePattern> findByProjectId(Long projectId);
 
-    List<FilePattern> findByProjectIdAndFileSet(Long projectId, FileSet fileSet);
+    List<FilePattern> findByProjectIdAndFileSetType(Long projectId, FileSetType fileSetType);
 
     int deleteByProjectId(Long projectId);
 }

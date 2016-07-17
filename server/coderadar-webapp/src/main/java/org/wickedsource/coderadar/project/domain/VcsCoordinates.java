@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.net.URL;
 
 /**
@@ -17,6 +19,7 @@ public class VcsCoordinates {
     private URL url;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private VcsType type;
 
     @Column

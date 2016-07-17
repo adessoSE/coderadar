@@ -21,10 +21,12 @@ public class FilePattern {
     private String pattern;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private InclusionType inclusionType;
 
     @Column
-    private FileSet fileSet;
+    @Enumerated(EnumType.STRING)
+    private FileSetType fileSetType;
 
     @ManyToOne
     private Project project;
@@ -56,12 +58,12 @@ public class FilePattern {
         this.inclusionType = inclusionType;
     }
 
-    public FileSet getFileSet() {
-        return fileSet;
+    public FileSetType getFileSetType() {
+        return fileSetType;
     }
 
-    public void setFileSet(FileSet fileSet) {
-        this.fileSet = fileSet;
+    public void setFileSetType(FileSetType fileSetType) {
+        this.fileSetType = fileSetType;
     }
 
     public Project getProject() {

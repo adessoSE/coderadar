@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v1.0.0.SNAPSHOT, Tom Hombergs, 2016-07-15">
+<meta name="author" content="v1.0.0.SNAPSHOT, Tom Hombergs, 2016-07-17">
 <title>coderadar REST API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -423,7 +423,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v1.0.0.SNAPSHOT, Tom Hombergs, 2016-07-15</span><br>
+<span id="author" class="author">v1.0.0.SNAPSHOT, Tom Hombergs, 2016-07-17</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -823,7 +823,7 @@ patterns. Thus, the file set will include all INCLUDED files except those that w
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">filePatterns[].fileSet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">filePatterns[].fileSetType</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The set of files the files matching this pattern belong to. Currently, the only available value is 'SOURCE' describing source code files.</p></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -865,17 +865,17 @@ patterns. Thus, the file set will include all INCLUDED files except those that w
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/files HTTP/1.1
 Content-Type: application/json
 Host: localhost
-Content-Length: 264
+Content-Length: 272
 
 {
   "filePatterns" : [ {
     "pattern" : "src/main/java/**/*.java",
     "inclusionType" : "INCLUDE",
-    "fileSet" : "SOURCE"
+    "fileSetType" : "SOURCE"
   }, {
     "pattern" : "src/main/java/**/generated/**/*.java",
     "inclusionType" : "EXCLUDE",
-    "fileSet" : "SOURCE"
+    "fileSetType" : "SOURCE"
   } ]
 }</code></pre>
 </div>
@@ -916,17 +916,17 @@ all file patterns of a project at once.</p>
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/files HTTP/1.1
 Content-Type: application/json
 Host: localhost
-Content-Length: 264
+Content-Length: 272
 
 {
   "filePatterns" : [ {
     "pattern" : "src/main/java/**/*.java",
     "inclusionType" : "INCLUDE",
-    "fileSet" : "SOURCE"
+    "fileSetType" : "SOURCE"
   }, {
     "pattern" : "src/main/java/**/generated/**/*.java",
     "inclusionType" : "EXCLUDE",
-    "fileSet" : "SOURCE"
+    "fileSetType" : "SOURCE"
   } ]
 }</code></pre>
 </div>
@@ -938,17 +938,17 @@ Content-Length: 264
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 446
+Content-Length: 454
 
 {
   "filePatterns" : [ {
     "pattern" : "src/main/java/**/*.java",
     "inclusionType" : "INCLUDE",
-    "fileSet" : "SOURCE"
+    "fileSetType" : "SOURCE"
   }, {
     "pattern" : "src/main/java/**/generated/**/*.java",
     "inclusionType" : "EXCLUDE",
-    "fileSet" : "SOURCE"
+    "fileSetType" : "SOURCE"
   } ],
   "links" : [ {
     "rel" : "self",
@@ -1383,7 +1383,7 @@ Host: localhost
 Content-Length: 74
 
 {
-  "fromDate" : 1468617198818,
+  "fromDate" : 1468762782801,
   "active" : true,
   "rescan" : true
 }</code></pre>
@@ -1399,7 +1399,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 239
 
 {
-  "fromDate" : 1468617198818,
+  "fromDate" : 1468762782801,
   "active" : true,
   "links" : [ {
     "rel" : "self",
@@ -1433,7 +1433,7 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 239
 
 {
-  "fromDate" : 1468617198877,
+  "fromDate" : 1468762782863,
   "active" : true,
   "links" : [ {
     "rel" : "self",

@@ -25,7 +25,7 @@ public class FilePatternResourceAssembler extends ResourceAssemblerSupport<Itera
         FilePatternResource resource = new FilePatternResource();
         for (FilePattern entity : entities) {
             FilePatternDTO dto = new FilePatternDTO();
-            dto.setFileSet(entity.getFileSet());
+            dto.setFileSetType(entity.getFileSetType());
             dto.setInclusionType(entity.getInclusionType());
             dto.setPattern(entity.getPattern());
             resource.addFilePattern(dto);
@@ -41,7 +41,7 @@ public class FilePatternResourceAssembler extends ResourceAssemblerSupport<Itera
             FilePattern entity = new FilePattern();
             entity.setPattern(dto.getPattern());
             entity.setInclusionType(dto.getInclusionType());
-            entity.setFileSet(dto.getFileSet());
+            entity.setFileSetType(dto.getFileSetType());
             entity.setProject(project);
             entities.add(entity);
         }
