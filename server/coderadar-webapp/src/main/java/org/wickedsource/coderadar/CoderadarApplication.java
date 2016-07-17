@@ -9,15 +9,15 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@EntityScan(basePackageClasses = {Coderadar.class})
+@EntityScan(basePackageClasses = {CoderadarApplication.class})
 @EnableEntityLinks
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 @EnableScheduling
 @EnableTransactionManagement
-public class Coderadar {
+public class CoderadarApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Coderadar.class, args);
+        SpringApplication.run(CoderadarApplication.class, args);
     }
 
 }

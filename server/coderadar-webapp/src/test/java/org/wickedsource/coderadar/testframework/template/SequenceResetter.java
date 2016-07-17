@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar;
+package org.wickedsource.coderadar.testframework.template;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -4,17 +4,19 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.coderadar.IntegrationTestTemplate;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.job.core.JobRepository;
 import org.wickedsource.coderadar.job.scan.commit.ScanCommitsJob;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
-import static org.wickedsource.coderadar.factories.entities.EntityFactory.*;
+import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.job;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
 public class JobDequeueLoadTest extends IntegrationTestTemplate {
 

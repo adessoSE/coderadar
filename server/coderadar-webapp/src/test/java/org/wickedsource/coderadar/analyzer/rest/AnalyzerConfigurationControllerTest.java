@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
-import org.wickedsource.coderadar.ControllerTest;
-import org.wickedsource.coderadar.ControllerTestTemplate;
+import org.wickedsource.coderadar.testframework.category.ControllerTest;
+import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;

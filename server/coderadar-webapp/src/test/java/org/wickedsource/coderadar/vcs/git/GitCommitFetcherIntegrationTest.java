@@ -8,9 +8,9 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wickedsource.coderadar.IntegrationTest;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
 import org.wickedsource.coderadar.project.domain.VcsType;
+import org.wickedsource.coderadar.testframework.category.IntegrationTest;
 
 import java.io.File;
 import java.io.IOException;

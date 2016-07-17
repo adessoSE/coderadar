@@ -5,8 +5,8 @@ import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.mock.web.MockMultipartFile;
-import org.wickedsource.coderadar.ControllerTest;
-import org.wickedsource.coderadar.ControllerTestTemplate;
+import org.wickedsource.coderadar.testframework.category.ControllerTest;
+import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

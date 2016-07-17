@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar;
+package org.wickedsource.coderadar.testframework.template;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;

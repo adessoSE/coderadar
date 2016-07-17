@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.coderadar.IntegrationTestTemplate;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.job.core.JobRepository;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
@@ -13,6 +12,7 @@ import org.wickedsource.coderadar.job.queue.JobQueueService;
 import org.wickedsource.coderadar.job.queue.JobUpdater;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
+import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;

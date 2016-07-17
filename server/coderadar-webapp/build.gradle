@@ -34,19 +34,23 @@ test{
 
     useJUnit{
         // disable long-running integration tests by default
-        excludeCategories 'org.wickedsource.coderadar.IntegrationTest'
+        excludeCategories 'org.wickedsource.coderadar.testframework.category.IntegrationTest'
+    }
+
+    testLogging {
+        showStandardStreams = true
     }
 }
 
 task integrationTest(type: Test){
     useJUnit{
-        includeCategories 'org.wickedsource.coderadar.IntegrationTest'
+        includeCategories 'org.wickedsource.coderadar.testframework.category.IntegrationTest'
     }
 }
 
 task controllerTest(type: Test){
     useJUnit{
-        includeCategories 'org.wickedsource.coderadar.ControllerTest'
+        includeCategories 'org.wickedsource.coderadar.testframework.category.ControllerTest'
     }
 }
 

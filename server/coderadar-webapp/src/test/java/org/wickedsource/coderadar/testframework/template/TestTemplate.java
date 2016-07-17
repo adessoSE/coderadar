@@ -1,5 +1,6 @@
-package org.wickedsource.coderadar;
+package org.wickedsource.coderadar.testframework.template;
 
+import org.wickedsource.coderadar.CoderadarConfiguration;
 import org.wickedsource.coderadar.core.WorkdirManager;
 
 import java.io.File;

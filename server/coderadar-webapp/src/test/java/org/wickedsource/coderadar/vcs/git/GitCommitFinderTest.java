@@ -3,7 +3,7 @@ package org.wickedsource.coderadar.vcs.git;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Assert;
 import org.junit.Test;
-import org.wickedsource.coderadar.GitTestTemplate;
+import org.wickedsource.coderadar.testframework.template.GitTestTemplate;
 
 public class GitCommitFinderTest extends GitTestTemplate {
 

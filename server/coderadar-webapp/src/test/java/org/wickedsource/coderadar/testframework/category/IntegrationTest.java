@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar;
+package org.wickedsource.coderadar.testframework.category;
 
 /**
  * Marker Interface used in JUnit @Category annotations to mark integration tests

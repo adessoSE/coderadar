@@ -5,6 +5,8 @@ import org.junit.experimental.categories.Category;
 import org.springframework.http.MediaType;
 import org.wickedsource.coderadar.core.rest.validation.ErrorDTO;
 import org.wickedsource.coderadar.project.rest.ProjectResource;
+import org.wickedsource.coderadar.testframework.category.ControllerTest;
+import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

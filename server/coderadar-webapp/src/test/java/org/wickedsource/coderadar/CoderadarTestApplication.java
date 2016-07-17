@@ -8,14 +8,14 @@ import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@EntityScan(basePackageClasses = {TestCoderadar.class})
+@EntityScan(basePackageClasses = {CoderadarTestApplication.class})
 @EnableEntityLinks
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 @EnableTransactionManagement
-public class TestCoderadar {
+public class CoderadarTestApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TestCoderadar.class, args);
+        SpringApplication.run(CoderadarTestApplication.class, args);
     }
 
 }

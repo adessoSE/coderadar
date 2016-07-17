@@ -13,8 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.profiler.Profiler;
 import org.wickedsource.coderadar.CoderadarConfiguration;
-import org.wickedsource.coderadar.GitTestTemplate;
-import org.wickedsource.coderadar.IntegrationTest;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.WorkdirManager;
@@ -23,11 +21,11 @@ import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
 import org.wickedsource.coderadar.project.domain.VcsType;
+import org.wickedsource.coderadar.testframework.category.IntegrationTest;
+import org.wickedsource.coderadar.testframework.template.GitTestTemplate;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryChecker;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryCloner;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryUpdater;
-
-import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +33,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static org.mockito.Mockito.*;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
 public class CommitScannerIntegrationTest extends GitTestTemplate {
 

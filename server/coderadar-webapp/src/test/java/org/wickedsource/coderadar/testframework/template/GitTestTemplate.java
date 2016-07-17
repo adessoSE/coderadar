@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar;
+package org.wickedsource.coderadar.testframework.template;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;

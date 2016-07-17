@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.wickedsource.coderadar.IntegrationTestTemplate;
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
@@ -12,6 +11,7 @@ import org.wickedsource.coderadar.commit.domain.CommitToFileAssociation;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociationRepository;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
+import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.*;
 
