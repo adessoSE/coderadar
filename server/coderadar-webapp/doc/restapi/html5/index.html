@@ -604,49 +604,52 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json
-Content-Length: 1146
+Content-Length: 1198
 
 {
-  "links" : [ ],
-  "content" : [ {
-    "name" : "Testproject",
-    "vcsType" : "GIT",
-    "vcsUrl" : "https://github.com/thombergs/diffparser.git",
-    "vcsUser" : "user",
-    "vcsPassword" : "pass",
-    "links" : [ {
-      "rel" : "self",
-      "href" : "http://localhost:8080/projects/1"
+  "_embedded" : {
+    "projectResourceList" : [ {
+      "name" : "name",
+      "vcsType" : "GIT",
+      "vcsUrl" : "http://valid.url",
+      "vcsUser" : "user",
+      "vcsPassword" : "pass",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/projects/1"
+        },
+        "files" : {
+          "href" : "http://localhost:8080/projects/1/files"
+        },
+        "analyzers" : {
+          "href" : "http://localhost:8080/projects/1/analyzers"
+        },
+        "strategy" : {
+          "href" : "http://localhost:8080/projects/1/strategy"
+        }
+      }
     }, {
-      "rel" : "files",
-      "href" : "http://localhost:8080/projects/1/files"
-    }, {
-      "rel" : "analyzers",
-      "href" : "http://localhost:8080/projects/1/analyzers"
-    }, {
-      "rel" : "strategy",
-      "href" : "http://localhost:8080/projects/1/strategy"
+      "name" : "name2",
+      "vcsType" : "GIT",
+      "vcsUrl" : "http://valid.url2",
+      "vcsUser" : "user2",
+      "vcsPassword" : "pass2",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/projects/2"
+        },
+        "files" : {
+          "href" : "http://localhost:8080/projects/2/files"
+        },
+        "analyzers" : {
+          "href" : "http://localhost:8080/projects/2/analyzers"
+        },
+        "strategy" : {
+          "href" : "http://localhost:8080/projects/2/strategy"
+        }
+      }
     } ]
-  }, {
-    "name" : "Another project",
-    "vcsType" : "SVN",
-    "vcsUrl" : "http://your.url",
-    "vcsUser" : null,
-    "vcsPassword" : null,
-    "links" : [ {
-      "rel" : "self",
-      "href" : "http://localhost:8080/projects/2"
-    }, {
-      "rel" : "files",
-      "href" : "http://localhost:8080/projects/2/files"
-    }, {
-      "rel" : "analyzers",
-      "href" : "http://localhost:8080/projects/2/analyzers"
-    }, {
-      "rel" : "strategy",
-      "href" : "http://localhost:8080/projects/2/strategy"
-    } ]
-  } ]
+  }
 }</code></pre>
 </div>
 </div>
@@ -678,28 +681,29 @@ Content-Length: 129
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Type: application/json;charset=UTF-8
-Content-Length: 527
+Content-Type: application/hal+json
+Content-Length: 485
 
 {
-  "name" : "Testproject",
+  "name" : "name",
   "vcsType" : "GIT",
-  "vcsUrl" : "https://github.com/thombergs/diffparser.git",
+  "vcsUrl" : "http://valid.url",
   "vcsUser" : "user",
   "vcsPassword" : "pass",
-  "links" : [ {
-    "rel" : "self",
-    "href" : "http://localhost:8080/projects/1"
-  }, {
-    "rel" : "files",
-    "href" : "http://localhost:8080/projects/1/files"
-  }, {
-    "rel" : "analyzers",
-    "href" : "http://localhost:8080/projects/1/analyzers"
-  }, {
-    "rel" : "strategy",
-    "href" : "http://localhost:8080/projects/1/strategy"
-  } ]
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/projects/1"
+    },
+    "files" : {
+      "href" : "http://localhost:8080/projects/1/files"
+    },
+    "analyzers" : {
+      "href" : "http://localhost:8080/projects/1/analyzers"
+    },
+    "strategy" : {
+      "href" : "http://localhost:8080/projects/1/strategy"
+    }
+  }
 }</code></pre>
 </div>
 </div>
@@ -714,14 +718,14 @@ Content-Length: 527
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1 HTTP/1.1
 Content-Type: application/json
 Host: localhost
-Content-Length: 147
+Content-Length: 151
 
 {
-  "name" : "name",
+  "name" : "name2",
   "vcsType" : "GIT",
-  "vcsUrl" : "http://valid.url",
-  "vcsUser" : "user",
-  "vcsPassword" : "pass",
+  "vcsUrl" : "http://valid.url2",
+  "vcsUser" : "user2",
+  "vcsPassword" : "pass2",
   "links" : [ ]
 }</code></pre>
 </div>
@@ -732,28 +736,29 @@ Content-Length: 147
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 527
+Content-Type: application/hal+json
+Content-Length: 489
 
 {
-  "name" : "Testproject",
+  "name" : "name2",
   "vcsType" : "GIT",
-  "vcsUrl" : "https://github.com/thombergs/diffparser.git",
-  "vcsUser" : "user",
-  "vcsPassword" : "pass",
-  "links" : [ {
-    "rel" : "self",
-    "href" : "http://localhost:8080/projects/1"
-  }, {
-    "rel" : "files",
-    "href" : "http://localhost:8080/projects/1/files"
-  }, {
-    "rel" : "analyzers",
-    "href" : "http://localhost:8080/projects/1/analyzers"
-  }, {
-    "rel" : "strategy",
-    "href" : "http://localhost:8080/projects/1/strategy"
-  } ]
+  "vcsUrl" : "http://valid.url2",
+  "vcsUser" : "user2",
+  "vcsPassword" : "pass2",
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/projects/1"
+    },
+    "files" : {
+      "href" : "http://localhost:8080/projects/1/files"
+    },
+    "analyzers" : {
+      "href" : "http://localhost:8080/projects/1/analyzers"
+    },
+    "strategy" : {
+      "href" : "http://localhost:8080/projects/1/strategy"
+    }
+  }
 }</code></pre>
 </div>
 </div>
@@ -886,18 +891,27 @@ Content-Length: 272
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 210
+Content-Type: application/hal+json
+Content-Length: 452
 
 {
-  "filePatterns" : [ ],
-  "links" : [ {
-    "rel" : "self",
-    "href" : "http://localhost:8080/projects/1/files"
+  "filePatterns" : [ {
+    "pattern" : "src/main/java/**/*.java",
+    "inclusionType" : "INCLUDE",
+    "fileSetType" : "SOURCE"
   }, {
-    "rel" : "project",
-    "href" : "http://localhost:8080/projects/1"
-  } ]
+    "pattern" : "src/main/java/**/generated/**/*.java",
+    "inclusionType" : "EXCLUDE",
+    "fileSetType" : "SOURCE"
+  } ],
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/files"
+    },
+    "project" : {
+      "href" : "http://localhost:8080/projects/1"
+    }
+  }
 }</code></pre>
 </div>
 </div>
@@ -937,8 +951,8 @@ Content-Length: 272
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Type: application/json;charset=UTF-8
-Content-Length: 454
+Content-Type: application/hal+json
+Content-Length: 452
 
 {
   "filePatterns" : [ {
@@ -950,13 +964,14 @@ Content-Length: 454
     "inclusionType" : "EXCLUDE",
     "fileSetType" : "SOURCE"
   } ],
-  "links" : [ {
-    "rel" : "self",
-    "href" : "http://localhost:8080/projects/1/files"
-  }, {
-    "rel" : "project",
-    "href" : "http://localhost:8080/projects/1"
-  } ]
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/files"
+    },
+    "project" : {
+      "href" : "http://localhost:8080/projects/1"
+    }
+  }
 }</code></pre>
 </div>
 </div>
@@ -1041,10 +1056,10 @@ plugin via the AnalyzerConfiguration resource.</p>
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers HTTP/1.1
 Content-Type: application/json
 Host: localhost
-Content-Length: 76
+Content-Length: 104
 
 {
-  "analyzerName" : "org.wickedsource.locAnalyzer",
+  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
   "enabled" : true
 }</code></pre>
 </div>
@@ -1055,22 +1070,23 @@ Content-Length: 76
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Type: application/json;charset=UTF-8
-Content-Length: 352
+Content-Type: application/hal+json
+Content-Length: 375
 
 {
-  "analyzerName" : "org.wickedsource.locAnalyzer",
+  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
   "enabled" : true,
-  "links" : [ {
-    "rel" : "project",
-    "href" : "http://localhost:8080/projects/1"
-  }, {
-    "rel" : "list",
-    "href" : "http://localhost:8080/projects/1/analyzers"
-  }, {
-    "rel" : "self",
-    "href" : "http://localhost:8080/projects/1/analyzers/1"
-  } ]
+  "_links" : {
+    "project" : {
+      "href" : "http://localhost:8080/projects/1"
+    },
+    "list" : {
+      "href" : "http://localhost:8080/projects/1/analyzers"
+    },
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/analyzers/1"
+    }
+  }
 }</code></pre>
 </div>
 </div>
@@ -1082,11 +1098,8 @@ Content-Length: 352
 <h4 id="_example_request_8"><a class="link" href="#_example_request_8">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/analyzers HTTP/1.1
-Host: localhost
-Content-Length: 28
-
-org.wickedsource.locAnalyzer</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/analyzers/2 HTTP/1.1
+Host: localhost</code></pre>
 </div>
 </div>
 </div>
@@ -1108,11 +1121,11 @@ org.wickedsource.locAnalyzer</code></pre>
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers/1 HTTP/1.1
 Content-Type: application/json
 Host: localhost
-Content-Length: 76
+Content-Length: 105
 
 {
-  "analyzerName" : "org.wickedsource.locAnalyzer",
-  "enabled" : true
+  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
+  "enabled" : false
 }</code></pre>
 </div>
 </div>
@@ -1122,22 +1135,23 @@ Content-Length: 76
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 352
+Content-Type: application/hal+json
+Content-Length: 376
 
 {
-  "analyzerName" : "org.wickedsource.locAnalyzer",
-  "enabled" : true,
-  "links" : [ {
-    "rel" : "project",
-    "href" : "http://localhost:8080/projects/1"
-  }, {
-    "rel" : "list",
-    "href" : "http://localhost:8080/projects/1/analyzers"
-  }, {
-    "rel" : "self",
-    "href" : "http://localhost:8080/projects/1/analyzers/1"
-  } ]
+  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
+  "enabled" : false,
+  "_links" : {
+    "project" : {
+      "href" : "http://localhost:8080/projects/1"
+    },
+    "list" : {
+      "href" : "http://localhost:8080/projects/1/analyzers"
+    },
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/analyzers/1"
+    }
+  }
 }</code></pre>
 </div>
 </div>
@@ -1160,37 +1174,40 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json
-Content-Length: 801
+Content-Length: 941
 
 {
-  "links" : [ ],
-  "content" : [ {
-    "analyzerName" : "org.wickedsource.locAnalyzer",
-    "enabled" : true,
-    "links" : [ {
-      "rel" : "project",
-      "href" : "http://localhost:8080/projects/1"
+  "_embedded" : {
+    "analyzerConfigurationResourceList" : [ {
+      "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
+      "enabled" : true,
+      "_links" : {
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        },
+        "list" : {
+          "href" : "http://localhost:8080/projects/1/analyzers"
+        },
+        "self" : {
+          "href" : "http://localhost:8080/projects/1/analyzers/1"
+        }
+      }
     }, {
-      "rel" : "list",
-      "href" : "http://localhost:8080/projects/1/analyzers"
-    }, {
-      "rel" : "self",
-      "href" : "http://localhost:8080/projects/1/analyzers/1"
+      "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer2",
+      "enabled" : true,
+      "_links" : {
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        },
+        "list" : {
+          "href" : "http://localhost:8080/projects/1/analyzers"
+        },
+        "self" : {
+          "href" : "http://localhost:8080/projects/1/analyzers/2"
+        }
+      }
     } ]
-  }, {
-    "analyzerName" : "org.wickedsource.fooAnalyzer",
-    "enabled" : false,
-    "links" : [ {
-      "rel" : "project",
-      "href" : "http://localhost:8080/projects/1"
-    }, {
-      "rel" : "list",
-      "href" : "http://localhost:8080/projects/1/analyzers"
-    }, {
-      "rel" : "self",
-      "href" : "http://localhost:8080/projects/1/analyzers/2"
-    } ]
-  } ]
+  }
 }</code></pre>
 </div>
 </div>
@@ -1212,22 +1229,23 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 352
+Content-Type: application/hal+json
+Content-Length: 375
 
 {
-  "analyzerName" : "org.wickedsource.locAnalyzer",
+  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
   "enabled" : true,
-  "links" : [ {
-    "rel" : "project",
-    "href" : "http://localhost:8080/projects/1"
-  }, {
-    "rel" : "list",
-    "href" : "http://localhost:8080/projects/1/analyzers"
-  }, {
-    "rel" : "self",
-    "href" : "http://localhost:8080/projects/1/analyzers/1"
-  } ]
+  "_links" : {
+    "project" : {
+      "href" : "http://localhost:8080/projects/1"
+    },
+    "list" : {
+      "href" : "http://localhost:8080/projects/1/analyzers"
+    },
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/analyzers/1"
+    }
+  }
 }</code></pre>
 </div>
 </div>
@@ -1256,9 +1274,9 @@ Host: localhost
 
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
 Content-Disposition: form-data; name=file
-Content-Type: text/xml
+Content-Type: text/plain
 
-&lt;configuration&gt;&lt;param1&gt;value1&lt;/param1&gt;&lt;param2&gt;value2&gt;&lt;/param2&gt;&lt;/configuration&gt;
+abc
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
 </div>
 </div>
@@ -1288,13 +1306,10 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Length: 90
-Content-Type: text/xml
+Content-Length: 3
+Content-Type: text/plain
 
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;config&gt;
-    &lt;param1&gt;value1&lt;/param1&gt;
-&lt;/config&gt;</code></pre>
+abc</code></pre>
 </div>
 </div>
 </div>
@@ -1383,7 +1398,7 @@ Host: localhost
 Content-Length: 74
 
 {
-  "fromDate" : 1468762782801,
+  "fromDate" : 1451602800000,
   "active" : true,
   "rescan" : true
 }</code></pre>
@@ -1395,19 +1410,20 @@ Content-Length: 74
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 239
+Content-Type: application/hal+json
+Content-Length: 237
 
 {
-  "fromDate" : 1468762782801,
+  "fromDate" : 1451602800000,
   "active" : true,
-  "links" : [ {
-    "rel" : "self",
-    "href" : "http://localhost:8080/projects/1/strategy"
-  }, {
-    "rel" : "project",
-    "href" : "http://localhost:8080/projects/1"
-  } ]
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/strategy"
+    },
+    "project" : {
+      "href" : "http://localhost:8080/projects/1"
+    }
+  }
 }</code></pre>
 </div>
 </div>
@@ -1429,19 +1445,20 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 239
+Content-Type: application/hal+json
+Content-Length: 237
 
 {
-  "fromDate" : 1468762782863,
+  "fromDate" : 1451602800000,
   "active" : true,
-  "links" : [ {
-    "rel" : "self",
-    "href" : "http://localhost:8080/projects/1/strategy"
-  }, {
-    "rel" : "project",
-    "href" : "http://localhost:8080/projects/1"
-  } ]
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/strategy"
+    },
+    "project" : {
+      "href" : "http://localhost:8080/projects/1"
+    }
+  }
 }</code></pre>
 </div>
 </div>
@@ -1476,11 +1493,11 @@ Content-Length: 204
 {
   "errorMessage" : "Validation Error",
   "fieldErrors" : [ {
-    "field" : "vcsUrl",
-    "message" : "must be a valid URL"
-  }, {
     "field" : "name",
     "message" : "may not be null"
+  }, {
+    "field" : "vcsUrl",
+    "message" : "must be a valid URL"
   } ]
 }</code></pre>
 </div>
@@ -1535,7 +1552,7 @@ Content-Length: 204
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-07-13 23:33:39 +02:00
+Last updated 2016-07-17 21:06:03 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

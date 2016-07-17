@@ -14,4 +14,14 @@ public class ProjectResourceFactory {
         project.setVcsType(VcsType.GIT);
         return project;
     }
+
+    public ProjectResource validProjectResource2(){
+        ProjectResource project = new ProjectResource();
+        project.setVcsUser("user2");
+        project.setVcsPassword("pass2");
+        project.setVcsUrl("http://valid.url2");
+        project.setName("name2");
+        project.setVcsType(VcsType.GIT);
+        return project;
+    }
 }

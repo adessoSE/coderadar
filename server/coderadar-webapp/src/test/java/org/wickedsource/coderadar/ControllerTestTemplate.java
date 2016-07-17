@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -12,8 +13,6 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.data.web.PagedResourcesAssemblerArgumentResolver;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.hypermedia.Link;
@@ -21,15 +20,16 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.snippet.Snippet;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.StringUtils;
-import org.wickedsource.coderadar.core.rest.validation.ControllerExceptionHandler;
+import org.springframework.web.context.WebApplicationContext;
 import org.wickedsource.coderadar.core.rest.validation.ErrorDTO;
-import org.wickedsource.coderadar.testframework.ControllerTestConfiguration;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,18 +39,20 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.snippet.Attributes.key;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = ControllerTestConfiguration.class)
-public abstract class ControllerTestTemplate {
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private PagedResourcesAssemblerArgumentResolver pagedResourcesAssemblerArgumentResolver;
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionDbUnitTestExecutionListener.class})
+public abstract class ControllerTestTemplate extends IntegrationTestTemplate{
 
     private Logger logger = LoggerFactory.getLogger(ControllerTestTemplate.class);
 
     private MockMvc mvc;
+
+    @Autowired
+    private WebApplicationContext applicationContext;
+
+    @Autowired
+    private SequenceResetter sequenceResetter;
 
     @Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
@@ -100,11 +102,13 @@ public abstract class ControllerTestTemplate {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        mvc = MockMvcBuilders.standaloneSetup(getController())
-                .setCustomArgumentResolvers(pageableArgumentResolver, pagedResourcesAssemblerArgumentResolver)
-                .setControllerAdvice(new ControllerExceptionHandler())
+        mvc = MockMvcBuilders.webAppContextSetup(applicationContext)
                 .apply(MockMvcRestDocumentation.documentationConfiguration(this.restDocumentation))
                 .build();
+        sequenceResetter.resetAutoIncrementColumns(
+                "project",
+                "analyzer_configuration",
+                "analyzer_configuration_file");
     }
 
     protected <T> ConstrainedFields<T> fields(Class<T> clazz) {
@@ -145,8 +149,6 @@ public abstract class ControllerTestTemplate {
     protected MockMvc mvc() {
         return mvc;
     }
-
-    protected abstract Object getController();
 
     protected <T> ResultMatcher contains(Class<T> clazz) {
         return result -> {

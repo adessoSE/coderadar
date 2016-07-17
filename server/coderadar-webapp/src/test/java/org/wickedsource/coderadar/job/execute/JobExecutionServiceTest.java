@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.wickedsource.coderadar.IntegrationTestTemplate;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.job.core.JobRepository;
@@ -20,7 +19,6 @@ import static org.mockito.Mockito.doThrow;
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.job;
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
-@DirtiesContext
 public class JobExecutionServiceTest extends IntegrationTestTemplate {
 
     @Autowired

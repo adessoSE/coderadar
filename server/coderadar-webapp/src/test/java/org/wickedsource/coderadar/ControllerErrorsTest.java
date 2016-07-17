@@ -1,25 +1,17 @@
 package org.wickedsource.coderadar;
 
 import org.junit.Test;
-import org.mockito.InjectMocks;
+import org.junit.experimental.categories.Category;
 import org.springframework.http.MediaType;
 import org.wickedsource.coderadar.core.rest.validation.ErrorDTO;
-import org.wickedsource.coderadar.project.rest.ProjectController;
 import org.wickedsource.coderadar.project.rest.ProjectResource;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.projectResource;
 
+@Category(ControllerTest.class)
 public class ControllerErrorsTest extends ControllerTestTemplate {
-
-    @InjectMocks
-    private ProjectController projectController;
-
-    @Override
-    protected Object getController() {
-        return projectController;
-    }
 
     @Test
     public void invalidJsonPayloadError() throws Exception {

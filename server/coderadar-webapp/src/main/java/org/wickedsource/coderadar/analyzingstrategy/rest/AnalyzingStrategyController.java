@@ -31,13 +31,13 @@ public class AnalyzingStrategyController {
 
     private AnalyzingStrategyRepository analyzingStrategyRepository;
 
-    private ProjectResetter analysisResetter;
+    private ProjectResetter projectResetter;
 
     @Autowired
-    public AnalyzingStrategyController(ProjectVerifier projectVerifier, AnalyzingStrategyRepository analyzingStrategyRepository, ProjectResetter analysisResetter) {
+    public AnalyzingStrategyController(ProjectVerifier projectVerifier, AnalyzingStrategyRepository analyzingStrategyRepository, ProjectResetter projectResetter) {
         this.projectVerifier = projectVerifier;
         this.analyzingStrategyRepository = analyzingStrategyRepository;
-        this.analysisResetter = analysisResetter;
+        this.projectResetter = projectResetter;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -57,7 +57,7 @@ public class AnalyzingStrategyController {
 
         if(resource.isRescanNullsafe()){
             try {
-                analysisResetter.resetProject(project);
+                projectResetter.resetProject(project);
             }catch(ProjectResetException e){
                 throw new UserException("Cannot re-scan project while there are analyzer jobs waiting or running.");
             }

@@ -1,0 +1,15 @@
+<dataset>
+    <project/>
+    <analyzing_strategy/>
+    <commit/>
+    <commit_log_entry/>
+    <commit_file/>
+    <file/>
+    <file_identity/>
+    <file_pattern/>
+    <job/>
+    <metric_value/>
+    <finding/>
+    <analyzer_configuration/>
+    <analyzer_configuration_file/>
+</dataset>

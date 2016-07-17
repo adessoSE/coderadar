@@ -20,4 +20,8 @@ public class ResourceFactory {
         return new AnalyzerConfigurationResourceFactory();
     }
 
+    public static AnalyzingStrategyResourceFactory analyzingStrategyResource() {
+        return new AnalyzingStrategyResourceFactory();
+    }
+
 }

@@ -1,65 +1,27 @@
 package org.wickedsource.coderadar.project.rest;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
+import org.junit.experimental.categories.Category;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
+import org.wickedsource.coderadar.ControllerTest;
 import org.wickedsource.coderadar.ControllerTestTemplate;
-import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategyRepository;
-import org.wickedsource.coderadar.commit.domain.CommitRepository;
-import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
-import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
-import org.wickedsource.coderadar.project.domain.Project;
-import org.wickedsource.coderadar.project.domain.ProjectDeleter;
-import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
+import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.EMPTY;
+import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Projects.*;
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.projectResource;
 
+@Category(ControllerTest.class)
 public class ProjectControllerTest extends ControllerTestTemplate {
-
-    @InjectMocks
-    private ProjectController projectController;
-
-    @Mock
-    private ProjectRepository projectRepository;
-
-    @Mock
-    private ProjectVerifier projectVerifier;
-
-    @Spy
-    private ProjectResourceAssembler projectAssembler;
-
-    @Mock
-    private AnalyzingStrategyRepository analyzingStrategyRepository;
-
-    @Mock
-    private CommitRepository commitRepository;
-
-    @Mock
-    private FilePatternRepository filePatternRepository;
-
-    @Mock
-    private ProjectDeleter projectDeleter;
-
-    @Override
-    protected ProjectController getController() {
-        return projectController;
-    }
 
     @Before
     public void setUp() throws Exception {
@@ -67,12 +29,10 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     }
 
     @Test
+    @DatabaseSetup(EMPTY)
+    @ExpectedDatabase(SINGLE_PROJECT)
     public void createProjectSuccessfully() throws Exception {
         ProjectResource project = projectResource().validProjectResource();
-
-        when(projectRepository.save(any(Project.class))).thenReturn(project().validProject());
-        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(project().validProject());
-
         mvc().perform(post("/projects")
                 .content(toJsonWithoutLinks(project))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -83,8 +43,8 @@ public class ProjectControllerTest extends ControllerTestTemplate {
 
     private ResultHandler documentCreateProject() {
         ConstrainedFields fields = fields(ProjectResource.class);
-        return document("projects/post",
-                links(atomLinks(),
+        return document("projects/create",
+                links(halLinks(),
                         linkWithRel("self").description("Link to the project."),
                         linkWithRel("files").description("Link to the project's file patterns."),
                         linkWithRel("analyzers").description("Link to the project's analyzer configurations."),
@@ -98,22 +58,21 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     }
 
     @Test
+    @DatabaseSetup(SINGLE_PROJECT)
+    @ExpectedDatabase(SINGLE_PROJECT)
     public void createProjectWithValidationError() throws Exception {
         ProjectResource projectResource = projectResource().validProjectResource();
         projectResource.setName(null);
         projectResource.setVcsUrl("invalid url");
 
         ConstrainedFields fields = fields(ProjectResource.class);
-
-        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(project().validProject());
-
         mvc().perform(post("/projects")
                 .content(toJson(projectResource))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(validationErrorForField("name"))
                 .andExpect(validationErrorForField("vcsUrl"))
-                .andDo(document("projects/post/error400",
+                .andDo(document("projects/create/error400",
                         responseFields(
                                 fields.withPath("errorMessage").description("Short message describing what went wrong. In case of validation errors, the detailed validation error messages can be found in the fieldErrors array."),
                                 fields.withPath("fieldErrors").description("List of fields in the JSON payload of a request that had invalid values. May be empty. In this case, the 'message' field should contain an explanation of what went wrong."),
@@ -122,49 +81,41 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     }
 
     @Test
+    @DatabaseSetup(SINGLE_PROJECT)
+    @ExpectedDatabase(SINGLE_PROJECT_2)
     public void updateProject() throws Exception {
-        ProjectResource projectResource = projectResource().validProjectResource();
-
-        when(projectRepository.save(any(Project.class))).thenReturn(project().validProject());
-
+        ProjectResource projectResource = projectResource().validProjectResource2();
         mvc().perform(post("/projects/1")
                 .content(toJson(projectResource))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(contains(ProjectResource.class))
                 .andDo(document("projects/update"));
     }
 
     @Test
+    @DatabaseSetup(SINGLE_PROJECT)
+    @ExpectedDatabase(SINGLE_PROJECT)
     public void getProjectSuccessfully() throws Exception {
-        Project project = new Project();
-        project.setId(5L);
-
-        when(projectRepository.findOne(5L)).thenReturn(project);
-        when(projectVerifier.loadProjectOrThrowException(5L)).thenReturn(project);
-
-        mvc().perform(get("/projects/5"))
+        mvc().perform(get("/projects/1"))
                 .andExpect(status().isOk())
+                .andExpect(contains(ProjectResource.class))
                 .andDo(document("projects/get"));
     }
 
     @Test
+    @DatabaseSetup(SINGLE_PROJECT)
+    @ExpectedDatabase(EMPTY)
     public void deleteProject() throws Exception {
-        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(project().validProject());
-
         mvc().perform(delete("/projects/1"))
                 .andExpect(status().isOk())
                 .andDo(document("projects/delete"));
     }
 
     @Test
+    @DatabaseSetup(PROJECT_LIST)
+    @ExpectedDatabase(PROJECT_LIST)
     public void getProjectsSuccessfully() throws Exception {
-        List<Project> projects = new ArrayList<>();
-        projects.add(project().validProject());
-        projects.add(project().validProject2());
-
-        when(projectRepository.findAll()).thenReturn(projects);
-        when(projectVerifier.loadProjectOrThrowException(1L)).thenReturn(project().validProject());
-
         mvc().perform(get("/projects"))
                 .andExpect(status().isOk())
                 .andExpect(contains(Resources.class))
@@ -172,8 +123,9 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     }
 
     @Test
+    @DatabaseSetup(EMPTY)
+    @ExpectedDatabase(EMPTY)
     public void getProjectError() throws Exception {
-        when(projectVerifier.loadProjectOrThrowException(1L)).thenThrow(new ResourceNotFoundException());
         mvc().perform(get("/projects/1"))
                 .andExpect(status().isNotFound())
                 .andDo(document("projects/get/error404"));

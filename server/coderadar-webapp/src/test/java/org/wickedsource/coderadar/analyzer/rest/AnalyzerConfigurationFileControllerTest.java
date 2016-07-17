@@ -1,55 +1,28 @@
 package org.wickedsource.coderadar.analyzer.rest;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.junit.experimental.categories.Category;
 import org.springframework.mock.web.MockMultipartFile;
+import org.wickedsource.coderadar.ControllerTest;
 import org.wickedsource.coderadar.ControllerTestTemplate;
-import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
-import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
-import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationFileRepository;
-import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationRepository;
-import org.wickedsource.coderadar.analyzer.domain.AnalyzerPluginRegistry;
 
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.wickedsource.coderadar.factories.entities.EntityFactory.analyzer;
-import static org.wickedsource.coderadar.factories.entities.EntityFactory.analyzerConfiguration;
+import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.AnalyzerConfiguration.SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION;
+import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.AnalyzerConfiguration.SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION_FILE;
 
+@Category(ControllerTest.class)
 public class AnalyzerConfigurationFileControllerTest extends ControllerTestTemplate {
 
-    @InjectMocks
-    private AnalyzerConfigurationFileController controller;
-
-    @Mock
-    private AnalyzerConfigurationRepository analyzerConfigurationRepository;
-
-    @Mock
-    private AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository;
-
-    @Mock
-    private AnalyzerPluginRegistry analyzerRegistry;
-
-    @Override
-    protected Object getController() {
-        return controller;
-    }
-
     @Test
+    @DatabaseSetup(SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION)
+    @ExpectedDatabase(SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION_FILE)
     public void uploadConfigurationFile() throws Exception {
-
-        MockMultipartFile file = new MockMultipartFile("file", "configuration.xml", "text/xml", ("<configuration>" +
-                "<param1>value1</param1>" +
-                "<param2>value2></param2>" +
-                "</configuration>").getBytes());
-
-        AnalyzerConfiguration configuration = analyzerConfiguration().analyzerConfiguration();
-        when(analyzerConfigurationRepository.findByProjectIdAndId(eq(1L), eq(1L))).thenReturn(configuration);
-        when(analyzerRegistry.createAnalyzer(eq(configuration.getAnalyzerName()))).thenReturn((SourceCodeFileAnalyzerPlugin) analyzer().configurableAnalyzer());
-
+        MockMultipartFile file = new MockMultipartFile("file", "config.txt", "text/plain", ("abc".getBytes()));
         mvc().perform(fileUpload("/projects/1/analyzers/1/file")
                 .file(file))
                 .andExpect(status().isOk())
@@ -57,13 +30,12 @@ public class AnalyzerConfigurationFileControllerTest extends ControllerTestTempl
     }
 
     @Test
+    @DatabaseSetup(SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION_FILE)
+    @ExpectedDatabase(SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION_FILE)
     public void downloadConfigurationFile() throws Exception{
-
-        when(analyzerConfigurationFileRepository.findByAnalyzerConfigurationProjectIdAndAnalyzerConfigurationId(eq(1L), eq(1L)))
-                .thenReturn(analyzerConfiguration().analyzerConfigurationFile());
-
         mvc().perform(get("/projects/1/analyzers/1/file"))
                 .andExpect(status().isOk())
+                .andExpect(content().bytes("abc".getBytes()))
                 .andDo(document("analyzerConfigurationFile/download"));
     }
 }

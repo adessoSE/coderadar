@@ -13,9 +13,7 @@ import org.wickedsource.coderadar.commit.domain.CommitToFileAssociationRepositor
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
-import static org.wickedsource.coderadar.factories.entities.EntityFactory.sourceFile;
-import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
-import static org.wickedsource.coderadar.factories.entities.EntityFactory.commit;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.*;
 
 @Transactional
 public class FileRepositoryTest extends IntegrationTestTemplate {

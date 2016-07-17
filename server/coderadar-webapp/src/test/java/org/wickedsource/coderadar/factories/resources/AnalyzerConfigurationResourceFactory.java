@@ -7,8 +7,15 @@ public class AnalyzerConfigurationResourceFactory {
 
     public AnalyzerConfigurationResource analyzerConfiguration(){
         AnalyzerConfigurationResource resource = new AnalyzerConfigurationResource();
-        resource.setAnalyzerName("org.wickedsource.locAnalyzer");
+        resource.setAnalyzerName("org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer");
         resource.setEnabled(Boolean.TRUE);
+        return resource;
+    }
+
+    public AnalyzerConfigurationResource analyzerConfiguration2(){
+        AnalyzerConfigurationResource resource = new AnalyzerConfigurationResource();
+        resource.setAnalyzerName("org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer");
+        resource.setEnabled(Boolean.FALSE);
         return resource;
     }
 

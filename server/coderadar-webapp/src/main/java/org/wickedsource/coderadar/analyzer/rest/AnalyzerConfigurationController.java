@@ -54,9 +54,10 @@ public class AnalyzerConfigurationController {
         return new ResponseEntity<>(assembler.toResource(savedEntity), HttpStatus.CREATED);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteAnalyzerConfigurationFromProject(@PathVariable Long projectId, @Valid @RequestBody String analyzerName) {
-        analyzerConfigurationRepository.deleteByProjectIdAndAnalyzerName(projectId, analyzerName);
+    @RequestMapping(path="/{analyzerConfigurationId}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteAnalyzerConfigurationFromProject(@PathVariable Long projectId,  @PathVariable Long analyzerConfigurationId) {
+        projectVerifier.checkProjectExistsOrThrowException(projectId);
+        analyzerConfigurationRepository.deleteByProjectIdAndId(projectId, analyzerConfigurationId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

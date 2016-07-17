@@ -20,10 +20,10 @@ A project defines some metadata about the project you want coderadar to analyze.
 and its sub-resources you provide coderadar with the information it needs to analyze the source code.
 
 === Structure
-include::{snippets}/projects/post/request-fields.adoc[]
+include::{snippets}/projects/create/request-fields.adoc[]
 
 === Hypermedia Links
-include::{snippets}/projects/post/links.adoc[]
+include::{snippets}/projects/create/links.adoc[]
 
 === Listing Projects
 
@@ -36,10 +36,10 @@ include::{snippets}/projects/list/http-response.adoc[]
 === Creating a Project
 
 ==== Example Request
-include::{snippets}/projects/post/http-request.adoc[]
+include::{snippets}/projects/create/http-request.adoc[]
 
 ==== Example Response
-include::{snippets}/projects/post/http-response.adoc[]
+include::{snippets}/projects/create/http-response.adoc[]
 
 === Updating a Project
 
@@ -68,10 +68,10 @@ contained in a certain file set (like the SOURCE file set), coderadar will first
 patterns. Thus, the file set will include all INCLUDED files except those that were part of an EXCLUDE pattern.
 
 === Structure
-include::{snippets}/filepatterns/post/request-fields.adoc[]
+include::{snippets}/filepatterns/create-update/request-fields.adoc[]
 
 === Hypermedia Links
-include::{snippets}/filepatterns/post/links.adoc[]
+include::{snippets}/filepatterns/create-update/links.adoc[]
 
 === Listing a Project's File Patterns
 
@@ -86,10 +86,10 @@ Coderadar views a project's list of file patterns as a single resource. Hence, y
 all file patterns of a project at once.
 
 ==== Example Request
-include::{snippets}/filepatterns/post/http-request.adoc[]
+include::{snippets}/filepatterns/create-update/http-request.adoc[]
 
 ==== Example Response
-include::{snippets}/filepatterns/post/http-response.adoc[]
+include::{snippets}/filepatterns/create-update/http-response.adoc[]
 
 == Analyzer Configuration
 
@@ -172,18 +172,18 @@ Analyzing Strategy present for a project, no analysis will be performed at all. 
 an Analyzing Strategy, analysis jobs will be queued automatically for the commits defined within the strategy.
 
 === Structure
-include::{snippets}/strategy/set/request-fields.adoc[]
+include::{snippets}/strategy/create-update/request-fields.adoc[]
 
 === Hypermedia Links
-include::{snippets}/strategy/set/links.adoc[]
+include::{snippets}/strategy/create-update/links.adoc[]
 
 === Setting a Project's Analyzing Strategy
 
 ==== Example Request
-include::{snippets}/strategy/set/http-request.adoc[]
+include::{snippets}/strategy/create-update/http-request.adoc[]
 
 ==== Example Response
-include::{snippets}/strategy/set/http-response.adoc[]
+include::{snippets}/strategy/create-update/http-response.adoc[]
 
 === Getting a Project's Analyzing Strategy
 
@@ -204,8 +204,8 @@ POST requests against the coderadar API usually expect a JSON structure in the r
 contains values that are invalid, the API returns a response with HTTP status 400 (bad request) that contains
 an error JSON structure object that looks like this:
 
-include::{snippets}/projects/post/error400/http-response.adoc[]
-include::{snippets}/projects/post/error400/response-fields.adoc[]
+include::{snippets}/projects/create/error400/http-response.adoc[]
+include::{snippets}/projects/create/error400/response-fields.adoc[]
 
 == General Errors
 If some unexpected error occurs during the processing of a request, the API returns a response with HTTP status 500

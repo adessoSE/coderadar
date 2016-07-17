@@ -1,0 +1,20 @@
+<dataset>
+    <project/>
+    <analyzing_strategy/>
+    <commit/>
+    <commit_log_entry/>
+    <commit_file/>
+    <file/>
+    <file_identity/>
+    <file_pattern/>
+    <job/>
+    <metric_value/>
+    <finding/>
+    <analyzer_configuration/>
+    <analyzer_configuration_file/>
+
+    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
+
+    <analyzing_strategy id="1" project_id="1" from_date="2016-01-01 00:00:00" active="true"/>
+
+</dataset>
