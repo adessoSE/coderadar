@@ -36,10 +36,6 @@ test{
         // disable long-running integration tests by default
         excludeCategories 'org.wickedsource.coderadar.testframework.category.IntegrationTest'
     }
-
-    testLogging {
-        showStandardStreams = true
-    }
 }
 
 task integrationTest(type: Test){
