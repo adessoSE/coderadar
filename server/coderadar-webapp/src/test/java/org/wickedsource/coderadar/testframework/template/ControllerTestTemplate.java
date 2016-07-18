@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +18,6 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.snippet.Snippet;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -38,11 +32,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.snippet.Attributes.key;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class})
-public abstract class ControllerTestTemplate extends IntegrationTestTemplate{
+public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
 
     private Logger logger = LoggerFactory.getLogger(ControllerTestTemplate.class);
 
@@ -108,7 +98,14 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate{
         sequenceResetter.resetAutoIncrementColumns(
                 "project",
                 "analyzer_configuration",
-                "analyzer_configuration_file");
+                "analyzer_configuration_file",
+                "analyzing_strategy",
+                "commit",
+                "commit_log_entry",
+                "file",
+                "file_identity",
+                "file_pattern",
+                "job");
     }
 
     protected <T> ConstrainedFields<T> fields(Class<T> clazz) {

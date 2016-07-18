@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.file.domain;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
+import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.EMPTY;
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.*;
 
 @Transactional
@@ -31,6 +33,7 @@ public class FileRepositoryTest extends IntegrationTestTemplate {
     private CommitToFileAssociationRepository commitToFileAssociationRepository;
 
     @Test
+    @DatabaseSetup(EMPTY)
     public void testFindInCommit() {
         Project project = project().validProject();
         project = projectRepository.save(project);
