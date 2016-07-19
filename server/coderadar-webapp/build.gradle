@@ -14,6 +14,7 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.4.RELEASE")
         classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
         classpath "se.transmode.gradle:gradle-docker:1.2"
+        classpath "org.ajoberstar:gradle-git:1.5.1"
     }
 }
 
@@ -21,9 +22,10 @@ apply plugin: 'java'
 apply plugin: 'spring-boot'
 apply plugin: 'org.asciidoctor.convert'
 apply plugin: 'docker'
+apply plugin: 'org.ajoberstar.github-pages'
 
 group = 'org.wickedsource'
-version = '1.0.0.SNAPSHOT'
+version = '1.0.0-SNAPSHOT'
 
 ext{
     snippetsDir = file('build/generated-snippets')
@@ -57,7 +59,7 @@ asciidoctor {
     inputs.dir snippetsDir
     dependsOn test
     sourceDir 'src/main/asciidoc'
-    outputDir 'doc/restapi'
+    outputDir 'build/doc/restapi'
 }
 
 jar {
@@ -149,5 +151,14 @@ task buildDocker(type: Docker, dependsOn: build) {
             into stageDir
             include 'application.properties'
         }
+    }
+}
+
+githubPages {
+    repoUri = 'https://github.com/thombergs/coderadar.git'
+    targetBranch = 'gh-pages'
+    pages {
+        from 'build/doc/restapi/html5'
+        into "${version}/docs/restapi"
     }
 }
