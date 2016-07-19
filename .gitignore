@@ -1,8 +1,0 @@
-/.idea
-/.gradle
-*.iws
-.gradle
-*.iml
-*.ipr
-/plugins/findbugs-adapter-plugin/src/main/generated
-build
