@@ -97,6 +97,7 @@ dependencies {
     testCompile 'org.springframework.restdocs:spring-restdocs-core:1.1.0.RELEASE'
     testCompile 'com.github.springtestdbunit:spring-test-dbunit:1.3.0'
     testCompile 'org.dbunit:dbunit:2.5.2'
+    testCompile 'com.jayway.jsonpath:json-path:2.2.0'
 }
 
 bootRun {

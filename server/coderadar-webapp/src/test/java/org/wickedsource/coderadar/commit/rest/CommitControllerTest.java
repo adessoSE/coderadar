@@ -20,15 +20,20 @@ public class CommitControllerTest extends ControllerTestTemplate {
     @DatabaseSetup(SINGLE_PROJECT_WITH_COMMITS)
     @ExpectedDatabase(SINGLE_PROJECT_WITH_COMMITS)
     public void getCommits() throws Exception {
+        ConstrainedFields fields = fields(CommitResource.class);
         mvc().perform(get("/projects/1/commits"))
                 .andExpect(status().isOk())
                 .andExpect(contains(PagedResources.class))
                 .andDo(document("commit/list",
-                        links(halLinks(),
-                                linkWithRel("self").description("Link to the current page of commits."),
-                                linkWithRel("next").description("Link to the next page of commits."),
-                                linkWithRel("last").description("Link to the last page of commits."),
-                                linkWithRel("first").description("Link to the first page of commits."))));
+                        linksInPath("$._embedded.commitResourceList[0]",
+                                linkWithRel("project").description("The project resource this commit belongs to.")),
+                        responseFieldsInPath("$._embedded.commitResourceList[0]",
+                                fields.withPath("name").description("The name of the commit."),
+                                fields.withPath("parentCommitName").description("The name of this commit's parent commit."),
+                                fields.withPath("author").description("The author (committer) of the commit."),
+                                fields.withPath("timestamp").description("The timestamp of the commit in milliseconds since epoch."),
+                                fields.withPath("analyzed").description("Whether this commit has already been analyzed by the source code analyzers or not. If it has been analyzed, code metrics for this commit should be available."))));
     }
+
 
 }

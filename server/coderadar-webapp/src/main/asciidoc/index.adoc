@@ -193,6 +193,24 @@ include::{snippets}/strategy/get/http-request.adoc[]
 ==== Example Response
 include::{snippets}/strategy/get/http-response.adoc[]
 
+== Commit
+The Commit resource contains some metadata about a commit to your project's version control system.
+Commits are a read-only resource since the commit metadata is automatically gathered by the coderadar server.
+
+=== Structure
+include::{snippets}/commit/list/response-fields.adoc[]
+
+=== Hypermedia Links
+include::{snippets}/commit/list/links.adoc[]
+
+=== Listing a Project's Commits
+
+==== Example Request
+include::{snippets}/commit/list/http-request.adoc[]
+
+==== Example Response
+include::{snippets}/commit/list/http-response.adoc[]
+
 = Error Handling
 
 == Successful Requests

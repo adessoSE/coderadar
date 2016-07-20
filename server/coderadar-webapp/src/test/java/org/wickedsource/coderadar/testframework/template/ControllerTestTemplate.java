@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
-import org.springframework.restdocs.hypermedia.Link;
+import org.springframework.restdocs.hypermedia.*;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.FieldDescriptor;
@@ -26,6 +26,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.wickedsource.coderadar.core.rest.validation.ErrorDTO;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -157,6 +158,14 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
                 Assert.fail(String.format("expected JSON representation of class %s but found '%s'", clazz, json));
             }
         };
+    }
+
+    protected JsonPathResponseFieldsSnippet responseFieldsInPath(String jsonPath, FieldDescriptor... fieldDescriptors){
+        return new JsonPathResponseFieldsSnippet(jsonPath, fieldDescriptors);
+    }
+
+    protected LinksSnippet linksInPath(String jsonPath, LinkDescriptor... linkDescriptors){
+        return new JsonPathLinksSnippet(jsonPath, linkDescriptors);
     }
 
 }
