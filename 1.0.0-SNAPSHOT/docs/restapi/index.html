@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v1.0.0-SNAPSHOT, Tom Hombergs, 2016-07-19">
+<meta name="author" content="v1.0.0-SNAPSHOT, Tom Hombergs, 2016-07-21">
 <title>coderadar REST API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -423,7 +423,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v1.0.0-SNAPSHOT, Tom Hombergs, 2016-07-19</span><br>
+<span id="author" class="author">v1.0.0-SNAPSHOT, Tom Hombergs, 2016-07-21</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -472,6 +472,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_hypermedia_links_4">Hypermedia Links</a></li>
 <li><a href="#_setting_a_project_s_analyzing_strategy">Setting a Project&#8217;s Analyzing Strategy</a></li>
 <li><a href="#_getting_a_project_s_analyzing_strategy">Getting a Project&#8217;s Analyzing Strategy</a></li>
+</ul>
+</li>
+<li><a href="#_commit">Commit</a>
+<ul class="sectlevel2">
+<li><a href="#_structure_5">Structure</a></li>
+<li><a href="#_hypermedia_links_5">Hypermedia Links</a></li>
+<li><a href="#_listing_a_project_s_commits">Listing a Project&#8217;s Commits</a></li>
 </ul>
 </li>
 </ul>
@@ -1466,6 +1473,238 @@ Content-Length: 237
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_commit"><a class="link" href="#_commit">Commit</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Commit resource contains some metadata about a commit to your project&#8217;s version control system.
+Commits are a read-only resource since the commit metadata is automatically gathered by the coderadar server.</p>
+</div>
+<div class="sect2">
+<h3 id="_structure_5"><a class="link" href="#_structure_5">Structure</a></h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the commit.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>parentCommitName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of this commit&#8217;s parent commit.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>author</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The author (committer) of the commit.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timestamp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The timestamp of the commit in milliseconds since epoch.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>analyzed</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether this commit has already been analyzed by the source code analyzers or not. If it has been analyzed, code metrics for this commit should be available.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_hypermedia_links_5"><a class="link" href="#_hypermedia_links_5">Hypermedia Links</a></h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Relation</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The project resource this commit belongs to.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_listing_a_project_s_commits"><a class="link" href="#_listing_a_project_s_commits">Listing a Project&#8217;s Commits</a></h3>
+<div class="sect3">
+<h4 id="_example_request_16"><a class="link" href="#_example_request_16">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/commits HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_16"><a class="link" href="#_example_response_16">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json
+Content-Length: 3404
+
+{
+  "_embedded" : {
+    "commitResourceList" : [ {
+      "name" : "cafebabe",
+      "parentCommitName" : "cafebabe",
+      "author" : "Tom",
+      "timestamp" : 1462417505000,
+      "analyzed" : false,
+      "_links" : {
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    }, {
+      "name" : "cafebabe",
+      "parentCommitName" : "cafebabe",
+      "author" : "Tom",
+      "timestamp" : 1462417505000,
+      "analyzed" : false,
+      "_links" : {
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    }, {
+      "name" : "cafebabe",
+      "parentCommitName" : "cafebabe",
+      "author" : "Tom",
+      "timestamp" : 1462417505000,
+      "analyzed" : false,
+      "_links" : {
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    }, {
+      "name" : "cafebabe",
+      "parentCommitName" : "cafebabe",
+      "author" : "Tom",
+      "timestamp" : 1462417505000,
+      "analyzed" : false,
+      "_links" : {
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    }, {
+      "name" : "cafebabe",
+      "parentCommitName" : "cafebabe",
+      "author" : "Tom",
+      "timestamp" : 1462417505000,
+      "analyzed" : false,
+      "_links" : {
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    }, {
+      "name" : "cafebabe",
+      "parentCommitName" : "cafebabe",
+      "author" : "Tom",
+      "timestamp" : 1462417505000,
+      "analyzed" : false,
+      "_links" : {
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    }, {
+      "name" : "cafebabe",
+      "parentCommitName" : "cafebabe",
+      "author" : "Tom",
+      "timestamp" : 1462417505000,
+      "analyzed" : false,
+      "_links" : {
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    }, {
+      "name" : "cafebabe",
+      "parentCommitName" : "cafebabe",
+      "author" : "Tom",
+      "timestamp" : 1462417505000,
+      "analyzed" : false,
+      "_links" : {
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    }, {
+      "name" : "cafebabe",
+      "parentCommitName" : "cafebabe",
+      "author" : "Tom",
+      "timestamp" : 1462417505000,
+      "analyzed" : false,
+      "_links" : {
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    }, {
+      "name" : "cafebabe",
+      "parentCommitName" : "cafebabe",
+      "author" : "Tom",
+      "timestamp" : 1462417505000,
+      "analyzed" : false,
+      "_links" : {
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "first" : {
+      "href" : "http://localhost:8080/projects/1/commits?page=0&amp;size=10"
+    },
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/commits"
+    },
+    "next" : {
+      "href" : "http://localhost:8080/projects/1/commits?page=1&amp;size=10"
+    },
+    "last" : {
+      "href" : "http://localhost:8080/projects/1/commits?page=1&amp;size=10"
+    }
+  },
+  "page" : {
+    "size" : 10,
+    "totalElements" : 17,
+    "totalPages" : 2,
+    "number" : 0
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <h1 id="_error_handling" class="sect0"><a class="link" href="#_error_handling">Error Handling</a></h1>
 <div class="sect1">
 <h2 id="_successful_requests"><a class="link" href="#_successful_requests">Successful Requests</a></h2>
@@ -1493,11 +1732,11 @@ Content-Length: 204
 {
   "errorMessage" : "Validation Error",
   "fieldErrors" : [ {
-    "field" : "name",
-    "message" : "may not be null"
-  }, {
     "field" : "vcsUrl",
     "message" : "must be a valid URL"
+  }, {
+    "field" : "name",
+    "message" : "may not be null"
   } ]
 }</code></pre>
 </div>
@@ -1552,7 +1791,7 @@ Content-Length: 204
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-07-19 21:44:37 +02:00
+Last updated 2016-07-20 23:30:26 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
