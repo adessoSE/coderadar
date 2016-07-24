@@ -447,7 +447,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_structure">Structure</a></li>
 <li><a href="#_hypermedia_links">Hypermedia Links</a></li>
 <li><a href="#_listing_projects">Listing Projects</a></li>
-<li><a href="#_creating_a_project">Creating a Project</a></li>
 <li><a href="#_updating_a_project">Updating a Project</a></li>
 <li><a href="#_deleting_a_project">Deleting a Project</a></li>
 </ul>
@@ -606,11 +605,11 @@ Content-Length: 204
 {
   "errorMessage" : "Validation Error",
   "fieldErrors" : [ {
-    "field" : "vcsUrl",
-    "message" : "must be a valid URL"
-  }, {
     "field" : "name",
     "message" : "may not be null"
+  }, {
+    "field" : "vcsUrl",
+    "message" : "must be a valid URL"
   } ]
 }</code></pre>
 </div>
@@ -824,10 +823,11 @@ Content-Length: 1198
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p><a id="creating-a-project"></a>
+=== Creating a Project</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_creating_a_project"><a class="link" href="#_creating_a_project">Creating a Project</a></h3>
 <div class="sect3">
 <h4 id="_example_request_2"><a class="link" href="#_example_request_2">Example Request</a></h4>
 <div class="listingblock">
@@ -1556,6 +1556,9 @@ an Analyzing Strategy, analysis jobs will be queued automatically for the commit
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p><a id="creating-analyzing-strategy"></a></p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_setting_a_project_s_analyzing_strategy"><a class="link" href="#_setting_a_project_s_analyzing_strategy">Setting a Project&#8217;s Analyzing Strategy</a></h3>
@@ -1650,7 +1653,7 @@ configuration you provide.
 <div class="sectionbody">
 <div class="paragraph">
 <p>The Commit resource contains some metadata about a commit to your project&#8217;s version control system. Commits
-will become available as soon as you have created a project and provided valid VCS credentials (see <a href="#_creating_a_project">Creating a Project</a>).
+will become available as soon as you have created a project and provided valid VCS credentials (see <a href="#creating-a-project">Creating a Project</a>).
 Depending of the number of commits you have in your project, it may take a while until all commits
 are available.</p>
 </div>
@@ -1725,7 +1728,7 @@ are available.</p>
 <h4 id="_example_request_16"><a class="link" href="#_example_request_16">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/commits HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/commits?page=3&amp;size=5 HTTP/1.1
 Host: localhost</code></pre>
 </div>
 </div>
@@ -1736,7 +1739,7 @@ Host: localhost</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json
-Content-Length: 3404
+Content-Length: 1142
 
 {
   "_embedded" : {
@@ -1762,115 +1765,27 @@ Content-Length: 3404
           "href" : "http://localhost:8080/projects/1"
         }
       }
-    }, {
-      "name" : "cafebabe",
-      "parentCommitName" : "cafebabe",
-      "author" : "Tom",
-      "timestamp" : 1462417505000,
-      "analyzed" : false,
-      "_links" : {
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    }, {
-      "name" : "cafebabe",
-      "parentCommitName" : "cafebabe",
-      "author" : "Tom",
-      "timestamp" : 1462417505000,
-      "analyzed" : false,
-      "_links" : {
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    }, {
-      "name" : "cafebabe",
-      "parentCommitName" : "cafebabe",
-      "author" : "Tom",
-      "timestamp" : 1462417505000,
-      "analyzed" : false,
-      "_links" : {
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    }, {
-      "name" : "cafebabe",
-      "parentCommitName" : "cafebabe",
-      "author" : "Tom",
-      "timestamp" : 1462417505000,
-      "analyzed" : false,
-      "_links" : {
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    }, {
-      "name" : "cafebabe",
-      "parentCommitName" : "cafebabe",
-      "author" : "Tom",
-      "timestamp" : 1462417505000,
-      "analyzed" : false,
-      "_links" : {
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    }, {
-      "name" : "cafebabe",
-      "parentCommitName" : "cafebabe",
-      "author" : "Tom",
-      "timestamp" : 1462417505000,
-      "analyzed" : false,
-      "_links" : {
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    }, {
-      "name" : "cafebabe",
-      "parentCommitName" : "cafebabe",
-      "author" : "Tom",
-      "timestamp" : 1462417505000,
-      "analyzed" : false,
-      "_links" : {
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    }, {
-      "name" : "cafebabe",
-      "parentCommitName" : "cafebabe",
-      "author" : "Tom",
-      "timestamp" : 1462417505000,
-      "analyzed" : false,
-      "_links" : {
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
     } ]
   },
   "_links" : {
     "first" : {
-      "href" : "http://localhost:8080/projects/1/commits?page=0&amp;size=10"
+      "href" : "http://localhost:8080/projects/1/commits?page=0&amp;size=5"
+    },
+    "prev" : {
+      "href" : "http://localhost:8080/projects/1/commits?page=2&amp;size=5"
     },
     "self" : {
-      "href" : "http://localhost:8080/projects/1/commits"
-    },
-    "next" : {
-      "href" : "http://localhost:8080/projects/1/commits?page=1&amp;size=10"
+      "href" : "http://localhost:8080/projects/1/commits?page=3&amp;size=5"
     },
     "last" : {
-      "href" : "http://localhost:8080/projects/1/commits?page=1&amp;size=10"
+      "href" : "http://localhost:8080/projects/1/commits?page=3&amp;size=5"
     }
   },
   "page" : {
-    "size" : 10,
+    "size" : 5,
     "totalElements" : 17,
-    "totalPages" : 2,
-    "number" : 0
+    "totalPages" : 4,
+    "number" : 3
   }
 }</code></pre>
 </div>
@@ -1885,6 +1800,22 @@ Content-Length: 3404
 <div class="paragraph">
 <p>You can access the metrics aggregated for each commit using this operation. You have to specify a query object
 that defines which metrics you are interested in.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Metrics will become available as soon as you have provided an <a href="#creating-analyzing-strategy">Analyzing Strategy</a> for your project.
+At that moment, analysis of each commit defined in the strategy starts. Depending on how many commits that are,
+analysis will take a while.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_query_structure"><a class="link" href="#_query_structure">Query Structure</a></h3>
@@ -1918,8 +1849,19 @@ that defines which metrics you are interested in.</p>
 </table>
 <div class="sect3">
 <h4 id="_example_request_17"><a class="link" href="#_example_request_17">Example Request</a></h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
 <div class="paragraph">
-<p>This request can be sent using the GET or POST method. See <a href="#usage-of-get">Usage of GET</a>.</p>
+<p>This request can be sent using either the GET or the POST method. See <a href="#usage-of-get">Usage of GET</a>.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1970,7 +1912,7 @@ Content-Length: 297
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-07-24 23:52:04 +02:00
+Last updated 2016-07-25 00:22:52 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
