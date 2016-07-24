@@ -344,6 +344,8 @@ analysis will take a while.
 
 include::{snippets}/metrics/commit/request-fields.adoc[]
 
+=== Listing Metrics of a Commit
+
 ==== Example Request
 
 [NOTE]
