@@ -1,0 +1,46 @@
+<dataset>
+    <project/>
+    <analyzing_strategy/>
+    <commit/>
+    <commit_log_entry/>
+    <commit_file/>
+    <file_identity/>
+    <file/>
+    <file_pattern/>
+    <job/>
+    <metric_value/>
+    <finding/>
+    <analyzer_configuration/>
+    <analyzer_configuration_file/>
+
+    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
+    <commit id="1" project_id="1" name="abc" author="Tom" parent_commit_name="cafebabe" comment="first commit"
+            scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+    <commit id="2" project_id="1" name="cba" author="Tom" parent_commit_name="cafebabe" comment="first commit"
+            scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+    <commit id="3" project_id="1" name="def" author="Tom" parent_commit_name="cafebabe" comment="first commit"
+            scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+    <commit id="4" project_id="1" name="fed" author="Tom" parent_commit_name="cafebabe" comment="first commit"
+            scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+
+    <file_identity id="2"/>
+    <file id="1" filepath="src/main/java/test.java" identity_id="2"/>
+    <file id="2" filepath="src/main/java/test2,java" identity_id="2"/>
+    <metric_value commit_id="1" file_id="1" metric_name="metric1" value="1"/>
+    <metric_value commit_id="1" file_id="1" metric_name="metric2" value="1"/>
+    <metric_value commit_id="1" file_id="1" metric_name="metric3" value="1"/>
+    <metric_value commit_id="1" file_id="1" metric_name="metric4" value="1"/>
+    <metric_value commit_id="1" file_id="2" metric_name="metric1" value="1"/>
+    <metric_value commit_id="1" file_id="2" metric_name="metric2" value="1"/>
+    <metric_value commit_id="1" file_id="2" metric_name="metric3" value="1"/>
+    <metric_value commit_id="1" file_id="2" metric_name="metric4" value="1"/>
+
+    <metric_value commit_id="2" file_id="1" metric_name="metric1" value="2"/>
+    <metric_value commit_id="2" file_id="1" metric_name="metric2" value="2"/>
+    <metric_value commit_id="2" file_id="1" metric_name="metric3" value="2"/>
+
+    <metric_value commit_id="3" file_id="1" metric_name="metric1" value="3"/>
+    <metric_value commit_id="3" file_id="1" metric_name="metric2" value="3"/>
+    <metric_value commit_id="3" file_id="2" metric_name="metric1" value="3"/>
+    <metric_value commit_id="3" file_id="2" metric_name="metric2" value="3"/>
+</dataset>

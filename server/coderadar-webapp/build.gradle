@@ -98,6 +98,8 @@ dependencies {
     testCompile 'com.github.springtestdbunit:spring-test-dbunit:1.3.0'
     testCompile 'org.dbunit:dbunit:2.5.2'
     testCompile 'com.jayway.jsonpath:json-path:2.2.0'
+    testCompile 'org.assertj:assertj-core:3.5.1'
+
 }
 
 bootRun {

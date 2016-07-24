@@ -13,6 +13,8 @@
     </root>
 
     <logger name="org.reflections" level="INFO"/>
-    <logger name="org.wickedsource" level="DEBUG"/>
+    <logger name="org.wickedsource" level="INFO"/>
+    <logger name="org.hibernate.SQL" level="INFO"/>
+    <logger name="org.dbunit" level="INFO"/>
 
 </configuration>

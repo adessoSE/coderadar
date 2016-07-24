@@ -29,4 +29,8 @@ public class DbUnitFactory {
         public final static String SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION_FILE = "/dbunit/analyzerconfiguration/singleProjectWithAnalyzerConfigurationFile.xml";
     }
 
+    public static class MetricValues {
+        public final static String SINGLE_PROJECT_WITH_METRICS = "/dbunit/metric/singleProjectWithMetrics.xml";
+    }
+
 }

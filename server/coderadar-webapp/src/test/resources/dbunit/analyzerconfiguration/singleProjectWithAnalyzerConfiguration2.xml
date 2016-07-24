@@ -4,8 +4,8 @@
     <commit/>
     <commit_log_entry/>
     <commit_file/>
-    <file/>
     <file_identity/>
+    <file/>
     <file_pattern/>
     <job/>
     <metric_value/>

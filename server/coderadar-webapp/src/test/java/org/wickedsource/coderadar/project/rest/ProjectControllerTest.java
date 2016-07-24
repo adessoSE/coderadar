@@ -2,7 +2,6 @@ package org.wickedsource.coderadar.project.rest;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.hateoas.Resources;
@@ -22,11 +21,6 @@ import static org.wickedsource.coderadar.factories.resources.ResourceFactory.pro
 
 @Category(ControllerTest.class)
 public class ProjectControllerTest extends ControllerTestTemplate {
-
-    @Before
-    public void setUp() throws Exception {
-
-    }
 
     @Test
     @DatabaseSetup(EMPTY)

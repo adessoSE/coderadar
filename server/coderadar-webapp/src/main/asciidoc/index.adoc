@@ -13,7 +13,61 @@ The coderadar server is a tool for continuous source code analysis. To start ana
 you only have to provide a few configuration parameters and let coderadar do the work. This document
 describes the REST API of the coderadar server.
 
-= Resources
+== Usage of HTTP Verbs
+The following table describes how the coderadar API interprets the HTTP verbs.
+
+.HTTP Verbs
+|===
+|HTTP Verb | Usage
+
+|GET
+|GET is used to retrieve information.
+
+|POST
+|POST is used to create and update resources.
+
+|DELETE
+|DELETE is used to delete resources.
+
+|PUT
+|PUT is not used at this time.
+
+|PATCH
+|PATCH is not used at this time.
+|===
+
+anchor:usage-of-get[]
+[NOTE]
+====
+.Usage of GET
+If a GET request requires parameters, they can usually be
+provided as parameters encoded in the URL. However, in some cases parameters are too unwieldy to
+encode them in the URL. In these cases the parameters are expected as JSON string within the request
+body. Since some tools don't allow GET requests with a body, these requests will also be answered
+when using the POST method.
+====
+
+== Error Handling
+
+=== Successful Requests
+Successful requests return a response with HTTP status 200 (OK) or 201 (CREATED) and contain a JSON structure in the response
+body if applicable.
+
+=== Validation Errors
+POST requests against the coderadar API usually expect a JSON structure in the request body. If the JSON structure
+contains values that are invalid, the API returns a response with HTTP status 400 (bad request) that contains
+an error JSON structure object that looks like this:
+
+include::{snippets}/projects/create/error400/http-response.adoc[]
+include::{snippets}/projects/create/error400/response-fields.adoc[]
+
+=== General Errors
+If some unexpected error occurs during the processing of a request, the API returns a response with HTTP status 500
+(internal server error).
+
+= Configuring a Project
+
+This section describes the resources you can interact with to configure a project to be analyzed by coderadar.
 
 == Project
 A project defines some metadata about the project you want coderadar to analyze. With a project resource
@@ -193,9 +247,16 @@ include::{snippets}/strategy/get/http-request.adoc[]
 ==== Example Response
 include::{snippets}/strategy/get/http-response.adoc[]
 
+= Accessing Analysis Results
+This section describes the resources you can access to get information about the results of analyses that
+were run on a project. These resources are read-only since coderadar creates those resources from the project
+configuration you provide.
+
 == Commit
-The Commit resource contains some metadata about a commit to your project's version control system.
-Commits are a read-only resource since the commit metadata is automatically gathered by the coderadar server.
+The Commit resource contains some metadata about a commit to your project's version control system. Commits
+will become available as soon as you have created a project and provided valid VCS credentials (see <<Creating a Project>>).
+Depending of the number of commits you have in your project, it may take a while until all commits
+are available.
 
 === Structure
 include::{snippets}/commit/list/response-fields.adoc[]
@@ -211,23 +272,19 @@ include::{snippets}/commit/list/http-request.adoc[]
 ==== Example Response
 include::{snippets}/commit/list/http-response.adoc[]
 
-= Error Handling
+== Commit Metrics
+You can access the metrics aggregated for each commit using this operation. You have to specify a query object
+that defines which metrics you are interested in.
 
-== Successful Requests
-Successful requests return a response with HTTP status 200 (OK) and contain a JSON structure in the response
-body if applicable.
+=== Query Structure
+include::{snippets}/metrics/commit/request-fields.adoc[]
 
-== Validation Errors
-POST requests against the coderadar API usually expect a JSON structure in the request body. If the JSON structure
-contains values that are invalid, the API returns a response with HTTP status 400 (bad request) that contains
-an error JSON structure object that looks like this:
+==== Example Request
+This request can be sent using the GET or POST method. See <<usage-of-get, Usage of GET>>.
+include::{snippets}/metrics/commit/http-request.adoc[]
 
-include::{snippets}/projects/create/error400/http-response.adoc[]
-include::{snippets}/projects/create/error400/response-fields.adoc[]
-
-== General Errors
-If some unexpected error occurs during the processing of a request, the API returns a response with HTTP status 500
-(internal server error).
+==== Example Response
+include::{snippets}/metrics/commit/http-response.adoc[]
 
 
 
