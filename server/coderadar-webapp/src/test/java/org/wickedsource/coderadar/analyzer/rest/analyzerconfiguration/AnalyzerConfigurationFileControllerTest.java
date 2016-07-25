@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.rest;
+package org.wickedsource.coderadar.analyzer.rest.analyzerconfiguration;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;

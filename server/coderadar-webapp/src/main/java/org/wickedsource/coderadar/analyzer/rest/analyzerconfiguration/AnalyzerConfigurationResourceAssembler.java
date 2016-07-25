@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.rest;
+package org.wickedsource.coderadar.analyzer.rest.analyzerconfiguration;
 
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
 import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;

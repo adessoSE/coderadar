@@ -1,7 +1,7 @@
 package org.wickedsource.coderadar.project.rest;
 
 import org.springframework.stereotype.Component;
-import org.wickedsource.coderadar.analyzer.rest.AnalyzerConfigurationController;
+import org.wickedsource.coderadar.analyzer.rest.analyzerconfiguration.AnalyzerConfigurationController;
 import org.wickedsource.coderadar.analyzingstrategy.rest.AnalyzingStrategyController;
 import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
 import org.wickedsource.coderadar.filepattern.rest.FilePatternController;

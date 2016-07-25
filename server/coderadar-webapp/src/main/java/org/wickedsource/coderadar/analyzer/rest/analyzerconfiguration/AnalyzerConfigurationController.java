@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.rest;
+package org.wickedsource.coderadar.analyzer.rest.analyzerconfiguration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
