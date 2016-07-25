@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metric.rest;
+package org.wickedsource.coderadar.metric.rest.metricvalue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
@@ -21,7 +21,7 @@ import java.util.List;
 @Controller
 @ExposesResourceFor(MetricValue.class)
 @Transactional
-@RequestMapping(path = "/projects/{projectId}/metrics")
+@RequestMapping(path = "/projects/{projectId}/metricvalues")
 public class MetricValuesController {
 
     private ProjectVerifier projectVerifier;
@@ -34,7 +34,7 @@ public class MetricValuesController {
         this.metricValueRepository = metricValueRepository;
     }
 
-    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, produces = "application/hal+json")
+    @RequestMapping(path = "/perCommit", method = {RequestMethod.GET, RequestMethod.POST}, produces = "application/hal+json")
     public ResponseEntity<CommitMetricsResource> listCommitMetrics(@PathVariable Long projectId, @Valid @RequestBody QueryParams query) {
         projectVerifier.checkProjectExistsOrThrowException(projectId);
         List<MetricValueDTO> metricValues = metricValueRepository.findValuesAggregatedByCommitAndMetric(query.getCommitNames(), query.getMetricNames());

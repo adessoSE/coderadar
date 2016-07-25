@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
+import org.wickedsource.coderadar.metric.rest.metricvalue.CommitMetricsResource;
+import org.wickedsource.coderadar.metric.rest.metricvalue.QueryParams;
 import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
@@ -30,7 +32,7 @@ public class MetricValuesControllerTest extends ControllerTestTemplate {
 
         ConstrainedFields fields = fields(QueryParams.class);
 
-        MvcResult result = mvc().perform(get("/projects/1/metrics")
+        MvcResult result = mvc().perform(get("/projects/1/metricvalues/perCommit")
                 .content(toJsonWithoutLinks(params))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metric.rest;
+package org.wickedsource.coderadar.metric.rest.metricvalue;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.ResourceSupport;
