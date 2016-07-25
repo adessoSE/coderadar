@@ -30,7 +30,7 @@ public class MetricValuesControllerTest extends ControllerTestTemplate {
     public void getCommitMetrics() throws Exception {
 
         QueryParams params = new QueryParams();
-        params.addCommitNames("abc", "def");
+        params.addCommitNames("f9b0553930f133490f292a9c78d0b36b39be8758", "eb7cbd429530dc26d06a9ea2a62794421dce1e9a");
         params.addMetricNames("metric1", "metric3", "metric4");
 
         ConstrainedFields fields = fields(QueryParams.class);
@@ -48,12 +48,12 @@ public class MetricValuesControllerTest extends ControllerTestTemplate {
 
         CommitMetricsResource commitMetricsResource = fromJson(result.getResponse().getContentAsString(), CommitMetricsResource.class);
         assertThat(commitMetricsResource.getCommits()).hasSize(2);
-        assertThat(commitMetricsResource.getMetricsForCommit("abc")).hasSize(3);
-        assertThat(commitMetricsResource.getValueForCommitAndMetric("abc", "metric1")).isEqualTo(2);
-        assertThat(commitMetricsResource.getValueForCommitAndMetric("abc", "metric3")).isEqualTo(2);
-        assertThat(commitMetricsResource.getValueForCommitAndMetric("abc", "metric4")).isEqualTo(2);
-        assertThat(commitMetricsResource.getMetricsForCommit("def")).hasSize(1);
-        assertThat(commitMetricsResource.getValueForCommitAndMetric("def", "metric1")).isEqualTo(6);
+        assertThat(commitMetricsResource.getMetricsForCommit("f9b0553930f133490f292a9c78d0b36b39be8758")).hasSize(3);
+        assertThat(commitMetricsResource.getValueForCommitAndMetric("f9b0553930f133490f292a9c78d0b36b39be8758", "metric1")).isEqualTo(2);
+        assertThat(commitMetricsResource.getValueForCommitAndMetric("f9b0553930f133490f292a9c78d0b36b39be8758", "metric3")).isEqualTo(2);
+        assertThat(commitMetricsResource.getValueForCommitAndMetric("f9b0553930f133490f292a9c78d0b36b39be8758", "metric4")).isEqualTo(2);
+        assertThat(commitMetricsResource.getMetricsForCommit("eb7cbd429530dc26d06a9ea2a62794421dce1e9a")).hasSize(1);
+        assertThat(commitMetricsResource.getValueForCommitAndMetric("eb7cbd429530dc26d06a9ea2a62794421dce1e9a", "metric1")).isEqualTo(6);
     }
 
 }

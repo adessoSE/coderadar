@@ -45,8 +45,8 @@ anchor:usage-of-get[]
 If a GET request requires parameters, they can usually be
 provided as parameters encoded in the URL. However, in some cases parameters are too unwieldy to
 encode them in the URL. In these cases the parameters are expected as JSON string within the request
-body. Since some tools don't allow GET requests with a body, these requests will also be answered
-when using the POST method.
+body. Since some tools don't allow GET requests with a body, coderadar accepts the POST method in
+these cases as well.
 ====
 
 == Error Handling
@@ -381,7 +381,7 @@ analysis will take a while.
 
 include::{snippets}/metrics/commit/request-fields.adoc[]
 
-=== Listing Metrics of a Commit
+=== Listing Metric Values of a Commit
 
 ==== Example Request
 
