@@ -3,6 +3,9 @@ package org.wickedsource.coderadar.analyzer.domain;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.analyzer.api.ConfigurableAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
@@ -11,9 +14,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class AnalyzerPluginRegistry {
@@ -30,6 +31,23 @@ public class AnalyzerPluginRegistry {
         initRegistry();
     }
 
+    public Page<String> getAvailableAnalyzers(Pageable pageable) {
+        List<String> analyzerList = new ArrayList<>(sourceCodeFileAnalyzerPlugins.keySet());
+        analyzerList.sort(String::compareTo);
+
+        int fromIndex = pageable.getOffset();
+        if (fromIndex > analyzerList.size() - 1) {
+            fromIndex = analyzerList.size() - 1;
+        }
+
+        int toIndex = pageable.getOffset() + pageable.getPageSize();
+        if (toIndex > analyzerList.size() - 1) {
+            toIndex = analyzerList.size() - 1;
+        }
+
+        return new PageImpl<>(analyzerList.subList(fromIndex, toIndex), pageable, analyzerList.size());
+    }
+
     /**
      * Creates a new instance of the analyzer with the specified name. Does not invoke the
      * configure() method of ConfigurationAnalyzerPlugins. Throws an IllegalArgumentException if the analyzer is
@@ -41,8 +59,7 @@ public class AnalyzerPluginRegistry {
                 throw new IllegalArgumentException(String.format("Analyzer with name %s is not registered!", analyzerName));
             }
             Class<? extends SourceCodeFileAnalyzerPlugin> pluginClass = sourceCodeFileAnalyzerPlugins.get(analyzerName);
-            SourceCodeFileAnalyzerPlugin plugin = pluginClass.newInstance();
-            return plugin;
+            return pluginClass.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
             throw new IllegalStateException(String.format("Could not instantiate analyzer plugin %s", analyzerName));
         }
@@ -66,27 +83,27 @@ public class AnalyzerPluginRegistry {
         return (SourceCodeFileAnalyzerPlugin) configurableAnalyzer;
     }
 
-    private void checkValidConfigurationFile(ConfigurableAnalyzerPlugin configurableAnalyzer, byte[] configurationFile){
-        if(!configurableAnalyzer.isValidConfigurationFile(configurationFile)){
+    private void checkValidConfigurationFile(ConfigurableAnalyzerPlugin configurableAnalyzer, byte[] configurationFile) {
+        if (!configurableAnalyzer.isValidConfigurationFile(configurationFile)) {
             try {
                 InputStreamReader reader = new InputStreamReader(new ByteArrayInputStream(configurationFile));
                 BufferedReader bufferedReader = new BufferedReader(reader);
                 String firstCoupleLines = "";
                 for (int i = 0; i < 5; i++) {
                     String line = bufferedReader.readLine();
-                    if(line != null) {
+                    if (line != null) {
                         firstCoupleLines += bufferedReader.readLine();
                     }
                 }
                 throw new IllegalArgumentException(String.format("Not a valid configuration file for analyzer plugin %s. The first couple lines of configuration file are:\n %s", configurableAnalyzer.getClass(), firstCoupleLines));
-            }catch(IOException e){
+            } catch (IOException e) {
                 throw new IllegalArgumentException(String.format("Not a valid configuration file for analyzer plugin %s.", configurableAnalyzer.getClass()));
             }
         }
     }
 
-    private void checkImplementsConfigurableInterface(SourceCodeFileAnalyzerPlugin analyzer){
-        if(!(analyzer instanceof ConfigurableAnalyzerPlugin)){
+    private void checkImplementsConfigurableInterface(SourceCodeFileAnalyzerPlugin analyzer) {
+        if (!(analyzer instanceof ConfigurableAnalyzerPlugin)) {
             throw new IllegalArgumentException(String.format("Analyzer plugin %s does not implement the interface %s and therefore cannot be configured!", analyzer.getClass(), ConfigurableAnalyzerPlugin.class));
         }
     }

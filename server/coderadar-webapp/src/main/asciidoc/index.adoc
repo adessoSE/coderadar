@@ -299,11 +299,25 @@ include::{snippets}/strategy/get/http-request.adoc[]
 
 include::{snippets}/strategy/get/http-response.adoc[]
 
-= Accessing Analysis Results
+= Accessing Project and System Data
 
 This section describes the resources you can access to get information about the results of analyses that
 were run on a project. These resources are read-only since coderadar creates those resources from the project
 configuration you provide.
+
+== Analyzer
+
+coderadar can be configured to use Analyzer plugins that analyze source code to create certain metrics.
+
+=== Listing available Analyzers
+
+==== Example Request
+
+include::{snippets}/analyzer/list/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/analyzer/list/http-response.adoc[]
 
 == Commit
 
