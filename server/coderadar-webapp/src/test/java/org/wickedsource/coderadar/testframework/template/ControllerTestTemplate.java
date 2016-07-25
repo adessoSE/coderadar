@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.PagedResources;
+import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.hypermedia.*;
@@ -26,8 +27,12 @@ import org.springframework.web.context.WebApplicationContext;
 import org.wickedsource.coderadar.core.rest.validation.ErrorDTO;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.fail;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.snippet.Attributes.key;
@@ -38,11 +43,19 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
 
     private MockMvc mvc;
 
+    private ObjectMapper halMapper;
+
     @Autowired
     private WebApplicationContext applicationContext;
 
     @Autowired
     private SequenceResetter sequenceResetter;
+
+    public ControllerTestTemplate() {
+        halMapper = new ObjectMapper();
+        halMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        halMapper.registerModule(new Jackson2HalModule());
+    }
 
     @Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
@@ -81,10 +94,10 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
             String json = result.getResponse().getContentAsString();
             try {
                 ErrorDTO errors = fromJson(json, ErrorDTO.class);
-                Assert.assertTrue(String.format("expected at least one validation error for field %s", fieldName), errors.getErrorsForField(fieldName).size() > 0);
+                assertThat(errors.getErrorsForField(fieldName).size()).isGreaterThan(0).as(String.format("expected at least one validation error for field %s", fieldName));
             } catch (Exception e) {
                 logger.error(String.format("expected JSON representation of ValidationErrorsDTO but found '%s'", json), e);
-                Assert.fail(String.format("expected JSON representation of ValidationErrorsDTO but found '%s'", json));
+                fail(String.format("expected JSON representation of ValidationErrorsDTO but found '%s'", json));
             }
         };
     }
@@ -153,11 +166,35 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
             String json = result.getResponse().getContentAsString();
             try {
                 T object = fromJson(json, clazz);
-                Assert.assertNotNull(object);
+                assertThat(object).isNotNull();
             } catch (Exception e) {
                 throw new RuntimeException(String.format("expected JSON representation of class %s but found '%s'", clazz, json), e);
             }
         };
+    }
+
+    protected <T> ResultMatcher containsPagedResources(Class<T> clazz) {
+        return result -> {
+            String json = result.getResponse().getContentAsString();
+            try {
+                PagedResources<T> pagedResources = fromPagedResourceJson(json, clazz);
+                assertThat(pagedResources).isNotNull();
+            } catch (Exception e) {
+                throw new RuntimeException(String.format("expected JSON representation of class %s but found '%s'", clazz, json), e);
+            }
+        };
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T> PagedResources<T> fromPagedResourceJson(String json, Class<T> contentType) throws IOException {
+        List<T> contentItems = new ArrayList<>();
+        PagedResources<Map<String, Object>> pagedResources = halMapper.readValue(json, PagedResources.class);
+        for (Map<String, Object> contentItem : pagedResources.getContent()) {
+            String objectJson = halMapper.writeValueAsString(contentItem);
+            T object = halMapper.readValue(objectJson, contentType);
+            contentItems.add(object);
+        }
+        return new PagedResources<T>(contentItems, pagedResources.getMetadata());
     }
 
     protected JsonPathResponseFieldsSnippet responseFieldsInPath(String jsonPath, FieldDescriptor... fieldDescriptors){

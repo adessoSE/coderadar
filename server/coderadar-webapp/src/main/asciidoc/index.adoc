@@ -319,6 +319,29 @@ include::{snippets}/analyzer/list/http-request.adoc[]
 
 include::{snippets}/analyzer/list/http-response.adoc[]
 
+== Metric
+
+The Metric resource describes a metric that an analyzer configured in your project provides.
+
+=== Listing available Metrics
+
+You can list all metrics that have been measured for your project by calling the request below.
+
+[NOTE]
+====
+Metrics will become available as soon as you have provided an <<creating-analyzing-strategy,Analyzing Strategy>> for your project.
+At that moment, analysis of each commit defined in the strategy starts. Depending on how many commits that are,
+analysis will take a while.
+====
+
+==== Example Request
+
+include::{snippets}/metrics/list/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/metrics/list/http-response.adoc[]
+
 == Commit
 
 The Commit resource contains some metadata about a commit to your project's version control system. Commits
@@ -342,14 +365,14 @@ include::{snippets}/commit/list/http-request.adoc[]
 
 include::{snippets}/commit/list/http-response.adoc[]
 
-== Commit Metrics
+== Commit Metric Values
 
-You can access the metrics aggregated for each commit using this operation. You have to specify a query object
+You can access the metric values aggregated for each commit using this operation. You have to specify a query object
 that defines which metrics you are interested in.
 
 [NOTE]
 ====
-Metrics will become available as soon as you have provided an <<creating-analyzing-strategy,Analyzing Strategy>> for your project.
+Metric values will become available as soon as you have provided an <<creating-analyzing-strategy,Analyzing Strategy>> for your project.
 At that moment, analysis of each commit defined in the strategy starts. Depending on how many commits that are,
 analysis will take a while.
 ====

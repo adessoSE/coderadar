@@ -34,7 +34,7 @@ public class MetricValuesController {
         this.metricValueRepository = metricValueRepository;
     }
 
-    @RequestMapping(path = "/perCommit", method = {RequestMethod.GET, RequestMethod.POST}, produces = "application/hal+json")
+    @RequestMapping(path = "/perCommit", method = RequestMethod.GET, produces = "application/hal+json")
     public ResponseEntity<CommitMetricsResource> listCommitMetrics(@PathVariable Long projectId, @Valid @RequestBody QueryParams query) {
         projectVerifier.checkProjectExistsOrThrowException(projectId);
         List<MetricValueDTO> metricValues = metricValueRepository.findValuesAggregatedByCommitAndMetric(query.getCommitNames(), query.getMetricNames());
