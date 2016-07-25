@@ -487,8 +487,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
-<li><a href="#_accessing_analysis_results">Accessing Analysis Results</a>
+<li><a href="#_accessing_project_and_system_data">Accessing Project and System Data</a>
 <ul class="sectlevel1">
+<li><a href="#_analyzer">Analyzer</a>
+<ul class="sectlevel2">
+<li><a href="#_listing_available_analyzers">Listing available Analyzers</a></li>
+</ul>
+</li>
+<li><a href="#_metric">Metric</a>
+<ul class="sectlevel2">
+<li><a href="#_listing_available_metrics">Listing available Metrics</a></li>
+</ul>
+</li>
 <li><a href="#_commit">Commit</a>
 <ul class="sectlevel2">
 <li><a href="#_structure_5">Structure</a></li>
@@ -496,9 +506,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_listing_a_project_s_commits">Listing a Project&#8217;s Commits</a></li>
 </ul>
 </li>
-<li><a href="#_commit_metrics">Commit Metrics</a>
+<li><a href="#_commit_metric_values">Commit Metric Values</a>
 <ul class="sectlevel2">
 <li><a href="#_query_structure">Query Structure</a></li>
+<li><a href="#_listing_metrics_of_a_commit">Listing Metrics of a Commit</a></li>
 </ul>
 </li>
 </ul>
@@ -1643,12 +1654,146 @@ Content-Length: 237
 </div>
 </div>
 </div>
-<h1 id="_accessing_analysis_results" class="sect0"><a class="link" href="#_accessing_analysis_results">Accessing Analysis Results</a></h1>
+<h1 id="_accessing_project_and_system_data" class="sect0"><a class="link" href="#_accessing_project_and_system_data">Accessing Project and System Data</a></h1>
 <div class="openblock partintro">
 <div class="content">
 This section describes the resources you can access to get information about the results of analyses that
 were run on a project. These resources are read-only since coderadar creates those resources from the project
 configuration you provide.
+</div>
+</div>
+<div class="sect1">
+<h2 id="_analyzer"><a class="link" href="#_analyzer">Analyzer</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>coderadar can be configured to use Analyzer plugins that analyze source code to create certain metrics.</p>
+</div>
+<div class="sect2">
+<h3 id="_listing_available_analyzers"><a class="link" href="#_listing_available_analyzers">Listing available Analyzers</a></h3>
+<div class="sect3">
+<h4 id="_example_request_16"><a class="link" href="#_example_request_16">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /analyzers?page=0&amp;size=2 HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_16"><a class="link" href="#_example_response_16">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json
+Content-Length: 740
+
+{
+  "_embedded" : {
+    "analyzerResourceList" : [ {
+      "analyzerName" : "org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin"
+    }, {
+      "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer"
+    } ]
+  },
+  "_links" : {
+    "first" : {
+      "href" : "http://localhost:8080/analyzers?page=0&amp;size=2"
+    },
+    "self" : {
+      "href" : "http://localhost:8080/analyzers"
+    },
+    "next" : {
+      "href" : "http://localhost:8080/analyzers?page=1&amp;size=2"
+    },
+    "last" : {
+      "href" : "http://localhost:8080/analyzers?page=1&amp;size=2"
+    }
+  },
+  "page" : {
+    "size" : 2,
+    "totalElements" : 4,
+    "totalPages" : 2,
+    "number" : 0
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_metric"><a class="link" href="#_metric">Metric</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Metric resource describes a metric that an analyzer configured in your project provides.</p>
+</div>
+<div class="sect2">
+<h3 id="_listing_available_metrics"><a class="link" href="#_listing_available_metrics">Listing available Metrics</a></h3>
+<div class="paragraph">
+<p>You can list all metrics that have been measured for your project by calling the request below.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Metrics will become available as soon as you have provided an <a href="#creating-analyzing-strategy">Analyzing Strategy</a> for your project.
+At that moment, analysis of each commit defined in the strategy starts. Depending on how many commits that are,
+analysis will take a while.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_example_request_17"><a class="link" href="#_example_request_17">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metrics HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_17"><a class="link" href="#_example_response_17">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json
+Content-Length: 436
+
+{
+  "_embedded" : {
+    "metricResourceList" : [ {
+      "metricName" : "metric1"
+    }, {
+      "metricName" : "metric2"
+    }, {
+      "metricName" : "metric3"
+    }, {
+      "metricName" : "metric4"
+    } ]
+  },
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/metrics"
+    }
+  },
+  "page" : {
+    "size" : 10,
+    "totalElements" : 4,
+    "totalPages" : 1,
+    "number" : 0
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1728,7 +1873,7 @@ are available.</p>
 <div class="sect2">
 <h3 id="_listing_a_project_s_commits"><a class="link" href="#_listing_a_project_s_commits">Listing a Project&#8217;s Commits</a></h3>
 <div class="sect3">
-<h4 id="_example_request_16"><a class="link" href="#_example_request_16">Example Request</a></h4>
+<h4 id="_example_request_18"><a class="link" href="#_example_request_18">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/commits?page=3&amp;size=5 HTTP/1.1
@@ -1737,7 +1882,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_16"><a class="link" href="#_example_response_16">Example Response</a></h4>
+<h4 id="_example_response_18"><a class="link" href="#_example_response_18">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -1798,10 +1943,10 @@ Content-Length: 1142
 </div>
 </div>
 <div class="sect1">
-<h2 id="_commit_metrics"><a class="link" href="#_commit_metrics">Commit Metrics</a></h2>
+<h2 id="_commit_metric_values"><a class="link" href="#_commit_metric_values">Commit Metric Values</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>You can access the metrics aggregated for each commit using this operation. You have to specify a query object
+<p>You can access the metric values aggregated for each commit using this operation. You have to specify a query object
 that defines which metrics you are interested in.</p>
 </div>
 <div class="admonitionblock note">
@@ -1812,7 +1957,7 @@ that defines which metrics you are interested in.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Metrics will become available as soon as you have provided an <a href="#creating-analyzing-strategy">Analyzing Strategy</a> for your project.
+<p>Metric values will become available as soon as you have provided an <a href="#creating-analyzing-strategy">Analyzing Strategy</a> for your project.
 At that moment, analysis of each commit defined in the strategy starts. Depending on how many commits that are,
 analysis will take a while.</p>
 </div>
@@ -1850,8 +1995,11 @@ analysis will take a while.</p>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect2">
+<h3 id="_listing_metrics_of_a_commit"><a class="link" href="#_listing_metrics_of_a_commit">Listing Metrics of a Commit</a></h3>
 <div class="sect3">
-<h4 id="_example_request_17"><a class="link" href="#_example_request_17">Example Request</a></h4>
+<h4 id="_example_request_19"><a class="link" href="#_example_request_19">Example Request</a></h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1868,7 +2016,7 @@ analysis will take a while.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metrics HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metricvalues/perCommit HTTP/1.1
 Content-Type: application/json
 Host: localhost
 Content-Length: 96
@@ -1881,7 +2029,7 @@ Content-Length: 96
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_17"><a class="link" href="#_example_response_17">Example Response</a></h4>
+<h4 id="_example_response_19"><a class="link" href="#_example_response_19">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -1915,7 +2063,7 @@ Content-Length: 297
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-07-25 00:24:07 +02:00
+Last updated 2016-07-25 13:46:04 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
