@@ -18,6 +18,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.EMPTY;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Projects.*;
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.projectResource;
+import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJson;
+import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.validationErrorForField;
 
 @Category(ControllerTest.class)
 public class ProjectControllerTest extends ControllerTestTemplate {
@@ -31,7 +35,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
                 .content(toJsonWithoutLinks(project))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(contains(ProjectResource.class))
+                .andExpect(containsResource(ProjectResource.class))
                 .andDo(documentCreateProject());
     }
 
@@ -83,7 +87,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
                 .content(toJson(projectResource))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(contains(ProjectResource.class))
+                .andExpect(containsResource(ProjectResource.class))
                 .andDo(document("projects/update"));
     }
 
@@ -93,7 +97,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     public void getProjectSuccessfully() throws Exception {
         mvc().perform(get("/projects/1"))
                 .andExpect(status().isOk())
-                .andExpect(contains(ProjectResource.class))
+                .andExpect(containsResource(ProjectResource.class))
                 .andDo(document("projects/get"));
     }
 
@@ -112,7 +116,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     public void getProjectsSuccessfully() throws Exception {
         mvc().perform(get("/projects"))
                 .andExpect(status().isOk())
-                .andExpect(contains(Resources.class))
+                .andExpect(containsResource(Resources.class))
                 .andDo(document("projects/list"));
     }
 

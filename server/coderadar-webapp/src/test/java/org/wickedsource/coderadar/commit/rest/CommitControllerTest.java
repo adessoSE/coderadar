@@ -12,6 +12,7 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.li
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Commits.SINGLE_PROJECT_WITH_COMMITS;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
 
 @Category(ControllerTest.class)
 public class CommitControllerTest extends ControllerTestTemplate {
@@ -23,7 +24,7 @@ public class CommitControllerTest extends ControllerTestTemplate {
         ConstrainedFields fields = fields(CommitResource.class);
         mvc().perform(get("/projects/1/commits?page=3&size=5"))
                 .andExpect(status().isOk())
-                .andExpect(contains(PagedResources.class))
+                .andExpect(containsResource(PagedResources.class))
                 .andDo(document("commit/list",
                         linksInPath("$._embedded.commitResourceList[0]",
                                 linkWithRel("project").description("The project resource this commit belongs to.")),

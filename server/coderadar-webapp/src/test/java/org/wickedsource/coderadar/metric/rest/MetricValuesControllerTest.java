@@ -16,6 +16,9 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.MetricValues.SINGLE_PROJECT_WITH_METRICS;
+import static org.wickedsource.coderadar.testframework.template.JsonHelper.fromJson;
+import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
 
 @Category(ControllerTest.class)
 public class MetricValuesControllerTest extends ControllerTestTemplate {
@@ -36,7 +39,7 @@ public class MetricValuesControllerTest extends ControllerTestTemplate {
                 .content(toJsonWithoutLinks(params))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(contains(CommitMetricsResource.class))
+                .andExpect(containsResource(CommitMetricsResource.class))
                 .andDo(document("metrics/commit",
                         requestFields(
                                 fields.withPath("commitNames").description("List of the names of the commits whose metrics you want to get."),

@@ -11,6 +11,8 @@ import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.projectResource;
+import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
 
 @Category(ControllerTest.class)
 public class ControllerErrorsTest extends ControllerTestTemplate {
@@ -21,7 +23,7 @@ public class ControllerErrorsTest extends ControllerTestTemplate {
                 .content("{123")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(contains(ErrorDTO.class));
+                .andExpect(containsResource(ErrorDTO.class));
     }
 
     @Test
@@ -34,7 +36,7 @@ public class ControllerErrorsTest extends ControllerTestTemplate {
                 .content(projectAsJson)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andExpect(contains(ErrorDTO.class));
+                .andExpect(containsResource(ErrorDTO.class));
     }
 
     @Test
@@ -45,7 +47,7 @@ public class ControllerErrorsTest extends ControllerTestTemplate {
                 .content(toJsonWithoutLinks(project))
                 .contentType(MediaType.APPLICATION_ATOM_XML))
                 .andExpect(status().isBadRequest())
-                .andExpect(contains(ErrorDTO.class));
+                .andExpect(containsResource(ErrorDTO.class));
     }
 
 }

@@ -17,6 +17,8 @@ import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Analy
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.EMPTY;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Projects.SINGLE_PROJECT;
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.analyzingStrategyResource;
+import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
 
 @Category(ControllerTest.class)
 public class AnalyzingStrategyControllerTest extends ControllerTestTemplate {
@@ -32,7 +34,7 @@ public class AnalyzingStrategyControllerTest extends ControllerTestTemplate {
                 .content(toJsonWithoutLinks(resource))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(contains(AnalyzingStrategyResource.class))
+                .andExpect(containsResource(AnalyzingStrategyResource.class))
                 .andDo(document("strategy/create-update",
                         links(halLinks(),
                                 linkWithRel("self").description("Link to this AnalyzingStrategy resource."),
@@ -61,7 +63,7 @@ public class AnalyzingStrategyControllerTest extends ControllerTestTemplate {
     public void getAnalyzingStrategy() throws Exception {
         mvc().perform(get("/projects/1/strategy"))
                 .andExpect(status().isOk())
-                .andExpect(contains(AnalyzingStrategyResource.class))
+                .andExpect(containsResource(AnalyzingStrategyResource.class))
                 .andDo(document("strategy/get"));
     }
 

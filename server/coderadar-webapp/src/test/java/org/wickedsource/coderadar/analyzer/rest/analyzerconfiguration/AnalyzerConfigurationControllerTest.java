@@ -17,6 +17,8 @@ import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Analy
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.EMPTY;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Projects.SINGLE_PROJECT;
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.analyzerConfigurationResource;
+import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
 
 @Category(ControllerTest.class)
 public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate {
@@ -31,7 +33,7 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
                 .content(toJsonWithoutLinks(resource))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(contains(AnalyzerConfigurationResource.class))
+                .andExpect(containsResource(AnalyzerConfigurationResource.class))
                 .andDo(document("analyzerConfiguration/post",
                         links(halLinks(),
                                 linkWithRel("self").description("Link to the AnalyzerConfiguration itself."),
@@ -48,7 +50,7 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
     public void listAnalyzerConfigurations() throws Exception {
         mvc().perform(get("/projects/1/analyzers"))
                 .andExpect(status().isOk())
-                .andExpect(contains(Resources.class))
+                .andExpect(containsResource(Resources.class))
                 .andDo(document("analyzerConfiguration/get"));
     }
 
@@ -59,7 +61,7 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
     public void getAnalyzerConfiguration() throws Exception {
         mvc().perform(get("/projects/1/analyzers/1"))
                 .andExpect(status().isOk())
-                .andExpect(contains(AnalyzerConfigurationResource.class))
+                .andExpect(containsResource(AnalyzerConfigurationResource.class))
                 .andDo(document("analyzerConfiguration/getSingle"));
     }
 
@@ -72,7 +74,7 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
                 .content(toJsonWithoutLinks(resource))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(contains(AnalyzerConfigurationResource.class))
+                .andExpect(containsResource(AnalyzerConfigurationResource.class))
                 .andDo(document("analyzerConfiguration/update"));
     }
 

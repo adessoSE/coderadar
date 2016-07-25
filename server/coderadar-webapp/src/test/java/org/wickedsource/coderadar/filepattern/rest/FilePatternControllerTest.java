@@ -18,6 +18,8 @@ import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.EMPTY
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.FilePatterns.SINGLE_PROJECT_WITH_FILEPATTERNS;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Projects.SINGLE_PROJECT;
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.filePatternResource;
+import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
 
 @Category(ControllerTest.class)
 public class FilePatternControllerTest extends ControllerTestTemplate {
@@ -32,7 +34,7 @@ public class FilePatternControllerTest extends ControllerTestTemplate {
                 .content(toJsonWithoutLinks(filepatterns))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(contains(FilePatternResource.class))
+                .andExpect(containsResource(FilePatternResource.class))
                 .andDo(document("filepatterns/create-update",
                         links(halLinks(),
                                 linkWithRel("self").description("Link to the list of file patterns of this project."),
@@ -63,7 +65,7 @@ public class FilePatternControllerTest extends ControllerTestTemplate {
                 .content(toJsonWithoutLinks(filepatterns))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(contains(FilePatternResource.class))
+                .andExpect(containsResource(FilePatternResource.class))
                 .andDo(document("filepatterns/get"));
     }
 
