@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.testframework.template;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.mockito.MockitoAnnotations;
@@ -43,7 +44,10 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
         mvc = MockMvcBuilders.webAppContextSetup(applicationContext)
                 .apply(MockMvcRestDocumentation.documentationConfiguration(this.restDocumentation))
                 .build();
+    }
 
+    @After
+    public void reset() {
         sequenceResetter.resetAutoIncrementColumns(
                 "project",
                 "analyzer_configuration",
@@ -54,7 +58,9 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
                 "file",
                 "file_identity",
                 "file_pattern",
-                "job");
+                "job",
+                "quality_profile",
+                "quality_profile_metric");
     }
 
     @SuppressWarnings("unchecked")

@@ -33,4 +33,10 @@ public class DbUnitFactory {
         public final static String SINGLE_PROJECT_WITH_METRICS = "/dbunit/metric/singleProjectWithMetrics.xml";
     }
 
+    public static class QualityProfiles {
+        public final static String SINGLE_PROJECT_WITH_QUALITY_PROFILE = "/dbunit/qualityprofile/singleProjectWithQualityProfile.xml";
+        public final static String SINGLE_PROJECT_WITH_QUALITY_PROFILE2 = "/dbunit/qualityprofile/singleProjectWithQualityProfile2.xml";
+        public final static String SINGLE_PROJECT_WITH_QUALITY_PROFILES = "/dbunit/qualityprofile/singleProjectWithQualityProfiles.xml";
+    }
+
 }

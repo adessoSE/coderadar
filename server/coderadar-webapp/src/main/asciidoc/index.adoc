@@ -299,6 +299,72 @@ include::{snippets}/strategy/get/http-request.adoc[]
 
 include::{snippets}/strategy/get/http-response.adoc[]
 
+== Quality Profile
+
+The main goal of coderadar is to make it easy for you to monitor your quality standards.
+To be able to focus on the quality metrics that are most important to you and your team,
+you can combine a set  metrics within a quality profile. There are several API methods
+that take a quality profile as parameter and return information on the metrics that are
+part of the quality profile and thus are most important to you.
+
+=== Structure
+
+include::{snippets}/qualityprofiles/create/request-fields.adoc[]
+
+=== Hypermedia Links
+
+include::{snippets}/qualityprofiles/create/links.adoc[]
+
+=== Creating a Quality Profile
+
+==== Example Request
+
+include::{snippets}/qualityprofiles/create/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/qualityprofiles/create/http-response.adoc[]
+
+=== Updating a Quality Profile
+
+==== Example Request
+
+include::{snippets}/qualityprofiles/update/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/qualityprofiles/update/http-response.adoc[]
+
+=== Loading a single Quality Profile
+
+==== Example Request
+
+include::{snippets}/qualityprofiles/get/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/qualityprofiles/get/http-response.adoc[]
+
+=== Deleting a Quality Profile
+
+==== Example Request
+
+include::{snippets}/qualityprofiles/delete/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/qualityprofiles/delete/http-response.adoc[]
+
+=== Listing a Project's Quality Profiles
+
+==== Example Request
+
+include::{snippets}/qualityprofiles/list/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/qualityprofiles/list/http-response.adoc[]
+
 = Accessing Project and System Data
 
 This section describes the resources you can access to get information about the results of analyses that

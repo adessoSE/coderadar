@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metric.domain;
+package org.wickedsource.coderadar.metric.domain.metricvalue;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

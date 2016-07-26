@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metric.domain;
+package org.wickedsource.coderadar.metric.domain.metricvalue;
 
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.file.domain.File;

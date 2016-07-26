@@ -12,4 +12,6 @@
     <finding/>
     <analyzer_configuration/>
     <analyzer_configuration_file/>
+    <quality_profile/>
+    <quality_profile_metric/>
 </dataset>

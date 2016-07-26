@@ -12,6 +12,8 @@
     <finding/>
     <analyzer_configuration/>
     <analyzer_configuration_file/>
+    <quality_profile/>
+    <quality_profile_metric/>
 
     <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
 </dataset>

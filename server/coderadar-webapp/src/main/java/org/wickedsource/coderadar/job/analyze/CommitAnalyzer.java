@@ -26,10 +26,10 @@ import org.wickedsource.coderadar.file.domain.FileRepository;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.filepattern.domain.FileSetType;
-import org.wickedsource.coderadar.metric.domain.FindingRepository;
-import org.wickedsource.coderadar.metric.domain.MetricValue;
-import org.wickedsource.coderadar.metric.domain.MetricValueId;
-import org.wickedsource.coderadar.metric.domain.MetricValueRepository;
+import org.wickedsource.coderadar.metric.domain.finding.FindingRepository;
+import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValue;
+import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueId;
+import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
 
@@ -86,7 +86,7 @@ public class CommitAnalyzer {
 
     public void analyzeCommit(Commit commit) {
         if (commit == null) {
-            throw new IllegalArgumentException(String.format("commit with ID %d does not exist!", commit.getId()));
+            throw new IllegalArgumentException("argument commit must not be null!");
         }
 
         Path gitRoot = workdirManager.getLocalGitRoot(commit.getProject().getName());
@@ -177,7 +177,7 @@ public class CommitAnalyzer {
 
 
             for(Finding finding : metrics.getFindings(metric)){
-                org.wickedsource.coderadar.metric.domain.Finding entity = new org.wickedsource.coderadar.metric.domain.Finding();
+                org.wickedsource.coderadar.metric.domain.finding.Finding entity = new org.wickedsource.coderadar.metric.domain.finding.Finding();
                 entity.setId(id);
                 entity.setLineStart(finding.getLineStart());
                 entity.setLineEnd(finding.getLineEnd());

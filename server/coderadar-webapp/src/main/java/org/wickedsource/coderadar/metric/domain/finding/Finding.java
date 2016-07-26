@@ -1,4 +1,6 @@
-package org.wickedsource.coderadar.metric.domain;
+package org.wickedsource.coderadar.metric.domain.finding;
+
+import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueId;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;

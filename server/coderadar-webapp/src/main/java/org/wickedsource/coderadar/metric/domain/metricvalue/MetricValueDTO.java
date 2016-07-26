@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metric.domain;
+package org.wickedsource.coderadar.metric.domain.metricvalue;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

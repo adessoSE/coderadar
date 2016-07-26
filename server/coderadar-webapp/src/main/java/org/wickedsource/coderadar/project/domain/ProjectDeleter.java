@@ -14,8 +14,8 @@ import org.wickedsource.coderadar.file.domain.FileIdentityRepository;
 import org.wickedsource.coderadar.file.domain.FileRepository;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.job.core.JobRepository;
-import org.wickedsource.coderadar.metric.domain.FindingRepository;
-import org.wickedsource.coderadar.metric.domain.MetricValueRepository;
+import org.wickedsource.coderadar.metric.domain.finding.FindingRepository;
+import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
 
 @Component
 public class ProjectDeleter {

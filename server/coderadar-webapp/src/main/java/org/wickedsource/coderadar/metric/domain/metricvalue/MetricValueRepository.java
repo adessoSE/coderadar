@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metric.domain;
+package org.wickedsource.coderadar.metric.domain.metricvalue;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +15,7 @@ public interface MetricValueRepository extends CrudRepository<MetricValue, Long>
     @Modifying
     int deleteByProjectId(@Param("projectId") Long projectId);
 
-    @Query("select new org.wickedsource.coderadar.metric.domain.MetricValueDTO (m.id.commit.name, m.id.metricName, sum(m.value)) from MetricValue m where m.id.commit.name in (:commitNames) and m.id.metricName in (:metricNames) group by m.id.commit.name, m.id.metricName")
+    @Query("select new org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueDTO (m.id.commit.name, m.id.metricName, sum(m.value)) from MetricValue m where m.id.commit.name in (:commitNames) and m.id.metricName in (:metricNames) group by m.id.commit.name, m.id.metricName")
     List<MetricValueDTO> findValuesAggregatedByCommitAndMetric(@Param("commitNames") List<String> commitNames, @Param("metricNames") List<String> metricNames);
 
     @Query("select distinct m.id.metricName from MetricValue m where m.id.commit.project.id = :projectId order by m.id.metricName")

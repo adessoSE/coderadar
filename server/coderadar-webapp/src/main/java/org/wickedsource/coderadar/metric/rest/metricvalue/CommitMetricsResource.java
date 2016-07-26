@@ -2,7 +2,7 @@ package org.wickedsource.coderadar.metric.rest.metricvalue;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.ResourceSupport;
-import org.wickedsource.coderadar.metric.domain.MetricValueDTO;
+import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueDTO;
 
 import java.util.*;
 

@@ -24,4 +24,8 @@ public class ResourceFactory {
         return new AnalyzingStrategyResourceFactory();
     }
 
+    public static QualityProfileResourceFactory qualityProfileResource() {
+        return new QualityProfileResourceFactory();
+    }
+
 }
