@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v1.0.0-SNAPSHOT, Tom Hombergs, 2016-07-25">
+<meta name="author" content="v1.0.0-SNAPSHOT, Tom Hombergs, 2016-07-26">
 <title>coderadar REST API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -423,7 +423,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v1.0.0-SNAPSHOT, Tom Hombergs, 2016-07-25</span><br>
+<span id="author" class="author">v1.0.0-SNAPSHOT, Tom Hombergs, 2016-07-26</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -485,6 +485,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_getting_a_project_s_analyzing_strategy">Getting a Project&#8217;s Analyzing Strategy</a></li>
 </ul>
 </li>
+<li><a href="#_quality_profile">Quality Profile</a>
+<ul class="sectlevel2">
+<li><a href="#_structure_5">Structure</a></li>
+<li><a href="#_hypermedia_links_5">Hypermedia Links</a></li>
+<li><a href="#_creating_a_quality_profile">Creating a Quality Profile</a></li>
+<li><a href="#_updating_a_quality_profile">Updating a Quality Profile</a></li>
+<li><a href="#_loading_a_single_quality_profile">Loading a single Quality Profile</a></li>
+<li><a href="#_deleting_a_quality_profile">Deleting a Quality Profile</a></li>
+<li><a href="#_listing_a_project_s_quality_profiles">Listing a Project&#8217;s Quality Profiles</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_accessing_project_and_system_data">Accessing Project and System Data</a>
@@ -501,15 +512,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_commit">Commit</a>
 <ul class="sectlevel2">
-<li><a href="#_structure_5">Structure</a></li>
-<li><a href="#_hypermedia_links_5">Hypermedia Links</a></li>
+<li><a href="#_structure_6">Structure</a></li>
+<li><a href="#_hypermedia_links_6">Hypermedia Links</a></li>
 <li><a href="#_listing_a_project_s_commits">Listing a Project&#8217;s Commits</a></li>
 </ul>
 </li>
 <li><a href="#_commit_metric_values">Commit Metric Values</a>
 <ul class="sectlevel2">
 <li><a href="#_query_structure">Query Structure</a></li>
-<li><a href="#_listing_metrics_of_a_commit">Listing Metrics of a Commit</a></li>
+<li><a href="#_listing_metric_values_of_a_commit">Listing Metric Values of a Commit</a></li>
 </ul>
 </li>
 </ul>
@@ -582,8 +593,8 @@ describes the REST API of the coderadar server.</p>
 <p>If a GET request requires parameters, they can usually be
 provided as parameters encoded in the URL. However, in some cases parameters are too unwieldy to
 encode them in the URL. In these cases the parameters are expected as JSON string within the request
-body. Since some tools don&#8217;t allow GET requests with a body, these requests will also be answered
-when using the POST method.</p>
+body. Since some tools don&#8217;t allow GET requests with a body, coderadar accepts the POST method in
+these cases as well.</p>
 </div>
 </td>
 </tr>
@@ -617,11 +628,11 @@ Content-Length: 204
 {
   "errorMessage" : "Validation Error",
   "fieldErrors" : [ {
-    "field" : "name",
-    "message" : "may not be null"
-  }, {
     "field" : "vcsUrl",
     "message" : "must be a valid URL"
+  }, {
+    "field" : "name",
+    "message" : "may not be null"
   } ]
 }</code></pre>
 </div>
@@ -1654,6 +1665,344 @@ Content-Length: 237
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_quality_profile"><a class="link" href="#_quality_profile">Quality Profile</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The main goal of coderadar is to make it easy for you to monitor your quality standards
+best. Thus, it is important to be able to configure a set of metrics that define those quality standards so you
+can focus on these metrics and put aside the other, not so important metrics. A quality profile combines such a set
+of metrics. Providing your quality profile in some other API calls, you will get focussed information about
+the metrics that are most important to you.</p>
+</div>
+<div class="sect2">
+<h3 id="_structure_5"><a class="link" href="#_structure_5">Structure</a></h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">profileName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The display name of the profile.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">metrics[].metricName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the metric that is part of this quality profile.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">metrics[].metricType</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Either VIOLATION if high metric values should be interpreted as negative or COMPLIANCE if high metric values should be interpreted as positive.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_hypermedia_links_5"><a class="link" href="#_hypermedia_links_5">Hypermedia Links</a></h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Relation</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to this quality profile.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project this quality profile belongs to.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_creating_a_quality_profile"><a class="link" href="#_creating_a_quality_profile">Creating a Quality Profile</a></h3>
+<div class="sect3">
+<h4 id="_example_request_16"><a class="link" href="#_example_request_16">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/qualityprofiles HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 213
+
+{
+  "profileName" : "Quality Profile",
+  "metrics" : [ {
+    "metricName" : "dummyMetric1",
+    "metricType" : "VIOLATION"
+  }, {
+    "metricName" : "dummyMetric2",
+    "metricType" : "COMPLIANCE"
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_16"><a class="link" href="#_example_response_16">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
+Content-Type: application/hal+json
+Content-Length: 405
+
+{
+  "profileName" : "Quality Profile",
+  "metrics" : [ {
+    "metricName" : "dummyMetric1",
+    "metricType" : "VIOLATION"
+  }, {
+    "metricName" : "dummyMetric2",
+    "metricType" : "COMPLIANCE"
+  } ],
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/qualityprofiles/1"
+    },
+    "project" : {
+      "href" : "http://localhost:8080/projects/1"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_updating_a_quality_profile"><a class="link" href="#_updating_a_quality_profile">Updating a Quality Profile</a></h3>
+<div class="sect3">
+<h4 id="_example_request_17"><a class="link" href="#_example_request_17">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/qualityprofiles/1 HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 223
+
+{
+  "profileName" : "Quality Profile (updated)",
+  "metrics" : [ {
+    "metricName" : "dummyMetric3",
+    "metricType" : "VIOLATION"
+  }, {
+    "metricName" : "dummyMetric4",
+    "metricType" : "COMPLIANCE"
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_17"><a class="link" href="#_example_response_17">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json
+Content-Length: 415
+
+{
+  "profileName" : "Quality Profile (updated)",
+  "metrics" : [ {
+    "metricName" : "dummyMetric3",
+    "metricType" : "VIOLATION"
+  }, {
+    "metricName" : "dummyMetric4",
+    "metricType" : "COMPLIANCE"
+  } ],
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/qualityprofiles/1"
+    },
+    "project" : {
+      "href" : "http://localhost:8080/projects/1"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_loading_a_single_quality_profile"><a class="link" href="#_loading_a_single_quality_profile">Loading a single Quality Profile</a></h3>
+<div class="sect3">
+<h4 id="_example_request_18"><a class="link" href="#_example_request_18">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/qualityprofiles/1 HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 213
+
+{
+  "profileName" : "Quality Profile",
+  "metrics" : [ {
+    "metricName" : "dummyMetric1",
+    "metricType" : "VIOLATION"
+  }, {
+    "metricName" : "dummyMetric2",
+    "metricType" : "COMPLIANCE"
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_18"><a class="link" href="#_example_response_18">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json
+Content-Length: 405
+
+{
+  "profileName" : "Quality Profile",
+  "metrics" : [ {
+    "metricName" : "dummyMetric1",
+    "metricType" : "VIOLATION"
+  }, {
+    "metricName" : "dummyMetric2",
+    "metricType" : "COMPLIANCE"
+  } ],
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/qualityprofiles/1"
+    },
+    "project" : {
+      "href" : "http://localhost:8080/projects/1"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deleting_a_quality_profile"><a class="link" href="#_deleting_a_quality_profile">Deleting a Quality Profile</a></h3>
+<div class="sect3">
+<h4 id="_example_request_19"><a class="link" href="#_example_request_19">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/qualityprofiles/1 HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_19"><a class="link" href="#_example_response_19">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_listing_a_project_s_quality_profiles"><a class="link" href="#_listing_a_project_s_quality_profiles">Listing a Project&#8217;s Quality Profiles</a></h3>
+<div class="sect3">
+<h4 id="_example_request_20"><a class="link" href="#_example_request_20">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/qualityprofiles?page=0&amp;size=2 HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_20"><a class="link" href="#_example_response_20">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json
+Content-Length: 1567
+
+{
+  "_embedded" : {
+    "qualityProfileResourceList" : [ {
+      "profileName" : "Quality Profile 1",
+      "metrics" : [ {
+        "metricName" : "dummyMetric1",
+        "metricType" : "VIOLATION"
+      }, {
+        "metricName" : "dummyMetric2",
+        "metricType" : "COMPLIANCE"
+      } ],
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/projects/1/qualityprofiles/1"
+        },
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    }, {
+      "profileName" : "Quality Profile 2",
+      "metrics" : [ {
+        "metricName" : "dummyMetric1",
+        "metricType" : "VIOLATION"
+      }, {
+        "metricName" : "dummyMetric2",
+        "metricType" : "COMPLIANCE"
+      } ],
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/projects/1/qualityprofiles/2"
+        },
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "first" : {
+      "href" : "http://localhost:8080/projects/1/qualityprofiles?page=0&amp;size=2"
+    },
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/qualityprofiles?page=0&amp;size=2"
+    },
+    "next" : {
+      "href" : "http://localhost:8080/projects/1/qualityprofiles?page=1&amp;size=2"
+    },
+    "last" : {
+      "href" : "http://localhost:8080/projects/1/qualityprofiles?page=2&amp;size=2"
+    }
+  },
+  "page" : {
+    "size" : 2,
+    "totalElements" : 5,
+    "totalPages" : 3,
+    "number" : 0
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <h1 id="_accessing_project_and_system_data" class="sect0"><a class="link" href="#_accessing_project_and_system_data">Accessing Project and System Data</a></h1>
 <div class="openblock partintro">
 <div class="content">
@@ -1671,7 +2020,7 @@ configuration you provide.
 <div class="sect2">
 <h3 id="_listing_available_analyzers"><a class="link" href="#_listing_available_analyzers">Listing available Analyzers</a></h3>
 <div class="sect3">
-<h4 id="_example_request_16"><a class="link" href="#_example_request_16">Example Request</a></h4>
+<h4 id="_example_request_21"><a class="link" href="#_example_request_21">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /analyzers?page=0&amp;size=2 HTTP/1.1
@@ -1680,7 +2029,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_16"><a class="link" href="#_example_response_16">Example Response</a></h4>
+<h4 id="_example_response_21"><a class="link" href="#_example_response_21">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -1750,7 +2099,7 @@ analysis will take a while.</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_example_request_17"><a class="link" href="#_example_request_17">Example Request</a></h4>
+<h4 id="_example_request_22"><a class="link" href="#_example_request_22">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metrics HTTP/1.1
@@ -1759,7 +2108,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_17"><a class="link" href="#_example_response_17">Example Response</a></h4>
+<h4 id="_example_response_22"><a class="link" href="#_example_response_22">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -1806,7 +2155,7 @@ Depending of the number of commits you have in your project, it may take a while
 are available.</p>
 </div>
 <div class="sect2">
-<h3 id="_structure_5"><a class="link" href="#_structure_5">Structure</a></h3>
+<h3 id="_structure_6"><a class="link" href="#_structure_6">Structure</a></h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -1850,7 +2199,7 @@ are available.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_hypermedia_links_5"><a class="link" href="#_hypermedia_links_5">Hypermedia Links</a></h3>
+<h3 id="_hypermedia_links_6"><a class="link" href="#_hypermedia_links_6">Hypermedia Links</a></h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 50%;">
@@ -1873,7 +2222,7 @@ are available.</p>
 <div class="sect2">
 <h3 id="_listing_a_project_s_commits"><a class="link" href="#_listing_a_project_s_commits">Listing a Project&#8217;s Commits</a></h3>
 <div class="sect3">
-<h4 id="_example_request_18"><a class="link" href="#_example_request_18">Example Request</a></h4>
+<h4 id="_example_request_23"><a class="link" href="#_example_request_23">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/commits?page=3&amp;size=5 HTTP/1.1
@@ -1882,7 +2231,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_18"><a class="link" href="#_example_response_18">Example Response</a></h4>
+<h4 id="_example_response_23"><a class="link" href="#_example_response_23">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -1997,9 +2346,9 @@ analysis will take a while.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_listing_metrics_of_a_commit"><a class="link" href="#_listing_metrics_of_a_commit">Listing Metrics of a Commit</a></h3>
+<h3 id="_listing_metric_values_of_a_commit"><a class="link" href="#_listing_metric_values_of_a_commit">Listing Metric Values of a Commit</a></h3>
 <div class="sect3">
-<h4 id="_example_request_19"><a class="link" href="#_example_request_19">Example Request</a></h4>
+<h4 id="_example_request_24"><a class="link" href="#_example_request_24">Example Request</a></h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2019,26 +2368,26 @@ analysis will take a while.</p>
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metricvalues/perCommit HTTP/1.1
 Content-Type: application/json
 Host: localhost
-Content-Length: 96
+Content-Length: 170
 
 {
   "metricNames" : [ "metric1", "metric3", "metric4" ],
-  "commitNames" : [ "abc", "def" ]
+  "commitNames" : [ "f9b0553930f133490f292a9c78d0b36b39be8758", "eb7cbd429530dc26d06a9ea2a62794421dce1e9a" ]
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_19"><a class="link" href="#_example_response_19">Example Response</a></h4>
+<h4 id="_example_response_24"><a class="link" href="#_example_response_24">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json
-Content-Length: 297
+Content-Length: 371
 
 {
   "commitMetrics" : {
-    "abc" : [ {
+    "f9b0553930f133490f292a9c78d0b36b39be8758" : [ {
       "metric" : "metric1",
       "value" : 2
     }, {
@@ -2048,7 +2397,7 @@ Content-Length: 297
       "metric" : "metric4",
       "value" : 2
     } ],
-    "def" : [ {
+    "eb7cbd429530dc26d06a9ea2a62794421dce1e9a" : [ {
       "metric" : "metric1",
       "value" : 6
     } ]
@@ -2063,7 +2412,7 @@ Content-Length: 297
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-07-25 13:46:04 +02:00
+Last updated 2016-07-26 23:48:52 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
