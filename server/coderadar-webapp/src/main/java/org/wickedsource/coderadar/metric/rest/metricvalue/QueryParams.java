@@ -31,5 +31,14 @@ public class QueryParams {
     public void setOutputs(QueryOutputParams outputs) {
         this.outputs = outputs;
     }
+
+    public boolean scanCommits() {
+        return subjects.getCommits() != null && !subjects.getCommits().isEmpty();
+    }
+
+    public boolean outputMetrics() {
+        return outputs.getMetrics() != null && !outputs.getMetrics().isEmpty();
+    }
+
 }
 

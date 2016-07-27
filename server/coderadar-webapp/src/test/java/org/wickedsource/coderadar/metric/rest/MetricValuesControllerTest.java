@@ -27,7 +27,7 @@ public class MetricValuesControllerTest extends ControllerTestTemplate {
     @Test
     @DatabaseSetup(SINGLE_PROJECT_WITH_METRICS)
     @ExpectedDatabase(SINGLE_PROJECT_WITH_METRICS)
-    public void getCommitMetrics() throws Exception {
+    public void queryCommitMetrics() throws Exception {
 
         QueryParams params = new QueryParams();
         params.getSubjects().addCommits("f9b0553930f133490f292a9c78d0b36b39be8758", "eb7cbd429530dc26d06a9ea2a62794421dce1e9a");
@@ -35,7 +35,7 @@ public class MetricValuesControllerTest extends ControllerTestTemplate {
 
         ConstrainedFields fields = fields(QueryParams.class);
 
-        MvcResult result = mvc().perform(get("/projects/1/metricvalues/perCommit")
+        MvcResult result = mvc().perform(get("/projects/1/metricvalues")
                 .content(toJsonWithoutLinks(params))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

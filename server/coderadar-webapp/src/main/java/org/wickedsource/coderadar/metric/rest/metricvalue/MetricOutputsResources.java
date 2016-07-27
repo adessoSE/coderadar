@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.ResourceSupport;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueDTO;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public class MetricOutputsResources extends ResourceSupport {
@@ -13,18 +16,6 @@ public class MetricOutputsResources extends ResourceSupport {
 
     public MetricOutputsResources() {
         this.commits = new HashMap();
-    }
-
-    public MetricOutputsResources(Collection<MetricValueDTO> metricValues) {
-        this.commits = new HashMap();
-        for (MetricValueDTO metricValue : metricValues) {
-            List<MetricValueDTO> metricsList = commits.get(metricValue.getCommit());
-            if (metricsList == null) {
-                metricsList = new ArrayList<>();
-                commits.put(metricValue.getCommit(), metricsList);
-            }
-            metricsList.add(metricValue);
-        }
     }
 
     @JsonIgnore
@@ -52,6 +43,20 @@ public class MetricOutputsResources extends ResourceSupport {
 
     public void setCommits(Map<String, List<MetricValueDTO>> commits) {
         this.commits = commits;
+    }
+
+    /**
+     * Takes a flat list of metric values and aggregates them by commit.
+     */
+    public void setCommitsList(List<MetricValueDTO> metricValues) {
+        for (MetricValueDTO metricValue : metricValues) {
+            List<MetricValueDTO> metricsList = commits.get(metricValue.getCommit());
+            if (metricsList == null) {
+                metricsList = new ArrayList<>();
+                commits.put(metricValue.getCommit(), metricsList);
+            }
+            metricsList.add(metricValue);
+        }
     }
 
 }
