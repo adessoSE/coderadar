@@ -1,10 +1,6 @@
 package org.wickedsource.coderadar.metric.rest.metricvalue;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Objects of this class provide parameters to query for metric values.
@@ -12,39 +8,28 @@ import java.util.List;
 public class QueryParams {
 
     @NotNull
-    @Size(min = 1)
-    private List<String> metricNames;
+    private QuerySubjectParams subjects = new QuerySubjectParams();
 
     @NotNull
-    @Size(min = 1)
-    private List<String> commitNames;
+    private QueryOutputParams outputs = new QueryOutputParams();
 
     public QueryParams() {
-        metricNames = new ArrayList<>();
-        commitNames = new ArrayList<>();
     }
 
-    public void setMetricNames(List<String> metricNames) {
-        this.metricNames = metricNames;
+    public QuerySubjectParams getSubjects() {
+        return subjects;
     }
 
-    public void setCommitNames(List<String> commitNames) {
-        this.commitNames = commitNames;
+    public void setSubjects(QuerySubjectParams subjects) {
+        this.subjects = subjects;
     }
 
-    public void addMetricNames(String... metricNames) {
-        this.metricNames.addAll(Arrays.asList(metricNames));
+    public QueryOutputParams getOutputs() {
+        return outputs;
     }
 
-    public void addCommitNames(String... commitNames) {
-        this.commitNames.addAll(Arrays.asList(commitNames));
-    }
-
-    public List<String> getMetricNames() {
-        return metricNames;
-    }
-
-    public List<String> getCommitNames() {
-        return commitNames;
+    public void setOutputs(QueryOutputParams outputs) {
+        this.outputs = outputs;
     }
 }
+

@@ -35,10 +35,10 @@ public class MetricValuesController {
     }
 
     @RequestMapping(path = "/perCommit", method = RequestMethod.GET, produces = "application/hal+json")
-    public ResponseEntity<CommitMetricsResource> listCommitMetrics(@PathVariable Long projectId, @Valid @RequestBody QueryParams query) {
+    public ResponseEntity<MetricOutputsResources> listCommitMetrics(@PathVariable Long projectId, @Valid @RequestBody QueryParams query) {
         projectVerifier.checkProjectExistsOrThrowException(projectId);
-        List<MetricValueDTO> metricValues = metricValueRepository.findValuesAggregatedByCommitAndMetric(query.getCommitNames(), query.getMetricNames());
-        CommitMetricsResource resource = new CommitMetricsResource(metricValues);
+        List<MetricValueDTO> metricValues = metricValueRepository.findValuesAggregatedByCommitAndMetric(query.getSubjects().getCommits(), query.getOutputs().getMetrics());
+        MetricOutputsResources resource = new MetricOutputsResources(metricValues);
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }
 

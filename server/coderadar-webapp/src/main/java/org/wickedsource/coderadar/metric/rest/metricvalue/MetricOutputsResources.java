@@ -7,21 +7,21 @@ import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueDTO;
 import java.util.*;
 
 @SuppressWarnings("unchecked")
-public class CommitMetricsResource extends ResourceSupport {
+public class MetricOutputsResources extends ResourceSupport {
 
-    private Map<String, List<MetricValueDTO>> commitMetrics;
+    private Map<String, List<MetricValueDTO>> commits;
 
-    public CommitMetricsResource() {
-        this.commitMetrics = new HashMap();
+    public MetricOutputsResources() {
+        this.commits = new HashMap();
     }
 
-    public CommitMetricsResource(Collection<MetricValueDTO> metricValues) {
-        this.commitMetrics = new HashMap();
+    public MetricOutputsResources(Collection<MetricValueDTO> metricValues) {
+        this.commits = new HashMap();
         for (MetricValueDTO metricValue : metricValues) {
-            List<MetricValueDTO> metricsList = commitMetrics.get(metricValue.getCommit());
+            List<MetricValueDTO> metricsList = commits.get(metricValue.getCommit());
             if (metricsList == null) {
                 metricsList = new ArrayList<>();
-                commitMetrics.put(metricValue.getCommit(), metricsList);
+                commits.put(metricValue.getCommit(), metricsList);
             }
             metricsList.add(metricValue);
         }
@@ -29,12 +29,12 @@ public class CommitMetricsResource extends ResourceSupport {
 
     @JsonIgnore
     public List<MetricValueDTO> getMetricsForCommit(String commit) {
-        return commitMetrics.get(commit);
+        return commits.get(commit);
     }
 
     @JsonIgnore
     public Long getValueForCommitAndMetric(String commit, String metric) {
-        List<MetricValueDTO> metricValues = commitMetrics.get(commit);
+        List<MetricValueDTO> metricValues = commits.get(commit);
         if (metricValues == null) {
             return null;
         }
@@ -46,17 +46,12 @@ public class CommitMetricsResource extends ResourceSupport {
         return null;
     }
 
-    @JsonIgnore
-    public Set<String> getCommits() {
-        return commitMetrics.keySet();
+    public Map<String, List<MetricValueDTO>> getCommits() {
+        return this.commits;
     }
 
-    public Map<String, List<MetricValueDTO>> getCommitMetrics() {
-        return this.commitMetrics;
-    }
-
-    public void setCommitMetrics(Map<String, List<MetricValueDTO>> commitMetrics) {
-        this.commitMetrics = commitMetrics;
+    public void setCommits(Map<String, List<MetricValueDTO>> commits) {
+        this.commits = commits;
     }
 
 }
