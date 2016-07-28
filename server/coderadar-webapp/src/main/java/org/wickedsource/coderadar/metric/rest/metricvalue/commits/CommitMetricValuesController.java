@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metric.rest.metricvalue;
+package org.wickedsource.coderadar.metric.rest.metricvalue.commits;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
@@ -22,35 +22,33 @@ import java.util.List;
 @Controller
 @ExposesResourceFor(MetricValue.class)
 @Transactional
-@RequestMapping(path = "/projects/{projectId}/metricvalues")
-public class MetricValuesController {
+@RequestMapping(path = "/projects/{projectId}/metricvalues/commits")
+public class CommitMetricValuesController {
 
     private ProjectVerifier projectVerifier;
 
     private MetricValueRepository metricValueRepository;
 
     @Autowired
-    public MetricValuesController(ProjectVerifier projectVerifier, MetricValueRepository metricValueRepository) {
+    public CommitMetricValuesController(ProjectVerifier projectVerifier, MetricValueRepository metricValueRepository) {
         this.projectVerifier = projectVerifier;
         this.metricValueRepository = metricValueRepository;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
-    public ResponseEntity<MetricOutputsResource> queryMetrics(@PathVariable Long projectId, @Valid @RequestBody QueryParams query) {
+    public ResponseEntity<CommitMetricsOutputResource> queryMetrics(@PathVariable Long projectId, @Valid @RequestBody CommitMetricsQuery query) {
         projectVerifier.checkProjectExistsOrThrowException(projectId);
-        MetricOutputsResource resource = new MetricOutputsResource();
+        CommitMetricsOutputResource resource = new CommitMetricsOutputResource();
 
-        if (query.scanCommits()) {
-            if (query.outputMetrics()) {
-                List<MetricValuePerCommitDTO> commitMetricValues = metricValueRepository.findValuesAggregatedByCommitAndMetric(projectId, query.getSubjects().getCommits(), query.getOutputs().getMetrics());
-                resource.setMetricValuesPerCommit(commitMetricValues);
-                resource.addAbsentMetrics(query.getOutputs().getMetrics());
-            }
-            if (query.outputQualityProfiles()) {
-                List<ProfileValuePerCommitDTO> profileMetricValues = metricValueRepository.findValuesAggregatedByCommitAndProfile(projectId, query.getSubjects().getCommits(), query.getOutputs().getProfiles());
-                resource.setProfileValuesPerCommit(profileMetricValues);
-                resource.addAbsentProfiles(query.getOutputs().getProfiles());
-            }
+        if (query.outputMetrics()) {
+            List<MetricValuePerCommitDTO> commitMetricValues = metricValueRepository.findValuesAggregatedByCommitAndMetric(projectId, query.getCommits(), query.getOutputs().getMetrics());
+            resource.setMetricValuesPerCommit(commitMetricValues);
+            resource.addAbsentMetrics(query.getOutputs().getMetrics());
+        }
+        if (query.outputQualityProfiles()) {
+            List<ProfileValuePerCommitDTO> profileMetricValues = metricValueRepository.findValuesAggregatedByCommitAndProfile(projectId, query.getCommits(), query.getOutputs().getProfiles());
+            resource.setProfileValuesPerCommit(profileMetricValues);
+            resource.addAbsentProfiles(query.getOutputs().getProfiles());
         }
 
         return new ResponseEntity<>(resource, HttpStatus.OK);

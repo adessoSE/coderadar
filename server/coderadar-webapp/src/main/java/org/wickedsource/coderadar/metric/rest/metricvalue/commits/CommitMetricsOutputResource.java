@@ -1,20 +1,21 @@
-package org.wickedsource.coderadar.metric.rest.metricvalue;
+package org.wickedsource.coderadar.metric.rest.metricvalue.commits;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.ResourceSupport;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValuePerCommitDTO;
 import org.wickedsource.coderadar.metric.domain.metricvalue.ProfileValuePerCommitDTO;
+import org.wickedsource.coderadar.metric.rest.metricvalue.ProfileRatingDTO;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public class MetricOutputsResource extends ResourceSupport {
+public class CommitMetricsOutputResource extends ResourceSupport {
 
     private Map<String, OutputsPerCommitDTO> commits;
 
-    public MetricOutputsResource() {
+    public CommitMetricsOutputResource() {
         this.commits = new HashMap();
     }
 

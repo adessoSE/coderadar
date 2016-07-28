@@ -1,6 +1,7 @@
-package org.wickedsource.coderadar.metric.rest.metricvalue;
+package org.wickedsource.coderadar.metric.rest.metricvalue.commits;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.wickedsource.coderadar.metric.rest.metricvalue.ProfileRatingDTO;
 
 import java.util.HashMap;
 import java.util.Map;

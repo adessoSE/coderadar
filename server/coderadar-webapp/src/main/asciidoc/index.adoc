@@ -447,7 +447,7 @@ analysis will take a while.
 
 include::{snippets}/metrics/commit/request-fields.adoc[]
 
-=== Listing Metric Values of a Commit
+=== Querying Metric Values of Commits
 
 ==== Example Request
 
@@ -461,7 +461,7 @@ include::{snippets}/metrics/commit/metrics/http-request.adoc[]
 
 include::{snippets}/metrics/commit/metrics/http-response.adoc[]
 
-=== Listing Quality Profile Ratings of a Commit
+=== Querying Quality Profile Ratings of Commits
 
 ==== Example Request
 

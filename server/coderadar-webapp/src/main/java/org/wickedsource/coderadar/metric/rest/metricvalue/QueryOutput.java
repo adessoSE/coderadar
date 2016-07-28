@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class QueryOutputParams {
+public class QueryOutput {
 
     @Size(min = 1)
     private List<String> metrics;
