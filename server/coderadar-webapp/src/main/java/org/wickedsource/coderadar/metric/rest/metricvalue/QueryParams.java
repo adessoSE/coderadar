@@ -40,5 +40,9 @@ public class QueryParams {
         return outputs.getMetrics() != null && !outputs.getMetrics().isEmpty();
     }
 
+    public boolean outputQualityProfiles() {
+        return outputs.getProfiles() != null && !outputs.getProfiles().isEmpty();
+    }
+
 }
 

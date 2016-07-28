@@ -2,7 +2,7 @@ package org.wickedsource.coderadar.metric.domain.metricvalue;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class MetricValueDTO {
+public class MetricValuePerCommitDTO {
 
     @JsonIgnore
     private String commit;
@@ -11,11 +11,11 @@ public class MetricValueDTO {
 
     private Long value;
 
-    public MetricValueDTO() {
+    public MetricValuePerCommitDTO() {
 
     }
 
-    public MetricValueDTO(String commitName, String metricName, Long value) {
+    public MetricValuePerCommitDTO(String commitName, String metricName, Long value) {
         this.commit = commitName;
         this.metric = metricName;
         this.value = value;

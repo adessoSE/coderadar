@@ -1,0 +1,62 @@
+<dataset>
+    <project/>
+    <analyzing_strategy/>
+    <commit/>
+    <commit_log_entry/>
+    <commit_file/>
+    <file_identity/>
+    <file/>
+    <file_pattern/>
+    <job/>
+    <metric_value/>
+    <finding/>
+    <analyzer_configuration/>
+    <analyzer_configuration_file/>,
+    <quality_profile/>
+    <quality_profile_metric/>
+
+    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
+    <commit id="1" project_id="1" name="f9b0553930f133490f292a9c78d0b36b39be8758" author="Tom"
+            parent_commit_name="cafebabe" comment="first commit"
+            scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+    <commit id="2" project_id="1" name="43f6cbba44ce1c23cfdf70dc164824fee062f7e2" author="Tom"
+            parent_commit_name="cafebabe" comment="first commit"
+            scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+    <commit id="3" project_id="1" name="eb7cbd429530dc26d06a9ea2a62794421dce1e9a" author="Tom"
+            parent_commit_name="cafebabe" comment="first commit"
+            scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+    <commit id="4" project_id="1" name="670cac5091c0c42253c66a83197c6c6069910aa8" author="Tom"
+            parent_commit_name="cafebabe" comment="first commit"
+            scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+
+    <file_identity id="2"/>
+    <file id="1" filepath="src/main/java/test.java" identity_id="2"/>
+    <file id="2" filepath="src/main/java/test2,java" identity_id="2"/>
+    <metric_value commit_id="1" file_id="1" metric_name="metric1" value="1"/>
+    <metric_value commit_id="1" file_id="1" metric_name="metric2" value="1"/>
+    <metric_value commit_id="1" file_id="1" metric_name="metric3" value="1"/>
+    <metric_value commit_id="1" file_id="1" metric_name="metric4" value="1"/>
+    <metric_value commit_id="1" file_id="2" metric_name="metric1" value="1"/>
+    <metric_value commit_id="1" file_id="2" metric_name="metric2" value="1"/>
+    <metric_value commit_id="1" file_id="2" metric_name="metric3" value="1"/>
+    <metric_value commit_id="1" file_id="2" metric_name="metric4" value="1"/>
+
+    <metric_value commit_id="2" file_id="1" metric_name="metric1" value="2"/>
+    <metric_value commit_id="2" file_id="1" metric_name="metric2" value="2"/>
+    <metric_value commit_id="2" file_id="1" metric_name="metric3" value="2"/>
+
+    <metric_value commit_id="3" file_id="1" metric_name="metric1" value="3"/>
+    <metric_value commit_id="3" file_id="1" metric_name="metric2" value="3"/>
+    <metric_value commit_id="3" file_id="2" metric_name="metric1" value="3"/>
+    <metric_value commit_id="3" file_id="2" metric_name="metric2" value="3"/>
+
+    <quality_profile id="1" project_id="1" name="profile1"/>
+    <quality_profile id="2" project_id="1" name="profile2"/>
+
+    <quality_profile_metric id="1" profile_id="1" name="metric1" metric_type="VIOLATION"/>
+    <quality_profile_metric id="2" profile_id="1" name="metric2" metric_type="COMPLIANCE"/>
+    <quality_profile_metric id="3" profile_id="2" name="metric3" metric_type="VIOLATION"/>
+    <quality_profile_metric id="4" profile_id="2" name="metric4" metric_type="COMPLIANCE"/>
+
+
+</dataset>

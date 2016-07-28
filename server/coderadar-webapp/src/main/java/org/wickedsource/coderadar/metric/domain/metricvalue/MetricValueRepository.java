@@ -15,8 +15,11 @@ public interface MetricValueRepository extends CrudRepository<MetricValue, Long>
     @Modifying
     int deleteByProjectId(@Param("projectId") Long projectId);
 
-    @Query("select new org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueDTO (m.id.commit.name, m.id.metricName, sum(m.value)) from MetricValue m where m.id.commit.name in (:commitNames) and m.id.metricName in (:metricNames) group by m.id.commit.name, m.id.metricName")
-    List<MetricValueDTO> findValuesAggregatedByCommitAndMetric(@Param("commitNames") List<String> commitNames, @Param("metricNames") List<String> metricNames);
+    @Query("select new org.wickedsource.coderadar.metric.domain.metricvalue.MetricValuePerCommitDTO (m.id.commit.name, m.id.metricName, sum(m.value)) from MetricValue m where m.id.commit.project.id = :projectId and m.id.commit.name in (:commitNames) and m.id.metricName in (:metricNames) group by m.id.commit.name, m.id.metricName")
+    List<MetricValuePerCommitDTO> findValuesAggregatedByCommitAndMetric(@Param("projectId") Long projectId, @Param("commitNames") List<String> commitNames, @Param("metricNames") List<String> metricNames);
+
+    @Query("select new org.wickedsource.coderadar.metric.domain.metricvalue.ProfileValuePerCommitDTO (mv.id.commit.name, qpm.profile.name, qpm.metricType, sum(1)) from QualityProfileMetric qpm, MetricValue mv where qpm.name = mv.id.metricName and qpm.profile.project.id = :projectId and qpm.profile.name in (:profileNames) and qpm.name in (select mv.id.metricName from MetricValue mv where mv.id.commit.name in (:commitNames)) group by mv.id.commit.name, qpm.profile.id, qpm.metricType")
+    List<ProfileValuePerCommitDTO> findValuesAggregatedByCommitAndProfile(@Param("projectId") Long projectId, @Param("commitNames") List<String> commitNames, @Param("profileNames") List<String> profileNames);
 
     @Query("select distinct m.id.metricName from MetricValue m where m.id.commit.project.id = :projectId order by m.id.metricName")
     Page<String> findMetricsInProject(@Param("projectId") Long projectId, Pageable pageable);

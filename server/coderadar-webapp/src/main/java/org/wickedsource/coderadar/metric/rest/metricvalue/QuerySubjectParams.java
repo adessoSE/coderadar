@@ -1,6 +1,5 @@
 package org.wickedsource.coderadar.metric.rest.metricvalue;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +7,6 @@ import java.util.List;
 
 public class QuerySubjectParams {
 
-    @NotNull
     @Size(min = 1)
     private List<String> commits;
 
@@ -35,4 +33,5 @@ public class QuerySubjectParams {
         initCommits();
         this.commits.addAll(Arrays.asList(commits));
     }
+
 }

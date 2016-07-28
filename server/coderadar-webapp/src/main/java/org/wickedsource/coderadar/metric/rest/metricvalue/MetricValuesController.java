@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValue;
-import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueDTO;
+import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValuePerCommitDTO;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
+import org.wickedsource.coderadar.metric.domain.metricvalue.ProfileValuePerCommitDTO;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
 import javax.validation.Valid;
@@ -35,14 +36,20 @@ public class MetricValuesController {
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
-    public ResponseEntity<MetricOutputsResources> queryMetrics(@PathVariable Long projectId, @Valid @RequestBody QueryParams query) {
+    public ResponseEntity<MetricOutputsResource> queryMetrics(@PathVariable Long projectId, @Valid @RequestBody QueryParams query) {
         projectVerifier.checkProjectExistsOrThrowException(projectId);
-        MetricOutputsResources resource = new MetricOutputsResources();
+        MetricOutputsResource resource = new MetricOutputsResource();
 
         if (query.scanCommits()) {
             if (query.outputMetrics()) {
-                List<MetricValueDTO> commitMetricValues = metricValueRepository.findValuesAggregatedByCommitAndMetric(query.getSubjects().getCommits(), query.getOutputs().getMetrics());
-                resource.setCommitsList(commitMetricValues);
+                List<MetricValuePerCommitDTO> commitMetricValues = metricValueRepository.findValuesAggregatedByCommitAndMetric(projectId, query.getSubjects().getCommits(), query.getOutputs().getMetrics());
+                resource.setMetricValuesPerCommit(commitMetricValues);
+                resource.addAbsentMetrics(query.getOutputs().getMetrics());
+            }
+            if (query.outputQualityProfiles()) {
+                List<ProfileValuePerCommitDTO> profileMetricValues = metricValueRepository.findValuesAggregatedByCommitAndProfile(projectId, query.getSubjects().getCommits(), query.getOutputs().getProfiles());
+                resource.setProfileValuesPerCommit(profileMetricValues);
+                resource.addAbsentProfiles(query.getOutputs().getProfiles());
             }
         }
 

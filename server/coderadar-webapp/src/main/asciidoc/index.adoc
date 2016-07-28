@@ -455,11 +455,25 @@ include::{snippets}/metrics/commit/request-fields.adoc[]
 ====
 This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
 ====
-include::{snippets}/metrics/commit/http-request.adoc[]
+include::{snippets}/metrics/commit/metrics/http-request.adoc[]
 
 ==== Example Response
 
-include::{snippets}/metrics/commit/http-response.adoc[]
+include::{snippets}/metrics/commit/metrics/http-response.adoc[]
+
+=== Listing Quality Profile Ratings of a Commit
+
+==== Example Request
+
+[NOTE]
+====
+This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
+====
+include::{snippets}/metrics/commit/profiles/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/metrics/commit/profiles/http-response.adoc[]
 
 
 
