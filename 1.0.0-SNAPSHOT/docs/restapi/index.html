@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v1.0.0-SNAPSHOT, Tom Hombergs, 2016-07-26">
+<meta name="author" content="v1.0.0-SNAPSHOT, Tom Hombergs, 2016-07-28">
 <title>coderadar REST API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -423,7 +423,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v1.0.0-SNAPSHOT, Tom Hombergs, 2016-07-26</span><br>
+<span id="author" class="author">v1.0.0-SNAPSHOT, Tom Hombergs, 2016-07-28</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -521,6 +521,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_query_structure">Query Structure</a></li>
 <li><a href="#_listing_metric_values_of_a_commit">Listing Metric Values of a Commit</a></li>
+<li><a href="#_listing_quality_profile_ratings_of_a_commit">Listing Quality Profile Ratings of a Commit</a></li>
 </ul>
 </li>
 </ul>
@@ -1669,11 +1670,11 @@ Content-Length: 237
 <h2 id="_quality_profile"><a class="link" href="#_quality_profile">Quality Profile</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The main goal of coderadar is to make it easy for you to monitor your quality standards
-best. Thus, it is important to be able to configure a set of metrics that define those quality standards so you
-can focus on these metrics and put aside the other, not so important metrics. A quality profile combines such a set
-of metrics. Providing your quality profile in some other API calls, you will get focussed information about
-the metrics that are most important to you.</p>
+<p>The main goal of coderadar is to make it easy for you to monitor your quality standards.
+To be able to focus on the quality metrics that are most important to you and your team,
+you can combine a set  metrics within a quality profile. There are several API methods
+that take a quality profile as parameter and return information on the metrics that are
+part of the quality profile and thus are most important to you.</p>
 </div>
 <div class="sect2">
 <h3 id="_structure_5"><a class="link" href="#_structure_5">Structure</a></h3>
@@ -1695,7 +1696,7 @@ the metrics that are most important to you.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">profileName</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The display name of the profile.</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">metrics[].metricName</p></td>
@@ -2316,34 +2317,9 @@ analysis will take a while.</p>
 </div>
 <div class="sect2">
 <h3 id="_query_structure"><a class="link" href="#_query_structure">Query Structure</a></h3>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">commitNames</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">List of the names of the commits whose metrics you want to get.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null. Size must be between 1 and 2147483647 inclusive</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">metricNames</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">List of the names of the metrics you want get.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null. Size must be between 1 and 2147483647 inclusive</p></td>
-</tr>
-</tbody>
-</table>
+<div class="paragraph">
+<p>Unresolved directive in index.adoc - include::D:\data\workspaces\coderadar\server\coderadar-webapp\build\generated-snippets/metrics/commit/request-fields.adoc[]</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_listing_metric_values_of_a_commit"><a class="link" href="#_listing_metric_values_of_a_commit">Listing Metric Values of a Commit</a></h3>
@@ -2365,14 +2341,19 @@ analysis will take a while.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metricvalues/perCommit HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metricvalues HTTP/1.1
 Content-Type: application/json
 Host: localhost
-Content-Length: 170
+Content-Length: 235
 
 {
-  "metricNames" : [ "metric1", "metric3", "metric4" ],
-  "commitNames" : [ "f9b0553930f133490f292a9c78d0b36b39be8758", "eb7cbd429530dc26d06a9ea2a62794421dce1e9a" ]
+  "subjects" : {
+    "commits" : [ "f9b0553930f133490f292a9c78d0b36b39be8758", "eb7cbd429530dc26d06a9ea2a62794421dce1e9a" ]
+  },
+  "outputs" : {
+    "metrics" : [ "metric1", "metric3", "metric4" ],
+    "profiles" : null
+  }
 }</code></pre>
 </div>
 </div>
@@ -2383,24 +2364,105 @@ Content-Length: 170
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json
-Content-Length: 371
+Content-Length: 399
 
 {
-  "commitMetrics" : {
-    "f9b0553930f133490f292a9c78d0b36b39be8758" : [ {
-      "metric" : "metric1",
-      "value" : 2
-    }, {
-      "metric" : "metric3",
-      "value" : 2
-    }, {
-      "metric" : "metric4",
-      "value" : 2
-    } ],
-    "eb7cbd429530dc26d06a9ea2a62794421dce1e9a" : [ {
-      "metric" : "metric1",
-      "value" : 6
-    } ]
+  "commits" : {
+    "f9b0553930f133490f292a9c78d0b36b39be8758" : {
+      "metrics" : {
+        "metric1" : 2,
+        "metric3" : 2,
+        "metric4" : 2
+      },
+      "profiles" : null
+    },
+    "eb7cbd429530dc26d06a9ea2a62794421dce1e9a" : {
+      "metrics" : {
+        "metric1" : 6,
+        "metric3" : 0,
+        "metric4" : 0
+      },
+      "profiles" : null
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_listing_quality_profile_ratings_of_a_commit"><a class="link" href="#_listing_quality_profile_ratings_of_a_commit">Listing Quality Profile Ratings of a Commit</a></h3>
+<div class="sect3">
+<h4 id="_example_request_25"><a class="link" href="#_example_request_25">Example Request</a></h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This request can be sent using either the GET or the POST method. See <a href="#usage-of-get">Usage of GET</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metricvalues HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 226
+
+{
+  "subjects" : {
+    "commits" : [ "f9b0553930f133490f292a9c78d0b36b39be8758", "eb7cbd429530dc26d06a9ea2a62794421dce1e9a" ]
+  },
+  "outputs" : {
+    "metrics" : null,
+    "profiles" : [ "profile1", "profile2" ]
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_25"><a class="link" href="#_example_response_25">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json
+Content-Length: 671
+
+{
+  "commits" : {
+    "f9b0553930f133490f292a9c78d0b36b39be8758" : {
+      "metrics" : null,
+      "profiles" : {
+        "profile1" : {
+          "complianceRating" : 2,
+          "violationRating" : 2
+        },
+        "profile2" : {
+          "complianceRating" : 2,
+          "violationRating" : 2
+        }
+      }
+    },
+    "eb7cbd429530dc26d06a9ea2a62794421dce1e9a" : {
+      "metrics" : null,
+      "profiles" : {
+        "profile1" : {
+          "complianceRating" : 2,
+          "violationRating" : 2
+        },
+        "profile2" : {
+          "complianceRating" : 0,
+          "violationRating" : 0
+        }
+      }
+    }
   }
 }</code></pre>
 </div>
@@ -2412,7 +2474,7 @@ Content-Length: 371
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-07-26 23:48:52 +02:00
+Last updated 2016-07-28 13:14:46 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
