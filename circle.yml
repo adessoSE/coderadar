@@ -25,7 +25,7 @@ dependencies:
     - if [[ -e ~/docker/java.tar ]]; then docker load --input ~/docker/java.tar; fi
 
     - chmod +x gradlew
-    - ./gradlew --console=plain buildDocker --stacktrace
+    - ./gradlew --console=plain buildDocker --stacktrace --info
 
     # pull image here to cache it and speed up the test
     - docker images
