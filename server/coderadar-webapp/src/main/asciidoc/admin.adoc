@@ -1,0 +1,59 @@
+= coderadar Administration Guide
+v{version}, Tom Hombergs, {date}
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+[introduction]
+= Introduction
+
+This guide is intended for administrators and developers who want to get a coderadar server up and running.
+
+= Starting a coderadar server
+
+= Configuration Parameters
+
+= Clustering
+
+= Monitoring
+
+Coderadar makes use of http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready[Spring Boot Actuator],
+which provides a mechanism to expose certain metrics via HTTP. A list of the monitoring endpoints can by default be accessed via
+"/actuator" on each server node in a coderadar cluster.
+
+== Securing Access to Monitoring
+Most monitoring endpoints are protected by a basic authentication. The username and password for this authentication
+has to be configured via the config parameters `security.user.name` and `security.user.password` (see chapter <<Configuration Parameters>>).
+
+== Coderadar-specific Monitoring Metrics
+
+Coderadar exposes the following metrics via the "/metrics" endpoint. Note that the metrics will only be listed
+once a certain action has taken place, so if the metric is not listed you can interpret it as "never occurred".
+
+.Coderadar Monitoring Metrics
+|===
+|Metric name |Description
+
+| counter.coderadar.jobs.jobAcquisitionConflicts
+| The number of times that two server nodes tried to acquire the same job from the waiting job queue and thus
+  failed acquiring a waiting job. When this happens, the server nodes automatically retry after a couple seconds.
+  As long as this number does not grow faster than the sum of successfully finished jobs, there shouldn't be
+  a problem.
+
+| gauge.coderadar.jobs.<JOB_TYPE>.inProgress
+| 1 if a job of the given type is currently running, 0 if not.
+
+| counter.coderadar.jobs.<JOB_TYPE>.success
+| Number of successfully processed jobs of the given type.
+
+| counter.coderadar.jobs.<JOB_TYPE>.failed
+| Number of failed jobs of the given type.
+
+| gauge.coderadar.jobs.currentJobStartTime
+| Timestamp of the start of the job that is currently being processed by this server node (milliseconds since epoch).
+  -1 if no job is currently being processed.
+
+|===

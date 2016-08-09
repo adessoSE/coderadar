@@ -59,7 +59,7 @@ asciidoctor {
     inputs.dir snippetsDir
     dependsOn test
     sourceDir 'src/main/asciidoc'
-    outputDir 'build/doc/restapi'
+    outputDir 'build/docs'
 }
 
 jar {
@@ -173,7 +173,7 @@ githubPages {
     repoUri = 'https://github.com/thombergs/coderadar.git'
     targetBranch = 'gh-pages'
     pages {
-        from 'build/doc/restapi/html5'
-        into "${version}/docs/restapi"
+        from 'build/docs/html5'
+        into "${version}/docs"
     }
 }
