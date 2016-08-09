@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.job.execute;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,14 +16,12 @@ import org.wickedsource.coderadar.job.queue.JobDeletedException;
 import org.wickedsource.coderadar.job.queue.JobQueueService;
 import org.wickedsource.coderadar.job.queue.JobUpdater;
 
-import java.util.Date;
-
 @Service
 @Transactional
 @ConditionalOnProperty(CoderadarConfiguration.SLAVE)
 class JobExecutionService {
 
-    private JobLogger jobLogger = new JobLogger();
+    private JobLogger jobLogger;
 
     private JobQueueService queueService;
 
@@ -30,7 +30,9 @@ class JobExecutionService {
     private JobExecutor executor;
 
     @Autowired
-    public JobExecutionService(JobQueueService queueService, JobUpdater jobUpdater, JobExecutor executor) {
+    public JobExecutionService(JobLogger jobLogger, JobQueueService queueService, JobUpdater jobUpdater,
+                               JobExecutor executor) {
+        this.jobLogger = jobLogger;
         this.queueService = queueService;
         this.jobUpdater = jobUpdater;
         this.executor = executor;
@@ -68,7 +70,8 @@ class JobExecutionService {
                 job.setResultStatus(ResultStatus.FAILED);
                 job.setProcessingStatus(ProcessingStatus.PROCESSED);
                 job.setEndDate(new Date());
-                job.setMessage(String.format("Failed due to exception of type %s. View the log file for details.", e.getClass()));
+                job.setMessage(String.format("Failed due to exception of type %s. View the log file for details.",
+                                             e.getClass()));
                 // storing the failed job back into the database in a separate transaction because the current
                 // transaction may be marked for rollback
                 jobUpdater.updateJob(job);

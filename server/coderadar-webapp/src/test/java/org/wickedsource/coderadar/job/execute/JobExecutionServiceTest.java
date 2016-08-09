@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wickedsource.coderadar.job.JobLogger;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.job.core.JobRepository;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
@@ -30,6 +31,9 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
     @Autowired
     private JobUpdater jobUpdater;
 
+    @Autowired
+    private JobLogger jobLogger;
+
     @Mock
     private JobExecutor jobExecutor;
 
@@ -41,7 +45,8 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
     public void testSuccessfulExecution() {
         Job jobBeforeExecution = initJob();
 
-        JobExecutionService executionService = new JobExecutionService(jobQueueService, jobUpdater, jobExecutor);
+        JobExecutionService executionService =
+                new JobExecutionService(jobLogger, jobQueueService, jobUpdater, jobExecutor);
         executionService.executeNextJobInQueue();
 
         Job jobAfterExecution = jobRepository.findOne(jobBeforeExecution.getId());
@@ -50,8 +55,8 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
     }
 
     private Job initJob() {
-        Project project = projectRepository.save(project().validProject());
-        Job jobBeforeExecution = job().waitingPullJob();
+        Project project            = projectRepository.save(project().validProject());
+        Job     jobBeforeExecution = job().waitingPullJob();
         jobBeforeExecution.setId(null);
         jobBeforeExecution.setProject(project);
         jobBeforeExecution = jobRepository.save(jobBeforeExecution);
@@ -66,7 +71,8 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
 
         doThrow(new RuntimeException("bwaaah")).when(jobExecutor).execute(any(Job.class));
 
-        JobExecutionService executionService = new JobExecutionService(jobQueueService, jobUpdater, jobExecutor);
+        JobExecutionService executionService =
+                new JobExecutionService(jobLogger, jobQueueService, jobUpdater, jobExecutor);
         executionService.executeNextJobInQueue();
 
         Job jobAfterExecution = jobRepository.findOne(jobBeforeExecution.getId());

@@ -1,5 +1,9 @@
 package org.wickedsource.coderadar.job.scan.file;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,27 +14,22 @@ import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.job.JobLogger;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 @Service
 @ConditionalOnProperty(CoderadarConfiguration.MASTER)
 public class FileScannerTrigger {
 
-    private JobLogger jobLogger = new JobLogger();
+    private JobLogger jobLogger;
 
     private CommitRepository commitRepository;
 
     private ScanFilesJobRepository jobRepository;
 
-    private CoderadarConfiguration config;
-
     @Autowired
-    public FileScannerTrigger(CommitRepository commitRepository, ScanFilesJobRepository jobRepository, CoderadarConfiguration config) {
+    public FileScannerTrigger(JobLogger jobLogger, CommitRepository commitRepository,
+                              ScanFilesJobRepository jobRepository) {
+        this.jobLogger = jobLogger;
         this.commitRepository = commitRepository;
         this.jobRepository = jobRepository;
-        this.config = config;
     }
 
     @Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
@@ -52,7 +51,8 @@ public class FileScannerTrigger {
     }
 
     private boolean isJobCurrentlyQueuedForCommit(Commit commit) {
-        int count = jobRepository.countByProcessingStatusInAndCommitId(Arrays.asList(ProcessingStatus.WAITING, ProcessingStatus.PROCESSING), commit.getId());
+        int count = jobRepository.countByProcessingStatusInAndCommitId(
+                Arrays.asList(ProcessingStatus.WAITING, ProcessingStatus.PROCESSING), commit.getId());
         return count > 0;
     }
 

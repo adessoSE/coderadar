@@ -26,7 +26,8 @@ class JobExecutor {
     private CommitAnalyzer commitAnalyzer;
 
     @Autowired
-    public JobExecutor(CommitScanner commitScanner, FileScanner fileScanner, LogMerger merger, CommitAnalyzer commitAnalyzer) {
+    public JobExecutor(CommitScanner commitScanner, FileScanner fileScanner, LogMerger merger,
+                       CommitAnalyzer commitAnalyzer) {
         this.commitScanner = commitScanner;
         this.fileScanner = fileScanner;
         this.merger = merger;

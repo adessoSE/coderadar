@@ -1,5 +1,8 @@
 package org.wickedsource.coderadar.job.scan.commit;
 
+import java.util.Arrays;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,14 +14,11 @@ import org.wickedsource.coderadar.job.core.ProcessingStatus;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
-import java.util.Arrays;
-import java.util.Date;
-
 @Service
 @ConditionalOnProperty(CoderadarConfiguration.MASTER)
 class CommitScannerTrigger {
 
-    private JobLogger jobLogger = new JobLogger();
+    private JobLogger jobLogger;
 
     private CoderadarConfiguration config;
 
@@ -27,7 +27,9 @@ class CommitScannerTrigger {
     private ScanCommitsJobRepository jobRepository;
 
     @Autowired
-    public CommitScannerTrigger(CoderadarConfiguration config, ProjectRepository projectRepository, ScanCommitsJobRepository jobRepository) {
+    public CommitScannerTrigger(JobLogger jobLogger, CoderadarConfiguration config, ProjectRepository projectRepository,
+                                ScanCommitsJobRepository jobRepository) {
+        this.jobLogger = jobLogger;
         this.config = config;
         this.projectRepository = projectRepository;
         this.jobRepository = jobRepository;
@@ -52,20 +54,23 @@ class CommitScannerTrigger {
             jobLogger.alreadyQueuedForProject(ScanCommitsJob.class, project);
             return false;
         } else {
-            Job lastJob = jobRepository.findTop1ByProcessingStatusAndProjectIdOrderByQueuedDateDesc(ProcessingStatus.PROCESSED, project.getId());
+            Job lastJob = jobRepository
+                    .findTop1ByProcessingStatusAndProjectIdOrderByQueuedDateDesc(ProcessingStatus.PROCESSED,
+                                                                                 project.getId());
             return lastJob == null || hasIntervalPassedSince(lastJob);
         }
     }
 
     private boolean isJobCurrentlyQueuedForProject(Project project) {
-        int count = jobRepository.countByProcessingStatusInAndProjectId(Arrays.asList(ProcessingStatus.PROCESSING, ProcessingStatus.WAITING), project.getId());
+        int count = jobRepository.countByProcessingStatusInAndProjectId(
+                Arrays.asList(ProcessingStatus.PROCESSING, ProcessingStatus.WAITING), project.getId());
         return count > 0;
     }
 
     private boolean hasIntervalPassedSince(Job lastJob) {
         long lastRun = lastJob.getQueuedDate().getTime();
         long nextRun = lastRun + config.getScanIntervalInSeconds() * 1000;
-        long now = new Date().getTime();
+        long now     = new Date().getTime();
 
         return now > nextRun;
     }

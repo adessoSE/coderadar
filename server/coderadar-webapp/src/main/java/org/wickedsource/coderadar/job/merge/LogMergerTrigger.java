@@ -1,5 +1,8 @@
 package org.wickedsource.coderadar.job.merge;
 
+import java.util.Arrays;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,16 +14,11 @@ import org.wickedsource.coderadar.job.core.ProcessingStatus;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
-import java.util.Arrays;
-import java.util.Date;
-
 @Service
 @ConditionalOnProperty(CoderadarConfiguration.MASTER)
 public class LogMergerTrigger {
 
-    private JobLogger jobLogger = new JobLogger();
-
-    private CoderadarConfiguration config;
+    private JobLogger jobLogger;
 
     private MergeLogJobRepository jobRepository;
 
@@ -29,8 +27,9 @@ public class LogMergerTrigger {
     private CommitRepository commitRepository;
 
     @Autowired
-    public LogMergerTrigger(CoderadarConfiguration config, MergeLogJobRepository jobRepository, ProjectRepository projectRepository, CommitRepository commitRepository) {
-        this.config = config;
+    public LogMergerTrigger(JobLogger jobLogger, MergeLogJobRepository jobRepository,
+                            ProjectRepository projectRepository, CommitRepository commitRepository) {
+        this.jobLogger = jobLogger;
         this.jobRepository = jobRepository;
         this.projectRepository = projectRepository;
         this.commitRepository = commitRepository;
@@ -55,14 +54,16 @@ public class LogMergerTrigger {
             jobLogger.alreadyQueuedForProject(MergeLogJob.class, project);
             return false;
         } else {
-            int scannedAndUnmergedCommits = commitRepository.countByProjectIdAndScannedTrueAndMergedFalse(project.getId());
+            int scannedAndUnmergedCommits =
+                    commitRepository.countByProjectIdAndScannedTrueAndMergedFalse(project.getId());
             int totalCommits = commitRepository.countByProjectId(project.getId());
             return totalCommits == scannedAndUnmergedCommits && totalCommits > 0;
         }
     }
 
     private boolean isJobCurrentlyQueuedForProject(Project project) {
-        int count = jobRepository.countByProcessingStatusInAndProjectId(Arrays.asList(ProcessingStatus.WAITING, ProcessingStatus.PROCESSING), project.getId());
+        int count = jobRepository.countByProcessingStatusInAndProjectId(
+                Arrays.asList(ProcessingStatus.WAITING, ProcessingStatus.PROCESSING), project.getId());
         return count > 0;
     }
 }
