@@ -445,7 +445,7 @@ analysis will take a while.
 
 === Query Structure
 
-include::{snippets}/metrics/commit/request-fields.adoc[]
+include::{snippets}/metrics/commit/metrics/request-fields.adoc[]
 
 === Querying Metric Values of Commits
 
