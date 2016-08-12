@@ -7,6 +7,4 @@ public interface AnalyzerFileFilter {
 
     boolean acceptFilename(String filename);
 
-    boolean acceptBinary();
-
 }

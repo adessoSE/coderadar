@@ -24,12 +24,12 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
     public CheckstyleSourceCodeFileAnalyzerPlugin() {
         try {
             init(createDefaultConfiguration());
-        }catch(CheckstyleException e){
+        } catch (CheckstyleException e) {
             throw new AnalyzerException(e);
         }
     }
 
-    private void init(Configuration configuration){
+    private void init(Configuration configuration) {
         checker = new Checker();
         try {
             auditListener = new CoderadarAuditListener();
@@ -50,10 +50,6 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
                 return filename.endsWith(".java");
             }
 
-            @Override
-            public boolean acceptBinary() {
-                return false;
-            }
         };
     }
 
@@ -108,7 +104,7 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
     public void configure(byte[] configurationFile) {
         try {
             init(getConfigurationFromStream(new ByteArrayInputStream(configurationFile)));
-        }catch(CheckstyleException e){
+        } catch (CheckstyleException e) {
             throw new AnalyzerException(e);
         }
 

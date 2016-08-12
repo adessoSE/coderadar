@@ -46,15 +46,7 @@ public class FileAnalyzer {
     }
 
     private boolean acceptFile(AnalyzerFileFilter filter, String filePath) {
-        return (filter.acceptBinary() || !isBinary(filePath)) && filter.acceptFilename(filePath);
-    }
-
-    /**
-     * Determines whether the given file is in binary format.
-     */
-    private boolean isBinary(String filePath) {
-        // TODO: analyze the first couple bytes of the file to determine if it's binary
-        return false;
+        return filter.acceptFilename(filePath);
     }
 
 }

@@ -10,8 +10,4 @@ public class DefaultFileFilter implements AnalyzerFileFilter {
         return true;
     }
 
-    @Override
-    public boolean acceptBinary() {
-        return false;
-    }
 }

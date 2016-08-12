@@ -9,9 +9,5 @@ public class LocAnalyzerFileFilter implements AnalyzerFileFilter {
         return filename.endsWith(".java");
     }
 
-    @Override
-    public boolean acceptBinary() {
-        return false;
-    }
 
 }
