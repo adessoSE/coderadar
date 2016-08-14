@@ -9,6 +9,7 @@ import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
 import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
 import org.wickedsource.coderadar.vcs.git.walk.AllCommitsWalker;
 
 import java.io.File;
@@ -22,10 +23,13 @@ public class CommitScanner {
 
     private LocalGitRepositoryUpdater updater;
 
+    private GitCommitFinder commitFinder;
+
     @Autowired
-    public CommitScanner(CommitRepository commitRepository, LocalGitRepositoryUpdater updater) {
+    public CommitScanner(CommitRepository commitRepository, LocalGitRepositoryUpdater updater, GitCommitFinder commitFinder) {
         this.commitRepository = commitRepository;
         this.updater = updater;
+        this.commitFinder = commitFinder;
     }
 
     /**
@@ -48,7 +52,7 @@ public class CommitScanner {
         if (lastKnownCommit != null) {
             walker.stopAtCommit(lastKnownCommit.getName());
         }
-        PersistingCommitProcessor commitProcessor = new PersistingCommitProcessor(commitRepository, project);
+        PersistingCommitProcessor commitProcessor = new PersistingCommitProcessor(commitRepository, project, commitFinder);
         walker.walk(gitClient, commitProcessor);
         gitClient.getRepository().close();
         logger.info("scanned {} new commits for project {}", commitProcessor.getUpdatedCommitsCount(), project);

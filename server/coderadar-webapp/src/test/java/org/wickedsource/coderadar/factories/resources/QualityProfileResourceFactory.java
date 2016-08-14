@@ -1,8 +1,8 @@
 package org.wickedsource.coderadar.factories.resources;
 
-import org.wickedsource.coderadar.metric.domain.qualityprofile.MetricType;
-import org.wickedsource.coderadar.metric.rest.qualityprofile.MetricDTO;
-import org.wickedsource.coderadar.metric.rest.qualityprofile.QualityProfileResource;
+import org.wickedsource.coderadar.qualityprofile.domain.MetricDTO;
+import org.wickedsource.coderadar.qualityprofile.domain.MetricType;
+import org.wickedsource.coderadar.qualityprofile.rest.QualityProfileResource;
 
 public class QualityProfileResourceFactory {
 

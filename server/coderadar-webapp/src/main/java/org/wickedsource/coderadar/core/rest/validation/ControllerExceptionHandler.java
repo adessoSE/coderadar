@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -66,9 +67,18 @@ public class ControllerExceptionHandler {
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseBody
+    public ErrorDTO handleInvalidRequestMethod(HttpRequestMethodNotSupportedException e) {
+        ErrorDTO errors = new ErrorDTO();
+        errors.setErrorMessage(e.getMessage());
+        return errors;
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     @ResponseBody
-    public ErrorDTO handleInvalidContentTypeException(HttpMediaTypeNotSupportedException e){
+    public ErrorDTO handleInvalidContentTypeException(HttpMediaTypeNotSupportedException e) {
         ErrorDTO errors = new ErrorDTO();
         errors.setErrorMessage(e.getMessage());
         return errors;

@@ -28,4 +28,6 @@ public interface CommitRepository extends PagingAndSortingRepository<Commit, Lon
     @Query("update Commit c set c.analyzed=false where c.project.id = :projectId")
     @Modifying
     int resetAnalyzedFlagForProjectId(@Param("projectId") Long projectId);
+
+    Commit findByName(String commitName);
 }

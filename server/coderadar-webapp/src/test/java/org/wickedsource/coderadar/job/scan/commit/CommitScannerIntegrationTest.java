@@ -23,6 +23,7 @@ import org.wickedsource.coderadar.project.domain.VcsCoordinates;
 import org.wickedsource.coderadar.project.domain.VcsType;
 import org.wickedsource.coderadar.testframework.category.IntegrationTest;
 import org.wickedsource.coderadar.testframework.template.GitTestTemplate;
+import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryChecker;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryCloner;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryUpdater;
@@ -57,6 +58,9 @@ public class CommitScannerIntegrationTest extends GitTestTemplate {
     @Mock
     private WorkdirManager workdirManager;
 
+    @Mock
+    private GitCommitFinder commitFinder;
+
     private LocalGitRepositoryUpdater updater;
 
     private CoderadarConfiguration config;
@@ -86,7 +90,7 @@ public class CommitScannerIntegrationTest extends GitTestTemplate {
         Project project = project().validProject();
         Profiler profiler = new Profiler("Scanner");
         profiler.setLogger(logger);
-        CommitScanner scanner = new CommitScanner(commitRepository, updater);
+        CommitScanner scanner = new CommitScanner(commitRepository, updater, commitFinder);
         when(projectRepository.findOne(project.getId())).thenReturn(createProject());
         profiler.start("scanning without local repository present");
         File repoRoot = scanner.scan(project).getParentFile();

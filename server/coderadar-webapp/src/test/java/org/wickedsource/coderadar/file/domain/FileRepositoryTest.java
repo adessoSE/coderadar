@@ -39,6 +39,7 @@ public class FileRepositoryTest extends IntegrationTestTemplate {
         project = projectRepository.save(project);
         Commit commit = commit().unprocessedCommit();
         commit.setProject(project);
+        commit.setSequenceNumber(1);
         commit = commitRepository.save(commit);
         File file = sourceFile().withPath("123");
         file = fileRepository.save(file);
@@ -49,7 +50,7 @@ public class FileRepositoryTest extends IntegrationTestTemplate {
         File foundFile = fileRepository.findInCommit(file.getFilepath(), commit.getName(), 1L);
         Assert.assertEquals(file.getId(), foundFile.getId());
 
-        File unknownFile = fileRepository.findInCommit("321",commit.getName(), 1L);
+        File unknownFile = fileRepository.findInCommit("321", commit.getName(), 1L);
         Assert.assertNull(unknownFile);
     }
 

@@ -5,6 +5,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
 import org.wickedsource.coderadar.vcs.git.walk.CommitProcessor;
 
 import java.util.Date;
@@ -20,9 +21,12 @@ class PersistingCommitProcessor implements CommitProcessor {
 
     private int updatedCommits;
 
-    PersistingCommitProcessor(CommitRepository commitRepository, Project project) {
+    private GitCommitFinder commitFinder;
+
+    PersistingCommitProcessor(CommitRepository commitRepository, Project project, GitCommitFinder commitFinder) {
         this.commitRepository = commitRepository;
         this.project = project;
+        this.commitFinder = commitFinder;
     }
 
     @Override
@@ -33,15 +37,27 @@ class PersistingCommitProcessor implements CommitProcessor {
         commit.setComment(gitCommit.getShortMessage());
         commit.setProject(project);
         commit.setTimestamp(new Date(gitCommit.getCommitTime() * 1000L));
-        if(gitCommit.getParentCount() > 0){
-            // TODO: support multiple parents
+        commit.setSequenceNumber(getSequenceNumberForCommit(gitClient, gitCommit));
+        if (gitCommit.getParents() != null && gitCommit.getParentCount() > 0) {
+            // TODO: support multiple parents?
             commit.setParentCommitName(gitCommit.getParent(0).getName());
         }
         commitRepository.save(commit);
         updatedCommits++;
     }
 
-    public int getUpdatedCommitsCount(){
+    private int getSequenceNumberForCommit(Git gitClient, RevCommit gitCommit) {
+        if (gitCommit.getParents() == null || gitCommit.getParentCount() == 0) {
+            return 1;
+        } else {
+            String parentName = gitCommit.getParent(0).getName();
+            RevCommit parentCommit = commitFinder.findCommit(gitClient, parentName);
+            // TODO: support multiple parents?
+            return getSequenceNumberForCommit(gitClient, parentCommit) + 1;
+        }
+    }
+
+    public int getUpdatedCommitsCount() {
         return updatedCommits;
     }
 

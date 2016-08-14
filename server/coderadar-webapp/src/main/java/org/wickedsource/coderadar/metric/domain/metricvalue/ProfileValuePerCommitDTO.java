@@ -1,12 +1,9 @@
 package org.wickedsource.coderadar.metric.domain.metricvalue;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.wickedsource.coderadar.metric.domain.qualityprofile.MetricType;
+import org.wickedsource.coderadar.qualityprofile.domain.MetricType;
 
 public class ProfileValuePerCommitDTO {
-
-    @JsonIgnore
-    private String commit;
 
     @JsonIgnore
     private String profile;
@@ -16,11 +13,9 @@ public class ProfileValuePerCommitDTO {
     private Long value;
 
     public ProfileValuePerCommitDTO() {
-
     }
 
-    public ProfileValuePerCommitDTO(String commitName, String profile, MetricType metricType, Long value) {
-        this.commit = commitName;
+    public ProfileValuePerCommitDTO(String profile, MetricType metricType, Long value) {
         this.profile = profile;
         this.metricType = metricType;
         this.value = value;
@@ -32,14 +27,6 @@ public class ProfileValuePerCommitDTO {
 
     public Long getValue() {
         return value;
-    }
-
-    public String getCommit() {
-        return commit;
-    }
-
-    public void setCommit(String commit) {
-        this.commit = commit;
     }
 
     public void setProfile(String profile) {

@@ -48,6 +48,9 @@ public class Commit {
     @Column(nullable = false)
     private boolean analyzed = false;
 
+    @Column(nullable = false)
+    private Integer sequenceNumber;
+
     @OneToMany(mappedBy = "id.commit")
     private Set<CommitToFileAssociation> files = new HashSet<>();
 
@@ -144,5 +147,13 @@ public class Commit {
 
     public void setParentCommitName(String parentCommitName) {
         this.parentCommitName = parentCommitName;
+    }
+
+    public Integer getSequenceNumber() {
+        return sequenceNumber;
+    }
+
+    public void setSequenceNumber(Integer sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
     }
 }
