@@ -443,7 +443,7 @@ At that moment, analysis of each commit defined in the strategy starts. Dependin
 analysis will take a while.
 ====
 
-=== Querying Metric Values of Commits
+=== Querying Metric Values of a Commit
 
 ==== Query Structure
 
@@ -461,7 +461,7 @@ include::{snippets}/metrics/commit/metrics/http-request.adoc[]
 
 include::{snippets}/metrics/commit/metrics/http-response.adoc[]
 
-=== Querying Quality Profile Ratings of Commits
+=== Querying Quality Profile Ratings of a Commit
 
 ==== Query Structure
 
