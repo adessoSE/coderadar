@@ -1,17 +1,17 @@
 package org.wickedsource.coderadar.job.analyze;
 
-import java.util.Arrays;
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.wickedsource.coderadar.CoderadarConfiguration;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
+import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
 import org.wickedsource.coderadar.job.JobLogger;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
+
+import java.util.Arrays;
+import java.util.Date;
 
 @Service
 @ConditionalOnProperty(CoderadarConfiguration.MASTER)

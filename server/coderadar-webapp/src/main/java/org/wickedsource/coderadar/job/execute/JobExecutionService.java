@@ -1,13 +1,11 @@
 package org.wickedsource.coderadar.job.execute;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.wickedsource.coderadar.CoderadarConfiguration;
+import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
 import org.wickedsource.coderadar.job.JobLogger;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
@@ -15,6 +13,8 @@ import org.wickedsource.coderadar.job.core.ResultStatus;
 import org.wickedsource.coderadar.job.queue.JobDeletedException;
 import org.wickedsource.coderadar.job.queue.JobQueueService;
 import org.wickedsource.coderadar.job.queue.JobUpdater;
+
+import java.util.Date;
 
 @Service
 @Transactional

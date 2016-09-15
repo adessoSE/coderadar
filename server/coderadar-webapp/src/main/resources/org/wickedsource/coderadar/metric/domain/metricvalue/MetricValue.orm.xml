@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.0"
+                 xmlns="http://java.sun.com/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm  http://java.sun.com/xml/ns/persistence/orm_2_0.xsd">
+
+    <named-query name="MetricValue.findValuesAggregatedByCommitAndMetric">
+        <query><![CDATA[
+            SELECT NEW org.wickedsource.coderadar.metric.domain.metricvalue.MetricValuePerCommitDTO (m.id.commit.name, m.id.metricName, sum(m.value))
+            FROM MetricValue m
+            WHERE m.id.commit.project.id = :projectId
+              AND m.id.metricName IN (:metricNames)
+              AND m.id.commit.sequenceNumber =
+                (SELECT max(m2.id.commit.sequenceNumber)
+                 FROM MetricValue m2
+                 WHERE m2.id.commit.sequenceNumber<=:commitSequenceNumber
+                   AND m2.id.file.identity.id = m.id.file.identity.id
+                   AND m2.id.metricName = m.id.metricName)
+            GROUP BY m.id.commit.name,
+                     m.id.metricName
+]]></query>
+    </named-query>
+
+    <named-query name="MetricValue.findValuesAggregatedByCommitAndProfile">
+        <query><![CDATA[
+            SELECT NEW org.wickedsource.coderadar.metric.domain.metricvalue.ProfileValuePerCommitDTO (qpm.profile.name, qpm.metricType, sum(mv.value))
+            FROM QualityProfileMetric qpm,
+                 MetricValue mv
+            WHERE qpm.name = mv.id.metricName
+              AND qpm.profile.project.id = :projectId
+              AND qpm.profile.name IN (:profileNames)
+              AND mv.id.commit.sequenceNumber =
+                (SELECT max(m2.id.commit.sequenceNumber)
+                 FROM MetricValue m2
+                 WHERE m2.id.commit.sequenceNumber<=:commitSequenceNumber
+                   AND m2.id.file.identity.id = mv.id.file.identity.id
+                   AND m2.id.metricName = mv.id.metricName)
+            GROUP BY qpm.profile.id,
+                     qpm.metricType
+            ]]>
+        </query>
+    </named-query>
+
+</entity-mappings>

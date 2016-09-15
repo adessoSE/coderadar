@@ -1,6 +1,6 @@
-package org.wickedsource.coderadar;
+package org.wickedsource.coderadar.core.configuration;
 
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Configuration;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 /**
  * Configuration class that holds all configuration parameters passed to the Coderadar application at startup.
  */
-@Service
+@Configuration
 public class CoderadarConfiguration {
 
     public static final int TIMER_INTERVAL = 100;
@@ -67,6 +67,5 @@ public class CoderadarConfiguration {
     public void setWorkdir(Path workdir) {
         System.setProperty(WORKDIR, workdir.toString());
     }
-
 
 }

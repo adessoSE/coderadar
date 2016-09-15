@@ -2,7 +2,7 @@ package org.wickedsource.coderadar.core;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wickedsource.coderadar.CoderadarConfiguration;
+import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
 
 import java.nio.file.Path;
 
