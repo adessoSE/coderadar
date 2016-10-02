@@ -12,13 +12,13 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.AnalyzingStrategies.SINGLE_PROJECT_WITH_ANALYZING_STRATEGY;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.EMPTY;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Projects.SINGLE_PROJECT;
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.analyzingStrategyResource;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
 
 @Category(ControllerTest.class)
 public class AnalyzingStrategyControllerTest extends ControllerTestTemplate {

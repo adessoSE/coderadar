@@ -18,15 +18,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Projects.SINGLE_PROJECT;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.QualityProfiles.*;
 import static org.wickedsource.coderadar.factories.resources.QualityProfileResourceFactory.profile;
 import static org.wickedsource.coderadar.factories.resources.QualityProfileResourceFactory.profile2;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.fromJson;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
-import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsPagedResources;
-import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.*;
 
 @Category(ControllerTest.class)
 public class QualityProfileControllerTest extends ControllerTestTemplate {

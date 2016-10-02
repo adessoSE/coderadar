@@ -14,14 +14,12 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.EMPTY;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Projects.*;
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.projectResource;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJson;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
-import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
-import static org.wickedsource.coderadar.testframework.template.ResultMatchers.validationErrorForField;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.*;
 
 @Category(ControllerTest.class)
 public class ProjectControllerTest extends ControllerTestTemplate {

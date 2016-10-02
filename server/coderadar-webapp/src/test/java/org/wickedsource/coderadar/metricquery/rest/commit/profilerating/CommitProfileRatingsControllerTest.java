@@ -10,11 +10,11 @@ import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.MetricValues.SINGLE_PROJECT_WITH_METRICS_AND_QUALITY_PROFILES;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.fromJson;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
 
 public class CommitProfileRatingsControllerTest extends ControllerTestTemplate {
 

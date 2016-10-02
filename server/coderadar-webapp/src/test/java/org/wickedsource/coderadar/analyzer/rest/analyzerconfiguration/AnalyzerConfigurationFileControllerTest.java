@@ -11,9 +11,9 @@ import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.AnalyzerConfiguration.SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.AnalyzerConfiguration.SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION_FILE;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
 
 @Category(ControllerTest.class)
 public class AnalyzerConfigurationFileControllerTest extends ControllerTestTemplate {

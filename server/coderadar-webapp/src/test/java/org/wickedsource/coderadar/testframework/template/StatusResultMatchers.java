@@ -1,6 +1,6 @@
 package org.wickedsource.coderadar.testframework.template;
 
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import static org.springframework.test.util.AssertionErrors.assertEquals;
@@ -11,20 +11,23 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 public class StatusResultMatchers {
 
     public ResultMatcher is(final int status) {
-        return new ResultMatcher() {
-            @Override
-            public void match(MvcResult result) throws Exception {
-                assertEquals(String.format("Unexpected HTTP status! Server response was: %s", result.getResponse().getContentAsString()), status, result.getResponse().getStatus());
-            }
-        };
+        return result -> assertEquals(String.format("Unexpected HTTP status! Server response was: %s", result.getResponse().getContentAsString()), status, result.getResponse().getStatus());
     }
 
     public ResultMatcher isOk() {
-        return is(200);
+        return is(HttpStatus.OK.value());
     }
 
     public ResultMatcher isBadRequest() {
-        return is(400);
+        return is(HttpStatus.BAD_REQUEST.value());
+    }
+
+    public ResultMatcher isCreated() {
+        return is(HttpStatus.CREATED.value());
+    }
+
+    public ResultMatcher isNotFound() {
+        return is(HttpStatus.NOT_FOUND.value());
     }
 
 }
