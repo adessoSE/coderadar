@@ -6,7 +6,7 @@
 
     <named-query name="MetricValue.findValuesAggregatedByCommitAndMetric">
         <query><![CDATA[
-            SELECT NEW org.wickedsource.coderadar.metric.domain.metricvalue.MetricValuePerCommitDTO (m.id.commit.name, m.id.metricName, sum(m.value))
+            SELECT NEW org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueDTO (m.id.metricName, sum(m.value))
             FROM MetricValue m
             WHERE m.id.commit.project.id = :projectId
               AND m.id.metricName IN (:metricNames)
@@ -16,9 +16,9 @@
                  WHERE m2.id.commit.sequenceNumber<=:commitSequenceNumber
                    AND m2.id.file.identity.id = m.id.file.identity.id
                    AND m2.id.metricName = m.id.metricName)
-            GROUP BY m.id.commit.name,
-                     m.id.metricName
-]]></query>
+            GROUP BY m.id.metricName
+            ]]>
+        </query>
     </named-query>
 
     <named-query name="MetricValue.findValuesAggregatedByCommitAndProfile">

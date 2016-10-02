@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metricquery.commit.profilerating;
+package org.wickedsource.coderadar.metricquery.rest.commit.profilerating;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;

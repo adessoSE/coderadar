@@ -18,16 +18,20 @@
     <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
     <commit id="1" project_id="1" name="f9b0553930f133490f292a9c78d0b36b39be8758" sequence_number="1" author="Tom"
             parent_commit_name="cafebabe" comment="first commit"
-            scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            scanned="false" analyzed="false" merged="false" timestamp="2016-01-01 00:00:00"
+            year="2016" month="1" day_of_month="1" week_of_year="53" year_of_week="2015"/>
     <commit id="2" project_id="1" name="43f6cbba44ce1c23cfdf70dc164824fee062f7e2" sequence_number="2" author="Tom"
             parent_commit_name="cafebabe" comment="first commit"
-            scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 06:05:05"/>
+            scanned="false" analyzed="false" merged="false" timestamp="2016-02-01 00:00:00"
+            year="2016" month="2" day_of_month="1" week_of_year="5" year_of_week="2016"/>
     <commit id="3" project_id="1" name="eb7cbd429530dc26d06a9ea2a62794421dce1e9a" sequence_number="3" author="Tom"
             parent_commit_name="cafebabe" comment="first commit"
-            scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 07:05:05"/>
+            scanned="false" analyzed="false" merged="false" timestamp="2016-03-01 00:00:00"
+            year="2016" month="3" day_of_month="1" week_of_year="9" year_of_week="2016"/>
     <commit id="4" project_id="1" name="670cac5091c0c42253c66a83197c6c6069910aa8" sequence_number="4" author="Tom"
             parent_commit_name="cafebabe" comment="first commit"
-            scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 08:05:05"/>
+            scanned="false" analyzed="false" merged="false" timestamp="2016-04-01 00:00:00"
+            year="2016" month="4" day_of_month="1" week_of_year="13" year_of_week="2016"/>
 
     <file_identity id="1"/>
     <file_identity id="2"/>
@@ -44,6 +48,10 @@
     <metric_value commit_id="1" file_id="2" metric_name="metric2" value="6"/>
     <metric_value commit_id="1" file_id="2" metric_name="metric3" value="7"/>
     <metric_value commit_id="1" file_id="2" metric_name="metric4" value="8"/>
+    <metric_value commit_id="1" file_id="3" metric_name="metric1" value="1"/>
+    <metric_value commit_id="1" file_id="3" metric_name="metric2" value="2"/>
+    <metric_value commit_id="1" file_id="3" metric_name="metric3" value="3"/>
+    <metric_value commit_id="1" file_id="3" metric_name="metric4" value="4"/>
 
     <metric_value commit_id="2" file_id="1" metric_name="metric1" value="9"/>
     <metric_value commit_id="2" file_id="1" metric_name="metric2" value="10"/>
@@ -51,6 +59,6 @@
 
     <metric_value commit_id="3" file_id="1" metric_name="metric1" value="12"/>
     <metric_value commit_id="3" file_id="1" metric_name="metric2" value="13"/>
-    <metric_value commit_id="3" file_id="2" metric_name="metric1" value="14"/>
-    <metric_value commit_id="3" file_id="2" metric_name="metric2" value="15"/>
+    <metric_value commit_id="3" file_id="3" metric_name="metric1" value="14"/>
+    <metric_value commit_id="3" file_id="3" metric_name="metric2" value="15"/>
 </dataset>

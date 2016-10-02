@@ -1,27 +1,27 @@
-package org.wickedsource.coderadar.metricquery.commit.metric;
+package org.wickedsource.coderadar.metricquery.rest.commit.metric;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.ResourceSupport;
-import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValuePerCommitDTO;
+import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueDTO;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Stores the result of a query for metric values of selected metrics aggregated by a selected commit.
+ * Result of a query for values of selected metrics at the time of a given commit.
  */
 @SuppressWarnings("unchecked")
-public class CommitMetricsOutputResource extends ResourceSupport {
+public class CommitMetricsResource extends ResourceSupport {
 
     private Map<String, Long> metrics;
 
-    public CommitMetricsOutputResource() {
+    public CommitMetricsResource() {
     }
 
     @JsonIgnore
-    public void addMetricValues(List<MetricValuePerCommitDTO> metricValuesPerCommit) {
-        for (MetricValuePerCommitDTO metricValue : metricValuesPerCommit) {
+    public void addMetricValues(List<MetricValueDTO> metricValuesPerCommit) {
+        for (MetricValueDTO metricValue : metricValuesPerCommit) {
             addMetricValue(metricValue.getMetric(), metricValue.getValue());
         }
     }

@@ -1,22 +1,16 @@
 package org.wickedsource.coderadar.metric.domain.metricvalue;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-public class MetricValuePerCommitDTO {
-
-    @JsonIgnore
-    private String commit;
+public class MetricValueDTO {
 
     private String metric;
 
     private Long value;
 
-    public MetricValuePerCommitDTO() {
+    public MetricValueDTO() {
 
     }
 
-    public MetricValuePerCommitDTO(String commitName, String metricName, Long value) {
-        this.commit = commitName;
+    public MetricValueDTO(String metricName, Long value) {
         this.metric = metricName;
         this.value = value;
     }
@@ -27,14 +21,6 @@ public class MetricValuePerCommitDTO {
 
     public Long getValue() {
         return value;
-    }
-
-    public String getCommit() {
-        return commit;
-    }
-
-    public void setCommit(String commit) {
-        this.commit = commit;
     }
 
     public void setMetric(String metric) {

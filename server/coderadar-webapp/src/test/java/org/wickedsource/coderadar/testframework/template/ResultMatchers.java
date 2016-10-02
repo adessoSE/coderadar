@@ -80,4 +80,8 @@ public class ResultMatchers {
             }
         };
     }
+
+    public static StatusResultMatchers status() {
+        return new StatusResultMatchers();
+    }
 }

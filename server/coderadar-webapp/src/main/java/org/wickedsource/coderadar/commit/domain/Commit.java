@@ -54,6 +54,9 @@ public class Commit {
     @OneToMany(mappedBy = "id.commit")
     private Set<CommitToFileAssociation> files = new HashSet<>();
 
+    @Embedded
+    private DateCoordinates dateCoordinates;
+
     public Long getId() {
         return id;
     }
@@ -84,6 +87,10 @@ public class Commit {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+        if (this.dateCoordinates == null) {
+            this.dateCoordinates = new DateCoordinates();
+        }
+        dateCoordinates.updateFromDate(timestamp);
     }
 
     public String getComment() {

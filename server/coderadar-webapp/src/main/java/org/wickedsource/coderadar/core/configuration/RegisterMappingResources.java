@@ -13,7 +13,8 @@ import java.util.Set;
 /**
  * Picks up all implementations of {@link MappingResourceProvider} in the application context
  * and retrieves their locations of ORM mapping files. It then registers these files with
- * the EntityManagerFactory.
+ * the EntityManagerFactory. This allows modules to define their own ORM mappings instead of
+ * having all in one place.
  */
 @Component
 public class RegisterMappingResources implements BeanPostProcessor {

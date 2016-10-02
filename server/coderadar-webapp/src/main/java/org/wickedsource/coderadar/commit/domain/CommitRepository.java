@@ -6,6 +6,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
 
+import java.util.Date;
 import java.util.List;
 
 public interface CommitRepository extends PagingAndSortingRepository<Commit, Long> {
@@ -30,4 +31,15 @@ public interface CommitRepository extends PagingAndSortingRepository<Commit, Lon
     int resetAnalyzedFlagForProjectId(@Param("projectId") Long projectId);
 
     Commit findByName(String commitName);
+
+    /**
+     * Returns the last Commit of each day in the given date range.
+     *
+     * @param projectId ID of the project whose commits to consider.
+     * @param startDate start date of date range in which to consider commits.
+     * @param endDate   end date of date range in which to consider commits.
+     * @return List of commits, each being the last commit of a day.
+     */
+    @Query(name = "Commit.findLastForEachDay")
+    List<Commit> findLastForEachDay(@Param("projectId") Long projectId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

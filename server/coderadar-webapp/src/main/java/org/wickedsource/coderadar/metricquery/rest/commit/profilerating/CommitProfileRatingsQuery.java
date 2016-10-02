@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metricquery.commit.profilerating;
+package org.wickedsource.coderadar.metricquery.rest.commit.profilerating;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

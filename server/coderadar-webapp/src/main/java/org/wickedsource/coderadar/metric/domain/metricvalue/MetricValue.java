@@ -3,19 +3,15 @@ package org.wickedsource.coderadar.metric.domain.metricvalue;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.file.domain.File;
 
-import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 @Entity
-@Table
 public class MetricValue {
 
     @EmbeddedId
     private MetricValueId id;
 
-    @Column
     private Long value;
 
     public MetricValue() {
@@ -26,15 +22,15 @@ public class MetricValue {
         this.value = value;
     }
 
-    public Commit getCommit(){
+    public Commit getCommit() {
         return id.getCommit();
     }
 
-    public File getFile(){
+    public File getFile() {
         return id.getFile();
     }
 
-    public String getMetricName(){
+    public String getMetricName() {
         return id.getMetricName();
     }
 

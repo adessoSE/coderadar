@@ -10,9 +10,9 @@ v{version}, Tom Hombergs, {date}
 [introduction]
 = Introduction
 
-The coderadar server is a tool for continuous source code analysis. To start analysis of your project,
-you only have to provide a few configuration parameters and let coderadar do the work. This document
-describes the REST API of the coderadar server.
+The coderadar server is a tool for continuous source code analysis. This document describes the REST API of the coderadar server.
+
+The chapter <<creating-analyzing-strategy,Analyzing Strategy>>
 
 == Usage of HTTP Verbs
 
@@ -71,6 +71,7 @@ If some unexpected error occurs during the processing of a request, the API retu
 (internal server error).
 
 = Configuring a Project
+anchor:chapter-configure[]
 
 This section describes the resources you can interact with to configure a project to be analyzed by coderadar.
 
@@ -365,11 +366,10 @@ include::{snippets}/qualityprofiles/list/http-request.adoc[]
 
 include::{snippets}/qualityprofiles/list/http-response.adoc[]
 
-= Accessing Project and System Data
+= Querying Global Data
+anchor:chapter-query-global-data[]
 
-This section describes the resources you can access to get information about the results of analyses that
-were run on a project. These resources are read-only since coderadar creates those resources from the project
-configuration you provide.
+This section describes the resources that are not attached to a project and are thus available server-wide.
 
 == Analyzer
 
@@ -384,6 +384,12 @@ include::{snippets}/analyzer/list/http-request.adoc[]
 ==== Example Response
 
 include::{snippets}/analyzer/list/http-response.adoc[]
+
+= Querying Project Data
+anchor:chapter-query-project-data[]
+
+This section describes the resources that are attached to a project and are only available in the context of a
+project.
 
 == Metric
 
@@ -479,5 +485,23 @@ include::{snippets}/metrics/commit/profiles/http-request.adoc[]
 
 include::{snippets}/metrics/commit/profiles/http-response.adoc[]
 
+=== Querying the History of a Metric
+Use this endpoint to receive the history of a specific metric over time.
+
+==== Query Structure
+
+include::{snippets}/metrics/history/metrics/request-fields.adoc[]
+
+==== Example Request
+
+[NOTE]
+====
+This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
+====
+include::{snippets}/metrics/history/metrics/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/metrics/history/metrics/http-response.adoc[]
 
 

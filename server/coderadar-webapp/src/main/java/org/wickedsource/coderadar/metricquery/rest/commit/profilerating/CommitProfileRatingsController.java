@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metricquery.commit.metric;
+package org.wickedsource.coderadar.metricquery.rest.commit.profilerating;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
@@ -14,8 +14,8 @@ import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValue;
-import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValuePerCommitDTO;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
+import org.wickedsource.coderadar.metric.domain.metricvalue.ProfileValuePerCommitDTO;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
 import javax.validation.Valid;
@@ -24,8 +24,8 @@ import java.util.List;
 @Controller
 @ExposesResourceFor(MetricValue.class)
 @Transactional
-@RequestMapping(path = "/projects/{projectId}/metricvalues/perCommit")
-public class CommitMetricValuesController {
+@RequestMapping(path = "/projects/{projectId}/profileratings/perCommit")
+public class CommitProfileRatingsController {
 
     private ProjectVerifier projectVerifier;
 
@@ -34,14 +34,14 @@ public class CommitMetricValuesController {
     private CommitRepository commitRepository;
 
     @Autowired
-    public CommitMetricValuesController(ProjectVerifier projectVerifier, MetricValueRepository metricValueRepository, CommitRepository commitRepository) {
+    public CommitProfileRatingsController(ProjectVerifier projectVerifier, MetricValueRepository metricValueRepository, CommitRepository commitRepository) {
         this.projectVerifier = projectVerifier;
         this.metricValueRepository = metricValueRepository;
         this.commitRepository = commitRepository;
     }
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, produces = "application/hal+json")
-    public ResponseEntity<CommitMetricsOutputResource> queryMetrics(@PathVariable Long projectId, @Valid @RequestBody CommitMetricsQuery query) {
+    public ResponseEntity<CommitProfileRatingsOutputResource> queryProfileRatings(@PathVariable Long projectId, @Valid @RequestBody CommitProfileRatingsQuery query) {
         projectVerifier.checkProjectExistsOrThrowException(projectId);
 
         Commit commit = commitRepository.findByName(query.getCommit());
@@ -49,10 +49,10 @@ public class CommitMetricValuesController {
             throw new ResourceNotFoundException();
         }
 
-        CommitMetricsOutputResource resource = new CommitMetricsOutputResource();
-        List<MetricValuePerCommitDTO> commitMetricValues = metricValueRepository.findValuesAggregatedByCommitAndMetric(projectId, commit.getSequenceNumber(), query.getMetrics());
-        resource.addMetricValues(commitMetricValues);
-        resource.addAbsentMetrics(query.getMetrics());
+        CommitProfileRatingsOutputResource resource = new CommitProfileRatingsOutputResource();
+        List<ProfileValuePerCommitDTO> profileValues = metricValueRepository.findValuesAggregatedByCommitAndProfile(projectId, commit.getSequenceNumber(), query.getProfiles());
+        resource.addProfileValues(profileValues);
+        resource.addAbsentProfiles(query.getProfiles());
 
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }

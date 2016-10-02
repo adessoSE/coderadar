@@ -11,7 +11,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.4.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE")
         classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
         classpath "se.transmode.gradle:gradle-docker:1.2"
         classpath "org.ajoberstar:gradle-git:1.5.1"
@@ -70,29 +70,30 @@ jar {
 }
 
 dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.3.3.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-web:1.3.3.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-hateoas:1.3.3.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-security:1.3.3.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-actuator:1.3.3.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.4.0.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-web:1.4.0.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-hateoas:1.4.0.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-security:1.4.0.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-actuator:1.4.0.RELEASE'
+    compile 'org.springframework.boot:spring-boot-devtools:1.4.0.RELEASE'
     compile 'org.apache.commons:commons-exec:1.3'
     compile 'org.eclipse.jgit:org.eclipse.jgit:4.1.0.201509280440-r'
     compile 'commons-io:commons-io:2.4'
     compile 'io.fabric8:gitective-core:0.9.10'
     compile 'com.h2database:h2:1.4.191'
     compile 'org.apache.commons:commons-lang3:3.4'
-    compile 'org.springframework.boot:spring-boot-devtools'
     compile 'org.hibernate:hibernate-validator:5.2.4.Final'
     compile 'org.reflections:reflections:0.9.10'
     compile 'commons-fileupload:commons-fileupload:1.3'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.1'
 
     compile project(':plugins:loc-analyzer-plugin')
     compile project(':plugins:checkstyle-analyzer-plugin')
 
     runtime 'mysql:mysql-connector-java:5.1.6'
 
-    testCompile 'org.springframework.boot:spring-boot-starter-test:1.3.3.RELEASE'
-    testCompile 'junit:junit:4.11'
+    testCompile 'org.springframework.boot:spring-boot-starter-test:1.4.0.RELEASE'
+    testCompile 'junit:junit:4.12'
     testCompile 'org.slf4j:slf4j-ext:1.7.21'
     testCompile 'org.springframework.restdocs:spring-restdocs-mockmvc:1.1.0.RELEASE'
     testCompile 'org.springframework.restdocs:spring-restdocs-core:1.1.0.RELEASE'

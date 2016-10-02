@@ -18,39 +18,56 @@
     <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
 
     <commit id="1" sequence_number="1" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="2" sequence_number="2" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="3" sequence_number="3" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="4" sequence_number="4" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="5" sequence_number="5" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="6" sequence_number="6" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="7" sequence_number="7" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="8" sequence_number="8" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="9" sequence_number="9" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="10" sequence_number="10" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="11" sequence_number="11" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="12" sequence_number="12" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="13" sequence_number="13" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="14" sequence_number="14" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="15" sequence_number="15" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="16" sequence_number="16" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="17" sequence_number="17" project_id="1" name="cafebabe" author="Tom" parent_commit_name="cafebabe"
-            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"/>
+            comment="first commit" scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
+            year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
 
 
 </dataset>

@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metricquery.commit.metric;
+package org.wickedsource.coderadar.metricquery.rest.commit.metric;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Objects of this class provide parameters to query for metric values aggregated per commit.
+ * Provides parameters to query for values of one or more metrics values at the time of a specific commit.
  */
 public class CommitMetricsQuery {
 

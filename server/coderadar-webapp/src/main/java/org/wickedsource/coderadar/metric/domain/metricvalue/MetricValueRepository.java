@@ -18,18 +18,18 @@ public interface MetricValueRepository extends CrudRepository<MetricValue, Long>
     /**
      * Aggregates metric values by commit and metric name.
      *
-     * @param projectId            ID of the project whose metrics to find
+     * @param projectId            ID of the project whose metrics to find.
      * @param commitSequenceNumber sequence number of the commit defining the point in time for which to retrieve the metric values.
-     * @param metricNames          names of the metrics whose metrics to find.
+     * @param metricNames          names of the metrics whose values to find.
      * @return list of aggregated metric values.
      */
     @Query(name = "MetricValue.findValuesAggregatedByCommitAndMetric")
-    List<MetricValuePerCommitDTO> findValuesAggregatedByCommitAndMetric(@Param("projectId") Long projectId, @Param("commitSequenceNumber") Integer commitSequenceNumber, @Param("metricNames") List<String> metricNames);
+    List<MetricValueDTO> findValuesAggregatedByCommitAndMetric(@Param("projectId") Long projectId, @Param("commitSequenceNumber") Integer commitSequenceNumber, @Param("metricNames") List<String> metricNames);
 
     /**
      * Aggregates quality profile ratings per commit and quality profile name.
      *
-     * @param projectId            D of the project whose metrics to find
+     * @param projectId            ID of the project whose metrics to find.
      * @param commitSequenceNumber sequence number of the commit defining the point in time for which to retrieve the metric values.
      * @param profileNames         names of the quality profiles for which to retrieve the metrics.
      * @return list of aggregated profile ratings.
