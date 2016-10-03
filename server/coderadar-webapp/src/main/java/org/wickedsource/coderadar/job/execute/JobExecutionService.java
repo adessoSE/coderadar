@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
+import org.wickedsource.coderadar.core.configuration.configparams.SlaveConfigurationParameter;
 import org.wickedsource.coderadar.job.JobLogger;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
@@ -18,7 +19,7 @@ import java.util.Date;
 
 @Service
 @Transactional
-@ConditionalOnProperty(CoderadarConfiguration.SLAVE)
+@ConditionalOnProperty(SlaveConfigurationParameter.NAME)
 class JobExecutionService {
 
     private JobLogger jobLogger;
@@ -71,7 +72,7 @@ class JobExecutionService {
                 job.setProcessingStatus(ProcessingStatus.PROCESSED);
                 job.setEndDate(new Date());
                 job.setMessage(String.format("Failed due to exception of type %s. View the log file for details.",
-                                             e.getClass()));
+                        e.getClass()));
                 // storing the failed job back into the database in a separate transaction because the current
                 // transaction may be marked for rollback
                 jobUpdater.updateJob(job);

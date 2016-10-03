@@ -1,71 +1,110 @@
 package org.wickedsource.coderadar.core.configuration;
 
-import org.springframework.context.annotation.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.wickedsource.coderadar.core.configuration.configparams.*;
 
+import javax.annotation.PostConstruct;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Configuration class that holds all configuration parameters passed to the Coderadar application at startup.
+ * Provides access to all configuration parameters of the coderadar application.
  */
-@Configuration
+@Component
 public class CoderadarConfiguration {
 
+    private Logger logger = LoggerFactory.getLogger(CoderadarConfiguration.class);
+
+    /**
+     * Number of milliseconds that @Scheduled tasks should wait before executing again.
+     */
     public static final int TIMER_INTERVAL = 100;
 
-    public static final String MASTER = "coderadar.master";
+    private List<ConfigurationParameter> configurationParameters = new ArrayList<>();
 
-    public static final String SLAVE = "coderadar.slave";
+    private MasterConfigurationParameter master;
 
-    public static final String WORKDIR = "coderadar.workdir";
+    private SlaveConfigurationParameter slave;
 
-    public static final String SCAN_INTERVAL_IN_SECONDS = "coderadar.scanIntervalInSeconds";
+    private WorkdirConfigurationParameter workdir;
 
-    /**
-     * Returns if the Coderadar application is configured as a master node in a Coderadar cluster.
-     * A node can be configured as master and slave simultaneously. However, there must only be a single master
-     * in a cluster.
-     */
-    public boolean isMaster() {
-        return Boolean.valueOf(System.getProperty(MASTER));
+    private ScanIntervalConfigurationParameter scanInterval;
+
+    @Autowired
+    public CoderadarConfiguration(MasterConfigurationParameter master, SlaveConfigurationParameter slave, WorkdirConfigurationParameter workdir, ScanIntervalConfigurationParameter scanInterval) {
+        this.master = master;
+        this.slave = slave;
+        this.workdir = workdir;
+        this.scanInterval = scanInterval;
+        this.configurationParameters.add(master);
+        this.configurationParameters.add(slave);
+        this.configurationParameters.add(workdir);
+        this.configurationParameters.add(scanInterval);
     }
 
-    /**
-     * Returns if the Coderadar application is configured as a slave node in a Coderadar cluster.
-     * A node can be configured as master and slave simultaneously. However, there must only be a single master
-     * in a cluster.
-     */
-    public boolean isSlave() {
-        return Boolean.valueOf(System.getProperty(SLAVE));
-    }
-
-    /**
-     * Returns the folder in which Coderadar puts local vcs data.
-     */
-    public Path getWorkdir() {
-        String path = System.getProperty(WORKDIR);
-        return Paths.get(path);
-    }
-
-    public int getScanIntervalInSeconds() {
-        String stringValue = System.getProperty(SCAN_INTERVAL_IN_SECONDS);
-        if (stringValue == null) {
-            return 60;
-        } else {
-            return Integer.valueOf(stringValue);
+    @PostConstruct
+    public void checkConfiguration() {
+        int errorCount = 0;
+        for (ConfigurationParameter<?> param : this.configurationParameters) {
+            // null check
+            if (param.getValue() == null && !param.getDefaultValue().isPresent()) {
+                logger.error("Configuration parameter '{}' is not set and has no default value!", param.getName());
+                errorCount++;
+            } else if (param.getDefaultValue().isPresent()) {
+                logger.info("Setting configuration parameter '{}' to default value '{}' since not value was specified.", param.getName(), param.getDefaultValue().get());
+            } else {
+                // validation only if null check was successful
+                List<ParameterValidationError> validationErrors = param.validate();
+                for (ParameterValidationError validationError : validationErrors) {
+                    if (validationError.getException() == null) {
+                        logger.error("Configuration parameter '{}' has an invalid value. Message: {}", param.getName(), validationError.getMessage());
+                    } else {
+                        logger.error("Configuration parameter '{}' has an invalid value. Message: {}. Stacktrace: ", param.getName(), validationError.getMessage(), validationError.getException());
+                    }
+                    errorCount++;
+                }
+                if (validationErrors.isEmpty()) {
+                    logger.info("Setting configuration parameter '{}' to value '{}'.", param.getName(), param.getValue());
+                }
+            }
+        }
+        if (errorCount > 0) {
+            throw new ConfigurationException(errorCount);
         }
     }
 
-    public void setMaster(boolean value) {
-        System.setProperty(MASTER, String.valueOf(value));
+
+    /**
+     * @see MasterConfigurationParameter
+     */
+    public boolean isMaster() {
+        return master.getValue();
     }
 
-    public void setSlave(boolean value) {
-        System.setProperty(SLAVE, String.valueOf(value));
+    /**
+     * @see SlaveConfigurationParameter
+     */
+    public boolean isSlave() {
+        return slave.getValue();
     }
 
-    public void setWorkdir(Path workdir) {
-        System.setProperty(WORKDIR, workdir.toString());
+
+    /**
+     * @see WorkdirConfigurationParameter
+     */
+    public Path getWorkdir() {
+        return workdir.getValue();
+    }
+
+    /**
+     * @see ScanIntervalConfigurationParameter
+     */
+    public int getScanIntervalInSeconds() {
+        return scanInterval.getValue();
     }
 
 }

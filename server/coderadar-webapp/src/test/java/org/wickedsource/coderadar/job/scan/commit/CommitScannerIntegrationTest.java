@@ -63,13 +63,14 @@ public class CommitScannerIntegrationTest extends GitTestTemplate {
 
     private LocalGitRepositoryUpdater updater;
 
+    @Mock
     private CoderadarConfiguration config;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        config = createConfig();
         mock(workdirManager);
+        mock(config);
         updater = new LocalGitRepositoryUpdater(gitUpdater, gitCloner, gitChecker, workdirManager);
     }
 
@@ -102,16 +103,6 @@ public class CommitScannerIntegrationTest extends GitTestTemplate {
 
         verify(commitRepository, atLeast(20)).save(any(Commit.class));
         profiler.stop().log();
-    }
-
-    private CoderadarConfiguration createConfig() {
-        File dir = createTempDir();
-
-        CoderadarConfiguration config = new CoderadarConfiguration();
-        config.setMaster(true);
-        config.setSlave(true);
-        config.setWorkdir(dir.toPath());
-        return config;
     }
 
     private Project createProject() {
