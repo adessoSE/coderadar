@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Provides access to all configuration parameters of the coderadar application.
@@ -34,16 +35,20 @@ public class CoderadarConfiguration {
 
     private ScanIntervalConfigurationParameter scanInterval;
 
+    private DateLocaleConfigurationParameter dateLocale;
+
     @Autowired
-    public CoderadarConfiguration(MasterConfigurationParameter master, SlaveConfigurationParameter slave, WorkdirConfigurationParameter workdir, ScanIntervalConfigurationParameter scanInterval) {
+    public CoderadarConfiguration(MasterConfigurationParameter master, SlaveConfigurationParameter slave, WorkdirConfigurationParameter workdir, ScanIntervalConfigurationParameter scanInterval, DateLocaleConfigurationParameter dateLocale) {
         this.master = master;
         this.slave = slave;
         this.workdir = workdir;
         this.scanInterval = scanInterval;
+        this.dateLocale = dateLocale;
         this.configurationParameters.add(master);
         this.configurationParameters.add(slave);
         this.configurationParameters.add(workdir);
         this.configurationParameters.add(scanInterval);
+        this.configurationParameters.add(dateLocale);
     }
 
     @PostConstruct
@@ -105,6 +110,13 @@ public class CoderadarConfiguration {
      */
     public int getScanIntervalInSeconds() {
         return scanInterval.getValue();
+    }
+
+    /**
+     * @see DateLocaleConfigurationParameter
+     */
+    public Locale getDateLocale() {
+        return dateLocale.getValue();
     }
 
 }

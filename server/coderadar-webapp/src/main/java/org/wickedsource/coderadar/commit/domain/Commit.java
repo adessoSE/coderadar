@@ -14,6 +14,7 @@ import java.util.Set;
  */
 @Entity
 @Table
+@EntityListeners(UpdateDateCoordinatesEntityListener.class)
 public class Commit {
 
     @Id
@@ -90,7 +91,6 @@ public class Commit {
         if (this.dateCoordinates == null) {
             this.dateCoordinates = new DateCoordinates();
         }
-        dateCoordinates.updateFromDate(timestamp);
     }
 
     public String getComment() {
@@ -162,5 +162,13 @@ public class Commit {
 
     public void setSequenceNumber(Integer sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
+    }
+
+    DateCoordinates getDateCoordinates() {
+        return dateCoordinates;
+    }
+
+    void setDateCoordinates(DateCoordinates dateCoordinates) {
+        this.dateCoordinates = dateCoordinates;
     }
 }

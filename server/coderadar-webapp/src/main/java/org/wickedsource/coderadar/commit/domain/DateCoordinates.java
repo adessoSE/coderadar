@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 @Embeddable
 public class DateCoordinates {
@@ -63,11 +64,13 @@ public class DateCoordinates {
         return yearOfWeek;
     }
 
-    /**
-     * Sets the this object date coordinate fields according to the specified date.
-     */
-    public void updateFromDate(Date date) {
-        Calendar c = Calendar.getInstance();
+    public void setYearOfWeek(Integer yearOfWeek) {
+        this.yearOfWeek = yearOfWeek;
+    }
+
+
+    public void updateFromDate(Date date, Locale locale) {
+        Calendar c = Calendar.getInstance(locale);
         c.setTime(date);
         this.dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
         this.year = c.get(Calendar.YEAR);
