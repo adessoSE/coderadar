@@ -28,5 +28,28 @@
         </query>
     </named-query>
 
+    <named-query name="Commit.findLastForEachWeek">
+        <query><![CDATA[
+            select
+               c
+            from
+               Commit c
+            where
+               c.sequenceNumber in (
+                  select
+                     MAX(c2.sequenceNumber)
+                  from
+                     Commit c2
+                  where
+                     c2.project.id = :projectId
+                     and c2.timestamp between :startDate and :endDate
+                  group by
+                     c2.dateCoordinates.yearOfWeek,
+                     c2.dateCoordinates.weekOfYear
+               )
+            ]]>
+        </query>
+    </named-query>
+
 
 </entity-mappings>

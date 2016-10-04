@@ -61,4 +61,17 @@
     <metric_value commit_id="3" file_id="1" metric_name="metric2" value="13"/>
     <metric_value commit_id="3" file_id="3" metric_name="metric1" value="14"/>
     <metric_value commit_id="3" file_id="3" metric_name="metric2" value="15"/>
+
+    <metric_value commit_id="4" file_id="1" metric_name="metric1" value="11"/>
+    <metric_value commit_id="4" file_id="1" metric_name="metric2" value="21"/>
+    <metric_value commit_id="4" file_id="1" metric_name="metric3" value="31"/>
+    <metric_value commit_id="4" file_id="1" metric_name="metric4" value="41"/>
+    <metric_value commit_id="4" file_id="2" metric_name="metric1" value="51"/>
+    <metric_value commit_id="4" file_id="2" metric_name="metric2" value="61"/>
+    <metric_value commit_id="4" file_id="2" metric_name="metric3" value="71"/>
+    <metric_value commit_id="4" file_id="2" metric_name="metric4" value="81"/>
+    <metric_value commit_id="4" file_id="3" metric_name="metric1" value="11"/>
+    <metric_value commit_id="4" file_id="3" metric_name="metric2" value="21"/>
+    <metric_value commit_id="4" file_id="3" metric_name="metric3" value="31"/>
+    <metric_value commit_id="4" file_id="3" metric_name="metric4" value="41"/>
 </dataset>

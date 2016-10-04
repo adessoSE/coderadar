@@ -7,7 +7,9 @@ import org.junit.experimental.categories.Category;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.wickedsource.coderadar.core.rest.dates.Day;
+import org.wickedsource.coderadar.core.rest.dates.Week;
 import org.wickedsource.coderadar.core.rest.dates.series.DayPoint;
+import org.wickedsource.coderadar.core.rest.dates.series.WeekPoint;
 import org.wickedsource.coderadar.metricquery.rest.commit.DateRange;
 import org.wickedsource.coderadar.metricquery.rest.commit.Interval;
 import org.wickedsource.coderadar.testframework.category.ControllerTest;
@@ -62,7 +64,7 @@ public class CommitMetricValuesControllerTest extends ControllerTestTemplate {
     @DatabaseSetup(SINGLE_PROJECT_WITH_METRICS)
     @ExpectedDatabase(SINGLE_PROJECT_WITH_METRICS)
     @SuppressWarnings("unchecked")
-    public void historyAggregatedByDay() throws Exception {
+    public void historyByDay() throws Exception {
 
         CommitMetricsHistoryQuery query = new CommitMetricsHistoryQuery();
 
@@ -70,19 +72,11 @@ public class CommitMetricValuesControllerTest extends ControllerTestTemplate {
         query.setMetric("metric1");
         query.setInterval(Interval.DAY);
 
-        ConstrainedFields requestFields = fields(CommitMetricsHistoryQuery.class);
-
         MvcResult result = mvc().perform(get("/projects/1/metricvalues/history")
                 .content(toJsonWithoutLinks(query))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(containsResource(MetricValueHistoryResource.class))
-                .andDo(document("metrics/history/metrics",
-                        requestFields(
-                                requestFields.withPath("dateRange.startDate").description("Date from which to start the metric history."),
-                                requestFields.withPath("dateRange.endDate").description("Date at which to end the metric history."),
-                                requestFields.withPath("metric").description("Name of the metric whose history to query."),
-                                requestFields.withPath("interval").description("The resolution of the history. The history result will contain one data point in each interval. Can be one of DAY, WEEK, MONTH or YEAR."))))
                 .andReturn();
 
         MetricValueHistoryResource historyResource = fromJson(result.getResponse().getContentAsString(), MetricValueHistoryResource.class);
@@ -119,7 +113,45 @@ public class CommitMetricValuesControllerTest extends ControllerTestTemplate {
         assertThat(historyResource.getPoints()).contains(new DayPoint(new Day(2016, 3, 1), 26L));
     }
 
+    @Test
+    @DatabaseSetup(SINGLE_PROJECT_WITH_METRICS)
+    @ExpectedDatabase(SINGLE_PROJECT_WITH_METRICS)
+    @SuppressWarnings("unchecked")
+    public void historyByWeek() throws Exception {
 
+        CommitMetricsHistoryQuery query = new CommitMetricsHistoryQuery();
+
+        query.setDateRange(new DateRange(LocalDate.of(2016, 2, 1), LocalDate.of(2016, 4, 1)));
+        query.setMetric("metric1");
+        query.setInterval(Interval.WEEK);
+
+        ConstrainedFields requestFields = fields(CommitMetricsHistoryQuery.class);
+
+        MvcResult result = mvc().perform(get("/projects/1/metricvalues/history")
+                .content(toJsonWithoutLinks(query))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(containsResource(MetricValueHistoryResource.class))
+                .andDo(document("metrics/history/metrics",
+                        requestFields(
+                                requestFields.withPath("dateRange.startDate").description("Date from which to start the metric history."),
+                                requestFields.withPath("dateRange.endDate").description("Date at which to end the metric history."),
+                                requestFields.withPath("metric").description("Name of the metric whose history to query."),
+                                requestFields.withPath("interval").description("The resolution of the history. The history result will contain one data point in each interval. Can be one of DAY, WEEK, MONTH or YEAR."))))
+                .andReturn();
+
+        MetricValueHistoryResource historyResource = fromJson(result.getResponse().getContentAsString(), MetricValueHistoryResource.class);
+        assertThat(historyResource.getPoints()).hasSize(9);
+        assertThat(historyResource.getPoints()).contains(new WeekPoint(new Week(2016, 5), 10L));
+        assertThat(historyResource.getPoints()).contains(new WeekPoint(new Week(2016, 6), 10L));
+        assertThat(historyResource.getPoints()).contains(new WeekPoint(new Week(2016, 7), 10L));
+        assertThat(historyResource.getPoints()).contains(new WeekPoint(new Week(2016, 8), 10L));
+        assertThat(historyResource.getPoints()).contains(new WeekPoint(new Week(2016, 9), 26L));
+        assertThat(historyResource.getPoints()).contains(new WeekPoint(new Week(2016, 10), 26L));
+        assertThat(historyResource.getPoints()).contains(new WeekPoint(new Week(2016, 11), 26L));
+        assertThat(historyResource.getPoints()).contains(new WeekPoint(new Week(2016, 12), 26L));
+        assertThat(historyResource.getPoints()).contains(new WeekPoint(new Week(2016, 13), 73L));
+    }
 
 
 }

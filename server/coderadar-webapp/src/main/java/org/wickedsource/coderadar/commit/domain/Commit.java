@@ -164,7 +164,12 @@ public class Commit {
         this.sequenceNumber = sequenceNumber;
     }
 
-    DateCoordinates getDateCoordinates() {
+    /**
+     * The DateCoordinates contain each date unit (year, month, ...) in a separate field. This allows for easier
+     * SQL queries as well as easier computations with dates. Note that this field is set automatically when
+     * the timestamp field is set.
+     */
+    public DateCoordinates getDateCoordinates() {
         return dateCoordinates;
     }
 

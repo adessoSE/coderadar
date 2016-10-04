@@ -29,7 +29,11 @@ public class DateLocaleConfigurationParameter implements ConfigurationParameter<
     @Override
     public Locale getValue() {
         if (value.isPresent()) {
-            return LocaleUtils.toLocale(value.get());
+            try {
+                return LocaleUtils.toLocale(value.get());
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
         } else {
             return getDefaultValue().get();
         }
@@ -46,7 +50,7 @@ public class DateLocaleConfigurationParameter implements ConfigurationParameter<
             LocaleUtils.toLocale(value.get());
             return Collections.emptyList();
         } catch (IllegalArgumentException e) {
-            return Collections.singletonList(new ParameterValidationError(String.format("'%s' is an invalid Locale. Correct format would be something like 'en_us' (language_country).", this.value)));
+            return Collections.singletonList(new ParameterValidationError(String.format("'%s' is an invalid Locale. Correct format would be something like 'en_US' (language_country).", this.value.get())));
         }
     }
 }

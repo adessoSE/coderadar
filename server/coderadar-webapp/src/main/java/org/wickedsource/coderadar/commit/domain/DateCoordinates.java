@@ -24,6 +24,14 @@ public class DateCoordinates {
     @Column(nullable = false)
     private Integer yearOfWeek;
 
+    public DateCoordinates() {
+
+    }
+
+    public DateCoordinates(Date date, Locale locale) {
+        updateFromDate(date, locale);
+    }
+
     public Integer getYear() {
         return year;
     }
@@ -78,8 +86,8 @@ public class DateCoordinates {
         this.weekOfYear = c.get(Calendar.WEEK_OF_YEAR);
 
         if (weekOfYear == 1 && c.get(Calendar.DAY_OF_YEAR) > 7) {
-            // it's the first week of the next year!
-            this.yearOfWeek = this.year + 1;
+            // it's the first week of the current year!
+            this.yearOfWeek = this.year;
         } else if (weekOfYear >= 52 && c.get(Calendar.DAY_OF_YEAR) < 358) {
             // it's the last week of the previous year!
             this.yearOfWeek = this.year - 1;

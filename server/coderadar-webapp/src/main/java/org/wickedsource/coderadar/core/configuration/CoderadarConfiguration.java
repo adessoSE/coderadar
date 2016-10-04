@@ -55,15 +55,10 @@ public class CoderadarConfiguration {
     public void checkConfiguration() {
         int errorCount = 0;
         for (ConfigurationParameter<?> param : this.configurationParameters) {
-            // null check
-            if (param.getValue() == null && !param.getDefaultValue().isPresent()) {
-                logger.error("Configuration parameter '{}' is not set and has no default value!", param.getName());
-                errorCount++;
-            } else if (param.getDefaultValue().isPresent()) {
-                logger.info("Setting configuration parameter '{}' to default value '{}' since not value was specified.", param.getName(), param.getDefaultValue().get());
-            } else {
-                // validation only if null check was successful
-                List<ParameterValidationError> validationErrors = param.validate();
+            List<ParameterValidationError> validationErrors = param.validate();
+
+            // log validation errors
+            if (!validationErrors.isEmpty()) {
                 for (ParameterValidationError validationError : validationErrors) {
                     if (validationError.getException() == null) {
                         logger.error("Configuration parameter '{}' has an invalid value. Message: {}", param.getName(), validationError.getMessage());
@@ -72,14 +67,29 @@ public class CoderadarConfiguration {
                     }
                     errorCount++;
                 }
-                if (validationErrors.isEmpty()) {
-                    logger.info("Setting configuration parameter '{}' to value '{}'.", param.getName(), param.getValue());
-                }
+                continue;
             }
+
+            // null check only if validation was successful
+            if (param.getValue() == null && !param.getDefaultValue().isPresent()) {
+                logger.error("Configuration parameter '{}' is not set and has no default value!", param.getName());
+                errorCount++;
+                continue;
+            }
+
+            // fallback to default value
+            if (param.getValue() == null && param.getDefaultValue().isPresent()) {
+                logger.info("Setting configuration parameter '{}' to default value '{}' since no value was specified.", param.getName(), param.getDefaultValue().get());
+                continue;
+            }
+
+            // take specified value
+            logger.info("Setting configuration parameter '{}' to value '{}'.", param.getName(), param.getValue());
         }
         if (errorCount > 0) {
             throw new ConfigurationException(errorCount);
         }
+
     }
 
 

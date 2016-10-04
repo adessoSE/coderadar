@@ -2,7 +2,11 @@ package org.wickedsource.coderadar.core.rest.dates.series;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.wickedsource.coderadar.core.rest.dates.Week;
+import org.wickedsource.coderadar.core.rest.dates.serialize.WeekDeserializer;
+import org.wickedsource.coderadar.core.rest.dates.serialize.WeekSerializer;
 
 @JsonTypeName("week")
 public class WeekPoint extends Point<Week, Long> {
@@ -22,6 +26,8 @@ public class WeekPoint extends Point<Week, Long> {
     }
 
     @Override
+    @JsonSerialize(using = WeekSerializer.class)
+    @JsonDeserialize(using = WeekDeserializer.class)
     public Week getX() {
         return week;
     }

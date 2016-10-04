@@ -1,7 +1,7 @@
 package org.wickedsource.coderadar.core.rest.dates.serialize;
 
 import org.junit.Test;
-import org.wickedsource.coderadar.core.rest.dates.Day;
+import org.wickedsource.coderadar.core.rest.dates.Week;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -9,15 +9,15 @@ import java.io.StringWriter;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.wickedsource.coderadar.core.rest.dates.serialize.ObjectMapperProvider.mapper;
 
-public class DaySerializerTest {
+public class WeekSerializerTest {
 
     @Test
     public void serialize() throws IOException {
-        Day day = new Day(2016, 5, 13);
+        Week week = new Week(2016, 5);
         StringWriter writer = new StringWriter();
-        mapper().writeValue(writer, day);
+        mapper().writeValue(writer, week);
         String json = writer.toString();
-        assertThat(json).isEqualTo("[2016,5,13]");
+        assertThat(json).isEqualTo("[2016,5]");
     }
 
 }

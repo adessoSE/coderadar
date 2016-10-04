@@ -42,4 +42,15 @@ public interface CommitRepository extends PagingAndSortingRepository<Commit, Lon
      */
     @Query(name = "Commit.findLastForEachDay")
     List<Commit> findLastForEachDay(@Param("projectId") Long projectId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    /**
+     * Returns the last Commit of each week in the given date range.
+     *
+     * @param projectId ID of the project whose commits to consider.
+     * @param startDate start date of date range in which to consider commits.
+     * @param endDate   end date of date range in which to consider commits.
+     * @return List of commits, each being the last commit of a week.
+     */
+    @Query(name = "Commit.findLastForEachWeek")
+    List<Commit> findLastForEachWeek(@Param("projectId") Long projectId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 }

@@ -19,7 +19,8 @@ import org.wickedsource.coderadar.CoderadarTestApplication;
 @SpringBootTest(classes = CoderadarTestApplication.class, properties = {
         "coderadar.master=false",
         "coderadar.slave=false",
-        "coderadar.workdir=build/coderadar-workdir"
+        "coderadar.workdir=build/coderadar-workdir",
+        "coderadar.dateLocale=de_DE"
 })
 @WebAppConfiguration
 public abstract class IntegrationTestTemplate extends TestTemplate {
