@@ -1,7 +1,8 @@
 package org.wickedsource.coderadar.core.configuration.configparams;
 
 import org.apache.commons.lang3.LocaleUtils;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -18,8 +19,12 @@ public class DateLocaleConfigurationParameter implements ConfigurationParameter<
 
     public static final String NAME = "coderadar.dateLocale";
 
-    @Value("${coderadar.dateLocale:}")
-    private Optional<String> value;
+    private Environment environment;
+
+    @Autowired
+    public DateLocaleConfigurationParameter(Environment environment) {
+        this.environment = environment;
+    }
 
     @Override
     public String getName() {
@@ -27,15 +32,15 @@ public class DateLocaleConfigurationParameter implements ConfigurationParameter<
     }
 
     @Override
-    public Locale getValue() {
-        if (value.isPresent()) {
+    public Optional<Locale> getValue() {
+        if (envProperty() != null) {
             try {
-                return LocaleUtils.toLocale(value.get());
+                return Optional.of(LocaleUtils.toLocale(envProperty()));
             } catch (IllegalArgumentException e) {
-                return null;
+                return Optional.empty();
             }
         } else {
-            return null;
+            return getDefaultValue();
         }
     }
 
@@ -45,15 +50,24 @@ public class DateLocaleConfigurationParameter implements ConfigurationParameter<
     }
 
     @Override
+    public boolean hasFallenBackOnDefaultValue() {
+        return envProperty() == null;
+    }
+
+    @Override
     public List<ParameterValidationError> validate() {
-        if (!value.isPresent()) {
+        if (envProperty() == null) {
             return Collections.emptyList();
         }
         try {
-            LocaleUtils.toLocale(value.get());
+            LocaleUtils.toLocale(envProperty());
             return Collections.emptyList();
         } catch (IllegalArgumentException e) {
-            return Collections.singletonList(new ParameterValidationError(String.format("'%s' is an invalid Locale. Correct format would be something like 'en_US' (language_country).", this.value.get())));
+            return Collections.singletonList(new ParameterValidationError(String.format("'%s' is an invalid Locale. Correct format would be something like 'en_US' (language_country).", envProperty())));
         }
+    }
+
+    private String envProperty() {
+        return environment.getProperty(NAME);
     }
 }

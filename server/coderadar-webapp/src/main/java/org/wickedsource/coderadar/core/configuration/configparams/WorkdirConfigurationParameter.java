@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.core.configuration.configparams;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -18,8 +19,12 @@ public class WorkdirConfigurationParameter implements ConfigurationParameter<Pat
 
     public static final String NAME = "coderadar.workdir";
 
-    @Value("${coderadar.workdir:}")
-    private Optional<String> value;
+    private Environment environment;
+
+    @Autowired
+    public WorkdirConfigurationParameter(Environment environment) {
+        this.environment = environment;
+    }
 
     @Override
     public String getName() {
@@ -27,11 +32,11 @@ public class WorkdirConfigurationParameter implements ConfigurationParameter<Pat
     }
 
     @Override
-    public Path getValue() {
-        if (value.isPresent()) {
-            return Paths.get(this.value.get());
+    public Optional<Path> getValue() {
+        if (envProperty() != null) {
+            return Optional.of(Paths.get(envProperty()));
         } else {
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -41,22 +46,31 @@ public class WorkdirConfigurationParameter implements ConfigurationParameter<Pat
     }
 
     @Override
+    public boolean hasFallenBackOnDefaultValue() {
+        return false;
+    }
+
+    @Override
     public List<ParameterValidationError> validate() {
-        if (!this.value.isPresent()) {
+        if (envProperty() == null) {
             return Collections.emptyList();
         }
 
         try {
-            File dir = Paths.get(this.value.get()).toFile();
+            File dir = Paths.get(envProperty()).toFile();
             if (dir.exists()) {
                 return Collections.emptyList();
             }
             if (!dir.mkdirs()) {
-                return Collections.singletonList(new ParameterValidationError(String.format("Could not create directory '%s'!", this.value)));
+                return Collections.singletonList(new ParameterValidationError(String.format("Could not create directory '%s'!", envProperty())));
             }
             return Collections.emptyList();
         } catch (SecurityException e) {
-            return Collections.singletonList(new ParameterValidationError(String.format("Could not access directory '%s' due to %s", this.value, e.getClass().getName()), e));
+            return Collections.singletonList(new ParameterValidationError(String.format("Could not access directory '%s' due to %s", envProperty(), e.getClass().getName()), e));
         }
+    }
+
+    private String envProperty() {
+        return environment.getProperty(NAME);
     }
 }

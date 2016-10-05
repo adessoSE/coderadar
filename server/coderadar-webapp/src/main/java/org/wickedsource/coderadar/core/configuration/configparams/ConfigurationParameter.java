@@ -17,16 +17,22 @@ public interface ConfigurationParameter<T> {
     String getName();
 
     /**
-     * Returns the value of the configuration parameter. Must return null if the value for this configuration parameter is not set.
-     * Must not return the default value in this case!
+     * Returns the value of the configuration parameter. If no value is explicitly set, may return a default value (in this case
+     * hasDefaultValue() and hasFallenBackOnDefaultValue() must both return true!). If no value is available,
+     * must return an empty Optional.
      */
-    T getValue();
+    Optional<T> getValue();
 
     /**
-     * Returns the default value for this configuration parameter. An empty Optional result is interpreted as "no default value present" and
-     * application startup will fail if no explicit parameter value is defined.
+     * If this configuration parameter has a default value, return it. Otherwise return an empty Optional.
      */
     Optional<T> getDefaultValue();
+
+    /**
+     * Returns true if no specific value has been set for this configuration parameter and thus getValue() returns the
+     * default value. If this method returns true, getDefaultValue() must not return an empty Optional!
+     */
+    boolean hasFallenBackOnDefaultValue();
 
     /**
      * Validates the configuration parameter value. Returns a {@link ParameterValidationError} object for each

@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.core.configuration.configparams;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -15,8 +16,12 @@ public class ScanIntervalConfigurationParameter implements ConfigurationParamete
 
     public static final String NAME = "coderadar.scanIntervalInSeconds";
 
-    @Value("${coderadar.scanIntervalInSeconds:}")
-    private Optional<Integer> value;
+    private Environment environment;
+
+    @Autowired
+    public ScanIntervalConfigurationParameter(Environment environment) {
+        this.environment = environment;
+    }
 
 
     @Override
@@ -25,11 +30,11 @@ public class ScanIntervalConfigurationParameter implements ConfigurationParamete
     }
 
     @Override
-    public Integer getValue() {
-        if (value.isPresent()) {
-            return value.get();
+    public Optional<Integer> getValue() {
+        if (envProperty() != null) {
+            return Optional.of(Integer.valueOf(envProperty()));
         } else {
-            return getDefaultValue().get();
+            return getDefaultValue();
         }
     }
 
@@ -39,7 +44,19 @@ public class ScanIntervalConfigurationParameter implements ConfigurationParamete
     }
 
     @Override
+    public boolean hasFallenBackOnDefaultValue() {
+        return envProperty() == null;
+    }
+
+    @Override
     public List<ParameterValidationError> validate() {
+        if (!envProperty().matches("^[0-9]+$")) {
+            return Collections.singletonList(new ParameterValidationError(String.format("'%s' is not a valid integer!", envProperty())));
+        }
         return Collections.emptyList();
+    }
+
+    private String envProperty() {
+        return environment.getProperty(NAME);
     }
 }

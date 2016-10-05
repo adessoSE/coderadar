@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.core.configuration.configparams;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -17,8 +18,12 @@ public class MasterConfigurationParameter implements ConfigurationParameter<Bool
 
     public static final String NAME = "coderadar.master";
 
-    @Value("${coderadar.master:}")
-    private Optional<Boolean> value;
+    private Environment environment;
+
+    @Autowired
+    public MasterConfigurationParameter(Environment environment) {
+        this.environment = environment;
+    }
 
 
     @Override
@@ -27,11 +32,11 @@ public class MasterConfigurationParameter implements ConfigurationParameter<Bool
     }
 
     @Override
-    public Boolean getValue() {
-        if (value.isPresent()) {
-            return value.get();
+    public Optional<Boolean> getValue() {
+        if (envProperty() != null) {
+            return Optional.of(Boolean.valueOf(envProperty()));
         } else {
-            return null;
+            return Optional.empty();
         }
     }
 
@@ -41,7 +46,16 @@ public class MasterConfigurationParameter implements ConfigurationParameter<Bool
     }
 
     @Override
+    public boolean hasFallenBackOnDefaultValue() {
+        return false;
+    }
+
+    @Override
     public List<ParameterValidationError> validate() {
         return Collections.emptyList();
+    }
+
+    private String envProperty() {
+        return environment.getProperty(NAME);
     }
 }

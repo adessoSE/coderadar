@@ -85,19 +85,19 @@ public class CoderadarConfiguration {
         }
 
         // null check only if validation was successful
-        if (param.getValue() == null && !param.getDefaultValue().isPresent()) {
+        if (!param.getValue().isPresent() && !param.getDefaultValue().isPresent()) {
             logger.error("Configuration parameter '{}' is not set and has no default value!", param.getName());
             return false;
         }
 
         // fallback to default value
-        if (param.getValue() == null && param.getDefaultValue().isPresent()) {
-            logger.info("Setting configuration parameter '{}' to default value '{}' since no value was specified.", param.getName(), param.getDefaultValue().get());
+        if (param.getValue().isPresent() && param.hasFallenBackOnDefaultValue()) {
+            logger.info("Setting configuration parameter '{}' to default value '{}' since no value was specified.", param.getName(), param.getValue().get());
             return true;
         }
 
         // take specified value
-        logger.info("Setting configuration parameter '{}' to value '{}'.", param.getName(), param.getValue());
+        logger.info("Setting configuration parameter '{}' to value '{}'.", param.getName(), param.getValue().get());
         return true;
     }
 
@@ -106,14 +106,14 @@ public class CoderadarConfiguration {
      * @see MasterConfigurationParameter
      */
     public boolean isMaster() {
-        return master.getValue();
+        return master.getValue().get();
     }
 
     /**
      * @see SlaveConfigurationParameter
      */
     public boolean isSlave() {
-        return slave.getValue();
+        return slave.getValue().get();
     }
 
 
@@ -121,21 +121,21 @@ public class CoderadarConfiguration {
      * @see WorkdirConfigurationParameter
      */
     public Path getWorkdir() {
-        return workdir.getValue();
+        return workdir.getValue().get();
     }
 
     /**
      * @see ScanIntervalConfigurationParameter
      */
     public int getScanIntervalInSeconds() {
-        return scanInterval.getValue();
+        return scanInterval.getValue().get();
     }
 
     /**
      * @see DateLocaleConfigurationParameter
      */
     public Locale getDateLocale() {
-        return dateLocale.getValue();
+        return dateLocale.getValue().get();
     }
 
 }
