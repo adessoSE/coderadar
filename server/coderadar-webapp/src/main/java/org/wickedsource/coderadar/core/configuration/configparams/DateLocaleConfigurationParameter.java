@@ -35,7 +35,7 @@ public class DateLocaleConfigurationParameter implements ConfigurationParameter<
                 return null;
             }
         } else {
-            return getDefaultValue().get();
+            return null;
         }
     }
 
@@ -46,6 +46,9 @@ public class DateLocaleConfigurationParameter implements ConfigurationParameter<
 
     @Override
     public List<ParameterValidationError> validate() {
+        if (!value.isPresent()) {
+            return Collections.emptyList();
+        }
         try {
             LocaleUtils.toLocale(value.get());
             return Collections.emptyList();

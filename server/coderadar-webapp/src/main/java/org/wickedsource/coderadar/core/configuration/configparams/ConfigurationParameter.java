@@ -17,11 +17,8 @@ public interface ConfigurationParameter<T> {
     String getName();
 
     /**
-     * Returns the value of the configuration parameter.
-     * <ul>
-     * <li>must return null if the parameter value is not specified and no default value is present (i.e. {@link #getDefaultValue()} returns an empty Optional)</li>
-     * <li>must return the same result as {@link #getDefaultValue()} if the parameter value is not specified and {@link #getDefaultValue()} returns an non-empty Optional.</li>
-     * </ul>
+     * Returns the value of the configuration parameter. Must return null if the value for this configuration parameter is not set.
+     * Must not return the default value in this case!
      */
     T getValue();
 
@@ -35,6 +32,8 @@ public interface ConfigurationParameter<T> {
      * Validates the configuration parameter value. Returns a {@link ParameterValidationError} object for each
      * issue with the parameter value. The error messages are logged at ERROR level so the user
      * can quickly see what's wrong and thus should contain meaningful error messages.
+     * <p/>
+     * This validation does not need to check on
      */
     List<ParameterValidationError> validate();
 

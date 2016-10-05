@@ -42,6 +42,10 @@ public class WorkdirConfigurationParameter implements ConfigurationParameter<Pat
 
     @Override
     public List<ParameterValidationError> validate() {
+        if (!this.value.isPresent()) {
+            return Collections.emptyList();
+        }
+
         try {
             File dir = Paths.get(this.value.get()).toFile();
             if (dir.exists()) {

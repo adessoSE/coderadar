@@ -55,41 +55,50 @@ public class CoderadarConfiguration {
     public void checkConfiguration() {
         int errorCount = 0;
         for (ConfigurationParameter<?> param : this.configurationParameters) {
-            List<ParameterValidationError> validationErrors = param.validate();
-
-            // log validation errors
-            if (!validationErrors.isEmpty()) {
-                for (ParameterValidationError validationError : validationErrors) {
-                    if (validationError.getException() == null) {
-                        logger.error("Configuration parameter '{}' has an invalid value. Message: {}", param.getName(), validationError.getMessage());
-                    } else {
-                        logger.error("Configuration parameter '{}' has an invalid value. Message: {}. Stacktrace: ", param.getName(), validationError.getMessage(), validationError.getException());
-                    }
-                    errorCount++;
-                }
-                continue;
-            }
-
-            // null check only if validation was successful
-            if (param.getValue() == null && !param.getDefaultValue().isPresent()) {
-                logger.error("Configuration parameter '{}' is not set and has no default value!", param.getName());
+            if (!isConfigParamValid(param)) {
                 errorCount++;
-                continue;
             }
-
-            // fallback to default value
-            if (param.getValue() == null && param.getDefaultValue().isPresent()) {
-                logger.info("Setting configuration parameter '{}' to default value '{}' since no value was specified.", param.getName(), param.getDefaultValue().get());
-                continue;
-            }
-
-            // take specified value
-            logger.info("Setting configuration parameter '{}' to value '{}'.", param.getName(), param.getValue());
         }
         if (errorCount > 0) {
             throw new ConfigurationException(errorCount);
         }
 
+    }
+
+    /**
+     * Checks if a config parameter is set to a valid value and provides some log output for finding configuration
+     * errors quickly.
+     */
+    protected boolean isConfigParamValid(ConfigurationParameter<?> param) {
+        List<ParameterValidationError> validationErrors = param.validate();
+
+        // log validation errors
+        if (!validationErrors.isEmpty()) {
+            for (ParameterValidationError validationError : validationErrors) {
+                if (validationError.getException() == null) {
+                    logger.error("Configuration parameter '{}' has an invalid value. Message: {}", param.getName(), validationError.getMessage());
+                } else {
+                    logger.error("Configuration parameter '{}' has an invalid value. Message: {}. Stacktrace: ", param.getName(), validationError.getMessage(), validationError.getException());
+                }
+            }
+            return false;
+        }
+
+        // null check only if validation was successful
+        if (param.getValue() == null && !param.getDefaultValue().isPresent()) {
+            logger.error("Configuration parameter '{}' is not set and has no default value!", param.getName());
+            return false;
+        }
+
+        // fallback to default value
+        if (param.getValue() == null && param.getDefaultValue().isPresent()) {
+            logger.info("Setting configuration parameter '{}' to default value '{}' since no value was specified.", param.getName(), param.getDefaultValue().get());
+            return true;
+        }
+
+        // take specified value
+        logger.info("Setting configuration parameter '{}' to value '{}'.", param.getName(), param.getValue());
+        return true;
     }
 
 
