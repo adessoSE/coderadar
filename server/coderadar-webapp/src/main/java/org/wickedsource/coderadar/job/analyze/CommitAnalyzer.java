@@ -105,9 +105,9 @@ public class CommitAnalyzer {
         List<AnalyzerConfiguration> configs = analyzerConfigurationRepository.findByProjectId(project.getId());
         for (AnalyzerConfiguration config : configs) {
             AnalyzerConfigurationFile configFile = analyzerConfigurationFileRepository.findByAnalyzerConfigurationProjectIdAndAnalyzerConfigurationId(project.getId(), config.getId());
-            if(configFile != null){
+            if (configFile != null) {
                 analyzers.add(analyzerRegistry.createAnalyzer(config.getAnalyzerName(), configFile.getFileData()));
-            }else {
+            } else {
                 analyzers.add(analyzerRegistry.createAnalyzer(config.getAnalyzerName()));
             }
         }
@@ -165,7 +165,7 @@ public class CommitAnalyzer {
     }
 
     private void storeMetrics(Commit commit, String filePath, FileMetrics metrics) {
-        File file = fileRepository.findInCommit(filePath, commit.getName(), commit.getProject().getId());
+        File file = findInCommit(filePath, commit);
         if (file == null) {
             throw new IllegalStateException(String.format("file %s not found for commit %s in database!", filePath, commit.getName()));
         }
@@ -176,7 +176,7 @@ public class CommitAnalyzer {
             metricValueRepository.save(metricValue);
 
 
-            for(Finding finding : metrics.getFindings(metric)){
+            for (Finding finding : metrics.getFindings(metric)) {
                 org.wickedsource.coderadar.metric.domain.finding.Finding entity = new org.wickedsource.coderadar.metric.domain.finding.Finding();
                 entity.setId(id);
                 entity.setLineStart(finding.getLineStart());
@@ -187,6 +187,25 @@ public class CommitAnalyzer {
             }
         }
     }
+
+    private File findInCommit(String filePath, Commit commit) {
+        List<File> files = fileRepository.findInCommit(filePath, commit.getName(), commit.getProject().getId());
+        if (files.size() == 1) {
+            return files.get(0);
+        } else if (files.size() > 1) {
+            // Usually, we only get one file as result. However in the exotic case that MySQL is used (whose queries
+            // are case insensitive by default) and the same file exists in the database more than once with different
+            // upper or lower case characters, we can have more than one result. In this case, we select the correct
+            // file by hand.
+            for (File file : files) {
+                if (file.getFilepath().equals(filePath)) {
+                    return file;
+                }
+            }
+        }
+        throw new IllegalStateException(String.format("could not find file '%s' in commit %s", filePath, commit.getName()));
+    }
+
 
     private FileMatchingPattern toFileMatchingPattern(List<FilePattern> filePatternList) {
         FileMatchingPattern pattern = new FileMatchingPattern();
