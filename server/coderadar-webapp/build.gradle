@@ -130,8 +130,9 @@ bootRun {
                     // coderadar settings for server instance
                     "-Dcoderadar.master=true",
                     "-Dcoderadar.slave=true",
-                    "-Dcoderadar.scanIntervalInSeconds=asd",
+                    "-Dcoderadar.scanIntervalInSeconds=30",
                     "-Dcoderadar.workdir=coderadar-workdir",
+                    "-Dcoderadar.dateLocale=de_DE",
 
                     // hibernate
                     "-Dspring.jpa.hibernate.ddl-auto=create-drop",

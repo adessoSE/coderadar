@@ -37,6 +37,7 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
     @Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
 
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);

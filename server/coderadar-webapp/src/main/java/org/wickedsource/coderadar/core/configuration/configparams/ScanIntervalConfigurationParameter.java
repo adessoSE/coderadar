@@ -50,7 +50,7 @@ public class ScanIntervalConfigurationParameter implements ConfigurationParamete
 
     @Override
     public List<ParameterValidationError> validate() {
-        if (!envProperty().matches("^[0-9]+$")) {
+        if (envProperty() != null && !envProperty().matches("^[0-9]+$")) {
             return Collections.singletonList(new ParameterValidationError(String.format("'%s' is not a valid integer!", envProperty())));
         }
         return Collections.emptyList();
