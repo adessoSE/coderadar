@@ -27,12 +27,3 @@ dependencies:
     - mkdir -p $CIRCLE_ARTIFACTS/build-artifacts
     - cp -a server/coderadar-webapp/build/libs/coderadar-webapp-*.jar $CIRCLE_ARTIFACTS/build-artifacts/
 
-test:
-  pre:
-  override:
-  post:
-
-deployment:
-  hub:
-    branch: master
-    commands:

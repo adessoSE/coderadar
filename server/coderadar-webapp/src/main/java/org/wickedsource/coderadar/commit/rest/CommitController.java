@@ -31,7 +31,7 @@ public class CommitController {
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
-    public ResponseEntity<PagedResources<CommitResource>> listCommits(@PageableDefault Pageable pageable, PagedResourcesAssembler pagedResourcesAssembler, @PathVariable long projectId) {
+    public ResponseEntity<PagedResources<CommitResource>> listCommits(@PageableDefault Pageable pageable, PagedResourcesAssembler<Commit> pagedResourcesAssembler, @PathVariable long projectId) {
         Page<Commit> commitsPage = commitRepository.findAll(pageable);
         CommitResourceAssembler commitResourceAssembler = new CommitResourceAssembler(projectId);
         PagedResources<CommitResource> pagedResources = pagedResourcesAssembler.toResource(commitsPage, commitResourceAssembler);
