@@ -2,10 +2,6 @@ apply plugin: 'idea'
 
 version= '1.0.0-SNAPSHOT'
 
-ext {
-    dockerGroup = 'thombergs'
-}
-
 subprojects{
     apply plugin: 'idea'
     apply plugin: 'java'

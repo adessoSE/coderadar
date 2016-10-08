@@ -15,7 +15,6 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE")
         classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
-        classpath "se.transmode.gradle:gradle-docker:1.2"
         classpath "org.ajoberstar:gradle-git:1.5.1"
     }
 }
@@ -23,7 +22,6 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'spring-boot'
 apply plugin: 'org.asciidoctor.convert'
-apply plugin: 'docker'
 apply plugin: 'org.ajoberstar.github-pages'
 
 group = 'org.wickedsource'
@@ -156,28 +154,6 @@ bootRun {
                     "-Dmanagement.security.roles=SUPERUSER",
 
             ]
-}
-
-task buildDocker(type: Docker, dependsOn: build) {
-    push = false
-    tagVersion = 'latest'
-    tag = "${project.dockerGroup}/coderadar-server"
-
-    dockerfile = file('src/main/docker/Dockerfile')
-    doFirst {
-        copy {
-            from("${project.buildDir}/libs/") {
-                rename "${jar.baseName}-.*\\.jar", "${jar.baseName}.jar"
-            }
-            into stageDir
-            exclude '*.original'
-        }
-        copy {
-            from "${projectDir}/src/main/docker"
-            into stageDir
-            include 'application.properties'
-        }
-    }
 }
 
 githubPages {
