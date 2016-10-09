@@ -12,8 +12,6 @@ v{version}, Tom Hombergs, {date}
 
 The coderadar server is a tool for continuous source code analysis. This document describes the REST API of the coderadar server.
 
-The chapter <<creating-analyzing-strategy,Analyzing Strategy>>
-
 == Usage of HTTP Verbs
 
 The following table describes how the coderadar API interprets the HTTP verbs.
