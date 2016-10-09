@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v1.0.0-SNAPSHOT, Tom Hombergs, 2016-08-14">
+<meta name="author" content="v1.0.0-SNAPSHOT, Tom Hombergs, 2016-10-09">
 <title>coderadar REST API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -423,7 +423,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v1.0.0-SNAPSHOT, Tom Hombergs, 2016-08-14</span><br>
+<span id="author" class="author">v1.0.0-SNAPSHOT, Tom Hombergs, 2016-10-09</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -452,18 +452,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_deleting_a_project">Deleting a Project</a></li>
 </ul>
 </li>
-<li><a href="#_file_patterns">File Patterns</a>
+<li><a href="#_modules">Modules</a>
 <ul class="sectlevel2">
 <li><a href="#_structure_2">Structure</a></li>
 <li><a href="#_hypermedia_links_2">Hypermedia Links</a></li>
+<li><a href="#_creating_a_module">Creating a Module</a></li>
+<li><a href="#_updating_a_module">Updating a Module</a></li>
+<li><a href="#_listing_all_modules_of_a_project">Listing all Modules of a Project</a></li>
+<li><a href="#_deleting_a_module">Deleting a Module</a></li>
+</ul>
+</li>
+<li><a href="#_file_patterns">File Patterns</a>
+<ul class="sectlevel2">
+<li><a href="#_structure_3">Structure</a></li>
+<li><a href="#_hypermedia_links_3">Hypermedia Links</a></li>
 <li><a href="#_listing_a_project_s_file_patterns">Listing a Project&#8217;s File Patterns</a></li>
 <li><a href="#_setting_a_project_s_file_patterns">Setting a Project&#8217;s File Patterns</a></li>
 </ul>
 </li>
 <li><a href="#_analyzer_configuration">Analyzer Configuration</a>
 <ul class="sectlevel2">
-<li><a href="#_structure_3">Structure</a></li>
-<li><a href="#_hypermedia_links_3">Hypermedia Links</a></li>
+<li><a href="#_structure_4">Structure</a></li>
+<li><a href="#_hypermedia_links_4">Hypermedia Links</a></li>
 <li><a href="#_adding_an_analyzer_configuration">Adding an Analyzer Configuration</a></li>
 <li><a href="#_deleting_an_analyzer_configuration">Deleting an Analyzer Configuration</a></li>
 <li><a href="#_updating_an_analyzer_configuration">Updating an Analyzer Configuration</a></li>
@@ -479,16 +489,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_analyzing_strategy">Analyzing Strategy</a>
 <ul class="sectlevel2">
-<li><a href="#_structure_4">Structure</a></li>
-<li><a href="#_hypermedia_links_4">Hypermedia Links</a></li>
+<li><a href="#_structure_5">Structure</a></li>
+<li><a href="#_hypermedia_links_5">Hypermedia Links</a></li>
 <li><a href="#_setting_a_project_s_analyzing_strategy">Setting a Project&#8217;s Analyzing Strategy</a></li>
 <li><a href="#_getting_a_project_s_analyzing_strategy">Getting a Project&#8217;s Analyzing Strategy</a></li>
 </ul>
 </li>
 <li><a href="#_quality_profile">Quality Profile</a>
 <ul class="sectlevel2">
-<li><a href="#_structure_5">Structure</a></li>
-<li><a href="#_hypermedia_links_5">Hypermedia Links</a></li>
+<li><a href="#_structure_6">Structure</a></li>
+<li><a href="#_hypermedia_links_6">Hypermedia Links</a></li>
 <li><a href="#_creating_a_quality_profile">Creating a Quality Profile</a></li>
 <li><a href="#_updating_a_quality_profile">Updating a Quality Profile</a></li>
 <li><a href="#_loading_a_single_quality_profile">Loading a single Quality Profile</a></li>
@@ -498,13 +508,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
-<li><a href="#_accessing_project_and_system_data">Accessing Project and System Data</a>
+<li><a href="#_querying_global_data">Querying Global Data</a>
 <ul class="sectlevel1">
 <li><a href="#_analyzer">Analyzer</a>
 <ul class="sectlevel2">
 <li><a href="#_listing_available_analyzers">Listing available Analyzers</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a href="#_querying_project_data">Querying Project Data</a>
+<ul class="sectlevel1">
 <li><a href="#_metric">Metric</a>
 <ul class="sectlevel2">
 <li><a href="#_listing_available_metrics">Listing available Metrics</a></li>
@@ -512,15 +526,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_commit">Commit</a>
 <ul class="sectlevel2">
-<li><a href="#_structure_6">Structure</a></li>
-<li><a href="#_hypermedia_links_6">Hypermedia Links</a></li>
+<li><a href="#_structure_7">Structure</a></li>
+<li><a href="#_hypermedia_links_7">Hypermedia Links</a></li>
 <li><a href="#_listing_a_project_s_commits">Listing a Project&#8217;s Commits</a></li>
 </ul>
 </li>
 <li><a href="#_commit_metric_values">Commit Metric Values</a>
 <ul class="sectlevel2">
-<li><a href="#_querying_metric_values_of_commits">Querying Metric Values of Commits</a></li>
-<li><a href="#_querying_quality_profile_ratings_of_commits">Querying Quality Profile Ratings of Commits</a></li>
+<li><a href="#_querying_metric_values_of_a_commit">Querying Metric Values of a Commit</a></li>
+<li><a href="#_querying_quality_profile_ratings_of_a_commit">Querying Quality Profile Ratings of a Commit</a></li>
+<li><a href="#_querying_the_history_of_a_metric">Querying the History of a Metric</a></li>
 </ul>
 </li>
 </ul>
@@ -533,9 +548,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_introduction"><a class="link" href="#_introduction">Introduction</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The coderadar server is a tool for continuous source code analysis. To start analysis of your project,
-you only have to provide a few configuration parameters and let coderadar do the work. This document
-describes the REST API of the coderadar server.</p>
+<p>The coderadar server is a tool for continuous source code analysis. This document describes the REST API of the coderadar server.</p>
+</div>
+<div class="paragraph">
+<p>The chapter <a href="#creating-analyzing-strategy">Analyzing Strategy</a></p>
 </div>
 <div class="sect1">
 <h2 id="_usage_of_http_verbs"><a class="link" href="#_usage_of_http_verbs">Usage of HTTP Verbs</a></h2>
@@ -688,7 +704,12 @@ Content-Length: 204
 <h1 id="_configuring_a_project" class="sect0"><a class="link" href="#_configuring_a_project">Configuring a Project</a></h1>
 <div class="openblock partintro">
 <div class="content">
-This section describes the resources you can interact with to configure a project to be analyzed by coderadar.
+<div class="paragraph">
+<p><a id="chapter-configure"></a></p>
+</div>
+<div class="paragraph">
+<p>This section describes the resources you can interact with to configure a project to be analyzed by coderadar.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -796,7 +817,7 @@ Host: localhost</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 1198
 
 {
@@ -877,7 +898,7 @@ Content-Length: 129
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 485
 
 {
@@ -932,7 +953,7 @@ Content-Length: 151
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 489
 
 {
@@ -983,6 +1004,236 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_modules"><a class="link" href="#_modules">Modules</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Source code is usually arranged within multiple modules that each contains a set of source files.
+Using the following REST endpoints, you can provide coderadar with information about the modules within
+your codebase. Each module simply is a path into the VCS codebase. All files that are within that path
+are considered to be part of the module.</p>
+</div>
+<div class="sect2">
+<h3 id="_structure_2"><a class="link" href="#_structure_2">Structure</a></h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">modulePath</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The path of this module starting at the VCS root. All files below that path are considered to be part of the module.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_hypermedia_links_2"><a class="link" href="#_hypermedia_links_2">Hypermedia Links</a></h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Relation</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to this module.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project this module belongs to.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_creating_a_module"><a class="link" href="#_creating_a_module">Creating a Module</a></h3>
+<div class="sect3">
+<h4 id="_example_request_5"><a class="link" href="#_example_request_5">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/modules HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 80
+
+{
+  "modulePath" : "src/main/java/org/wickedsource/coderadar/TestClass.java"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_5"><a class="link" href="#_example_response_5">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
+Content-Type: application/hal+json;charset=UTF-8
+Content-Length: 264
+
+{
+  "modulePath" : "src/main/java/org/wickedsource/coderadar/TestClass.java",
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/modules/1"
+    },
+    "project" : {
+      "href" : "http://localhost:8080/projects/1"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_updating_a_module"><a class="link" href="#_updating_a_module">Updating a Module</a></h3>
+<div class="sect3">
+<h4 id="_example_request_6"><a class="link" href="#_example_request_6">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/modules/1 HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 87
+
+{
+  "modulePath" : "src/main/java/org/wickedsource/coderadar/AnotherTestClass.java"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_6"><a class="link" href="#_example_response_6">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json;charset=UTF-8
+Content-Length: 271
+
+{
+  "modulePath" : "src/main/java/org/wickedsource/coderadar/AnotherTestClass.java",
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/modules/1"
+    },
+    "project" : {
+      "href" : "http://localhost:8080/projects/1"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_listing_all_modules_of_a_project"><a class="link" href="#_listing_all_modules_of_a_project">Listing all Modules of a Project</a></h3>
+<div class="sect3">
+<h4 id="_example_request_7"><a class="link" href="#_example_request_7">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/modules HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_7"><a class="link" href="#_example_response_7">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json;charset=UTF-8
+Content-Length: 1208
+
+{
+  "_embedded" : {
+    "moduleResourceList" : [ {
+      "modulePath" : "src/main/java/org/wickedsource/coderadar/AnotherTestClass.java",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/projects/1/modules/1"
+        },
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    }, {
+      "modulePath" : "src/main/java/org/wickedsource/coderadar/AnotherTestClass2.java",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/projects/1/modules/2"
+        },
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    }, {
+      "modulePath" : "src/main/java/org/wickedsource/coderadar/AnotherTestClas3.java",
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/projects/1/modules/3"
+        },
+        "project" : {
+          "href" : "http://localhost:8080/projects/1"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/projects/1/modules"
+    }
+  },
+  "page" : {
+    "size" : 10,
+    "totalElements" : 3,
+    "totalPages" : 1,
+    "number" : 0
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_deleting_a_module"><a class="link" href="#_deleting_a_module">Deleting a Module</a></h3>
+<div class="sect3">
+<h4 id="_example_request_8"><a class="link" href="#_example_request_8">Example Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/modules/1 HTTP/1.1
+Host: localhost</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_8"><a class="link" href="#_example_response_8">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_file_patterns"><a class="link" href="#_file_patterns">File Patterns</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -996,7 +1247,7 @@ contained in a certain file set (like the SOURCE file set), coderadar will first
 patterns. Thus, the file set will include all INCLUDED files except those that were part of an EXCLUDE pattern.</p>
 </div>
 <div class="sect2">
-<h3 id="_structure_2"><a class="link" href="#_structure_2">Structure</a></h3>
+<h3 id="_structure_3"><a class="link" href="#_structure_3">Structure</a></h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 25%;">
@@ -1033,7 +1284,7 @@ patterns. Thus, the file set will include all INCLUDED files except those that w
 </table>
 </div>
 <div class="sect2">
-<h3 id="_hypermedia_links_2"><a class="link" href="#_hypermedia_links_2">Hypermedia Links</a></h3>
+<h3 id="_hypermedia_links_3"><a class="link" href="#_hypermedia_links_3">Hypermedia Links</a></h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 50%;">
@@ -1060,7 +1311,7 @@ patterns. Thus, the file set will include all INCLUDED files except those that w
 <div class="sect2">
 <h3 id="_listing_a_project_s_file_patterns"><a class="link" href="#_listing_a_project_s_file_patterns">Listing a Project&#8217;s File Patterns</a></h3>
 <div class="sect3">
-<h4 id="_example_request_5"><a class="link" href="#_example_request_5">Example Request</a></h4>
+<h4 id="_example_request_9"><a class="link" href="#_example_request_9">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/files HTTP/1.1
@@ -1069,11 +1320,11 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_5"><a class="link" href="#_example_response_5">Example Response</a></h4>
+<h4 id="_example_response_9"><a class="link" href="#_example_response_9">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 452
 
 {
@@ -1106,7 +1357,7 @@ Content-Length: 452
 all file patterns of a project at once.</p>
 </div>
 <div class="sect3">
-<h4 id="_example_request_6"><a class="link" href="#_example_request_6">Example Request</a></h4>
+<h4 id="_example_request_10"><a class="link" href="#_example_request_10">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/files HTTP/1.1
@@ -1129,11 +1380,11 @@ Content-Length: 272
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_6"><a class="link" href="#_example_response_6">Example Response</a></h4>
+<h4 id="_example_response_10"><a class="link" href="#_example_response_10">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 452
 
 {
@@ -1170,7 +1421,7 @@ you need (or you can use the analyzer plugins that are shipped with coderadar). 
 plugin via the AnalyzerConfiguration resource.</p>
 </div>
 <div class="sect2">
-<h3 id="_structure_3"><a class="link" href="#_structure_3">Structure</a></h3>
+<h3 id="_structure_4"><a class="link" href="#_structure_4">Structure</a></h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 25%;">
@@ -1201,7 +1452,7 @@ plugin via the AnalyzerConfiguration resource.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_hypermedia_links_3"><a class="link" href="#_hypermedia_links_3">Hypermedia Links</a></h3>
+<h3 id="_hypermedia_links_4"><a class="link" href="#_hypermedia_links_4">Hypermedia Links</a></h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 50%;">
@@ -1232,7 +1483,7 @@ plugin via the AnalyzerConfiguration resource.</p>
 <div class="sect2">
 <h3 id="_adding_an_analyzer_configuration"><a class="link" href="#_adding_an_analyzer_configuration">Adding an Analyzer Configuration</a></h3>
 <div class="sect3">
-<h4 id="_example_request_7"><a class="link" href="#_example_request_7">Example Request</a></h4>
+<h4 id="_example_request_11"><a class="link" href="#_example_request_11">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers HTTP/1.1
@@ -1248,11 +1499,11 @@ Content-Length: 104
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_7"><a class="link" href="#_example_response_7">Example Response</a></h4>
+<h4 id="_example_response_11"><a class="link" href="#_example_response_11">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 375
 
 {
@@ -1277,7 +1528,7 @@ Content-Length: 375
 <div class="sect2">
 <h3 id="_deleting_an_analyzer_configuration"><a class="link" href="#_deleting_an_analyzer_configuration">Deleting an Analyzer Configuration</a></h3>
 <div class="sect3">
-<h4 id="_example_request_8"><a class="link" href="#_example_request_8">Example Request</a></h4>
+<h4 id="_example_request_12"><a class="link" href="#_example_request_12">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/analyzers/2 HTTP/1.1
@@ -1286,7 +1537,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_8"><a class="link" href="#_example_response_8">Example Response</a></h4>
+<h4 id="_example_response_12"><a class="link" href="#_example_response_12">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
@@ -1297,7 +1548,7 @@ Host: localhost</code></pre>
 <div class="sect2">
 <h3 id="_updating_an_analyzer_configuration"><a class="link" href="#_updating_an_analyzer_configuration">Updating an Analyzer Configuration</a></h3>
 <div class="sect3">
-<h4 id="_example_request_9"><a class="link" href="#_example_request_9">Example Request</a></h4>
+<h4 id="_example_request_13"><a class="link" href="#_example_request_13">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers/1 HTTP/1.1
@@ -1313,11 +1564,11 @@ Content-Length: 105
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_9"><a class="link" href="#_example_response_9">Example Response</a></h4>
+<h4 id="_example_response_13"><a class="link" href="#_example_response_13">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 376
 
 {
@@ -1342,7 +1593,7 @@ Content-Length: 376
 <div class="sect2">
 <h3 id="_listing_a_project_s_analyzer_configurations"><a class="link" href="#_listing_a_project_s_analyzer_configurations">Listing a Project&#8217;s Analyzer Configurations</a></h3>
 <div class="sect3">
-<h4 id="_example_request_10"><a class="link" href="#_example_request_10">Example Request</a></h4>
+<h4 id="_example_request_14"><a class="link" href="#_example_request_14">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers HTTP/1.1
@@ -1351,11 +1602,11 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_10"><a class="link" href="#_example_response_10">Example Response</a></h4>
+<h4 id="_example_response_14"><a class="link" href="#_example_response_14">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 941
 
 {
@@ -1398,7 +1649,7 @@ Content-Length: 941
 <div class="sect2">
 <h3 id="_loading_a_single_analyzer_configuration"><a class="link" href="#_loading_a_single_analyzer_configuration">Loading a single Analyzer Configuration</a></h3>
 <div class="sect3">
-<h4 id="_example_request_11"><a class="link" href="#_example_request_11">Example Request</a></h4>
+<h4 id="_example_request_15"><a class="link" href="#_example_request_15">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers/1 HTTP/1.1
@@ -1407,11 +1658,11 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_11"><a class="link" href="#_example_response_11">Example Response</a></h4>
+<h4 id="_example_response_15"><a class="link" href="#_example_response_15">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 375
 
 {
@@ -1447,7 +1698,7 @@ the analyzer needs.</p>
 <div class="sect2">
 <h3 id="_uploading_an_analyzer_configuration_file"><a class="link" href="#_uploading_an_analyzer_configuration_file">Uploading an Analyzer Configuration File</a></h3>
 <div class="sect3">
-<h4 id="_example_request_12"><a class="link" href="#_example_request_12">Example Request</a></h4>
+<h4 id="_example_request_16"><a class="link" href="#_example_request_16">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers/1/file HTTP/1.1
@@ -1464,7 +1715,7 @@ abc
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_12"><a class="link" href="#_example_response_12">Example Response</a></h4>
+<h4 id="_example_response_16"><a class="link" href="#_example_response_16">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
@@ -1475,7 +1726,7 @@ abc
 <div class="sect2">
 <h3 id="_downloading_an_analyzer_configuration_file"><a class="link" href="#_downloading_an_analyzer_configuration_file">Downloading an Analyzer Configuration File</a></h3>
 <div class="sect3">
-<h4 id="_example_request_13"><a class="link" href="#_example_request_13">Example Request</a></h4>
+<h4 id="_example_request_17"><a class="link" href="#_example_request_17">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers/1/file HTTP/1.1
@@ -1484,7 +1735,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_13"><a class="link" href="#_example_response_13">Example Response</a></h4>
+<h4 id="_example_response_17"><a class="link" href="#_example_response_17">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -1507,7 +1758,7 @@ Analyzing Strategy present for a project, no analysis will be performed at all. 
 an Analyzing Strategy, analysis jobs will be queued automatically for the commits defined within the strategy.</p>
 </div>
 <div class="sect2">
-<h3 id="_structure_4"><a class="link" href="#_structure_4">Structure</a></h3>
+<h3 id="_structure_5"><a class="link" href="#_structure_5">Structure</a></h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 25%;">
@@ -1544,7 +1795,7 @@ an Analyzing Strategy, analysis jobs will be queued automatically for the commit
 </table>
 </div>
 <div class="sect2">
-<h3 id="_hypermedia_links_4"><a class="link" href="#_hypermedia_links_4">Hypermedia Links</a></h3>
+<h3 id="_hypermedia_links_5"><a class="link" href="#_hypermedia_links_5">Hypermedia Links</a></h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 50%;">
@@ -1574,7 +1825,7 @@ an Analyzing Strategy, analysis jobs will be queued automatically for the commit
 <div class="sect2">
 <h3 id="_setting_a_project_s_analyzing_strategy"><a class="link" href="#_setting_a_project_s_analyzing_strategy">Setting a Project&#8217;s Analyzing Strategy</a></h3>
 <div class="sect3">
-<h4 id="_example_request_14"><a class="link" href="#_example_request_14">Example Request</a></h4>
+<h4 id="_example_request_18"><a class="link" href="#_example_request_18">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/strategy HTTP/1.1
@@ -1591,11 +1842,11 @@ Content-Length: 74
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_14"><a class="link" href="#_example_response_14">Example Response</a></h4>
+<h4 id="_example_response_18"><a class="link" href="#_example_response_18">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 237
 
 {
@@ -1617,7 +1868,7 @@ Content-Length: 237
 <div class="sect2">
 <h3 id="_getting_a_project_s_analyzing_strategy"><a class="link" href="#_getting_a_project_s_analyzing_strategy">Getting a Project&#8217;s Analyzing Strategy</a></h3>
 <div class="sect3">
-<h4 id="_example_request_15"><a class="link" href="#_example_request_15">Example Request</a></h4>
+<h4 id="_example_request_19"><a class="link" href="#_example_request_19">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/strategy HTTP/1.1
@@ -1626,11 +1877,11 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_15"><a class="link" href="#_example_response_15">Example Response</a></h4>
+<h4 id="_example_response_19"><a class="link" href="#_example_response_19">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 237
 
 {
@@ -1662,7 +1913,7 @@ that take a quality profile as parameter and return information on the metrics t
 part of the quality profile and thus are most important to you.</p>
 </div>
 <div class="sect2">
-<h3 id="_structure_5"><a class="link" href="#_structure_5">Structure</a></h3>
+<h3 id="_structure_6"><a class="link" href="#_structure_6">Structure</a></h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 25%;">
@@ -1699,7 +1950,7 @@ part of the quality profile and thus are most important to you.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_hypermedia_links_5"><a class="link" href="#_hypermedia_links_5">Hypermedia Links</a></h3>
+<h3 id="_hypermedia_links_6"><a class="link" href="#_hypermedia_links_6">Hypermedia Links</a></h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 50%;">
@@ -1726,7 +1977,7 @@ part of the quality profile and thus are most important to you.</p>
 <div class="sect2">
 <h3 id="_creating_a_quality_profile"><a class="link" href="#_creating_a_quality_profile">Creating a Quality Profile</a></h3>
 <div class="sect3">
-<h4 id="_example_request_16"><a class="link" href="#_example_request_16">Example Request</a></h4>
+<h4 id="_example_request_20"><a class="link" href="#_example_request_20">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/qualityprofiles HTTP/1.1
@@ -1748,11 +1999,11 @@ Content-Length: 213
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_16"><a class="link" href="#_example_response_16">Example Response</a></h4>
+<h4 id="_example_response_20"><a class="link" href="#_example_response_20">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 405
 
 {
@@ -1780,7 +2031,7 @@ Content-Length: 405
 <div class="sect2">
 <h3 id="_updating_a_quality_profile"><a class="link" href="#_updating_a_quality_profile">Updating a Quality Profile</a></h3>
 <div class="sect3">
-<h4 id="_example_request_17"><a class="link" href="#_example_request_17">Example Request</a></h4>
+<h4 id="_example_request_21"><a class="link" href="#_example_request_21">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/qualityprofiles/1 HTTP/1.1
@@ -1802,11 +2053,11 @@ Content-Length: 223
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_17"><a class="link" href="#_example_response_17">Example Response</a></h4>
+<h4 id="_example_response_21"><a class="link" href="#_example_response_21">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 415
 
 {
@@ -1834,7 +2085,7 @@ Content-Length: 415
 <div class="sect2">
 <h3 id="_loading_a_single_quality_profile"><a class="link" href="#_loading_a_single_quality_profile">Loading a single Quality Profile</a></h3>
 <div class="sect3">
-<h4 id="_example_request_18"><a class="link" href="#_example_request_18">Example Request</a></h4>
+<h4 id="_example_request_22"><a class="link" href="#_example_request_22">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/qualityprofiles/1 HTTP/1.1
@@ -1856,11 +2107,11 @@ Content-Length: 213
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_18"><a class="link" href="#_example_response_18">Example Response</a></h4>
+<h4 id="_example_response_22"><a class="link" href="#_example_response_22">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 405
 
 {
@@ -1888,7 +2139,7 @@ Content-Length: 405
 <div class="sect2">
 <h3 id="_deleting_a_quality_profile"><a class="link" href="#_deleting_a_quality_profile">Deleting a Quality Profile</a></h3>
 <div class="sect3">
-<h4 id="_example_request_19"><a class="link" href="#_example_request_19">Example Request</a></h4>
+<h4 id="_example_request_23"><a class="link" href="#_example_request_23">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/qualityprofiles/1 HTTP/1.1
@@ -1897,7 +2148,7 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_19"><a class="link" href="#_example_response_19">Example Response</a></h4>
+<h4 id="_example_response_23"><a class="link" href="#_example_response_23">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
@@ -1908,7 +2159,7 @@ Host: localhost</code></pre>
 <div class="sect2">
 <h3 id="_listing_a_project_s_quality_profiles"><a class="link" href="#_listing_a_project_s_quality_profiles">Listing a Project&#8217;s Quality Profiles</a></h3>
 <div class="sect3">
-<h4 id="_example_request_20"><a class="link" href="#_example_request_20">Example Request</a></h4>
+<h4 id="_example_request_24"><a class="link" href="#_example_request_24">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/qualityprofiles?page=0&amp;size=2 HTTP/1.1
@@ -1917,11 +2168,11 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_20"><a class="link" href="#_example_response_20">Example Response</a></h4>
+<h4 id="_example_response_24"><a class="link" href="#_example_response_24">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 1567
 
 {
@@ -1989,12 +2240,15 @@ Content-Length: 1567
 </div>
 </div>
 </div>
-<h1 id="_accessing_project_and_system_data" class="sect0"><a class="link" href="#_accessing_project_and_system_data">Accessing Project and System Data</a></h1>
+<h1 id="_querying_global_data" class="sect0"><a class="link" href="#_querying_global_data">Querying Global Data</a></h1>
 <div class="openblock partintro">
 <div class="content">
-This section describes the resources you can access to get information about the results of analyses that
-were run on a project. These resources are read-only since coderadar creates those resources from the project
-configuration you provide.
+<div class="paragraph">
+<p><a id="chapter-query-global-data"></a></p>
+</div>
+<div class="paragraph">
+<p>This section describes the resources that are not attached to a project and are thus available server-wide.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -2006,7 +2260,7 @@ configuration you provide.
 <div class="sect2">
 <h3 id="_listing_available_analyzers"><a class="link" href="#_listing_available_analyzers">Listing available Analyzers</a></h3>
 <div class="sect3">
-<h4 id="_example_request_21"><a class="link" href="#_example_request_21">Example Request</a></h4>
+<h4 id="_example_request_25"><a class="link" href="#_example_request_25">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /analyzers?page=0&amp;size=2 HTTP/1.1
@@ -2015,11 +2269,11 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_21"><a class="link" href="#_example_response_21">Example Response</a></h4>
+<h4 id="_example_response_25"><a class="link" href="#_example_response_25">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 740
 
 {
@@ -2057,6 +2311,18 @@ Content-Length: 740
 </div>
 </div>
 </div>
+<h1 id="_querying_project_data" class="sect0"><a class="link" href="#_querying_project_data">Querying Project Data</a></h1>
+<div class="openblock partintro">
+<div class="content">
+<div class="paragraph">
+<p><a id="chapter-query-project-data"></a></p>
+</div>
+<div class="paragraph">
+<p>This section describes the resources that are attached to a project and are only available in the context of a
+project.</p>
+</div>
+</div>
+</div>
 <div class="sect1">
 <h2 id="_metric"><a class="link" href="#_metric">Metric</a></h2>
 <div class="sectionbody">
@@ -2085,7 +2351,7 @@ analysis will take a while.</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_example_request_22"><a class="link" href="#_example_request_22">Example Request</a></h4>
+<h4 id="_example_request_26"><a class="link" href="#_example_request_26">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metrics HTTP/1.1
@@ -2094,11 +2360,11 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_22"><a class="link" href="#_example_response_22">Example Response</a></h4>
+<h4 id="_example_response_26"><a class="link" href="#_example_response_26">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 436
 
 {
@@ -2141,7 +2407,7 @@ Depending of the number of commits you have in your project, it may take a while
 are available.</p>
 </div>
 <div class="sect2">
-<h3 id="_structure_6"><a class="link" href="#_structure_6">Structure</a></h3>
+<h3 id="_structure_7"><a class="link" href="#_structure_7">Structure</a></h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -2185,7 +2451,7 @@ are available.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_hypermedia_links_6"><a class="link" href="#_hypermedia_links_6">Hypermedia Links</a></h3>
+<h3 id="_hypermedia_links_7"><a class="link" href="#_hypermedia_links_7">Hypermedia Links</a></h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 50%;">
@@ -2208,7 +2474,7 @@ are available.</p>
 <div class="sect2">
 <h3 id="_listing_a_project_s_commits"><a class="link" href="#_listing_a_project_s_commits">Listing a Project&#8217;s Commits</a></h3>
 <div class="sect3">
-<h4 id="_example_request_23"><a class="link" href="#_example_request_23">Example Request</a></h4>
+<h4 id="_example_request_27"><a class="link" href="#_example_request_27">Example Request</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/commits?page=3&amp;size=5 HTTP/1.1
@@ -2217,11 +2483,11 @@ Host: localhost</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_23"><a class="link" href="#_example_response_23">Example Response</a></h4>
+<h4 id="_example_response_27"><a class="link" href="#_example_response_27">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 1142
 
 {
@@ -2301,7 +2567,7 @@ analysis will take a while.</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_querying_metric_values_of_commits"><a class="link" href="#_querying_metric_values_of_commits">Querying Metric Values of Commits</a></h3>
+<h3 id="_querying_metric_values_of_a_commit"><a class="link" href="#_querying_metric_values_of_a_commit">Querying Metric Values of a Commit</a></h3>
 <div class="sect3">
 <h4 id="_query_structure"><a class="link" href="#_query_structure">Query Structure</a></h4>
 <table class="tableblock frame-all grid-all spread">
@@ -2334,7 +2600,7 @@ analysis will take a while.</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_example_request_24"><a class="link" href="#_example_request_24">Example Request</a></h4>
+<h4 id="_example_request_28"><a class="link" href="#_example_request_28">Example Request</a></h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2364,19 +2630,19 @@ Content-Length: 124
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_24"><a class="link" href="#_example_response_24">Example Response</a></h4>
+<h4 id="_example_response_28"><a class="link" href="#_example_response_28">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 109
 
 {
   "metrics" : {
     "metric1" : 26,
     "metric2" : 28,
-    "metric3" : 11,
-    "metric4" : 12
+    "metric3" : 14,
+    "metric4" : 16
   }
 }</code></pre>
 </div>
@@ -2384,7 +2650,7 @@ Content-Length: 109
 </div>
 </div>
 <div class="sect2">
-<h3 id="_querying_quality_profile_ratings_of_commits"><a class="link" href="#_querying_quality_profile_ratings_of_commits">Querying Quality Profile Ratings of Commits</a></h3>
+<h3 id="_querying_quality_profile_ratings_of_a_commit"><a class="link" href="#_querying_quality_profile_ratings_of_a_commit">Querying Quality Profile Ratings of a Commit</a></h3>
 <div class="sect3">
 <h4 id="_query_structure_2"><a class="link" href="#_query_structure_2">Query Structure</a></h4>
 <table class="tableblock frame-all grid-all spread">
@@ -2417,7 +2683,7 @@ Content-Length: 109
 </table>
 </div>
 <div class="sect3">
-<h4 id="_example_request_25"><a class="link" href="#_example_request_25">Example Request</a></h4>
+<h4 id="_example_request_29"><a class="link" href="#_example_request_29">Example Request</a></h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2447,11 +2713,11 @@ Content-Length: 105
 </div>
 </div>
 <div class="sect3">
-<h4 id="_example_response_25"><a class="link" href="#_example_response_25">Example Response</a></h4>
+<h4 id="_example_response_29"><a class="link" href="#_example_response_29">Example Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json
+Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 206
 
 {
@@ -2470,12 +2736,145 @@ Content-Length: 206
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_querying_the_history_of_a_metric"><a class="link" href="#_querying_the_history_of_a_metric">Querying the History of a Metric</a></h3>
+<div class="paragraph">
+<p>Use this endpoint to receive the history of a specific metric over time.</p>
+</div>
+<div class="sect3">
+<h4 id="_query_structure_3"><a class="link" href="#_query_structure_3">Query Structure</a></h4>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dateRange.startDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date from which to start the metric history.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dateRange.endDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Date at which to end the metric history.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">metric</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the metric whose history to query.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">interval</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The resolution of the history. The history result will contain one data point in each interval. Can be one of DAY, WEEK, MONTH or YEAR.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_example_request_30"><a class="link" href="#_example_request_30">Example Request</a></h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This request can be sent using either the GET or the POST method. See <a href="#usage-of-get">Usage of GET</a>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metricvalues/history HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 144
+
+{
+  "metric" : "metric1",
+  "dateRange" : {
+    "startDate" : [ 2016, 2, 1 ],
+    "endDate" : [ 2016, 4, 1 ]
+  },
+  "interval" : "WEEK"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_example_response_30"><a class="link" href="#_example_response_30">Example Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json;charset=UTF-8
+Content-Length: 637
+
+{
+  "points" : [ {
+    "type" : "week",
+    "x" : [ 2016, 6 ],
+    "y" : 10
+  }, {
+    "type" : "week",
+    "x" : [ 2016, 7 ],
+    "y" : 10
+  }, {
+    "type" : "week",
+    "x" : [ 2016, 8 ],
+    "y" : 10
+  }, {
+    "type" : "week",
+    "x" : [ 2016, 10 ],
+    "y" : 26
+  }, {
+    "type" : "week",
+    "x" : [ 2016, 11 ],
+    "y" : 26
+  }, {
+    "type" : "week",
+    "x" : [ 2016, 12 ],
+    "y" : 26
+  }, {
+    "type" : "week",
+    "x" : [ 2016, 5 ],
+    "y" : 10
+  }, {
+    "type" : "week",
+    "x" : [ 2016, 9 ],
+    "y" : 26
+  }, {
+    "type" : "week",
+    "x" : [ 2016, 13 ],
+    "y" : 73
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2016-08-14 20:47:28 +02:00
+Last updated 2016-10-09 22:11:59 +02:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
