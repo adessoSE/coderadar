@@ -11,6 +11,10 @@ buildscript {
 
 apply plugin: 'com.github.jacobono.jaxb'
 
+ext {
+    generatedSource = 'src/gen/java'
+}
+
 dependencies {
     jaxb 'com.sun.xml.bind:jaxb-core:2.2.11'
     jaxb 'com.sun.xml.bind:jaxb-xjc:2.2.11'
@@ -24,27 +28,27 @@ dependencies {
     testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
 }
 
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src/main/generated', 'src/main/java']
-        }
-    }
-}
+sourceSets.main.java.srcDirs generatedSource
 
 jaxb {
     xsdDir = 'plugins/findbugs-adapter-plugin/src/main/resources/xsd'
     xjc {
-        destinationDir = 'src/main/generated'
+        destinationDir = generatedSource
         generatePackage = 'org.wickedsource.coderadar.analyzer.findbugs.xsd'
     }
 }
 
 compileJava {
-    dependsOn(xjc)
+    dependsOn xjc
 }
 
-task cleanGeneratedSources(type: Delete) {
-    delete 'src/main/generated'
+tasks.idea.dependsOn xjc
+
+clean.dependsOn cleanXjc
+
+idea {
+    module {
+        sourceDirs += file(generatedSource)
+        generatedSourceDirs += file(generatedSource)
+    }
 }
-clean.dependsOn(cleanGeneratedSources)

@@ -1,6 +1,6 @@
 apply plugin: 'idea'
 
-version= '1.0.0-SNAPSHOT'
+version '1.0.0-SNAPSHOT'
 
 subprojects{
     apply plugin: 'idea'
@@ -37,5 +37,16 @@ subprojects{
 task printClasspathForCoderadar {
     doLast {
         configurations.testRuntime.each { println it }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.1'
+    distributionType = Wrapper.DistributionType.ALL
+}
+
+idea {
+    project {
+        vcs = 'Git'
     }
 }
