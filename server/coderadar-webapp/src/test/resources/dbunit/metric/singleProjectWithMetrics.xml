@@ -14,6 +14,7 @@
     <analyzer_configuration_file/>,
     <quality_profile/>
     <quality_profile_metric/>
+    <module/>
 
     <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
     <commit id="1" project_id="1" name="f9b0553930f133490f292a9c78d0b36b39be8758" sequence_number="1" author="Tom"

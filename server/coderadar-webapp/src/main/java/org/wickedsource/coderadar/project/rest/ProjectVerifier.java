@@ -21,6 +21,9 @@ public class ProjectVerifier {
      * exception if it doesn't.
      */
     public Project loadProjectOrThrowException(Long projectId) {
+        if (projectId == null) {
+            throw new IllegalArgumentException("projectId must not be null!");
+        }
         Project project = projectRepository.findOne(projectId);
         if (project == null) {
             throw new ResourceNotFoundException();
@@ -33,6 +36,9 @@ public class ProjectVerifier {
      * Checks if the Project with the given ID exists without loading it from the database.
      */
     public void checkProjectExistsOrThrowException(Long projectId) {
+        if (projectId == null) {
+            throw new IllegalArgumentException("projectId must not be null!");
+        }
         int count = projectRepository.countById(projectId);
         if (count == 0) {
             throw new ResourceNotFoundException();

@@ -34,6 +34,12 @@ public class DbUnitFactory {
         public final static String SINGLE_PROJECT_WITH_METRICS_AND_QUALITY_PROFILES = "/dbunit/metric/singleProjectWithMetricsAndQualityProfiles.xml";
     }
 
+    public static class Modules {
+        public final static String SINGLE_PROJECT_WITH_MODULE = "/dbunit/module/singleProjectWithModule.xml";
+        public final static String SINGLE_PROJECT_WITH_MODULE2 = "/dbunit/module/singleProjectWithModule2.xml";
+        public final static String SINGLE_PROJECT_WITH_MODULES = "/dbunit/module/singleProjectWithModules.xml";
+    }
+
     public static class QualityProfiles {
         public final static String SINGLE_PROJECT_WITH_QUALITY_PROFILE = "/dbunit/qualityprofile/singleProjectWithQualityProfile.xml";
         public final static String SINGLE_PROJECT_WITH_QUALITY_PROFILE2 = "/dbunit/qualityprofile/singleProjectWithQualityProfile2.xml";

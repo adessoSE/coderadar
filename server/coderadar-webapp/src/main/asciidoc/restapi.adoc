@@ -130,6 +130,59 @@ include::{snippets}/projects/delete/http-request.adoc[]
 
 include::{snippets}/projects/delete/http-response.adoc[]
 
+== Modules
+Source code is usually arranged within multiple modules that each contains a set of source files.
+Using the following REST endpoints, you can provide coderadar with information about the modules within
+your codebase. Each module simply is a path into the VCS codebase. All files that are within that path
+are considered to be part of the module.
+
+=== Structure
+
+include::{snippets}/modules/create/request-fields.adoc[]
+
+=== Hypermedia Links
+
+include::{snippets}/modules/create/links.adoc[]
+
+=== Creating a Module
+
+==== Example Request
+
+include::{snippets}/modules/create/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/modules/create/http-response.adoc[]
+
+=== Updating a Module
+
+==== Example Request
+
+include::{snippets}/modules/update/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/modules/update/http-response.adoc[]
+
+=== Listing all Modules of a Project
+
+==== Example Request
+
+include::{snippets}/modules/list/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/modules/list/http-response.adoc[]
+
+=== Deleting a Module
+
+==== Example Request
+
+include::{snippets}/modules/delete/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/modules/delete/http-response.adoc[]
 
 == File Patterns
 

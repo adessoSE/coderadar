@@ -61,7 +61,8 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
                 "file_pattern",
                 "job",
                 "quality_profile",
-                "quality_profile_metric");
+                "quality_profile_metric",
+                "module");
     }
 
     @SuppressWarnings("unchecked")
