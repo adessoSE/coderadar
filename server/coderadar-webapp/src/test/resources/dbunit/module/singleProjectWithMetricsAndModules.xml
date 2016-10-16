@@ -3,10 +3,10 @@
     <analyzing_strategy/>
     <commit/>
     <commit_log_entry/>
-    <commit_file/>
     <file_identity/>
-    <module/>
     <file/>
+    <module/>
+    <commit_file/>
     <file_pattern/>
     <job/>
     <metric_value/>
@@ -17,6 +17,11 @@
     <quality_profile_metric/>
 
     <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
+
+    <module id="1" path="/path/to/module1" project_id="1"/>
+    <module id="2" path="/path/to/module1/submodule2" project_id="1"/>
+    <module id="3" path="/path/to/module3" project_id="1"/>
+
     <commit id="1" project_id="1" name="f9b0553930f133490f292a9c78d0b36b39be8758" sequence_number="1" author="Tom"
             parent_commit_name="cafebabe" comment="first commit"
             scanned="false" analyzed="false" merged="false" timestamp="2016-01-01 00:00:00"
@@ -36,10 +41,26 @@
 
     <file_identity id="1"/>
     <file_identity id="2"/>
+    <file_identity id="3"/>
 
     <file id="1" filepath="src/main/java/test.java" identity_id="2"/>
     <file id="2" filepath="src/main/java/test2.java" identity_id="2"/>
     <file id="3" filepath="src/main/java/fileOnlyTouchedInFirstCommit.java" identity_id="1"/>
+    <file id="4" filepath="src/main/java/anotherfile.java" identity_id="3"/>
+
+    <commit_file commit_id="1" file_id="1" change_type="UNCHANGED" module_id="1"/>
+    <commit_file commit_id="1" file_id="2" change_type="UNCHANGED" module_id="1"/>
+    <commit_file commit_id="1" file_id="3" change_type="UNCHANGED" module_id="2"/>
+    <commit_file commit_id="1" file_id="4" change_type="UNCHANGED" module_id="3"/>
+    <commit_file commit_id="2" file_id="1" change_type="UNCHANGED" module_id="1"/>
+    <commit_file commit_id="2" file_id="4" change_type="UNCHANGED" module_id="3"/>
+    <commit_file commit_id="3" file_id="1" change_type="UNCHANGED" module_id="1"/>
+    <commit_file commit_id="3" file_id="3" change_type="UNCHANGED" module_id="2"/>
+    <commit_file commit_id="3" file_id="4" change_type="UNCHANGED" module_id="3"/>
+    <commit_file commit_id="4" file_id="1" change_type="UNCHANGED" module_id="1"/>
+    <commit_file commit_id="4" file_id="2" change_type="UNCHANGED" module_id="1"/>
+    <commit_file commit_id="4" file_id="3" change_type="UNCHANGED" module_id="2"/>
+    <commit_file commit_id="4" file_id="4" change_type="UNCHANGED" module_id="3"/>
 
     <metric_value commit_id="1" file_id="1" metric_name="metric1" value="1"/>
     <metric_value commit_id="1" file_id="1" metric_name="metric2" value="2"/>
@@ -51,17 +72,19 @@
     <metric_value commit_id="1" file_id="2" metric_name="metric4" value="8"/>
     <metric_value commit_id="1" file_id="3" metric_name="metric1" value="1"/>
     <metric_value commit_id="1" file_id="3" metric_name="metric2" value="2"/>
-    <metric_value commit_id="1" file_id="3" metric_name="metric3" value="3"/>
+    <metric_value commit_id="1" file_id="3" metric_name="metric3" value="3"/> <!-- module2, metric3 -->
     <metric_value commit_id="1" file_id="3" metric_name="metric4" value="4"/>
+    <metric_value commit_id="1" file_id="4" metric_name="metric3" value="5"/> <!-- module3, metric3 -->
 
     <metric_value commit_id="2" file_id="1" metric_name="metric1" value="9"/>
     <metric_value commit_id="2" file_id="1" metric_name="metric2" value="10"/>
-    <metric_value commit_id="2" file_id="1" metric_name="metric3" value="11"/>
+    <metric_value commit_id="2" file_id="1" metric_name="metric3" value="11"/> <!-- module1, metric3 -->
+    <metric_value commit_id="2" file_id="4" metric_name="metric1" value="12"/> <!-- module3, metric1 -->
 
-    <metric_value commit_id="3" file_id="1" metric_name="metric1" value="12"/>
-    <metric_value commit_id="3" file_id="1" metric_name="metric2" value="13"/>
-    <metric_value commit_id="3" file_id="3" metric_name="metric1" value="14"/>
-    <metric_value commit_id="3" file_id="3" metric_name="metric2" value="15"/>
+    <metric_value commit_id="3" file_id="1" metric_name="metric1" value="12"/> <!-- module1, metric1 -->
+    <metric_value commit_id="3" file_id="1" metric_name="metric2" value="13"/> <!-- module1, metric2 -->
+    <metric_value commit_id="3" file_id="3" metric_name="metric1" value="14"/> <!-- module2, metric1 -->
+    <metric_value commit_id="3" file_id="3" metric_name="metric2" value="15"/> <!-- module2, metric2 -->
 
     <metric_value commit_id="4" file_id="1" metric_name="metric1" value="11"/>
     <metric_value commit_id="4" file_id="1" metric_name="metric2" value="21"/>

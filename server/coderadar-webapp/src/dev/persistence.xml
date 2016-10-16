@@ -22,6 +22,7 @@
         <class>org.wickedsource.coderadar.qualityprofile.domain.QualityProfileMetric</class>
         <class>org.wickedsource.coderadar.job.scan.commit.ScanCommitsJob</class>
         <class>org.wickedsource.coderadar.job.scan.file.ScanFilesJob</class>
+        <class>org.wickedsource.coderadar.module.domain.Module</class>
 
         <properties>
             <property name="hibernate.ejb.naming_strategy"

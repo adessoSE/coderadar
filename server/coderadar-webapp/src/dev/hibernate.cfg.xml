@@ -25,5 +25,6 @@
         <mapping class="org.wickedsource.coderadar.qualityprofile.domain.QualityProfileMetric"/>
         <mapping class="org.wickedsource.coderadar.job.scan.commit.ScanCommitsJob"/>
         <mapping class="org.wickedsource.coderadar.job.scan.file.ScanFilesJob"/>
+        <mapping class="org.wickedsource.coderadar.module.domain.Module"/>
     </session-factory>
 </hibernate-configuration>

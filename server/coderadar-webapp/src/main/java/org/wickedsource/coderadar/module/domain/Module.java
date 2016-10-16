@@ -18,11 +18,11 @@ public class Module {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "project_id")
     private Project project;
 
-    @Column(name = "path")
+    @Column(name = "path", nullable = false)
     private String path;
 
     public Long getId() {

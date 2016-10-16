@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.commit.domain;
 
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
 import org.wickedsource.coderadar.file.domain.File;
+import org.wickedsource.coderadar.module.domain.Module;
 
 import javax.persistence.*;
 
@@ -11,7 +12,7 @@ import javax.persistence.*;
  * one can easily access the full set of files at the time of the Commit.
  */
 @Entity
-@Table(name="commit_file")
+@Table(name = "commit_file")
 @AssociationOverrides({
         @AssociationOverride(name = "id.commit", joinColumns = @JoinColumn(name = "commit_id")),
         @AssociationOverride(name = "id.file", joinColumns = @JoinColumn(name = "file_id"))}
@@ -25,11 +26,14 @@ public class CommitToFileAssociation {
     @Enumerated(EnumType.STRING)
     private ChangeType changeType;
 
-    public CommitToFileAssociation(){
+    @ManyToOne
+    private Module module;
+
+    public CommitToFileAssociation() {
 
     }
 
-    public CommitToFileAssociation(Commit commit, File sourcefile, ChangeType changeType){
+    public CommitToFileAssociation(Commit commit, File sourcefile, ChangeType changeType) {
         this.id = new CommitToFileId(commit, sourcefile);
         this.changeType = changeType;
     }
@@ -58,6 +62,14 @@ public class CommitToFileAssociation {
 
     public void setChangeType(ChangeType changeType) {
         this.changeType = changeType;
+    }
+
+    public Module getModule() {
+        return module;
+    }
+
+    public void setModule(Module module) {
+        this.module = module;
     }
 
     @Override

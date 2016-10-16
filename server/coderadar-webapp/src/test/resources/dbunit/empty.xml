@@ -3,9 +3,10 @@
     <analyzing_strategy/>
     <commit/>
     <commit_log_entry/>
-    <commit_file/>
     <file_identity/>
     <file/>
+    <module/>
+    <commit_file/>
     <file_pattern/>
     <job/>
     <metric_value/>
@@ -14,5 +15,4 @@
     <analyzer_configuration_file/>
     <quality_profile/>
     <quality_profile_metric/>
-    <module/>
 </dataset>

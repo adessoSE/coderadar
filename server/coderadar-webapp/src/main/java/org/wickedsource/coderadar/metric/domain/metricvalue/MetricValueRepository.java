@@ -40,4 +40,7 @@ public interface MetricValueRepository extends CrudRepository<MetricValue, Long>
     @Query("select distinct m.id.metricName from MetricValue m where m.id.commit.project.id = :projectId order by m.id.metricName")
     Page<String> findMetricsInProject(@Param("projectId") Long projectId, Pageable pageable);
 
+    @Query(name = "MetricValue.findValuesAggregatedByModule")
+    List<MetricValuePerModuleDTO> findValuesAggregatedByModule(@Param("projectId") Long projectId, @Param("commitSequenceNumber") Integer commitSequenceNumber, @Param("metricNames") List<String> metricNames);
+
 }
