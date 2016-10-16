@@ -50,15 +50,14 @@ public class LogMergerTrigger {
         }
     }
 
-    private boolean shouldJobBeQueuedForProject(Project project) {
+    boolean shouldJobBeQueuedForProject(Project project) {
         if (isJobCurrentlyQueuedForProject(project)) {
             jobLogger.alreadyQueuedForProject(MergeLogJob.class, project);
             return false;
         } else {
             int scannedAndUnmergedCommits =
                     commitRepository.countByProjectIdAndScannedTrueAndMergedFalse(project.getId());
-            int totalCommits = commitRepository.countByProjectId(project.getId());
-            return totalCommits == scannedAndUnmergedCommits && totalCommits > 0;
+            return scannedAndUnmergedCommits > 0;
         }
     }
 

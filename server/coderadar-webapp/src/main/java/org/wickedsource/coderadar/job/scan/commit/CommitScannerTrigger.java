@@ -57,7 +57,7 @@ class CommitScannerTrigger {
         } else {
             Job lastJob = jobRepository
                     .findTop1ByProcessingStatusAndProjectIdOrderByQueuedDateDesc(ProcessingStatus.PROCESSED,
-                                                                                 project.getId());
+                            project.getId());
             return lastJob == null || hasIntervalPassedSince(lastJob);
         }
     }
@@ -71,7 +71,7 @@ class CommitScannerTrigger {
     private boolean hasIntervalPassedSince(Job lastJob) {
         long lastRun = lastJob.getQueuedDate().getTime();
         long nextRun = lastRun + config.getScanIntervalInSeconds() * 1000;
-        long now     = new Date().getTime();
+        long now = new Date().getTime();
 
         return now > nextRun;
     }
