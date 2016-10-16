@@ -147,12 +147,6 @@ bootRun {
                     "-Dspring.datasource.password=coderadar",
                     "-Dspring.datasource.driver-class-name=com.mysql.jdbc.Driver",
                     "-Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect",
-
-                    // credentials for admin console, see endpoint "/actuator"
-                    "-Dsecurity.user.name=admin",
-                    "-Dsecurity.user.password=admin",
-                    "-Dmanagement.security.roles=SUPERUSER",
-
             ]
 }
 
