@@ -88,7 +88,7 @@ public class ModuleController {
     }
 
     @RequestMapping(path = "/{moduleId}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteProject(@PathVariable Long moduleId, @PathVariable Long projectId) {
+    public ResponseEntity<String> deleteModule(@PathVariable Long moduleId, @PathVariable Long projectId) {
         projectVerifier.checkProjectExistsOrThrowException(projectId);
         moduleRepository.delete(moduleId);
         return new ResponseEntity<>(HttpStatus.OK);
