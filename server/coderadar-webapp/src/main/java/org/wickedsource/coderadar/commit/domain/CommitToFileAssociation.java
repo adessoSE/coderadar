@@ -5,6 +5,7 @@ import org.wickedsource.coderadar.file.domain.File;
 import org.wickedsource.coderadar.module.domain.Module;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Associates a Commit to a File. Each Commit is associated to all Files that have been
@@ -26,8 +27,14 @@ public class CommitToFileAssociation {
     @Enumerated(EnumType.STRING)
     private ChangeType changeType;
 
-    @ManyToOne
-    private Module module;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "commit_file_module",
+            joinColumns = {
+                    @JoinColumn(name = "commit_id", nullable = false, updatable = false, referencedColumnName = "commit_id"),
+                    @JoinColumn(name = "file_id", nullable = false, updatable = false, referencedColumnName = "file_id")
+            },
+            inverseJoinColumns = @JoinColumn(name = "module_id", nullable = false, updatable = false))
+    private List<Module> modules;
 
     public CommitToFileAssociation() {
 
@@ -64,12 +71,12 @@ public class CommitToFileAssociation {
         this.changeType = changeType;
     }
 
-    public Module getModule() {
-        return module;
+    public List<Module> getModules() {
+        return modules;
     }
 
-    public void setModule(Module module) {
-        this.module = module;
+    public void setModule(List<Module> modules) {
+        this.modules = modules;
     }
 
     @Override

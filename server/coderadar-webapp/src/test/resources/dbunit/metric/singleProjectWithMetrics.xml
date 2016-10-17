@@ -3,10 +3,11 @@
     <analyzing_strategy/>
     <commit/>
     <commit_log_entry/>
-    <commit_file/>
     <file_identity/>
-    <module/>
     <file/>
+    <module/>
+    <commit_file/>
+    <commit_file_module/>
     <file_pattern/>
     <job/>
     <metric_value/>

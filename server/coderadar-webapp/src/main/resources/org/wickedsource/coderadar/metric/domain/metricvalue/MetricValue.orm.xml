@@ -43,19 +43,20 @@
 
     <named-query name="MetricValue.findValuesAggregatedByModule">
         <query><![CDATA[
-            SELECT NEW org.wickedsource.coderadar.metric.domain.metricvalue.MetricValuePerModuleDTO(m.id.metricName, sum(m.value), a.module.path)
-            FROM MetricValue m, CommitToFileAssociation a
-            WHERE m.id.file.id = a.id.file.id
-              AND m.id.commit.project.id = :projectId
-              AND m.id.metricName IN (:metricNames)
-              AND a.id.commit.sequenceNumber = m.id.commit.sequenceNumber
-              AND m.id.commit.sequenceNumber =
+            SELECT NEW org.wickedsource.coderadar.metric.domain.metricvalue.MetricValuePerModuleDTO(mv.id.metricName, sum(mv.value), m.path)
+            FROM MetricValue mv, CommitToFileAssociation a
+            JOIN a.modules m
+            WHERE mv.id.file.id = a.id.file.id
+              AND mv.id.commit.project.id = :projectId
+              AND mv.id.metricName IN (:metricNames)
+              AND a.id.commit.sequenceNumber = mv.id.commit.sequenceNumber
+              AND mv.id.commit.sequenceNumber =
                 (SELECT max(m2.id.commit.sequenceNumber)
                  FROM MetricValue m2
                  WHERE m2.id.commit.sequenceNumber<=:commitSequenceNumber
-                   AND m2.id.file.identity.id = m.id.file.identity.id
-                   AND m2.id.metricName = m.id.metricName)
-            GROUP BY m.id.metricName, a.module.path
+                   AND m2.id.file.identity.id = mv.id.file.identity.id
+                   AND m2.id.metricName = mv.id.metricName)
+            GROUP BY mv.id.metricName, m.path
             ]]>
         </query>
     </named-query>

@@ -7,6 +7,7 @@
     <file/>
     <module/>
     <commit_file/>
+    <commit_file_module/>
     <file_pattern/>
     <job/>
     <metric_value/>
@@ -48,19 +49,33 @@
     <file id="3" filepath="src/main/java/fileOnlyTouchedInFirstCommit.java" identity_id="1"/>
     <file id="4" filepath="src/main/java/anotherfile.java" identity_id="3"/>
 
-    <commit_file commit_id="1" file_id="1" change_type="UNCHANGED" module_id="1"/>
-    <commit_file commit_id="1" file_id="2" change_type="UNCHANGED" module_id="1"/>
-    <commit_file commit_id="1" file_id="3" change_type="UNCHANGED" module_id="2"/>
-    <commit_file commit_id="1" file_id="4" change_type="UNCHANGED" module_id="3"/>
-    <commit_file commit_id="2" file_id="1" change_type="UNCHANGED" module_id="1"/>
-    <commit_file commit_id="2" file_id="4" change_type="UNCHANGED" module_id="3"/>
-    <commit_file commit_id="3" file_id="1" change_type="UNCHANGED" module_id="1"/>
-    <commit_file commit_id="3" file_id="3" change_type="UNCHANGED" module_id="2"/>
-    <commit_file commit_id="3" file_id="4" change_type="UNCHANGED" module_id="3"/>
-    <commit_file commit_id="4" file_id="1" change_type="UNCHANGED" module_id="1"/>
-    <commit_file commit_id="4" file_id="2" change_type="UNCHANGED" module_id="1"/>
-    <commit_file commit_id="4" file_id="3" change_type="UNCHANGED" module_id="2"/>
-    <commit_file commit_id="4" file_id="4" change_type="UNCHANGED" module_id="3"/>
+    <commit_file commit_id="1" file_id="1" change_type="UNCHANGED"/>
+    <commit_file commit_id="1" file_id="2" change_type="UNCHANGED"/>
+    <commit_file commit_id="1" file_id="3" change_type="UNCHANGED"/>
+    <commit_file commit_id="1" file_id="4" change_type="UNCHANGED"/>
+    <commit_file commit_id="2" file_id="1" change_type="UNCHANGED"/>
+    <commit_file commit_id="2" file_id="4" change_type="UNCHANGED"/>
+    <commit_file commit_id="3" file_id="1" change_type="UNCHANGED"/>
+    <commit_file commit_id="3" file_id="3" change_type="UNCHANGED"/>
+    <commit_file commit_id="3" file_id="4" change_type="UNCHANGED"/>
+    <commit_file commit_id="4" file_id="1" change_type="UNCHANGED"/>
+    <commit_file commit_id="4" file_id="2" change_type="UNCHANGED"/>
+    <commit_file commit_id="4" file_id="3" change_type="UNCHANGED"/>
+    <commit_file commit_id="4" file_id="4" change_type="UNCHANGED"/>
+
+    <commit_file_module commit_id="1" file_id="1" module_id="1"/>
+    <commit_file_module commit_id="1" file_id="2" module_id="1"/>
+    <commit_file_module commit_id="1" file_id="3" module_id="2"/>
+    <commit_file_module commit_id="1" file_id="4" module_id="3"/>
+    <commit_file_module commit_id="2" file_id="1" module_id="1"/>
+    <commit_file_module commit_id="2" file_id="4" module_id="3"/>
+    <commit_file_module commit_id="3" file_id="1" module_id="1"/>
+    <commit_file_module commit_id="3" file_id="3" module_id="2"/>
+    <commit_file_module commit_id="3" file_id="4" module_id="3"/>
+    <commit_file_module commit_id="4" file_id="1" module_id="1"/>
+    <commit_file_module commit_id="4" file_id="2" module_id="1"/>
+    <commit_file_module commit_id="4" file_id="3" module_id="2"/>
+    <commit_file_module commit_id="4" file_id="4" module_id="3"/>
 
     <metric_value commit_id="1" file_id="1" metric_name="metric1" value="1"/>
     <metric_value commit_id="1" file_id="1" metric_name="metric2" value="2"/>

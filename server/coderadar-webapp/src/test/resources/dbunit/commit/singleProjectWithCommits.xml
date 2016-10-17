@@ -7,12 +7,13 @@
     <file/>
     <module/>
     <commit_file/>
+    <commit_file_module/>
     <file_pattern/>
     <job/>
     <metric_value/>
     <finding/>
     <analyzer_configuration/>
-    <analyzer_configuration_file/>
+    <analyzer_configuration_file/>,
     <quality_profile/>
     <quality_profile_metric/>
 
