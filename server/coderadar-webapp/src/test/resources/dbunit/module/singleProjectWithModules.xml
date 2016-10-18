@@ -18,8 +18,35 @@
     <quality_profile_metric/>
 
     <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
+
     <module id="1" path="server/coderadar-webapp" project_id="1"/>
     <module id="2" path="client/coderadar-app" project_id="1"/>
     <module id="3" path="server/analyzer" project_id="1"/>
+    <module id="4" path="server/analyzer/submodule" project_id="1"/>
+
+    <commit id="1" project_id="1" name="f9b0553930f133490f292a9c78d0b36b39be8758" sequence_number="1" author="Tom"
+            parent_commit_name="cafebabe" comment="first commit"
+            scanned="false" analyzed="false" merged="false" timestamp="2016-01-01 00:00:00"
+            year="2016" month="1" day_of_month="1" week_of_year="53" year_of_week="2015"/>
+
+    <file_identity id="1"/>
+    <file_identity id="2"/>
+    <file_identity id="3"/>
+    <file_identity id="4"/>
+
+    <file id="1" filepath="server/coderadar-webapp/src/main/java/test.java" identity_id="1"/>
+    <file id="2" filepath="client/coderadar-app/src/main/java/test2.java" identity_id="2"/>
+    <file id="3" filepath="server/analyzer/src/main/java/fileOnlyTouchedInFirstCommit.java" identity_id="3"/>
+    <file id="4" filepath="server/analyzer/submodule/testfile" identity_id="4"/>
+
+    <commit_file commit_id="1" file_id="1" change_type="UNCHANGED"/>
+    <commit_file commit_id="1" file_id="2" change_type="UNCHANGED"/>
+    <commit_file commit_id="1" file_id="3" change_type="UNCHANGED"/>
+    <commit_file commit_id="1" file_id="4" change_type="UNCHANGED"/>
+
+    <commit_file_module commit_id="1" file_id="1" module_id="1"/>
+    <commit_file_module commit_id="1" file_id="2" module_id="2"/>
+    <commit_file_module commit_id="1" file_id="3" module_id="3"/>
+    <commit_file_module commit_id="1" file_id="4" module_id="4"/>
 
 </dataset>

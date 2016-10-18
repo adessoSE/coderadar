@@ -9,6 +9,7 @@ import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationRepositor
 import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategyRepository;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociationRepository;
+import org.wickedsource.coderadar.commit.domain.ModuleAssociationRepository;
 import org.wickedsource.coderadar.file.domain.CommitLogEntryRepository;
 import org.wickedsource.coderadar.file.domain.FileIdentityRepository;
 import org.wickedsource.coderadar.file.domain.FileRepository;
@@ -16,6 +17,7 @@ import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.job.core.JobRepository;
 import org.wickedsource.coderadar.metric.domain.finding.FindingRepository;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
+import org.wickedsource.coderadar.module.domain.ModuleRepository;
 
 @Component
 public class ProjectDeleter {
@@ -48,8 +50,12 @@ public class ProjectDeleter {
 
     private FileIdentityRepository fileIdentityRepository;
 
+    private ModuleRepository moduleRepository;
+
+    private ModuleAssociationRepository moduleAssociationRepository;
+
     @Autowired
-    public ProjectDeleter(AnalyzingStrategyRepository analyzingStrategyRepository, CommitRepository commitRepository, FilePatternRepository filePatternRepository, ProjectRepository projectRepository, JobRepository jobRepository, AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository, AnalyzerConfigurationRepository analyzerConfigurationRepository, CommitToFileAssociationRepository commitToFileAssociationRepository, FileRepository fileRepository, CommitLogEntryRepository commitLogEntryRepository, FindingRepository findingRepository, MetricValueRepository metricValueRepository, FileIdentityRepository fileIdentityRepository) {
+    public ProjectDeleter(AnalyzingStrategyRepository analyzingStrategyRepository, CommitRepository commitRepository, FilePatternRepository filePatternRepository, ProjectRepository projectRepository, JobRepository jobRepository, AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository, AnalyzerConfigurationRepository analyzerConfigurationRepository, CommitToFileAssociationRepository commitToFileAssociationRepository, FileRepository fileRepository, CommitLogEntryRepository commitLogEntryRepository, FindingRepository findingRepository, MetricValueRepository metricValueRepository, FileIdentityRepository fileIdentityRepository, ModuleRepository moduleRepository, ModuleAssociationRepository moduleAssociationRepository) {
         this.analyzingStrategyRepository = analyzingStrategyRepository;
         this.commitRepository = commitRepository;
         this.filePatternRepository = filePatternRepository;
@@ -63,6 +69,8 @@ public class ProjectDeleter {
         this.findingRepository = findingRepository;
         this.metricValueRepository = metricValueRepository;
         this.fileIdentityRepository = fileIdentityRepository;
+        this.moduleRepository = moduleRepository;
+        this.moduleAssociationRepository = moduleAssociationRepository;
     }
 
     public void deleteProject(Long id) {
@@ -73,7 +81,9 @@ public class ProjectDeleter {
         logger.debug("deleted {} CommitLogEntry entities", commitLogEntryRepository.deleteByProjectId(id));
         logger.debug("deleted {} MetricValue entities", metricValueRepository.deleteByProjectId(id));
         logger.debug("deleted {} Finding entities", findingRepository.deleteByProjectId(id));
+        logger.debug("deleted {} ModuleAssociation entities", moduleAssociationRepository.deleteByProjectId(id));
         logger.debug("deleted {} CommitToFileAssociation entities", commitToFileAssociationRepository.deleteByProjectId(id));
+        logger.debug("deleted {} Module entities", moduleRepository.deleteByProjectId(id));
         logger.debug("deleted {} File entities", fileRepository.deleteByProjectId(id));
         logger.debug("deleted {} FileIdentity entities", fileIdentityRepository.deleteByProjectId(id));
         logger.debug("deleted {} Commit entities", commitRepository.deleteByProjectId(id));

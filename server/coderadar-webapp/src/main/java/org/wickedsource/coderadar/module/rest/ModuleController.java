@@ -34,10 +34,13 @@ public class ModuleController {
 
     private ModuleRepository moduleRepository;
 
+    private ModuleAssociationService moduleAssociationService;
+
     @Autowired
-    public ModuleController(ProjectVerifier projectVerifier, ModuleRepository moduleRepository) {
+    public ModuleController(ProjectVerifier projectVerifier, ModuleRepository moduleRepository, ModuleAssociationService moduleAssociationService) {
         this.projectVerifier = projectVerifier;
         this.moduleRepository = moduleRepository;
+        this.moduleAssociationService = moduleAssociationService;
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -50,6 +53,7 @@ public class ModuleController {
         Module module = new Module();
         assembler.updateEntity(module, moduleResource);
         module = moduleRepository.save(module);
+        moduleAssociationService.associate(module);
         return new ResponseEntity<>(assembler.toResource(module), HttpStatus.CREATED);
     }
 
@@ -74,6 +78,7 @@ public class ModuleController {
         }
         ModuleResourceAssembler assembler = new ModuleResourceAssembler(project);
         module = assembler.updateEntity(module, moduleResource);
+        moduleAssociationService.reassociate(module);
         return new ResponseEntity<>(assembler.toResource(module), HttpStatus.OK);
     }
 
@@ -90,7 +95,12 @@ public class ModuleController {
     @RequestMapping(path = "/{moduleId}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteModule(@PathVariable Long moduleId, @PathVariable Long projectId) {
         projectVerifier.checkProjectExistsOrThrowException(projectId);
-        moduleRepository.delete(moduleId);
+        Module module = moduleRepository.findOne(moduleId);
+        if (module == null) {
+            throw new ResourceNotFoundException();
+        }
+        moduleAssociationService.disassociate(module);
+        moduleRepository.delete(module);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

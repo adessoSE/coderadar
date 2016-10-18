@@ -5,6 +5,7 @@ import org.wickedsource.coderadar.file.domain.File;
 import org.wickedsource.coderadar.module.domain.Module;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public class CommitToFileAssociation {
                     @JoinColumn(name = "file_id", nullable = false, updatable = false, referencedColumnName = "file_id")
             },
             inverseJoinColumns = @JoinColumn(name = "module_id", nullable = false, updatable = false))
-    private List<Module> modules;
+    private List<Module> modules = new ArrayList<>();
 
     public CommitToFileAssociation() {
 

@@ -135,6 +135,9 @@ Using the following REST endpoints, you can provide coderadar with information a
 your codebase. Each module simply is a path into the VCS codebase. All files that are within that path
 are considered to be part of the module.
 
+Please note that the operations to create, update and delete modules may take some time to be finished since all
+files in all commits have to be updated during these operations.
+
 === Structure
 
 include::{snippets}/modules/create/request-fields.adoc[]
