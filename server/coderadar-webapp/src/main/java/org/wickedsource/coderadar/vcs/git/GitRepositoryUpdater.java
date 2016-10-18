@@ -20,7 +20,7 @@ public class GitRepositoryUpdater implements RepositoryUpdater {
             git.pull().call();
             return git;
         } catch (Exception e) {
-            throw new IllegalStateException(String.format("error accessing local GIT repository at %s", repositoryRoot));
+            throw new IllegalStateException(String.format("error accessing local GIT repository at %s", repositoryRoot), e);
         }
     }
 
