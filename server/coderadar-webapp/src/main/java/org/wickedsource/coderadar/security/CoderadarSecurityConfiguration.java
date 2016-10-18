@@ -18,6 +18,8 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
                 .anyRequest().permitAll()
                 .and()
                 .httpBasic();
+
+        http.csrf().disable();
     }
 
     @Autowired
