@@ -35,9 +35,6 @@ public class ModuleTreeResource extends ResourceSupport {
         this.name = name;
         this.parent = parent;
         this.payload = payload;
-        if (parent != null) {
-            addMetricValuesToAncestors();
-        }
     }
 
     public String getName() {
@@ -76,6 +73,18 @@ public class ModuleTreeResource extends ResourceSupport {
             parent = parent.getParent();
         }
         return ancestors;
+    }
+
+    @JsonIgnore
+    public final ModuleTreeResource getRoot() {
+        ModuleTreeResource parent = getParent();
+        while (parent != null) {
+            if (parent.getParent() == null) {
+                return parent;
+            }
+            parent = parent.getParent();
+        }
+        throw new IllegalStateException("Tree has no root!");
     }
 
     /**
@@ -117,19 +126,21 @@ public class ModuleTreeResource extends ResourceSupport {
 
             previousModule = currentModule;
         }
+
+        addMetricValuesFromChildren();
     }
 
     /**
-     * Adds the values of this node's metrics to all parents up to the root node.
+     * Adds the values of this node's child modules to this nodes payload.
      */
-    private void addMetricValuesToAncestors() {
-        for (ModuleTreeResource parent : getAncestors()) {
-            for (Map.Entry<String, Long> entry : payload.getMetricValues().entrySet()) {
-                Long currentValue = parent.getPayload().getMetricValue(entry.getKey());
+    private void addMetricValuesFromChildren() {
+        for (ModuleTreeResource childModule : modules) {
+            for (Map.Entry<String, Long> entry : childModule.getPayload().getMetricValues().entrySet()) {
+                Long currentValue = this.payload.getMetricValue(entry.getKey());
                 if (currentValue == null) {
                     currentValue = 0L;
                 }
-                parent.getPayload().setMetricValue(entry.getKey(), currentValue + payload.getMetricValue(entry.getKey()));
+                this.payload.setMetricValue(entry.getKey(), currentValue + entry.getValue());
             }
         }
     }

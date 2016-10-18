@@ -1,7 +1,6 @@
 package org.wickedsource.coderadar.metricquery.rest.module;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -20,7 +19,6 @@ public class ModuleMetricsControllerTest extends ControllerTestTemplate {
 
     @Test
     @DatabaseSetup(SINGLE_PROJECT_WITH_METRICS_AND_MODULES)
-    @ExpectedDatabase(SINGLE_PROJECT_WITH_METRICS_AND_MODULES)
     public void queryCommitMetrics() throws Exception {
 
         ModuleMetricsQuery query = new ModuleMetricsQuery();
@@ -42,6 +40,9 @@ public class ModuleMetricsControllerTest extends ControllerTestTemplate {
 
         ModuleTreeResource moduleTreeResource = fromJson(result.getResponse().getContentAsString(), ModuleTreeResource.class);
         assertThat(moduleTreeResource.getModules()).hasSize(2);
+        assertThat(moduleTreeResource.getPayload().getMetricValue("metric1")).isEqualTo(26L + 12L);
+        assertThat(moduleTreeResource.getPayload().getMetricValue("metric2")).isEqualTo(28L + 0L);
+        assertThat(moduleTreeResource.getPayload().getMetricValue("metric3")).isEqualTo(14L + 5L);
         assertThat(moduleTreeResource.getModules().get(0).getName()).isEqualTo("/path/to/module1");
         assertThat(moduleTreeResource.getModules().get(0).getModules()).hasSize(1);
         assertThat(moduleTreeResource.getModules().get(0).getPayload().getMetricValue("metric1")).isEqualTo(26L);
