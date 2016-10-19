@@ -33,10 +33,10 @@ public class NestedModuleMetricsAssemblerTest {
         valuesPerModule.add(new MetricValuePerModuleDTO("metric2", 11L, "server/foo/bar/module6/submodule7"));
         valuesPerModule.add(new MetricValuePerModuleDTO("metric3", 12L, "server/foo/bar/module6/submodule7"));
 
-        ModuleMetricsTreeResourceAssembler assembler = new ModuleMetricsTreeResourceAssembler();
-        ModuleTreeResource resource = assembler.toResource(valuesPerModule);
+        MetricsTreeResourceAssembler assembler = new MetricsTreeResourceAssembler();
+        MetricsTreeResource resource = assembler.toResource(valuesPerModule);
 
-        assertThat(resource.getModules()).hasSize(3);
+        assertThat(resource.getChildren()).hasSize(3);
 
     }
 

@@ -7,20 +7,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ModuleMetricsTreeResourceAssembler extends ResourceAssemblerSupport<List<MetricValuePerModuleDTO>, ModuleTreeResource> {
+public class MetricsTreeResourceAssembler extends ResourceAssemblerSupport<List<MetricValuePerModuleDTO>, MetricsTreeResource> {
 
-    public ModuleMetricsTreeResourceAssembler() {
-        super(ModuleMetricsController.class, ModuleTreeResource.class);
+    public MetricsTreeResourceAssembler() {
+        super(ModuleMetricsController.class, MetricsTreeResource.class);
     }
 
     @Override
-    public ModuleTreeResource toResource(List<MetricValuePerModuleDTO> metricValuesPerModule) {
+    public MetricsTreeResource toResource(List<MetricValuePerModuleDTO> metricValuesPerModule) {
         Map<String, List<MetricValuePerModuleDTO>> metricValuesGroupedByModule = metricValuesPerModule
                 .stream()
                 .collect(Collectors.groupingBy(MetricValuePerModuleDTO::getModule));
-        ModuleTreeResource moduleTreeResource = new ModuleTreeResource();
-        moduleTreeResource.addModules(metricValuesGroupedByModule.keySet(), (module -> toModuleMetricsResource(metricValuesGroupedByModule.get(module))));
-        return moduleTreeResource;
+        MetricsTreeResource metricsTreeResource = new MetricsTreeResource();
+        metricsTreeResource.addModules(metricValuesGroupedByModule.keySet(), (module -> toModuleMetricsResource(metricValuesGroupedByModule.get(module))));
+        return metricsTreeResource;
     }
 
     private MetricValuesSet toModuleMetricsResource(List<MetricValuePerModuleDTO> metricValuesPerModule) {

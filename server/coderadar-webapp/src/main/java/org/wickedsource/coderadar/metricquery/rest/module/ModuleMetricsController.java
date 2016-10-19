@@ -41,16 +41,16 @@ public class ModuleMetricsController {
     }
 
     @RequestMapping(path = "/perModule", method = {RequestMethod.GET, RequestMethod.POST}, produces = "application/hal+json")
-    public ResponseEntity<ModuleTreeResource> queryMetrics(@PathVariable Long projectId, @Valid @RequestBody ModuleMetricsQuery query) {
+    public ResponseEntity<MetricsTreeResource> queryMetrics(@PathVariable Long projectId, @Valid @RequestBody ModuleMetricsQuery query) {
         projectVerifier.checkProjectExistsOrThrowException(projectId);
         Commit commit = commitRepository.findByName(query.getCommit());
         if (commit == null) {
             throw new ResourceNotFoundException();
         }
         List<MetricValuePerModuleDTO> moduleValues = metricValueRepository.findValuesAggregatedByModule(projectId, commit.getSequenceNumber(), query.getMetrics());
-        ModuleMetricsTreeResourceAssembler assembler = new ModuleMetricsTreeResourceAssembler();
-        ModuleTreeResource moduleTreeResource = assembler.toResource(moduleValues);
-        return new ResponseEntity<>(moduleTreeResource, HttpStatus.OK);
+        MetricsTreeResourceAssembler assembler = new MetricsTreeResourceAssembler();
+        MetricsTreeResource metricsTreeResource = assembler.toResource(moduleValues);
+        return new ResponseEntity<>(metricsTreeResource, HttpStatus.OK);
     }
 
 }

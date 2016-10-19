@@ -31,33 +31,33 @@ public class ModuleMetricsControllerTest extends ControllerTestTemplate {
                 .content(toJsonWithoutLinks(query))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(containsResource(ModuleTreeResource.class))
+                .andExpect(containsResource(MetricsTreeResource.class))
                 .andDo(document("metrics/module/tree",
                         requestFields(
                                 requestFields.withPath("commit").description("Name of the commit that defines the point in time at which the metrics should be queried."),
                                 requestFields.withPath("metrics").description("List of the names of the metrics whose values you want to query."))))
                 .andReturn();
 
-        ModuleTreeResource moduleTreeResource = fromJson(result.getResponse().getContentAsString(), ModuleTreeResource.class);
-        assertThat(moduleTreeResource.getModules()).hasSize(2);
-        assertThat(moduleTreeResource.getPayload().getMetricValue("metric1")).isEqualTo(26L + 12L);
-        assertThat(moduleTreeResource.getPayload().getMetricValue("metric2")).isEqualTo(28L + 0L);
-        assertThat(moduleTreeResource.getPayload().getMetricValue("metric3")).isEqualTo(14L + 5L);
-        assertThat(moduleTreeResource.getModules().get(0).getName()).isEqualTo("/path/to/module1");
-        assertThat(moduleTreeResource.getModules().get(0).getModules()).hasSize(1);
-        assertThat(moduleTreeResource.getModules().get(0).getPayload().getMetricValue("metric1")).isEqualTo(26L);
-        assertThat(moduleTreeResource.getModules().get(0).getPayload().getMetricValue("metric2")).isEqualTo(28L);
-        assertThat(moduleTreeResource.getModules().get(0).getPayload().getMetricValue("metric3")).isEqualTo(14L);
-        assertThat(moduleTreeResource.getModules().get(0).getModules().get(0).getName()).isEqualTo("/path/to/module1/submodule2");
-        assertThat(moduleTreeResource.getModules().get(0).getModules().get(0).getPayload().getMetricValue("metric1")).isEqualTo(14L);
-        assertThat(moduleTreeResource.getModules().get(0).getModules().get(0).getPayload().getMetricValue("metric2")).isEqualTo(15L);
-        assertThat(moduleTreeResource.getModules().get(0).getModules().get(0).getPayload().getMetricValue("metric3")).isEqualTo(3L);
-        assertThat(moduleTreeResource.getModules().get(0).getModules().get(0).getModules()).isEmpty();
-        assertThat(moduleTreeResource.getModules().get(1).getName()).isEqualTo("/path/to/module3");
-        assertThat(moduleTreeResource.getModules().get(1).getModules()).isEmpty();
-        assertThat(moduleTreeResource.getModules().get(1).getPayload().getMetricValue("metric1")).isEqualTo(12L);
-        assertThat(moduleTreeResource.getModules().get(1).getPayload().getMetricValue("metric2")).isNull();
-        assertThat(moduleTreeResource.getModules().get(1).getPayload().getMetricValue("metric3")).isEqualTo(5L);
+        MetricsTreeResource metricsTreeResource = fromJson(result.getResponse().getContentAsString(), MetricsTreeResource.class);
+        assertThat(metricsTreeResource.getChildren()).hasSize(2);
+        assertThat(metricsTreeResource.getPayload().getMetricValue("metric1")).isEqualTo(26L + 12L);
+        assertThat(metricsTreeResource.getPayload().getMetricValue("metric2")).isEqualTo(28L + 0L);
+        assertThat(metricsTreeResource.getPayload().getMetricValue("metric3")).isEqualTo(14L + 5L);
+        assertThat(metricsTreeResource.getChildren().get(0).getName()).isEqualTo("/path/to/module1");
+        assertThat(metricsTreeResource.getChildren().get(0).getChildren()).hasSize(1);
+        assertThat(metricsTreeResource.getChildren().get(0).getPayload().getMetricValue("metric1")).isEqualTo(26L);
+        assertThat(metricsTreeResource.getChildren().get(0).getPayload().getMetricValue("metric2")).isEqualTo(28L);
+        assertThat(metricsTreeResource.getChildren().get(0).getPayload().getMetricValue("metric3")).isEqualTo(14L);
+        assertThat(metricsTreeResource.getChildren().get(0).getChildren().get(0).getName()).isEqualTo("/path/to/module1/submodule2");
+        assertThat(metricsTreeResource.getChildren().get(0).getChildren().get(0).getPayload().getMetricValue("metric1")).isEqualTo(14L);
+        assertThat(metricsTreeResource.getChildren().get(0).getChildren().get(0).getPayload().getMetricValue("metric2")).isEqualTo(15L);
+        assertThat(metricsTreeResource.getChildren().get(0).getChildren().get(0).getPayload().getMetricValue("metric3")).isEqualTo(3L);
+        assertThat(metricsTreeResource.getChildren().get(0).getChildren().get(0).getChildren()).isEmpty();
+        assertThat(metricsTreeResource.getChildren().get(1).getName()).isEqualTo("/path/to/module3");
+        assertThat(metricsTreeResource.getChildren().get(1).getChildren()).isEmpty();
+        assertThat(metricsTreeResource.getChildren().get(1).getPayload().getMetricValue("metric1")).isEqualTo(12L);
+        assertThat(metricsTreeResource.getChildren().get(1).getPayload().getMetricValue("metric2")).isNull();
+        assertThat(metricsTreeResource.getChildren().get(1).getPayload().getMetricValue("metric3")).isEqualTo(5L);
 
     }
 

@@ -14,24 +14,26 @@ import java.util.stream.Collectors;
  * Tree structure that contains nested modules. For each module it contains a set of selected metric values.
  * Parent modules inherit the metric values of their sub modules.
  */
-public class ModuleTreeResource extends ResourceSupport {
+public class MetricsTreeResource extends ResourceSupport {
 
     private String name;
+
+    private MetricsTreeNodeType type = MetricsTreeNodeType.MODULE;
 
     @JsonUnwrapped
     private MetricValuesSet payload;
 
-    private List<ModuleTreeResource> modules = new ArrayList<>();
+    private List<MetricsTreeResource> children = new ArrayList<>();
 
     @JsonIgnore
-    private ModuleTreeResource parent;
+    private MetricsTreeResource parent;
 
-    public ModuleTreeResource() {
+    public MetricsTreeResource() {
         this.name = "root";
         this.payload = new MetricValuesSet();
     }
 
-    public ModuleTreeResource(String name, ModuleTreeResource parent, MetricValuesSet payload) {
+    public MetricsTreeResource(String name, MetricsTreeResource parent, MetricValuesSet payload) {
         this.name = name;
         this.parent = parent;
         this.payload = payload;
@@ -45,19 +47,19 @@ public class ModuleTreeResource extends ResourceSupport {
         this.name = name;
     }
 
-    public List<ModuleTreeResource> getModules() {
-        return modules;
+    public List<MetricsTreeResource> getChildren() {
+        return children;
     }
 
-    public void setModules(List<ModuleTreeResource> modules) {
-        this.modules = modules;
+    public void setChildren(List<MetricsTreeResource> children) {
+        this.children = children;
     }
 
-    public ModuleTreeResource getParent() {
+    public MetricsTreeResource getParent() {
         return parent;
     }
 
-    public void setParent(ModuleTreeResource parent) {
+    public void setParent(MetricsTreeResource parent) {
         this.parent = parent;
     }
 
@@ -65,9 +67,9 @@ public class ModuleTreeResource extends ResourceSupport {
      * Returns a list of all ancestors of the current node up to the root node.
      */
     @JsonIgnore
-    public final List<ModuleTreeResource> getAncestors() {
-        List<ModuleTreeResource> ancestors = new ArrayList<>();
-        ModuleTreeResource parent = getParent();
+    public final List<MetricsTreeResource> getAncestors() {
+        List<MetricsTreeResource> ancestors = new ArrayList<>();
+        MetricsTreeResource parent = getParent();
         while (parent != null) {
             ancestors.add(parent);
             parent = parent.getParent();
@@ -76,8 +78,8 @@ public class ModuleTreeResource extends ResourceSupport {
     }
 
     @JsonIgnore
-    public final ModuleTreeResource getRoot() {
-        ModuleTreeResource parent = getParent();
+    public final MetricsTreeResource getRoot() {
+        MetricsTreeResource parent = getParent();
         while (parent != null) {
             if (parent.getParent() == null) {
                 return parent;
@@ -100,27 +102,27 @@ public class ModuleTreeResource extends ResourceSupport {
                 .sorted()
                 .collect(Collectors.toList());
 
-        ModuleTreeResource previousModule = null;
+        MetricsTreeResource previousModule = null;
         for (String module : sortedModules) {
-            ModuleTreeResource currentModule = null;
+            MetricsTreeResource currentModule = null;
             if (previousModule == null) {
-                currentModule = new ModuleTreeResource(module, this, payloadSupplier.getPayload(module));
-                this.modules.add(currentModule);
+                currentModule = new MetricsTreeResource(module, this, payloadSupplier.getPayload(module));
+                this.children.add(currentModule);
             } else if (previousModule.getName() != null && module.startsWith(previousModule.getName())) {
-                currentModule = new ModuleTreeResource(module, previousModule, payloadSupplier.getPayload(module));
-                previousModule.getModules().add(currentModule);
+                currentModule = new MetricsTreeResource(module, previousModule, payloadSupplier.getPayload(module));
+                previousModule.getChildren().add(currentModule);
             } else {
-                List<ModuleTreeResource> ancestors = previousModule.getAncestors();
-                for (ModuleTreeResource ancestor : ancestors) {
+                List<MetricsTreeResource> ancestors = previousModule.getAncestors();
+                for (MetricsTreeResource ancestor : ancestors) {
                     if (ancestor.getName() != null && module.startsWith(ancestor.getName())) {
-                        currentModule = new ModuleTreeResource(module, ancestor, payloadSupplier.getPayload(module));
-                        ancestor.getModules().add(currentModule);
+                        currentModule = new MetricsTreeResource(module, ancestor, payloadSupplier.getPayload(module));
+                        ancestor.getChildren().add(currentModule);
                         break;
                     }
                 }
                 if (currentModule == null) {
-                    currentModule = new ModuleTreeResource(module, this, payloadSupplier.getPayload(module));
-                    this.modules.add(currentModule);
+                    currentModule = new MetricsTreeResource(module, this, payloadSupplier.getPayload(module));
+                    this.children.add(currentModule);
                 }
             }
 
@@ -134,7 +136,7 @@ public class ModuleTreeResource extends ResourceSupport {
      * Adds the values of this node's child modules to this nodes payload.
      */
     private void addMetricValuesFromChildren() {
-        for (ModuleTreeResource childModule : modules) {
+        for (MetricsTreeResource childModule : children) {
             for (Map.Entry<String, Long> entry : childModule.getPayload().getMetricValues().entrySet()) {
                 Long currentValue = this.payload.getMetricValue(entry.getKey());
                 if (currentValue == null) {
@@ -151,5 +153,13 @@ public class ModuleTreeResource extends ResourceSupport {
 
     public void setPayload(MetricValuesSet payload) {
         this.payload = payload;
+    }
+
+    public MetricsTreeNodeType getType() {
+        return type;
+    }
+
+    public void setType(MetricsTreeNodeType type) {
+        this.type = type;
     }
 }
