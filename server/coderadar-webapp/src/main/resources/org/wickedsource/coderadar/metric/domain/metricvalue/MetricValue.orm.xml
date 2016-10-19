@@ -43,7 +43,7 @@
 
     <named-query name="MetricValue.findValuesAggregatedByModule">
         <query><![CDATA[
-            SELECT NEW org.wickedsource.coderadar.metric.domain.metricvalue.MetricValuePerModuleDTO(mv.id.metricName, sum(mv.value), m.path)
+            SELECT NEW org.wickedsource.coderadar.metric.domain.metricvalue.GroupedByModuleMetricValueDTO(mv.id.metricName, sum(mv.value), m.path)
             FROM MetricValue mv, CommitToFileAssociation a
             JOIN a.modules m
             WHERE mv.id.file.id = a.id.file.id
@@ -57,6 +57,25 @@
                    AND m2.id.file.identity.id = mv.id.file.identity.id
                    AND m2.id.metricName = mv.id.metricName)
             GROUP BY mv.id.metricName, m.path
+            ]]>
+        </query>
+    </named-query>
+
+    <named-query name="MetricValue.findValuesAggregatedByFile">
+        <query><![CDATA[
+            SELECT NEW org.wickedsource.coderadar.metric.domain.metricvalue.GroupedByFileMetricValueDTO(mv.id.metricName, sum(mv.value), mv.id.file.filepath)
+            FROM MetricValue mv, CommitToFileAssociation a
+            WHERE mv.id.file.id = a.id.file.id
+              AND mv.id.commit.project.id = :projectId
+              AND mv.id.metricName IN (:metricNames)
+              AND a.id.commit.sequenceNumber = mv.id.commit.sequenceNumber
+              AND mv.id.commit.sequenceNumber =
+                (SELECT max(m2.id.commit.sequenceNumber)
+                 FROM MetricValue m2
+                 WHERE m2.id.commit.sequenceNumber<=:commitSequenceNumber
+                   AND m2.id.file.identity.id = mv.id.file.identity.id
+                   AND m2.id.metricName = mv.id.metricName)
+            GROUP BY mv.id.metricName, mv.id.file.filepath
             ]]>
         </query>
     </named-query>

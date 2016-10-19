@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metricquery.rest.module;
+package org.wickedsource.coderadar.metricquery.rest.tree;
 
 import org.junit.Test;
 
@@ -10,13 +10,13 @@ public class MetricsTreeResourceTest {
 
     @Test
     public void addedModulesAreNestedCorrectly() {
-        MetricsTreeResource tree = new MetricsTreeResource(null, null, null);
+        MetricsTreeResource tree = new MetricsTreeResource(null, null, null, MetricsTreeNodeType.MODULE);
         tree.addModules(Arrays.asList("server/foo/module1",
                 "server/foo/module1/submodule1",
                 "server/foo/module1/submodule2",
                 "server/foo/module1/submodule1/subsubmodule3",
                 "server/foo/bar/module4/submodule5",
-                "server/foo/bar/module6/submodule7"), (module -> new MetricValuesSet()));
+                "server/foo/bar/module6/submodule7"), (module -> new MetricValuesSet()), (module -> MetricsTreeNodeType.MODULE));
 
         assertThat(tree.getChildren()).hasSize(3);
         assertThat(tree.getChildren().get(0).getName()).isEqualTo("server/foo/bar/module4/submodule5");

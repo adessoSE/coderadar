@@ -559,17 +559,14 @@ include::{snippets}/metrics/history/metrics/http-request.adoc[]
 
 include::{snippets}/metrics/history/metrics/http-response.adoc[]
 
-== Module Metric Values
+== Metrics Tree
 
-The following endpoints provide metric value data aggregated by the modules that are currently configured
-for you project (see <<chapter-modules, Modules>>).
-
-=== Querying Nested Module Metric Values
-This endpoint provides a tree structure containing all modules of the project and their submodules.
+=== Querying a Metrics Tree
+This endpoint provides a tree structure containing metrics for all modules and files of the project.
 
 ==== Query Structure
 
-include::{snippets}/metrics/module/tree/request-fields.adoc[]
+include::{snippets}/metrics/tree/request-fields.adoc[]
 
 ==== Example Request
 
@@ -577,11 +574,11 @@ include::{snippets}/metrics/module/tree/request-fields.adoc[]
 ====
 This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
 ====
-include::{snippets}/metrics/module/tree/http-request.adoc[]
+include::{snippets}/metrics/tree/http-request.adoc[]
 
 ==== Example Response
 
-include::{snippets}/metrics/module/tree/http-response.adoc[]
+include::{snippets}/metrics/tree/http-response.adoc[]
 
 
 

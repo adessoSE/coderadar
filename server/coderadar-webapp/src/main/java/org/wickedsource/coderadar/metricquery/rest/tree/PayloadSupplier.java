@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metricquery.rest.module;
+package org.wickedsource.coderadar.metricquery.rest.tree;
 
 @FunctionalInterface
 public interface PayloadSupplier<T> {

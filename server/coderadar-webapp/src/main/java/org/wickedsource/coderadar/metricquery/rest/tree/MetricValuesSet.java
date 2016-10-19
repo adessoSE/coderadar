@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metricquery.rest.module;
+package org.wickedsource.coderadar.metricquery.rest.tree;
 
 import java.util.HashMap;
 import java.util.Map;

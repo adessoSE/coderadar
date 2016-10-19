@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metricquery.rest.module;
+package org.wickedsource.coderadar.metricquery.rest.tree;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Provides parameters to query for values of one or more metrics values at the time of a specific commit.
  */
-public class ModuleMetricsQuery {
+public class MetricsTreeQuery {
 
     @NotNull
     private String commit;
@@ -17,7 +17,7 @@ public class ModuleMetricsQuery {
     @Size(min = 1)
     private List<String> metrics;
 
-    public ModuleMetricsQuery() {
+    public MetricsTreeQuery() {
     }
 
     private void initMetrics() {

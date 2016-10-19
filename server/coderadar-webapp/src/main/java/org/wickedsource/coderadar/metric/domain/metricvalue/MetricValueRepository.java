@@ -41,6 +41,9 @@ public interface MetricValueRepository extends CrudRepository<MetricValue, Long>
     Page<String> findMetricsInProject(@Param("projectId") Long projectId, Pageable pageable);
 
     @Query(name = "MetricValue.findValuesAggregatedByModule")
-    List<MetricValuePerModuleDTO> findValuesAggregatedByModule(@Param("projectId") Long projectId, @Param("commitSequenceNumber") Integer commitSequenceNumber, @Param("metricNames") List<String> metricNames);
+    List<GroupedMetricValueDTO> findValuesAggregatedByModule(@Param("projectId") Long projectId, @Param("commitSequenceNumber") Integer commitSequenceNumber, @Param("metricNames") List<String> metricNames);
+
+    @Query(name = "MetricValue.findValuesAggregatedByFile")
+    List<GroupedByFileMetricValueDTO> findValuesAggregatedByFile(@Param("projectId") Long projectId, @Param("commitSequenceNumber") Integer commitSequenceNumber, @Param("metricNames") List<String> metricNames);
 
 }

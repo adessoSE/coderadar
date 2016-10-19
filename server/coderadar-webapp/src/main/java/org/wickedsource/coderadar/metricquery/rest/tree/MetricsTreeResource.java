@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.metricquery.rest.module;
+package org.wickedsource.coderadar.metricquery.rest.tree;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
@@ -18,7 +18,7 @@ public class MetricsTreeResource extends ResourceSupport {
 
     private String name;
 
-    private MetricsTreeNodeType type = MetricsTreeNodeType.MODULE;
+    private MetricsTreeNodeType type;
 
     @JsonUnwrapped
     private MetricValuesSet payload;
@@ -31,12 +31,14 @@ public class MetricsTreeResource extends ResourceSupport {
     public MetricsTreeResource() {
         this.name = "root";
         this.payload = new MetricValuesSet();
+        this.type = MetricsTreeNodeType.MODULE;
     }
 
-    public MetricsTreeResource(String name, MetricsTreeResource parent, MetricValuesSet payload) {
+    public MetricsTreeResource(String name, MetricsTreeResource parent, MetricValuesSet payload, MetricsTreeNodeType type) {
         this.name = name;
         this.parent = parent;
         this.payload = payload;
+        this.type = type;
     }
 
     public String getName() {
@@ -97,7 +99,7 @@ public class MetricsTreeResource extends ResourceSupport {
      * @param modules         the list of modules to transform into a tree strucure.
      * @param payloadSupplier function that provides the payload for a node.
      */
-    public void addModules(Collection<String> modules, PayloadSupplier<MetricValuesSet> payloadSupplier) {
+    public void addModules(Collection<String> modules, PayloadSupplier<MetricValuesSet> payloadSupplier, NodeTypeSupplier nodeTypeSupplier) {
         List<String> sortedModules = modules.stream()
                 .sorted()
                 .collect(Collectors.toList());
@@ -106,22 +108,22 @@ public class MetricsTreeResource extends ResourceSupport {
         for (String module : sortedModules) {
             MetricsTreeResource currentModule = null;
             if (previousModule == null) {
-                currentModule = new MetricsTreeResource(module, this, payloadSupplier.getPayload(module));
+                currentModule = new MetricsTreeResource(module, this, payloadSupplier.getPayload(module), nodeTypeSupplier.getNodeType(module));
                 this.children.add(currentModule);
             } else if (previousModule.getName() != null && module.startsWith(previousModule.getName())) {
-                currentModule = new MetricsTreeResource(module, previousModule, payloadSupplier.getPayload(module));
+                currentModule = new MetricsTreeResource(module, previousModule, payloadSupplier.getPayload(module), nodeTypeSupplier.getNodeType(module));
                 previousModule.getChildren().add(currentModule);
             } else {
                 List<MetricsTreeResource> ancestors = previousModule.getAncestors();
                 for (MetricsTreeResource ancestor : ancestors) {
                     if (ancestor.getName() != null && module.startsWith(ancestor.getName())) {
-                        currentModule = new MetricsTreeResource(module, ancestor, payloadSupplier.getPayload(module));
+                        currentModule = new MetricsTreeResource(module, ancestor, payloadSupplier.getPayload(module), nodeTypeSupplier.getNodeType(module));
                         ancestor.getChildren().add(currentModule);
                         break;
                     }
                 }
                 if (currentModule == null) {
-                    currentModule = new MetricsTreeResource(module, this, payloadSupplier.getPayload(module));
+                    currentModule = new MetricsTreeResource(module, this, payloadSupplier.getPayload(module), nodeTypeSupplier.getNodeType(module));
                     this.children.add(currentModule);
                 }
             }
