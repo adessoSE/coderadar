@@ -3,16 +3,18 @@ v{version}, Tom Hombergs, {date}
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
+:highlightjs-theme: darkula
 :toc: left
-:toclevels: 2
+:toclevels: 3
 :sectlinks:
+:sectnums:
 
 [introduction]
-= Introduction
+== Introduction
 
 The coderadar server is a tool for continuous source code analysis. This document describes the REST API of the coderadar server.
 
-== Usage of HTTP Verbs
+=== Usage of HTTP Verbs
 
 The following table describes how the coderadar API interprets the HTTP verbs.
 
@@ -38,23 +40,23 @@ The following table describes how the coderadar API interprets the HTTP verbs.
 
 anchor:usage-of-get[]
 [NOTE]
-====
+=====
 .Usage of GET
 If a GET request requires parameters, they can usually be
 provided as parameters encoded in the URL. However, in some cases parameters are too unwieldy to
 encode them in the URL. In these cases the parameters are expected as JSON string within the request
 body. Since some tools don't allow GET requests with a body, coderadar accepts the POST method in
 these cases as well.
-====
+=====
 
-== Error Handling
+=== Error Handling
 
-=== Successful Requests
+==== Successful Requests
 
 Successful requests return a response with HTTP status 200 (OK) or 201 (CREATED) and contain a JSON structure in the response
 body if applicable.
 
-=== Validation Errors
+==== Validation Errors
 
 POST requests against the coderadar API usually expect a JSON structure in the request body. If the JSON structure
 contains values that are invalid, the API returns a response with HTTP status 400 (bad request) that contains
@@ -63,72 +65,72 @@ an error JSON structure object that looks like this:
 include::{snippets}/projects/create/error400/http-response.adoc[]
 include::{snippets}/projects/create/error400/response-fields.adoc[]
 
-=== General Errors
+==== General Errors
 
 If some unexpected error occurs during the processing of a request, the API returns a response with HTTP status 500
 (internal server error).
 
-= Configuring a Project
+== Configuring a Project
 anchor:chapter-configure[]
 
 This section describes the resources you can interact with to configure a project to be analyzed by coderadar.
 
-== Project
+=== Project
 
 A project defines some metadata about the project you want coderadar to analyze. With a project resource
 and its sub-resources you provide coderadar with the information it needs to analyze the source code.
 
-=== Structure
+==== Structure
 
 include::{snippets}/projects/create/request-fields.adoc[]
 
-=== Hypermedia Links
+==== Hypermedia Links
 
 include::{snippets}/projects/create/links.adoc[]
 
-=== Listing Projects
+==== Listing Projects
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/projects/list/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/projects/list/http-response.adoc[]
 
 anchor:creating-a-project[]
 
-=== Creating a Project
+==== Creating a Project
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/projects/create/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/projects/create/http-response.adoc[]
 
-=== Updating a Project
+==== Updating a Project
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/projects/update/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/projects/update/http-response.adoc[]
 
-=== Deleting a Project
+==== Deleting a Project
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/projects/delete/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/projects/delete/http-response.adoc[]
 
-== Modules
+=== Modules
 anchor:chapter-modules[]
 Source code is usually arranged within multiple modules that each contains a set of source files.
 Using the following REST endpoints, you can provide coderadar with information about the modules within
@@ -138,55 +140,55 @@ are considered to be part of the module.
 Please note that the operations to create, update and delete modules may take some time to be finished since all
 files in all commits have to be updated during these operations.
 
-=== Structure
+==== Structure
 
 include::{snippets}/modules/create/request-fields.adoc[]
 
-=== Hypermedia Links
+==== Hypermedia Links
 
 include::{snippets}/modules/create/links.adoc[]
 
-=== Creating a Module
+==== Creating a Module
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/modules/create/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/modules/create/http-response.adoc[]
 
-=== Updating a Module
+==== Updating a Module
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/modules/update/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/modules/update/http-response.adoc[]
 
-=== Listing all Modules of a Project
+==== Listing all Modules of a Project
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/modules/list/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/modules/list/http-response.adoc[]
 
-=== Deleting a Module
+==== Deleting a Module
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/modules/delete/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/modules/delete/http-response.adoc[]
 
-== File Patterns
+=== File Patterns
 
 A file pattern describes a set of files within a project's code base. Each project can have several file patterns
 defined. Each file pattern belongs to a certain file set, the most important of which is the SOURCE file set that
@@ -196,166 +198,166 @@ File patterns may either define a pattern for files to be INCLUDED or files to b
 contained in a certain file set (like the SOURCE file set), coderadar will first apply all INCLUDE patterns of that file set and then apply all EXCLUDE
 patterns. Thus, the file set will include all INCLUDED files except those that were part of an EXCLUDE pattern.
 
-=== Structure
+==== Structure
 
 include::{snippets}/filepatterns/create-update/request-fields.adoc[]
 
-=== Hypermedia Links
+==== Hypermedia Links
 
 include::{snippets}/filepatterns/create-update/links.adoc[]
 
-=== Listing a Project's File Patterns
+==== Listing a Project's File Patterns
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/filepatterns/get/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/filepatterns/get/http-response.adoc[]
 
-=== Setting a Project's File Patterns
+==== Setting a Project's File Patterns
 
 Coderadar views a project's list of file patterns as a single resource. Hence, you can only list and save
 all file patterns of a project at once.
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/filepatterns/create-update/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/filepatterns/create-update/http-response.adoc[]
 
-== Analyzer Configuration
+=== Analyzer Configuration
 
 Coderadar has a plugin system for source code analyzers so you can implement your own analyzers that produce the metrics
 you need (or you can use the analyzer plugins that are shipped with coderadar). For each project, you can configure each analyzer
 plugin via the AnalyzerConfiguration resource.
 
-=== Structure
+==== Structure
 
 include::{snippets}/analyzerConfiguration/post/request-fields.adoc[]
 
-=== Hypermedia Links
+==== Hypermedia Links
 
 include::{snippets}/analyzerConfiguration/post/links.adoc[]
 
-=== Adding an Analyzer Configuration
+==== Adding an Analyzer Configuration
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/analyzerConfiguration/post/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/analyzerConfiguration/post/http-response.adoc[]
 
-=== Deleting an Analyzer Configuration
+==== Deleting an Analyzer Configuration
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/analyzerConfiguration/delete/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/analyzerConfiguration/delete/http-response.adoc[]
 
-=== Updating an Analyzer Configuration
+==== Updating an Analyzer Configuration
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/analyzerConfiguration/update/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/analyzerConfiguration/update/http-response.adoc[]
 
-=== Listing a Project's Analyzer Configurations
+==== Listing a Project's Analyzer Configurations
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/analyzerConfiguration/get/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/analyzerConfiguration/get/http-response.adoc[]
 
-=== Loading a single Analyzer Configuration
+==== Loading a single Analyzer Configuration
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/analyzerConfiguration/getSingle/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/analyzerConfiguration/getSingle/http-response.adoc[]
 
-== Analyzer Configuration File
+=== Analyzer Configuration File
 
 An AnalyzerConfiguration can be supplied with a configuration file. For example, the Checkstyle analyzer
 can be supplied with a checkstyle configuration xml file to define which rules to check. The content of
 the configuration file can be text, xml, or even a binary format, depending on the configuration format
 the analyzer needs.
 
-=== Uploading an Analyzer Configuration File
+==== Uploading an Analyzer Configuration File
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/analyzerConfigurationFile/upload/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/analyzerConfigurationFile/upload/http-response.adoc[]
 
 
-=== Downloading an Analyzer Configuration File
+==== Downloading an Analyzer Configuration File
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/analyzerConfigurationFile/download/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/analyzerConfigurationFile/download/http-response.adoc[]
 
-== Analyzing Strategy
+=== Analyzing Strategy
 
 An Analyzing Strategy defines which commits of a project are to be analyzed. If there is no active
 Analyzing Strategy present for a project, no analysis will be performed at all. Once you provide
 an Analyzing Strategy, analysis jobs will be queued automatically for the commits defined within the strategy.
 
-=== Structure
+==== Structure
 
 include::{snippets}/strategy/create-update/request-fields.adoc[]
 
-=== Hypermedia Links
+==== Hypermedia Links
 
 include::{snippets}/strategy/create-update/links.adoc[]
 
 anchor:creating-analyzing-strategy[]
 
-=== Setting a Project's Analyzing Strategy
+==== Setting a Project's Analyzing Strategy
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/strategy/create-update/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/strategy/create-update/http-response.adoc[]
 
-=== Getting a Project's Analyzing Strategy
+==== Getting a Project's Analyzing Strategy
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/strategy/get/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/strategy/get/http-response.adoc[]
 
-== Quality Profile
+=== Quality Profile
 
 The main goal of coderadar is to make it easy for you to monitor your quality standards.
 To be able to focus on the quality metrics that are most important to you and your team,
@@ -363,220 +365,220 @@ you can combine a set  metrics within a quality profile. There are several API m
 that take a quality profile as parameter and return information on the metrics that are
 part of the quality profile and thus are most important to you.
 
-=== Structure
+==== Structure
 
 include::{snippets}/qualityprofiles/create/request-fields.adoc[]
 
-=== Hypermedia Links
+==== Hypermedia Links
 
 include::{snippets}/qualityprofiles/create/links.adoc[]
 
-=== Creating a Quality Profile
+==== Creating a Quality Profile
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/qualityprofiles/create/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/qualityprofiles/create/http-response.adoc[]
 
-=== Updating a Quality Profile
+==== Updating a Quality Profile
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/qualityprofiles/update/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/qualityprofiles/update/http-response.adoc[]
 
-=== Loading a single Quality Profile
+==== Loading a single Quality Profile
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/qualityprofiles/get/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/qualityprofiles/get/http-response.adoc[]
 
-=== Deleting a Quality Profile
+==== Deleting a Quality Profile
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/qualityprofiles/delete/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/qualityprofiles/delete/http-response.adoc[]
 
-=== Listing a Project's Quality Profiles
+==== Listing a Project's Quality Profiles
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/qualityprofiles/list/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/qualityprofiles/list/http-response.adoc[]
 
-= Querying Global Data
+== Querying Global Data
 anchor:chapter-query-global-data[]
 
 This section describes the resources that are not attached to a project and are thus available server-wide.
 
-== Analyzer
+=== Analyzer
 
 coderadar can be configured to use Analyzer plugins that analyze source code to create certain metrics.
 
-=== Listing available Analyzers
+==== Listing available Analyzers
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/analyzer/list/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/analyzer/list/http-response.adoc[]
 
-= Querying Project Data
+== Querying Project Data
 anchor:chapter-query-project-data[]
 
 This section describes the resources that are attached to a project and are only available in the context of a
 project.
 
-== Metric
+=== Metric
 
 The Metric resource describes a metric that an analyzer configured in your project provides.
 
-=== Listing available Metrics
+==== Listing available Metrics
 
 You can list all metrics that have been measured for your project by calling the request below.
 
 [NOTE]
-====
+=====
 Metrics will become available as soon as you have provided an <<creating-analyzing-strategy,Analyzing Strategy>> for your project.
 At that moment, analysis of each commit defined in the strategy starts. Depending on how many commits that are,
 analysis will take a while.
-====
+=====
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/metrics/list/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/metrics/list/http-response.adoc[]
 
-== Commit
+=== Commit
 
 The Commit resource contains some metadata about a commit to your project's version control system. Commits
 will become available as soon as you have created a project and provided valid VCS credentials (see <<creating-a-project,Creating a Project>>).
 Depending of the number of commits you have in your project, it may take a while until all commits
 are available.
 
-=== Structure
+==== Structure
 include::{snippets}/commit/list/response-fields.adoc[]
 
-=== Hypermedia Links
+==== Hypermedia Links
 include::{snippets}/commit/list/links.adoc[]
 
-=== Listing a Project's Commits
+==== Listing a Project's Commits
 
-==== Example Request
+===== Example Request
 
 include::{snippets}/commit/list/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/commit/list/http-response.adoc[]
 
-== Commit Metric Values
+=== Commit Metric Values
 
 You can access the metric values aggregated for each commit using this operation. You have to specify a query object
 that defines which metrics you are interested in.
 
 [NOTE]
-====
+=====
 Metric values will become available as soon as you have provided an <<creating-analyzing-strategy,Analyzing Strategy>> for your project.
 At that moment, analysis of each commit defined in the strategy starts. Depending on how many commits that are,
 analysis will take a while.
-====
+=====
 
-=== Querying Metric Values of a Commit
+==== Querying Metric Values of a Commit
 
-==== Query Structure
+===== Query Structure
 
 include::{snippets}/metrics/commit/metrics/request-fields.adoc[]
 
-==== Example Request
+===== Example Request
 
 [NOTE]
-====
+=====
 This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
-====
+=====
 include::{snippets}/metrics/commit/metrics/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/metrics/commit/metrics/http-response.adoc[]
 
-=== Querying Quality Profile Ratings of a Commit
+==== Querying Quality Profile Ratings of a Commit
 
-==== Query Structure
+===== Query Structure
 
 include::{snippets}/metrics/commit/profiles/request-fields.adoc[]
 
-==== Example Request
+===== Example Request
 
 [NOTE]
-====
+=====
 This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
-====
+=====
 include::{snippets}/metrics/commit/profiles/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/metrics/commit/profiles/http-response.adoc[]
 
-=== Querying the History of a Metric
+==== Querying the History of a Metric
 Use this endpoint to receive the history of a specific metric over time.
 
-==== Query Structure
+===== Query Structure
 
 include::{snippets}/metrics/history/metrics/request-fields.adoc[]
 
-==== Example Request
+===== Example Request
 
 [NOTE]
-====
+=====
 This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
-====
+=====
 include::{snippets}/metrics/history/metrics/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/metrics/history/metrics/http-response.adoc[]
 
-== Metrics Tree
+=== Metrics Tree
 
-=== Querying a Metrics Tree
+==== Querying a Metrics Tree
 This endpoint provides a tree structure containing metrics for all modules and files of the project.
 
-==== Query Structure
+===== Query Structure
 
 include::{snippets}/metrics/tree/request-fields.adoc[]
 
-==== Example Request
+===== Example Request
 
 [NOTE]
-====
+=====
 This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
-====
+=====
 include::{snippets}/metrics/tree/http-request.adoc[]
 
-==== Example Response
+===== Example Response
 
 include::{snippets}/metrics/tree/http-response.adoc[]
 
