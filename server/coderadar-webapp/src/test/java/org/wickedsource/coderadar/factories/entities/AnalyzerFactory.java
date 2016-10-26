@@ -26,7 +26,7 @@ public class AnalyzerFactory {
         }
 
         @Override
-        public FileMetrics analyzeFile(byte[] fileContent) throws AnalyzerException {
+        public FileMetrics analyzeFile(String filename, byte[] fileContent) throws AnalyzerException {
             return new FileMetrics();
         }
     }

@@ -16,9 +16,10 @@ public interface SourceCodeFileAnalyzerPlugin extends AnalyzerPlugin {
     /**
      * Analyzes a single file.
      *
+     * @param filename    the full path of the file, starting from the VCS root.
      * @param fileContent the content of the file.
      * @return a set of metric values calculated for the given file.
      */
-    FileMetrics analyzeFile(byte[] fileContent) throws AnalyzerException;
+    FileMetrics analyzeFile(String filename, byte[] fileContent) throws AnalyzerException;
 
 }

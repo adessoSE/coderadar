@@ -27,14 +27,14 @@ public class AllCommitsWalkerTest extends GitTestTemplate {
         final FileMetricsWithChangeType metrics1 = new FileMetricsWithChangeType(ChangeType.ADD);
         metrics1.setMetricCount(new Metric("123"), 5l);
         SourceCodeFileAnalyzerPlugin plugin1 = Mockito.mock(SourceCodeFileAnalyzerPlugin.class);
-        when(plugin1.analyzeFile(any(byte[].class))).thenReturn(metrics1);
+        when(plugin1.analyzeFile(any(String.class), any(byte[].class))).thenReturn(metrics1);
         when(plugin1.getFilter()).thenReturn(new DefaultFileFilter());
 
         // mocking analyzer plugin 2
         final FileMetricsWithChangeType metrics2 = new FileMetricsWithChangeType(ChangeType.ADD);
         metrics1.setMetricCount(new Metric("321"), 10l);
         SourceCodeFileAnalyzerPlugin plugin2 = Mockito.mock(SourceCodeFileAnalyzerPlugin.class);
-        when(plugin2.analyzeFile(any(byte[].class))).thenReturn(metrics2);
+        when(plugin2.analyzeFile(any(String.class), any(byte[].class))).thenReturn(metrics2);
         when(plugin2.getFilter()).thenReturn(new DefaultFileFilter());
 
         List<SourceCodeFileAnalyzerPlugin> analyzers = Arrays.asList(plugin1, plugin2);
@@ -47,10 +47,10 @@ public class AllCommitsWalkerTest extends GitTestTemplate {
         walker.walk(git, commitProcessor);
 
         // verify that each file is passed into all analyzers
-        verify(plugin1).analyzeFile("testFile".getBytes());
-        verify(plugin1).analyzeFile("testJavaFile".getBytes());
-        verify(plugin2).analyzeFile("testFile".getBytes());
-        verify(plugin2).analyzeFile("testJavaFile".getBytes());
+        verify(plugin1).analyzeFile("file1.txt", "testFile".getBytes());
+        verify(plugin1).analyzeFile("dir1/File2.java", "testJavaFile".getBytes());
+        verify(plugin2).analyzeFile("file1.txt", "testFile".getBytes());
+        verify(plugin2).analyzeFile("dir1/File2.java", "testJavaFile".getBytes());
 
         // verify that each analysis result is passed into the MetricsProcessor
         FileMetricsWithChangeType aggregatedMetrics = metrics1;

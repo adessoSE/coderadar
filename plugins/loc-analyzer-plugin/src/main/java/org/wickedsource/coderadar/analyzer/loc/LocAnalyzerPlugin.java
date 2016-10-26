@@ -1,17 +1,17 @@
 package org.wickedsource.coderadar.analyzer.loc;
 
 import org.wickedsource.coderadar.analyzer.api.*;
+import org.wickedsource.coderadar.analyzer.loc.profiles.LocProfile;
+import org.wickedsource.coderadar.analyzer.loc.profiles.Profiles;
 
 import java.io.IOException;
 
 /**
- * A simple analyzer counting java lines of code (loc) in a naive way.
+ * Counts several types of lines of code.
  */
 public class LocAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin {
 
     private LocCounter locCounter = new LocCounter();
-
-    public static final Metric JAVA_LOC_METRIC = new Metric("coderadar:javaLoc");
 
     @Override
     public AnalyzerFileFilter getFilter() {
@@ -19,14 +19,25 @@ public class LocAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin {
     }
 
     @Override
-    public FileMetrics analyzeFile(byte[] fileContent) throws AnalyzerException {
+    public FileMetrics analyzeFile(String filename, byte[] fileContent) throws AnalyzerException {
         try {
-            FileMetrics results = new FileMetrics();
-            results.setMetricCount(JAVA_LOC_METRIC, (long) locCounter.count(fileContent));
-            return results;
+            String fileEnding = filename.substring(filename.lastIndexOf('.'));
+            LocProfile profile = Profiles.getForFile(filename);
+            Loc loc = locCounter.count(fileContent, profile);
+            return toFileMetrics(loc, fileEnding);
         } catch (IOException e) {
             throw new AnalyzerException(e);
         }
+    }
+
+    private FileMetrics toFileMetrics(Loc loc, String fileEnding) {
+        String sanitizedFileEnding = fileEnding.replaceAll("\\.", "");
+        FileMetrics metrics = new FileMetrics();
+        metrics.setMetricCount(new Metric("coderadar:size:loc:" + sanitizedFileEnding), (long) loc.getLoc());
+        metrics.setMetricCount(new Metric("coderadar:size:cloc:" + sanitizedFileEnding), (long) loc.getCloc());
+        metrics.setMetricCount(new Metric("coderadar:size:sloc:" + sanitizedFileEnding), (long) loc.getSloc());
+        metrics.setMetricCount(new Metric("coderadar:size:eloc:" + sanitizedFileEnding), (long) loc.getEloc());
+        return metrics;
     }
 
 

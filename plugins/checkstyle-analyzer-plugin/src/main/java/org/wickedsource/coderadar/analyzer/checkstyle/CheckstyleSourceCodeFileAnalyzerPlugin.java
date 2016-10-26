@@ -58,7 +58,7 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
     }
 
     @Override
-    public FileMetrics analyzeFile(byte[] fileContent) throws AnalyzerException {
+    public FileMetrics analyzeFile(String filename, byte[] fileContent) throws AnalyzerException {
         File fileToAnalyze = null;
         try {
             fileToAnalyze = createTempFile(fileContent);
@@ -86,7 +86,7 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin implements SourceCodeFileAna
     @Override
     public boolean isValidConfigurationFile(byte[] configurationFile) {
         try {
-            Configuration config = getConfigurationFromStream(new ByteArrayInputStream(configurationFile));
+            getConfigurationFromStream(new ByteArrayInputStream(configurationFile));
             return true;
         } catch (CheckstyleException e) {
             return false;

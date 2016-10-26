@@ -12,13 +12,13 @@ public class DummyAnalyzer implements SourceCodeFileAnalyzerPlugin, Configurable
     }
 
     @Override
-    public FileMetrics analyzeFile(byte[] fileContent) throws AnalyzerException {
+    public FileMetrics analyzeFile(String filename, byte[] fileContent) throws AnalyzerException {
         return null;
     }
 
     @Override
     public boolean isValidConfigurationFile(byte[] configurationFile) {
-        if(configurationFile[0] == 'a'){
+        if (configurationFile[0] == 'a') {
             return true;
         }
         return false;

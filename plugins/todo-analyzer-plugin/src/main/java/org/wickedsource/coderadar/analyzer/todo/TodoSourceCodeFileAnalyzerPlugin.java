@@ -24,7 +24,7 @@ public class TodoSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerP
     }
 
     @Override
-    public FileMetrics analyzeFile(byte[] fileContent) throws AnalyzerException {
+    public FileMetrics analyzeFile(String filename, byte[] fileContent) throws AnalyzerException {
         try {
             List<Finding> findings = todoFinder.findTodos(fileContent);
             FileMetrics metrics = new FileMetrics();
