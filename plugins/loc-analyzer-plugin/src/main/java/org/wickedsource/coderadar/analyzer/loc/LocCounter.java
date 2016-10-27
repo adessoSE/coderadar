@@ -89,7 +89,11 @@ public class LocCounter {
     }
 
     private List<LineMarker> getSingleLineCommentStarts(String line, LocProfile profile) {
-        return getMarkers(line, profile.singleLineCommentStart(), LineMarker.Type.SINGLE_LINE_COMMENT_START);
+        if (profile.singleLineCommentStart().isPresent()) {
+            return getMarkers(line, profile.singleLineCommentStart().get(), LineMarker.Type.SINGLE_LINE_COMMENT_START);
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     private List<LineMarker> getStringDelimiters(String line, LocProfile profile) {
@@ -110,24 +114,30 @@ public class LocCounter {
     }
 
     private boolean isHeaderOrFooter(String line, LocProfile profile) {
-        return profile.headerOrFooter().matcher(line).matches();
+        if (profile.headerOrFooter().isPresent()) {
+            return profile.headerOrFooter().get().matcher(line).matches();
+        } else {
+            return false;
+        }
     }
 
     private boolean isCommentLine(String line, LocProfile profile, LocContext context) {
         // single line comment
-        Matcher matcher = profile.singleLineCommentStart().matcher(line.trim());
-        if (matcher.find()) {
-            int index = matcher.start();
-            // it's a comment line if it starts with the comment marker
-            if (index == 0) {
-                return true;
+        if (profile.singleLineCommentStart().isPresent()) {
+            Matcher singleCommentLineMatcher = profile.singleLineCommentStart().get().matcher(line.trim());
+            if (singleCommentLineMatcher.find()) {
+                int index = singleCommentLineMatcher.start();
+                // it's a comment line if it starts with the comment marker
+                if (index == 0) {
+                    return true;
+                }
             }
         }
 
         // multi line comment
-        matcher = profile.multiLineCommentStart().matcher(line.trim());
-        if (matcher.find()) {
-            int index = matcher.start();
+        Matcher multiCommentLineMatcher = profile.multiLineCommentStart().matcher(line.trim());
+        if (multiCommentLineMatcher.find()) {
+            int index = multiCommentLineMatcher.start();
             // it's a comment line if it starts with the comment marker
             if (index == 0) {
                 return true;

@@ -9,6 +9,7 @@ public class Profiles {
 
     static {
         PROFILES.put(".java", new JavaLocProfile());
+        PROFILES.put(".xml", new XmlLocProfile());
     }
 
     public static LocProfile getForFile(String file) {
