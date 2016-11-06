@@ -8,12 +8,9 @@ machine:
     version: oraclejdk8
   python:
     version: 2.7.3
-
   services:
 
-dependencies:
-  pre:
-  cache_directories:
+test:
   override:
     - chmod +x gradlew
     - ./gradlew --console=plain build --stacktrace --info
@@ -26,4 +23,3 @@ dependencies:
 
     - mkdir -p $CIRCLE_ARTIFACTS/build-artifacts
     - cp -a server/coderadar-webapp/build/libs/coderadar-webapp-*.jar $CIRCLE_ARTIFACTS/build-artifacts/
-
