@@ -5,4 +5,6 @@
 /plugins/findbugs-adapter-plugin/src/gen/java
 /schema/episodes
 *.iml
+*.jar
+!/gradle/wrapper/gradle-wrapper.jar
 build
