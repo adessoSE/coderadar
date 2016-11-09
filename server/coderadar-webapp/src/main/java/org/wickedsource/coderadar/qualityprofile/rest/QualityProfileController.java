@@ -37,7 +37,7 @@ public class QualityProfileController {
         this.qualityProfileRepository = qualityProfileRepository;
     }
 
-    @RequestMapping(method = RequestMethod.POST, produces = "application/hal+json", consumes = "application/json")
+    @RequestMapping(method = RequestMethod.POST, produces = "application/hal+json")
     public ResponseEntity<QualityProfileResource> createQualityProfile(@RequestBody @Valid QualityProfileResource qualityProfileResource, @PathVariable Long projectId) {
         Project project = projectVerifier.loadProjectOrThrowException(projectId);
         QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
