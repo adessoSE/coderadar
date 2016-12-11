@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Contains values for a set of metrics.
  */
-public class MetricValuesSet {
+public class MetricValuesSet implements MetricsTreePayload<MetricValuesSet> {
 
     private Map<String, Long> metricValues = new HashMap<>();
 
@@ -24,5 +24,16 @@ public class MetricValuesSet {
 
     public void setMetricValues(Map<String, Long> metricValues) {
         this.metricValues = metricValues;
+    }
+
+    @Override
+    public void add(MetricValuesSet payload) {
+        for (Map.Entry<String, Long> entry : payload.getMetricValues().entrySet()) {
+            Long currentValue = this.getMetricValue(entry.getKey());
+            if (currentValue == null) {
+                currentValue = 0L;
+            }
+            this.setMetricValue(entry.getKey(), currentValue + entry.getValue());
+        }
     }
 }

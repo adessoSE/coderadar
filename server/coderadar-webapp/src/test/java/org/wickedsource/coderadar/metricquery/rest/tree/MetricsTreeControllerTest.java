@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.metricquery.rest.tree;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.Test;
 import org.springframework.http.MediaType;
@@ -31,14 +32,14 @@ public class MetricsTreeControllerTest extends ControllerTestTemplate {
                 .content(toJsonWithoutLinks(query))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(containsResource(MetricsTreeResource.class))
+                .andExpect(containsResource(new TypeReference<MetricsTreeResource<MetricValuesSet>>(){}))
                 .andDo(document("metrics/tree",
                         requestFields(
                                 requestFields.withPath("commit").description("Name of the commit that defines the point in time at which the metrics should be queried."),
                                 requestFields.withPath("metrics").description("List of the names of the metrics whose values you want to query."))))
                 .andReturn();
 
-        MetricsTreeResource metricsTreeResource = fromJson(result.getResponse().getContentAsString(), MetricsTreeResource.class);
+        MetricsTreeResource<MetricValuesSet> metricsTreeResource = fromJson(result.getResponse().getContentAsString(), new TypeReference<MetricsTreeResource<MetricValuesSet>>(){});
         assertThat(metricsTreeResource.getChildren()).hasSize(2);
         assertThat(metricsTreeResource.getPayload().getMetricValue("metric1")).isEqualTo(26L + 12L);
         assertThat(metricsTreeResource.getPayload().getMetricValue("metric2")).isEqualTo(28L + 0L);

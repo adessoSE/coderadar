@@ -20,7 +20,7 @@ public class MetricsTreeResourceAssembler extends ResourceAssemblerSupport<List<
         Map<String, List<GroupedMetricValueDTO>> metricValuesGroupedByModule = metricValuesPerModule
                 .stream()
                 .collect(Collectors.groupingBy(GroupedMetricValueDTO::getGroup));
-        MetricsTreeResource metricsTreeResource = new MetricsTreeResource();
+        MetricsTreeResource<MetricValuesSet> metricsTreeResource = new MetricsTreeResource<>(new MetricValuesSet());
         metricsTreeResource.addModules(metricValuesGroupedByModule.keySet(),
                 (module -> providePayload(metricValuesGroupedByModule.get(module))),
                 (module -> provideNodeType(module, metricValuesGroupedByModule)));

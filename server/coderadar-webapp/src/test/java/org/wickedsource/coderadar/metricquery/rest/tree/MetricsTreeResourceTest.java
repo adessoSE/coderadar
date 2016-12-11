@@ -10,7 +10,7 @@ public class MetricsTreeResourceTest {
 
     @Test
     public void addedModulesAreNestedCorrectly() {
-        MetricsTreeResource tree = new MetricsTreeResource(null, null, null, MetricsTreeNodeType.MODULE);
+        MetricsTreeResource<MetricValuesSet> tree = new MetricsTreeResource<>(null, null, new MetricValuesSet(), MetricsTreeNodeType.MODULE);
         tree.addModules(Arrays.asList("server/foo/module1",
                 "server/foo/module1/submodule1",
                 "server/foo/module1/submodule2",
