@@ -1,12 +1,11 @@
 package org.wickedsource.coderadar.metricquery.rest.tree;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.springframework.hateoas.ResourceSupport;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -21,6 +20,9 @@ public class MetricsTreeResource<P extends MetricsTreePayload> extends ResourceS
 
     @JsonUnwrapped
     private P payload;
+
+    @JsonIgnore
+    private Map<String, MetricsTreeResource<P>> childMap = new HashMap<>();
 
     private List<MetricsTreeResource<P>> children = new ArrayList<>();
 
@@ -52,12 +54,26 @@ public class MetricsTreeResource<P extends MetricsTreePayload> extends ResourceS
         this.name = name;
     }
 
+    @JsonProperty("children")
     public List<MetricsTreeResource<P>> getChildren() {
-        return children;
+        return this.children;
     }
 
     public void setChildren(List<MetricsTreeResource<P>> children) {
         this.children = children;
+        this.childMap.clear();
+        for (MetricsTreeResource<P> child : children) {
+            this.childMap.put(child.getName(), child);
+        }
+    }
+
+    public void addChild(MetricsTreeResource<P> child) {
+        this.children.add(child);
+        this.childMap.put(child.getName(), child);
+    }
+
+    public MetricsTreeResource<P> getChild(String name) {
+        return childMap.get(name);
     }
 
     public MetricsTreeResource getParent() {
@@ -112,7 +128,7 @@ public class MetricsTreeResource<P extends MetricsTreePayload> extends ResourceS
             MetricsTreeResource<P> currentModule = null;
             if (previousModule == null) {
                 currentModule = new MetricsTreeResource<>(module, this, payloadSupplier.getPayload(module), nodeTypeSupplier.getNodeType(module));
-                this.children.add(currentModule);
+                addChild(currentModule);
             } else if (previousModule.getName() != null && module.startsWith(previousModule.getName())) {
                 currentModule = new MetricsTreeResource<>(module, previousModule, payloadSupplier.getPayload(module), nodeTypeSupplier.getNodeType(module));
                 previousModule.getChildren().add(currentModule);
@@ -127,7 +143,7 @@ public class MetricsTreeResource<P extends MetricsTreePayload> extends ResourceS
                 }
                 if (currentModule == null) {
                     currentModule = new MetricsTreeResource<>(module, this, payloadSupplier.getPayload(module), nodeTypeSupplier.getNodeType(module));
-                    this.children.add(currentModule);
+                    addChild(currentModule);
                 }
             }
 
@@ -141,7 +157,7 @@ public class MetricsTreeResource<P extends MetricsTreePayload> extends ResourceS
      * Adds the values of this node's child modules to this nodes payload.
      */
     private void addMetricValuesFromChildren() {
-        for (MetricsTreeResource<P> childModule : children) {
+        for (MetricsTreeResource<P> childModule : childMap.values()) {
             this.payload.add(childModule.getPayload());
         }
     }

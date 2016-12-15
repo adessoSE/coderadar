@@ -561,14 +561,19 @@ include::{snippets}/metrics/history/metrics/http-request.adoc[]
 
 include::{snippets}/metrics/history/metrics/http-response.adoc[]
 
-=== Metrics Tree
+=== Metrics Trees
 
-==== Querying a Metrics Tree
-This endpoint provides a tree structure containing metrics for all modules and files of the project.
+==== Querying Metrics for all Files in a Single Commit
+This endpoint provides a tree structure containing metrics for all modules and files of the project at the
+time of a specified commit.
 
-===== Query Structure
+===== Request Structure
 
 include::{snippets}/metrics/tree/request-fields.adoc[]
+
+===== Response Structure
+
+include::{snippets}/metrics/tree/response-fields.adoc[]
 
 ===== Example Request
 
@@ -581,6 +586,32 @@ include::{snippets}/metrics/tree/http-request.adoc[]
 ===== Example Response
 
 include::{snippets}/metrics/tree/http-response.adoc[]
+
+==== Querying Metrics for all Files in two Commits
+This endpoint provides a tree structure containing metrics for all modules and files of the project at the
+time of two specified commits so the metric values between these commits can be directly compared.
+Also, the tree contains information about files that have been renamed or moved between the two specified
+commits.
+
+===== Request Structure
+
+include::{snippets}/metrics/deltaTree/request-fields.adoc[]
+
+===== Response Structure
+
+include::{snippets}/metrics/deltaTree/response-fields.adoc[]
+
+===== Example Request
+
+[NOTE]
+=====
+This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
+=====
+include::{snippets}/metrics/deltaTree/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/metrics/deltaTree/http-response.adoc[]
 
 
 

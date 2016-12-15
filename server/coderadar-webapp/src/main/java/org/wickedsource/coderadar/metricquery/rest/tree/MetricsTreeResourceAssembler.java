@@ -16,11 +16,11 @@ public class MetricsTreeResourceAssembler extends ResourceAssemblerSupport<List<
     }
 
     @Override
-    public MetricsTreeResource toResource(List<GroupedMetricValueDTO> metricValuesPerModule) {
+    public MetricsTreeResource<CommitMetricsPayload> toResource(List<GroupedMetricValueDTO> metricValuesPerModule) {
         Map<String, List<GroupedMetricValueDTO>> metricValuesGroupedByModule = metricValuesPerModule
                 .stream()
                 .collect(Collectors.groupingBy(GroupedMetricValueDTO::getGroup));
-        MetricsTreeResource<MetricValuesSet> metricsTreeResource = new MetricsTreeResource<>(new MetricValuesSet());
+        MetricsTreeResource<CommitMetricsPayload> metricsTreeResource = new MetricsTreeResource<>(new CommitMetricsPayload());
         metricsTreeResource.addModules(metricValuesGroupedByModule.keySet(),
                 (module -> providePayload(metricValuesGroupedByModule.get(module))),
                 (module -> provideNodeType(module, metricValuesGroupedByModule)));
@@ -41,12 +41,12 @@ public class MetricsTreeResourceAssembler extends ResourceAssemblerSupport<List<
         return null;
     }
 
-    private MetricValuesSet providePayload(List<GroupedMetricValueDTO> metricValuesPerModule) {
+    private CommitMetricsPayload providePayload(List<GroupedMetricValueDTO> metricValuesPerModule) {
         MetricValuesSet moduleMetrics = new MetricValuesSet();
         for (GroupedMetricValueDTO groupedMetricValueDTO : metricValuesPerModule) {
             moduleMetrics.setMetricValue(groupedMetricValueDTO.getMetric(), groupedMetricValueDTO.getValue());
         }
-        return moduleMetrics;
+        return new CommitMetricsPayload(moduleMetrics);
     }
 
 

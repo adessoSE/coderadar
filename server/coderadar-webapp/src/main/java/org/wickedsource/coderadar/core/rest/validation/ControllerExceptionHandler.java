@@ -87,8 +87,12 @@ public class ControllerExceptionHandler {
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseBody
-    public String handleNotFound(Exception e) {
-        return "Resource not found!";
+    public String handleNotFound(ResourceNotFoundException e) {
+        if (e.getMessage() == null) {
+            return "Resource not found!";
+        } else {
+            return e.getMessage();
+        }
     }
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
