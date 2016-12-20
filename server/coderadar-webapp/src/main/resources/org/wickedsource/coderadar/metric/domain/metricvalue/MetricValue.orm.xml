@@ -82,7 +82,7 @@
 
     <named-query name="MetricValue.findRenamedFilesBetweenTwoCommits">
         <query><![CDATA[
-            SELECT new org.wickedsource.coderadar.metric.domain.metricvalue.RenamedFileDTO(l.filepath, l.oldFilepath)
+            SELECT new org.wickedsource.coderadar.metric.domain.metricvalue.RenamedFileDTO(l.oldFilepath, l.filepath)
             FROM CommitLogEntry l
             WHERE l.project.id = :projectId
             AND l.changeType = 'RENAME'
