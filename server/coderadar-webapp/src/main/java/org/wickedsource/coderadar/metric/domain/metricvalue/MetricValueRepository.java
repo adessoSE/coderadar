@@ -47,6 +47,6 @@ public interface MetricValueRepository extends CrudRepository<MetricValue, Long>
     List<GroupedByFileMetricValueDTO> findValuesAggregatedByFile(@Param("projectId") Long projectId, @Param("commitSequenceNumber") Integer commitSequenceNumber, @Param("metricNames") List<String> metricNames);
 
     @Query(name = "MetricValue.findRenamedFilesBetweenTwoCommits")
-    List<RenamedFileDTO> findRenamedFilesBetweenTwoCommits(@Param("commit1SequenceNumber") Integer commit1SequenceNumber, @Param("commit2SequenceNumber") Integer commit2SequenceNumber);
+    List<RenamedFileDTO> findRenamedFilesBetweenTwoCommits(@Param("projectId") Long projectId, @Param("commit1SequenceNumber") Integer commit1SequenceNumber, @Param("commit2SequenceNumber") Integer commit2SequenceNumber);
 
 }

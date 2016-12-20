@@ -85,15 +85,15 @@ public class MetricsTreeController {
         groupedMetricValues2.addAll(metricValueRepository.findValuesAggregatedByFile(projectId, commit2.getSequenceNumber(), query.getMetrics()));
         MetricsTreeResource<CommitMetricsPayload> treeForCommit2 = assembler.toResource(groupedMetricValues2);
 
-        RenamedFilesMap renamedFilesMap = getRenamedFiles(commit1, commit2);
+        RenamedFilesMap renamedFilesMap = getRenamedFiles(projectId, commit1, commit2);
 
         MetricsTreeResource<DeltaTreePayload> deltaTree = merge(treeForCommit1, treeForCommit2, renamedFilesMap);
 
         return new ResponseEntity<>(deltaTree, HttpStatus.OK);
     }
 
-    private RenamedFilesMap getRenamedFiles(Commit commit1, Commit commit2) {
-        List<RenamedFileDTO> renamedFiles = metricValueRepository.findRenamedFilesBetweenTwoCommits(commit1.getSequenceNumber(), commit2.getSequenceNumber());
+    private RenamedFilesMap getRenamedFiles(Long projectId, Commit commit1, Commit commit2) {
+        List<RenamedFileDTO> renamedFiles = metricValueRepository.findRenamedFilesBetweenTwoCommits(projectId, commit1.getSequenceNumber(), commit2.getSequenceNumber());
         RenamedFilesMap renamedFilesMap = new RenamedFilesMap();
         for (RenamedFileDTO renamedFile : renamedFiles) {
             renamedFilesMap.addRenamedFile(renamedFile.getOldFileName(), renamedFile.getNewFileName());
