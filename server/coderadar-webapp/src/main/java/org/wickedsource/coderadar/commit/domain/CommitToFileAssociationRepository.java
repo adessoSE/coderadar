@@ -11,4 +11,6 @@ public interface CommitToFileAssociationRepository extends CrudRepository<Commit
     @Modifying
     int deleteByProjectId(@Param("projectId") Long id);
 
+    CommitToFileAssociation save(CommitToFileAssociation a);
+
 }

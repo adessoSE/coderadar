@@ -111,7 +111,7 @@ public class MetricsTreeController {
 
         addMetricsToDeltaTreeRecursively(tree1, deltaTree, (DeltaTreePayload::setCommit1Metrics));
         addMetricsToDeltaTreeRecursively(tree2, deltaTree, (DeltaTreePayload::setCommit2Metrics));
-        addChangeTypesRecursively(deltaTree, renamedFilesMap);
+        addRenamedInfoRecursively(deltaTree, renamedFilesMap);
         return deltaTree;
     }
 
@@ -130,7 +130,7 @@ public class MetricsTreeController {
         }
     }
 
-    private void addChangeTypesRecursively(MetricsTreeResource<DeltaTreePayload> tree, RenamedFilesMap renamedFilesMap) {
+    private void addRenamedInfoRecursively(MetricsTreeResource<DeltaTreePayload> tree, RenamedFilesMap renamedFilesMap) {
         for (MetricsTreeResource<DeltaTreePayload> node : tree.getChildren()) {
             String fileName = node.getName();
             String newFileName = renamedFilesMap.getNewFileName(fileName);
@@ -144,7 +144,7 @@ public class MetricsTreeController {
                 node.getPayload().setRenamedFrom(oldFileName);
             }
 
-            addChangeTypesRecursively(node, renamedFilesMap);
+            addRenamedInfoRecursively(node, renamedFilesMap);
         }
     }
 

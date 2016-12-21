@@ -51,7 +51,8 @@ public class CommitLogMerger {
         associateWithAddedAndCopiedFiles(commit);
         List<File> modifiedFiles = associateWithModifiedFiles(commit);
         List<File> renamedFiles = associateWithRenamedFiles(commit);
-        associateWithUnchangedFiles(commit, modifiedFiles, renamedFiles);
+        List<File> deletedFiles = associateWithDeletedFiles(commit);
+        associateWithUnchangedFiles(commit, modifiedFiles, renamedFiles, deletedFiles);
         commit.setMerged(true);
         commitRepository.save(commit);
         // commit entity is updated in database implicitly
@@ -99,6 +100,22 @@ public class CommitLogMerger {
         return filesToAssociate;
     }
 
+    private List<File> associateWithDeletedFiles(Commit commit) {
+        List<CommitLogEntry> deletedFiles = commitLogEntryRepository.findByCommitNameAndChangeTypeIn(commit.getName(), Collections.singletonList(ChangeType.DELETE));
+        logger.debug("found {} DELETED files", deletedFiles.size());
+        List<String> filepaths = deletedFiles
+                .stream()
+                .map(CommitLogEntry::getOldFilepath)
+                .collect(Collectors.toList());
+        List<File> filesToAssociate = fileRepository.findInCommit(commit.getParentCommitName(), filepaths);
+        for (File file : filesToAssociate) {
+            CommitToFileAssociation association = new CommitToFileAssociation(commit, file, ChangeType.DELETE);
+            commit.getFiles().add(association);
+            saveCommitToFileAssociation(association);
+        }
+        return filesToAssociate;
+    }
+
     private void associateWithAddedAndCopiedFiles(Commit commit) {
         List<CommitLogEntry> addedFiles = commitLogEntryRepository.findByCommitNameAndChangeTypeIn(commit.getName(), Arrays.asList(ChangeType.ADD, ChangeType.COPY));
         logger.debug("found {} ADDED and COPIED files", addedFiles.size());
@@ -115,10 +132,11 @@ public class CommitLogMerger {
         }
     }
 
-    private void associateWithUnchangedFiles(Commit commit, List<File> modifiedFiles, List<File> renamedFiles) {
+    private void associateWithUnchangedFiles(Commit commit, List<File> modifiedFiles, List<File> renamedFiles, List<File> deletedFiles) {
         List<File> unchangedFiles = fileRepository.findInCommit(ALL_BUT_DELETED, commit.getParentCommitName(), commit.getProject().getId());
         unchangedFiles.removeAll(modifiedFiles);
         unchangedFiles.removeAll(renamedFiles);
+        unchangedFiles.removeAll(deletedFiles);
         logger.debug("found {} UNCHANGED files", unchangedFiles.size());
         for (File file : unchangedFiles) {
             CommitToFileAssociation association = new CommitToFileAssociation(commit, file, ChangeType.UNCHANGED);
