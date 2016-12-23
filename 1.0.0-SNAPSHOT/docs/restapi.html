@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v1.0.0-SNAPSHOT, Tom Hombergs, 2016-12-16">
+<meta name="author" content="v1.0.0-SNAPSHOT, Tom Hombergs, 2016-12-23">
 <title>coderadar REST API</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v1.0.0-SNAPSHOT, Tom Hombergs, 2016-12-16</span><br>
+<span id="author" class="author">v1.0.0-SNAPSHOT, Tom Hombergs, 2016-12-23</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -4820,6 +4820,11 @@ commits.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Only contains a value if this file has been renamed (moved) between commit1 and commit2. In this case, this field contains the new name of the file, after it was renamed. Otherwise, this field is NULL.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>changes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Varies</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Contains information about what kind of changes were made to this file between commit1 and commit2. This field is only filled for FILEs and not for MODULEs.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>children</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">If this node describes a MODULE, this field contains the list of child nodes of the same structure, which can be of type MODULE or FILE.</p></td>
@@ -4864,7 +4869,7 @@ Content-Length: 173
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 2533
+Content-Length: 3058
 
 {
   "name" : "root",
@@ -4881,6 +4886,7 @@ Content-Length: 2533
   },
   "renamedFrom" : null,
   "renamedTo" : null,
+  "changes" : null,
   "children" : [ {
     "name" : "/path/to/module1",
     "type" : "MODULE",
@@ -4896,6 +4902,7 @@ Content-Length: 2533
     },
     "renamedFrom" : null,
     "renamedTo" : null,
+    "changes" : null,
     "children" : [ {
       "name" : "/path/to/module1/src/main/java/test.java",
       "type" : "FILE",
@@ -4911,6 +4918,12 @@ Content-Length: 2533
       },
       "renamedFrom" : null,
       "renamedTo" : null,
+      "changes" : {
+        "renamed" : false,
+        "modified" : true,
+        "deleted" : false,
+        "added" : false
+      },
       "children" : [ ]
     }, {
       "name" : "/path/to/module1/submodule2",
@@ -4927,6 +4940,7 @@ Content-Length: 2533
       },
       "renamedFrom" : null,
       "renamedTo" : null,
+      "changes" : null,
       "children" : [ {
         "name" : "/path/to/module1/submodule2/src/main/java/fileOnlyTouchedInFirstCommit.java",
         "type" : "FILE",
@@ -4942,6 +4956,12 @@ Content-Length: 2533
         },
         "renamedFrom" : null,
         "renamedTo" : null,
+        "changes" : {
+          "renamed" : false,
+          "modified" : false,
+          "deleted" : false,
+          "added" : false
+        },
         "children" : [ ]
       } ]
     } ]
@@ -4958,6 +4978,7 @@ Content-Length: 2533
     },
     "renamedFrom" : null,
     "renamedTo" : null,
+    "changes" : null,
     "children" : [ {
       "name" : "/path/to/module3/src/main/java/anotherfile.java",
       "type" : "FILE",
@@ -4971,6 +4992,12 @@ Content-Length: 2533
       },
       "renamedFrom" : null,
       "renamedTo" : null,
+      "changes" : {
+        "renamed" : false,
+        "modified" : false,
+        "deleted" : false,
+        "added" : true
+      },
       "children" : [ ]
     } ]
   } ]
