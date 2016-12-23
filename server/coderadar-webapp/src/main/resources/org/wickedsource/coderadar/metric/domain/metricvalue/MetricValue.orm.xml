@@ -96,12 +96,11 @@
         </query>
     </named-query>
 
-    <named-query name="MetricValue.findRenamedFilesBetweenTwoCommits">
+    <named-query name="MetricValue.findChangedFilesBetweenTwoCommits">
         <query><![CDATA[
-            SELECT new org.wickedsource.coderadar.metric.domain.metricvalue.RenamedFileDTO(l.oldFilepath, l.filepath)
+            SELECT DISTINCT new org.wickedsource.coderadar.metric.domain.metricvalue.ChangedFileDTO(l.oldFilepath, l.filepath, l.changeType)
             FROM CommitLogEntry l
             WHERE l.project.id = :projectId
-            AND l.changeType = 'RENAME'
             AND l.commitName in
               (SELECT ctf.id.commit.name
                FROM CommitToFileAssociation ctf

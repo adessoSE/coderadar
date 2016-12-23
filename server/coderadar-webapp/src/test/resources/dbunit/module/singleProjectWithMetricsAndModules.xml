@@ -40,6 +40,7 @@
             scanned="false" analyzed="false" merged="false" timestamp="2016-04-01 00:00:00"
             year="2016" month="4" day_of_month="1" week_of_year="13" year_of_week="2016"/>
 
+
     <file_identity id="1"/>
     <file_identity id="2"/>
     <file_identity id="3"/>
@@ -49,6 +50,40 @@
     <file id="3" filepath="/path/to/module1/submodule2/src/main/java/fileOnlyTouchedInFirstCommit.java"
           identity_id="1"/>
     <file id="4" filepath="/path/to/module3/src/main/java/anotherfile.java" identity_id="3"/>
+
+    <commit_log_entry id="1" project_id="1" commit_name="f9b0553930f133490f292a9c78d0b36b39be8758"
+                      old_filepath="/path/to/module1/src/main/java/test.java"
+                      filepath="/path/to/module1/src/main/java/test.java" change_type="ADD"/>
+    <commit_log_entry id="2" project_id="1" commit_name="f9b0553930f133490f292a9c78d0b36b39be8758"
+                      old_filepath="/path/to/module1/src/main/java/test2.java"
+                      filepath="/path/to/module1/src/main/java/test2.java" change_type="ADD"/>
+    <commit_log_entry id="3" project_id="1" commit_name="f9b0553930f133490f292a9c78d0b36b39be8758"
+                      old_filepath="/path/to/module1/submodule2/src/main/java/fileOnlyTouchedInFirstCommit.java"
+                      filepath="/path/to/module1/submodule2/src/main/java/fileOnlyTouchedInFirstCommit.java"
+                      change_type="ADD"/>
+
+    <commit_log_entry id="8" project_id="1" commit_name="43f6cbba44ce1c23cfdf70dc164824fee062f7e2"
+                      parent_commit_name="f9b0553930f133490f292a9c78d0b36b39be8758"
+                      old_filepath="/path/to/module3/src/main/java/anotherfile.java"
+                      filepath="/path/to/module3/src/main/java/anotherfile.java" change_type="ADD"/>
+
+    <commit_log_entry id="9" project_id="1" commit_name="eb7cbd429530dc26d06a9ea2a62794421dce1e9a"
+                      parent_commit_name="43f6cbba44ce1c23cfdf70dc164824fee062f7e2"
+                      old_filepath="/path/to/module1/src/main/java/test.java"
+                      filepath="/path/to/module1/src/main/java/test.java" change_type="MODIFY"/>
+    <commit_log_entry id="10" project_id="1" commit_name="eb7cbd429530dc26d06a9ea2a62794421dce1e9a"
+                      parent_commit_name="43f6cbba44ce1c23cfdf70dc164824fee062f7e2"
+                      old_filepath="/path/to/module1/src/main/java/test2.java"
+                      filepath="/path/to/module1/src/main/java/test2.java" change_type="DELETE"/>
+    <commit_log_entry id="12" project_id="1" commit_name="eb7cbd429530dc26d06a9ea2a62794421dce1e9a"
+                      parent_commit_name="43f6cbba44ce1c23cfdf70dc164824fee062f7e2"
+                      old_filepath="/path/to/module3/src/main/java/anotherfile.java"
+                      filepath="/path/to/module3/src/main/java/anotherfile.java" change_type="ADD"/>
+
+    <commit_log_entry id="16" project_id="1" commit_name="670cac5091c0c42253c66a83197c6c6069910aa8"
+                      parent_commit_name="eb7cbd429530dc26d06a9ea2a62794421dce1e9a"
+                      old_filepath="/path/to/module3/src/main/java/anotherfile.java"
+                      filepath="/path/to/module3/src/main/java/anotherfile.java" change_type="RENAME"/>
 
     <commit_file commit_id="1" file_id="1" change_type="UNCHANGED"/>
     <commit_file commit_id="1" file_id="2" change_type="UNCHANGED"/>

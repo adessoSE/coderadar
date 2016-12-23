@@ -10,16 +10,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.wickedsource.coderadar.analyzer.api.ChangeType;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
+import org.wickedsource.coderadar.metric.domain.metricvalue.ChangedFileDTO;
 import org.wickedsource.coderadar.metric.domain.metricvalue.GroupedMetricValueDTO;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValue;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
-import org.wickedsource.coderadar.metric.domain.metricvalue.RenamedFileDTO;
+import org.wickedsource.coderadar.metricquery.rest.tree.delta.ChangedFilesMap;
+import org.wickedsource.coderadar.metricquery.rest.tree.delta.Changes;
 import org.wickedsource.coderadar.metricquery.rest.tree.delta.DeltaTreePayload;
 import org.wickedsource.coderadar.metricquery.rest.tree.delta.DeltaTreeQuery;
-import org.wickedsource.coderadar.metricquery.rest.tree.delta.RenamedFilesMap;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
 import javax.validation.Valid;
@@ -85,23 +87,26 @@ public class MetricsTreeController {
         groupedMetricValues2.addAll(metricValueRepository.findValuesAggregatedByFile(projectId, commit2.getSequenceNumber(), query.getMetrics()));
         MetricsTreeResource<CommitMetricsPayload> treeForCommit2 = assembler.toResource(groupedMetricValues2);
 
-        RenamedFilesMap renamedFilesMap = getRenamedFiles(projectId, commit1, commit2);
+        ChangedFilesMap changedFilesMap = getChangedFiles(projectId, commit1, commit2);
 
-        MetricsTreeResource<DeltaTreePayload> deltaTree = merge(treeForCommit1, treeForCommit2, renamedFilesMap);
+        MetricsTreeResource<DeltaTreePayload> deltaTree = merge(treeForCommit1, treeForCommit2, changedFilesMap);
 
         return new ResponseEntity<>(deltaTree, HttpStatus.OK);
     }
 
-    private RenamedFilesMap getRenamedFiles(Long projectId, Commit commit1, Commit commit2) {
-        List<RenamedFileDTO> renamedFiles = metricValueRepository.findRenamedFilesBetweenTwoCommits(projectId, commit1.getSequenceNumber(), commit2.getSequenceNumber());
-        RenamedFilesMap renamedFilesMap = new RenamedFilesMap();
-        for (RenamedFileDTO renamedFile : renamedFiles) {
-            renamedFilesMap.addRenamedFile(renamedFile.getOldFileName(), renamedFile.getNewFileName());
+    private ChangedFilesMap getChangedFiles(Long projectId, Commit commit1, Commit commit2) {
+        List<ChangedFileDTO> changedFiles = metricValueRepository.findChangedFilesBetweenTwoCommits(projectId, commit1.getSequenceNumber(), commit2.getSequenceNumber());
+        ChangedFilesMap changedFilesMap = new ChangedFilesMap();
+        for (ChangedFileDTO changedFile : changedFiles) {
+            if (changedFile.getChangeType() == ChangeType.RENAME) {
+                changedFilesMap.addRenamedFile(changedFile.getOldFileName(), changedFile.getNewFileName());
+            }
+            changedFilesMap.addChangeType(changedFile.getNewFileName(), changedFile.getChangeType());
         }
-        return renamedFilesMap;
+        return changedFilesMap;
     }
 
-    private MetricsTreeResource<DeltaTreePayload> merge(MetricsTreeResource<CommitMetricsPayload> tree1, MetricsTreeResource<CommitMetricsPayload> tree2, RenamedFilesMap renamedFilesMap) {
+    private MetricsTreeResource<DeltaTreePayload> merge(MetricsTreeResource<CommitMetricsPayload> tree1, MetricsTreeResource<CommitMetricsPayload> tree2, ChangedFilesMap changedFilesMap) {
 
         DeltaTreePayload rootPayload = new DeltaTreePayload();
         rootPayload.setCommit1Metrics(tree1.getPayload().getMetrics());
@@ -111,7 +116,7 @@ public class MetricsTreeController {
 
         addMetricsToDeltaTreeRecursively(tree1, deltaTree, (DeltaTreePayload::setCommit1Metrics));
         addMetricsToDeltaTreeRecursively(tree2, deltaTree, (DeltaTreePayload::setCommit2Metrics));
-        addRenamedInfoRecursively(deltaTree, renamedFilesMap);
+        addRenamedInfoRecursively(deltaTree, changedFilesMap);
         return deltaTree;
     }
 
@@ -130,11 +135,11 @@ public class MetricsTreeController {
         }
     }
 
-    private void addRenamedInfoRecursively(MetricsTreeResource<DeltaTreePayload> tree, RenamedFilesMap renamedFilesMap) {
+    private void addRenamedInfoRecursively(MetricsTreeResource<DeltaTreePayload> tree, ChangedFilesMap changedFilesMap) {
         for (MetricsTreeResource<DeltaTreePayload> node : tree.getChildren()) {
             String fileName = node.getName();
-            String newFileName = renamedFilesMap.getNewFileName(fileName);
-            String oldFileName = renamedFilesMap.getOldFileName(fileName);
+            String newFileName = changedFilesMap.getNewFileName(fileName);
+            String oldFileName = changedFilesMap.getOldFileName(fileName);
 
             if (newFileName != null) {
                 node.getPayload().setRenamedTo(newFileName);
@@ -144,7 +149,20 @@ public class MetricsTreeController {
                 node.getPayload().setRenamedFrom(oldFileName);
             }
 
-            addRenamedInfoRecursively(node, renamedFilesMap);
+            if (node.getType() == MetricsTreeNodeType.FILE) {
+                List<ChangeType> changeTypes = changedFilesMap.getChangeTypes(fileName);
+                if (changeTypes == null) {
+                    changeTypes = new ArrayList<>();
+                }
+                Changes changes = new Changes();
+                changes.setAdded(changeTypes.contains(ChangeType.ADD));
+                changes.setModified(changeTypes.contains(ChangeType.MODIFY));
+                changes.setDeleted(changeTypes.contains(ChangeType.DELETE));
+                changes.setRenamed(changeTypes.contains(ChangeType.RENAME) || newFileName != null || oldFileName != null);
+                node.getPayload().setChanges(changes);
+            }
+
+            addRenamedInfoRecursively(node, changedFilesMap);
         }
     }
 

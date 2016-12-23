@@ -17,6 +17,8 @@ public class DeltaTreePayload implements MetricsTreePayload<DeltaTreePayload> {
 
     private String renamedTo;
 
+    private Changes changes;
+
     @Override
     public void add(DeltaTreePayload payload) {
 
@@ -52,5 +54,13 @@ public class DeltaTreePayload implements MetricsTreePayload<DeltaTreePayload> {
 
     public void setRenamedTo(String renamedTo) {
         this.renamedTo = renamedTo;
+    }
+
+    public Changes getChanges() {
+        return changes;
+    }
+
+    public void setChanges(Changes changes) {
+        this.changes = changes;
     }
 }
