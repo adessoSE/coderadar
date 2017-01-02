@@ -11,11 +11,11 @@ import com.auth0.jwt.algorithms.Algorithm;
 @Service
 public class AuthenticationService {
 
-    private static final Integer SESSION_DURATION_IN_MINUTES = 60;
+    private static final Integer TOKEN_VALIDITY_DURATION_IN_MINUTES = 60;
 
     public String createToken(UserLoginResource userLoginResource) {
         DateTime dateTime = new DateTime();
-        dateTime.plusMinutes(SESSION_DURATION_IN_MINUTES);
+        dateTime.plusMinutes(TOKEN_VALIDITY_DURATION_IN_MINUTES);
         byte[] secretKey = generateSecretKey();
         String jwtId = putSecretKey(secretKey);
         return JWT.create().withIssuer(userLoginResource.getUsername()).withExpiresAt(dateTime.toDate()).withJWTId(jwtId).sign(Algorithm.HMAC256(secretKey));
