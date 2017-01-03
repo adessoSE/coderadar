@@ -63,7 +63,7 @@ is made up of the following elements:
   
 ## Getting Started
 
-### Building coderdar
+### Building coderadar
 Simply run `gradlew build`.
 
 ### Starting the coderadar server
