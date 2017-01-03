@@ -4,6 +4,9 @@
 
 coderadar aims to be a continuous source code analysis tool that connects to your version control system (VCS) and automatically runs code analyzers that provide you with the metrics that are most important to you and your team. coderadar provides per-commit code metrics and even allows viewing the history of code metrics in legacy projects. Also, coderadar aims to provide metrics for each committer, thus enabling gamification features that add fun to creating quality code.
 
+## Want to contribute?
+See the [contribution guide](https://github.com/reflectoring/coderadar/blob/master/CONTRIBUTING.md).
+
 ## coderadar server (work in progress)
 The coderadar server is a web application that provides a REST API to interact with it. Via the REST API, you can configure your project and retrieve source code metrics for each commit in your version control system.
 
