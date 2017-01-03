@@ -7,7 +7,7 @@ This guide gives an overview of coderadar and some development guidelines
 to make it easier for new contributors to get up and running. If you have
 any questions, feel free to get in touch.
 
-## Coderadar Components
+## Coderadar Overview
 Major components are documented via a README file in the folder of the component.
 The following list links to those READMEs:
 
@@ -60,3 +60,23 @@ is made up of the following elements:
 * Javadoc: please provide sensible javadoc of at least public API
 * This contribution guide: this guide is not carved in stone, so when things change,
   change this guide. 
+  
+## Getting Started
+
+### Building coderdar
+Simply run `gradlew build`.
+
+### Starting the coderadar server
+* install a local database (MySQL is preconfigured, so if you want to reduce configuration time, use MySQL)
+* Open the file `build.gradle` in the `coderadar-webapp` component and configure the 
+  access to your database by changing the configuration parameters `spring.datasource.*` in
+  the `bootrun` section
+* run `gradlew bootrun` from the project directory
+* the coderadar server will be accessible on `localhost:8080` by default
+
+### Accessing the coderadar REST API
+* start the server
+* install a REST client like DHC
+* refer to the [REST API documentation](http://www.reflectoring.io/coderadar/1.0.0-SNAPSHOT/docs/restapi.html)
+  to see what calls you can make and submit them using your REST client
+ 
