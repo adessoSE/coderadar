@@ -6,13 +6,18 @@ import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
 import com.auth0.jwt.JWT;
 
-public class AuthenticationServiceTest {
+public class AuthenticationServiceTest extends IntegrationTestTemplate {
 
     private static final String USER_NAME = "user";
-    private AuthenticationService sut = new AuthenticationService();
+    private static final String ISSUER = "reflectoring.io";
+
+    @Autowired
+    private AuthenticationService sut;
     private JWT jwt;
 
     @Before
@@ -27,8 +32,14 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    public void issuerIsUsername() throws Exception {
-        assertThat(jwt.getIssuer()).describedAs("issuer in the token is not the user").isEqualTo(USER_NAME);
+    public void issuerIsSet() throws Exception {
+        assertThat(jwt.getIssuer()).describedAs("issuer in the token is wrong").isEqualTo(ISSUER);
+    }
+
+    @Test
+    public void subjectIsUser() throws Exception {
+        assertThat(jwt.getSubject()).describedAs("subject of the token is not the user").isEqualTo(USER_NAME);
+
     }
 
     @Test
