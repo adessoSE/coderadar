@@ -1,6 +1,6 @@
 # coderadar
 
-[![Build Status](https://circleci.com/gh/reflectoring/coderadar.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/reflectoring/coderadar)
+[![Build Status](https://circleci.com/gh/reflectoring/coderadar.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/reflectoring/coderadar) [![Gradle Status](https://gradleupdate.appspot.com/reflectoring/coderadar/status.svg)](https://gradleupdate.appspot.com/reflectoring/coderadar/status)
 
 coderadar aims to be a continuous source code analysis tool that connects to your version control system (VCS) and automatically runs code analyzers that provide you with the metrics that are most important to you and your team. coderadar provides per-commit code metrics and even allows viewing the history of code metrics in legacy projects. Also, coderadar aims to provide metrics for each committer, thus enabling gamification features that add fun to creating quality code.
 
