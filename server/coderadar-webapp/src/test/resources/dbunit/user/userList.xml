@@ -18,11 +18,6 @@
     <quality_profile_metric/>
     <user/>
 
-    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
-
-    <quality_profile id="1" project_id="1" name="Quality Profile"/>
-
-    <quality_profile_metric id="1" profile_id="1" name="dummyMetric1" metric_type="VIOLATION"/>
-    <quality_profile_metric id="2" profile_id="1" name="dummyMetric2" metric_type="COMPLIANCE"/>
-
+    <user id="1" username="user" password="pass"/>
+    <user id="2" username="radar" password="nopass"/>
 </dataset>

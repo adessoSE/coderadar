@@ -47,4 +47,9 @@ public class DbUnitFactory {
         public final static String SINGLE_PROJECT_WITH_QUALITY_PROFILES = "/dbunit/qualityprofile/singleProjectWithQualityProfiles.xml";
     }
 
+    public static class Users {
+
+        public static final String USERS = "/dbunit/user/userList.xml";
+    }
+
 }
