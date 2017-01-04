@@ -101,7 +101,12 @@ public class MetricsTreeController {
             if (changedFile.getChangeType() == ChangeType.RENAME) {
                 changedFilesMap.addRenamedFile(changedFile.getOldFileName(), changedFile.getNewFileName());
             }
-            changedFilesMap.addChangeType(changedFile.getNewFileName(), changedFile.getChangeType());
+            if (changedFile.getChangeType() == ChangeType.DELETE) {
+                // for deleted files we have to take the old filename, since the new filename is always "/dev/null"
+                changedFilesMap.addChangeType(changedFile.getOldFileName(), changedFile.getChangeType());
+            } else {
+                changedFilesMap.addChangeType(changedFile.getNewFileName(), changedFile.getChangeType());
+            }
         }
         return changedFilesMap;
     }
