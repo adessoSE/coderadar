@@ -53,4 +53,9 @@ public interface CommitRepository extends PagingAndSortingRepository<Commit, Lon
      */
     @Query(name = "Commit.findLastForEachWeek")
     List<Commit> findLastForEachWeek(@Param("projectId") Long projectId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    @Query("select c from Commit c where c.project.id = :projectId and c.timestamp = (select min(c2.timestamp) from Commit c2 where c2.timestamp >= :date)")
+    Commit findFirstCommitAfterDate(@Param("projectId") Long projectId, @Param("date") Date date);
+
+
 }
