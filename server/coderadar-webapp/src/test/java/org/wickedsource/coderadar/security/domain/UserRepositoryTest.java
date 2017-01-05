@@ -1,14 +1,13 @@
 package org.wickedsource.coderadar.security.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.factories.databases.DbUnitFactory;
 import org.wickedsource.coderadar.factories.entities.EntityFactory;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserRepositoryTest extends IntegrationTestTemplate {
 
@@ -27,6 +26,19 @@ public class UserRepositoryTest extends IntegrationTestTemplate {
     public void testFindOne() throws Exception {
         User user = repository.findOne(2L);
         assertThat(user.getUsername()).isEqualTo("radar");
+    }
 
+    @Test
+    @DatabaseSetup(DbUnitFactory.Users.USERS)
+    public void findByUsername() throws Exception {
+        User user = repository.findByUsername("radar");
+        assertThat(user).isNotNull();
+    }
+
+    @Test
+    @DatabaseSetup(DbUnitFactory.Users.USERS)
+    public void findByUsernameNot() throws Exception {
+        User user = repository.findByUsername("andreas");
+        assertThat(user).isNull();
     }
 }
