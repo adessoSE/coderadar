@@ -1,15 +1,15 @@
 package org.wickedsource.coderadar.security.authentication.rest;
 
-import java.util.UUID;
-
-import javax.crypto.SecretKey;
-
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.wickedsource.coderadar.security.domain.UserCredentialsResource;
+import org.wickedsource.coderadar.security.service.SecretKeyService;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
+import javax.crypto.SecretKey;
+import java.util.UUID;
 
 @Service
 public class AuthenticationService {
@@ -23,12 +23,12 @@ public class AuthenticationService {
         this.secretKeyService = secretKeyService;
     }
 
-    public String createToken(UserLoginResource userLoginResource) {
+    public String createToken(UserCredentialsResource userCredentialsResource) {
         DateTime dateTime = new DateTime();
         dateTime.plusDays(TOKEN_VALIDITY_DURATION_IN_DAYS);
         SecretKey secretKey = secretKeyService.getSecretKey();
         String jwtId = UUID.randomUUID().toString();
-        return JWT.create().withIssuer("reflectoring.io").withSubject(userLoginResource.getUsername()).withExpiresAt(dateTime.toDate()).withJWTId(jwtId)
+        return JWT.create().withIssuer("reflectoring.io").withSubject(userCredentialsResource.getUsername()).withExpiresAt(dateTime.toDate()).withJWTId(jwtId)
                 .sign(Algorithm.HMAC256(secretKey.getEncoded()));
     }
 }

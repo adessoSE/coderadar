@@ -1,13 +1,17 @@
-package org.wickedsource.coderadar.security.authentication.rest;
+package org.wickedsource.coderadar.security.domain;
 
 import org.springframework.hateoas.ResourceSupport;
 
-public class UserLoginResource extends ResourceSupport {
+public class UserCredentialsResource extends ResourceSupport {
 
     private String username;
     private String password;
 
-    public UserLoginResource(String username, String password) {
+
+    public UserCredentialsResource() {
+    }
+
+    public UserCredentialsResource(String username, String password) {
         this.username = username;
         this.password = password;
     }

@@ -22,6 +22,10 @@ public class StatusResultMatchers {
         return is(HttpStatus.BAD_REQUEST.value());
     }
 
+    public ResultMatcher isConflict() {
+        return is(HttpStatus.CONFLICT.value());
+    }
+
     public ResultMatcher isCreated() {
         return is(HttpStatus.CREATED.value());
     }

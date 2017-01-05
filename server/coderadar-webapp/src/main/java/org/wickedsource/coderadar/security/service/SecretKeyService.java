@@ -1,12 +1,11 @@
-package org.wickedsource.coderadar.security.authentication.rest;
+package org.wickedsource.coderadar.security.service;
 
-import java.security.NoSuchAlgorithmException;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-
-import org.springframework.stereotype.Service;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Service for generation and holding a secret key. The generated key is a AES key of the length 256 bit and it is used to sign and to verify authentication

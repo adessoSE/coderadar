@@ -1,12 +1,13 @@
 package org.wickedsource.coderadar.security.authentication.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.wickedsource.coderadar.security.service.SecretKeyService;
+import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
 import javax.crypto.SecretKey;
 
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SecretKeyServiceTest extends IntegrationTestTemplate {
 

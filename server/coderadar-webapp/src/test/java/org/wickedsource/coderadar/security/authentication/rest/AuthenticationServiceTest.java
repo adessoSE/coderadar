@@ -1,15 +1,15 @@
 package org.wickedsource.coderadar.security.authentication.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.Date;
-
+import com.auth0.jwt.JWT;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wickedsource.coderadar.security.domain.UserCredentialsResource;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
-import com.auth0.jwt.JWT;
+import java.util.Date;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthenticationServiceTest extends IntegrationTestTemplate {
 
@@ -22,7 +22,7 @@ public class AuthenticationServiceTest extends IntegrationTestTemplate {
 
     @Before
     public void setUp() {
-        String token = sut.createToken(new UserLoginResource("user", "123456"));
+        String token = sut.createToken(new UserCredentialsResource("user", "123456"));
         jwt = JWT.decode(token);
     }
 

@@ -28,4 +28,8 @@ public class ResourceFactory {
         return new QualityProfileResourceFactory();
     }
 
+    public static UserCredentialsResourceFactory userCredentialsResource() {
+        return new UserCredentialsResourceFactory();
+    }
+
 }
