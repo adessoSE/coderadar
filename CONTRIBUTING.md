@@ -19,7 +19,7 @@ The following list links to those READMEs:
 
 Any kind of contribution is welcome as a pull request.
 If you are unsure on how to fork a repository and then create a pull 
-request from your fork, please read [this blog post](https://github.com/thombergs/reflectoring.github.io/blob/pull-request-article/_posts/hacks/2017-01-02-github-fork-and-pull.md)
+request from your fork, please read [this blog post](http://www.reflectoring.io/hacks/github-fork-and-pull/)
 for a quick guide.
 
 ### Pick an Issue
