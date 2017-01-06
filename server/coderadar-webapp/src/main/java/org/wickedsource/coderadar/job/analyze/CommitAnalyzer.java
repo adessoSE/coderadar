@@ -6,6 +6,7 @@ import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.gitective.core.BlobUtils;
 import org.slf4j.Logger;
@@ -18,6 +19,8 @@ import org.wickedsource.coderadar.analyzer.api.Metric;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.domain.*;
 import org.wickedsource.coderadar.analyzer.match.FileMatchingPattern;
+import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategy;
+import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategyRepository;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.WorkdirManager;
@@ -67,10 +70,12 @@ public class CommitAnalyzer {
 
     private FindingRepository findingRepository;
 
+    private AnalyzingStrategyRepository analyzingStrategyRepository;
+
     private static final Set<DiffEntry.ChangeType> CHANGES_TO_ANALYZE = EnumSet.of(DiffEntry.ChangeType.ADD, DiffEntry.ChangeType.COPY, DiffEntry.ChangeType.MODIFY, DiffEntry.ChangeType.RENAME);
 
     @Autowired
-    public CommitAnalyzer(CommitRepository commitRepository, WorkdirManager workdirManager, FilePatternRepository filePatternRepository, GitCommitFinder commitFinder, AnalyzerPluginRegistry analyzerRegistry, AnalyzerConfigurationRepository analyzerConfigurationRepository, AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository, FileAnalyzer fileAnalyzer, FileRepository fileRepository, MetricValueRepository metricValueRepository, FindingRepository findingRepository) {
+    public CommitAnalyzer(CommitRepository commitRepository, WorkdirManager workdirManager, FilePatternRepository filePatternRepository, GitCommitFinder commitFinder, AnalyzerPluginRegistry analyzerRegistry, AnalyzerConfigurationRepository analyzerConfigurationRepository, AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository, FileAnalyzer fileAnalyzer, FileRepository fileRepository, MetricValueRepository metricValueRepository, FindingRepository findingRepository, AnalyzingStrategyRepository analyzingStrategyRepository) {
         this.commitRepository = commitRepository;
         this.workdirManager = workdirManager;
         this.filePatternRepository = filePatternRepository;
@@ -82,6 +87,7 @@ public class CommitAnalyzer {
         this.fileRepository = fileRepository;
         this.metricValueRepository = metricValueRepository;
         this.findingRepository = findingRepository;
+        this.analyzingStrategyRepository = analyzingStrategyRepository;
     }
 
     public void analyzeCommit(Commit commit) {
@@ -92,12 +98,40 @@ public class CommitAnalyzer {
         Path gitRoot = workdirManager.getLocalGitRoot(commit.getProject().getName());
         try {
             Git gitClient = Git.open(gitRoot.toFile());
-            walkFilesInCommit(gitClient, commit, getAnalyzersForProject(commit.getProject()));
+            boolean isFirstCommit = isFirstCommitInAnalyzingStrategy(commit);
+
+            List<SourceCodeFileAnalyzerPlugin> analyzers = getAnalyzersForProject(commit.getProject());
+
+            if (analyzers.isEmpty()) {
+                logger.warn("skipping analysis of commit {} since there are no analyzers configured for project {}!", commit.getName(), commit.getProject().getName());
+                return;
+            }
+
+            logger.info("starting analysis of commit {}", commit.getName());
+            if (isFirstCommit) {
+                // If it is the first commit to be analyzed we want to analyze ALL files that are in the repo
+                // at the time of the commit so that we have all the files' metrics ...
+                walkAllFilesInCommit(gitClient, commit, analyzers);
+            } else {
+                // ... otherwise we only want to analyze the files that were changed with this commit
+                walkTouchedFilesInCommit(gitClient, commit, analyzers);
+            }
         } catch (IOException e) {
             throw new IllegalStateException(String.format("error opening git root %s", gitRoot));
         }
         commit.setAnalyzed(Boolean.TRUE);
         commitRepository.save(commit);
+    }
+
+    private boolean isFirstCommitInAnalyzingStrategy(Commit commit) {
+        AnalyzingStrategy strategy = analyzingStrategyRepository.findByProjectId(commit.getProject().getId());
+
+        if (strategy.getFromDate() == null) {
+            return false;
+        }
+
+        Commit firstCommitInDateRange = commitRepository.findFirstCommitAfterDate(commit.getProject().getId(), strategy.getFromDate());
+        return firstCommitInDateRange.getId() == commit.getId();
     }
 
     private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Project project) {
@@ -114,13 +148,11 @@ public class CommitAnalyzer {
         return analyzers;
     }
 
-    private void walkFilesInCommit(Git gitClient, Commit commit, List<SourceCodeFileAnalyzerPlugin> analyzers) throws IOException {
-        if (analyzers.isEmpty()) {
-            logger.warn("skipping analysis of commit {} since there are no analyzers configured for project {}!", commit.getName(), commit.getProject().getName());
-            return;
-        }
-        logger.info("starting analysis of commit {}", commit.getName());
-
+    /**
+     * Iterates over all files that were modified within a commit and runs the analyzers over them to store metric
+     * values in the database.
+     */
+    private void walkTouchedFilesInCommit(Git gitClient, Commit commit, List<SourceCodeFileAnalyzerPlugin> analyzers) throws IOException {
         RevCommit gitCommit = commitFinder.findCommit(gitClient, commit.getName());
         if (gitCommit == null) {
             throw new IllegalArgumentException(String.format("commit with name %s was not found in git root %s", commit.getName(), gitClient.getRepository().getDirectory()));
@@ -137,8 +169,7 @@ public class CommitAnalyzer {
             parentId = gitCommit.getParent(0).getId();
         }
 
-        List<FilePattern> sourceFilePatterns = filePatternRepository.findByProjectIdAndFileSetType(commit.getProject().getId(), FileSetType.SOURCE);
-        FileMatchingPattern pattern = toFileMatchingPattern(sourceFilePatterns);
+        FileMatchingPattern pattern = getFileMatchingPattern(commit);
 
         List<DiffEntry> diffs = diffFormatter.scan(parentId, gitCommit);
         for (DiffEntry diff : diffs) {
@@ -153,11 +184,50 @@ public class CommitAnalyzer {
                 continue;
             }
 
-            byte[] fileContent = BlobUtils.getRawContent(gitClient.getRepository(), gitCommit.getId(), filepath);
-            FileMetrics metrics = fileAnalyzer.analyzeFile(analyzers, filepath, fileContent);
-
-            storeMetrics(commit, filepath, metrics);
+            analyzeFile(gitClient, commit, analyzers, gitCommit, filepath);
         }
+    }
+
+    private FileMatchingPattern getFileMatchingPattern(Commit commit) {
+        List<FilePattern> sourceFilePatterns = filePatternRepository.findByProjectIdAndFileSetType(commit.getProject().getId(), FileSetType.SOURCE);
+        return toFileMatchingPattern(sourceFilePatterns);
+    }
+
+    /**
+     * Iterates over all files that exist at the time of the given commit and runs the analyzers over them to store metric
+     * values in the database.
+     */
+    private void walkAllFilesInCommit(Git gitClient, Commit commit, List<SourceCodeFileAnalyzerPlugin> analyzers) {
+        RevCommit gitCommit = commitFinder.findCommit(gitClient, commit.getName());
+        if (gitCommit == null) {
+            throw new IllegalArgumentException(String.format("commit with name %s was not found in git root %s", commit.getName(), gitClient.getRepository().getDirectory()));
+        }
+
+        FileMatchingPattern pattern = getFileMatchingPattern(commit);
+
+        try (TreeWalk treeWalk = new TreeWalk(gitClient.getRepository())) {
+            treeWalk.addTree(gitCommit.getTree());
+            treeWalk.setRecursive(true);
+            while (treeWalk.next()) {
+                String filepath = treeWalk.getPathString();
+
+                if (!pattern.matches(filepath)) {
+                    logger.debug("skipping analysis of file {} because it does not match source file pattern of project {}", filepath, commit.getProject().getName());
+                    continue;
+                }
+
+                analyzeFile(gitClient, commit, analyzers, gitCommit, filepath);
+
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    private void analyzeFile(Git gitClient, Commit commit, List<SourceCodeFileAnalyzerPlugin> analyzers, RevCommit gitCommit, String filepath) {
+        byte[] fileContent = BlobUtils.getRawContent(gitClient.getRepository(), gitCommit.getId(), filepath);
+        FileMetrics metrics = fileAnalyzer.analyzeFile(analyzers, filepath, fileContent);
+        storeMetrics(commit, filepath, metrics);
     }
 
     private boolean shouldBeAnalyzed(DiffEntry.ChangeType changeType) {
