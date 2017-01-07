@@ -1,24 +1,25 @@
-package org.wickedsource.coderadar.security.registration.rest;
+package org.wickedsource.coderadar.user.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.wickedsource.coderadar.core.rest.validation.RegistrationException;
-import org.wickedsource.coderadar.security.domain.User;
-import org.wickedsource.coderadar.security.domain.UserRegistrationDataResource;
-import org.wickedsource.coderadar.security.domain.UserResource;
+import org.wickedsource.coderadar.user.domain.User;
+import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
+import org.wickedsource.coderadar.user.domain.UserResource;
 
 import javax.validation.Valid;
 
 @Controller
 @Transactional
-@RequestMapping(path = "/user/register")
-public class RegistrationController {
+@RequestMapping(path = "/user")
+public class UserController {
 
     private final RegistrationService registrationService;
 
@@ -26,12 +27,12 @@ public class RegistrationController {
 
 
     @Autowired
-    public RegistrationController(RegistrationService registrationService, UserResourceAssembler userResourceAssembler) {
+    public UserController(RegistrationService registrationService, UserResourceAssembler userResourceAssembler) {
         this.registrationService = registrationService;
         this.userResourceAssembler = userResourceAssembler;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, path = "/register")
     public ResponseEntity<UserResource> register(@Valid @RequestBody UserRegistrationDataResource userRegistrationDataResource) {
         if (registrationService.userExists(userRegistrationDataResource)) {
             throw new RegistrationException(userRegistrationDataResource.getUsername());
@@ -39,5 +40,12 @@ public class RegistrationController {
         User registeredUser = registrationService.register(userRegistrationDataResource);
         UserResource userResource = userResourceAssembler.toResource(registeredUser);
         return new ResponseEntity<>(userResource, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/{userId}")
+    public ResponseEntity<UserResource> getUser(@PathVariable Long userId) {
+        User user = registrationService.getUser(userId);
+        UserResource userResource = userResourceAssembler.toResource(user);
+        return new ResponseEntity<>(userResource, HttpStatus.OK);
     }
 }

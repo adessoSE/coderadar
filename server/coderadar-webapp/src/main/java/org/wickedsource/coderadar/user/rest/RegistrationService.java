@@ -1,10 +1,11 @@
-package org.wickedsource.coderadar.security.registration.rest;
+package org.wickedsource.coderadar.user.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wickedsource.coderadar.security.domain.User;
-import org.wickedsource.coderadar.security.domain.UserRegistrationDataResource;
-import org.wickedsource.coderadar.security.domain.UserRepository;
+import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
+import org.wickedsource.coderadar.user.domain.User;
+import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
+import org.wickedsource.coderadar.user.domain.UserRepository;
 
 @Service
 public class RegistrationService {
@@ -39,5 +40,20 @@ public class RegistrationService {
     boolean userExists(UserRegistrationDataResource userRegistrationDataResource) {
         User user = userRepository.findByUsername(userRegistrationDataResource.getUsername());
         return user != null;
+    }
+
+    /**
+     * This method returns the user with id <code>userId</code>. If no user with Id <code>userId</code> was found,
+     * {@link ResourceNotFoundException} will be thrown.
+     *
+     * @param userId Id of the user to be returned
+     * @return User with id <code>userId</code>
+     */
+    User getUser(Long userId) {
+        User user = userRepository.findOne(userId);
+        if (user == null) {
+            throw new ResourceNotFoundException();
+        }
+        return user;
     }
 }

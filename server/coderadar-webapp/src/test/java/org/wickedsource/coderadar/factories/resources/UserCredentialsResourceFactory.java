@@ -1,6 +1,6 @@
 package org.wickedsource.coderadar.factories.resources;
 
-import org.wickedsource.coderadar.security.domain.UserRegistrationDataResource;
+import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 
 public class UserCredentialsResourceFactory {
 

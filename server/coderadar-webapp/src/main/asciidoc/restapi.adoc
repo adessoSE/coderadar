@@ -613,6 +613,29 @@ include::{snippets}/metrics/deltaTree/http-request.adoc[]
 
 include::{snippets}/metrics/deltaTree/http-response.adoc[]
 
+== User Management
+anchor:chapter-configure[]
+This section describes available operation for user management
+
+=== Registration
+To use the functionality of the coderadar you have to register a user.
+You need to define a username and a password. Password will be send as
+plain text and hashed on server side for persisting.
+
+===== Structure
+include::{snippets}/user/register/request-fields.adoc
+
+===== Hypermedia links
+include::{snippets}/user/register/links.adoc
+
+===== Example Request
+
+include::{snippets}/user/register/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/user/register/http-response.adoc[]
+
 
 
 

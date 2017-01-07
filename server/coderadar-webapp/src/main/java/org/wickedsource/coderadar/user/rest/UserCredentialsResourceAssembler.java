@@ -1,12 +1,12 @@
-package org.wickedsource.coderadar.security.registration.rest;
+package org.wickedsource.coderadar.user.rest;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
-import org.wickedsource.coderadar.security.domain.User;
-import org.wickedsource.coderadar.security.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.security.service.PasswordService;
+import org.wickedsource.coderadar.user.domain.User;
+import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 
 @Component
 public class UserCredentialsResourceAssembler extends AbstractResourceAssembler<User, UserRegistrationDataResource> {
@@ -15,7 +15,7 @@ public class UserCredentialsResourceAssembler extends AbstractResourceAssembler<
 
     @Autowired
     public UserCredentialsResourceAssembler(PasswordService passwordService) {
-        super(RegistrationController.class, UserRegistrationDataResource.class);
+        super(UserController.class, UserRegistrationDataResource.class);
         this.passwordService = passwordService;
     }
 

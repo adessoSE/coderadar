@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.security.domain;
+package org.wickedsource.coderadar.user.domain;
 
 import org.hibernate.validator.constraints.Length;
 import org.springframework.hateoas.ResourceSupport;

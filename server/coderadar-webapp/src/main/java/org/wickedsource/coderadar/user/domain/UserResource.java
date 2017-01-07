@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.security.domain;
+package org.wickedsource.coderadar.user.domain;
 
 import org.springframework.hateoas.ResourceSupport;
 
