@@ -15,7 +15,7 @@ import java.security.NoSuchAlgorithmException;
 public class SecretKeyService {
 
     private static final String ALGORITHM = "AES";
-    private static final int KEY_LENGHT = 256;
+    private static final int KEY_LENGTH = 256;
     private static SecretKey secretKey;
 
     @PostConstruct
@@ -26,7 +26,7 @@ public class SecretKeyService {
     private SecretKey generateSecretKey() {
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance(ALGORITHM);
-            keyGenerator.init(KEY_LENGHT);
+            keyGenerator.init(KEY_LENGTH);
             return keyGenerator.generateKey();
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException("Could not generate secret authentication token key");

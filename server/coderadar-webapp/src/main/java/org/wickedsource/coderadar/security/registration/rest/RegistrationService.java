@@ -3,7 +3,7 @@ package org.wickedsource.coderadar.security.registration.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.security.domain.User;
-import org.wickedsource.coderadar.security.domain.UserCredentialsResource;
+import org.wickedsource.coderadar.security.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.security.domain.UserRepository;
 
 @Service
@@ -20,23 +20,24 @@ public class RegistrationService {
     }
 
     /**
-     * creates a user and saves him in the db
+     * Creates a user and saves him in the data base.
      *
-     * @param userCredentialsResource domain object with user information
+     * @param userRegistrationDataResource domain object with user information.
+     * @return {@link User}, that is saved in the data base.
      */
-    void register(UserCredentialsResource userCredentialsResource) {
-        User user = userCredentialsResourceAssembler.toEntity(userCredentialsResource);
-        userRepository.save(user);
+    User register(UserRegistrationDataResource userRegistrationDataResource) {
+        User user = userCredentialsResourceAssembler.toEntity(userRegistrationDataResource);
+        return userRepository.save(user);
     }
 
     /**
-     * returns <code>true</code>, if a user with username from <code>userCredentialsResource</code> exists.
+     * Returns <code>true</code>, if a user with username from <code>userCredentialsResource</code> exists.
      *
-     * @param userCredentialsResource user credentials
+     * @param userRegistrationDataResource user credentials
      * @return <code>true</code> is a user exists, falls otherwise
      */
-    boolean existsUser(UserCredentialsResource userCredentialsResource) {
-        User user = userRepository.findByUsername(userCredentialsResource.getUsername());
+    boolean userExists(UserRegistrationDataResource userRegistrationDataResource) {
+        User user = userRepository.findByUsername(userRegistrationDataResource.getUsername());
         return user != null;
     }
 }

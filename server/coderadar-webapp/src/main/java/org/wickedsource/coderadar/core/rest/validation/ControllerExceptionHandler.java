@@ -57,6 +57,15 @@ public class ControllerExceptionHandler {
         return errors;
     }
 
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    @ExceptionHandler(RegistrationException.class)
+    @ResponseBody
+    public ErrorDTO handleRegistrationException(RegistrationException e){
+        ErrorDTO errors = new ErrorDTO();
+        errors.setErrorMessage(e.getMessage());
+        return errors;
+    }
+
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseBody

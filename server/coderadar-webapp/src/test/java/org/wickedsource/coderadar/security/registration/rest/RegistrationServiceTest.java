@@ -6,7 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.wickedsource.coderadar.security.domain.User;
-import org.wickedsource.coderadar.security.domain.UserCredentialsResource;
+import org.wickedsource.coderadar.security.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.security.domain.UserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,14 +25,14 @@ public class RegistrationServiceTest {
     @Test
     public void existsUser() throws Exception {
         when(userRepository.findByUsername(anyString())).thenReturn(new User());
-        boolean existsUser = registrationService.existsUser(new UserCredentialsResource("username", "password"));
+        boolean existsUser = registrationService.userExists(new UserRegistrationDataResource("username", "password"));
         assertThat(existsUser).isTrue();
     }
 
     @Test
     public void notExistUser() throws Exception {
         when(userRepository.findByUsername(anyString())).thenReturn(null);
-        boolean existsUser = registrationService.existsUser(new UserCredentialsResource("username", "password"));
+        boolean existsUser = registrationService.userExists(new UserRegistrationDataResource("username", "password"));
         assertThat(existsUser).isFalse();
     }
 }

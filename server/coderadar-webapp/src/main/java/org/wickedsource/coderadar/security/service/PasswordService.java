@@ -26,11 +26,11 @@ public class PasswordService {
     /**
      * checks, if the passwords match
      *
-     * @param rowPassword     the password to be verified
+     * @param rawPassword     the password to be verified
      * @param encodedPassword encoded the password as hexadecimal
      * @return <code>true</code>, if the password match, false otherwise
      */
-    boolean verify(String rowPassword, String encodedPassword) {
-        return passwordEncoder.matches(rowPassword, encodedPassword);
+    boolean verify(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }
