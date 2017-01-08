@@ -30,4 +30,8 @@ public class EntityFactory {
         return new AnalyzingStrategyFactory();
     }
 
+    public static UserFactory user() {
+        return new UserFactory();
+    }
+
 }
