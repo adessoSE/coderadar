@@ -14,7 +14,7 @@ public class PasswordService {
 
 
     /**
-     * hash the password with "bcrypt"
+     * Hash the password with "bcrypt".
      *
      * @param password the password to be hashed
      * @return hashed password as hexadecimal
@@ -24,7 +24,7 @@ public class PasswordService {
     }
 
     /**
-     * checks, if the passwords match
+     * Checks, if the passwords match.
      *
      * @param rawPassword     the password to be verified
      * @param encodedPassword encoded the password as hexadecimal
