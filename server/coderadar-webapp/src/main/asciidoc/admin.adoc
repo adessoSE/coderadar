@@ -1,5 +1,5 @@
 == coderadar Administration Guide
-v{version}, Tom Hombergs, {date}
+v{version}, {date}
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
