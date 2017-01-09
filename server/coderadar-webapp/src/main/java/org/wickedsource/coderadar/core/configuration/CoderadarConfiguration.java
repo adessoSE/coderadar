@@ -1,16 +1,17 @@
 package org.wickedsource.coderadar.core.configuration;
 
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.core.configuration.configparams.*;
-
-import javax.annotation.PostConstruct;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * Provides access to all configuration parameters of the coderadar application.
@@ -37,13 +38,21 @@ public class CoderadarConfiguration {
 
     private DateLocaleConfigurationParameter dateLocale;
 
+    private AccessTokenDurationParameter accessTokenDuration;
+
+    private RefreshTokenDurationParameter refreshTokenDuration;
+
     @Autowired
-    public CoderadarConfiguration(MasterConfigurationParameter master, SlaveConfigurationParameter slave, WorkdirConfigurationParameter workdir, ScanIntervalConfigurationParameter scanInterval, DateLocaleConfigurationParameter dateLocale) {
+    public CoderadarConfiguration(MasterConfigurationParameter master, SlaveConfigurationParameter slave, WorkdirConfigurationParameter workdir,
+            ScanIntervalConfigurationParameter scanInterval, DateLocaleConfigurationParameter dateLocale, AccessTokenDurationParameter accessTokenDuration,
+            RefreshTokenDurationParameter refreshTokenDuration) {
         this.master = master;
         this.slave = slave;
         this.workdir = workdir;
         this.scanInterval = scanInterval;
         this.dateLocale = dateLocale;
+        this.accessTokenDuration = accessTokenDuration;
+        this.refreshTokenDuration = refreshTokenDuration;
         this.configurationParameters.add(master);
         this.configurationParameters.add(slave);
         this.configurationParameters.add(workdir);
@@ -66,8 +75,7 @@ public class CoderadarConfiguration {
     }
 
     /**
-     * Checks if a config parameter is set to a valid value and provides some log output for finding configuration
-     * errors quickly.
+     * Checks if a config parameter is set to a valid value and provides some log output for finding configuration errors quickly.
      */
     protected boolean isConfigParamValid(ConfigurationParameter<?> param) {
         List<ParameterValidationError> validationErrors = param.validate();
@@ -78,7 +86,8 @@ public class CoderadarConfiguration {
                 if (validationError.getException() == null) {
                     logger.error("Configuration parameter '{}' has an invalid value. Message: {}", param.getName(), validationError.getMessage());
                 } else {
-                    logger.error("Configuration parameter '{}' has an invalid value. Message: {}. Stacktrace: ", param.getName(), validationError.getMessage(), validationError.getException());
+                    logger.error("Configuration parameter '{}' has an invalid value. Message: {}. Stacktrace: ", param.getName(), validationError.getMessage(),
+                            validationError.getException());
                 }
             }
             return false;
@@ -101,7 +110,6 @@ public class CoderadarConfiguration {
         return true;
     }
 
-
     /**
      * @see MasterConfigurationParameter
      */
@@ -115,7 +123,6 @@ public class CoderadarConfiguration {
     public boolean isSlave() {
         return slave.getValue().get();
     }
-
 
     /**
      * @see WorkdirConfigurationParameter
@@ -138,4 +145,17 @@ public class CoderadarConfiguration {
         return dateLocale.getValue().get();
     }
 
+    /**
+     * @see AccessTokenDurationParameter
+     */
+    public Integer getAccessTokenDuration() {
+        return accessTokenDuration.getValue().get();
+    }
+
+    /**
+     * @see RefreshTokenDurationParameter
+     */
+    public Integer getRefreshTokenDuration() {
+        return refreshTokenDuration.getValue().get();
+    }
 }

@@ -5,7 +5,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.hateoas.ResourceSupport;
 
-public class UserRegistrationDataResource extends ResourceSupport {
+public class UserLoginResource extends ResourceSupport {
 
     @NotNull
     private String username;
@@ -13,15 +13,6 @@ public class UserRegistrationDataResource extends ResourceSupport {
     @NotNull
     @Size(min = 8)
     private String password;
-
-
-    public UserRegistrationDataResource() {
-    }
-
-    public UserRegistrationDataResource(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
 
     public String getUsername() {
         return username;
