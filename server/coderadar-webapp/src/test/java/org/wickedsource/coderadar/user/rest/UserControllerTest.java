@@ -54,7 +54,7 @@ public class UserControllerTest extends ControllerTestTemplate {
                         linkWithRel("self").description("Link to the user.")),
                 requestFields(
                         fields.withPath("username").description("The name of the user to be registered."),
-                        fields.withPath("password").description("The password of the user as plaintext")));
+                        fields.withCustomPath("password").description("The password of the user as plaintext")));
     }
 
     @Test

@@ -1,5 +1,13 @@
 package org.wickedsource.coderadar.testframework.template;
 
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.snippet.Attributes.key;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Properties;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,10 +28,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.snippet.Attributes.key;
-
 public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
 
     private MockMvc mvc;
@@ -37,32 +41,17 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
     @Rule
     public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
 
-
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
 
-        mvc = MockMvcBuilders.webAppContextSetup(applicationContext)
-                .apply(MockMvcRestDocumentation.documentationConfiguration(this.restDocumentation))
-                .build();
+        mvc = MockMvcBuilders.webAppContextSetup(applicationContext).apply(MockMvcRestDocumentation.documentationConfiguration(this.restDocumentation)).build();
     }
 
     @After
     public void reset() {
-        sequenceResetter.resetAutoIncrementColumns(
-                "project",
-                "analyzer_configuration",
-                "analyzer_configuration_file",
-                "analyzing_strategy",
-                "commit",
-                "commit_log_entry",
-                "file",
-                "file_identity",
-                "file_pattern",
-                "job",
-                "quality_profile",
-                "quality_profile_metric",
-                "module");
+        sequenceResetter.resetAutoIncrementColumns("project", "analyzer_configuration", "analyzer_configuration_file", "analyzing_strategy", "commit",
+                "commit_log_entry", "file", "file_identity", "file_pattern", "job", "quality_profile", "quality_profile_metric", "module");
     }
 
     @SuppressWarnings("unchecked")
@@ -73,27 +62,37 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
     public static class ConstrainedFields<T> {
 
         private final ConstraintDescriptions constraintDescriptions;
+        private final Properties customValidationDescription = new Properties();
 
         ConstrainedFields(Class<T> input) {
-            this.constraintDescriptions = new ConstraintDescriptions(input);
+
+            try {
+                this.constraintDescriptions = new ConstraintDescriptions(input);
+                this.customValidationDescription.load(getClass().getResourceAsStream("CustomValidationDescription.properties"));
+            } catch (IOException e) {
+                throw new IllegalArgumentException("unable to load properties for custom validation description");
+            }
         }
 
         public FieldDescriptor withPath(String path) {
-            return fieldWithPath(path).attributes(key("constraints").value(StringUtils
-                    .collectionToDelimitedString(this.constraintDescriptions
-                            .descriptionsForProperty(path), ". ")));
+            return fieldWithPath(path).attributes(
+                    key("constraints").value(StringUtils.collectionToDelimitedString(this.constraintDescriptions.descriptionsForProperty(path), ". ")));
+        }
+
+        /**
+         * Returns field descriptor for custom validators.
+         */
+        public FieldDescriptor withCustomPath(String path) {
+            return fieldWithPath(path).attributes(key("constraints")
+                    .value(StringUtils.collectionToDelimitedString(Collections.singletonList(customValidationDescription.getProperty(path)), ". ")));
         }
     }
 
     /**
-     * Wraps the static document() method of RestDocs and configures it to pretty print request and
-     * response JSON structures.
+     * Wraps the static document() method of RestDocs and configures it to pretty print request and response JSON structures.
      */
     protected RestDocumentationResultHandler document(String identifier, Snippet... snippets) {
-        return MockMvcRestDocumentation.document(identifier,
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                snippets);
+        return MockMvcRestDocumentation.document(identifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()), snippets);
     }
 
     protected MockMvc mvc() {
