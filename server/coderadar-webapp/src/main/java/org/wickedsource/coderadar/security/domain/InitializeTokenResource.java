@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.hateoas.ResourceSupport;
 
-public class TokenResource extends ResourceSupport {
+public class InitializeTokenResource extends ResourceSupport {
 
     @NotNull
     private String accessToken;

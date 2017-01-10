@@ -49,6 +49,7 @@ public class TokenService {
         byte[] secret = secretKeyService.getSecretKey().getEncoded();
         return JWT.create()//
                 .withExpiresAt(expiresAt)//
+                .withIssuedAt(new Date())
                 .withIssuer("coderadar")//
                 .withClaim("userId", userId.toString())//
                 .withClaim("username", username)//

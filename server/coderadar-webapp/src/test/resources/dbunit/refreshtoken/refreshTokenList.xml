@@ -18,4 +18,8 @@
     <quality_profile_metric/>
     <user/>
     <refresh_token/>
+
+    <user id="1" username="user" password="password"/>
+    <user id="2" username="radar" password="nopassword"/>
+    <refresh_token id="1" token="token1" user_id="2"/>
 </dataset>

@@ -46,6 +46,14 @@ public class UserControllerTest extends ControllerTestTemplate {
         assertThat(count).isEqualTo(1);
     }
 
+    @Test
+    @DatabaseSetup(EMPTY)
+    public void registerInvalidPassword() throws Exception {
+        UserRegistrationDataResource userCredentials = userCredentialsResource().userCredentialsInvalidPasswordResource();
+        mvc().perform(post("/user/registration").content(toJsonWithoutLinks(userCredentials)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
     private ResultHandler documentCreateProject() {
         ConstrainedFields fields = fields(UserRegistrationDataResource.class);
         return document("user/registration",

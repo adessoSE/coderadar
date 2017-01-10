@@ -171,6 +171,7 @@ bootRun {
                     // authentication
                     // Duration in minutes
                     "-Dcoderadar.access.token.duration=15",
+                    // a week
                     "-Dcoderadar.refresh.token.duration=10080"
             ]
 }

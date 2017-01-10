@@ -7,4 +7,8 @@ public class UserCredentialsResourceFactory {
     public UserRegistrationDataResource userCredentialsResource() {
         return new UserRegistrationDataResource("user", "Password12!");
     }
+
+    public UserRegistrationDataResource userCredentialsInvalidPasswordResource() {
+        return new UserRegistrationDataResource("user", "password12!");
+    }
 }

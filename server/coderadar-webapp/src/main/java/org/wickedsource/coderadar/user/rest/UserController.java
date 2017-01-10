@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.wickedsource.coderadar.core.rest.validation.RegistrationException;
-import org.wickedsource.coderadar.security.domain.TokenResource;
+import org.wickedsource.coderadar.security.domain.InitializeTokenResource;
+import org.wickedsource.coderadar.security.service.TokenService;
 import org.wickedsource.coderadar.user.domain.User;
 import org.wickedsource.coderadar.user.domain.UserLoginResource;
 import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
@@ -33,11 +34,15 @@ public class UserController {
 
     private final AuthenticationManager authenticationManager;
 
+    private final TokenService tokenService;
+
     @Autowired
-    public UserController(RegistrationService registrationService, UserResourceAssembler userResourceAssembler, AuthenticationManager authenticationManager) {
+    public UserController(RegistrationService registrationService, UserResourceAssembler userResourceAssembler, AuthenticationManager authenticationManager,
+            TokenService tokenService) {
         this.registrationService = registrationService;
         this.userResourceAssembler = userResourceAssembler;
         this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/registration")
@@ -58,7 +63,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/auth")
-    public ResponseEntity<TokenResource> login(@Valid @RequestBody UserLoginResource userLoginResource) {
+    public ResponseEntity<InitializeTokenResource> login(@Valid @RequestBody UserLoginResource userLoginResource) {
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginResource.getUsername(), userLoginResource.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
