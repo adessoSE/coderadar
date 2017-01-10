@@ -40,7 +40,7 @@ public class UserController {
         this.authenticationManager = authenticationManager;
     }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/register")
+    @RequestMapping(method = RequestMethod.POST, path = "/registration")
     public ResponseEntity<UserResource> register(@Valid @RequestBody UserRegistrationDataResource userRegistrationDataResource) {
         if (registrationService.userExists(userRegistrationDataResource)) {
             throw new RegistrationException(userRegistrationDataResource.getUsername());
