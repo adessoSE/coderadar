@@ -1,5 +1,5 @@
 = coderadar REST API
-v{version}, Tom Hombergs, {date}
+v{version}, {date}
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
@@ -69,6 +69,41 @@ include::{snippets}/projects/create/error400/response-fields.adoc[]
 
 If some unexpected error occurs during the processing of a request, the API returns a response with HTTP status 500
 (internal server error).
+
+== User Management
+anchor:chapter-configure[]
+This section describes the REST endpoints for managing coderadar users.
+
+=== Users
+To access the functionality of coderadar you have to register a user.
+You need to define a username and a password. The password will be sent as
+plain text and hashed on server side for persisting.
+
+==== Hypermedia links
+include::{snippets}/user/register/links.adoc[]
+
+==== Registering a User
+
+===== Registration Data Structure
+include::{snippets}/user/register/request-fields.adoc[]
+
+===== Example Request
+
+include::{snippets}/user/register/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/user/register/http-response.adoc[]
+
+==== Loading a User
+
+===== Example Request
+
+include::{snippets}/user/get/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/user/get/http-response.adoc[]
 
 == Configuring a Project
 anchor:chapter-configure[]
@@ -613,28 +648,6 @@ include::{snippets}/metrics/deltaTree/http-request.adoc[]
 
 include::{snippets}/metrics/deltaTree/http-response.adoc[]
 
-== User Management
-anchor:chapter-configure[]
-This section describes available operation for user management
-
-=== Registration
-To use the functionality of the coderadar you have to register a user.
-You need to define a username and a password. Password will be send as
-plain text and hashed on server side for persisting.
-
-===== Structure
-include::{snippets}/user/register/request-fields.adoc
-
-===== Hypermedia links
-include::{snippets}/user/register/links.adoc
-
-===== Example Request
-
-include::{snippets}/user/register/http-request.adoc[]
-
-===== Example Response
-
-include::{snippets}/user/register/http-response.adoc[]
 
 
 
