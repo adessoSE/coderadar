@@ -20,6 +20,7 @@
     <refresh_token/>
 
     <user id="1" username="user" password="password"/>
-    <user id="2" username="radar" password="nopassword"/>
+    <user id="2" username="radar"
+          password="$2a$10$uZ3pynZ.CcvHjbZPqhVxbueuHvoHRSA0TPgFbryCbobqkE135vv6G"/>
     <refresh_token id="1" token="token1" user_id="2"/>
 </dataset>

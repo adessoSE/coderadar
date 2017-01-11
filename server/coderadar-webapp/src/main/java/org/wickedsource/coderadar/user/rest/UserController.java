@@ -1,7 +1,5 @@
 package org.wickedsource.coderadar.user.rest;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.wickedsource.coderadar.core.rest.validation.RegistrationException;
 import org.wickedsource.coderadar.security.domain.InitializeTokenResource;
-import org.wickedsource.coderadar.security.service.TokenService;
 import org.wickedsource.coderadar.user.domain.User;
 import org.wickedsource.coderadar.user.domain.UserLoginResource;
 import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.user.domain.UserResource;
+import org.wickedsource.coderadar.user.service.LoginService;
+import org.wickedsource.coderadar.user.service.RegistrationService;
+
+import javax.validation.Valid;
 
 @Controller
 @Transactional
@@ -34,15 +35,14 @@ public class UserController {
 
     private final AuthenticationManager authenticationManager;
 
-    private final TokenService tokenService;
+    private final LoginService loginService;
 
     @Autowired
-    public UserController(RegistrationService registrationService, UserResourceAssembler userResourceAssembler, AuthenticationManager authenticationManager,
-            TokenService tokenService) {
+    public UserController(RegistrationService registrationService, UserResourceAssembler userResourceAssembler, AuthenticationManager authenticationManager, LoginService loginService) {
         this.registrationService = registrationService;
         this.userResourceAssembler = userResourceAssembler;
         this.authenticationManager = authenticationManager;
-        this.tokenService = tokenService;
+        this.loginService = loginService;
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/registration")
@@ -67,8 +67,9 @@ public class UserController {
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginResource.getUsername(), userLoginResource.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        // TODO create and return tokens
-        return null;
+
+        InitializeTokenResource initializeTokenResource = loginService.login(userLoginResource.getUsername());
+        return new ResponseEntity<>(initializeTokenResource, HttpStatus.OK);
     }
 
 }

@@ -5,10 +5,10 @@ import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 public class UserCredentialsResourceFactory {
 
     public UserRegistrationDataResource userCredentialsResource() {
-        return new UserRegistrationDataResource("user", "Password12!");
+        return new UserRegistrationDataResource("radar", "Password12!");
     }
 
     public UserRegistrationDataResource userCredentialsInvalidPasswordResource() {
-        return new UserRegistrationDataResource("user", "password12!");
+        return new UserRegistrationDataResource("radar", "password12!");
     }
 }

@@ -1,9 +1,9 @@
 package org.wickedsource.coderadar.user.domain;
 
+import org.springframework.hateoas.ResourceSupport;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.springframework.hateoas.ResourceSupport;
 
 public class UserLoginResource extends ResourceSupport {
 
@@ -13,6 +13,14 @@ public class UserLoginResource extends ResourceSupport {
     @NotNull
     @Size(min = 8)
     private String password;
+
+    public UserLoginResource() {
+    }
+
+    public UserLoginResource(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 
     public String getUsername() {
         return username;

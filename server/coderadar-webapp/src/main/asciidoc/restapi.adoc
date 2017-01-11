@@ -105,6 +105,10 @@ include::{snippets}/user/get/http-request.adoc[]
 
 include::{snippets}/user/get/http-response.adoc[]
 
+==== Login
+// TODO
+
+
 == Configuring a Project
 anchor:chapter-configure[]
 

@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.user.rest;
+package org.wickedsource.coderadar.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,6 +6,7 @@ import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException
 import org.wickedsource.coderadar.user.domain.User;
 import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.user.domain.UserRepository;
+import org.wickedsource.coderadar.user.rest.UserCredentialsResourceAssembler;
 
 @Service
 public class RegistrationService {
@@ -26,7 +27,7 @@ public class RegistrationService {
      * @param userRegistrationDataResource domain object with user information.
      * @return {@link User}, that is saved in the data base.
      */
-    User register(UserRegistrationDataResource userRegistrationDataResource) {
+    public User register(UserRegistrationDataResource userRegistrationDataResource) {
         User user = userCredentialsResourceAssembler.toEntity(userRegistrationDataResource);
         return userRepository.save(user);
     }
@@ -37,7 +38,7 @@ public class RegistrationService {
      * @param userRegistrationDataResource user credentials
      * @return <code>true</code> is a user exists, falls otherwise
      */
-    boolean userExists(UserRegistrationDataResource userRegistrationDataResource) {
+    public boolean userExists(UserRegistrationDataResource userRegistrationDataResource) {
         User user = userRepository.findByUsername(userRegistrationDataResource.getUsername());
         return user != null;
     }
@@ -49,7 +50,7 @@ public class RegistrationService {
      * @param userId Id of the user to be returned
      * @return User with id <code>userId</code>
      */
-    User getUser(Long userId) {
+    public User getUser(Long userId) {
         User user = userRepository.findOne(userId);
         if (user == null) {
             throw new ResourceNotFoundException();
