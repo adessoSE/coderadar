@@ -80,20 +80,20 @@ You need to define a username and a password. The password will be sent as
 plain text and hashed on server side for persisting.
 
 ==== Hypermedia links
-include::{snippets}/user/register/links.adoc[]
+include::{snippets}/user/registration/links.adoc[]
 
 ==== Registering a User
 
 ===== Registration Data Structure
-include::{snippets}/user/register/request-fields.adoc[]
+include::{snippets}/user/registration/request-fields.adoc[]
 
 ===== Example Request
 
-include::{snippets}/user/register/http-request.adoc[]
+include::{snippets}/user/registration/http-request.adoc[]
 
 ===== Example Response
 
-include::{snippets}/user/register/http-response.adoc[]
+include::{snippets}/user/registration/http-response.adoc[]
 
 ==== Loading a User
 
@@ -106,7 +106,27 @@ include::{snippets}/user/get/http-request.adoc[]
 include::{snippets}/user/get/http-response.adoc[]
 
 ==== Login
-// TODO
+A user has to log in to use other endpoints of coderadar. If the log in is successful, user obtains two JSON Web Tokens https://jwt.io
+
+* an access token
+* a refresh token.
+
+How to use the tokens is described in <<authentication, Authentication>>
+
+===== Login Data Structure
+include::{snippets}/user/auth/request-fields.adoc[]
+
+===== Example Request
+include::{snippets}/user/auth/http-request.adoc[]
+
+===== Example Response
+include::{snippets}/user/auth/http-response.adoc[]
+
+anchor:authentication[]
+
+==== Authentication
+
+
 
 
 == Configuring a Project
