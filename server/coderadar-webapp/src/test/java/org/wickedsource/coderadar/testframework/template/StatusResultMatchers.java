@@ -34,4 +34,8 @@ public class StatusResultMatchers {
         return is(HttpStatus.NOT_FOUND.value());
     }
 
+    public ResultMatcher isForbidden() {
+        return is(HttpStatus.FORBIDDEN.value());
+    }
+
 }
