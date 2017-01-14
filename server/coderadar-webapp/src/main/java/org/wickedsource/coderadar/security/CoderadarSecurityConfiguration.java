@@ -54,7 +54,7 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
 
                 .anyRequest().authenticated();
 
-        // put JSON Wen Token authentication before other ones
+        // put JSON Web Token authentication before other ones
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
     }
 }
