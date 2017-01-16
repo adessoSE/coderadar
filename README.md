@@ -25,13 +25,8 @@ The overriding goal of coderadar is **to make it easy for you to improve the cod
 * **Fun**
  * Support gamification to make code quality fun
  
-## Want to contribute?
-
-See the [contribution guide](https://github.com/reflectoring/coderadar/blob/master/CONTRIBUTING.md).
-
 ## Roadmap
-
-The development of coderadar follows a roadmap that serves as a guide when prioritizing issues and feature requests:
+The development of coderadar loosely follows a roadmap that serves as a guide when prioritizing issues and feature requests:
 
 Milestone | Short Description | Status
 ----------|-------------------|-------
@@ -42,3 +37,6 @@ Minimum Viable Product | Add all features that are needed for coderadar to work 
 ## Documentation
 * [REST API documentation](http://reflectoring.github.io/coderadar/1.0.0-SNAPSHOT/docs/restapi.html).
 * [Administration Guide](http://reflectoring.github.io/coderadar/1.0.0-SNAPSHOT/docs/admin.html)
+
+## Want to contribute?
+See the [contribution guide](https://github.com/reflectoring/coderadar/blob/master/CONTRIBUTING.md).
