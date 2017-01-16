@@ -88,4 +88,12 @@ public class TokenServiceTest {
         token = token.concat("invalid");
         tokenService.isExpired(token);
     }
+
+    @Test
+    public void getUsername() throws Exception {
+        Date expireDate = DateTime.now().plusMinutes(1).toDate();
+        String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
+        String username = tokenService.getUsername(token);
+        assertThat(username).isEqualTo("user");
+    }
 }

@@ -1,12 +1,12 @@
 package org.wickedsource.coderadar.core.configuration.configparams;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class RefreshTokenDurationParameter implements ConfigurationParameter<Integer> {
@@ -36,7 +36,7 @@ public class RefreshTokenDurationParameter implements ConfigurationParameter<Int
 
     @Override
     public Optional<Integer> getDefaultValue() {
-        return Optional.of(15);
+        return Optional.of(86400);
     }
 
     @Override

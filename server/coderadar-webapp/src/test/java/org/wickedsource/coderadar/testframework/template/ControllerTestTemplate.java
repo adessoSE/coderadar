@@ -1,13 +1,5 @@
 package org.wickedsource.coderadar.testframework.template;
 
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.snippet.Attributes.key;
-
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Properties;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,6 +19,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Properties;
+
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.snippet.Attributes.key;
 
 public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
 

@@ -1,20 +1,26 @@
 package org.wickedsource.coderadar.user.rest;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.wickedsource.coderadar.factories.databases.DbUnitFactory;
-import org.wickedsource.coderadar.security.domain.InitializeTokenResource;
-import org.wickedsource.coderadar.security.domain.RefreshTokenRepository;
+import org.wickedsource.coderadar.security.TokenType;
+import org.wickedsource.coderadar.security.domain.*;
+import org.wickedsource.coderadar.security.service.SecretKeyService;
 import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 import org.wickedsource.coderadar.user.domain.UserLoginResource;
 import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.user.domain.UserRepository;
 import org.wickedsource.coderadar.user.domain.UserResource;
+
+import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
@@ -37,6 +43,9 @@ public class UserControllerTest extends ControllerTestTemplate {
 
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
+
+    @Autowired
+    private SecretKeyService secretKeyService;
 
     @Test
     @DatabaseSetup(EMPTY)
@@ -84,7 +93,6 @@ public class UserControllerTest extends ControllerTestTemplate {
     }
 
 
-
     @Test
     @DatabaseSetup(USERS)
     public void userExists() throws Exception {
@@ -120,5 +128,64 @@ public class UserControllerTest extends ControllerTestTemplate {
 
         long count = refreshTokenRepository.count();
         assertThat(count).isEqualTo(2);
+    }
+
+    @Test
+    @DatabaseSetup(DbUnitFactory.RefreshTokens.REFRESH_TOKENS)
+    public void refresh() throws Exception {
+
+        // we need to create token here to pass the validation with the current key
+        String expiredAccessToken = createExpiredAccessToken();
+        String refreshToken = createRefreshToken();
+
+        // save valid refresh token
+        RefreshToken refreshTokenEntity = refreshTokenRepository.findOne(1L);
+        refreshTokenEntity.setToken(refreshToken);
+        refreshTokenRepository.save(refreshTokenEntity);
+
+
+        RefreshTokenResource refreshTokenResource = new RefreshTokenResource(expiredAccessToken, refreshToken);
+        mvc().perform(post("/user/refresh")//
+                              .content(toJsonWithoutLinks(refreshTokenResource))
+                              .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(containsResource(AccessTokenResource.class))
+                .andDo(documentRefresh());
+    }
+
+    private String createExpiredAccessToken() {
+        byte[] secret = secretKeyService.getSecretKey().getEncoded();
+        Date expireAt = DateTime.now().minusMinutes(14).toDate();
+        Date issuedAt = DateTime.now().minusMinutes(29).toDate();
+        return JWT.create()//
+                       .withExpiresAt(expireAt)//
+                       .withIssuedAt(issuedAt)//
+                       .withIssuer("coderadar")//
+                       .withClaim("userId", 1)//
+                       .withClaim("username", "radar")//
+                       .withClaim("type", TokenType.ACCESS.toString()).sign(Algorithm.HMAC256(secret));
+    }
+
+    private String createRefreshToken() {
+        byte[] secret = secretKeyService.getSecretKey().getEncoded();
+        Date expireAt = DateTime.now().plusMinutes(3000).toDate();
+        Date issuedAt = DateTime.now().minusMinutes(3000).toDate();
+        return JWT.create()//
+                       .withExpiresAt(expireAt)//
+                       .withIssuedAt(issuedAt)//
+                       .withIssuer("coderadar")//
+                       .withClaim("userId", 1)//
+                       .withClaim("username", "radar")//
+                       .withClaim("type", TokenType.REFRESH.toString()).sign(Algorithm.HMAC256(secret));
+    }
+
+    private ResultHandler documentRefresh() {
+        ConstrainedFields fields = fields(RefreshTokenResource.class);
+        return document("user/refresh",
+
+                requestFields(
+                        fields.withPath("accessToken").description("The expired access token"),
+                        fields.withPath("refreshToken").description("The valid refresh token")));
+
     }
 }

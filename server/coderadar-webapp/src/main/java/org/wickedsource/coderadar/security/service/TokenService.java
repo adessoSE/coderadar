@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,6 @@ public class TokenService {
      * @return JSON Web Token
      */
     public String generateAccessToken(Long userId, String username) {
-        byte[] secret = secretKeyService.getSecretKey().getEncoded();
         Date expiresAt = DateTime.now().plusMinutes(configuration.getAccessTokenDuration()).toDate();
         TokenType tokenType = TokenType.ACCESS;
         return generateToken(userId, username, expiresAt, tokenType);
@@ -100,5 +100,16 @@ public class TokenService {
         Date expiresAt = DateTime.now().plusMinutes(configuration.getRefreshTokenDuration()).toDate();
         TokenType tokenType = TokenType.REFRESH;
         return generateToken(userId, username, expiresAt, tokenType);
+    }
+
+    /**
+     * Returns username from the tokens claim <code>username</code>.
+     *
+     * @param refreshToken a jwt token
+     */
+    public String getUsername(String refreshToken) {
+        JWT jwt = JWT.decode(refreshToken);
+        Claim claim = jwt.getClaim("username");
+        return claim.asString();
     }
 }

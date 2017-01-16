@@ -13,14 +13,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.wickedsource.coderadar.core.rest.validation.AccessTokenNotExpiredException;
 import org.wickedsource.coderadar.core.rest.validation.RegistrationException;
+import org.wickedsource.coderadar.security.domain.AccessTokenResource;
 import org.wickedsource.coderadar.security.domain.InitializeTokenResource;
+import org.wickedsource.coderadar.security.domain.RefreshTokenResource;
+import org.wickedsource.coderadar.security.service.TokenService;
 import org.wickedsource.coderadar.user.domain.User;
 import org.wickedsource.coderadar.user.domain.UserLoginResource;
 import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.user.domain.UserResource;
 import org.wickedsource.coderadar.user.service.LoginService;
 import org.wickedsource.coderadar.user.service.RegistrationService;
+import org.wickedsource.coderadar.user.service.TokenRefreshService;
 
 import javax.validation.Valid;
 
@@ -37,12 +42,18 @@ public class UserController {
 
     private final LoginService loginService;
 
+    private final TokenService tokenService;
+
+    private final TokenRefreshService tokenRefreshService;
+
     @Autowired
-    public UserController(RegistrationService registrationService, UserResourceAssembler userResourceAssembler, AuthenticationManager authenticationManager, LoginService loginService) {
+    public UserController(RegistrationService registrationService, UserResourceAssembler userResourceAssembler, AuthenticationManager authenticationManager, LoginService loginService, TokenService tokenService, TokenRefreshService tokenRefreshService) {
         this.registrationService = registrationService;
         this.userResourceAssembler = userResourceAssembler;
         this.authenticationManager = authenticationManager;
         this.loginService = loginService;
+        this.tokenService = tokenService;
+        this.tokenRefreshService = tokenRefreshService;
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/registration")
@@ -70,6 +81,15 @@ public class UserController {
 
         InitializeTokenResource initializeTokenResource = loginService.login(userLoginResource.getUsername());
         return new ResponseEntity<>(initializeTokenResource, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/refresh")
+    public ResponseEntity<AccessTokenResource> refresh(@Valid @RequestBody RefreshTokenResource refreshTokenResource) {
+        if (tokenService.isExpired(refreshTokenResource.getAccessToken())) {
+            String accessToken = tokenRefreshService.createAccessToken(refreshTokenResource.getRefreshToken());
+            return new ResponseEntity<>(new AccessTokenResource(accessToken), HttpStatus.OK);
+        }
+        throw new AccessTokenNotExpiredException();
     }
 
 }

@@ -122,6 +122,19 @@ include::{snippets}/user/auth/http-request.adoc[]
 ===== Example Response
 include::{snippets}/user/auth/http-response.adoc[]
 
+==== Refresh of Tokens
+To get a new access token after the current token has been expired you have
+to use the refresh token you got after successful login
+
+===== Login Data Structure
+include::{snippets}/user/refresh/request-fields.adoc[]
+
+===== Example Request
+include::{snippets}/user/refresh/http-request.adoc[]
+
+===== Example Response
+include::{snippets}/user/refresh/http-response.adoc[]
+
 anchor:authentication[]
 
 ==== Authentication
