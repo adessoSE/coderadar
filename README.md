@@ -30,9 +30,9 @@ The development of coderadar loosely follows a roadmap that serves as a guide wh
 
 Milestone | Short Description | Status
 ----------|-------------------|-------
-Proof of Concept | Build a server that supports the idea of analyzing a source code repository on-the-fly. Prove that it works with big code bases (>500.000 loc). | [ ]
-Basic User Interface | Build a user interface that supports basic use cases like a comparing metrics between two commits. | [ ]
-Minimum Viable Product | Add all features that are needed for coderadar to work in a real environment, like user management, security and administration | [ ] 
+Proof of Concept | Build a server that supports the idea of analyzing a source code repository on-the-fly. Prove that it works with big code bases (>500.000 loc). | in progress
+Basic User Interface | Build a user interface that supports basic use cases like a comparing metrics between two commits. | 
+Minimum Viable Product | Add all features that are needed for coderadar to work in a real environment, like user management, security and administration | 
 
 ## Documentation
 * [REST API documentation](http://reflectoring.github.io/coderadar/1.0.0-SNAPSHOT/docs/restapi.html).
