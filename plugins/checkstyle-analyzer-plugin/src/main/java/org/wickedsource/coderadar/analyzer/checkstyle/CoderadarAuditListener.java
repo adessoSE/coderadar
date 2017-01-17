@@ -14,6 +14,8 @@ public class CoderadarAuditListener implements AuditListener {
 
     private FileMetrics metrics = new FileMetrics();
 
+    private MetricCountExtractor metricCountExtractor = new MetricCountExtractor();
+
     @Override
     public void auditStarted(AuditEvent evt) {
         // do nothing
@@ -36,10 +38,12 @@ public class CoderadarAuditListener implements AuditListener {
 
     @Override
     public void addError(AuditEvent evt) {
-        if(evt.getSeverityLevel() != SeverityLevel.IGNORE) {
+        if (evt.getSeverityLevel() != SeverityLevel.IGNORE) {
             Metric metric = new Metric("checkstyle:" + evt.getSourceName());
             Finding finding = new Finding(evt.getLine(), evt.getLine(), evt.getColumn(), evt.getColumn());
-            metrics.addFinding(metric, finding);
+            Long metricCount = metricCountExtractor.extractMetricCount(evt);
+            metrics.addFinding(metric, finding, metricCount);
+            System.out.println(String.format("%s;%s", evt.getSourceName(), evt.getMessage()));
         }
     }
 
