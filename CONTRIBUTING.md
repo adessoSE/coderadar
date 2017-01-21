@@ -7,7 +7,7 @@ This guide gives an overview of coderadar and some development guidelines
 to make it easier for new contributors to get up and running. If you have
 any questions, feel free to get in touch.
 
-## Coderadar Overview
+## Overview of coderadar components
 Major components are documented via a README file in the folder of the component.
 The following list links to those READMEs:
 
