@@ -50,7 +50,7 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
                 .authorizeRequests()
 
                 // only these endpoints can be called without authentication
-                .antMatchers("/actuator", "/user/auth", "user/registration", "user/refresh").permitAll()
+                .antMatchers("/actuator", "/user/auth", "/user/registration", "/user/refresh").permitAll()
 
                 .anyRequest().authenticated();
 
