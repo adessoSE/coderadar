@@ -1,3 +1,12 @@
+apply plugin: "com.diffplug.gradle.spotless"
+
+spotless {
+    java {
+        googleJavaFormat()
+        paddedCell()
+    }
+}
+
 dependencies {
     compile project(':plugins:analyzer-plugin-api')
     testCompile group: 'commons-io', name: 'commons-io', version: '2.4'

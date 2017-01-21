@@ -1,3 +1,12 @@
+apply plugin: "com.diffplug.gradle.spotless"
+
+spotless {
+    java {
+        googleJavaFormat()
+        paddedCell()
+    }
+}
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }

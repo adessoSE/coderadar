@@ -2,33 +2,20 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 import java.text.SimpleDateFormat
 
-buildscript {
-    repositories {
-        mavenCentral()
-        mavenLocal()
-        jcenter()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${version_spring_boot}")
-        classpath "org.asciidoctor:asciidoctor-gradle-plugin:1.5.3"
-        classpath "org.ajoberstar:gradle-git:1.5.1"
-    }
-}
-
-apply plugin: "java"
 apply plugin: "org.springframework.boot"
 apply plugin: "org.asciidoctor.convert"
 apply plugin: "org.ajoberstar.github-pages"
-
-group = "org.wickedsource"
-version = "1.0.0-SNAPSHOT"
+apply plugin: "com.diffplug.gradle.spotless"
 
 ext {
     snippetsDir = file("build/generated-snippets")
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+        paddedCell()
+    }
 }
 
 processResources {
