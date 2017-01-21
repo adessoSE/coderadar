@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Configures the number of minutes of the validity for the authentication refresh token.
+ */
 @Component
 public class RefreshTokenDurationParameter implements ConfigurationParameter<Integer> {
 

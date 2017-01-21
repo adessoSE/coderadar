@@ -1,13 +1,11 @@
 package org.wickedsource.coderadar.security;
 
-import java.util.Arrays;
+import com.google.common.base.Joiner;
+import org.passay.*;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-
-import org.passay.*;
-
-import com.google.common.base.Joiner;
+import java.util.Arrays;
 
 /**
  * Validator for password users define while registration or changing password
@@ -22,18 +20,11 @@ public class CoderadarPasswordValidator implements ConstraintValidator<ValidPass
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         PasswordValidator passwordValidator = new PasswordValidator(//
-                Arrays.asList(new LengthRule(8, 20), //
-                        // at least one upper-case character
-                        new CharacterRule(EnglishCharacterData.UpperCase, 1),
-
-                        // at least one lower-case character
-                        new CharacterRule(EnglishCharacterData.LowerCase, 1),
-
+                                                                           Arrays.asList(
                         // at least one digit character
                         new CharacterRule(EnglishCharacterData.Digit, 1),
 
-                        // at least one symbol (special character)
-                        new CharacterRule(EnglishCharacterData.Special, 1),
+                                                                                   new CharacterRule(EnglishCharacterData.Alphabetical, 1),
 
                         // no whitespace
                         new WhitespaceRule()));

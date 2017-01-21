@@ -9,6 +9,6 @@ public class UserCredentialsResourceFactory {
     }
 
     public UserRegistrationDataResource userCredentialsInvalidPasswordResource() {
-        return new UserRegistrationDataResource("radar", "password12!");
+        return new UserRegistrationDataResource("radar", "password 12!");
     }
 }

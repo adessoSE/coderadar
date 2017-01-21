@@ -1,10 +1,15 @@
 package org.wickedsource.coderadar.security.domain;
 
-import javax.persistence.*;
-
 import org.wickedsource.coderadar.user.domain.User;
 
+import javax.persistence.*;
+
+/**
+ * Refresh token is a JSON Web Token, that is used by client to get a new access token.
+ * In contrast to access token is the refresh token persisted to have the possibility to revoke it and to assign the token to user entity.
+ */
 @Entity
+@Table
 public class RefreshToken {
 
     @Id
