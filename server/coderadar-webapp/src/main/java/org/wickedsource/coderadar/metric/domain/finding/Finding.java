@@ -11,58 +11,53 @@ import javax.persistence.Table;
 @Table
 public class Finding {
 
-    @EmbeddedId
-    private MetricValueId id;
+  @EmbeddedId private MetricValueId id;
 
-    @Column
-    private Integer lineStart;
+  @Column private Integer lineStart;
 
-    @Column
-    private Integer lineEnd;
+  @Column private Integer lineEnd;
 
-    @Column
-    private Integer charStart;
+  @Column private Integer charStart;
 
-    @Column
-    private Integer charEnd;
+  @Column private Integer charEnd;
 
-    public MetricValueId getId() {
-        return id;
-    }
+  public MetricValueId getId() {
+    return id;
+  }
 
-    public void setId(MetricValueId id) {
-        this.id = id;
-    }
+  public void setId(MetricValueId id) {
+    this.id = id;
+  }
 
-    public Integer getLineStart() {
-        return lineStart;
-    }
+  public Integer getLineStart() {
+    return lineStart;
+  }
 
-    public void setLineStart(Integer lineStart) {
-        this.lineStart = lineStart;
-    }
+  public void setLineStart(Integer lineStart) {
+    this.lineStart = lineStart;
+  }
 
-    public Integer getLineEnd() {
-        return lineEnd;
-    }
+  public Integer getLineEnd() {
+    return lineEnd;
+  }
 
-    public void setLineEnd(Integer lineEnd) {
-        this.lineEnd = lineEnd;
-    }
+  public void setLineEnd(Integer lineEnd) {
+    this.lineEnd = lineEnd;
+  }
 
-    public Integer getCharStart() {
-        return charStart;
-    }
+  public Integer getCharStart() {
+    return charStart;
+  }
 
-    public void setCharStart(Integer charStart) {
-        this.charStart = charStart;
-    }
+  public void setCharStart(Integer charStart) {
+    this.charStart = charStart;
+  }
 
-    public Integer getCharEnd() {
-        return charEnd;
-    }
+  public Integer getCharEnd() {
+    return charEnd;
+  }
 
-    public void setCharEnd(Integer charEnd) {
-        this.charEnd = charEnd;
-    }
+  public void setCharEnd(Integer charEnd) {
+    this.charEnd = charEnd;
+  }
 }

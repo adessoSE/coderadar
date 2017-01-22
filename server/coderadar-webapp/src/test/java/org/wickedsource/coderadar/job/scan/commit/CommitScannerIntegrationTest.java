@@ -1,5 +1,12 @@
 package org.wickedsource.coderadar.job.scan.commit;
 
+import static org.mockito.Mockito.*;
+import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
@@ -28,96 +35,79 @@ import org.wickedsource.coderadar.vcs.git.GitRepositoryChecker;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryCloner;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryUpdater;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import static org.mockito.Mockito.*;
-import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
-
 public class CommitScannerIntegrationTest extends GitTestTemplate {
 
-    private Logger logger = LoggerFactory.getLogger(ScanCommitsJob.class);
+  private Logger logger = LoggerFactory.getLogger(ScanCommitsJob.class);
 
-    @Mock
-    private ProjectRepository projectRepository;
+  @Mock private ProjectRepository projectRepository;
 
-    @Mock
-    private CommitRepository commitRepository;
+  @Mock private CommitRepository commitRepository;
 
-    @Spy
-    private GitRepositoryChecker gitChecker;
+  @Spy private GitRepositoryChecker gitChecker;
 
-    @Spy
-    private GitRepositoryCloner gitCloner;
+  @Spy private GitRepositoryCloner gitCloner;
 
-    @Spy
-    private GitRepositoryUpdater gitUpdater;
+  @Spy private GitRepositoryUpdater gitUpdater;
 
-    @Mock
-    private WorkdirManager workdirManager;
+  @Mock private WorkdirManager workdirManager;
 
-    @Mock
-    private GitCommitFinder commitFinder;
+  @Mock private GitCommitFinder commitFinder;
 
-    private LocalGitRepositoryUpdater updater;
+  private LocalGitRepositoryUpdater updater;
 
-    @Mock
-    private CoderadarConfiguration config;
+  @Mock private CoderadarConfiguration config;
 
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        mock(workdirManager);
-        mock(config);
-        updater = new LocalGitRepositoryUpdater(gitUpdater, gitCloner, gitChecker, workdirManager);
+  @Before
+  public void setup() {
+    MockitoAnnotations.initMocks(this);
+    mock(workdirManager);
+    mock(config);
+    updater = new LocalGitRepositoryUpdater(gitUpdater, gitCloner, gitChecker, workdirManager);
+  }
+
+  @After
+  public void cleanup() {
+    try {
+      if (!Boolean.valueOf(System.getProperty("coderadar.keepTempFiles"))) {
+        FileUtils.deleteDirectory(config.getWorkdir().toFile());
+      }
+    } catch (IOException e) {
+      logger.warn("could not delete temp dir at {}", config.getWorkdir());
     }
+  }
 
-    @After
-    public void cleanup() {
-        try {
-            if (!Boolean.valueOf(System.getProperty("coderadar.keepTempFiles"))) {
-                FileUtils.deleteDirectory(config.getWorkdir().toFile());
-            }
-        } catch (IOException e) {
-            logger.warn("could not delete temp dir at {}", config.getWorkdir());
-        }
+  @Test
+  @Category(IntegrationTest.class)
+  public void scan() {
+    Project project = project().validProject();
+    Profiler profiler = new Profiler("Scanner");
+    profiler.setLogger(logger);
+    CommitScanner scanner = new CommitScanner(commitRepository, updater, commitFinder);
+    when(projectRepository.findOne(project.getId())).thenReturn(createProject());
+    profiler.start("scanning without local repository present");
+    File repoRoot = scanner.scan(project).getParentFile();
+    Assert.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
+    // scanning again should be fairly quick, since the repository is already cloned
+    profiler.start("re-scanning with local repository present from last test");
+    scanner.scan(project);
+    Assert.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
+
+    verify(commitRepository, atLeast(20)).save(any(Commit.class));
+    profiler.stop().log();
+  }
+
+  private Project createProject() {
+    try {
+      Project project = new Project();
+      project.setId(1L);
+      project.setName("coderadar");
+      VcsCoordinates vcs = new VcsCoordinates();
+      vcs.setUrl(new URL("https://github.com/thombergs/diffparser.git"));
+      vcs.setType(VcsType.GIT);
+      project.setVcsCoordinates(vcs);
+      return project;
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
     }
-
-    @Test
-    @Category(IntegrationTest.class)
-    public void scan() {
-        Project project = project().validProject();
-        Profiler profiler = new Profiler("Scanner");
-        profiler.setLogger(logger);
-        CommitScanner scanner = new CommitScanner(commitRepository, updater, commitFinder);
-        when(projectRepository.findOne(project.getId())).thenReturn(createProject());
-        profiler.start("scanning without local repository present");
-        File repoRoot = scanner.scan(project).getParentFile();
-        Assert.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
-        // scanning again should be fairly quick, since the repository is already cloned
-        profiler.start("re-scanning with local repository present from last test");
-        scanner.scan(project);
-        Assert.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
-
-        verify(commitRepository, atLeast(20)).save(any(Commit.class));
-        profiler.stop().log();
-    }
-
-    private Project createProject() {
-        try {
-            Project project = new Project();
-            project.setId(1L);
-            project.setName("coderadar");
-            VcsCoordinates vcs = new VcsCoordinates();
-            vcs.setUrl(new URL("https://github.com/thombergs/diffparser.git"));
-            vcs.setType(VcsType.GIT);
-            project.setVcsCoordinates(vcs);
-            return project;
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+  }
 }

@@ -12,16 +12,13 @@ import javax.persistence.Table;
 @Table(name = "commit_file_module")
 public class ModuleAssociation {
 
-    @EmbeddedId
-    private ModuleAssociationId id;
+  @EmbeddedId private ModuleAssociationId id;
 
-    public ModuleAssociationId getId() {
-        return id;
-    }
+  public ModuleAssociationId getId() {
+    return id;
+  }
 
-    public void setId(ModuleAssociationId id) {
-        this.id = id;
-    }
-
-
+  public void setId(ModuleAssociationId id) {
+    this.id = id;
+  }
 }

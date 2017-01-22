@@ -24,34 +24,35 @@ import java.util.List;
 @RequestMapping(path = "/projects/{projectId}/files")
 public class FilePatternController {
 
-    private FilePatternRepository filePatternRepository;
+  private FilePatternRepository filePatternRepository;
 
-    private ProjectVerifier projectVerifier;
+  private ProjectVerifier projectVerifier;
 
-    @Autowired
-    public FilePatternController(FilePatternRepository filePatternRepository, ProjectVerifier projectVerifier) {
-        this.filePatternRepository = filePatternRepository;
-        this.projectVerifier = projectVerifier;
-    }
+  @Autowired
+  public FilePatternController(
+      FilePatternRepository filePatternRepository, ProjectVerifier projectVerifier) {
+    this.filePatternRepository = filePatternRepository;
+    this.projectVerifier = projectVerifier;
+  }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<FilePatternResource> getFilePatterns(@PathVariable Long projectId) {
-        projectVerifier.checkProjectExistsOrThrowException(projectId);
-        FilePatternResourceAssembler assembler = new FilePatternResourceAssembler(projectId);
-        List<FilePattern> filePatternList = filePatternRepository.findByProjectId(projectId);
-        FilePatternResource resource = assembler.toResource(filePatternList);
-        return new ResponseEntity<>(resource, HttpStatus.OK);
-    }
+  @RequestMapping(method = RequestMethod.GET)
+  public ResponseEntity<FilePatternResource> getFilePatterns(@PathVariable Long projectId) {
+    projectVerifier.checkProjectExistsOrThrowException(projectId);
+    FilePatternResourceAssembler assembler = new FilePatternResourceAssembler(projectId);
+    List<FilePattern> filePatternList = filePatternRepository.findByProjectId(projectId);
+    FilePatternResource resource = assembler.toResource(filePatternList);
+    return new ResponseEntity<>(resource, HttpStatus.OK);
+  }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<FilePatternResource> setFilePatterns(@PathVariable Long projectId, @Valid @RequestBody FilePatternResource resource) {
-        Project project = projectVerifier.loadProjectOrThrowException(projectId);
-        FilePatternResourceAssembler assembler = new FilePatternResourceAssembler(projectId);
-        filePatternRepository.deleteByProjectId(projectId);
-        List<FilePattern> filePatterns = assembler.toEntity(resource, project);
-        Iterable<FilePattern> savedFilePatterns = filePatternRepository.save(filePatterns);
-        FilePatternResource savedResource = assembler.toResource(savedFilePatterns);
-        return new ResponseEntity<>(savedResource, HttpStatus.CREATED);
-    }
-
+  @RequestMapping(method = RequestMethod.POST)
+  public ResponseEntity<FilePatternResource> setFilePatterns(
+      @PathVariable Long projectId, @Valid @RequestBody FilePatternResource resource) {
+    Project project = projectVerifier.loadProjectOrThrowException(projectId);
+    FilePatternResourceAssembler assembler = new FilePatternResourceAssembler(projectId);
+    filePatternRepository.deleteByProjectId(projectId);
+    List<FilePattern> filePatterns = assembler.toEntity(resource, project);
+    Iterable<FilePattern> savedFilePatterns = filePatternRepository.save(filePatterns);
+    FilePatternResource savedResource = assembler.toResource(savedFilePatterns);
+    return new ResponseEntity<>(savedResource, HttpStatus.CREATED);
+  }
 }

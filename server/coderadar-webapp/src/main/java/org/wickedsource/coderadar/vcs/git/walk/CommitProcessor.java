@@ -5,6 +5,5 @@ import org.eclipse.jgit.revwalk.RevCommit;
 
 public interface CommitProcessor {
 
-    void processCommit(Git gitClient, RevCommit commit);
-
+  void processCommit(Git gitClient, RevCommit commit);
 }

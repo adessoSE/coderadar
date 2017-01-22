@@ -17,36 +17,38 @@ import org.wickedsource.coderadar.job.scan.file.ScanFilesJob;
 @Service
 class JobExecutor {
 
-    private CommitScanner commitScanner;
+  private CommitScanner commitScanner;
 
-    private FileScanner fileScanner;
+  private FileScanner fileScanner;
 
-    private LogMerger merger;
+  private LogMerger merger;
 
-    private CommitAnalyzer commitAnalyzer;
+  private CommitAnalyzer commitAnalyzer;
 
-    @Autowired
-    public JobExecutor(CommitScanner commitScanner, FileScanner fileScanner, LogMerger merger,
-                       CommitAnalyzer commitAnalyzer) {
-        this.commitScanner = commitScanner;
-        this.fileScanner = fileScanner;
-        this.merger = merger;
-        this.commitAnalyzer = commitAnalyzer;
+  @Autowired
+  public JobExecutor(
+      CommitScanner commitScanner,
+      FileScanner fileScanner,
+      LogMerger merger,
+      CommitAnalyzer commitAnalyzer) {
+    this.commitScanner = commitScanner;
+    this.fileScanner = fileScanner;
+    this.merger = merger;
+    this.commitAnalyzer = commitAnalyzer;
+  }
+
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void execute(Job job) {
+    if (job instanceof ScanCommitsJob) {
+      commitScanner.scan(job.getProject());
+    } else if (job instanceof ScanFilesJob) {
+      fileScanner.scan(((ScanFilesJob) job).getCommit());
+    } else if (job instanceof MergeLogJob) {
+      merger.merge(job.getProject());
+    } else if (job instanceof AnalyzeCommitJob) {
+      commitAnalyzer.analyzeCommit(((AnalyzeCommitJob) job).getCommit());
+    } else {
+      throw new IllegalArgumentException(String.format("unsupported job type %s", job.getClass()));
     }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void execute(Job job) {
-        if (job instanceof ScanCommitsJob) {
-            commitScanner.scan(job.getProject());
-        } else if (job instanceof ScanFilesJob) {
-            fileScanner.scan(((ScanFilesJob) job).getCommit());
-        } else if (job instanceof MergeLogJob) {
-            merger.merge(job.getProject());
-        } else if (job instanceof AnalyzeCommitJob) {
-            commitAnalyzer.analyzeCommit(((AnalyzeCommitJob) job).getCommit());
-        } else {
-            throw new IllegalArgumentException(String.format("unsupported job type %s", job.getClass()));
-        }
-    }
-
+  }
 }

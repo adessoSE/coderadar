@@ -2,24 +2,24 @@ package org.wickedsource.coderadar.core.configuration.configparams;
 
 public class ParameterValidationError {
 
-    private final String message;
+  private final String message;
 
-    private Exception exception;
+  private Exception exception;
 
-    public ParameterValidationError(String message) {
-        this.message = message;
-    }
+  public ParameterValidationError(String message) {
+    this.message = message;
+  }
 
-    public ParameterValidationError(String message, Exception e) {
-        this.message = message;
-        this.exception = e;
-    }
+  public ParameterValidationError(String message, Exception e) {
+    this.message = message;
+    this.exception = e;
+  }
 
-    public String getMessage() {
-        return message;
-    }
+  public String getMessage() {
+    return message;
+  }
 
-    public Exception getException() {
-        return exception;
-    }
+  public Exception getException() {
+    return exception;
+  }
 }

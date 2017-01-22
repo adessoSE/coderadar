@@ -6,6 +6,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface QualityProfileRepository extends CrudRepository<QualityProfile, Long> {
 
-    Page<QualityProfile> findByProjectId(Long projectId, Pageable pageable);
-
+  Page<QualityProfile> findByProjectId(Long projectId, Pageable pageable);
 }

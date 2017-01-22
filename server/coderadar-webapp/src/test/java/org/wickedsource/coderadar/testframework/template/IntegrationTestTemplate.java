@@ -13,21 +13,25 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.wickedsource.coderadar.CoderadarTestApplication;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionDbUnitTestExecutionListener.class})
-@SpringBootTest(classes = CoderadarTestApplication.class, properties = {
-        "coderadar.master=false",
-        "coderadar.slave=false",
-        "coderadar.workdir=build/coderadar-workdir",
-        "coderadar.dateLocale=de_DE"
+@TestExecutionListeners({
+  DependencyInjectionTestExecutionListener.class,
+  DirtiesContextTestExecutionListener.class,
+  TransactionDbUnitTestExecutionListener.class
 })
+@SpringBootTest(
+  classes = CoderadarTestApplication.class,
+  properties = {
+    "coderadar.master=false",
+    "coderadar.slave=false",
+    "coderadar.workdir=build/coderadar-workdir",
+    "coderadar.dateLocale=de_DE"
+  }
+)
 @WebAppConfiguration
 public abstract class IntegrationTestTemplate extends TestTemplate {
 
-    @Before
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-    }
-
+  @Before
+  public void setup() {
+    MockitoAnnotations.initMocks(this);
+  }
 }

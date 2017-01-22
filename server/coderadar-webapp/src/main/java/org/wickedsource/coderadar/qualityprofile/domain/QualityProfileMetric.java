@@ -6,49 +6,47 @@ import javax.persistence.*;
 @Table
 public class QualityProfileMetric {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    @Column
-    private String name;
+  @Column private String name;
 
-    @Column
-    @Enumerated(EnumType.STRING)
-    private MetricType metricType;
+  @Column
+  @Enumerated(EnumType.STRING)
+  private MetricType metricType;
 
-    @ManyToOne
-    private QualityProfile profile;
+  @ManyToOne private QualityProfile profile;
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public MetricType getMetricType() {
-        return metricType;
-    }
+  public MetricType getMetricType() {
+    return metricType;
+  }
 
-    public void setMetricType(MetricType metricType) {
-        this.metricType = metricType;
-    }
+  public void setMetricType(MetricType metricType) {
+    this.metricType = metricType;
+  }
 
-    public QualityProfile getProfile() {
-        return profile;
-    }
+  public QualityProfile getProfile() {
+    return profile;
+  }
 
-    public void setProfile(QualityProfile profile) {
-        this.profile = profile;
-    }
+  public void setProfile(QualityProfile profile) {
+    this.profile = profile;
+  }
 }

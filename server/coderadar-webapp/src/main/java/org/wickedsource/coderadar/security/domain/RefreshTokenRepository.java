@@ -4,6 +4,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface RefreshTokenRepository extends CrudRepository<RefreshToken, Long> {
 
-    RefreshToken findByToken(String token);
-
+  RefreshToken findByToken(String token);
 }

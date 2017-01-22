@@ -21,24 +21,31 @@ import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 @RequestMapping(path = "/projects/{projectId}/metrics")
 public class MetricsController {
 
-    private ProjectVerifier projectVerifier;
+  private ProjectVerifier projectVerifier;
 
-    private MetricValueRepository metricValueRepository;
+  private MetricValueRepository metricValueRepository;
 
-    @Autowired
-    public MetricsController(ProjectVerifier projectVerifier, MetricValueRepository metricValueRepository) {
-        this.projectVerifier = projectVerifier;
-        this.metricValueRepository = metricValueRepository;
-    }
+  @Autowired
+  public MetricsController(
+      ProjectVerifier projectVerifier, MetricValueRepository metricValueRepository) {
+    this.projectVerifier = projectVerifier;
+    this.metricValueRepository = metricValueRepository;
+  }
 
-    @SuppressWarnings("unchecked")
-    @RequestMapping(method = {RequestMethod.GET}, produces = "application/hal+json")
-    public ResponseEntity<PagedResources<MetricResource>> listMetrics(@PathVariable Long projectId, @PageableDefault Pageable pageable, PagedResourcesAssembler pagedResourcesAssembler) {
-        projectVerifier.checkProjectExistsOrThrowException(projectId);
-        Page<String> metricsPage = metricValueRepository.findMetricsInProject(projectId, pageable);
-        MetricResourceAssembler assembler = new MetricResourceAssembler();
-        PagedResources<MetricResource> pagedResources = pagedResourcesAssembler.toResource(metricsPage, assembler);
-        return new ResponseEntity<>(pagedResources, HttpStatus.OK);
-    }
-
+  @SuppressWarnings("unchecked")
+  @RequestMapping(
+    method = {RequestMethod.GET},
+    produces = "application/hal+json"
+  )
+  public ResponseEntity<PagedResources<MetricResource>> listMetrics(
+      @PathVariable Long projectId,
+      @PageableDefault Pageable pageable,
+      PagedResourcesAssembler pagedResourcesAssembler) {
+    projectVerifier.checkProjectExistsOrThrowException(projectId);
+    Page<String> metricsPage = metricValueRepository.findMetricsInProject(projectId, pageable);
+    MetricResourceAssembler assembler = new MetricResourceAssembler();
+    PagedResources<MetricResource> pagedResources =
+        pagedResourcesAssembler.toResource(metricsPage, assembler);
+    return new ResponseEntity<>(pagedResources, HttpStatus.OK);
+  }
 }

@@ -16,14 +16,14 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.s
 @Category(ControllerTest.class)
 public class AnalyzerControllerTest extends ControllerTestTemplate {
 
-    @Test
-    @DatabaseSetup(EMPTY)
-    @ExpectedDatabase(EMPTY)
-    public void listAnalyzers() throws Exception {
-        mvc().perform(get("/analyzers?page=0&size=2"))
-                .andExpect(status().isOk())
-                .andExpect(containsResource(PagedResources.class))
-                .andDo(document("analyzer/list"));
-    }
-
+  @Test
+  @DatabaseSetup(EMPTY)
+  @ExpectedDatabase(EMPTY)
+  public void listAnalyzers() throws Exception {
+    mvc()
+        .perform(get("/analyzers?page=0&size=2"))
+        .andExpect(status().isOk())
+        .andExpect(containsResource(PagedResources.class))
+        .andDo(document("analyzer/list"));
+  }
 }

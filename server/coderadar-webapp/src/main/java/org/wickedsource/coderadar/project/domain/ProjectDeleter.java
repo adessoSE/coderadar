@@ -22,73 +22,96 @@ import org.wickedsource.coderadar.module.domain.ModuleRepository;
 @Component
 public class ProjectDeleter {
 
-    private Logger logger = LoggerFactory.getLogger(ProjectDeleter.class);
+  private Logger logger = LoggerFactory.getLogger(ProjectDeleter.class);
 
-    private AnalyzingStrategyRepository analyzingStrategyRepository;
+  private AnalyzingStrategyRepository analyzingStrategyRepository;
 
-    private CommitRepository commitRepository;
+  private CommitRepository commitRepository;
 
-    private FilePatternRepository filePatternRepository;
+  private FilePatternRepository filePatternRepository;
 
-    private ProjectRepository projectRepository;
+  private ProjectRepository projectRepository;
 
-    private JobRepository jobRepository;
+  private JobRepository jobRepository;
 
-    private AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository;
+  private AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository;
 
-    private AnalyzerConfigurationRepository analyzerConfigurationRepository;
+  private AnalyzerConfigurationRepository analyzerConfigurationRepository;
 
-    private CommitToFileAssociationRepository commitToFileAssociationRepository;
+  private CommitToFileAssociationRepository commitToFileAssociationRepository;
 
-    private FileRepository fileRepository;
+  private FileRepository fileRepository;
 
-    private CommitLogEntryRepository commitLogEntryRepository;
+  private CommitLogEntryRepository commitLogEntryRepository;
 
-    private FindingRepository findingRepository;
+  private FindingRepository findingRepository;
 
-    private MetricValueRepository metricValueRepository;
+  private MetricValueRepository metricValueRepository;
 
-    private FileIdentityRepository fileIdentityRepository;
+  private FileIdentityRepository fileIdentityRepository;
 
-    private ModuleRepository moduleRepository;
+  private ModuleRepository moduleRepository;
 
-    private ModuleAssociationRepository moduleAssociationRepository;
+  private ModuleAssociationRepository moduleAssociationRepository;
 
-    @Autowired
-    public ProjectDeleter(AnalyzingStrategyRepository analyzingStrategyRepository, CommitRepository commitRepository, FilePatternRepository filePatternRepository, ProjectRepository projectRepository, JobRepository jobRepository, AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository, AnalyzerConfigurationRepository analyzerConfigurationRepository, CommitToFileAssociationRepository commitToFileAssociationRepository, FileRepository fileRepository, CommitLogEntryRepository commitLogEntryRepository, FindingRepository findingRepository, MetricValueRepository metricValueRepository, FileIdentityRepository fileIdentityRepository, ModuleRepository moduleRepository, ModuleAssociationRepository moduleAssociationRepository) {
-        this.analyzingStrategyRepository = analyzingStrategyRepository;
-        this.commitRepository = commitRepository;
-        this.filePatternRepository = filePatternRepository;
-        this.projectRepository = projectRepository;
-        this.jobRepository = jobRepository;
-        this.analyzerConfigurationFileRepository = analyzerConfigurationFileRepository;
-        this.analyzerConfigurationRepository = analyzerConfigurationRepository;
-        this.commitToFileAssociationRepository = commitToFileAssociationRepository;
-        this.fileRepository = fileRepository;
-        this.commitLogEntryRepository = commitLogEntryRepository;
-        this.findingRepository = findingRepository;
-        this.metricValueRepository = metricValueRepository;
-        this.fileIdentityRepository = fileIdentityRepository;
-        this.moduleRepository = moduleRepository;
-        this.moduleAssociationRepository = moduleAssociationRepository;
-    }
+  @Autowired
+  public ProjectDeleter(
+      AnalyzingStrategyRepository analyzingStrategyRepository,
+      CommitRepository commitRepository,
+      FilePatternRepository filePatternRepository,
+      ProjectRepository projectRepository,
+      JobRepository jobRepository,
+      AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository,
+      AnalyzerConfigurationRepository analyzerConfigurationRepository,
+      CommitToFileAssociationRepository commitToFileAssociationRepository,
+      FileRepository fileRepository,
+      CommitLogEntryRepository commitLogEntryRepository,
+      FindingRepository findingRepository,
+      MetricValueRepository metricValueRepository,
+      FileIdentityRepository fileIdentityRepository,
+      ModuleRepository moduleRepository,
+      ModuleAssociationRepository moduleAssociationRepository) {
+    this.analyzingStrategyRepository = analyzingStrategyRepository;
+    this.commitRepository = commitRepository;
+    this.filePatternRepository = filePatternRepository;
+    this.projectRepository = projectRepository;
+    this.jobRepository = jobRepository;
+    this.analyzerConfigurationFileRepository = analyzerConfigurationFileRepository;
+    this.analyzerConfigurationRepository = analyzerConfigurationRepository;
+    this.commitToFileAssociationRepository = commitToFileAssociationRepository;
+    this.fileRepository = fileRepository;
+    this.commitLogEntryRepository = commitLogEntryRepository;
+    this.findingRepository = findingRepository;
+    this.metricValueRepository = metricValueRepository;
+    this.fileIdentityRepository = fileIdentityRepository;
+    this.moduleRepository = moduleRepository;
+    this.moduleAssociationRepository = moduleAssociationRepository;
+  }
 
-    public void deleteProject(Long id) {
-        logger.debug("deleted {} AnalyzerConfigurationFile entities", analyzerConfigurationFileRepository.deleteByProjectId(id));
-        logger.debug("deleted {} AnalyzerConfiguration entities", analyzerConfigurationRepository.deleteByProjectId(id));
-        logger.debug("deleted {} Job entities", jobRepository.deleteByProjectId(id));
-        logger.debug("deleted {} AnalyzingStrategy entities", analyzingStrategyRepository.deleteByProjectId(id));
-        logger.debug("deleted {} CommitLogEntry entities", commitLogEntryRepository.deleteByProjectId(id));
-        logger.debug("deleted {} MetricValue entities", metricValueRepository.deleteByProjectId(id));
-        logger.debug("deleted {} Finding entities", findingRepository.deleteByProjectId(id));
-        logger.debug("deleted {} ModuleAssociation entities", moduleAssociationRepository.deleteByProjectId(id));
-        logger.debug("deleted {} CommitToFileAssociation entities", commitToFileAssociationRepository.deleteByProjectId(id));
-        logger.debug("deleted {} Module entities", moduleRepository.deleteByProjectId(id));
-        logger.debug("deleted {} File entities", fileRepository.deleteByProjectId(id));
-        logger.debug("deleted {} FileIdentity entities", fileIdentityRepository.deleteByProjectId(id));
-        logger.debug("deleted {} Commit entities", commitRepository.deleteByProjectId(id));
-        logger.debug("deleted {} FilePattern entities", filePatternRepository.deleteByProjectId(id));
-        logger.debug("deleted {} Project entities", projectRepository.deleteById(id));
-    }
-
+  public void deleteProject(Long id) {
+    logger.debug(
+        "deleted {} AnalyzerConfigurationFile entities",
+        analyzerConfigurationFileRepository.deleteByProjectId(id));
+    logger.debug(
+        "deleted {} AnalyzerConfiguration entities",
+        analyzerConfigurationRepository.deleteByProjectId(id));
+    logger.debug("deleted {} Job entities", jobRepository.deleteByProjectId(id));
+    logger.debug(
+        "deleted {} AnalyzingStrategy entities", analyzingStrategyRepository.deleteByProjectId(id));
+    logger.debug(
+        "deleted {} CommitLogEntry entities", commitLogEntryRepository.deleteByProjectId(id));
+    logger.debug("deleted {} MetricValue entities", metricValueRepository.deleteByProjectId(id));
+    logger.debug("deleted {} Finding entities", findingRepository.deleteByProjectId(id));
+    logger.debug(
+        "deleted {} ModuleAssociation entities", moduleAssociationRepository.deleteByProjectId(id));
+    logger.debug(
+        "deleted {} CommitToFileAssociation entities",
+        commitToFileAssociationRepository.deleteByProjectId(id));
+    logger.debug("deleted {} Module entities", moduleRepository.deleteByProjectId(id));
+    logger.debug("deleted {} File entities", fileRepository.deleteByProjectId(id));
+    logger.debug("deleted {} FileIdentity entities", fileIdentityRepository.deleteByProjectId(id));
+    logger.debug("deleted {} Commit entities", commitRepository.deleteByProjectId(id));
+    logger.debug("deleted {} FilePattern entities", filePatternRepository.deleteByProjectId(id));
+    logger.debug("deleted {} Project entities", projectRepository.deleteById(id));
+  }
 }

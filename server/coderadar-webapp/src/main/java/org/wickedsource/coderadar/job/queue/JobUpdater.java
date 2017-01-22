@@ -12,42 +12,44 @@ import org.wickedsource.coderadar.project.domain.ProjectRepository;
 @Service
 public class JobUpdater {
 
-    private JobRepository updateJobRepository;
+  private JobRepository updateJobRepository;
 
-    private ProjectRepository projectRepository;
+  private ProjectRepository projectRepository;
 
-    private JobRepository jobRepository;
+  private JobRepository jobRepository;
 
-    @Autowired
-    public JobUpdater(JobRepository updateJobRepository, ProjectRepository projectRepository, JobRepository jobRepository) {
-        this.updateJobRepository = updateJobRepository;
-        this.projectRepository = projectRepository;
-        this.jobRepository = jobRepository;
+  @Autowired
+  public JobUpdater(
+      JobRepository updateJobRepository,
+      ProjectRepository projectRepository,
+      JobRepository jobRepository) {
+    this.updateJobRepository = updateJobRepository;
+    this.projectRepository = projectRepository;
+    this.jobRepository = jobRepository;
+  }
+
+  /**
+   * Embeds updating a Job in a separate transaction so it can be updated in the database even if
+   * the outer transaction is marked for rollback.
+   *
+   * @param job the job to update in the database.
+   */
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void updateJob(Job job) {
+    if (!jobExists(job)) {
+      throw new JobDeletedException(job);
     }
 
-    /**
-     * Embeds updating a Job in a separate transaction so it can be updated in the database even if the outer
-     * transaction is marked for rollback.
-     *
-     * @param job the job to update in the database.
-     */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void updateJob(Job job) {
-        if(!jobExists(job)){
-            throw new JobDeletedException(job);
-        }
-
-        if (projectExists(job.getProject())) {
-            updateJobRepository.save(job);
-        }
+    if (projectExists(job.getProject())) {
+      updateJobRepository.save(job);
     }
+  }
 
-    private boolean projectExists(Project project) {
-        return projectRepository.countById(project.getId()) > 0;
-    }
+  private boolean projectExists(Project project) {
+    return projectRepository.countById(project.getId()) > 0;
+  }
 
-    private boolean jobExists(Job job) {
-        return jobRepository.countById(job.getId()) > 0;
-    }
-
+  private boolean jobExists(Job job) {
+    return jobRepository.countById(job.getId()) > 0;
+  }
 }

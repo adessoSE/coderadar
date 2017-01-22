@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface MergeLogJobRepository extends CrudRepository<MergeLogJob, Long> {
 
-    int countByProcessingStatusInAndProjectId(List<ProcessingStatus> status, Long projectId);
-
+  int countByProcessingStatusInAndProjectId(List<ProcessingStatus> status, Long projectId);
 }

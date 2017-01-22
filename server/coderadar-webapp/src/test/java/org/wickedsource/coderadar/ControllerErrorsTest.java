@@ -17,37 +17,36 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.s
 @Category(ControllerTest.class)
 public class ControllerErrorsTest extends ControllerTestTemplate {
 
-    @Test
-    public void invalidJsonPayloadError() throws Exception {
-        mvc().perform(post("/projects")
-                .content("{123")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(containsResource(ErrorDTO.class));
-    }
+  @Test
+  public void invalidJsonPayloadError() throws Exception {
+    mvc()
+        .perform(post("/projects").content("{123").contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(containsResource(ErrorDTO.class));
+  }
 
-    @Test
-    public void invalidEnumConstantError() throws Exception {
-        ProjectResource project = projectResource().validProjectResource();
-        String projectAsJson = toJsonWithoutLinks(project);
-        projectAsJson = projectAsJson.replaceAll(project.getVcsType().toString(), "ABC");
+  @Test
+  public void invalidEnumConstantError() throws Exception {
+    ProjectResource project = projectResource().validProjectResource();
+    String projectAsJson = toJsonWithoutLinks(project);
+    projectAsJson = projectAsJson.replaceAll(project.getVcsType().toString(), "ABC");
 
-        mvc().perform(post("/projects")
-                .content(projectAsJson)
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(containsResource(ErrorDTO.class));
-    }
+    mvc()
+        .perform(post("/projects").content(projectAsJson).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest())
+        .andExpect(containsResource(ErrorDTO.class));
+  }
 
-    @Test
-    public void invalidContentTypeError() throws Exception {
-        ProjectResource project = projectResource().validProjectResource();
+  @Test
+  public void invalidContentTypeError() throws Exception {
+    ProjectResource project = projectResource().validProjectResource();
 
-        mvc().perform(post("/projects")
+    mvc()
+        .perform(
+            post("/projects")
                 .content(toJsonWithoutLinks(project))
                 .contentType(MediaType.APPLICATION_ATOM_XML))
-                .andExpect(status().isBadRequest())
-                .andExpect(containsResource(ErrorDTO.class));
-    }
-
+        .andExpect(status().isBadRequest())
+        .andExpect(containsResource(ErrorDTO.class));
+  }
 }

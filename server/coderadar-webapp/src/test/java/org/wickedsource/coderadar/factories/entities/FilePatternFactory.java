@@ -6,20 +6,19 @@ import org.wickedsource.coderadar.project.domain.InclusionType;
 
 public class FilePatternFactory {
 
-    public FilePattern filePattern(){
-        FilePattern pattern = new FilePattern();
-        pattern.setPattern("src/main/java/**/*.java");
-        pattern.setInclusionType(InclusionType.INCLUDE);
-        pattern.setFileSetType(FileSetType.SOURCE);
-        return pattern;
-    }
+  public FilePattern filePattern() {
+    FilePattern pattern = new FilePattern();
+    pattern.setPattern("src/main/java/**/*.java");
+    pattern.setInclusionType(InclusionType.INCLUDE);
+    pattern.setFileSetType(FileSetType.SOURCE);
+    return pattern;
+  }
 
-    public FilePattern filePattern2(){
-        FilePattern pattern = new FilePattern();
-        pattern.setPattern("src/main/java/**/generated/**/*.java");
-        pattern.setInclusionType(InclusionType.EXCLUDE);
-        pattern.setFileSetType(FileSetType.SOURCE);
-        return pattern;
-    }
-
+  public FilePattern filePattern2() {
+    FilePattern pattern = new FilePattern();
+    pattern.setPattern("src/main/java/**/generated/**/*.java");
+    pattern.setInclusionType(InclusionType.EXCLUDE);
+    pattern.setFileSetType(FileSetType.SOURCE);
+    return pattern;
+  }
 }

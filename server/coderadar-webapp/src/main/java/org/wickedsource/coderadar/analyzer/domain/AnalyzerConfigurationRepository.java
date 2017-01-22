@@ -1,20 +1,20 @@
 package org.wickedsource.coderadar.analyzer.domain;
 
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
+public interface AnalyzerConfigurationRepository
+    extends CrudRepository<AnalyzerConfiguration, Long> {
 
-public interface AnalyzerConfigurationRepository extends CrudRepository<AnalyzerConfiguration, Long> {
+  AnalyzerConfiguration findByProjectIdAndAnalyzerName(Long projectId, String analyzerName);
 
-    AnalyzerConfiguration findByProjectIdAndAnalyzerName(Long projectId, String analyzerName);
+  int countByProjectIdAndAnalyzerName(Long projectId, String analyzerName);
 
-    int countByProjectIdAndAnalyzerName(Long projectId, String analyzerName);
+  List<AnalyzerConfiguration> findByProjectId(Long projectId);
 
-    List<AnalyzerConfiguration> findByProjectId(Long projectId);
+  int deleteByProjectIdAndId(Long projectId, Long analyzerId);
 
-    int deleteByProjectIdAndId(Long projectId, Long analyzerId);
+  AnalyzerConfiguration findByProjectIdAndId(Long projectId, Long analyzerConfigurationId);
 
-    AnalyzerConfiguration findByProjectIdAndId(Long projectId, Long analyzerConfigurationId);
-
-    int deleteByProjectId(Long id);
+  int deleteByProjectId(Long id);
 }

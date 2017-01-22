@@ -4,7 +4,7 @@ import org.wickedsource.coderadar.user.domain.UserLoginResource;
 
 public class UserLoginResourceFactory {
 
-    public UserLoginResource userLoginResource() {
-        return new UserLoginResource("radar", "Password12!");
-    }
+  public UserLoginResource userLoginResource() {
+    return new UserLoginResource("radar", "Password12!");
+  }
 }

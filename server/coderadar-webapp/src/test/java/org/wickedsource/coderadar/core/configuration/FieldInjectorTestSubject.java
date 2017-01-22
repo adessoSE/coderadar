@@ -4,11 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class FieldInjectorTestSubject {
 
-    @Autowired
-    private CoderadarConfiguration injectedConfiguration;
+  @Autowired private CoderadarConfiguration injectedConfiguration;
 
-    public CoderadarConfiguration getInjectedConfiguration() {
-        return injectedConfiguration;
-    }
-
+  public CoderadarConfiguration getInjectedConfiguration() {
+    return injectedConfiguration;
+  }
 }

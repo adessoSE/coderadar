@@ -1,11 +1,8 @@
 package org.wickedsource.coderadar.security;
 
-/**
- * Enumeration for token types.
- */
+/** Enumeration for token types. */
 public enum TokenType {
+  ACCESS,
 
-    ACCESS,
-
-    REFRESH;
+  REFRESH;
 }

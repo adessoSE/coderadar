@@ -21,40 +21,50 @@ import static java.time.temporal.ChronoUnit.WEEKS;
 @Component
 public class WeekSeriesFactory extends MetricValueSeriesFactory<Week> {
 
-    private CommitRepository commitRepository;
+  private CommitRepository commitRepository;
 
-    private CoderadarConfiguration config;
+  private CoderadarConfiguration config;
 
-    @Autowired
-    public WeekSeriesFactory(MetricValueRepository metricValueRepository, CommitRepository commitRepository, CoderadarConfiguration config) {
-        super(metricValueRepository);
-        this.commitRepository = commitRepository;
-        this.config = config;
+  @Autowired
+  public WeekSeriesFactory(
+      MetricValueRepository metricValueRepository,
+      CommitRepository commitRepository,
+      CoderadarConfiguration config) {
+    super(metricValueRepository);
+    this.commitRepository = commitRepository;
+    this.config = config;
+  }
+
+  @Override
+  protected DateSeries<Week> createEmptySeries(LocalDate startDate, LocalDate endDate) {
+    DateSeries<Week> series = new DateSeries<>();
+    for (int i = 0; i < WEEKS.between(startDate, endDate) + 1; i++) {
+      LocalDate nextDate = startDate.plus(i, WEEKS);
+      DateCoordinates dateCoordinates =
+          new DateCoordinates(
+              Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(nextDate),
+              config.getDateLocale());
+      Week week = new Week(dateCoordinates.getYearOfWeek(), dateCoordinates.getWeekOfYear());
+      series.addPoint(new WeekPoint(week, null));
     }
+    return series;
+  }
 
-    @Override
-    protected DateSeries<Week> createEmptySeries(LocalDate startDate, LocalDate endDate) {
-        DateSeries<Week> series = new DateSeries<>();
-        for (int i = 0; i < WEEKS.between(startDate, endDate) + 1; i++) {
-            LocalDate nextDate = startDate.plus(i, WEEKS);
-            DateCoordinates dateCoordinates = new DateCoordinates(Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(nextDate), config.getDateLocale());
-            Week week = new Week(dateCoordinates.getYearOfWeek(), dateCoordinates.getWeekOfYear());
-            series.addPoint(new WeekPoint(week, null));
-        }
-        return series;
-    }
+  @Override
+  protected List<Commit> getLastCommitPerInterval(
+      Long projectId, LocalDate startDate, LocalDate endDate) {
+    return commitRepository.findLastForEachWeek(
+        projectId,
+        Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(startDate),
+        Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(endDate));
+  }
 
-    @Override
-    protected List<Commit> getLastCommitPerInterval(Long projectId, LocalDate startDate, LocalDate endDate) {
-        return commitRepository.findLastForEachWeek(projectId,
-                Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(startDate),
-                Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(endDate));
-    }
-
-    @Override
-    protected Point<Week, Long> createPointForCommit(Commit commit, Long value) {
-        Week week = new Week(commit.getDateCoordinates().getYearOfWeek(), commit.getDateCoordinates().getWeekOfYear());
-        return new WeekPoint(week, value);
-    }
-
+  @Override
+  protected Point<Week, Long> createPointForCommit(Commit commit, Long value) {
+    Week week =
+        new Week(
+            commit.getDateCoordinates().getYearOfWeek(),
+            commit.getDateCoordinates().getWeekOfYear());
+    return new WeekPoint(week, value);
+  }
 }

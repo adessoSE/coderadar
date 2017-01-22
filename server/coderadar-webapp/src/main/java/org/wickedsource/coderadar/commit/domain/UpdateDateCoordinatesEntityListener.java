@@ -13,16 +13,14 @@ import javax.persistence.PreUpdate;
  */
 public class UpdateDateCoordinatesEntityListener {
 
-    @Autowired
-    private CoderadarConfiguration config;
+  @Autowired private CoderadarConfiguration config;
 
-    @PrePersist
-    @PreUpdate
-    public void updateDateCoordinates(Commit commit) {
-        Injector.getInstance().inject(this);
-        DateCoordinates dateCoordinates = new DateCoordinates();
-        dateCoordinates.updateFromDate(commit.getTimestamp(), config.getDateLocale());
-        commit.setDateCoordinates(dateCoordinates);
-    }
-
+  @PrePersist
+  @PreUpdate
+  public void updateDateCoordinates(Commit commit) {
+    Injector.getInstance().inject(this);
+    DateCoordinates dateCoordinates = new DateCoordinates();
+    dateCoordinates.updateFromDate(commit.getTimestamp(), config.getDateLocale());
+    commit.setDateCoordinates(dateCoordinates);
+  }
 }

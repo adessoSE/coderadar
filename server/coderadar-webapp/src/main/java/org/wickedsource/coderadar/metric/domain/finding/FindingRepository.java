@@ -8,8 +8,8 @@ import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueId;
 
 public interface FindingRepository extends CrudRepository<Finding, MetricValueId> {
 
-    @Query("delete from Finding f where f.id.commit.id in (select c.id from Commit c where c.project.id = :projectId)")
-    @Modifying
-    int deleteByProjectId(@Param("projectId") Long projectId);
-
+  @Query(
+      "delete from Finding f where f.id.commit.id in (select c.id from Commit c where c.project.id = :projectId)")
+  @Modifying
+  int deleteByProjectId(@Param("projectId") Long projectId);
 }

@@ -12,19 +12,17 @@ import java.nio.file.Path;
 @Service
 public class GitRepositoryUpdater implements RepositoryUpdater {
 
-    @Override
-    public Git updateRepository(Path repositoryRoot) {
-        try {
-            FileRepositoryBuilder builder = new FileRepositoryBuilder();
-            Repository repository = builder.setWorkTree(repositoryRoot.toFile()).build();
-            Git git = new Git(repository);
-            git.pull()
-                    .setStrategy(MergeStrategy.THEIRS)
-                    .call();
-            return git;
-        } catch (Exception e) {
-            throw new IllegalStateException(String.format("error accessing local GIT repository at %s", repositoryRoot), e);
-        }
+  @Override
+  public Git updateRepository(Path repositoryRoot) {
+    try {
+      FileRepositoryBuilder builder = new FileRepositoryBuilder();
+      Repository repository = builder.setWorkTree(repositoryRoot.toFile()).build();
+      Git git = new Git(repository);
+      git.pull().setStrategy(MergeStrategy.THEIRS).call();
+      return git;
+    } catch (Exception e) {
+      throw new IllegalStateException(
+          String.format("error accessing local GIT repository at %s", repositoryRoot), e);
     }
-
+  }
 }

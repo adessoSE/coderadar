@@ -18,8 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class CoderadarApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(CoderadarApplication.class, args);
-    }
-
+  public static void main(String[] args) {
+    SpringApplication.run(CoderadarApplication.class, args);
+  }
 }

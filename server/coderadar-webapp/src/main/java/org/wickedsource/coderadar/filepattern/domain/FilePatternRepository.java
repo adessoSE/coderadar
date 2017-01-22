@@ -1,14 +1,13 @@
 package org.wickedsource.coderadar.filepattern.domain;
 
-import org.springframework.data.repository.CrudRepository;
-
 import java.util.List;
+import org.springframework.data.repository.CrudRepository;
 
 public interface FilePatternRepository extends CrudRepository<FilePattern, Long> {
 
-    List<FilePattern> findByProjectId(Long projectId);
+  List<FilePattern> findByProjectId(Long projectId);
 
-    List<FilePattern> findByProjectIdAndFileSetType(Long projectId, FileSetType fileSetType);
+  List<FilePattern> findByProjectIdAndFileSetType(Long projectId, FileSetType fileSetType);
 
-    int deleteByProjectId(Long projectId);
+  int deleteByProjectId(Long projectId);
 }

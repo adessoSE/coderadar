@@ -20,41 +20,43 @@ import org.wickedsource.coderadar.security.service.TokenService;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+  @Autowired private UserDetailsService userDetailsService;
 
-    @Autowired
-    private TokenService tokenService;
+  @Autowired private TokenService tokenService;
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // user CoderadarUserDetailService for authentication
-        auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
-    }
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    // user CoderadarUserDetailService for authentication
+    auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
+  }
 
-    @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder getPasswordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-    @Bean
-    public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
-        return new AuthenticationTokenFilter(tokenService);
-    }
+  @Bean
+  public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+    return new AuthenticationTokenFilter(tokenService);
+  }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.csrf()
+        .disable()
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .authorizeRequests()
 
-                .authorizeRequests()
+        // only these endpoints can be called without authentication
+        .antMatchers("/actuator", "/user/auth", "/user/registration", "/user/refresh")
+        .permitAll()
+        .anyRequest()
+        .authenticated();
 
-                // only these endpoints can be called without authentication
-                .antMatchers("/actuator", "/user/auth", "/user/registration", "/user/refresh").permitAll()
-
-                .anyRequest().authenticated();
-
-        // put JSON Web Token authentication before other ones
-        http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
-    }
+    // put JSON Web Token authentication before other ones
+    http.addFilterBefore(
+        authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+  }
 }

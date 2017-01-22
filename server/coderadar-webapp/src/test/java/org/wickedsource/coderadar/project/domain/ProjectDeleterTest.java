@@ -6,15 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
 @Transactional
-public class ProjectDeleterTest extends IntegrationTestTemplate{
+public class ProjectDeleterTest extends IntegrationTestTemplate {
 
-    @Autowired
-    private ProjectDeleter projectDeleter;
+  @Autowired private ProjectDeleter projectDeleter;
 
-    @Test
-    public void deleteProject(){
-        // TODO: Add actual test data to delete. This test currently only tests that all queries can be executed.
-        projectDeleter.deleteProject(1L);
-    }
-
+  @Test
+  public void deleteProject() {
+    // TODO: Add actual test data to delete. This test currently only tests that all queries can be executed.
+    projectDeleter.deleteProject(1L);
+  }
 }

@@ -8,48 +8,45 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Result of a query for values of selected metrics at the time of a given commit.
- */
+/** Result of a query for values of selected metrics at the time of a given commit. */
 @SuppressWarnings("unchecked")
 public class CommitMetricsResource extends ResourceSupport {
 
-    private Map<String, Long> metrics;
+  private Map<String, Long> metrics;
 
-    public CommitMetricsResource() {
-    }
+  public CommitMetricsResource() {}
 
-    @JsonIgnore
-    public void addMetricValues(List<MetricValueDTO> metricValuesPerCommit) {
-        for (MetricValueDTO metricValue : metricValuesPerCommit) {
-            addMetricValue(metricValue.getMetric(), metricValue.getValue());
-        }
+  @JsonIgnore
+  public void addMetricValues(List<MetricValueDTO> metricValuesPerCommit) {
+    for (MetricValueDTO metricValue : metricValuesPerCommit) {
+      addMetricValue(metricValue.getMetric(), metricValue.getValue());
     }
+  }
 
-    public void addMetricValue(String metric, Long value) {
-        initMetrics();
-        metrics.put(metric, value);
-    }
+  public void addMetricValue(String metric, Long value) {
+    initMetrics();
+    metrics.put(metric, value);
+  }
 
-    private void initMetrics() {
-        if (metrics == null) {
-            metrics = new HashMap<>();
-        }
+  private void initMetrics() {
+    if (metrics == null) {
+      metrics = new HashMap<>();
     }
+  }
 
-    public Map<String, Long> getMetrics() {
-        return metrics;
-    }
+  public Map<String, Long> getMetrics() {
+    return metrics;
+  }
 
-    public void setMetrics(Map<String, Long> metrics) {
-        this.metrics = metrics;
-    }
+  public void setMetrics(Map<String, Long> metrics) {
+    this.metrics = metrics;
+  }
 
-    public void addAbsentMetrics(List<String> metrics) {
-        for (String metric : metrics) {
-            if (this.metrics.get(metric) == null) {
-                addMetricValue(metric, 0L);
-            }
-        }
+  public void addAbsentMetrics(List<String> metrics) {
+    for (String metric : metrics) {
+      if (this.metrics.get(metric) == null) {
+        addMetricValue(metric, 0L);
+      }
     }
+  }
 }

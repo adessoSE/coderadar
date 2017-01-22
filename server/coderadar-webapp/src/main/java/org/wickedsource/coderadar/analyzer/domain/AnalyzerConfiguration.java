@@ -4,56 +4,50 @@ import org.wickedsource.coderadar.project.domain.Project;
 
 import javax.persistence.*;
 
-/**
- * An AnalyzerConfiguration stores the configuration for a single analyzer plugin
- * in a project.
- */
+/** An AnalyzerConfiguration stores the configuration for a single analyzer plugin in a project. */
 @Entity
 @Table
 public class AnalyzerConfiguration {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    @ManyToOne
-    private Project project;
+  @ManyToOne private Project project;
 
-    @Column
-    private String analyzerName;
+  @Column private String analyzerName;
 
-    @Column
-    private Boolean enabled;
+  @Column private Boolean enabled;
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public Project getProject() {
-        return project;
-    }
+  public Project getProject() {
+    return project;
+  }
 
-    public void setProject(Project project) {
-        this.project = project;
-    }
+  public void setProject(Project project) {
+    this.project = project;
+  }
 
-    public String getAnalyzerName() {
-        return analyzerName;
-    }
+  public String getAnalyzerName() {
+    return analyzerName;
+  }
 
-    public void setAnalyzerName(String analyzerName) {
-        this.analyzerName = analyzerName;
-    }
+  public void setAnalyzerName(String analyzerName) {
+    this.analyzerName = analyzerName;
+  }
 
-    public Boolean getEnabled() {
-        return enabled;
-    }
+  public Boolean getEnabled() {
+    return enabled;
+  }
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
+  }
 }

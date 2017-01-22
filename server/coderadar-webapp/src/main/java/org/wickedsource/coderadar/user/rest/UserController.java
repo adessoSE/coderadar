@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.user.rest;
 
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,69 +28,79 @@ import org.wickedsource.coderadar.user.service.LoginService;
 import org.wickedsource.coderadar.user.service.RegistrationService;
 import org.wickedsource.coderadar.user.service.TokenRefreshService;
 
-import javax.validation.Valid;
-
 @Controller
 @Transactional
 @RequestMapping(path = "/user")
 public class UserController {
 
-    private final RegistrationService registrationService;
+  private final RegistrationService registrationService;
 
-    private final UserResourceAssembler userResourceAssembler;
+  private final UserResourceAssembler userResourceAssembler;
 
-    private final AuthenticationManager authenticationManager;
+  private final AuthenticationManager authenticationManager;
 
-    private final LoginService loginService;
+  private final LoginService loginService;
 
-    private final TokenService tokenService;
+  private final TokenService tokenService;
 
-    private final TokenRefreshService tokenRefreshService;
+  private final TokenRefreshService tokenRefreshService;
 
-    @Autowired
-    public UserController(RegistrationService registrationService, UserResourceAssembler userResourceAssembler, AuthenticationManager authenticationManager, LoginService loginService, TokenService tokenService, TokenRefreshService tokenRefreshService) {
-        this.registrationService = registrationService;
-        this.userResourceAssembler = userResourceAssembler;
-        this.authenticationManager = authenticationManager;
-        this.loginService = loginService;
-        this.tokenService = tokenService;
-        this.tokenRefreshService = tokenRefreshService;
+  @Autowired
+  public UserController(
+      RegistrationService registrationService,
+      UserResourceAssembler userResourceAssembler,
+      AuthenticationManager authenticationManager,
+      LoginService loginService,
+      TokenService tokenService,
+      TokenRefreshService tokenRefreshService) {
+    this.registrationService = registrationService;
+    this.userResourceAssembler = userResourceAssembler;
+    this.authenticationManager = authenticationManager;
+    this.loginService = loginService;
+    this.tokenService = tokenService;
+    this.tokenRefreshService = tokenRefreshService;
+  }
+
+  @RequestMapping(method = RequestMethod.POST, path = "/registration")
+  public ResponseEntity<UserResource> register(
+      @Valid @RequestBody UserRegistrationDataResource userRegistrationDataResource) {
+    if (registrationService.userExists(userRegistrationDataResource)) {
+      throw new RegistrationException(userRegistrationDataResource.getUsername());
     }
+    User registeredUser = registrationService.register(userRegistrationDataResource);
+    UserResource userResource = userResourceAssembler.toResource(registeredUser);
+    return new ResponseEntity<>(userResource, HttpStatus.CREATED);
+  }
 
-    @RequestMapping(method = RequestMethod.POST, path = "/registration")
-    public ResponseEntity<UserResource> register(@Valid @RequestBody UserRegistrationDataResource userRegistrationDataResource) {
-        if (registrationService.userExists(userRegistrationDataResource)) {
-            throw new RegistrationException(userRegistrationDataResource.getUsername());
-        }
-        User registeredUser = registrationService.register(userRegistrationDataResource);
-        UserResource userResource = userResourceAssembler.toResource(registeredUser);
-        return new ResponseEntity<>(userResource, HttpStatus.CREATED);
+  @RequestMapping(method = RequestMethod.GET, path = "/{userId}")
+  public ResponseEntity<UserResource> getUser(@PathVariable Long userId) {
+    User user = registrationService.getUser(userId);
+    UserResource userResource = userResourceAssembler.toResource(user);
+    return new ResponseEntity<>(userResource, HttpStatus.OK);
+  }
+
+  @RequestMapping(method = RequestMethod.POST, path = "/auth")
+  public ResponseEntity<InitializeTokenResource> login(
+      @Valid @RequestBody UserLoginResource userLoginResource) {
+    Authentication authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                userLoginResource.getUsername(), userLoginResource.getPassword()));
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    InitializeTokenResource initializeTokenResource =
+        loginService.login(userLoginResource.getUsername());
+    return new ResponseEntity<>(initializeTokenResource, HttpStatus.OK);
+  }
+
+  @RequestMapping(method = RequestMethod.POST, path = "/refresh")
+  public ResponseEntity<AccessTokenResource> refresh(
+      @Valid @RequestBody RefreshTokenResource refreshTokenResource) {
+    if (tokenService.isExpired(refreshTokenResource.getAccessToken())) {
+      String accessToken =
+          tokenRefreshService.createAccessToken(refreshTokenResource.getRefreshToken());
+      return new ResponseEntity<>(new AccessTokenResource(accessToken), HttpStatus.OK);
     }
-
-    @RequestMapping(method = RequestMethod.GET, path = "/{userId}")
-    public ResponseEntity<UserResource> getUser(@PathVariable Long userId) {
-        User user = registrationService.getUser(userId);
-        UserResource userResource = userResourceAssembler.toResource(user);
-        return new ResponseEntity<>(userResource, HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.POST, path = "/auth")
-    public ResponseEntity<InitializeTokenResource> login(@Valid @RequestBody UserLoginResource userLoginResource) {
-        Authentication authentication =
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginResource.getUsername(), userLoginResource.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        InitializeTokenResource initializeTokenResource = loginService.login(userLoginResource.getUsername());
-        return new ResponseEntity<>(initializeTokenResource, HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.POST, path = "/refresh")
-    public ResponseEntity<AccessTokenResource> refresh(@Valid @RequestBody RefreshTokenResource refreshTokenResource) {
-        if (tokenService.isExpired(refreshTokenResource.getAccessToken())) {
-            String accessToken = tokenRefreshService.createAccessToken(refreshTokenResource.getRefreshToken());
-            return new ResponseEntity<>(new AccessTokenResource(accessToken), HttpStatus.OK);
-        }
-        throw new AccessTokenNotExpiredException();
-    }
-
+    throw new AccessTokenNotExpiredException();
+  }
 }

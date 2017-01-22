@@ -4,8 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface AnalyzingStrategyRepository extends CrudRepository<AnalyzingStrategy, Long> {
 
-    AnalyzingStrategy findByProjectId(long projectId);
+  AnalyzingStrategy findByProjectId(long projectId);
 
-    int deleteByProjectId(long projectId);
-
+  int deleteByProjectId(long projectId);
 }

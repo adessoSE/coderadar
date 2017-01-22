@@ -23,19 +23,22 @@ import org.wickedsource.coderadar.commit.domain.CommitRepository;
 @RequestMapping(path = "/projects/{projectId}/commits")
 public class CommitController {
 
-    private CommitRepository commitRepository;
+  private CommitRepository commitRepository;
 
-    @Autowired
-    public CommitController(CommitRepository commitRepository) {
-        this.commitRepository = commitRepository;
-    }
+  @Autowired
+  public CommitController(CommitRepository commitRepository) {
+    this.commitRepository = commitRepository;
+  }
 
-    @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
-    public ResponseEntity<PagedResources<CommitResource>> listCommits(@PageableDefault Pageable pageable, PagedResourcesAssembler<Commit> pagedResourcesAssembler, @PathVariable long projectId) {
-        Page<Commit> commitsPage = commitRepository.findAll(pageable);
-        CommitResourceAssembler commitResourceAssembler = new CommitResourceAssembler(projectId);
-        PagedResources<CommitResource> pagedResources = pagedResourcesAssembler.toResource(commitsPage, commitResourceAssembler);
-        return new ResponseEntity<>(pagedResources, HttpStatus.OK);
-    }
-
+  @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
+  public ResponseEntity<PagedResources<CommitResource>> listCommits(
+      @PageableDefault Pageable pageable,
+      PagedResourcesAssembler<Commit> pagedResourcesAssembler,
+      @PathVariable long projectId) {
+    Page<Commit> commitsPage = commitRepository.findAll(pageable);
+    CommitResourceAssembler commitResourceAssembler = new CommitResourceAssembler(projectId);
+    PagedResources<CommitResource> pagedResources =
+        pagedResourcesAssembler.toResource(commitsPage, commitResourceAssembler);
+    return new ResponseEntity<>(pagedResources, HttpStatus.OK);
+  }
 }

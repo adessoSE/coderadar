@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.metricquery.rest.commit.metric;
 
+import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
@@ -22,72 +24,95 @@ import org.wickedsource.coderadar.metricquery.rest.commit.metric.series.DaySerie
 import org.wickedsource.coderadar.metricquery.rest.commit.metric.series.WeekSeriesFactory;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
-import javax.validation.Valid;
-import java.util.List;
-
 @Controller
 @ExposesResourceFor(MetricValue.class)
 @Transactional
 @RequestMapping(path = "/projects/{projectId}/metricvalues")
 public class CommitMetricValuesController {
 
-    private ProjectVerifier projectVerifier;
+  private ProjectVerifier projectVerifier;
 
-    private MetricValueRepository metricValueRepository;
+  private MetricValueRepository metricValueRepository;
 
-    private CommitRepository commitRepository;
+  private CommitRepository commitRepository;
 
-    private DaySeriesFactory daySeriesFactory;
+  private DaySeriesFactory daySeriesFactory;
 
-    private WeekSeriesFactory weekSeriesFactory;
+  private WeekSeriesFactory weekSeriesFactory;
 
-    @Autowired
-    public CommitMetricValuesController(ProjectVerifier projectVerifier, MetricValueRepository metricValueRepository, CommitRepository commitRepository, DaySeriesFactory daySeriesFactory, WeekSeriesFactory weekSeriesFactory) {
-        this.projectVerifier = projectVerifier;
-        this.metricValueRepository = metricValueRepository;
-        this.commitRepository = commitRepository;
-        this.daySeriesFactory = daySeriesFactory;
-        this.weekSeriesFactory = weekSeriesFactory;
+  @Autowired
+  public CommitMetricValuesController(
+      ProjectVerifier projectVerifier,
+      MetricValueRepository metricValueRepository,
+      CommitRepository commitRepository,
+      DaySeriesFactory daySeriesFactory,
+      WeekSeriesFactory weekSeriesFactory) {
+    this.projectVerifier = projectVerifier;
+    this.metricValueRepository = metricValueRepository;
+    this.commitRepository = commitRepository;
+    this.daySeriesFactory = daySeriesFactory;
+    this.weekSeriesFactory = weekSeriesFactory;
+  }
+
+  @RequestMapping(
+    path = "/perCommit",
+    method = {RequestMethod.GET, RequestMethod.POST},
+    produces = "application/hal+json"
+  )
+  public ResponseEntity<CommitMetricsResource> queryMetrics(
+      @PathVariable Long projectId, @Valid @RequestBody CommitMetricsQuery query) {
+    projectVerifier.checkProjectExistsOrThrowException(projectId);
+
+    Commit commit = commitRepository.findByName(query.getCommit());
+    if (commit == null) {
+      throw new ResourceNotFoundException();
     }
 
-    @RequestMapping(path = "/perCommit", method = {RequestMethod.GET, RequestMethod.POST}, produces = "application/hal+json")
-    public ResponseEntity<CommitMetricsResource> queryMetrics(@PathVariable Long projectId, @Valid @RequestBody CommitMetricsQuery query) {
-        projectVerifier.checkProjectExistsOrThrowException(projectId);
+    CommitMetricsResource resource = new CommitMetricsResource();
+    List<MetricValueDTO> commitMetricValues =
+        metricValueRepository.findValuesAggregatedByCommitAndMetric(
+            projectId, commit.getSequenceNumber(), query.getMetrics());
+    resource.addMetricValues(commitMetricValues);
+    resource.addAbsentMetrics(query.getMetrics());
 
-        Commit commit = commitRepository.findByName(query.getCommit());
-        if (commit == null) {
-            throw new ResourceNotFoundException();
-        }
+    return new ResponseEntity<>(resource, HttpStatus.OK);
+  }
 
-        CommitMetricsResource resource = new CommitMetricsResource();
-        List<MetricValueDTO> commitMetricValues = metricValueRepository.findValuesAggregatedByCommitAndMetric(projectId, commit.getSequenceNumber(), query.getMetrics());
-        resource.addMetricValues(commitMetricValues);
-        resource.addAbsentMetrics(query.getMetrics());
+  @RequestMapping(
+    path = "/history",
+    method = {RequestMethod.GET, RequestMethod.POST},
+    produces = "application/hal+json"
+  )
+  @SuppressWarnings("unchecked")
+  public ResponseEntity<MetricValueHistoryResource> queryMetricsHistory(
+      @PathVariable Long projectId, @Valid @RequestBody CommitMetricsHistoryQuery query) {
+    projectVerifier.checkProjectExistsOrThrowException(projectId);
 
-        return new ResponseEntity<>(resource, HttpStatus.OK);
+    MetricValueHistoryResource<Day> resource = new MetricValueHistoryResource<>();
+    Series historySeries;
+    switch (query.getInterval()) {
+      case DAY:
+        historySeries =
+            daySeriesFactory.createSeries(
+                projectId,
+                query.getMetric(),
+                query.getDateRange().getStartDate(),
+                query.getDateRange().getEndDate());
+        break;
+      case WEEK:
+        historySeries =
+            weekSeriesFactory.createSeries(
+                projectId,
+                query.getMetric(),
+                query.getDateRange().getStartDate(),
+                query.getDateRange().getEndDate());
+        break;
+      default:
+        throw new IllegalStateException(
+            String.format("unknown Interval type %s", query.getInterval()));
     }
+    resource.setPoints(historySeries.getPoints());
 
-    @RequestMapping(path = "/history", method = {RequestMethod.GET, RequestMethod.POST}, produces = "application/hal+json")
-    @SuppressWarnings("unchecked")
-    public ResponseEntity<MetricValueHistoryResource> queryMetricsHistory(@PathVariable Long projectId, @Valid @RequestBody CommitMetricsHistoryQuery query) {
-        projectVerifier.checkProjectExistsOrThrowException(projectId);
-
-        MetricValueHistoryResource<Day> resource = new MetricValueHistoryResource<>();
-        Series historySeries;
-        switch (query.getInterval()) {
-            case DAY:
-                historySeries = daySeriesFactory.createSeries(projectId, query.getMetric(), query.getDateRange().getStartDate(), query.getDateRange().getEndDate());
-                break;
-            case WEEK:
-                historySeries = weekSeriesFactory.createSeries(projectId, query.getMetric(), query.getDateRange().getStartDate(), query.getDateRange().getEndDate());
-                break;
-            default:
-                throw new IllegalStateException(String.format("unknown Interval type %s", query.getInterval()));
-
-        }
-        resource.setPoints(historySeries.getPoints());
-
-        return new ResponseEntity<>(resource, HttpStatus.OK);
-    }
-
+    return new ResponseEntity<>(resource, HttpStatus.OK);
+  }
 }

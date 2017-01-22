@@ -20,40 +20,37 @@ import static org.wickedsource.coderadar.factories.entities.EntityFactory.projec
 
 public class JobDequeueLoadTest extends IntegrationTestTemplate {
 
-    private Logger logger = LoggerFactory.getLogger(JobDequeueLoadTest.class);
+  private Logger logger = LoggerFactory.getLogger(JobDequeueLoadTest.class);
 
-    @Autowired
-    private JobQueueService service;
+  @Autowired private JobQueueService service;
 
-    @Autowired
-    private ProjectRepository projectRepository;
+  @Autowired private ProjectRepository projectRepository;
 
-    @Autowired
-    private JobRepository repository;
+  @Autowired private JobRepository repository;
 
-    @Test
-    public void loadTestDequeueJob() throws InterruptedException {
-        for (int i = 0; i < 100; i++) {
-            Project project = projectRepository.save(project().validProject());
-            ScanCommitsJob job = job().waitingPullJob();
-            job.setId(null);
-            job.setProject(project);
-            repository.save(job);
-        }
-
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
-        for (int i = 0; i < 100; i++) {
-            executorService.execute(() -> {
-                Job job = service.dequeue();
-                if(job != null) {
-                    logger.info("dequeued job {}", job.getId());
-                }else{
-                    logger.info("dequeue attempt FAILED");
-                }
-            });
-        }
-        executorService.shutdown();
-        executorService.awaitTermination(1, TimeUnit.MINUTES);
+  @Test
+  public void loadTestDequeueJob() throws InterruptedException {
+    for (int i = 0; i < 100; i++) {
+      Project project = projectRepository.save(project().validProject());
+      ScanCommitsJob job = job().waitingPullJob();
+      job.setId(null);
+      job.setProject(project);
+      repository.save(job);
     }
 
+    ExecutorService executorService = Executors.newFixedThreadPool(10);
+    for (int i = 0; i < 100; i++) {
+      executorService.execute(
+          () -> {
+            Job job = service.dequeue();
+            if (job != null) {
+              logger.info("dequeued job {}", job.getId());
+            } else {
+              logger.info("dequeue attempt FAILED");
+            }
+          });
+    }
+    executorService.shutdown();
+    executorService.awaitTermination(1, TimeUnit.MINUTES);
+  }
 }
