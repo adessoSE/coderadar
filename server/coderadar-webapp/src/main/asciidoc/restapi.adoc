@@ -142,7 +142,7 @@ anchor:authentication[]
 
 ==== Authentication
 After user registered in the system, he or she can start working with coderadar.
-The first step is login. To log in in coderadar use <<login, Login>>-API. The user muss use the username and the password,
+The first step is login. To log in in coderadar use <<login, Login>>-API. The user must use the username and the password,
 he or she defined.
 If the login was successful user gets two JSON Web Tokens https://jwt.io:
 
@@ -152,13 +152,13 @@ If the login was successful user gets two JSON Web Tokens https://jwt.io:
 
 After that the user has to use the access token for authentication with each request to protected route or resource.
 The tokens are signed by server so the server can validate the signature of the token to grant the access to resources.
-The access token is a Base64 encoded String, that muss be added to Authorization header like this:
+The access token is a Base64 encoded String, that must be added to Authorization header like this:
 
  Authorization:eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODQ1MTUzOTUsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg0NTE1NDU1LCJ1c2VySWQiOiIxIiwidXNlcm5hbWUiOiJyYWRhciJ9.zfkyc5jkPiAUEt7nU25SJxKprcPiXaiq0Q6bCJ_RrQo
 
 The access token is short-lived and expires after 15 minutes (default value).
 When the access token expires, the user has to require a new access token. It can be done with the refresh token
-user got as response after login. The refresh token muss be sent with request to <<refresh, Token Refresh>>-API.
+user got as response after login. The refresh token must be sent with request to <<refresh, Token Refresh>>-API.
 The refresh token is long life and expires after 60 days (default). Optionally it can be long-lived.
 When the refresh token expired or revoked for example after a password change,
 user has to login again to get a new refresh token.
