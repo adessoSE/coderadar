@@ -9,6 +9,7 @@ import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException
 import org.wickedsource.coderadar.user.domain.User;
 import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.user.domain.UserRepository;
+import org.wickedsource.coderadar.user.service.RegistrationService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyLong;

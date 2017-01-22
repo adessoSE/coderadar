@@ -17,6 +17,7 @@
     <quality_profile/>
     <quality_profile_metric/>
     <user/>
+    <refresh_token/>
 
     <user id="1" username="user" password="password"/>
     <user id="2" username="radar" password="nopassword"/>

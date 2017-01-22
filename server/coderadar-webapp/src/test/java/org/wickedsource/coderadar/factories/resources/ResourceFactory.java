@@ -32,4 +32,8 @@ public class ResourceFactory {
         return new UserCredentialsResourceFactory();
     }
 
+    public static UserLoginResourceFactory userLoginResource() {
+        return new UserLoginResourceFactory();
+    }
+
 }

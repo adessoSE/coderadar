@@ -24,7 +24,7 @@ public class UserCredentialsResourceAssembler extends AbstractResourceAssembler<
         return null;
     }
 
-    User toEntity(UserRegistrationDataResource userRegistrationDataResource) {
+    public User toEntity(UserRegistrationDataResource userRegistrationDataResource) {
         User user = new User();
         user.setUsername(userRegistrationDataResource.getUsername());
         user.setPassword(passwordService.hash(userRegistrationDataResource.getPassword()));
