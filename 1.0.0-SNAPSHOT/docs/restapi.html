@@ -2132,6 +2132,9 @@ table.tableblock.grid-all {
 <li><a href="#_hypermedia_links">2.1.1. Hypermedia links</a></li>
 <li><a href="#_registering_a_user">2.1.2. Registering a User</a></li>
 <li><a href="#_loading_a_user">2.1.3. Loading a User</a></li>
+<li><a href="#_login">2.1.4. Login</a></li>
+<li><a href="#_token_refresh">2.1.5. Token Refresh</a></li>
+<li><a href="#_authentication">2.1.6. Authentication</a></li>
 </ul>
 </li>
 </ul>
@@ -2340,11 +2343,11 @@ Content-Length: 195
 {
   "errorMessage" : "Validation Error",
   "fieldErrors" : [ {
-    "field" : "name",
-    "message" : "may not be null"
-  }, {
     "field" : "vcsUrl",
     "message" : "must be a valid URL"
+  }, {
+    "field" : "name",
+    "message" : "may not be null"
   } ]
 }</code></pre>
 </div>
@@ -2459,7 +2462,7 @@ plain text and hashed on server side for persisting.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">password</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The password of the user as plaintext</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Length must be between 8 and 2147483647 inclusive. Must not be null</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Password must not be null and must contain at least one alphabetical and one digit character and no white spaces.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2468,14 +2471,14 @@ plain text and hashed on server side for persisting.</p>
 <h5 id="_example_request"><a class="link" href="#_example_request">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /user/register HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /user/registration HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 52
+Content-Length: 56
 
 {
-  "username" : "user",
-  "password" : "password"
+  "username" : "radar",
+  "password" : "Password12!"
 }</code></pre>
 </div>
 </div>
@@ -2486,10 +2489,10 @@ Content-Length: 52
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 112
+Content-Length: 113
 
 {
-  "username" : "user",
+  "username" : "radar",
   "_links" : {
     "self" : {
       "href" : "http://localhost:8080/user/3"
@@ -2531,6 +2534,230 @@ Content-Length: 112
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_login"><a class="link" href="#_login">2.1.4. Login</a></h4>
+<div class="paragraph">
+<p><a id="login"></a>
+A user has to log in to use other endpoints of coderadar.
+If the log in is successful, user obtains two JSON Web Tokens <a href="https://jwt.io" class="bare">https://jwt.io</a></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>an access token</p>
+</li>
+<li>
+<p>a refresh token.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>How to use the tokens is described in <a href="#authentication">Authentication</a></p>
+</div>
+<div class="sect4">
+<h5 id="_login_data_structure"><a class="link" href="#_login_data_structure">Login Data Structure</a></h5>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">username</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the user to be logged in.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">password</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The password of the user as plaintext</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null. Size must be between 8 and 2147483647 inclusive</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_example_request_3"><a class="link" href="#_example_request_3">Example Request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /user/auth HTTP/1.1
+Content-Type: application/json
+Host: localhost:8080
+Content-Length: 56
+
+{
+  "username" : "radar",
+  "password" : "Password12!"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_example_response_3"><a class="link" href="#_example_response_3">Example Response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json;charset=UTF-8
+Content-Length: 535
+
+{
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODUxMjI5MTEsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODUxMjIwMTEsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.0ROi1uN_A1MeaFBwelP-imhsNFiAck3d0iEwqfL-zws",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTAzMDYwMTEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg1MTIyMDExLCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.GcM2xbtsEWhWypTgvT-KSkwp7rT21J2UNKS3nHTUpls",
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/user/2"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_token_refresh"><a class="link" href="#_token_refresh">2.1.5. Token Refresh</a></h4>
+<div class="paragraph">
+<p><a id="refresh"></a>
+To get a new access token after the current token has been expired you have
+to use the refresh token you got after successful login</p>
+</div>
+<div class="sect4">
+<h5 id="_login_data_structure_2"><a class="link" href="#_login_data_structure_2">Login Data Structure</a></h5>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">accessToken</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The expired access token</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">refreshToken</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The valid refresh token</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_example_request_4"><a class="link" href="#_example_request_4">Example Request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /user/refresh HTTP/1.1
+Content-Type: application/json
+Host: localhost:8080
+Content-Length: 443
+
+{
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODUxMjExNzEsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODUxMjAyNzEsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.5j6HtMIKkrMfzIpTyQMN0WdGlCSbmakYhQyOFY5z-Lc",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODUzMDIwMTEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg0OTQyMDExLCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.a3AS6DgHQ1SfpSS8XX9LHxtSoALUN7B5kxOSlZc4XvE"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_example_response_4"><a class="link" href="#_example_response_4">Example Response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json;charset=UTF-8
+Content-Length: 218
+
+{
+  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODUxMjI5MTEsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODUxMjIwMTEsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.0ROi1uN_A1MeaFBwelP-imhsNFiAck3d0iEwqfL-zws"
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><a id="authentication"></a></p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_authentication"><a class="link" href="#_authentication">2.1.6. Authentication</a></h4>
+<div class="paragraph">
+<p>After a user registered, he or she can start working with coderadar.
+The first step is login. To log in in coderadar use the <a href="#login">Login</a> endpoint. The user must use the username and the password
+specified at registration. If the login was successful user gets two JSON Web Tokens (see <a href="https://jwt.io" class="bare">https://jwt.io</a>):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>an access token and</p>
+</li>
+<li>
+<p>a refresh token.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>After that the user has to use the access token for authentication with each request to a protected route or resource.
+The tokens are signed by the server so the server can validate the signature of the token to grant the access to resources.
+The access token is a Base64 encoded String, that must be added to Authorization HTTP header like this:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Authorization:eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODQ1MTUzOTUsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg0NTE1NDU1LCJ1c2VySWQiOiIxIiwidXNlcm5hbWUiOiJyYWRhciJ9.zfkyc5jkPiAUEt7nU25SJxKprcPiXaiq0Q6bCJ_RrQo</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The access token is short-lived and by default expires after 15 minutes.
+When the access token expires, the user has to require a new access token. It can be done with the refresh token
+user got as response after login. The refresh token must be sent with a request to the <a href="#refresh">Token Refresh</a> endpoint.
+The refresh token is long-lived and by default expires after 60 days.
+When the refresh token expired or was revoked for example after a password change,
+a user has to login again to get a new refresh token.</p>
+</div>
+<div class="paragraph">
+<p>A typical work flow looks like this:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Client logs in with username and password and gets two tokens</p>
+</li>
+<li>
+<p>Client requires resources using the access token in each request</p>
+</li>
+<li>
+<p>After 15 minutes client gets a 401-Response</p>
+</li>
+<li>
+<p>Clients tries to get a new access token using refresh token</p>
+</li>
+<li>
+<p>Clients gets a new acess token and can request further resources</p>
+</li>
+<li>
+<p>If the client can&#8217;t get a new access token using the refresh token, client has to login again with username and password.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>See more: <a href="https://auth0.com/docs/tokens/refresh-token" class="bare">https://auth0.com/docs/tokens/refresh-token</a> and <a href="https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/" class="bare">https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/</a></p>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2541,7 +2768,30 @@ Content-Length: 112
 <p><a id="chapter-configure"></a></p>
 </div>
 <div class="paragraph">
-<p>This section describes the resources you can interact with to configure a project to be analyzed by coderadar.</p>
+<p>This section describes the resources you can interact with to configure a project to be analyzed by coderadar.
+To run an analysis on a project, you have to at least follow these steps:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><a href="#creating-a-project">Create a Project</a> so that coderadar knows where to get the code base. Once this step
+is done, coderadar will clone the repository and create some metadata on the commits and code base. Depending
+on the size of the project, it may take some while to complete.</p>
+</li>
+<li>
+<p><a href="#setting-filepatterns">Define File Patterns</a> to tell coderadar which files should be analyzed. If this step
+is omitted, an analysis will provide no results.</p>
+</li>
+<li>
+<p><a href="#create-analyzer">Add at least one analyzer</a> to your project. Each added analyzer will run over the
+files specified in the previous step and provide some code metrics.</p>
+</li>
+<li>
+<p><a href="#creating-analyzing-strategy">Add an AnalyzingStrategy</a> for your project. Once this is done, coderadar
+will start to analyze all files in the commits defined by the strategy. Depending on the size of the code base
+and the number of configured analyzers, this may take some time to finish.</p>
+</li>
+</ol>
 </div>
 <div class="sect2">
 <h3 id="_project"><a class="link" href="#_project">3.1. Project</a></h3>
@@ -2634,7 +2884,7 @@ and its sub-resources you provide coderadar with the information it needs to ana
 <div class="sect3">
 <h4 id="_listing_projects"><a class="link" href="#_listing_projects">3.1.3. Listing Projects</a></h4>
 <div class="sect4">
-<h5 id="_example_request_3"><a class="link" href="#_example_request_3">Example Request</a></h5>
+<h5 id="_example_request_5"><a class="link" href="#_example_request_5">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects HTTP/1.1
@@ -2643,7 +2893,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_3"><a class="link" href="#_example_response_3">Example Response</a></h5>
+<h5 id="_example_response_5"><a class="link" href="#_example_response_5">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -2697,15 +2947,15 @@ Content-Length: 1154
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p><a id="creating-a-project"></a></p>
-</div>
 </div>
 </div>
 <div class="sect3">
 <h4 id="_creating_a_project"><a class="link" href="#_creating_a_project">3.1.4. Creating a Project</a></h4>
+<div class="paragraph">
+<p><a id="creating-a-project"></a></p>
+</div>
 <div class="sect4">
-<h5 id="_example_request_4"><a class="link" href="#_example_request_4">Example Request</a></h5>
+<h5 id="_example_request_6"><a class="link" href="#_example_request_6">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects HTTP/1.1
@@ -2724,7 +2974,7 @@ Content-Length: 123
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_4"><a class="link" href="#_example_response_4">Example Response</a></h5>
+<h5 id="_example_response_6"><a class="link" href="#_example_response_6">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
@@ -2759,7 +3009,7 @@ Content-Length: 465
 <div class="sect3">
 <h4 id="_updating_a_project"><a class="link" href="#_updating_a_project">3.1.5. Updating a Project</a></h4>
 <div class="sect4">
-<h5 id="_example_request_5"><a class="link" href="#_example_request_5">Example Request</a></h5>
+<h5 id="_example_request_7"><a class="link" href="#_example_request_7">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1 HTTP/1.1
@@ -2779,7 +3029,7 @@ Content-Length: 144
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_5"><a class="link" href="#_example_response_5">Example Response</a></h5>
+<h5 id="_example_response_7"><a class="link" href="#_example_response_7">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -2814,7 +3064,7 @@ Content-Length: 469
 <div class="sect3">
 <h4 id="_deleting_a_project"><a class="link" href="#_deleting_a_project">3.1.6. Deleting a Project</a></h4>
 <div class="sect4">
-<h5 id="_example_request_6"><a class="link" href="#_example_request_6">Example Request</a></h5>
+<h5 id="_example_request_8"><a class="link" href="#_example_request_8">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1 HTTP/1.1
@@ -2823,7 +3073,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_6"><a class="link" href="#_example_response_6">Example Response</a></h5>
+<h5 id="_example_response_8"><a class="link" href="#_example_response_8">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
@@ -2898,7 +3148,7 @@ files in all commits have to be updated during these operations.</p>
 <div class="sect3">
 <h4 id="_creating_a_module"><a class="link" href="#_creating_a_module">3.2.3. Creating a Module</a></h4>
 <div class="sect4">
-<h5 id="_example_request_7"><a class="link" href="#_example_request_7">Example Request</a></h5>
+<h5 id="_example_request_9"><a class="link" href="#_example_request_9">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/modules HTTP/1.1
@@ -2913,7 +3163,7 @@ Content-Length: 46
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_7"><a class="link" href="#_example_response_7">Example Response</a></h5>
+<h5 id="_example_response_9"><a class="link" href="#_example_response_9">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
@@ -2938,7 +3188,7 @@ Content-Length: 222
 <div class="sect3">
 <h4 id="_updating_a_module"><a class="link" href="#_updating_a_module">3.2.4. Updating a Module</a></h4>
 <div class="sect4">
-<h5 id="_example_request_8"><a class="link" href="#_example_request_8">Example Request</a></h5>
+<h5 id="_example_request_10"><a class="link" href="#_example_request_10">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/modules/1 HTTP/1.1
@@ -2953,7 +3203,7 @@ Content-Length: 46
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_8"><a class="link" href="#_example_response_8">Example Response</a></h5>
+<h5 id="_example_response_10"><a class="link" href="#_example_response_10">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -2978,7 +3228,7 @@ Content-Length: 222
 <div class="sect3">
 <h4 id="_listing_all_modules_of_a_project"><a class="link" href="#_listing_all_modules_of_a_project">3.2.5. Listing all Modules of a Project</a></h4>
 <div class="sect4">
-<h5 id="_example_request_9"><a class="link" href="#_example_request_9">Example Request</a></h5>
+<h5 id="_example_request_11"><a class="link" href="#_example_request_11">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/modules HTTP/1.1
@@ -2987,7 +3237,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_9"><a class="link" href="#_example_response_9">Example Response</a></h5>
+<h5 id="_example_response_11"><a class="link" href="#_example_response_11">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -3057,7 +3307,7 @@ Content-Length: 1300
 <div class="sect3">
 <h4 id="_deleting_a_module"><a class="link" href="#_deleting_a_module">3.2.6. Deleting a Module</a></h4>
 <div class="sect4">
-<h5 id="_example_request_10"><a class="link" href="#_example_request_10">Example Request</a></h5>
+<h5 id="_example_request_12"><a class="link" href="#_example_request_12">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/modules/1 HTTP/1.1
@@ -3066,7 +3316,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_10"><a class="link" href="#_example_response_10">Example Response</a></h5>
+<h5 id="_example_response_12"><a class="link" href="#_example_response_12">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
@@ -3152,7 +3402,7 @@ patterns. Thus, the file set will include all INCLUDED files except those that w
 <div class="sect3">
 <h4 id="_listing_a_project_s_file_patterns"><a class="link" href="#_listing_a_project_s_file_patterns">3.3.3. Listing a Project&#8217;s File Patterns</a></h4>
 <div class="sect4">
-<h5 id="_example_request_11"><a class="link" href="#_example_request_11">Example Request</a></h5>
+<h5 id="_example_request_13"><a class="link" href="#_example_request_13">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/files HTTP/1.1
@@ -3161,7 +3411,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_11"><a class="link" href="#_example_response_11">Example Response</a></h5>
+<h5 id="_example_response_13"><a class="link" href="#_example_response_13">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -3194,11 +3444,14 @@ Content-Length: 434
 <div class="sect3">
 <h4 id="_setting_a_project_s_file_patterns"><a class="link" href="#_setting_a_project_s_file_patterns">3.3.4. Setting a Project&#8217;s File Patterns</a></h4>
 <div class="paragraph">
+<p><a id="setting-filepatterns"></a></p>
+</div>
+<div class="paragraph">
 <p>Coderadar views a project&#8217;s list of file patterns as a single resource. Hence, you can only list and save
 all file patterns of a project at once.</p>
 </div>
 <div class="sect4">
-<h5 id="_example_request_12"><a class="link" href="#_example_request_12">Example Request</a></h5>
+<h5 id="_example_request_14"><a class="link" href="#_example_request_14">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/files HTTP/1.1
@@ -3221,7 +3474,7 @@ Content-Length: 262
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_12"><a class="link" href="#_example_response_12">Example Response</a></h5>
+<h5 id="_example_response_14"><a class="link" href="#_example_response_14">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
@@ -3321,8 +3574,11 @@ plugin via the AnalyzerConfiguration resource.</p>
 </div>
 <div class="sect3">
 <h4 id="_adding_an_analyzer_configuration"><a class="link" href="#_adding_an_analyzer_configuration">3.4.3. Adding an Analyzer Configuration</a></h4>
+<div class="paragraph">
+<p><a id="create-analyzer"></a></p>
+</div>
 <div class="sect4">
-<h5 id="_example_request_13"><a class="link" href="#_example_request_13">Example Request</a></h5>
+<h5 id="_example_request_15"><a class="link" href="#_example_request_15">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers HTTP/1.1
@@ -3338,7 +3594,7 @@ Content-Length: 101
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_13"><a class="link" href="#_example_response_13">Example Response</a></h5>
+<h5 id="_example_response_15"><a class="link" href="#_example_response_15">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
@@ -3367,7 +3623,7 @@ Content-Length: 361
 <div class="sect3">
 <h4 id="_deleting_an_analyzer_configuration"><a class="link" href="#_deleting_an_analyzer_configuration">3.4.4. Deleting an Analyzer Configuration</a></h4>
 <div class="sect4">
-<h5 id="_example_request_14"><a class="link" href="#_example_request_14">Example Request</a></h5>
+<h5 id="_example_request_16"><a class="link" href="#_example_request_16">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/analyzers/2 HTTP/1.1
@@ -3376,7 +3632,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_14"><a class="link" href="#_example_response_14">Example Response</a></h5>
+<h5 id="_example_response_16"><a class="link" href="#_example_response_16">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
@@ -3387,7 +3643,7 @@ Host: localhost:8080</code></pre>
 <div class="sect3">
 <h4 id="_updating_an_analyzer_configuration"><a class="link" href="#_updating_an_analyzer_configuration">3.4.5. Updating an Analyzer Configuration</a></h4>
 <div class="sect4">
-<h5 id="_example_request_15"><a class="link" href="#_example_request_15">Example Request</a></h5>
+<h5 id="_example_request_17"><a class="link" href="#_example_request_17">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers/1 HTTP/1.1
@@ -3403,7 +3659,7 @@ Content-Length: 102
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_15"><a class="link" href="#_example_response_15">Example Response</a></h5>
+<h5 id="_example_response_17"><a class="link" href="#_example_response_17">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -3432,7 +3688,7 @@ Content-Length: 362
 <div class="sect3">
 <h4 id="_listing_a_project_s_analyzer_configurations"><a class="link" href="#_listing_a_project_s_analyzer_configurations">3.4.6. Listing a Project&#8217;s Analyzer Configurations</a></h4>
 <div class="sect4">
-<h5 id="_example_request_16"><a class="link" href="#_example_request_16">Example Request</a></h5>
+<h5 id="_example_request_18"><a class="link" href="#_example_request_18">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers HTTP/1.1
@@ -3441,7 +3697,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_16"><a class="link" href="#_example_response_16">Example Response</a></h5>
+<h5 id="_example_response_18"><a class="link" href="#_example_response_18">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -3488,7 +3744,7 @@ Content-Length: 909
 <div class="sect3">
 <h4 id="_loading_a_single_analyzer_configuration"><a class="link" href="#_loading_a_single_analyzer_configuration">3.4.7. Loading a single Analyzer Configuration</a></h4>
 <div class="sect4">
-<h5 id="_example_request_17"><a class="link" href="#_example_request_17">Example Request</a></h5>
+<h5 id="_example_request_19"><a class="link" href="#_example_request_19">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers/1 HTTP/1.1
@@ -3497,7 +3753,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_17"><a class="link" href="#_example_response_17">Example Response</a></h5>
+<h5 id="_example_response_19"><a class="link" href="#_example_response_19">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -3535,7 +3791,7 @@ the analyzer needs.</p>
 <div class="sect3">
 <h4 id="_uploading_an_analyzer_configuration_file"><a class="link" href="#_uploading_an_analyzer_configuration_file">3.5.1. Uploading an Analyzer Configuration File</a></h4>
 <div class="sect4">
-<h5 id="_example_request_18"><a class="link" href="#_example_request_18">Example Request</a></h5>
+<h5 id="_example_request_20"><a class="link" href="#_example_request_20">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers/1/file HTTP/1.1
@@ -3552,7 +3808,7 @@ abc
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_18"><a class="link" href="#_example_response_18">Example Response</a></h5>
+<h5 id="_example_response_20"><a class="link" href="#_example_response_20">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
@@ -3563,7 +3819,7 @@ abc
 <div class="sect3">
 <h4 id="_downloading_an_analyzer_configuration_file"><a class="link" href="#_downloading_an_analyzer_configuration_file">3.5.2. Downloading an Analyzer Configuration File</a></h4>
 <div class="sect4">
-<h5 id="_example_request_19"><a class="link" href="#_example_request_19">Example Request</a></h5>
+<h5 id="_example_request_21"><a class="link" href="#_example_request_21">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers/1/file HTTP/1.1
@@ -3572,7 +3828,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_19"><a class="link" href="#_example_response_19">Example Response</a></h5>
+<h5 id="_example_response_21"><a class="link" href="#_example_response_21">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -3653,14 +3909,14 @@ an Analyzing Strategy, analysis jobs will be queued automatically for the commit
 </tr>
 </tbody>
 </table>
-<div class="paragraph">
-<p><a id="creating-analyzing-strategy"></a></p>
-</div>
 </div>
 <div class="sect3">
 <h4 id="_setting_a_project_s_analyzing_strategy"><a class="link" href="#_setting_a_project_s_analyzing_strategy">3.6.3. Setting a Project&#8217;s Analyzing Strategy</a></h4>
+<div class="paragraph">
+<p><a id="creating-analyzing-strategy"></a></p>
+</div>
 <div class="sect4">
-<h5 id="_example_request_20"><a class="link" href="#_example_request_20">Example Request</a></h5>
+<h5 id="_example_request_22"><a class="link" href="#_example_request_22">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/strategy HTTP/1.1
@@ -3677,7 +3933,7 @@ Content-Length: 70
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_20"><a class="link" href="#_example_response_20">Example Response</a></h5>
+<h5 id="_example_response_22"><a class="link" href="#_example_response_22">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -3703,7 +3959,7 @@ Content-Length: 226
 <div class="sect3">
 <h4 id="_getting_a_project_s_analyzing_strategy"><a class="link" href="#_getting_a_project_s_analyzing_strategy">3.6.4. Getting a Project&#8217;s Analyzing Strategy</a></h4>
 <div class="sect4">
-<h5 id="_example_request_21"><a class="link" href="#_example_request_21">Example Request</a></h5>
+<h5 id="_example_request_23"><a class="link" href="#_example_request_23">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/strategy HTTP/1.1
@@ -3712,7 +3968,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_21"><a class="link" href="#_example_response_21">Example Response</a></h5>
+<h5 id="_example_response_23"><a class="link" href="#_example_response_23">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -3810,7 +4066,7 @@ part of the quality profile and thus are most important to you.</p>
 <div class="sect3">
 <h4 id="_creating_a_quality_profile"><a class="link" href="#_creating_a_quality_profile">3.7.3. Creating a Quality Profile</a></h4>
 <div class="sect4">
-<h5 id="_example_request_22"><a class="link" href="#_example_request_22">Example Request</a></h5>
+<h5 id="_example_request_24"><a class="link" href="#_example_request_24">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/qualityprofiles HTTP/1.1
@@ -3832,7 +4088,7 @@ Content-Length: 204
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_22"><a class="link" href="#_example_response_22">Example Response</a></h5>
+<h5 id="_example_response_24"><a class="link" href="#_example_response_24">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
@@ -3864,7 +4120,7 @@ Content-Length: 388
 <div class="sect3">
 <h4 id="_updating_a_quality_profile"><a class="link" href="#_updating_a_quality_profile">3.7.4. Updating a Quality Profile</a></h4>
 <div class="sect4">
-<h5 id="_example_request_23"><a class="link" href="#_example_request_23">Example Request</a></h5>
+<h5 id="_example_request_25"><a class="link" href="#_example_request_25">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/qualityprofiles/1 HTTP/1.1
@@ -3886,7 +4142,7 @@ Content-Length: 214
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_23"><a class="link" href="#_example_response_23">Example Response</a></h5>
+<h5 id="_example_response_25"><a class="link" href="#_example_response_25">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -3918,7 +4174,7 @@ Content-Length: 398
 <div class="sect3">
 <h4 id="_loading_a_single_quality_profile"><a class="link" href="#_loading_a_single_quality_profile">3.7.5. Loading a single Quality Profile</a></h4>
 <div class="sect4">
-<h5 id="_example_request_24"><a class="link" href="#_example_request_24">Example Request</a></h5>
+<h5 id="_example_request_26"><a class="link" href="#_example_request_26">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/qualityprofiles/1 HTTP/1.1
@@ -3940,7 +4196,7 @@ Content-Length: 204
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_24"><a class="link" href="#_example_response_24">Example Response</a></h5>
+<h5 id="_example_response_26"><a class="link" href="#_example_response_26">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -3972,7 +4228,7 @@ Content-Length: 388
 <div class="sect3">
 <h4 id="_deleting_a_quality_profile"><a class="link" href="#_deleting_a_quality_profile">3.7.6. Deleting a Quality Profile</a></h4>
 <div class="sect4">
-<h5 id="_example_request_25"><a class="link" href="#_example_request_25">Example Request</a></h5>
+<h5 id="_example_request_27"><a class="link" href="#_example_request_27">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/qualityprofiles/1 HTTP/1.1
@@ -3981,7 +4237,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_25"><a class="link" href="#_example_response_25">Example Response</a></h5>
+<h5 id="_example_response_27"><a class="link" href="#_example_response_27">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
@@ -3992,7 +4248,7 @@ Host: localhost:8080</code></pre>
 <div class="sect3">
 <h4 id="_listing_a_project_s_quality_profiles"><a class="link" href="#_listing_a_project_s_quality_profiles">3.7.7. Listing a Project&#8217;s Quality Profiles</a></h4>
 <div class="sect4">
-<h5 id="_example_request_26"><a class="link" href="#_example_request_26">Example Request</a></h5>
+<h5 id="_example_request_28"><a class="link" href="#_example_request_28">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/qualityprofiles?page=0&amp;size=2&amp;page=0&amp;size=2 HTTP/1.1
@@ -4001,7 +4257,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_26"><a class="link" href="#_example_response_26">Example Response</a></h5>
+<h5 id="_example_response_28"><a class="link" href="#_example_response_28">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -4091,7 +4347,7 @@ Content-Length: 1509
 <div class="sect3">
 <h4 id="_listing_available_analyzers"><a class="link" href="#_listing_available_analyzers">4.1.1. Listing available Analyzers</a></h4>
 <div class="sect4">
-<h5 id="_example_request_27"><a class="link" href="#_example_request_27">Example Request</a></h5>
+<h5 id="_example_request_29"><a class="link" href="#_example_request_29">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /analyzers?page=0&amp;size=2&amp;page=0&amp;size=2 HTTP/1.1
@@ -4100,7 +4356,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_27"><a class="link" href="#_example_response_27">Example Response</a></h5>
+<h5 id="_example_response_29"><a class="link" href="#_example_response_29">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -4180,7 +4436,7 @@ analysis will take a while.</p>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_example_request_28"><a class="link" href="#_example_request_28">Example Request</a></h5>
+<h5 id="_example_request_30"><a class="link" href="#_example_request_30">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metrics HTTP/1.1
@@ -4189,7 +4445,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_28"><a class="link" href="#_example_response_28">Example Response</a></h5>
+<h5 id="_example_response_30"><a class="link" href="#_example_response_30">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -4301,7 +4557,7 @@ are available.</p>
 <div class="sect3">
 <h4 id="_listing_a_project_s_commits"><a class="link" href="#_listing_a_project_s_commits">5.2.3. Listing a Project&#8217;s Commits</a></h4>
 <div class="sect4">
-<h5 id="_example_request_29"><a class="link" href="#_example_request_29">Example Request</a></h5>
+<h5 id="_example_request_31"><a class="link" href="#_example_request_31">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/commits?page=3&amp;size=5&amp;page=3&amp;size=5 HTTP/1.1
@@ -4310,7 +4566,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_29"><a class="link" href="#_example_response_29">Example Response</a></h5>
+<h5 id="_example_response_31"><a class="link" href="#_example_response_31">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -4425,7 +4681,7 @@ analysis will take a while.</p>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_example_request_30"><a class="link" href="#_example_request_30">Example Request</a></h5>
+<h5 id="_example_request_32"><a class="link" href="#_example_request_32">Example Request</a></h5>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -4455,7 +4711,7 @@ Content-Length: 121
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_30"><a class="link" href="#_example_response_30">Example Response</a></h5>
+<h5 id="_example_response_32"><a class="link" href="#_example_response_32">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -4508,7 +4764,7 @@ Content-Length: 102
 </table>
 </div>
 <div class="sect4">
-<h5 id="_example_request_31"><a class="link" href="#_example_request_31">Example Request</a></h5>
+<h5 id="_example_request_33"><a class="link" href="#_example_request_33">Example Request</a></h5>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -4538,7 +4794,7 @@ Content-Length: 102
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_31"><a class="link" href="#_example_response_31">Example Response</a></h5>
+<h5 id="_example_response_33"><a class="link" href="#_example_response_33">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -4610,7 +4866,7 @@ Content-Length: 195
 </table>
 </div>
 <div class="sect4">
-<h5 id="_example_request_32"><a class="link" href="#_example_request_32">Example Request</a></h5>
+<h5 id="_example_request_34"><a class="link" href="#_example_request_34">Example Request</a></h5>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -4644,7 +4900,7 @@ Content-Length: 137
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_32"><a class="link" href="#_example_response_32">Example Response</a></h5>
+<h5 id="_example_response_34"><a class="link" href="#_example_response_34">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -4774,7 +5030,7 @@ time of a specified commit.</p>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_example_request_33"><a class="link" href="#_example_request_33">Example Request</a></h5>
+<h5 id="_example_request_35"><a class="link" href="#_example_request_35">Example Request</a></h5>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -4804,7 +5060,7 @@ Content-Length: 110
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_33"><a class="link" href="#_example_response_33">Example Response</a></h5>
+<h5 id="_example_response_35"><a class="link" href="#_example_response_35">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -4982,7 +5238,7 @@ commits.</p>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_example_request_34"><a class="link" href="#_example_request_34">Example Request</a></h5>
+<h5 id="_example_request_36"><a class="link" href="#_example_request_36">Example Request</a></h5>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -5013,7 +5269,7 @@ Content-Length: 169
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_34"><a class="link" href="#_example_response_34">Example Response</a></h5>
+<h5 id="_example_response_36"><a class="link" href="#_example_response_36">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -5161,7 +5417,7 @@ Content-Length: 2928
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-01-22 20:58:42 UTC
+Last updated 2017-01-22 21:49:05 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
