@@ -181,7 +181,7 @@ bootRun {
 }
 
 githubPages {
-    repoUri = "https://github.com/reflectoring/coderadar.git"
+    repoUri = "git@github.com:reflectoring/coderadar.git"
     targetBranch = "gh-pages"
     pages {
         from "build/docs/html5"
