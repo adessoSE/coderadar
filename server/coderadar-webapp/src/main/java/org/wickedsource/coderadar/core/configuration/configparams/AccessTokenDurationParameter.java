@@ -1,12 +1,12 @@
 package org.wickedsource.coderadar.core.configuration.configparams;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Configures the number of minutes of the validity for the authentication access token.
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AccessTokenDurationParameter implements ConfigurationParameter<Integer> {
 
-    public static final String NAME = "coderadar.access.token.duration";
+    public static final String NAME = "coderadar.access.token.durationInMinutes";
 
     private Environment environment;
 

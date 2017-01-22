@@ -14,7 +14,7 @@ import java.util.Optional;
 @Component
 public class RefreshTokenDurationParameter implements ConfigurationParameter<Integer> {
 
-    public static final String NAME = "coderadar.refresh.token.duration";
+    public static final String NAME = "coderadar.refresh.token.durationInMinutes";
 
     private Environment environment;
 
