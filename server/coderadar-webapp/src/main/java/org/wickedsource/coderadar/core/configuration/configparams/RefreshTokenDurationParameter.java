@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Configures the number of minutes of the validity for the authentication refresh token.
+ * Configures the number of minutes the authentication refresh token is valid.
  */
 @Component
 public class RefreshTokenDurationParameter implements ConfigurationParameter<Integer> {

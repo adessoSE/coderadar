@@ -17,10 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Filter for authentication of requests with tokens. This filter reads the access token from http-request header and validate the signature of the token. If the signature is valid, a {@link UsernamePasswordAuthenticationToken} will be set as
- * {@link org.springframework.security.core.Authentication} in {@link org.springframework.security.core.context.SecurityContext}. That means, other filter of filter chain will not authenticate the request anymore.
- * If the signature of the access token is not valid, other filter will try to authenticate the request.
- * Note: the filter muss be added or inserted to the filter chain in the security configuration.
+ * Filter for authentication of requests with JSON Web Tokens. This filter reads the access token from http-request header and validates the signature of the token. If the signature is valid, a {@link UsernamePasswordAuthenticationToken} will be set as
+ * {@link org.springframework.security.core.Authentication} in {@link org.springframework.security.core.context.SecurityContext}. That means other filters of the filter chain will not authenticate the request anymore.
+ * If the signature of the access token is not valid, other filters will try to authenticate the request.
+ * Note: the filter must be added or inserted to the filter chain in the security configuration.
  */
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
 

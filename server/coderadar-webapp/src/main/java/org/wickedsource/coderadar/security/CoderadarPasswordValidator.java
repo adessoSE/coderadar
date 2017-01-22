@@ -8,7 +8,7 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 
 /**
- * Validator for password users define while registration or changing password
+ * Validator for user passwords.
  */
 public class CoderadarPasswordValidator implements ConstraintValidator<ValidPassword, String> {
 
@@ -20,13 +20,9 @@ public class CoderadarPasswordValidator implements ConstraintValidator<ValidPass
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         PasswordValidator passwordValidator = new PasswordValidator(//
-                                                                           Arrays.asList(
-                        // at least one digit character
+                Arrays.asList(
                         new CharacterRule(EnglishCharacterData.Digit, 1),
-
-                                                                                   new CharacterRule(EnglishCharacterData.Alphabetical, 1),
-
-                        // no whitespace
+                        new CharacterRule(EnglishCharacterData.Alphabetical, 1),
                         new WhitespaceRule()));
         RuleResult result = passwordValidator.validate(new PasswordData(value));
         if (result.isValid()) {

@@ -5,8 +5,8 @@ import org.wickedsource.coderadar.user.domain.User;
 import javax.persistence.*;
 
 /**
- * Refresh token is a JSON Web Token, that is used by client to get a new access token.
- * In contrast to access token is the refresh token persisted to have the possibility to revoke it and to assign the token to user entity.
+ * Refresh token is a JSON Web Token that is used by a client to get a new access token.
+ * In contrast to access token the refresh token is persisted to have the possibility to assign the token to the user entity and to revoke it.
  */
 @Entity
 @Table
