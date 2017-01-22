@@ -1,0 +1,26 @@
+<dataset>
+    <project/>
+    <analyzing_strategy/>
+    <commit/>
+    <commit_log_entry/>
+    <file_identity/>
+    <file/>
+    <module/>
+    <commit_file/>
+    <commit_file_module/>
+    <file_pattern/>
+    <job/>
+    <metric_value/>
+    <finding/>
+    <analyzer_configuration/>
+    <analyzer_configuration_file/>,
+    <quality_profile/>
+    <quality_profile_metric/>
+    <user/>
+    <refresh_token/>
+
+    <user id="1" username="user" password="password"/>
+    <user id="2" username="radar"
+          password="$2a$10$uZ3pynZ.CcvHjbZPqhVxbueuHvoHRSA0TPgFbryCbobqkE135vv6G"/>
+    <refresh_token id="1" token="token1" user_id="2"/>
+</dataset>

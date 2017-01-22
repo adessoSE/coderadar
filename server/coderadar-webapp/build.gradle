@@ -92,8 +92,10 @@ dependencies {
     compile "org.hibernate:hibernate-validator:${version_hibernate}"
     compile "org.reflections:reflections:0.9.10"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.1"
-    compile "com.auth0:java-jwt:3.0.2"
+    compile "com.auth0:java-jwt:3.1.0"
     compile "joda-time:joda-time:2.9.7"
+    compile "org.passay:passay:1.2.0"
+
 
     compile project(":plugins:loc-analyzer-plugin")
     compile project(":plugins:checkstyle-analyzer-plugin")
@@ -169,6 +171,12 @@ bootRun {
 //                    "-Dspring.datasource.password=coderadar",
 //                    "-Dspring.datasource.driver-class-name=net.sf.log4jdbc.DriverSpy",
 //                    "-Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect",
+
+                    // authentication
+                    // Duration in minutes
+                    "-Dcoderadar.access.token.duration=15",
+                    // 60 days
+                    "-Dcoderadar.refresh.token.duration=86400"
             ]
 }
 

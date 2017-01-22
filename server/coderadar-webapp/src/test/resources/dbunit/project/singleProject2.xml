@@ -17,6 +17,7 @@
     <quality_profile/>
     <quality_profile_metric/>
     <user/>
+    <refresh_token/>
 
     <project id="1" url="http://valid.url2" type="GIT" username="user2" password="pass2" name="name2"/>
 </dataset>
