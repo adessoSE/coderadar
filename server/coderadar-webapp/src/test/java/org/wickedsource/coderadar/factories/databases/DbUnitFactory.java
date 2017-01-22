@@ -52,4 +52,10 @@ public class DbUnitFactory {
         public static final String USERS = "/dbunit/user/userList.xml";
     }
 
+    public static class RefreshTokens {
+
+        public static final String REFRESH_TOKENS = "/dbunit/refreshtoken/refreshTokenList.xml";
+        public static final String REFRESH_STATIC_TOKENS = "/dbunit/refreshtoken/refreshTokenStaticList.xml";
+    }
+
 }
