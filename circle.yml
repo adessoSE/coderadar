@@ -23,3 +23,10 @@ test:
 
     - mkdir -p $CIRCLE_ARTIFACTS/build-artifacts
     - cp -a server/coderadar-webapp/build/libs/coderadar-webapp-*.jar $CIRCLE_ARTIFACTS/build-artifacts/
+
+deployment:
+  release:
+    branch: master
+    commands:
+      # update GitHub pages
+      - if [ "$CIRCLE_PR_NUMBER" = ""  ]; then cd server/coderadar-webapp && ../gradlew publishGhPages; else echo 'Skipping GitHub pages deployment for PRs!'; fi
