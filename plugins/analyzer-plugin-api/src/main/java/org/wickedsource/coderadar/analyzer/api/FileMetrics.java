@@ -78,19 +78,32 @@ public class FileMetrics {
 
     /**
      * Adds a finding for the specified metric to this FileMetrics object.
-     * <strong>This method also increments the metric count so that incrementMetricCount() should not be called
+     * <strong>This method also increments the metric count by 1 so that incrementMetricCount() should not be called
      * for the findings passed into addFinding()!</strong>
      *
      * @param metric  the metric for which to add the finding.
      * @param finding the finding to add.
      */
     public void addFinding(Metric metric, Finding finding) {
+        addFinding(metric, finding, 1L);
+    }
+
+    /**
+     * Adds a finding for the specified metric to this FileMetrics object.
+     * <strong>This method also increments the metric count by <code>count</code> so that incrementMetricCount() should not be called
+     * for the findings passed into addFinding()!</strong>
+     *
+     * @param metric  the metric for which to add the finding.
+     * @param finding the finding to add.
+     * @param count   the number by which to increment the metric count
+     */
+    public void addFinding(Metric metric, Finding finding, Long count) {
         List<Finding> findingsForMetric = findings.get(metric);
         if (findingsForMetric == null) {
             findingsForMetric = new ArrayList<>();
             findings.put(metric, findingsForMetric);
         }
-        incrementMetricCount(metric);
+        incrementMetricCount(metric, count);
         findingsForMetric.add(finding);
     }
 
@@ -120,9 +133,9 @@ public class FileMetrics {
      */
     public List<Finding> getFindings(Metric metric) {
         List<Finding> resultList = findings.get(metric);
-        if(resultList == null){
+        if (resultList == null) {
             return Collections.emptyList();
-        }else{
+        } else {
             return resultList;
         }
     }

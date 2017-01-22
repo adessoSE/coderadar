@@ -115,6 +115,10 @@ dependencies {
 
 }
 
+springBoot {
+    executable = true
+}
+
 bootRun {
     jvmArgs =
             [
