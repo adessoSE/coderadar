@@ -42,8 +42,8 @@ conventions. Fear not, the worst thing that may happen if you do not follow them
 is that we might propose some changes to a pull request you submitted.
 
 ### Styleguide
-For java code style, the gradle plugin (https://github.com/diffplug/spotless)["spotless"] has been included in the build to enforce the
-(https://google.github.io/styleguide/javaguide.html)[Google Java Code style] . Builds will fail if 
+For java code style, the gradle plugin ["spotless"](https://github.com/diffplug/spotless) has been included in the build to enforce the
+[Google Java Code style](https://google.github.io/styleguide/javaguide.html). Builds will fail if 
 the code does not comply to the style guide. To apply the style guide simply call 
 `gradlew spotlessApply`. Only after applying the style guide should you push your changes.
 
