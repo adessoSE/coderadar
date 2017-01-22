@@ -29,4 +29,4 @@ deployment:
     branch: master
     commands:
       # update GitHub pages
-      - if [ "$CIRCLE_PR_NUMBER" = ""  ]; then cd server/coderadar-webapp && ../gradlew publishGhPages; else echo 'Skipping GitHub pages deployment for PRs!'; fi
+      - if [ "$CIRCLE_PR_NUMBER" = ""  ]; then cd server/coderadar-webapp && ../../gradlew publishGhPages; else echo 'Skipping GitHub pages deployment for PRs!'; fi
