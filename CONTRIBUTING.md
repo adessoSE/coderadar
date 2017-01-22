@@ -42,11 +42,13 @@ conventions. Fear not, the worst thing that may happen if you do not follow them
 is that we might propose some changes to a pull request you submitted.
 
 ### Styleguide
-Currently, all coding has been done using IntelliJ IDEA with the default
-code formatter. If you are using IntelliJ, please use the default code
-formatter. If you are using a different IDE, please take special care 
-to only edit the code that really needs editing so that the formatting
-stays intact.
+For java code style, the gradle plugin (https://github.com/diffplug/spotless)["spotless"] has been included in the build to enforce the
+(https://google.github.io/styleguide/javaguide.html)[Google Java Code style] . Builds will fail if 
+the code does not comply to the style guide. To apply the style guide simply call 
+`gradlew spotlessApply`. Only after applying the style guide should you push your changes.
+
+**Hint:** in order for automatic style guide enforcement to work, you have to **disable**
+automatic code formatting on check-in in your IDE!
 
 ### Documentation
 Please keep documentation up-to-date when changing the code. Documentation
