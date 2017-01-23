@@ -185,6 +185,7 @@ githubPages {
 
 task dist(type: Zip) {
     archiveName "coderadar-${project.version}.zip"
+    destinationDir file("/build/distributions")
     from("build/libs") {
         include "*.war"
     }
