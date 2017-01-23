@@ -30,3 +30,5 @@ deployment:
     commands:
       # update GitHub pages
       - if [ "$CIRCLE_PR_NUMBER" = ""  ]; then cd server/coderadar-webapp && ../../gradlew publishGhPages --stacktrace; else echo 'Skipping GitHub pages deployment for PRs!'; fi
+      # upload artifacts to bintray
+      - if [ "$CIRCLE_PR_NUMBER" = ""  ]; then ./gradlew bintrayUpload; else echo 'Skipping Bintray artifact deployment for PRs!'; fi
