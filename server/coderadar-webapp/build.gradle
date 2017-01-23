@@ -197,10 +197,8 @@ zip.dependsOn bootRepackage
 zip.dependsOn build
 
 bintray {
-    user = "thombergs"
-    key = "4626a202c40ce9ba76d9699df08b82c5f03fda9962ba94d6a7ebf2cc0c33e875"
-//    user = System.getenv("BINTRAY_USER")
-//    key = System.getenv("BINTRAY_KEY")
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
     filesSpec {
         into "."
         from("build/libs") {
