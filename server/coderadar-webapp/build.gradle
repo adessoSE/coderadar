@@ -184,7 +184,7 @@ githubPages {
 }
 
 task dist(type: Zip) {
-    archiveName "coderadar.${project.version}.zip"
+    archiveName "coderadar-${project.version}.zip"
     from("build/libs") {
         include "*.war"
     }
@@ -199,16 +199,14 @@ bintray {
     user = System.getenv("BINTRAY_USER")
     key = System.getenv("BINTRAY_KEY")
     filesSpec {
-        into version
-        from("build/distributions") {
-            include "coderadar.${project.version}.zip"
-        }
+        into "."
+        from("build/distributions")
     }
     publish = true
     pkg {
-        repo = 'releases'
-        name = 'coderadar'
-        userOrg = 'reflectoring'
+        repo = "releases"
+        name = "coderadar"
+        userOrg = "reflectoring"
         version {
             name = project.version
             released = new Date()
