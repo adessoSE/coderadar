@@ -57,6 +57,8 @@ public class CoderadarConfiguration {
     this.configurationParameters.add(workdir);
     this.configurationParameters.add(scanInterval);
     this.configurationParameters.add(dateLocale);
+    this.configurationParameters.add(accessTokenDuration);
+    this.configurationParameters.add(refreshTokenDuration);
   }
 
   @PostConstruct
