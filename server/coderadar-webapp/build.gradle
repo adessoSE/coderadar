@@ -183,9 +183,9 @@ githubPages {
     }
 }
 
-task dist(type: Zip) {
+task zip(type: Zip) {
     archiveName "coderadar-${project.version}.zip"
-    destinationDir file("build/distributions")
+    destinationDir file("build/libs")
     from("build/libs") {
         include "*.war"
     }
@@ -193,15 +193,19 @@ task dist(type: Zip) {
         include "application.properties"
     }
 }
-dist.dependsOn bootRepackage
-dist.dependsOn build
+zip.dependsOn bootRepackage
+zip.dependsOn build
 
 bintray {
-    user = System.getenv("BINTRAY_USER")
-    key = System.getenv("BINTRAY_KEY")
+    user = "thombergs"
+    key = "4626a202c40ce9ba76d9699df08b82c5f03fda9962ba94d6a7ebf2cc0c33e875"
+//    user = System.getenv("BINTRAY_USER")
+//    key = System.getenv("BINTRAY_KEY")
     filesSpec {
         into "."
-        from("build/distributions")
+        from("build/libs") {
+            include "*.zip"
+        }
     }
     publish = true
     pkg {
@@ -215,4 +219,4 @@ bintray {
     }
 }
 
-bintrayUpload.dependsOn dist
+bintrayUpload.dependsOn zip
