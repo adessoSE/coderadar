@@ -22,7 +22,7 @@ test:
     - find . -type d -regex ".**/build/reports/tests" -exec sh -c 'cp -a {} $CIRCLE_TEST_REPORTS/junit-html/`echo {} | cut -d / -f2`' \;
 
     - mkdir -p $CIRCLE_ARTIFACTS/build-artifacts
-    - cp -a server/coderadar-webapp/build/libs/coderadar*.jar $CIRCLE_ARTIFACTS/build-artifacts/
+    - cp -a server/coderadar-webapp/build/libs/coderadar*.war $CIRCLE_ARTIFACTS/build-artifacts/
 
 deployment:
   release:
