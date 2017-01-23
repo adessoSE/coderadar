@@ -6,6 +6,8 @@ apply plugin: "org.springframework.boot"
 apply plugin: "org.asciidoctor.convert"
 apply plugin: "org.ajoberstar.github-pages"
 apply plugin: "com.diffplug.gradle.spotless"
+apply plugin: "com.jfrog.bintray"
+apply plugin: "war"
 
 ext {
     snippetsDir = file("build/generated-snippets")
@@ -63,6 +65,11 @@ jar {
     }
 }
 
+war {
+    baseName = "coderadar"
+    version = project.version
+}
+
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-jpa:${version_spring_boot}"
     compile "org.springframework.boot:spring-boot-starter-web:${version_spring_boot}"
@@ -83,12 +90,14 @@ dependencies {
     compile "joda-time:joda-time:2.9.7"
     compile "org.passay:passay:1.2.0"
 
-
     compile project(":plugins:loc-analyzer-plugin")
     compile project(":plugins:checkstyle-analyzer-plugin")
 
     runtime "mysql:mysql-connector-java:5.1.6"
     runtime "com.googlecode.log4jdbc:log4jdbc:1.2"
+
+    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat"
+    providedRuntime group: 'org.apache.tomcat', name: 'tomcat-juli', version: property('tomcat.version')
 
     testCompile "org.springframework.boot:spring-boot-starter-test:${version_spring_boot}"
     testCompile "junit:junit:4.12"
@@ -135,6 +144,8 @@ bootRun {
                     "-Dcoderadar.scanIntervalInSeconds=30",
                     "-Dcoderadar.workdir=coderadar-workdir",
                     "-Dcoderadar.dateLocale=de_DE",
+                    "-Dcoderadar.access.token.durationInMinutes=15",
+                    "-Dcoderadar.refresh.token.durationInMinutes=86400", // 60 days
 
                     // hibernate
                     "-Dspring.jpa.hibernate.ddl-auto=create",
@@ -159,11 +170,7 @@ bootRun {
 //                    "-Dspring.datasource.driver-class-name=net.sf.log4jdbc.DriverSpy",
 //                    "-Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect",
 
-                    // authentication
-                    // Duration in minutes
-                    "-Dcoderadar.access.token.durationInMinutes=15",
-                    // 60 days
-                    "-Dcoderadar.refresh.token.durationInMinutes=86400"
+
             ]
 }
 
@@ -172,6 +179,41 @@ githubPages {
     targetBranch = "gh-pages"
     pages {
         from "build/docs/html5"
-        into "${version}/docs"
+        into "${baseVersion}/docs"
     }
 }
+
+task dist(type: Zip) {
+    archiveName "coderadar.${project.version}.zip"
+    from("build/libs") {
+        include "*.war"
+    }
+    from("src/main/config") {
+        include "application.properties"
+    }
+}
+dist.dependsOn bootRepackage
+dist.dependsOn build
+
+bintray {
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
+    filesSpec {
+        into version
+        from("build/distributions") {
+            include "coderadar.${project.version}.zip"
+        }
+    }
+    publish = true
+    pkg {
+        repo = 'releases'
+        name = 'coderadar'
+        userOrg = 'reflectoring'
+        version {
+            name = project.version
+            released = new Date()
+        }
+    }
+}
+
+bintrayUpload.dependsOn dist

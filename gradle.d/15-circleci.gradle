@@ -17,13 +17,12 @@ def getBuildVersion(String baseVersion) {
 
     if (project.isCiBuild) {
         if (project.isPullRequest) {
-            version += "-PR${project.pullRequestNumber}"
+            version += ".PR${project.pullRequestNumber}"
         }
-        version += "-${project.buildNumber}"
-        version += "-${project.gitCommitShort}"
+        version += ".${project.buildNumber}"
 
     } else {
-        version += "-local"
+        version += ".local"
     }
 }
 
