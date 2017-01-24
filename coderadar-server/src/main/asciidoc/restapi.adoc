@@ -186,8 +186,8 @@ To run an analysis on a project, you have to at least follow these steps:
   is omitted, an analysis will provide no results.
 . <<create-analyzer, Add at least one analyzer>> to your project. Each added analyzer will run over the
   files specified in the previous step and provide some code metrics.
-. <<creating-analyzing-job, Add an AnalyzingJob>> for your project. Once this is done, coderadar
-  will start to analyze all files in the commits defined by the strategy. Depending on the size of the code base
+. <<creating-analyzing-job, Add an Analyzing Job>> for your project. Once this is done, coderadar
+  will start to analyze all files in the commits defined by the job. Depending on the size of the code base
   and the number of configured analyzers, this may take some time to finish.
 
 === Project
@@ -580,8 +580,8 @@ You can list all metrics that have been measured for your project by calling the
 
 [NOTE]
 =====
-Metrics will become available as soon as you have provided an <<creating-analyzing-strategy,Analyzing Strategy>> for your project.
-At that moment, analysis of each commit defined in the strategy starts. Depending on how many commits that are,
+Metrics will become available as soon as you have provided an <<creating-analyzing-job,Analyzing Job>> for your project.
+At that moment, analysis of each commit defined in the job starts. Depending on how many commits that are,
 analysis will take a while.
 =====
 
@@ -623,8 +623,8 @@ that defines which metrics you are interested in.
 
 [NOTE]
 =====
-Metric values will become available as soon as you have provided an <<creating-analyzing-strategy,Analyzing Strategy>> for your project.
-At that moment, analysis of each commit defined in the strategy starts. Depending on how many commits that are,
+Metric values will become available as soon as you have provided an <<creating-analyzing-job,Analyzing Job>> for your project.
+At that moment, analysis of each commit defined in the job starts. Depending on how many commits that are,
 analysis will take a while.
 =====
 
