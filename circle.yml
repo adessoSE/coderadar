@@ -13,7 +13,10 @@ machine:
 test:
   override:
     - chmod +x gradlew
-    - ./gradlew --console=plain zip --stacktrace --info
+    - ./gradlew --console=plain zip --stacktrace
+
+    # prepare GitHub pages
+    - ./gradlew --stacktrace --console=plain preparePages
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
     - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
