@@ -22,7 +22,7 @@ public class DbUnitFactory {
 
   public static class AnalyzingStrategies {
     public static final String SINGLE_PROJECT_WITH_ANALYZING_STRATEGY =
-        "/dbunit/analyzingstrategy/singleProjectWithAnalyzingStrategy.xml";
+        "/dbunit/analyzingjob/singleProjectWithAnalyzingJob.xml";
   }
 
   public static class AnalyzerConfiguration {

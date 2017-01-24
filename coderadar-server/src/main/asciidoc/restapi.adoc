@@ -186,7 +186,7 @@ To run an analysis on a project, you have to at least follow these steps:
   is omitted, an analysis will provide no results.
 . <<create-analyzer, Add at least one analyzer>> to your project. Each added analyzer will run over the
   files specified in the previous step and provide some code metrics.
-. <<creating-analyzing-strategy, Add an AnalyzingStrategy>> for your project. Once this is done, coderadar
+. <<creating-analyzing-job, Add an AnalyzingJob>> for your project. Once this is done, coderadar
   will start to analyze all files in the commits defined by the strategy. Depending on the size of the code base
   and the number of configured analyzers, this may take some time to finish.
 
@@ -437,40 +437,47 @@ include::{snippets}/analyzerConfigurationFile/download/http-request.adoc[]
 
 include::{snippets}/analyzerConfigurationFile/download/http-response.adoc[]
 
-=== Analyzing Strategy
+=== Analyzing Job
 
-An Analyzing Strategy defines which commits of a project are to be analyzed. If there is no active
-Analyzing Strategy present for a project, no analysis will be performed at all. Once you provide
-an Analyzing Strategy, analysis jobs will be queued automatically for the commits defined within the strategy.
+By providing an Analyzing Job to coderadar, you can trigger an analysis of a Project's codebase. Note
+the following hints:
+
+* coderadar will automatically start to analyze the codebase once an Analyzing Job has been provided,
+unless the Analyzing Job is set to inactive.
+* Only one Analyzing Job can be active for a project at a time. You will have to wait until a running job
+is finished to start another one.
+* New incoming commits to the underlying git repository will automatically be analyzed, unless the Analyzing
+Job is set to inactive.
+
 
 ==== Structure
 
-include::{snippets}/strategy/create-update/request-fields.adoc[]
+include::{snippets}/analyzing-job/create-update/request-fields.adoc[]
 
 ==== Hypermedia Links
 
-include::{snippets}/strategy/create-update/links.adoc[]
+include::{snippets}/analyzing-job/create-update/links.adoc[]
 
-==== Setting a Project's Analyzing Strategy
-anchor:creating-analyzing-strategy[]
-
-===== Example Request
-
-include::{snippets}/strategy/create-update/http-request.adoc[]
-
-===== Example Response
-
-include::{snippets}/strategy/create-update/http-response.adoc[]
-
-==== Getting a Project's Analyzing Strategy
+==== Starting an Analyzing Job
+anchor:creating-analyzing-job[]
 
 ===== Example Request
 
-include::{snippets}/strategy/get/http-request.adoc[]
+include::{snippets}/analyzing-job/create-update/http-request.adoc[]
 
 ===== Example Response
 
-include::{snippets}/strategy/get/http-response.adoc[]
+include::{snippets}/analyzing-job/create-update/http-response.adoc[]
+
+==== Retrieving an Analyzing Job
+
+===== Example Request
+
+include::{snippets}/analyzing-job/get/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/analyzing-job/get/http-response.adoc[]
 
 === Quality Profile
 

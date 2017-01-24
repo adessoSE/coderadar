@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzingstrategy.domain;
+package org.wickedsource.coderadar.analyzingjob.domain;
 
 import java.util.Arrays;
 import org.slf4j.Logger;

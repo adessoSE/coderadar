@@ -1,6 +1,6 @@
 <dataset>
     <project/>
-    <analyzing_strategy/>
+    <analyzing_job/>
     <commit/>
     <commit_log_entry/>
     <file_identity/>
@@ -21,6 +21,6 @@
 
     <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
 
-    <analyzing_strategy id="1" project_id="1" from_date="2016-01-01 00:00:00" active="true"/>
+    <analyzing_job id="1" project_id="1" from_date="2016-01-01 00:00:00" active="true"/>
 
 </dataset>

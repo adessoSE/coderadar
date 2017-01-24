@@ -1,3 +1,3 @@
-package org.wickedsource.coderadar.analyzingstrategy.domain;
+package org.wickedsource.coderadar.analyzingjob.domain;
 
 public class ProjectResetException extends RuntimeException {}

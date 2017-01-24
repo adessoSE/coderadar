@@ -2,7 +2,7 @@
 // Diese Datei wurde mit der JavaTM Architecture for XML Binding(JAXB) Reference Implementation, v2.2.11 generiert 
 // Siehe <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
 // Änderungen an dieser Datei gehen bei einer Neukompilierung des Quellschemas verloren. 
-// Generiert: 2017.01.24 um 09:29:42 AM CET 
+// Generiert: 2017.01.24 um 10:39:08 PM CET 
 //
 
 
@@ -6323,24 +6323,24 @@ public class BugCollection {
              * 
              * <p>
              * Objects of the following type(s) are allowed in the list
-             * {@link JAXBElement }{@code <}{@link PackageMatcherType }{@code >}
              * {@link JAXBElement }{@code <}{@link OrMatcherType }{@code >}
-             * {@link JAXBElement }{@code <}{@link DesignationMatcherType }{@code >}
-             * {@link JAXBElement }{@code <}{@link LocalMatcherType }{@code >}
-             * {@link JAXBElement }{@code <}{@link LastVersionMatcherType }{@code >}
-             * {@link JAXBElement }{@code <}{@link BugPatternMatcherType }{@code >}
-             * {@link JAXBElement }{@code <}{@link MatcherType }{@code >}
              * {@link JAXBElement }{@code <}{@link ClassMatcherType }{@code >}
-             * {@link JAXBElement }{@code <}{@link MethodMatcherType }{@code >}
-             * {@link JAXBElement }{@code <}{@link BugCodeMatcherType }{@code >}
-             * {@link JAXBElement }{@code <}{@link FieldMatcherType }{@code >}
+             * {@link JAXBElement }{@code <}{@link PackageMatcherType }{@code >}
              * {@link JAXBElement }{@code <}{@link RankMatcherType }{@code >}
-             * {@link JAXBElement }{@code <}{@link FirstVersionMatcherType }{@code >}
-             * {@link JAXBElement }{@code <}{@link NotMatcherType }{@code >}
-             * {@link JAXBElement }{@code <}{@link BugMatcherType }{@code >}
              * {@link JAXBElement }{@code <}{@link AndMatcherType }{@code >}
-             * {@link JAXBElement }{@code <}{@link PriorityMatcherType }{@code >}
+             * {@link JAXBElement }{@code <}{@link BugCodeMatcherType }{@code >}
+             * {@link JAXBElement }{@code <}{@link BugMatcherType }{@code >}
+             * {@link JAXBElement }{@code <}{@link FieldMatcherType }{@code >}
+             * {@link JAXBElement }{@code <}{@link NotMatcherType }{@code >}
+             * {@link JAXBElement }{@code <}{@link LastVersionMatcherType }{@code >}
+             * {@link JAXBElement }{@code <}{@link LocalMatcherType }{@code >}
+             * {@link JAXBElement }{@code <}{@link DesignationMatcherType }{@code >}
+             * {@link JAXBElement }{@code <}{@link FirstVersionMatcherType }{@code >}
+             * {@link JAXBElement }{@code <}{@link MatcherType }{@code >}
              * {@link JAXBElement }{@code <}{@link MatchMatcherType }{@code >}
+             * {@link JAXBElement }{@code <}{@link PriorityMatcherType }{@code >}
+             * {@link JAXBElement }{@code <}{@link MethodMatcherType }{@code >}
+             * {@link JAXBElement }{@code <}{@link BugPatternMatcherType }{@code >}
              * 
              * 
              */

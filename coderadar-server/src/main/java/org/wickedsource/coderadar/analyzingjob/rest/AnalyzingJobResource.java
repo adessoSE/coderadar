@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzingstrategy.rest;
+package org.wickedsource.coderadar.analyzingjob.rest;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -6,7 +6,7 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 import org.springframework.hateoas.ResourceSupport;
 
-public class AnalyzingStrategyResource extends ResourceSupport {
+public class AnalyzingJobResource extends ResourceSupport {
 
   private Date fromDate;
 
@@ -15,9 +15,9 @@ public class AnalyzingStrategyResource extends ResourceSupport {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   private Boolean rescan;
 
-  public AnalyzingStrategyResource() {}
+  public AnalyzingJobResource() {}
 
-  public AnalyzingStrategyResource(Date fromDate, boolean active) {
+  public AnalyzingJobResource(Date fromDate, boolean active) {
     this.fromDate = fromDate;
     this.active = active;
   }

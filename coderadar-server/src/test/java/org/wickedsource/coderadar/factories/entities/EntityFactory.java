@@ -26,8 +26,8 @@ public class EntityFactory {
     return new AnalyzerFactory();
   }
 
-  public static AnalyzingStrategyFactory analyzingStrategy() {
-    return new AnalyzingStrategyFactory();
+  public static AnalyzingJobFactory analyzingJob() {
+    return new AnalyzingJobFactory();
   }
 
   public static UserFactory user() {

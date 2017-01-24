@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationFileRepository;
 import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationRepository;
-import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategyRepository;
+import org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJobRepository;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociationRepository;
 import org.wickedsource.coderadar.commit.domain.ModuleAssociationRepository;
@@ -24,7 +24,7 @@ public class ProjectDeleter {
 
   private Logger logger = LoggerFactory.getLogger(ProjectDeleter.class);
 
-  private AnalyzingStrategyRepository analyzingStrategyRepository;
+  private AnalyzingJobRepository analyzingJobRepository;
 
   private CommitRepository commitRepository;
 
@@ -56,7 +56,7 @@ public class ProjectDeleter {
 
   @Autowired
   public ProjectDeleter(
-      AnalyzingStrategyRepository analyzingStrategyRepository,
+      AnalyzingJobRepository analyzingJobRepository,
       CommitRepository commitRepository,
       FilePatternRepository filePatternRepository,
       ProjectRepository projectRepository,
@@ -71,7 +71,7 @@ public class ProjectDeleter {
       FileIdentityRepository fileIdentityRepository,
       ModuleRepository moduleRepository,
       ModuleAssociationRepository moduleAssociationRepository) {
-    this.analyzingStrategyRepository = analyzingStrategyRepository;
+    this.analyzingJobRepository = analyzingJobRepository;
     this.commitRepository = commitRepository;
     this.filePatternRepository = filePatternRepository;
     this.projectRepository = projectRepository;
@@ -97,7 +97,7 @@ public class ProjectDeleter {
         analyzerConfigurationRepository.deleteByProjectId(id));
     logger.debug("deleted {} Job entities", jobRepository.deleteByProjectId(id));
     logger.debug(
-        "deleted {} AnalyzingStrategy entities", analyzingStrategyRepository.deleteByProjectId(id));
+        "deleted {} AnalyzingJob entities", analyzingJobRepository.deleteByProjectId(id));
     logger.debug(
         "deleted {} CommitLogEntry entities", commitLogEntryRepository.deleteByProjectId(id));
     logger.debug("deleted {} MetricValue entities", metricValueRepository.deleteByProjectId(id));

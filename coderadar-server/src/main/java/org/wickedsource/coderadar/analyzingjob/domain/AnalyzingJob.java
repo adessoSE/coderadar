@@ -1,13 +1,15 @@
-package org.wickedsource.coderadar.analyzingstrategy.domain;
+package org.wickedsource.coderadar.analyzingjob.domain;
 
 import java.util.Date;
 import javax.persistence.*;
 import org.wickedsource.coderadar.project.domain.Project;
 
-/** Defines which commits of a project are to be analyzed. */
+/** A job that defines which commits are to be analyzed. Storing an entity of this type in the database
+ * automatically triggers analysis of a project's code base.
+ */
 @Entity
 @Table
-public class AnalyzingStrategy {
+public class AnalyzingJob {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

@@ -10,7 +10,7 @@
         <mapping class="org.wickedsource.coderadar.job.analyze.AnalyzeCommitJob"/>
         <mapping class="org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration"/>
         <mapping class="org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationFile"/>
-        <mapping class="org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategy"/>
+        <mapping class="org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJob"/>
         <mapping class="org.wickedsource.coderadar.commit.domain.Commit"/>
         <mapping class="org.wickedsource.coderadar.file.domain.CommitLogEntry"/>
         <mapping class="org.wickedsource.coderadar.commit.domain.CommitToFileAssociation"/>
