@@ -178,10 +178,21 @@ githubPages {
     repoUri = "git@github.com:reflectoring/coderadar.git"
     targetBranch = "gh-pages"
     pages {
-        from "build/docs/html5"
+        from "build/pages"
         into "current/docs"
     }
 }
+
+task preparePages() {
+    doLast {
+        copy {
+            from "build/docs/html5"
+            into "build/pages"
+        }
+    }
+}
+
+preparePages.dependsOn asciidoctor
 
 task zip(type: Zip) {
     archiveName "coderadar-${project.version}.zip"
