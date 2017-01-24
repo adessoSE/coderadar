@@ -1,4 +1,4 @@
-# analyzer-plugin-api
+# coderadar-plugin-api
 
 This component contains the API for creating analyzer plugins.
 
@@ -8,9 +8,9 @@ These metrics are then accessible via the coderadar API so that users can
 view the metrics.
 
 The following types of plugins can be created by implementing an interface:
-* [**SourceCodeAnalyzerPlugins**](https://github.com/reflectoring/coderadar/blob/master/plugins/analyzer-plugin-api/src/main/java/org/wickedsource/coderadar/analyzer/api/SourceCodeFileAnalyzerPlugin.java): 
+* [**SourceCodeAnalyzerPlugins**](https://github.com/reflectoring/coderadar/blob/master/coderadar-plugin-api/src/main/java/org/wickedsource/coderadar/analyzer/api/SourceCodeFileAnalyzerPlugin.java): 
   a plugin that takes a source code file and calculates metrics from it.
-* [**AdapterPlugins**](https://github.com/reflectoring/coderadar/blob/master/plugins/analyzer-plugin-api/src/main/java/org/wickedsource/coderadar/analyzer/api/AdapterPlugin.java):
+* [**AdapterPlugins**](https://github.com/reflectoring/coderadar/blob/master/coderadar-plugin-api/src/main/java/org/wickedsource/coderadar/analyzer/api/AdapterPlugin.java):
   a plugin that takes a report file from some external source and maps it into 
   coderadar metrics.
   
