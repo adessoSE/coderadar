@@ -25,8 +25,8 @@ import org.wickedsource.coderadar.analyzer.api.Metric;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.domain.*;
 import org.wickedsource.coderadar.analyzer.match.FileMatchingPattern;
-import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategy;
-import org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategyRepository;
+import org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJob;
+import org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJobRepository;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.WorkdirManager;
@@ -69,7 +69,7 @@ public class CommitAnalyzer {
 
   private FindingRepository findingRepository;
 
-  private AnalyzingStrategyRepository analyzingStrategyRepository;
+  private AnalyzingJobRepository analyzingJobRepository;
 
   private static final Set<DiffEntry.ChangeType> CHANGES_TO_ANALYZE =
       EnumSet.of(
@@ -91,7 +91,7 @@ public class CommitAnalyzer {
       FileRepository fileRepository,
       MetricValueRepository metricValueRepository,
       FindingRepository findingRepository,
-      AnalyzingStrategyRepository analyzingStrategyRepository) {
+      AnalyzingJobRepository analyzingJobRepository) {
     this.commitRepository = commitRepository;
     this.workdirManager = workdirManager;
     this.filePatternRepository = filePatternRepository;
@@ -103,7 +103,7 @@ public class CommitAnalyzer {
     this.fileRepository = fileRepository;
     this.metricValueRepository = metricValueRepository;
     this.findingRepository = findingRepository;
-    this.analyzingStrategyRepository = analyzingStrategyRepository;
+    this.analyzingJobRepository = analyzingJobRepository;
   }
 
   public void analyzeCommit(Commit commit) {
@@ -114,7 +114,7 @@ public class CommitAnalyzer {
     Path gitRoot = workdirManager.getLocalGitRoot(commit.getProject().getName());
     try {
       Git gitClient = Git.open(gitRoot.toFile());
-      boolean isFirstCommit = isFirstCommitInAnalyzingStrategy(commit);
+      boolean isFirstCommit = isFirstCommitInAnalyzingJob(commit);
 
       List<SourceCodeFileAnalyzerPlugin> analyzers = getAnalyzersForProject(commit.getProject());
 
@@ -142,9 +142,9 @@ public class CommitAnalyzer {
     commitRepository.save(commit);
   }
 
-  private boolean isFirstCommitInAnalyzingStrategy(Commit commit) {
-    AnalyzingStrategy strategy =
-        analyzingStrategyRepository.findByProjectId(commit.getProject().getId());
+  private boolean isFirstCommitInAnalyzingJob(Commit commit) {
+    AnalyzingJob strategy =
+        analyzingJobRepository.findByProjectId(commit.getProject().getId());
 
     if (strategy.getFromDate() == null) {
       return false;

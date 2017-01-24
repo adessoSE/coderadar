@@ -55,7 +55,7 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
         "project",
         "analyzer_configuration",
         "analyzer_configuration_file",
-        "analyzing_strategy",
+        "analyzing_job",
         "commit",
         "commit_log_entry",
         "file",

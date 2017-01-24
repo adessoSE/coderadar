@@ -7,7 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.analyzer.rest.analyzerconfiguration.AnalyzerConfigurationController;
-import org.wickedsource.coderadar.analyzingstrategy.rest.AnalyzingStrategyController;
+import org.wickedsource.coderadar.analyzingjob.rest.AnalyzingJobController;
 import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
 import org.wickedsource.coderadar.filepattern.rest.FilePatternController;
 import org.wickedsource.coderadar.project.domain.Project;
@@ -39,7 +39,7 @@ public class ProjectResourceAssembler extends AbstractResourceAssembler<Project,
                     .getAnalyzerConfigurationsForProject(project.getId()))
             .withRel("analyzers"));
     resource.add(
-        linkTo(methodOn(AnalyzingStrategyController.class).getAnalyzingStrategy(project.getId()))
+        linkTo(methodOn(AnalyzingJobController.class).getAnalyzingJob(project.getId()))
             .withRel("strategy"));
     return resource;
   }

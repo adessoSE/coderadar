@@ -20,8 +20,8 @@ public class ResourceFactory {
     return new AnalyzerConfigurationResourceFactory();
   }
 
-  public static AnalyzingStrategyResourceFactory analyzingStrategyResource() {
-    return new AnalyzingStrategyResourceFactory();
+  public static AnalyzingJobResourceFactory analyzingJobResource() {
+    return new AnalyzingJobResourceFactory();
   }
 
   public static QualityProfileResourceFactory qualityProfileResource() {

@@ -7,7 +7,7 @@
         <class>org.wickedsource.coderadar.job.analyze.AnalyzeCommitJob</class>
         <class>org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration</class>
         <class>org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationFile</class>
-        <class>org.wickedsource.coderadar.analyzingstrategy.domain.AnalyzingStrategy</class>
+        <class>org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJob</class>
         <class>org.wickedsource.coderadar.commit.domain.Commit</class>
         <class>org.wickedsource.coderadar.file.domain.CommitLogEntry</class>
         <class>org.wickedsource.coderadar.commit.domain.CommitToFileAssociation</class>
