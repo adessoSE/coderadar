@@ -17,7 +17,7 @@ dependencies {
     jaxb 'com.sun.xml.bind:jaxb-xjc:2.2.11'
     jaxb 'com.sun.xml.bind:jaxb-impl:2.2.11'
     jaxb 'javax.xml.bind:jaxb-api:2.2.12-b141001.1542'
-    compile project(':plugins:analyzer-plugin-api')
+    compile project(':coderadar-plugin-api')
     compile 'com.google.code.findbugs:findbugs:3.0.1'
     compile 'commons-io:commons-io:2.4'
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.12'
@@ -28,7 +28,7 @@ dependencies {
 sourceSets.main.java.srcDirs generatedSource
 
 jaxb {
-    xsdDir = 'plugins/findbugs-adapter-plugin/src/main/resources/xsd'
+    xsdDir = 'coderadar-plugins/findbugs-adapter-plugin/src/main/resources/xsd'
     xjc {
         destinationDir = generatedSource
         generatePackage = 'org.wickedsource.coderadar.analyzer.findbugs.xsd'

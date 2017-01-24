@@ -1,4 +1,4 @@
-# coderadar-webapp
+# server
 This component contains the coderadar server which is a
 web application running on Spring Boot. 
 

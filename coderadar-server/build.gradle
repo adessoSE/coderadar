@@ -90,8 +90,8 @@ dependencies {
     compile "joda-time:joda-time:2.9.7"
     compile "org.passay:passay:1.2.0"
 
-    compile project(":plugins:loc-analyzer-plugin")
-    compile project(":plugins:checkstyle-analyzer-plugin")
+    compile project(":coderadar-plugins:loc-analyzer-plugin")
+    compile project(":coderadar-plugins:checkstyle-analyzer-plugin")
 
     runtime "mysql:mysql-connector-java:5.1.6"
     runtime "com.googlecode.log4jdbc:log4jdbc:1.2"

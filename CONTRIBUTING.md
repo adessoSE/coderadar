@@ -11,7 +11,7 @@ any questions, feel free to get in touch.
 Major components are documented via a README file in the folder of the component.
 The following list links to those READMEs:
 
-* [coderadar-webapp](https://github.com/reflectoring/coderadar/tree/master/server/coderadar-webapp): the coderadar server
+* [server](https://github.com/reflectoring/coderadar/tree/master/server): the coderadar server
 * [analyzer-plugin-api](https://github.com/reflectoring/coderadar/tree/master/plugins/analyzer-plugin-api): API classes for creating analyzers
 * [plugins](https://github.com/reflectoring/coderadar/tree/master/plugins): analyzer plugins that are by default contained in the coderadar server
 
@@ -57,7 +57,7 @@ is made up of the following elements:
 * Documentation of the REST API. This documentation is made with [AsciiDoctor](http://asciidoctor.org/) and
   [Spring RestDocs](https://projects.spring.io/spring-restdocs/). Example requests
   and responses are generated automatically from the integration tests covering
-  the REST controllers. The documentation files are [here](https://github.com/reflectoring/coderadar/tree/master/server/coderadar-webapp/src/main/asciidoc).
+  the REST controllers. The documentation files are [here](https://github.com/reflectoring/coderadar/tree/master/server/src/main/asciidoc).
 * README.md files in the folders of all main components
 * Javadoc: please provide sensible javadoc of at least public API
 * This contribution guide: this guide is not carved in stone, so when things change,
@@ -70,7 +70,7 @@ Simply run `gradlew build`.
 
 ### Starting the coderadar server
 * install a local database (MySQL is preconfigured, so if you want to reduce configuration time, use MySQL)
-* Open the file `build.gradle` in the `coderadar-webapp` component and configure the 
+* Open the file `build.gradle` in the `server` component and configure the 
   access to your database by changing the configuration parameters `spring.datasource.*` in
   the `bootrun` section
 * run `gradlew bootrun` from the project directory
