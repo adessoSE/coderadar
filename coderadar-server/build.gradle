@@ -179,7 +179,7 @@ githubPages {
     targetBranch = "gh-pages"
     pages {
         from "build/docs/html5"
-        into "${baseVersion}/docs"
+        into "current/docs"
     }
 }
 
