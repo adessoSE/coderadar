@@ -1,8 +1,8 @@
-include 'plugins:analyzer-plugin-api'
-include 'plugins:loc-analyzer-plugin'
-include 'plugins:todo-analyzer-plugin'
-include 'plugins:checkstyle-analyzer-plugin'
-include 'plugins:findbugs-adapter-plugin'
-include 'server:coderadar-webapp'
+include 'coderadar-plugin-api'
+include 'coderadar-plugins:loc-analyzer-plugin'
+include 'coderadar-plugins:todo-analyzer-plugin'
+include 'coderadar-plugins:checkstyle-analyzer-plugin'
+include 'coderadar-plugins:findbugs-adapter-plugin'
+include 'coderadar-server'
 
 

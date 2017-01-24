@@ -2,7 +2,7 @@
 /.gradle
 /*.iws
 /*.ipr
-/plugins/findbugs-adapter-plugin/src/gen/java
+/coderadar-plugins/findbugs-adapter-plugin/src/gen/java
 /schema/episodes
 *.iml
 *.jar
