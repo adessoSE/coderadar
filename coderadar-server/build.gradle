@@ -115,62 +115,19 @@ springBoot {
     executable = true
 }
 
+Properties localBootRunProperties() {
+    Properties p = new Properties();
+    p.load(new FileInputStream(file(project.projectDir).absolutePath + "/local.application.properties"))
+    return p;
+}
+
 bootRun {
+    systemProperties = localBootRunProperties()
     jvmArgs =
             [
                     // debugging
                     "-Xdebug",
                     "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
-
-                    // logging
-                    "-Dlogging.level.org.wickedsource.coderadar=DEBUG",
-                    "-Dlogging.level.org.wickedsource.coderadar.job.JobLogger=INFO",
-                    "-Dlogging.level.org.hibernate.SQL=ERROR",
-                    "-Dlogging.level.org.hibernate.type=ERROR",
-                    "-Dlogging.level.org.reflections=ERROR",
-
-                    // log4jdbc for logging SQL queries
-                    "-Dlogging.level.jdbc.sqlonly=INFO",
-                    "-Dlogging.level.jdbc.sqltiming=ERROR",
-                    "-Dlogging.level.jdbc.audit=ERROR",
-                    "-Dlogging.level.jdbc.connection=ERROR",
-                    "-Dlogging.level.jdbc.resultset=ERROR",
-
-                    "-Dlogging.file=coderadar.log",
-
-                    // coderadar settings for server instance
-                    "-Dcoderadar.master=true",
-                    "-Dcoderadar.slave=true",
-                    "-Dcoderadar.scanIntervalInSeconds=30",
-                    "-Dcoderadar.workdir=coderadar-workdir",
-                    "-Dcoderadar.dateLocale=de_DE",
-                    "-Dcoderadar.access.token.durationInMinutes=15",
-                    "-Dcoderadar.refresh.token.durationInMinutes=86400", // 60 days
-
-                    // hibernate
-                    "-Dspring.jpa.hibernate.ddl-auto=create",
-
-                    // file based H2 datasource
-//                    "-Dspring.datasource.url=jdbc:h2:file:C:/coderadar/database",
-//                    "-Dspring.datasource.username=sa",
-//                    "-Dspring.datasource.password=sa",
-//                    "-Dspring.datasource.driverClassName=org.h2.Driver",
-
-                    // MySQL datasource
-                    "-Dspring.datasource.url=jdbc:mysql://localhost/coderadar",
-                    "-Dspring.datasource.username=coderadar",
-                    "-Dspring.datasource.password=coderadar",
-                    "-Dspring.datasource.driver-class-name=com.mysql.jdbc.Driver",
-                    "-Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect",
-
-                    // MySQL datasource with log4jdbc driver spy to log SQL output
-//                    "-Dspring.datasource.url=jdbc:log4jdbc:mysql://localhost/coderadar",
-//                    "-Dspring.datasource.username=coderadar",
-//                    "-Dspring.datasource.password=coderadar",
-//                    "-Dspring.datasource.driver-class-name=net.sf.log4jdbc.DriverSpy",
-//                    "-Dspring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect",
-
-
             ]
 }
 
@@ -178,10 +135,21 @@ githubPages {
     repoUri = "git@github.com:reflectoring/coderadar.git"
     targetBranch = "gh-pages"
     pages {
-        from "build/docs/html5"
+        from "build/pages"
         into "current/docs"
     }
 }
+
+task preparePages() {
+    doLast {
+        copy {
+            from "build/docs/html5"
+            into "build/pages"
+        }
+    }
+}
+
+preparePages.dependsOn asciidoctor
 
 task zip(type: Zip) {
     archiveName "coderadar-${project.version}.zip"

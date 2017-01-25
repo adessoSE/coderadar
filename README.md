@@ -35,8 +35,8 @@ Basic User Interface | Build a user interface that supports basic use cases like
 Minimum Viable Product | Add all features that are needed for coderadar to work in a real environment, like user management, security and administration | 
 
 ## Documentation
-* [REST API documentation](http://reflectoring.github.io/coderadar/1.0.0-SNAPSHOT/docs/restapi.html).
-* [Administration Guide](http://reflectoring.github.io/coderadar/1.0.0-SNAPSHOT/docs/admin.html)
+* [REST API documentation](http://reflectoring.github.io/coderadar/current/docs/restapi.html).
+* [Administration Guide](http://reflectoring.github.io/coderadar/current/docs/admin.html)
 
 ## Want to contribute?
 See the [contribution guide](https://github.com/reflectoring/coderadar/blob/master/CONTRIBUTING.md).

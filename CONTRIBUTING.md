@@ -70,9 +70,8 @@ Simply run `gradlew build`.
 
 ### Starting the coderadar server
 * install a local database (MySQL is preconfigured, so if you want to reduce configuration time, use MySQL)
-* Open the file `build.gradle` in the `coderadar-server` component and configure the 
-  access to your database by changing the configuration parameters `spring.datasource.*` in
-  the `bootrun` section
+* copy the file `coderadar-server/local.application.properties.template` into a file named `local.application.properties`
+  in the same folder and edit the configuration parameters in that file for your local environment and database
 * run `gradlew bootrun` from the project directory
 * the coderadar server will be accessible on `localhost:8080` by default
 
