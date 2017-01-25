@@ -52,6 +52,8 @@ public class DbUnitFactory {
         "/dbunit/module/singleProjectWithModules.xml";
     public static final String SINGLE_PROJECT_WITH_METRICS_AND_MODULES =
         "/dbunit/module/singleProjectWithMetricsAndModules.xml";
+    public static final String MODULE_ASSOCIATION =
+            "/dbunit/module/moduleAssociation.xml";
   }
 
   public static class QualityProfiles {

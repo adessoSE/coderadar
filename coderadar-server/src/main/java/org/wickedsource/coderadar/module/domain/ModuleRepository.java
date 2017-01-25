@@ -17,7 +17,7 @@ public interface ModuleRepository extends CrudRepository<Module, Long> {
   Page<Module> findByProjectId(Long projectId, Pageable pageable);
 
   @Query(
-      "select a from CommitToFileAssociation a where substring(a.id.file.filepath, 1, length(:modulePath)) = :modulePath order by a.id.file.filepath")
+      "select a from CommitToFileAssociation a where a.id.file.filepath LIKE CONCAT(:modulePath,'/%') order by a.id.file.filepath")
   List<CommitToFileAssociation> findFilesByModulePath(@Param("modulePath") String modulePath);
 
   @Query("select a from CommitToFileAssociation a join a.modules m where m.id = :moduleId")
@@ -25,7 +25,7 @@ public interface ModuleRepository extends CrudRepository<Module, Long> {
 
   /** Lists all Modules that are a parent path of the specified file path. */
   @Query(
-      "select m from Module m where m.path = substring(:filepath, 1, length(m.path)) order by m.path")
+      "select m from Module m where :filepath LIKE CONCAT(m.path, '/%') order by m.path")
   List<Module> findModulesForFile(@Param("filepath") String filepath);
 
   int deleteByProjectId(Long id);
