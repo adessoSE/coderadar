@@ -117,20 +117,24 @@ springBoot {
 
 def Properties localBootRunProperties() {
     Properties p = new Properties();
-    if(!isCiBuild){
-        p.load(new FileInputStream(file(project.projectDir).absolutePath + "/local.application.properties"))
-    }
+    p.load(new FileInputStream(file(project.projectDir).absolutePath + "/local.application.properties"))
     return p;
 }
 
 bootRun {
-    systemProperties = localBootRunProperties()
     jvmArgs =
             [
                     // debugging
                     "-Xdebug",
                     "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
             ]
+    doFirst {
+        // Loading the local application properties from file.
+        // We cannot do this in the configuration phase, otherwise all tasks
+        // would fail when the file is missing. So, we do it first thing
+        // in the execution phase.
+        bootRun.systemProperties = localBootRunProperties()
+    }
 }
 
 githubPages {
