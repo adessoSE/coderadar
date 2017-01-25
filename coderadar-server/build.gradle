@@ -115,9 +115,11 @@ springBoot {
     executable = true
 }
 
-Properties localBootRunProperties() {
+def Properties localBootRunProperties() {
     Properties p = new Properties();
-    p.load(new FileInputStream(file(project.projectDir).absolutePath + "/local.application.properties"))
+    if(!isCiBuild){
+        p.load(new FileInputStream(file(project.projectDir).absolutePath + "/local.application.properties"))
+    }
     return p;
 }
 
