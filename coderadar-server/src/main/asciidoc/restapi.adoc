@@ -12,7 +12,13 @@ v{version}, {date}
 [introduction]
 == Introduction
 
-The coderadar server is a tool for continuous source code analysis. This document describes the REST API of the coderadar server.
+coderadar server is a tool for continuous source code analysis. This document describes the REST API of coderadar.
+The REST API may for example be accessed by the following clients:
+
+* applications that provide a user interface for coderadar (like coderadar's own user interface)
+* third-party applications or tools that want to integrate data provided by coderadar
+
+This guide is aimed at developers of such applications.
 
 === Usage of HTTP Verbs
 
