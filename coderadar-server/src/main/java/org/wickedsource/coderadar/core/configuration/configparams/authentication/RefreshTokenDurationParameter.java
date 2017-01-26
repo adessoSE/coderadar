@@ -1,23 +1,25 @@
-package org.wickedsource.coderadar.core.configuration.configparams;
+package org.wickedsource.coderadar.core.configuration.configparams.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.wickedsource.coderadar.core.configuration.configparams.ConfigurationParameter;
+import org.wickedsource.coderadar.core.configuration.configparams.ParameterValidationError;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-/** Configures the number of minutes of the validity for the authentication access token. */
+/** Configures the number of minutes the authentication refresh token is valid. */
 @Component
-public class AccessTokenDurationParameter implements ConfigurationParameter<Integer> {
+public class RefreshTokenDurationParameter implements ConfigurationParameter<Integer> {
 
-  public static final String NAME = "coderadar.access.token.durationInMinutes";
+  public static final String NAME = "coderadar.authentication.refreshToken.durationInMinutes";
 
   private Environment environment;
 
   @Autowired
-  public AccessTokenDurationParameter(Environment environment) {
+  public RefreshTokenDurationParameter(Environment environment) {
     this.environment = environment;
   }
 
@@ -37,7 +39,7 @@ public class AccessTokenDurationParameter implements ConfigurationParameter<Inte
 
   @Override
   public Optional<Integer> getDefaultValue() {
-    return Optional.of(15);
+    return Optional.of(86400);
   }
 
   @Override

@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
 import org.wickedsource.coderadar.security.service.TokenService;
 
 @Configuration
@@ -20,43 +21,55 @@ import org.wickedsource.coderadar.security.service.TokenService;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-  @Autowired private UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
 
-  @Autowired private TokenService tokenService;
+    private TokenService tokenService;
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    // user CoderadarUserDetailService for authentication
-    auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
-  }
+    private CoderadarConfiguration coderadarConfiguration;
 
-  @Bean
-  public PasswordEncoder getPasswordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Autowired
+    public CoderadarSecurityConfiguration(UserDetailsService userDetailsService, TokenService tokenService, CoderadarConfiguration coderadarConfiguration) {
+        this.userDetailsService = userDetailsService;
+        this.tokenService = tokenService;
+        this.coderadarConfiguration = coderadarConfiguration;
+    }
 
-  @Bean
-  public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
-    return new AuthenticationTokenFilter(tokenService);
-  }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        // user CoderadarUserDetailService for authentication
+        auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
+    }
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http.csrf()
-        .disable()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeRequests()
+    @Bean
+    public PasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-        // only these endpoints can be called without authentication
-        .antMatchers("/actuator", "/user/auth", "/user/registration", "/user/refresh")
-        .permitAll()
-        .anyRequest()
-        .authenticated();
+    @Bean
+    public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+        return new AuthenticationTokenFilter(tokenService);
+    }
 
-    // put JSON Web Token authentication before other ones
-    http.addFilterBefore(
-        authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
-  }
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf()
+                .disable();
+
+        if (coderadarConfiguration.isAuthenticationEnabled()) {
+            http.sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                    .authorizeRequests()
+
+                    // only these endpoints can be called without authentication
+                    .antMatchers("/actuator", "/user/auth", "/user/registration", "/user/refresh")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated();
+
+            // put JSON Web Token authentication before other ones
+            http.addFilterBefore(
+                    authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+        }
+    }
 }

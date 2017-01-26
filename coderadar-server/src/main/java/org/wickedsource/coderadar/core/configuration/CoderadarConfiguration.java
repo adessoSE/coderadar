@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.core.configuration.configparams.*;
+import org.wickedsource.coderadar.core.configuration.configparams.authentication.AccessTokenDurationParameter;
+import org.wickedsource.coderadar.core.configuration.configparams.authentication.AuthenticationEnabledParameter;
+import org.wickedsource.coderadar.core.configuration.configparams.authentication.RefreshTokenDurationParameter;
 
 /** Provides access to all configuration parameters of the coderadar application. */
 @Component
@@ -36,6 +39,8 @@ public class CoderadarConfiguration {
 
   private RefreshTokenDurationParameter refreshTokenDuration;
 
+  private AuthenticationEnabledParameter authenticationEnabled;
+
   @Autowired
   public CoderadarConfiguration(
       MasterConfigurationParameter master,
@@ -44,7 +49,9 @@ public class CoderadarConfiguration {
       ScanIntervalConfigurationParameter scanInterval,
       DateLocaleConfigurationParameter dateLocale,
       AccessTokenDurationParameter accessTokenDuration,
-      RefreshTokenDurationParameter refreshTokenDuration) {
+      RefreshTokenDurationParameter refreshTokenDuration,
+      AuthenticationEnabledParameter authenticationEnabled) {
+
     this.master = master;
     this.slave = slave;
     this.workdir = workdir;
@@ -52,6 +59,8 @@ public class CoderadarConfiguration {
     this.dateLocale = dateLocale;
     this.accessTokenDuration = accessTokenDuration;
     this.refreshTokenDuration = refreshTokenDuration;
+    this.authenticationEnabled = authenticationEnabled;
+
     this.configurationParameters.add(master);
     this.configurationParameters.add(slave);
     this.configurationParameters.add(workdir);
@@ -59,6 +68,7 @@ public class CoderadarConfiguration {
     this.configurationParameters.add(dateLocale);
     this.configurationParameters.add(accessTokenDuration);
     this.configurationParameters.add(refreshTokenDuration);
+    this.configurationParameters.add(authenticationEnabled);
   }
 
   @PostConstruct
@@ -157,5 +167,10 @@ public class CoderadarConfiguration {
   /** @see RefreshTokenDurationParameter */
   public Integer getRefreshTokenDuration() {
     return refreshTokenDuration.getValue().get();
+  }
+
+  /** @see AuthenticationEnabledParameter */
+  public Boolean isAuthenticationEnabled(){
+    return authenticationEnabled.getValue().get();
   }
 }
