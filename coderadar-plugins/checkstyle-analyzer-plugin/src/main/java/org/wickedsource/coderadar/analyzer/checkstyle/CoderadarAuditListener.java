@@ -43,7 +43,6 @@ public class CoderadarAuditListener implements AuditListener {
             Finding finding = new Finding(evt.getLine(), evt.getLine(), evt.getColumn(), evt.getColumn());
             Long metricCount = metricCountExtractor.extractMetricCount(evt);
             metrics.addFinding(metric, finding, metricCount);
-            System.out.println(String.format("%s;%s", evt.getSourceName(), evt.getMessage()));
         }
     }
 
