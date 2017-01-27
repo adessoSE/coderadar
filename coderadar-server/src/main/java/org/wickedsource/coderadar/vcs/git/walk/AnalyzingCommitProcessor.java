@@ -39,7 +39,8 @@ public class AnalyzingCommitProcessor implements CommitProcessor {
   }
 
   @Override
-  public void processCommit(Git gitClient, RevCommit commit) {
+  public void processCommit(Git gitClient, RevCommitWithSequenceNumber commitWithSequenceNumber) {
+    RevCommit commit = commitWithSequenceNumber.getCommit();
     try {
       walkFilesInCommit(gitClient, commit, analyzers, metricsProcessor);
     } catch (IOException e) {

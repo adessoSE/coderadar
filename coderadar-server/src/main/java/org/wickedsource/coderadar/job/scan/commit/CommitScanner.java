@@ -10,7 +10,6 @@ import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
 import org.wickedsource.coderadar.project.domain.Project;
-import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
 import org.wickedsource.coderadar.vcs.git.walk.AllCommitsWalker;
 
 @Service
@@ -22,23 +21,17 @@ public class CommitScanner {
 
   private LocalGitRepositoryUpdater updater;
 
-  private GitCommitFinder commitFinder;
-
   @Autowired
-  public CommitScanner(
-      CommitRepository commitRepository,
-      LocalGitRepositoryUpdater updater,
-      GitCommitFinder commitFinder) {
+  public CommitScanner(CommitRepository commitRepository, LocalGitRepositoryUpdater updater) {
     this.commitRepository = commitRepository;
     this.updater = updater;
-    this.commitFinder = commitFinder;
   }
 
   /**
    * Scans the local GIT repository of the specified project and stores metadata about each commit
    * in the database. If the local GIT repository does not exist, the remote repository of the
    * project is cloned into a local repository first. If it exists, it will be updated to the state
-   * of the remote repository.
+   * of the remote repository before scanning.
    *
    * @param project he project whose repository to scan.
    * @return File object of the local GIT repository.
@@ -54,10 +47,10 @@ public class CommitScanner {
         commitRepository.findTop1ByProjectIdOrderByTimestampDesc(project.getId());
     AllCommitsWalker walker = new AllCommitsWalker();
     if (lastKnownCommit != null) {
-      walker.stopAtCommit(lastKnownCommit.getName());
+      walker.setLastKnownCommitName(lastKnownCommit.getName());
     }
     PersistingCommitProcessor commitProcessor =
-        new PersistingCommitProcessor(commitRepository, project, commitFinder);
+        new PersistingCommitProcessor(commitRepository, project);
     walker.walk(gitClient, commitProcessor);
     gitClient.getRepository().close();
     logger.info(
