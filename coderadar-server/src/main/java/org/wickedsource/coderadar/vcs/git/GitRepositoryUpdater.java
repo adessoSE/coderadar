@@ -15,10 +15,10 @@ import org.wickedsource.coderadar.vcs.RepositoryUpdater;
 @Service
 public class GitRepositoryUpdater implements RepositoryUpdater {
 
-  private GitRepositoryReverter reverter;
+  private GitRepositoryResetter reverter;
 
   @Autowired
-  public GitRepositoryUpdater(GitRepositoryReverter reverter) {
+  public GitRepositoryUpdater(GitRepositoryResetter reverter) {
     this.reverter = reverter;
   }
 
@@ -29,7 +29,7 @@ public class GitRepositoryUpdater implements RepositoryUpdater {
     } catch (CheckoutConflictException e) {
       // When having a checkout conflict, someone or something fiddled with the working directory.
       // Since the working directory is designed to be read only, we just revert it and try again.
-      reverter.revertRepository(repositoryRoot);
+      reverter.reset(repositoryRoot);
       try {
         return updateInternal(repositoryRoot);
       } catch (Exception e2) {
