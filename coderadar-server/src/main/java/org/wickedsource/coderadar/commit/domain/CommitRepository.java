@@ -10,15 +10,15 @@ import org.wickedsource.coderadar.job.core.ProcessingStatus;
 
 public interface CommitRepository extends PagingAndSortingRepository<Commit, Long> {
 
-  Commit findTop1ByProjectIdOrderByTimestampDesc(Long projectId);
+  Commit findTop1ByProjectIdOrderBySequenceNumberDesc(Long projectId);
 
   List<Commit> findByScannedFalse();
 
-  List<Commit> findByProjectIdAndScannedTrueAndMergedFalseOrderByTimestamp(long projectId);
+  List<Commit> findByProjectIdAndScannedTrueAndMergedFalseOrderBySequenceNumber(long projectId);
 
-  int countByProjectIdAndScannedTrueAndMergedFalse(Long id);
+  int countByProjectIdAndScannedTrueAndMergedFalse(Long projectId);
 
-  int countByProjectId(Long id);
+  int countByProjectId(Long projectId);
 
   @Query(
       "select c from Commit c where c.merged = true and c.analyzed = false and c.id not in (select j.commit.id from AnalyzeCommitJob j where j.processingStatus in (:ignoredProcessingStatus)) and c.project.id in (select aj.project.id from AnalyzingJob aj where aj.active=true and aj.fromDate < c.timestamp)")

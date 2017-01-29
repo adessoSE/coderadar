@@ -10,7 +10,6 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
-import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
@@ -106,6 +105,13 @@ public class CommitAnalyzer {
     this.analyzingJobRepository = analyzingJobRepository;
   }
 
+  /**
+   * Analyzes all files that were ADDED, COPIED, MODIFIED or RENAMED within the specified commit.
+   * Analysis means that all analyzers currently configured for the project are being run over each
+   * file, producing metrics that are stored in the database.
+   *
+   * @param commit the commit whose changes to analyze.
+   */
   public void analyzeCommit(Commit commit) {
     if (commit == null) {
       throw new IllegalArgumentException("argument commit must not be null!");
@@ -143,8 +149,7 @@ public class CommitAnalyzer {
   }
 
   private boolean isFirstCommitInAnalyzingJob(Commit commit) {
-    AnalyzingJob strategy =
-        analyzingJobRepository.findByProjectId(commit.getProject().getId());
+    AnalyzingJob strategy = analyzingJobRepository.findByProjectId(commit.getProject().getId());
 
     if (strategy.getFromDate() == null) {
       return false;
@@ -153,7 +158,7 @@ public class CommitAnalyzer {
     Commit firstCommitInDateRange =
         commitRepository.findFirstCommitAfterDate(
             commit.getProject().getId(), strategy.getFromDate());
-    return firstCommitInDateRange.getId() == commit.getId();
+    return firstCommitInDateRange.getId().equals(commit.getId());
   }
 
   private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Project project) {
@@ -195,15 +200,12 @@ public class CommitAnalyzer {
     diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
     diffFormatter.setDetectRenames(true);
 
-    ObjectId parentId = null;
-    if (gitCommit.getParentCount() > 0) {
-      // TODO: support multiple parents
-      parentId = gitCommit.getParent(0).getId();
-    }
-
     FileMatchingPattern pattern = getFileMatchingPattern(commit);
 
-    List<DiffEntry> diffs = diffFormatter.scan(parentId, gitCommit);
+    // we are only interested in the changes compared to the FIRST parent,
+    // since that is the parent commit in the same "lane" as the current commit
+    // (we don't want to "branch out" of our lane)
+    List<DiffEntry> diffs = diffFormatter.scan(gitCommit.getParent(0), gitCommit);
     for (DiffEntry diff : diffs) {
       String filepath = diff.getPath(DiffEntry.Side.NEW);
 
@@ -288,11 +290,6 @@ public class CommitAnalyzer {
 
   private void storeMetrics(Commit commit, String filePath, FileMetrics metrics) {
     File file = findInCommit(filePath, commit);
-    if (file == null) {
-      throw new IllegalStateException(
-          String.format(
-              "file %s not found for commit %s in database!", filePath, commit.getName()));
-    }
 
     for (Metric metric : metrics.getMetrics()) {
       MetricValueId id = new MetricValueId(commit, file, metric.getId());

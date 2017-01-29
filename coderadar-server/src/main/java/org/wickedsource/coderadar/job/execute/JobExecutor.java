@@ -6,9 +6,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.job.analyze.AnalyzeCommitJob;
 import org.wickedsource.coderadar.job.analyze.CommitAnalyzer;
+import org.wickedsource.coderadar.job.associate.AssociateGitLogJob;
+import org.wickedsource.coderadar.job.associate.GitLogAssociator;
 import org.wickedsource.coderadar.job.core.Job;
-import org.wickedsource.coderadar.job.merge.LogMerger;
-import org.wickedsource.coderadar.job.merge.MergeLogJob;
 import org.wickedsource.coderadar.job.scan.commit.CommitScanner;
 import org.wickedsource.coderadar.job.scan.commit.ScanCommitsJob;
 import org.wickedsource.coderadar.job.scan.file.FileScanner;
@@ -21,7 +21,7 @@ class JobExecutor {
 
   private FileScanner fileScanner;
 
-  private LogMerger merger;
+  private GitLogAssociator gitLogAssociator;
 
   private CommitAnalyzer commitAnalyzer;
 
@@ -29,22 +29,27 @@ class JobExecutor {
   public JobExecutor(
       CommitScanner commitScanner,
       FileScanner fileScanner,
-      LogMerger merger,
+      GitLogAssociator gitLogAssociator,
       CommitAnalyzer commitAnalyzer) {
     this.commitScanner = commitScanner;
     this.fileScanner = fileScanner;
-    this.merger = merger;
+    this.gitLogAssociator = gitLogAssociator;
     this.commitAnalyzer = commitAnalyzer;
   }
 
+  /**
+   * Executes the given job.
+   *
+   * @param job the job to execute.
+   */
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void execute(Job job) {
     if (job instanceof ScanCommitsJob) {
       commitScanner.scan(job.getProject());
     } else if (job instanceof ScanFilesJob) {
       fileScanner.scan(((ScanFilesJob) job).getCommit());
-    } else if (job instanceof MergeLogJob) {
-      merger.merge(job.getProject());
+    } else if (job instanceof AssociateGitLogJob) {
+      gitLogAssociator.associate(job.getProject());
     } else if (job instanceof AnalyzeCommitJob) {
       commitAnalyzer.analyzeCommit(((AnalyzeCommitJob) job).getCommit());
     } else {

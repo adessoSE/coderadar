@@ -11,7 +11,7 @@ import javax.persistence.*;
  * migrated into the final data structure (see {@link File}).
  */
 @Entity
-public class CommitLogEntry {
+public class GitLogEntry {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

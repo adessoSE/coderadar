@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.merge;
+package org.wickedsource.coderadar.job.associate;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -16,7 +16,7 @@ import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
 @Service
 @ConditionalOnProperty(MasterConfigurationParameter.NAME)
-public class LogMergerTrigger {
+public class AssociateGitLogTrigger {
 
   private JobLogger jobLogger;
 
@@ -27,7 +27,7 @@ public class LogMergerTrigger {
   private CommitRepository commitRepository;
 
   @Autowired
-  public LogMergerTrigger(
+  public AssociateGitLogTrigger(
       JobLogger jobLogger,
       MergeLogJobRepository jobRepository,
       ProjectRepository projectRepository,
@@ -42,7 +42,7 @@ public class LogMergerTrigger {
   public void trigger() {
     for (Project project : projectRepository.findAll()) {
       if (shouldJobBeQueuedForProject(project)) {
-        MergeLogJob newJob = new MergeLogJob();
+        AssociateGitLogJob newJob = new AssociateGitLogJob();
         newJob.setProcessingStatus(ProcessingStatus.WAITING);
         newJob.setQueuedDate(new Date());
         newJob.setProject(project);
@@ -54,7 +54,7 @@ public class LogMergerTrigger {
 
   boolean shouldJobBeQueuedForProject(Project project) {
     if (isJobCurrentlyQueuedForProject(project)) {
-      jobLogger.alreadyQueuedForProject(MergeLogJob.class, project);
+      jobLogger.alreadyQueuedForProject(AssociateGitLogJob.class, project);
       return false;
     } else {
       int scannedAndUnmergedCommits =

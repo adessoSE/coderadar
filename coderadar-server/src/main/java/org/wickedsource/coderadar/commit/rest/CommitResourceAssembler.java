@@ -22,7 +22,6 @@ public class CommitResourceAssembler extends AbstractResourceAssembler<Commit, C
     resource.setAnalyzed(entity.isAnalyzed());
     resource.setAuthor(entity.getAuthor());
     resource.setName(entity.getName());
-    resource.setParentCommitName(entity.getParentCommitName());
     resource.setTimestamp(entity.getTimestamp());
     resource.add(
         linkTo(methodOn(ProjectController.class).getProject(this.projectId)).withRel("project"));

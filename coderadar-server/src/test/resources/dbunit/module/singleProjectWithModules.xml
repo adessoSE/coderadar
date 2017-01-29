@@ -2,7 +2,7 @@
     <project/>
     <analyzing_job/>
     <commit/>
-    <commit_log_entry/>
+    <git_log_entry/>
     <file_identity/>
     <file/>
     <module/>
@@ -27,7 +27,7 @@
     <module id="4" path="server/analyzer/submodule" project_id="1"/>
 
     <commit id="1" project_id="1" name="f9b0553930f133490f292a9c78d0b36b39be8758" sequence_number="1" author="Tom"
-            parent_commit_name="cafebabe" comment="first commit"
+            first_parent="cafebabe" comment="first commit"
             scanned="false" analyzed="false" merged="false" timestamp="2016-01-01 00:00:00"
             year="2016" month="1" day_of_month="1" week_of_year="53" year_of_week="2015"/>
 

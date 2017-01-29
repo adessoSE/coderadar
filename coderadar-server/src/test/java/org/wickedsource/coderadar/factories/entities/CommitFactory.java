@@ -9,7 +9,6 @@ public class CommitFactory {
 
   public Commit unprocessedCommit() {
     Commit commit = new Commit();
-    commit.setParentCommitName("123");
     commit.setName("345");
     commit.setTimestamp(new Date());
     commit.setAuthor("max");
@@ -18,7 +17,6 @@ public class CommitFactory {
 
   public Commit validCommit() {
     Commit commit = new Commit();
-    commit.setParentCommitName("123");
     commit.setName("345");
     commit.setTimestamp(new Date());
     commit.setAuthor("max");

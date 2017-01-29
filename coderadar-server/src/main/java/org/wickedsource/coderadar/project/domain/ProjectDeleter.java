@@ -10,7 +10,7 @@ import org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJobRepository;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociationRepository;
 import org.wickedsource.coderadar.commit.domain.ModuleAssociationRepository;
-import org.wickedsource.coderadar.file.domain.CommitLogEntryRepository;
+import org.wickedsource.coderadar.file.domain.GitLogEntryRepository;
 import org.wickedsource.coderadar.file.domain.FileIdentityRepository;
 import org.wickedsource.coderadar.file.domain.FileRepository;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
@@ -42,7 +42,7 @@ public class ProjectDeleter {
 
   private FileRepository fileRepository;
 
-  private CommitLogEntryRepository commitLogEntryRepository;
+  private GitLogEntryRepository gitLogEntryRepository;
 
   private FindingRepository findingRepository;
 
@@ -65,7 +65,7 @@ public class ProjectDeleter {
       AnalyzerConfigurationRepository analyzerConfigurationRepository,
       CommitToFileAssociationRepository commitToFileAssociationRepository,
       FileRepository fileRepository,
-      CommitLogEntryRepository commitLogEntryRepository,
+      GitLogEntryRepository gitLogEntryRepository,
       FindingRepository findingRepository,
       MetricValueRepository metricValueRepository,
       FileIdentityRepository fileIdentityRepository,
@@ -80,7 +80,7 @@ public class ProjectDeleter {
     this.analyzerConfigurationRepository = analyzerConfigurationRepository;
     this.commitToFileAssociationRepository = commitToFileAssociationRepository;
     this.fileRepository = fileRepository;
-    this.commitLogEntryRepository = commitLogEntryRepository;
+    this.gitLogEntryRepository = gitLogEntryRepository;
     this.findingRepository = findingRepository;
     this.metricValueRepository = metricValueRepository;
     this.fileIdentityRepository = fileIdentityRepository;
@@ -99,7 +99,7 @@ public class ProjectDeleter {
     logger.debug(
         "deleted {} AnalyzingJob entities", analyzingJobRepository.deleteByProjectId(id));
     logger.debug(
-        "deleted {} CommitLogEntry entities", commitLogEntryRepository.deleteByProjectId(id));
+        "deleted {} GitLogEntry entities", gitLogEntryRepository.deleteByProjectId(id));
     logger.debug("deleted {} MetricValue entities", metricValueRepository.deleteByProjectId(id));
     logger.debug("deleted {} Finding entities", findingRepository.deleteByProjectId(id));
     logger.debug(

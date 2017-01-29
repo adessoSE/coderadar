@@ -23,6 +23,13 @@ class PersistingCommitProcessor implements CommitProcessor {
     this.project = project;
   }
 
+  /**
+   * Takes a JGit commit and stores a corresponding {@link Commit} entity in the database.
+   *
+   * @param gitClient the git repository
+   * @param commitWithSequenceNumber a git commit with a number defining its sequence in relation to
+   *     the other commits.
+   */
   @Override
   public void processCommit(Git gitClient, RevCommitWithSequenceNumber commitWithSequenceNumber) {
     Commit commit = new Commit();
@@ -33,9 +40,8 @@ class PersistingCommitProcessor implements CommitProcessor {
     commit.setProject(project);
     commit.setTimestamp(new Date(gitCommit.getCommitTime() * 1000L));
     commit.setSequenceNumber(commitWithSequenceNumber.getSequenceNumber());
-    if (gitCommit.getParents() != null && gitCommit.getParentCount() > 0) {
-      // TODO: support multiple parents?
-      commit.setParentCommitName(gitCommit.getParent(0).getName());
+    if (gitCommit.getParentCount() > 0) {
+      commit.setFirstParent(gitCommit.getParent(0).getName());
     }
     commitRepository.save(commit);
     updatedCommits++;

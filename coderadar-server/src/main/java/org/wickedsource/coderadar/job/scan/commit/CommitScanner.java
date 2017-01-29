@@ -10,7 +10,7 @@ import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
 import org.wickedsource.coderadar.project.domain.Project;
-import org.wickedsource.coderadar.vcs.git.walk.AllCommitsWalker;
+import org.wickedsource.coderadar.vcs.git.walk.CommitWalker;
 
 @Service
 public class CommitScanner {
@@ -44,8 +44,8 @@ public class CommitScanner {
 
   private void scanLocalRepository(Project project, Git gitClient) {
     Commit lastKnownCommit =
-        commitRepository.findTop1ByProjectIdOrderByTimestampDesc(project.getId());
-    AllCommitsWalker walker = new AllCommitsWalker();
+        commitRepository.findTop1ByProjectIdOrderBySequenceNumberDesc(project.getId());
+    CommitWalker walker = new CommitWalker();
     if (lastKnownCommit != null) {
       walker.setLastKnownCommitName(lastKnownCommit.getName());
     }

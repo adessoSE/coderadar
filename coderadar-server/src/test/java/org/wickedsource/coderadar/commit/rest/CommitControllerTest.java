@@ -36,9 +36,6 @@ public class CommitControllerTest extends ControllerTestTemplate {
                 responseFieldsInPath(
                     "$._embedded.commitResourceList[0]",
                     fields.withPath("name").description("The name of the commit."),
-                    fields
-                        .withPath("parentCommitName")
-                        .description("The name of this commit's parent commit."),
                     fields.withPath("author").description("The author (committer) of the commit."),
                     fields
                         .withPath("timestamp")

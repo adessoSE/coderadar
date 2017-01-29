@@ -1,11 +1,10 @@
-package org.wickedsource.coderadar.job.merge;
+package org.wickedsource.coderadar.job.associate;
 
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
 
-import java.util.List;
-
-public interface MergeLogJobRepository extends CrudRepository<MergeLogJob, Long> {
+public interface MergeLogJobRepository extends CrudRepository<AssociateGitLogJob, Long> {
 
   int countByProcessingStatusInAndProjectId(List<ProcessingStatus> status, Long projectId);
 }

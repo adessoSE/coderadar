@@ -4,9 +4,9 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
 
-public interface CommitLogEntryRepository extends CrudRepository<CommitLogEntry, Long> {
+public interface GitLogEntryRepository extends CrudRepository<GitLogEntry, Long> {
 
-  List<CommitLogEntry> findByCommitNameAndChangeTypeIn(
+  List<GitLogEntry> findByCommitNameAndChangeTypeIn(
       String commitName, List<ChangeType> changeTypes);
 
   int deleteByProjectId(Long projectId);

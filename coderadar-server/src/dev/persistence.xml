@@ -9,13 +9,13 @@
         <class>org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationFile</class>
         <class>org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJob</class>
         <class>org.wickedsource.coderadar.commit.domain.Commit</class>
-        <class>org.wickedsource.coderadar.file.domain.CommitLogEntry</class>
+        <class>org.wickedsource.coderadar.file.domain.GitLogEntry</class>
         <class>org.wickedsource.coderadar.commit.domain.CommitToFileAssociation</class>
         <class>org.wickedsource.coderadar.file.domain.File</class>
         <class>org.wickedsource.coderadar.file.domain.FileIdentity</class>
         <class>org.wickedsource.coderadar.filepattern.domain.FilePattern</class>
         <class>org.wickedsource.coderadar.analyzer.api.Finding</class>
-        <class>org.wickedsource.coderadar.job.merge.MergeLogJob</class>
+        <class>org.wickedsource.coderadar.job.associate.MergeLogJob</class>
         <class>org.wickedsource.coderadar.metric.domain.metricvalue.MetricValue</class>
         <class>org.wickedsource.coderadar.project.domain.Project</class>
         <class>org.wickedsource.coderadar.qualityprofile.domain.QualityProfile</class>

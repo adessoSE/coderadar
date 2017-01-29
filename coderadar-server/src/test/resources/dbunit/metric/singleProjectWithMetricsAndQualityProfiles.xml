@@ -2,7 +2,7 @@
     <project/>
     <analyzing_job/>
     <commit/>
-    <commit_log_entry/>
+    <git_log_entry/>
     <file_identity/>
     <file/>
     <module/>
@@ -21,19 +21,19 @@
 
     <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
     <commit id="1" project_id="1" name="f9b0553930f133490f292a9c78d0b36b39be8758" sequence_number="1" author="Tom"
-            parent_commit_name="cafebabe" comment="first commit"
+            first_parent="cafebabe" comment="first commit"
             scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
             year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="2" project_id="1" name="43f6cbba44ce1c23cfdf70dc164824fee062f7e2" sequence_number="2" author="Tom"
-            parent_commit_name="cafebabe" comment="first commit"
+            first_parent="cafebabe" comment="first commit"
             scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
             year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="3" project_id="1" name="eb7cbd429530dc26d06a9ea2a62794421dce1e9a" sequence_number="3" author="Tom"
-            parent_commit_name="cafebabe" comment="first commit"
+            first_parent="cafebabe" comment="first commit"
             scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
             year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
     <commit id="4" project_id="1" name="670cac5091c0c42253c66a83197c6c6069910aa8" sequence_number="4" author="Tom"
-            parent_commit_name="cafebabe" comment="first commit"
+            first_parent="cafebabe" comment="first commit"
             scanned="false" analyzed="false" merged="false" timestamp="2016-05-05 05:05:05"
             year="2016" month="5" day_of_month="5" week_of_year="18" year_of_week="2016"/>
 

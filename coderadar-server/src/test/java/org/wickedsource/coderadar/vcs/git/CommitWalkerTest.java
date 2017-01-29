@@ -10,11 +10,11 @@ import org.mockito.Mockito;
 import org.wickedsource.coderadar.analyzer.api.*;
 import org.wickedsource.coderadar.testframework.template.GitTestTemplate;
 import org.wickedsource.coderadar.vcs.MetricsProcessor;
-import org.wickedsource.coderadar.vcs.git.walk.AllCommitsWalker;
 import org.wickedsource.coderadar.vcs.git.walk.AnalyzingCommitProcessor;
 import org.wickedsource.coderadar.vcs.git.walk.CommitProcessor;
+import org.wickedsource.coderadar.vcs.git.walk.CommitWalker;
 
-public class AllCommitsWalkerTest extends GitTestTemplate {
+public class CommitWalkerTest extends GitTestTemplate {
 
   @Test
   public void testWalk() throws Exception {
@@ -41,7 +41,7 @@ public class AllCommitsWalkerTest extends GitTestTemplate {
     // mocking metrics processor
     MetricsProcessor metricsProcessor = Mockito.mock(MetricsProcessor.class);
 
-    AllCommitsWalker walker = new AllCommitsWalker();
+    CommitWalker walker = new CommitWalker();
     CommitProcessor commitProcessor = new AnalyzingCommitProcessor(analyzers, metricsProcessor);
     walker.walk(git, commitProcessor);
 

@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.merge;
+package org.wickedsource.coderadar.job.associate;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,11 +18,11 @@ import org.wickedsource.coderadar.commit.event.CommitToFileAssociatedEvent;
 import org.wickedsource.coderadar.file.domain.*;
 
 @Service
-public class CommitLogMerger {
+public class CommitToFileAssociator {
 
-  private Logger logger = LoggerFactory.getLogger(CommitLogMerger.class);
+  private Logger logger = LoggerFactory.getLogger(CommitToFileAssociator.class);
 
-  private CommitLogEntryRepository commitLogEntryRepository;
+  private GitLogEntryRepository gitLogEntryRepository;
 
   private FileRepository fileRepository;
 
@@ -41,23 +41,32 @@ public class CommitLogMerger {
           ChangeType.UNCHANGED);
 
   @Autowired
-  public CommitLogMerger(
-      CommitLogEntryRepository commitLogEntryRepository,
+  public CommitToFileAssociator(
+      GitLogEntryRepository gitLogEntryRepository,
       FileRepository fileRepository,
       CommitRepository commitRepository,
       CommitToFileAssociationRepository commitToFileAssociationRepository,
       ApplicationEventPublisher eventPublisher) {
-    this.commitLogEntryRepository = commitLogEntryRepository;
+    this.gitLogEntryRepository = gitLogEntryRepository;
     this.fileRepository = fileRepository;
     this.commitRepository = commitRepository;
     this.commitToFileAssociationRepository = commitToFileAssociationRepository;
     this.eventPublisher = eventPublisher;
   }
 
+  /**
+   * Goes through the git log of all files of the given commit and creates {@link File} entities for
+   * each. If a {@link File} for the file is already present, the file in the commit is associated
+   * with the present to file so that RENAMED files can be traced to their new filename in the
+   * database. Each {@link File} entity will then be associated with the {@link Commit} entity in
+   * order to build a searchable database.
+   *
+   * @param commit the commit whose files to associate
+   */
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public void mergeCommit(Commit commit) {
+  public void associateFilesOfCommit(Commit commit) {
     checkEligibility(commit);
-    logger.debug("starting merge of commit {}", commit);
+    logger.debug("starting associating files of commit {}", commit);
     associateWithAddedAndCopiedFiles(commit);
     List<File> modifiedFiles = associateWithModifiedFiles(commit);
     List<File> renamedFiles = associateWithRenamedFiles(commit);
@@ -69,20 +78,24 @@ public class CommitLogMerger {
   }
 
   private List<File> associateWithRenamedFiles(Commit commit) {
-    List<CommitLogEntry> renamedFiles =
-        commitLogEntryRepository.findByCommitNameAndChangeTypeIn(
+    List<GitLogEntry> renamedFiles =
+        gitLogEntryRepository.findByCommitNameAndChangeTypeIn(
             commit.getName(), Collections.singletonList(ChangeType.RENAME));
 
-    Map<String, CommitLogEntry> oldPathToFile = new HashMap<>();
-    for (CommitLogEntry file : renamedFiles) {
+    Map<String, GitLogEntry> oldPathToFile = new HashMap<>();
+    for (GitLogEntry file : renamedFiles) {
       oldPathToFile.put(file.getOldFilepath(), file);
     }
 
     logger.debug("found {} RENAMED files", renamedFiles.size());
     List<String> oldFilepaths =
-        renamedFiles.stream().map(CommitLogEntry::getOldFilepath).collect(Collectors.toList());
+        renamedFiles.stream().map(GitLogEntry::getOldFilepath).collect(Collectors.toList());
+
+    // the File entities of RENAMED files must already exist in the commit before the current commit, so
+    // we simply load them from the database
     List<File> filesToAssociate =
-        fileRepository.findInCommit(commit.getParentCommitName(), oldFilepaths);
+        fileRepository.findInCommit(commit.getFirstParent(), oldFilepaths);
+
     for (File file : filesToAssociate) {
       File newFile = new File();
       newFile.setIdentity(file.getIdentity());
@@ -97,14 +110,17 @@ public class CommitLogMerger {
   }
 
   private List<File> associateWithModifiedFiles(Commit commit) {
-    List<CommitLogEntry> modifiedFiles =
-        commitLogEntryRepository.findByCommitNameAndChangeTypeIn(
+    List<GitLogEntry> modifiedFiles =
+        gitLogEntryRepository.findByCommitNameAndChangeTypeIn(
             commit.getName(), Collections.singletonList(ChangeType.MODIFY));
     logger.debug("found {} MODIFIED files", modifiedFiles.size());
     List<String> filepaths =
-        modifiedFiles.stream().map(CommitLogEntry::getFilepath).collect(Collectors.toList());
-    List<File> filesToAssociate =
-        fileRepository.findInCommit(commit.getParentCommitName(), filepaths);
+        modifiedFiles.stream().map(GitLogEntry::getFilepath).collect(Collectors.toList());
+
+    // the File entities of MODIFIED files must already exist in the commit before the current commit, so
+    // we simply load them from the database
+    List<File> filesToAssociate = fileRepository.findInCommit(commit.getFirstParent(), filepaths);
+
     for (File file : filesToAssociate) {
       CommitToFileAssociation association =
           new CommitToFileAssociation(commit, file, ChangeType.MODIFY);
@@ -115,14 +131,17 @@ public class CommitLogMerger {
   }
 
   private List<File> associateWithDeletedFiles(Commit commit) {
-    List<CommitLogEntry> deletedFiles =
-        commitLogEntryRepository.findByCommitNameAndChangeTypeIn(
+    List<GitLogEntry> deletedFiles =
+        gitLogEntryRepository.findByCommitNameAndChangeTypeIn(
             commit.getName(), Collections.singletonList(ChangeType.DELETE));
     logger.debug("found {} DELETED files", deletedFiles.size());
     List<String> filepaths =
-        deletedFiles.stream().map(CommitLogEntry::getOldFilepath).collect(Collectors.toList());
-    List<File> filesToAssociate =
-        fileRepository.findInCommit(commit.getParentCommitName(), filepaths);
+        deletedFiles.stream().map(GitLogEntry::getOldFilepath).collect(Collectors.toList());
+
+    // the File entities of DELETED files must already exist in the commit before the current commit, so
+    // we simply load them from the database
+    List<File> filesToAssociate = fileRepository.findInCommit(commit.getFirstParent(), filepaths);
+
     for (File file : filesToAssociate) {
       CommitToFileAssociation association =
           new CommitToFileAssociation(commit, file, ChangeType.DELETE);
@@ -133,11 +152,11 @@ public class CommitLogMerger {
   }
 
   private void associateWithAddedAndCopiedFiles(Commit commit) {
-    List<CommitLogEntry> addedFiles =
-        commitLogEntryRepository.findByCommitNameAndChangeTypeIn(
+    List<GitLogEntry> addedFiles =
+        gitLogEntryRepository.findByCommitNameAndChangeTypeIn(
             commit.getName(), Arrays.asList(ChangeType.ADD, ChangeType.COPY));
     logger.debug("found {} ADDED and COPIED files", addedFiles.size());
-    for (CommitLogEntry addedFile : addedFiles) {
+    for (GitLogEntry addedFile : addedFiles) {
       File file = new File();
       file.setFilepath(addedFile.getFilepath());
       fileRepository.save(file);
@@ -155,7 +174,7 @@ public class CommitLogMerger {
       Commit commit, List<File> modifiedFiles, List<File> renamedFiles, List<File> deletedFiles) {
     List<File> unchangedFiles =
         fileRepository.findInCommit(
-            ALL_BUT_DELETED, commit.getParentCommitName(), commit.getProject().getId());
+            ALL_BUT_DELETED, commit.getFirstParent(), commit.getProject().getId());
     unchangedFiles.removeAll(modifiedFiles);
     unchangedFiles.removeAll(renamedFiles);
     unchangedFiles.removeAll(deletedFiles);

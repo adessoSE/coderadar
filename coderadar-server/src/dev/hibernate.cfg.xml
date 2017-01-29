@@ -12,13 +12,13 @@
         <mapping class="org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationFile"/>
         <mapping class="org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJob"/>
         <mapping class="org.wickedsource.coderadar.commit.domain.Commit"/>
-        <mapping class="org.wickedsource.coderadar.file.domain.CommitLogEntry"/>
+        <mapping class="org.wickedsource.coderadar.file.domain.GitLogEntry"/>
         <mapping class="org.wickedsource.coderadar.commit.domain.CommitToFileAssociation"/>
         <mapping class="org.wickedsource.coderadar.file.domain.File"/>
         <mapping class="org.wickedsource.coderadar.file.domain.FileIdentity"/>
         <mapping class="org.wickedsource.coderadar.filepattern.domain.FilePattern"/>
         <mapping class="org.wickedsource.coderadar.metric.domain.finding.Finding"/>
-        <mapping class="org.wickedsource.coderadar.job.merge.MergeLogJob"/>
+        <mapping class="org.wickedsource.coderadar.job.associate.MergeLogJob"/>
         <mapping class="org.wickedsource.coderadar.metric.domain.metricvalue.MetricValue"/>
         <mapping class="org.wickedsource.coderadar.project.domain.Project"/>
         <mapping class="org.wickedsource.coderadar.qualityprofile.domain.QualityProfile"/>

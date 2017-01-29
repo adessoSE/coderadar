@@ -99,7 +99,7 @@
     <named-query name="MetricValue.findChangedFilesBetweenTwoCommits">
         <query><![CDATA[
             SELECT DISTINCT new org.wickedsource.coderadar.metric.domain.metricvalue.ChangedFileDTO(l.oldFilepath, l.filepath, l.changeType)
-            FROM CommitLogEntry l
+            FROM GitLogEntry l
             WHERE l.project.id = :projectId
             AND l.commitName in
               (SELECT ctf.id.commit.name

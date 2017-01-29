@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.job.merge;
+package org.wickedsource.coderadar.job.associate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyList;
@@ -13,18 +13,19 @@ import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.job.JobLogger;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
-public class LogMergerTriggerTest {
+public class GitLogAssociatorTriggerTest {
 
   private CommitRepository commitRepository = Mockito.mock(CommitRepository.class);
   private JobLogger jobLogger = Mockito.mock(JobLogger.class);
   private MergeLogJobRepository mergeLogJobRepository = Mockito.mock(MergeLogJobRepository.class);
   private ProjectRepository projectRepository = Mockito.mock(ProjectRepository.class);
-  private LogMergerTrigger trigger;
+  private AssociateGitLogTrigger trigger;
 
   @Before
   public void setup() {
     trigger =
-        new LogMergerTrigger(jobLogger, mergeLogJobRepository, projectRepository, commitRepository);
+        new AssociateGitLogTrigger(
+            jobLogger, mergeLogJobRepository, projectRepository, commitRepository);
   }
 
   @Test

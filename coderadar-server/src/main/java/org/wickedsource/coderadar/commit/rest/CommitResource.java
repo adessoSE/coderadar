@@ -8,8 +8,6 @@ public class CommitResource extends ResourceSupport {
 
   private String name;
 
-  private String parentCommitName;
-
   private String author;
 
   private Date timestamp;
@@ -22,14 +20,6 @@ public class CommitResource extends ResourceSupport {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public String getParentCommitName() {
-    return parentCommitName;
-  }
-
-  public void setParentCommitName(String parentCommitName) {
-    this.parentCommitName = parentCommitName;
   }
 
   public String getAuthor() {

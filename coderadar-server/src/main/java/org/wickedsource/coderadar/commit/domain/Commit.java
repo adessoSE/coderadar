@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.wickedsource.coderadar.project.domain.Project;
 
-/** Metadata about a commit to a VCS. */
+/** Metadata about a commit to a Git repository. */
 @Entity
 @Table
 @EntityListeners(UpdateDateCoordinatesEntityListener.class)
@@ -28,8 +28,6 @@ public class Commit {
   @Temporal(TemporalType.TIMESTAMP)
   private Date timestamp;
 
-  @Column private String parentCommitName;
-
   @Column private String comment;
 
   @Column(nullable = false)
@@ -46,6 +44,8 @@ public class Commit {
 
   @Column(nullable = false)
   private Integer sequenceNumber;
+
+  @Column private String firstParent;
 
   @OneToMany(mappedBy = "id.commit")
   private Set<CommitToFileAssociation> files = new HashSet<>();
@@ -143,14 +143,6 @@ public class Commit {
     this.files = files;
   }
 
-  public String getParentCommitName() {
-    return parentCommitName;
-  }
-
-  public void setParentCommitName(String parentCommitName) {
-    this.parentCommitName = parentCommitName;
-  }
-
   public Integer getSequenceNumber() {
     return sequenceNumber;
   }
@@ -170,5 +162,13 @@ public class Commit {
 
   void setDateCoordinates(DateCoordinates dateCoordinates) {
     this.dateCoordinates = dateCoordinates;
+  }
+
+  public String getFirstParent() {
+    return firstParent;
+  }
+
+  public void setFirstParent(String firstParent) {
+    this.firstParent = firstParent;
   }
 }
