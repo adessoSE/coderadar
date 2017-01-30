@@ -29,7 +29,16 @@ public class AnalyzerPluginRegistry {
    * SourceCodeFileAnalyzer interface!
    */
   public AnalyzerPluginRegistry() {
-    initRegistry();
+    initRegistry(null);
+  }
+
+  /**
+   * Alternative constructor for scanning a specified package (and its sub-packages) only instead
+   * of the whole classpath.
+   * @param packageName the package to scan for analyzer plugins.
+   */
+  public AnalyzerPluginRegistry(String packageName){
+    initRegistry(packageName);
   }
 
   public Page<String> getAvailableAnalyzers(Pageable pageable) {
@@ -42,8 +51,8 @@ public class AnalyzerPluginRegistry {
     }
 
     int toIndex = pageable.getOffset() + pageable.getPageSize();
-    if (toIndex > analyzerList.size() - 1) {
-      toIndex = analyzerList.size() - 1;
+    if (toIndex > analyzerList.size()) {
+      toIndex = analyzerList.size();
     }
 
     return new PageImpl<>(analyzerList.subList(fromIndex, toIndex), pageable, analyzerList.size());
@@ -129,8 +138,13 @@ public class AnalyzerPluginRegistry {
     return sourceCodeFileAnalyzerPlugins.get(analyzerName) != null;
   }
 
-  private void initRegistry() {
-    Reflections reflections = new Reflections();
+  private void initRegistry(String packageName) {
+    Reflections reflections;
+    if(packageName == null){
+      reflections = new Reflections();
+    } else{
+      reflections = new Reflections(packageName);
+    }
     Set<Class<? extends SourceCodeFileAnalyzerPlugin>> foundPlugins =
         reflections.getSubTypesOf(SourceCodeFileAnalyzerPlugin.class);
     for (Class<? extends SourceCodeFileAnalyzerPlugin> pluginClass : foundPlugins) {

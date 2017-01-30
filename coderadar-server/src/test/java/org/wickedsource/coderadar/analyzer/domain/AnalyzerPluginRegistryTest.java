@@ -2,11 +2,14 @@ package org.wickedsource.coderadar.analyzer.domain;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.data.domain.PageRequest;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnalyzerPluginRegistryTest {
 
-  private static AnalyzerPluginRegistry registry = new AnalyzerPluginRegistry();
+  private static AnalyzerPluginRegistry registry = new AnalyzerPluginRegistry("org.wickedsource.coderadar.analyzer.domain");
 
   @Test
   public void createsNewPluginInstances() {
@@ -17,6 +20,14 @@ public class AnalyzerPluginRegistryTest {
     Assert.assertNotNull(plugin1);
     Assert.assertNotNull(plugin2);
     Assert.assertFalse(plugin1 == plugin2);
+  }
+
+  @Test
+  public void returnsPageableAnalyzers(){
+    assertThat(registry.getAvailableAnalyzers(new PageRequest(0, 10))).hasSize(5);
+    assertThat(registry.getAvailableAnalyzers(new PageRequest(0, 5))).hasSize(5);
+    assertThat(registry.getAvailableAnalyzers(new PageRequest(0, 4))).hasSize(4);
+    assertThat(registry.getAvailableAnalyzers(new PageRequest(1, 4))).hasSize(1);
   }
 
   @Test(expected = IllegalArgumentException.class)
