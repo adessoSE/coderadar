@@ -1,8 +1,7 @@
 package org.wickedsource.coderadar.project.domain;
 
 import javax.persistence.*;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /** A coderadar project that defines the source of files that are to be analyzed. */
 @Entity
@@ -18,6 +17,9 @@ public class Project {
   private String name;
 
   @Embedded private VcsCoordinates vcsCoordinates;
+
+  @Column(nullable = false)
+  private String workdirName;
 
   public Long getId() {
     return id;
@@ -45,9 +47,14 @@ public class Project {
 
   @Override
   public String toString() {
-    ReflectionToStringBuilder builder =
-        new ReflectionToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    builder.setExcludeFieldNames("sourceFilePatterns");
-    return builder.toString();
+    return ToStringBuilder.reflectionToString(this);
+  }
+
+  public String getWorkdirName() {
+    return workdirName;
+  }
+
+  public void setWorkdirName(String workdirName) {
+    this.workdirName = workdirName;
   }
 }

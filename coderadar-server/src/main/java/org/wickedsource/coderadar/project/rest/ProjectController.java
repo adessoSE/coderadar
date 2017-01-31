@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.project.rest;
 
+import java.util.UUID;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.hateoas.Resources;
@@ -15,8 +17,6 @@ import org.wickedsource.coderadar.core.rest.validation.UserException;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectDeleter;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
-
-import javax.validation.Valid;
 
 @Controller
 @ExposesResourceFor(Project.class)
@@ -60,7 +60,8 @@ public class ProjectController {
               "Project with name '%s' already exists. Please choose another name.",
               projectResource.getName()));
     }
-    Project project = projectAssembler.toEntity(projectResource);
+    Project project = projectAssembler.updateEntity(projectResource, new Project());
+    project.setWorkdirName(UUID.randomUUID().toString());
     Project savedProject = projectRepository.save(project);
     ProjectResource resultResource = projectAssembler.toResource(savedProject);
     return new ResponseEntity<>(resultResource, HttpStatus.CREATED);
@@ -83,8 +84,8 @@ public class ProjectController {
   @RequestMapping(path = "/{id}", method = RequestMethod.POST)
   public ResponseEntity<ProjectResource> updateProject(
       @Valid @RequestBody ProjectResource projectResource, @PathVariable Long id) {
-    Project project = projectAssembler.toEntity(projectResource);
-    project.setId(id);
+    Project project = projectVerifier.loadProjectOrThrowException(id);
+    project = projectAssembler.updateEntity(projectResource, project);
     Project savedProject = projectRepository.save(project);
     ProjectResource resultResource = projectAssembler.toResource(savedProject);
     return new ResponseEntity<>(resultResource, HttpStatus.OK);

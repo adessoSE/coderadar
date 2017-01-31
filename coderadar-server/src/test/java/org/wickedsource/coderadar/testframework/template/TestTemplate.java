@@ -1,20 +1,18 @@
 package org.wickedsource.coderadar.testframework.template;
 
-import org.wickedsource.coderadar.core.WorkdirManager;
-import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
-
-import java.io.File;
-
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
+import org.wickedsource.coderadar.core.WorkdirManager;
+import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
+
 public class TestTemplate {
 
   protected void mock(WorkdirManager workdirManagerMock) {
-    when(workdirManagerMock.getLocalGitRoot(any(String.class)))
-        .thenReturn(createTempDir().toPath());
+    when(workdirManagerMock.getLocalGitRoot(any(Long.class))).thenReturn(createTempDir().toPath());
   }
 
   protected void mock(CoderadarConfiguration configMock) {

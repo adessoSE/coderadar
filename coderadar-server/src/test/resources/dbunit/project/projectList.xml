@@ -19,6 +19,6 @@
     <user/>
     <refresh_token/>
 
-    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
-    <project id="2" url="http://valid.url2" type="GIT" username="user2" password="pass2" name="name2"/>
+    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name" workdir_name="foo"/>
+    <project id="2" url="http://valid.url2" type="GIT" username="user2" password="pass2" name="name2" workdir_name="foo"/>
 </dataset>

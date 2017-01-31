@@ -21,7 +21,7 @@ public class CoderadarConfiguration {
   private Logger logger = LoggerFactory.getLogger(CoderadarConfiguration.class);
 
   /** Number of milliseconds that @Scheduled tasks should wait before executing again. */
-  public static final int TIMER_INTERVAL = 1000;
+  public static final int TIMER_INTERVAL = 100;
 
   private List<ConfigurationParameter> configurationParameters = new ArrayList<>();
 
@@ -170,7 +170,7 @@ public class CoderadarConfiguration {
   }
 
   /** @see AuthenticationEnabledParameter */
-  public Boolean isAuthenticationEnabled(){
+  public Boolean isAuthenticationEnabled() {
     return authenticationEnabled.getValue().get();
   }
 }

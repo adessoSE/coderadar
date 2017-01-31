@@ -65,6 +65,6 @@ public class LocalGitRepositoryUpdater {
   }
 
   private Path getWorkdir(Project project) {
-    return workdirManager.getLocalGitRoot(project.getName());
+    return workdirManager.getLocalGitRoot(project.getId());
   }
 }

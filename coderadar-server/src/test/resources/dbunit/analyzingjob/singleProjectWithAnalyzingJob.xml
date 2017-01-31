@@ -19,7 +19,7 @@
     <user/>
     <refresh_token/>
 
-    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
+    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name" workdir_name="foo"/>
 
     <analyzing_job id="1" project_id="1" from_date="2016-01-01 00:00:00" active="true"/>
 

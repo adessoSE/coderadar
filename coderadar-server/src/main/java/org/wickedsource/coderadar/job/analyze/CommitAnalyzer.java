@@ -117,7 +117,7 @@ public class CommitAnalyzer {
       throw new IllegalArgumentException("argument commit must not be null!");
     }
 
-    Path gitRoot = workdirManager.getLocalGitRoot(commit.getProject().getName());
+    Path gitRoot = workdirManager.getLocalGitRoot(commit.getProject().getId());
     try {
       Git gitClient = Git.open(gitRoot.toFile());
       boolean isFirstCommit = isFirstCommitInAnalyzingJob(commit);

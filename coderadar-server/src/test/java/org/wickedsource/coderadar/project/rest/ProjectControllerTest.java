@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.project.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -15,18 +16,23 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
+import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
 @Category(ControllerTest.class)
 public class ProjectControllerTest extends ControllerTestTemplate {
 
+  @Autowired
+  private ProjectRepository projectRepository;
+
   @Test
   @DatabaseSetup(EMPTY)
-  @ExpectedDatabase(SINGLE_PROJECT)
   public void createProjectSuccessfully() throws Exception {
     ProjectResource project = projectResource().validProjectResource();
     mvc()
@@ -37,6 +43,15 @@ public class ProjectControllerTest extends ControllerTestTemplate {
         .andExpect(status().isCreated())
         .andExpect(containsResource(ProjectResource.class))
         .andDo(documentCreateProject());
+
+    Project savedProject = projectRepository.findOne(1L);
+    assertThat(savedProject).isNotNull();
+    assertThat(savedProject.getWorkdirName()).isNotEmpty();
+    assertThat(savedProject.getName()).isEqualTo(project.getName());
+    assertThat(savedProject.getVcsCoordinates().getUsername()).isEqualTo(project.getVcsUser());
+    assertThat(savedProject.getVcsCoordinates().getPassword()).isEqualTo(project.getVcsPassword());
+    assertThat(savedProject.getVcsCoordinates().getType()).isEqualTo(project.getVcsType());
+    assertThat(savedProject.getVcsCoordinates().getUrl().toString()).isEqualTo(project.getVcsUrl());
   }
 
   private ResultHandler documentCreateProject() {

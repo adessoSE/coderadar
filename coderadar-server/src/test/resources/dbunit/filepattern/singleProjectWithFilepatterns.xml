@@ -19,7 +19,7 @@
     <user/>
     <refresh_token/>
 
-    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
+    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name" workdir_name="foo"/>
 
     <file_pattern id="1" project_id="1" inclusion_type="INCLUDE" file_set_type="SOURCE" pattern="src/main/java/**/*.java"/>
     <file_pattern id="2" project_id="1" inclusion_type="EXCLUDE" file_set_type="SOURCE" pattern="src/main/java/**/generated/**/*.java"/>

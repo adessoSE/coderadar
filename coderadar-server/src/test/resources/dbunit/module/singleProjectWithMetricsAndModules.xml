@@ -19,7 +19,7 @@
     <user/>
     <refresh_token/>
 
-    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name"/>
+    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name" workdir_name="foo"/>
 
     <module id="1" path="/path/to/module1" project_id="1"/>
     <module id="2" path="/path/to/module1/submodule2" project_id="1"/>

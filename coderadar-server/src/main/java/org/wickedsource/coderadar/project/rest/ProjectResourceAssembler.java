@@ -44,15 +44,14 @@ public class ProjectResourceAssembler extends AbstractResourceAssembler<Project,
     return resource;
   }
 
-  Project toEntity(ProjectResource resource) {
+  Project updateEntity(ProjectResource resource, Project entity) {
     try {
-      Project project = new Project();
-      project.setName(resource.getName());
+      entity.setName(resource.getName());
       VcsCoordinates vcs = new VcsCoordinates(new URL(resource.getVcsUrl()), resource.getVcsType());
       vcs.setUsername(resource.getVcsUser());
       vcs.setPassword(resource.getVcsPassword());
-      project.setVcsCoordinates(vcs);
-      return project;
+      entity.setVcsCoordinates(vcs);
+      return entity;
     } catch (MalformedURLException e) {
       throw new IllegalStateException("Invalid URL should have been caught earlier!", e);
     }
