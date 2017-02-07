@@ -44,7 +44,7 @@ Coderadar makes use of http://docs.spring.io/spring-boot/docs/current/reference/
 which provides a mechanism to expose certain metrics via HTTP. A list of the monitoring endpoints can by default be accessed via
 "/actuator" on each server node in a coderadar cluster.
 
-For an explanation of the endpoints and monitorint metrics provided by Spring Boot Actuator, please
+For an explanation of the endpoints and monitoring metrics provided by Spring Boot Actuator, please
 consult the manual.
 
 === Coderadar-specific Monitoring Metrics
