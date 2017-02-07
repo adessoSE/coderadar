@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v0.1.0.238, 2017-02-05">
+<meta name="author" content="v0.1.0.240, 2017-02-07">
 <title>coderadar Administration Guide</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar Administration Guide</h1>
 <div class="details">
-<span id="author" class="author">v0.1.0.238, 2017-02-05</span><br>
+<span id="author" class="author">v0.1.0.240, 2017-02-07</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2218,15 +2218,19 @@ This documentation is work in progress. If you want to contribute, have a look a
 <h2 id="_monitoring"><a class="link" href="#_monitoring">4. Monitoring</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Coderadar makes use of <a href="http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready">Spring Boot Actuator</a>,
+<p>Coderadar makes use of <a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready">Spring Boot Actuator</a>,
 which provides a mechanism to expose certain metrics via HTTP. A list of the monitoring endpoints can by default be accessed via
 "/actuator" on each server node in a coderadar cluster.</p>
+</div>
+<div class="paragraph">
+<p>For an explanation of the endpoints and monitorint metrics provided by Spring Boot Actuator, please
+consult the manual.</p>
 </div>
 <div class="sect2">
 <h3 id="_coderadar_specific_monitoring_metrics"><a class="link" href="#_coderadar_specific_monitoring_metrics">4.1. Coderadar-specific Monitoring Metrics</a></h3>
 <div class="paragraph">
-<p>Coderadar exposes the following metrics via the "/metrics" endpoint. Note that the metrics will only be listed
-once a certain action has taken place, so if the metric is not listed you can interpret it as "never occurred".</p>
+<p>Coderadar exposes the following monitoring metrics as a JSON object via the "/metrics" endpoint.
+All metrics starting with the prefix <code>coderadar.</code> are coderadar-specific metrics.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 1. Coderadar Monitoring Metrics</caption>
@@ -2242,28 +2246,57 @@ once a certain action has taken place, so if the metric is not listed you can in
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">counter.coderadar.jobs.jobAcquisitionConflicts</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The number of times that two server nodes tried to acquire the same job from the waiting job queue and thus
-  failed acquiring a waiting job. When this happens, the server nodes automatically retry after a couple seconds.
-  As long as this number does not grow faster than the sum of successfully finished jobs, there shouldn&#8217;t be
-  a problem.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.CommitAnalyzer.commits.*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of commits having been analyzed.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">gauge.coderadar.jobs.&lt;JOB_TYPE&gt;.inProgress</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1 if a job of the given type is currently running, 0 if not.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.CommitAnalyzer.files.*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of files having been analyzed.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">counter.coderadar.jobs.&lt;JOB_TYPE&gt;.success</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number of successfully processed jobs of the given type.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.CommitMetaDataScanner.commits.*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of commits having been scanned for metadata.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">counter.coderadar.jobs.&lt;JOB_TYPE&gt;.failed</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number of failed jobs of the given type.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.CommitToFileAssociator.commits.*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of commits whose files have been associated with it.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">gauge.coderadar.jobs.currentJobStartTime</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Timestamp of the start of the job that is currently being processed by this server node (milliseconds since epoch).
-  -1 if no job is currently being processed.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.CommitToFileAssociator.files.*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of files having been associated with a commit.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.FileMetadataScanner.commits.count.*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of commits whose files have been scanned for metadata.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.FileMetadataScanner.files.*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of files having been scanned for metadata.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.jobs.acquisitionConflicts.*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Count and rate of conflicts between server nodes who tried to acquire the same
+  job for processing. It&#8217;s OK if this happens and the <code>coderadar.jobs.inProgress</code>
+  counter stays at approximately the number of coderadar slaves in the cluster.
+  If the <code>coderadar.jobs.inProgress</code> counter falls significantly below the number
+  of coderadar slaved in the cluster, they are probably contesting too much for
+  the jobs waiting in queue.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.jobs.failed.*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Count and rate of failed jobs.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.jobs.finished.*</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of successfully finished jobs.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.jobs.inProgress</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Current number of jobs that are in progress over all coderadar servers in the cluster.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.jobs.waiting</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Current number of jobs that are waiting for processing over all coderadar servers in the cluster.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2273,7 +2306,7 @@ once a certain action has taken place, so if the metric is not listed you can in
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-02-05 12:02:52 UTC
+Last updated 2017-02-07 23:07:12 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">

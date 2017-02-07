@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v0.1.0.238, 2017-02-05">
+<meta name="author" content="v0.1.0.240, 2017-02-07">
 <title>coderadar REST API</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v0.1.0.238, 2017-02-05</span><br>
+<span id="author" class="author">v0.1.0.240, 2017-02-07</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2357,11 +2357,11 @@ Content-Length: 195
 {
   "errorMessage" : "Validation Error",
   "fieldErrors" : [ {
-    "field" : "vcsUrl",
-    "message" : "must be a valid URL"
-  }, {
     "field" : "name",
     "message" : "may not be null"
+  }, {
+    "field" : "vcsUrl",
+    "message" : "must be a valid URL"
   } ]
 }</code></pre>
 </div>
@@ -2624,8 +2624,8 @@ Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 535
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODYyOTcyOTgsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODYyOTYzOTgsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.-nBAB3O_jZ0T0Ul4nyvTL8MqWSiP09574Y78t642CVw",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTE0ODAzOTgsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg2Mjk2Mzk4LCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.dJbWxGziAmA9FyudwqM1pu35vkts2OuHGiCjIZCjDCQ",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODY1MDk5ODcsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODY1MDkwODcsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.jz59IvHlB_5aaW1DqAQjpsQcN22z0ApXzaThEo-xqqo",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTE2OTMwODcsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg2NTA5MDg3LCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.NJDHbOIfCIyW1pEwOQBTVZS6me1kbOWtTVk-jovZ1bQ",
   "_links" : {
     "self" : {
       "href" : "http://localhost:8080/user/2"
@@ -2684,8 +2684,8 @@ Host: localhost:8080
 Content-Length: 443
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODYyOTU1NTgsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODYyOTQ2NTgsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.J_ox6AMSHKSpXyYnJOtGPxwMoPPU8gZ-PpaWxQk-oR0",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODY0NzYzOTgsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg2MTE2Mzk4LCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.wbJPDqQZNhU1C_2PYmvFaSqw72sc4R_axVK5uq-LQc4"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODY1MDgyNDcsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODY1MDczNDcsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.BWEi0x7Mq1LoYR6R3A7yTAz3Lnrgi60LouV6Mk6rg7s",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODY2ODkwODcsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg2MzI5MDg3LCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.OV_Q0fzHlWjdok2sgVE9ukolKxG8Brx5SzN9ixTIzB4"
 }</code></pre>
 </div>
 </div>
@@ -2699,7 +2699,7 @@ Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 218
 
 {
-  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODYyOTcyOTgsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODYyOTYzOTgsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.-nBAB3O_jZ0T0Ul4nyvTL8MqWSiP09574Y78t642CVw"
+  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODY1MDk5ODcsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODY1MDkwODcsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.jz59IvHlB_5aaW1DqAQjpsQcN22z0ApXzaThEo-xqqo"
 }</code></pre>
 </div>
 </div>
@@ -4932,40 +4932,40 @@ Content-Length: 599
 {
   "points" : [ {
     "type" : "week",
-    "x" : [ 2016, 6 ],
-    "y" : 10
+    "y" : 10,
+    "x" : [ 2016, 6 ]
   }, {
     "type" : "week",
-    "x" : [ 2016, 7 ],
-    "y" : 10
+    "y" : 10,
+    "x" : [ 2016, 7 ]
   }, {
     "type" : "week",
-    "x" : [ 2016, 8 ],
-    "y" : 10
+    "y" : 10,
+    "x" : [ 2016, 8 ]
   }, {
     "type" : "week",
-    "x" : [ 2016, 10 ],
-    "y" : 26
+    "y" : 26,
+    "x" : [ 2016, 10 ]
   }, {
     "type" : "week",
-    "x" : [ 2016, 11 ],
-    "y" : 26
+    "y" : 26,
+    "x" : [ 2016, 11 ]
   }, {
     "type" : "week",
-    "x" : [ 2016, 12 ],
-    "y" : 26
+    "y" : 26,
+    "x" : [ 2016, 12 ]
   }, {
     "type" : "week",
-    "x" : [ 2016, 5 ],
-    "y" : 10
+    "y" : 10,
+    "x" : [ 2016, 5 ]
   }, {
     "type" : "week",
-    "x" : [ 2016, 9 ],
-    "y" : 26
+    "y" : 26,
+    "x" : [ 2016, 9 ]
   }, {
     "type" : "week",
-    "x" : [ 2016, 13 ],
-    "y" : 73
+    "y" : 73,
+    "x" : [ 2016, 13 ]
   } ]
 }</code></pre>
 </div>
@@ -5439,7 +5439,7 @@ Content-Length: 2928
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-02-05 12:02:52 UTC
+Last updated 2017-02-07 23:07:12 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
