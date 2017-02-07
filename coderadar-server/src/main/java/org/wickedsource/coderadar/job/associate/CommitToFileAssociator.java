@@ -2,6 +2,9 @@ package org.wickedsource.coderadar.job.associate;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,10 @@ public class CommitToFileAssociator {
 
   private ApplicationEventPublisher eventPublisher;
 
+  private Meter commitsMeter;
+
+  private Meter filesMeter;
+
   private static List<ChangeType> ALL_BUT_DELETED =
       Arrays.asList(
           ChangeType.ADD,
@@ -42,16 +49,18 @@ public class CommitToFileAssociator {
 
   @Autowired
   public CommitToFileAssociator(
-      GitLogEntryRepository gitLogEntryRepository,
-      FileRepository fileRepository,
-      CommitRepository commitRepository,
-      CommitToFileAssociationRepository commitToFileAssociationRepository,
-      ApplicationEventPublisher eventPublisher) {
+          GitLogEntryRepository gitLogEntryRepository,
+          FileRepository fileRepository,
+          CommitRepository commitRepository,
+          CommitToFileAssociationRepository commitToFileAssociationRepository,
+          ApplicationEventPublisher eventPublisher, MetricRegistry metricRegistry) {
     this.gitLogEntryRepository = gitLogEntryRepository;
     this.fileRepository = fileRepository;
     this.commitRepository = commitRepository;
     this.commitToFileAssociationRepository = commitToFileAssociationRepository;
     this.eventPublisher = eventPublisher;
+    this.commitsMeter = metricRegistry.meter("coderadar.CommitToFileAssociator.commits");
+    this.filesMeter = metricRegistry.meter("coderadar.CommitToFileAssociator.files");
   }
 
   /**
@@ -67,14 +76,26 @@ public class CommitToFileAssociator {
   public void associateFilesOfCommit(Commit commit) {
     checkEligibility(commit);
     logger.debug("starting associating files of commit {}", commit);
-    associateWithAddedAndCopiedFiles(commit);
+
+    int addedFilesCount = associateWithAddedAndCopiedFiles(commit);
+    filesMeter.mark(addedFilesCount);
+
     List<File> modifiedFiles = associateWithModifiedFiles(commit);
+    filesMeter.mark(modifiedFiles.size());
+
     List<File> renamedFiles = associateWithRenamedFiles(commit);
+    filesMeter.mark(renamedFiles.size());
+
     List<File> deletedFiles = associateWithDeletedFiles(commit);
-    associateWithUnchangedFiles(commit, modifiedFiles, renamedFiles, deletedFiles);
+    filesMeter.mark(deletedFiles.size());
+
+    int unchangedFilesCount = associateWithUnchangedFiles(commit, modifiedFiles, renamedFiles, deletedFiles);
+    filesMeter.mark(unchangedFilesCount);
+
     commit.setMerged(true);
     commitRepository.save(commit);
     // commit entity is updated in database implicitly
+    commitsMeter.mark();
   }
 
   private List<File> associateWithRenamedFiles(Commit commit) {
@@ -151,7 +172,7 @@ public class CommitToFileAssociator {
     return filesToAssociate;
   }
 
-  private void associateWithAddedAndCopiedFiles(Commit commit) {
+  private int associateWithAddedAndCopiedFiles(Commit commit) {
     List<GitLogEntry> addedFiles =
         gitLogEntryRepository.findByCommitNameAndChangeTypeIn(
             commit.getName(), Arrays.asList(ChangeType.ADD, ChangeType.COPY));
@@ -163,14 +184,13 @@ public class CommitToFileAssociator {
       file.setIdentity(new FileIdentity());
       CommitToFileAssociation association =
           new CommitToFileAssociation(commit, file, addedFile.getChangeType());
-      if (!commit.getFiles().contains(association)) {
         commit.getFiles().add(association);
         saveCommitToFileAssociation(association);
-      }
     }
+    return addedFiles.size();
   }
 
-  private void associateWithUnchangedFiles(
+  private int associateWithUnchangedFiles(
       Commit commit, List<File> modifiedFiles, List<File> renamedFiles, List<File> deletedFiles) {
     List<File> unchangedFiles =
         fileRepository.findInCommit(
@@ -182,11 +202,10 @@ public class CommitToFileAssociator {
     for (File file : unchangedFiles) {
       CommitToFileAssociation association =
           new CommitToFileAssociation(commit, file, ChangeType.UNCHANGED);
-      if (!commit.getFiles().contains(association)) {
         commit.getFiles().add(association);
         saveCommitToFileAssociation(association);
-      }
     }
+    return unchangedFiles.size();
   }
 
   private void saveCommitToFileAssociation(CommitToFileAssociation association) {

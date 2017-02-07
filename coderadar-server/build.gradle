@@ -89,6 +89,7 @@ dependencies {
     compile "com.auth0:java-jwt:3.1.0"
     compile "joda-time:joda-time:2.9.7"
     compile "org.passay:passay:1.2.0"
+    compile "io.dropwizard:dropwizard-metrics:1.0.6"
 
     compile project(":coderadar-plugins:loc-analyzer-plugin")
     compile project(":coderadar-plugins:checkstyle-analyzer-plugin")

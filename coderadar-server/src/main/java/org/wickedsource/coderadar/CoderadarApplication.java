@@ -3,6 +3,7 @@ package org.wickedsource.coderadar;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.hateoas.config.EnableEntityLinks;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -14,8 +15,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableEntityLinks
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 @EnableScheduling
-@EnableAsync
-@EnableTransactionManagement
+@EnableAsync(proxyTargetClass = true)
+@EnableTransactionManagement(proxyTargetClass = true)
 public class CoderadarApplication {
 
   public static void main(String[] args) {

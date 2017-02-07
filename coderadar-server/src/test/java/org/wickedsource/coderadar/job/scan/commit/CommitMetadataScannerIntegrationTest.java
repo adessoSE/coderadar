@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
@@ -34,7 +37,7 @@ import org.wickedsource.coderadar.vcs.git.GitRepositoryChecker;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryCloner;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryUpdater;
 
-public class CommitScannerIntegrationTest extends GitTestTemplate {
+public class CommitMetadataScannerIntegrationTest extends GitTestTemplate {
 
   private Logger logger = LoggerFactory.getLogger(ScanCommitsJob.class);
 
@@ -53,6 +56,8 @@ public class CommitScannerIntegrationTest extends GitTestTemplate {
   private LocalGitRepositoryUpdater updater;
 
   @Mock private CoderadarConfiguration config;
+
+  @Mock private MetricRegistry metricRegistry;
 
   @Before
   public void setup() {
@@ -79,7 +84,8 @@ public class CommitScannerIntegrationTest extends GitTestTemplate {
     Project project = project().validProject();
     Profiler profiler = new Profiler("Scanner");
     profiler.setLogger(logger);
-    CommitScanner scanner = new CommitScanner(commitRepository, updater);
+    when(metricRegistry.meter(anyString())).thenReturn(new Meter());
+    CommitMetadataScanner scanner = new CommitMetadataScanner(commitRepository, updater, metricRegistry);
     when(projectRepository.findOne(project.getId())).thenReturn(createProject());
     profiler.start("scanning without local repository present");
     File repoRoot = scanner.scan(project).getParentFile();

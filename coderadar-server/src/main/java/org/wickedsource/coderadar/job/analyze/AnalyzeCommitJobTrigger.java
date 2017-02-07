@@ -34,7 +34,7 @@ public class AnalyzeCommitJobTrigger {
   }
 
   @Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
-  private void trigger() {
+  public void trigger() {
     for (Commit commit :
         commitRepository.findCommitsToBeAnalyzed(
             Arrays.asList(ProcessingStatus.PROCESSING, ProcessingStatus.WAITING))) {

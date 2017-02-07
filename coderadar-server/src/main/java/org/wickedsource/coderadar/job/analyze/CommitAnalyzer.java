@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
@@ -70,6 +73,10 @@ public class CommitAnalyzer {
 
   private AnalyzingJobRepository analyzingJobRepository;
 
+  private Meter commitsMeter;
+
+  private Meter filesMeter;
+
   private static final Set<DiffEntry.ChangeType> CHANGES_TO_ANALYZE =
       EnumSet.of(
           DiffEntry.ChangeType.ADD,
@@ -79,18 +86,19 @@ public class CommitAnalyzer {
 
   @Autowired
   public CommitAnalyzer(
-      CommitRepository commitRepository,
-      WorkdirManager workdirManager,
-      FilePatternRepository filePatternRepository,
-      GitCommitFinder commitFinder,
-      AnalyzerPluginRegistry analyzerRegistry,
-      AnalyzerConfigurationRepository analyzerConfigurationRepository,
-      AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository,
-      FileAnalyzer fileAnalyzer,
-      FileRepository fileRepository,
-      MetricValueRepository metricValueRepository,
-      FindingRepository findingRepository,
-      AnalyzingJobRepository analyzingJobRepository) {
+          CommitRepository commitRepository,
+          WorkdirManager workdirManager,
+          FilePatternRepository filePatternRepository,
+          GitCommitFinder commitFinder,
+          AnalyzerPluginRegistry analyzerRegistry,
+          AnalyzerConfigurationRepository analyzerConfigurationRepository,
+          AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository,
+          FileAnalyzer fileAnalyzer,
+          FileRepository fileRepository,
+          MetricValueRepository metricValueRepository,
+          FindingRepository findingRepository,
+          AnalyzingJobRepository analyzingJobRepository,
+          MetricRegistry metricRegistry) {
     this.commitRepository = commitRepository;
     this.workdirManager = workdirManager;
     this.filePatternRepository = filePatternRepository;
@@ -103,6 +111,8 @@ public class CommitAnalyzer {
     this.metricValueRepository = metricValueRepository;
     this.findingRepository = findingRepository;
     this.analyzingJobRepository = analyzingJobRepository;
+    this.commitsMeter = metricRegistry.meter("coderadar.CommitAnalyzer.commits");
+    this.filesMeter = metricRegistry.meter("coderadar.CommitAnalyzer.files");
   }
 
   /**
@@ -146,6 +156,7 @@ public class CommitAnalyzer {
     }
     commit.setAnalyzed(Boolean.TRUE);
     commitRepository.save(commit);
+    commitsMeter.mark();
   }
 
   private boolean isFirstCommitInAnalyzingJob(Commit commit) {
@@ -282,6 +293,7 @@ public class CommitAnalyzer {
         BlobUtils.getRawContent(gitClient.getRepository(), gitCommit.getId(), filepath);
     FileMetrics metrics = fileAnalyzer.analyzeFile(analyzers, filepath, fileContent);
     storeMetrics(commit, filepath, metrics);
+    filesMeter.mark();
   }
 
   private boolean shouldBeAnalyzed(DiffEntry.ChangeType changeType) {

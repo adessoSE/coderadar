@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.job.scan.file;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
@@ -22,9 +24,9 @@ import java.io.IOException;
 import java.util.List;
 
 @Service
-public class FileScanner {
+public class FileMetadataScanner {
 
-    private Logger logger = LoggerFactory.getLogger(FileScanner.class);
+    private Logger logger = LoggerFactory.getLogger(FileMetadataScanner.class);
 
     private LocalGitRepositoryUpdater updater;
 
@@ -36,16 +38,23 @@ public class FileScanner {
 
     private GitLogEntryRepository logEntryRepository;
 
+    private Meter filesMeter;
+
+    private Meter commitsMeter;
+
     @Autowired
-    public FileScanner(
+    public FileMetadataScanner(
             LocalGitRepositoryUpdater updater,
             CommitRepository commitRepository,
             GitCommitFinder commitFinder,
-            GitLogEntryRepository logEntryRepository) {
+            GitLogEntryRepository logEntryRepository,
+            MetricRegistry metricRegistry) {
         this.updater = updater;
         this.commitRepository = commitRepository;
         this.commitFinder = commitFinder;
         this.logEntryRepository = logEntryRepository;
+        this.filesMeter = metricRegistry.meter("coderadar.FileMetadataScanner.files");
+        this.commitsMeter = metricRegistry.meter("coderadar.FileMetadataScanner.commits");
     }
 
     /**
@@ -62,6 +71,7 @@ public class FileScanner {
             }
             Git gitClient = updater.updateLocalGitRepository(commit.getProject());
             walkFilesInCommit(gitClient, commit);
+            commitsMeter.mark();
         } catch (IOException e) {
             throw new IllegalStateException(
                     String.format("error while scanning commit %d", commit.getId()));
@@ -89,6 +99,7 @@ public class FileScanner {
                 logEntry.setProject(commit.getProject());
                 logEntryRepository.save(logEntry);
                 fileCounter++;
+                filesMeter.mark();
             }
         }
         commit.setScanned(true);

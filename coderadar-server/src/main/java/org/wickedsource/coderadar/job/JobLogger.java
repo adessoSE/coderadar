@@ -1,10 +1,11 @@
 package org.wickedsource.coderadar.job;
 
+import com.codahale.metrics.Gauge;
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.metrics.CounterService;
-import org.springframework.boot.actuate.metrics.GaugeService;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.job.core.Job;
@@ -23,14 +24,17 @@ public class JobLogger {
 
   private Logger logger = LoggerFactory.getLogger(JobLogger.class);
 
-  private CounterService counterService;
+  private Meter failedJobsMeter;
 
-  private GaugeService gaugeService;
+  private Meter jobConflictMeter;
+
+  private Meter finishedJobsMeter;
 
   @Autowired
-  public JobLogger(CounterService counterService, GaugeService gaugeService) {
-    this.counterService = counterService;
-    this.gaugeService = gaugeService;
+  public JobLogger(MetricRegistry metricRegistry) {
+    this.failedJobsMeter = metricRegistry.meter("coderadar.jobs.failed");
+    this.jobConflictMeter = metricRegistry.meter("coderadar.jobs.acquisitionConflicts");
+    this.finishedJobsMeter = metricRegistry.meter("coderadar.jobs.finished");
   }
 
   public void queuedNewJob(Job job, Project project) {
@@ -54,7 +58,7 @@ public class JobLogger {
   public void couldNotObtainJob() {
     logger.debug(
         "Could not obtain the next job in queue due to contention with another transaction...trying again next time!");
-    counterService.increment("coderadar.jobs.jobAcquisitionConflicts");
+    jobConflictMeter.mark();
   }
 
   public void emptyQueue() {
@@ -63,26 +67,15 @@ public class JobLogger {
 
   public void startingJob(Job job) {
     logger.info("Starting to process job: {}", job);
-    gaugeService.submit(
-        String.format("coderadar.jobs.%s.inProgress", job.getClass().getSimpleName()), 1);
-    gaugeService.submit("coderadar.jobs.currentJobStartTime", System.currentTimeMillis());
   }
 
   public void successfullyFinishedJob(Job job) {
     logger.info("Successfully processed job: {}", job);
-    counterService.increment(
-        String.format("coderadar.jobs.%s.success", job.getClass().getSimpleName()));
-    gaugeService.submit(
-        String.format("coderadar.jobs.%s.inProgress", job.getClass().getSimpleName()), 0);
-    gaugeService.submit("coderadar.jobs.currentJobStartTime", -1);
+    finishedJobsMeter.mark();
   }
 
   public void jobFailed(Job job, Throwable cause) {
     logger.error(String.format("Job failed due to error: %s", job), cause);
-    counterService.increment(
-        String.format("coderadar.jobs.%s.failed", job.getClass().getSimpleName()));
-    gaugeService.submit(
-        String.format("coderadar.jobs.%s.inProgress", job.getClass().getSimpleName()), 0);
-    gaugeService.submit("coderadar.jobs.currentJobStartTime", -1);
+    failedJobsMeter.mark();
   }
 }

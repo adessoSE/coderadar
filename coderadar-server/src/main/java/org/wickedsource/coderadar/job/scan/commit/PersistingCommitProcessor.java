@@ -1,6 +1,8 @@
 package org.wickedsource.coderadar.job.scan.commit;
 
 import java.util.Date;
+
+import com.codahale.metrics.Meter;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.wickedsource.coderadar.commit.domain.Commit;
@@ -16,11 +18,14 @@ class PersistingCommitProcessor implements CommitProcessor {
 
   private Project project;
 
+  private Meter commitsMeter;
+
   private int updatedCommits;
 
-  PersistingCommitProcessor(CommitRepository commitRepository, Project project) {
+  PersistingCommitProcessor(CommitRepository commitRepository, Project project, Meter commitsMeter) {
     this.commitRepository = commitRepository;
     this.project = project;
+    this.commitsMeter = commitsMeter;
   }
 
   /**
@@ -45,6 +50,7 @@ class PersistingCommitProcessor implements CommitProcessor {
     }
     commitRepository.save(commit);
     updatedCommits++;
+    commitsMeter.mark();
   }
 
   public int getUpdatedCommitsCount() {

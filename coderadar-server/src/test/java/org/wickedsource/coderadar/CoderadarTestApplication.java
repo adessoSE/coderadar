@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan(basePackageClasses = {CoderadarTestApplication.class})
 @EnableEntityLinks
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
-@EnableTransactionManagement
+@EnableTransactionManagement(proxyTargetClass = true)
 public class CoderadarTestApplication {
 
   public static void main(String[] args) {

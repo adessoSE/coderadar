@@ -1,6 +1,9 @@
 package org.wickedsource.coderadar.job.scan.commit;
 
 import java.io.File;
+
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import org.eclipse.jgit.api.Git;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,18 +16,21 @@ import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.vcs.git.walk.CommitWalker;
 
 @Service
-public class CommitScanner {
+public class CommitMetadataScanner {
 
-  private Logger logger = LoggerFactory.getLogger(CommitScanner.class);
+  private Logger logger = LoggerFactory.getLogger(CommitMetadataScanner.class);
 
   private CommitRepository commitRepository;
 
   private LocalGitRepositoryUpdater updater;
 
+  private Meter commitsMeter;
+
   @Autowired
-  public CommitScanner(CommitRepository commitRepository, LocalGitRepositoryUpdater updater) {
+  public CommitMetadataScanner(CommitRepository commitRepository, LocalGitRepositoryUpdater updater, MetricRegistry metricRegistry) {
     this.commitRepository = commitRepository;
     this.updater = updater;
+    this.commitsMeter = metricRegistry.meter("coderadar.CommitMetaDataScanner.commits");
   }
 
   /**
@@ -50,7 +56,7 @@ public class CommitScanner {
       walker.setLastKnownCommitName(lastKnownCommit.getName());
     }
     PersistingCommitProcessor commitProcessor =
-        new PersistingCommitProcessor(commitRepository, project);
+        new PersistingCommitProcessor(commitRepository, project, commitsMeter);
     walker.walk(gitClient, commitProcessor);
     gitClient.getRepository().close();
     logger.info(

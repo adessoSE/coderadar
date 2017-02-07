@@ -9,17 +9,17 @@ import org.wickedsource.coderadar.job.analyze.CommitAnalyzer;
 import org.wickedsource.coderadar.job.associate.AssociateGitLogJob;
 import org.wickedsource.coderadar.job.associate.GitLogAssociator;
 import org.wickedsource.coderadar.job.core.Job;
-import org.wickedsource.coderadar.job.scan.commit.CommitScanner;
+import org.wickedsource.coderadar.job.scan.commit.CommitMetadataScanner;
 import org.wickedsource.coderadar.job.scan.commit.ScanCommitsJob;
-import org.wickedsource.coderadar.job.scan.file.FileScanner;
+import org.wickedsource.coderadar.job.scan.file.FileMetadataScanner;
 import org.wickedsource.coderadar.job.scan.file.ScanFilesJob;
 
 @Service
 class JobExecutor {
 
-  private CommitScanner commitScanner;
+  private CommitMetadataScanner commitMetadataScanner;
 
-  private FileScanner fileScanner;
+  private FileMetadataScanner fileMetadataScanner;
 
   private GitLogAssociator gitLogAssociator;
 
@@ -27,12 +27,12 @@ class JobExecutor {
 
   @Autowired
   public JobExecutor(
-      CommitScanner commitScanner,
-      FileScanner fileScanner,
-      GitLogAssociator gitLogAssociator,
-      CommitAnalyzer commitAnalyzer) {
-    this.commitScanner = commitScanner;
-    this.fileScanner = fileScanner;
+          CommitMetadataScanner commitMetadataScanner,
+          FileMetadataScanner fileMetadataScanner,
+          GitLogAssociator gitLogAssociator,
+          CommitAnalyzer commitAnalyzer) {
+    this.commitMetadataScanner = commitMetadataScanner;
+    this.fileMetadataScanner = fileMetadataScanner;
     this.gitLogAssociator = gitLogAssociator;
     this.commitAnalyzer = commitAnalyzer;
   }
@@ -45,9 +45,9 @@ class JobExecutor {
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void execute(Job job) {
     if (job instanceof ScanCommitsJob) {
-      commitScanner.scan(job.getProject());
+      commitMetadataScanner.scan(job.getProject());
     } else if (job instanceof ScanFilesJob) {
-      fileScanner.scan(((ScanFilesJob) job).getCommit());
+      fileMetadataScanner.scan(((ScanFilesJob) job).getCommit());
     } else if (job instanceof AssociateGitLogJob) {
       gitLogAssociator.associate(job.getProject());
     } else if (job instanceof AnalyzeCommitJob) {

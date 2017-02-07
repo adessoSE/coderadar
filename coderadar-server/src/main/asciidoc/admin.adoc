@@ -40,36 +40,61 @@ WARNING: This documentation is work in progress. If you want to contribute, have
 
 == Monitoring
 
-Coderadar makes use of http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#production-ready[Spring Boot Actuator],
+Coderadar makes use of http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready[Spring Boot Actuator],
 which provides a mechanism to expose certain metrics via HTTP. A list of the monitoring endpoints can by default be accessed via
 "/actuator" on each server node in a coderadar cluster.
 
+For an explanation of the endpoints and monitorint metrics provided by Spring Boot Actuator, please
+consult the manual.
+
 === Coderadar-specific Monitoring Metrics
 
-Coderadar exposes the following metrics via the "/metrics" endpoint. Note that the metrics will only be listed
-once a certain action has taken place, so if the metric is not listed you can interpret it as "never occurred".
+Coderadar exposes the following monitoring metrics as a JSON object via the "/metrics" endpoint.
+All metrics starting with the prefix `coderadar.` are coderadar-specific metrics.
 
 .Coderadar Monitoring Metrics
 |===
 |Metric name |Description
 
-| counter.coderadar.jobs.jobAcquisitionConflicts
-| The number of times that two server nodes tried to acquire the same job from the waiting job queue and thus
-  failed acquiring a waiting job. When this happens, the server nodes automatically retry after a couple seconds.
-  As long as this number does not grow faster than the sum of successfully finished jobs, there shouldn't be
-  a problem.
+| coderadar.CommitAnalyzer.commits.*
+| Count and throughput of commits having been analyzed.
 
-| gauge.coderadar.jobs.<JOB_TYPE>.inProgress
-| 1 if a job of the given type is currently running, 0 if not.
+| coderadar.CommitAnalyzer.files.*
+| Count and throughput of files having been analyzed.
 
-| counter.coderadar.jobs.<JOB_TYPE>.success
-| Number of successfully processed jobs of the given type.
+| coderadar.CommitMetaDataScanner.commits.*
+| Count and throughput of commits having been scanned for metadata.
 
-| counter.coderadar.jobs.<JOB_TYPE>.failed
-| Number of failed jobs of the given type.
+| coderadar.CommitToFileAssociator.commits.*
+| Count and throughput of commits whose files have been associated with it.
 
-| gauge.coderadar.jobs.currentJobStartTime
-| Timestamp of the start of the job that is currently being processed by this server node (milliseconds since epoch).
-  -1 if no job is currently being processed.
+| coderadar.CommitToFileAssociator.files.*
+| Count and throughput of files having been associated with a commit.
+
+| coderadar.FileMetadataScanner.commits.count.*
+| Count and throughput of commits whose files have been scanned for metadata.
+
+| coderadar.FileMetadataScanner.files.*
+| Count and throughput of files having been scanned for metadata.
+
+| coderadar.jobs.acquisitionConflicts.*
+| Count and rate of conflicts between server nodes who tried to acquire the same
+  job for processing. It's OK if this happens and the `coderadar.jobs.inProgress`
+  counter stays at approximately the number of coderadar slaves in the cluster.
+  If the `coderadar.jobs.inProgress` counter falls significantly below the number
+  of coderadar slaved in the cluster, they are probably contesting too much for
+  the jobs waiting in queue.
+
+| coderadar.jobs.failed.*
+| Count and rate of failed jobs.
+
+| coderadar.jobs.finished.*
+| Count and throughput of successfully finished jobs.
+
+| coderadar.jobs.inProgress
+| Current number of jobs that are in progress over all coderadar servers in the cluster.
+
+| coderadar.jobs.waiting
+| Current number of jobs that are waiting for processing over all coderadar servers in the cluster.
 
 |===
