@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v0.1.0.240, 2017-02-07">
+<meta name="author" content="v0.1.0.243, 2017-02-09">
 <title>coderadar REST API</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v0.1.0.240, 2017-02-07</span><br>
+<span id="author" class="author">v0.1.0.243, 2017-02-09</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2357,11 +2357,11 @@ Content-Length: 195
 {
   "errorMessage" : "Validation Error",
   "fieldErrors" : [ {
-    "field" : "name",
-    "message" : "may not be null"
-  }, {
     "field" : "vcsUrl",
     "message" : "must be a valid URL"
+  }, {
+    "field" : "name",
+    "message" : "may not be null"
   } ]
 }</code></pre>
 </div>
@@ -2624,8 +2624,8 @@ Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 535
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODY1MDk5ODcsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODY1MDkwODcsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.jz59IvHlB_5aaW1DqAQjpsQcN22z0ApXzaThEo-xqqo",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTE2OTMwODcsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg2NTA5MDg3LCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.NJDHbOIfCIyW1pEwOQBTVZS6me1kbOWtTVk-jovZ1bQ",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODY2NzczMDIsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODY2NzY0MDIsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.3sHBUDt2fQ94emfqEfWsI90kIkQG8ZbuPM4M1ABQDiE",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTE4NjA0MDIsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg2Njc2NDAyLCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.Ck45p-IIs0Z2cFgbAjguv33auOVIEHexZT-XwKdnh4U",
   "_links" : {
     "self" : {
       "href" : "http://localhost:8080/user/2"
@@ -2684,8 +2684,8 @@ Host: localhost:8080
 Content-Length: 443
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODY1MDgyNDcsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODY1MDczNDcsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.BWEi0x7Mq1LoYR6R3A7yTAz3Lnrgi60LouV6Mk6rg7s",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODY2ODkwODcsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg2MzI5MDg3LCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.OV_Q0fzHlWjdok2sgVE9ukolKxG8Brx5SzN9ixTIzB4"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODY2NzU1NjIsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODY2NzQ2NjIsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.ILqPsRkkwZnQng8i3fnHA47pGk03aEckukUrE7t3V6M",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODY4NTY0MDIsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg2NDk2NDAyLCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.DUrphYaiKQS0SkdDRJHarV5SSOmm8u9RGw_98Swj0nc"
 }</code></pre>
 </div>
 </div>
@@ -2699,7 +2699,7 @@ Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 218
 
 {
-  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODY1MDk5ODcsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODY1MDkwODcsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.jz59IvHlB_5aaW1DqAQjpsQcN22z0ApXzaThEo-xqqo"
+  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODY2NzczMDIsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODY2NzY0MDIsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.3sHBUDt2fQ94emfqEfWsI90kIkQG8ZbuPM4M1ABQDiE"
 }</code></pre>
 </div>
 </div>
@@ -5439,7 +5439,7 @@ Content-Length: 2928
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-02-07 23:07:12 UTC
+Last updated 2017-02-09 21:35:57 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
