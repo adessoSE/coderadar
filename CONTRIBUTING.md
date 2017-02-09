@@ -24,7 +24,7 @@ for a quick guide.
 
 ### Pick an Issue
 You can pick any issue from the [issue tracker](https://github.com/reflectoring/coderadar/issues). 
-I try to document all feature ideas, tasks and bugs as issues in the tracker.
+We try to document all feature ideas, tasks and bugs as issues in the tracker.
 Issues marked with the tag ["up-for-grabs"](https://github.com/reflectoring/coderadar/issues?q=is%3Aissue+is%3Aopen+label%3Aup-for-grabs) are especially documented so that 
 new contributors should get an idea of what is to do. You might want to
 start with one of those tasks. You can just as well pick any other task, though.
