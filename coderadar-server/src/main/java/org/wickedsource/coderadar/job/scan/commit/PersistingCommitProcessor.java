@@ -1,8 +1,7 @@
 package org.wickedsource.coderadar.job.scan.commit;
 
-import java.util.Date;
-
 import com.codahale.metrics.Meter;
+import java.util.Date;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.wickedsource.coderadar.commit.domain.Commit;
@@ -22,7 +21,8 @@ class PersistingCommitProcessor implements CommitProcessor {
 
   private int updatedCommits;
 
-  PersistingCommitProcessor(CommitRepository commitRepository, Project project, Meter commitsMeter) {
+  PersistingCommitProcessor(
+      CommitRepository commitRepository, Project project, Meter commitsMeter) {
     this.commitRepository = commitRepository;
     this.project = project;
     this.commitsMeter = commitsMeter;

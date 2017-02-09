@@ -10,9 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class GitRepositoryResetter {
 
-  /**
-   * Removes any staged changes that are not yet committed from a git repository.
-   */
+  /** Removes any staged changes that are not yet committed from a git repository. */
   public Git reset(Path repositoryRoot) {
     try {
       FileRepositoryBuilder builder = new FileRepositoryBuilder();

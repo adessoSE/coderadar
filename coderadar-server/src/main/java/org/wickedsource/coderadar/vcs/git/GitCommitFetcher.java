@@ -1,11 +1,10 @@
 package org.wickedsource.coderadar.vcs.git;
 
+import java.nio.file.Path;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
-
-import java.nio.file.Path;
 
 @Service
 public class GitCommitFetcher {

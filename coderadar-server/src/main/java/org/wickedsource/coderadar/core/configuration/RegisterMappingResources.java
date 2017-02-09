@@ -1,14 +1,13 @@
 package org.wickedsource.coderadar.core.configuration;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Component;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Picks up all implementations of {@link MappingResourceProvider} in the application context and

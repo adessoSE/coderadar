@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.analyzer.rest.analyzerconfiguration;
 
+import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.hateoas.ExposesResourceFor;
@@ -18,8 +19,6 @@ import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.domain.*;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
 import org.wickedsource.coderadar.core.rest.validation.ValidationException;
-
-import java.io.IOException;
 
 @Controller
 @ExposesResourceFor(AnalyzerConfiguration.class)

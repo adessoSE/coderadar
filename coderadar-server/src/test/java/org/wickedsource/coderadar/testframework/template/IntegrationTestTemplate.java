@@ -12,10 +12,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.wickedsource.coderadar.CoderadarTestApplication;
 
-/**
- * Base class for integration tests that need the full context of the Spring Boot
- * application.
- */
+/** Base class for integration tests that need the full context of the Spring Boot application. */
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners({
   DependencyInjectionTestExecutionListener.class,

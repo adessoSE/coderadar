@@ -1,5 +1,8 @@
 package org.wickedsource.coderadar.user.service;
 
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -12,9 +15,6 @@ import org.wickedsource.coderadar.security.domain.RefreshTokenRepository;
 import org.wickedsource.coderadar.security.service.TokenService;
 import org.wickedsource.coderadar.user.domain.User;
 import org.wickedsource.coderadar.user.domain.UserRepository;
-
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 public class TokenRefreshServiceTest {

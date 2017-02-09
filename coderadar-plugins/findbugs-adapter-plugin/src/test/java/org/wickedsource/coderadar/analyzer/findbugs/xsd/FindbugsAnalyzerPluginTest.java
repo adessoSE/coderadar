@@ -5,9 +5,6 @@ import org.wickedsource.coderadar.analyzer.api.AnalyzerException;
 
 public class FindbugsAnalyzerPluginTest {
 
-    @Test
-    public void test() throws AnalyzerException {
-
-    }
-
+  @Test
+  public void test() throws AnalyzerException {}
 }

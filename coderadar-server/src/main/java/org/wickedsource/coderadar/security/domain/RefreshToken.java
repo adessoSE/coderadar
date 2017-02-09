@@ -1,8 +1,7 @@
 package org.wickedsource.coderadar.security.domain;
 
-import org.wickedsource.coderadar.user.domain.User;
-
 import javax.persistence.*;
+import org.wickedsource.coderadar.user.domain.User;
 
 /**
  * Refresh token is a JSON Web Token that is used by a client to get a new access token. In contrast

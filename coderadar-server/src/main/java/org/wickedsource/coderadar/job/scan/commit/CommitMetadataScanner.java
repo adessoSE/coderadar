@@ -1,9 +1,8 @@
 package org.wickedsource.coderadar.job.scan.commit;
 
-import java.io.File;
-
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
+import java.io.File;
 import org.eclipse.jgit.api.Git;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,10 @@ public class CommitMetadataScanner {
   private Meter commitsMeter;
 
   @Autowired
-  public CommitMetadataScanner(CommitRepository commitRepository, LocalGitRepositoryUpdater updater, MetricRegistry metricRegistry) {
+  public CommitMetadataScanner(
+      CommitRepository commitRepository,
+      LocalGitRepositoryUpdater updater,
+      MetricRegistry metricRegistry) {
     this.commitRepository = commitRepository;
     this.updater = updater;
     this.commitsMeter = metricRegistry.meter("coderadar.CommitMetaDataScanner.commits");

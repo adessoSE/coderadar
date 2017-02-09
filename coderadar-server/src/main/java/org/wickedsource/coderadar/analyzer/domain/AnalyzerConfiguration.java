@@ -1,8 +1,7 @@
 package org.wickedsource.coderadar.analyzer.domain;
 
-import org.wickedsource.coderadar.project.domain.Project;
-
 import javax.persistence.*;
+import org.wickedsource.coderadar.project.domain.Project;
 
 /** An AnalyzerConfiguration stores the configuration for a single analyzer plugin in a project. */
 @Entity

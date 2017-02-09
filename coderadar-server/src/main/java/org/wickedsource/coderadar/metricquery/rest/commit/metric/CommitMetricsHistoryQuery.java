@@ -1,9 +1,8 @@
 package org.wickedsource.coderadar.metricquery.rest.commit.metric;
 
+import javax.validation.constraints.NotNull;
 import org.wickedsource.coderadar.metricquery.rest.commit.DateRange;
 import org.wickedsource.coderadar.metricquery.rest.commit.Interval;
-
-import javax.validation.constraints.NotNull;
 
 /** Provides parameters to query for a history of values for a specific metric. */
 public class CommitMetricsHistoryQuery {

@@ -24,8 +24,7 @@ public interface ModuleRepository extends CrudRepository<Module, Long> {
   List<CommitToFileAssociation> findFilesByModuleId(@Param("moduleId") Long moduleId);
 
   /** Lists all Modules that are a parent path of the specified file path. */
-  @Query(
-      "select m from Module m where :filepath LIKE CONCAT(m.path, '/%') order by m.path")
+  @Query("select m from Module m where :filepath LIKE CONCAT(m.path, '/%') order by m.path")
   List<Module> findModulesForFile(@Param("filepath") String filepath);
 
   int deleteByProjectId(Long id);

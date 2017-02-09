@@ -1,11 +1,10 @@
 package org.wickedsource.coderadar.metric.domain.finding;
 
-import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueId;
-
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueId;
 
 @Entity
 @Table

@@ -1,7 +1,17 @@
 package org.wickedsource.coderadar.metricquery.rest.commit.metric;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.MetricValues.SINGLE_PROJECT_WITH_METRICS;
+import static org.wickedsource.coderadar.testframework.template.JsonHelper.fromJson;
+import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
+
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import java.time.LocalDate;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.http.MediaType;
@@ -14,17 +24,6 @@ import org.wickedsource.coderadar.metricquery.rest.commit.DateRange;
 import org.wickedsource.coderadar.metricquery.rest.commit.Interval;
 import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
-
-import java.time.LocalDate;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.MetricValues.SINGLE_PROJECT_WITH_METRICS;
-import static org.wickedsource.coderadar.testframework.template.JsonHelper.fromJson;
-import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
-import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
-import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
 
 @Category(ControllerTest.class)
 public class CommitMetricValuesControllerTest extends ControllerTestTemplate {

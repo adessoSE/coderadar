@@ -1,12 +1,11 @@
 package org.wickedsource.coderadar.core.rest.dates.serialize;
 
-import org.junit.Test;
-import org.wickedsource.coderadar.core.rest.dates.Day;
-
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.wickedsource.coderadar.core.rest.dates.serialize.ObjectMapperProvider.mapper;
+
+import java.io.IOException;
+import org.junit.Test;
+import org.wickedsource.coderadar.core.rest.dates.Day;
 
 public class DayDeserializerTest {
 

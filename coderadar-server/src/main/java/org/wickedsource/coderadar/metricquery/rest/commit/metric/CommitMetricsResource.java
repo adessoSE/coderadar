@@ -1,12 +1,11 @@
 package org.wickedsource.coderadar.metricquery.rest.commit.metric;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.hateoas.ResourceSupport;
-import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueDTO;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.hateoas.ResourceSupport;
+import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueDTO;
 
 /** Result of a query for values of selected metrics at the time of a given commit. */
 @SuppressWarnings("unchecked")

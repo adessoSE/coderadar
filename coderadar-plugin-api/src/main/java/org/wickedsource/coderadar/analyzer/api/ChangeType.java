@@ -1,17 +1,15 @@
 package org.wickedsource.coderadar.analyzer.api;
 
 public enum ChangeType {
+  ADD,
 
-    ADD,
+  MODIFY,
 
-    MODIFY,
+  DELETE,
 
-    DELETE,
+  RENAME,
 
-    RENAME,
+  COPY,
 
-    COPY,
-
-    UNCHANGED
-
+  UNCHANGED
 }

@@ -33,11 +33,12 @@ public class AnalyzerPluginRegistry {
   }
 
   /**
-   * Alternative constructor for scanning a specified package (and its sub-packages) only instead
-   * of the whole classpath.
+   * Alternative constructor for scanning a specified package (and its sub-packages) only instead of
+   * the whole classpath.
+   *
    * @param packageName the package to scan for analyzer plugins.
    */
-  public AnalyzerPluginRegistry(String packageName){
+  public AnalyzerPluginRegistry(String packageName) {
     initRegistry(packageName);
   }
 
@@ -140,9 +141,9 @@ public class AnalyzerPluginRegistry {
 
   private void initRegistry(String packageName) {
     Reflections reflections;
-    if(packageName == null){
+    if (packageName == null) {
       reflections = new Reflections();
-    } else{
+    } else {
       reflections = new Reflections(packageName);
     }
     Set<Class<? extends SourceCodeFileAnalyzerPlugin>> foundPlugins =

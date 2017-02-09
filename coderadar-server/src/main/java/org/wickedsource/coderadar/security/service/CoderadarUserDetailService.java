@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.security.service;
 
+import java.util.Collections;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,9 +11,6 @@ import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.security.domain.CoderadarUserDetails;
 import org.wickedsource.coderadar.user.domain.User;
 import org.wickedsource.coderadar.user.domain.UserRepository;
-
-import java.util.Collections;
-import java.util.List;
 
 @Service
 public class CoderadarUserDetailService implements UserDetailsService {

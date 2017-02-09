@@ -50,8 +50,7 @@ public class AnalyzingJobController {
     if (strategy == null) {
       throw new ResourceNotFoundException();
     }
-    AnalyzingJobResourceAssembler assembler =
-        new AnalyzingJobResourceAssembler(projectId);
+    AnalyzingJobResourceAssembler assembler = new AnalyzingJobResourceAssembler(projectId);
     return new ResponseEntity<>(assembler.toResource(strategy), HttpStatus.OK);
   }
 
@@ -75,8 +74,7 @@ public class AnalyzingJobController {
       strategy = new AnalyzingJob();
     }
 
-    AnalyzingJobResourceAssembler assembler =
-        new AnalyzingJobResourceAssembler(projectId);
+    AnalyzingJobResourceAssembler assembler = new AnalyzingJobResourceAssembler(projectId);
     strategy = assembler.updateEntity(strategy, resource, project);
     analyzingJobRepository.save(strategy);
     return new ResponseEntity<>(assembler.toResource(strategy), HttpStatus.OK);

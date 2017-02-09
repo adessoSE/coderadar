@@ -4,12 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.Calendar;
+import java.util.Date;
 import org.wickedsource.coderadar.core.rest.dates.Day;
 import org.wickedsource.coderadar.core.rest.dates.serialize.DayDeserializer;
 import org.wickedsource.coderadar.core.rest.dates.serialize.DaySerializer;
-
-import java.util.Calendar;
-import java.util.Date;
 
 @JsonTypeName("day")
 public class DayPoint extends Point<Day, Long> {

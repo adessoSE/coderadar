@@ -1,12 +1,11 @@
 package org.wickedsource.coderadar.core.configuration.configparams;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 /**
  * Determines if the Coderadar application is configured as a master node in a coderadar cluster. A

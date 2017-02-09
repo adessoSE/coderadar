@@ -1,9 +1,9 @@
 package org.wickedsource.coderadar.core.configuration;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Test;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class InjectorTest extends IntegrationTestTemplate {
 

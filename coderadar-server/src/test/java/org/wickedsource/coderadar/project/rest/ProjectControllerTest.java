@@ -28,8 +28,7 @@ import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 @Category(ControllerTest.class)
 public class ProjectControllerTest extends ControllerTestTemplate {
 
-  @Autowired
-  private ProjectRepository projectRepository;
+  @Autowired private ProjectRepository projectRepository;
 
   @Test
   @DatabaseSetup(EMPTY)

@@ -1,6 +1,5 @@
 package org.wickedsource.coderadar.job;
 
-import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import org.slf4j.Logger;

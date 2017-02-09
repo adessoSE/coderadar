@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.metricquery.rest.commit.profilerating;
 
+import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
@@ -17,9 +19,6 @@ import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValue;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
 import org.wickedsource.coderadar.metric.domain.metricvalue.ProfileValuePerCommitDTO;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @ExposesResourceFor(MetricValue.class)

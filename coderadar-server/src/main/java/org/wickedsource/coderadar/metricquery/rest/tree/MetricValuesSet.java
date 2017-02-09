@@ -2,7 +2,6 @@ package org.wickedsource.coderadar.metricquery.rest.tree;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-
 import java.util.HashMap;
 import java.util.Map;
 

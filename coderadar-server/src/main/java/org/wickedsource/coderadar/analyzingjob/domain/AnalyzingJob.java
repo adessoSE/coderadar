@@ -4,8 +4,9 @@ import java.util.Date;
 import javax.persistence.*;
 import org.wickedsource.coderadar.project.domain.Project;
 
-/** A job that defines which commits are to be analyzed. Storing an entity of this type in the database
- * automatically triggers analysis of a project's code base.
+/**
+ * A job that defines which commits are to be analyzed. Storing an entity of this type in the
+ * database automatically triggers analysis of a project's code base.
  */
 @Entity
 @Table

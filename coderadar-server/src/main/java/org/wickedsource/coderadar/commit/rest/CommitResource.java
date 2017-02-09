@@ -1,8 +1,7 @@
 package org.wickedsource.coderadar.commit.rest;
 
-import org.springframework.hateoas.ResourceSupport;
-
 import java.util.Date;
+import org.springframework.hateoas.ResourceSupport;
 
 public class CommitResource extends ResourceSupport {
 

@@ -1,13 +1,13 @@
 package org.wickedsource.coderadar.user.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.factories.databases.DbUnitFactory;
 import org.wickedsource.coderadar.factories.entities.EntityFactory;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserRepositoryTest extends IntegrationTestTemplate {
 

@@ -1,10 +1,10 @@
 package org.wickedsource.coderadar.metricquery.rest.tree.delta;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Provides parameters to query for values of one or more metrics values at the time of two specific

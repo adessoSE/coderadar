@@ -1,9 +1,8 @@
 package org.wickedsource.coderadar.file.domain;
 
+import javax.persistence.*;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import javax.persistence.*;
 
 /**
  * A FileIdentity connects Files that have been renamed at some point in time. Two Files with the

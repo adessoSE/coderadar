@@ -1,12 +1,11 @@
 package org.wickedsource.coderadar.factories.resources;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.wickedsource.coderadar.filepattern.domain.FileSetType;
 import org.wickedsource.coderadar.filepattern.rest.FilePatternDTO;
 import org.wickedsource.coderadar.filepattern.rest.FilePatternResource;
 import org.wickedsource.coderadar.project.domain.InclusionType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FilePatternResourceFactory {
 

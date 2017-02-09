@@ -1,9 +1,8 @@
 package org.wickedsource.coderadar.file.domain;
 
+import javax.persistence.*;
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
 import org.wickedsource.coderadar.project.domain.Project;
-
-import javax.persistence.*;
 
 /**
  * Stores metadata about a file that has been part of a commit to a VCS (i.e. metadata of a log

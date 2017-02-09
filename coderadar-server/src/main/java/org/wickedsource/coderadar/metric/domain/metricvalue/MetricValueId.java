@@ -1,14 +1,13 @@
 package org.wickedsource.coderadar.metric.domain.metricvalue;
 
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.ManyToOne;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.file.domain.File;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
-import java.io.Serializable;
 
 @Embeddable
 public class MetricValueId implements Serializable {

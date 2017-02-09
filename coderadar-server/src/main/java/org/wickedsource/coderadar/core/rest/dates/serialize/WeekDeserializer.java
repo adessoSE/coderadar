@@ -3,10 +3,9 @@ package org.wickedsource.coderadar.core.rest.dates.serialize;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import org.wickedsource.coderadar.core.rest.dates.Week;
-
 import java.io.IOException;
 import java.util.Arrays;
+import org.wickedsource.coderadar.core.rest.dates.Week;
 
 public class WeekDeserializer extends JsonDeserializer<Week> {
 

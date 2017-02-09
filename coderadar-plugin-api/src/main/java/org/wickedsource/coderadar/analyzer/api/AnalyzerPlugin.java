@@ -1,5 +1,3 @@
 package org.wickedsource.coderadar.analyzer.api;
 
-public interface AnalyzerPlugin {
-
-}
+public interface AnalyzerPlugin {}

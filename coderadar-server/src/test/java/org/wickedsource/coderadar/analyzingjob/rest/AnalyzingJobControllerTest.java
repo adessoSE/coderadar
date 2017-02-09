@@ -44,8 +44,7 @@ public class AnalyzingJobControllerTest extends ControllerTestTemplate {
                     halLinks(),
                     linkWithRel("self").description("Link to this AnalyzingJob resource."),
                     linkWithRel("project")
-                        .description(
-                            "Link to the project resource this AnalyzingJob belongs to.")),
+                        .description("Link to the project resource this AnalyzingJob belongs to.")),
                 requestFields(
                     fields
                         .withPath("active")

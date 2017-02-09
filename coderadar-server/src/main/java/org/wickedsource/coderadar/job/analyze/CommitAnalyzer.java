@@ -1,14 +1,13 @@
 package org.wickedsource.coderadar.job.analyze;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
@@ -86,19 +85,19 @@ public class CommitAnalyzer {
 
   @Autowired
   public CommitAnalyzer(
-          CommitRepository commitRepository,
-          WorkdirManager workdirManager,
-          FilePatternRepository filePatternRepository,
-          GitCommitFinder commitFinder,
-          AnalyzerPluginRegistry analyzerRegistry,
-          AnalyzerConfigurationRepository analyzerConfigurationRepository,
-          AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository,
-          FileAnalyzer fileAnalyzer,
-          FileRepository fileRepository,
-          MetricValueRepository metricValueRepository,
-          FindingRepository findingRepository,
-          AnalyzingJobRepository analyzingJobRepository,
-          MetricRegistry metricRegistry) {
+      CommitRepository commitRepository,
+      WorkdirManager workdirManager,
+      FilePatternRepository filePatternRepository,
+      GitCommitFinder commitFinder,
+      AnalyzerPluginRegistry analyzerRegistry,
+      AnalyzerConfigurationRepository analyzerConfigurationRepository,
+      AnalyzerConfigurationFileRepository analyzerConfigurationFileRepository,
+      FileAnalyzer fileAnalyzer,
+      FileRepository fileRepository,
+      MetricValueRepository metricValueRepository,
+      FindingRepository findingRepository,
+      AnalyzingJobRepository analyzingJobRepository,
+      MetricRegistry metricRegistry) {
     this.commitRepository = commitRepository;
     this.workdirManager = workdirManager;
     this.filePatternRepository = filePatternRepository;

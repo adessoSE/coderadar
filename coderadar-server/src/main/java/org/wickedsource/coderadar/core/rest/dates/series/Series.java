@@ -1,7 +1,6 @@
 package org.wickedsource.coderadar.core.rest.dates.series;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-
 import java.util.ArrayList;
 import java.util.List;
 

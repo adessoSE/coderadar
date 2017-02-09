@@ -1,11 +1,10 @@
 package org.wickedsource.coderadar.commit.domain;
 
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
 import org.wickedsource.coderadar.core.configuration.Injector;
-
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 
 /**
  * Updates a Commit's date coordinate fields according to the specified date. The date coordinate

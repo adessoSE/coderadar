@@ -16,7 +16,6 @@ ext {
 spotless {
     java {
         googleJavaFormat()
-        paddedCell()
     }
 }
 

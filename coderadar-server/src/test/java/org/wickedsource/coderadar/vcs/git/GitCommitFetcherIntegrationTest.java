@@ -1,5 +1,12 @@
 package org.wickedsource.coderadar.vcs.git;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
@@ -11,14 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
 import org.wickedsource.coderadar.project.domain.VcsType;
 import org.wickedsource.coderadar.testframework.category.IntegrationTest;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 public class GitCommitFetcherIntegrationTest {
 

@@ -5,14 +5,13 @@ import org.junit.Test;
 
 public class BugCollectionParserTest extends TestReportAccessor {
 
-    @Test
-    public void parsesSuccessfully() throws Exception {
-        byte[] report = getValidReport();
+  @Test
+  public void parsesSuccessfully() throws Exception {
+    byte[] report = getValidReport();
 
-        BugCollectionParser parser = new BugCollectionParser();
-        BugCollection collection = parser.fromBytes(report);
+    BugCollectionParser parser = new BugCollectionParser();
+    BugCollection collection = parser.fromBytes(report);
 
-        Assert.assertNotNull(collection);
-    }
-
+    Assert.assertNotNull(collection);
+  }
 }

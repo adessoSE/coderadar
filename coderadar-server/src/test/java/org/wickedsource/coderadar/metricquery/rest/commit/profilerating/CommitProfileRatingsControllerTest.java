@@ -1,12 +1,5 @@
 package org.wickedsource.coderadar.metricquery.rest.commit.profilerating;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import org.junit.Test;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
-import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -15,6 +8,13 @@ import static org.wickedsource.coderadar.testframework.template.JsonHelper.fromJ
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import org.junit.Test;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
+import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
 public class CommitProfileRatingsControllerTest extends ControllerTestTemplate {
 

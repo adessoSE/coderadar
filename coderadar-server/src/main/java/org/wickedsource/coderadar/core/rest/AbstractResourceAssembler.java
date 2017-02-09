@@ -1,10 +1,9 @@
 package org.wickedsource.coderadar.core.rest;
 
-import org.springframework.hateoas.ResourceSupport;
-import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
 public abstract class AbstractResourceAssembler<E, R extends ResourceSupport>
     extends ResourceAssemblerSupport<E, R> {

@@ -1,15 +1,16 @@
 package org.wickedsource.coderadar.analyzer.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.data.domain.PageRequest;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class AnalyzerPluginRegistryTest {
 
-  private static AnalyzerPluginRegistry registry = new AnalyzerPluginRegistry("org.wickedsource.coderadar.analyzer.domain");
+  private static AnalyzerPluginRegistry registry =
+      new AnalyzerPluginRegistry("org.wickedsource.coderadar.analyzer.domain");
 
   @Test
   public void createsNewPluginInstances() {
@@ -23,7 +24,7 @@ public class AnalyzerPluginRegistryTest {
   }
 
   @Test
-  public void returnsPageableAnalyzers(){
+  public void returnsPageableAnalyzers() {
     assertThat(registry.getAvailableAnalyzers(new PageRequest(0, 10))).hasSize(5);
     assertThat(registry.getAvailableAnalyzers(new PageRequest(0, 5))).hasSize(5);
     assertThat(registry.getAvailableAnalyzers(new PageRequest(0, 4))).hasSize(4);

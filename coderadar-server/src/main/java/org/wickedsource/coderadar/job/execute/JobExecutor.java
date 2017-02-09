@@ -27,10 +27,10 @@ class JobExecutor {
 
   @Autowired
   public JobExecutor(
-          CommitMetadataScanner commitMetadataScanner,
-          FileMetadataScanner fileMetadataScanner,
-          GitLogAssociator gitLogAssociator,
-          CommitAnalyzer commitAnalyzer) {
+      CommitMetadataScanner commitMetadataScanner,
+      FileMetadataScanner fileMetadataScanner,
+      GitLogAssociator gitLogAssociator,
+      CommitAnalyzer commitAnalyzer) {
     this.commitMetadataScanner = commitMetadataScanner;
     this.fileMetadataScanner = fileMetadataScanner;
     this.gitLogAssociator = gitLogAssociator;

@@ -1,5 +1,11 @@
 package org.wickedsource.coderadar;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.wickedsource.coderadar.factories.resources.ResourceFactory.projectResource;
+import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
+
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.http.MediaType;
@@ -7,12 +13,6 @@ import org.wickedsource.coderadar.core.rest.validation.ErrorDTO;
 import org.wickedsource.coderadar.project.rest.ProjectResource;
 import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.wickedsource.coderadar.factories.resources.ResourceFactory.projectResource;
-import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
-import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
-import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
 
 @Category(ControllerTest.class)
 public class ControllerErrorsTest extends ControllerTestTemplate {

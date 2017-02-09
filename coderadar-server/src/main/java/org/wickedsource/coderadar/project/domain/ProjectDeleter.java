@@ -10,9 +10,9 @@ import org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJobRepository;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociationRepository;
 import org.wickedsource.coderadar.commit.domain.ModuleAssociationRepository;
-import org.wickedsource.coderadar.file.domain.GitLogEntryRepository;
 import org.wickedsource.coderadar.file.domain.FileIdentityRepository;
 import org.wickedsource.coderadar.file.domain.FileRepository;
+import org.wickedsource.coderadar.file.domain.GitLogEntryRepository;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.job.core.JobRepository;
 import org.wickedsource.coderadar.metric.domain.finding.FindingRepository;
@@ -96,10 +96,8 @@ public class ProjectDeleter {
         "deleted {} AnalyzerConfiguration entities",
         analyzerConfigurationRepository.deleteByProjectId(id));
     logger.debug("deleted {} Job entities", jobRepository.deleteByProjectId(id));
-    logger.debug(
-        "deleted {} AnalyzingJob entities", analyzingJobRepository.deleteByProjectId(id));
-    logger.debug(
-        "deleted {} GitLogEntry entities", gitLogEntryRepository.deleteByProjectId(id));
+    logger.debug("deleted {} AnalyzingJob entities", analyzingJobRepository.deleteByProjectId(id));
+    logger.debug("deleted {} GitLogEntry entities", gitLogEntryRepository.deleteByProjectId(id));
     logger.debug("deleted {} MetricValue entities", metricValueRepository.deleteByProjectId(id));
     logger.debug("deleted {} Finding entities", findingRepository.deleteByProjectId(id));
     logger.debug(

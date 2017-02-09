@@ -6,13 +6,12 @@ import org.wickedsource.coderadar.analyzer.api.AnalyzerFileFilter;
 
 public class LocAnalyzerPluginFilterTest {
 
-    @Test
-    public void filterAcceptsTheCorrectFiles() {
-        AnalyzerFileFilter filter = new LocAnalyzerFileFilter();
+  @Test
+  public void filterAcceptsTheCorrectFiles() {
+    AnalyzerFileFilter filter = new LocAnalyzerFileFilter();
 
-        Assert.assertTrue(filter.acceptFilename("Testfile.java"));
-        Assert.assertFalse(filter.acceptFilename("Testfile.txt"));
-        Assert.assertFalse(filter.acceptFilename("Testfile"));
-    }
-
+    Assert.assertTrue(filter.acceptFilename("Testfile.java"));
+    Assert.assertFalse(filter.acceptFilename("Testfile.txt"));
+    Assert.assertFalse(filter.acceptFilename("Testfile"));
+  }
 }

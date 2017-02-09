@@ -1,14 +1,13 @@
 package org.wickedsource.coderadar.core.configuration.configparams.authentication;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.core.configuration.configparams.ConfigurationParameter;
 import org.wickedsource.coderadar.core.configuration.configparams.ParameterValidationError;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 /** Configures the number of minutes of the validity for the authentication access token. */
 @Component

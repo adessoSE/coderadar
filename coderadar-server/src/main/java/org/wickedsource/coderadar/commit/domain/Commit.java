@@ -92,10 +92,10 @@ public class Commit {
   }
 
   public void setComment(String comment) {
-    if(comment.length() > 255){
+    if (comment.length() > 255) {
       // truncating commit message if too long for database
       this.comment = comment.substring(0, 252) + "...";
-    }else {
+    } else {
       this.comment = comment;
     }
   }

@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.filepattern.rest;
 
+import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
@@ -14,9 +16,6 @@ import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
-
-import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @ExposesResourceFor(FilePattern.class)

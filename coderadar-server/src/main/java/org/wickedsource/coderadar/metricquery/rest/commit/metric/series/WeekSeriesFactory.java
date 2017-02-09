@@ -1,5 +1,9 @@
 package org.wickedsource.coderadar.metricquery.rest.commit.metric.series;
 
+import static java.time.temporal.ChronoUnit.WEEKS;
+
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.stereotype.Component;
@@ -12,11 +16,6 @@ import org.wickedsource.coderadar.core.rest.dates.series.Point;
 import org.wickedsource.coderadar.core.rest.dates.series.WeekPoint;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
 import org.wickedsource.coderadar.metricquery.rest.commit.DateSeries;
-
-import java.time.LocalDate;
-import java.util.List;
-
-import static java.time.temporal.ChronoUnit.WEEKS;
 
 @Component
 public class WeekSeriesFactory extends MetricValueSeriesFactory<Week> {

@@ -3,13 +3,12 @@ package org.wickedsource.coderadar.job.scan.commit;
 import static org.mockito.Mockito.*;
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
@@ -85,7 +84,8 @@ public class CommitMetadataScannerIntegrationTest extends GitTestTemplate {
     Profiler profiler = new Profiler("Scanner");
     profiler.setLogger(logger);
     when(metricRegistry.meter(anyString())).thenReturn(new Meter());
-    CommitMetadataScanner scanner = new CommitMetadataScanner(commitRepository, updater, metricRegistry);
+    CommitMetadataScanner scanner =
+        new CommitMetadataScanner(commitRepository, updater, metricRegistry);
     when(projectRepository.findOne(project.getId())).thenReturn(createProject());
     profiler.start("scanning without local repository present");
     File repoRoot = scanner.scan(project).getParentFile();

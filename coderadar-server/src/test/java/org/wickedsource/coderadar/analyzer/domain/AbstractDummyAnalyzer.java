@@ -2,7 +2,8 @@ package org.wickedsource.coderadar.analyzer.domain;
 
 import org.wickedsource.coderadar.analyzer.api.*;
 
-public abstract class AbstractDummyAnalyzer implements SourceCodeFileAnalyzerPlugin, ConfigurableAnalyzerPlugin {
+public abstract class AbstractDummyAnalyzer
+    implements SourceCodeFileAnalyzerPlugin, ConfigurableAnalyzerPlugin {
 
   private boolean configured;
 

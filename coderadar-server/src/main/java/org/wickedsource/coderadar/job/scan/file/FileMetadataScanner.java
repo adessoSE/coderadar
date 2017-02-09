@@ -2,6 +2,8 @@ package org.wickedsource.coderadar.job.scan.file;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
+import java.io.IOException;
+import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
@@ -20,90 +22,87 @@ import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
 import org.wickedsource.coderadar.vcs.git.ChangeTypeMapper;
 import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
 
-import java.io.IOException;
-import java.util.List;
-
 @Service
 public class FileMetadataScanner {
 
-    private Logger logger = LoggerFactory.getLogger(FileMetadataScanner.class);
+  private Logger logger = LoggerFactory.getLogger(FileMetadataScanner.class);
 
-    private LocalGitRepositoryUpdater updater;
+  private LocalGitRepositoryUpdater updater;
 
-    private CommitRepository commitRepository;
+  private CommitRepository commitRepository;
 
-    private GitCommitFinder commitFinder;
+  private GitCommitFinder commitFinder;
 
-    private ChangeTypeMapper changeTypeMapper = new ChangeTypeMapper();
+  private ChangeTypeMapper changeTypeMapper = new ChangeTypeMapper();
 
-    private GitLogEntryRepository logEntryRepository;
+  private GitLogEntryRepository logEntryRepository;
 
-    private Meter filesMeter;
+  private Meter filesMeter;
 
-    private Meter commitsMeter;
+  private Meter commitsMeter;
 
-    @Autowired
-    public FileMetadataScanner(
-            LocalGitRepositoryUpdater updater,
-            CommitRepository commitRepository,
-            GitCommitFinder commitFinder,
-            GitLogEntryRepository logEntryRepository,
-            MetricRegistry metricRegistry) {
-        this.updater = updater;
-        this.commitRepository = commitRepository;
-        this.commitFinder = commitFinder;
-        this.logEntryRepository = logEntryRepository;
-        this.filesMeter = metricRegistry.meter("coderadar.FileMetadataScanner.files");
-        this.commitsMeter = metricRegistry.meter("coderadar.FileMetadataScanner.commits");
+  @Autowired
+  public FileMetadataScanner(
+      LocalGitRepositoryUpdater updater,
+      CommitRepository commitRepository,
+      GitCommitFinder commitFinder,
+      GitLogEntryRepository logEntryRepository,
+      MetricRegistry metricRegistry) {
+    this.updater = updater;
+    this.commitRepository = commitRepository;
+    this.commitFinder = commitFinder;
+    this.logEntryRepository = logEntryRepository;
+    this.filesMeter = metricRegistry.meter("coderadar.FileMetadataScanner.files");
+    this.commitsMeter = metricRegistry.meter("coderadar.FileMetadataScanner.commits");
+  }
+
+  /**
+   * Goes through all files that were touched in a commit and stores meta data about the files in a
+   * "git log" like database table (see {@link GitLogEntry}).
+   *
+   * @param commit the commit whose files to extract and store in the database.
+   */
+  public void scan(Commit commit) {
+    try {
+      if (commit == null) {
+        throw new IllegalArgumentException(
+            String.format("Commit with ID %d does not exist!", commit.getId()));
+      }
+      Git gitClient = updater.updateLocalGitRepository(commit.getProject());
+      walkFilesInCommit(gitClient, commit);
+      commitsMeter.mark();
+    } catch (IOException e) {
+      throw new IllegalStateException(
+          String.format("error while scanning commit %d", commit.getId()));
     }
+  }
 
-    /**
-     * Goes through all files that were touched in a commit and stores meta data about the files in a "git log" like
-     * database table (see {@link GitLogEntry}).
-     *
-     * @param commit the commit whose files to extract and store in the database.
-     */
-    public void scan(Commit commit) {
-        try {
-            if (commit == null) {
-                throw new IllegalArgumentException(
-                        String.format("Commit with ID %d does not exist!", commit.getId()));
-            }
-            Git gitClient = updater.updateLocalGitRepository(commit.getProject());
-            walkFilesInCommit(gitClient, commit);
-            commitsMeter.mark();
-        } catch (IOException e) {
-            throw new IllegalStateException(
-                    String.format("error while scanning commit %d", commit.getId()));
-        }
+  private void walkFilesInCommit(Git gitClient, Commit commit) throws IOException {
+    logger.info("starting scan of commit {}", commit);
+    RevCommit gitCommit = commitFinder.findCommit(gitClient, commit.getName());
+    DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
+    diffFormatter.setRepository(gitClient.getRepository());
+    diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
+    diffFormatter.setDetectRenames(true);
+
+    int fileCounter = 0;
+    for (RevCommit parent : gitCommit.getParents()) {
+      List<DiffEntry> diffs = diffFormatter.scan(parent, gitCommit);
+      for (DiffEntry diff : diffs) {
+        GitLogEntry logEntry = new GitLogEntry();
+        logEntry.setCommitName(commit.getName());
+        logEntry.setParentCommitName(parent.getName());
+        logEntry.setOldFilepath(diff.getOldPath());
+        logEntry.setFilepath(diff.getNewPath());
+        logEntry.setChangeType(changeTypeMapper.jgitToCoderadar(diff.getChangeType()));
+        logEntry.setProject(commit.getProject());
+        logEntryRepository.save(logEntry);
+        fileCounter++;
+        filesMeter.mark();
+      }
     }
-
-    private void walkFilesInCommit(Git gitClient, Commit commit) throws IOException {
-        logger.info("starting scan of commit {}", commit);
-        RevCommit gitCommit = commitFinder.findCommit(gitClient, commit.getName());
-        DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
-        diffFormatter.setRepository(gitClient.getRepository());
-        diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
-        diffFormatter.setDetectRenames(true);
-
-        int fileCounter = 0;
-        for (RevCommit parent : gitCommit.getParents()) {
-            List<DiffEntry> diffs = diffFormatter.scan(parent, gitCommit);
-            for (DiffEntry diff : diffs) {
-                GitLogEntry logEntry = new GitLogEntry();
-                logEntry.setCommitName(commit.getName());
-                logEntry.setParentCommitName(parent.getName());
-                logEntry.setOldFilepath(diff.getOldPath());
-                logEntry.setFilepath(diff.getNewPath());
-                logEntry.setChangeType(changeTypeMapper.jgitToCoderadar(diff.getChangeType()));
-                logEntry.setProject(commit.getProject());
-                logEntryRepository.save(logEntry);
-                fileCounter++;
-                filesMeter.mark();
-            }
-        }
-        commit.setScanned(true);
-        commitRepository.save(commit);
-        logger.info("scanned {} files in commit {}", fileCounter, commit);
-    }
+    commit.setScanned(true);
+    commitRepository.save(commit);
+    logger.info("scanned {} files in commit {}", fileCounter, commit);
+  }
 }
