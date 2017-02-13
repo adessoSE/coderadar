@@ -52,8 +52,10 @@ public class JobPerformanceTestRunner {
         Map<String, Number> maxMetrics = monitor.startMonitoring(client, DURATION_IN_SECONDS, MONITORING_INTERVAL_IN_SECONDS);
         logger.info("performance test concluded ... see results in 'metrics_report.csv'");
         logger.info("max metric values:");
+        logger.info(String.format("|%-60s| %-25s|", "Metric", "Max value during test"));
+        logger.info(String.format("|%-60s| %-25s|", "------------------------------------------------------------", "-------------------------"));
         for(String metric : maxMetrics.keySet()) {
-            logger.info(String.format("%-60s: %f", metric, maxMetrics.get(metric)));
+            logger.info(String.format("|%-60s| %-25f|", metric, maxMetrics.get(metric)));
         }
 
     }

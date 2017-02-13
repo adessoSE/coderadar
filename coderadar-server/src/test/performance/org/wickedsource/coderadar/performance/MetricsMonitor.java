@@ -1,6 +1,5 @@
 package org.wickedsource.coderadar.performance;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
@@ -8,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.restclient.CoderadarRestClient;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Monitors the monitoring metrics REST endpoint of the coderadar application over a specified
@@ -68,13 +66,13 @@ public class MetricsMonitor {
     }
 
     private void logMetricsSnapshot(Map<String, Number> metrics) {
-        List<Number> monitoredMetricValues = metrics.entrySet().stream()
-                .filter(item -> monitoredMetrics.contains(item.getKey()))
-                .map(item -> item.getValue())
-                .collect(Collectors.toList());
+        List<Object> args = new ArrayList<>();
+        args.add(dateFormat.print(System.currentTimeMillis()));
+        for (String metric : monitoredMetrics) {
+            args.add(metrics.get(metric));
+        }
 
-        Object[] args = ArrayUtils.addAll(new Object[]{dateFormat.print(System.currentTimeMillis())}, monitoredMetricValues.toArray());
-        logger.info(logPattern, args);
+        logger.info(logPattern, args.toArray());
     }
 
     private void updateMaxMetricValues(Map<String, Number> snapshot) {
