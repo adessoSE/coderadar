@@ -16,7 +16,7 @@ import org.wickedsource.coderadar.job.core.ProcessingStatus;
 
 @Service
 @ConditionalOnProperty(MasterConfigurationParameter.NAME)
-public class FileScannerTrigger {
+public class FileMetadataScannerTrigger {
 
   private JobLogger jobLogger;
 
@@ -25,7 +25,7 @@ public class FileScannerTrigger {
   private ScanFilesJobRepository jobRepository;
 
   @Autowired
-  public FileScannerTrigger(
+  public FileMetadataScannerTrigger(
       JobLogger jobLogger,
       CommitRepository commitRepository,
       ScanFilesJobRepository jobRepository) {

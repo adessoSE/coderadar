@@ -16,7 +16,7 @@ import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
 @Service
 @ConditionalOnProperty(MasterConfigurationParameter.NAME)
-class CommitScannerTrigger {
+class CommitMetadataScannerTrigger {
 
   private JobLogger jobLogger;
 
@@ -27,7 +27,7 @@ class CommitScannerTrigger {
   private ScanCommitsJobRepository jobRepository;
 
   @Autowired
-  public CommitScannerTrigger(
+  public CommitMetadataScannerTrigger(
       JobLogger jobLogger,
       CoderadarConfiguration config,
       ProjectRepository projectRepository,
