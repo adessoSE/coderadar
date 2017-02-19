@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v0.1.0.252, 2017-02-13">
+<meta name="author" content="v0.1.0.254, 2017-02-19">
 <title>coderadar REST API</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v0.1.0.252, 2017-02-13</span><br>
+<span id="author" class="author">v0.1.0.254, 2017-02-19</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2357,11 +2357,11 @@ Content-Length: 195
 {
   "errorMessage" : "Validation Error",
   "fieldErrors" : [ {
-    "field" : "vcsUrl",
-    "message" : "must be a valid URL"
-  }, {
     "field" : "name",
     "message" : "may not be null"
+  }, {
+    "field" : "vcsUrl",
+    "message" : "must be a valid URL"
   } ]
 }</code></pre>
 </div>
@@ -2624,8 +2624,8 @@ Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 535
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODcwMjMzOTYsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODcwMjI0OTYsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.uHNM_p8aZQdrljJTp2TYBUklTzq3AXERKhyYizV5E0Q",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTIyMDY0OTYsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg3MDIyNDk2LCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.pr2-8Foi8iVllr2lm9VYD33sBFS8ssC82llRbD0xiUI",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODc1Mjc3MDgsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODc1MjY4MDgsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.kHqMBoYoWCh0L_8rjnDaSyzg_IBUflv3_YjZ0m4e9B8",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTI3MTA4MDgsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg3NTI2ODA4LCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.igZo2_-PrdPL_pgPCLxPI5f1PLcbLpXXWBjXtCmuJS0",
   "_links" : {
     "self" : {
       "href" : "http://localhost:8080/user/2"
@@ -2684,8 +2684,8 @@ Host: localhost:8080
 Content-Length: 443
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODcwMjE2NTYsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODcwMjA3NTYsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.NGMvOYCrJM7kptq6MSwqsV49B_XLmOT4bEWIdW1jgKk",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODcyMDI0OTYsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg2ODQyNDk2LCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.pzxJpEBLkwOXZo16jd_yTjYBnCnysLyZh389kZ3CHnQ"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODc1MjU5NjgsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODc1MjUwNjgsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.o3ylVq3ZDtn_WZVN9ycszeTLALSdtbDNMdnGrcV-dC4",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODc3MDY4MDgsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg3MzQ2ODA4LCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.CyZoXmH8MtYuTNagkJ6qpqIodiS2GlSSNLY-Ls0gEzU"
 }</code></pre>
 </div>
 </div>
@@ -2699,7 +2699,7 @@ Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 218
 
 {
-  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODcwMjMzOTYsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODcwMjI0OTYsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.uHNM_p8aZQdrljJTp2TYBUklTzq3AXERKhyYizV5E0Q"
+  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODc1Mjc3MDgsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODc1MjY4MDgsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.kHqMBoYoWCh0L_8rjnDaSyzg_IBUflv3_YjZ0m4e9B8"
 }</code></pre>
 </div>
 </div>
@@ -2859,6 +2859,18 @@ and its sub-resources you provide coderadar with the information it needs to ana
 <td class="tableblock halign-left valign-top"><p class="tableblock">The type of the version control system your project uses. Either 'GIT' or 'SVN'.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">startDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The start date of the range of commits which should be analyzed by coderadar. Leave empty to start at the first commit.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">endDate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The end date of the range of commits which should be analyzed by coderadar. Leave empty to automatically process all new incoming commits.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -2912,7 +2924,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 1162
+Content-Length: 1306
 
 {
   "_embedded" : {
@@ -2922,6 +2934,8 @@ Content-Length: 1162
       "vcsUrl" : "http://valid.url",
       "vcsUser" : "user",
       "vcsPassword" : "pass",
+      "startDate" : [ 2016, 1, 1 ],
+      "endDate" : [ 2016, 12, 31 ],
       "_links" : {
         "self" : {
           "href" : "http://localhost:8080/projects/1"
@@ -2942,6 +2956,8 @@ Content-Length: 1162
       "vcsUrl" : "http://valid.url2",
       "vcsUser" : "user2",
       "vcsPassword" : "pass2",
+      "startDate" : [ 2016, 1, 1 ],
+      "endDate" : [ 2016, 12, 31 ],
       "_links" : {
         "self" : {
           "href" : "http://localhost:8080/projects/2"
@@ -2975,14 +2991,16 @@ Content-Length: 1162
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 123
+Content-Length: 187
 
 {
   "name" : "name",
   "vcsType" : "GIT",
   "vcsUrl" : "http://valid.url",
   "vcsUser" : "user",
-  "vcsPassword" : "pass"
+  "vcsPassword" : "pass",
+  "startDate" : [ 2016, 1, 1 ],
+  "endDate" : [ 2016, 12, 31 ]
 }</code></pre>
 </div>
 </div>
@@ -2993,7 +3011,7 @@ Content-Length: 123
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 469
+Content-Length: 533
 
 {
   "name" : "name",
@@ -3001,6 +3019,8 @@ Content-Length: 469
   "vcsUrl" : "http://valid.url",
   "vcsUser" : "user",
   "vcsPassword" : "pass",
+  "startDate" : [ 2016, 1, 1 ],
+  "endDate" : [ 2016, 12, 31 ],
   "_links" : {
     "self" : {
       "href" : "http://localhost:8080/projects/1"
@@ -3029,7 +3049,7 @@ Content-Length: 469
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1 HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 144
+Content-Length: 208
 
 {
   "name" : "name2",
@@ -3037,6 +3057,8 @@ Content-Length: 144
   "vcsUrl" : "http://valid.url2",
   "vcsUser" : "user2",
   "vcsPassword" : "pass2",
+  "startDate" : [ 2016, 1, 1 ],
+  "endDate" : [ 2016, 12, 31 ],
   "links" : [ ]
 }</code></pre>
 </div>
@@ -3048,7 +3070,7 @@ Content-Length: 144
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 473
+Content-Length: 537
 
 {
   "name" : "name2",
@@ -3056,6 +3078,8 @@ Content-Length: 473
   "vcsUrl" : "http://valid.url2",
   "vcsUser" : "user2",
   "vcsPassword" : "pass2",
+  "startDate" : [ 2016, 1, 1 ],
+  "endDate" : [ 2016, 12, 31 ],
   "_links" : {
     "self" : {
       "href" : "http://localhost:8080/projects/1"
@@ -5439,7 +5463,7 @@ Content-Length: 2928
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-02-13 21:43:55 UTC
+Last updated 2017-02-19 17:49:22 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
