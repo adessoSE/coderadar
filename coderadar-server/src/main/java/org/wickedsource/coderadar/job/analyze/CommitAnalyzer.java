@@ -4,10 +4,7 @@ import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
@@ -129,8 +126,6 @@ public class CommitAnalyzer {
     Path gitRoot = workdirManager.getLocalGitRoot(commit.getProject().getId());
     try {
       Git gitClient = Git.open(gitRoot.toFile());
-      boolean isFirstCommit = isFirstCommitInAnalyzingJob(commit);
-
       List<SourceCodeFileAnalyzerPlugin> analyzers = getAnalyzersForProject(commit.getProject());
 
       if (analyzers.isEmpty()) {
@@ -142,7 +137,7 @@ public class CommitAnalyzer {
       }
 
       logger.info("starting analysis of commit {}", commit.getName());
-      if (isFirstCommit) {
+      if (isFirstCommitInAnalyzingJob(commit) || isFirstCommitInProject(commit)) {
         // If it is the first commit to be analyzed we want to analyze ALL files that are in the repo
         // at the time of the commit so that we have all the files' metrics ...
         walkAllFilesInCommit(gitClient, commit, analyzers);
@@ -169,6 +164,17 @@ public class CommitAnalyzer {
         commitRepository.findFirstCommitAfterDate(
             commit.getProject().getId(), strategy.getFromDate());
     return firstCommitInDateRange.getId().equals(commit.getId());
+  }
+
+  private boolean isFirstCommitInProject(Commit commit) {
+    Date startDate = commit.getProject().getVcsCoordinates().getStartDate();
+    if (startDate == null) {
+      return false;
+    } else {
+      Commit firstCommitInDateRange =
+          commitRepository.findFirstCommitAfterDate(commit.getProject().getId(), startDate);
+      return firstCommitInDateRange.getId().equals(commit.getId());
+    }
   }
 
   private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Project project) {

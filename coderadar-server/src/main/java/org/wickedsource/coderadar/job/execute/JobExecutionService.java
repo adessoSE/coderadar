@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
-import org.wickedsource.coderadar.core.configuration.configparams.SlaveConfigurationParameter;
 import org.wickedsource.coderadar.job.JobLogger;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
@@ -18,7 +17,7 @@ import org.wickedsource.coderadar.job.queue.JobUpdater;
 
 @Service
 @Transactional
-@ConditionalOnProperty(SlaveConfigurationParameter.NAME)
+@ConditionalOnProperty("coderadar.slave")
 class JobExecutionService {
 
   private JobLogger jobLogger;

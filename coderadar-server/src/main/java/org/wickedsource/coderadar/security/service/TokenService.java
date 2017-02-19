@@ -36,7 +36,10 @@ public class TokenService {
    * @return JSON Web Token
    */
   public String generateAccessToken(Long userId, String username) {
-    Date expiresAt = DateTime.now().plusMinutes(configuration.getAccessTokenDuration()).toDate();
+    Date expiresAt =
+        DateTime.now()
+            .plusMinutes(configuration.getAuthentication().getAccessTokenDurationInMinutes())
+            .toDate();
     TokenType tokenType = TokenType.ACCESS;
     return generateToken(userId, username, expiresAt, tokenType);
   }
@@ -79,7 +82,7 @@ public class TokenService {
   public boolean isExpired(String token) {
     byte[] secret = secretKeyService.getSecretKey().getEncoded();
     // specify a leeway window in which the token is still considered valid
-    int leeway = configuration.getRefreshTokenDuration() * 60;
+    int leeway = configuration.getAuthentication().getRefreshTokenDurationInMinutes() * 60;
     JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret)).acceptExpiresAt(leeway).build();
     // verify signature and claims
     verifier.verify(token);
@@ -96,7 +99,10 @@ public class TokenService {
    * @return JSON Web Token
    */
   public String generateRefreshToken(Long userId, String username) {
-    Date expiresAt = DateTime.now().plusMinutes(configuration.getRefreshTokenDuration()).toDate();
+    Date expiresAt =
+        DateTime.now()
+            .plusMinutes(configuration.getAuthentication().getRefreshTokenDurationInMinutes())
+            .toDate();
     TokenType tokenType = TokenType.REFRESH;
     return generateToken(userId, username, expiresAt, tokenType);
   }

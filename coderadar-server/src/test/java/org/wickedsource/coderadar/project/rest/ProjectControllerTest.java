@@ -80,7 +80,15 @@ public class ProjectControllerTest extends ControllerTestTemplate {
             fields
                 .withPath("vcsType")
                 .description(
-                    "The type of the version control system your project uses. Either 'GIT' or 'SVN'.")));
+                    "The type of the version control system your project uses. Either 'GIT' or 'SVN'."),
+            fields
+                .withPath("startDate")
+                .description(
+                    "The start date of the range of commits which should be analyzed by coderadar. Leave empty to start at the first commit."),
+            fields
+                .withPath("endDate")
+                .description(
+                    "The end date of the range of commits which should be analyzed by coderadar. Leave empty to automatically process all new incoming commits.")));
   }
 
   @Test

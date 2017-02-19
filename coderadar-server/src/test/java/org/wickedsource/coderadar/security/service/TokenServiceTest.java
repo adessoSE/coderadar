@@ -36,7 +36,7 @@ public class TokenServiceTest {
     SecretKey secretKey = mock(SecretKey.class);
     when(secretKey.getEncoded()).thenReturn(KEY);
     when(secretKeyService.getSecretKey()).thenReturn(secretKey);
-    when(configuration.getRefreshTokenDuration()).thenReturn(86400);
+    when(configuration.getAuthentication()).thenReturn(new CoderadarConfiguration.Authentication());
   }
 
   @Test

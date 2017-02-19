@@ -5,6 +5,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.analyzer.rest.analyzerconfiguration.AnalyzerConfigurationController;
 import org.wickedsource.coderadar.analyzingjob.rest.AnalyzingJobController;
@@ -29,6 +30,12 @@ public class ProjectResourceAssembler extends AbstractResourceAssembler<Project,
       resource.setVcsUrl(project.getVcsCoordinates().getUrl().toString());
       resource.setVcsUser(project.getVcsCoordinates().getUsername());
       resource.setVcsPassword(project.getVcsCoordinates().getPassword());
+      resource.setStartDate(
+          Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
+              project.getVcsCoordinates().getStartDate()));
+      resource.setEndDate(
+          Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
+              project.getVcsCoordinates().getEndDate()));
     }
     resource.add(
         linkTo(methodOn(FilePatternController.class).getFilePatterns(project.getId()))
@@ -50,6 +57,10 @@ public class ProjectResourceAssembler extends AbstractResourceAssembler<Project,
       VcsCoordinates vcs = new VcsCoordinates(new URL(resource.getVcsUrl()), resource.getVcsType());
       vcs.setUsername(resource.getVcsUser());
       vcs.setPassword(resource.getVcsPassword());
+      vcs.setStartDate(
+          Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(resource.getStartDate()));
+      vcs.setEndDate(
+          Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(resource.getEndDate()));
       entity.setVcsCoordinates(vcs);
       return entity;
     } catch (MalformedURLException e) {

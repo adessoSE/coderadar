@@ -1,19 +1,19 @@
 package org.wickedsource.coderadar.vcs.git.walk;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
+import org.wickedsource.coderadar.vcs.git.walk.filter.CommitWalkerFilter;
 
 /** A RepositoryWalker that walks through a certain set of commits of a repository. */
 public class CommitWalker {
 
-  private String lastKnownCommitName;
-
-  private GitCommitFinder commitFinder = new GitCommitFinder();
+  private List<CommitWalkerFilter> filters = new ArrayList<>();
 
   /**
    * Walks through all commits in the specified git repository and passes the commits into the
@@ -25,23 +25,13 @@ public class CommitWalker {
   public void walk(Git gitClient, CommitProcessor commitProcessor) {
     try {
 
-      RevCommit lastKnownCommit = null;
-      if (lastKnownCommitName != null) {
-        lastKnownCommit = commitFinder.findCommit(gitClient, lastKnownCommitName);
-        if (lastKnownCommit == null) {
-          throw new IllegalArgumentException(
-              String.format("Last known commit with name %s does not exist!", lastKnownCommitName));
-        }
-      }
-
       final Counter currentSequenceNumber = new Counter(getCommitCount(gitClient));
 
       ObjectId head = gitClient.getRepository().resolve(Constants.HEAD);
       Iterable<RevCommit> iterator = gitClient.log().add(head).call();
-      RevCommit finalLastKnownCommit = lastKnownCommit;
       iterator.forEach(
           commit -> {
-            if (finalLastKnownCommit == null || isNewerThan(commit, finalLastKnownCommit)) {
+            if (shouldBeProcessed(commit)) {
               RevCommitWithSequenceNumber commitWithSequenceNumber =
                   new RevCommitWithSequenceNumber(commit, currentSequenceNumber.getValue());
               commitProcessor.processCommit(gitClient, commitWithSequenceNumber);
@@ -64,18 +54,16 @@ public class CommitWalker {
     return count.getValue();
   }
 
-  private boolean isNewerThan(RevCommit commit, RevCommit referenceCommit) {
-    return commit.getCommitTime() > referenceCommit.getCommitTime();
+  private boolean shouldBeProcessed(RevCommit commit) {
+    for (CommitWalkerFilter filter : this.filters) {
+      if (!filter.shouldBeProcessed(commit)) {
+        return false;
+      }
+    }
+    return true;
   }
 
-  /**
-   * Lets you specify the name of the latest known commit that already has been processed. Only
-   * commits AFTER the specified commit will be walked by calling {@link #walk(Git,
-   * CommitProcessor)}.
-   *
-   * @param commitName sha1 hash name of the commit.
-   */
-  public void setLastKnownCommitName(String commitName) {
-    this.lastKnownCommitName = commitName;
+  public void addFilter(CommitWalkerFilter filter) {
+    this.filters.add(filter);
   }
 }

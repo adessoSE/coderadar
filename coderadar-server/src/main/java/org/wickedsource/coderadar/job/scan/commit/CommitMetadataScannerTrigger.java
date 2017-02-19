@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
-import org.wickedsource.coderadar.core.configuration.configparams.MasterConfigurationParameter;
 import org.wickedsource.coderadar.job.JobLogger;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
@@ -15,7 +14,7 @@ import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
 @Service
-@ConditionalOnProperty(MasterConfigurationParameter.NAME)
+@ConditionalOnProperty("coderadar.master")
 class CommitMetadataScannerTrigger {
 
   private JobLogger jobLogger;

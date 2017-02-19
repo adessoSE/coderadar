@@ -19,7 +19,7 @@
     <user/>
     <refresh_token/>
 
-    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name" workdir_name="foo"/>
+    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name" workdir_name="foo" start_date="2016-01-01 00:00:00" end_date="2016-12-31 00:00:00"/>
 
     <analyzer_configuration id="1" project_id="1" analyzer_name="org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer" enabled="false"/>
 

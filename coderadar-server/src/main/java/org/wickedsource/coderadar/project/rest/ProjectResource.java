@@ -1,5 +1,10 @@
 package org.wickedsource.coderadar.project.rest;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import java.time.LocalDate;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
@@ -21,6 +26,14 @@ public class ProjectResource extends ResourceSupport {
 
   @Length(max = 100)
   private String vcsPassword;
+
+  @JsonSerialize(using = LocalDateSerializer.class)
+  @JsonDeserialize(using = LocalDateDeserializer.class)
+  private LocalDate startDate;
+
+  @JsonSerialize(using = LocalDateSerializer.class)
+  @JsonDeserialize(using = LocalDateDeserializer.class)
+  private LocalDate endDate;
 
   public String getName() {
     return name;
@@ -60,5 +73,21 @@ public class ProjectResource extends ResourceSupport {
 
   public void setVcsPassword(String vcsPassword) {
     this.vcsPassword = vcsPassword;
+  }
+
+  public LocalDate getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(LocalDate startDate) {
+    this.startDate = startDate;
+  }
+
+  public LocalDate getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(LocalDate endDate) {
+    this.endDate = endDate;
   }
 }

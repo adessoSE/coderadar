@@ -1,10 +1,8 @@
 package org.wickedsource.coderadar.project.domain;
 
 import java.net.URL;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import java.util.Date;
+import javax.persistence.*;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -22,6 +20,14 @@ public class VcsCoordinates {
   @Column private String username;
 
   @Column private String password;
+
+  @Column
+  @Temporal(TemporalType.DATE)
+  private Date startDate;
+
+  @Column
+  @Temporal(TemporalType.DATE)
+  private Date endDate;
 
   public VcsCoordinates() {}
 
@@ -60,6 +66,22 @@ public class VcsCoordinates {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public Date getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(Date startDate) {
+    this.startDate = startDate;
+  }
+
+  public Date getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(Date endDate) {
+    this.endDate = endDate;
   }
 
   @Override

@@ -19,7 +19,7 @@
     <user/>
     <refresh_token/>
 
-    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name" workdir_name="foo"/>
+    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name" workdir_name="foo" start_date="2016-01-01 00:00:00" end_date="2016-12-31 00:00:00"/>
     <commit id="1" project_id="1" name="f9b0553930f133490f292a9c78d0b36b39be8758" sequence_number="1" author="Tom"
             first_parent="cafebabe" comment="first commit"
             scanned="false" analyzed="false" merged="false" timestamp="2016-01-01 00:00:00"

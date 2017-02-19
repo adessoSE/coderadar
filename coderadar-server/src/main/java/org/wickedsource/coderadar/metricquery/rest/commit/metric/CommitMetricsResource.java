@@ -43,7 +43,7 @@ public class CommitMetricsResource extends ResourceSupport {
 
   public void addAbsentMetrics(List<String> metrics) {
     for (String metric : metrics) {
-      if (this.metrics.get(metric) == null) {
+      if (this.metrics == null || this.metrics.get(metric) == null) {
         addMetricValue(metric, 0L);
       }
     }

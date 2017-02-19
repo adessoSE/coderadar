@@ -9,12 +9,11 @@ import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
-import org.wickedsource.coderadar.core.configuration.configparams.MasterConfigurationParameter;
 import org.wickedsource.coderadar.job.JobLogger;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
 
 @Service
-@ConditionalOnProperty(MasterConfigurationParameter.NAME)
+@ConditionalOnProperty("coderadar.master")
 public class AnalyzeCommitJobTrigger {
 
   private JobLogger jobLogger;
