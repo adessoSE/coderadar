@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.job.scan.file;
 
+import static com.codahale.metrics.MetricRegistry.name;
+
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import java.io.IOException;
@@ -24,8 +26,6 @@ import org.wickedsource.coderadar.file.domain.GitLogEntryRepository;
 import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
 import org.wickedsource.coderadar.vcs.git.ChangeTypeMapper;
 import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
-
-import static com.codahale.metrics.MetricRegistry.name;
 
 @Service
 public class FileMetadataScanner {

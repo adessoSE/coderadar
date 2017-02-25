@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.job.analyze;
 
+import static com.codahale.metrics.MetricRegistry.name;
+
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import java.io.IOException;
@@ -39,8 +41,6 @@ import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueId;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
-
-import static com.codahale.metrics.MetricRegistry.name;
 
 @Service
 public class CommitAnalyzer {

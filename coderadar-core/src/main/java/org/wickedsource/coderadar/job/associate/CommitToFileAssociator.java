@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.job.associate;
 
+import static com.codahale.metrics.MetricRegistry.name;
+
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import java.util.*;
@@ -18,8 +20,6 @@ import org.wickedsource.coderadar.commit.domain.CommitToFileAssociation;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociationRepository;
 import org.wickedsource.coderadar.commit.event.CommitToFileAssociatedEvent;
 import org.wickedsource.coderadar.file.domain.*;
-
-import static com.codahale.metrics.MetricRegistry.name;
 
 @Service
 public class CommitToFileAssociator {

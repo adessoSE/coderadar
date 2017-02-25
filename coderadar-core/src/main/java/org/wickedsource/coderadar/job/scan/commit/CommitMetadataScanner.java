@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.job.scan.commit;
 
+import static com.codahale.metrics.MetricRegistry.name;
+
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import java.io.File;
@@ -17,8 +19,6 @@ import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.vcs.git.walk.CommitWalker;
 import org.wickedsource.coderadar.vcs.git.walk.filter.DateRangeCommitFilter;
 import org.wickedsource.coderadar.vcs.git.walk.filter.LastKnownCommitFilter;
-
-import static com.codahale.metrics.MetricRegistry.name;
 
 @Service
 public class CommitMetadataScanner {

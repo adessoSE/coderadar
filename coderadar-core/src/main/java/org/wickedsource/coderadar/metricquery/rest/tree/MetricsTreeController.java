@@ -1,12 +1,12 @@
 package org.wickedsource.coderadar.metricquery.rest.tree;
 
+import static com.codahale.metrics.MetricRegistry.name;
+
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
-
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
@@ -31,8 +31,6 @@ import org.wickedsource.coderadar.metricquery.rest.tree.delta.DeltaTreePayload;
 import org.wickedsource.coderadar.metricquery.rest.tree.delta.DeltaTreeQuery;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
-import static com.codahale.metrics.MetricRegistry.name;
-
 @Controller
 @ExposesResourceFor(MetricValue.class)
 @Transactional
@@ -49,10 +47,10 @@ public class MetricsTreeController {
 
   @Autowired
   public MetricsTreeController(
-          ProjectVerifier projectVerifier,
-          MetricValueRepository metricValueRepository,
-          CommitRepository commitRepository,
-          MetricRegistry metricRegistry) {
+      ProjectVerifier projectVerifier,
+      MetricValueRepository metricValueRepository,
+      CommitRepository commitRepository,
+      MetricRegistry metricRegistry) {
     this.projectVerifier = projectVerifier;
     this.metricValueRepository = metricValueRepository;
     this.commitRepository = commitRepository;
@@ -107,30 +105,30 @@ public class MetricsTreeController {
 
       List<GroupedMetricValueDTO> groupedMetricValues1 = new ArrayList<>();
       groupedMetricValues1.addAll(
-              metricValueRepository.findValuesAggregatedByModule(
-                      projectId, commit1.getSequenceNumber(), query.getMetrics()));
+          metricValueRepository.findValuesAggregatedByModule(
+              projectId, commit1.getSequenceNumber(), query.getMetrics()));
       groupedMetricValues1.addAll(
-              metricValueRepository.findValuesAggregatedByFile(
-                      projectId, commit1.getSequenceNumber(), query.getMetrics()));
+          metricValueRepository.findValuesAggregatedByFile(
+              projectId, commit1.getSequenceNumber(), query.getMetrics()));
       MetricsTreeResource<CommitMetricsPayload> treeForCommit1 =
-              assembler.toResource(groupedMetricValues1);
+          assembler.toResource(groupedMetricValues1);
 
       List<GroupedMetricValueDTO> groupedMetricValues2 = new ArrayList<>();
       groupedMetricValues2.addAll(
-              metricValueRepository.findValuesAggregatedByModule(
-                      projectId, commit2.getSequenceNumber(), query.getMetrics()));
+          metricValueRepository.findValuesAggregatedByModule(
+              projectId, commit2.getSequenceNumber(), query.getMetrics()));
       groupedMetricValues2.addAll(
-              metricValueRepository.findValuesAggregatedByFile(
-                      projectId, commit2.getSequenceNumber(), query.getMetrics()));
+          metricValueRepository.findValuesAggregatedByFile(
+              projectId, commit2.getSequenceNumber(), query.getMetrics()));
       MetricsTreeResource<CommitMetricsPayload> treeForCommit2 =
-              assembler.toResource(groupedMetricValues2);
+          assembler.toResource(groupedMetricValues2);
 
       ChangedFilesMap changedFilesMap = getChangedFiles(projectId, commit1, commit2);
 
       MetricsTreeResource<DeltaTreePayload> deltaTree =
-              merge(treeForCommit1, treeForCommit2, changedFilesMap);
+          merge(treeForCommit1, treeForCommit2, changedFilesMap);
       return new ResponseEntity<>(deltaTree, HttpStatus.OK);
-    }finally {
+    } finally {
       timer.stop();
     }
   }
