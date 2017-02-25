@@ -23,6 +23,7 @@ The overriding goal of coderadar is **to make it easy for you to improve the cod
  * Easy installation of plugins
 
 * **Fun**
+ * Include metrics from the VCS to support gamification
  * Support gamification to make code quality fun
  
 ## Roadmap

@@ -3,6 +3,10 @@ package org.wickedsource.coderadar.metricquery.rest.tree;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
+
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
@@ -27,6 +31,8 @@ import org.wickedsource.coderadar.metricquery.rest.tree.delta.DeltaTreePayload;
 import org.wickedsource.coderadar.metricquery.rest.tree.delta.DeltaTreeQuery;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
+import static com.codahale.metrics.MetricRegistry.name;
+
 @Controller
 @ExposesResourceFor(MetricValue.class)
 @Transactional
@@ -39,14 +45,18 @@ public class MetricsTreeController {
 
   private CommitRepository commitRepository;
 
+  private Timer deltaTreeTimer;
+
   @Autowired
   public MetricsTreeController(
-      ProjectVerifier projectVerifier,
-      MetricValueRepository metricValueRepository,
-      CommitRepository commitRepository) {
+          ProjectVerifier projectVerifier,
+          MetricValueRepository metricValueRepository,
+          CommitRepository commitRepository,
+          MetricRegistry metricRegistry) {
     this.projectVerifier = projectVerifier;
     this.metricValueRepository = metricValueRepository;
     this.commitRepository = commitRepository;
+    this.deltaTreeTimer = metricRegistry.timer(name(MetricsTreeController.class, "deltaTree"));
   }
 
   @RequestMapping(
@@ -80,45 +90,49 @@ public class MetricsTreeController {
   )
   public ResponseEntity<MetricsTreeResource> queryMetricsDelta(
       @PathVariable Long projectId, @Valid @RequestBody DeltaTreeQuery query) {
-    projectVerifier.checkProjectExistsOrThrowException(projectId);
-    Commit commit1 = commitRepository.findByName(query.getCommit1());
-    if (commit1 == null) {
-      throw new ResourceNotFoundException("commit1 does not exist.");
+    Timer.Context timer = deltaTreeTimer.time();
+    try {
+      projectVerifier.checkProjectExistsOrThrowException(projectId);
+      Commit commit1 = commitRepository.findByName(query.getCommit1());
+      if (commit1 == null) {
+        throw new ResourceNotFoundException("commit1 does not exist.");
+      }
+
+      Commit commit2 = commitRepository.findByName(query.getCommit2());
+      if (commit2 == null) {
+        throw new ResourceNotFoundException("commit2 does not exist.");
+      }
+
+      MetricsTreeResourceAssembler assembler = new MetricsTreeResourceAssembler();
+
+      List<GroupedMetricValueDTO> groupedMetricValues1 = new ArrayList<>();
+      groupedMetricValues1.addAll(
+              metricValueRepository.findValuesAggregatedByModule(
+                      projectId, commit1.getSequenceNumber(), query.getMetrics()));
+      groupedMetricValues1.addAll(
+              metricValueRepository.findValuesAggregatedByFile(
+                      projectId, commit1.getSequenceNumber(), query.getMetrics()));
+      MetricsTreeResource<CommitMetricsPayload> treeForCommit1 =
+              assembler.toResource(groupedMetricValues1);
+
+      List<GroupedMetricValueDTO> groupedMetricValues2 = new ArrayList<>();
+      groupedMetricValues2.addAll(
+              metricValueRepository.findValuesAggregatedByModule(
+                      projectId, commit2.getSequenceNumber(), query.getMetrics()));
+      groupedMetricValues2.addAll(
+              metricValueRepository.findValuesAggregatedByFile(
+                      projectId, commit2.getSequenceNumber(), query.getMetrics()));
+      MetricsTreeResource<CommitMetricsPayload> treeForCommit2 =
+              assembler.toResource(groupedMetricValues2);
+
+      ChangedFilesMap changedFilesMap = getChangedFiles(projectId, commit1, commit2);
+
+      MetricsTreeResource<DeltaTreePayload> deltaTree =
+              merge(treeForCommit1, treeForCommit2, changedFilesMap);
+      return new ResponseEntity<>(deltaTree, HttpStatus.OK);
+    }finally {
+      timer.stop();
     }
-
-    Commit commit2 = commitRepository.findByName(query.getCommit2());
-    if (commit2 == null) {
-      throw new ResourceNotFoundException("commit2 does not exist.");
-    }
-
-    MetricsTreeResourceAssembler assembler = new MetricsTreeResourceAssembler();
-
-    List<GroupedMetricValueDTO> groupedMetricValues1 = new ArrayList<>();
-    groupedMetricValues1.addAll(
-        metricValueRepository.findValuesAggregatedByModule(
-            projectId, commit1.getSequenceNumber(), query.getMetrics()));
-    groupedMetricValues1.addAll(
-        metricValueRepository.findValuesAggregatedByFile(
-            projectId, commit1.getSequenceNumber(), query.getMetrics()));
-    MetricsTreeResource<CommitMetricsPayload> treeForCommit1 =
-        assembler.toResource(groupedMetricValues1);
-
-    List<GroupedMetricValueDTO> groupedMetricValues2 = new ArrayList<>();
-    groupedMetricValues2.addAll(
-        metricValueRepository.findValuesAggregatedByModule(
-            projectId, commit2.getSequenceNumber(), query.getMetrics()));
-    groupedMetricValues2.addAll(
-        metricValueRepository.findValuesAggregatedByFile(
-            projectId, commit2.getSequenceNumber(), query.getMetrics()));
-    MetricsTreeResource<CommitMetricsPayload> treeForCommit2 =
-        assembler.toResource(groupedMetricValues2);
-
-    ChangedFilesMap changedFilesMap = getChangedFiles(projectId, commit1, commit2);
-
-    MetricsTreeResource<DeltaTreePayload> deltaTree =
-        merge(treeForCommit1, treeForCommit2, changedFilesMap);
-
-    return new ResponseEntity<>(deltaTree, HttpStatus.OK);
   }
 
   private ChangedFilesMap getChangedFiles(Long projectId, Commit commit1, Commit commit2) {

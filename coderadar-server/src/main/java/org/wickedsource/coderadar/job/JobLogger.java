@@ -10,6 +10,8 @@ import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.project.domain.Project;
 
+import static com.codahale.metrics.MetricRegistry.name;
+
 /**
  * Central logger for logging informations about running and queuing jobs. This way, all log
  * information about jobs can easily be identified and even routed into a separate log file.
@@ -31,9 +33,9 @@ public class JobLogger {
 
   @Autowired
   public JobLogger(MetricRegistry metricRegistry) {
-    this.failedJobsMeter = metricRegistry.meter("coderadar.jobs.failed");
-    this.jobConflictMeter = metricRegistry.meter("coderadar.jobs.acquisitionConflicts");
-    this.finishedJobsMeter = metricRegistry.meter("coderadar.jobs.finished");
+    this.failedJobsMeter = metricRegistry.meter(name(JobLogger.class, "failed"));
+    this.jobConflictMeter = metricRegistry.meter(name(JobLogger.class, "conflicts"));
+    this.finishedJobsMeter = metricRegistry.meter(name(JobLogger.class, "finished"));
   }
 
   public void queuedNewJob(Job job, Project project) {

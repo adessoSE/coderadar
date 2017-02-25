@@ -19,6 +19,8 @@ import org.wickedsource.coderadar.commit.domain.CommitToFileAssociationRepositor
 import org.wickedsource.coderadar.commit.event.CommitToFileAssociatedEvent;
 import org.wickedsource.coderadar.file.domain.*;
 
+import static com.codahale.metrics.MetricRegistry.name;
+
 @Service
 public class CommitToFileAssociator {
 
@@ -59,8 +61,8 @@ public class CommitToFileAssociator {
     this.commitRepository = commitRepository;
     this.commitToFileAssociationRepository = commitToFileAssociationRepository;
     this.eventPublisher = eventPublisher;
-    this.commitsMeter = metricRegistry.meter("coderadar.CommitToFileAssociator.commits");
-    this.filesMeter = metricRegistry.meter("coderadar.CommitToFileAssociator.files");
+    this.commitsMeter = metricRegistry.meter(name(CommitToFileAssociator.class, "commits"));
+    this.filesMeter = metricRegistry.meter(name(CommitToFileAssociator.class, "files"));
   }
 
   /**

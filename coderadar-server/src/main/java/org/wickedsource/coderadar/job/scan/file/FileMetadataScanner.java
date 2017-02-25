@@ -25,6 +25,8 @@ import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
 import org.wickedsource.coderadar.vcs.git.ChangeTypeMapper;
 import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
 
+import static com.codahale.metrics.MetricRegistry.name;
+
 @Service
 public class FileMetadataScanner {
 
@@ -55,8 +57,8 @@ public class FileMetadataScanner {
     this.commitRepository = commitRepository;
     this.commitFinder = commitFinder;
     this.logEntryRepository = logEntryRepository;
-    this.filesMeter = metricRegistry.meter("coderadar.FileMetadataScanner.files");
-    this.commitsMeter = metricRegistry.meter("coderadar.FileMetadataScanner.commits");
+    this.filesMeter = metricRegistry.meter(name(FileMetadataScanner.class, "files"));
+    this.commitsMeter = metricRegistry.meter(name(FileMetadataScanner.class, "commits"));
   }
 
   /**

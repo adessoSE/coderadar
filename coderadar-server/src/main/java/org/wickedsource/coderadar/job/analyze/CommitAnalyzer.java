@@ -40,6 +40,8 @@ import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepositor
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
 
+import static com.codahale.metrics.MetricRegistry.name;
+
 @Service
 public class CommitAnalyzer {
 
@@ -107,8 +109,8 @@ public class CommitAnalyzer {
     this.metricValueRepository = metricValueRepository;
     this.findingRepository = findingRepository;
     this.analyzingJobRepository = analyzingJobRepository;
-    this.commitsMeter = metricRegistry.meter("coderadar.CommitAnalyzer.commits");
-    this.filesMeter = metricRegistry.meter("coderadar.CommitAnalyzer.files");
+    this.commitsMeter = metricRegistry.meter(name(CommitAnalyzer.class, "commits"));
+    this.filesMeter = metricRegistry.meter(name(CommitAnalyzer.class, "files"));
   }
 
   /**

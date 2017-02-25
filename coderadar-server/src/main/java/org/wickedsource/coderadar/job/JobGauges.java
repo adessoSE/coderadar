@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.job.core.JobRepository;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
 
+import static com.codahale.metrics.MetricRegistry.name;
+
 @Component
 public class JobGauges {
 
@@ -14,7 +16,7 @@ public class JobGauges {
   public JobGauges(MetricRegistry metricRegistry, JobRepository jobRepository) {
 
     metricRegistry.register(
-        "coderadar.jobs.inProgress",
+        name(JobLogger.class, "inProgress"),
         new Gauge() {
           @Override
           public Object getValue() {
@@ -23,7 +25,7 @@ public class JobGauges {
         });
 
     metricRegistry.register(
-        "coderadar.jobs.waiting",
+        name(JobLogger.class, "waiting"),
         new Gauge() {
           @Override
           public Object getValue() {

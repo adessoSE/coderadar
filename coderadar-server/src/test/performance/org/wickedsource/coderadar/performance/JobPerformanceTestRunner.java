@@ -20,13 +20,16 @@ import java.util.Map;
 public class JobPerformanceTestRunner {
 
     private static final List<String> MONITORED_METRICS = Arrays.asList(
-            "coderadar.CommitAnalyzer.commits.oneMinuteRate",
-            "coderadar.CommitAnalyzer.files.oneMinuteRate",
-            "coderadar.CommitMetaDataScanner.commits.oneMinuteRate",
-            "coderadar.CommitToFileAssociator.commits.oneMinuteRate",
-            "coderadar.CommitToFileAssociator.files.oneMinuteRate",
-            "coderadar.FileMetadataScanner.commits.oneMinuteRate",
-            "coderadar.FileMetadataScanner.files.oneMinuteRate"
+            "org.wickedsource.coderadar.job.JobLogger.conflicts.oneMinuteRate",
+            "org.wickedsource.coderadar.job.JobLogger.failed.oneMinuteRate",
+            "org.wickedsource.coderadar.job.JobLogger.finished.oneMinuteRate",
+            "org.wickedsource.coderadar.job.analyze.CommitAnalyzer.commits.oneMinuteRate",
+            "org.wickedsource.coderadar.job.analyze.CommitAnalyzer.files.oneMinuteRate",
+            "org.wickedsource.coderadar.job.associate.CommitToFileAssociator.commits.oneMinuteRate",
+            "org.wickedsource.coderadar.job.associate.CommitToFileAssociator.files.oneMinuteRate",
+            "org.wickedsource.coderadar.job.scan.commit.CommitMetadataScanner.commits.oneMinuteRate",
+            "org.wickedsource.coderadar.job.scan.file.FileMetadataScanner.commits.oneMinuteRate",
+            "org.wickedsource.coderadar.job.scan.file.FileMetadataScanner.files.oneMinuteRate"
     );
 
     private final static int DURATION_IN_SECONDS = 600;

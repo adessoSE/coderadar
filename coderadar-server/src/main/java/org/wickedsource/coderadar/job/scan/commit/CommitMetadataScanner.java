@@ -18,6 +18,8 @@ import org.wickedsource.coderadar.vcs.git.walk.CommitWalker;
 import org.wickedsource.coderadar.vcs.git.walk.filter.DateRangeCommitFilter;
 import org.wickedsource.coderadar.vcs.git.walk.filter.LastKnownCommitFilter;
 
+import static com.codahale.metrics.MetricRegistry.name;
+
 @Service
 public class CommitMetadataScanner {
 
@@ -36,7 +38,7 @@ public class CommitMetadataScanner {
       MetricRegistry metricRegistry) {
     this.commitRepository = commitRepository;
     this.updater = updater;
-    this.commitsMeter = metricRegistry.meter("coderadar.CommitMetaDataScanner.commits");
+    this.commitsMeter = metricRegistry.meter(name(CommitMetadataScanner.class, "commits"));
   }
 
   /**
