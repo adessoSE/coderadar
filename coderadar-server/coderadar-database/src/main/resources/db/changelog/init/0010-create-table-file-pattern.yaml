@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: 9
+      author: thombergs
+      changes:
+        - createTable:
+            tableName: file_pattern
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pattern
+                  type: varchar(2000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: inclusion_type
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_set_type
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: project_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            constraintName: pk_fpat_id
+            schemaName: public
+            tableName: file_pattern
+            columnNames: id
+        - addUniqueConstraint:
+            constraintName: uk_fpat_id
+            schemaName: public
+            tableName: file_pattern
+            columnNames: id
+        - createIndex:
+            indexName: idx_fpat_project_id
+            schemaName: public
+            tableName: file_pattern
+            columns:
+            - column:
+                name: project_id
