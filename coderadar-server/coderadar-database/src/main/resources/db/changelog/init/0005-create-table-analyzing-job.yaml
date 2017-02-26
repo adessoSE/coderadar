@@ -31,12 +31,12 @@ databaseChangeLog:
         - addPrimaryKey:
             constraintName: pk_ajob_id
             schemaName: public
-            tableName: analyzing_file
+            tableName: analyzing_job
             columnNames: id
         - addUniqueConstraint:
             constraintName: uk_ajob_id
             schemaName: public
-            tableName: analyzing_file
+            tableName: analyzing_job
             columnNames: id
         - addForeignKeyConstraint:
             constraintName: fk_ajob_proj_id

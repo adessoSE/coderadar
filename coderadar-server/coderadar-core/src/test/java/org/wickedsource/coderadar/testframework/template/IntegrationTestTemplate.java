@@ -25,7 +25,10 @@ import org.wickedsource.coderadar.CoderadarTestApplication;
     "coderadar.master=false",
     "coderadar.slave=false",
     "coderadar.workdir=build/coderadar-workdir",
-    "coderadar.dateLocale=de_DE"
+    "coderadar.dateLocale=de_DE",
+    // We want to use the same database instancein all tests, even when the default
+    // is set to "true" with Spring Boot 1.5
+    "spring.datasource.generate-unique-name=false"
   }
 )
 @WebAppConfiguration

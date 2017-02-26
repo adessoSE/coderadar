@@ -1,0 +1,61 @@
+databaseChangeLog:
+  - changeSet:
+      id: 11
+      author: thombergs
+      changes:
+        - createTable:
+            tableName: finding
+            schemaName: public
+            columns:
+              - column:
+                  name: commit_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: metric_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: char_start
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: char_end
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: line_start
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: line_end
+                  type: int
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            constraintName: pk_find_id
+            schemaName: public
+            tableName: finding
+            columnNames: commit_id, file_id, metric_name
+        - addUniqueConstraint:
+            constraintName: uk_find_id
+            schemaName: public
+            tableName: finding
+            columnNames: commit_id, file_id, metric_name
+        - createIndex:
+            indexName: idx_find_commit_id
+            schemaName: public
+            tableName: finding
+            columns:
+              - column:
+                  name: commit_id

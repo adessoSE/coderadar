@@ -33,13 +33,13 @@ databaseChangeLog:
             schemaName: public
             tableName: file
             columnNames: id
-         - createIndex:
+        - createIndex:
             indexName: idx_file_fiid_id
             schemaName: public
             tableName: file
             columns:
-            - column:
-                name: identity_id
+              - column:
+                  name: identity_id
         - createSequence:
             schemaName: public
             sequenceName: seq_file_id

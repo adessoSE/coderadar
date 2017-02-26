@@ -63,6 +63,6 @@ databaseChangeLog:
                 name: analyzer_configuration_id
         - createSequence:
             schemaName: public
-            sequenceName: seq_acon_id
+            sequenceName: seq_acof_id
 
 

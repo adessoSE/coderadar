@@ -7,18 +7,22 @@ import javax.persistence.Table;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueId;
 
 @Entity
-@Table
+@Table(name = "finding")
 public class Finding {
 
   @EmbeddedId private MetricValueId id;
 
-  @Column private Integer lineStart;
+  @Column(name = "line_start")
+  private Integer lineStart;
 
-  @Column private Integer lineEnd;
+  @Column(name = "line_end")
+  private Integer lineEnd;
 
-  @Column private Integer charStart;
+  @Column(name = "char_start")
+  private Integer charStart;
 
-  @Column private Integer charEnd;
+  @Column(name = "char_end")
+  private Integer charEnd;
 
   public MetricValueId getId() {
     return id;

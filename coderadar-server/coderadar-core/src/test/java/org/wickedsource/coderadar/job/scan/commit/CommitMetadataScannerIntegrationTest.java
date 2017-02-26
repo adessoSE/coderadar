@@ -33,6 +33,7 @@ import org.wickedsource.coderadar.testframework.category.IntegrationTest;
 import org.wickedsource.coderadar.testframework.template.GitTestTemplate;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryChecker;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryCloner;
+import org.wickedsource.coderadar.vcs.git.GitRepositoryResetter;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryUpdater;
 
 public class CommitMetadataScannerIntegrationTest extends GitTestTemplate {
@@ -47,7 +48,7 @@ public class CommitMetadataScannerIntegrationTest extends GitTestTemplate {
 
   @Spy private GitRepositoryCloner gitCloner;
 
-  @Spy private GitRepositoryUpdater gitUpdater;
+  private GitRepositoryUpdater gitUpdater;
 
   @Mock private WorkdirManager workdirManager;
 
@@ -62,6 +63,7 @@ public class CommitMetadataScannerIntegrationTest extends GitTestTemplate {
     MockitoAnnotations.initMocks(this);
     mock(workdirManager);
     mock(config);
+    gitUpdater = new GitRepositoryUpdater(new GitRepositoryResetter());
     updater = new LocalGitRepositoryUpdater(gitUpdater, gitCloner, gitChecker, workdirManager);
   }
 
