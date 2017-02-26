@@ -1,8 +1,10 @@
 package org.wickedsource.coderadar.job.queue;
 
+import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Projects.SINGLE_PROJECT;
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.job;
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -28,9 +30,10 @@ public class JobDequeueLoadTest extends IntegrationTestTemplate {
   @Autowired private JobRepository repository;
 
   @Test
+  @DatabaseSetup(SINGLE_PROJECT)
   public void loadTestDequeueJob() throws InterruptedException {
     for (int i = 0; i < 100; i++) {
-      Project project = projectRepository.save(project().validProject());
+      Project project = projectRepository.findOne(1L);
       ScanCommitsJob job = job().waitingPullJob();
       job.setId(null);
       job.setProject(project);

@@ -9,19 +9,19 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class DateCoordinates {
 
-  @Column(nullable = false)
+  @Column(name = "year", nullable = false)
   private Integer year;
 
-  @Column(nullable = false)
+  @Column(name = "month", nullable = false)
   private Integer month;
 
-  @Column(nullable = false)
+  @Column(name = "day_of_month", nullable = false)
   private Integer dayOfMonth;
 
-  @Column(nullable = false)
+  @Column(name = "week_of_year", nullable = false)
   private Integer weekOfYear;
 
-  @Column(nullable = false)
+  @Column(name = "year_of_week", nullable = false)
   private Integer yearOfWeek;
 
   public DateCoordinates() {}

@@ -1,0 +1,132 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: thombergs
+      changes:
+        - createTable:
+            tableName: commit
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(40)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: project_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: timestamp
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comment
+                  type: varchar(4000)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: author
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: scanned
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    defaultValue: false
+              - column:
+                  name: merged
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    defaultValue: false
+              - column:
+                  name: analyzed
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    defaultValue: false
+              - column:
+                  name: sequence_number
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_parent
+                  type: varchar(40)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: year
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: month
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: day_of_month
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: week_of_year
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: year_of_week
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            constraintName: pk_com_id
+            schemaName: public
+            tableName: commit
+            columnNames: id
+        - addUniqueConstraint:
+            constraintName: uk_com_id
+            schemaName: public
+            tableName: commit
+            columnNames: id
+        - addUniqueConstraint:
+            constraintName: uk_com_name
+            schemaName: public
+            tableName: commit
+            columnNames: name
+        - addForeignKeyConstraint:
+            constraintName: fk_com_project
+            baseColumnNames: project_id
+            baseTableName: commit
+            referencedColumnNames: id
+            referencedTableName: project
+        - createIndex:
+            schemaName: public
+            tableName: commit
+            columns:
+            - column:
+                name: project_id
+        - createIndex:
+            indexName: idx_com_sequence_number
+            schemaName: public
+            tableName: commit
+            columns:
+            - column:
+                name: sequence_number
+        - createSequence:
+            schemaName: public
+            sequenceName: seq_com_id
+
+

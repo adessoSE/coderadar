@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: thombergs
+
+  - include:
+      file: db/changelog/init/0001-create-table-project.yaml

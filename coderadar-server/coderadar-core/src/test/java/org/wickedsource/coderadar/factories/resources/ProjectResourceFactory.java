@@ -1,7 +1,6 @@
 package org.wickedsource.coderadar.factories.resources;
 
 import java.time.LocalDate;
-import org.wickedsource.coderadar.project.domain.VcsType;
 import org.wickedsource.coderadar.project.rest.ProjectResource;
 
 public class ProjectResourceFactory {
@@ -12,7 +11,6 @@ public class ProjectResourceFactory {
     project.setVcsPassword("pass");
     project.setVcsUrl("http://valid.url");
     project.setName("name");
-    project.setVcsType(VcsType.GIT);
     project.setStartDate(LocalDate.of(2016, 1, 1));
     project.setEndDate(LocalDate.of(2016, 12, 31));
     return project;
@@ -24,7 +22,6 @@ public class ProjectResourceFactory {
     project.setVcsPassword("pass2");
     project.setVcsUrl("http://valid.url2");
     project.setName("name2");
-    project.setVcsType(VcsType.GIT);
     project.setStartDate(LocalDate.of(2016, 1, 1));
     project.setEndDate(LocalDate.of(2016, 12, 31));
     return project;

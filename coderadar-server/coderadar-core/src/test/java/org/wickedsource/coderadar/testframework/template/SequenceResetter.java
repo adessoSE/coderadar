@@ -31,4 +31,20 @@ public final class SequenceResetter {
       throw new RuntimeException(e);
     }
   }
+
+  public void resetSequences(String... sequenceNames) {
+    try {
+      String resetSqlTemplate = "ALTER SEQUENCE %s RESTART WITH 1";
+      try (Connection dbConnection = dataSource.getConnection()) {
+        for (String resetSqlArgument : sequenceNames) {
+          try (Statement statement = dbConnection.createStatement()) {
+            String resetSql = String.format(resetSqlTemplate, resetSqlArgument);
+            statement.execute(resetSql);
+          }
+        }
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }

@@ -44,9 +44,11 @@ public class FileRepositoryTest extends IntegrationTestTemplate {
     commit.getFiles().add(association);
     commitToFileAssociationRepository.save(association);
 
-    File foundFile = fileRepository.findInCommit(file.getFilepath(), commit.getName(), 1L).get(0);
+    File foundFile =
+        fileRepository.findInCommit(file.getFilepath(), commit.getName(), project.getId()).get(0);
     Assert.assertEquals(file.getId(), foundFile.getId());
 
-    Assert.assertEquals(0, fileRepository.findInCommit("321", commit.getName(), 1L).size());
+    Assert.assertEquals(
+        0, fileRepository.findInCommit("321", commit.getName(), project.getId()).size());
   }
 }

@@ -16,7 +16,6 @@ import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
-import org.wickedsource.coderadar.project.domain.VcsType;
 import org.wickedsource.coderadar.testframework.category.IntegrationTest;
 
 public class GitCommitFetcherIntegrationTest {
@@ -47,8 +46,7 @@ public class GitCommitFetcherIntegrationTest {
   @Test
   @Category(IntegrationTest.class)
   public void fetchCommit() throws MalformedURLException {
-    VcsCoordinates vcs =
-        new VcsCoordinates(new URL("https://github.com/thombergs/diffparser.git"), VcsType.GIT);
+    VcsCoordinates vcs = new VcsCoordinates(new URL("https://github.com/thombergs/diffparser.git"));
     GitCommitFetcher fetcher = new GitCommitFetcher();
     fetcher.fetchCommit("729fa5085a8c40afc100592da98df86b356088a1", vcs, tempDir.toPath());
 

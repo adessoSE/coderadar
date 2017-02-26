@@ -26,7 +26,6 @@ public class ProjectResourceAssembler extends AbstractResourceAssembler<Project,
     ProjectResource resource = createResourceWithId(project.getId(), project);
     resource.setName(project.getName());
     if (project.getVcsCoordinates() != null) {
-      resource.setVcsType(project.getVcsCoordinates().getType());
       resource.setVcsUrl(project.getVcsCoordinates().getUrl().toString());
       resource.setVcsUser(project.getVcsCoordinates().getUsername());
       resource.setVcsPassword(project.getVcsCoordinates().getPassword());
@@ -54,7 +53,7 @@ public class ProjectResourceAssembler extends AbstractResourceAssembler<Project,
   Project updateEntity(ProjectResource resource, Project entity) {
     try {
       entity.setName(resource.getName());
-      VcsCoordinates vcs = new VcsCoordinates(new URL(resource.getVcsUrl()), resource.getVcsType());
+      VcsCoordinates vcs = new VcsCoordinates(new URL(resource.getVcsUrl()));
       vcs.setUsername(resource.getVcsUser());
       vcs.setPassword(resource.getVcsPassword());
       vcs.setStartDate(

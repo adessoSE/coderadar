@@ -1,5 +1,7 @@
 <dataset>
     <project/>
+    <databasechangelog/>
+    <databasechangeloglock/>
     <analyzing_job/>
     <commit/>
     <git_log_entry/>
@@ -19,9 +21,12 @@
     <user/>
     <refresh_token/>
 
-    <project id="1" url="http://valid.url" type="GIT" username="user" password="pass" name="name" workdir_name="foo" start_date="2016-01-01 00:00:00" end_date="2016-12-31 00:00:00"/>
+    <project id="1" vcs_url="http://valid.url" vcs_username="user" vcs_password="pass" name="name" workdir_name="foo"
+             vcs_start_date="2016-01-01 00:00:00" vcs_end_date="2016-12-31 00:00:00"/>
 
-    <analyzer_configuration id="1" project_id="1" analyzer_name="org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer" enabled="true"/>
-    <analyzer_configuration_file id="1" analyzer_configuration_id="1" file_data="YWJj" content_type="text/plain" file_name="config.txt" size_in_bytes="3"/>
+    <analyzer_configuration id="1" project_id="1"
+                            analyzer_name="org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer" enabled="true"/>
+    <analyzer_configuration_file id="1" analyzer_configuration_id="1" file_data="YWJj" content_type="text/plain"
+                                 file_name="config.txt" size_in_bytes="3"/>
 
 </dataset>

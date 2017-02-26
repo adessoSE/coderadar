@@ -10,30 +10,27 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @Embeddable
 public class VcsCoordinates {
 
-  @Column(nullable = false)
+  @Column(name = "vcs_url", nullable = false)
   private URL url;
 
-  @Column(nullable = false)
-  @Enumerated(EnumType.STRING)
-  private VcsType type;
+  @Column(name = "vcs_username")
+  private String username;
 
-  @Column private String username;
+  @Column(name = "vcs_password")
+  private String password;
 
-  @Column private String password;
-
-  @Column
+  @Column(name = "vcs_start_date")
   @Temporal(TemporalType.DATE)
   private Date startDate;
 
-  @Column
+  @Column(name = "vcs_end_date")
   @Temporal(TemporalType.DATE)
   private Date endDate;
 
   public VcsCoordinates() {}
 
-  public VcsCoordinates(URL url, VcsType type) {
+  public VcsCoordinates(URL url) {
     this.url = url;
-    this.type = type;
   }
 
   public URL getUrl() {
@@ -42,14 +39,6 @@ public class VcsCoordinates {
 
   public void setUrl(URL url) {
     this.url = url;
-  }
-
-  public VcsType getType() {
-    return type;
-  }
-
-  public void setType(VcsType type) {
-    this.type = type;
   }
 
   public String getUsername() {

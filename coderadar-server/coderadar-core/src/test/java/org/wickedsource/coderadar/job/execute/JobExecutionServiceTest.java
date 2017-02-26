@@ -2,9 +2,10 @@ package org.wickedsource.coderadar.job.execute;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Jobs.SINGLE_PROJECT_WITH_WAITING_JOB;
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.job;
-import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -16,8 +17,6 @@ import org.wickedsource.coderadar.job.core.ProcessingStatus;
 import org.wickedsource.coderadar.job.core.ResultStatus;
 import org.wickedsource.coderadar.job.queue.JobQueueService;
 import org.wickedsource.coderadar.job.queue.JobUpdater;
-import org.wickedsource.coderadar.project.domain.Project;
-import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
 public class JobExecutionServiceTest extends IntegrationTestTemplate {
@@ -32,11 +31,10 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
 
   @Mock private JobExecutor jobExecutor;
 
-  @Autowired private ProjectRepository projectRepository;
-
   @Test
+  @DatabaseSetup(SINGLE_PROJECT_WITH_WAITING_JOB)
   public void testSuccessfulExecution() {
-    Job jobBeforeExecution = initJob();
+    Job jobBeforeExecution = jobRepository.findOne(1l);
 
     JobExecutionService executionService =
         new JobExecutionService(jobLogger, jobQueueService, jobUpdater, jobExecutor);
@@ -47,20 +45,10 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
     Assert.assertEquals(ProcessingStatus.PROCESSED, jobAfterExecution.getProcessingStatus());
   }
 
-  private Job initJob() {
-    Project project = projectRepository.save(project().validProject());
-    Job jobBeforeExecution = job().waitingPullJob();
-    jobBeforeExecution.setId(null);
-    jobBeforeExecution.setProject(project);
-    jobBeforeExecution = jobRepository.save(jobBeforeExecution);
-    Assert.assertEquals(null, jobBeforeExecution.getResultStatus());
-    Assert.assertEquals(ProcessingStatus.WAITING, jobBeforeExecution.getProcessingStatus());
-    return jobBeforeExecution;
-  }
-
   @Test
+  @DatabaseSetup(SINGLE_PROJECT_WITH_WAITING_JOB)
   public void testFailedExecution() {
-    Job jobBeforeExecution = initJob();
+    Job jobBeforeExecution = jobRepository.findOne(1l);
 
     doThrow(new RuntimeException("bwaaah")).when(jobExecutor).execute(any(Job.class));
 

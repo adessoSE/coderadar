@@ -9,15 +9,12 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.hateoas.ResourceSupport;
-import org.wickedsource.coderadar.project.domain.VcsType;
 
 public class ProjectResource extends ResourceSupport {
 
   @NotNull
   @Length(max = 100)
   private String name;
-
-  @NotNull private VcsType vcsType;
 
   @NotNull @URL private String vcsUrl;
 
@@ -41,14 +38,6 @@ public class ProjectResource extends ResourceSupport {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public VcsType getVcsType() {
-    return vcsType;
-  }
-
-  public void setVcsType(VcsType vcsType) {
-    this.vcsType = vcsType;
   }
 
   public String getVcsUrl() {

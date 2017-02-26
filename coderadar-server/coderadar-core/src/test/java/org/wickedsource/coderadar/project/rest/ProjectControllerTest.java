@@ -43,13 +43,12 @@ public class ProjectControllerTest extends ControllerTestTemplate {
         .andExpect(containsResource(ProjectResource.class))
         .andDo(documentCreateProject());
 
-    Project savedProject = projectRepository.findOne(1L);
+    Project savedProject = projectRepository.findOne(50L);
     assertThat(savedProject).isNotNull();
     assertThat(savedProject.getWorkdirName()).isNotEmpty();
     assertThat(savedProject.getName()).isEqualTo(project.getName());
     assertThat(savedProject.getVcsCoordinates().getUsername()).isEqualTo(project.getVcsUser());
     assertThat(savedProject.getVcsCoordinates().getPassword()).isEqualTo(project.getVcsPassword());
-    assertThat(savedProject.getVcsCoordinates().getType()).isEqualTo(project.getVcsType());
     assertThat(savedProject.getVcsCoordinates().getUrl().toString()).isEqualTo(project.getVcsUrl());
   }
 
@@ -77,10 +76,6 @@ public class ProjectControllerTest extends ControllerTestTemplate {
                 .withPath("vcsPassword")
                 .description(
                     "The password of the version control system user. This password has to be stored in plain text for coderadar to be usable, so make sure to provide a user with only reading permissions. Don't provide this field if anonymous access is possible."),
-            fields
-                .withPath("vcsType")
-                .description(
-                    "The type of the version control system your project uses. Either 'GIT' or 'SVN'."),
             fields
                 .withPath("startDate")
                 .description(

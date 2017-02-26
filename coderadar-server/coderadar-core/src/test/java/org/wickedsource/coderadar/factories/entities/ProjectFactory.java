@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
-import org.wickedsource.coderadar.project.domain.VcsType;
 
 public class ProjectFactory {
 
@@ -15,7 +14,7 @@ public class ProjectFactory {
       project.setName("Testproject");
       project.setWorkdirName("foo");
       VcsCoordinates vcs =
-          new VcsCoordinates(new URL("https://github.com/thombergs/diffparser.git"), VcsType.GIT);
+          new VcsCoordinates(new URL("https://github.com/thombergs/diffparser.git"));
       vcs.setUsername("user");
       vcs.setPassword("pass");
       project.setVcsCoordinates(vcs);
@@ -30,7 +29,7 @@ public class ProjectFactory {
       Project project = new Project();
       project.setId(2L);
       project.setName("Another project");
-      VcsCoordinates vcs = new VcsCoordinates(new URL("http://your.url"), VcsType.SVN);
+      VcsCoordinates vcs = new VcsCoordinates(new URL("http://your.url"));
       project.setVcsCoordinates(vcs);
       return project;
     } catch (MalformedURLException e) {

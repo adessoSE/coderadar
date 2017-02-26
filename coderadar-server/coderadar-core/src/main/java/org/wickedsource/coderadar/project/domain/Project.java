@@ -5,20 +5,24 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /** A coderadar project that defines the source of files that are to be analyzed. */
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "name")})
+@Table(
+  name = "project",
+  uniqueConstraints = {@UniqueConstraint(columnNames = "name")}
+)
+@SequenceGenerator(name = "project_sequence", sequenceName = "seq_prj_id")
 public class Project {
 
   @Id
-  @Column
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "project_sequence")
   private Long id;
 
-  @Column(nullable = false)
+  @Column(name = "name", nullable = false)
   private String name;
 
   @Embedded private VcsCoordinates vcsCoordinates;
 
-  @Column(nullable = false)
+  @Column(name = "workdir_name", nullable = false)
   private String workdirName;
 
   public Long getId() {

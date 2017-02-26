@@ -75,4 +75,9 @@ public class DbUnitFactory {
     public static final String REFRESH_STATIC_TOKENS =
         "/dbunit/refreshtoken/refreshTokenStaticList.xml";
   }
+
+  public static class Jobs {
+    public static final String SINGLE_PROJECT_WITH_WAITING_JOB =
+        "/dbunit/job/singleProjectWithWaitingJob.xml";
+  }
 }

@@ -10,42 +10,47 @@ import org.wickedsource.coderadar.project.domain.Project;
 
 /** Metadata about a commit to a Git repository. */
 @Entity
-@Table
+@Table(name = "commit")
 @EntityListeners(UpdateDateCoordinatesEntityListener.class)
+@SequenceGenerator(name = "commit_sequence", sequenceName = "seq_com_id")
 public class Commit {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "commit_sequence")
+  @Column(name = "id")
   private Long id;
 
-  @Column(nullable = false)
+  @Column(name = "name", nullable = false)
   private String name;
 
   @ManyToOne(optional = false)
+  @JoinColumn(name = "project_id")
   private Project project;
 
-  @Column
+  @Column(name = "timestamp")
   @Temporal(TemporalType.TIMESTAMP)
   private Date timestamp;
 
-  @Column private String comment;
+  @Column(name = "comment")
+  private String comment;
 
-  @Column(nullable = false)
+  @Column(name = "author", nullable = false)
   private String author;
 
-  @Column(nullable = false)
+  @Column(name = "scanned", nullable = false)
   private boolean scanned = false;
 
-  @Column(nullable = false)
+  @Column(name = "merged", nullable = false)
   private boolean merged = false;
 
-  @Column(nullable = false)
+  @Column(name = "analyzed", nullable = false)
   private boolean analyzed = false;
 
-  @Column(nullable = false)
+  @Column(name = "sequence_number", nullable = false)
   private Integer sequenceNumber;
 
-  @Column private String firstParent;
+  @Column(name = "first_parent")
+  private String firstParent;
 
   @OneToMany(mappedBy = "id.commit")
   private Set<CommitToFileAssociation> files = new HashSet<>();

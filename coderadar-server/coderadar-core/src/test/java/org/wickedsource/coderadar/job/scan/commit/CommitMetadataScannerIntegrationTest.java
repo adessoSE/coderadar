@@ -29,7 +29,6 @@ import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
-import org.wickedsource.coderadar.project.domain.VcsType;
 import org.wickedsource.coderadar.testframework.category.IntegrationTest;
 import org.wickedsource.coderadar.testframework.template.GitTestTemplate;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryChecker;
@@ -106,7 +105,6 @@ public class CommitMetadataScannerIntegrationTest extends GitTestTemplate {
       project.setName("coderadar");
       VcsCoordinates vcs = new VcsCoordinates();
       vcs.setUrl(new URL("https://github.com/thombergs/diffparser.git"));
-      vcs.setType(VcsType.GIT);
       project.setVcsCoordinates(vcs);
       return project;
     } catch (MalformedURLException e) {

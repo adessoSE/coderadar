@@ -1,5 +1,7 @@
 <dataset>
     <project/>
+    <databasechangelog/>
+    <databasechangeloglock/>
     <analyzing_job/>
     <commit/>
     <git_log_entry/>

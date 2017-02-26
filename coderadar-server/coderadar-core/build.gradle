@@ -92,6 +92,7 @@ dependencies {
 
     compile project(":coderadar-plugins:loc-analyzer-plugin")
     compile project(":coderadar-plugins:checkstyle-analyzer-plugin")
+    compile project(":coderadar-server:coderadar-database")
 
     runtime "mysql:mysql-connector-java:5.1.6"
     runtime "org.postgresql:postgresql:9.4.1212"
