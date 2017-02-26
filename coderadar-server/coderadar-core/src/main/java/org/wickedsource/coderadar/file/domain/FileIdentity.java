@@ -10,11 +10,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * been renamed in its history, it has a unique FileIdentity.
  */
 @Entity
-@Table
+@Table(name = "file_identity")
+@SequenceGenerator(name = "file_identity_sequence", sequenceName = "seq_fiid_id")
 public class FileIdentity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_identity_sequence")
+  @Column(name = "id")
   private Long id;
 
   public Long getId() {

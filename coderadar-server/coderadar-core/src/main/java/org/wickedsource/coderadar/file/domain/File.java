@@ -6,17 +6,20 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 /** Represents a file in a VCS repository. */
 @Entity
-@Table
+@Table(name = "file")
+@SequenceGenerator(name = "file_sequence", sequenceName = "seq_file_id")
 public class File {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_sequence")
+  @Column(name = "id")
   private Long id;
 
-  @Column(nullable = false)
+  @Column(name = "filepath", nullable = false)
   private String filepath;
 
   @ManyToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "identity_id")
   private FileIdentity identity;
 
   public Long getId() {
