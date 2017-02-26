@@ -8,40 +8,47 @@ import org.wickedsource.coderadar.project.domain.Project;
 
 /** The Job entity defines a task in the coderadar application that is run asynchronously. */
 @Entity
-@Table
+@Table(name = "job")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "jobType", discriminatorType = DiscriminatorType.STRING)
+@SequenceGenerator(name = "job_sequence", sequenceName = "seq_job_id")
 public class Job {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "job_sequence")
+  @Column(name = "id")
   private Long id;
 
-  @Column @Version private Integer version;
+  @Column(name = "version")
+  @Version
+  private Integer version;
 
-  @Column(nullable = false)
+  @Column(name = "queued_date", nullable = false)
   @Temporal(TemporalType.TIMESTAMP)
   private Date queuedDate;
 
-  @Column
+  @Column(name = "start_date")
   @Temporal(TemporalType.TIMESTAMP)
   private Date startDate;
 
-  @Column
+  @Column(name = "end_date")
   @Temporal(TemporalType.TIMESTAMP)
   private Date endDate;
 
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false)
+  @Column(name = "processing_status", nullable = false)
   private ProcessingStatus processingStatus;
 
   @Enumerated(EnumType.STRING)
-  @Column
+  @Column(name = "result_status")
   private ResultStatus resultStatus;
 
-  @Column private String message;
+  @Column(name = "message")
+  private String message;
 
-  @ManyToOne private Project project;
+  @ManyToOne
+  @JoinColumn(name = "project_id")
+  private Project project;
 
   public Long getId() {
     return id;

@@ -1,0 +1,92 @@
+databaseChangeLog:
+  - changeSet:
+      id: 14
+      author: thombergs
+      changes:
+        - createTable:
+            tableName: job
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: version
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: queued_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: processing_status
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: result_status
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: message
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: project_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            constraintName: pk_job_id
+            schemaName: public
+            tableName: job
+            columnNames: id
+        - addUniqueConstraint:
+            constraintName: uk_job_id
+            schemaName: public
+            tableName: job
+            columnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_job_project_id
+            baseColumnNames: project_id
+            baseTableName: job
+            referencedColumnNames: id
+            referencedTableName: project
+        - createIndex:
+            indexName: idx_job_project_id
+            schemaName: public
+            tableName: job
+            columns:
+              - column:
+                  name: project_id
+        - createIndex:
+            indexName: idx_job_processing_status
+            schemaName: public
+            tableName: job
+            columns:
+              - column:
+                  name: processing_status
+        - createIndex:
+            indexName: idx_job_queued_date
+            schemaName: public
+            tableName: job
+            columns:
+              - column:
+                  name: queued_date
+
