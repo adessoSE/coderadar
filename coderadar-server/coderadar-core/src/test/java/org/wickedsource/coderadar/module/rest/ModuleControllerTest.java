@@ -59,7 +59,7 @@ public class ModuleControllerTest extends ControllerTestTemplate {
     resource.setModulePath("server/coderadar-server");
     mvc()
         .perform(
-            post("/projects/1/modules/1")
+            post("/projects/1/modules/50")
                 .content(toJsonWithoutLinks(resource))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -72,7 +72,7 @@ public class ModuleControllerTest extends ControllerTestTemplate {
   @ExpectedDatabase(SINGLE_PROJECT_WITH_MODULE)
   public void getModule() throws Exception {
     mvc()
-        .perform(get("/projects/1/modules/1"))
+        .perform(get("/projects/1/modules/50"))
         .andExpect(status().isOk())
         .andExpect(containsResource(ModuleResource.class))
         .andDo(document("modules/get"));
@@ -94,7 +94,7 @@ public class ModuleControllerTest extends ControllerTestTemplate {
   @ExpectedDatabase(SINGLE_PROJECT)
   public void deleteModule() throws Exception {
     mvc()
-        .perform(delete("/projects/1/modules/1"))
+        .perform(delete("/projects/1/modules/50"))
         .andExpect(status().isOk())
         .andDo(document("modules/delete"));
   }

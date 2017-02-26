@@ -52,6 +52,12 @@ databaseChangeLog:
             schemaName: public
             tableName: finding
             columnNames: commit_id, file_id, metric_name
+        - addForeignKeyConstraint:
+            constraintName: fk_glen_comm_id
+            baseColumnNames: commit_id
+            baseTableName: finding
+            referencedColumnNames: id
+            referencedTableName: commit
         - createIndex:
             indexName: idx_find_commit_id
             schemaName: public
@@ -59,3 +65,17 @@ databaseChangeLog:
             columns:
               - column:
                   name: commit_id
+        - addForeignKeyConstraint:
+            constraintName: fk_glen_file_id
+            baseColumnNames: file_id
+            baseTableName: finding
+            referencedColumnNames: id
+            referencedTableName: file
+        - createIndex:
+            indexName: idx_find_file_id
+            schemaName: public
+            tableName: finding
+            columns:
+              - column:
+                  name: file_id
+

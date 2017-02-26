@@ -10,25 +10,33 @@ import org.wickedsource.coderadar.project.domain.Project;
  * migrated into the final data structure (see {@link File}).
  */
 @Entity
+@Table(name = "git_log_entry")
+@SequenceGenerator(name = "git_log_entry_sequence", sequenceName = "seq_glen_id")
 public class GitLogEntry {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "git_log_entry_sequence")
+  @Column(name = "id")
   private Long id;
 
-  @Column
+  @Column(name = "change_type")
   @Enumerated(EnumType.STRING)
   private ChangeType changeType;
 
-  @Column private String filepath;
+  @Column(name = "filepath")
+  private String filepath;
 
-  @Column private String oldFilepath;
+  @Column(name = "old_filepath")
+  private String oldFilepath;
 
-  @Column private String commitName;
+  @Column(name = "commit_name")
+  private String commitName;
 
-  @Column private String parentCommitName;
+  @Column(name = "parent_commit_name")
+  private String parentCommitName;
 
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "project_id")
   private Project project;
 
   public Long getId() {

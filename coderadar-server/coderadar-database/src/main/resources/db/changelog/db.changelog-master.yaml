@@ -21,8 +21,12 @@ databaseChangeLog:
   - include:
       file: db/changelog/init/0008-create-table-commit-file.yaml
   - include:
-      file: db/changelog/init/0009-create-table-commit-file-module.yaml
+      file: db/changelog/init/0009-create-table-module.yaml
   - include:
-      file: db/changelog/init/0010-create-table-file-pattern.yaml
+      file: db/changelog/init/0010-create-table-commit-file-module.yaml
   - include:
-      file: db/changelog/init/0011-create-table-finding.yaml
+      file: db/changelog/init/0011-create-table-file-pattern.yaml
+  - include:
+      file: db/changelog/init/0012-create-table-finding.yaml
+  - include:
+      file: db/changelog/init/0013-create-table-git-log-entry.yaml

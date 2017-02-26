@@ -32,6 +32,12 @@ databaseChangeLog:
             schemaName: public
             tableName: commit_file
             columnNames: commit_id, file_id
+        - addForeignKeyConstraint:
+            constraintName: fk_cofi_commit_id
+            baseColumnNames: commit_id
+            baseTableName: commit_file
+            referencedColumnNames: id
+            referencedTableName: commit
         - createIndex:
             indexName: idx_cofi_commit_id
             schemaName: public
@@ -39,6 +45,12 @@ databaseChangeLog:
             columns:
             - column:
                 name: commit_id
+        - addForeignKeyConstraint:
+            constraintName: fk_cofi_file_id
+            baseColumnNames: file_id
+            baseTableName: commit_file
+            referencedColumnNames: id
+            referencedTableName: file
         - createIndex:
             indexName: idx_cofi_file_id
             schemaName: public

@@ -43,6 +43,12 @@ databaseChangeLog:
             schemaName: public
             tableName: file_pattern
             columnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_fpat_project_id
+            baseColumnNames: project_id
+            baseTableName: file_pattern
+            referencedColumnNames: id
+            referencedTableName: project
         - createIndex:
             indexName: idx_fpat_project_id
             schemaName: public

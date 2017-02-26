@@ -32,6 +32,12 @@ databaseChangeLog:
             schemaName: public
             tableName: commit_file_module
             columnNames: commit_id, file_id, module_id
+        - addForeignKeyConstraint:
+            constraintName: fk_cfmo_commit_id
+            baseColumnNames: commit_id
+            baseTableName: commit_file_module
+            referencedColumnNames: id
+            referencedTableName: commit
         - createIndex:
             indexName: idx_cfmo_commit_id
             schemaName: public
@@ -39,6 +45,12 @@ databaseChangeLog:
             columns:
             - column:
                 name: commit_id
+        - addForeignKeyConstraint:
+            constraintName: fk_cfmo_file_id
+            baseColumnNames: file_id
+            baseTableName: commit_file_module
+            referencedColumnNames: id
+            referencedTableName: file
         - createIndex:
             indexName: idx_cfmo_file_id
             schemaName: public
@@ -46,6 +58,12 @@ databaseChangeLog:
             columns:
             - column:
                 name: file_id
+        - addForeignKeyConstraint:
+            constraintName: fk_cfmo_module_id
+            baseColumnNames: module_id
+            baseTableName: commit_file_module
+            referencedColumnNames: id
+            referencedTableName: module
         - createIndex:
             indexName: idx_cfmo_module_id
             schemaName: public

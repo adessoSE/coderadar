@@ -8,11 +8,15 @@ import org.wickedsource.coderadar.project.domain.Project;
  * within that path are considered to be part of the module.
  */
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"project_id", "path"})})
+@Table(
+  name = "module",
+  uniqueConstraints = {@UniqueConstraint(columnNames = {"project_id", "path"})}
+)
+@SequenceGenerator(name = "module_sequence", sequenceName = "seq_modu_id")
 public class Module {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "module_sequence")
   @Column(name = "id")
   private Long id;
 
