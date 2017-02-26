@@ -49,15 +49,15 @@ databaseChangeLog:
                   constraints:
                     nullable: true
         - addPrimaryKey:
-            constraintName: pk_prj_id
+            constraintName: pk_proj_id
             schemaName: public
             tableName: project
             columnNames: id
         - addUniqueConstraint:
-            constraintName: uk_prj_id
+            constraintName: uk_proj_id
             schemaName: public
             tableName: project
             columnNames: id
         - createSequence:
             schemaName: public
-            sequenceName: seq_prj_id
+            sequenceName: seq_proj_id

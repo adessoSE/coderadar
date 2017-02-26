@@ -52,8 +52,6 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
   @After
   public void reset() {
     sequenceResetter.resetAutoIncrementColumns(
-        "analyzer_configuration",
-        "analyzer_configuration_file",
         "analyzing_job",
         "git_log_entry",
         "file",
@@ -64,7 +62,7 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
         "quality_profile_metric",
         "module");
 
-    sequenceResetter.resetSequences("seq_prj_id", "seq_com_id");
+    sequenceResetter.resetSequences("seq_proj_id", "seq_comm_id", "seq_acon_id", "seq_acof_id");
   }
 
   @SuppressWarnings("unchecked")

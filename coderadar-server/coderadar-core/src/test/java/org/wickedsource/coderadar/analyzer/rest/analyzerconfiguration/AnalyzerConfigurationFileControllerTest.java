@@ -25,7 +25,7 @@ public class AnalyzerConfigurationFileControllerTest extends ControllerTestTempl
     MockMultipartFile file =
         new MockMultipartFile("file", "config.txt", "text/plain", ("abc".getBytes()));
     mvc()
-        .perform(fileUpload("/projects/1/analyzers/1/file").file(file))
+        .perform(fileUpload("/projects/1/analyzers/50/file").file(file))
         .andExpect(status().isOk())
         .andDo(document("analyzerConfigurationFile/upload"));
   }
@@ -35,7 +35,7 @@ public class AnalyzerConfigurationFileControllerTest extends ControllerTestTempl
   @ExpectedDatabase(SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION_FILE)
   public void downloadConfigurationFile() throws Exception {
     mvc()
-        .perform(get("/projects/1/analyzers/1/file"))
+        .perform(get("/projects/1/analyzers/50/file"))
         .andExpect(status().isOk())
         .andExpect(content().bytes("abc".getBytes()))
         .andDo(document("analyzerConfigurationFile/download"));

@@ -7,22 +7,34 @@ import javax.persistence.*;
  * configuration file the analyzer needs.
  */
 @Entity
-@Table
+@Table(name = "analyzer_configuration_file")
+@SequenceGenerator(name = "analyzer_configuration_file_sequence", sequenceName = "seq_acof_id")
 public class AnalyzerConfigurationFile {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(
+    strategy = GenerationType.SEQUENCE,
+    generator = "analyzer_configuration_file_sequence"
+  )
+  @Column(name = "id")
   private Long id;
 
-  @Column @Lob private byte[] fileData;
+  @Column(name = "file_data")
+  @Lob
+  private byte[] fileData;
 
-  @Column private String contentType;
+  @Column(name = "content_type")
+  private String contentType;
 
-  @Column private String fileName;
+  @Column(name = "file_name")
+  private String fileName;
 
-  @OneToOne private AnalyzerConfiguration analyzerConfiguration;
+  @OneToOne
+  @JoinColumn(name = "analyzer_configuration_id")
+  private AnalyzerConfiguration analyzerConfiguration;
 
-  @Column private long sizeInBytes;
+  @Column(name = "size_in_bytes")
+  private long sizeInBytes;
 
   public Long getId() {
     return id;

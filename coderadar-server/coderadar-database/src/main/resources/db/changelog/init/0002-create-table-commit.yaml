@@ -92,34 +92,35 @@ databaseChangeLog:
                   constraints:
                     nullable: false
         - addPrimaryKey:
-            constraintName: pk_com_id
+            constraintName: pk_comm_id
             schemaName: public
             tableName: commit
             columnNames: id
         - addUniqueConstraint:
-            constraintName: uk_com_id
+            constraintName: uk_comm_id
             schemaName: public
             tableName: commit
             columnNames: id
         - addUniqueConstraint:
-            constraintName: uk_com_name
+            constraintName: uk_comm_name
             schemaName: public
             tableName: commit
             columnNames: name
         - addForeignKeyConstraint:
-            constraintName: fk_com_project
+            constraintName: fk_comm_project
             baseColumnNames: project_id
             baseTableName: commit
             referencedColumnNames: id
             referencedTableName: project
         - createIndex:
+            indexName: idx_comm_project_id
             schemaName: public
             tableName: commit
             columns:
             - column:
                 name: project_id
         - createIndex:
-            indexName: idx_com_sequence_number
+            indexName: idx_comm_sequence_number
             schemaName: public
             tableName: commit
             columns:
@@ -127,6 +128,6 @@ databaseChangeLog:
                 name: sequence_number
         - createSequence:
             schemaName: public
-            sequenceName: seq_com_id
+            sequenceName: seq_comm_id
 
 

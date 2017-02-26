@@ -9,7 +9,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
   name = "project",
   uniqueConstraints = {@UniqueConstraint(columnNames = "name")}
 )
-@SequenceGenerator(name = "project_sequence", sequenceName = "seq_prj_id")
+@SequenceGenerator(name = "project_sequence", sequenceName = "seq_proj_id")
 public class Project {
 
   @Id

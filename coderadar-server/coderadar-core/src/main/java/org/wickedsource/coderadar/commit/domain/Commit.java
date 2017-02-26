@@ -12,7 +12,7 @@ import org.wickedsource.coderadar.project.domain.Project;
 @Entity
 @Table(name = "commit")
 @EntityListeners(UpdateDateCoordinatesEntityListener.class)
-@SequenceGenerator(name = "commit_sequence", sequenceName = "seq_com_id")
+@SequenceGenerator(name = "commit_sequence", sequenceName = "seq_comm_id")
 public class Commit {
 
   @Id

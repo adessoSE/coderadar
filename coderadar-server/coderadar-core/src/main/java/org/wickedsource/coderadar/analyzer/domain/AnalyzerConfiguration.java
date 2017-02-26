@@ -5,18 +5,24 @@ import org.wickedsource.coderadar.project.domain.Project;
 
 /** An AnalyzerConfiguration stores the configuration for a single analyzer plugin in a project. */
 @Entity
-@Table
+@Table(name = "analyzer_configuration")
+@SequenceGenerator(name = "analyzer_configuration_sequence", sequenceName = "seq_acon_id")
 public class AnalyzerConfiguration {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "analyzer_configuration_sequence")
+  @Column(name = "id")
   private Long id;
 
-  @ManyToOne private Project project;
+  @ManyToOne
+  @JoinColumn(name = "project_id")
+  private Project project;
 
-  @Column private String analyzerName;
+  @Column(name = "analyzer_name")
+  private String analyzerName;
 
-  @Column private Boolean enabled;
+  @Column(name = "enabled")
+  private Boolean enabled;
 
   public Long getId() {
     return id;
