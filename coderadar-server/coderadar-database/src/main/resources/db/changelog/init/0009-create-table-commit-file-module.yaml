@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: 9
+      author: thombergs
+      changes:
+        - createTable:
+            tableName: commit_file_module
+            schemaName: public
+            columns:
+              - column:
+                  name: commit_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: module_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            constraintName: pk_cfmo_id
+            schemaName: public
+            tableName: commit_file_module
+            columnNames: commit_id, file_id, module_id
+        - addUniqueConstraint:
+            constraintName: uk_cfmo_id
+            schemaName: public
+            tableName: commit_file_module
+            columnNames: commit_id, file_id, module_id
+        - createIndex:
+            indexName: idx_cfmo_commit_id
+            schemaName: public
+            tableName: commit_file_module
+            columns:
+            - column:
+                name: commit_id
+        - createIndex:
+            indexName: idx_cfmo_file_id
+            schemaName: public
+            tableName: commit_file_module
+            columns:
+            - column:
+                name: file_id
+        - createIndex:
+            indexName: idx_cfmo_module_id
+            schemaName: public
+            tableName: commit_file_module
+            columns:
+            - column:
+                name: module_id
