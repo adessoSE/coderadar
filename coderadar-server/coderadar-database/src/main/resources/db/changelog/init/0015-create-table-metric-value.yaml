@@ -1,0 +1,72 @@
+databaseChangeLog:
+  - changeSet:
+      id: 15
+      author: thombergs
+      changes:
+        - createTable:
+            tableName: job
+            schemaName: public
+            columns:
+              - column:
+                  name: commit_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: metric_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            constraintName: pk_meva_id
+            schemaName: public
+            tableName: metric_value
+            columnNames: commit_id, file_id, metric_name
+        - addUniqueConstraint:
+            constraintName: uk_meva_id
+            schemaName: public
+            tableName: metric_value
+            columnNames: commit_id, file_id, metric_name
+        - addForeignKeyConstraint:
+            constraintName: fk_meva_commit_id
+            baseColumnNames: commit_id
+            baseTableName: metric_value
+            referencedColumnNames: id
+            referencedTableName: commit
+        - createIndex:
+            indexName: idx_meva_commit_id
+            schemaName: public
+            tableName: metric_value
+            columns:
+              - column:
+                  name: commit_id
+        - addForeignKeyConstraint:
+            constraintName: fk_meva_file_id
+            baseColumnNames: file_id
+            baseTableName: metric_value
+            referencedColumnNames: id
+            referencedTableName: file
+        - createIndex:
+            indexName: idx_meva_file_id
+            schemaName: public
+            tableName: metric_value
+            columns:
+              - column:
+                  name: file_id
+        - createIndex:
+            indexName: idx_meva_metric_name
+            schemaName: public
+            tableName: metric_value
+            columns:
+              - column:
+                  name: metric_name

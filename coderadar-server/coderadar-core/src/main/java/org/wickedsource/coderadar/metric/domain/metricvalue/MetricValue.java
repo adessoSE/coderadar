@@ -2,10 +2,12 @@ package org.wickedsource.coderadar.metric.domain.metricvalue;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.file.domain.File;
 
 @Entity
+@Table(name = "metric_value")
 public class MetricValue {
 
   @EmbeddedId private MetricValueId id;
