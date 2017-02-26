@@ -53,7 +53,7 @@ databaseChangeLog:
             baseColumnNames: analyzer_configuration_id
             baseTableName: analyzer_configuration_file
             referencedColumnNames: id
-            referencedTableName: analyzer_configuration#
+            referencedTableName: analyzer_configuration
         - createIndex:
             indexName: idx_acof_acon_id
             schemaName: public

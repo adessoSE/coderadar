@@ -9,18 +9,24 @@ import org.wickedsource.coderadar.project.domain.Project;
  * database automatically triggers analysis of a project's code base.
  */
 @Entity
-@Table
+@Table(name = "analyzing_job")
+@SequenceGenerator(name = "analyzing_job_sequence", sequenceName = "seq_ajob_id")
 public class AnalyzingJob {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "analyzing_job_sequence")
+  @Column(name = "id")
   private Long id;
 
-  @OneToOne private Project project;
+  @OneToOne
+  @JoinColumn(name = "project_id")
+  private Project project;
 
-  @Column private Date fromDate;
+  @Column(name = "from_date")
+  private Date fromDate;
 
-  @Column private boolean active = false;
+  @Column(name = "active")
+  private boolean active = false;
 
   /**
    * The date from which to start scanning commits. If null, all commits from the very beginning are
