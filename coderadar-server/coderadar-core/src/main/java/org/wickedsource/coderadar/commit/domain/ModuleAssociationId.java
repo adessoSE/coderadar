@@ -1,5 +1,9 @@
 package org.wickedsource.coderadar.commit.domain;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueId;
+
 import java.io.Serializable;
 import javax.persistence.Column;
 
@@ -37,4 +41,26 @@ public class ModuleAssociationId implements Serializable {
   public void setModuleId(Long moduleId) {
     this.moduleId = moduleId;
   }
+
+  @Override
+  public int hashCode() {
+    return 31 + commitId.hashCode() + fileId.hashCode() + moduleId.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null || !(obj instanceof ModuleAssociationId)) {
+      return false;
+    }
+    ModuleAssociationId that = (ModuleAssociationId) obj;
+    return this.commitId.equals(that.commitId)
+            && this.fileId.equals(that.fileId)
+            && this.moduleId.equals(that.moduleId);
+  }
+
+  @Override
+  public String toString() {
+    return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+  }
+
 }
