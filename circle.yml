@@ -20,7 +20,7 @@ test:
     - find . -type d -regex ".**/build/reports/tests" -exec sh -c 'cp -a {} $CIRCLE_TEST_REPORTS/junit-html/`echo {} | cut -d / -f2`' \;
 
     - mkdir -p $CIRCLE_ARTIFACTS/build-artifacts
-    - cp -a coderadar-server/codradar-core/build/libs/coderadar*.zip $CIRCLE_ARTIFACTS/build-artifacts/
+    - cp -a coderadar-server/coderadar-core/build/libs/coderadar*.zip $CIRCLE_ARTIFACTS/build-artifacts/
 
 deployment:
   release:
