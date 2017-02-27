@@ -65,3 +65,6 @@ databaseChangeLog:
             columns:
               - column:
                   name: project_id
+        - createSequence:
+            schemaName: public
+            sequenceName: seq_glen_id

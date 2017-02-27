@@ -9,18 +9,21 @@ import org.wickedsource.coderadar.user.domain.User;
  * user entity and to revoke it.
  */
 @Entity
-@Table
+@Table(name = "refresh_token")
+@SequenceGenerator(name = "refresh_token_sequence", sequenceName = "seq_reto_id")
 public class RefreshToken {
 
   @Id
-  @Column
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "refresh_token_sequence")
   private Long id;
 
-  @Column(nullable = false)
+  @Column(name = "token", nullable = false)
   private String token;
 
-  @ManyToOne private User user;
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private User user;
 
   public Long getId() {
     return id;

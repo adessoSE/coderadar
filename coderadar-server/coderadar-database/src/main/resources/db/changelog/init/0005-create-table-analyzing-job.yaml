@@ -10,7 +10,6 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
-                  autoIncrement: true
                   constraints:
                     nullable: false
               - column:

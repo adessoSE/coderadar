@@ -183,8 +183,8 @@ public class CommitToFileAssociator {
     for (GitLogEntry addedFile : addedFiles) {
       File file = new File();
       file.setFilepath(addedFile.getFilepath());
-      fileRepository.save(file);
       file.setIdentity(new FileIdentity());
+      fileRepository.save(file);
       CommitToFileAssociation association =
           new CommitToFileAssociation(commit, file, addedFile.getChangeType());
       commit.getFiles().add(association);

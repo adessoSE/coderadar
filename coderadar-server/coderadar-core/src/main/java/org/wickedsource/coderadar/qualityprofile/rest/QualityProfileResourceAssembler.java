@@ -40,10 +40,10 @@ public class QualityProfileResourceAssembler
     return resource;
   }
 
-  public QualityProfile toEntity(QualityProfileResource resource) {
-    QualityProfile profile = new QualityProfile();
+  public QualityProfile updateEntity(QualityProfileResource resource, QualityProfile profile) {
     profile.setName(resource.getProfileName());
     profile.setProject(project);
+    profile.getMetrics().clear();
     for (MetricDTO metricDTO : resource.getMetrics()) {
       QualityProfileMetric metric = new QualityProfileMetric();
       metric.setName(metricDTO.getMetricName());

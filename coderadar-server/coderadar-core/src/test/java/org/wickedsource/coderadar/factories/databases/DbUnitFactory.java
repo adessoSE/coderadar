@@ -60,6 +60,8 @@ public class DbUnitFactory {
         "/dbunit/qualityprofile/singleProjectWithQualityProfile.xml";
     public static final String SINGLE_PROJECT_WITH_QUALITY_PROFILE2 =
         "/dbunit/qualityprofile/singleProjectWithQualityProfile2.xml";
+    public static final String SINGLE_PROJECT_WITH_QUALITY_PROFILE3 =
+        "/dbunit/qualityprofile/singleProjectWithQualityProfile3.xml";
     public static final String SINGLE_PROJECT_WITH_QUALITY_PROFILES =
         "/dbunit/qualityprofile/singleProjectWithQualityProfiles.xml";
   }

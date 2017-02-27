@@ -24,9 +24,9 @@
     <project id="1" vcs_url="http://valid.url" vcs_username="user" vcs_password="pass" name="name" workdir_name="foo"
              vcs_start_date="2016-01-01 00:00:00" vcs_end_date="2016-12-31 00:00:00"/>
 
-    <quality_profile id="1" project_id="1" name="Quality Profile (updated)"/>
+    <quality_profile id="50" project_id="1" name="Quality Profile"/>
 
-    <quality_profile_metric id="3" profile_id="1" name="dummyMetric3" metric_type="VIOLATION"/>
-    <quality_profile_metric id="4" profile_id="1" name="dummyMetric4" metric_type="COMPLIANCE"/>
+    <quality_profile_metric id="1" profile_id="50" name="dummyMetric3" metric_type="VIOLATION"/>
+    <quality_profile_metric id="2" profile_id="50" name="dummyMetric4" metric_type="COMPLIANCE"/>
 
 </dataset>

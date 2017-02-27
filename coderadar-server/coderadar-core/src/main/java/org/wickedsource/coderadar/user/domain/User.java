@@ -4,18 +4,22 @@ import javax.persistence.*;
 
 /** a user of application, who has to login to access to functionality */
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "username")})
+@Table(
+  name = "user",
+  uniqueConstraints = {@UniqueConstraint(columnNames = "username")}
+)
+@SequenceGenerator(name = "user_sequence", sequenceName = "seq_user_id")
 public class User {
 
   @Id
-  @Column
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence")
   private Long id;
 
-  @Column(nullable = false)
+  @Column(name = "username", nullable = false)
   private String username;
 
-  @Column(nullable = false)
+  @Column(name = "password", nullable = false)
   private String password;
 
   public Long getId() {

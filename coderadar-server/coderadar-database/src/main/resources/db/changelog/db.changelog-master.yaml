@@ -30,3 +30,15 @@ databaseChangeLog:
       file: db/changelog/init/0012-create-table-finding.yaml
   - include:
       file: db/changelog/init/0013-create-table-git-log-entry.yaml
+  - include:
+      file: db/changelog/init/0014-create-table-job.yaml
+  - include:
+      file: db/changelog/init/0015-create-table-metric-value.yaml
+  - include:
+      file: db/changelog/init/0016-create-table-quality-profile.yaml
+  - include:
+      file: db/changelog/init/0017-create-table-quality-profile-metric.yaml
+  - include:
+      file: db/changelog/init/0018-create-table-user.yaml
+  - include:
+      file: db/changelog/init/0019-create-table-refresh-token.yaml

@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 11
+      id: 16
       author: thombergs
       changes:
         - createTable:
-            tableName: file_pattern
+            tableName: quality_profile
             schemaName: public
             columns:
               - column:
@@ -13,18 +13,8 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: pattern
-                  type: varchar(2000)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: inclusion_type
-                  type: varchar(10)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: file_set_type
-                  type: varchar(10)
+                  name: name
+                  type: varchar(255)
                   constraints:
                     nullable: false
               - column:
@@ -33,28 +23,28 @@ databaseChangeLog:
                   constraints:
                     nullable: false
         - addPrimaryKey:
-            constraintName: pk_fpat_id
+            constraintName: pk_qupr_id
             schemaName: public
-            tableName: file_pattern
+            tableName: quality_profile
             columnNames: id
         - addUniqueConstraint:
-            constraintName: uk_fpat_id
+            constraintName: uk_qupr_id
             schemaName: public
-            tableName: file_pattern
+            tableName: quality_profile
             columnNames: id
         - addForeignKeyConstraint:
-            constraintName: fk_fpat_project_id
+            constraintName: fk_qupr_project_id
             baseColumnNames: project_id
-            baseTableName: file_pattern
+            baseTableName: quality_profile
             referencedColumnNames: id
             referencedTableName: project
         - createIndex:
-            indexName: idx_fpat_project_id
+            indexName: idx_qupr_project_id
             schemaName: public
-            tableName: file_pattern
+            tableName: quality_profile
             columns:
-            - column:
-                name: project_id
+              - column:
+                  name: project_id
         - createSequence:
             schemaName: public
-            sequenceName: seq_fpat_id
+            sequenceName: seq_qupr_id

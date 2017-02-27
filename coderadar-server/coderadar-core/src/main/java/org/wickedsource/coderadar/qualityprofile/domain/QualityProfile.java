@@ -6,11 +6,13 @@ import javax.persistence.*;
 import org.wickedsource.coderadar.project.domain.Project;
 
 @Entity
-@Table
+@Table(name = "quality_profile")
+@SequenceGenerator(name = "quality_profile_sequence", sequenceName = "seq_qupr_id")
 public class QualityProfile {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quality_profile_sequence")
+  @Column(name = "id")
   private Long id;
 
   @OneToMany(
@@ -21,9 +23,12 @@ public class QualityProfile {
   )
   private List<QualityProfileMetric> metrics = new ArrayList<>();
 
-  @Column private String name;
+  @Column(name = "name")
+  private String name;
 
-  @ManyToOne private Project project;
+  @ManyToOne
+  @JoinColumn(name = "project_id")
+  private Project project;
 
   public Long getId() {
     return id;

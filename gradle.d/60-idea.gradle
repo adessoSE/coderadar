@@ -9,6 +9,7 @@ allprojects {
             downloadSources = true
             outputDir = file('build/classes/main')
             testOutputDir = file('build/classes/test')
+            testSourceDirs += file('src/test/performance')
         }
     }
 

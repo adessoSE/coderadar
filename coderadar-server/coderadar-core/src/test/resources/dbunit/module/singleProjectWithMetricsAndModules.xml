@@ -58,14 +58,17 @@
 
     <git_log_entry id="1" project_id="1" commit_name="f9b0553930f133490f292a9c78d0b36b39be8758"
                    old_filepath="/path/to/module1/src/main/java/test.java"
-                   filepath="/path/to/module1/src/main/java/test.java" change_type="ADD"/>
+                   filepath="/path/to/module1/src/main/java/test.java" change_type="ADD"
+                   parent_commit_name="cafebabe"/>
     <git_log_entry id="2" project_id="1" commit_name="f9b0553930f133490f292a9c78d0b36b39be8758"
                    old_filepath="/path/to/module1/src/main/java/test2.java"
-                   filepath="/path/to/module1/src/main/java/test2.java" change_type="ADD"/>
+                   filepath="/path/to/module1/src/main/java/test2.java" change_type="ADD"
+                   parent_commit_name="cafebabe"/>
     <git_log_entry id="3" project_id="1" commit_name="f9b0553930f133490f292a9c78d0b36b39be8758"
                    old_filepath="/path/to/module1/submodule2/src/main/java/fileOnlyTouchedInFirstCommit.java"
                    filepath="/path/to/module1/submodule2/src/main/java/fileOnlyTouchedInFirstCommit.java"
-                   change_type="ADD"/>
+                   change_type="ADD"
+                   parent_commit_name="cafebabe"/>
 
     <git_log_entry id="8" project_id="1" commit_name="43f6cbba44ce1c23cfdf70dc164824fee062f7e2"
                    parent_commit_name="f9b0553930f133490f292a9c78d0b36b39be8758"

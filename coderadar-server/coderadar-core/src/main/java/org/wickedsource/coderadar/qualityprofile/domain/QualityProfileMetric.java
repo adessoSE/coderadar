@@ -3,20 +3,25 @@ package org.wickedsource.coderadar.qualityprofile.domain;
 import javax.persistence.*;
 
 @Entity
-@Table
+@Table(name = "quality_profile_metric")
+@SequenceGenerator(name = "quality_profile_metric_sequence", sequenceName = "seq_qpme_id")
 public class QualityProfileMetric {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quality_profile_metric_sequence")
+  @Column(name = "id")
   private Long id;
 
-  @Column private String name;
+  @Column(name = "name")
+  private String name;
 
-  @Column
+  @Column(name = "metric_type")
   @Enumerated(EnumType.STRING)
   private MetricType metricType;
 
-  @ManyToOne private QualityProfile profile;
+  @ManyToOne
+  @JoinColumn(name = "profile_id")
+  private QualityProfile profile;
 
   public Long getId() {
     return id;

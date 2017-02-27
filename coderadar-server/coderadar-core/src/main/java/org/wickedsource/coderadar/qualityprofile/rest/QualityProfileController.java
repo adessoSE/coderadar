@@ -43,7 +43,7 @@ public class QualityProfileController {
       @PathVariable Long projectId) {
     Project project = projectVerifier.loadProjectOrThrowException(projectId);
     QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
-    QualityProfile profile = assembler.toEntity(qualityProfileResource);
+    QualityProfile profile = assembler.updateEntity(qualityProfileResource, new QualityProfile());
     profile = qualityProfileRepository.save(profile);
     return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.CREATED);
   }
@@ -59,8 +59,11 @@ public class QualityProfileController {
       @PathVariable Long projectId) {
     Project project = projectVerifier.loadProjectOrThrowException(projectId);
     QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
-    QualityProfile profile = assembler.toEntity(qualityProfileResource);
-    profile.setId(profileId);
+    QualityProfile profile = qualityProfileRepository.findOne(profileId);
+    if (profile == null) {
+      throw new ResourceNotFoundException();
+    }
+    profile = assembler.updateEntity(qualityProfileResource, profile);
     profile = qualityProfileRepository.save(profile);
     return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.OK);
   }

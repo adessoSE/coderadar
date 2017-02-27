@@ -10,7 +10,6 @@ databaseChangeLog:
               - column:
                   name: id
                   type: bigint
-                  autoIncrement: true
                   constraints:
                     nullable: false
               - column:
@@ -58,7 +57,7 @@ databaseChangeLog:
                     defaultValue: false
               - column:
                   name: sequence_number
-                  type: bigint
+                  type: int
                   constraints:
                     nullable: false
               - column:
@@ -68,27 +67,27 @@ databaseChangeLog:
                     nullable: true
               - column:
                   name: year
-                  type: bigint
+                  type: int
                   constraints:
                     nullable: false
               - column:
                   name: month
-                  type: bigint
+                  type: int
                   constraints:
                     nullable: false
               - column:
                   name: day_of_month
-                  type: bigint
+                  type: int
                   constraints:
                     nullable: false
               - column:
                   name: week_of_year
-                  type: bigint
+                  type: int
                   constraints:
                     nullable: false
               - column:
                   name: year_of_week
-                  type: bigint
+                  type: int
                   constraints:
                     nullable: false
         - addPrimaryKey:

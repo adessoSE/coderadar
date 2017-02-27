@@ -50,3 +50,6 @@ databaseChangeLog:
             columns:
             - column:
                 name: project_id
+        - createSequence:
+            schemaName: public
+            sequenceName: seq_modu_id

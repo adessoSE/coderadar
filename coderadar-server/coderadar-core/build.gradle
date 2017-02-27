@@ -13,6 +13,14 @@ ext {
     snippetsDir = file("build/generated-snippets")
 }
 
+sourceSets{
+    test {
+        java {
+            srcDir "src/test/performance"
+        }
+    }
+}
+
 spotless {
     java {
         googleJavaFormat()

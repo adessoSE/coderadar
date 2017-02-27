@@ -4,7 +4,7 @@ databaseChangeLog:
       author: thombergs
       changes:
         - createTable:
-            tableName: job
+            tableName: metric_value
             schemaName: public
             columns:
               - column:

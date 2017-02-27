@@ -26,22 +26,22 @@ databaseChangeLog:
                   name: char_start
                   type: int
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: char_end
                   type: int
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: line_start
                   type: int
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: line_end
                   type: int
                   constraints:
-                    nullable: false
+                    nullable: true
         - addPrimaryKey:
             constraintName: pk_find_id
             schemaName: public
@@ -78,4 +78,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: file_id
+        - createSequence:
+            schemaName: public
+            sequenceName: seq_find_id
 

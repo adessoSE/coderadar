@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: 7
+      id: 19
       author: thombergs
       changes:
         - createTable:
-            tableName: file
+            tableName: refresh_token
             schemaName: public
             columns:
               - column:
@@ -13,40 +13,38 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: filepath
-                  type: varchar(2000)
+                  name: token
+                  type: varchar(500)
                   constraints:
                     nullable: false
               - column:
-                  name: identity_id
+                  name: user_id
                   type: bigint
                   constraints:
                     nullable: false
         - addPrimaryKey:
-            constraintName: pk_file_id
+            constraintName: pk_reto_id
             schemaName: public
-            tableName: file
+            tableName: refresh_token
             columnNames: id
         - addUniqueConstraint:
-            constraintName: uk_file_id
+            constraintName: uk_reto_id
             schemaName: public
-            tableName: file
+            tableName: refresh_token
             columnNames: id
         - addForeignKeyConstraint:
-            constraintName: fk_file_fiid_id
-            baseColumnNames: identity_id
-            baseTableName: file
+            constraintName: fk_reto_user_id
+            baseColumnNames: user_id
+            baseTableName: refresh_token
             referencedColumnNames: id
-            referencedTableName: file_identity
+            referencedTableName: user
         - createIndex:
-            indexName: idx_file_fiid_id
+            indexName: idx_reto_user_id
             schemaName: public
-            tableName: file
+            tableName: refresh_token
             columns:
               - column:
-                  name: identity_id
+                  name: user_id
         - createSequence:
             schemaName: public
-            sequenceName: seq_file_id
-
-
+            sequenceName: seq_reto_id
