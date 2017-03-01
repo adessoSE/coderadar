@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v0.1.0.261, 2017-02-27">
+<meta name="author" content="v0.1.0.263, 2017-03-01">
 <title>coderadar REST API</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v0.1.0.261, 2017-02-27</span><br>
+<span id="author" class="author">v0.1.0.263, 2017-03-01</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2357,11 +2357,11 @@ Content-Length: 195
 {
   "errorMessage" : "Validation Error",
   "fieldErrors" : [ {
-    "field" : "vcsUrl",
-    "message" : "must be a valid URL"
-  }, {
     "field" : "name",
     "message" : "may not be null"
+  }, {
+    "field" : "vcsUrl",
+    "message" : "must be a valid URL"
   } ]
 }</code></pre>
 </div>
@@ -2503,13 +2503,13 @@ Content-Length: 56
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 114
+Content-Length: 113
 
 {
   "username" : "radar",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/user/50"
+      "href" : "http://localhost:8080/user/1"
     }
   }
 }</code></pre>
@@ -2624,8 +2624,8 @@ Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 535
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODgyMzU4MzAsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODgyMzQ5MzAsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.EuRr1OMieZjaC9pDiN9nTOxrAhQ6BBryT3PsWHRqFr8",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTM0MTg5MzAsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg4MjM0OTMwLCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.dLaIEWW2k0bwUf0vcsvq-4hEun8sooBtV7UH-zBIWzA",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODg0MDcwNjQsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODg0MDYxNjQsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.f2sqJbQ_B4wk6WecwsguP-vWCgXu2VVkj_TMIqKr5Mo",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTM1OTAxNjQsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg4NDA2MTY0LCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.KqMX9H8UkCoNfh87_h-4wnU7Fl7y11LPxWq0Dy0Lu_0",
   "_links" : {
     "self" : {
       "href" : "http://localhost:8080/user/2"
@@ -2684,8 +2684,8 @@ Host: localhost:8080
 Content-Length: 443
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODgyMzQwOTAsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODgyMzMxOTAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.f3BeTK31fhkUxxYZP8fZualsfUFseVPYNvXeojWCCjI",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODg0MTQ5MzAsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg4MDU0OTMwLCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.6kl9aXNGjrdOPmONepoZi7wGn_Rmzt45yI1DtNd1rgQ"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODg0MDUzMjQsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODg0MDQ0MjQsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.xNz78AP03FfO28BHxdhFOxQ3a4Q1-Bb2-R8a_5iDArY",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODg1ODYxNjQsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg4MjI2MTY0LCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.m_yKIZcNVIqg6NsczrrKq2UnYd28lmjPHGZJT2MMy8g"
 }</code></pre>
 </div>
 </div>
@@ -2699,7 +2699,7 @@ Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 218
 
 {
-  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODgyMzU4MzAsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODgyMzQ5MzAsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.EuRr1OMieZjaC9pDiN9nTOxrAhQ6BBryT3PsWHRqFr8"
+  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0ODg0MDcwNjQsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0ODg0MDYxNjQsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.f2sqJbQ_B4wk6WecwsguP-vWCgXu2VVkj_TMIqKr5Mo"
 }</code></pre>
 </div>
 </div>
@@ -3002,7 +3002,7 @@ Content-Length: 166
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 516
+Content-Length: 512
 
 {
   "name" : "name",
@@ -3013,16 +3013,16 @@ Content-Length: 516
   "endDate" : [ 2016, 12, 31 ],
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/projects/50"
+      "href" : "http://localhost:8080/projects/1"
     },
     "files" : {
-      "href" : "http://localhost:8080/projects/50/files"
+      "href" : "http://localhost:8080/projects/1/files"
     },
     "analyzers" : {
-      "href" : "http://localhost:8080/projects/50/analyzers"
+      "href" : "http://localhost:8080/projects/1/analyzers"
     },
     "strategy" : {
-      "href" : "http://localhost:8080/projects/50/analyzingJob"
+      "href" : "http://localhost:8080/projects/1/analyzingJob"
     }
   }
 }</code></pre>
@@ -3194,13 +3194,13 @@ Content-Length: 46
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 223
+Content-Length: 222
 
 {
   "modulePath" : "server/coderadar-webapp",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/projects/1/modules/50"
+      "href" : "http://localhost:8080/projects/1/modules/1"
     },
     "project" : {
       "href" : "http://localhost:8080/projects/1"
@@ -3217,7 +3217,7 @@ Content-Length: 223
 <h5 id="_example_request_10"><a class="link" href="#_example_request_10">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/modules/50 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/modules/1 HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080
 Content-Length: 46
@@ -3234,13 +3234,13 @@ Content-Length: 46
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 223
+Content-Length: 222
 
 {
   "modulePath" : "server/coderadar-server",
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/projects/1/modules/50"
+      "href" : "http://localhost:8080/projects/1/modules/1"
     },
     "project" : {
       "href" : "http://localhost:8080/projects/1"
@@ -3336,7 +3336,7 @@ Content-Length: 1300
 <h5 id="_example_request_12"><a class="link" href="#_example_request_12">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/modules/50 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/modules/1 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3625,7 +3625,7 @@ Content-Length: 101
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 362
+Content-Length: 361
 
 {
   "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
@@ -3638,7 +3638,7 @@ Content-Length: 362
       "href" : "http://localhost:8080/projects/1/analyzers"
     },
     "self" : {
-      "href" : "http://localhost:8080/projects/1/analyzers/50"
+      "href" : "http://localhost:8080/projects/1/analyzers/1"
     }
   }
 }</code></pre>
@@ -3672,7 +3672,7 @@ Host: localhost:8080</code></pre>
 <h5 id="_example_request_17"><a class="link" href="#_example_request_17">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers/50 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers/1 HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080
 Content-Length: 102
@@ -3690,7 +3690,7 @@ Content-Length: 102
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 363
+Content-Length: 362
 
 {
   "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
@@ -3703,7 +3703,7 @@ Content-Length: 363
       "href" : "http://localhost:8080/projects/1/analyzers"
     },
     "self" : {
-      "href" : "http://localhost:8080/projects/1/analyzers/50"
+      "href" : "http://localhost:8080/projects/1/analyzers/1"
     }
   }
 }</code></pre>
@@ -3728,7 +3728,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 911
+Content-Length: 910
 
 {
   "_embedded" : {
@@ -3743,7 +3743,7 @@ Content-Length: 911
           "href" : "http://localhost:8080/projects/1/analyzers"
         },
         "self" : {
-          "href" : "http://localhost:8080/projects/1/analyzers/50"
+          "href" : "http://localhost:8080/projects/1/analyzers/1"
         }
       }
     }, {
@@ -3773,7 +3773,7 @@ Content-Length: 911
 <h5 id="_example_request_19"><a class="link" href="#_example_request_19">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers/50 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers/1 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3784,7 +3784,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 362
+Content-Length: 361
 
 {
   "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
@@ -3797,7 +3797,7 @@ Content-Length: 362
       "href" : "http://localhost:8080/projects/1/analyzers"
     },
     "self" : {
-      "href" : "http://localhost:8080/projects/1/analyzers/50"
+      "href" : "http://localhost:8080/projects/1/analyzers/1"
     }
   }
 }</code></pre>
@@ -3820,7 +3820,7 @@ the analyzer needs.</p>
 <h5 id="_example_request_20"><a class="link" href="#_example_request_20">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers/50/file HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers/1/file HTTP/1.1
 Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
 Host: localhost:8080
 
@@ -3848,7 +3848,7 @@ abc
 <h5 id="_example_request_21"><a class="link" href="#_example_request_21">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers/50/file HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers/1/file HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -4134,7 +4134,7 @@ Content-Length: 204
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 389
+Content-Length: 388
 
 {
   "profileName" : "Quality Profile",
@@ -4147,7 +4147,7 @@ Content-Length: 389
   } ],
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/projects/1/qualityprofiles/50"
+      "href" : "http://localhost:8080/projects/1/qualityprofiles/1"
     },
     "project" : {
       "href" : "http://localhost:8080/projects/1"
@@ -4164,7 +4164,7 @@ Content-Length: 389
 <h5 id="_example_request_25"><a class="link" href="#_example_request_25">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/qualityprofiles/50 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/qualityprofiles/1 HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080
 Content-Length: 214
@@ -4188,7 +4188,7 @@ Content-Length: 214
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 399
+Content-Length: 398
 
 {
   "profileName" : "Quality Profile (updated)",
@@ -4201,7 +4201,7 @@ Content-Length: 399
   } ],
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/projects/1/qualityprofiles/50"
+      "href" : "http://localhost:8080/projects/1/qualityprofiles/1"
     },
     "project" : {
       "href" : "http://localhost:8080/projects/1"
@@ -4218,7 +4218,7 @@ Content-Length: 399
 <h5 id="_example_request_26"><a class="link" href="#_example_request_26">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/qualityprofiles/50 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/qualityprofiles/1 HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080
 Content-Length: 204
@@ -4242,7 +4242,7 @@ Content-Length: 204
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 389
+Content-Length: 388
 
 {
   "profileName" : "Quality Profile",
@@ -4255,7 +4255,7 @@ Content-Length: 389
   } ],
   "_links" : {
     "self" : {
-      "href" : "http://localhost:8080/projects/1/qualityprofiles/50"
+      "href" : "http://localhost:8080/projects/1/qualityprofiles/1"
     },
     "project" : {
       "href" : "http://localhost:8080/projects/1"
@@ -4272,7 +4272,7 @@ Content-Length: 389
 <h5 id="_example_request_27"><a class="link" href="#_example_request_27">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/qualityprofiles/50 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/qualityprofiles/1 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -5451,7 +5451,7 @@ Content-Length: 2928
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-02-27 22:31:18 UTC
+Last updated 2017-03-01 22:04:37 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
