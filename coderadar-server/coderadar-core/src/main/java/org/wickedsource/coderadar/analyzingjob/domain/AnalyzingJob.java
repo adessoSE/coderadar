@@ -10,7 +10,11 @@ import org.wickedsource.coderadar.project.domain.Project;
  */
 @Entity
 @Table(name = "analyzing_job")
-@SequenceGenerator(name = "analyzing_job_sequence", sequenceName = "seq_ajob_id")
+@SequenceGenerator(
+  name = "analyzing_job_sequence",
+  sequenceName = "seq_ajob_id",
+  allocationSize = 1
+)
 public class AnalyzingJob {
 
   @Id

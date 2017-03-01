@@ -11,7 +11,7 @@ import org.wickedsource.coderadar.project.domain.Project;
 @Table(name = "job")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "jobType", discriminatorType = DiscriminatorType.STRING)
-@SequenceGenerator(name = "job_sequence", sequenceName = "seq_job_id")
+@SequenceGenerator(name = "job_sequence", sequenceName = "seq_job_id", allocationSize = 1)
 public class Job {
 
   @Id

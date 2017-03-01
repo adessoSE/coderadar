@@ -6,7 +6,11 @@ import org.wickedsource.coderadar.project.domain.Project;
 /** An AnalyzerConfiguration stores the configuration for a single analyzer plugin in a project. */
 @Entity
 @Table(name = "analyzer_configuration")
-@SequenceGenerator(name = "analyzer_configuration_sequence", sequenceName = "seq_acon_id")
+@SequenceGenerator(
+  name = "analyzer_configuration_sequence",
+  sequenceName = "seq_acon_id",
+  allocationSize = 1
+)
 public class AnalyzerConfiguration {
 
   @Id

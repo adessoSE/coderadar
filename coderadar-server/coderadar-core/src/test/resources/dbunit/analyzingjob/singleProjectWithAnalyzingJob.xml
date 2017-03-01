@@ -24,6 +24,6 @@
     <project id="1" vcs_url="http://valid.url" vcs_username="user" vcs_password="pass" name="name" workdir_name="foo"
              vcs_start_date="2016-01-01 00:00:00" vcs_end_date="2016-12-31 00:00:00"/>
 
-    <analyzing_job id="50" project_id="1" from_date="2016-01-01 00:00:00" active="true"/>
+    <analyzing_job id="1" project_id="1" from_date="2016-01-01 00:00:00" active="true"/>
 
 </dataset>

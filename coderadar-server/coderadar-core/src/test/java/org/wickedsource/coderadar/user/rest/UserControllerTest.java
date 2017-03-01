@@ -148,7 +148,7 @@ public class UserControllerTest extends ControllerTestTemplate {
     String refreshToken = createRefreshToken();
 
     // save valid refresh token
-    RefreshToken refreshTokenEntity = refreshTokenRepository.findOne(1L);
+    RefreshToken refreshTokenEntity = refreshTokenRepository.findOne(100L);
     refreshTokenEntity.setToken(refreshToken);
     refreshTokenRepository.save(refreshTokenEntity);
 

@@ -24,9 +24,9 @@
     <project id="1" vcs_url="http://valid.url" vcs_username="user" vcs_password="pass" name="name" workdir_name="foo"
              vcs_start_date="2016-01-01 00:00:00" vcs_end_date="2016-12-31 00:00:00"/>
 
-    <file_pattern id="50" project_id="1" inclusion_type="INCLUDE" file_set_type="SOURCE"
+    <file_pattern id="1" project_id="1" inclusion_type="INCLUDE" file_set_type="SOURCE"
                   pattern="src/main/java/**/*.java"/>
-    <file_pattern id="51" project_id="1" inclusion_type="EXCLUDE" file_set_type="SOURCE"
+    <file_pattern id="2" project_id="1" inclusion_type="EXCLUDE" file_set_type="SOURCE"
                   pattern="src/main/java/**/generated/**/*.java"/>
 
 </dataset>

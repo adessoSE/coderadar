@@ -77,7 +77,7 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
   @ExpectedDatabase(SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION_LIST)
   public void getAnalyzerConfiguration() throws Exception {
     mvc()
-        .perform(get("/projects/1/analyzers/50"))
+        .perform(get("/projects/1/analyzers/1"))
         .andExpect(status().isOk())
         .andExpect(containsResource(AnalyzerConfigurationResource.class))
         .andDo(document("analyzerConfiguration/getSingle"));
@@ -91,7 +91,7 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
         analyzerConfigurationResource().analyzerConfiguration2();
     mvc()
         .perform(
-            post("/projects/1/analyzers/50")
+            post("/projects/1/analyzers/1")
                 .content(toJsonWithoutLinks(resource))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())

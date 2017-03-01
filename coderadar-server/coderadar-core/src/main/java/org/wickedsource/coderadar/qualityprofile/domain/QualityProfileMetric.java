@@ -4,7 +4,11 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "quality_profile_metric")
-@SequenceGenerator(name = "quality_profile_metric_sequence", sequenceName = "seq_qpme_id")
+@SequenceGenerator(
+  name = "quality_profile_metric_sequence",
+  sequenceName = "seq_qpme_id",
+  allocationSize = 1
+)
 public class QualityProfileMetric {
 
   @Id

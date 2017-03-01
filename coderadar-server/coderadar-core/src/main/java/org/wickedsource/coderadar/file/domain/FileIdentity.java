@@ -11,7 +11,11 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 @Entity
 @Table(name = "file_identity")
-@SequenceGenerator(name = "file_identity_sequence", sequenceName = "seq_fiid_id")
+@SequenceGenerator(
+  name = "file_identity_sequence",
+  sequenceName = "seq_fiid_id",
+  allocationSize = 1
+)
 public class FileIdentity {
 
   @Id

@@ -7,7 +7,11 @@ import org.wickedsource.coderadar.project.domain.Project;
 
 @Entity
 @Table(name = "quality_profile")
-@SequenceGenerator(name = "quality_profile_sequence", sequenceName = "seq_qupr_id")
+@SequenceGenerator(
+  name = "quality_profile_sequence",
+  sequenceName = "seq_qupr_id",
+  allocationSize = 1
+)
 public class QualityProfile {
 
   @Id

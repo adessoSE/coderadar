@@ -16,7 +16,7 @@ public class RefreshTokenRepositoryTest extends IntegrationTestTemplate {
   @Test
   @DatabaseSetup(DbUnitFactory.RefreshTokens.REFRESH_TOKENS)
   public void load() throws Exception {
-    RefreshToken refreshToken = repository.findOne(1L);
+    RefreshToken refreshToken = repository.findOne(100L);
     assertThat(refreshToken).isNotNull();
     User user = refreshToken.getUser();
     assertThat(user).isNotNull();

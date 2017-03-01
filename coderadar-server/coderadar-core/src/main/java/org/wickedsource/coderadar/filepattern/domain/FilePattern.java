@@ -10,7 +10,7 @@ import org.wickedsource.coderadar.project.domain.Project;
  */
 @Entity
 @Table(name = "file_pattern")
-@SequenceGenerator(name = "file_pattern_sequence", sequenceName = "seq_fpat_id")
+@SequenceGenerator(name = "file_pattern_sequence", sequenceName = "seq_fpat_id", allocationSize = 1)
 public class FilePattern {
 
   @Id

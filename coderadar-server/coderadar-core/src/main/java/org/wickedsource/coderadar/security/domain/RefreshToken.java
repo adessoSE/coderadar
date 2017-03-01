@@ -10,7 +10,11 @@ import org.wickedsource.coderadar.user.domain.User;
  */
 @Entity
 @Table(name = "refresh_token")
-@SequenceGenerator(name = "refresh_token_sequence", sequenceName = "seq_reto_id")
+@SequenceGenerator(
+  name = "refresh_token_sequence",
+  sequenceName = "seq_reto_id",
+  allocationSize = 1
+)
 public class RefreshToken {
 
   @Id

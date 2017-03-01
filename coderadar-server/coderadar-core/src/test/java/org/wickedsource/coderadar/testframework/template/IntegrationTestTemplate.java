@@ -29,7 +29,8 @@ import org.wickedsource.coderadar.CoderadarTestApplication;
     // We want to use the same database instancein all tests, even when the default
     // is set to "true" with Spring Boot 1.5
     "spring.datasource.generate-unique-name=false",
-    "spring.jpa.hibernate.ddl-auto=validate"
+    "spring.jpa.hibernate.ddl-auto=validate",
+    "spring.jpa.hibernate.use-new-id-generator-mappings=true"
   }
 )
 @WebAppConfiguration

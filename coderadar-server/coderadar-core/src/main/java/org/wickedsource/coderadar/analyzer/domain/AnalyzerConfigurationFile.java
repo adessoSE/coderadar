@@ -8,7 +8,11 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "analyzer_configuration_file")
-@SequenceGenerator(name = "analyzer_configuration_file_sequence", sequenceName = "seq_acof_id")
+@SequenceGenerator(
+  name = "analyzer_configuration_file_sequence",
+  sequenceName = "seq_acof_id",
+  allocationSize = 1
+)
 public class AnalyzerConfigurationFile {
 
   @Id

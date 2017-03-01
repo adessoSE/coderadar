@@ -76,7 +76,7 @@ public class QualityProfileControllerTest extends ControllerTestTemplate {
   @ExpectedDatabase(SINGLE_PROJECT)
   public void deleteQualityProfile() throws Exception {
     mvc()
-        .perform(delete("/projects/1/qualityprofiles/50"))
+        .perform(delete("/projects/1/qualityprofiles/1"))
         .andExpect(status().isOk())
         .andDo(document("qualityprofiles/delete"));
   }
@@ -88,7 +88,7 @@ public class QualityProfileControllerTest extends ControllerTestTemplate {
     QualityProfileResource resource = profile2();
     mvc()
         .perform(
-            post("/projects/1/qualityprofiles/50")
+            post("/projects/1/qualityprofiles/1")
                 .content(toJsonWithoutLinks(resource))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -104,7 +104,7 @@ public class QualityProfileControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/1/qualityprofiles/50")
+                get("/projects/1/qualityprofiles/1")
                     .content(toJsonWithoutLinks(resource))
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())

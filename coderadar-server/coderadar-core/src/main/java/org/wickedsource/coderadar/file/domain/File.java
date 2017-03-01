@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /** Represents a file in a VCS repository. */
 @Entity
 @Table(name = "file")
-@SequenceGenerator(name = "file_sequence", sequenceName = "seq_file_id")
+@SequenceGenerator(name = "file_sequence", sequenceName = "seq_file_id", allocationSize = 1)
 public class File {
 
   @Id

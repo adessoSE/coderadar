@@ -43,7 +43,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
         .andExpect(containsResource(ProjectResource.class))
         .andDo(documentCreateProject());
 
-    Project savedProject = projectRepository.findOne(50L);
+    Project savedProject = projectRepository.findOne(1L);
     assertThat(savedProject).isNotNull();
     assertThat(savedProject.getWorkdirName()).isNotEmpty();
     assertThat(savedProject.getName()).isEqualTo(project.getName());

@@ -12,7 +12,7 @@ import org.wickedsource.coderadar.project.domain.Project;
   name = "module",
   uniqueConstraints = {@UniqueConstraint(columnNames = {"project_id", "path"})}
 )
-@SequenceGenerator(name = "module_sequence", sequenceName = "seq_modu_id")
+@SequenceGenerator(name = "module_sequence", sequenceName = "seq_modu_id", allocationSize = 1)
 public class Module {
 
   @Id

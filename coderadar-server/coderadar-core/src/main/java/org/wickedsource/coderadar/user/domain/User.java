@@ -8,7 +8,7 @@ import javax.persistence.*;
   name = "user",
   uniqueConstraints = {@UniqueConstraint(columnNames = "username")}
 )
-@SequenceGenerator(name = "user_sequence", sequenceName = "seq_user_id")
+@SequenceGenerator(name = "user_sequence", sequenceName = "seq_user_id", allocationSize = 1)
 public class User {
 
   @Id

@@ -11,7 +11,11 @@ import org.wickedsource.coderadar.project.domain.Project;
  */
 @Entity
 @Table(name = "git_log_entry")
-@SequenceGenerator(name = "git_log_entry_sequence", sequenceName = "seq_glen_id")
+@SequenceGenerator(
+  name = "git_log_entry_sequence",
+  sequenceName = "seq_glen_id",
+  allocationSize = 1
+)
 public class GitLogEntry {
 
   @Id
