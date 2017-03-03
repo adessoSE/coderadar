@@ -24,15 +24,4 @@ public class PasswordService {
   public String hash(String password) {
     return passwordEncoder.encode(password);
   }
-
-  /**
-   * Checks, if the passwords match.
-   *
-   * @param rawPassword the password to be verified
-   * @param encodedPassword encoded the password as hexadecimal
-   * @return <code>true</code>, if the password match, false otherwise
-   */
-  boolean verify(String rawPassword, String encodedPassword) {
-    return passwordEncoder.matches(rawPassword, encodedPassword);
-  }
 }
