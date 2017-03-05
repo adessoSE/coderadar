@@ -5,7 +5,7 @@ import javax.persistence.*;
 /** a user of application, who has to login to access to functionality */
 @Entity
 @Table(
-  name = "user",
+  name = "user_account",
   uniqueConstraints = {@UniqueConstraint(columnNames = "username")}
 )
 @SequenceGenerator(name = "user_sequence", sequenceName = "seq_user_id", allocationSize = 1)
