@@ -20,7 +20,7 @@
     <analyzer_configuration_file/>,
     <quality_profile/>
     <quality_profile_metric/>
-    <user/>
+    <user_account/>
     <refresh_token/>
 
     <project id="1" vcs_url="http://valid.url" vcs_username="user" vcs_password="pass" name="name" workdir_name="foo"
