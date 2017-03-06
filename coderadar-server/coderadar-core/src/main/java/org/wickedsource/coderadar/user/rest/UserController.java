@@ -112,7 +112,7 @@ public class UserController {
       @Valid @RequestBody PasswordChangeResource passwordChangeResource) {
     ChangePasswordResponseResource passwordResponseResource =
         passwordChangeService.change(
-            passwordChangeResource.getUsername(), passwordChangeResource.getNewPassword());
+            passwordChangeResource.getRefreshToken(), passwordChangeResource.getNewPassword());
     return new ResponseEntity<>(passwordResponseResource, HttpStatus.OK);
   }
 }

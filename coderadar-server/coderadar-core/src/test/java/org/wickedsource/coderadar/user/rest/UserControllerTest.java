@@ -168,8 +168,18 @@ public class UserControllerTest extends ControllerTestTemplate {
   @Test
   @DatabaseSetup(DbUnitFactory.RefreshTokens.REFRESH_TOKENS)
   public void changePassword() throws Exception {
+
+    // we need to create token here to pass the validation with the current key
+    String refreshToken = createRefreshToken();
+    // save valid refresh token
+    RefreshToken refreshTokenEntity = refreshTokenRepository.findOne(100L);
+    refreshTokenEntity.setToken(refreshToken);
+    refreshTokenRepository.save(refreshTokenEntity);
+
     PasswordChangeResource passwordChangeResource =
         passwordChangeResource().passwordChangeResource();
+    passwordChangeResource.setRefreshToken(refreshToken);
+
     mvc()
         .perform(
             post("/user/password/change")
@@ -186,7 +196,7 @@ public class UserControllerTest extends ControllerTestTemplate {
         "user/password/change",
         links(halLinks(), linkWithRel("self").description("Link to the user.")),
         requestFields(
-            fields.withPath("username").description("The name of the user"),
+            fields.withPath("refreshToken").description("the current refresh token of the user"),
             fields
                 .withCustomPath("newPassword")
                 .description("The password of the user as plaintext")));

@@ -6,14 +6,14 @@ import org.wickedsource.coderadar.security.ValidPassword;
 
 public class PasswordChangeResource extends ResourceSupport {
 
-  @NotNull private String username;
+  @NotNull private String refreshToken;
 
   @ValidPassword private String newPassword;
 
   public PasswordChangeResource() {}
 
-  public PasswordChangeResource(String username, String newPassword) {
-    this.username = username;
+  public PasswordChangeResource(String refreshToken, String newPassword) {
+    this.refreshToken = refreshToken;
     this.newPassword = newPassword;
   }
 
@@ -25,11 +25,11 @@ public class PasswordChangeResource extends ResourceSupport {
     this.newPassword = newPassword;
   }
 
-  public String getUsername() {
-    return username;
+  public String getRefreshToken() {
+    return refreshToken;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public void setRefreshToken(String refreshToken) {
+    this.refreshToken = refreshToken;
   }
 }
