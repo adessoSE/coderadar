@@ -5,40 +5,42 @@ databaseChangeLog:
   # Sadly, we cannot use the "includeAll" feature and have to list every single changeset
   # here due to https://liquibase.jira.com/browse/CORE-2863
   - include:
-      file: db/changelog/init/0001-create-table-project.yaml
+      file: db/changelog/V0_1_0/0001-create-table-project.yaml
   - include:
-      file: db/changelog/init/0002-create-table-commit.yaml
+      file: db/changelog/V0_1_0/0002-create-table-commit.yaml
   - include:
-      file: db/changelog/init/0003-create-table-analyzer-configuration.yaml
+      file: db/changelog/V0_1_0/0003-create-table-analyzer-configuration.yaml
   - include:
-      file: db/changelog/init/0004-create-table-analyzer-configuration-file.yaml
+      file: db/changelog/V0_1_0/0004-create-table-analyzer-configuration-file.yaml
   - include:
-      file: db/changelog/init/0005-create-table-analyzing-job.yaml
+      file: db/changelog/V0_1_0/0005-create-table-analyzing-job.yaml
   - include:
-      file: db/changelog/init/0006-create-table-file-identity.yaml
+      file: db/changelog/V0_1_0/0006-create-table-file-identity.yaml
   - include:
-      file: db/changelog/init/0007-create-table-file.yaml
+      file: db/changelog/V0_1_0/0007-create-table-file.yaml
   - include:
-      file: db/changelog/init/0008-create-table-commit-file.yaml
+      file: db/changelog/V0_1_0/0008-create-table-commit-file.yaml
   - include:
-      file: db/changelog/init/0009-create-table-module.yaml
+      file: db/changelog/V0_1_0/0009-create-table-module.yaml
   - include:
-      file: db/changelog/init/0010-create-table-commit-file-module.yaml
+      file: db/changelog/V0_1_0/0010-create-table-commit-file-module.yaml
   - include:
-      file: db/changelog/init/0011-create-table-file-pattern.yaml
+      file: db/changelog/V0_1_0/0011-create-table-file-pattern.yaml
   - include:
-      file: db/changelog/init/0012-create-table-finding.yaml
+      file: db/changelog/V0_1_0/0012-create-table-finding.yaml
   - include:
-      file: db/changelog/init/0013-create-table-git-log-entry.yaml
+      file: db/changelog/V0_1_0/0013-create-table-git-log-entry.yaml
   - include:
-      file: db/changelog/init/0014-create-table-job.yaml
+      file: db/changelog/V0_1_0/0014-create-table-job.yaml
   - include:
-      file: db/changelog/init/0015-create-table-metric-value.yaml
+      file: db/changelog/V0_1_0/0015-create-table-metric-value.yaml
   - include:
-      file: db/changelog/init/0016-create-table-quality-profile.yaml
+      file: db/changelog/V0_1_0/0016-create-table-quality-profile.yaml
   - include:
-      file: db/changelog/init/0017-create-table-quality-profile-metric.yaml
+      file: db/changelog/V0_1_0/0017-create-table-quality-profile-metric.yaml
   - include:
-      file: db/changelog/init/0018-create-table-user.yaml
+      file: db/changelog/V0_1_0/0018-create-table-user.yaml
   - include:
-      file: db/changelog/init/0019-create-table-refresh-token.yaml
+      file: db/changelog/V0_1_0/0019-create-table-refresh-token.yaml
+  - include:
+      file: db/changelog/V0_1_0/0020-rename-table-users.yaml

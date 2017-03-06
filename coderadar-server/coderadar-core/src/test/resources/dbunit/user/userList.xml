@@ -18,9 +18,9 @@
     <analyzer_configuration_file/>,
     <quality_profile/>
     <quality_profile_metric/>
-    <user/>
+    <user_account/>
     <refresh_token/>
 
-    <user id="1" username="user" password="password"/>
-    <user id="2" username="radar" password="nopassword"/>
+    <user_account id="1" username="user" password="password"/>
+    <user_account id="2" username="radar" password="nopassword"/>
 </dataset>
