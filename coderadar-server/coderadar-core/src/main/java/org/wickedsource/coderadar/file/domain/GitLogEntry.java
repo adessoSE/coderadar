@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.file.domain;
 
 import javax.persistence.*;
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
+import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.project.domain.Project;
 
 /**
@@ -33,11 +34,9 @@ public class GitLogEntry {
   @Column(name = "old_filepath")
   private String oldFilepath;
 
-  @Column(name = "commit_name")
-  private String commitName;
-
-  @Column(name = "parent_commit_name")
-  private String parentCommitName;
+  @ManyToOne
+  @JoinColumn(name = "commit_id")
+  private Commit commit;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "project_id")
@@ -75,27 +74,19 @@ public class GitLogEntry {
     this.oldFilepath = oldFilepath;
   }
 
-  public String getCommitName() {
-    return commitName;
-  }
-
-  public void setCommitName(String commitName) {
-    this.commitName = commitName;
-  }
-
-  public String getParentCommitName() {
-    return parentCommitName;
-  }
-
-  public void setParentCommitName(String parentCommitName) {
-    this.parentCommitName = parentCommitName;
-  }
-
   public Project getProject() {
     return project;
   }
 
   public void setProject(Project project) {
     this.project = project;
+  }
+
+  public Commit getCommit() {
+    return commit;
+  }
+
+  public void setCommit(Commit commit) {
+    this.commit = commit;
   }
 }

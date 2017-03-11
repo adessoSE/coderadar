@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 23
+      author: thombergs
+      changes:
+        - dropColumn:
+            columnName: commit_name
+            schemaName: public
+            tableName: git_log_entry
+        - dropColumn:
+            columnName: parent_commit_name
+            schemaName: public
+            tableName: git_log_entry
+        - addColumn:
+            columns:
+            - column:
+                name: commit_id
+                type: bigint
+            schemaName: public
+            tableName: git_log_entry
+        - addForeignKeyConstraint:
+            constraintName: fk_glen_commit_id
+            baseColumnNames: commit_id
+            baseTableName: git_log_entry
+            referencedColumnNames: id
+            referencedTableName: commit
+        - createIndex:
+            indexName: idx_glen_commit_id
+            schemaName: public
+            tableName: git_log_entry
+            columns:
+            - column:
+                name: commit_id

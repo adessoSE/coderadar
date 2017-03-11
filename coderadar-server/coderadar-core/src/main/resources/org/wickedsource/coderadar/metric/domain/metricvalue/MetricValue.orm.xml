@@ -100,11 +100,9 @@
         <query><![CDATA[
             SELECT DISTINCT new org.wickedsource.coderadar.metric.domain.metricvalue.ChangedFileDTO(l.oldFilepath, l.filepath, l.changeType)
             FROM GitLogEntry l
+            JOIN l.commit c
             WHERE l.project.id = :projectId
-            AND l.commitName in
-              (SELECT ctf.id.commit.name
-               FROM CommitToFileAssociation ctf
-               WHERE ctf.id.commit.sequenceNumber BETWEEN :commit1SequenceNumber AND :commit2SequenceNumber)
+            AND c.sequenceNumber BETWEEN :commit1SequenceNumber AND :commit2SequenceNumber
             ]]>
         </query>
     </named-query>

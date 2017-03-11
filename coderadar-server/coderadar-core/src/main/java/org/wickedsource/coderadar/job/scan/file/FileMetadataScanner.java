@@ -5,7 +5,6 @@ import static com.codahale.metrics.MetricRegistry.name;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -24,6 +23,7 @@ import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.file.domain.GitLogEntry;
 import org.wickedsource.coderadar.file.domain.GitLogEntryRepository;
 import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
+import org.wickedsource.coderadar.job.core.FirstCommitFinder;
 import org.wickedsource.coderadar.vcs.git.ChangeTypeMapper;
 import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
 
@@ -46,19 +46,23 @@ public class FileMetadataScanner {
 
   private Meter commitsMeter;
 
+  private FirstCommitFinder firstCommitFinder;
+
   @Autowired
   public FileMetadataScanner(
       LocalGitRepositoryUpdater updater,
       CommitRepository commitRepository,
       GitCommitFinder commitFinder,
       GitLogEntryRepository logEntryRepository,
-      MetricRegistry metricRegistry) {
+      MetricRegistry metricRegistry,
+      FirstCommitFinder firstCommitFinder) {
     this.updater = updater;
     this.commitRepository = commitRepository;
     this.commitFinder = commitFinder;
     this.logEntryRepository = logEntryRepository;
     this.filesMeter = metricRegistry.meter(name(FileMetadataScanner.class, "files"));
     this.commitsMeter = metricRegistry.meter(name(FileMetadataScanner.class, "commits"));
+    this.firstCommitFinder = firstCommitFinder;
   }
 
   /**
@@ -74,7 +78,7 @@ public class FileMetadataScanner {
             String.format("Commit with ID %d does not exist!", commit.getId()));
       }
       Git gitClient = updater.updateLocalGitRepository(commit.getProject());
-      if (isFirstCommitInProject(commit)) {
+      if (firstCommitFinder.isFirstCommitInProject(commit)) {
         walkAllFilesInCommit(gitClient, commit);
       } else {
         walkTouchedFilesInCommit(gitClient, commit);
@@ -94,12 +98,11 @@ public class FileMetadataScanner {
       treeWalk.setRecursive(true);
       while (treeWalk.next()) {
         GitLogEntry logEntry = new GitLogEntry();
-        logEntry.setCommitName(commit.getName());
-        logEntry.setParentCommitName(null); // the commit is to be treated as the first commit
         logEntry.setOldFilepath("/dev/null");
         logEntry.setFilepath(treeWalk.getPathString());
         logEntry.setProject(commit.getProject());
         logEntry.setChangeType(ChangeType.ADD);
+        logEntry.setCommit(commit);
 
         logEntryRepository.save(logEntry);
         fileCounter++;
@@ -124,12 +127,11 @@ public class FileMetadataScanner {
       List<DiffEntry> diffs = diffFormatter.scan(parent, gitCommit);
       for (DiffEntry diff : diffs) {
         GitLogEntry logEntry = new GitLogEntry();
-        logEntry.setCommitName(commit.getName());
-        logEntry.setParentCommitName(parent.getName());
         logEntry.setOldFilepath(diff.getOldPath());
         logEntry.setFilepath(diff.getNewPath());
         logEntry.setProject(commit.getProject());
         logEntry.setChangeType(changeTypeMapper.jgitToCoderadar(diff.getChangeType()));
+        logEntry.setCommit(commit);
 
         logEntryRepository.save(logEntry);
         fileCounter++;
@@ -139,16 +141,5 @@ public class FileMetadataScanner {
     commit.setScanned(true);
     commitRepository.save(commit);
     logger.info("scanned {} files in commit {}", fileCounter, commit);
-  }
-
-  private boolean isFirstCommitInProject(Commit commit) {
-    Date startDate = commit.getProject().getVcsCoordinates().getStartDate();
-    if (startDate == null) {
-      return false;
-    } else {
-      Commit firstCommitInDateRange =
-          commitRepository.findFirstCommitAfterDate(commit.getProject().getId(), startDate);
-      return firstCommitInDateRange.getId().equals(commit.getId());
-    }
   }
 }

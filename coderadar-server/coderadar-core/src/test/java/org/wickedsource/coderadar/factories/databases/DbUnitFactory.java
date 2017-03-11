@@ -82,4 +82,9 @@ public class DbUnitFactory {
     public static final String SINGLE_PROJECT_WITH_WAITING_JOB =
         "/dbunit/job/singleProjectWithWaitingJob.xml";
   }
+
+  public static class GitLogEntries {
+    public static final String GIT_LOG_ENTRY_NOT_IN_EARLIER_COMMIT =
+        "/dbunit/gitlogentry/gitLogEntryNotInEarlierCommit.xml";
+  }
 }

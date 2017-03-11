@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.performance;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -72,6 +73,8 @@ public class JobPerformanceTestRunner {
     ProjectResource projectResource = new ProjectResource();
     projectResource.setName("coderadar");
     projectResource.setVcsUrl("https://github.com/reflectoring/coderadar.git");
+    projectResource.setStartDate(LocalDate.of(2017, 1, 1));
+    projectResource.setEndDate(LocalDate.of(2017, 1, 31));
     return client.createProject(projectResource);
   }
 
@@ -82,17 +85,17 @@ public class JobPerformanceTestRunner {
     pattern.setFileSetType(FileSetType.SOURCE);
     pattern.setPattern("**/src/main/java/**/*.java");
     patterns.addFilePattern(pattern);
-    return client.setFilePatterns(50L, patterns);
+    return client.setFilePatterns(1L, patterns);
   }
 
   private static void addAnalyzerConfigurations(CoderadarRestClient client) {
     client.addAnalyzerConfiguration(
-        50L,
+        1L,
         new AnalyzerConfigurationResource(
             "org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin",
             true));
     client.addAnalyzerConfiguration(
-        50L,
+        1L,
         new AnalyzerConfigurationResource(
             "org.wickedsource.coderadar.analyzer.loc.LocAnalyzerPlugin", true));
   }
@@ -102,6 +105,6 @@ public class JobPerformanceTestRunner {
     job.setActive(true);
     job.setFromDate(new Date(0));
     job.setRescan(true);
-    return client.addAnalyzingJob(50L, job);
+    return client.addAnalyzingJob(1L, job);
   }
 }

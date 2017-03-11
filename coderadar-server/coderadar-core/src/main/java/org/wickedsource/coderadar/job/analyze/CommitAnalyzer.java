@@ -35,6 +35,7 @@ import org.wickedsource.coderadar.file.domain.FileRepository;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.filepattern.domain.FileSetType;
+import org.wickedsource.coderadar.job.core.FirstCommitFinder;
 import org.wickedsource.coderadar.metric.domain.finding.FindingRepository;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValue;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueId;
@@ -75,6 +76,8 @@ public class CommitAnalyzer {
 
   private Meter filesMeter;
 
+  private FirstCommitFinder firstCommitFinder;
+
   private static final Set<DiffEntry.ChangeType> CHANGES_TO_ANALYZE =
       EnumSet.of(
           DiffEntry.ChangeType.ADD,
@@ -96,7 +99,8 @@ public class CommitAnalyzer {
       MetricValueRepository metricValueRepository,
       FindingRepository findingRepository,
       AnalyzingJobRepository analyzingJobRepository,
-      MetricRegistry metricRegistry) {
+      MetricRegistry metricRegistry,
+      FirstCommitFinder firstCommitFinder) {
     this.commitRepository = commitRepository;
     this.workdirManager = workdirManager;
     this.filePatternRepository = filePatternRepository;
@@ -111,6 +115,7 @@ public class CommitAnalyzer {
     this.analyzingJobRepository = analyzingJobRepository;
     this.commitsMeter = metricRegistry.meter(name(CommitAnalyzer.class, "commits"));
     this.filesMeter = metricRegistry.meter(name(CommitAnalyzer.class, "files"));
+    this.firstCommitFinder = firstCommitFinder;
   }
 
   /**
@@ -139,7 +144,7 @@ public class CommitAnalyzer {
       }
 
       logger.info("starting analysis of commit {}", commit.getName());
-      if (isFirstCommitInAnalyzingJob(commit) || isFirstCommitInProject(commit)) {
+      if (isFirstCommitInAnalyzingJob(commit) || firstCommitFinder.isFirstCommitInProject(commit)) {
         // If it is the first commit to be analyzed we want to analyze ALL files that are in the repo
         // at the time of the commit so that we have all the files' metrics ...
         walkAllFilesInCommit(gitClient, commit, analyzers);
@@ -156,27 +161,16 @@ public class CommitAnalyzer {
   }
 
   private boolean isFirstCommitInAnalyzingJob(Commit commit) {
-    AnalyzingJob strategy = analyzingJobRepository.findByProjectId(commit.getProject().getId());
+    AnalyzingJob analyzingJob = analyzingJobRepository.findByProjectId(commit.getProject().getId());
 
-    if (strategy.getFromDate() == null) {
+    if (analyzingJob.getFromDate() == null) {
       return false;
     }
 
     Commit firstCommitInDateRange =
         commitRepository.findFirstCommitAfterDate(
-            commit.getProject().getId(), strategy.getFromDate());
+            commit.getProject().getId(), analyzingJob.getFromDate());
     return firstCommitInDateRange.getId().equals(commit.getId());
-  }
-
-  private boolean isFirstCommitInProject(Commit commit) {
-    Date startDate = commit.getProject().getVcsCoordinates().getStartDate();
-    if (startDate == null) {
-      return false;
-    } else {
-      Commit firstCommitInDateRange =
-          commitRepository.findFirstCommitAfterDate(commit.getProject().getId(), startDate);
-      return firstCommitInDateRange.getId().equals(commit.getId());
-    }
   }
 
   private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Project project) {
