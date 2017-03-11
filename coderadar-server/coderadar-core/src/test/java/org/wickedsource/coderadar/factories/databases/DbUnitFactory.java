@@ -83,8 +83,4 @@ public class DbUnitFactory {
         "/dbunit/job/singleProjectWithWaitingJob.xml";
   }
 
-  public static class GitLogEntries {
-    public static final String GIT_LOG_ENTRY_NOT_IN_EARLIER_COMMIT =
-        "/dbunit/gitlogentry/gitLogEntryNotInEarlierCommit.xml";
-  }
 }
