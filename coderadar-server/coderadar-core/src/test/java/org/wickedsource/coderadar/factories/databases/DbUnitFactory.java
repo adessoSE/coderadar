@@ -82,5 +82,4 @@ public class DbUnitFactory {
     public static final String SINGLE_PROJECT_WITH_WAITING_JOB =
         "/dbunit/job/singleProjectWithWaitingJob.xml";
   }
-
 }
