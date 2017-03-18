@@ -1,14 +1,15 @@
-package org.wickedsource.coderadar.analyzer.match;
+package org.wickedsource.coderadar.filepattern.match;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 
 /**
  * This class allows to specify a set of include patterns and exclude patterns that define a set of
  * files from a given starting folder. The patterns are Ant-style patterns. The exclude patterns are
  * applied AFTER the include patterns so that excludes can be used to override certain includes.
  */
-public class FileMatchingPattern {
+public class FilePatternMatcher {
 
   private AntPathMatcher matcher = new AntPathMatcher();
 
@@ -16,12 +17,38 @@ public class FileMatchingPattern {
 
   private List<String> excludePatterns = new ArrayList<>();
 
+  public FilePatternMatcher() {}
+
+  public FilePatternMatcher(List<FilePattern> patterns) {
+    addFilePatterns(patterns);
+  }
+
   public void addIncludePattern(String pattern) {
     this.includePatterns.add(pattern);
   }
 
   public void addExcludePattern(String pattern) {
     this.excludePatterns.add(pattern);
+  }
+
+  public void addFilePattern(FilePattern pattern) {
+    switch (pattern.getInclusionType()) {
+      case INCLUDE:
+        addIncludePattern(pattern.getPattern());
+        break;
+      case EXCLUDE:
+        addExcludePattern(pattern.getPattern());
+        break;
+      default:
+        throw new IllegalStateException(
+            String.format("invalid InclusionType %s", pattern.getInclusionType()));
+    }
+  }
+
+  public void addFilePatterns(List<FilePattern> patterns) {
+    for (FilePattern pattern : patterns) {
+      addFilePattern(pattern);
+    }
   }
 
   /**

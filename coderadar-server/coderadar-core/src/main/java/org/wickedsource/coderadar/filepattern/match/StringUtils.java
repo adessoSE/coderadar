@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.match;
+package org.wickedsource.coderadar.filepattern.match;
 
 import java.util.ArrayList;
 import java.util.Collection;

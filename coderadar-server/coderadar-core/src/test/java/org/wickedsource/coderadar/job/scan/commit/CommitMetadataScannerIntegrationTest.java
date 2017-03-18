@@ -25,7 +25,7 @@ import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.WorkdirManager;
 import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
-import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
+import org.wickedsource.coderadar.job.LocalGitRepositoryManager;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
@@ -52,7 +52,7 @@ public class CommitMetadataScannerIntegrationTest extends GitTestTemplate {
 
   @Mock private WorkdirManager workdirManager;
 
-  private LocalGitRepositoryUpdater updater;
+  private LocalGitRepositoryManager updater;
 
   @Mock private CoderadarConfiguration config;
 
@@ -64,7 +64,7 @@ public class CommitMetadataScannerIntegrationTest extends GitTestTemplate {
     mock(workdirManager);
     mock(config);
     gitUpdater = new GitRepositoryUpdater(new GitRepositoryResetter());
-    updater = new LocalGitRepositoryUpdater(gitUpdater, gitCloner, gitChecker, workdirManager);
+    updater = new LocalGitRepositoryManager(gitUpdater, gitCloner, gitChecker, workdirManager);
   }
 
   @After

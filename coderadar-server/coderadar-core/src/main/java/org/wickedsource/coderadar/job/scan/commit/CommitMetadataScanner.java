@@ -14,7 +14,7 @@ import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
-import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
+import org.wickedsource.coderadar.job.LocalGitRepositoryManager;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.vcs.git.walk.CommitWalker;
 import org.wickedsource.coderadar.vcs.git.walk.filter.DateRangeCommitFilter;
@@ -27,17 +27,17 @@ public class CommitMetadataScanner {
 
   private CommitRepository commitRepository;
 
-  private LocalGitRepositoryUpdater updater;
+  private LocalGitRepositoryManager gitRepoManager;
 
   private Meter commitsMeter;
 
   @Autowired
   public CommitMetadataScanner(
       CommitRepository commitRepository,
-      LocalGitRepositoryUpdater updater,
+      LocalGitRepositoryManager gitRepoManager,
       MetricRegistry metricRegistry) {
     this.commitRepository = commitRepository;
-    this.updater = updater;
+    this.gitRepoManager = gitRepoManager;
     this.commitsMeter = metricRegistry.meter(name(CommitMetadataScanner.class, "commits"));
   }
 
@@ -51,7 +51,7 @@ public class CommitMetadataScanner {
    * @return File object of the local GIT repository.
    */
   public File scan(Project project) {
-    Git gitClient = updater.updateLocalGitRepository(project);
+    Git gitClient = gitRepoManager.updateLocalGitRepository(project);
     scanLocalRepository(project, gitClient);
     return gitClient.getRepository().getDirectory();
   }

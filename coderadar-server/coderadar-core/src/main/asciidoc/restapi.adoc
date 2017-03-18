@@ -318,6 +318,8 @@ File patterns may either define a pattern for files to be INCLUDED or files to b
 contained in a certain file set (like the SOURCE file set), coderadar will first apply all INCLUDE patterns of that file set and then apply all EXCLUDE
 patterns. Thus, the file set will include all INCLUDED files except those that were part of an EXCLUDE pattern.
 
+If a project has no file patterns defined, no files will be analyzed.
+
 ==== Structure
 
 include::{snippets}/filepatterns/create-update/request-fields.adoc[]

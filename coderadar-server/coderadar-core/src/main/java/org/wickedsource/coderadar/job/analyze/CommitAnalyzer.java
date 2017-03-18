@@ -24,7 +24,6 @@ import org.wickedsource.coderadar.analyzer.api.Finding;
 import org.wickedsource.coderadar.analyzer.api.Metric;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.domain.*;
-import org.wickedsource.coderadar.analyzer.match.FileMatchingPattern;
 import org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJob;
 import org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJobRepository;
 import org.wickedsource.coderadar.commit.domain.Commit;
@@ -35,6 +34,7 @@ import org.wickedsource.coderadar.file.domain.FileRepository;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.filepattern.domain.FileSetType;
+import org.wickedsource.coderadar.filepattern.match.FilePatternMatcher;
 import org.wickedsource.coderadar.job.core.FirstCommitFinder;
 import org.wickedsource.coderadar.metric.domain.finding.FindingRepository;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValue;
@@ -212,7 +212,7 @@ public class CommitAnalyzer {
     diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
     diffFormatter.setDetectRenames(true);
 
-    FileMatchingPattern pattern = getFileMatchingPattern(commit);
+    FilePatternMatcher pattern = getPatternMatcher(commit.getProject().getId());
 
     // we are only interested in the changes compared to the FIRST parent,
     // since that is the parent commit in the same "lane" as the current commit
@@ -240,11 +240,10 @@ public class CommitAnalyzer {
     }
   }
 
-  private FileMatchingPattern getFileMatchingPattern(Commit commit) {
+  private FilePatternMatcher getPatternMatcher(long projectId) {
     List<FilePattern> sourceFilePatterns =
-        filePatternRepository.findByProjectIdAndFileSetType(
-            commit.getProject().getId(), FileSetType.SOURCE);
-    return toFileMatchingPattern(sourceFilePatterns);
+        filePatternRepository.findByProjectIdAndFileSetType(projectId, FileSetType.SOURCE);
+    return new FilePatternMatcher(sourceFilePatterns);
   }
 
   /**
@@ -261,7 +260,7 @@ public class CommitAnalyzer {
               commit.getName(), gitClient.getRepository().getDirectory()));
     }
 
-    FileMatchingPattern pattern = getFileMatchingPattern(commit);
+    FilePatternMatcher pattern = getPatternMatcher(commit.getProject().getId());
 
     try (TreeWalk treeWalk = new TreeWalk(gitClient.getRepository())) {
       treeWalk.addTree(gitCommit.getTree());
@@ -340,23 +339,5 @@ public class CommitAnalyzer {
     }
     throw new IllegalStateException(
         String.format("could not find file '%s' in commit %s", filePath, commit.getName()));
-  }
-
-  private FileMatchingPattern toFileMatchingPattern(List<FilePattern> filePatternList) {
-    FileMatchingPattern pattern = new FileMatchingPattern();
-    for (FilePattern files : filePatternList) {
-      switch (files.getInclusionType()) {
-        case INCLUDE:
-          pattern.addIncludePattern(files.getPattern());
-          break;
-        case EXCLUDE:
-          pattern.addExcludePattern(files.getPattern());
-          break;
-        default:
-          throw new IllegalStateException(
-              String.format("invalid InclusionType %s", files.getInclusionType()));
-      }
-    }
-    return pattern;
   }
 }

@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.job;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import org.eclipse.jgit.api.Git;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import org.wickedsource.coderadar.vcs.git.GitRepositoryCloner;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryUpdater;
 
 @Service
-public class LocalGitRepositoryUpdater {
+public class LocalGitRepositoryManager {
 
   private GitRepositoryUpdater gitUpdater;
 
@@ -22,7 +23,7 @@ public class LocalGitRepositoryUpdater {
   private WorkdirManager workdirManager;
 
   @Autowired
-  public LocalGitRepositoryUpdater(
+  public LocalGitRepositoryManager(
       GitRepositoryUpdater gitUpdater,
       GitRepositoryCloner gitCloner,
       GitRepositoryChecker gitChecker,
@@ -31,6 +32,25 @@ public class LocalGitRepositoryUpdater {
     this.gitCloner = gitCloner;
     this.gitChecker = gitChecker;
     this.workdirManager = workdirManager;
+  }
+
+  public Git getLocalGitRepository(Project project) {
+    if (project == null) {
+      throw new IllegalArgumentException("parameter project must not be null!");
+    }
+
+    Path workdir = getWorkdir(project);
+    if (!isRepositoryAlreadyCheckedOut(project)) {
+      throw new IllegalArgumentException(
+          String.format("no local git repository found at %s", workdir));
+    }
+
+    try {
+      return Git.open(workdir.toFile());
+    } catch (IOException e) {
+      throw new IllegalStateException(
+          String.format("could not open local git repository at %s due to exception", workdir), e);
+    }
   }
 
   public Git updateLocalGitRepository(Project project) {

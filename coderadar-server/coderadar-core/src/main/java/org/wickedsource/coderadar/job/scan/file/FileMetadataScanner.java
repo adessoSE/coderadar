@@ -22,7 +22,11 @@ import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.file.domain.GitLogEntry;
 import org.wickedsource.coderadar.file.domain.GitLogEntryRepository;
-import org.wickedsource.coderadar.job.LocalGitRepositoryUpdater;
+import org.wickedsource.coderadar.filepattern.domain.FilePattern;
+import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
+import org.wickedsource.coderadar.filepattern.domain.FileSetType;
+import org.wickedsource.coderadar.filepattern.match.FilePatternMatcher;
+import org.wickedsource.coderadar.job.LocalGitRepositoryManager;
 import org.wickedsource.coderadar.job.core.FirstCommitFinder;
 import org.wickedsource.coderadar.vcs.git.ChangeTypeMapper;
 import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
@@ -32,7 +36,7 @@ public class FileMetadataScanner {
 
   private Logger logger = LoggerFactory.getLogger(FileMetadataScanner.class);
 
-  private LocalGitRepositoryUpdater updater;
+  private LocalGitRepositoryManager gitRepoManager;
 
   private CommitRepository commitRepository;
 
@@ -48,21 +52,25 @@ public class FileMetadataScanner {
 
   private FirstCommitFinder firstCommitFinder;
 
+  private FilePatternRepository filePatternRepository;
+
   @Autowired
   public FileMetadataScanner(
-      LocalGitRepositoryUpdater updater,
+      LocalGitRepositoryManager gitRepoManager,
       CommitRepository commitRepository,
       GitCommitFinder commitFinder,
       GitLogEntryRepository logEntryRepository,
       MetricRegistry metricRegistry,
-      FirstCommitFinder firstCommitFinder) {
-    this.updater = updater;
+      FirstCommitFinder firstCommitFinder,
+      FilePatternRepository filePatternRepository) {
+    this.gitRepoManager = gitRepoManager;
     this.commitRepository = commitRepository;
     this.commitFinder = commitFinder;
     this.logEntryRepository = logEntryRepository;
     this.filesMeter = metricRegistry.meter(name(FileMetadataScanner.class, "files"));
     this.commitsMeter = metricRegistry.meter(name(FileMetadataScanner.class, "commits"));
     this.firstCommitFinder = firstCommitFinder;
+    this.filePatternRepository = filePatternRepository;
   }
 
   /**
@@ -77,11 +85,12 @@ public class FileMetadataScanner {
         throw new IllegalArgumentException(
             String.format("Commit with ID %d does not exist!", commit.getId()));
       }
-      Git gitClient = updater.updateLocalGitRepository(commit.getProject());
+      Git gitClient = gitRepoManager.getLocalGitRepository(commit.getProject());
+      FilePatternMatcher matcher = getPatternMatcher(commit.getProject().getId());
       if (firstCommitFinder.isFirstCommitInProject(commit)) {
-        walkAllFilesInCommit(gitClient, commit);
+        walkAllFilesInCommit(gitClient, commit, matcher);
       } else {
-        walkTouchedFilesInCommit(gitClient, commit);
+        walkTouchedFilesInCommit(gitClient, commit, matcher);
       }
       commitsMeter.mark();
     } catch (IOException e) {
@@ -90,13 +99,19 @@ public class FileMetadataScanner {
     }
   }
 
-  private void walkAllFilesInCommit(Git gitClient, Commit commit) throws IOException {
+  private void walkAllFilesInCommit(Git gitClient, Commit commit, FilePatternMatcher matcher)
+      throws IOException {
     int fileCounter = 0;
     RevCommit gitCommit = commitFinder.findCommit(gitClient, commit.getName());
     try (TreeWalk treeWalk = new TreeWalk(gitClient.getRepository())) {
       treeWalk.addTree(gitCommit.getTree());
       treeWalk.setRecursive(true);
       while (treeWalk.next()) {
+
+        if (!matcher.matches(treeWalk.getPathString())) {
+          continue;
+        }
+
         GitLogEntry logEntry = new GitLogEntry();
         logEntry.setOldFilepath("/dev/null");
         logEntry.setFilepath(treeWalk.getPathString());
@@ -114,7 +129,14 @@ public class FileMetadataScanner {
     logger.info("scanned {} files in commit {}", fileCounter, commit);
   }
 
-  private void walkTouchedFilesInCommit(Git gitClient, Commit commit) throws IOException {
+  private FilePatternMatcher getPatternMatcher(long projectId) {
+    List<FilePattern> sourceFilePatterns =
+        filePatternRepository.findByProjectIdAndFileSetType(projectId, FileSetType.SOURCE);
+    return new FilePatternMatcher(sourceFilePatterns);
+  }
+
+  private void walkTouchedFilesInCommit(Git gitClient, Commit commit, FilePatternMatcher matcher)
+      throws IOException {
     logger.info("starting scan of commit {}", commit);
     RevCommit gitCommit = commitFinder.findCommit(gitClient, commit.getName());
     DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
@@ -126,6 +148,11 @@ public class FileMetadataScanner {
     for (RevCommit parent : gitCommit.getParents()) {
       List<DiffEntry> diffs = diffFormatter.scan(parent, gitCommit);
       for (DiffEntry diff : diffs) {
+
+        if (!matcher.matches(diff.getNewPath())) {
+          continue;
+        }
+
         GitLogEntry logEntry = new GitLogEntry();
         logEntry.setOldFilepath(diff.getOldPath());
         logEntry.setFilepath(diff.getNewPath());
