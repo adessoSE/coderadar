@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.job;
 
 import java.io.IOException;
 import java.nio.file.Path;
+
 import org.eclipse.jgit.api.Git;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,13 +35,9 @@ public class LocalGitRepositoryManager {
     this.workdirManager = workdirManager;
   }
 
-  public Git getLocalGitRepository(Project project) {
-    if (project == null) {
-      throw new IllegalArgumentException("parameter project must not be null!");
-    }
-
-    Path workdir = getWorkdir(project);
-    if (!isRepositoryAlreadyCheckedOut(project)) {
+  public Git getLocalGitRepository(long projectId) {
+    Path workdir = getWorkdir(projectId);
+    if (!isRepositoryAlreadyCheckedOut(projectId)) {
       throw new IllegalArgumentException(
           String.format("no local git repository found at %s", workdir));
     }
@@ -58,16 +55,16 @@ public class LocalGitRepositoryManager {
       throw new IllegalArgumentException("parameter project must not be null!");
     }
     Git gitClient;
-    if (!isRepositoryAlreadyCheckedOut(project)) {
+    if (!isRepositoryAlreadyCheckedOut(project.getId())) {
       gitClient = cloneRepository(project);
     } else {
-      gitClient = updateLocalRepository(project);
+      gitClient = updateLocalRepository(project.getId());
     }
     return gitClient;
   }
 
-  private Git updateLocalRepository(Project project) {
-    return gitUpdater.updateRepository(getWorkdir(project));
+  private Git updateLocalRepository(long projectId) {
+    return gitUpdater.updateRepository(getWorkdir(projectId));
   }
 
   private Git cloneRepository(Project project) {
@@ -76,15 +73,15 @@ public class LocalGitRepositoryManager {
           String.format("vcsCoordinates of Project with ID %d are null!", project.getId()));
     }
     return gitCloner.cloneRepository(
-        project.getVcsCoordinates().getUrl().toString(), getWorkdir(project).toFile());
+        project.getVcsCoordinates().getUrl().toString(), getWorkdir(project.getId()).toFile());
   }
 
-  private boolean isRepositoryAlreadyCheckedOut(Project project) {
-    Path projectWorkdir = getWorkdir(project);
+  private boolean isRepositoryAlreadyCheckedOut(long projectId) {
+    Path projectWorkdir = getWorkdir(projectId);
     return gitChecker.isRepository(projectWorkdir);
   }
 
-  private Path getWorkdir(Project project) {
-    return workdirManager.getLocalGitRoot(project.getId());
+  private Path getWorkdir(long projectId) {
+    return workdirManager.getLocalGitRoot(projectId);
   }
 }

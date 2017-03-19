@@ -3,7 +3,6 @@ package org.wickedsource.coderadar.file.domain;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.EMPTY;
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.*;
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,8 @@ import org.wickedsource.coderadar.commit.domain.CommitToFileAssociationRepositor
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
+
+import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 @Transactional
 public class FileRepositoryTest extends IntegrationTestTemplate {
@@ -35,6 +36,7 @@ public class FileRepositoryTest extends IntegrationTestTemplate {
     project = projectRepository.save(project);
     Commit commit = commit().unprocessedCommit();
     commit.setProject(project);
+    commit.setName("cafebabe");
     commit.setSequenceNumber(1);
     commit = commitRepository.save(commit);
     File file = sourceFile().withPath("123");
@@ -45,10 +47,10 @@ public class FileRepositoryTest extends IntegrationTestTemplate {
     commitToFileAssociationRepository.save(association);
 
     File foundFile =
-        fileRepository.findInCommit(file.getFilepath(), commit.getName(), project.getId()).get(0);
+        fileRepository.findInCommit(file.getFilepath(), commit.getName(), project.getId());
     Assert.assertEquals(file.getId(), foundFile.getId());
 
     Assert.assertEquals(
-        0, fileRepository.findInCommit("321", commit.getName(), project.getId()).size());
+        null, fileRepository.findInCommit("321", commit.getName(), project.getId()));
   }
 }

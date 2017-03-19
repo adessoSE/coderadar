@@ -1,6 +1,18 @@
 package org.wickedsource.coderadar.file.domain;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.project.domain.Project;
@@ -41,6 +53,9 @@ public class GitLogEntry {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "project_id")
   private Project project;
+
+  @Column(name = "file_hash")
+  private String fileHash;
 
   public Long getId() {
     return id;
@@ -88,5 +103,13 @@ public class GitLogEntry {
 
   public void setCommit(Commit commit) {
     this.commit = commit;
+  }
+
+  public String getFileHash() {
+    return fileHash;
+  }
+
+  public void setFileHash(String fileHash) {
+    this.fileHash = fileHash;
   }
 }

@@ -48,3 +48,5 @@ databaseChangeLog:
       file: db/changelog/V0_1_0/0022-drop-not-null-constraint-on-table-git-log-entry.yaml
   - include:
       file: db/changelog/V0_1_0/0023-add-column-commit-to-git-log-entry.yaml
+  - include:
+      file: db/changelog/V0_1_0/0024-add-column-filehash-to-git-log-entry.yaml

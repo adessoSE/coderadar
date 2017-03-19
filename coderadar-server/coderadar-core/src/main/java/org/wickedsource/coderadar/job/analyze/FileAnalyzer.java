@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.job.analyze;
 
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,6 @@ public class FileAnalyzer {
    */
   public FileMetrics analyzeFile(
       List<SourceCodeFileAnalyzerPlugin> analyzerPlugins, String filePath, byte[] fileContent) {
-    logger.debug("analyzing file {}", filePath);
     FileMetrics fileMetrics = new FileMetrics();
     for (SourceCodeFileAnalyzerPlugin analyzerPlugin : analyzerPlugins) {
       if (analyzerPlugin.getFilter() == null) {

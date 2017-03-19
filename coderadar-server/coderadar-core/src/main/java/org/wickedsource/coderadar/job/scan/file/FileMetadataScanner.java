@@ -2,10 +2,9 @@ package org.wickedsource.coderadar.job.scan.file;
 
 import static com.codahale.metrics.MetricRegistry.name;
 
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
 import java.io.IOException;
 import java.util.List;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
@@ -13,6 +12,7 @@ import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
+import org.gitective.core.BlobUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,9 @@ import org.wickedsource.coderadar.job.LocalGitRepositoryManager;
 import org.wickedsource.coderadar.job.core.FirstCommitFinder;
 import org.wickedsource.coderadar.vcs.git.ChangeTypeMapper;
 import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
+
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 
 @Service
 public class FileMetadataScanner {
@@ -53,6 +56,8 @@ public class FileMetadataScanner {
   private FirstCommitFinder firstCommitFinder;
 
   private FilePatternRepository filePatternRepository;
+
+  private Hasher hasher = new Hasher();
 
   @Autowired
   public FileMetadataScanner(
@@ -83,9 +88,9 @@ public class FileMetadataScanner {
     try {
       if (commit == null) {
         throw new IllegalArgumentException(
-            String.format("Commit with ID %d does not exist!", commit.getId()));
+            String.format("argument 'commit' must not be null!"));
       }
-      Git gitClient = gitRepoManager.getLocalGitRepository(commit.getProject());
+      Git gitClient = gitRepoManager.getLocalGitRepository(commit.getProject().getId());
       FilePatternMatcher matcher = getPatternMatcher(commit.getProject().getId());
       if (firstCommitFinder.isFirstCommitInProject(commit)) {
         walkAllFilesInCommit(gitClient, commit, matcher);
@@ -95,7 +100,7 @@ public class FileMetadataScanner {
       commitsMeter.mark();
     } catch (IOException e) {
       throw new IllegalStateException(
-          String.format("error while scanning commit %d", commit.getId()));
+          String.format("error while scanning commit %d", commit.getId()), e);
     }
   }
 
@@ -112,12 +117,15 @@ public class FileMetadataScanner {
           continue;
         }
 
+        String hash = createHash(gitClient, gitCommit, treeWalk.getPathString());
+
         GitLogEntry logEntry = new GitLogEntry();
         logEntry.setOldFilepath("/dev/null");
         logEntry.setFilepath(treeWalk.getPathString());
         logEntry.setProject(commit.getProject());
         logEntry.setChangeType(ChangeType.ADD);
         logEntry.setCommit(commit);
+        logEntry.setFileHash(hash);
 
         logEntryRepository.save(logEntry);
         fileCounter++;
@@ -129,6 +137,18 @@ public class FileMetadataScanner {
     logger.info("scanned {} files in commit {}", fileCounter, commit);
   }
 
+  private boolean entryWithSameFileAlreadyExists(
+      long projectId, String filepath, ChangeType changeType, String fileHash) {
+    return logEntryRepository.countByProjectIdAndFilepathAndChangeTypeAndFileHash(
+            projectId, filepath, changeType, fileHash)
+        > 0;
+  }
+
+  private String createHash(Git gitClient, RevCommit commit, String filepath) {
+    byte[] file = BlobUtils.getRawContent(gitClient.getRepository(), commit.getId(), filepath);
+    return hasher.hash(file);
+  }
+
   private FilePatternMatcher getPatternMatcher(long projectId) {
     List<FilePattern> sourceFilePatterns =
         filePatternRepository.findByProjectIdAndFileSetType(projectId, FileSetType.SOURCE);
@@ -137,7 +157,6 @@ public class FileMetadataScanner {
 
   private void walkTouchedFilesInCommit(Git gitClient, Commit commit, FilePatternMatcher matcher)
       throws IOException {
-    logger.info("starting scan of commit {}", commit);
     RevCommit gitCommit = commitFinder.findCommit(gitClient, commit.getName());
     DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
     diffFormatter.setRepository(gitClient.getRepository());
@@ -145,25 +164,35 @@ public class FileMetadataScanner {
     diffFormatter.setDetectRenames(true);
 
     int fileCounter = 0;
-    for (RevCommit parent : gitCommit.getParents()) {
-      List<DiffEntry> diffs = diffFormatter.scan(parent, gitCommit);
-      for (DiffEntry diff : diffs) {
+    RevCommit parent = gitCommit.getParent(0);
+    List<DiffEntry> diffs = diffFormatter.scan(parent, gitCommit);
+    for (DiffEntry diff : diffs) {
 
-        if (!matcher.matches(diff.getNewPath())) {
+      if (!matcher.matches(diff.getNewPath())) {
+        continue;
+      }
+
+      String hash = createHash(gitClient, gitCommit, diff.getNewPath());
+      ChangeType changeType = changeTypeMapper.jgitToCoderadar(diff.getChangeType());
+      if (changeType == ChangeType.ADD || changeType == ChangeType.COPY) {
+        // we want to add ADDED and COPIED log entries only once for the same file
+        if (entryWithSameFileAlreadyExists(
+            commit.getProject().getId(), diff.getNewPath(), changeType, hash)) {
           continue;
         }
-
-        GitLogEntry logEntry = new GitLogEntry();
-        logEntry.setOldFilepath(diff.getOldPath());
-        logEntry.setFilepath(diff.getNewPath());
-        logEntry.setProject(commit.getProject());
-        logEntry.setChangeType(changeTypeMapper.jgitToCoderadar(diff.getChangeType()));
-        logEntry.setCommit(commit);
-
-        logEntryRepository.save(logEntry);
-        fileCounter++;
-        filesMeter.mark();
       }
+
+      GitLogEntry logEntry = new GitLogEntry();
+      logEntry.setOldFilepath(diff.getOldPath());
+      logEntry.setFilepath(diff.getNewPath());
+      logEntry.setProject(commit.getProject());
+      logEntry.setChangeType(changeType);
+      logEntry.setCommit(commit);
+      logEntry.setFileHash(hash);
+
+      logEntryRepository.save(logEntry);
+      fileCounter++;
+      filesMeter.mark();
     }
     commit.setScanned(true);
     commitRepository.save(commit);
