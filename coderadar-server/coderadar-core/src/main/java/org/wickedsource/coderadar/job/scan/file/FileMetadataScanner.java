@@ -87,8 +87,7 @@ public class FileMetadataScanner {
   public void scan(Commit commit) {
     try {
       if (commit == null) {
-        throw new IllegalArgumentException(
-            String.format("argument 'commit' must not be null!"));
+        throw new IllegalArgumentException(String.format("argument 'commit' must not be null!"));
       }
       Git gitClient = gitRepoManager.getLocalGitRepository(commit.getProject().getId());
       FilePatternMatcher matcher = getPatternMatcher(commit.getProject().getId());
