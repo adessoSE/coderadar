@@ -2,11 +2,12 @@ package org.wickedsource.coderadar.job.analyze;
 
 import static com.codahale.metrics.MetricRegistry.name;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.gitective.core.BlobUtils;
@@ -41,9 +42,6 @@ import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueId;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
-
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
 
 @Service
 public class CommitAnalyzer {

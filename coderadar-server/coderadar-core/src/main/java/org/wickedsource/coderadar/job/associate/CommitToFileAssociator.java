@@ -2,10 +2,11 @@ package org.wickedsource.coderadar.job.associate;
 
 import static com.codahale.metrics.MetricRegistry.name;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,6 @@ import org.wickedsource.coderadar.file.domain.FileIdentity;
 import org.wickedsource.coderadar.file.domain.FileRepository;
 import org.wickedsource.coderadar.file.domain.GitLogEntry;
 import org.wickedsource.coderadar.file.domain.GitLogEntryRepository;
-
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
 
 @Service
 public class CommitToFileAssociator {

@@ -2,6 +2,8 @@ package org.wickedsource.coderadar.job;
 
 import static com.codahale.metrics.MetricRegistry.name;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +11,6 @@ import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.project.domain.Project;
-
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
 
 /**
  * Central logger for logging informations about running and queuing jobs. This way, all log

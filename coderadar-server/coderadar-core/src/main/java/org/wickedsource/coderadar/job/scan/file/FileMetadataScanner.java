@@ -2,9 +2,10 @@ package org.wickedsource.coderadar.job.scan.file;
 
 import static com.codahale.metrics.MetricRegistry.name;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import java.io.IOException;
 import java.util.List;
-
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
@@ -30,9 +31,6 @@ import org.wickedsource.coderadar.job.LocalGitRepositoryManager;
 import org.wickedsource.coderadar.job.core.FirstCommitFinder;
 import org.wickedsource.coderadar.vcs.git.ChangeTypeMapper;
 import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
-
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
 
 @Service
 public class FileMetadataScanner {

@@ -1,7 +1,6 @@
 package org.wickedsource.coderadar.job.core;
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -20,7 +19,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
-
 import org.wickedsource.coderadar.project.domain.Project;
 
 /** The Job entity defines a task in the coderadar application that is run asynchronously. */

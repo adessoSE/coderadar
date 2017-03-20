@@ -2,7 +2,6 @@ package org.wickedsource.coderadar.job;
 
 import java.io.IOException;
 import java.nio.file.Path;
-
 import org.eclipse.jgit.api.Git;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

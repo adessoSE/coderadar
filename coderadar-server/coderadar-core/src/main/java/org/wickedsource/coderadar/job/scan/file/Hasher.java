@@ -2,7 +2,6 @@ package org.wickedsource.coderadar.job.scan.file;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import javax.xml.bind.DatatypeConverter;
 
 public class Hasher {
