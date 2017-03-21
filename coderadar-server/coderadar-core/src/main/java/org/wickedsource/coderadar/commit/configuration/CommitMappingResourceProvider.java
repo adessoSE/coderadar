@@ -1,15 +1,19 @@
 package org.wickedsource.coderadar.commit.configuration;
 
-import java.util.Collections;
-import java.util.Set;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.core.configuration.MappingResourceProvider;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class CommitMappingResourceProvider implements MappingResourceProvider {
 
   @Override
   public Set<String> getMappingResource() {
-    return Collections.singleton("org/wickedsource/coderadar/commit/domain/Commit.orm.xml");
+    Set<String> resources = new HashSet<>();
+    resources.add("org/wickedsource/coderadar/commit/domain/Commit.orm.xml");
+    resources.add("org/wickedsource/coderadar/commit/domain/CommitToFileAssociation.orm.xml");
+    return resources;
   }
 }

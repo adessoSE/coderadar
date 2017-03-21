@@ -1,12 +1,7 @@
 package org.wickedsource.coderadar.job.associate;
 
-import static com.codahale.metrics.MetricRegistry.name;
-
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +15,12 @@ import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociation;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociationRepository;
 import org.wickedsource.coderadar.commit.event.CommitToFileAssociatedEvent;
-import org.wickedsource.coderadar.file.domain.File;
-import org.wickedsource.coderadar.file.domain.FileIdentity;
-import org.wickedsource.coderadar.file.domain.FileRepository;
-import org.wickedsource.coderadar.file.domain.GitLogEntry;
-import org.wickedsource.coderadar.file.domain.GitLogEntryRepository;
+import org.wickedsource.coderadar.file.domain.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.codahale.metrics.MetricRegistry.name;
 
 @Service
 public class CommitToFileAssociator {
@@ -44,14 +40,6 @@ public class CommitToFileAssociator {
   private Meter commitsMeter;
 
   private Meter filesMeter;
-
-  private static final List<ChangeType> ALL_BUT_DELETED =
-      Arrays.asList(
-          ChangeType.ADD,
-          ChangeType.RENAME,
-          ChangeType.COPY,
-          ChangeType.MODIFY,
-          ChangeType.UNCHANGED);
 
   @Autowired
   public CommitToFileAssociator(
@@ -84,9 +72,8 @@ public class CommitToFileAssociator {
     checkEligibility(commit);
 
     List<File> touchedFiles = associateWithTouchedFiles(commit);
-    filesMeter.mark(touchedFiles.size());
 
-    int unchangedFilesCount = associateWithUnchangedFiles(commit, touchedFiles);
+    int unchangedFilesCount = associateWithUntouchedFiles(commit);
     filesMeter.mark(unchangedFilesCount);
 
     logger.info(
@@ -125,9 +112,15 @@ public class CommitToFileAssociator {
 
       associateFile(commit, file, entry.getChangeType());
       associatedFiles.add(file);
+      filesMeter.mark();
     }
 
     return associatedFiles;
+  }
+
+  private int associateWithUntouchedFiles(Commit commit) {
+    return commitToFileAssociationRepository.associateWithFilesFromParentCommit(commit.getId());
+    // TODO: fire (batch) CommitToFileAssociatedEvent
   }
 
   private void associateFile(Commit commit, File file, ChangeType changeType) {
@@ -153,17 +146,6 @@ public class CommitToFileAssociator {
     newFile.setIdentity(file.getIdentity());
     newFile.setFilepath(filepath);
     return fileRepository.save(newFile);
-  }
-
-  private int associateWithUnchangedFiles(Commit commit, List<File> touchedFiles) {
-    List<File> unchangedFiles =
-        fileRepository.findInCommit(
-            ALL_BUT_DELETED, commit.getFirstParent(), commit.getProject().getId());
-    unchangedFiles.removeAll(touchedFiles);
-    for (File file : unchangedFiles) {
-      associateFile(commit, file, ChangeType.UNCHANGED);
-    }
-    return unchangedFiles.size();
   }
 
   private void saveCommitToFileAssociation(CommitToFileAssociation association) {
