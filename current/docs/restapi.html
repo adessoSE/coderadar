@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v0.1.0.279, 2017-03-20">
+<meta name="author" content="v0.1.0.282, 2017-03-22">
 <title>coderadar REST API</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v0.1.0.279, 2017-03-20</span><br>
+<span id="author" class="author">v0.1.0.282, 2017-03-22</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2357,11 +2357,11 @@ Content-Length: 195
 {
   "errorMessage" : "Validation Error",
   "fieldErrors" : [ {
-    "field" : "vcsUrl",
-    "message" : "must be a valid URL"
-  }, {
     "field" : "name",
     "message" : "may not be null"
+  }, {
+    "field" : "vcsUrl",
+    "message" : "must be a valid URL"
   } ]
 }</code></pre>
 </div>
@@ -2624,8 +2624,8 @@ Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 535
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTAwNDY4ODEsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0OTAwNDU5ODEsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.5-8ZBt84J7iKDPe9ph4TYbTj9sGSBCfbHm1RgL2vIiE",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTUyMjk5ODEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDkwMDQ1OTgxLCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.Bo4u6VuwS0IT4p1A1W43I8o4M2smDARcBeYMqHjds7o",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTAxODQ5NTksInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0OTAxODQwNTksInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.rIQ3aZL5PQxsFPh6aSKZJVVxFCuwi-J5gVgMbyRWieE",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTUzNjgwNTksInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDkwMTg0MDU5LCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9._esYi1gMaekqqZzL-A5mc49QwpeyUJHNwOf5XWO0hZ8",
   "_links" : {
     "self" : {
       "href" : "http://localhost:8080/user/2"
@@ -2684,8 +2684,8 @@ Host: localhost:8080
 Content-Length: 443
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTAwNDUxNDEsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0OTAwNDQyNDEsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.ibLE1U3GeabR8tfkzDZzfMAWHgFhEehhiethIPw8EbA",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTAyMjU5ODEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDg5ODY1OTgxLCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.4m5322ALFUyHLWsVrLR1LmIipa2JIQwEn63a-uSkq04"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTAxODMyMTksInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0OTAxODIzMTksInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.Ua5fgD_48LEBG-shXAu3s8i8_iQWla_oVLtrBr2pqsY",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTAzNjQwNTksInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNDkwMDA0MDU5LCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.zmy8d7bx_sZpGQgze8vqoxPDpqZMHoKwLmfaH5rLkag"
 }</code></pre>
 </div>
 </div>
@@ -2699,7 +2699,7 @@ Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 218
 
 {
-  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTAwNDY4ODEsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0OTAwNDU5ODEsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.5-8ZBt84J7iKDPe9ph4TYbTj9sGSBCfbHm1RgL2vIiE"
+  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE0OTAxODQ5NTksInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE0OTAxODQwNTksInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.rIQ3aZL5PQxsFPh6aSKZJVVxFCuwi-J5gVgMbyRWieE"
 }</code></pre>
 </div>
 </div>
@@ -5454,7 +5454,7 @@ Content-Length: 2928
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-03-20 21:35:05 UTC
+Last updated 2017-03-22 11:56:52 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
