@@ -1,10 +1,9 @@
 package org.wickedsource.coderadar.commit.configuration;
 
-import org.springframework.stereotype.Component;
-import org.wickedsource.coderadar.core.configuration.MappingResourceProvider;
-
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.stereotype.Component;
+import org.wickedsource.coderadar.core.configuration.MappingResourceProvider;
 
 @Component
 public class CommitMappingResourceProvider implements MappingResourceProvider {
