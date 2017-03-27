@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.rest.analyzerconfiguration;
+package org.wickedsource.coderadar.analyzerconfig.rest;
 
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;

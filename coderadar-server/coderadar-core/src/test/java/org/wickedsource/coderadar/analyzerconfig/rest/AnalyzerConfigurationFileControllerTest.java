@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.rest.analyzerconfiguration;
+package org.wickedsource.coderadar.analyzerconfig.rest;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.rest.analyzerregistry;
+package org.wickedsource.coderadar.analyzer.rest;
 
 import org.springframework.hateoas.ResourceSupport;
 

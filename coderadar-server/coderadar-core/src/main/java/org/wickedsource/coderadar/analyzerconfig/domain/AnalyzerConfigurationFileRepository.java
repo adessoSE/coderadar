@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.domain;
+package org.wickedsource.coderadar.analyzerconfig.domain;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

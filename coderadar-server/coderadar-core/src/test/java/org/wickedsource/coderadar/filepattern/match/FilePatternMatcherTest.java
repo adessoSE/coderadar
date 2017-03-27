@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.match;
+package org.wickedsource.coderadar.filepattern.match;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FileSetType;
-import org.wickedsource.coderadar.filepattern.match.FilePatternMatcher;
 import org.wickedsource.coderadar.project.domain.InclusionType;
 
 public class FilePatternMatcherTest {

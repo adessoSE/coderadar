@@ -7,7 +7,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
-import org.wickedsource.coderadar.analyzer.rest.analyzerconfiguration.AnalyzerConfigurationResource;
+import org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationResource;
 import org.wickedsource.coderadar.analyzingjob.rest.AnalyzingJobResource;
 import org.wickedsource.coderadar.filepattern.rest.FilePatternResource;
 import org.wickedsource.coderadar.project.rest.ProjectResource;

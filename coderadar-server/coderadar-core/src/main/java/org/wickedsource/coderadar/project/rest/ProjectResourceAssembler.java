@@ -7,7 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.stereotype.Component;
-import org.wickedsource.coderadar.analyzer.rest.analyzerconfiguration.AnalyzerConfigurationController;
+import org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationController;
 import org.wickedsource.coderadar.analyzingjob.rest.AnalyzingJobController;
 import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
 import org.wickedsource.coderadar.filepattern.rest.FilePatternController;

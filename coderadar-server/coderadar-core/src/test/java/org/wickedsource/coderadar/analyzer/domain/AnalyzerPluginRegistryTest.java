@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.data.domain.PageRequest;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
+import org.wickedsource.coderadar.analyzer.service.AnalyzerPluginRegistry;
 
 public class AnalyzerPluginRegistryTest {
 

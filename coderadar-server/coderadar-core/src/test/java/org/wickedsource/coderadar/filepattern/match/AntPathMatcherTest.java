@@ -1,8 +1,7 @@
-package org.wickedsource.coderadar.analyzer.match;
+package org.wickedsource.coderadar.filepattern.match;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.wickedsource.coderadar.filepattern.match.AntPathMatcher;
 
 public class AntPathMatcherTest {
 

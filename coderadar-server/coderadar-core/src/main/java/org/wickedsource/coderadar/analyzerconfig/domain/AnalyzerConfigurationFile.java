@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.domain;
+package org.wickedsource.coderadar.analyzerconfig.domain;
 
 import javax.persistence.*;
 

@@ -1,9 +1,9 @@
-package org.wickedsource.coderadar.analyzer.rest.analyzerconfiguration;
+package org.wickedsource.coderadar.analyzerconfig.rest;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
+import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfiguration;
 import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectController;

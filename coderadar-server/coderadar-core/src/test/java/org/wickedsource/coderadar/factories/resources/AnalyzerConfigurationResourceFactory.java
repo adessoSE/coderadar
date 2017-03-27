@@ -1,6 +1,6 @@
 package org.wickedsource.coderadar.factories.resources;
 
-import org.wickedsource.coderadar.analyzer.rest.analyzerconfiguration.AnalyzerConfigurationResource;
+import org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationResource;
 
 public class AnalyzerConfigurationResourceFactory {
 

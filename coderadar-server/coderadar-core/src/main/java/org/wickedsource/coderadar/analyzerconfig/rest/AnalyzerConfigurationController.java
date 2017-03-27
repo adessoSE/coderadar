@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.rest.analyzerconfiguration;
+package org.wickedsource.coderadar.analyzerconfig.rest;
 
 import java.util.List;
 import javax.validation.Valid;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
-import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationRepository;
+import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfiguration;
+import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationRepository;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
 import org.wickedsource.coderadar.core.rest.validation.UserException;
 import org.wickedsource.coderadar.project.domain.Project;

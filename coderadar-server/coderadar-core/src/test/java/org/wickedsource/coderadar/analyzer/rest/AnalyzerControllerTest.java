@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.rest.analyzerregistry;
+package org.wickedsource.coderadar.analyzer.rest;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.EMPTY;
