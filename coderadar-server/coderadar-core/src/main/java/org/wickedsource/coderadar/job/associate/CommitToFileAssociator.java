@@ -4,8 +4,8 @@ import static com.codahale.metrics.MetricRegistry.name;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,14 +40,6 @@ public class CommitToFileAssociator {
 
   private Meter filesMeter;
 
-  private static List<ChangeType> ALL_BUT_DELETED =
-      Arrays.asList(
-          ChangeType.ADD,
-          ChangeType.RENAME,
-          ChangeType.COPY,
-          ChangeType.MODIFY,
-          ChangeType.UNCHANGED);
-
   @Autowired
   public CommitToFileAssociator(
       GitLogEntryRepository gitLogEntryRepository,
@@ -77,23 +69,18 @@ public class CommitToFileAssociator {
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void associateFilesOfCommit(Commit commit) {
     checkEligibility(commit);
-    logger.debug("starting associating files of commit {}", commit);
 
-    int addedFilesCount = associateWithAddedAndCopiedFiles(commit);
-    filesMeter.mark(addedFilesCount);
+    List<File> touchedFiles = associateWithTouchedFiles(commit);
 
-    List<File> modifiedFiles = associateWithModifiedFiles(commit);
-    filesMeter.mark(modifiedFiles.size());
-
-    List<File> renamedFiles = associateWithRenamedFiles(commit);
-    filesMeter.mark(renamedFiles.size());
-
-    List<File> deletedFiles = associateWithDeletedFiles(commit);
-    filesMeter.mark(deletedFiles.size());
-
-    int unchangedFilesCount =
-        associateWithUnchangedFiles(commit, modifiedFiles, renamedFiles, deletedFiles);
+    int unchangedFilesCount = associateWithUntouchedFiles(commit);
     filesMeter.mark(unchangedFilesCount);
+
+    logger.info(
+        "associated {} CHANGED files and {} UNCHANGED files with commit {} (id: {})",
+        touchedFiles.size(),
+        unchangedFilesCount,
+        commit.getName(),
+        commit.getId());
 
     commit.setMerged(true);
     commitRepository.save(commit);
@@ -101,114 +88,63 @@ public class CommitToFileAssociator {
     commitsMeter.mark();
   }
 
-  private List<File> associateWithRenamedFiles(Commit commit) {
-    List<GitLogEntry> renamedFiles =
-        gitLogEntryRepository.findByCommitNameAndChangeTypeIn(
-            commit.getName(), Collections.singletonList(ChangeType.RENAME));
+  private List<File> associateWithTouchedFiles(Commit commit) {
 
-    Map<String, GitLogEntry> oldPathToFile = new HashMap<>();
-    for (GitLogEntry file : renamedFiles) {
-      oldPathToFile.put(file.getOldFilepath(), file);
+    List<File> associatedFiles = new ArrayList<>();
+
+    for (GitLogEntry entry : gitLogEntryRepository.findByCommitId(commit.getId())) {
+
+      File file = null;
+
+      if (entry.getChangeType() == ChangeType.RENAME) {
+        File existingFile = loadExistingFile(commit, entry.getOldFilepath());
+        if (existingFile != null) {
+          file = createNewFileWithSameIdentity(existingFile, entry.getFilepath());
+        }
+      } else {
+        file = loadExistingFile(commit, entry.getFilepath());
+      }
+
+      if (file == null || entry.getChangeType() == ChangeType.RENAME) {
+        file = createNewFile(entry.getFilepath());
+      }
+
+      associateFile(commit, file, entry.getChangeType());
+      associatedFiles.add(file);
+      filesMeter.mark();
     }
 
-    logger.debug("found {} RENAMED files", renamedFiles.size());
-    List<String> oldFilepaths =
-        renamedFiles.stream().map(GitLogEntry::getOldFilepath).collect(Collectors.toList());
-
-    // the File entities of RENAMED files must already exist in the commit before the current commit, so
-    // we simply load them from the database
-    List<File> filesToAssociate =
-        fileRepository.findInCommit(commit.getFirstParent(), oldFilepaths);
-
-    for (File file : filesToAssociate) {
-      File newFile = new File();
-      newFile.setIdentity(file.getIdentity());
-      newFile.setFilepath(oldPathToFile.get(file.getFilepath()).getFilepath());
-      fileRepository.save(newFile);
-      CommitToFileAssociation association =
-          new CommitToFileAssociation(commit, newFile, ChangeType.RENAME);
-      commit.getFiles().add(association);
-      saveCommitToFileAssociation(association);
-    }
-    return filesToAssociate;
+    return associatedFiles;
   }
 
-  private List<File> associateWithModifiedFiles(Commit commit) {
-    List<GitLogEntry> modifiedFiles =
-        gitLogEntryRepository.findByCommitNameAndChangeTypeIn(
-            commit.getName(), Collections.singletonList(ChangeType.MODIFY));
-    logger.debug("found {} MODIFIED files", modifiedFiles.size());
-    List<String> filepaths =
-        modifiedFiles.stream().map(GitLogEntry::getFilepath).collect(Collectors.toList());
-
-    // the File entities of MODIFIED files must already exist in the commit before the current commit, so
-    // we simply load them from the database
-    List<File> filesToAssociate = fileRepository.findInCommit(commit.getFirstParent(), filepaths);
-
-    for (File file : filesToAssociate) {
-      CommitToFileAssociation association =
-          new CommitToFileAssociation(commit, file, ChangeType.MODIFY);
-      commit.getFiles().add(association);
-      saveCommitToFileAssociation(association);
-    }
-    return filesToAssociate;
+  private int associateWithUntouchedFiles(Commit commit) {
+    return commitToFileAssociationRepository.associateWithFilesFromParentCommit(commit.getId());
+    // TODO: fire (batch) CommitToFileAssociatedEvent
   }
 
-  private List<File> associateWithDeletedFiles(Commit commit) {
-    List<GitLogEntry> deletedFiles =
-        gitLogEntryRepository.findByCommitNameAndChangeTypeIn(
-            commit.getName(), Collections.singletonList(ChangeType.DELETE));
-    logger.debug("found {} DELETED files", deletedFiles.size());
-    List<String> filepaths =
-        deletedFiles.stream().map(GitLogEntry::getOldFilepath).collect(Collectors.toList());
-
-    // the File entities of DELETED files must already exist in the commit before the current commit, so
-    // we simply load them from the database
-    List<File> filesToAssociate = fileRepository.findInCommit(commit.getFirstParent(), filepaths);
-
-    for (File file : filesToAssociate) {
-      CommitToFileAssociation association =
-          new CommitToFileAssociation(commit, file, ChangeType.DELETE);
-      commit.getFiles().add(association);
-      saveCommitToFileAssociation(association);
-    }
-    return filesToAssociate;
+  private void associateFile(Commit commit, File file, ChangeType changeType) {
+    CommitToFileAssociation association = new CommitToFileAssociation(commit, file, changeType);
+    commit.getFiles().add(association);
+    saveCommitToFileAssociation(association);
   }
 
-  private int associateWithAddedAndCopiedFiles(Commit commit) {
-    List<GitLogEntry> addedFiles =
-        gitLogEntryRepository.findByCommitNameAndChangeTypeIn(
-            commit.getName(), Arrays.asList(ChangeType.ADD, ChangeType.COPY));
-    logger.debug("found {} ADDED and COPIED files", addedFiles.size());
-    for (GitLogEntry addedFile : addedFiles) {
-      File file = new File();
-      file.setFilepath(addedFile.getFilepath());
-      file.setIdentity(new FileIdentity());
-      fileRepository.save(file);
-      CommitToFileAssociation association =
-          new CommitToFileAssociation(commit, file, addedFile.getChangeType());
-      commit.getFiles().add(association);
-      saveCommitToFileAssociation(association);
-    }
-    return addedFiles.size();
+  private File loadExistingFile(Commit commit, String filepath) {
+    return fileRepository.findInCommit(
+        filepath, commit.getFirstParent(), commit.getProject().getId());
   }
 
-  private int associateWithUnchangedFiles(
-      Commit commit, List<File> modifiedFiles, List<File> renamedFiles, List<File> deletedFiles) {
-    List<File> unchangedFiles =
-        fileRepository.findInCommit(
-            ALL_BUT_DELETED, commit.getFirstParent(), commit.getProject().getId());
-    unchangedFiles.removeAll(modifiedFiles);
-    unchangedFiles.removeAll(renamedFiles);
-    unchangedFiles.removeAll(deletedFiles);
-    logger.debug("found {} UNCHANGED files", unchangedFiles.size());
-    for (File file : unchangedFiles) {
-      CommitToFileAssociation association =
-          new CommitToFileAssociation(commit, file, ChangeType.UNCHANGED);
-      commit.getFiles().add(association);
-      saveCommitToFileAssociation(association);
-    }
-    return unchangedFiles.size();
+  private File createNewFile(String filepath) {
+    File newFile = new File();
+    newFile.setIdentity(new FileIdentity());
+    newFile.setFilepath(filepath);
+    return fileRepository.save(newFile);
+  }
+
+  private File createNewFileWithSameIdentity(File file, String filepath) {
+    File newFile = new File();
+    newFile.setIdentity(file.getIdentity());
+    newFile.setFilepath(filepath);
+    return fileRepository.save(newFile);
   }
 
   private void saveCommitToFileAssociation(CommitToFileAssociation association) {

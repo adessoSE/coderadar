@@ -56,40 +56,32 @@
           identity_id="1"/>
     <file id="4" filepath="/path/to/module3/src/main/java/anotherfile.java" identity_id="3"/>
 
-    <git_log_entry id="1" project_id="1" commit_name="f9b0553930f133490f292a9c78d0b36b39be8758"
+    <git_log_entry id="1" project_id="1" commit_id="1"
                    old_filepath="/path/to/module1/src/main/java/test.java"
-                   filepath="/path/to/module1/src/main/java/test.java" change_type="ADD"
-                   parent_commit_name="cafebabe"/>
-    <git_log_entry id="2" project_id="1" commit_name="f9b0553930f133490f292a9c78d0b36b39be8758"
+                   filepath="/path/to/module1/src/main/java/test.java" change_type="ADD"/>
+    <git_log_entry id="2" project_id="1" commit_id="1"
                    old_filepath="/path/to/module1/src/main/java/test2.java"
-                   filepath="/path/to/module1/src/main/java/test2.java" change_type="ADD"
-                   parent_commit_name="cafebabe"/>
-    <git_log_entry id="3" project_id="1" commit_name="f9b0553930f133490f292a9c78d0b36b39be8758"
+                   filepath="/path/to/module1/src/main/java/test2.java" change_type="ADD"/>
+    <git_log_entry id="3" project_id="1" commit_id="1"
                    old_filepath="/path/to/module1/submodule2/src/main/java/fileOnlyTouchedInFirstCommit.java"
                    filepath="/path/to/module1/submodule2/src/main/java/fileOnlyTouchedInFirstCommit.java"
-                   change_type="ADD"
-                   parent_commit_name="cafebabe"/>
+                   change_type="ADD"/>
 
-    <git_log_entry id="8" project_id="1" commit_name="43f6cbba44ce1c23cfdf70dc164824fee062f7e2"
-                   parent_commit_name="f9b0553930f133490f292a9c78d0b36b39be8758"
+    <git_log_entry id="8" project_id="1" commit_id="2"
                    old_filepath="/path/to/module3/src/main/java/anotherfile.java"
                    filepath="/path/to/module3/src/main/java/anotherfile.java" change_type="ADD"/>
 
-    <git_log_entry id="9" project_id="1" commit_name="eb7cbd429530dc26d06a9ea2a62794421dce1e9a"
-                   parent_commit_name="43f6cbba44ce1c23cfdf70dc164824fee062f7e2"
+    <git_log_entry id="9" project_id="1" commit_id="3"
                    old_filepath="/path/to/module1/src/main/java/test.java"
                    filepath="/path/to/module1/src/main/java/test.java" change_type="MODIFY"/>
-    <git_log_entry id="10" project_id="1" commit_name="eb7cbd429530dc26d06a9ea2a62794421dce1e9a"
-                   parent_commit_name="43f6cbba44ce1c23cfdf70dc164824fee062f7e2"
+    <git_log_entry id="10" project_id="1" commit_id="3"
                    old_filepath="/path/to/module1/src/main/java/test2.java"
                    filepath="/path/to/module1/src/main/java/test2.java" change_type="DELETE"/>
-    <git_log_entry id="12" project_id="1" commit_name="eb7cbd429530dc26d06a9ea2a62794421dce1e9a"
-                   parent_commit_name="43f6cbba44ce1c23cfdf70dc164824fee062f7e2"
+    <git_log_entry id="12" project_id="1" commit_id="3"
                    old_filepath="/path/to/module3/src/main/java/anotherfile.java"
                    filepath="/path/to/module3/src/main/java/anotherfile.java" change_type="ADD"/>
 
-    <git_log_entry id="16" project_id="1" commit_name="670cac5091c0c42253c66a83197c6c6069910aa8"
-                   parent_commit_name="eb7cbd429530dc26d06a9ea2a62794421dce1e9a"
+    <git_log_entry id="16" project_id="1" commit_id="4"
                    old_filepath="/path/to/module3/src/main/java/anotherfile.java"
                    filepath="/path/to/module3/src/main/java/anotherfile.java" change_type="RENAME"/>
 

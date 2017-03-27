@@ -3,9 +3,20 @@ package org.wickedsource.coderadar.commit.domain;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import org.wickedsource.coderadar.project.domain.Project;
 
 /** Metadata about a commit to a Git repository. */
@@ -139,10 +150,8 @@ public class Commit {
 
   @Override
   public String toString() {
-    ReflectionToStringBuilder builder =
-        new ReflectionToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    builder.setExcludeFieldNames("project", "files");
-    return builder.build();
+    return String.format(
+        "[Commit: projectId=%d, id=%d; name=%s]", this.project.getId(), this.id, this.name);
   }
 
   public Set<CommitToFileAssociation> getFiles() {

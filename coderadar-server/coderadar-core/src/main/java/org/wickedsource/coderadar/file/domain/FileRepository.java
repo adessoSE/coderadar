@@ -10,13 +10,6 @@ import org.wickedsource.coderadar.analyzer.api.ChangeType;
 public interface FileRepository extends FileRepositoryCustom, CrudRepository<File, Long> {
 
   @Query(
-      "select f from Commit c join c.files a join a.id.file f where f.filepath=:filepath and c.name=:commitName and c.project.id = :projectId")
-  List<File> findInCommit(
-      @Param("filepath") String filepath,
-      @Param("commitName") String commitName,
-      @Param("projectId") Long projectId);
-
-  @Query(
       "select f from Commit c join c.files a join a.id.file f where a.changeType in (:changeTypes) and c.name=:commitName and c.project.id = :projectId")
   List<File> findInCommit(
       @Param("changeTypes") List<ChangeType> changeType,

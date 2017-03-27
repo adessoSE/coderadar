@@ -4,37 +4,38 @@ import static com.codahale.metrics.MetricRegistry.name;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.diff.DiffEntry;
-import org.eclipse.jgit.diff.DiffFormatter;
-import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.treewalk.TreeWalk;
-import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.gitective.core.BlobUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.wickedsource.coderadar.analyzer.api.ChangeType;
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 import org.wickedsource.coderadar.analyzer.api.Finding;
 import org.wickedsource.coderadar.analyzer.api.Metric;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
-import org.wickedsource.coderadar.analyzer.domain.*;
-import org.wickedsource.coderadar.analyzer.match.FileMatchingPattern;
-import org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJob;
-import org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJobRepository;
+import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfiguration;
+import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationFile;
+import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationFileRepository;
+import org.wickedsource.coderadar.analyzer.domain.AnalyzerConfigurationRepository;
+import org.wickedsource.coderadar.analyzer.domain.AnalyzerPluginRegistry;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
-import org.wickedsource.coderadar.core.WorkdirManager;
 import org.wickedsource.coderadar.file.domain.File;
 import org.wickedsource.coderadar.file.domain.FileRepository;
+import org.wickedsource.coderadar.file.domain.GitLogEntry;
+import org.wickedsource.coderadar.file.domain.GitLogEntryRepository;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.filepattern.domain.FileSetType;
+import org.wickedsource.coderadar.filepattern.match.FilePatternMatcher;
+import org.wickedsource.coderadar.job.LocalGitRepositoryManager;
 import org.wickedsource.coderadar.metric.domain.finding.FindingRepository;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValue;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueId;
@@ -46,10 +47,6 @@ import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
 public class CommitAnalyzer {
 
   private Logger logger = LoggerFactory.getLogger(CommitAnalyzer.class);
-
-  private CommitRepository commitRepository;
-
-  private WorkdirManager workdirManager;
 
   private FilePatternRepository filePatternRepository;
 
@@ -69,23 +66,21 @@ public class CommitAnalyzer {
 
   private FindingRepository findingRepository;
 
-  private AnalyzingJobRepository analyzingJobRepository;
-
   private Meter commitsMeter;
 
   private Meter filesMeter;
 
-  private static final Set<DiffEntry.ChangeType> CHANGES_TO_ANALYZE =
-      EnumSet.of(
-          DiffEntry.ChangeType.ADD,
-          DiffEntry.ChangeType.COPY,
-          DiffEntry.ChangeType.MODIFY,
-          DiffEntry.ChangeType.RENAME);
+  private GitLogEntryRepository gitLogEntryRepository;
+
+  private LocalGitRepositoryManager gitRepoManager;
+
+  private CommitRepository commitRepository;
+
+  private static final Set<ChangeType> CHANGES_TO_ANALYZE =
+      EnumSet.of(ChangeType.ADD, ChangeType.COPY, ChangeType.MODIFY, ChangeType.RENAME);
 
   @Autowired
   public CommitAnalyzer(
-      CommitRepository commitRepository,
-      WorkdirManager workdirManager,
       FilePatternRepository filePatternRepository,
       GitCommitFinder commitFinder,
       AnalyzerPluginRegistry analyzerRegistry,
@@ -95,10 +90,10 @@ public class CommitAnalyzer {
       FileRepository fileRepository,
       MetricValueRepository metricValueRepository,
       FindingRepository findingRepository,
-      AnalyzingJobRepository analyzingJobRepository,
-      MetricRegistry metricRegistry) {
-    this.commitRepository = commitRepository;
-    this.workdirManager = workdirManager;
+      MetricRegistry metricRegistry,
+      GitLogEntryRepository gitLogEntryRepository,
+      LocalGitRepositoryManager gitRepoManager,
+      CommitRepository commitRepository) {
     this.filePatternRepository = filePatternRepository;
     this.commitFinder = commitFinder;
     this.analyzerRegistry = analyzerRegistry;
@@ -108,75 +103,67 @@ public class CommitAnalyzer {
     this.fileRepository = fileRepository;
     this.metricValueRepository = metricValueRepository;
     this.findingRepository = findingRepository;
-    this.analyzingJobRepository = analyzingJobRepository;
     this.commitsMeter = metricRegistry.meter(name(CommitAnalyzer.class, "commits"));
     this.filesMeter = metricRegistry.meter(name(CommitAnalyzer.class, "files"));
+    this.gitLogEntryRepository = gitLogEntryRepository;
+    this.gitRepoManager = gitRepoManager;
+    this.commitRepository = commitRepository;
   }
 
-  /**
-   * Analyzes all files that were ADDED, COPIED, MODIFIED or RENAMED within the specified commit.
-   * Analysis means that all analyzers currently configured for the project are being run over each
-   * file, producing metrics that are stored in the database.
-   *
-   * @param commit the commit whose changes to analyze.
-   */
   public void analyzeCommit(Commit commit) {
     if (commit == null) {
-      throw new IllegalArgumentException("argument commit must not be null!");
+      throw new IllegalArgumentException("argument 'commit' must not be null!");
     }
 
-    Path gitRoot = workdirManager.getLocalGitRoot(commit.getProject().getId());
-    try {
-      Git gitClient = Git.open(gitRoot.toFile());
-      List<SourceCodeFileAnalyzerPlugin> analyzers = getAnalyzersForProject(commit.getProject());
+    List<SourceCodeFileAnalyzerPlugin> analyzers = getAnalyzersForProject(commit.getProject());
 
-      if (analyzers.isEmpty()) {
-        logger.warn(
-            "skipping analysis of commit {} since there are no analyzers configured for project {}!",
-            commit.getName(),
-            commit.getProject().getName());
-        return;
-      }
-
-      logger.info("starting analysis of commit {}", commit.getName());
-      if (isFirstCommitInAnalyzingJob(commit) || isFirstCommitInProject(commit)) {
-        // If it is the first commit to be analyzed we want to analyze ALL files that are in the repo
-        // at the time of the commit so that we have all the files' metrics ...
-        walkAllFilesInCommit(gitClient, commit, analyzers);
-      } else {
-        // ... otherwise we only want to analyze the files that were changed with this commit
-        walkTouchedFilesInCommit(gitClient, commit, analyzers);
-      }
-    } catch (IOException e) {
-      throw new IllegalStateException(String.format("error opening git root %s", gitRoot));
+    if (analyzers.isEmpty()) {
+      logger.warn(
+          "skipping analysis of commit {} since there are no analyzers configured for project {}!",
+          commit.getName(),
+          commit.getProject().getName());
+      return;
     }
-    commit.setAnalyzed(Boolean.TRUE);
-    commitRepository.save(commit);
+
+    FilePatternMatcher matcher = getPatternMatcher(commit.getProject().getId());
+    Git gitClient = gitRepoManager.getLocalGitRepository(commit.getProject().getId());
+    List<GitLogEntry> logEntries =
+        gitLogEntryRepository.findByCommitIdAndChangeTypeIn(commit.getId(), CHANGES_TO_ANALYZE);
+
+    int analyzedFiles = 0;
+    for (GitLogEntry logEntry : logEntries) {
+      String filepath = logEntry.getFilepath();
+      if (!matcher.matches(filepath)) {
+        logger.trace(
+            "skipping analysis of file {} in commit{} since it does not match the project's file patterns",
+            filepath,
+            commit.getName());
+        continue;
+      }
+
+      logger.trace("analyzing file {} in commit {}", filepath, commit.getName());
+      FileMetrics metrics = analyzeFile(gitClient, commit, filepath, analyzers);
+      storeMetrics(commit, filepath, metrics);
+      filesMeter.mark();
+      analyzedFiles++;
+    }
+
     commitsMeter.mark();
+    commit.setAnalyzed(true);
+    commitRepository.save(commit);
+    logger.info(
+        "analyzed {} files with {} analyzers in commit {}",
+        analyzedFiles,
+        analyzers.size(),
+        commit.getName());
   }
 
-  private boolean isFirstCommitInAnalyzingJob(Commit commit) {
-    AnalyzingJob strategy = analyzingJobRepository.findByProjectId(commit.getProject().getId());
-
-    if (strategy.getFromDate() == null) {
-      return false;
-    }
-
-    Commit firstCommitInDateRange =
-        commitRepository.findFirstCommitAfterDate(
-            commit.getProject().getId(), strategy.getFromDate());
-    return firstCommitInDateRange.getId().equals(commit.getId());
-  }
-
-  private boolean isFirstCommitInProject(Commit commit) {
-    Date startDate = commit.getProject().getVcsCoordinates().getStartDate();
-    if (startDate == null) {
-      return false;
-    } else {
-      Commit firstCommitInDateRange =
-          commitRepository.findFirstCommitAfterDate(commit.getProject().getId(), startDate);
-      return firstCommitInDateRange.getId().equals(commit.getId());
-    }
+  private FileMetrics analyzeFile(
+      Git gitClient, Commit commit, String filepath, List<SourceCodeFileAnalyzerPlugin> analyzers) {
+    RevCommit gitCommit = commitFinder.findCommit(gitClient, commit.getName());
+    byte[] fileContent =
+        BlobUtils.getRawContent(gitClient.getRepository(), gitCommit.getId(), filepath);
+    return fileAnalyzer.analyzeFile(analyzers, filepath, fileContent);
   }
 
   private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Project project) {
@@ -198,117 +185,22 @@ public class CommitAnalyzer {
     return analyzers;
   }
 
-  /**
-   * Iterates over all files that were modified within a commit and runs the analyzers over them to
-   * store metric values in the database.
-   */
-  private void walkTouchedFilesInCommit(
-      Git gitClient, Commit commit, List<SourceCodeFileAnalyzerPlugin> analyzers)
-      throws IOException {
-    RevCommit gitCommit = commitFinder.findCommit(gitClient, commit.getName());
-    if (gitCommit == null) {
-      throw new IllegalArgumentException(
-          String.format(
-              "commit with name %s was not found in git root %s",
-              commit.getName(), gitClient.getRepository().getDirectory()));
-    }
-
-    DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
-    diffFormatter.setRepository(gitClient.getRepository());
-    diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
-    diffFormatter.setDetectRenames(true);
-
-    FileMatchingPattern pattern = getFileMatchingPattern(commit);
-
-    // we are only interested in the changes compared to the FIRST parent,
-    // since that is the parent commit in the same "lane" as the current commit
-    // (we don't want to "branch out" of our lane)
-    List<DiffEntry> diffs = diffFormatter.scan(gitCommit.getParent(0), gitCommit);
-    for (DiffEntry diff : diffs) {
-      String filepath = diff.getPath(DiffEntry.Side.NEW);
-
-      if (!shouldBeAnalyzed(diff.getChangeType())) {
-        logger.debug(
-            "skipping analysis of file {} because of changetype {}",
-            filepath,
-            diff.getChangeType());
-        continue;
-      }
-      if (!pattern.matches(filepath)) {
-        logger.debug(
-            "skipping analysis of file {} because it does not match source file pattern of project {}",
-            filepath,
-            commit.getProject().getName());
-        continue;
-      }
-
-      analyzeFile(gitClient, commit, analyzers, gitCommit, filepath);
-    }
-  }
-
-  private FileMatchingPattern getFileMatchingPattern(Commit commit) {
+  private FilePatternMatcher getPatternMatcher(long projectId) {
     List<FilePattern> sourceFilePatterns =
-        filePatternRepository.findByProjectIdAndFileSetType(
-            commit.getProject().getId(), FileSetType.SOURCE);
-    return toFileMatchingPattern(sourceFilePatterns);
-  }
-
-  /**
-   * Iterates over all files that exist at the time of the given commit and runs the analyzers over
-   * them to store metric values in the database.
-   */
-  private void walkAllFilesInCommit(
-      Git gitClient, Commit commit, List<SourceCodeFileAnalyzerPlugin> analyzers) {
-    RevCommit gitCommit = commitFinder.findCommit(gitClient, commit.getName());
-    if (gitCommit == null) {
-      throw new IllegalArgumentException(
-          String.format(
-              "commit with name %s was not found in git root %s",
-              commit.getName(), gitClient.getRepository().getDirectory()));
-    }
-
-    FileMatchingPattern pattern = getFileMatchingPattern(commit);
-
-    try (TreeWalk treeWalk = new TreeWalk(gitClient.getRepository())) {
-      treeWalk.addTree(gitCommit.getTree());
-      treeWalk.setRecursive(true);
-      while (treeWalk.next()) {
-        String filepath = treeWalk.getPathString();
-
-        if (!pattern.matches(filepath)) {
-          logger.debug(
-              "skipping analysis of file {} because it does not match source file pattern of project {}",
-              filepath,
-              commit.getProject().getName());
-          continue;
-        }
-
-        analyzeFile(gitClient, commit, analyzers, gitCommit, filepath);
-      }
-    } catch (IOException e) {
-      throw new IllegalStateException(e);
-    }
-  }
-
-  private void analyzeFile(
-      Git gitClient,
-      Commit commit,
-      List<SourceCodeFileAnalyzerPlugin> analyzers,
-      RevCommit gitCommit,
-      String filepath) {
-    byte[] fileContent =
-        BlobUtils.getRawContent(gitClient.getRepository(), gitCommit.getId(), filepath);
-    FileMetrics metrics = fileAnalyzer.analyzeFile(analyzers, filepath, fileContent);
-    storeMetrics(commit, filepath, metrics);
-    filesMeter.mark();
-  }
-
-  private boolean shouldBeAnalyzed(DiffEntry.ChangeType changeType) {
-    return CHANGES_TO_ANALYZE.contains(changeType);
+        filePatternRepository.findByProjectIdAndFileSetType(projectId, FileSetType.SOURCE);
+    return new FilePatternMatcher(sourceFilePatterns);
   }
 
   private void storeMetrics(Commit commit, String filePath, FileMetrics metrics) {
-    File file = findInCommit(filePath, commit);
+    File file =
+        fileRepository.findInCommit(filePath, commit.getName(), commit.getProject().getId());
+
+    if (file == null) {
+      throw new IllegalStateException(
+          String.format(
+              "could not find file '%s' in commit %s (id: %d)",
+              filePath, commit.getName(), commit.getId()));
+    }
 
     for (Metric metric : metrics.getMetrics()) {
       MetricValueId id = new MetricValueId(commit, file, metric.getId());
@@ -326,43 +218,5 @@ public class CommitAnalyzer {
         findingRepository.save(entity);
       }
     }
-  }
-
-  private File findInCommit(String filePath, Commit commit) {
-    List<File> files =
-        fileRepository.findInCommit(filePath, commit.getName(), commit.getProject().getId());
-    if (files.size() == 1) {
-      return files.get(0);
-    } else if (files.size() > 1) {
-      // Usually, we only get one file as result. However in the exotic case that MySQL is used (whose queries
-      // are case insensitive by default) and the same file exists in the database more than once with different
-      // upper or lower case characters, we can have more than one result. In this case, we select the correct
-      // file by hand.
-      for (File file : files) {
-        if (file.getFilepath().equals(filePath)) {
-          return file;
-        }
-      }
-    }
-    throw new IllegalStateException(
-        String.format("could not find file '%s' in commit %s", filePath, commit.getName()));
-  }
-
-  private FileMatchingPattern toFileMatchingPattern(List<FilePattern> filePatternList) {
-    FileMatchingPattern pattern = new FileMatchingPattern();
-    for (FilePattern files : filePatternList) {
-      switch (files.getInclusionType()) {
-        case INCLUDE:
-          pattern.addIncludePattern(files.getPattern());
-          break;
-        case EXCLUDE:
-          pattern.addExcludePattern(files.getPattern());
-          break;
-        default:
-          throw new IllegalStateException(
-              String.format("invalid InclusionType %s", files.getInclusionType()));
-      }
-    }
-    return pattern;
   }
 }

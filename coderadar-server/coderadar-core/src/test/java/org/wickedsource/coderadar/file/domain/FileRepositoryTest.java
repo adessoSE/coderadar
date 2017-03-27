@@ -35,6 +35,7 @@ public class FileRepositoryTest extends IntegrationTestTemplate {
     project = projectRepository.save(project);
     Commit commit = commit().unprocessedCommit();
     commit.setProject(project);
+    commit.setName("cafebabe");
     commit.setSequenceNumber(1);
     commit = commitRepository.save(commit);
     File file = sourceFile().withPath("123");
@@ -45,10 +46,10 @@ public class FileRepositoryTest extends IntegrationTestTemplate {
     commitToFileAssociationRepository.save(association);
 
     File foundFile =
-        fileRepository.findInCommit(file.getFilepath(), commit.getName(), project.getId()).get(0);
+        fileRepository.findInCommit(file.getFilepath(), commit.getName(), project.getId());
     Assert.assertEquals(file.getId(), foundFile.getId());
 
     Assert.assertEquals(
-        0, fileRepository.findInCommit("321", commit.getName(), project.getId()).size());
+        null, fileRepository.findInCommit("321", commit.getName(), project.getId()));
   }
 }

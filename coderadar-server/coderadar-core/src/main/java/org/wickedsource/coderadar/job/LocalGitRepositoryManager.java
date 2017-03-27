@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.job;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import org.eclipse.jgit.api.Git;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import org.wickedsource.coderadar.vcs.git.GitRepositoryCloner;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryUpdater;
 
 @Service
-public class LocalGitRepositoryUpdater {
+public class LocalGitRepositoryManager {
 
   private GitRepositoryUpdater gitUpdater;
 
@@ -22,7 +23,7 @@ public class LocalGitRepositoryUpdater {
   private WorkdirManager workdirManager;
 
   @Autowired
-  public LocalGitRepositoryUpdater(
+  public LocalGitRepositoryManager(
       GitRepositoryUpdater gitUpdater,
       GitRepositoryCloner gitCloner,
       GitRepositoryChecker gitChecker,
@@ -33,21 +34,36 @@ public class LocalGitRepositoryUpdater {
     this.workdirManager = workdirManager;
   }
 
+  public Git getLocalGitRepository(long projectId) {
+    Path workdir = getWorkdir(projectId);
+    if (!isRepositoryAlreadyCheckedOut(projectId)) {
+      throw new IllegalArgumentException(
+          String.format("no local git repository found at %s", workdir));
+    }
+
+    try {
+      return Git.open(workdir.toFile());
+    } catch (IOException e) {
+      throw new IllegalStateException(
+          String.format("could not open local git repository at %s due to exception", workdir), e);
+    }
+  }
+
   public Git updateLocalGitRepository(Project project) {
     if (project == null) {
       throw new IllegalArgumentException("parameter project must not be null!");
     }
     Git gitClient;
-    if (!isRepositoryAlreadyCheckedOut(project)) {
+    if (!isRepositoryAlreadyCheckedOut(project.getId())) {
       gitClient = cloneRepository(project);
     } else {
-      gitClient = updateLocalRepository(project);
+      gitClient = updateLocalRepository(project.getId());
     }
     return gitClient;
   }
 
-  private Git updateLocalRepository(Project project) {
-    return gitUpdater.updateRepository(getWorkdir(project));
+  private Git updateLocalRepository(long projectId) {
+    return gitUpdater.updateRepository(getWorkdir(projectId));
   }
 
   private Git cloneRepository(Project project) {
@@ -56,15 +72,15 @@ public class LocalGitRepositoryUpdater {
           String.format("vcsCoordinates of Project with ID %d are null!", project.getId()));
     }
     return gitCloner.cloneRepository(
-        project.getVcsCoordinates().getUrl().toString(), getWorkdir(project).toFile());
+        project.getVcsCoordinates().getUrl().toString(), getWorkdir(project.getId()).toFile());
   }
 
-  private boolean isRepositoryAlreadyCheckedOut(Project project) {
-    Path projectWorkdir = getWorkdir(project);
+  private boolean isRepositoryAlreadyCheckedOut(long projectId) {
+    Path projectWorkdir = getWorkdir(projectId);
     return gitChecker.isRepository(projectWorkdir);
   }
 
-  private Path getWorkdir(Project project) {
-    return workdirManager.getLocalGitRoot(project.getId());
+  private Path getWorkdir(long projectId) {
+    return workdirManager.getLocalGitRoot(projectId);
   }
 }

@@ -26,7 +26,6 @@ public class FileAnalyzer {
    */
   public FileMetrics analyzeFile(
       List<SourceCodeFileAnalyzerPlugin> analyzerPlugins, String filePath, byte[] fileContent) {
-    logger.debug("analyzing file {}", filePath);
     FileMetrics fileMetrics = new FileMetrics();
     for (SourceCodeFileAnalyzerPlugin analyzerPlugin : analyzerPlugins) {
       if (analyzerPlugin.getFilter() == null) {
