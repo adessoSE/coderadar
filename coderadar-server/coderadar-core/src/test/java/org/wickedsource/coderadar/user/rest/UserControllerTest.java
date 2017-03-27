@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.EMPTY;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Users.USERS;
+import static org.wickedsource.coderadar.factories.resources.ResourceFactory.passwordChangeResource;
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.userCredentialsResource;
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.userLoginResource;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
@@ -162,6 +163,43 @@ public class UserControllerTest extends ControllerTestTemplate {
         .andExpect(status().isOk())
         .andExpect(containsResource(AccessTokenResource.class))
         .andDo(documentRefresh());
+  }
+
+  @Test
+  @DatabaseSetup(DbUnitFactory.RefreshTokens.REFRESH_TOKENS)
+  public void changePassword() throws Exception {
+
+    // we need to create token here to pass the validation with the current key
+    String refreshToken = createRefreshToken();
+    // save valid refresh token
+    RefreshToken refreshTokenEntity = refreshTokenRepository.findOne(100L);
+    refreshTokenEntity.setToken(refreshToken);
+    refreshTokenRepository.save(refreshTokenEntity);
+
+    PasswordChangeResource passwordChangeResource =
+        passwordChangeResource().passwordChangeResource();
+    passwordChangeResource.setRefreshToken(refreshToken);
+
+    mvc()
+        .perform(
+            post("/user/password/change")
+                .content(toJsonWithoutLinks(passwordChangeResource))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(containsResource(ChangePasswordResponseResource.class))
+        .andDo(documentPasswordChange());
+  }
+
+  private ResultHandler documentPasswordChange() {
+    ConstrainedFields fields = fields(PasswordChangeResource.class);
+    return document(
+        "user/password/change",
+        links(halLinks(), linkWithRel("self").description("Link to the user.")),
+        requestFields(
+            fields.withPath("refreshToken").description("the current refresh token of the user"),
+            fields
+                .withCustomPath("newPassword")
+                .description("The password of the user as plaintext")));
   }
 
   private String createExpiredAccessToken() {

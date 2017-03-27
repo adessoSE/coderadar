@@ -144,6 +144,21 @@ include::{snippets}/user/refresh/http-request.adoc[]
 ===== Example Response
 include::{snippets}/user/refresh/http-response.adoc[]
 
+==== Password Change
+To change the password user has to be authenticated by the access token
+and has to send a new password and thе refresh token to the server. The user will be found by the
+refresh token and his refresh tokens will be revoked so the user has to log in with the username and password
+again after the current access token is expired.
+
+===== Login Data Structure
+include::{snippets}/user/password/change/request-fields.adoc[]
+
+===== Example Request
+include::{snippets}/user/password/change/http-request.adoc[]
+
+===== Example Response
+include::{snippets}/user/password/change/http-response.adoc[]
+
 anchor:authentication[]
 
 ==== Authentication

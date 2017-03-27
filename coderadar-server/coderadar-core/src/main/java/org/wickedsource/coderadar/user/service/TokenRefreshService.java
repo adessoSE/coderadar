@@ -34,18 +34,18 @@ public class TokenRefreshService {
    * Checks the validity of refresh token and validity of the user, who sent the token.
    *
    * @param refreshToken the refresh token of the user to check
+   * @throws RefreshTokenNotFoundException if the token was not found.
+   * @throws UsernameNotFoundException if the user from the refresh token was not found.
    */
   void checkUser(String refreshToken) {
     RefreshToken refreshTokenEntity = refreshTokenRepository.findByToken(refreshToken);
     if (refreshTokenEntity == null) {
       throw new RefreshTokenNotFoundException();
     }
-    String username = tokenService.getUsername(refreshToken);
-    User user = userRepository.findByUsername(username);
-    // TODO check user
+    User user = getUser(refreshToken);
     if (user == null) {
       throw new UsernameNotFoundException(
-          String.format("The user with username %s was not found", username));
+          String.format("The user with username %s was not found", refreshToken));
     }
     tokenService.verify(refreshToken);
   }
@@ -61,5 +61,17 @@ public class TokenRefreshService {
     String username = tokenService.getUsername(refreshToken);
     User user = userRepository.findByUsername(username);
     return tokenService.generateAccessToken(user.getId(), user.getUsername());
+  }
+
+  /**
+   * reads the username from the refresh token and loads the user by thе username from thе data
+   * base.
+   *
+   * @param refreshToken refresh token
+   * @return User according to the refresh token
+   */
+  public User getUser(String refreshToken) {
+    String username = tokenService.getUsername(refreshToken);
+    return userRepository.findByUsername(username);
   }
 }
