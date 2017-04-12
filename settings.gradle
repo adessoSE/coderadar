@@ -4,6 +4,7 @@ include 'coderadar-plugins:todo-analyzer-plugin'
 include 'coderadar-plugins:checkstyle-analyzer-plugin'
 include 'coderadar-plugins:findbugs-adapter-plugin'
 include 'coderadar-server:coderadar-core'
+include 'coderadar-server:coderadar-graph'
 include 'coderadar-server:coderadar-database'
 
 
