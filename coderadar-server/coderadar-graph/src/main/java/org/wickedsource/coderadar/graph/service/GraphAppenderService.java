@@ -9,53 +9,48 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.graph.domain.commit.CommitName;
-import org.wickedsource.coderadar.graph.domain.commit.CommitNode;
 import org.wickedsource.coderadar.graph.domain.commit.CommitNodeRepository;
 
+/**
+ * The {@link GraphAppenderService} provides functionality to add nodes to the coderadar graph
+ * database.
+ */
 @Service
-public class GraphService {
+public class GraphAppenderService {
 
   private final CommitNodeRepository commitNodeRepository;
 
-  private CommitNodeFactory commitNodeFactory;
-
-  private FileSnapshotNodeFactory fileSnapshotNodeFactory;
+  private CommitGraphFactory commitGraphFactory;
 
   @Autowired
-  public GraphService(
-      CommitNodeRepository commitNodeRepository,
-      CommitNodeFactory commitNodeFactory,
-      FileSnapshotNodeFactory fileSnapshotNodeFactory) {
+  public GraphAppenderService(
+      CommitNodeRepository commitNodeRepository, CommitGraphFactory commitGraphFactory) {
     this.commitNodeRepository = commitNodeRepository;
-    this.commitNodeFactory = commitNodeFactory;
-    this.fileSnapshotNodeFactory = fileSnapshotNodeFactory;
+    this.commitGraphFactory = commitGraphFactory;
   }
 
-  /** @param changes the changes are expected to be in chronological order of the commits. */
-  public void addGitChanges(List<GitChange> changes) {
+  /**
+   * Appends the specified list of changes in a git repository to the coderadar graph database. This
+   * method can be called multiple times for the same git repository, however it is expected that
+   * the changes passed into this method are in chronological order between two calls.
+   *
+   * @param changes the changes made in a git repository. The changes are expected to be in
+   *     chronological order of the commits.
+   */
+  public void appendGitChanges(List<GitChange> changes) {
 
     Map<CommitName, List<GitChange>> changesPerCommit =
         changes.stream().collect(Collectors.groupingBy(c -> CommitName.from(c.getCommitName())));
     List<CommitName> sortedCommits = sortCommits(changes);
 
     for (CommitName commitName : sortedCommits) {
-      List<GitChange> changesForCommit = changesPerCommit.get(commitName);
-      CommitNode commitNode = commitNodeFactory.createCommitNode(commitName, changesForCommit);
-      fileSnapshotNodeFactory.appendFileSnapshotNodes(commitNode, changesForCommit);
-
-      // saving commit node and all attached nodes to graph
-      commitNodeRepository.save(commitNode);
-
-      // TODO: FileNodes
-      // ADDED / COPIED: 	new FileNode
-      // MODIFIED: 		existing FileNode
-      // DELETED: 		existing FileNode
-      // RENAMED:			existing FileNode (with different file name)
-
+      List<GitChange> changesInThisCommit = changesPerCommit.get(commitName);
+      CommitGraph commitGraph =
+          commitGraphFactory.createCommitGraph(commitName, changesInThisCommit);
+      commitGraph.appendGitChanges(changesInThisCommit);
+      commitNodeRepository.save(commitGraph.getCommitNode());
     }
   }
-
-  private void addFileNodes(CommitNode commitNode, List<GitChange> changes) {}
 
   private List<CommitName> sortCommits(List<GitChange> changes) {
     Set<String> processedCommits = new HashSet<>();

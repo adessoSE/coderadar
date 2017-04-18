@@ -14,7 +14,6 @@ public class CoderadarGraphConfiguration {
 
   @Bean
   public SessionFactory sessionFactory() {
-    // with domain entity base package(s)
     return new SessionFactory("org.wickedsource.coderadar.graph");
   }
 

@@ -24,6 +24,12 @@ public class FileSnapshotNode {
   @Relationship(type = "MEASURED_BY")
   private Set<MeasuresRelationship> measuredBy;
 
+  public FileSnapshotNode() {}
+
+  public FileSnapshotNode(String filepath) {
+    this.filepath = filepath;
+  }
+
   public Long getId() {
     return id;
   }
@@ -62,5 +68,25 @@ public class FileSnapshotNode {
 
   public void measuredBy(Set<MeasuresRelationship> measuredBy) {
     this.measuredBy = measuredBy;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    FileSnapshotNode that = (FileSnapshotNode) o;
+
+    return filepath != null ? filepath.equals(that.filepath) : that.filepath == null;
+  }
+
+  @Override
+  public int hashCode() {
+    return filepath != null ? filepath.hashCode() : 0;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("FileSnapshotNode[filepath=%s]", this.filepath);
   }
 }

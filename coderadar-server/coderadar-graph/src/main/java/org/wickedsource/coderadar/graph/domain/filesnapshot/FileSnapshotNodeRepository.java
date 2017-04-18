@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.graph.domain.filesnapshot;
 
 import java.util.List;
+import java.util.Set;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
@@ -10,8 +11,14 @@ public interface FileSnapshotNodeRepository extends GraphRepository<FileSnapshot
       "MATCH "
           + "(snapshot:FileSnapshot)-[:SNAPSHOT_IN_COMMIT]->(c:Commit {name:{0}})"
           + "RETURN snapshot")
-  List<FileSnapshotNode> findFileSnapshotsInCommit(String commitName);
+  List<FileSnapshotNode> inCommit(String commitName);
 
-  @Query("MATCH " + "")
-  List<FileSnapshotNode> findSumInCommit(String commitName, String metricName);
+  @Query(
+      "MATCH "
+          + "(child:Commit {name:{0}})-[:IS_CHILD_OF*]->(parent:Commit), "
+          + "(parent)-[:TOUCHED]->(file:File), "
+          + "(snapshot:FileSnapshot)-[snapshotOfFile:SNAPSHOT_OF_FILE]->(file)"
+          + "WHERE NOT ((file)-[:DELETED_IN_COMMIT]->()) "
+          + "RETURN snapshot, snapshotOfFile, file")
+  Set<FileSnapshotNode> notDeletedInPreviousCommits(String commitName);
 }
