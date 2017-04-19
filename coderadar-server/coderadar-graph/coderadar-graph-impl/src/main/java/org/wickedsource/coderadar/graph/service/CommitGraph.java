@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.wickedsource.coderadar.graph.GitChange;
 import org.wickedsource.coderadar.graph.domain.commit.CommitNode;
 import org.wickedsource.coderadar.graph.domain.file.FileId;
 import org.wickedsource.coderadar.graph.domain.file.FileNode;

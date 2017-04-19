@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.graph.service;
+package org.wickedsource.coderadar.graph;
 
 import java.time.LocalDateTime;
 

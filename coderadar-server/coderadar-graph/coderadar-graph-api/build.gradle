@@ -1,0 +1,11 @@
+
+apply plugin: "com.diffplug.gradle.spotless"
+
+dependencies {
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}

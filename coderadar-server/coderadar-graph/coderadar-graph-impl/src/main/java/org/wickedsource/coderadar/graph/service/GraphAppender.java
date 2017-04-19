@@ -8,35 +8,28 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.wickedsource.coderadar.graph.GitChange;
+import org.wickedsource.coderadar.graph.GraphAppenderService;
 import org.wickedsource.coderadar.graph.domain.commit.CommitName;
 import org.wickedsource.coderadar.graph.domain.commit.CommitNodeRepository;
 
 /**
- * The {@link GraphAppenderService} provides functionality to add nodes to the coderadar graph
- * database.
+ * The {@link GraphAppender} provides functionality to add nodes to the coderadar graph database.
  */
 @Service
-public class GraphAppenderService {
+class GraphAppender implements GraphAppenderService {
 
   private final CommitNodeRepository commitNodeRepository;
 
   private CommitGraphFactory commitGraphFactory;
 
   @Autowired
-  public GraphAppenderService(
+  public GraphAppender(
       CommitNodeRepository commitNodeRepository, CommitGraphFactory commitGraphFactory) {
     this.commitNodeRepository = commitNodeRepository;
     this.commitGraphFactory = commitGraphFactory;
   }
 
-  /**
-   * Appends the specified list of changes in a git repository to the coderadar graph database. This
-   * method can be called multiple times for the same git repository, however it is expected that
-   * the changes passed into this method are in chronological order between two calls.
-   *
-   * @param changes the changes made in a git repository. The changes are expected to be in
-   *     chronological order of the commits.
-   */
   public void appendGitChanges(List<GitChange> changes) {
 
     Map<CommitName, List<GitChange>> changesPerCommit =

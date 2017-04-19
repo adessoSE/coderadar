@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.wickedsource.coderadar.graph.GitChange;
 import org.wickedsource.coderadar.graph.Neo4jIntegrationTestTemplate;
 import org.wickedsource.coderadar.graph.domain.commit.CommitName;
 import org.wickedsource.coderadar.graph.domain.commit.CommitNode;
@@ -16,7 +17,7 @@ import org.wickedsource.coderadar.graph.domain.file.FileNodeRepository;
 import org.wickedsource.coderadar.graph.domain.file.TouchedFilesCountQueryResult;
 import org.wickedsource.coderadar.graph.domain.filesnapshot.FileSnapshotNodeRepository;
 
-public class GraphAppenderServiceTest extends Neo4jIntegrationTestTemplate {
+public class GraphAppenderTest extends Neo4jIntegrationTestTemplate {
 
   @Autowired private CommitNodeRepository commitNodeRepository;
 
@@ -24,7 +25,7 @@ public class GraphAppenderServiceTest extends Neo4jIntegrationTestTemplate {
 
   @Autowired private FileSnapshotNodeRepository fileSnapshotNodeRepository;
 
-  @Autowired private GraphAppenderService graphAppenderService;
+  @Autowired private GraphAppender graphAppender;
 
   private CommitNode commit1;
 
@@ -58,7 +59,7 @@ public class GraphAppenderServiceTest extends Neo4jIntegrationTestTemplate {
             "file1",
             GitChange.ChangeType.RENAMED,
             LocalDateTime.now()));
-    graphAppenderService.appendGitChanges(changes);
+    graphAppender.appendGitChanges(changes);
 
     commit1 = commitNodeRepository.findByName(CommitName.from("commit1"));
     commit2 = commitNodeRepository.findByName(CommitName.from("commit2"));
@@ -87,7 +88,7 @@ public class GraphAppenderServiceTest extends Neo4jIntegrationTestTemplate {
     changes.add(
         new GitChange(
             "commit4", "commit3", "file3", null, GitChange.ChangeType.ADDED, LocalDateTime.now()));
-    graphAppenderService.appendGitChanges(changes);
+    graphAppender.appendGitChanges(changes);
 
     commit1 = commitNodeRepository.findByName(CommitName.from("commit1"));
     commit2 = commitNodeRepository.findByName(CommitName.from("commit2"));
