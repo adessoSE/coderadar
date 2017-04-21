@@ -19,7 +19,7 @@ logging.file=coderadar.log
 
 spring.jpa.hibernate.ddl-auto=validate
 
-spring.datasource.url=dbc:postgresql://localhost:5432/coderadar
+spring.datasource.url=jdbc:postgresql://localhost:5432/coderadar
 spring.datasource.username=coderadar
 spring.datasource.password=coderadar
 spring.datasource.driver-class-name=org.postgresql.Driver
