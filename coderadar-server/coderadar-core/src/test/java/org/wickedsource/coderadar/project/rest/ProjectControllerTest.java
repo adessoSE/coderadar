@@ -77,6 +77,10 @@ public class ProjectControllerTest extends ControllerTestTemplate {
                 .description(
                     "The password of the version control system user. This password has to be stored in plain text for coderadar to be usable, so make sure to provide a user with only reading permissions. Don't provide this field if anonymous access is possible."),
             fields
+                .withPath("vcsOnline")
+                .description(
+                    "Set to false if you want no interaction with a remote repository for this project. True by default."),
+            fields
                 .withPath("startDate")
                 .description(
                     "The start date of the range of commits which should be analyzed by coderadar. Leave empty to start at the first commit."),

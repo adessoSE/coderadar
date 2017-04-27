@@ -6,6 +6,7 @@ import org.eclipse.jgit.api.Git;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.core.WorkdirManager;
+import org.wickedsource.coderadar.core.rest.validation.UserException;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryChecker;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryCloner;
@@ -55,8 +56,20 @@ public class LocalGitRepositoryManager {
     }
     Git gitClient;
     if (!isRepositoryAlreadyCheckedOut(project.getId())) {
+
+      if (!project.getVcsCoordinates().isOnline()) {
+        throw new UserException(
+            "The remote git repository has not yet been cloned but the project is set to offline mode. Set the project to online mode and try again.");
+      }
+
       gitClient = cloneRepository(project);
     } else {
+
+      if (!project.getVcsCoordinates().isOnline()) {
+        // don't pull changes from remote repository, since we are in offline mode
+        return getLocalGitRepository(project.getId());
+      }
+
       gitClient = updateLocalRepository(project.getId());
     }
     return gitClient;

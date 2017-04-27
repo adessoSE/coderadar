@@ -35,6 +35,7 @@ public class ProjectResourceAssembler extends AbstractResourceAssembler<Project,
       resource.setEndDate(
           Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
               project.getVcsCoordinates().getEndDate()));
+      resource.setVcsOnline(project.getVcsCoordinates().isOnline());
     }
     resource.add(
         linkTo(methodOn(FilePatternController.class).getFilePatterns(project.getId()))
@@ -60,6 +61,7 @@ public class ProjectResourceAssembler extends AbstractResourceAssembler<Project,
           Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(resource.getStartDate()));
       vcs.setEndDate(
           Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(resource.getEndDate()));
+      vcs.setOnline(resource.isVcsOnline());
       entity.setVcsCoordinates(vcs);
       return entity;
     } catch (MalformedURLException e) {

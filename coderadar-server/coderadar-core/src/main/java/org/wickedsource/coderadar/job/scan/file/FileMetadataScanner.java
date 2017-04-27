@@ -161,38 +161,40 @@ public class FileMetadataScanner {
     diffFormatter.setDetectRenames(true);
 
     int fileCounter = 0;
-    RevCommit parent = gitCommit.getParent(0);
-    List<DiffEntry> diffs = diffFormatter.scan(parent, gitCommit);
-    for (DiffEntry diff : diffs) {
+    if (gitCommit.getParentCount() > 0) {
+      RevCommit parent = gitCommit.getParent(0);
+      List<DiffEntry> diffs = diffFormatter.scan(parent, gitCommit);
+      for (DiffEntry diff : diffs) {
 
-      if (!matcher.matches(diff.getNewPath())) {
-        continue;
-      }
-
-      String hash = createHash(gitClient, gitCommit, diff.getNewPath());
-      ChangeType changeType = changeTypeMapper.jgitToCoderadar(diff.getChangeType());
-      if (changeType == ChangeType.ADD || changeType == ChangeType.COPY) {
-        // we want to add ADDED and COPIED log entries only once for the same file
-        if (entryWithSameFileAlreadyExists(
-            commit.getProject().getId(), diff.getNewPath(), changeType, hash)) {
+        if (!matcher.matches(diff.getNewPath())) {
           continue;
         }
+
+        String hash = createHash(gitClient, gitCommit, diff.getNewPath());
+        ChangeType changeType = changeTypeMapper.jgitToCoderadar(diff.getChangeType());
+        if (changeType == ChangeType.ADD || changeType == ChangeType.COPY) {
+          // we want to add ADDED and COPIED log entries only once for the same file
+          if (entryWithSameFileAlreadyExists(
+              commit.getProject().getId(), diff.getNewPath(), changeType, hash)) {
+            continue;
+          }
+        }
+
+        GitLogEntry logEntry = new GitLogEntry();
+        logEntry.setOldFilepath(diff.getOldPath());
+        logEntry.setFilepath(diff.getNewPath());
+        logEntry.setProject(commit.getProject());
+        logEntry.setChangeType(changeType);
+        logEntry.setCommit(commit);
+        logEntry.setFileHash(hash);
+
+        logEntryRepository.save(logEntry);
+        fileCounter++;
+        filesMeter.mark();
       }
-
-      GitLogEntry logEntry = new GitLogEntry();
-      logEntry.setOldFilepath(diff.getOldPath());
-      logEntry.setFilepath(diff.getNewPath());
-      logEntry.setProject(commit.getProject());
-      logEntry.setChangeType(changeType);
-      logEntry.setCommit(commit);
-      logEntry.setFileHash(hash);
-
-      logEntryRepository.save(logEntry);
-      fileCounter++;
-      filesMeter.mark();
+      commit.setScanned(true);
+      commitRepository.save(commit);
+      logger.info("scanned {} files in commit {}", fileCounter, commit);
     }
-    commit.setScanned(true);
-    commitRepository.save(commit);
-    logger.info("scanned {} files in commit {}", fileCounter, commit);
   }
 }

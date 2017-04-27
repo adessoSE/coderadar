@@ -21,7 +21,7 @@
     <user_account/>
     <refresh_token/>
 
-    <project id="1" vcs_url="http://valid.url" vcs_username="user" vcs_password="pass" name="name" workdir_name="foo"
+    <project vcs_online="true" id="1" vcs_url="http://valid.url" vcs_username="user" vcs_password="pass" name="name" workdir_name="foo"
              vcs_start_date="2016-01-01 00:00:00" vcs_end_date="2016-12-31 00:00:00"/>
 
     <module id="5" path="server" project_id="1"/>

@@ -27,6 +27,9 @@ public class VcsCoordinates {
   @Temporal(TemporalType.DATE)
   private Date endDate;
 
+  @Column(name = "vcs_online")
+  private boolean online = true;
+
   public VcsCoordinates() {}
 
   public VcsCoordinates(URL url) {
@@ -71,6 +74,14 @@ public class VcsCoordinates {
 
   public void setEndDate(Date endDate) {
     this.endDate = endDate;
+  }
+
+  public boolean isOnline() {
+    return online;
+  }
+
+  public void setOnline(boolean online) {
+    this.online = online;
   }
 
   @Override

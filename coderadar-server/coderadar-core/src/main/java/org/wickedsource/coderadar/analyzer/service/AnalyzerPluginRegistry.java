@@ -33,7 +33,7 @@ public class AnalyzerPluginRegistry {
    * SourceCodeFileAnalyzer interface!
    */
   public AnalyzerPluginRegistry() {
-    initRegistry(null);
+    initRegistry("org.wickedsource.coderadar");
   }
 
   /**

@@ -32,6 +32,8 @@ public class ProjectResource extends ResourceSupport {
   @JsonDeserialize(using = LocalDateDeserializer.class)
   private LocalDate endDate;
 
+  private boolean vcsOnline = true;
+
   public String getName() {
     return name;
   }
@@ -78,5 +80,13 @@ public class ProjectResource extends ResourceSupport {
 
   public void setEndDate(LocalDate endDate) {
     this.endDate = endDate;
+  }
+
+  public boolean isVcsOnline() {
+    return vcsOnline;
+  }
+
+  public void setVcsOnline(boolean vcsOnline) {
+    this.vcsOnline = vcsOnline;
   }
 }
