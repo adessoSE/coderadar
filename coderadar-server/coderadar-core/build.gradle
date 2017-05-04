@@ -100,7 +100,6 @@ dependencies {
     compile group: 'io.dropwizard.metrics', name: 'metrics-annotation', version: '3.2.1'
     compile "io.prometheus:simpleclient_spring_boot:0.0.21"
     compile "io.prometheus:simpleclient_hotspot:0.0.21"
-    compile "io.prometheus:simpleclient_servlet:0.0.21"
     compile "io.prometheus:simpleclient_dropwizard:0.0.21"
 
     compile project(":coderadar-plugins:loc-analyzer-plugin")
