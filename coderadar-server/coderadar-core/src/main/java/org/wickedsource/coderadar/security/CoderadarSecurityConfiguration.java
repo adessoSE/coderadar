@@ -1,6 +1,9 @@
 package org.wickedsource.coderadar.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.FixedPrincipalExtractor;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -8,15 +11,16 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
 import org.wickedsource.coderadar.security.service.TokenService;
 
 @Configuration
+@EnableOAuth2Sso
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -50,7 +54,7 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
 
   @Bean
   public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
-    return new AuthenticationTokenFilter(tokenService);
+    return new AuthenticationTokenFilter(tokenService, new AccessDeniedHandlerImpl());
   }
 
   @Override
@@ -58,11 +62,7 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
     http.csrf().disable();
 
     if (coderadarConfiguration.getAuthentication().getEnabled()) {
-      http.sessionManagement()
-          .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-          .and()
-          .authorizeRequests()
-
+      http.authorizeRequests()
           // only these endpoints can be called without authentication
           .antMatchers("/actuator", "/user/auth", "/user/registration", "/user/refresh")
           .permitAll()

@@ -10,8 +10,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.wickedsource.coderadar.security.service.TokenService;
 
@@ -27,13 +29,17 @@ import org.wickedsource.coderadar.security.service.TokenService;
  */
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
 
-  public static final String TOKEN_HEADER = "Authorization";
+  static final String TOKEN_HEADER = "Authorization";
 
   private final TokenService tokenService;
 
+  private final AccessDeniedHandler accessDeniedHandler;
+
   @Autowired
-  public AuthenticationTokenFilter(TokenService tokenService) {
+  public AuthenticationTokenFilter(
+      TokenService tokenService, AccessDeniedHandler accessDeniedHandler) {
     this.tokenService = tokenService;
+    this.accessDeniedHandler = accessDeniedHandler;
   }
 
   @Override
@@ -51,8 +57,14 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
             new UsernamePasswordAuthenticationToken(username.asString(), null, null);
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
       } catch (JWTVerificationException e) {
-        // in case of verification error a further filter will take care about authentication error
-        logger.error("Authentication error. Token is not valid", e);
+        // If the access token is sent and could not be verified, no further filter in the chain will be used. The user gets 403 Error.
+        // If you let other filter try to authenticate the user, then OAuth2 filter tries to authenticate the user und redirects him or her to authorization server.
+        // This behavior is not expected with the JWT access token, that's why the AccessDeniedException is thrown here.
+        accessDeniedHandler.handle(
+            request,
+            response,
+            new AccessDeniedException("Authentication error. Token is not valid", e));
+        return;
       }
     }
     filterChain.doFilter(request, response);
