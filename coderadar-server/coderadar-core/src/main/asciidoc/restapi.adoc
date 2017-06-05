@@ -80,7 +80,7 @@ If some unexpected error occurs during the processing of a request, the API retu
 anchor:chapter-configure[]
 This section describes the REST endpoints for managing coderadar users.
 
-=== Users
+=== Users with integrated support
 To access the functionality of coderadar you have to register a user.
 You need to define a username and a password. The password will be sent as
 plain text and hashed on server side for persisting.
@@ -193,6 +193,9 @@ A typical work flow looks like this:
 
 See more: https://auth0.com/docs/tokens/refresh-token and https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
 
+=== Users with OAuth 2.0
+Coderader supports also OAuth 2.0 authentication. If the system does not find
+an Authorization HTTP Header, it tries to proceed OAuth2 Authentication with Github.
 
 == Configuring a Project
 anchor:chapter-configure[]
