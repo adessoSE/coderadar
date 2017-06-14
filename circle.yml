@@ -8,7 +8,7 @@ machine:
 test:
   override:
     - chmod +x gradlew
-    - ./gradlew --console=plain zip --stacktrace
+    #- ./gradlew --console=plain zip --stacktrace
 
     # prepare GitHub pages
     - ./gradlew --stacktrace --console=plain preparePages
