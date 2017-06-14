@@ -1,4 +1,6 @@
 machine:
+  enviroment:
+   _JAVA_OPTIONS: "-Xms512m -Xmx4096m"
   java:
     version: oraclejdk8
   python:
@@ -8,7 +10,7 @@ machine:
 test:
   override:
     - chmod +x gradlew
-    #- ./gradlew --console=plain zip --stacktrace
+    - ./gradlew --console=plain zip --stacktrace
 
     # prepare GitHub pages
     - ./gradlew --stacktrace --console=plain preparePages
