@@ -8,23 +8,23 @@ coderadar aims to be a continuous source code analysis tool that connects to you
 The overriding goal of coderadar is **to make it easy for you to improve the code quality** of your project. To achieve that, coderadar pursues the following goals:
 
 * **Easy to use**
- * Find the data you want with as few clicks as possible
- * View only the data you need without being distracted by an overstuffed user interface
- * Minimal configuration neccessary to be able to get started quickly 
- * Support regular code quality meetings in a development team as good as possible
+  * Find the data you want with as few clicks as possible
+  * View only the data you need without being distracted by an overstuffed user interface
+  * Minimal configuration neccessary to be able to get started quickly 
+  * Support regular code quality meetings in a development team as good as possible
 
 * **Flexible**
- * Measure your own definition of code quality
- * Customize your view on the data to fit your needs
+  * Measure your own definition of code quality
+  * Customize your view on the data to fit your needs
 
 * **Modular**
- * Low threshold for developing analyzer plugins to measure specific quality metrics
- * Low threshold for developing user interface plugins to visualize quality metrics
- * Easy installation of plugins
+  * Low threshold for developing analyzer plugins to measure specific quality metrics
+  * Low threshold for developing user interface plugins to visualize quality metrics
+  * Easy installation of plugins
 
 * **Fun**
- * Include metrics from the VCS to support gamification
- * Support gamification to make code quality fun
+  * Include metrics from the VCS to support gamification
+  * Support gamification to make code quality fun
  
 ## Roadmap
 The development of coderadar loosely follows a roadmap that serves as a guide when prioritizing issues and feature requests:
@@ -36,8 +36,8 @@ Basic User Interface | Build a user interface that supports basic use cases like
 Minimum Viable Product | Add all features that are needed for coderadar to work in a real environment, like user management, security and administration | 
 
 ## Documentation
-* [REST API documentation](http://reflectoring.github.io/coderadar/current/docs/restapi.html).
-* [Administration Guide](http://reflectoring.github.io/coderadar/current/docs/admin.html)
+* [REST API documentation](https://cdn.rawgit.com/reflectoring/coderadar/gh-pages/current/docs/restapi.html).
+* [Administration Guide](https://cdn.rawgit.com/reflectoring/coderadar/gh-pages/current/docs/admin.html)
 
 ## Want to contribute?
 See the [contribution guide](https://github.com/reflectoring/coderadar/blob/master/CONTRIBUTING.md).
