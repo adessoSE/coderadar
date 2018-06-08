@@ -192,9 +192,9 @@ public class FileMetadataScanner {
         fileCounter++;
         filesMeter.mark();
       }
-      commit.setScanned(true);
-      commitRepository.save(commit);
-      logger.info("scanned {} files in commit {}", fileCounter, commit);
     }
+    commit.setScanned(true);
+    commitRepository.save(commit);
+    logger.info("scanned {} files in commit {}", fileCounter, commit);
   }
 }
