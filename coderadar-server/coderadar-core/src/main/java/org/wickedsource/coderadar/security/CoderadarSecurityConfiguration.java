@@ -48,11 +48,6 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
     return new BCryptPasswordEncoder();
   }
 
-  @Bean
-  public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
-    return new AuthenticationTokenFilter(tokenService);
-  }
-
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable();
@@ -71,7 +66,7 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
 
       // put JSON Web Token authentication before other ones
       http.addFilterBefore(
-          authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+              new AuthenticationTokenFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
     }
   }
 }
