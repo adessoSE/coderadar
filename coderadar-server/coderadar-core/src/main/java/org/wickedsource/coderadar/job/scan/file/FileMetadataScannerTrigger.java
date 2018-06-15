@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
+import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.job.JobLogger;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
 
@@ -23,14 +24,18 @@ public class FileMetadataScannerTrigger {
 
   private ScanFilesJobRepository jobRepository;
 
+  private FilePatternRepository filePatternRepository;
+
   @Autowired
   public FileMetadataScannerTrigger(
       JobLogger jobLogger,
       CommitRepository commitRepository,
-      ScanFilesJobRepository jobRepository) {
+      ScanFilesJobRepository jobRepository,
+      FilePatternRepository filePatternRepository) {
     this.jobLogger = jobLogger;
     this.commitRepository = commitRepository;
     this.jobRepository = jobRepository;
+    this.filePatternRepository = filePatternRepository;
   }
 
   @Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
@@ -39,7 +44,7 @@ public class FileMetadataScannerTrigger {
     for (Commit commit : unscannedCommits) {
       if (isJobCurrentlyQueuedForCommit(commit)) {
         jobLogger.alreadyQueuedForCommit(ScanFilesJob.class, commit);
-      } else {
+      } else if (hasFilePatternsConfigured(commit)) {
         ScanFilesJob job = new ScanFilesJob();
         job.setCommit(commit);
         job.setProject(commit.getProject());
@@ -56,5 +61,9 @@ public class FileMetadataScannerTrigger {
         jobRepository.countByProcessingStatusInAndCommitId(
             Arrays.asList(ProcessingStatus.WAITING, ProcessingStatus.PROCESSING), commit.getId());
     return count > 0;
+  }
+
+  private boolean hasFilePatternsConfigured(Commit commit) {
+    return filePatternRepository.countByProjectId(commit.getProject().getId()) > 0;
   }
 }

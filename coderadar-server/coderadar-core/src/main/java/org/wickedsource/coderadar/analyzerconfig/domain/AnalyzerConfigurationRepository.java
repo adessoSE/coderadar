@@ -17,4 +17,6 @@ public interface AnalyzerConfigurationRepository
   AnalyzerConfiguration findByProjectIdAndId(Long projectId, Long analyzerConfigurationId);
 
   int deleteByProjectId(Long id);
+
+  int countByProjectId(Long projectId);
 }
