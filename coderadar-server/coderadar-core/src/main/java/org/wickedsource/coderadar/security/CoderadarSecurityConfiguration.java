@@ -66,7 +66,7 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
 
       // put JSON Web Token authentication before other ones
       http.addFilterBefore(
-              new AuthenticationTokenFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
+          new AuthenticationTokenFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
     }
   }
 }
