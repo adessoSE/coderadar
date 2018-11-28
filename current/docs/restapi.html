@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v0.1.0.323, 2018-11-26">
+<meta name="author" content="v0.2.0.325, 2018-11-28">
 <title>coderadar REST API</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v0.1.0.323, 2018-11-26</span><br>
+<span id="author" class="author">v0.2.0.325, 2018-11-28</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2358,11 +2358,11 @@ Content-Length: 195
 {
   "errorMessage" : "Validation Error",
   "fieldErrors" : [ {
-    "field" : "vcsUrl",
-    "message" : "must be a valid URL"
-  }, {
     "field" : "name",
     "message" : "may not be null"
+  }, {
+    "field" : "vcsUrl",
+    "message" : "must be a valid URL"
   } ]
 }</code></pre>
 </div>
@@ -2625,8 +2625,8 @@ Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 535
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDMyMTc5NjUsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NDMyMTcwNjUsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.Z1RBaG9dbk1ZiFt0J-H8rKI3Er5cvejWBtgoTVutND8",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDg0MDEwNjUsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTQzMjE3MDY1LCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.hZw2_yr0mXq2WqBaTdoOVVmfeKfYMUXsWKngwBa8gYI",
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDMzOTQ0MzAsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NDMzOTM1MzAsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.Pdc3VtblfGbMcSlPShsKRtVuy834038QcEZUUUMChCE",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDg1Nzc1MzAsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTQzMzkzNTMwLCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.BQ2Ejqp0TYDvK1p2h1TxpV8apUUn3Pw6YUYM-5K6FpE",
   "_links" : {
     "self" : {
       "href" : "http://localhost:8080/user/2"
@@ -2685,8 +2685,8 @@ Host: localhost:8080
 Content-Length: 443
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDMyMTYyMjUsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NDMyMTUzMjUsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.cX-3iSZjPwWuuQ3OOq0kN7zYWoBq-szTVMn6Qpky7Fk",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDMzOTcwNjUsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTQzMDM3MDY1LCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.6dWDzTrawJn3lg5scB5Oy2Vmn4_DosIXlSo805VV5DQ"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDMzOTI2OTAsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NDMzOTE3OTAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.3obw5SQbVdebW7MSo04GLfeWL_OG5aPQX0jZmemWx34",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDM1NzM1MzAsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTQzMjEzNTMwLCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.e6xw94-JOZ0mHVwXVu7xUbM1DOsdizeDGHb8brR4a90"
 }</code></pre>
 </div>
 </div>
@@ -2700,7 +2700,7 @@ Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 218
 
 {
-  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDMyMTc5NjUsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NDMyMTcwNjUsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.Z1RBaG9dbk1ZiFt0J-H8rKI3Er5cvejWBtgoTVutND8"
+  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDMzOTQ0MzAsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NDMzOTM1MzAsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.Pdc3VtblfGbMcSlPShsKRtVuy834038QcEZUUUMChCE"
 }</code></pre>
 </div>
 </div>
@@ -2755,7 +2755,7 @@ Host: localhost:8080
 Content-Length: 256
 
 {
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDMzOTcwNjUsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTQzMDM3MDY1LCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.6dWDzTrawJn3lg5scB5Oy2Vmn4_DosIXlSo805VV5DQ",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDM1NzM1MzAsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTQzMjEzNTMwLCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.e6xw94-JOZ0mHVwXVu7xUbM1DOsdizeDGHb8brR4a90",
   "newPassword" : "Coderadar4"
 }</code></pre>
 </div>
@@ -5541,7 +5541,7 @@ Content-Length: 2928
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-11-26 07:20:30 UTC
+Last updated 2018-11-28 08:21:28 UTC
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
