@@ -3,7 +3,7 @@ apply plugin: 'idea'
 ext {
     majorVersion = '0'
     minorVersion = '2'
-    patchVersion = '2'
+    patchVersion = '3'
     baseVersion = "${majorVersion}.${minorVersion}.${patchVersion}"
 }
 
