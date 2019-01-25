@@ -52,7 +52,7 @@ public class MetricsTreeControllerTest extends ControllerTestTemplate {
                             .withPath("metrics")
                             .description(
                                 "List of the names of the metrics whose values you want to query.")),
-                        relaxedResponseFields(
+                    relaxedResponseFields(
                         fieldWithPath("name")
                             .type(JsonFieldType.STRING)
                             .description(
@@ -206,7 +206,7 @@ public class MetricsTreeControllerTest extends ControllerTestTemplate {
                             .withPath("metrics")
                             .description(
                                 "List of the names of the metrics whose values you want to query.")),
-                        relaxedResponseFields (
+                    relaxedResponseFields(
                         fieldWithPath("name")
                             .type(JsonFieldType.STRING)
                             .description(

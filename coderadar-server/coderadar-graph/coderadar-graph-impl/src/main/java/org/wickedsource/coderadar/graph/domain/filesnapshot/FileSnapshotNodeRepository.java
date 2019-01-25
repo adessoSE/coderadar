@@ -3,9 +3,9 @@ package org.wickedsource.coderadar.graph.domain.filesnapshot;
 import java.util.List;
 import java.util.Set;
 import org.springframework.data.neo4j.annotation.Query;
-import org.springframework.data.neo4j.repository.GraphRepository;
+import org.springframework.data.neo4j.repository.Neo4jRepository;
 
-public interface FileSnapshotNodeRepository extends GraphRepository<FileSnapshotNode> {
+public interface FileSnapshotNodeRepository extends Neo4jRepository<FileSnapshotNode, Long> {
 
   @Query(
       "MATCH "
