@@ -16,6 +16,8 @@ import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.user.domain.UserRepository;
 import org.wickedsource.coderadar.user.service.RegistrationService;
 
+import java.util.Optional;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 public class RegistrationServiceTest {
 
@@ -50,7 +52,7 @@ public class RegistrationServiceTest {
 
   @Test(expected = ResourceNotFoundException.class)
   public void getUserNotFound() throws Exception {
-    when(userRepository.findById(anyLong())).thenReturn(null);
+    when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
     registrationService.getUser(1L);
   }
 }

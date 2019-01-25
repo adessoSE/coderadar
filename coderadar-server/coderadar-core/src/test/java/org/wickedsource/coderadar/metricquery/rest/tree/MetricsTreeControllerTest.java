@@ -52,7 +52,7 @@ public class MetricsTreeControllerTest extends ControllerTestTemplate {
                             .withPath("metrics")
                             .description(
                                 "List of the names of the metrics whose values you want to query.")),
-                    responseFields(
+                        relaxedResponseFields(
                         fieldWithPath("name")
                             .type(JsonFieldType.STRING)
                             .description(
@@ -79,7 +79,7 @@ public class MetricsTreeControllerTest extends ControllerTestTemplate {
     assertThat(metricsTreeResource.getPayload().getMetrics().getMetricValue("metric1"))
         .isEqualTo(26L + 12L);
     assertThat(metricsTreeResource.getPayload().getMetrics().getMetricValue("metric2"))
-        .isEqualTo(28L + 0L);
+        .isEqualTo(28L);
     assertThat(metricsTreeResource.getPayload().getMetrics().getMetricValue("metric3"))
         .isEqualTo(14L + 5L);
     assertThat(metricsTreeResource.getChildren().get(0).getName()).isEqualTo("/path/to/module1");
@@ -206,7 +206,7 @@ public class MetricsTreeControllerTest extends ControllerTestTemplate {
                             .withPath("metrics")
                             .description(
                                 "List of the names of the metrics whose values you want to query.")),
-                    responseFields(
+                        relaxedResponseFields (
                         fieldWithPath("name")
                             .type(JsonFieldType.STRING)
                             .description(

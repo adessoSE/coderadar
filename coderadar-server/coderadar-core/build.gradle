@@ -109,10 +109,9 @@ dependencies {
     compile "org.passay:passay:1.2.0"
     compile "io.dropwizard:dropwizard-metrics:1.0.6"
     compile group: 'io.dropwizard.metrics', name: 'metrics-annotation', version: '3.2.1'
-/*    compile "io.prometheus:simpleclient_spring_boot:0.0.21"
+    compile "io.prometheus:simpleclient_spring_boot:0.0.21"
     compile "io.prometheus:simpleclient_hotspot:0.0.21"
-    compile "io.prometheus:simpleclient_dropwizard:0.0.21"*/
-    compile "io.micrometer:micrometer-registry-prometheus:1.0.2"
+    compile "io.prometheus:simpleclient_dropwizard:0.0.21"
 
     compile project(":coderadar-plugins:loc-analyzer-plugin")
     compile project(":coderadar-plugins:checkstyle-analyzer-plugin")

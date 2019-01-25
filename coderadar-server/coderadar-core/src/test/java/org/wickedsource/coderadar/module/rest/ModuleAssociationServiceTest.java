@@ -83,7 +83,7 @@ public class ModuleAssociationServiceTest extends IntegrationTestTemplate {
   @DatabaseSetup(MODULE_ASSOCIATION)
   public void associateFileToModulesWithSimilarNames() {
     Optional<Commit> commit = commitRepository.findById(1L);
-    Optional<File> file = fileRepository.findById(4L);
+    Optional<File> file = fileRepository.findById(6L);
     Assert.assertTrue(commit.isPresent());
     Assert.assertTrue(file.isPresent());
 
