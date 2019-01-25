@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.project.rest;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
@@ -23,11 +24,11 @@ public class ProjectVerifier {
     if (projectId == null) {
       throw new IllegalArgumentException("projectId must not be null!");
     }
-    Project project = projectRepository.findOne(projectId);
-    if (project == null) {
+    Optional<Project> project = projectRepository.findById(projectId);
+    if (!project.isPresent()) {
       throw new ResourceNotFoundException();
     } else {
-      return project;
+      return project.get();
     }
   }
 

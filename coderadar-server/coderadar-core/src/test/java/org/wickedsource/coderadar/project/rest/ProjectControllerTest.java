@@ -14,6 +14,7 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.*
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import java.util.Optional;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,10 @@ public class ProjectControllerTest extends ControllerTestTemplate {
         .andExpect(containsResource(ProjectResource.class))
         .andDo(documentCreateProject());
 
-    Project savedProject = projectRepository.findOne(1L);
+    Optional<Project> savedProjectOptional = projectRepository.findById(1L);
+    assertThat(savedProjectOptional.isPresent()).isTrue();
+    Project savedProject = savedProjectOptional.get();
+
     assertThat(savedProject).isNotNull();
     assertThat(savedProject.getWorkdirName()).isNotEmpty();
     assertThat(savedProject.getName()).isEqualTo(project.getName());

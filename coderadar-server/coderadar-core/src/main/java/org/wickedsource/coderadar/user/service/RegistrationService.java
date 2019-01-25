@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.user.service;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
@@ -54,10 +55,10 @@ public class RegistrationService {
    * @return User with id <code>userId</code>
    */
   public User getUser(Long userId) {
-    User user = userRepository.findOne(userId);
-    if (user == null) {
+    Optional<User> user = userRepository.findById(userId);
+    if (!user.isPresent()) {
       throw new ResourceNotFoundException();
     }
-    return user;
+    return user.get();
   }
 }

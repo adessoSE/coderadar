@@ -87,7 +87,8 @@ public class CommitMetadataScannerIntegrationTest extends GitTestTemplate {
     when(metricRegistry.meter(anyString())).thenReturn(new Meter());
     CommitMetadataScanner scanner =
         new CommitMetadataScanner(commitRepository, updater, metricRegistry);
-    when(projectRepository.findOne(project.getId())).thenReturn(createProject());
+    when(projectRepository.findById(project.getId()))
+        .thenReturn(java.util.Optional.ofNullable(createProject()));
     profiler.start("scanning without local repository present");
     File repoRoot = scanner.scan(project).getParentFile();
     Assert.assertTrue(gitChecker.isRepository(repoRoot.toPath()));

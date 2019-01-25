@@ -5,6 +5,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Jobs.SINGLE_PROJECT_WITH_WAITING_JOB;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -33,21 +34,24 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
   @Test
   @DatabaseSetup(SINGLE_PROJECT_WITH_WAITING_JOB)
   public void testSuccessfulExecution() {
-    Job jobBeforeExecution = jobRepository.findOne(1l);
+    Optional<Job> jobBeforeExecution = jobRepository.findById(1L);
+    Assert.assertTrue(jobBeforeExecution.isPresent());
 
     JobExecutionService executionService =
         new JobExecutionService(jobLogger, jobQueueService, jobUpdater, jobExecutor);
     executionService.executeNextJobInQueue();
 
-    Job jobAfterExecution = jobRepository.findOne(jobBeforeExecution.getId());
-    Assert.assertEquals(ResultStatus.SUCCESS, jobAfterExecution.getResultStatus());
-    Assert.assertEquals(ProcessingStatus.PROCESSED, jobAfterExecution.getProcessingStatus());
+    Optional<Job> jobAfterExecution = jobRepository.findById(jobBeforeExecution.get().getId());
+    Assert.assertTrue(jobAfterExecution.isPresent());
+    Assert.assertEquals(ResultStatus.SUCCESS, jobAfterExecution.get().getResultStatus());
+    Assert.assertEquals(ProcessingStatus.PROCESSED, jobAfterExecution.get().getProcessingStatus());
   }
 
   @Test
   @DatabaseSetup(SINGLE_PROJECT_WITH_WAITING_JOB)
   public void testFailedExecution() {
-    Job jobBeforeExecution = jobRepository.findOne(1l);
+    Optional<Job> jobBeforeExecution = jobRepository.findById(1L);
+    Assert.assertTrue(jobBeforeExecution.isPresent());
 
     doThrow(new RuntimeException("bwaaah")).when(jobExecutor).execute(any(Job.class));
 
@@ -55,8 +59,10 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
         new JobExecutionService(jobLogger, jobQueueService, jobUpdater, jobExecutor);
     executionService.executeNextJobInQueue();
 
-    Job jobAfterExecution = jobRepository.findOne(jobBeforeExecution.getId());
-    Assert.assertEquals(ResultStatus.FAILED, jobAfterExecution.getResultStatus());
-    Assert.assertEquals(ProcessingStatus.PROCESSED, jobAfterExecution.getProcessingStatus());
+    Optional<Job> jobAfterExecution = jobRepository.findById(jobBeforeExecution.get().getId());
+    Assert.assertTrue(jobAfterExecution.isPresent());
+
+    Assert.assertEquals(ResultStatus.FAILED, jobAfterExecution.get().getResultStatus());
+    Assert.assertEquals(ProcessingStatus.PROCESSED, jobAfterExecution.get().getProcessingStatus());
   }
 }

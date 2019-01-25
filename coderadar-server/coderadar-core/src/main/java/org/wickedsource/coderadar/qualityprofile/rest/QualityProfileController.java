@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.qualityprofile.rest;
 
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -59,13 +60,13 @@ public class QualityProfileController {
       @PathVariable Long projectId) {
     Project project = projectVerifier.loadProjectOrThrowException(projectId);
     QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
-    QualityProfile profile = qualityProfileRepository.findOne(profileId);
-    if (profile == null) {
+    Optional<QualityProfile> profile = qualityProfileRepository.findById(profileId);
+    if (!profile.isPresent()) {
       throw new ResourceNotFoundException();
     }
-    profile = assembler.updateEntity(qualityProfileResource, profile);
-    profile = qualityProfileRepository.save(profile);
-    return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.OK);
+    QualityProfile qualityProfile = assembler.updateEntity(qualityProfileResource, profile.get());
+    qualityProfile = qualityProfileRepository.save(qualityProfile);
+    return new ResponseEntity<>(assembler.toResource(qualityProfile), HttpStatus.OK);
   }
 
   @RequestMapping(
@@ -77,11 +78,11 @@ public class QualityProfileController {
       @PathVariable Long profileId, @PathVariable Long projectId) {
     Project project = projectVerifier.loadProjectOrThrowException(projectId);
     QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
-    QualityProfile profile = qualityProfileRepository.findOne(profileId);
-    if (profile == null) {
+    Optional<QualityProfile> profile = qualityProfileRepository.findById(profileId);
+    if (!profile.isPresent()) {
       throw new ResourceNotFoundException();
     }
-    return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.OK);
+    return new ResponseEntity<>(assembler.toResource(profile.get()), HttpStatus.OK);
   }
 
   @RequestMapping(
@@ -92,7 +93,7 @@ public class QualityProfileController {
   public ResponseEntity<String> deleteQualityProfile(
       @PathVariable Long profileId, @PathVariable Long projectId) {
     projectVerifier.checkProjectExistsOrThrowException(projectId);
-    qualityProfileRepository.delete(profileId);
+    qualityProfileRepository.deleteById(profileId);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 

@@ -18,7 +18,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import java.util.Date;
+import java.util.Optional;
 import org.joda.time.DateTime;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,9 +151,10 @@ public class UserControllerTest extends ControllerTestTemplate {
     String refreshToken = createRefreshToken();
 
     // save valid refresh token
-    RefreshToken refreshTokenEntity = refreshTokenRepository.findOne(100L);
-    refreshTokenEntity.setToken(refreshToken);
-    refreshTokenRepository.save(refreshTokenEntity);
+    Optional<RefreshToken> refreshTokenEntity = refreshTokenRepository.findById(100L);
+    Assert.assertTrue(refreshTokenEntity.isPresent());
+    refreshTokenEntity.get().setToken(refreshToken);
+    refreshTokenRepository.save(refreshTokenEntity.get());
 
     RefreshTokenResource refreshTokenResource =
         new RefreshTokenResource(expiredAccessToken, refreshToken);
@@ -172,9 +175,11 @@ public class UserControllerTest extends ControllerTestTemplate {
     // we need to create token here to pass the validation with the current key
     String refreshToken = createRefreshToken();
     // save valid refresh token
-    RefreshToken refreshTokenEntity = refreshTokenRepository.findOne(100L);
-    refreshTokenEntity.setToken(refreshToken);
-    refreshTokenRepository.save(refreshTokenEntity);
+    Optional<RefreshToken> refreshTokenEntity = refreshTokenRepository.findById(100L);
+    Assert.assertTrue(refreshTokenEntity.isPresent());
+
+    refreshTokenEntity.get().setToken(refreshToken);
+    refreshTokenRepository.save(refreshTokenEntity.get());
 
     PasswordChangeResource passwordChangeResource =
         passwordChangeResource().passwordChangeResource();

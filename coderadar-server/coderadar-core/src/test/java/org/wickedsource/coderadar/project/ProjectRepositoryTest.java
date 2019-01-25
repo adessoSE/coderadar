@@ -3,6 +3,7 @@ package org.wickedsource.coderadar.project;
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
 import java.net.MalformedURLException;
+import java.util.Optional;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class ProjectRepositoryTest extends IntegrationTestTemplate {
   @Test
   public void saveEntity() throws MalformedURLException {
     Project project = projectRepository.save(project().validProject());
-    project = projectRepository.findOne(project.getId());
-    Assert.assertNotNull(project);
+    Optional<Project> projectResult = projectRepository.findById(project.getId());
+    Assert.assertTrue(projectResult.isPresent());
   }
 }

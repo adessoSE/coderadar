@@ -43,14 +43,14 @@ public class RegistrationServiceTest {
   public void getUser() throws Exception {
     User user = new User();
     user.setUsername("user");
-    when(userRepository.findOne(anyLong())).thenReturn(user);
+    when(userRepository.findById(anyLong())).thenReturn(java.util.Optional.of(user));
     User foundUser = registrationService.getUser(1L);
     assertThat(foundUser).isSameAs(user);
   }
 
   @Test(expected = ResourceNotFoundException.class)
   public void getUserNotFound() throws Exception {
-    when(userRepository.findOne(anyLong())).thenReturn(null);
+    when(userRepository.findById(anyLong())).thenReturn(null);
     registrationService.getUser(1L);
   }
 }

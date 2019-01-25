@@ -9,8 +9,15 @@ apply plugin: "com.diffplug.gradle.spotless"
 apply plugin: "com.jfrog.bintray"
 apply plugin: "war"
 
-springBoot {
+/*bootRepackage {
     mainClass = 'org.wickedsource.coderadar.CoderadarApplication'
+}*/
+
+bootJar {
+    mainClassName = 'org.wickedsource.coderadar.CoderadarApplication'
+    launchScript {
+        properties 'executable': 'true'
+    }
 }
 
 ext {
@@ -102,9 +109,10 @@ dependencies {
     compile "org.passay:passay:1.2.0"
     compile "io.dropwizard:dropwizard-metrics:1.0.6"
     compile group: 'io.dropwizard.metrics', name: 'metrics-annotation', version: '3.2.1'
-    compile "io.prometheus:simpleclient_spring_boot:0.0.21"
+/*    compile "io.prometheus:simpleclient_spring_boot:0.0.21"
     compile "io.prometheus:simpleclient_hotspot:0.0.21"
-    compile "io.prometheus:simpleclient_dropwizard:0.0.21"
+    compile "io.prometheus:simpleclient_dropwizard:0.0.21"*/
+    compile "io.micrometer:micrometer-registry-prometheus:1.0.2"
 
     compile project(":coderadar-plugins:loc-analyzer-plugin")
     compile project(":coderadar-plugins:checkstyle-analyzer-plugin")
@@ -114,7 +122,7 @@ dependencies {
     runtime "org.postgresql:postgresql:9.4.1212"
     runtime "com.googlecode.log4jdbc:log4jdbc:1.2"
 
-    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat"
+    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${version_spring_boot}"
     providedRuntime group: 'org.apache.tomcat', name: 'tomcat-juli', version: property('tomcat.version')
 
     testCompile "org.springframework.boot:spring-boot-starter-test:${version_spring_boot}"
@@ -130,10 +138,6 @@ dependencies {
     configurations.all {
         exclude(group: 'org.hibernate', module: 'hibernate-entitymanager')
     }
-}
-
-springBoot {
-    executable = true
 }
 
 def Properties localBootRunProperties() {
@@ -188,7 +192,7 @@ task zip(type: Zip) {
         include "application.properties"
     }
 }
-zip.dependsOn bootRepackage
+zip.dependsOn bootJar
 zip.dependsOn build
 
 bintray {
