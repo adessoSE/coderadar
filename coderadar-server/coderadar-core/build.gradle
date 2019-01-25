@@ -9,6 +9,10 @@ apply plugin: "com.diffplug.gradle.spotless"
 apply plugin: "com.jfrog.bintray"
 apply plugin: "war"
 
+springBoot {
+    mainClass = 'org.wickedsource.coderadar.CoderadarApplication'
+}
+
 ext {
     snippetsDir = file("build/generated-snippets")
 }
@@ -123,6 +127,9 @@ dependencies {
     testCompile "com.jayway.jsonpath:json-path:2.2.0"
     testCompile "org.assertj:assertj-core:3.5.1"
 
+    configurations.all {
+        exclude(group: 'org.hibernate', module: 'hibernate-entitymanager')
+    }
 }
 
 springBoot {

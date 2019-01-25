@@ -3,7 +3,6 @@ package org.wickedsource.coderadar.job.execute;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Jobs.SINGLE_PROJECT_WITH_WAITING_JOB;
-import static org.wickedsource.coderadar.factories.entities.EntityFactory.job;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.Assert;
