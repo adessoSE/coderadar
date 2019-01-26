@@ -1,9 +1,9 @@
 apply plugin: 'idea'
 
-ext{
+ext {
     majorVersion = '0'
-    minorVersion = '1'
-    patchVersion = '0'
+    minorVersion = '2'
+    patchVersion = '3'
     baseVersion = "${majorVersion}.${minorVersion}.${patchVersion}"
 }
 

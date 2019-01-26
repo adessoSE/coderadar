@@ -24,7 +24,8 @@ public class FirstCommitFinder {
     } else {
       Commit firstCommitInDateRange =
           commitRepository.findFirstCommitAfterDate(commit.getProject().getId(), startDate);
-      return firstCommitInDateRange.getId().equals(commit.getId());
+      return firstCommitInDateRange != null
+          && firstCommitInDateRange.getId().equals(commit.getId());
     }
   }
 }
