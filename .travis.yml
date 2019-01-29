@@ -19,7 +19,7 @@ stages:
 jobs:
   include:
   - stage: build
-    script: "./gradlew --console=plain clean build +x test"
+    script: "./gradlew --console=plain clean build -x test"
   
   - stage: test
     script: "./gradlew clean test"
