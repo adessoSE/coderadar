@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.filepattern.domain;
 
 import javax.persistence.*;
+import lombok.Data;
 import org.wickedsource.coderadar.project.domain.InclusionType;
 import org.wickedsource.coderadar.project.domain.Project;
 
@@ -11,6 +12,7 @@ import org.wickedsource.coderadar.project.domain.Project;
 @Entity
 @Table(name = "file_pattern")
 @SequenceGenerator(name = "file_pattern_sequence", sequenceName = "seq_fpat_id", allocationSize = 1)
+@Data
 public class FilePattern {
 
   @Id
@@ -18,6 +20,7 @@ public class FilePattern {
   @Column(name = "id")
   private Long id;
 
+  /** Ant-style file path pattern. */
   @Column(name = "pattern")
   private String pattern;
 
@@ -32,45 +35,4 @@ public class FilePattern {
   @ManyToOne
   @JoinColumn(name = "project_id")
   private Project project;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  /** Ant-style file path pattern. */
-  public String getPattern() {
-    return pattern;
-  }
-
-  public void setPattern(String pattern) {
-    this.pattern = pattern;
-  }
-
-  public InclusionType getInclusionType() {
-    return inclusionType;
-  }
-
-  public void setInclusionType(InclusionType inclusionType) {
-    this.inclusionType = inclusionType;
-  }
-
-  public FileSetType getFileSetType() {
-    return fileSetType;
-  }
-
-  public void setFileSetType(FileSetType fileSetType) {
-    this.fileSetType = fileSetType;
-  }
-
-  public Project getProject() {
-    return project;
-  }
-
-  public void setProject(Project project) {
-    this.project = project;
-  }
 }

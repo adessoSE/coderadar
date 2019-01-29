@@ -4,15 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.hateoas.ResourceSupport;
 import org.wickedsource.coderadar.metric.domain.metricvalue.ProfileValuePerCommitDTO;
 
 @SuppressWarnings("unchecked")
+@NoArgsConstructor
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class CommitProfileRatingsOutputResource extends ResourceSupport {
 
   private Map<String, ProfileRatingDTO> profiles;
-
-  public CommitProfileRatingsOutputResource() {}
 
   @JsonIgnore
   public void addProfileValues(List<ProfileValuePerCommitDTO> profileValuesPerCommit) {
@@ -70,13 +74,5 @@ public class CommitProfileRatingsOutputResource extends ResourceSupport {
   public void addProfileRating(ProfileRatingDTO rating, String profile) {
     initProfiles();
     profiles.put(profile, rating);
-  }
-
-  public Map<String, ProfileRatingDTO> getProfiles() {
-    return profiles;
-  }
-
-  public void setProfiles(Map<String, ProfileRatingDTO> profiles) {
-    this.profiles = profiles;
   }
 }

@@ -32,7 +32,7 @@ public class AnalyzingJobResourceAssembler
   public AnalyzingJob updateEntity(
       AnalyzingJob entity, AnalyzingJobResource resource, Project project) {
     entity.setProject(project);
-    entity.setActive(resource.isActive());
+    entity.setActive(resource.getActive());
     entity.setFromDate(resource.getFromDate());
     return entity;
   }

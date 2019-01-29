@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.analyzerconfig.domain;
 
 import javax.persistence.*;
+import lombok.Data;
 import org.wickedsource.coderadar.project.domain.Project;
 
 /** An AnalyzerConfiguration stores the configuration for a single analyzer plugin in a project. */
@@ -11,6 +12,7 @@ import org.wickedsource.coderadar.project.domain.Project;
   sequenceName = "seq_acon_id",
   allocationSize = 1
 )
+@Data
 public class AnalyzerConfiguration {
 
   @Id
@@ -27,36 +29,4 @@ public class AnalyzerConfiguration {
 
   @Column(name = "enabled")
   private Boolean enabled;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public Project getProject() {
-    return project;
-  }
-
-  public void setProject(Project project) {
-    this.project = project;
-  }
-
-  public String getAnalyzerName() {
-    return analyzerName;
-  }
-
-  public void setAnalyzerName(String analyzerName) {
-    this.analyzerName = analyzerName;
-  }
-
-  public Boolean getEnabled() {
-    return enabled;
-  }
-
-  public void setEnabled(Boolean enabled) {
-    this.enabled = enabled;
-  }
 }

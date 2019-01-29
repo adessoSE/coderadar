@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
+import lombok.Data;
 import org.wickedsource.coderadar.project.domain.Project;
 
 /** The Job entity defines a task in the coderadar application that is run asynchronously. */
@@ -27,6 +28,7 @@ import org.wickedsource.coderadar.project.domain.Project;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "jobType", discriminatorType = DiscriminatorType.STRING)
 @SequenceGenerator(name = "job_sequence", sequenceName = "seq_job_id", allocationSize = 1)
+@Data
 public class Job {
 
   @Id
@@ -65,80 +67,8 @@ public class Job {
   @JoinColumn(name = "project_id")
   private Project project;
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public Date getQueuedDate() {
-    return queuedDate;
-  }
-
-  public void setQueuedDate(Date queuedDate) {
-    this.queuedDate = queuedDate;
-  }
-
-  public Date getStartDate() {
-    return startDate;
-  }
-
-  public void setStartDate(Date startDate) {
-    this.startDate = startDate;
-  }
-
-  public Date getEndDate() {
-    return endDate;
-  }
-
-  public void setEndDate(Date endDate) {
-    this.endDate = endDate;
-  }
-
-  public ProcessingStatus getProcessingStatus() {
-    return processingStatus;
-  }
-
-  public void setProcessingStatus(ProcessingStatus processingStatus) {
-    this.processingStatus = processingStatus;
-  }
-
-  public String getMessage() {
-    return message;
-  }
-
-  public void setMessage(String message) {
-    this.message = message;
-  }
-
-  public ResultStatus getResultStatus() {
-    return resultStatus;
-  }
-
-  public void setResultStatus(ResultStatus resultStatus) {
-    this.resultStatus = resultStatus;
-  }
-
-  public Integer getVersion() {
-    return version;
-  }
-
-  public void setVersion(Integer version) {
-    this.version = version;
-  }
-
   @Override
   public String toString() {
     return String.format("[Job: id=%d; type=%s]", this.id, getClass().getSimpleName());
-  }
-
-  public Project getProject() {
-    return project;
-  }
-
-  public void setProject(Project project) {
-    this.project = project;
   }
 }

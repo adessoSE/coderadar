@@ -6,23 +6,20 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Calendar;
 import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.wickedsource.coderadar.core.rest.dates.Day;
 import org.wickedsource.coderadar.core.rest.dates.serialize.DayDeserializer;
 import org.wickedsource.coderadar.core.rest.dates.serialize.DaySerializer;
 
 @JsonTypeName("day")
+@AllArgsConstructor
+@NoArgsConstructor
 public class DayPoint extends Point<Day, Long> {
 
   @JsonIgnore private Day day;
 
   @JsonIgnore private Long value;
-
-  public DayPoint() {}
-
-  public DayPoint(Day day, Long value) {
-    this.day = day;
-    this.value = value;
-  }
 
   public static DayPoint from(Date date, Long value) {
     Calendar c = Calendar.getInstance();

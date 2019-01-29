@@ -1,17 +1,15 @@
 package org.wickedsource.coderadar.metric.domain.metricvalue;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
 public class MetricValueDTO {
 
   private String metric;
 
   private Long value;
-
-  public MetricValueDTO() {}
-
-  public MetricValueDTO(String metricName, Long value) {
-    this.metric = metricName;
-    this.value = value;
-  }
 
   public String getMetric() {
     return metric;

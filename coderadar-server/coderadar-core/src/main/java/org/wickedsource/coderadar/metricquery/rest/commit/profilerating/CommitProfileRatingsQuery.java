@@ -5,11 +5,15 @@ import java.util.Arrays;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Objects of this class provide parameters to query for quality profile ratings aggregated per
  * commit.
  */
+@NoArgsConstructor
+@Data
 public class CommitProfileRatingsQuery {
 
   @NotNull private String commit;
@@ -17,20 +21,10 @@ public class CommitProfileRatingsQuery {
   @Size(min = 1)
   private List<String> profiles;
 
-  public CommitProfileRatingsQuery() {}
-
   private void initProfiles() {
     if (profiles == null) {
       profiles = new ArrayList<>();
     }
-  }
-
-  public List<String> getProfiles() {
-    return profiles;
-  }
-
-  public void setProfiles(List<String> profiles) {
-    this.profiles = profiles;
   }
 
   public void addProfile(String profileName) {
@@ -41,13 +35,5 @@ public class CommitProfileRatingsQuery {
   public void addProfiles(String... profileNames) {
     initProfiles();
     this.profiles.addAll(Arrays.asList(profileNames));
-  }
-
-  public String getCommit() {
-    return commit;
-  }
-
-  public void setCommit(String commit) {
-    this.commit = commit;
   }
 }
