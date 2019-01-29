@@ -109,9 +109,7 @@ dependencies {
     runtime "mysql:mysql-connector-java:5.1.6"
     runtime "org.postgresql:postgresql:9.4.1212"
     runtime "com.googlecode.log4jdbc:log4jdbc:1.2"
-
-    providedCompile group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
-
+    
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat"
     providedRuntime group: 'org.apache.tomcat', name: 'tomcat-juli', version: property('tomcat.version')
 
