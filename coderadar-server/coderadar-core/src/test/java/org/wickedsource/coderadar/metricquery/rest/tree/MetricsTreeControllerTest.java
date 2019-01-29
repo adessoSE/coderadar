@@ -52,7 +52,7 @@ public class MetricsTreeControllerTest extends ControllerTestTemplate {
                             .withPath("metrics")
                             .description(
                                 "List of the names of the metrics whose values you want to query.")),
-                    relaxedResponseFields(
+                    responseFields(
                         fieldWithPath("name")
                             .type(JsonFieldType.STRING)
                             .description(
@@ -61,11 +61,11 @@ public class MetricsTreeControllerTest extends ControllerTestTemplate {
                             .type(JsonFieldType.STRING)
                             .description(
                                 "Either 'MODULE' if this node describes a module which can have child nodes or 'FILE' if this node describes a file (which has no child nodes)."),
-                        fieldWithPath("metrics")
+                        subsectionWithPath("metrics")
                             .type(JsonFieldType.OBJECT)
                             .description(
                                 "Contains a map of metric values for each of the metrics specified in the query at the time of the commit specified in the request. If this node is a MODULE, the metrics are aggregated over all files within this module."),
-                        fieldWithPath("children")
+                        subsectionWithPath("children")
                             .type(JsonFieldType.ARRAY)
                             .description(
                                 "If this node describes a MODULE, this field contains the list of child nodes of the same structure, which can be of type MODULE or FILE."))))
@@ -206,7 +206,7 @@ public class MetricsTreeControllerTest extends ControllerTestTemplate {
                             .withPath("metrics")
                             .description(
                                 "List of the names of the metrics whose values you want to query.")),
-                    relaxedResponseFields(
+                    responseFields(
                         fieldWithPath("name")
                             .type(JsonFieldType.STRING)
                             .description(
@@ -215,11 +215,11 @@ public class MetricsTreeControllerTest extends ControllerTestTemplate {
                             .type(JsonFieldType.STRING)
                             .description(
                                 "Either 'MODULE' if this node describes a module which can have child nodes or 'FILE' if this node describes a file (which has no child nodes)."),
-                        fieldWithPath("commit1Metrics")
+                        subsectionWithPath("commit1Metrics")
                             .type(JsonFieldType.OBJECT)
                             .description(
                                 "Contains a map of metric values for each of the metrics specified in the query at the time of the commit specified as 'commit1' in the request. This field is NULL if the file or module has not existed yet in commit1. If this node is a MODULE, the metrics are aggregated over all files within this module."),
-                        fieldWithPath("commit2Metrics")
+                        subsectionWithPath("commit2Metrics")
                             .type(JsonFieldType.OBJECT)
                             .description(
                                 "Contains a map of metric values for each of the metrics specified in the query at the time of the commit specified as 'commit2' in the request. This field is NULL if the file or module does not exist anymore in commit2. If this node is a MODULE, the metrics are aggregated over all files within this module."),
@@ -235,7 +235,7 @@ public class MetricsTreeControllerTest extends ControllerTestTemplate {
                             .type(JsonFieldType.VARIES)
                             .description(
                                 "Contains information about what kind of changes were made to this file between commit1 and commit2. This field is only filled for FILEs and not for MODULEs."),
-                        fieldWithPath("children")
+                        subsectionWithPath("children")
                             .type(JsonFieldType.ARRAY)
                             .description(
                                 "If this node describes a MODULE, this field contains the list of child nodes of the same structure, which can be of type MODULE or FILE."))))
