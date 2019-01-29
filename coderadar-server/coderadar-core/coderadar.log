@@ -1,0 +1,724 @@
+2019-01-29 08:09:35.574  INFO 14008 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Starting CoderadarApplication on de-adn-821gzw1 with PID 14008 (C:\Users\atanasov\workspace\CODE_RADAR\coderadar\coderadar-server\coderadar-core\build\classes\java\main started by atanasov in C:\Users\atanasov\workspace\CODE_RADAR\coderadar\coderadar-server\coderadar-core)
+2019-01-29 08:09:35.579 DEBUG 14008 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Running with Spring Boot v2.1.2.RELEASE, Spring v5.1.4.RELEASE
+2019-01-29 08:09:35.580  INFO 14008 --- [restartedMain] o.w.coderadar.CoderadarApplication       : No active profile set, falling back to default profiles: default
+2019-01-29 08:09:35.724  INFO 14008 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2019-01-29 08:09:35.725  INFO 14008 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2019-01-29 08:09:38.702  INFO 14008 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-01-29 08:09:39.205  INFO 14008 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 489ms. Found 23 repository interfaces.
+2019-01-29 08:09:39.877  INFO 14008 --- [restartedMain] o.s.c.a.ConfigurationClassEnhancer       : @Bean method CoderadarApplicationContextConfiguration.propertySourcesPlaceholderConfigurer is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+2019-01-29 08:09:40.226  INFO 14008 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$2f2d26ce] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:09:40.305  INFO 14008 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$c7daef08] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:09:40.317  INFO 14008 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'objectPostProcessor' of type [org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:09:40.321  INFO 14008 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@28ef7a80' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:09:40.323  INFO 14008 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$ecaf91ba] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:09:40.331  INFO 14008 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:09:40.351  INFO 14008 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'commitMappingResourceProvider' of type [org.wickedsource.coderadar.commit.configuration.CommitMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:09:40.357  INFO 14008 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'metricValueMappingResourceProvider' of type [org.wickedsource.coderadar.metric.configuration.MetricValueMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:09:40.367  INFO 14008 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$aead7400] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:09:41.742  INFO 14008 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2019-01-29 08:09:41.783  INFO 14008 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-01-29 08:09:41.783  INFO 14008 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.14]
+2019-01-29 08:09:41.798  INFO 14008 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [C:\Program Files\Java\jdk1.8.0_181\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\Docker\Docker\Resources\bin;C:\oraclexe\app\oracle\product\11.2.0\server\bin;;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Ruby24-x64\bin;C:\Users\atanasov\AppData\Local\Microsoft\WindowsApps;C:\Users\atanasov\Desktop\terminalMath-master\windows\bin\Release;C:\Program Files\apache-maven-3.5.2\bin;C:\Users\atanasov\eclipse-workspace\slavicTales\VS_libs;C:\Program Files\Java\jdk1.8.0_161\bin;C:\Users\atanasov\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Microsoft VS Code\bin;C:\Users\atanasov\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin;C:\Program Files\JetBrains\IntelliJ IDEA 2018.3\bin;;C:\Program Files\CMake\bin;.]
+2019-01-29 08:09:41.998  INFO 14008 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-01-29 08:09:41.998  INFO 14008 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 6273 ms
+2019-01-29 08:09:42.986  INFO 14008 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2019-01-29 08:09:44.090 ERROR 14008 --- [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Exception during pool initialization.
+
+org.postgresql.util.PSQLException: FATAL: password authentication failed for user "coderadar"
+	at org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:443) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:217) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:136) ~[HikariCP-3.2.0.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:369) ~[HikariCP-3.2.0.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:198) ~[HikariCP-3.2.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:467) [HikariCP-3.2.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:541) [HikariCP-3.2.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:115) [HikariCP-3.2.0.jar:na]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:112) [HikariCP-3.2.0.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:302) [liquibase-core-3.6.2.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1804) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1741) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:576) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:498) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222) ~[spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:307) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1083) ~[spring-context-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:853) ~[spring-context-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:546) ~[spring-context-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:142) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:775) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:397) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1260) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1248) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:24) ~[main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_181]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_181]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_181]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_181]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) ~[spring-boot-devtools-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+
+2019-01-29 08:09:44.092  WARN 14008 --- [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: password authentication failed for user "coderadar"
+2019-01-29 08:09:44.096  INFO 14008 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2019-01-29 08:09:44.116  INFO 14008 --- [restartedMain] ConditionEvaluationReportLoggingListener : 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2019-01-29 08:09:44.120 ERROR 14008 --- [restartedMain] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: password authentication failed for user "coderadar"
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1745) ~[spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:576) ~[spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:498) ~[spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320) ~[spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222) ~[spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318) ~[spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199) ~[spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:307) ~[spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199) ~[spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1083) ~[spring-context-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:853) ~[spring-context-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:546) ~[spring-context-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:142) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:775) [spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:397) [spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316) [spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1260) [spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1248) [spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:24) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_181]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_181]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_181]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_181]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+Caused by: liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: password authentication failed for user "coderadar"
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:307) ~[liquibase-core-3.6.2.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1804) ~[spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1741) ~[spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	... 23 common frames omitted
+Caused by: org.postgresql.util.PSQLException: FATAL: password authentication failed for user "coderadar"
+	at org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:443) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:217) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:136) ~[HikariCP-3.2.0.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:369) ~[HikariCP-3.2.0.jar:na]
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:198) ~[HikariCP-3.2.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:467) ~[HikariCP-3.2.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:541) ~[HikariCP-3.2.0.jar:na]
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:115) ~[HikariCP-3.2.0.jar:na]
+	at com.zaxxer.hikari.HikariDataSource.getConnection(HikariDataSource.java:112) ~[HikariCP-3.2.0.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:302) ~[liquibase-core-3.6.2.jar:na]
+	... 25 common frames omitted
+
+2019-01-29 08:12:10.743  INFO 10436 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Starting CoderadarApplication on de-adn-821gzw1 with PID 10436 (C:\Users\atanasov\workspace\CODE_RADAR\coderadar\coderadar-server\coderadar-core\build\classes\java\main started by atanasov in C:\Users\atanasov\workspace\CODE_RADAR\coderadar\coderadar-server\coderadar-core)
+2019-01-29 08:12:10.747 DEBUG 10436 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Running with Spring Boot v2.1.2.RELEASE, Spring v5.1.4.RELEASE
+2019-01-29 08:12:10.748  INFO 10436 --- [restartedMain] o.w.coderadar.CoderadarApplication       : No active profile set, falling back to default profiles: default
+2019-01-29 08:12:10.901  INFO 10436 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2019-01-29 08:12:10.901  INFO 10436 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2019-01-29 08:12:13.829  INFO 10436 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-01-29 08:12:14.275  INFO 10436 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 434ms. Found 23 repository interfaces.
+2019-01-29 08:12:14.860  INFO 10436 --- [restartedMain] o.s.c.a.ConfigurationClassEnhancer       : @Bean method CoderadarApplicationContextConfiguration.propertySourcesPlaceholderConfigurer is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+2019-01-29 08:12:15.138  INFO 10436 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$b35fab60] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:12:15.212  INFO 10436 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$4c0d739a] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:12:15.220  INFO 10436 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'objectPostProcessor' of type [org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:12:15.223  INFO 10436 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@519bbd69' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:12:15.230  INFO 10436 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$70e2164c] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:12:15.237  INFO 10436 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:12:15.250  INFO 10436 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'commitMappingResourceProvider' of type [org.wickedsource.coderadar.commit.configuration.CommitMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:12:15.254  INFO 10436 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'metricValueMappingResourceProvider' of type [org.wickedsource.coderadar.metric.configuration.MetricValueMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:12:15.262  INFO 10436 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$32dff892] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:12:16.585  INFO 10436 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2019-01-29 08:12:16.630  INFO 10436 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-01-29 08:12:16.631  INFO 10436 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.14]
+2019-01-29 08:12:16.647  INFO 10436 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [C:\Program Files\Java\jdk1.8.0_181\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\Docker\Docker\Resources\bin;C:\oraclexe\app\oracle\product\11.2.0\server\bin;;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Ruby24-x64\bin;C:\Users\atanasov\AppData\Local\Microsoft\WindowsApps;C:\Users\atanasov\Desktop\terminalMath-master\windows\bin\Release;C:\Program Files\apache-maven-3.5.2\bin;C:\Users\atanasov\eclipse-workspace\slavicTales\VS_libs;C:\Program Files\Java\jdk1.8.0_161\bin;C:\Users\atanasov\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Microsoft VS Code\bin;C:\Users\atanasov\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin;C:\Program Files\JetBrains\IntelliJ IDEA 2018.3\bin;;C:\Program Files\CMake\bin;.]
+2019-01-29 08:12:16.842  INFO 10436 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-01-29 08:12:16.842  INFO 10436 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 5940 ms
+2019-01-29 08:12:17.840  INFO 10436 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2019-01-29 08:12:18.002  INFO 10436 --- [restartedMain] com.zaxxer.hikari.pool.PoolBase          : HikariPool-1 - Driver does not support get/set network timeout for connections. (Die Methode org.postgresql.jdbc.PgConnection.getNetworkTimeout() ist noch nicht implementiert.)
+2019-01-29 08:12:18.035  INFO 10436 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2019-01-29 08:12:19.226  INFO 10436 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT COUNT(*) FROM public.databasechangeloglock
+2019-01-29 08:12:19.241  INFO 10436 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT COUNT(*) FROM public.databasechangeloglock
+2019-01-29 08:12:19.244  INFO 10436 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT LOCKED FROM public.databasechangeloglock WHERE ID=1
+2019-01-29 08:12:19.271  INFO 10436 --- [restartedMain] l.lockservice.StandardLockService        : Changelog-Protokoll erfolgreich gesperrt.
+2019-01-29 08:12:20.633  INFO 10436 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT MD5SUM FROM public.databasechangelog WHERE MD5SUM IS NOT NULL LIMIT 1
+2019-01-29 08:12:20.640  INFO 10436 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT COUNT(*) FROM public.databasechangelog
+2019-01-29 08:12:20.644  INFO 10436 --- [restartedMain] l.c.StandardChangeLogHistoryService      : Reading from public.databasechangelog
+2019-01-29 08:12:20.645  INFO 10436 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT * FROM public.databasechangelog ORDER BY DATEEXECUTED ASC, ORDEREXECUTED ASC
+2019-01-29 08:12:20.759  INFO 10436 --- [restartedMain] l.lockservice.StandardLockService        : Successfully released change log lock
+2019-01-29 08:12:21.042  INFO 10436 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-01-29 08:12:21.157  INFO 10436 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.7.Final}
+2019-01-29 08:12:21.160  INFO 10436 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2019-01-29 08:12:21.369  INFO 10436 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2019-01-29 08:12:22.220  INFO 10436 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+2019-01-29 08:12:22.377  INFO 10436 --- [restartedMain] o.h.e.j.e.i.LobCreatorBuilderImpl        : HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+
+java.lang.reflect.InvocationTargetException: null
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_181]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_181]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_181]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_181]
+	at org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl.useContextualLobCreation(LobCreatorBuilderImpl.java:113) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl.makeLobCreatorBuilder(LobCreatorBuilderImpl.java:54) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentImpl.<init>(JdbcEnvironmentImpl.java:271) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.initiateService(JdbcEnvironmentInitiator.java:114) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.initiateService(JdbcEnvironmentInitiator.java:35) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.boot.registry.internal.StandardServiceRegistryImpl.initiateService(StandardServiceRegistryImpl.java:94) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.createService(AbstractServiceRegistryImpl.java:263) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.initializeService(AbstractServiceRegistryImpl.java:237) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.getService(AbstractServiceRegistryImpl.java:214) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.id.factory.internal.DefaultIdentifierGeneratorFactory.injectServices(DefaultIdentifierGeneratorFactory.java:152) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.injectDependencies(AbstractServiceRegistryImpl.java:286) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.initializeService(AbstractServiceRegistryImpl.java:243) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.getService(AbstractServiceRegistryImpl.java:214) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.<init>(InFlightMetadataCollectorImpl.java:179) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:119) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.metadata(EntityManagerFactoryBuilderImpl.java:904) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:935) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:57) [spring-orm-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365) [spring-orm-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:390) [spring-orm-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:377) [spring-orm-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:341) [spring-orm-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1804) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1741) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:576) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:498) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222) ~[spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1083) ~[spring-context-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:853) ~[spring-context-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:546) ~[spring-context-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:142) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:775) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:397) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1260) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1248) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:24) ~[main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_181]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_181]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_181]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_181]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) ~[spring-boot-devtools-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+Caused by: java.sql.SQLFeatureNotSupportedException: Die Methode org.postgresql.jdbc.PgConnection.createClob() ist noch nicht implementiert.
+	at org.postgresql.Driver.notImplemented(Driver.java:640) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.createClob(PgConnection.java:1297) ~[postgresql-9.4.1212.jar:9.4.1212]
+	... 49 common frames omitted
+
+2019-01-29 08:12:23.006  INFO 10436 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.master is set to 'true'
+2019-01-29 08:12:23.007  INFO 10436 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.slave is set to 'true'
+2019-01-29 08:12:23.007  INFO 10436 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.workdir is set to 'coderadar-workdir'
+2019-01-29 08:12:23.007  INFO 10436 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.dateLocale is set to 'de_DE'
+2019-01-29 08:12:23.007  INFO 10436 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.scanIntervalInSeconds is set to '30'
+2019-01-29 08:12:23.008  INFO 10436 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.authentication.accessTokenDurationInMinutes is set to '15'
+2019-01-29 08:12:23.008  INFO 10436 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.authentication.refreshTokenDurationInMinutes is set to '86400'
+2019-01-29 08:12:23.008  INFO 10436 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.authentication.enabled is set to 'false'
+2019-01-29 08:12:24.262  INFO 10436 --- [restartedMain] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2019-01-29 08:12:24.516  INFO 10436 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-01-29 08:12:24.554  INFO 10436 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2019-01-29 08:12:24.801  INFO 10436 --- [restartedMain] o.w.c.a.service.AnalyzerPluginRegistry   : registered analyzer plugin class org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin
+2019-01-29 08:12:24.801  INFO 10436 --- [restartedMain] o.w.c.a.service.AnalyzerPluginRegistry   : registered analyzer plugin class org.wickedsource.coderadar.analyzer.loc.LocAnalyzerPlugin
+2019-01-29 08:12:27.641  WARN 10436 --- [restartedMain] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-01-29 08:12:28.369  INFO 10436 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@311223c6, org.springframework.security.web.context.SecurityContextPersistenceFilter@2c6e664c, org.springframework.security.web.header.HeaderWriterFilter@74c2f8ab, org.springframework.security.web.authentication.logout.LogoutFilter@20846308, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@52f8ce8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4ea4af98, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2b1057f2, org.springframework.security.web.session.SessionManagementFilter@26cfd5ef, org.springframework.security.web.access.ExceptionTranslationFilter@117a2058]
+2019-01-29 08:12:28.974  INFO 10436 --- [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2019-01-29 08:12:29.044  INFO 10436 --- [restartedMain] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2019-01-29 08:12:29.367  INFO 10436 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2019-01-29 08:12:29.371  INFO 10436 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Started CoderadarApplication in 19.743 seconds (JVM running for 20.757)
+2019-01-29 08:12:29.729  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1232; type=AnalyzeCommitJob]
+2019-01-29 08:12:30.791  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit 187645da8793fb2d4628b1dde6337a06d3b80420
+2019-01-29 08:12:30.836  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1232; type=AnalyzeCommitJob]
+2019-01-29 08:12:30.947  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1233; type=AnalyzeCommitJob]
+2019-01-29 08:12:30.964  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 0cf9192b07175a889c8331d6c8e4267dafb3f9ad
+2019-01-29 08:12:30.977  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1233; type=AnalyzeCommitJob]
+2019-01-29 08:12:31.088  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1234; type=AnalyzeCommitJob]
+2019-01-29 08:12:31.102  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 59e30f1c1df4315e4c7845203e80ad13819ad811
+2019-01-29 08:12:31.116  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1234; type=AnalyzeCommitJob]
+2019-01-29 08:12:31.227  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1235; type=AnalyzeCommitJob]
+2019-01-29 08:12:31.241  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 4ed5a72a8fc9940bf0cef0443f3e9c0c855f9832
+2019-01-29 08:12:31.250  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1235; type=AnalyzeCommitJob]
+2019-01-29 08:12:31.358  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1236; type=AnalyzeCommitJob]
+2019-01-29 08:12:31.371  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit affa66a2c257bb72d488962797134c100d0cb09b
+2019-01-29 08:12:31.380  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1236; type=AnalyzeCommitJob]
+2019-01-29 08:12:31.488  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1237; type=AnalyzeCommitJob]
+2019-01-29 08:12:31.590  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 6 files with 1 analyzers in commit 20f7bc3b8ddb00337addd932b0055e10bfbcae49
+2019-01-29 08:12:31.611  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1237; type=AnalyzeCommitJob]
+2019-01-29 08:12:31.719  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1238; type=AnalyzeCommitJob]
+2019-01-29 08:12:31.797  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 6 files with 1 analyzers in commit cd35774daaf0b136a547ded3a9f2872827cd72df
+2019-01-29 08:12:31.816  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1238; type=AnalyzeCommitJob]
+2019-01-29 08:12:31.923  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1239; type=AnalyzeCommitJob]
+2019-01-29 08:12:31.935  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit f0d56c443e70185f74448a7ac82ad064a08b644f
+2019-01-29 08:12:31.943  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1239; type=AnalyzeCommitJob]
+2019-01-29 08:12:32.051  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1240; type=AnalyzeCommitJob]
+2019-01-29 08:12:32.151  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 7 files with 1 analyzers in commit fb87b188423a6d89b0fb3f48518fca02f33024bb
+2019-01-29 08:12:32.168  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1240; type=AnalyzeCommitJob]
+2019-01-29 08:12:32.275  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1241; type=AnalyzeCommitJob]
+2019-01-29 08:12:32.315  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit 59f24eb31ec06983e1abbca8f7ca3d0a82ffa42b
+2019-01-29 08:12:32.324  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1241; type=AnalyzeCommitJob]
+2019-01-29 08:12:32.432  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1242; type=AnalyzeCommitJob]
+2019-01-29 08:12:32.443  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 72baff9adc05ccd9105052c1fcdcdc7fb948bad4
+2019-01-29 08:12:32.449  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1242; type=AnalyzeCommitJob]
+2019-01-29 08:12:32.556  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1243; type=AnalyzeCommitJob]
+2019-01-29 08:12:32.568  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit a4ba90b3416347c85fc3b23419c4660a45e7daa2
+2019-01-29 08:12:32.574  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1243; type=AnalyzeCommitJob]
+2019-01-29 08:12:32.684  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1244; type=AnalyzeCommitJob]
+2019-01-29 08:12:32.694  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit e7d509ef45d477119dff96624a616d69413228a5
+2019-01-29 08:12:32.701  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1244; type=AnalyzeCommitJob]
+2019-01-29 08:12:32.809  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1245; type=AnalyzeCommitJob]
+2019-01-29 08:12:32.917  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 9 files with 1 analyzers in commit 8f95d64dd7a9d5180aa4ec926f5d95098a5027ee
+2019-01-29 08:12:32.938  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1245; type=AnalyzeCommitJob]
+2019-01-29 08:12:33.047  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1246; type=AnalyzeCommitJob]
+2019-01-29 08:12:33.406  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 37 files with 1 analyzers in commit ddda6008ddf8d504a02d51d225d436852d22b19a
+2019-01-29 08:12:33.464  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1246; type=AnalyzeCommitJob]
+2019-01-29 08:12:33.572  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1247; type=AnalyzeCommitJob]
+2019-01-29 08:12:33.584  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 7772f918c618202d8e124f8032667b39ea889ddf
+2019-01-29 08:12:33.590  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1247; type=AnalyzeCommitJob]
+2019-01-29 08:12:33.696  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1248; type=AnalyzeCommitJob]
+2019-01-29 08:12:33.709  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 762c89d9918784019e07f8cc2b9447d7bdd82672
+2019-01-29 08:12:33.716  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1248; type=AnalyzeCommitJob]
+2019-01-29 08:12:33.824  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1249; type=AnalyzeCommitJob]
+2019-01-29 08:12:33.835  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit e48b2308b820d2837fdadec5897999b0a6469357
+2019-01-29 08:12:33.841  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1249; type=AnalyzeCommitJob]
+2019-01-29 08:12:33.949  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1250; type=AnalyzeCommitJob]
+2019-01-29 08:12:33.959  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 224b2f0c0cf6e11a0fd660f2dbe0cd0256c5250e
+2019-01-29 08:12:33.965  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1250; type=AnalyzeCommitJob]
+2019-01-29 08:12:34.072  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1251; type=AnalyzeCommitJob]
+2019-01-29 08:12:34.185  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 11 files with 1 analyzers in commit f7a5a18cbcde96502d34ae726b0361a847a5528e
+2019-01-29 08:12:34.207  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1251; type=AnalyzeCommitJob]
+2019-01-29 08:12:34.316  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1252; type=AnalyzeCommitJob]
+2019-01-29 08:12:34.372  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 3 files with 1 analyzers in commit 167ea16f24d0f178ff49c74c6fdf81d3ce7ff50e
+2019-01-29 08:12:34.383  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1252; type=AnalyzeCommitJob]
+2019-01-29 08:12:34.491  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1253; type=AnalyzeCommitJob]
+2019-01-29 08:12:34.546  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 3 files with 1 analyzers in commit 5fced39bff55d14dd9dc30bf734c39e1e2612e72
+2019-01-29 08:12:34.558  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1253; type=AnalyzeCommitJob]
+2019-01-29 08:12:34.664  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1254; type=AnalyzeCommitJob]
+2019-01-29 08:12:34.706  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 2 files with 1 analyzers in commit ae32d17d112bd7f3029172ff7132c3e6fc971c6d
+2019-01-29 08:12:34.716  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1254; type=AnalyzeCommitJob]
+2019-01-29 08:12:34.823  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1255; type=AnalyzeCommitJob]
+2019-01-29 08:12:34.832  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit aa2ddea1e0e23326f8c50912cfd0a86996f84a70
+2019-01-29 08:12:34.837  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1255; type=AnalyzeCommitJob]
+2019-01-29 08:12:34.945  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1256; type=AnalyzeCommitJob]
+2019-01-29 08:12:34.978  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 2 files with 1 analyzers in commit 1219288b295944c898c1c32adff6b75750aacbba
+2019-01-29 08:12:34.991  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1256; type=AnalyzeCommitJob]
+2019-01-29 08:12:35.098  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1257; type=AnalyzeCommitJob]
+2019-01-29 08:12:35.154  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 5 files with 1 analyzers in commit 23a1796a53ae3ace731593e79229726a5cb594e8
+2019-01-29 08:12:35.166  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1257; type=AnalyzeCommitJob]
+2019-01-29 08:12:35.272  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1258; type=AnalyzeCommitJob]
+2019-01-29 08:12:35.366  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 10 files with 1 analyzers in commit 4b68f2d33a02e42660cef58168ffd59d8d5e996d
+2019-01-29 08:12:35.388  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1258; type=AnalyzeCommitJob]
+2019-01-29 08:12:35.495  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1259; type=AnalyzeCommitJob]
+2019-01-29 08:12:35.599  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 12 files with 1 analyzers in commit 1e1d94df567d151bad7c820e7e7bdca5dd1d5fa7
+2019-01-29 08:12:35.620  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1259; type=AnalyzeCommitJob]
+2019-01-29 08:12:35.726  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1260; type=AnalyzeCommitJob]
+2019-01-29 08:12:35.904  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 22 files with 1 analyzers in commit d47aaa0dcaf5784b1bc013fc1bf7b8326d3e9969
+2019-01-29 08:12:35.980  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1260; type=AnalyzeCommitJob]
+2019-01-29 08:12:36.087  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1261; type=AnalyzeCommitJob]
+2019-01-29 08:12:36.110  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit 10fe61e14bdd542cf226a9f25182d52692fb0ee1
+2019-01-29 08:12:36.116  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1261; type=AnalyzeCommitJob]
+2019-01-29 08:12:36.222  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1262; type=AnalyzeCommitJob]
+2019-01-29 08:12:36.651  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 61 files with 1 analyzers in commit 8a855b6767f5f940d8c568b8cebef6431d15b3ad
+2019-01-29 08:12:36.722  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1262; type=AnalyzeCommitJob]
+2019-01-29 08:12:36.829  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1263; type=AnalyzeCommitJob]
+2019-01-29 08:12:36.839  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit c0f8d6f2c0f7b9d9b7118fcdcdb5f2da4dd43aa4
+2019-01-29 08:12:36.845  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1263; type=AnalyzeCommitJob]
+2019-01-29 08:12:36.952  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1264; type=AnalyzeCommitJob]
+2019-01-29 08:12:37.070  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 17 files with 1 analyzers in commit 1e4f4da274ccdcdf2cdd60e33d36976c1088e303
+2019-01-29 08:12:37.094  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1264; type=AnalyzeCommitJob]
+2019-01-29 08:12:37.199  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1265; type=AnalyzeCommitJob]
+2019-01-29 08:12:37.207  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 73c7cc5370e7682de563d0fbac3b4bcd204438e1
+2019-01-29 08:12:37.212  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1265; type=AnalyzeCommitJob]
+2019-01-29 08:12:37.319  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1266; type=AnalyzeCommitJob]
+2019-01-29 08:12:37.348  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 2 files with 1 analyzers in commit 03931c47c23f732d153b74449cc7500549847768
+2019-01-29 08:12:37.361  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1266; type=AnalyzeCommitJob]
+2019-01-29 08:12:37.467  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1267; type=AnalyzeCommitJob]
+2019-01-29 08:12:37.488  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit 20702620ca8bfbb4a3f7fd98882c37c03494b229
+2019-01-29 08:12:37.495  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1267; type=AnalyzeCommitJob]
+2019-01-29 08:12:37.601  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1268; type=AnalyzeCommitJob]
+2019-01-29 08:12:37.769  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 23 files with 1 analyzers in commit 887a16bf7913756f2da22146361793c5ee48cea4
+2019-01-29 08:12:37.798  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1268; type=AnalyzeCommitJob]
+2019-01-29 08:12:37.905  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1269; type=AnalyzeCommitJob]
+2019-01-29 08:12:37.938  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 3 files with 1 analyzers in commit 1327ea93196b53e193f323ede9b9d130b3f40d96
+2019-01-29 08:12:37.946  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1269; type=AnalyzeCommitJob]
+2019-01-29 08:12:38.053  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1270; type=AnalyzeCommitJob]
+2019-01-29 08:12:38.196  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 21 files with 1 analyzers in commit 411968c34532b2b0d9f30f0a1a6111171033c861
+2019-01-29 08:12:38.224  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1270; type=AnalyzeCommitJob]
+2019-01-29 08:12:38.331  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1271; type=AnalyzeCommitJob]
+2019-01-29 08:12:38.416  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 10 files with 1 analyzers in commit 73fbc6eddc83eb9e760c067e1cc317464eec3421
+2019-01-29 08:12:38.434  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1271; type=AnalyzeCommitJob]
+2019-01-29 08:12:38.540  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1272; type=AnalyzeCommitJob]
+2019-01-29 08:12:38.711  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 22 files with 1 analyzers in commit c8843f9ccf784f67ba03f423295bf6b9b246ff47
+2019-01-29 08:12:38.742  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1272; type=AnalyzeCommitJob]
+2019-01-29 08:12:38.848  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1273; type=AnalyzeCommitJob]
+2019-01-29 08:12:38.909  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 8 files with 1 analyzers in commit 2023aae969a0bfa893e46d33637a41db73b586df
+2019-01-29 08:12:38.922  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1273; type=AnalyzeCommitJob]
+2019-01-29 08:12:39.028  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1274; type=AnalyzeCommitJob]
+2019-01-29 08:12:39.068  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 4 files with 1 analyzers in commit 8747b8877634fc28848089b5705fd4014ad64d94
+2019-01-29 08:12:39.079  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1274; type=AnalyzeCommitJob]
+2019-01-29 08:12:39.186  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1275; type=AnalyzeCommitJob]
+2019-01-29 08:12:39.343  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 24 files with 1 analyzers in commit 74de16faffbb7d3f0217b8f68af3b77c3fd25fa4
+2019-01-29 08:12:39.370  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1275; type=AnalyzeCommitJob]
+2019-01-29 08:12:39.478  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1276; type=AnalyzeCommitJob]
+2019-01-29 08:12:39.909  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 66 files with 1 analyzers in commit 9247cfeba6aec00e324ede7b4c959f327eec5902
+2019-01-29 08:12:39.983  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1276; type=AnalyzeCommitJob]
+2019-01-29 08:12:40.089  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1277; type=AnalyzeCommitJob]
+2019-01-29 08:12:40.111  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit 2d560d25bcfab1fa7f2707c08cba448699ffdc60
+2019-01-29 08:12:40.117  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1277; type=AnalyzeCommitJob]
+2019-01-29 08:12:40.223  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1278; type=AnalyzeCommitJob]
+2019-01-29 08:12:40.642  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 69 files with 1 analyzers in commit 048da3fd9491f71f22de9fa5d4306a0c5dbfca3d
+2019-01-29 08:12:40.709  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1278; type=AnalyzeCommitJob]
+2019-01-29 08:12:40.818  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1279; type=AnalyzeCommitJob]
+2019-01-29 08:12:40.862  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 5 files with 1 analyzers in commit dbcba43cdb011535bf18ab132162cf0bb001d94f
+2019-01-29 08:12:40.871  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1279; type=AnalyzeCommitJob]
+2019-01-29 08:12:40.978  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1280; type=AnalyzeCommitJob]
+2019-01-29 08:12:41.088  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 15 files with 1 analyzers in commit af5985780989137bf48d7e7832e1caa2a9350a3d
+2019-01-29 08:12:41.109  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1280; type=AnalyzeCommitJob]
+2019-01-29 08:12:41.215  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1281; type=AnalyzeCommitJob]
+2019-01-29 08:12:41.674  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 73 files with 1 analyzers in commit c45721a70c9da17b802d61d6a7c55f83f0ae72ec
+2019-01-29 08:12:41.756  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1281; type=AnalyzeCommitJob]
+2019-01-29 08:12:41.863  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1282; type=AnalyzeCommitJob]
+2019-01-29 08:12:41.885  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit 02d8134047f3391e95d718a7eb8eb88426649373
+2019-01-29 08:12:41.892  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1282; type=AnalyzeCommitJob]
+2019-01-29 08:12:41.999  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1283; type=AnalyzeCommitJob]
+2019-01-29 08:12:42.007  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 7c912cd774eb16c344a119bffd23cc6b36bc68d1
+2019-01-29 08:12:42.012  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1283; type=AnalyzeCommitJob]
+2019-01-29 08:12:42.117  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1284; type=AnalyzeCommitJob]
+2019-01-29 08:12:42.123  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 290fe613efb0486d760d7d68a77cfe06e7678e86
+2019-01-29 08:12:42.128  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1284; type=AnalyzeCommitJob]
+2019-01-29 08:12:42.233  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1285; type=AnalyzeCommitJob]
+2019-01-29 08:12:42.241  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 16d751718002e2ae36c4096916d1061aac7dce81
+2019-01-29 08:12:42.246  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1285; type=AnalyzeCommitJob]
+2019-01-29 08:12:42.351  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1286; type=AnalyzeCommitJob]
+2019-01-29 08:12:42.359  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit b1e85e7844211bbbb89b76ff77c21fbf4f3e2547
+2019-01-29 08:12:42.364  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1286; type=AnalyzeCommitJob]
+2019-01-29 08:12:42.471  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1287; type=AnalyzeCommitJob]
+2019-01-29 08:12:42.480  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit b518e7cb19b81f2630af3ea9f9346b1fa1d17aed
+2019-01-29 08:12:42.488  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1287; type=AnalyzeCommitJob]
+2019-01-29 08:12:42.594  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1288; type=AnalyzeCommitJob]
+2019-01-29 08:12:43.055  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 79 files with 1 analyzers in commit 45e31d719338adb59cc4789fc9cb1491bb67c850
+2019-01-29 08:12:43.139  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1288; type=AnalyzeCommitJob]
+2019-01-29 08:12:43.247  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1289; type=AnalyzeCommitJob]
+2019-01-29 08:12:43.270  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit da2371562339c039462213554a522dc05581b0f6
+2019-01-29 08:12:43.276  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1289; type=AnalyzeCommitJob]
+2019-01-29 08:12:43.383  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1290; type=AnalyzeCommitJob]
+2019-01-29 08:12:43.391  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 5051913d9a856ff8b41bdfb8a93f1e4057c60d1d
+2019-01-29 08:12:43.396  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1290; type=AnalyzeCommitJob]
+2019-01-29 08:12:43.501  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1291; type=AnalyzeCommitJob]
+2019-01-29 08:12:43.509  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 529c70157c32681d92b071996ee55667dc35e8ec
+2019-01-29 08:12:43.513  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1291; type=AnalyzeCommitJob]
+2019-01-29 08:12:43.620  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1292; type=AnalyzeCommitJob]
+2019-01-29 08:12:43.642  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit 991147aebec30380af6467a64a8f50ec4a3e6d70
+2019-01-29 08:12:43.649  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1292; type=AnalyzeCommitJob]
+2019-01-29 08:12:43.756  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1293; type=AnalyzeCommitJob]
+2019-01-29 08:12:43.764  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 865880bbece34998bec36b47b9e9eb860b6814ad
+2019-01-29 08:12:43.767  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1293; type=AnalyzeCommitJob]
+2019-01-29 08:12:43.873  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1294; type=AnalyzeCommitJob]
+2019-01-29 08:12:43.893  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit 6b897d10f6a4ca1787c9bb0558405e22af44182e
+2019-01-29 08:12:43.899  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1294; type=AnalyzeCommitJob]
+2019-01-29 08:12:44.007  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1295; type=AnalyzeCommitJob]
+2019-01-29 08:12:44.033  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 2 files with 1 analyzers in commit 4321ef912ac2c733b5052b986a7e0612e76d8c18
+2019-01-29 08:12:44.039  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1295; type=AnalyzeCommitJob]
+2019-01-29 08:12:44.144  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1296; type=AnalyzeCommitJob]
+2019-01-29 08:12:44.172  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 2 files with 1 analyzers in commit 8dcccb178f76ab4f56c690b217b116ef8ab2ac39
+2019-01-29 08:12:44.180  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1296; type=AnalyzeCommitJob]
+2019-01-29 08:12:44.286  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1297; type=AnalyzeCommitJob]
+2019-01-29 08:12:44.319  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 3 files with 1 analyzers in commit 1270c2315afe3d3b9ab8b6b4aa165d815fc004d2
+2019-01-29 08:12:44.327  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1297; type=AnalyzeCommitJob]
+2019-01-29 08:12:44.433  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1298; type=AnalyzeCommitJob]
+2019-01-29 08:12:44.467  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 3 files with 1 analyzers in commit e9473f3904c240e049fc9005a758bb7a1c00b36d
+2019-01-29 08:12:44.476  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1298; type=AnalyzeCommitJob]
+2019-01-29 08:12:44.588  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1299; type=AnalyzeCommitJob]
+2019-01-29 08:12:44.610  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit d076f60c702c87408933e8fb2ca388f80dc956ff
+2019-01-29 08:12:44.615  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1299; type=AnalyzeCommitJob]
+2019-01-29 08:12:44.721  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1300; type=AnalyzeCommitJob]
+2019-01-29 08:12:44.754  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 3 files with 1 analyzers in commit dd2886ca094b11e648763486f1233e0df6d74910
+2019-01-29 08:12:44.761  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1300; type=AnalyzeCommitJob]
+2019-01-29 08:12:44.866  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1301; type=AnalyzeCommitJob]
+2019-01-29 08:12:44.887  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit 3548862d7d0ccd20a84847c1c59a8595b1b245a9
+2019-01-29 08:12:44.893  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1301; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.000  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1302; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.026  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 2 files with 1 analyzers in commit 6e1a6d7607dffa266847d35671a85d8af03a157a
+2019-01-29 08:12:45.035  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1302; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.143  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1303; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.169  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 2 files with 1 analyzers in commit de6a9b0e02bcd2f89d339dbcbbc98609485f9bd9
+2019-01-29 08:12:45.175  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1303; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.282  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1304; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.303  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit 3daf47ddb5ba2c8368e5f38a2e0f6bca6d519650
+2019-01-29 08:12:45.308  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1304; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.415  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1305; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.441  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 2 files with 1 analyzers in commit c8207a0b2be7a77ec9b5ded3614083a20b59d2d8
+2019-01-29 08:12:45.447  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1305; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.554  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1306; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.582  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 2 files with 1 analyzers in commit ab14b3d7d59f941b9fd9fe92423c25306042e9f0
+2019-01-29 08:12:45.589  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1306; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.694  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1307; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.753  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 7 files with 1 analyzers in commit 4c04dce7ccd457e9879159c91ed13ddbed315a3e
+2019-01-29 08:12:45.766  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1307; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.872  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1308; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.880  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 0 files with 1 analyzers in commit 2e8d110024604a1eb4e8f6bc12a09f206b294cee
+2019-01-29 08:12:45.884  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1308; type=AnalyzeCommitJob]
+2019-01-29 08:12:45.989  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1309; type=AnalyzeCommitJob]
+2019-01-29 08:12:46.065  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 11 files with 1 analyzers in commit d7ea13d9dd1c28205696bf416d4caf0a7a2f0f41
+2019-01-29 08:12:46.078  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1309; type=AnalyzeCommitJob]
+2019-01-29 08:12:46.184  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1310; type=AnalyzeCommitJob]
+2019-01-29 08:12:46.217  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 3 files with 1 analyzers in commit aa187296105acdc4381ad02ecda71aa3a8412106
+2019-01-29 08:12:46.224  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1310; type=AnalyzeCommitJob]
+2019-01-29 08:12:46.330  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1311; type=AnalyzeCommitJob]
+2019-01-29 08:12:46.357  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 2 files with 1 analyzers in commit f3f008e73db1c234b6de6f774f2d7a0b7d0602d9
+2019-01-29 08:12:46.365  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1311; type=AnalyzeCommitJob]
+2019-01-29 08:12:46.471  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1312; type=AnalyzeCommitJob]
+2019-01-29 08:12:46.494  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit 3945ac675d9de7d79f4dff8dd9c4181097264240
+2019-01-29 08:12:46.500  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1312; type=AnalyzeCommitJob]
+2019-01-29 08:12:46.606  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1313; type=AnalyzeCommitJob]
+2019-01-29 08:12:46.627  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit 9c28bbc1a096ed3c422f218fe4b590d3138eba44
+2019-01-29 08:12:46.633  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1313; type=AnalyzeCommitJob]
+2019-01-29 08:12:46.738  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1314; type=AnalyzeCommitJob]
+2019-01-29 08:12:46.835  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 13 files with 1 analyzers in commit 0219fcece0769d2144daf9ae7ae916024630ff60
+2019-01-29 08:12:46.854  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1314; type=AnalyzeCommitJob]
+2019-01-29 08:12:46.960  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1315; type=AnalyzeCommitJob]
+2019-01-29 08:12:47.064  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 14 files with 1 analyzers in commit acea68a3af5e78279e62b1321875df8a9fcdad30
+2019-01-29 08:12:47.083  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1315; type=AnalyzeCommitJob]
+2019-01-29 08:12:47.189  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1316; type=AnalyzeCommitJob]
+2019-01-29 08:12:47.211  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit 6b45b2b81304254a9f91bbe419984b66030384d3
+2019-01-29 08:12:47.216  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1316; type=AnalyzeCommitJob]
+2019-01-29 08:12:47.321  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1317; type=AnalyzeCommitJob]
+2019-01-29 08:12:47.343  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 1 files with 1 analyzers in commit 78de3f820c35a41c9ae9d80baea3a4e4cb57bb1e
+2019-01-29 08:12:47.348  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1317; type=AnalyzeCommitJob]
+2019-01-29 08:12:47.453  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1318; type=AnalyzeCommitJob]
+2019-01-29 08:12:47.613  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 24 files with 1 analyzers in commit 06396bc288ae2c344e36da791230fcc6b302f33a
+2019-01-29 08:12:47.640  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1318; type=AnalyzeCommitJob]
+2019-01-29 08:12:47.746  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1319; type=AnalyzeCommitJob]
+2019-01-29 08:12:47.781  INFO 10436 --- [scheduling-1] o.w.c.job.analyze.CommitAnalyzer         : analyzed 3 files with 1 analyzers in commit 2dd803d713c0518fd8d4dbfc9f8598fd21cde696
+2019-01-29 08:12:47.788  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1319; type=AnalyzeCommitJob]
+2019-01-29 08:12:47.897  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1320; type=ScanCommitsJob]
+2019-01-29 08:12:49.255  INFO 10436 --- [scheduling-1] o.w.c.j.s.commit.CommitMetadataScanner   : scanned 0 new commits for project [Project: id=1; name=budgeteer]
+2019-01-29 08:12:49.260  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1320; type=ScanCommitsJob]
+2019-01-29 08:12:49.278  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : queued new job [Job: id=1321; type=ScanCommitsJob] for project [Project: id=1; name=budgeteer]
+2019-01-29 08:12:49.366  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1321; type=ScanCommitsJob]
+2019-01-29 08:12:49.843  INFO 10436 --- [scheduling-1] o.w.c.j.s.commit.CommitMetadataScanner   : scanned 0 new commits for project [Project: id=1; name=budgeteer]
+2019-01-29 08:12:49.847  INFO 10436 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1321; type=ScanCommitsJob]
+2019-01-29 08:18:40.946  INFO 9268 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Starting CoderadarApplication on de-adn-821gzw1 with PID 9268 (C:\Users\atanasov\workspace\CODE_RADAR\coderadar\coderadar-server\coderadar-core\build\classes\java\main started by atanasov in C:\Users\atanasov\workspace\CODE_RADAR\coderadar\coderadar-server\coderadar-core)
+2019-01-29 08:18:40.953 DEBUG 9268 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Running with Spring Boot v2.1.2.RELEASE, Spring v5.1.4.RELEASE
+2019-01-29 08:18:40.953  INFO 9268 --- [restartedMain] o.w.coderadar.CoderadarApplication       : No active profile set, falling back to default profiles: default
+2019-01-29 08:18:41.088  INFO 9268 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2019-01-29 08:18:41.088  INFO 9268 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2019-01-29 08:18:44.007  INFO 9268 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-01-29 08:18:44.486  INFO 9268 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 466ms. Found 23 repository interfaces.
+2019-01-29 08:18:45.109  INFO 9268 --- [restartedMain] o.s.c.a.ConfigurationClassEnhancer       : @Bean method CoderadarApplicationContextConfiguration.propertySourcesPlaceholderConfigurer is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+2019-01-29 08:18:45.419  INFO 9268 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$298465ff] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:18:45.498  INFO 9268 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$c2322e39] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:18:45.508  INFO 9268 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'objectPostProcessor' of type [org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:18:45.513  INFO 9268 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@266179e8' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:18:45.519  INFO 9268 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$e706d0eb] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:18:45.527  INFO 9268 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:18:45.546  INFO 9268 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'commitMappingResourceProvider' of type [org.wickedsource.coderadar.commit.configuration.CommitMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:18:45.550  INFO 9268 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'metricValueMappingResourceProvider' of type [org.wickedsource.coderadar.metric.configuration.MetricValueMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:18:45.557  INFO 9268 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$a904b331] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:18:46.917  INFO 9268 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2019-01-29 08:18:46.967  INFO 9268 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-01-29 08:18:46.967  INFO 9268 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.14]
+2019-01-29 08:18:46.983  INFO 9268 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [C:\Program Files\Java\jdk1.8.0_181\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\Docker\Docker\Resources\bin;C:\oraclexe\app\oracle\product\11.2.0\server\bin;;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Ruby24-x64\bin;C:\Users\atanasov\AppData\Local\Microsoft\WindowsApps;C:\Users\atanasov\Desktop\terminalMath-master\windows\bin\Release;C:\Program Files\apache-maven-3.5.2\bin;C:\Users\atanasov\eclipse-workspace\slavicTales\VS_libs;C:\Program Files\Java\jdk1.8.0_161\bin;C:\Users\atanasov\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Microsoft VS Code\bin;C:\Users\atanasov\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin;C:\Program Files\JetBrains\IntelliJ IDEA 2018.3\bin;;C:\Program Files\CMake\bin;.]
+2019-01-29 08:18:47.166  INFO 9268 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-01-29 08:18:47.167  INFO 9268 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 6078 ms
+2019-01-29 08:18:48.117  INFO 9268 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2019-01-29 08:18:48.284  INFO 9268 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2019-01-29 08:18:49.426  INFO 9268 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT COUNT(*) FROM public.databasechangeloglock
+2019-01-29 08:18:49.430  INFO 9268 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT COUNT(*) FROM public.databasechangeloglock
+2019-01-29 08:18:49.433  INFO 9268 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT LOCKED FROM public.databasechangeloglock WHERE ID=1
+2019-01-29 08:18:49.454  INFO 9268 --- [restartedMain] l.lockservice.StandardLockService        : Changelog-Protokoll erfolgreich gesperrt.
+2019-01-29 08:18:50.923  INFO 9268 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT MD5SUM FROM public.databasechangelog WHERE MD5SUM IS NOT NULL LIMIT 1
+2019-01-29 08:18:50.926  INFO 9268 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT COUNT(*) FROM public.databasechangelog
+2019-01-29 08:18:50.928  INFO 9268 --- [restartedMain] l.c.StandardChangeLogHistoryService      : Reading from public.databasechangelog
+2019-01-29 08:18:50.929  INFO 9268 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT * FROM public.databasechangelog ORDER BY DATEEXECUTED ASC, ORDEREXECUTED ASC
+2019-01-29 08:18:51.096  INFO 9268 --- [restartedMain] l.lockservice.StandardLockService        : Successfully released change log lock
+2019-01-29 08:18:51.383  INFO 9268 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-01-29 08:18:51.488  INFO 9268 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.7.Final}
+2019-01-29 08:18:51.491  INFO 9268 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2019-01-29 08:18:51.708  INFO 9268 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2019-01-29 08:18:52.555  INFO 9268 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+2019-01-29 08:18:52.744  INFO 9268 --- [restartedMain] o.h.e.j.e.i.LobCreatorBuilderImpl        : HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+
+java.lang.reflect.InvocationTargetException: null
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_181]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_181]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_181]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_181]
+	at org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl.useContextualLobCreation(LobCreatorBuilderImpl.java:113) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.engine.jdbc.env.internal.LobCreatorBuilderImpl.makeLobCreatorBuilder(LobCreatorBuilderImpl.java:54) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentImpl.<init>(JdbcEnvironmentImpl.java:271) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.initiateService(JdbcEnvironmentInitiator.java:114) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.initiateService(JdbcEnvironmentInitiator.java:35) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.boot.registry.internal.StandardServiceRegistryImpl.initiateService(StandardServiceRegistryImpl.java:94) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.createService(AbstractServiceRegistryImpl.java:263) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.initializeService(AbstractServiceRegistryImpl.java:237) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.getService(AbstractServiceRegistryImpl.java:214) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.id.factory.internal.DefaultIdentifierGeneratorFactory.injectServices(DefaultIdentifierGeneratorFactory.java:152) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.injectDependencies(AbstractServiceRegistryImpl.java:286) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.initializeService(AbstractServiceRegistryImpl.java:243) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.service.internal.AbstractServiceRegistryImpl.getService(AbstractServiceRegistryImpl.java:214) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.<init>(InFlightMetadataCollectorImpl.java:179) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:119) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.metadata(EntityManagerFactoryBuilderImpl.java:904) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:935) [hibernate-core-5.3.7.Final.jar:5.3.7.Final]
+	at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:57) [spring-orm-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365) [spring-orm-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:390) [spring-orm-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:377) [spring-orm-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:341) [spring-orm-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1804) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1741) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:576) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:498) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222) ~[spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199) [spring-beans-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1083) ~[spring-context-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:853) ~[spring-context-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:546) ~[spring-context-5.1.4.RELEASE.jar:5.1.4.RELEASE]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:142) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:775) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:397) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:316) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1260) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1248) ~[spring-boot-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:24) ~[main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_181]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_181]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_181]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_181]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) ~[spring-boot-devtools-2.1.2.RELEASE.jar:2.1.2.RELEASE]
+Caused by: java.sql.SQLFeatureNotSupportedException: Die Methode org.postgresql.jdbc.PgConnection.createClob() ist noch nicht implementiert.
+	at org.postgresql.Driver.notImplemented(Driver.java:688) ~[postgresql-42.2.5.jar:42.2.5]
+	at org.postgresql.jdbc.PgConnection.createClob(PgConnection.java:1269) ~[postgresql-42.2.5.jar:42.2.5]
+	... 49 common frames omitted
+
+2019-01-29 08:18:53.375  INFO 9268 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.master is set to 'true'
+2019-01-29 08:18:53.375  INFO 9268 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.slave is set to 'true'
+2019-01-29 08:18:53.376  INFO 9268 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.workdir is set to 'coderadar-workdir'
+2019-01-29 08:18:53.376  INFO 9268 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.dateLocale is set to 'de_DE'
+2019-01-29 08:18:53.376  INFO 9268 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.scanIntervalInSeconds is set to '30'
+2019-01-29 08:18:53.377  INFO 9268 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.authentication.accessTokenDurationInMinutes is set to '15'
+2019-01-29 08:18:53.377  INFO 9268 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.authentication.refreshTokenDurationInMinutes is set to '86400'
+2019-01-29 08:18:53.377  INFO 9268 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.authentication.enabled is set to 'false'
+2019-01-29 08:18:54.740  INFO 9268 --- [restartedMain] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2019-01-29 08:18:54.989  INFO 9268 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-01-29 08:18:55.032  INFO 9268 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2019-01-29 08:18:55.269  INFO 9268 --- [restartedMain] o.w.c.a.service.AnalyzerPluginRegistry   : registered analyzer plugin class org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin
+2019-01-29 08:18:55.270  INFO 9268 --- [restartedMain] o.w.c.a.service.AnalyzerPluginRegistry   : registered analyzer plugin class org.wickedsource.coderadar.analyzer.loc.LocAnalyzerPlugin
+2019-01-29 08:18:57.927  WARN 9268 --- [restartedMain] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-01-29 08:18:58.706  INFO 9268 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4366e474, org.springframework.security.web.context.SecurityContextPersistenceFilter@6f7aeb03, org.springframework.security.web.header.HeaderWriterFilter@68d9a0, org.springframework.security.web.authentication.logout.LogoutFilter@7a091261, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6f12f50a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6353c186, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3e089c23, org.springframework.security.web.session.SessionManagementFilter@466eccf8, org.springframework.security.web.access.ExceptionTranslationFilter@2ad5d82]
+2019-01-29 08:18:59.336  INFO 9268 --- [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2019-01-29 08:18:59.394  INFO 9268 --- [restartedMain] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2019-01-29 08:18:59.747  INFO 9268 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2019-01-29 08:18:59.756  INFO 9268 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Started CoderadarApplication in 19.823 seconds (JVM running for 20.702)
+2019-01-29 08:19:00.011  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : queued new job [Job: id=1322; type=ScanCommitsJob] for project [Project: id=1; name=budgeteer]
+2019-01-29 08:19:00.060  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1322; type=ScanCommitsJob]
+2019-01-29 08:19:01.465  INFO 9268 --- [scheduling-1] o.w.c.j.s.commit.CommitMetadataScanner   : scanned 0 new commits for project [Project: id=1; name=budgeteer]
+2019-01-29 08:19:01.491  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1322; type=ScanCommitsJob]
+2019-01-29 08:19:30.056  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : queued new job [Job: id=1323; type=ScanCommitsJob] for project [Project: id=1; name=budgeteer]
+2019-01-29 08:19:30.065  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1323; type=ScanCommitsJob]
+2019-01-29 08:19:30.691  INFO 9268 --- [scheduling-1] o.w.c.j.s.commit.CommitMetadataScanner   : scanned 0 new commits for project [Project: id=1; name=budgeteer]
+2019-01-29 08:19:30.698  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1323; type=ScanCommitsJob]
+2019-01-29 08:20:00.101  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : queued new job [Job: id=1324; type=ScanCommitsJob] for project [Project: id=1; name=budgeteer]
+2019-01-29 08:20:00.110  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1324; type=ScanCommitsJob]
+2019-01-29 08:20:01.012  INFO 9268 --- [scheduling-1] o.w.c.j.s.commit.CommitMetadataScanner   : scanned 0 new commits for project [Project: id=1; name=budgeteer]
+2019-01-29 08:20:01.018  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1324; type=ScanCommitsJob]
+2019-01-29 08:20:30.112  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : queued new job [Job: id=1325; type=ScanCommitsJob] for project [Project: id=1; name=budgeteer]
+2019-01-29 08:20:30.119  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1325; type=ScanCommitsJob]
+2019-01-29 08:20:30.831  INFO 9268 --- [scheduling-1] o.w.c.j.s.commit.CommitMetadataScanner   : scanned 0 new commits for project [Project: id=1; name=budgeteer]
+2019-01-29 08:20:30.838  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1325; type=ScanCommitsJob]
+2019-01-29 08:21:00.133  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : queued new job [Job: id=1326; type=ScanCommitsJob] for project [Project: id=1; name=budgeteer]
+2019-01-29 08:21:00.140  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1326; type=ScanCommitsJob]
+2019-01-29 08:21:00.788  INFO 9268 --- [scheduling-1] o.w.c.j.s.commit.CommitMetadataScanner   : scanned 0 new commits for project [Project: id=1; name=budgeteer]
+2019-01-29 08:21:00.793  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1326; type=ScanCommitsJob]
+2019-01-29 08:21:30.212  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : queued new job [Job: id=1327; type=ScanCommitsJob] for project [Project: id=1; name=budgeteer]
+2019-01-29 08:21:30.222  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1327; type=ScanCommitsJob]
+2019-01-29 08:21:31.021  INFO 9268 --- [scheduling-1] o.w.c.j.s.commit.CommitMetadataScanner   : scanned 0 new commits for project [Project: id=1; name=budgeteer]
+2019-01-29 08:21:31.025  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1327; type=ScanCommitsJob]
+2019-01-29 08:22:00.213  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : queued new job [Job: id=1328; type=ScanCommitsJob] for project [Project: id=1; name=budgeteer]
+2019-01-29 08:22:00.219  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1328; type=ScanCommitsJob]
+2019-01-29 08:22:00.842  INFO 9268 --- [scheduling-1] o.w.c.j.s.commit.CommitMetadataScanner   : scanned 0 new commits for project [Project: id=1; name=budgeteer]
+2019-01-29 08:22:00.846  INFO 9268 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1328; type=ScanCommitsJob]
+2019-01-29 08:22:14.948  INFO 14280 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Starting CoderadarApplication on de-adn-821gzw1 with PID 14280 (C:\Users\atanasov\workspace\CODE_RADAR\coderadar\coderadar-server\coderadar-core\build\classes\java\main started by atanasov in C:\Users\atanasov\workspace\CODE_RADAR\coderadar\coderadar-server\coderadar-core)
+2019-01-29 08:22:14.954 DEBUG 14280 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Running with Spring Boot v2.1.2.RELEASE, Spring v5.1.4.RELEASE
+2019-01-29 08:22:14.955  INFO 14280 --- [restartedMain] o.w.coderadar.CoderadarApplication       : No active profile set, falling back to default profiles: default
+2019-01-29 08:22:15.103  INFO 14280 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2019-01-29 08:22:15.103  INFO 14280 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2019-01-29 08:22:17.873  INFO 14280 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2019-01-29 08:22:18.383  INFO 14280 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 499ms. Found 23 repository interfaces.
+2019-01-29 08:22:19.009  INFO 14280 --- [restartedMain] o.s.c.a.ConfigurationClassEnhancer       : @Bean method CoderadarApplicationContextConfiguration.propertySourcesPlaceholderConfigurer is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+2019-01-29 08:22:19.337  INFO 14280 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$77e14c61] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:22:19.414  INFO 14280 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$108f149b] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:22:19.424  INFO 14280 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'objectPostProcessor' of type [org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:22:19.426  INFO 14280 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@1b6b5d4f' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:22:19.433  INFO 14280 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$3563b74d] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:22:19.439  INFO 14280 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:22:19.456  INFO 14280 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'commitMappingResourceProvider' of type [org.wickedsource.coderadar.commit.configuration.CommitMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:22:19.463  INFO 14280 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'metricValueMappingResourceProvider' of type [org.wickedsource.coderadar.metric.configuration.MetricValueMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:22:19.471  INFO 14280 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.hateoas.config.HateoasConfiguration' of type [org.springframework.hateoas.config.HateoasConfiguration$$EnhancerBySpringCGLIB$$f7619993] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-01-29 08:22:20.841  INFO 14280 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2019-01-29 08:22:20.886  INFO 14280 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2019-01-29 08:22:20.887  INFO 14280 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.14]
+2019-01-29 08:22:20.903  INFO 14280 --- [restartedMain] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [C:\Program Files\Java\jdk1.8.0_181\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\Docker\Docker\Resources\bin;C:\oraclexe\app\oracle\product\11.2.0\server\bin;;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\dotnet\;C:\Program Files\Git\cmd;C:\Program Files\Microsoft VS Code\bin;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Ruby24-x64\bin;C:\Users\atanasov\AppData\Local\Microsoft\WindowsApps;C:\Users\atanasov\Desktop\terminalMath-master\windows\bin\Release;C:\Program Files\apache-maven-3.5.2\bin;C:\Users\atanasov\eclipse-workspace\slavicTales\VS_libs;C:\Program Files\Java\jdk1.8.0_161\bin;C:\Users\atanasov\AppData\Local\Microsoft\WindowsApps;C:\Program Files\Microsoft VS Code\bin;C:\Users\atanasov\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin;C:\Program Files\JetBrains\IntelliJ IDEA 2018.3\bin;;C:\Program Files\CMake\bin;.]
+2019-01-29 08:22:21.096  INFO 14280 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-01-29 08:22:21.097  INFO 14280 --- [restartedMain] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 5994 ms
+2019-01-29 08:22:22.153  INFO 14280 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2019-01-29 08:22:22.326  INFO 14280 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2019-01-29 08:22:23.377  INFO 14280 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT COUNT(*) FROM public.databasechangeloglock
+2019-01-29 08:22:23.380  INFO 14280 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT COUNT(*) FROM public.databasechangeloglock
+2019-01-29 08:22:23.384  INFO 14280 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT LOCKED FROM public.databasechangeloglock WHERE ID=1
+2019-01-29 08:22:23.410  INFO 14280 --- [restartedMain] l.lockservice.StandardLockService        : Changelog-Protokoll erfolgreich gesperrt.
+2019-01-29 08:22:24.827  INFO 14280 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT MD5SUM FROM public.databasechangelog WHERE MD5SUM IS NOT NULL LIMIT 1
+2019-01-29 08:22:24.830  INFO 14280 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT COUNT(*) FROM public.databasechangelog
+2019-01-29 08:22:24.832  INFO 14280 --- [restartedMain] l.c.StandardChangeLogHistoryService      : Reading from public.databasechangelog
+2019-01-29 08:22:24.832  INFO 14280 --- [restartedMain] liquibase.executor.jvm.JdbcExecutor      : SELECT * FROM public.databasechangelog ORDER BY DATEEXECUTED ASC, ORDEREXECUTED ASC
+2019-01-29 08:22:24.967  INFO 14280 --- [restartedMain] l.lockservice.StandardLockService        : Successfully released change log lock
+2019-01-29 08:22:25.299  INFO 14280 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-01-29 08:22:25.439  INFO 14280 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.7.Final}
+2019-01-29 08:22:25.442  INFO 14280 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2019-01-29 08:22:25.704  INFO 14280 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2019-01-29 08:22:26.594  INFO 14280 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+2019-01-29 08:22:26.746  INFO 14280 --- [restartedMain] o.h.e.j.e.i.LobCreatorBuilderImpl        : HHH000421: Disabling contextual LOB creation as hibernate.jdbc.lob.non_contextual_creation is true
+2019-01-29 08:22:27.340  INFO 14280 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.master is set to 'true'
+2019-01-29 08:22:27.340  INFO 14280 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.slave is set to 'true'
+2019-01-29 08:22:27.341  INFO 14280 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.workdir is set to 'coderadar-workdir'
+2019-01-29 08:22:27.341  INFO 14280 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.dateLocale is set to 'de_DE'
+2019-01-29 08:22:27.341  INFO 14280 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.scanIntervalInSeconds is set to '30'
+2019-01-29 08:22:27.341  INFO 14280 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.authentication.accessTokenDurationInMinutes is set to '15'
+2019-01-29 08:22:27.342  INFO 14280 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.authentication.refreshTokenDurationInMinutes is set to '86400'
+2019-01-29 08:22:27.342  INFO 14280 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.authentication.enabled is set to 'false'
+2019-01-29 08:22:28.698  INFO 14280 --- [restartedMain] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2019-01-29 08:22:28.958  INFO 14280 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-01-29 08:22:29.004  INFO 14280 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2019-01-29 08:22:29.264  INFO 14280 --- [restartedMain] o.w.c.a.service.AnalyzerPluginRegistry   : registered analyzer plugin class org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin
+2019-01-29 08:22:29.265  INFO 14280 --- [restartedMain] o.w.c.a.service.AnalyzerPluginRegistry   : registered analyzer plugin class org.wickedsource.coderadar.analyzer.loc.LocAnalyzerPlugin
+2019-01-29 08:22:32.227  WARN 14280 --- [restartedMain] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2019-01-29 08:22:32.994  INFO 14280 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@cc0e0fd, org.springframework.security.web.context.SecurityContextPersistenceFilter@184e1b10, org.springframework.security.web.header.HeaderWriterFilter@4afbf4a4, org.springframework.security.web.authentication.logout.LogoutFilter@40413064, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4ee87d1a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@466734cf, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@b18cf00, org.springframework.security.web.session.SessionManagementFilter@68255716, org.springframework.security.web.access.ExceptionTranslationFilter@7f3ccbd5]
+2019-01-29 08:22:33.620  INFO 14280 --- [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2019-01-29 08:22:33.701  INFO 14280 --- [restartedMain] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2019-01-29 08:22:34.024  INFO 14280 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2019-01-29 08:22:34.029  INFO 14280 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Started CoderadarApplication in 20.152 seconds (JVM running for 21.081)
+2019-01-29 08:22:34.265  INFO 14280 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : queued new job [Job: id=1329; type=ScanCommitsJob] for project [Project: id=1; name=budgeteer]
+2019-01-29 08:22:34.319  INFO 14280 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1329; type=ScanCommitsJob]
+2019-01-29 08:22:35.652  INFO 14280 --- [scheduling-1] o.w.c.j.s.commit.CommitMetadataScanner   : scanned 0 new commits for project [Project: id=1; name=budgeteer]
+2019-01-29 08:22:35.681  INFO 14280 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1329; type=ScanCommitsJob]
+2019-01-29 08:23:04.263  INFO 14280 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : queued new job [Job: id=1330; type=ScanCommitsJob] for project [Project: id=1; name=budgeteer]
+2019-01-29 08:23:04.276  INFO 14280 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : starting to process job: [Job: id=1330; type=ScanCommitsJob]
+2019-01-29 08:23:05.149  INFO 14280 --- [scheduling-1] o.w.c.j.s.commit.CommitMetadataScanner   : scanned 0 new commits for project [Project: id=1; name=budgeteer]
+2019-01-29 08:23:05.163  INFO 14280 --- [scheduling-1] o.wickedsource.coderadar.job.JobLogger   : successfully processed job: [Job: id=1330; type=ScanCommitsJob]

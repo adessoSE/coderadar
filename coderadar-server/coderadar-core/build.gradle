@@ -9,11 +9,7 @@ apply plugin: "com.diffplug.gradle.spotless"
 apply plugin: "com.jfrog.bintray"
 apply plugin: "war"
 
-/*bootRepackage {
-    mainClass = 'org.wickedsource.coderadar.CoderadarApplication'
-}*/
-
-bootJar {
+bootWar {
     mainClassName = 'org.wickedsource.coderadar.CoderadarApplication'
     launchScript {
         properties 'executable': 'true'
@@ -118,7 +114,7 @@ dependencies {
     compile project(":coderadar-server:coderadar-database")
 
     runtime "mysql:mysql-connector-java:5.1.6"
-    runtime "org.postgresql:postgresql:9.4.1212"
+    runtime "org.postgresql:postgresql:42.2.5"
     runtime "com.googlecode.log4jdbc:log4jdbc:1.2"
 
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${version_spring_boot}"
