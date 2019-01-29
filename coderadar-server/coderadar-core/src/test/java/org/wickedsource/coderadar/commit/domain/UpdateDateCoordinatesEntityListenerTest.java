@@ -19,7 +19,6 @@ public class UpdateDateCoordinatesEntityListenerTest extends IntegrationTestTemp
 
   @Test
   public void updatesDateCoordinates() {
-    Locale.setDefault(Locale.US);
     Project project = EntityFactory.project().validProject();
     projectRepository.save(project);
     Commit commit = EntityFactory.commit().validCommit();
