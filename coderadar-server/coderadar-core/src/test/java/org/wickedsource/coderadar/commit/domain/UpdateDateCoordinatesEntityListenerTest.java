@@ -9,6 +9,8 @@ import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
+import java.util.Locale;
+
 public class UpdateDateCoordinatesEntityListenerTest extends IntegrationTestTemplate {
 
   @Autowired private CommitRepository commitRepository;
@@ -17,6 +19,7 @@ public class UpdateDateCoordinatesEntityListenerTest extends IntegrationTestTemp
 
   @Test
   public void updatesDateCoordinates() {
+    Locale.setDefault(Locale.US);
     Project project = EntityFactory.project().validProject();
     projectRepository.save(project);
     Commit commit = EntityFactory.commit().validCommit();
