@@ -18,7 +18,7 @@ stages:
 jobs:
   include:
   - stage: build
-    script: "./gradlew --stacktrace --debug build"
+    script: "./gradlew --stacktrace build"
 
   - stage: prepare github-pages
     script: "./gradlew --console=plain clean preparePages"
