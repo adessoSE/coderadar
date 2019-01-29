@@ -9,8 +9,6 @@ import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
-import java.util.Locale;
-
 public class UpdateDateCoordinatesEntityListenerTest extends IntegrationTestTemplate {
 
   @Autowired private CommitRepository commitRepository;
