@@ -1,10 +1,11 @@
 language: java
 install: true
-sudo: false
+sudo: true
 addons:
   apt:
     packages:
     - oracle-java8-installer
+    - oracle-java8-set-default
 
 stages:
 - name: build
