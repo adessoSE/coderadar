@@ -24,7 +24,7 @@ jobs:
   - stage: test
     script: "./gradlew --console=plain test"
 
-  - stage: github-pages
+  - stage: prepare github-pages
     script: "./gradlew --console=plain clean preparePages"
 
   - stage: release
