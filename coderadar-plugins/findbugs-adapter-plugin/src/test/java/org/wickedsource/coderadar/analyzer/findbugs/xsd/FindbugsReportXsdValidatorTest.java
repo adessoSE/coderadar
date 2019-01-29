@@ -1,9 +1,10 @@
 package org.wickedsource.coderadar.analyzer.findbugs.xsd;
 
-import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.SAXParseException;
+
+import java.util.List;
 
 public class FindbugsReportXsdValidatorTest extends TestReportAccessor {
 

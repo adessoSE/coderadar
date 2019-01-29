@@ -1,9 +1,10 @@
 package org.wickedsource.coderadar.analyzer.findbugs.xsd;
 
-import java.io.IOException;
-import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class TestReportAccessor {
 
