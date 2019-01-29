@@ -9,13 +9,6 @@ apply plugin: "com.diffplug.gradle.spotless"
 apply plugin: "com.jfrog.bintray"
 apply plugin: "war"
 
-bootWar {
-    mainClassName = 'org.wickedsource.coderadar.CoderadarApplication'
-    launchScript {
-        properties 'executable': 'true'
-    }
-}
-
 ext {
     snippetsDir = file("build/generated-snippets")
 }
