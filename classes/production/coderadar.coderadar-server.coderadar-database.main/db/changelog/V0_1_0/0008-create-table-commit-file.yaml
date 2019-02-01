@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: 8
+      author: thombergs
+      changes:
+        - createTable:
+            tableName: commit_file
+            schemaName: public
+            columns:
+              - column:
+                  name: commit_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: change_type
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            constraintName: pk_cofi_id
+            schemaName: public
+            tableName: commit_file
+            columnNames: commit_id, file_id
+        - addUniqueConstraint:
+            constraintName: uk_cofi_id
+            schemaName: public
+            tableName: commit_file
+            columnNames: commit_id, file_id
+        - addForeignKeyConstraint:
+            constraintName: fk_cofi_commit_id
+            baseColumnNames: commit_id
+            baseTableName: commit_file
+            referencedColumnNames: id
+            referencedTableName: commit
+        - createIndex:
+            indexName: idx_cofi_commit_id
+            schemaName: public
+            tableName: commit_file
+            columns:
+            - column:
+                name: commit_id
+        - addForeignKeyConstraint:
+            constraintName: fk_cofi_file_id
+            baseColumnNames: file_id
+            baseTableName: commit_file
+            referencedColumnNames: id
+            referencedTableName: file
+        - createIndex:
+            indexName: idx_cofi_file_id
+            schemaName: public
+            tableName: commit_file
+            columns:
+            - column:
+                name: file_id

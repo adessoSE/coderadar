@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 22
+      author: thombergs
+      changes:
+        - dropNotNullConstraint:
+            columnName: parent_commit_name
+            schemaName: public
+            tableName: git_log_entry
+            columnDataType: varchar(40)

@@ -1,0 +1,84 @@
+databaseChangeLog:
+  - changeSet:
+      id: 12
+      author: thombergs
+      changes:
+        - createTable:
+            tableName: finding
+            schemaName: public
+            columns:
+              - column:
+                  name: commit_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: metric_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: char_start
+                  type: int
+                  constraints:
+                    nullable: true
+              - column:
+                  name: char_end
+                  type: int
+                  constraints:
+                    nullable: true
+              - column:
+                  name: line_start
+                  type: int
+                  constraints:
+                    nullable: true
+              - column:
+                  name: line_end
+                  type: int
+                  constraints:
+                    nullable: true
+        - addPrimaryKey:
+            constraintName: pk_find_id
+            schemaName: public
+            tableName: finding
+            columnNames: commit_id, file_id, metric_name
+        - addUniqueConstraint:
+            constraintName: uk_find_id
+            schemaName: public
+            tableName: finding
+            columnNames: commit_id, file_id, metric_name
+        - addForeignKeyConstraint:
+            constraintName: fk_glen_comm_id
+            baseColumnNames: commit_id
+            baseTableName: finding
+            referencedColumnNames: id
+            referencedTableName: commit
+        - createIndex:
+            indexName: idx_find_commit_id
+            schemaName: public
+            tableName: finding
+            columns:
+              - column:
+                  name: commit_id
+        - addForeignKeyConstraint:
+            constraintName: fk_glen_file_id
+            baseColumnNames: file_id
+            baseTableName: finding
+            referencedColumnNames: id
+            referencedTableName: file
+        - createIndex:
+            indexName: idx_find_file_id
+            schemaName: public
+            tableName: finding
+            columns:
+              - column:
+                  name: file_id
+        - createSequence:
+            schemaName: public
+            sequenceName: seq_find_id
+

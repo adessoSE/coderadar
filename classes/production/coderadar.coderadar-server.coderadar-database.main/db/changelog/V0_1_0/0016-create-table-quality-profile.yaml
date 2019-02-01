@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: 16
+      author: thombergs
+      changes:
+        - createTable:
+            tableName: quality_profile
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: project_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            constraintName: pk_qupr_id
+            schemaName: public
+            tableName: quality_profile
+            columnNames: id
+        - addUniqueConstraint:
+            constraintName: uk_qupr_id
+            schemaName: public
+            tableName: quality_profile
+            columnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_qupr_project_id
+            baseColumnNames: project_id
+            baseTableName: quality_profile
+            referencedColumnNames: id
+            referencedTableName: project
+        - createIndex:
+            indexName: idx_qupr_project_id
+            schemaName: public
+            tableName: quality_profile
+            columns:
+              - column:
+                  name: project_id
+        - createSequence:
+            schemaName: public
+            sequenceName: seq_qupr_id

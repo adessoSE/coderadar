@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 24
+      author: thombergs
+      changes:
+        - addColumn:
+            columns:
+            - column:
+                name: file_hash
+                type: varchar(40)
+            schemaName: public
+            tableName: git_log_entry
+        - createIndex:
+            indexName: idx_glen_hash
+            schemaName: public
+            tableName: git_log_entry
+            columns:
+              - column:
+                  name: file_hash

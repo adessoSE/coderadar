@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: thombergs
+      changes:
+        - createTable:
+            tableName: analyzer_configuration_file
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_data
+                  type: blob
+                  constraints:
+                    nullable: false
+              - column:
+                  name: content_type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: analyzer_configuration_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: size_in_bytes
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            constraintName: pk_acof_id
+            schemaName: public
+            tableName: analyzer_configuration_file
+            columnNames: id
+        - addUniqueConstraint:
+            constraintName: uk_acof_id
+            schemaName: public
+            tableName: analyzer_configuration_file
+            columnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_acof_acon_id
+            baseColumnNames: analyzer_configuration_id
+            baseTableName: analyzer_configuration_file
+            referencedColumnNames: id
+            referencedTableName: analyzer_configuration
+        - createIndex:
+            indexName: idx_acof_acon_id
+            schemaName: public
+            tableName: analyzer_configuration_file
+            columns:
+            - column:
+                name: analyzer_configuration_id
+        - createSequence:
+            schemaName: public
+            sequenceName: seq_acof_id
+
+

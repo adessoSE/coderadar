@@ -1,0 +1,62 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: thombergs
+      changes:
+        - createTable:
+            tableName: project
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: workdir_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: vcs_url
+                  type: varchar(2000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: vcs_username
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: vcs_password
+                  type: varchar(2000)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: vcs_start_date
+                  type: date
+                  constraints:
+                    nullable: true
+              - column:
+                  name: vcs_end_date
+                  type: date
+                  constraints:
+                    nullable: true
+        - addPrimaryKey:
+            constraintName: pk_proj_id
+            schemaName: public
+            tableName: project
+            columnNames: id
+        - addUniqueConstraint:
+            constraintName: uk_proj_id
+            schemaName: public
+            tableName: project
+            columnNames: id
+        - createSequence:
+            schemaName: public
+            sequenceName: seq_proj_id
