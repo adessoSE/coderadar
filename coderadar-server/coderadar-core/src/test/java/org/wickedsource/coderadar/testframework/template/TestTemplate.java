@@ -6,7 +6,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
-
 import org.springframework.test.annotation.DirtiesContext;
 import org.wickedsource.coderadar.core.WorkdirManager;
 import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
