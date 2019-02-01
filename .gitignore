@@ -10,3 +10,4 @@
 build
 coderadar-server/local.application.properties
 *.class
+/classes
