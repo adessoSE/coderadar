@@ -1,7 +1,5 @@
 package org.wickedsource.coderadar.testframework.template;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.PrintWriter;
 import org.apache.commons.io.FileUtils;
@@ -9,8 +7,9 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,14 +26,14 @@ public abstract class GitTestTemplate extends TestTemplate {
 
   private PersonIdent committer = new PersonIdent("Test Committer", "committer@test.com");
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     testRepo = initRepo();
     git = Git.open(testRepo);
     logger.info("created temporary git repository at {}", testRepo);
   }
 
-  @After
+  @AfterEach
   public void cleanUp() throws Exception {
     git.close();
     FileUtils.deleteDirectory(testRepo.getParentFile());
@@ -46,15 +45,15 @@ public abstract class GitTestTemplate extends TestTemplate {
 
     Git.init().setDirectory(dir).setBare(false).call();
     File repo = new File(dir, Constants.DOT_GIT);
-    assertTrue(repo.exists());
+    Assertions.assertTrue(repo.exists());
 
     return repo;
   }
 
   protected void add(String path, String content) throws Exception {
     File file = new File(testRepo.getParentFile(), path);
-    if (!file.getParentFile().exists()) assertTrue(file.getParentFile().mkdirs());
-    if (!file.exists()) assertTrue(file.createNewFile());
+    if (!file.getParentFile().exists()) Assertions.assertTrue(file.getParentFile().mkdirs());
+    if (!file.exists()) Assertions.assertTrue(file.createNewFile());
     PrintWriter writer = new PrintWriter(file);
     if (content == null) content = "";
     try {

@@ -1,8 +1,8 @@
 package org.wickedsource.coderadar.vcs.git;
 
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.coderadar.testframework.template.GitTestTemplate;
 
 public class GitCommitFinderTest extends GitTestTemplate {
@@ -18,9 +18,9 @@ public class GitCommitFinderTest extends GitTestTemplate {
     RevCommit foundCommit2 = finder.findCommit(git, commit2.getName());
     RevCommit foundCommit3 = finder.findCommit(git, commit3.getName());
 
-    Assert.assertEquals(commit1.getName(), foundCommit1.getName());
-    Assert.assertEquals(commit2.getName(), foundCommit2.getName());
-    Assert.assertEquals(commit3.getName(), foundCommit3.getName());
+    Assertions.assertEquals(commit1.getName(), foundCommit1.getName());
+    Assertions.assertEquals(commit2.getName(), foundCommit2.getName());
+    Assertions.assertEquals(commit3.getName(), foundCommit3.getName());
   }
 
   @Test
@@ -30,6 +30,6 @@ public class GitCommitFinderTest extends GitTestTemplate {
     RevCommit commit3 = commit();
 
     GitCommitFinder finder = new GitCommitFinder();
-    Assert.assertNull(finder.findCommit(git, "36db3431f4ecd789ba0cf8a44954ef51d7402825"));
+    Assertions.assertNull(finder.findCommit(git, "36db3431f4ecd789ba0cf8a44954ef51d7402825"));
   }
 }

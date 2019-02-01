@@ -6,8 +6,8 @@ import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.job.JobLogger;
@@ -21,7 +21,7 @@ public class GitLogAssociatorTriggerTest {
   private ProjectRepository projectRepository = Mockito.mock(ProjectRepository.class);
   private AssociateGitLogTrigger trigger;
 
-  @Before
+  @BeforeEach
   public void setup() {
     trigger =
         new AssociateGitLogTrigger(

@@ -25,6 +25,8 @@ buildscript {
 }
 
 subprojects {
+    apply plugin: "idea"
+    apply plugin: "java"
 
     buildscript {
         repositories {
@@ -46,8 +48,6 @@ subprojects {
         }
     }
 
-    apply plugin: "idea"
-    apply plugin: "java"
 
     version = project.getBuildVersion(baseVersion)
 
@@ -58,6 +58,21 @@ subprojects {
         jcenter()
         mavenCentral()
         mavenLocal()
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    dependencies {
+        testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: version_junit
+        testCompile group: 'org.junit.platform', name: 'junit-platform-runner', version: "1.2.0"
+        testCompile group: 'org.junit.vintage', name: 'junit-vintage-engine', version: version_junit
+        testCompile (group: 'com.github.database-rider', name: 'rider-junit5', version: "1.5.1") {
+            exclude group: "org.slf4j", module: "slf4j-simple"
+        }
+        testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-migrationsupport', version: version_junit
+        testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: version_junit
     }
 
 }

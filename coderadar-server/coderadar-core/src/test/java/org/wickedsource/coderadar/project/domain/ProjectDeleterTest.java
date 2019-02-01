@@ -3,8 +3,8 @@ package org.wickedsource.coderadar.project.domain;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Projects.SINGLE_PROJECT;
 
 import com.github.springtestdbunit.annotation.*;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
@@ -19,6 +19,6 @@ public class ProjectDeleterTest extends IntegrationTestTemplate {
   @DatabaseSetup(SINGLE_PROJECT)
   public void deleteProject() {
     projectDeleter.deleteProject(1L);
-    Assert.assertEquals(0, projectRepository.count());
+    Assertions.assertEquals(0, projectRepository.count());
   }
 }

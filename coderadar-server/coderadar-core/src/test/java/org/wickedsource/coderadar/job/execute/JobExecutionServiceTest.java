@@ -6,8 +6,8 @@ import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Jobs.
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import java.util.Optional;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.job.JobLogger;
@@ -35,23 +35,24 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
   @DatabaseSetup(SINGLE_PROJECT_WITH_WAITING_JOB)
   public void testSuccessfulExecution() {
     Optional<Job> jobBeforeExecution = jobRepository.findById(1L);
-    Assert.assertTrue(jobBeforeExecution.isPresent());
+    Assertions.assertTrue(jobBeforeExecution.isPresent());
 
     JobExecutionService executionService =
         new JobExecutionService(jobLogger, jobQueueService, jobUpdater, jobExecutor);
     executionService.executeNextJobInQueue();
 
     Optional<Job> jobAfterExecution = jobRepository.findById(jobBeforeExecution.get().getId());
-    Assert.assertTrue(jobAfterExecution.isPresent());
-    Assert.assertEquals(ResultStatus.SUCCESS, jobAfterExecution.get().getResultStatus());
-    Assert.assertEquals(ProcessingStatus.PROCESSED, jobAfterExecution.get().getProcessingStatus());
+    Assertions.assertTrue(jobAfterExecution.isPresent());
+    Assertions.assertEquals(ResultStatus.SUCCESS, jobAfterExecution.get().getResultStatus());
+    Assertions.assertEquals(
+        ProcessingStatus.PROCESSED, jobAfterExecution.get().getProcessingStatus());
   }
 
   @Test
   @DatabaseSetup(SINGLE_PROJECT_WITH_WAITING_JOB)
   public void testFailedExecution() {
     Optional<Job> jobBeforeExecution = jobRepository.findById(1L);
-    Assert.assertTrue(jobBeforeExecution.isPresent());
+    Assertions.assertTrue(jobBeforeExecution.isPresent());
 
     doThrow(new RuntimeException("bwaaah")).when(jobExecutor).execute(any(Job.class));
 
@@ -60,9 +61,10 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
     executionService.executeNextJobInQueue();
 
     Optional<Job> jobAfterExecution = jobRepository.findById(jobBeforeExecution.get().getId());
-    Assert.assertTrue(jobAfterExecution.isPresent());
+    Assertions.assertTrue(jobAfterExecution.isPresent());
 
-    Assert.assertEquals(ResultStatus.FAILED, jobAfterExecution.get().getResultStatus());
-    Assert.assertEquals(ProcessingStatus.PROCESSED, jobAfterExecution.get().getProcessingStatus());
+    Assertions.assertEquals(ResultStatus.FAILED, jobAfterExecution.get().getResultStatus());
+    Assertions.assertEquals(
+        ProcessingStatus.PROCESSED, jobAfterExecution.get().getProcessingStatus());
   }
 }

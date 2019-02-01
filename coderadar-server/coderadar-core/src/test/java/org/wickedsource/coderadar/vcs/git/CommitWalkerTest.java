@@ -5,7 +5,7 @@ import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.List;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.wickedsource.coderadar.analyzer.api.*;
 import org.wickedsource.coderadar.testframework.template.GitTestTemplate;

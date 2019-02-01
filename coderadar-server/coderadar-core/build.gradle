@@ -35,22 +35,21 @@ processResources {
 
 test {
     outputs.dir snippetsDir
-
-    useJUnit {
+    useJUnitPlatform  {
         // disable long-running integration tests by default
-        excludeCategories "org.wickedsource.coderadar.testframework.category.IntegrationTest"
+        excludeTags 'IntegrationTest.class'
     }
 }
 
 task integrationTest(type: Test) {
-    useJUnit {
-        includeCategories "org.wickedsource.coderadar.testframework.category.IntegrationTest"
+    useJUnitPlatform  {
+        includeTags "IntegrationTest.class"
     }
 }
 
 task controllerTest(type: Test) {
-    useJUnit {
-        includeCategories "org.wickedsource.coderadar.testframework.category.ControllerTest"
+    useJUnitPlatform  {
+        includeTags "ControllerTest.class"
     }
 }
 
@@ -114,7 +113,6 @@ dependencies {
     providedRuntime group: 'org.apache.tomcat', name: 'tomcat-juli', version: property('tomcat.version')
 
     testCompile "org.springframework.boot:spring-boot-starter-test:${version_spring_boot}"
-    testCompile "junit:junit:4.12"
     testCompile "org.slf4j:slf4j-ext:1.7.21"
     testCompile "org.springframework.restdocs:spring-restdocs-mockmvc:${version_spring_restdocs}"
     testCompile "org.springframework.restdocs:spring-restdocs-core:${version_spring_restdocs}"
@@ -125,6 +123,7 @@ dependencies {
 
     configurations.all {
         exclude(group: 'org.hibernate', module: 'hibernate-entitymanager')
+        //exclude(group: 'junit', module: 'junit')
     }
 }
 

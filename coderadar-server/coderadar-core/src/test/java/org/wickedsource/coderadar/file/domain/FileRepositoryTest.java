@@ -4,8 +4,8 @@ import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.EMPTY
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.*;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
@@ -47,9 +47,9 @@ public class FileRepositoryTest extends IntegrationTestTemplate {
 
     File foundFile =
         fileRepository.findInCommit(file.getFilepath(), commit.getName(), project.getId());
-    Assert.assertEquals(file.getId(), foundFile.getId());
+    Assertions.assertEquals(file.getId(), foundFile.getId());
 
-    Assert.assertEquals(
+    Assertions.assertEquals(
         null, fileRepository.findInCommit("321", commit.getName(), project.getId()));
   }
 }

@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.graph.Neo4jIntegrationTestTemplate;
@@ -44,7 +44,7 @@ public class FileSnapshotNodeRepositoryTest extends Neo4jIntegrationTestTemplate
     Collection<FileSnapshotNode> nodes = session.loadAll(FileSnapshotNode.class);
   }
 
-  @Before
+  @BeforeEach
   public void createTestData() {
 
     FileNode file1 = new FileNode(FileId.from("file1"));

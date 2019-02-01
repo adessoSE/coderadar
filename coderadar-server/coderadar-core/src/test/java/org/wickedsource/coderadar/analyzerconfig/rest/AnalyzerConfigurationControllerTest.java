@@ -13,14 +13,13 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.s
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
-import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
-@Category(ControllerTest.class)
+@Tag("ControllerTest.class")
 public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate {
 
   @Test

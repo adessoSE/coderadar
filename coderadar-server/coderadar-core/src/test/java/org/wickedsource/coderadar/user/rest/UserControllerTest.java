@@ -20,9 +20,9 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import java.util.Date;
 import java.util.Optional;
 import org.joda.time.DateTime;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
@@ -30,14 +30,13 @@ import org.wickedsource.coderadar.factories.databases.DbUnitFactory;
 import org.wickedsource.coderadar.security.TokenType;
 import org.wickedsource.coderadar.security.domain.*;
 import org.wickedsource.coderadar.security.service.SecretKeyService;
-import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 import org.wickedsource.coderadar.user.domain.UserLoginResource;
 import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.user.domain.UserRepository;
 import org.wickedsource.coderadar.user.domain.UserResource;
 
-@Category(ControllerTest.class)
+@Tag("ControllerTest.class")
 public class UserControllerTest extends ControllerTestTemplate {
 
   @Autowired private UserRepository userRepository;
@@ -152,7 +151,7 @@ public class UserControllerTest extends ControllerTestTemplate {
 
     // save valid refresh token
     Optional<RefreshToken> refreshTokenEntity = refreshTokenRepository.findById(100L);
-    Assert.assertTrue(refreshTokenEntity.isPresent());
+    Assertions.assertTrue(refreshTokenEntity.isPresent());
     refreshTokenEntity.get().setToken(refreshToken);
     refreshTokenRepository.save(refreshTokenEntity.get());
 
@@ -176,7 +175,7 @@ public class UserControllerTest extends ControllerTestTemplate {
     String refreshToken = createRefreshToken();
     // save valid refresh token
     Optional<RefreshToken> refreshTokenEntity = refreshTokenRepository.findById(100L);
-    Assert.assertTrue(refreshTokenEntity.isPresent());
+    Assertions.assertTrue(refreshTokenEntity.isPresent());
 
     refreshTokenEntity.get().setToken(refreshToken);
     refreshTokenRepository.save(refreshTokenEntity.get());

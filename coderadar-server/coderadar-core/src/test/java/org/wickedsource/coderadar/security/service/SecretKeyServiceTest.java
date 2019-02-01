@@ -3,7 +3,7 @@ package org.wickedsource.coderadar.security.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.crypto.SecretKey;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 

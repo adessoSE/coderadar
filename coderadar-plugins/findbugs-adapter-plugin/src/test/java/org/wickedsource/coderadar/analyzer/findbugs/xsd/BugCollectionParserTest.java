@@ -1,7 +1,7 @@
 package org.wickedsource.coderadar.analyzer.findbugs.xsd;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class BugCollectionParserTest extends TestReportAccessor {
 
@@ -12,6 +12,6 @@ public class BugCollectionParserTest extends TestReportAccessor {
     BugCollectionParser parser = new BugCollectionParser();
     BugCollection collection = parser.fromBytes(report);
 
-    Assert.assertNotNull(collection);
+    Assertions.assertNotNull(collection);
   }
 }

@@ -1,7 +1,7 @@
 package org.wickedsource.coderadar.analyzer.findbugs.xsd;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.coderadar.analyzer.api.FileSetMetrics;
 import org.wickedsource.coderadar.analyzer.api.Metric;
 
@@ -16,26 +16,26 @@ public class FindbugsReportMapperTest extends TestReportAccessor {
     Metric metric1 = new Metric("findbugs:EI_EXPOSE_REP");
     Metric metric2 = new Metric("findbugs:EI_EXPOSE_REP2");
 
-    Assert.assertNotNull(metrics);
-    Assert.assertEquals(5, metrics.getFiles().size());
-    Assert.assertEquals(
+    Assertions.assertNotNull(metrics);
+    Assertions.assertEquals(5, metrics.getFiles().size());
+    Assertions.assertEquals(
         Long.valueOf(1),
         metrics
             .getFileMetrics("org/wickedsource/coderadar/annotator/api/Commit.java")
             .getMetricCount(metric1));
-    Assert.assertEquals(
+    Assertions.assertEquals(
         Long.valueOf(1),
         metrics
             .getFileMetrics("org/wickedsource/coderadar/annotator/api/Commit.java")
             .getMetricCount(metric2));
-    Assert.assertEquals(
+    Assertions.assertEquals(
         Integer.valueOf(26),
         metrics
             .getFileMetrics("org/wickedsource/coderadar/annotator/api/Commit.java")
             .getFindings(metric1)
             .get(0)
             .getLineStart());
-    Assert.assertEquals(
+    Assertions.assertEquals(
         Integer.valueOf(26),
         metrics
             .getFileMetrics("org/wickedsource/coderadar/annotator/api/Commit.java")

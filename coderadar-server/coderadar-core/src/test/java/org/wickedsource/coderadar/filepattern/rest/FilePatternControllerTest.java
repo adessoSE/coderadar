@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.filepattern.rest;
 
+import static com.github.database.rider.core.util.EntityManagerProvider.instance;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -12,15 +13,19 @@ import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJso
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
 
+import com.github.database.rider.core.api.configuration.DBUnit;
+import com.github.database.rider.core.api.connection.ConnectionHolder;
+import com.github.database.rider.core.util.EntityManagerProvider;
+import com.github.database.rider.junit5.api.DBRider;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
-@Category(ControllerTest.class)
+@Tag("ControllerTest.class")
+@DBUnit
 public class FilePatternControllerTest extends ControllerTestTemplate {
 
   @Test
