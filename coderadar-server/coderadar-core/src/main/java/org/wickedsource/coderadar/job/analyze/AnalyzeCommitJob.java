@@ -9,13 +9,13 @@ import org.wickedsource.coderadar.job.core.Job;
 @Entity
 public class AnalyzeCommitJob extends Job {
 
-  @ManyToOne private Commit commit;
+	@ManyToOne private Commit commit;
 
-  public Commit getCommit() {
-    return commit;
-  }
+	public Commit getCommit() {
+		return commit;
+	}
 
-  public void setCommit(Commit commit) {
-    this.commit = commit;
-  }
+	public void setCommit(Commit commit) {
+		this.commit = commit;
+	}
 }

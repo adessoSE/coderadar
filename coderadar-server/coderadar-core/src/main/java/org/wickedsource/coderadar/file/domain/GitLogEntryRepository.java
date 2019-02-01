@@ -7,16 +7,16 @@ import org.wickedsource.coderadar.analyzer.api.ChangeType;
 
 public interface GitLogEntryRepository extends CrudRepository<GitLogEntry, Long> {
 
-  List<GitLogEntry> findByCommitNameAndChangeTypeIn(
-      String commitName, List<ChangeType> changeTypes);
+	List<GitLogEntry> findByCommitNameAndChangeTypeIn(
+			String commitName, List<ChangeType> changeTypes);
 
-  int deleteByProjectId(Long projectId);
+	int deleteByProjectId(Long projectId);
 
-  int countByProjectIdAndFilepathAndChangeTypeAndFileHash(
-      long projectId, String filepath, ChangeType changeType, String fileHash);
+	int countByProjectIdAndFilepathAndChangeTypeAndFileHash(
+			long projectId, String filepath, ChangeType changeType, String fileHash);
 
-  List<GitLogEntry> findByCommitId(long commitId);
+	List<GitLogEntry> findByCommitId(long commitId);
 
-  List<GitLogEntry> findByCommitIdAndChangeTypeIn(
-      long commitId, Collection<ChangeType> changeTypes);
+	List<GitLogEntry> findByCommitIdAndChangeTypeIn(
+			long commitId, Collection<ChangeType> changeTypes);
 }

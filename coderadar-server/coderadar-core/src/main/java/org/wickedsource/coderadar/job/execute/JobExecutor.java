@@ -17,43 +17,43 @@ import org.wickedsource.coderadar.job.scan.file.ScanFilesJob;
 @Service
 class JobExecutor {
 
-  private CommitMetadataScanner commitMetadataScanner;
+	private CommitMetadataScanner commitMetadataScanner;
 
-  private FileMetadataScanner fileMetadataScanner;
+	private FileMetadataScanner fileMetadataScanner;
 
-  private GitLogAssociator gitLogAssociator;
+	private GitLogAssociator gitLogAssociator;
 
-  private CommitAnalyzer commitAnalyzer;
+	private CommitAnalyzer commitAnalyzer;
 
-  @Autowired
-  public JobExecutor(
-      CommitMetadataScanner commitMetadataScanner,
-      FileMetadataScanner fileMetadataScanner,
-      GitLogAssociator gitLogAssociator,
-      CommitAnalyzer commitAnalyzer) {
-    this.commitMetadataScanner = commitMetadataScanner;
-    this.fileMetadataScanner = fileMetadataScanner;
-    this.gitLogAssociator = gitLogAssociator;
-    this.commitAnalyzer = commitAnalyzer;
-  }
+	@Autowired
+	public JobExecutor(
+			CommitMetadataScanner commitMetadataScanner,
+			FileMetadataScanner fileMetadataScanner,
+			GitLogAssociator gitLogAssociator,
+			CommitAnalyzer commitAnalyzer) {
+		this.commitMetadataScanner = commitMetadataScanner;
+		this.fileMetadataScanner = fileMetadataScanner;
+		this.gitLogAssociator = gitLogAssociator;
+		this.commitAnalyzer = commitAnalyzer;
+	}
 
-  /**
-   * Executes the given job.
-   *
-   * @param job the job to execute.
-   */
-  @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public void execute(Job job) {
-    if (job instanceof ScanCommitsJob) {
-      commitMetadataScanner.scan(job.getProject());
-    } else if (job instanceof ScanFilesJob) {
-      fileMetadataScanner.scan(((ScanFilesJob) job).getCommit());
-    } else if (job instanceof AssociateGitLogJob) {
-      gitLogAssociator.associate(job.getProject());
-    } else if (job instanceof AnalyzeCommitJob) {
-      commitAnalyzer.analyzeCommit(((AnalyzeCommitJob) job).getCommit());
-    } else {
-      throw new IllegalArgumentException(String.format("unsupported job type %s", job.getClass()));
-    }
-  }
+	/**
+	* Executes the given job.
+	*
+	* @param job the job to execute.
+	*/
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public void execute(Job job) {
+		if (job instanceof ScanCommitsJob) {
+			commitMetadataScanner.scan(job.getProject());
+		} else if (job instanceof ScanFilesJob) {
+			fileMetadataScanner.scan(((ScanFilesJob) job).getCommit());
+		} else if (job instanceof AssociateGitLogJob) {
+			gitLogAssociator.associate(job.getProject());
+		} else if (job instanceof AnalyzeCommitJob) {
+			commitAnalyzer.analyzeCommit(((AnalyzeCommitJob) job).getCommit());
+		} else {
+			throw new IllegalArgumentException(String.format("unsupported job type %s", job.getClass()));
+		}
+	}
 }

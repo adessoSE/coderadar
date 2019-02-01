@@ -15,9 +15,9 @@ import javax.validation.Payload;
 @Retention(RUNTIME)
 public @interface ValidPassword {
 
-  String message() default "Specified password does not comply to password rules";
+	String message() default "Specified password does not comply to password rules";
 
-  Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-  Class<? extends Payload>[] payload() default {};
+	Class<? extends Payload>[] payload() default {};
 }

@@ -26,57 +26,57 @@ import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 @RequestMapping(path = "/projects/{projectId}/analyzingJob")
 public class AnalyzingJobController {
 
-  private ProjectVerifier projectVerifier;
+	private ProjectVerifier projectVerifier;
 
-  private AnalyzingJobRepository analyzingJobRepository;
+	private AnalyzingJobRepository analyzingJobRepository;
 
-  private ProjectResetter projectResetter;
+	private ProjectResetter projectResetter;
 
-  @Autowired
-  public AnalyzingJobController(
-      ProjectVerifier projectVerifier,
-      AnalyzingJobRepository analyzingJobRepository,
-      ProjectResetter projectResetter) {
-    this.projectVerifier = projectVerifier;
-    this.analyzingJobRepository = analyzingJobRepository;
-    this.projectResetter = projectResetter;
-  }
+	@Autowired
+	public AnalyzingJobController(
+			ProjectVerifier projectVerifier,
+			AnalyzingJobRepository analyzingJobRepository,
+			ProjectResetter projectResetter) {
+		this.projectVerifier = projectVerifier;
+		this.analyzingJobRepository = analyzingJobRepository;
+		this.projectResetter = projectResetter;
+	}
 
-  @RequestMapping(method = RequestMethod.GET)
-  public ResponseEntity<AnalyzingJobResource> getAnalyzingJob(
-      @PathVariable("projectId") Long projectId) {
-    projectVerifier.checkProjectExistsOrThrowException(projectId);
-    AnalyzingJob strategy = analyzingJobRepository.findByProjectId(projectId);
-    if (strategy == null) {
-      throw new ResourceNotFoundException();
-    }
-    AnalyzingJobResourceAssembler assembler = new AnalyzingJobResourceAssembler(projectId);
-    return new ResponseEntity<>(assembler.toResource(strategy), HttpStatus.OK);
-  }
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<AnalyzingJobResource> getAnalyzingJob(
+			@PathVariable("projectId") Long projectId) {
+		projectVerifier.checkProjectExistsOrThrowException(projectId);
+		AnalyzingJob strategy = analyzingJobRepository.findByProjectId(projectId);
+		if (strategy == null) {
+			throw new ResourceNotFoundException();
+		}
+		AnalyzingJobResourceAssembler assembler = new AnalyzingJobResourceAssembler(projectId);
+		return new ResponseEntity<>(assembler.toResource(strategy), HttpStatus.OK);
+	}
 
-  @RequestMapping(method = RequestMethod.POST)
-  public ResponseEntity<AnalyzingJobResource> setAnalyzingJob(
-      @PathVariable("projectId") Long projectId,
-      @Valid @RequestBody AnalyzingJobResource resource) {
-    Project project = projectVerifier.loadProjectOrThrowException(projectId);
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<AnalyzingJobResource> setAnalyzingJob(
+			@PathVariable("projectId") Long projectId,
+			@Valid @RequestBody AnalyzingJobResource resource) {
+		Project project = projectVerifier.loadProjectOrThrowException(projectId);
 
-    if (resource.isRescanNullsafe()) {
-      try {
-        projectResetter.resetProject(project);
-      } catch (ProjectResetException e) {
-        throw new UserException(
-            "Cannot re-scan project while there are analyzer jobs waiting or running.");
-      }
-    }
+		if (resource.isRescanNullsafe()) {
+			try {
+				projectResetter.resetProject(project);
+			} catch (ProjectResetException e) {
+				throw new UserException(
+						"Cannot re-scan project while there are analyzer jobs waiting or running.");
+			}
+		}
 
-    AnalyzingJob strategy = analyzingJobRepository.findByProjectId(projectId);
-    if (strategy == null) {
-      strategy = new AnalyzingJob();
-    }
+		AnalyzingJob strategy = analyzingJobRepository.findByProjectId(projectId);
+		if (strategy == null) {
+			strategy = new AnalyzingJob();
+		}
 
-    AnalyzingJobResourceAssembler assembler = new AnalyzingJobResourceAssembler(projectId);
-    strategy = assembler.updateEntity(strategy, resource, project);
-    analyzingJobRepository.save(strategy);
-    return new ResponseEntity<>(assembler.toResource(strategy), HttpStatus.OK);
-  }
+		AnalyzingJobResourceAssembler assembler = new AnalyzingJobResourceAssembler(projectId);
+		strategy = assembler.updateEntity(strategy, resource, project);
+		analyzingJobRepository.save(strategy);
+		return new ResponseEntity<>(assembler.toResource(strategy), HttpStatus.OK);
+	}
 }

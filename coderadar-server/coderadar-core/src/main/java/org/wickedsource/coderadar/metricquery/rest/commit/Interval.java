@@ -1,11 +1,11 @@
 package org.wickedsource.coderadar.metricquery.rest.commit;
 
 public enum Interval {
-  DAY,
+	DAY,
 
-  WEEK,
+	WEEK,
 
-  MONTH,
+	MONTH,
 
-  YEAR;
+	YEAR;
 }

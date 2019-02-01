@@ -19,38 +19,38 @@ import org.wickedsource.coderadar.user.service.RegistrationService;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class RegistrationServiceTest {
 
-  @InjectMocks private RegistrationService registrationService;
+	@InjectMocks private RegistrationService registrationService;
 
-  @Mock private UserRepository userRepository;
+	@Mock private UserRepository userRepository;
 
-  @Test
-  public void existsUser() throws Exception {
-    when(userRepository.findByUsername(anyString())).thenReturn(new User());
-    boolean existsUser =
-        registrationService.userExists(new UserRegistrationDataResource("username", "password"));
-    assertThat(existsUser).isTrue();
-  }
+	@Test
+	public void existsUser() throws Exception {
+		when(userRepository.findByUsername(anyString())).thenReturn(new User());
+		boolean existsUser =
+				registrationService.userExists(new UserRegistrationDataResource("username", "password"));
+		assertThat(existsUser).isTrue();
+	}
 
-  @Test
-  public void notExistUser() throws Exception {
-    when(userRepository.findByUsername(anyString())).thenReturn(null);
-    boolean existsUser =
-        registrationService.userExists(new UserRegistrationDataResource("username", "password"));
-    assertThat(existsUser).isFalse();
-  }
+	@Test
+	public void notExistUser() throws Exception {
+		when(userRepository.findByUsername(anyString())).thenReturn(null);
+		boolean existsUser =
+				registrationService.userExists(new UserRegistrationDataResource("username", "password"));
+		assertThat(existsUser).isFalse();
+	}
 
-  @Test
-  public void getUser() throws Exception {
-    User user = new User();
-    user.setUsername("user");
-    when(userRepository.findOne(anyLong())).thenReturn(user);
-    User foundUser = registrationService.getUser(1L);
-    assertThat(foundUser).isSameAs(user);
-  }
+	@Test
+	public void getUser() throws Exception {
+		User user = new User();
+		user.setUsername("user");
+		when(userRepository.findOne(anyLong())).thenReturn(user);
+		User foundUser = registrationService.getUser(1L);
+		assertThat(foundUser).isSameAs(user);
+	}
 
-  @Test(expected = ResourceNotFoundException.class)
-  public void getUserNotFound() throws Exception {
-    when(userRepository.findOne(anyLong())).thenReturn(null);
-    registrationService.getUser(1L);
-  }
+	@Test(expected = ResourceNotFoundException.class)
+	public void getUserNotFound() throws Exception {
+		when(userRepository.findOne(anyLong())).thenReturn(null);
+		registrationService.getUser(1L);
+	}
 }

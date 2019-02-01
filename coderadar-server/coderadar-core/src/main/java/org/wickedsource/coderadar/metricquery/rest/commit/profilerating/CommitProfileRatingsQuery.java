@@ -7,47 +7,47 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * Objects of this class provide parameters to query for quality profile ratings aggregated per
- * commit.
- */
+* Objects of this class provide parameters to query for quality profile ratings aggregated per
+* commit.
+*/
 public class CommitProfileRatingsQuery {
 
-  @NotNull private String commit;
+	@NotNull private String commit;
 
-  @Size(min = 1)
-  private List<String> profiles;
+	@Size(min = 1)
+	private List<String> profiles;
 
-  public CommitProfileRatingsQuery() {}
+	public CommitProfileRatingsQuery() {}
 
-  private void initProfiles() {
-    if (profiles == null) {
-      profiles = new ArrayList<>();
-    }
-  }
+	private void initProfiles() {
+		if (profiles == null) {
+			profiles = new ArrayList<>();
+		}
+	}
 
-  public List<String> getProfiles() {
-    return profiles;
-  }
+	public List<String> getProfiles() {
+		return profiles;
+	}
 
-  public void setProfiles(List<String> profiles) {
-    this.profiles = profiles;
-  }
+	public void setProfiles(List<String> profiles) {
+		this.profiles = profiles;
+	}
 
-  public void addProfile(String profileName) {
-    initProfiles();
-    this.profiles.add(profileName);
-  }
+	public void addProfile(String profileName) {
+		initProfiles();
+		this.profiles.add(profileName);
+	}
 
-  public void addProfiles(String... profileNames) {
-    initProfiles();
-    this.profiles.addAll(Arrays.asList(profileNames));
-  }
+	public void addProfiles(String... profileNames) {
+		initProfiles();
+		this.profiles.addAll(Arrays.asList(profileNames));
+	}
 
-  public String getCommit() {
-    return commit;
-  }
+	public String getCommit() {
+		return commit;
+	}
 
-  public void setCommit(String commit) {
-    this.commit = commit;
-  }
+	public void setCommit(String commit) {
+		this.commit = commit;
+	}
 }

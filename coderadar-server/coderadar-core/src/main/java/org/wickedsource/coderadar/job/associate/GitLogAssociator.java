@@ -12,32 +12,32 @@ import org.wickedsource.coderadar.project.domain.Project;
 @Service
 public class GitLogAssociator {
 
-  private Logger logger = LoggerFactory.getLogger(GitLogAssociator.class);
+	private Logger logger = LoggerFactory.getLogger(GitLogAssociator.class);
 
-  private CommitRepository commitRepository;
+	private CommitRepository commitRepository;
 
-  private CommitToFileAssociator commitToFileAssociator;
+	private CommitToFileAssociator commitToFileAssociator;
 
-  @Autowired
-  public GitLogAssociator(
-      CommitRepository commitRepository, CommitToFileAssociator commitToFileAssociator) {
-    this.commitRepository = commitRepository;
-    this.commitToFileAssociator = commitToFileAssociator;
-  }
+	@Autowired
+	public GitLogAssociator(
+			CommitRepository commitRepository, CommitToFileAssociator commitToFileAssociator) {
+		this.commitRepository = commitRepository;
+		this.commitToFileAssociator = commitToFileAssociator;
+	}
 
-  /**
-   * Goes through all files in all commits of the specified project and associates them with other
-   * files to support git RENAMEs.
-   *
-   * @param project the project whose files to associate.
-   */
-  public void associate(Project project) {
-    List<Commit> commitsToMerge =
-        commitRepository.findByProjectIdAndScannedTrueAndMergedFalseOrderBySequenceNumber(
-            project.getId());
-    for (Commit commit : commitsToMerge) {
-      commitToFileAssociator.associateFilesOfCommit(commit);
-    }
-    logger.info("processed {} commits for project {}", commitsToMerge.size(), project);
-  }
+	/**
+	* Goes through all files in all commits of the specified project and associates them with other
+	* files to support git RENAMEs.
+	*
+	* @param project the project whose files to associate.
+	*/
+	public void associate(Project project) {
+		List<Commit> commitsToMerge =
+				commitRepository.findByProjectIdAndScannedTrueAndMergedFalseOrderBySequenceNumber(
+						project.getId());
+		for (Commit commit : commitsToMerge) {
+			commitToFileAssociator.associateFilesOfCommit(commit);
+		}
+		logger.info("processed {} commits for project {}", commitsToMerge.size(), project);
+	}
 }

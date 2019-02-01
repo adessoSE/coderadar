@@ -8,14 +8,14 @@ import org.wickedsource.coderadar.user.domain.User;
 
 public interface RefreshTokenRepository extends CrudRepository<RefreshToken, Long> {
 
-  RefreshToken findByToken(String token);
+	RefreshToken findByToken(String token);
 
-  /**
-   * deletes all refrech token of the user
-   *
-   * @param user user having refresh tokens
-   */
-  @Modifying
-  @Query("DELETE FROM RefreshToken rt where rt.user = :user")
-  int deleteByUser(@Param("user") User user);
+	/**
+	* deletes all refrech token of the user
+	*
+	* @param user user having refresh tokens
+	*/
+	@Modifying
+	@Query("DELETE FROM RefreshToken rt where rt.user = :user")
+	int deleteByUser(@Param("user") User user);
 }

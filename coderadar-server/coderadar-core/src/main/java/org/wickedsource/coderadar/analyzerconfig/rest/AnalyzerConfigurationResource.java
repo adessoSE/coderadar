@@ -5,30 +5,30 @@ import org.springframework.hateoas.ResourceSupport;
 
 public class AnalyzerConfigurationResource extends ResourceSupport {
 
-  @NotNull private String analyzerName;
+	@NotNull private String analyzerName;
 
-  @NotNull private Boolean enabled;
+	@NotNull private Boolean enabled;
 
-  public AnalyzerConfigurationResource() {}
+	public AnalyzerConfigurationResource() {}
 
-  public AnalyzerConfigurationResource(String analyzerName, boolean enabled) {
-    this.analyzerName = analyzerName;
-    this.enabled = enabled;
-  }
+	public AnalyzerConfigurationResource(String analyzerName, boolean enabled) {
+		this.analyzerName = analyzerName;
+		this.enabled = enabled;
+	}
 
-  public String getAnalyzerName() {
-    return analyzerName;
-  }
+	public String getAnalyzerName() {
+		return analyzerName;
+	}
 
-  public void setAnalyzerName(String analyzerName) {
-    this.analyzerName = analyzerName;
-  }
+	public void setAnalyzerName(String analyzerName) {
+		this.analyzerName = analyzerName;
+	}
 
-  public Boolean isEnabled() {
-    return enabled;
-  }
+	public Boolean isEnabled() {
+		return enabled;
+	}
 
-  public void setEnabled(Boolean enabled) {
-    this.enabled = enabled;
-  }
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
 }

@@ -12,12 +12,12 @@ import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate
 
 public class ProjectRepositoryTest extends IntegrationTestTemplate {
 
-  @Autowired private ProjectRepository projectRepository;
+	@Autowired private ProjectRepository projectRepository;
 
-  @Test
-  public void saveEntity() throws MalformedURLException {
-    Project project = projectRepository.save(project().validProject());
-    project = projectRepository.findOne(project.getId());
-    Assert.assertNotNull(project);
-  }
+	@Test
+	public void saveEntity() throws MalformedURLException {
+		Project project = projectRepository.save(project().validProject());
+		project = projectRepository.findOne(project.getId());
+		Assert.assertNotNull(project);
+	}
 }

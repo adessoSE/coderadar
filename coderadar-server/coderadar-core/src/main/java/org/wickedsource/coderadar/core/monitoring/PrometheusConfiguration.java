@@ -11,25 +11,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * This configuration activates the "/prometheus" endpoint and exposes default metrics and all
- * DropWizard metrics to this endpoint.
- */
+* This configuration activates the "/prometheus" endpoint and exposes default metrics and all
+* DropWizard metrics to this endpoint.
+*/
 @Configuration
 @EnablePrometheusEndpoint
 public class PrometheusConfiguration {
 
-  private MetricRegistry dropwizardMetricRegistry;
+	private MetricRegistry dropwizardMetricRegistry;
 
-  @Autowired
-  public PrometheusConfiguration(MetricRegistry dropwizardMetricRegistry) {
-    this.dropwizardMetricRegistry = dropwizardMetricRegistry;
-  }
+	@Autowired
+	public PrometheusConfiguration(MetricRegistry dropwizardMetricRegistry) {
+		this.dropwizardMetricRegistry = dropwizardMetricRegistry;
+	}
 
-  @PostConstruct
-  public void registerPrometheusCollectors() {
-    CollectorRegistry.defaultRegistry.clear();
-    new StandardExports().register();
-    new MemoryPoolsExports().register();
-    new DropwizardExports(dropwizardMetricRegistry).register();
-  }
+	@PostConstruct
+	public void registerPrometheusCollectors() {
+		CollectorRegistry.defaultRegistry.clear();
+		new StandardExports().register();
+		new MemoryPoolsExports().register();
+		new DropwizardExports(dropwizardMetricRegistry).register();
+	}
 }

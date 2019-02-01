@@ -18,52 +18,52 @@ import org.wickedsource.coderadar.job.core.ProcessingStatus;
 @ConditionalOnProperty("coderadar.master")
 public class FileMetadataScannerTrigger {
 
-  private JobLogger jobLogger;
+	private JobLogger jobLogger;
 
-  private CommitRepository commitRepository;
+	private CommitRepository commitRepository;
 
-  private ScanFilesJobRepository jobRepository;
+	private ScanFilesJobRepository jobRepository;
 
-  private FilePatternRepository filePatternRepository;
+	private FilePatternRepository filePatternRepository;
 
-  @Autowired
-  public FileMetadataScannerTrigger(
-      JobLogger jobLogger,
-      CommitRepository commitRepository,
-      ScanFilesJobRepository jobRepository,
-      FilePatternRepository filePatternRepository) {
-    this.jobLogger = jobLogger;
-    this.commitRepository = commitRepository;
-    this.jobRepository = jobRepository;
-    this.filePatternRepository = filePatternRepository;
-  }
+	@Autowired
+	public FileMetadataScannerTrigger(
+			JobLogger jobLogger,
+			CommitRepository commitRepository,
+			ScanFilesJobRepository jobRepository,
+			FilePatternRepository filePatternRepository) {
+		this.jobLogger = jobLogger;
+		this.commitRepository = commitRepository;
+		this.jobRepository = jobRepository;
+		this.filePatternRepository = filePatternRepository;
+	}
 
-  @Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
-  public void trigger() {
-    List<Commit> unscannedCommits = commitRepository.findByScannedFalse();
-    for (Commit commit : unscannedCommits) {
-      if (isJobCurrentlyQueuedForCommit(commit)) {
-        jobLogger.alreadyQueuedForCommit(ScanFilesJob.class, commit);
-      } else if (hasFilePatternsConfigured(commit)) {
-        ScanFilesJob job = new ScanFilesJob();
-        job.setCommit(commit);
-        job.setProject(commit.getProject());
-        job.setProcessingStatus(ProcessingStatus.WAITING);
-        job.setQueuedDate(new Date());
-        jobRepository.save(job);
-        jobLogger.queuedNewJob(job, commit.getProject());
-      }
-    }
-  }
+	@Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
+	public void trigger() {
+		List<Commit> unscannedCommits = commitRepository.findByScannedFalse();
+		for (Commit commit : unscannedCommits) {
+			if (isJobCurrentlyQueuedForCommit(commit)) {
+				jobLogger.alreadyQueuedForCommit(ScanFilesJob.class, commit);
+			} else if (hasFilePatternsConfigured(commit)) {
+				ScanFilesJob job = new ScanFilesJob();
+				job.setCommit(commit);
+				job.setProject(commit.getProject());
+				job.setProcessingStatus(ProcessingStatus.WAITING);
+				job.setQueuedDate(new Date());
+				jobRepository.save(job);
+				jobLogger.queuedNewJob(job, commit.getProject());
+			}
+		}
+	}
 
-  private boolean isJobCurrentlyQueuedForCommit(Commit commit) {
-    int count =
-        jobRepository.countByProcessingStatusInAndCommitId(
-            Arrays.asList(ProcessingStatus.WAITING, ProcessingStatus.PROCESSING), commit.getId());
-    return count > 0;
-  }
+	private boolean isJobCurrentlyQueuedForCommit(Commit commit) {
+		int count =
+				jobRepository.countByProcessingStatusInAndCommitId(
+						Arrays.asList(ProcessingStatus.WAITING, ProcessingStatus.PROCESSING), commit.getId());
+		return count > 0;
+	}
 
-  private boolean hasFilePatternsConfigured(Commit commit) {
-    return filePatternRepository.countByProjectId(commit.getProject().getId()) > 0;
-  }
+	private boolean hasFilePatternsConfigured(Commit commit) {
+		return filePatternRepository.countByProjectId(commit.getProject().getId()) > 0;
+	}
 }

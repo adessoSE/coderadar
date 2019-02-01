@@ -8,61 +8,61 @@ import org.wickedsource.coderadar.project.domain.Project;
 @Entity
 @Table(name = "quality_profile")
 @SequenceGenerator(
-  name = "quality_profile_sequence",
-  sequenceName = "seq_qupr_id",
-  allocationSize = 1
+	name = "quality_profile_sequence",
+	sequenceName = "seq_qupr_id",
+	allocationSize = 1
 )
 public class QualityProfile {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quality_profile_sequence")
-  @Column(name = "id")
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quality_profile_sequence")
+	@Column(name = "id")
+	private Long id;
 
-  @OneToMany(
-    fetch = FetchType.EAGER,
-    cascade = CascadeType.ALL,
-    orphanRemoval = true,
-    mappedBy = "profile"
-  )
-  private List<QualityProfileMetric> metrics = new ArrayList<>();
+	@OneToMany(
+		fetch = FetchType.EAGER,
+		cascade = CascadeType.ALL,
+		orphanRemoval = true,
+		mappedBy = "profile"
+	)
+	private List<QualityProfileMetric> metrics = new ArrayList<>();
 
-  @Column(name = "name")
-  private String name;
+	@Column(name = "name")
+	private String name;
 
-  @ManyToOne
-  @JoinColumn(name = "project_id")
-  private Project project;
+	@ManyToOne
+	@JoinColumn(name = "project_id")
+	private Project project;
 
-  public Long getId() {
-    return id;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public List<QualityProfileMetric> getMetrics() {
-    return metrics;
-  }
+	public List<QualityProfileMetric> getMetrics() {
+		return metrics;
+	}
 
-  public void setMetrics(List<QualityProfileMetric> metrics) {
-    this.metrics = metrics;
-  }
+	public void setMetrics(List<QualityProfileMetric> metrics) {
+		this.metrics = metrics;
+	}
 
-  public String getName() {
-    return name;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public Project getProject() {
-    return project;
-  }
+	public Project getProject() {
+		return project;
+	}
 
-  public void setProject(Project project) {
-    this.project = project;
-  }
+	public void setProject(Project project) {
+		this.project = project;
+	}
 }

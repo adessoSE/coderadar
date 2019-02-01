@@ -11,15 +11,15 @@ import org.wickedsource.coderadar.user.domain.UserResource;
 @Component
 public class UserResourceAssembler extends AbstractResourceAssembler<User, UserResource> {
 
-  public UserResourceAssembler() {
-    super(UserController.class, UserResource.class);
-  }
+	public UserResourceAssembler() {
+		super(UserController.class, UserResource.class);
+	}
 
-  @Override
-  public UserResource toResource(User entity) {
-    UserResource userResource = new UserResource(entity.getUsername());
-    userResource.add(
-        linkTo(methodOn(UserController.class).getUser(entity.getId())).withRel("self"));
-    return userResource;
-  }
+	@Override
+	public UserResource toResource(User entity) {
+		UserResource userResource = new UserResource(entity.getUsername());
+		userResource.add(
+				linkTo(methodOn(UserController.class).getUser(entity.getId())).withRel("self"));
+		return userResource;
+	}
 }

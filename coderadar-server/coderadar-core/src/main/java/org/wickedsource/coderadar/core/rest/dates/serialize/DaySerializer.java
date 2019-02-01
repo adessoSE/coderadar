@@ -8,9 +8,9 @@ import org.wickedsource.coderadar.core.rest.dates.Day;
 
 public class DaySerializer extends JsonSerializer<Day> {
 
-  @Override
-  public void serialize(Day day, JsonGenerator gen, SerializerProvider serializers)
-      throws IOException {
-    gen.writeArray(new int[] {day.getYear(), day.getMonth(), day.getDayOfMonth()}, 0, 3);
-  }
+	@Override
+	public void serialize(Day day, JsonGenerator gen, SerializerProvider serializers)
+			throws IOException {
+		gen.writeArray(new int[] {day.getYear(), day.getMonth(), day.getDayOfMonth()}, 0, 3);
+	}
 }

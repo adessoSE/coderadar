@@ -9,22 +9,22 @@ import org.wickedsource.coderadar.project.rest.ProjectController;
 
 public class CommitResourceAssembler extends AbstractResourceAssembler<Commit, CommitResource> {
 
-  private long projectId;
+	private long projectId;
 
-  public CommitResourceAssembler(long projectId) {
-    super(CommitController.class, CommitResource.class);
-    this.projectId = projectId;
-  }
+	public CommitResourceAssembler(long projectId) {
+		super(CommitController.class, CommitResource.class);
+		this.projectId = projectId;
+	}
 
-  @Override
-  public CommitResource toResource(Commit entity) {
-    CommitResource resource = new CommitResource();
-    resource.setAnalyzed(entity.isAnalyzed());
-    resource.setAuthor(entity.getAuthor());
-    resource.setName(entity.getName());
-    resource.setTimestamp(entity.getTimestamp());
-    resource.add(
-        linkTo(methodOn(ProjectController.class).getProject(this.projectId)).withRel("project"));
-    return resource;
-  }
+	@Override
+	public CommitResource toResource(Commit entity) {
+		CommitResource resource = new CommitResource();
+		resource.setAnalyzed(entity.isAnalyzed());
+		resource.setAuthor(entity.getAuthor());
+		resource.setName(entity.getName());
+		resource.setTimestamp(entity.getTimestamp());
+		resource.add(
+				linkTo(methodOn(ProjectController.class).getProject(this.projectId)).withRel("project"));
+		return resource;
+	}
 }

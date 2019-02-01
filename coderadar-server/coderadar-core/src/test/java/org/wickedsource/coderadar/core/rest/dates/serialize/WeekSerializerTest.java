@@ -10,12 +10,12 @@ import org.wickedsource.coderadar.core.rest.dates.Week;
 
 public class WeekSerializerTest {
 
-  @Test
-  public void serialize() throws IOException {
-    Week week = new Week(2016, 5);
-    StringWriter writer = new StringWriter();
-    mapper().writeValue(writer, week);
-    String json = writer.toString();
-    assertThat(json).isEqualTo("[2016,5]");
-  }
+	@Test
+	public void serialize() throws IOException {
+		Week week = new Week(2016, 5);
+		StringWriter writer = new StringWriter();
+		mapper().writeValue(writer, week);
+		String json = writer.toString();
+		assertThat(json).isEqualTo("[2016,5]");
+	}
 }

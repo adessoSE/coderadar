@@ -32,87 +32,87 @@ import org.wickedsource.coderadar.user.service.TokenRefreshService;
 @RequestMapping(path = "/user")
 public class UserController {
 
-  private final RegistrationService registrationService;
+	private final RegistrationService registrationService;
 
-  private final UserResourceAssembler userResourceAssembler;
+	private final UserResourceAssembler userResourceAssembler;
 
-  private final AuthenticationManager authenticationManager;
+	private final AuthenticationManager authenticationManager;
 
-  private final LoginService loginService;
+	private final LoginService loginService;
 
-  private final TokenService tokenService;
+	private final TokenService tokenService;
 
-  private final TokenRefreshService tokenRefreshService;
+	private final TokenRefreshService tokenRefreshService;
 
-  private final PasswordChangeService passwordChangeService;
+	private final PasswordChangeService passwordChangeService;
 
-  @Autowired
-  public UserController(
-      RegistrationService registrationService,
-      UserResourceAssembler userResourceAssembler,
-      AuthenticationManager authenticationManager,
-      LoginService loginService,
-      TokenService tokenService,
-      TokenRefreshService tokenRefreshService,
-      PasswordChangeService passwordChangeService) {
-    this.registrationService = registrationService;
-    this.userResourceAssembler = userResourceAssembler;
-    this.authenticationManager = authenticationManager;
-    this.loginService = loginService;
-    this.tokenService = tokenService;
-    this.tokenRefreshService = tokenRefreshService;
-    this.passwordChangeService = passwordChangeService;
-  }
+	@Autowired
+	public UserController(
+			RegistrationService registrationService,
+			UserResourceAssembler userResourceAssembler,
+			AuthenticationManager authenticationManager,
+			LoginService loginService,
+			TokenService tokenService,
+			TokenRefreshService tokenRefreshService,
+			PasswordChangeService passwordChangeService) {
+		this.registrationService = registrationService;
+		this.userResourceAssembler = userResourceAssembler;
+		this.authenticationManager = authenticationManager;
+		this.loginService = loginService;
+		this.tokenService = tokenService;
+		this.tokenRefreshService = tokenRefreshService;
+		this.passwordChangeService = passwordChangeService;
+	}
 
-  @RequestMapping(method = RequestMethod.POST, path = "/registration")
-  public ResponseEntity<UserResource> register(
-      @Valid @RequestBody UserRegistrationDataResource userRegistrationDataResource) {
-    if (registrationService.userExists(userRegistrationDataResource)) {
-      throw new RegistrationException(userRegistrationDataResource.getUsername());
-    }
-    User registeredUser = registrationService.register(userRegistrationDataResource);
-    UserResource userResource = userResourceAssembler.toResource(registeredUser);
-    return new ResponseEntity<>(userResource, HttpStatus.CREATED);
-  }
+	@RequestMapping(method = RequestMethod.POST, path = "/registration")
+	public ResponseEntity<UserResource> register(
+			@Valid @RequestBody UserRegistrationDataResource userRegistrationDataResource) {
+		if (registrationService.userExists(userRegistrationDataResource)) {
+			throw new RegistrationException(userRegistrationDataResource.getUsername());
+		}
+		User registeredUser = registrationService.register(userRegistrationDataResource);
+		UserResource userResource = userResourceAssembler.toResource(registeredUser);
+		return new ResponseEntity<>(userResource, HttpStatus.CREATED);
+	}
 
-  @RequestMapping(method = RequestMethod.GET, path = "/{userId}")
-  public ResponseEntity<UserResource> getUser(@PathVariable Long userId) {
-    User user = registrationService.getUser(userId);
-    UserResource userResource = userResourceAssembler.toResource(user);
-    return new ResponseEntity<>(userResource, HttpStatus.OK);
-  }
+	@RequestMapping(method = RequestMethod.GET, path = "/{userId}")
+	public ResponseEntity<UserResource> getUser(@PathVariable Long userId) {
+		User user = registrationService.getUser(userId);
+		UserResource userResource = userResourceAssembler.toResource(user);
+		return new ResponseEntity<>(userResource, HttpStatus.OK);
+	}
 
-  @RequestMapping(method = RequestMethod.POST, path = "/auth")
-  public ResponseEntity<InitializeTokenResource> login(
-      @Valid @RequestBody UserLoginResource userLoginResource) {
-    Authentication authentication =
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                userLoginResource.getUsername(), userLoginResource.getPassword()));
-    SecurityContextHolder.getContext().setAuthentication(authentication);
+	@RequestMapping(method = RequestMethod.POST, path = "/auth")
+	public ResponseEntity<InitializeTokenResource> login(
+			@Valid @RequestBody UserLoginResource userLoginResource) {
+		Authentication authentication =
+				authenticationManager.authenticate(
+						new UsernamePasswordAuthenticationToken(
+								userLoginResource.getUsername(), userLoginResource.getPassword()));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    InitializeTokenResource initializeTokenResource =
-        loginService.login(userLoginResource.getUsername());
-    return new ResponseEntity<>(initializeTokenResource, HttpStatus.OK);
-  }
+		InitializeTokenResource initializeTokenResource =
+				loginService.login(userLoginResource.getUsername());
+		return new ResponseEntity<>(initializeTokenResource, HttpStatus.OK);
+	}
 
-  @RequestMapping(method = RequestMethod.POST, path = "/refresh")
-  public ResponseEntity<AccessTokenResource> refresh(
-      @Valid @RequestBody RefreshTokenResource refreshTokenResource) {
-    if (tokenService.isExpired(refreshTokenResource.getAccessToken())) {
-      String accessToken =
-          tokenRefreshService.createAccessToken(refreshTokenResource.getRefreshToken());
-      return new ResponseEntity<>(new AccessTokenResource(accessToken), HttpStatus.OK);
-    }
-    throw new AccessTokenNotExpiredException();
-  }
+	@RequestMapping(method = RequestMethod.POST, path = "/refresh")
+	public ResponseEntity<AccessTokenResource> refresh(
+			@Valid @RequestBody RefreshTokenResource refreshTokenResource) {
+		if (tokenService.isExpired(refreshTokenResource.getAccessToken())) {
+			String accessToken =
+					tokenRefreshService.createAccessToken(refreshTokenResource.getRefreshToken());
+			return new ResponseEntity<>(new AccessTokenResource(accessToken), HttpStatus.OK);
+		}
+		throw new AccessTokenNotExpiredException();
+	}
 
-  @RequestMapping(method = RequestMethod.POST, path = "/password/change")
-  public ResponseEntity<ChangePasswordResponseResource> changePassword(
-      @Valid @RequestBody PasswordChangeResource passwordChangeResource) {
-    ChangePasswordResponseResource passwordResponseResource =
-        passwordChangeService.change(
-            passwordChangeResource.getRefreshToken(), passwordChangeResource.getNewPassword());
-    return new ResponseEntity<>(passwordResponseResource, HttpStatus.OK);
-  }
+	@RequestMapping(method = RequestMethod.POST, path = "/password/change")
+	public ResponseEntity<ChangePasswordResponseResource> changePassword(
+			@Valid @RequestBody PasswordChangeResource passwordChangeResource) {
+		ChangePasswordResponseResource passwordResponseResource =
+				passwordChangeService.change(
+						passwordChangeResource.getRefreshToken(), passwordChangeResource.getNewPassword());
+		return new ResponseEntity<>(passwordResponseResource, HttpStatus.OK);
+	}
 }

@@ -18,26 +18,26 @@ import org.wickedsource.coderadar.user.domain.User;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class LoginServiceTest {
 
-  @InjectMocks private LoginService loginService;
+	@InjectMocks private LoginService loginService;
 
-  @Mock private RefreshTokenRepository refreshTokenRepository;
+	@Mock private RefreshTokenRepository refreshTokenRepository;
 
-  @Test
-  public void testLogin() throws Exception {}
+	@Test
+	public void testLogin() throws Exception {}
 
-  @Test
-  public void testSaveRefreshToken() throws Exception {
+	@Test
+	public void testSaveRefreshToken() throws Exception {
 
-    when(refreshTokenRepository.save(any(RefreshToken.class))).thenReturn(new RefreshToken());
-    String refreshToken = "refreshToken";
-    User user = new User();
-    loginService.saveRefreshToken(user, refreshToken);
+		when(refreshTokenRepository.save(any(RefreshToken.class))).thenReturn(new RefreshToken());
+		String refreshToken = "refreshToken";
+		User user = new User();
+		loginService.saveRefreshToken(user, refreshToken);
 
-    ArgumentCaptor<RefreshToken> refreshTokenArgumentCaptor =
-        ArgumentCaptor.forClass(RefreshToken.class);
+		ArgumentCaptor<RefreshToken> refreshTokenArgumentCaptor =
+				ArgumentCaptor.forClass(RefreshToken.class);
 
-    verify(refreshTokenRepository).save(refreshTokenArgumentCaptor.capture());
-    assertThat(refreshTokenArgumentCaptor.getValue().getToken()).isEqualTo(refreshToken);
-    assertThat(refreshTokenArgumentCaptor.getValue().getUser()).isEqualTo(user);
-  }
+		verify(refreshTokenRepository).save(refreshTokenArgumentCaptor.capture());
+		assertThat(refreshTokenArgumentCaptor.getValue().getToken()).isEqualTo(refreshToken);
+		assertThat(refreshTokenArgumentCaptor.getValue().getUser()).isEqualTo(user);
+	}
 }

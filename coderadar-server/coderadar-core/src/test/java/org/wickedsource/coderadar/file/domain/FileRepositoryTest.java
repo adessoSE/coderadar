@@ -20,36 +20,36 @@ import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate
 @Transactional
 public class FileRepositoryTest extends IntegrationTestTemplate {
 
-  @Autowired private FileRepository fileRepository;
+	@Autowired private FileRepository fileRepository;
 
-  @Autowired private ProjectRepository projectRepository;
+	@Autowired private ProjectRepository projectRepository;
 
-  @Autowired private CommitRepository commitRepository;
+	@Autowired private CommitRepository commitRepository;
 
-  @Autowired private CommitToFileAssociationRepository commitToFileAssociationRepository;
+	@Autowired private CommitToFileAssociationRepository commitToFileAssociationRepository;
 
-  @Test
-  @DatabaseSetup(EMPTY)
-  public void testFindInCommit() {
-    Project project = project().validProject();
-    project = projectRepository.save(project);
-    Commit commit = commit().unprocessedCommit();
-    commit.setProject(project);
-    commit.setName("cafebabe");
-    commit.setSequenceNumber(1);
-    commit = commitRepository.save(commit);
-    File file = sourceFile().withPath("123");
-    file = fileRepository.save(file);
-    CommitToFileAssociation association =
-        new CommitToFileAssociation(commit, file, ChangeType.MODIFY);
-    commit.getFiles().add(association);
-    commitToFileAssociationRepository.save(association);
+	@Test
+	@DatabaseSetup(EMPTY)
+	public void testFindInCommit() {
+		Project project = project().validProject();
+		project = projectRepository.save(project);
+		Commit commit = commit().unprocessedCommit();
+		commit.setProject(project);
+		commit.setName("cafebabe");
+		commit.setSequenceNumber(1);
+		commit = commitRepository.save(commit);
+		File file = sourceFile().withPath("123");
+		file = fileRepository.save(file);
+		CommitToFileAssociation association =
+				new CommitToFileAssociation(commit, file, ChangeType.MODIFY);
+		commit.getFiles().add(association);
+		commitToFileAssociationRepository.save(association);
 
-    File foundFile =
-        fileRepository.findInCommit(file.getFilepath(), commit.getName(), project.getId());
-    Assert.assertEquals(file.getId(), foundFile.getId());
+		File foundFile =
+				fileRepository.findInCommit(file.getFilepath(), commit.getName(), project.getId());
+		Assert.assertEquals(file.getId(), foundFile.getId());
 
-    Assert.assertEquals(
-        null, fileRepository.findInCommit("321", commit.getName(), project.getId()));
-  }
+		Assert.assertEquals(
+				null, fileRepository.findInCommit("321", commit.getName(), project.getId()));
+	}
 }

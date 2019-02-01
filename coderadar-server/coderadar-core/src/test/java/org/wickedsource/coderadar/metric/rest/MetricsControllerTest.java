@@ -19,21 +19,21 @@ import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 @Category(ControllerTest.class)
 public class MetricsControllerTest extends ControllerTestTemplate {
 
-  @Test
-  @DatabaseSetup(SINGLE_PROJECT_WITH_METRICS)
-  @ExpectedDatabase(SINGLE_PROJECT_WITH_METRICS)
-  public void listMetrics() throws Exception {
-    MvcResult result =
-        mvc()
-            .perform(get("/projects/1/metrics"))
-            .andExpect(status().isOk())
-            .andExpect(containsPagedResources(MetricResource.class))
-            .andDo(document("metrics/list"))
-            .andReturn();
+	@Test
+	@DatabaseSetup(SINGLE_PROJECT_WITH_METRICS)
+	@ExpectedDatabase(SINGLE_PROJECT_WITH_METRICS)
+	public void listMetrics() throws Exception {
+		MvcResult result =
+				mvc()
+						.perform(get("/projects/1/metrics"))
+						.andExpect(status().isOk())
+						.andExpect(containsPagedResources(MetricResource.class))
+						.andDo(document("metrics/list"))
+						.andReturn();
 
-    PagedResources<MetricResource> resources =
-        fromPagedResourceJson(result.getResponse().getContentAsString(), MetricResource.class);
-    assertThat(resources).isNotNull();
-    assertThat(resources.getContent()).hasSize(4);
-  }
+		PagedResources<MetricResource> resources =
+				fromPagedResourceJson(result.getResponse().getContentAsString(), MetricResource.class);
+		assertThat(resources).isNotNull();
+		assertThat(resources.getContent()).hasSize(4);
+	}
 }

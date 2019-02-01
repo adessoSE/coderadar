@@ -8,11 +8,11 @@ import org.wickedsource.coderadar.core.configuration.MappingResourceProvider;
 @Component
 public class CommitMappingResourceProvider implements MappingResourceProvider {
 
-  @Override
-  public Set<String> getMappingResource() {
-    Set<String> resources = new HashSet<>();
-    resources.add("org/wickedsource/coderadar/commit/domain/Commit.orm.xml");
-    resources.add("org/wickedsource/coderadar/commit/domain/CommitToFileAssociation.orm.xml");
-    return resources;
-  }
+	@Override
+	public Set<String> getMappingResource() {
+		Set<String> resources = new HashSet<>();
+		resources.add("org/wickedsource/coderadar/commit/domain/Commit.orm.xml");
+		resources.add("org/wickedsource/coderadar/commit/domain/CommitToFileAssociation.orm.xml");
+		return resources;
+	}
 }

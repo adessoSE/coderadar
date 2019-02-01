@@ -4,5 +4,5 @@ import org.springframework.hateoas.ResourceSupport;
 
 public class ChangePasswordResponseResource extends ResourceSupport {
 
-  public ChangePasswordResponseResource() {}
+	public ChangePasswordResponseResource() {}
 }

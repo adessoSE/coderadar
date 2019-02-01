@@ -19,21 +19,21 @@ import org.wickedsource.coderadar.analyzer.service.AnalyzerPluginRegistry;
 @RequestMapping(path = "/analyzers")
 public class AnalyzerController {
 
-  private AnalyzerPluginRegistry analyzerRegistry;
+	private AnalyzerPluginRegistry analyzerRegistry;
 
-  @Autowired
-  public AnalyzerController(AnalyzerPluginRegistry analyzerRegistry) {
-    this.analyzerRegistry = analyzerRegistry;
-  }
+	@Autowired
+	public AnalyzerController(AnalyzerPluginRegistry analyzerRegistry) {
+		this.analyzerRegistry = analyzerRegistry;
+	}
 
-  @SuppressWarnings("unchecked")
-  @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
-  public ResponseEntity<PagedResources<AnalyzerResource>> listAnalyzers(
-      @PageableDefault Pageable pageable, PagedResourcesAssembler pagedResourcesAssembler) {
-    Page<String> analyzerPage = analyzerRegistry.getAvailableAnalyzers(pageable);
-    AnalyzerResourceAssembler assembler = new AnalyzerResourceAssembler();
-    PagedResources<AnalyzerResource> pagedResources =
-        pagedResourcesAssembler.toResource(analyzerPage, assembler);
-    return new ResponseEntity<>(pagedResources, HttpStatus.OK);
-  }
+	@SuppressWarnings("unchecked")
+	@RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
+	public ResponseEntity<PagedResources<AnalyzerResource>> listAnalyzers(
+			@PageableDefault Pageable pageable, PagedResourcesAssembler pagedResourcesAssembler) {
+		Page<String> analyzerPage = analyzerRegistry.getAvailableAnalyzers(pageable);
+		AnalyzerResourceAssembler assembler = new AnalyzerResourceAssembler();
+		PagedResources<AnalyzerResource> pagedResources =
+				pagedResourcesAssembler.toResource(analyzerPage, assembler);
+		return new ResponseEntity<>(pagedResources, HttpStatus.OK);
+	}
 }

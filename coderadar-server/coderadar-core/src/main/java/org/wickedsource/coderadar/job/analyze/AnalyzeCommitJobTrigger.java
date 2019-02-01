@@ -20,69 +20,69 @@ import org.wickedsource.coderadar.job.core.ProcessingStatus;
 @ConditionalOnProperty("coderadar.master")
 public class AnalyzeCommitJobTrigger {
 
-  private Logger logger = LoggerFactory.getLogger(AnalyzeCommitJobTrigger.class);
+	private Logger logger = LoggerFactory.getLogger(AnalyzeCommitJobTrigger.class);
 
-  private JobLogger jobLogger;
+	private JobLogger jobLogger;
 
-  private CommitRepository commitRepository;
+	private CommitRepository commitRepository;
 
-  private AnalyzeCommitJobRepository analyzeCommitJobRepository;
+	private AnalyzeCommitJobRepository analyzeCommitJobRepository;
 
-  private FilePatternRepository filePatternRepository;
+	private FilePatternRepository filePatternRepository;
 
-  private AnalyzerConfigurationRepository analyzerConfigurationRepository;
+	private AnalyzerConfigurationRepository analyzerConfigurationRepository;
 
-  @Autowired
-  public AnalyzeCommitJobTrigger(
-      JobLogger jobLogger,
-      CommitRepository commitRepository,
-      AnalyzeCommitJobRepository analyzeCommitJobRepository,
-      FilePatternRepository filePatternRepository,
-      AnalyzerConfigurationRepository analyzerConfigurationRepository) {
-    this.jobLogger = jobLogger;
-    this.commitRepository = commitRepository;
-    this.analyzeCommitJobRepository = analyzeCommitJobRepository;
-    this.filePatternRepository = filePatternRepository;
-    this.analyzerConfigurationRepository = analyzerConfigurationRepository;
-  }
+	@Autowired
+	public AnalyzeCommitJobTrigger(
+			JobLogger jobLogger,
+			CommitRepository commitRepository,
+			AnalyzeCommitJobRepository analyzeCommitJobRepository,
+			FilePatternRepository filePatternRepository,
+			AnalyzerConfigurationRepository analyzerConfigurationRepository) {
+		this.jobLogger = jobLogger;
+		this.commitRepository = commitRepository;
+		this.analyzeCommitJobRepository = analyzeCommitJobRepository;
+		this.filePatternRepository = filePatternRepository;
+		this.analyzerConfigurationRepository = analyzerConfigurationRepository;
+	}
 
-  @Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
-  public void trigger() {
-    for (Commit commit :
-        commitRepository.findCommitsToBeAnalyzed(
-            Arrays.asList(ProcessingStatus.PROCESSING, ProcessingStatus.WAITING))) {
+	@Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
+	public void trigger() {
+		for (Commit commit :
+				commitRepository.findCommitsToBeAnalyzed(
+						Arrays.asList(ProcessingStatus.PROCESSING, ProcessingStatus.WAITING))) {
 
-      if (!hasFilePatternsConfigured(commit)) {
-        logger.debug(
-            "skipping commit {} because no file patterns are configured for project {}",
-            commit.getName(),
-            commit.getProject().getId());
-        continue;
-      }
+			if (!hasFilePatternsConfigured(commit)) {
+				logger.debug(
+						"skipping commit {} because no file patterns are configured for project {}",
+						commit.getName(),
+						commit.getProject().getId());
+				continue;
+			}
 
-      if (!hasAnalyzerConfigured(commit)) {
-        logger.debug(
-            "skipping commit {} because no analyzers are configured for project {}",
-            commit.getName(),
-            commit.getProject().getId());
-        continue;
-      }
+			if (!hasAnalyzerConfigured(commit)) {
+				logger.debug(
+						"skipping commit {} because no analyzers are configured for project {}",
+						commit.getName(),
+						commit.getProject().getId());
+				continue;
+			}
 
-      AnalyzeCommitJob job = new AnalyzeCommitJob();
-      job.setQueuedDate(new Date());
-      job.setProcessingStatus(ProcessingStatus.WAITING);
-      job.setCommit(commit);
-      job.setProject(commit.getProject());
-      analyzeCommitJobRepository.save(job);
-      jobLogger.queuedNewJob(job, commit.getProject());
-    }
-  }
+			AnalyzeCommitJob job = new AnalyzeCommitJob();
+			job.setQueuedDate(new Date());
+			job.setProcessingStatus(ProcessingStatus.WAITING);
+			job.setCommit(commit);
+			job.setProject(commit.getProject());
+			analyzeCommitJobRepository.save(job);
+			jobLogger.queuedNewJob(job, commit.getProject());
+		}
+	}
 
-  private boolean hasFilePatternsConfigured(Commit commit) {
-    return filePatternRepository.countByProjectId(commit.getProject().getId()) > 0;
-  }
+	private boolean hasFilePatternsConfigured(Commit commit) {
+		return filePatternRepository.countByProjectId(commit.getProject().getId()) > 0;
+	}
 
-  private boolean hasAnalyzerConfigured(Commit commit) {
-    return analyzerConfigurationRepository.countByProjectId(commit.getProject().getId()) > 0;
-  }
+	private boolean hasAnalyzerConfigured(Commit commit) {
+		return analyzerConfigurationRepository.countByProjectId(commit.getProject().getId()) > 0;
+	}
 }

@@ -5,30 +5,30 @@ import org.springframework.hateoas.ResourceSupport;
 
 public class RefreshTokenResource extends ResourceSupport {
 
-  @NotNull private String accessToken;
+	@NotNull private String accessToken;
 
-  @NotNull private String refreshToken;
+	@NotNull private String refreshToken;
 
-  public RefreshTokenResource() {}
+	public RefreshTokenResource() {}
 
-  public RefreshTokenResource(String accessToken, String refreshToken) {
-    this.accessToken = accessToken;
-    this.refreshToken = refreshToken;
-  }
+	public RefreshTokenResource(String accessToken, String refreshToken) {
+		this.accessToken = accessToken;
+		this.refreshToken = refreshToken;
+	}
 
-  public String getAccessToken() {
-    return accessToken;
-  }
+	public String getAccessToken() {
+		return accessToken;
+	}
 
-  public void setAccessToken(String accessToken) {
-    this.accessToken = accessToken;
-  }
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
 
-  public String getRefreshToken() {
-    return refreshToken;
-  }
+	public String getRefreshToken() {
+		return refreshToken;
+	}
 
-  public void setRefreshToken(String refreshToken) {
-    this.refreshToken = refreshToken;
-  }
+	public void setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
 }

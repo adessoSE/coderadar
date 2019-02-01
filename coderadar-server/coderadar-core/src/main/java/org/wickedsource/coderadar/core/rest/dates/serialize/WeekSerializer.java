@@ -8,9 +8,9 @@ import org.wickedsource.coderadar.core.rest.dates.Week;
 
 public class WeekSerializer extends JsonSerializer<Week> {
 
-  @Override
-  public void serialize(Week week, JsonGenerator gen, SerializerProvider serializers)
-      throws IOException {
-    gen.writeArray(new int[] {week.getYear(), week.getWeekOfYear()}, 0, 2);
-  }
+	@Override
+	public void serialize(Week week, JsonGenerator gen, SerializerProvider serializers)
+			throws IOException {
+		gen.writeArray(new int[] {week.getYear(), week.getWeekOfYear()}, 0, 2);
+	}
 }

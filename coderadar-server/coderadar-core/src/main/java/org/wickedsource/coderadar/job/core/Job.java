@@ -29,116 +29,116 @@ import org.wickedsource.coderadar.project.domain.Project;
 @SequenceGenerator(name = "job_sequence", sequenceName = "seq_job_id", allocationSize = 1)
 public class Job {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "job_sequence")
-  @Column(name = "id")
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "job_sequence")
+	@Column(name = "id")
+	private Long id;
 
-  @Column(name = "version")
-  @Version
-  private Integer version;
+	@Column(name = "version")
+	@Version
+	private Integer version;
 
-  @Column(name = "queued_date", nullable = false)
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date queuedDate;
+	@Column(name = "queued_date", nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date queuedDate;
 
-  @Column(name = "start_date")
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date startDate;
+	@Column(name = "start_date")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date startDate;
 
-  @Column(name = "end_date")
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date endDate;
+	@Column(name = "end_date")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date endDate;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "processing_status", nullable = false)
-  private ProcessingStatus processingStatus;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "processing_status", nullable = false)
+	private ProcessingStatus processingStatus;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "result_status")
-  private ResultStatus resultStatus;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "result_status")
+	private ResultStatus resultStatus;
 
-  @Column(name = "message")
-  private String message;
+	@Column(name = "message")
+	private String message;
 
-  @ManyToOne
-  @JoinColumn(name = "project_id")
-  private Project project;
+	@ManyToOne
+	@JoinColumn(name = "project_id")
+	private Project project;
 
-  public Long getId() {
-    return id;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public Date getQueuedDate() {
-    return queuedDate;
-  }
+	public Date getQueuedDate() {
+		return queuedDate;
+	}
 
-  public void setQueuedDate(Date queuedDate) {
-    this.queuedDate = queuedDate;
-  }
+	public void setQueuedDate(Date queuedDate) {
+		this.queuedDate = queuedDate;
+	}
 
-  public Date getStartDate() {
-    return startDate;
-  }
+	public Date getStartDate() {
+		return startDate;
+	}
 
-  public void setStartDate(Date startDate) {
-    this.startDate = startDate;
-  }
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
 
-  public Date getEndDate() {
-    return endDate;
-  }
+	public Date getEndDate() {
+		return endDate;
+	}
 
-  public void setEndDate(Date endDate) {
-    this.endDate = endDate;
-  }
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
 
-  public ProcessingStatus getProcessingStatus() {
-    return processingStatus;
-  }
+	public ProcessingStatus getProcessingStatus() {
+		return processingStatus;
+	}
 
-  public void setProcessingStatus(ProcessingStatus processingStatus) {
-    this.processingStatus = processingStatus;
-  }
+	public void setProcessingStatus(ProcessingStatus processingStatus) {
+		this.processingStatus = processingStatus;
+	}
 
-  public String getMessage() {
-    return message;
-  }
+	public String getMessage() {
+		return message;
+	}
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
-  public ResultStatus getResultStatus() {
-    return resultStatus;
-  }
+	public ResultStatus getResultStatus() {
+		return resultStatus;
+	}
 
-  public void setResultStatus(ResultStatus resultStatus) {
-    this.resultStatus = resultStatus;
-  }
+	public void setResultStatus(ResultStatus resultStatus) {
+		this.resultStatus = resultStatus;
+	}
 
-  public Integer getVersion() {
-    return version;
-  }
+	public Integer getVersion() {
+		return version;
+	}
 
-  public void setVersion(Integer version) {
-    this.version = version;
-  }
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
 
-  @Override
-  public String toString() {
-    return String.format("[Job: id=%d; type=%s]", this.id, getClass().getSimpleName());
-  }
+	@Override
+	public String toString() {
+		return String.format("[Job: id=%d; type=%s]", this.id, getClass().getSimpleName());
+	}
 
-  public Project getProject() {
-    return project;
-  }
+	public Project getProject() {
+		return project;
+	}
 
-  public void setProject(Project project) {
-    this.project = project;
-  }
+	public void setProject(Project project) {
+		this.project = project;
+	}
 }

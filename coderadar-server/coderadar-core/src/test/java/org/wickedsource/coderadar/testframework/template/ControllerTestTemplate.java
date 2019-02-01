@@ -29,107 +29,107 @@ import org.springframework.web.context.WebApplicationContext;
 
 public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
 
-  private MockMvc mvc;
+	private MockMvc mvc;
 
-  @Autowired private WebApplicationContext applicationContext;
+	@Autowired private WebApplicationContext applicationContext;
 
-  @Autowired private SequenceResetter sequenceResetter;
+	@Autowired private SequenceResetter sequenceResetter;
 
-  @Rule
-  public JUnitRestDocumentation restDocumentation =
-      new JUnitRestDocumentation("build/generated-snippets");
+	@Rule
+	public JUnitRestDocumentation restDocumentation =
+			new JUnitRestDocumentation("build/generated-snippets");
 
-  @Before
-  public void setup() {
-    MockitoAnnotations.initMocks(this);
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
 
-    mvc =
-        MockMvcBuilders.webAppContextSetup(applicationContext)
-            .apply(MockMvcRestDocumentation.documentationConfiguration(this.restDocumentation))
-            .build();
-  }
+		mvc =
+				MockMvcBuilders.webAppContextSetup(applicationContext)
+						.apply(MockMvcRestDocumentation.documentationConfiguration(this.restDocumentation))
+						.build();
+	}
 
-  @After
-  public void reset() {
-    sequenceResetter.resetSequences(
-        "seq_proj_id",
-        "seq_comm_id",
-        "seq_acon_id",
-        "seq_acof_id",
-        "seq_ajob_id",
-        "seq_fiid_id",
-        "seq_file_id",
-        "seq_fpat_id",
-        "seq_modu_id",
-        "seq_glen_id",
-        "seq_job_id",
-        "seq_qpme_id",
-        "seq_user_id",
-        "seq_reto_id");
-  }
+	@After
+	public void reset() {
+		sequenceResetter.resetSequences(
+				"seq_proj_id",
+				"seq_comm_id",
+				"seq_acon_id",
+				"seq_acof_id",
+				"seq_ajob_id",
+				"seq_fiid_id",
+				"seq_file_id",
+				"seq_fpat_id",
+				"seq_modu_id",
+				"seq_glen_id",
+				"seq_job_id",
+				"seq_qpme_id",
+				"seq_user_id",
+				"seq_reto_id");
+	}
 
-  @SuppressWarnings("unchecked")
-  protected <T> ConstrainedFields<T> fields(Class<T> clazz) {
-    return new ConstrainedFields(clazz);
-  }
+	@SuppressWarnings("unchecked")
+	protected <T> ConstrainedFields<T> fields(Class<T> clazz) {
+		return new ConstrainedFields(clazz);
+	}
 
-  public static class ConstrainedFields<T> {
+	public static class ConstrainedFields<T> {
 
-    private final ConstraintDescriptions constraintDescriptions;
-    private final Properties customValidationDescription = new Properties();
+		private final ConstraintDescriptions constraintDescriptions;
+		private final Properties customValidationDescription = new Properties();
 
-    ConstrainedFields(Class<T> input) {
+		ConstrainedFields(Class<T> input) {
 
-      try {
-        this.constraintDescriptions = new ConstraintDescriptions(input);
-        this.customValidationDescription.load(
-            getClass().getResourceAsStream("CustomValidationDescription.properties"));
-      } catch (IOException e) {
-        throw new IllegalArgumentException(
-            "unable to load properties for custom validation description");
-      }
-    }
+			try {
+				this.constraintDescriptions = new ConstraintDescriptions(input);
+				this.customValidationDescription.load(
+						getClass().getResourceAsStream("CustomValidationDescription.properties"));
+			} catch (IOException e) {
+				throw new IllegalArgumentException(
+						"unable to load properties for custom validation description");
+			}
+		}
 
-    public FieldDescriptor withPath(String path) {
-      return fieldWithPath(path)
-          .attributes(
-              key("constraints")
-                  .value(
-                      StringUtils.collectionToDelimitedString(
-                          this.constraintDescriptions.descriptionsForProperty(path), ". ")));
-    }
+		public FieldDescriptor withPath(String path) {
+			return fieldWithPath(path)
+					.attributes(
+							key("constraints")
+									.value(
+											StringUtils.collectionToDelimitedString(
+													this.constraintDescriptions.descriptionsForProperty(path), ". ")));
+		}
 
-    /** Returns field descriptor for custom validators. */
-    public FieldDescriptor withCustomPath(String path) {
-      return fieldWithPath(path)
-          .attributes(
-              key("constraints")
-                  .value(
-                      StringUtils.collectionToDelimitedString(
-                          Collections.singletonList(customValidationDescription.getProperty(path)),
-                          ". ")));
-    }
-  }
+		/** Returns field descriptor for custom validators. */
+		public FieldDescriptor withCustomPath(String path) {
+			return fieldWithPath(path)
+					.attributes(
+							key("constraints")
+									.value(
+											StringUtils.collectionToDelimitedString(
+													Collections.singletonList(customValidationDescription.getProperty(path)),
+													". ")));
+		}
+	}
 
-  /**
-   * Wraps the static document() method of RestDocs and configures it to pretty print request and
-   * response JSON structures.
-   */
-  protected RestDocumentationResultHandler document(String identifier, Snippet... snippets) {
-    return MockMvcRestDocumentation.document(
-        identifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()), snippets);
-  }
+	/**
+	* Wraps the static document() method of RestDocs and configures it to pretty print request and
+	* response JSON structures.
+	*/
+	protected RestDocumentationResultHandler document(String identifier, Snippet... snippets) {
+		return MockMvcRestDocumentation.document(
+				identifier, preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint()), snippets);
+	}
 
-  protected MockMvc mvc() {
-    return mvc;
-  }
+	protected MockMvc mvc() {
+		return mvc;
+	}
 
-  protected JsonPathResponseFieldsSnippet responseFieldsInPath(
-      String jsonPath, FieldDescriptor... fieldDescriptors) {
-    return new JsonPathResponseFieldsSnippet(jsonPath, fieldDescriptors);
-  }
+	protected JsonPathResponseFieldsSnippet responseFieldsInPath(
+			String jsonPath, FieldDescriptor... fieldDescriptors) {
+		return new JsonPathResponseFieldsSnippet(jsonPath, fieldDescriptors);
+	}
 
-  protected LinksSnippet linksInPath(String jsonPath, LinkDescriptor... linkDescriptors) {
-    return new JsonPathLinksSnippet(jsonPath, linkDescriptors);
-  }
+	protected LinksSnippet linksInPath(String jsonPath, LinkDescriptor... linkDescriptors) {
+		return new JsonPathLinksSnippet(jsonPath, linkDescriptors);
+	}
 }

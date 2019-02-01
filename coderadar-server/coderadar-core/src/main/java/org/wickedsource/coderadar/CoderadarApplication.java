@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableConfigurationProperties
 public class CoderadarApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(CoderadarApplication.class, args);
-  }
+	public static void main(String[] args) {
+		SpringApplication.run(CoderadarApplication.class, args);
+	}
 }

@@ -4,7 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface AnalyzingJobRepository extends CrudRepository<AnalyzingJob, Long> {
 
-  AnalyzingJob findByProjectId(long projectId);
+	AnalyzingJob findByProjectId(long projectId);
 
-  int deleteByProjectId(long projectId);
+	int deleteByProjectId(long projectId);
 }

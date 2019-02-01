@@ -15,29 +15,29 @@ import org.wickedsource.coderadar.CoderadarTestApplication;
 /** Base class for integration tests that need the full context of the Spring Boot application. */
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners({
-  DependencyInjectionTestExecutionListener.class,
-  DirtiesContextTestExecutionListener.class,
-  TransactionDbUnitTestExecutionListener.class
+	DependencyInjectionTestExecutionListener.class,
+	DirtiesContextTestExecutionListener.class,
+	TransactionDbUnitTestExecutionListener.class
 })
 @SpringBootTest(
-  classes = CoderadarTestApplication.class,
-  properties = {
-    "coderadar.master=false",
-    "coderadar.slave=false",
-    "coderadar.workdir=build/coderadar-workdir",
-    "coderadar.dateLocale=de_DE",
-    // We want to use the same database instancein all tests, even when the default
-    // is set to "true" with Spring Boot 1.5
-    "spring.datasource.generate-unique-name=false",
-    "spring.jpa.hibernate.ddl-auto=validate",
-    "spring.jpa.hibernate.use-new-id-generator-mappings=true"
-  }
+	classes = CoderadarTestApplication.class,
+	properties = {
+		"coderadar.master=false",
+		"coderadar.slave=false",
+		"coderadar.workdir=build/coderadar-workdir",
+		"coderadar.dateLocale=de_DE",
+		// We want to use the same database instancein all tests, even when the default
+		// is set to "true" with Spring Boot 1.5
+		"spring.datasource.generate-unique-name=false",
+		"spring.jpa.hibernate.ddl-auto=validate",
+		"spring.jpa.hibernate.use-new-id-generator-mappings=true"
+	}
 )
 @WebAppConfiguration
 public abstract class IntegrationTestTemplate extends TestTemplate {
 
-  @Before
-  public void setup() {
-    MockitoAnnotations.initMocks(this);
-  }
+	@Before
+	public void setup() {
+		MockitoAnnotations.initMocks(this);
+	}
 }

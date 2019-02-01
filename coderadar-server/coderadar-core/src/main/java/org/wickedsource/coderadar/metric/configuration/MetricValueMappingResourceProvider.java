@@ -8,9 +8,9 @@ import org.wickedsource.coderadar.core.configuration.MappingResourceProvider;
 @Component
 public class MetricValueMappingResourceProvider implements MappingResourceProvider {
 
-  @Override
-  public Set<String> getMappingResource() {
-    return Collections.singleton(
-        "org/wickedsource/coderadar/metric/domain/metricvalue/MetricValue.orm.xml");
-  }
+	@Override
+	public Set<String> getMappingResource() {
+		return Collections.singleton(
+				"org/wickedsource/coderadar/metric/domain/metricvalue/MetricValue.orm.xml");
+	}
 }

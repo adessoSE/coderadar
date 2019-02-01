@@ -5,5 +5,5 @@ import org.eclipse.jgit.api.Git;
 @FunctionalInterface
 public interface CommitProcessor {
 
-  void processCommit(Git gitClient, RevCommitWithSequenceNumber commit);
+	void processCommit(Git gitClient, RevCommitWithSequenceNumber commit);
 }

@@ -17,55 +17,55 @@ import org.wickedsource.coderadar.project.domain.ProjectRepository;
 @ConditionalOnProperty("coderadar.master")
 public class AssociateGitLogTrigger {
 
-  private JobLogger jobLogger;
+	private JobLogger jobLogger;
 
-  private MergeLogJobRepository jobRepository;
+	private MergeLogJobRepository jobRepository;
 
-  private ProjectRepository projectRepository;
+	private ProjectRepository projectRepository;
 
-  private CommitRepository commitRepository;
+	private CommitRepository commitRepository;
 
-  @Autowired
-  public AssociateGitLogTrigger(
-      JobLogger jobLogger,
-      MergeLogJobRepository jobRepository,
-      ProjectRepository projectRepository,
-      CommitRepository commitRepository) {
-    this.jobLogger = jobLogger;
-    this.jobRepository = jobRepository;
-    this.projectRepository = projectRepository;
-    this.commitRepository = commitRepository;
-  }
+	@Autowired
+	public AssociateGitLogTrigger(
+			JobLogger jobLogger,
+			MergeLogJobRepository jobRepository,
+			ProjectRepository projectRepository,
+			CommitRepository commitRepository) {
+		this.jobLogger = jobLogger;
+		this.jobRepository = jobRepository;
+		this.projectRepository = projectRepository;
+		this.commitRepository = commitRepository;
+	}
 
-  @Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
-  public void trigger() {
-    for (Project project : projectRepository.findAll()) {
-      if (shouldJobBeQueuedForProject(project)) {
-        AssociateGitLogJob newJob = new AssociateGitLogJob();
-        newJob.setProcessingStatus(ProcessingStatus.WAITING);
-        newJob.setQueuedDate(new Date());
-        newJob.setProject(project);
-        jobRepository.save(newJob);
-        jobLogger.queuedNewJob(newJob, project);
-      }
-    }
-  }
+	@Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
+	public void trigger() {
+		for (Project project : projectRepository.findAll()) {
+			if (shouldJobBeQueuedForProject(project)) {
+				AssociateGitLogJob newJob = new AssociateGitLogJob();
+				newJob.setProcessingStatus(ProcessingStatus.WAITING);
+				newJob.setQueuedDate(new Date());
+				newJob.setProject(project);
+				jobRepository.save(newJob);
+				jobLogger.queuedNewJob(newJob, project);
+			}
+		}
+	}
 
-  boolean shouldJobBeQueuedForProject(Project project) {
-    if (isJobCurrentlyQueuedForProject(project)) {
-      jobLogger.alreadyQueuedForProject(AssociateGitLogJob.class, project);
-      return false;
-    } else {
-      int scannedAndUnmergedCommits =
-          commitRepository.countByProjectIdAndScannedTrueAndMergedFalse(project.getId());
-      return scannedAndUnmergedCommits > 0;
-    }
-  }
+	boolean shouldJobBeQueuedForProject(Project project) {
+		if (isJobCurrentlyQueuedForProject(project)) {
+			jobLogger.alreadyQueuedForProject(AssociateGitLogJob.class, project);
+			return false;
+		} else {
+			int scannedAndUnmergedCommits =
+					commitRepository.countByProjectIdAndScannedTrueAndMergedFalse(project.getId());
+			return scannedAndUnmergedCommits > 0;
+		}
+	}
 
-  private boolean isJobCurrentlyQueuedForProject(Project project) {
-    int count =
-        jobRepository.countByProcessingStatusInAndProjectId(
-            Arrays.asList(ProcessingStatus.WAITING, ProcessingStatus.PROCESSING), project.getId());
-    return count > 0;
-  }
+	private boolean isJobCurrentlyQueuedForProject(Project project) {
+		int count =
+				jobRepository.countByProcessingStatusInAndProjectId(
+						Arrays.asList(ProcessingStatus.WAITING, ProcessingStatus.PROCESSING), project.getId());
+		return count > 0;
+	}
 }

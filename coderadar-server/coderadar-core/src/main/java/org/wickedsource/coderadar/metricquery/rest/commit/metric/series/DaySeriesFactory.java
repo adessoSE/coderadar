@@ -18,44 +18,44 @@ import org.wickedsource.coderadar.metricquery.rest.commit.DateSeries;
 @Component
 public class DaySeriesFactory extends MetricValueSeriesFactory<Day> {
 
-  private CommitRepository commitRepository;
+	private CommitRepository commitRepository;
 
-  @Autowired
-  public DaySeriesFactory(
-      MetricValueRepository metricValueRepository, CommitRepository commitRepository) {
-    super(metricValueRepository);
-    this.commitRepository = commitRepository;
-  }
+	@Autowired
+	public DaySeriesFactory(
+			MetricValueRepository metricValueRepository, CommitRepository commitRepository) {
+		super(metricValueRepository);
+		this.commitRepository = commitRepository;
+	}
 
-  @Override
-  protected DateSeries<Day> createEmptySeries(LocalDate startDate, LocalDate endDate) {
-    DateSeries<Day> series = new DateSeries<>();
-    for (int i = 0; i < DAYS.between(startDate, endDate) + 1; i++) {
-      LocalDate nextDate = startDate.plus(i, DAYS);
-      series.addPoint(
-          new DayPoint(
-              new Day(nextDate.getYear(), nextDate.getMonthValue(), nextDate.getDayOfMonth()),
-              null));
-    }
-    return series;
-  }
+	@Override
+	protected DateSeries<Day> createEmptySeries(LocalDate startDate, LocalDate endDate) {
+		DateSeries<Day> series = new DateSeries<>();
+		for (int i = 0; i < DAYS.between(startDate, endDate) + 1; i++) {
+			LocalDate nextDate = startDate.plus(i, DAYS);
+			series.addPoint(
+					new DayPoint(
+							new Day(nextDate.getYear(), nextDate.getMonthValue(), nextDate.getDayOfMonth()),
+							null));
+		}
+		return series;
+	}
 
-  @Override
-  protected List<Commit> getLastCommitPerInterval(
-      Long projectId, LocalDate startDate, LocalDate endDate) {
-    return commitRepository.findLastForEachDay(
-        projectId,
-        Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(startDate),
-        Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(endDate));
-  }
+	@Override
+	protected List<Commit> getLastCommitPerInterval(
+			Long projectId, LocalDate startDate, LocalDate endDate) {
+		return commitRepository.findLastForEachDay(
+				projectId,
+				Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(startDate),
+				Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(endDate));
+	}
 
-  @Override
-  protected Point<Day, Long> createPointForCommit(Commit commit, Long value) {
-    Day day =
-        new Day(
-            commit.getDateCoordinates().getYear(),
-            commit.getDateCoordinates().getMonth(),
-            commit.getDateCoordinates().getDayOfMonth());
-    return new DayPoint(day, value);
-  }
+	@Override
+	protected Point<Day, Long> createPointForCommit(Commit commit, Long value) {
+		Day day =
+				new Day(
+						commit.getDateCoordinates().getYear(),
+						commit.getDateCoordinates().getMonth(),
+						commit.getDateCoordinates().getDayOfMonth());
+		return new DayPoint(day, value);
+	}
 }

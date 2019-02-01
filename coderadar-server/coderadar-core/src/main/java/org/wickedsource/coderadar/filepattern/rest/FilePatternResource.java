@@ -6,17 +6,17 @@ import org.springframework.hateoas.ResourceSupport;
 
 public class FilePatternResource extends ResourceSupport {
 
-  private List<FilePatternDTO> filePatterns = new ArrayList<>();
+	private List<FilePatternDTO> filePatterns = new ArrayList<>();
 
-  public List<FilePatternDTO> getFilePatterns() {
-    return filePatterns;
-  }
+	public List<FilePatternDTO> getFilePatterns() {
+		return filePatterns;
+	}
 
-  public void setFilePatterns(List<FilePatternDTO> filePatterns) {
-    this.filePatterns = filePatterns;
-  }
+	public void setFilePatterns(List<FilePatternDTO> filePatterns) {
+		this.filePatterns = filePatterns;
+	}
 
-  public void addFilePattern(FilePatternDTO filePatterns) {
-    this.filePatterns.add(filePatterns);
-  }
+	public void addFilePattern(FilePatternDTO filePatterns) {
+		this.filePatterns.add(filePatterns);
+	}
 }

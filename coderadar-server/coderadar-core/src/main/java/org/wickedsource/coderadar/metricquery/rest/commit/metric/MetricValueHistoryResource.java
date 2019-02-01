@@ -7,13 +7,13 @@ import org.wickedsource.coderadar.core.rest.dates.series.Point;
 
 public class MetricValueHistoryResource<T> extends ResourceSupport {
 
-  private List<Point<T, Long>> points = new ArrayList<>();
+	private List<Point<T, Long>> points = new ArrayList<>();
 
-  public List<Point<T, Long>> getPoints() {
-    return points;
-  }
+	public List<Point<T, Long>> getPoints() {
+		return points;
+	}
 
-  public void setPoints(List<Point<T, Long>> points) {
-    this.points = points;
-  }
+	public void setPoints(List<Point<T, Long>> points) {
+		this.points = points;
+	}
 }

@@ -24,6 +24,7 @@ sourceSets{
 spotless {
     java {
         googleJavaFormat()
+        indentWithTabs(2)
     }
 }
 

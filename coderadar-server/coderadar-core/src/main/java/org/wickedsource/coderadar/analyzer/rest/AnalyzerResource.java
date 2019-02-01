@@ -4,17 +4,17 @@ import org.springframework.hateoas.ResourceSupport;
 
 public class AnalyzerResource extends ResourceSupport {
 
-  private String analyzerName;
+	private String analyzerName;
 
-  public AnalyzerResource(String analyzerName) {
-    this.analyzerName = analyzerName;
-  }
+	public AnalyzerResource(String analyzerName) {
+		this.analyzerName = analyzerName;
+	}
 
-  public String getAnalyzerName() {
-    return analyzerName;
-  }
+	public String getAnalyzerName() {
+		return analyzerName;
+	}
 
-  public void setAnalyzerName(String analyzerName) {
-    this.analyzerName = analyzerName;
-  }
+	public void setAnalyzerName(String analyzerName) {
+		this.analyzerName = analyzerName;
+	}
 }

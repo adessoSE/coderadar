@@ -9,31 +9,31 @@ import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectController;
 
 public class AnalyzingJobResourceAssembler
-    extends ResourceAssemblerSupport<AnalyzingJob, AnalyzingJobResource> {
+		extends ResourceAssemblerSupport<AnalyzingJob, AnalyzingJobResource> {
 
-  private Long projectId;
+	private Long projectId;
 
-  AnalyzingJobResourceAssembler(Long projectId) {
-    super(AnalyzingJobController.class, AnalyzingJobResource.class);
-    this.projectId = projectId;
-  }
+	AnalyzingJobResourceAssembler(Long projectId) {
+		super(AnalyzingJobController.class, AnalyzingJobResource.class);
+		this.projectId = projectId;
+	}
 
-  @Override
-  public AnalyzingJobResource toResource(AnalyzingJob entity) {
-    AnalyzingJobResource resource =
-        new AnalyzingJobResource(entity.getFromDate(), entity.isActive());
-    resource.add(
-        linkTo(methodOn(AnalyzingJobController.class).getAnalyzingJob(projectId)).withRel("self"));
-    resource.add(
-        linkTo(methodOn(ProjectController.class).getProject(projectId)).withRel("project"));
-    return resource;
-  }
+	@Override
+	public AnalyzingJobResource toResource(AnalyzingJob entity) {
+		AnalyzingJobResource resource =
+				new AnalyzingJobResource(entity.getFromDate(), entity.isActive());
+		resource.add(
+				linkTo(methodOn(AnalyzingJobController.class).getAnalyzingJob(projectId)).withRel("self"));
+		resource.add(
+				linkTo(methodOn(ProjectController.class).getProject(projectId)).withRel("project"));
+		return resource;
+	}
 
-  public AnalyzingJob updateEntity(
-      AnalyzingJob entity, AnalyzingJobResource resource, Project project) {
-    entity.setProject(project);
-    entity.setActive(resource.isActive());
-    entity.setFromDate(resource.getFromDate());
-    return entity;
-  }
+	public AnalyzingJob updateEntity(
+			AnalyzingJob entity, AnalyzingJobResource resource, Project project) {
+		entity.setProject(project);
+		entity.setActive(resource.isActive());
+		entity.setFromDate(resource.getFromDate());
+		return entity;
+	}
 }

@@ -11,46 +11,46 @@ import org.wickedsource.coderadar.qualityprofile.domain.QualityProfile;
 import org.wickedsource.coderadar.qualityprofile.domain.QualityProfileMetric;
 
 public class QualityProfileResourceAssembler
-    extends ResourceAssemblerSupport<QualityProfile, QualityProfileResource> {
+		extends ResourceAssemblerSupport<QualityProfile, QualityProfileResource> {
 
-  private Project project;
+	private Project project;
 
-  public QualityProfileResourceAssembler(Project project) {
-    super(QualityProfileController.class, QualityProfileResource.class);
-    this.project = project;
-  }
+	public QualityProfileResourceAssembler(Project project) {
+		super(QualityProfileController.class, QualityProfileResource.class);
+		this.project = project;
+	}
 
-  @Override
-  public QualityProfileResource toResource(QualityProfile entity) {
-    QualityProfileResource resource = new QualityProfileResource();
-    resource.setProfileName(entity.getName());
-    for (QualityProfileMetric metric : entity.getMetrics()) {
-      MetricDTO metricDTO = new MetricDTO();
-      metricDTO.setMetricName(metric.getName());
-      metricDTO.setMetricType(metric.getMetricType());
-      resource.addMetric(metricDTO);
-    }
-    resource.add(
-        linkTo(
-                methodOn(QualityProfileController.class)
-                    .getQualityProfile(entity.getId(), project.getId()))
-            .withRel("self"));
-    resource.add(
-        linkTo(methodOn(ProjectController.class).getProject(project.getId())).withRel("project"));
-    return resource;
-  }
+	@Override
+	public QualityProfileResource toResource(QualityProfile entity) {
+		QualityProfileResource resource = new QualityProfileResource();
+		resource.setProfileName(entity.getName());
+		for (QualityProfileMetric metric : entity.getMetrics()) {
+			MetricDTO metricDTO = new MetricDTO();
+			metricDTO.setMetricName(metric.getName());
+			metricDTO.setMetricType(metric.getMetricType());
+			resource.addMetric(metricDTO);
+		}
+		resource.add(
+				linkTo(
+								methodOn(QualityProfileController.class)
+										.getQualityProfile(entity.getId(), project.getId()))
+						.withRel("self"));
+		resource.add(
+				linkTo(methodOn(ProjectController.class).getProject(project.getId())).withRel("project"));
+		return resource;
+	}
 
-  public QualityProfile updateEntity(QualityProfileResource resource, QualityProfile profile) {
-    profile.setName(resource.getProfileName());
-    profile.setProject(project);
-    profile.getMetrics().clear();
-    for (MetricDTO metricDTO : resource.getMetrics()) {
-      QualityProfileMetric metric = new QualityProfileMetric();
-      metric.setName(metricDTO.getMetricName());
-      metric.setMetricType(metricDTO.getMetricType());
-      metric.setProfile(profile);
-      profile.getMetrics().add(metric);
-    }
-    return profile;
-  }
+	public QualityProfile updateEntity(QualityProfileResource resource, QualityProfile profile) {
+		profile.setName(resource.getProfileName());
+		profile.setProject(project);
+		profile.getMetrics().clear();
+		for (MetricDTO metricDTO : resource.getMetrics()) {
+			QualityProfileMetric metric = new QualityProfileMetric();
+			metric.setName(metricDTO.getMetricName());
+			metric.setMetricType(metricDTO.getMetricType());
+			metric.setProfile(profile);
+			profile.getMetrics().add(metric);
+		}
+		return profile;
+	}
 }

@@ -17,64 +17,64 @@ import org.wickedsource.coderadar.project.domain.ProjectRepository;
 @ConditionalOnProperty("coderadar.master")
 class CommitMetadataScannerTrigger {
 
-  private JobLogger jobLogger;
+	private JobLogger jobLogger;
 
-  private CoderadarConfiguration config;
+	private CoderadarConfiguration config;
 
-  private ProjectRepository projectRepository;
+	private ProjectRepository projectRepository;
 
-  private ScanCommitsJobRepository jobRepository;
+	private ScanCommitsJobRepository jobRepository;
 
-  @Autowired
-  public CommitMetadataScannerTrigger(
-      JobLogger jobLogger,
-      CoderadarConfiguration config,
-      ProjectRepository projectRepository,
-      ScanCommitsJobRepository jobRepository) {
-    this.jobLogger = jobLogger;
-    this.config = config;
-    this.projectRepository = projectRepository;
-    this.jobRepository = jobRepository;
-  }
+	@Autowired
+	public CommitMetadataScannerTrigger(
+			JobLogger jobLogger,
+			CoderadarConfiguration config,
+			ProjectRepository projectRepository,
+			ScanCommitsJobRepository jobRepository) {
+		this.jobLogger = jobLogger;
+		this.config = config;
+		this.projectRepository = projectRepository;
+		this.jobRepository = jobRepository;
+	}
 
-  @Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
-  public void trigger() {
-    for (Project project : projectRepository.findAll()) {
-      if (shouldJobBeQueuedForProject(project)) {
-        ScanCommitsJob newJob = new ScanCommitsJob();
-        newJob.setProcessingStatus(ProcessingStatus.WAITING);
-        newJob.setQueuedDate(new Date());
-        newJob.setProject(project);
-        jobRepository.save(newJob);
-        jobLogger.queuedNewJob(newJob, project);
-      }
-    }
-  }
+	@Scheduled(fixedDelay = CoderadarConfiguration.TIMER_INTERVAL)
+	public void trigger() {
+		for (Project project : projectRepository.findAll()) {
+			if (shouldJobBeQueuedForProject(project)) {
+				ScanCommitsJob newJob = new ScanCommitsJob();
+				newJob.setProcessingStatus(ProcessingStatus.WAITING);
+				newJob.setQueuedDate(new Date());
+				newJob.setProject(project);
+				jobRepository.save(newJob);
+				jobLogger.queuedNewJob(newJob, project);
+			}
+		}
+	}
 
-  private boolean shouldJobBeQueuedForProject(Project project) {
-    if (isJobCurrentlyQueuedForProject(project)) {
-      jobLogger.alreadyQueuedForProject(ScanCommitsJob.class, project);
-      return false;
-    } else {
-      Job lastJob =
-          jobRepository.findTop1ByProcessingStatusAndProjectIdOrderByQueuedDateDesc(
-              ProcessingStatus.PROCESSED, project.getId());
-      return lastJob == null || hasIntervalPassedSince(lastJob);
-    }
-  }
+	private boolean shouldJobBeQueuedForProject(Project project) {
+		if (isJobCurrentlyQueuedForProject(project)) {
+			jobLogger.alreadyQueuedForProject(ScanCommitsJob.class, project);
+			return false;
+		} else {
+			Job lastJob =
+					jobRepository.findTop1ByProcessingStatusAndProjectIdOrderByQueuedDateDesc(
+							ProcessingStatus.PROCESSED, project.getId());
+			return lastJob == null || hasIntervalPassedSince(lastJob);
+		}
+	}
 
-  private boolean isJobCurrentlyQueuedForProject(Project project) {
-    int count =
-        jobRepository.countByProcessingStatusInAndProjectId(
-            Arrays.asList(ProcessingStatus.PROCESSING, ProcessingStatus.WAITING), project.getId());
-    return count > 0;
-  }
+	private boolean isJobCurrentlyQueuedForProject(Project project) {
+		int count =
+				jobRepository.countByProcessingStatusInAndProjectId(
+						Arrays.asList(ProcessingStatus.PROCESSING, ProcessingStatus.WAITING), project.getId());
+		return count > 0;
+	}
 
-  private boolean hasIntervalPassedSince(Job lastJob) {
-    long lastRun = lastJob.getQueuedDate().getTime();
-    long nextRun = lastRun + config.getScanIntervalInSeconds() * 1000;
-    long now = new Date().getTime();
+	private boolean hasIntervalPassedSince(Job lastJob) {
+		long lastRun = lastJob.getQueuedDate().getTime();
+		long nextRun = lastRun + config.getScanIntervalInSeconds() * 1000;
+		long now = new Date().getTime();
 
-    return now > nextRun;
-  }
+		return now > nextRun;
+	}
 }

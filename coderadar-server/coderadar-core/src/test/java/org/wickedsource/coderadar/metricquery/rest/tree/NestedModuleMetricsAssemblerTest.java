@@ -10,50 +10,50 @@ import org.wickedsource.coderadar.metric.domain.metricvalue.GroupedMetricValueDT
 
 public class NestedModuleMetricsAssemblerTest {
 
-  @Test
-  public void modulesAreNestedCorrectly() {
+	@Test
+	public void modulesAreNestedCorrectly() {
 
-    List<GroupedMetricValueDTO> valuesPerModule = new ArrayList<>();
-    valuesPerModule.add(new GroupedByModuleMetricValueDTO("metric1", 10L, "server/foo/module1"));
-    valuesPerModule.add(new GroupedByModuleMetricValueDTO("metric2", 11L, "server/foo/module1"));
-    valuesPerModule.add(new GroupedByModuleMetricValueDTO("metric3", 12L, "server/foo/module1"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO("metric1", 10L, "server/foo/module1/submodule1"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO("metric2", 11L, "server/foo/module1/submodule1"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO("metric3", 12L, "server/foo/module1/submodule1"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO("metric1", 10L, "server/foo/module1/submodule2"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO("metric2", 11L, "server/foo/module1/submodule2"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO("metric3", 12L, "server/foo/module1/submodule2"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO(
-            "metric1", 10L, "server/foo/module1/submodule1/subsubmodule3"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO(
-            "metric2", 11L, "server/foo/module1/submodule1/subsubmodule3"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO(
-            "metric3", 12L, "server/foo/module1/submodule1/subsubmodule3"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO("metric1", 10L, "server/foo/bar/module4/submodule5"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO("metric2", 11L, "server/foo/bar/module4/submodule5"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO("metric3", 12L, "server/foo/bar/module4/submodule5"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO("metric1", 10L, "server/foo/bar/module6/submodule7"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO("metric2", 11L, "server/foo/bar/module6/submodule7"));
-    valuesPerModule.add(
-        new GroupedByModuleMetricValueDTO("metric3", 12L, "server/foo/bar/module6/submodule7"));
+		List<GroupedMetricValueDTO> valuesPerModule = new ArrayList<>();
+		valuesPerModule.add(new GroupedByModuleMetricValueDTO("metric1", 10L, "server/foo/module1"));
+		valuesPerModule.add(new GroupedByModuleMetricValueDTO("metric2", 11L, "server/foo/module1"));
+		valuesPerModule.add(new GroupedByModuleMetricValueDTO("metric3", 12L, "server/foo/module1"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO("metric1", 10L, "server/foo/module1/submodule1"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO("metric2", 11L, "server/foo/module1/submodule1"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO("metric3", 12L, "server/foo/module1/submodule1"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO("metric1", 10L, "server/foo/module1/submodule2"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO("metric2", 11L, "server/foo/module1/submodule2"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO("metric3", 12L, "server/foo/module1/submodule2"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO(
+						"metric1", 10L, "server/foo/module1/submodule1/subsubmodule3"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO(
+						"metric2", 11L, "server/foo/module1/submodule1/subsubmodule3"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO(
+						"metric3", 12L, "server/foo/module1/submodule1/subsubmodule3"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO("metric1", 10L, "server/foo/bar/module4/submodule5"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO("metric2", 11L, "server/foo/bar/module4/submodule5"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO("metric3", 12L, "server/foo/bar/module4/submodule5"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO("metric1", 10L, "server/foo/bar/module6/submodule7"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO("metric2", 11L, "server/foo/bar/module6/submodule7"));
+		valuesPerModule.add(
+				new GroupedByModuleMetricValueDTO("metric3", 12L, "server/foo/bar/module6/submodule7"));
 
-    MetricsTreeResourceAssembler assembler = new MetricsTreeResourceAssembler();
-    MetricsTreeResource resource = assembler.toResource(valuesPerModule);
+		MetricsTreeResourceAssembler assembler = new MetricsTreeResourceAssembler();
+		MetricsTreeResource resource = assembler.toResource(valuesPerModule);
 
-    assertThat(resource.getChildren()).hasSize(3);
-  }
+		assertThat(resource.getChildren()).hasSize(3);
+	}
 }

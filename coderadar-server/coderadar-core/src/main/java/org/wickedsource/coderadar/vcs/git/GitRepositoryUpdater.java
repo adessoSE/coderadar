@@ -15,41 +15,41 @@ import org.wickedsource.coderadar.vcs.RepositoryUpdater;
 @Service
 public class GitRepositoryUpdater implements RepositoryUpdater {
 
-  private GitRepositoryResetter reverter;
+	private GitRepositoryResetter reverter;
 
-  @Autowired
-  public GitRepositoryUpdater(GitRepositoryResetter reverter) {
-    this.reverter = reverter;
-  }
+	@Autowired
+	public GitRepositoryUpdater(GitRepositoryResetter reverter) {
+		this.reverter = reverter;
+	}
 
-  @Override
-  public Git updateRepository(Path repositoryRoot) {
-    try {
-      return updateInternal(repositoryRoot);
-    } catch (CheckoutConflictException e) {
-      // When having a checkout conflict, someone or something fiddled with the working directory.
-      // Since the working directory is designed to be read only, we just revert it and try again.
-      reverter.reset(repositoryRoot);
-      try {
-        return updateInternal(repositoryRoot);
-      } catch (Exception e2) {
-        throw createException(e2, repositoryRoot);
-      }
-    } catch (Exception e) {
-      throw createException(e, repositoryRoot);
-    }
-  }
+	@Override
+	public Git updateRepository(Path repositoryRoot) {
+		try {
+			return updateInternal(repositoryRoot);
+		} catch (CheckoutConflictException e) {
+			// When having a checkout conflict, someone or something fiddled with the working directory.
+			// Since the working directory is designed to be read only, we just revert it and try again.
+			reverter.reset(repositoryRoot);
+			try {
+				return updateInternal(repositoryRoot);
+			} catch (Exception e2) {
+				throw createException(e2, repositoryRoot);
+			}
+		} catch (Exception e) {
+			throw createException(e, repositoryRoot);
+		}
+	}
 
-  private IllegalStateException createException(Exception cause, Path repositoryRoot) {
-    return new IllegalStateException(
-        String.format("error accessing local GIT repository at %s", repositoryRoot), cause);
-  }
+	private IllegalStateException createException(Exception cause, Path repositoryRoot) {
+		return new IllegalStateException(
+				String.format("error accessing local GIT repository at %s", repositoryRoot), cause);
+	}
 
-  private Git updateInternal(Path repositoryRoot) throws GitAPIException, IOException {
-    FileRepositoryBuilder builder = new FileRepositoryBuilder();
-    Repository repository = builder.setWorkTree(repositoryRoot.toFile()).build();
-    Git git = new Git(repository);
-    git.pull().setStrategy(MergeStrategy.THEIRS).call();
-    return git;
-  }
+	private Git updateInternal(Path repositoryRoot) throws GitAPIException, IOException {
+		FileRepositoryBuilder builder = new FileRepositoryBuilder();
+		Repository repository = builder.setWorkTree(repositoryRoot.toFile()).build();
+		Git git = new Git(repository);
+		git.pull().setStrategy(MergeStrategy.THEIRS).call();
+		return git;
+	}
 }

@@ -26,88 +26,88 @@ import org.wickedsource.coderadar.qualityprofile.domain.QualityProfileRepository
 @RequestMapping(path = "/projects/{projectId}/qualityprofiles")
 public class QualityProfileController {
 
-  private ProjectVerifier projectVerifier;
+	private ProjectVerifier projectVerifier;
 
-  private QualityProfileRepository qualityProfileRepository;
+	private QualityProfileRepository qualityProfileRepository;
 
-  @Autowired
-  public QualityProfileController(
-      ProjectVerifier projectVerifier, QualityProfileRepository qualityProfileRepository) {
-    this.projectVerifier = projectVerifier;
-    this.qualityProfileRepository = qualityProfileRepository;
-  }
+	@Autowired
+	public QualityProfileController(
+			ProjectVerifier projectVerifier, QualityProfileRepository qualityProfileRepository) {
+		this.projectVerifier = projectVerifier;
+		this.qualityProfileRepository = qualityProfileRepository;
+	}
 
-  @RequestMapping(method = RequestMethod.POST, produces = "application/hal+json")
-  public ResponseEntity<QualityProfileResource> createQualityProfile(
-      @RequestBody @Valid QualityProfileResource qualityProfileResource,
-      @PathVariable Long projectId) {
-    Project project = projectVerifier.loadProjectOrThrowException(projectId);
-    QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
-    QualityProfile profile = assembler.updateEntity(qualityProfileResource, new QualityProfile());
-    profile = qualityProfileRepository.save(profile);
-    return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.CREATED);
-  }
+	@RequestMapping(method = RequestMethod.POST, produces = "application/hal+json")
+	public ResponseEntity<QualityProfileResource> createQualityProfile(
+			@RequestBody @Valid QualityProfileResource qualityProfileResource,
+			@PathVariable Long projectId) {
+		Project project = projectVerifier.loadProjectOrThrowException(projectId);
+		QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
+		QualityProfile profile = assembler.updateEntity(qualityProfileResource, new QualityProfile());
+		profile = qualityProfileRepository.save(profile);
+		return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.CREATED);
+	}
 
-  @RequestMapping(
-    path = "/{profileId}",
-    method = RequestMethod.POST,
-    produces = "application/hal+json"
-  )
-  public ResponseEntity<QualityProfileResource> updateQualityProfile(
-      @Valid @RequestBody QualityProfileResource qualityProfileResource,
-      @PathVariable Long profileId,
-      @PathVariable Long projectId) {
-    Project project = projectVerifier.loadProjectOrThrowException(projectId);
-    QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
-    QualityProfile profile = qualityProfileRepository.findOne(profileId);
-    if (profile == null) {
-      throw new ResourceNotFoundException();
-    }
-    profile = assembler.updateEntity(qualityProfileResource, profile);
-    profile = qualityProfileRepository.save(profile);
-    return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.OK);
-  }
+	@RequestMapping(
+		path = "/{profileId}",
+		method = RequestMethod.POST,
+		produces = "application/hal+json"
+	)
+	public ResponseEntity<QualityProfileResource> updateQualityProfile(
+			@Valid @RequestBody QualityProfileResource qualityProfileResource,
+			@PathVariable Long profileId,
+			@PathVariable Long projectId) {
+		Project project = projectVerifier.loadProjectOrThrowException(projectId);
+		QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
+		QualityProfile profile = qualityProfileRepository.findOne(profileId);
+		if (profile == null) {
+			throw new ResourceNotFoundException();
+		}
+		profile = assembler.updateEntity(qualityProfileResource, profile);
+		profile = qualityProfileRepository.save(profile);
+		return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.OK);
+	}
 
-  @RequestMapping(
-    path = "/{profileId}",
-    method = RequestMethod.GET,
-    produces = "application/hal+json"
-  )
-  public ResponseEntity<QualityProfileResource> getQualityProfile(
-      @PathVariable Long profileId, @PathVariable Long projectId) {
-    Project project = projectVerifier.loadProjectOrThrowException(projectId);
-    QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
-    QualityProfile profile = qualityProfileRepository.findOne(profileId);
-    if (profile == null) {
-      throw new ResourceNotFoundException();
-    }
-    return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.OK);
-  }
+	@RequestMapping(
+		path = "/{profileId}",
+		method = RequestMethod.GET,
+		produces = "application/hal+json"
+	)
+	public ResponseEntity<QualityProfileResource> getQualityProfile(
+			@PathVariable Long profileId, @PathVariable Long projectId) {
+		Project project = projectVerifier.loadProjectOrThrowException(projectId);
+		QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
+		QualityProfile profile = qualityProfileRepository.findOne(profileId);
+		if (profile == null) {
+			throw new ResourceNotFoundException();
+		}
+		return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.OK);
+	}
 
-  @RequestMapping(
-    path = "/{profileId}",
-    method = RequestMethod.DELETE,
-    produces = "application/hal+json"
-  )
-  public ResponseEntity<String> deleteQualityProfile(
-      @PathVariable Long profileId, @PathVariable Long projectId) {
-    projectVerifier.checkProjectExistsOrThrowException(projectId);
-    qualityProfileRepository.delete(profileId);
-    return new ResponseEntity<>(HttpStatus.OK);
-  }
+	@RequestMapping(
+		path = "/{profileId}",
+		method = RequestMethod.DELETE,
+		produces = "application/hal+json"
+	)
+	public ResponseEntity<String> deleteQualityProfile(
+			@PathVariable Long profileId, @PathVariable Long projectId) {
+		projectVerifier.checkProjectExistsOrThrowException(projectId);
+		qualityProfileRepository.delete(profileId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
-  @SuppressWarnings("unchecked")
-  @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
-  public ResponseEntity<PagedResources<QualityProfileResource>> listQualityProfiles(
-      @PageableDefault Pageable pageable,
-      PagedResourcesAssembler pagedResourcesAssembler,
-      @PathVariable long projectId) {
-    Project project = projectVerifier.loadProjectOrThrowException(projectId);
-    Page<QualityProfile> profilesPage =
-        qualityProfileRepository.findByProjectId(projectId, pageable);
-    QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
-    PagedResources<QualityProfileResource> pagedResources =
-        pagedResourcesAssembler.toResource(profilesPage, assembler);
-    return new ResponseEntity<>(pagedResources, HttpStatus.OK);
-  }
+	@SuppressWarnings("unchecked")
+	@RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
+	public ResponseEntity<PagedResources<QualityProfileResource>> listQualityProfiles(
+			@PageableDefault Pageable pageable,
+			PagedResourcesAssembler pagedResourcesAssembler,
+			@PathVariable long projectId) {
+		Project project = projectVerifier.loadProjectOrThrowException(projectId);
+		Page<QualityProfile> profilesPage =
+				qualityProfileRepository.findByProjectId(projectId, pageable);
+		QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
+		PagedResources<QualityProfileResource> pagedResources =
+				pagedResourcesAssembler.toResource(profilesPage, assembler);
+		return new ResponseEntity<>(pagedResources, HttpStatus.OK);
+	}
 }

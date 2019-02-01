@@ -4,28 +4,28 @@ import org.wickedsource.coderadar.analyzer.api.*;
 
 public class AnalyzerFactory {
 
-  public ConfigurableAnalyzerPlugin configurableAnalyzer() {
-    return new DummyAnalyzer();
-  }
+	public ConfigurableAnalyzerPlugin configurableAnalyzer() {
+		return new DummyAnalyzer();
+	}
 
-  private class DummyAnalyzer implements SourceCodeFileAnalyzerPlugin, ConfigurableAnalyzerPlugin {
+	private class DummyAnalyzer implements SourceCodeFileAnalyzerPlugin, ConfigurableAnalyzerPlugin {
 
-    @Override
-    public boolean isValidConfigurationFile(byte[] configurationFile) {
-      return true;
-    }
+		@Override
+		public boolean isValidConfigurationFile(byte[] configurationFile) {
+			return true;
+		}
 
-    @Override
-    public void configure(byte[] configurationFile) {}
+		@Override
+		public void configure(byte[] configurationFile) {}
 
-    @Override
-    public AnalyzerFileFilter getFilter() {
-      return new DefaultFileFilter();
-    }
+		@Override
+		public AnalyzerFileFilter getFilter() {
+			return new DefaultFileFilter();
+		}
 
-    @Override
-    public FileMetrics analyzeFile(String filename, byte[] fileContent) throws AnalyzerException {
-      return new FileMetrics();
-    }
-  }
+		@Override
+		public FileMetrics analyzeFile(String filename, byte[] fileContent) throws AnalyzerException {
+			return new FileMetrics();
+		}
+	}
 }

@@ -9,11 +9,11 @@ import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate
 
 public class SecretKeyServiceTest extends IntegrationTestTemplate {
 
-  @Autowired private SecretKeyService sut;
+	@Autowired private SecretKeyService sut;
 
-  @Test
-  public void getSecretKey() throws Exception {
-    SecretKey secretKey = sut.getSecretKey();
-    assertThat(secretKey).isNotNull();
-  }
+	@Test
+	public void getSecretKey() throws Exception {
+		SecretKey secretKey = sut.getSecretKey();
+		assertThat(secretKey).isNotNull();
+	}
 }

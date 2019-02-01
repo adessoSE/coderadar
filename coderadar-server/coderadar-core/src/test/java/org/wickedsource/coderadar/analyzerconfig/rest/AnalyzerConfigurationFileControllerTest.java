@@ -18,26 +18,26 @@ import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 @Category(ControllerTest.class)
 public class AnalyzerConfigurationFileControllerTest extends ControllerTestTemplate {
 
-  @Test
-  @DatabaseSetup(SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION)
-  @ExpectedDatabase(SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION_FILE)
-  public void uploadConfigurationFile() throws Exception {
-    MockMultipartFile file =
-        new MockMultipartFile("file", "config.txt", "text/plain", ("abc".getBytes()));
-    mvc()
-        .perform(fileUpload("/projects/1/analyzers/1/file").file(file))
-        .andExpect(status().isOk())
-        .andDo(document("analyzerConfigurationFile/upload"));
-  }
+	@Test
+	@DatabaseSetup(SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION)
+	@ExpectedDatabase(SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION_FILE)
+	public void uploadConfigurationFile() throws Exception {
+		MockMultipartFile file =
+				new MockMultipartFile("file", "config.txt", "text/plain", ("abc".getBytes()));
+		mvc()
+				.perform(fileUpload("/projects/1/analyzers/1/file").file(file))
+				.andExpect(status().isOk())
+				.andDo(document("analyzerConfigurationFile/upload"));
+	}
 
-  @Test
-  @DatabaseSetup(SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION_FILE)
-  @ExpectedDatabase(SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION_FILE)
-  public void downloadConfigurationFile() throws Exception {
-    mvc()
-        .perform(get("/projects/1/analyzers/1/file"))
-        .andExpect(status().isOk())
-        .andExpect(content().bytes("abc".getBytes()))
-        .andDo(document("analyzerConfigurationFile/download"));
-  }
+	@Test
+	@DatabaseSetup(SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION_FILE)
+	@ExpectedDatabase(SINGLE_PROJECT_WITH_ANALYZER_CONFIGURATION_FILE)
+	public void downloadConfigurationFile() throws Exception {
+		mvc()
+				.perform(get("/projects/1/analyzers/1/file"))
+				.andExpect(status().isOk())
+				.andExpect(content().bytes("abc".getBytes()))
+				.andDo(document("analyzerConfigurationFile/download"));
+	}
 }

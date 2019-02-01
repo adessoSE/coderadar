@@ -16,148 +16,148 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("coderadar")
 public class CoderadarConfiguration {
 
-  private Logger logger = LoggerFactory.getLogger(CoderadarConfiguration.class);
+	private Logger logger = LoggerFactory.getLogger(CoderadarConfiguration.class);
 
-  private static final String CONFIG_PARAM_LOG_PATTERN = "%s is set to '%s'";
+	private static final String CONFIG_PARAM_LOG_PATTERN = "%s is set to '%s'";
 
-  /** Number of milliseconds that @Scheduled tasks should wait before executing again. */
-  public static final int TIMER_INTERVAL = 100;
+	/** Number of milliseconds that @Scheduled tasks should wait before executing again. */
+	public static final int TIMER_INTERVAL = 100;
 
-  @NotNull private Boolean master;
+	@NotNull private Boolean master;
 
-  @NotNull private Boolean slave;
+	@NotNull private Boolean slave;
 
-  @NotNull private Path workdir;
+	@NotNull private Path workdir;
 
-  @NotNull private Integer scanIntervalInSeconds = 300;
+	@NotNull private Integer scanIntervalInSeconds = 300;
 
-  @NotNull private Locale dateLocale = Locale.ENGLISH;
+	@NotNull private Locale dateLocale = Locale.ENGLISH;
 
-  private Authentication authentication = new Authentication();
+	private Authentication authentication = new Authentication();
 
-  public Boolean isMaster() {
-    return master;
-  }
+	public Boolean isMaster() {
+		return master;
+	}
 
-  public void setMaster(Boolean master) {
-    this.master = master;
-  }
+	public void setMaster(Boolean master) {
+		this.master = master;
+	}
 
-  public Boolean isSlave() {
-    return slave;
-  }
+	public Boolean isSlave() {
+		return slave;
+	}
 
-  public void setSlave(Boolean slave) {
-    this.slave = slave;
-  }
+	public void setSlave(Boolean slave) {
+		this.slave = slave;
+	}
 
-  public Path getWorkdir() {
-    return workdir;
-  }
+	public Path getWorkdir() {
+		return workdir;
+	}
 
-  public void setWorkdir(Path workdir) {
-    this.workdir = workdir;
-  }
+	public void setWorkdir(Path workdir) {
+		this.workdir = workdir;
+	}
 
-  public Locale getDateLocale() {
-    return dateLocale;
-  }
+	public Locale getDateLocale() {
+		return dateLocale;
+	}
 
-  public void setDateLocale(Locale dateLocale) {
-    this.dateLocale = dateLocale;
-  }
+	public void setDateLocale(Locale dateLocale) {
+		this.dateLocale = dateLocale;
+	}
 
-  public Integer getScanIntervalInSeconds() {
-    return scanIntervalInSeconds;
-  }
+	public Integer getScanIntervalInSeconds() {
+		return scanIntervalInSeconds;
+	}
 
-  public void setScanIntervalInSeconds(Integer scanIntervalInSeconds) {
-    this.scanIntervalInSeconds = scanIntervalInSeconds;
-  }
+	public void setScanIntervalInSeconds(Integer scanIntervalInSeconds) {
+		this.scanIntervalInSeconds = scanIntervalInSeconds;
+	}
 
-  public Authentication getAuthentication() {
-    return authentication;
-  }
+	public Authentication getAuthentication() {
+		return authentication;
+	}
 
-  public void setAuthentication(Authentication authentication) {
-    this.authentication = authentication;
-  }
+	public void setAuthentication(Authentication authentication) {
+		this.authentication = authentication;
+	}
 
-  @PostConstruct
-  public void logConfig() {
-    logger.info(String.format(CONFIG_PARAM_LOG_PATTERN, "coderadar.master", this.master));
-    logger.info(String.format(CONFIG_PARAM_LOG_PATTERN, "coderadar.slave", this.slave));
-    logger.info(String.format(CONFIG_PARAM_LOG_PATTERN, "coderadar.workdir", this.workdir));
-    logger.info(String.format(CONFIG_PARAM_LOG_PATTERN, "coderadar.dateLocale", this.dateLocale));
-    logger.info(
-        String.format(
-            CONFIG_PARAM_LOG_PATTERN,
-            "coderadar.scanIntervalInSeconds",
-            this.scanIntervalInSeconds));
-    logger.info(
-        String.format(
-            CONFIG_PARAM_LOG_PATTERN,
-            "coderadar.authentication.accessTokenDurationInMinutes",
-            this.authentication.accessTokenDurationInMinutes));
-    logger.info(
-        String.format(
-            CONFIG_PARAM_LOG_PATTERN,
-            "coderadar.authentication.refreshTokenDurationInMinutes",
-            this.authentication.refreshTokenDurationInMinutes));
-    logger.info(
-        String.format(
-            CONFIG_PARAM_LOG_PATTERN,
-            "coderadar.authentication.enabled",
-            this.authentication.enabled));
-  }
+	@PostConstruct
+	public void logConfig() {
+		logger.info(String.format(CONFIG_PARAM_LOG_PATTERN, "coderadar.master", this.master));
+		logger.info(String.format(CONFIG_PARAM_LOG_PATTERN, "coderadar.slave", this.slave));
+		logger.info(String.format(CONFIG_PARAM_LOG_PATTERN, "coderadar.workdir", this.workdir));
+		logger.info(String.format(CONFIG_PARAM_LOG_PATTERN, "coderadar.dateLocale", this.dateLocale));
+		logger.info(
+				String.format(
+						CONFIG_PARAM_LOG_PATTERN,
+						"coderadar.scanIntervalInSeconds",
+						this.scanIntervalInSeconds));
+		logger.info(
+				String.format(
+						CONFIG_PARAM_LOG_PATTERN,
+						"coderadar.authentication.accessTokenDurationInMinutes",
+						this.authentication.accessTokenDurationInMinutes));
+		logger.info(
+				String.format(
+						CONFIG_PARAM_LOG_PATTERN,
+						"coderadar.authentication.refreshTokenDurationInMinutes",
+						this.authentication.refreshTokenDurationInMinutes));
+		logger.info(
+				String.format(
+						CONFIG_PARAM_LOG_PATTERN,
+						"coderadar.authentication.enabled",
+						this.authentication.enabled));
+	}
 
-  @PostConstruct
-  public void validateWorkdirIsWritable() {
-    if (!Files.exists(this.workdir)) {
-      try {
-        Files.createDirectories(this.workdir);
-      } catch (IOException e) {
-        throw new IllegalArgumentException(
-            String.format("directory %s could not be created!", this.workdir), e);
-      }
-    }
+	@PostConstruct
+	public void validateWorkdirIsWritable() {
+		if (!Files.exists(this.workdir)) {
+			try {
+				Files.createDirectories(this.workdir);
+			} catch (IOException e) {
+				throw new IllegalArgumentException(
+						String.format("directory %s could not be created!", this.workdir), e);
+			}
+		}
 
-    if (!Files.isWritable(this.workdir)) {
-      throw new IllegalArgumentException(
-          String.format("directory %s is not writable!", this.workdir));
-    }
-  }
+		if (!Files.isWritable(this.workdir)) {
+			throw new IllegalArgumentException(
+					String.format("directory %s is not writable!", this.workdir));
+		}
+	}
 
-  public static class Authentication {
+	public static class Authentication {
 
-    @NotNull private Integer accessTokenDurationInMinutes = 15;
+		@NotNull private Integer accessTokenDurationInMinutes = 15;
 
-    @NotNull private Boolean enabled = Boolean.TRUE;
+		@NotNull private Boolean enabled = Boolean.TRUE;
 
-    @NotNull private Integer refreshTokenDurationInMinutes = 86400;
+		@NotNull private Integer refreshTokenDurationInMinutes = 86400;
 
-    public Integer getAccessTokenDurationInMinutes() {
-      return accessTokenDurationInMinutes;
-    }
+		public Integer getAccessTokenDurationInMinutes() {
+			return accessTokenDurationInMinutes;
+		}
 
-    public void setAccessTokenDurationInMinutes(Integer accessTokenDurationInMinutes) {
-      this.accessTokenDurationInMinutes = accessTokenDurationInMinutes;
-    }
+		public void setAccessTokenDurationInMinutes(Integer accessTokenDurationInMinutes) {
+			this.accessTokenDurationInMinutes = accessTokenDurationInMinutes;
+		}
 
-    public Boolean getEnabled() {
-      return enabled;
-    }
+		public Boolean getEnabled() {
+			return enabled;
+		}
 
-    public void setEnabled(Boolean enabled) {
-      this.enabled = enabled;
-    }
+		public void setEnabled(Boolean enabled) {
+			this.enabled = enabled;
+		}
 
-    public Integer getRefreshTokenDurationInMinutes() {
-      return refreshTokenDurationInMinutes;
-    }
+		public Integer getRefreshTokenDurationInMinutes() {
+			return refreshTokenDurationInMinutes;
+		}
 
-    public void setRefreshTokenDurationInMinutes(Integer refreshTokenDurationInMinutes) {
-      this.refreshTokenDurationInMinutes = refreshTokenDurationInMinutes;
-    }
-  }
+		public void setRefreshTokenDurationInMinutes(Integer refreshTokenDurationInMinutes) {
+			this.refreshTokenDurationInMinutes = refreshTokenDurationInMinutes;
+		}
+	}
 }

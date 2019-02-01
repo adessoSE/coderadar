@@ -26,42 +26,42 @@ import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 @RequestMapping(path = "/projects/{projectId}/profileratings/perCommit")
 public class CommitProfileRatingsController {
 
-  private ProjectVerifier projectVerifier;
+	private ProjectVerifier projectVerifier;
 
-  private MetricValueRepository metricValueRepository;
+	private MetricValueRepository metricValueRepository;
 
-  private CommitRepository commitRepository;
+	private CommitRepository commitRepository;
 
-  @Autowired
-  public CommitProfileRatingsController(
-      ProjectVerifier projectVerifier,
-      MetricValueRepository metricValueRepository,
-      CommitRepository commitRepository) {
-    this.projectVerifier = projectVerifier;
-    this.metricValueRepository = metricValueRepository;
-    this.commitRepository = commitRepository;
-  }
+	@Autowired
+	public CommitProfileRatingsController(
+			ProjectVerifier projectVerifier,
+			MetricValueRepository metricValueRepository,
+			CommitRepository commitRepository) {
+		this.projectVerifier = projectVerifier;
+		this.metricValueRepository = metricValueRepository;
+		this.commitRepository = commitRepository;
+	}
 
-  @RequestMapping(
-    method = {RequestMethod.GET, RequestMethod.POST},
-    produces = "application/hal+json"
-  )
-  public ResponseEntity<CommitProfileRatingsOutputResource> queryProfileRatings(
-      @PathVariable Long projectId, @Valid @RequestBody CommitProfileRatingsQuery query) {
-    projectVerifier.checkProjectExistsOrThrowException(projectId);
+	@RequestMapping(
+		method = {RequestMethod.GET, RequestMethod.POST},
+		produces = "application/hal+json"
+	)
+	public ResponseEntity<CommitProfileRatingsOutputResource> queryProfileRatings(
+			@PathVariable Long projectId, @Valid @RequestBody CommitProfileRatingsQuery query) {
+		projectVerifier.checkProjectExistsOrThrowException(projectId);
 
-    Commit commit = commitRepository.findByName(query.getCommit());
-    if (commit == null) {
-      throw new ResourceNotFoundException();
-    }
+		Commit commit = commitRepository.findByName(query.getCommit());
+		if (commit == null) {
+			throw new ResourceNotFoundException();
+		}
 
-    CommitProfileRatingsOutputResource resource = new CommitProfileRatingsOutputResource();
-    List<ProfileValuePerCommitDTO> profileValues =
-        metricValueRepository.findValuesAggregatedByCommitAndProfile(
-            projectId, commit.getSequenceNumber(), query.getProfiles());
-    resource.addProfileValues(profileValues);
-    resource.addAbsentProfiles(query.getProfiles());
+		CommitProfileRatingsOutputResource resource = new CommitProfileRatingsOutputResource();
+		List<ProfileValuePerCommitDTO> profileValues =
+				metricValueRepository.findValuesAggregatedByCommitAndProfile(
+						projectId, commit.getSequenceNumber(), query.getProfiles());
+		resource.addProfileValues(profileValues);
+		resource.addAbsentProfiles(query.getProfiles());
 
-    return new ResponseEntity<>(resource, HttpStatus.OK);
-  }
+		return new ResponseEntity<>(resource, HttpStatus.OK);
+	}
 }

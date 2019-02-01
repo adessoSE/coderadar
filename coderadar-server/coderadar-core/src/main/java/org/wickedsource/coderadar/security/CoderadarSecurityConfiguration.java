@@ -23,61 +23,61 @@ import org.wickedsource.coderadar.security.service.TokenService;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-  private UserDetailsService userDetailsService;
+	private UserDetailsService userDetailsService;
 
-  private TokenService tokenService;
+	private TokenService tokenService;
 
-  private CoderadarConfiguration coderadarConfiguration;
+	private CoderadarConfiguration coderadarConfiguration;
 
-  private CorsFilter corsFilter;
+	private CorsFilter corsFilter;
 
-  @Autowired
-  public CoderadarSecurityConfiguration(
-      UserDetailsService userDetailsService,
-      TokenService tokenService,
-      CoderadarConfiguration coderadarConfiguration,
-      Optional<CorsFilter> corsFilter) {
-    this.userDetailsService = userDetailsService;
-    this.tokenService = tokenService;
-    this.coderadarConfiguration = coderadarConfiguration;
-    if (corsFilter.isPresent()) {
-      this.corsFilter = corsFilter.get();
-    }
-  }
+	@Autowired
+	public CoderadarSecurityConfiguration(
+			UserDetailsService userDetailsService,
+			TokenService tokenService,
+			CoderadarConfiguration coderadarConfiguration,
+			Optional<CorsFilter> corsFilter) {
+		this.userDetailsService = userDetailsService;
+		this.tokenService = tokenService;
+		this.coderadarConfiguration = coderadarConfiguration;
+		if (corsFilter.isPresent()) {
+			this.corsFilter = corsFilter.get();
+		}
+	}
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    // user CoderadarUserDetailService for authentication
-    auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
-  }
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		// user CoderadarUserDetailService for authentication
+		auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
+	}
 
-  @Bean
-  public PasswordEncoder getPasswordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+	@Bean
+	public PasswordEncoder getPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http.csrf().disable();
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable();
 
-    if (coderadarConfiguration.getAuthentication().getEnabled()) {
-      http.sessionManagement()
-          .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-          .and()
-          .authorizeRequests()
+		if (coderadarConfiguration.getAuthentication().getEnabled()) {
+			http.sessionManagement()
+					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+					.and()
+					.authorizeRequests()
 
-          // only these endpoints can be called without authentication
-          .antMatchers("/actuator", "/user/auth", "/user/registration", "/user/refresh")
-          .permitAll()
-          .anyRequest()
-          .authenticated();
+					// only these endpoints can be called without authentication
+					.antMatchers("/actuator", "/user/auth", "/user/registration", "/user/refresh")
+					.permitAll()
+					.anyRequest()
+					.authenticated();
 
-      // put JSON Web Token authentication before other ones
-      http.addFilterBefore(
-          new AuthenticationTokenFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
-      if (corsFilter != null) {
-        http.addFilterBefore(corsFilter, AuthenticationTokenFilter.class);
-      }
-    }
-  }
+			// put JSON Web Token authentication before other ones
+			http.addFilterBefore(
+					new AuthenticationTokenFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
+			if (corsFilter != null) {
+				http.addFilterBefore(corsFilter, AuthenticationTokenFilter.class);
+			}
+		}
+	}
 }

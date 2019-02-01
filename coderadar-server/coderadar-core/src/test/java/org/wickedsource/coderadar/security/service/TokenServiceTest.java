@@ -23,73 +23,73 @@ import org.wickedsource.coderadar.security.TokenType;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class TokenServiceTest {
 
-  public static final byte[] KEY = "symmetric key to sign and verify".getBytes();
+	public static final byte[] KEY = "symmetric key to sign and verify".getBytes();
 
-  @InjectMocks private TokenService tokenService;
+	@InjectMocks private TokenService tokenService;
 
-  @Mock private CoderadarConfiguration configuration;
+	@Mock private CoderadarConfiguration configuration;
 
-  @Mock private SecretKeyService secretKeyService;
+	@Mock private SecretKeyService secretKeyService;
 
-  @Before
-  public void setUp() {
-    SecretKey secretKey = mock(SecretKey.class);
-    when(secretKey.getEncoded()).thenReturn(KEY);
-    when(secretKeyService.getSecretKey()).thenReturn(secretKey);
-    when(configuration.getAuthentication()).thenReturn(new CoderadarConfiguration.Authentication());
-  }
+	@Before
+	public void setUp() {
+		SecretKey secretKey = mock(SecretKey.class);
+		when(secretKey.getEncoded()).thenReturn(KEY);
+		when(secretKeyService.getSecretKey()).thenReturn(secretKey);
+		when(configuration.getAuthentication()).thenReturn(new CoderadarConfiguration.Authentication());
+	}
 
-  @Test
-  public void generateAndVerifyToken() throws Exception {
-    Date expireDate = DateTime.now().plusMinutes(1).toDate();
-    String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
-    JWT.require(Algorithm.HMAC256(KEY)).build().verify(token);
-  }
+	@Test
+	public void generateAndVerifyToken() throws Exception {
+		Date expireDate = DateTime.now().plusMinutes(1).toDate();
+		String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
+		JWT.require(Algorithm.HMAC256(KEY)).build().verify(token);
+	}
 
-  @Test(expected = InvalidClaimException.class)
-  public void verifyTokenFails() throws Exception {
-    Date expireDate = DateTime.now().minusMinutes(1).toDate();
-    String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
-    JWT.require(Algorithm.HMAC256(KEY)).build().verify(token);
-  }
+	@Test(expected = InvalidClaimException.class)
+	public void verifyTokenFails() throws Exception {
+		Date expireDate = DateTime.now().minusMinutes(1).toDate();
+		String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
+		JWT.require(Algorithm.HMAC256(KEY)).build().verify(token);
+	}
 
-  @Test(expected = SignatureVerificationException.class)
-  public void verifyTokenSignatureFails() throws Exception {
-    Date expireDate = DateTime.now().minusMinutes(1).toDate();
-    String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
-    token = token.concat("add string");
-    JWT.require(Algorithm.HMAC256(KEY)).build().verify(token);
-  }
+	@Test(expected = SignatureVerificationException.class)
+	public void verifyTokenSignatureFails() throws Exception {
+		Date expireDate = DateTime.now().minusMinutes(1).toDate();
+		String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
+		token = token.concat("add string");
+		JWT.require(Algorithm.HMAC256(KEY)).build().verify(token);
+	}
 
-  @Test
-  public void tokenExpiredAndSignatureValid() throws Exception {
-    Date expireDate = DateTime.now().minusMinutes(14).toDate();
-    String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
-    boolean result = tokenService.isExpired(token);
-    assertThat(result).isTrue();
-  }
+	@Test
+	public void tokenExpiredAndSignatureValid() throws Exception {
+		Date expireDate = DateTime.now().minusMinutes(14).toDate();
+		String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
+		boolean result = tokenService.isExpired(token);
+		assertThat(result).isTrue();
+	}
 
-  @Test
-  public void tokenNotExpiredAndSignatureValid() throws Exception {
-    Date expireDate = DateTime.now().plusMinutes(5).toDate();
-    String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
-    boolean result = tokenService.isExpired(token);
-    assertThat(result).isFalse();
-  }
+	@Test
+	public void tokenNotExpiredAndSignatureValid() throws Exception {
+		Date expireDate = DateTime.now().plusMinutes(5).toDate();
+		String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
+		boolean result = tokenService.isExpired(token);
+		assertThat(result).isFalse();
+	}
 
-  @Test(expected = SignatureVerificationException.class)
-  public void tokenNotExpiredAndSignatureNotValid() throws Exception {
-    Date expireDate = DateTime.now().plusMinutes(5).toDate();
-    String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
-    token = token.concat("invalid");
-    tokenService.isExpired(token);
-  }
+	@Test(expected = SignatureVerificationException.class)
+	public void tokenNotExpiredAndSignatureNotValid() throws Exception {
+		Date expireDate = DateTime.now().plusMinutes(5).toDate();
+		String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
+		token = token.concat("invalid");
+		tokenService.isExpired(token);
+	}
 
-  @Test
-  public void getUsername() throws Exception {
-    Date expireDate = DateTime.now().plusMinutes(1).toDate();
-    String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
-    String username = tokenService.getUsername(token);
-    assertThat(username).isEqualTo("user");
-  }
+	@Test
+	public void getUsername() throws Exception {
+		Date expireDate = DateTime.now().plusMinutes(1).toDate();
+		String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
+		String username = tokenService.getUsername(token);
+		assertThat(username).isEqualTo("user");
+	}
 }

@@ -22,80 +22,80 @@ import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 @Category(ControllerTest.class)
 public class ModuleControllerTest extends ControllerTestTemplate {
 
-  @Test
-  @DatabaseSetup(SINGLE_PROJECT)
-  @ExpectedDatabase(SINGLE_PROJECT_WITH_MODULE)
-  public void createModule() throws Exception {
-    ConstrainedFields fields = fields(ModuleResource.class);
+	@Test
+	@DatabaseSetup(SINGLE_PROJECT)
+	@ExpectedDatabase(SINGLE_PROJECT_WITH_MODULE)
+	public void createModule() throws Exception {
+		ConstrainedFields fields = fields(ModuleResource.class);
 
-    ModuleResource resource = module();
-    mvc()
-        .perform(
-            post("/projects/1/modules")
-                .content(toJsonWithoutLinks(resource))
-                .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isCreated())
-        .andExpect(containsResource(ModuleResource.class))
-        .andDo(
-            document(
-                "modules/create",
-                links(
-                    halLinks(),
-                    linkWithRel("self").description("Link to this module."),
-                    linkWithRel("project")
-                        .description("Link to the project this module belongs to.")),
-                requestFields(
-                    fields
-                        .withPath("modulePath")
-                        .description(
-                            "The path of this module starting at the VCS root. All files below that path are considered to be part of the module."))));
-  }
+		ModuleResource resource = module();
+		mvc()
+				.perform(
+						post("/projects/1/modules")
+								.content(toJsonWithoutLinks(resource))
+								.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isCreated())
+				.andExpect(containsResource(ModuleResource.class))
+				.andDo(
+						document(
+								"modules/create",
+								links(
+										halLinks(),
+										linkWithRel("self").description("Link to this module."),
+										linkWithRel("project")
+												.description("Link to the project this module belongs to.")),
+								requestFields(
+										fields
+												.withPath("modulePath")
+												.description(
+														"The path of this module starting at the VCS root. All files below that path are considered to be part of the module."))));
+	}
 
-  @Test
-  @DatabaseSetup(SINGLE_PROJECT_WITH_MODULE)
-  @ExpectedDatabase(SINGLE_PROJECT_WITH_MODULE2)
-  public void updateModule() throws Exception {
-    ModuleResource resource = module();
-    resource.setModulePath("server/coderadar-server");
-    mvc()
-        .perform(
-            post("/projects/1/modules/1")
-                .content(toJsonWithoutLinks(resource))
-                .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-        .andExpect(containsResource(ModuleResource.class))
-        .andDo(document("modules/update"));
-  }
+	@Test
+	@DatabaseSetup(SINGLE_PROJECT_WITH_MODULE)
+	@ExpectedDatabase(SINGLE_PROJECT_WITH_MODULE2)
+	public void updateModule() throws Exception {
+		ModuleResource resource = module();
+		resource.setModulePath("server/coderadar-server");
+		mvc()
+				.perform(
+						post("/projects/1/modules/1")
+								.content(toJsonWithoutLinks(resource))
+								.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(containsResource(ModuleResource.class))
+				.andDo(document("modules/update"));
+	}
 
-  @Test
-  @DatabaseSetup(SINGLE_PROJECT_WITH_MODULE)
-  @ExpectedDatabase(SINGLE_PROJECT_WITH_MODULE)
-  public void getModule() throws Exception {
-    mvc()
-        .perform(get("/projects/1/modules/1"))
-        .andExpect(status().isOk())
-        .andExpect(containsResource(ModuleResource.class))
-        .andDo(document("modules/get"));
-  }
+	@Test
+	@DatabaseSetup(SINGLE_PROJECT_WITH_MODULE)
+	@ExpectedDatabase(SINGLE_PROJECT_WITH_MODULE)
+	public void getModule() throws Exception {
+		mvc()
+				.perform(get("/projects/1/modules/1"))
+				.andExpect(status().isOk())
+				.andExpect(containsResource(ModuleResource.class))
+				.andDo(document("modules/get"));
+	}
 
-  @Test
-  @DatabaseSetup(SINGLE_PROJECT_WITH_MODULES)
-  @ExpectedDatabase(SINGLE_PROJECT_WITH_MODULES)
-  public void listModules() throws Exception {
-    mvc()
-        .perform(get("/projects/1/modules"))
-        .andExpect(status().isOk())
-        .andExpect(containsPagedResources(ModuleResource.class))
-        .andDo(document("modules/list"));
-  }
+	@Test
+	@DatabaseSetup(SINGLE_PROJECT_WITH_MODULES)
+	@ExpectedDatabase(SINGLE_PROJECT_WITH_MODULES)
+	public void listModules() throws Exception {
+		mvc()
+				.perform(get("/projects/1/modules"))
+				.andExpect(status().isOk())
+				.andExpect(containsPagedResources(ModuleResource.class))
+				.andDo(document("modules/list"));
+	}
 
-  @Test
-  @DatabaseSetup(SINGLE_PROJECT_WITH_MODULE)
-  @ExpectedDatabase(SINGLE_PROJECT)
-  public void deleteModule() throws Exception {
-    mvc()
-        .perform(delete("/projects/1/modules/1"))
-        .andExpect(status().isOk())
-        .andDo(document("modules/delete"));
-  }
+	@Test
+	@DatabaseSetup(SINGLE_PROJECT_WITH_MODULE)
+	@ExpectedDatabase(SINGLE_PROJECT)
+	public void deleteModule() throws Exception {
+		mvc()
+				.perform(delete("/projects/1/modules/1"))
+				.andExpect(status().isOk())
+				.andDo(document("modules/delete"));
+	}
 }

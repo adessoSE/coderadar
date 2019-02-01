@@ -6,30 +6,30 @@ import org.wickedsource.coderadar.security.ValidPassword;
 
 public class PasswordChangeResource extends ResourceSupport {
 
-  @NotNull private String refreshToken;
+	@NotNull private String refreshToken;
 
-  @ValidPassword private String newPassword;
+	@ValidPassword private String newPassword;
 
-  public PasswordChangeResource() {}
+	public PasswordChangeResource() {}
 
-  public PasswordChangeResource(String refreshToken, String newPassword) {
-    this.refreshToken = refreshToken;
-    this.newPassword = newPassword;
-  }
+	public PasswordChangeResource(String refreshToken, String newPassword) {
+		this.refreshToken = refreshToken;
+		this.newPassword = newPassword;
+	}
 
-  public String getNewPassword() {
-    return newPassword;
-  }
+	public String getNewPassword() {
+		return newPassword;
+	}
 
-  public void setNewPassword(String newPassword) {
-    this.newPassword = newPassword;
-  }
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
 
-  public String getRefreshToken() {
-    return refreshToken;
-  }
+	public String getRefreshToken() {
+		return refreshToken;
+	}
 
-  public void setRefreshToken(String refreshToken) {
-    this.refreshToken = refreshToken;
-  }
+	public void setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
 }

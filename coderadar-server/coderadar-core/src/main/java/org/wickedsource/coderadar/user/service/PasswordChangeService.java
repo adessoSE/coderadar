@@ -15,33 +15,33 @@ import org.wickedsource.coderadar.user.rest.UserController;
 @Service
 public class PasswordChangeService {
 
-  private final PasswordService passwordService;
+	private final PasswordService passwordService;
 
-  private final RefreshTokenRepository refreshTokenRepository;
+	private final RefreshTokenRepository refreshTokenRepository;
 
-  private final TokenRefreshService tokenRefreshService;
+	private final TokenRefreshService tokenRefreshService;
 
-  @Autowired
-  public PasswordChangeService(
-      PasswordService passwordService,
-      RefreshTokenRepository refreshTokenRepository,
-      TokenRefreshService tokenRefreshService) {
-    this.passwordService = passwordService;
-    this.refreshTokenRepository = refreshTokenRepository;
-    this.tokenRefreshService = tokenRefreshService;
-  }
+	@Autowired
+	public PasswordChangeService(
+			PasswordService passwordService,
+			RefreshTokenRepository refreshTokenRepository,
+			TokenRefreshService tokenRefreshService) {
+		this.passwordService = passwordService;
+		this.refreshTokenRepository = refreshTokenRepository;
+		this.tokenRefreshService = tokenRefreshService;
+	}
 
-  public ChangePasswordResponseResource change(String refreshToken, String newPassword) {
-    tokenRefreshService.checkUser(refreshToken);
-    User user = tokenRefreshService.getUser(refreshToken);
-    String hashedPassword = passwordService.hash(newPassword);
-    user.setPassword(hashedPassword);
-    refreshTokenRepository.deleteByUser(user);
+	public ChangePasswordResponseResource change(String refreshToken, String newPassword) {
+		tokenRefreshService.checkUser(refreshToken);
+		User user = tokenRefreshService.getUser(refreshToken);
+		String hashedPassword = passwordService.hash(newPassword);
+		user.setPassword(hashedPassword);
+		refreshTokenRepository.deleteByUser(user);
 
-    ChangePasswordResponseResource changePasswordResponseResource =
-        new ChangePasswordResponseResource();
-    changePasswordResponseResource.add(
-        linkTo(methodOn(UserController.class).getUser(user.getId())).withRel("self"));
-    return changePasswordResponseResource;
-  }
+		ChangePasswordResponseResource changePasswordResponseResource =
+				new ChangePasswordResponseResource();
+		changePasswordResponseResource.add(
+				linkTo(methodOn(UserController.class).getUser(user.getId())).withRel("self"));
+		return changePasswordResponseResource;
+	}
 }

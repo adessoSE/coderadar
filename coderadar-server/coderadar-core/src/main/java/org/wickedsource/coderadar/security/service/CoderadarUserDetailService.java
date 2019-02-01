@@ -15,24 +15,24 @@ import org.wickedsource.coderadar.user.domain.UserRepository;
 @Service
 public class CoderadarUserDetailService implements UserDetailsService {
 
-  private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-  @Autowired
-  public CoderadarUserDetailService(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
+	@Autowired
+	public CoderadarUserDetailService(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
-  @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User user = userRepository.findByUsername(username);
-    if (user == null) {
-      throw new UsernameNotFoundException(
-          String.format("The user with username %s was not found", username));
-    }
-    // TODO add authorities to user
-    List<SimpleGrantedAuthority> authorities =
-        Collections.singletonList(new SimpleGrantedAuthority("USER"));
-    return new CoderadarUserDetails(
-        user.getUsername(), user.getPassword(), authorities, true, true, true, true);
-  }
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = userRepository.findByUsername(username);
+		if (user == null) {
+			throw new UsernameNotFoundException(
+					String.format("The user with username %s was not found", username));
+		}
+		// TODO add authorities to user
+		List<SimpleGrantedAuthority> authorities =
+				Collections.singletonList(new SimpleGrantedAuthority("USER"));
+		return new CoderadarUserDetails(
+				user.getUsername(), user.getPassword(), authorities, true, true, true, true);
+	}
 }

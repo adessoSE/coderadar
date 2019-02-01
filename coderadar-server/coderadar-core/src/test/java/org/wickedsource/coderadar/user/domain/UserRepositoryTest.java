@@ -11,33 +11,33 @@ import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate
 
 public class UserRepositoryTest extends IntegrationTestTemplate {
 
-  @Autowired private UserRepository repository;
+	@Autowired private UserRepository repository;
 
-  @Test
-  public void testSave() throws Exception {
-    User user = repository.save(EntityFactory.user().registeredUser());
-    user = repository.findOne(user.getId());
-    assertThat(user).isNotNull();
-  }
+	@Test
+	public void testSave() throws Exception {
+		User user = repository.save(EntityFactory.user().registeredUser());
+		user = repository.findOne(user.getId());
+		assertThat(user).isNotNull();
+	}
 
-  @Test
-  @DatabaseSetup(DbUnitFactory.Users.USERS)
-  public void testFindOne() throws Exception {
-    User user = repository.findOne(2L);
-    assertThat(user.getUsername()).isEqualTo("radar");
-  }
+	@Test
+	@DatabaseSetup(DbUnitFactory.Users.USERS)
+	public void testFindOne() throws Exception {
+		User user = repository.findOne(2L);
+		assertThat(user.getUsername()).isEqualTo("radar");
+	}
 
-  @Test
-  @DatabaseSetup(DbUnitFactory.Users.USERS)
-  public void findByUsername() throws Exception {
-    User user = repository.findByUsername("radar");
-    assertThat(user).isNotNull();
-  }
+	@Test
+	@DatabaseSetup(DbUnitFactory.Users.USERS)
+	public void findByUsername() throws Exception {
+		User user = repository.findByUsername("radar");
+		assertThat(user).isNotNull();
+	}
 
-  @Test
-  @DatabaseSetup(DbUnitFactory.Users.USERS)
-  public void findByUsernameNot() throws Exception {
-    User user = repository.findByUsername("andreas");
-    assertThat(user).isNull();
-  }
+	@Test
+	@DatabaseSetup(DbUnitFactory.Users.USERS)
+	public void findByUsernameNot() throws Exception {
+		User user = repository.findByUsername("andreas");
+		assertThat(user).isNull();
+	}
 }

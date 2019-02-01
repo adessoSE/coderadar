@@ -15,29 +15,29 @@ import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate
 
 public class JobRepositoryTest extends IntegrationTestTemplate {
 
-  @Autowired private JobRepository repository;
+	@Autowired private JobRepository repository;
 
-  @Autowired private ProjectRepository projectRepository;
+	@Autowired private ProjectRepository projectRepository;
 
-  @Test
-  @DirtiesContext
-  public void findTop1() {
+	@Test
+	@DirtiesContext
+	public void findTop1() {
 
-    Project project = projectRepository.save(project().validProject());
+		Project project = projectRepository.save(project().validProject());
 
-    ScanCommitsJob job1 = job().waitingPullJob();
-    job1.setId(null);
-    job1.setQueuedDate(new Date(System.currentTimeMillis() - 600));
-    job1.setProject(project);
-    job1 = repository.save(job1);
+		ScanCommitsJob job1 = job().waitingPullJob();
+		job1.setId(null);
+		job1.setQueuedDate(new Date(System.currentTimeMillis() - 600));
+		job1.setProject(project);
+		job1 = repository.save(job1);
 
-    ScanCommitsJob job2 = job().waitingPullJob();
-    job2.setId(null);
-    job2.setProject(project);
-    repository.save(job2);
+		ScanCommitsJob job2 = job().waitingPullJob();
+		job2.setId(null);
+		job2.setProject(project);
+		repository.save(job2);
 
-    Job foundJob = repository.findTop1ByProcessingStatusOrderByQueuedDate(ProcessingStatus.WAITING);
+		Job foundJob = repository.findTop1ByProcessingStatusOrderByQueuedDate(ProcessingStatus.WAITING);
 
-    Assert.assertEquals(job1.getId(), foundJob.getId());
-  }
+		Assert.assertEquals(job1.getId(), foundJob.getId());
+	}
 }

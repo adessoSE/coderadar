@@ -15,55 +15,55 @@ import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
 public class GitLogAssociatorTriggerTest {
 
-  private CommitRepository commitRepository = Mockito.mock(CommitRepository.class);
-  private JobLogger jobLogger = Mockito.mock(JobLogger.class);
-  private MergeLogJobRepository mergeLogJobRepository = Mockito.mock(MergeLogJobRepository.class);
-  private ProjectRepository projectRepository = Mockito.mock(ProjectRepository.class);
-  private AssociateGitLogTrigger trigger;
+	private CommitRepository commitRepository = Mockito.mock(CommitRepository.class);
+	private JobLogger jobLogger = Mockito.mock(JobLogger.class);
+	private MergeLogJobRepository mergeLogJobRepository = Mockito.mock(MergeLogJobRepository.class);
+	private ProjectRepository projectRepository = Mockito.mock(ProjectRepository.class);
+	private AssociateGitLogTrigger trigger;
 
-  @Before
-  public void setup() {
-    trigger =
-        new AssociateGitLogTrigger(
-            jobLogger, mergeLogJobRepository, projectRepository, commitRepository);
-  }
+	@Before
+	public void setup() {
+		trigger =
+				new AssociateGitLogTrigger(
+						jobLogger, mergeLogJobRepository, projectRepository, commitRepository);
+	}
 
-  @Test
-  public void dontTriggerIfAlreadyQueued() {
-    whenQueuedJobCountIs(1);
-    boolean shouldBeTriggered = trigger.shouldJobBeQueuedForProject(project().validProject());
-    assertThat(shouldBeTriggered).isFalse();
-  }
+	@Test
+	public void dontTriggerIfAlreadyQueued() {
+		whenQueuedJobCountIs(1);
+		boolean shouldBeTriggered = trigger.shouldJobBeQueuedForProject(project().validProject());
+		assertThat(shouldBeTriggered).isFalse();
+	}
 
-  @Test
-  public void dontTriggerIfNoMergedCommits() {
-    whenQueuedJobCountIs(0);
-    whenUnmergedCommitCountIs(0);
-    whenTotalCommitCountIs(100);
-    boolean shouldBeTriggered = trigger.shouldJobBeQueuedForProject(project().validProject());
-    assertThat(shouldBeTriggered).isFalse();
-  }
+	@Test
+	public void dontTriggerIfNoMergedCommits() {
+		whenQueuedJobCountIs(0);
+		whenUnmergedCommitCountIs(0);
+		whenTotalCommitCountIs(100);
+		boolean shouldBeTriggered = trigger.shouldJobBeQueuedForProject(project().validProject());
+		assertThat(shouldBeTriggered).isFalse();
+	}
 
-  @Test
-  public void triggerIfUnmergedCommitsAvailable() {
-    whenQueuedJobCountIs(0);
-    whenUnmergedCommitCountIs(1);
-    whenTotalCommitCountIs(100);
-    boolean shouldBeTriggered = trigger.shouldJobBeQueuedForProject(project().validProject());
-    assertThat(shouldBeTriggered).isTrue();
-  }
+	@Test
+	public void triggerIfUnmergedCommitsAvailable() {
+		whenQueuedJobCountIs(0);
+		whenUnmergedCommitCountIs(1);
+		whenTotalCommitCountIs(100);
+		boolean shouldBeTriggered = trigger.shouldJobBeQueuedForProject(project().validProject());
+		assertThat(shouldBeTriggered).isTrue();
+	}
 
-  private void whenQueuedJobCountIs(int count) {
-    when(mergeLogJobRepository.countByProcessingStatusInAndProjectId(anyList(), anyLong()))
-        .thenReturn(count);
-  }
+	private void whenQueuedJobCountIs(int count) {
+		when(mergeLogJobRepository.countByProcessingStatusInAndProjectId(anyList(), anyLong()))
+				.thenReturn(count);
+	}
 
-  private void whenUnmergedCommitCountIs(int count) {
-    when(commitRepository.countByProjectIdAndScannedTrueAndMergedFalse(anyLong()))
-        .thenReturn(count);
-  }
+	private void whenUnmergedCommitCountIs(int count) {
+		when(commitRepository.countByProjectIdAndScannedTrueAndMergedFalse(anyLong()))
+				.thenReturn(count);
+	}
 
-  private void whenTotalCommitCountIs(int count) {
-    when(commitRepository.countByProjectId(anyLong())).thenReturn(count);
-  }
+	private void whenTotalCommitCountIs(int count) {
+		when(commitRepository.countByProjectId(anyLong())).thenReturn(count);
+	}
 }

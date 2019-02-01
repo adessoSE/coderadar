@@ -19,42 +19,42 @@ import org.wickedsource.coderadar.user.domain.UserRepository;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class TokenRefreshServiceTest {
 
-  @InjectMocks private TokenRefreshService tokenRefreshService;
+	@InjectMocks private TokenRefreshService tokenRefreshService;
 
-  @Mock private RefreshTokenRepository refreshTokenRepository;
+	@Mock private RefreshTokenRepository refreshTokenRepository;
 
-  @Mock private TokenService tokenService;
+	@Mock private TokenService tokenService;
 
-  @Mock private UserRepository userRepository;
+	@Mock private UserRepository userRepository;
 
-  @Test
-  public void checkUser() {
-    RefreshToken refreshToken = new RefreshToken();
-    User user = new User();
+	@Test
+	public void checkUser() {
+		RefreshToken refreshToken = new RefreshToken();
+		User user = new User();
 
-    when(refreshTokenRepository.findByToken(anyString())).thenReturn(refreshToken);
-    when(tokenService.getUsername(anyString())).thenReturn("radar");
-    when(userRepository.findByUsername("radar")).thenReturn(user);
+		when(refreshTokenRepository.findByToken(anyString())).thenReturn(refreshToken);
+		when(tokenService.getUsername(anyString())).thenReturn("radar");
+		when(userRepository.findByUsername("radar")).thenReturn(user);
 
-    tokenRefreshService.checkUser("jwtToken");
+		tokenRefreshService.checkUser("jwtToken");
 
-    verify(tokenService, times(1)).verify(anyString());
-  }
+		verify(tokenService, times(1)).verify(anyString());
+	}
 
-  @Test(expected = RefreshTokenNotFoundException.class)
-  public void checkNoToken() {
-    when(refreshTokenRepository.findByToken(anyString())).thenReturn(null);
-    tokenRefreshService.checkUser("jwtToken");
-  }
+	@Test(expected = RefreshTokenNotFoundException.class)
+	public void checkNoToken() {
+		when(refreshTokenRepository.findByToken(anyString())).thenReturn(null);
+		tokenRefreshService.checkUser("jwtToken");
+	}
 
-  @Test(expected = UsernameNotFoundException.class)
-  public void checkNoUser() {
-    RefreshToken refreshToken = new RefreshToken();
+	@Test(expected = UsernameNotFoundException.class)
+	public void checkNoUser() {
+		RefreshToken refreshToken = new RefreshToken();
 
-    when(refreshTokenRepository.findByToken(anyString())).thenReturn(refreshToken);
-    when(tokenService.getUsername(anyString())).thenReturn("radar");
-    when(userRepository.findByUsername("radar")).thenReturn(null);
+		when(refreshTokenRepository.findByToken(anyString())).thenReturn(refreshToken);
+		when(tokenService.getUsername(anyString())).thenReturn("radar");
+		when(userRepository.findByUsername("radar")).thenReturn(null);
 
-    tokenRefreshService.checkUser("jwtToken");
-  }
+		tokenRefreshService.checkUser("jwtToken");
+	}
 }

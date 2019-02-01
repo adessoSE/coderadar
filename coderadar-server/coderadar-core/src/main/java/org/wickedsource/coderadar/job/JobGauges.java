@@ -12,25 +12,25 @@ import org.wickedsource.coderadar.job.core.ProcessingStatus;
 @Component
 public class JobGauges {
 
-  @Autowired
-  public JobGauges(MetricRegistry metricRegistry, JobRepository jobRepository) {
+	@Autowired
+	public JobGauges(MetricRegistry metricRegistry, JobRepository jobRepository) {
 
-    metricRegistry.register(
-        name(JobLogger.class, "inProgress"),
-        new Gauge() {
-          @Override
-          public Object getValue() {
-            return jobRepository.countByProcessingStatus(ProcessingStatus.PROCESSING);
-          }
-        });
+		metricRegistry.register(
+				name(JobLogger.class, "inProgress"),
+				new Gauge() {
+					@Override
+					public Object getValue() {
+						return jobRepository.countByProcessingStatus(ProcessingStatus.PROCESSING);
+					}
+				});
 
-    metricRegistry.register(
-        name(JobLogger.class, "waiting"),
-        new Gauge() {
-          @Override
-          public Object getValue() {
-            return jobRepository.countByProcessingStatus(ProcessingStatus.WAITING);
-          }
-        });
-  }
+		metricRegistry.register(
+				name(JobLogger.class, "waiting"),
+				new Gauge() {
+					@Override
+					public Object getValue() {
+						return jobRepository.countByProcessingStatus(ProcessingStatus.WAITING);
+					}
+				});
+	}
 }

@@ -6,13 +6,13 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 public interface AnalyzerConfigurationFileRepository
-    extends CrudRepository<AnalyzerConfigurationFile, Long> {
+		extends CrudRepository<AnalyzerConfigurationFile, Long> {
 
-  AnalyzerConfigurationFile findByAnalyzerConfigurationProjectIdAndAnalyzerConfigurationId(
-      Long projectId, Long analyzerConfigurationId);
+	AnalyzerConfigurationFile findByAnalyzerConfigurationProjectIdAndAnalyzerConfigurationId(
+			Long projectId, Long analyzerConfigurationId);
 
-  @Query(
-      "delete AnalyzerConfigurationFile f where f.analyzerConfiguration.id in (select a.id from AnalyzerConfiguration a where a.project.id = :projectId)")
-  @Modifying
-  int deleteByProjectId(@Param("projectId") Long projectId);
+	@Query(
+			"delete AnalyzerConfigurationFile f where f.analyzerConfiguration.id in (select a.id from AnalyzerConfiguration a where a.project.id = :projectId)")
+	@Modifying
+	int deleteByProjectId(@Param("projectId") Long projectId);
 }

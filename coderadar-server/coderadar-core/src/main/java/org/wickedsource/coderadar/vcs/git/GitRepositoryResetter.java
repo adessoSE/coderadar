@@ -10,17 +10,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class GitRepositoryResetter {
 
-  /** Removes any staged changes that are not yet committed from a git repository. */
-  public Git reset(Path repositoryRoot) {
-    try {
-      FileRepositoryBuilder builder = new FileRepositoryBuilder();
-      Repository repository = builder.setWorkTree(repositoryRoot.toFile()).build();
-      Git git = new Git(repository);
-      git.reset().setMode(ResetCommand.ResetType.HARD).call();
-      return git;
-    } catch (Exception e) {
-      throw new IllegalStateException(
-          String.format("error resetting local GIT repository at %s", repositoryRoot), e);
-    }
-  }
+	/** Removes any staged changes that are not yet committed from a git repository. */
+	public Git reset(Path repositoryRoot) {
+		try {
+			FileRepositoryBuilder builder = new FileRepositoryBuilder();
+			Repository repository = builder.setWorkTree(repositoryRoot.toFile()).build();
+			Git git = new Git(repository);
+			git.reset().setMode(ResetCommand.ResetType.HARD).call();
+			return git;
+		} catch (Exception e) {
+			throw new IllegalStateException(
+					String.format("error resetting local GIT repository at %s", repositoryRoot), e);
+		}
+	}
 }
