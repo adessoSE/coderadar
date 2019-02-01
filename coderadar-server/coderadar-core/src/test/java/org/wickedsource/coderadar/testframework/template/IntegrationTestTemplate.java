@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.testframework.template;
 
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,7 @@ import org.wickedsource.coderadar.CoderadarTestApplication;
 /** Base class for integration tests that need the full context of the Spring Boot application. */
 @ExtendWith(SpringExtension.class)
 @TestExecutionListeners({
+  DbUnitTestExecutionListener.class,
   DependencyInjectionTestExecutionListener.class,
   DirtiesContextTestExecutionListener.class,
   TransactionDbUnitTestExecutionListener.class

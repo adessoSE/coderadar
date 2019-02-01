@@ -23,6 +23,5 @@ public class DayDeserializerTest {
   public void deserializeError() throws IOException {
     String json = "[2016,5,13,15]";
     Assertions.assertThrows(IllegalStateException.class, () -> mapper().readValue(json, Day.class));
-    mapper().readValue(json, Day.class);
   }
 }
