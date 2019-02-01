@@ -1,8 +1,9 @@
 package org.wickedsource.coderadar.analyzer.findbugs.xsd;
 
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXParseException;
 
 public class FindbugsReportXsdValidatorTest extends TestReportAccessor {
@@ -13,7 +14,7 @@ public class FindbugsReportXsdValidatorTest extends TestReportAccessor {
     FindbugsReportXsdValidator validator = new FindbugsReportXsdValidator();
     List<SAXParseException> validationErrors =
         validator.validate(report, FindbugsReportXsdValidator.ValidationLevel.FATAL);
-    Assert.assertEquals(0, validationErrors.size());
+    Assertions.assertEquals(0, validationErrors.size());
   }
 
   @Test
@@ -22,6 +23,6 @@ public class FindbugsReportXsdValidatorTest extends TestReportAccessor {
     FindbugsReportXsdValidator validator = new FindbugsReportXsdValidator();
     List<SAXParseException> validationErrors =
         validator.validate(report, FindbugsReportXsdValidator.ValidationLevel.ERROR);
-    Assert.assertTrue(validationErrors.size() > 0);
+    Assertions.assertTrue(validationErrors.size() > 0);
   }
 }

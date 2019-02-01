@@ -5,8 +5,8 @@ import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Modul
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import java.util.Optional;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.commit.domain.*;
@@ -58,12 +58,12 @@ public class ModuleAssociationServiceTest extends IntegrationTestTemplate {
   public void associateFileToModules() {
     Optional<Commit> commit = commitRepository.findById(1L);
     Optional<File> file = fileRepository.findById(4L);
-    Assert.assertTrue(commit.isPresent());
-    Assert.assertTrue(file.isPresent());
+    Assertions.assertTrue(commit.isPresent());
+    Assertions.assertTrue(file.isPresent());
 
     Optional<CommitToFileAssociation> ctf =
         commitToFileAssociationRepository.findById(new CommitToFileId(commit.get(), file.get()));
-    Assert.assertTrue(ctf.isPresent());
+    Assertions.assertTrue(ctf.isPresent());
 
     CommitToFileAssociatedEvent event = new CommitToFileAssociatedEvent(ctf.get());
     moduleAssociationService.associate(event);
@@ -84,12 +84,12 @@ public class ModuleAssociationServiceTest extends IntegrationTestTemplate {
   public void associateFileToModulesWithSimilarNames() {
     Optional<Commit> commit = commitRepository.findById(1L);
     Optional<File> file = fileRepository.findById(6L);
-    Assert.assertTrue(commit.isPresent());
-    Assert.assertTrue(file.isPresent());
+    Assertions.assertTrue(commit.isPresent());
+    Assertions.assertTrue(file.isPresent());
 
     Optional<CommitToFileAssociation> ctf =
         commitToFileAssociationRepository.findById(new CommitToFileId(commit.get(), file.get()));
-    Assert.assertTrue(ctf.isPresent());
+    Assertions.assertTrue(ctf.isPresent());
 
     CommitToFileAssociatedEvent event = new CommitToFileAssociatedEvent(ctf.get());
     moduleAssociationService.associate(event);

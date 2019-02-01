@@ -2,8 +2,8 @@ package org.wickedsource.coderadar.analyzer.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.service.AnalyzerPluginRegistry;
@@ -19,9 +19,9 @@ public class AnalyzerPluginRegistryTest {
         registry.createAnalyzer("org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer");
     SourceCodeFileAnalyzerPlugin plugin2 =
         registry.createAnalyzer("org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer");
-    Assert.assertNotNull(plugin1);
-    Assert.assertNotNull(plugin2);
-    Assert.assertFalse(plugin1 == plugin2);
+    Assertions.assertNotNull(plugin1);
+    Assertions.assertNotNull(plugin2);
+    Assertions.assertFalse(plugin1 == plugin2);
   }
 
   @Test
@@ -32,16 +32,17 @@ public class AnalyzerPluginRegistryTest {
     assertThat(registry.getAvailableAnalyzers(new PageRequest(1, 4))).hasSize(1);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void failsOnCreatingUnregisteredAnalyzer() {
-    registry.createAnalyzer("foo.bar");
+    Assertions.assertThrows(
+        IllegalArgumentException.class, () -> registry.createAnalyzer("foo.bar"));
   }
 
   @Test
   public void isAnalyzerRegistered() {
-    Assert.assertTrue(
+    Assertions.assertTrue(
         registry.isAnalyzerRegistered("org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer"));
-    Assert.assertFalse(registry.isAnalyzerRegistered("foo.bar"));
+    Assertions.assertFalse(registry.isAnalyzerRegistered("foo.bar"));
   }
 
   @Test
@@ -49,13 +50,16 @@ public class AnalyzerPluginRegistryTest {
     SourceCodeFileAnalyzerPlugin plugin1 =
         registry.createAnalyzer(
             "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer", new byte[] {'a', 'b', 'c'});
-    Assert.assertTrue(((DummyAnalyzer) plugin1).isConfigured());
+    Assertions.assertTrue(((DummyAnalyzer) plugin1).isConfigured());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void failsOnInvalidConfigurationFile() {
-    SourceCodeFileAnalyzerPlugin plugin1 =
-        registry.createAnalyzer(
-            "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer", new byte[] {'c', 'b', 'a'});
+    Assertions.assertThrows(
+        IllegalArgumentException.class,
+        () ->
+            registry.createAnalyzer(
+                "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
+                new byte[] {'c', 'b', 'a'}));
   }
 }

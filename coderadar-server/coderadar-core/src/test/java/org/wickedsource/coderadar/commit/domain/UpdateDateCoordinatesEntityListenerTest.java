@@ -3,7 +3,7 @@ package org.wickedsource.coderadar.commit.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.factories.entities.EntityFactory;
 import org.wickedsource.coderadar.project.domain.Project;

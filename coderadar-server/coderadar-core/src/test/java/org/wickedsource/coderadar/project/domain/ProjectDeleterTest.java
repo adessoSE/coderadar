@@ -1,6 +1,6 @@
 package org.wickedsource.coderadar.project.domain;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
