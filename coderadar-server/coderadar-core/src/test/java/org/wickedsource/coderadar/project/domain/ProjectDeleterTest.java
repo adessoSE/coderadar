@@ -12,7 +12,8 @@ public class ProjectDeleterTest extends IntegrationTestTemplate {
 
   @Test
   public void deleteProject() {
-    // TODO: Add actual test data to delete. This test currently only tests that all queries can be executed.
+    // TODO: Add actual test data to delete. This test currently only tests that all queries can be
+    // executed.
     projectDeleter.deleteProject(1L);
   }
 }

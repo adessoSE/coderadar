@@ -22,9 +22,12 @@ public class FileRepositoryImpl implements FileRepositoryCustom {
     if (files.size() == 1) {
       return files.get(0);
     } else if (files.size() > 1) {
-      // Usually, we only get one file as result. However in the exotic case that MySQL is used (whose queries
-      // are case insensitive by default) and the same file exists in the database more than once with different
-      // upper or lower case characters, we can have more than one result. In this case, we select the correct
+      // Usually, we only get one file as result. However in the exotic case that MySQL is used
+      // (whose queries
+      // are case insensitive by default) and the same file exists in the database more than once
+      // with different
+      // upper or lower case characters, we can have more than one result. In this case, we select
+      // the correct
       // file by hand.
       for (File file : files) {
         if (file.getFilepath().equals(filepath)) {

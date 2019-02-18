@@ -77,7 +77,8 @@ class JobExecutionService {
             String.format(
                 "Failed due to exception of type %s. View the log file for details.",
                 e.getClass()));
-        // storing the failed job back into the database in a separate transaction because the current
+        // storing the failed job back into the database in a separate transaction because the
+        // current
         // transaction may be marked for rollback
         jobUpdater.updateJob(job);
         jobLogger.jobFailed(job, e);

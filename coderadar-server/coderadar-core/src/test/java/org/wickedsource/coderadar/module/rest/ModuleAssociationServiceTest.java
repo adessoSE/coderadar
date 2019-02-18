@@ -61,7 +61,8 @@ public class ModuleAssociationServiceTest extends IntegrationTestTemplate {
     CommitToFileAssociatedEvent event = new CommitToFileAssociatedEvent(ctf);
     moduleAssociationService.associate(event);
 
-    // the file should be associated with modules "server" (5), "server/module1" (1) and "server/module1/submodule" (4)
+    // the file should be associated with modules "server" (5), "server/module1" (1) and
+    // "server/module1/submodule" (4)
     assertThat(moduleRepository.findFilesByModuleId(5L)).hasSize(1);
     assertThat(moduleRepository.findFilesByModuleId(1L)).hasSize(1);
     assertThat(moduleRepository.findFilesByModuleId(4L)).hasSize(1);
