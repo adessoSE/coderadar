@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 
 apply plugin: "org.springframework.boot"
 apply plugin: "org.asciidoctor.convert"
-apply plugin: "org.ajoberstar.github-pages"
+apply plugin: "org.ajoberstar.git-publish"
 apply plugin: "com.diffplug.gradle.spotless"
 apply plugin: "com.jfrog.bintray"
 apply plugin: "war"
@@ -158,17 +158,14 @@ bootRun {
     }
 }
 
-githubPages {
-    repoUri = "git@github.com:reflectoring/coderadar.git"
-    targetBranch = "gh-pages"
-    credentials {
-        username = System.getenv("GITHUB_TOKEN")
-        password = ''
-    }
-    pages {
+gitPublish {
+    repoUri = "https://github.com/reflectoring/coderadar.git"
+    branch = "gh-pages"
+    contents {
         from "build/pages"
         into "current/docs"
     }
+    commitMessage = "automatically updated docs"
 }
 
 task preparePages() {
