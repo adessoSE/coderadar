@@ -161,6 +161,10 @@ bootRun {
 githubPages {
     repoUri = "git@github.com:reflectoring/coderadar.git"
     targetBranch = "gh-pages"
+    credentials {
+        username = System.getenv("GITHUB_TOKEN")
+        password = ''
+    }
     pages {
         from "build/pages"
         into "current/docs"
