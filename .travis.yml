@@ -1,0 +1,30 @@
+language: java
+install: true
+sudo: true
+addons:
+  apt:
+    packages:
+    - oracle-java8-installer
+    - oracle-java8-set-default
+
+stages:
+- name: build
+
+- name: github-pages
+
+- name: release
+  if: branch = master AND type IN (push)
+
+jobs:
+  include:
+  - stage: build
+    script: "./gradlew --stacktrace build"
+
+  - stage: prepare github-pages
+    script: "./gradlew --console=plain clean preparePages"
+
+  - stage: release
+    script:
+    - "cd coderadar-server/coderadar-core && ../../gradlew publishGhPages --stacktrace"
+    - "cd coderadar-server/coderadar-core && ../../gradlew bintrayUpload --stacktrace"
+
