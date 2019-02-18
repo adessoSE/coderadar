@@ -60,7 +60,7 @@ task controllerTest(type: Test) {
 
 asciidoctor {
     attributes "snippets": snippetsDir,
-            "version": version,
+            "von": version,
             "date": new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
             "stylesheet": "themes/riak.css"
     inputs.dir snippetsDir
@@ -119,7 +119,7 @@ dependencies {
 
     testCompile "org.springframework.boot:spring-boot-starter-test:${version_spring_boot}"
     testCompile "junit:junit:4.12"
-    testCompile "org.slf4j:slf4j-ext:1.7.21"
+    testCompile "org.slf4j:slf4j-ext:1.7.25"
     testCompile "org.springframework.restdocs:spring-restdocs-mockmvc:${version_spring_restdocs}"
     testCompile "org.springframework.restdocs:spring-restdocs-core:${version_spring_restdocs}"
     testCompile "com.github.springtestdbunit:spring-test-dbunit:1.3.0"
