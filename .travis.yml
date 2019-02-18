@@ -25,6 +25,6 @@ jobs:
 
   - stage: release
     script:
-    - "cd coderadar-server/coderadar-core && ../../gradlew publishGhPages --stacktrace &&
-    cd coderadar-server/coderadar-core && ../../gradlew bintrayUpload --stacktrace"
+    - "cd coderadar-server/coderadar-core && ../../gradlew publishGhPages --stacktrace"
+    - "cd coderadar-server/coderadar-core && ../../gradlew bintrayUpload --stacktrace"
 
