@@ -50,10 +50,9 @@ subprojects {
     }
 
     dependencies{
-        compile group: 'org.projectlombok', name: 'lombok', version: "${lombok_version}"
+        annotationProcessor("org.projectlombok:lombok:$lombok_version")
+        compileOnly("org.projectlombok:lombok:$lombok_version")
     }
-
-
 
     version = project.getBuildVersion(baseVersion)
 
