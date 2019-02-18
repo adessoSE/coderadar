@@ -18,6 +18,8 @@ public class ProjectDeleterTest extends IntegrationTestTemplate {
   @Test
   @DatabaseSetup(SINGLE_PROJECT)
   public void deleteProject() {
+    // TODO: Add actual test data to delete. This test currently only tests that all queries can be
+    // executed.
     projectDeleter.deleteProject(1L);
     Assertions.assertEquals(0, projectRepository.count());
   }

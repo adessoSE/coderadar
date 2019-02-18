@@ -19,7 +19,7 @@ The following list links to those READMEs:
 
 Any kind of contribution is welcome as a pull request.
 If you are unsure on how to fork a repository and then create a pull 
-request from your fork, please read [this blog post](http://www.reflectoring.io/hacks/github-fork-and-pull/)
+request from your fork, please read [this blog post](https://reflectoring.io/github-fork-and-pull/)
 for a quick guide.
 
 ### Pick an Issue
@@ -57,7 +57,7 @@ is made up of the following elements:
 * Documentation of the REST API. This documentation is made with [AsciiDoctor](http://asciidoctor.org/) and
   [Spring RestDocs](https://projects.spring.io/spring-restdocs/). Example requests
   and responses are generated automatically from the integration tests covering
-  the REST controllers. The documentation files are [here](https://github.com/reflectoring/coderadar/tree/master/coderadar-server/src/main/asciidoc).
+  the REST controllers. The documentation files are [here](https://github.com/reflectoring/coderadar/tree/master/coderadar-server/coderadar-core/src/main/asciidoc).
 * README.md files in the folders of all main components
 * Javadoc: please provide sensible javadoc of at least public API
 * This contribution guide: this guide is not carved in stone, so when things change,
@@ -78,6 +78,6 @@ Simply run `gradlew build`.
 ### Accessing the coderadar REST API
 * start the server
 * install a REST client like DHC
-* refer to the [REST API documentation](http://www.reflectoring.io/coderadar/1.0.0-SNAPSHOT/docs/restapi.html)
+* refer to the [REST API documentation](https://cdn.rawgit.com/reflectoring/coderadar/gh-pages/current/docs/restapi.html)
   to see what calls you can make and submit them using your REST client
  
