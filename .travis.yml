@@ -23,7 +23,7 @@ jobs:
   - stage: release
     script:
     - "cd coderadar-server/coderadar-core"
-    - "../../gradlew --console=plain clean preparePages
+    - "../../gradlew --console=plain clean preparePages"
     - "../../gradlew publishGhPages --stacktrace"
     - "../../gradlew bintrayUpload --stacktrace"
 
