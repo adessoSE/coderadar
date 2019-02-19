@@ -1,10 +1,8 @@
 package org.wickedsource.coderadar.core.rest.dates;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Value;
 
-@AllArgsConstructor
-@Getter
+@Value
 public class Week implements Comparable<Week> {
 
   private final int year;

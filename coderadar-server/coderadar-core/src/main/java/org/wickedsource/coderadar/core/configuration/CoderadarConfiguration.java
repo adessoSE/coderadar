@@ -25,8 +25,6 @@ public class CoderadarConfiguration {
   @Setter(AccessLevel.NONE)
   private Logger logger = LoggerFactory.getLogger(CoderadarConfiguration.class);
 
-  @Getter(AccessLevel.NONE)
-  @Setter(AccessLevel.NONE)
   private static final String CONFIG_PARAM_LOG_PATTERN = "%s is set to '%s'";
 
   /** Number of milliseconds that @Scheduled tasks should wait before executing again. */
@@ -42,6 +40,8 @@ public class CoderadarConfiguration {
 
   @NotNull private Locale dateLocale = Locale.ENGLISH;
 
+  @Getter(AccessLevel.NONE)
+  @Setter(AccessLevel.NONE)
   private Authentication authentication = new Authentication();
 
   @PostConstruct
@@ -89,6 +89,7 @@ public class CoderadarConfiguration {
     }
   }
 
+  @Data
   public static class Authentication {
 
     @NotNull private Integer accessTokenDurationInMinutes = 15;
@@ -96,29 +97,5 @@ public class CoderadarConfiguration {
     @NotNull private Boolean enabled = Boolean.TRUE;
 
     @NotNull private Integer refreshTokenDurationInMinutes = 86400;
-
-    public Integer getAccessTokenDurationInMinutes() {
-      return accessTokenDurationInMinutes;
-    }
-
-    public void setAccessTokenDurationInMinutes(Integer accessTokenDurationInMinutes) {
-      this.accessTokenDurationInMinutes = accessTokenDurationInMinutes;
-    }
-
-    public Boolean getEnabled() {
-      return enabled;
-    }
-
-    public void setEnabled(Boolean enabled) {
-      this.enabled = enabled;
-    }
-
-    public Integer getRefreshTokenDurationInMinutes() {
-      return refreshTokenDurationInMinutes;
-    }
-
-    public void setRefreshTokenDurationInMinutes(Integer refreshTokenDurationInMinutes) {
-      this.refreshTokenDurationInMinutes = refreshTokenDurationInMinutes;
-    }
   }
 }
