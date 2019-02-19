@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Properties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith(RestDocumentationExtension.class)
+@Tag(ControllerTestTemplate.TAG)
 public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
+
+  public static final String TAG = "ControllerTest";
 
   private MockMvc mvc;
 

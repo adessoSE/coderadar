@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.Optional;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -36,7 +35,6 @@ import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.user.domain.UserRepository;
 import org.wickedsource.coderadar.user.domain.UserResource;
 
-@Tag("ControllerTest.class")
 public class UserControllerTest extends ControllerTestTemplate {
 
   @Autowired private UserRepository userRepository;

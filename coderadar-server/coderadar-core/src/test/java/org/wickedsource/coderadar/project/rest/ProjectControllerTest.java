@@ -15,7 +15,6 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.*
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import java.util.Optional;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
@@ -25,7 +24,6 @@ import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
-@Tag("ControllerTest.class")
 public class ProjectControllerTest extends ControllerTestTemplate {
 
   @Autowired private ProjectRepository projectRepository;

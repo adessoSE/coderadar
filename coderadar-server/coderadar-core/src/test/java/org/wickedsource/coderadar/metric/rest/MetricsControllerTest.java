@@ -9,13 +9,11 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.s
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.test.web.servlet.MvcResult;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
-@Tag("ControllerTest.class")
 public class MetricsControllerTest extends ControllerTestTemplate {
 
   @Test

@@ -16,7 +16,6 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -24,7 +23,6 @@ import org.wickedsource.coderadar.qualityprofile.domain.MetricDTO;
 import org.wickedsource.coderadar.qualityprofile.rest.QualityProfileResource;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
-@Tag("ControllerTest.class")
 public class QualityProfileControllerTest extends ControllerTestTemplate {
 
   @Test

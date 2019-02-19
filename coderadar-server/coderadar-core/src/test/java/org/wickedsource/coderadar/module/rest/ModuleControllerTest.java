@@ -13,12 +13,10 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.*
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
-@Tag("ControllerTest.class")
 public class ModuleControllerTest extends ControllerTestTemplate {
 
   @Test

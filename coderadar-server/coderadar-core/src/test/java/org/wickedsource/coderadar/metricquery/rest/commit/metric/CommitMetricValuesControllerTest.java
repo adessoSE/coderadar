@@ -12,7 +12,6 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.s
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import java.time.LocalDate;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -24,7 +23,6 @@ import org.wickedsource.coderadar.metricquery.rest.commit.DateRange;
 import org.wickedsource.coderadar.metricquery.rest.commit.Interval;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
-@Tag("ControllerTest.class")
 public class CommitMetricValuesControllerTest extends ControllerTestTemplate {
 
   @Test

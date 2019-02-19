@@ -15,7 +15,7 @@ import org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJob;
 import org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJobRepository;
 import org.wickedsource.coderadar.analyzingjob.domain.ProjectResetException;
 import org.wickedsource.coderadar.analyzingjob.domain.ProjectResetter;
-import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
+import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
 import org.wickedsource.coderadar.core.rest.validation.UserException;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;

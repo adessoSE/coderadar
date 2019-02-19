@@ -36,7 +36,7 @@ public class GitCommitFetcherIntegrationTest {
   }
 
   @Test
-  @Tag("IntegrationTest.class")
+  @Tag("IntegrationTest")
   public void fetchCommit() throws MalformedURLException {
     VcsCoordinates vcs = new VcsCoordinates(new URL("https://github.com/thombergs/diffparser.git"));
     GitCommitFetcher fetcher = new GitCommitFetcher();
