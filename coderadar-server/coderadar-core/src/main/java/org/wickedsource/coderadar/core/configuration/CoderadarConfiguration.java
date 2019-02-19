@@ -40,8 +40,6 @@ public class CoderadarConfiguration {
 
   @NotNull private Locale dateLocale = Locale.ENGLISH;
 
-  @Getter(AccessLevel.NONE)
-  @Setter(AccessLevel.NONE)
   private Authentication authentication = new Authentication();
 
   @PostConstruct
