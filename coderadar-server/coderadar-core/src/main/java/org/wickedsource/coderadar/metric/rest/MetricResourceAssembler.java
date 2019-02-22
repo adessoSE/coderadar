@@ -1,12 +1,8 @@
 package org.wickedsource.coderadar.metric.rest;
 
-import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
 
-public class MetricResourceAssembler extends ResourceAssemblerSupport<String, MetricResource> {
-
-  public MetricResourceAssembler() {
-    super(MetricsController.class, MetricResource.class);
-  }
+public class MetricResourceAssembler extends AbstractResourceAssembler<String, MetricResource> {
 
   @Override
   public MetricResource toResource(String metricName) {

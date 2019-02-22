@@ -1,9 +1,8 @@
 package org.wickedsource.coderadar.analyzerconfig.rest;
 
 import javax.validation.constraints.NotNull;
-import org.springframework.hateoas.ResourceSupport;
 
-public class AnalyzerConfigurationResource extends ResourceSupport {
+public class AnalyzerConfigurationResource {
 
   @NotNull private String analyzerName;
 

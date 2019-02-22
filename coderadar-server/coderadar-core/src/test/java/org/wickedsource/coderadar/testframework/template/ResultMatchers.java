@@ -3,12 +3,10 @@ package org.wickedsource.coderadar.testframework.template;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.fail;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.fromJson;
-import static org.wickedsource.coderadar.testframework.template.JsonHelper.fromPagedResourceJson;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.hateoas.PagedResources;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.wickedsource.coderadar.core.rest.validation.ErrorDTO;
 
@@ -57,28 +55,6 @@ public class ResultMatchers {
         throw new RuntimeException(
             String.format(
                 "expected JSON representation of class %s but found '%s'", typeReference, json),
-            e);
-      }
-    };
-  }
-
-  /**
-   * Tests if the response contains the JSON representation of a paging result with items of the
-   * given type.
-   *
-   * @param clazz the class of the expected paged objects.
-   * @param <T> the type of the expected paged objects.
-   * @return ResultMatcher that performs the test described above.
-   */
-  public static <T> ResultMatcher containsPagedResources(Class<T> clazz) {
-    return result -> {
-      String json = result.getResponse().getContentAsString();
-      try {
-        PagedResources<T> pagedResources = fromPagedResourceJson(json, clazz);
-        assertThat(pagedResources).isNotNull();
-      } catch (Exception e) {
-        throw new RuntimeException(
-            String.format("expected JSON representation of class %s but found '%s'", clazz, json),
             e);
       }
     };

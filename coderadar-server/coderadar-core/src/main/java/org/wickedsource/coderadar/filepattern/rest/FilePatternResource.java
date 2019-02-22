@@ -2,9 +2,8 @@ package org.wickedsource.coderadar.filepattern.rest;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.hateoas.ResourceSupport;
 
-public class FilePatternResource extends ResourceSupport {
+public class FilePatternResource {
 
   private List<FilePatternDTO> filePatterns = new ArrayList<>();
 

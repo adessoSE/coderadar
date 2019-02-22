@@ -1,8 +1,6 @@
 package org.wickedsource.coderadar.analyzer.rest;
 
-import org.springframework.hateoas.ResourceSupport;
-
-public class AnalyzerResource extends ResourceSupport {
+public class AnalyzerResource {
 
   private String analyzerName;
 

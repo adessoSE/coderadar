@@ -1,6 +1,5 @@
 package org.wickedsource.coderadar.analyzingjob.rest;
 
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -40,11 +39,6 @@ public class AnalyzingJobControllerTest extends ControllerTestTemplate {
         .andDo(
             document(
                 "analyzing-job/create-update",
-                links(
-                    halLinks(),
-                    linkWithRel("self").description("Link to this AnalyzingJob resource."),
-                    linkWithRel("project")
-                        .description("Link to the project resource this AnalyzingJob belongs to.")),
                 requestFields(
                     fields
                         .withPath("active")

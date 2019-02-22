@@ -8,9 +8,8 @@ import java.time.LocalDate;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
-import org.springframework.hateoas.ResourceSupport;
 
-public class ProjectResource extends ResourceSupport {
+public class ProjectResource {
 
   @NotNull
   @Length(max = 100)

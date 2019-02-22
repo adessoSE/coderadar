@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.springframework.hateoas.ResourceSupport;
 import org.wickedsource.coderadar.qualityprofile.domain.MetricDTO;
 
-public class QualityProfileResource extends ResourceSupport {
+public class QualityProfileResource {
 
   @NotNull private String profileName;
 

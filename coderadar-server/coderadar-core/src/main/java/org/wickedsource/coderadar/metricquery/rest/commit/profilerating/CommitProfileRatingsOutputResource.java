@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.hateoas.ResourceSupport;
 import org.wickedsource.coderadar.metric.domain.metricvalue.ProfileValuePerCommitDTO;
 
 @SuppressWarnings("unchecked")
-public class CommitProfileRatingsOutputResource extends ResourceSupport {
+public class CommitProfileRatingsOutputResource {
 
   private Map<String, ProfileRatingDTO> profiles;
 

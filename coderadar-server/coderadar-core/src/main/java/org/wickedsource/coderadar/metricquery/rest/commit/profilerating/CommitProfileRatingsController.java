@@ -3,7 +3,6 @@ package org.wickedsource.coderadar.metricquery.rest.commit.profilerating;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,13 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
-import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValue;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
 import org.wickedsource.coderadar.metric.domain.metricvalue.ProfileValuePerCommitDTO;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
 @Controller
-@ExposesResourceFor(MetricValue.class)
 @Transactional
 @RequestMapping(path = "/projects/{projectId}/profileratings/perCommit")
 public class CommitProfileRatingsController {

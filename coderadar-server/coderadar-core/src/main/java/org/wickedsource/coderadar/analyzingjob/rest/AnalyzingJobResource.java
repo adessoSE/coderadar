@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
-import org.springframework.hateoas.ResourceSupport;
 
-public class AnalyzingJobResource extends ResourceSupport {
+public class AnalyzingJobResource {
 
   private Date fromDate;
 

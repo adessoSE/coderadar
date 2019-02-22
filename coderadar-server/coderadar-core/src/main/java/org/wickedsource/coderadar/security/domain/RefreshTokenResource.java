@@ -1,9 +1,8 @@
 package org.wickedsource.coderadar.security.domain;
 
 import javax.validation.constraints.NotNull;
-import org.springframework.hateoas.ResourceSupport;
 
-public class RefreshTokenResource extends ResourceSupport {
+public class RefreshTokenResource {
 
   @NotNull private String accessToken;
 

@@ -1,9 +1,8 @@
 package org.wickedsource.coderadar.user.domain;
 
 import javax.validation.constraints.NotNull;
-import org.springframework.hateoas.ResourceSupport;
 
-public class UserResource extends ResourceSupport {
+public class UserResource {
 
   @NotNull private String username;
 

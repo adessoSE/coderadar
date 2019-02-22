@@ -1,8 +1,6 @@
 package org.wickedsource.coderadar.metric.rest;
 
-import org.springframework.hateoas.ResourceSupport;
-
-public class MetricResource extends ResourceSupport {
+public class MetricResource {
 
   private String metricName;
 

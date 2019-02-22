@@ -1,12 +1,7 @@
 package org.wickedsource.coderadar.commit.rest;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.ExposesResourceFor;
-import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,7 +13,6 @@ import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 
 @Controller
-@ExposesResourceFor(Commit.class)
 @Transactional
 @RequestMapping(path = "/projects/{projectId}/commits")
 public class CommitController {
@@ -31,14 +25,10 @@ public class CommitController {
   }
 
   @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
-  public ResponseEntity<PagedResources<CommitResource>> listCommits(
-      @PageableDefault Pageable pageable,
-      PagedResourcesAssembler<Commit> pagedResourcesAssembler,
-      @PathVariable long projectId) {
-    Page<Commit> commitsPage = commitRepository.findByProjectId(projectId, pageable);
-    CommitResourceAssembler commitResourceAssembler = new CommitResourceAssembler(projectId);
-    PagedResources<CommitResource> pagedResources =
-        pagedResourcesAssembler.toResource(commitsPage, commitResourceAssembler);
-    return new ResponseEntity<>(pagedResources, HttpStatus.OK);
+  public ResponseEntity<List<CommitResource>> listCommits(@PathVariable long projectId) {
+    List<Commit> commits = commitRepository.findByProjectId(projectId);
+    CommitResourceAssembler commitResourceAssembler = new CommitResourceAssembler();
+    List<CommitResource> commitResources = commitResourceAssembler.toResourceList(commits);
+    return new ResponseEntity<>(commitResources, HttpStatus.OK);
   }
 }

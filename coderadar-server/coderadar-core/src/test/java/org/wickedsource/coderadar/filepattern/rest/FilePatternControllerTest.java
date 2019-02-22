@@ -1,6 +1,5 @@
 package org.wickedsource.coderadar.filepattern.rest;
 
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -39,12 +38,6 @@ public class FilePatternControllerTest extends ControllerTestTemplate {
         .andDo(
             document(
                 "filepatterns/create-update",
-                links(
-                    halLinks(),
-                    linkWithRel("self")
-                        .description("Link to the list of file patterns of this project."),
-                    linkWithRel("project")
-                        .description("Link to the project these file patterns belong to.")),
                 requestFields(
                     fields
                         .withPath("filePatterns[].pattern")

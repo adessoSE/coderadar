@@ -1,6 +1,5 @@
 package org.wickedsource.coderadar.analyzerconfig.rest;
 
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.AnalyzerConfiguration.*;
@@ -13,9 +12,9 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.s
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import java.util.List;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
@@ -41,15 +40,6 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
         .andDo(
             document(
                 "analyzerConfiguration/post",
-                links(
-                    halLinks(),
-                    linkWithRel("self").description("Link to the AnalyzerConfiguration itself."),
-                    linkWithRel("list")
-                        .description(
-                            "Link to the list of AnalyzerConfigurations for this project."),
-                    linkWithRel("project")
-                        .description(
-                            "Link to the project to which the AnalyzerConfiguration belongs.")),
                 requestFields(
                     fields
                         .withPath("analyzerName")
@@ -68,7 +58,7 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
     mvc()
         .perform(get("/projects/1/analyzers"))
         .andExpect(status().isOk())
-        .andExpect(containsResource(Resources.class))
+        .andExpect(containsResource(List.class))
         .andDo(document("analyzerConfiguration/get"));
   }
 

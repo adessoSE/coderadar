@@ -1,13 +1,8 @@
 package org.wickedsource.coderadar.module.rest;
 
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.ExposesResourceFor;
-import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,7 +19,6 @@ import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
 @Controller
-@ExposesResourceFor(Module.class)
 @Transactional
 @RequestMapping(path = "/projects/{projectId}/modules")
 public class ModuleController {
@@ -94,16 +88,12 @@ public class ModuleController {
 
   @SuppressWarnings("unchecked")
   @RequestMapping(method = RequestMethod.GET)
-  public ResponseEntity<PagedResources<ModuleResource>> listModules(
-      @PageableDefault Pageable pageable,
-      PagedResourcesAssembler pagedResourcesAssembler,
-      @PathVariable long projectId) {
+  public ResponseEntity<List<ModuleResource>> listModules(@PathVariable long projectId) {
     Project project = projectVerifier.loadProjectOrThrowException(projectId);
-    Page<Module> page = moduleRepository.findByProjectId(projectId, pageable);
+    List<Module> modules = moduleRepository.findByProjectId(projectId);
     ModuleResourceAssembler assembler = new ModuleResourceAssembler(project);
-    PagedResources<ModuleResource> pagedResources =
-        pagedResourcesAssembler.toResource(page, assembler);
-    return new ResponseEntity<>(pagedResources, HttpStatus.OK);
+    List<ModuleResource> resources = assembler.toResourceList(modules);
+    return new ResponseEntity<>(resources, HttpStatus.OK);
   }
 
   @RequestMapping(path = "/{moduleId}", method = RequestMethod.DELETE)

@@ -1,10 +1,9 @@
 package org.wickedsource.coderadar.user.domain;
 
 import javax.validation.constraints.NotNull;
-import org.springframework.hateoas.ResourceSupport;
 import org.wickedsource.coderadar.security.ValidPassword;
 
-public class UserRegistrationDataResource extends ResourceSupport {
+public class UserRegistrationDataResource {
 
   @NotNull private String username;
 

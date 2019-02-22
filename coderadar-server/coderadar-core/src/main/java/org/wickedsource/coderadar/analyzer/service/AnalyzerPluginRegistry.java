@@ -4,17 +4,10 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.analyzer.api.ConfigurableAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
@@ -46,21 +39,10 @@ public class AnalyzerPluginRegistry {
     initRegistry(packageName);
   }
 
-  public Page<String> getAvailableAnalyzers(Pageable pageable) {
+  public List<String> getAvailableAnalyzers() {
     List<String> analyzerList = new ArrayList<>(sourceCodeFileAnalyzerPlugins.keySet());
     analyzerList.sort(String::compareTo);
-
-    int fromIndex = pageable.getOffset();
-    if (fromIndex > analyzerList.size() - 1) {
-      fromIndex = analyzerList.size() - 1;
-    }
-
-    int toIndex = pageable.getOffset() + pageable.getPageSize();
-    if (toIndex > analyzerList.size()) {
-      toIndex = analyzerList.size();
-    }
-
-    return new PageImpl<>(analyzerList.subList(fromIndex, toIndex), pageable, analyzerList.size());
+    return analyzerList;
   }
 
   /**

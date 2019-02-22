@@ -1,7 +1,6 @@
 package org.wickedsource.coderadar.qualityprofile;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Projects.SINGLE_PROJECT;
@@ -10,7 +9,8 @@ import static org.wickedsource.coderadar.factories.resources.QualityProfileResou
 import static org.wickedsource.coderadar.factories.resources.QualityProfileResourceFactory.profile2;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.fromJson;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
-import static org.wickedsource.coderadar.testframework.template.ResultMatchers.*;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
@@ -44,11 +44,6 @@ public class QualityProfileControllerTest extends ControllerTestTemplate {
         .andDo(
             document(
                 "qualityprofiles/create",
-                links(
-                    halLinks(),
-                    linkWithRel("self").description("Link to this quality profile."),
-                    linkWithRel("project")
-                        .description("Link to the project this quality profile belongs to.")),
                 requestFields(
                     fields.withPath("profileName").description("The display name of the profile."),
                     fields
@@ -67,7 +62,7 @@ public class QualityProfileControllerTest extends ControllerTestTemplate {
     mvc()
         .perform(get("/projects/1/qualityprofiles?page=0&size=2"))
         .andExpect(status().isOk())
-        .andExpect(containsPagedResources(QualityProfileResource.class))
+        .andExpect(containsResource(List.class))
         .andDo(document("qualityprofiles/list"));
   }
 

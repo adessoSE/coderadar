@@ -1,10 +1,9 @@
 package org.wickedsource.coderadar.project.rest;
 
+import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,7 +18,6 @@ import org.wickedsource.coderadar.project.domain.ProjectDeleter;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 
 @Controller
-@ExposesResourceFor(Project.class)
 @Transactional
 @RequestMapping(path = "/projects")
 public class ProjectController {
@@ -45,10 +43,9 @@ public class ProjectController {
   }
 
   @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
-  public ResponseEntity<Resources<ProjectResource>> getProjects() {
+  public ResponseEntity<List<ProjectResource>> getProjects() {
     Iterable<Project> projects = projectRepository.findAll();
-    return new ResponseEntity<>(
-        new Resources(projectAssembler.toResourceList(projects)), HttpStatus.OK);
+    return new ResponseEntity<>(projectAssembler.toResourceList(projects), HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.POST)

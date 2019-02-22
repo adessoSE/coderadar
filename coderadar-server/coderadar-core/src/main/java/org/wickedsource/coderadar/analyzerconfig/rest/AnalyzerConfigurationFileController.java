@@ -3,7 +3,6 @@ package org.wickedsource.coderadar.analyzerconfig.rest;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,6 @@ import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException
 import org.wickedsource.coderadar.core.rest.validation.ValidationException;
 
 @Controller
-@ExposesResourceFor(AnalyzerConfiguration.class)
 @Transactional
 @RequestMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}/file")
 public class AnalyzerConfigurationFileController {

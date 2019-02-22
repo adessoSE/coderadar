@@ -1,9 +1,8 @@
 package org.wickedsource.coderadar.module.rest;
 
 import javax.validation.constraints.NotNull;
-import org.springframework.hateoas.ResourceSupport;
 
-public class ModuleResource extends ResourceSupport {
+public class ModuleResource {
 
   @NotNull private String modulePath;
 

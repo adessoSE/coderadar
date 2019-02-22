@@ -1,10 +1,9 @@
 package org.wickedsource.coderadar.security.domain;
 
 import javax.validation.constraints.NotNull;
-import org.springframework.hateoas.ResourceSupport;
 import org.wickedsource.coderadar.security.ValidPassword;
 
-public class PasswordChangeResource extends ResourceSupport {
+public class PasswordChangeResource {
 
   @NotNull private String refreshToken;
 

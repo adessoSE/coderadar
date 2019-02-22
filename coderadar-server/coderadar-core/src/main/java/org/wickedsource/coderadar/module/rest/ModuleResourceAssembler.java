@@ -1,19 +1,14 @@
 package org.wickedsource.coderadar.module.rest;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
-import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
 import org.wickedsource.coderadar.module.domain.Module;
 import org.wickedsource.coderadar.project.domain.Project;
-import org.wickedsource.coderadar.project.rest.ProjectController;
 
-public class ModuleResourceAssembler extends ResourceAssemblerSupport<Module, ModuleResource> {
+public class ModuleResourceAssembler extends AbstractResourceAssembler<Module, ModuleResource> {
 
   private Project project;
 
   public ModuleResourceAssembler(Project project) {
-    super(ModuleController.class, ModuleResource.class);
     this.project = project;
   }
 
@@ -21,11 +16,6 @@ public class ModuleResourceAssembler extends ResourceAssemblerSupport<Module, Mo
   public ModuleResource toResource(Module entity) {
     ModuleResource resource = new ModuleResource();
     resource.setModulePath(entity.getPath());
-    resource.add(
-        linkTo(methodOn(ModuleController.class).getModule(entity.getId(), project.getId()))
-            .withRel("self"));
-    resource.add(
-        linkTo(methodOn(ProjectController.class).getProject(project.getId())).withRel("project"));
     return resource;
   }
 
