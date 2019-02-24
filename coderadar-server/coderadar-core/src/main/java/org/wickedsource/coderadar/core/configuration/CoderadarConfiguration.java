@@ -6,10 +6,7 @@ import java.nio.file.Path;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -21,9 +18,7 @@ import org.springframework.stereotype.Component;
 @Data
 public class CoderadarConfiguration {
 
-  @Getter(AccessLevel.NONE)
-  @Setter(AccessLevel.NONE)
-  private Logger logger = LoggerFactory.getLogger(CoderadarConfiguration.class);
+  private static final Logger logger = LoggerFactory.getLogger(CoderadarConfiguration.class);
 
   private static final String CONFIG_PARAM_LOG_PATTERN = "%s is set to '%s'";
 
