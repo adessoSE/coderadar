@@ -74,7 +74,7 @@ public class CommitMetadataScannerIntegrationTest extends GitTestTemplate {
   }
 
   @Test
-  @Tag("IntegrationTest.class")
+  @Tag("IntegrationTest")
   public void scan() {
     Project project = project().validProject();
     Profiler profiler = new Profiler("Scanner");
