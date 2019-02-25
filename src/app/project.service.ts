@@ -16,4 +16,8 @@ export class ProjectService {
     return this.httpClient.post<Project>(this.apiURL + 'projects', JSON.stringify(project), {headers: new HttpHeaders()
         .set('Content-Type', 'application/json'), observe: 'response'});
   }
+
+  public getProjects() {
+    return this.httpClient.get<Project>(this.apiURL + 'projects', {observe: 'response'});
+  }
 }
