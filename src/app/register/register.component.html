@@ -1,0 +1,9 @@
+<div style="justify-content:center; width: 100%; align-items: center; display: flex; min-height: 100%;
+padding: 200px;">
+  <form (ngSubmit)="submitForm()">
+    <input type="text" placeholder="Username" name="username" [(ngModel)]="username"><br>
+    <input type="password" placeholder="Password" name="password" [(ngModel)]="password"><br>
+    <input type="password" placeholder="Confirm password" name="confirmPassword" [(ngModel)]="confirmPassword"><br>
+    <a routerLink="/login">Have an account? Log in</a><input type="submit" value="Sign up">
+  </form>
+</div>

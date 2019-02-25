@@ -1,0 +1,13 @@
+<div style="justify-content:center; width: 100%; align-items: center; display: flex; min-height: 100%;
+padding: 200px;">
+  <form (ngSubmit)="submitForm()">
+    Project name: <input type="text" name="name" [(ngModel)]="project.name"><br>
+    VCS URL: <input type="url" name="vcsUrl" [(ngModel)]="project.vcsUrl"><br>
+    VCS user: <input type="text" name="vcsUser" [(ngModel)]="project.vcsUser"><br>
+    VCS password: <input type="password" name="vcsPassword" [(ngModel)]="project.vcsPassword"><br>
+    VCS online: <input type="checkbox" name="vcsOnline" [(ngModel)]="project.vcsOnline"><br>
+    Start date: <input type="date" name="startDate" [(ngModel)]="project.startDate"><br>
+    End date: <input type="date" name="endDate" [(ngModel)]="project.endDate"><br>
+    <input value="Cancel" type="button" routerLink="/dashboard"><input type="submit" value="Next">
+  </form>
+</div>

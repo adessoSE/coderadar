@@ -1,25 +1,27 @@
-# coderadar
+# Coderadar
 
-[![Build Status](https://travis-ci.org/reflectoring/coderadar.svg?branch=master)](https://travis-ci.org/reflectoring/coderadar)
-[![Gradle Status](https://gradleupdate.appspot.com/reflectoring/coderadar/status.svg)](https://gradleupdate.appspot.com/reflectoring/coderadar/status) [ ![Download](https://api.bintray.com/packages/reflectoring/releases/coderadar/images/download.svg) ](https://bintray.com/reflectoring/releases/coderadar/_latestVersion)
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.1.
 
-coderadar aims to be a continuous source code analysis tool that **automatically runs code analyzers on your version control system** that provide you with the metrics that are most important to you and your team. coderadar provides **per-commit code metrics** and even allows viewing **the history of code metrics** in legacy projects. 
+## Development server
 
-## Goals of coderadar
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-* coderadar is a tool for **architecture reviews**. It visualizes the architecture within a code base and helps to evaluate actions to improve the architecture.
+## Code scaffolding
 
-* coderadar is a tool for **code quality reviews**. It visualizes metrics and hotspots within the codebase and helps to evaluate actions to improve the code quality.
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-* coderadar is a tool for **continuous retrospection**. It provides dashboards and tools to facilitate regular retrospectives with the goal to improve quality over time.
+## Build
 
-* coderadar is a tool for **historical analysis**. It provides metrics for selected time frames to make it easy to compare changes in quality over time.
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-* coderadar is a tool for **gamification**. It provides mechanisms to gamify code quality and to improve motivation for developers to produce quality code.
+## Running unit tests
 
-## Documentation
-* [REST API documentation](https://cdn.rawgit.com/reflectoring/coderadar/gh-pages/current/docs/restapi.html).
-* [Administration Guide](https://cdn.rawgit.com/reflectoring/coderadar/gh-pages/current/docs/admin.html)
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Want to contribute?
-See the [contribution guide](https://github.com/reflectoring/coderadar/blob/master/CONTRIBUTING.md).
+## Running end-to-end tests
+
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+
+## Further help
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
