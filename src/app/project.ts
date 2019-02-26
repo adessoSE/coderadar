@@ -1,4 +1,5 @@
 export class Project {
+  public id: number;
   public name: string;
   public vcsUrl: string;
   public vcsUser: string;

@@ -16,6 +16,7 @@ const appRoutes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'add-project', component: AddProjectComponent },
+  { path: '', component: DashboardComponent },
 ];
 
 @NgModule({

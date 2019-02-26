@@ -1,4 +1,20 @@
 <div style="justify-content:center; width: 100%; align-items: center; display: flex; min-height: 100%;
 padding: 200px;">
-  <p>Hello there,<br> it looks like you haven't analyzed any projects yet<br> click <a routerLink="/add-project">here</a> to add a project</p>
+  <p *ngIf="projects.length == 0">Hello there,<br> it looks like you haven't analyzed any projects yet<br> click <a routerLink="/add-project">here</a> to add a project</p>
+  <div *ngIf="projects.length > 0">
+    <ul style="display: inline">
+      <li style="list-style-type: none" *ngFor="let project of projects">
+        <div>
+            <h1>{{project.name}}</h1>
+            <h3>Analysis start date {{project.startDate}}</h3>
+            <h3>Analysis end date {{project.endDate}}</h3>
+            <h3>URL: {{project.vcsUrl}}</h3>
+            <br>
+          <button (click)="deleteProject(project.id)">Delete project</button>
+        </div>
+      </li>
+    </ul>
+    <br><br>
+    <button routerLink="/add-project">Add new project</button>
+  </div>
 </div>

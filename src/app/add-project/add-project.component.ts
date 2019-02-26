@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Project} from '../project';
 import {ProjectService} from '../project.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-add-project',
@@ -11,7 +12,7 @@ export class AddProjectComponent implements OnInit {
 
   project: Project = new Project();
 
-  constructor(private projectService: ProjectService) { }
+  constructor(private router: Router, private projectService: ProjectService) { }
 
   ngOnInit() {
   }
@@ -19,5 +20,6 @@ export class AddProjectComponent implements OnInit {
   submitForm() {
     const response = this.projectService.addProject(this.project);
     response.forEach(value => alert(value.body.name));
+    this.router.navigate(['/dashboard']);
   }
 }

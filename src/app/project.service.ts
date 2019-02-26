@@ -18,6 +18,12 @@ export class ProjectService {
   }
 
   public getProjects() {
-    return this.httpClient.get<Project>(this.apiURL + 'projects', {observe: 'response'});
+    return this.httpClient.get<Project[]>(this.apiURL + 'projects', {observe: 'response'});
+  }
+
+  deleteProject(id: number) {
+    console.log(this.apiURL + 'projects/' + id);
+    return this.httpClient.delete(this.apiURL + 'projects/' + id, {headers: new HttpHeaders()
+        .set('Content-Type', 'application/json'), observe: 'response'});
   }
 }
