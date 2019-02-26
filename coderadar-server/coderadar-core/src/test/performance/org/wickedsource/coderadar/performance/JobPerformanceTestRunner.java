@@ -92,12 +92,13 @@ public class JobPerformanceTestRunner {
     client.addAnalyzerConfiguration(
         1L,
         new AnalyzerConfigurationResource(
+            1L,
             "org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin",
             true));
     client.addAnalyzerConfiguration(
         1L,
         new AnalyzerConfigurationResource(
-            "org.wickedsource.coderadar.analyzer.loc.LocAnalyzerPlugin", true));
+            1L, "org.wickedsource.coderadar.analyzer.loc.LocAnalyzerPlugin", true));
   }
 
   private static AnalyzingJobResource addAnalyzingJob(CoderadarRestClient client) {

@@ -16,6 +16,7 @@ public class ModuleResourceAssembler extends AbstractResourceAssembler<Module, M
   public ModuleResource toResource(Module entity) {
     ModuleResource resource = new ModuleResource();
     resource.setModulePath(entity.getPath());
+    resource.setId(entity.getId());
     return resource;
   }
 

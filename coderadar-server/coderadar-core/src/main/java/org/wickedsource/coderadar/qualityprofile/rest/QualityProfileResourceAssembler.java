@@ -19,6 +19,7 @@ public class QualityProfileResourceAssembler
   public QualityProfileResource toResource(QualityProfile entity) {
     QualityProfileResource resource = new QualityProfileResource();
     resource.setProfileName(entity.getName());
+    resource.setId(entity.getId());
     for (QualityProfileMetric metric : entity.getMetrics()) {
       MetricDTO metricDTO = new MetricDTO();
       metricDTO.setMetricName(metric.getName());

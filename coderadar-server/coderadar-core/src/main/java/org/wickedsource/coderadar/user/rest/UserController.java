@@ -21,7 +21,6 @@ import org.wickedsource.coderadar.security.service.TokenService;
 import org.wickedsource.coderadar.user.domain.User;
 import org.wickedsource.coderadar.user.domain.UserLoginResource;
 import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
-import org.wickedsource.coderadar.user.domain.UserResource;
 import org.wickedsource.coderadar.user.service.LoginService;
 import org.wickedsource.coderadar.user.service.PasswordChangeService;
 import org.wickedsource.coderadar.user.service.RegistrationService;

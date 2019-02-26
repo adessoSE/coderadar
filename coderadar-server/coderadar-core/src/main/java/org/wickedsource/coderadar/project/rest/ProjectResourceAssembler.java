@@ -15,6 +15,7 @@ public class ProjectResourceAssembler extends AbstractResourceAssembler<Project,
   public ProjectResource toResource(Project project) {
     ProjectResource resource = new ProjectResource();
     resource.setName(project.getName());
+    resource.setId(project.getId());
     if (project.getVcsCoordinates() != null) {
       resource.setVcsUrl(project.getVcsCoordinates().getUrl().toString());
       resource.setVcsUser(project.getVcsCoordinates().getUsername());

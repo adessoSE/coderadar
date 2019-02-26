@@ -41,6 +41,7 @@ public class ModuleControllerTest extends ControllerTestTemplate {
             document(
                 "modules/create",
                 requestFields(
+                    fields.withPath("id").description("The id of the module."),
                     fields
                         .withPath("modulePath")
                         .description(

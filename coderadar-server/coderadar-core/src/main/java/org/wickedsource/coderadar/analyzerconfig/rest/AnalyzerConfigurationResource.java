@@ -4,15 +4,25 @@ import javax.validation.constraints.NotNull;
 
 public class AnalyzerConfigurationResource {
 
+  private Long id;
+
   @NotNull private String analyzerName;
 
   @NotNull private Boolean enabled;
 
   public AnalyzerConfigurationResource() {}
 
-  public AnalyzerConfigurationResource(String analyzerName, boolean enabled) {
+  public AnalyzerConfigurationResource(Long id, String analyzerName, boolean enabled) {
     this.analyzerName = analyzerName;
     this.enabled = enabled;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getAnalyzerName() {

@@ -15,7 +15,8 @@ public class AnalyzerConfigurationResourceAssembler
 
   @Override
   public AnalyzerConfigurationResource toResource(AnalyzerConfiguration entity) {
-    return new AnalyzerConfigurationResource(entity.getAnalyzerName(), entity.getEnabled());
+    return new AnalyzerConfigurationResource(
+        entity.getId(), entity.getAnalyzerName(), entity.getEnabled());
   }
 
   public AnalyzerConfiguration toEntity(AnalyzerConfigurationResource resource, Project project) {

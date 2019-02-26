@@ -56,6 +56,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     return document(
         "projects/create",
         requestFields(
+            fields.withPath("id").description("The id of the project."),
             fields.withPath("name").description("The name of the project to be analyzed."),
             fields
                 .withPath("vcsUrl")

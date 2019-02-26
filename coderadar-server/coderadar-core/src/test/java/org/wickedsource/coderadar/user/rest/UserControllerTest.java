@@ -31,7 +31,6 @@ import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 import org.wickedsource.coderadar.user.domain.UserLoginResource;
 import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.user.domain.UserRepository;
-import org.wickedsource.coderadar.user.domain.UserResource;
 
 @Category(ControllerTest.class)
 public class UserControllerTest extends ControllerTestTemplate {
