@@ -650,3 +650,1046 @@ Caused by: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« exist
 	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) ~[liquibase-core-3.5.3.jar:na]
 	... 25 common frames omitted
 
+2019-02-26 10:56:08.235  INFO 7776 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Starting CoderadarApplication on de-adn-fjrytc2 with PID 7776 (C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core\build\classes\java\main started by kkrause in C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core)
+2019-02-26 10:56:08.243 DEBUG 7776 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Running with Spring Boot v1.5.2.RELEASE, Spring v4.3.7.RELEASE
+2019-02-26 10:56:08.244  INFO 7776 --- [restartedMain] o.w.coderadar.CoderadarApplication       : No active profile set, falling back to default profiles: default
+2019-02-26 10:56:08.414  INFO 7776 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@51c5193b: startup date [Tue Feb 26 10:56:08 CET 2019]; root of context hierarchy
+2019-02-26 10:56:14.030  WARN 7776 --- [restartedMain] o.s.c.a.ConfigurationClassEnhancer       : @Bean method CoderadarApplicationContextConfiguration.propertySourcesPlaceholderConfigurer is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+2019-02-26 10:56:14.574  INFO 7776 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$8491ab51] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:56:14.686  INFO 7776 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$1d3f738b] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:56:14.706  INFO 7776 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'objectPostProcessor' of type [org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:56:14.710  INFO 7776 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@509110f7' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:56:14.722  INFO 7776 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$4214163d] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:56:14.747  INFO 7776 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:56:14.764  INFO 7776 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'commitMappingResourceProvider' of type [org.wickedsource.coderadar.commit.configuration.CommitMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:56:14.770  INFO 7776 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'metricValueMappingResourceProvider' of type [org.wickedsource.coderadar.metric.configuration.MetricValueMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:56:15.894  INFO 7776 --- [restartedMain] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 8080 (http)
+2019-02-26 10:56:15.919  INFO 7776 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2019-02-26 10:56:15.922  INFO 7776 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.9
+2019-02-26 10:56:16.114  INFO 7776 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-02-26 10:56:16.114  INFO 7776 --- [localhost-startStop-1] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 7704 ms
+2019-02-26 10:56:16.814  INFO 7776 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'metricsFilter' to: [/*]
+2019-02-26 10:56:16.815  INFO 7776 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-02-26 10:56:16.818  INFO 7776 --- [localhost-startStop-1] .s.DelegatingFilterProxyRegistrationBean : Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-02-26 10:56:16.820  INFO 7776 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'webRequestLoggingFilter' to: [/*]
+2019-02-26 10:56:16.821  INFO 7776 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'corsFilter' to: [/*]
+2019-02-26 10:56:16.821  INFO 7776 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'applicationContextIdFilter' to: [/*]
+2019-02-26 10:56:16.822  INFO 7776 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'dispatcherServlet' to [/]
+2019-02-26 10:56:16.824  INFO 7776 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'webServlet' to [/h2-console/*]
+2019-02-26 10:56:17.780 ERROR 7776 --- [restartedMain] o.a.tomcat.jdbc.pool.ConnectionPool      : Unable to create initial connections of pool.
+
+org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2455) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.readStartupMessages(QueryExecutorImpl.java:2586) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.<init>(QueryExecutorImpl.java:113) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:222) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connectUsingDriver(PooledConnection.java:310) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connect(PooledConnection.java:203) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.createConnection(ConnectionPool.java:732) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.borrowConnection(ConnectionPool.java:664) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.init(ConnectionPool.java:479) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.<init>(ConnectionPool.java:154) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.pCreatePool(DataSourceProxy.java:118) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.createPool(DataSourceProxy.java:107) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.getConnection(DataSourceProxy.java:131) [tomcat-jdbc-8.5.9.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) [liquibase-core-3.5.3.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:296) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1081) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:856) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:737) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:370) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1162) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1151) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:20) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_191]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_191]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_191]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_191]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+
+2019-02-26 10:56:17.785  WARN 7776 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+2019-02-26 10:56:17.791  INFO 7776 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service Tomcat
+2019-02-26 10:56:17.821  WARN 7776 --- [restartedMain] o.s.boot.SpringApplication               : Error handling failed (Error creating bean with name 'delegatingApplicationListener' defined in class path resource [org/springframework/security/config/annotation/web/configuration/WebSecurityConfiguration.class]: BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'metaDataSourceAdvisor': Cannot resolve reference to bean 'methodSecurityMetadataSource' while setting constructor argument; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration': Initialization of bean failed; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'org.springframework.context.annotation.ConfigurationClassPostProcessor.importRegistry' available)
+2019-02-26 10:56:17.828 ERROR 7776 --- [restartedMain] o.s.boot.SpringApplication               : Application startup failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1628) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:296) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1081) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:856) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) ~[spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:737) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:370) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1162) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1151) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:20) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_191]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_191]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_191]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_191]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+Caused by: liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:390) ~[liquibase-core-3.5.3.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	... 23 common frames omitted
+Caused by: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2455) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.readStartupMessages(QueryExecutorImpl.java:2586) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.<init>(QueryExecutorImpl.java:113) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:222) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connectUsingDriver(PooledConnection.java:310) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connect(PooledConnection.java:203) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.createConnection(ConnectionPool.java:732) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.borrowConnection(ConnectionPool.java:664) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.init(ConnectionPool.java:479) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.<init>(ConnectionPool.java:154) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.pCreatePool(DataSourceProxy.java:118) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.createPool(DataSourceProxy.java:107) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.getConnection(DataSourceProxy.java:131) ~[tomcat-jdbc-8.5.9.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) ~[liquibase-core-3.5.3.jar:na]
+	... 25 common frames omitted
+
+2019-02-26 10:57:33.090  INFO 11320 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Starting CoderadarApplication on de-adn-fjrytc2 with PID 11320 (C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core\build\classes\java\main started by kkrause in C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core)
+2019-02-26 10:57:33.094 DEBUG 11320 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Running with Spring Boot v1.5.2.RELEASE, Spring v4.3.7.RELEASE
+2019-02-26 10:57:33.095  INFO 11320 --- [restartedMain] o.w.coderadar.CoderadarApplication       : No active profile set, falling back to default profiles: default
+2019-02-26 10:57:33.279  INFO 11320 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@4dc1fb83: startup date [Tue Feb 26 10:57:33 CET 2019]; root of context hierarchy
+2019-02-26 10:57:38.982  WARN 11320 --- [restartedMain] o.s.c.a.ConfigurationClassEnhancer       : @Bean method CoderadarApplicationContextConfiguration.propertySourcesPlaceholderConfigurer is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+2019-02-26 10:57:39.506  INFO 11320 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$f0416c7b] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:57:39.609  INFO 11320 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$88ef34b5] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:57:39.628  INFO 11320 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'objectPostProcessor' of type [org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:57:39.634  INFO 11320 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@14f4040c' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:57:39.669  INFO 11320 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$adc3d767] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:57:39.701  INFO 11320 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:57:39.720  INFO 11320 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'commitMappingResourceProvider' of type [org.wickedsource.coderadar.commit.configuration.CommitMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:57:39.728  INFO 11320 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'metricValueMappingResourceProvider' of type [org.wickedsource.coderadar.metric.configuration.MetricValueMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:57:41.146  INFO 11320 --- [restartedMain] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 8080 (http)
+2019-02-26 10:57:41.164  INFO 11320 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2019-02-26 10:57:41.166  INFO 11320 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.9
+2019-02-26 10:57:41.342  INFO 11320 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-02-26 10:57:41.343  INFO 11320 --- [localhost-startStop-1] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 8068 ms
+2019-02-26 10:57:41.998  INFO 11320 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'metricsFilter' to: [/*]
+2019-02-26 10:57:41.999  INFO 11320 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-02-26 10:57:42.002  INFO 11320 --- [localhost-startStop-1] .s.DelegatingFilterProxyRegistrationBean : Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-02-26 10:57:42.003  INFO 11320 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'webRequestLoggingFilter' to: [/*]
+2019-02-26 10:57:42.003  INFO 11320 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'corsFilter' to: [/*]
+2019-02-26 10:57:42.003  INFO 11320 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'applicationContextIdFilter' to: [/*]
+2019-02-26 10:57:42.004  INFO 11320 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'dispatcherServlet' to [/]
+2019-02-26 10:57:42.007  INFO 11320 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'webServlet' to [/h2-console/*]
+2019-02-26 10:57:42.893 ERROR 11320 --- [restartedMain] o.a.tomcat.jdbc.pool.ConnectionPool      : Unable to create initial connections of pool.
+
+org.postgresql.util.PSQLException: FATAL: Passwort-Authentifizierung für Benutzer »coderadar« fehlgeschlagen (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:443) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:217) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connectUsingDriver(PooledConnection.java:310) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connect(PooledConnection.java:203) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.createConnection(ConnectionPool.java:732) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.borrowConnection(ConnectionPool.java:664) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.init(ConnectionPool.java:479) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.<init>(ConnectionPool.java:154) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.pCreatePool(DataSourceProxy.java:118) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.createPool(DataSourceProxy.java:107) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.getConnection(DataSourceProxy.java:131) [tomcat-jdbc-8.5.9.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) [liquibase-core-3.5.3.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:296) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1081) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:856) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:737) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:370) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1162) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1151) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:20) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_191]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_191]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_191]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_191]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+
+2019-02-26 10:57:42.898  WARN 11320 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Passwort-Authentifizierung für Benutzer »coderadar« fehlgeschlagen (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+2019-02-26 10:57:42.903  INFO 11320 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service Tomcat
+2019-02-26 10:57:42.928  WARN 11320 --- [restartedMain] o.s.boot.SpringApplication               : Error handling failed (Error creating bean with name 'delegatingApplicationListener' defined in class path resource [org/springframework/security/config/annotation/web/configuration/WebSecurityConfiguration.class]: BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'metaDataSourceAdvisor': Cannot resolve reference to bean 'methodSecurityMetadataSource' while setting constructor argument; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration': Initialization of bean failed; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'org.springframework.context.annotation.ConfigurationClassPostProcessor.importRegistry' available)
+2019-02-26 10:57:42.936 ERROR 11320 --- [restartedMain] o.s.boot.SpringApplication               : Application startup failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Passwort-Authentifizierung für Benutzer »coderadar« fehlgeschlagen (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1628) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:296) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1081) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:856) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) ~[spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:737) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:370) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1162) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1151) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:20) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_191]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_191]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_191]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_191]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+Caused by: liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Passwort-Authentifizierung für Benutzer »coderadar« fehlgeschlagen (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:390) ~[liquibase-core-3.5.3.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	... 23 common frames omitted
+Caused by: org.postgresql.util.PSQLException: FATAL: Passwort-Authentifizierung für Benutzer »coderadar« fehlgeschlagen (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:443) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:217) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connectUsingDriver(PooledConnection.java:310) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connect(PooledConnection.java:203) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.createConnection(ConnectionPool.java:732) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.borrowConnection(ConnectionPool.java:664) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.init(ConnectionPool.java:479) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.<init>(ConnectionPool.java:154) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.pCreatePool(DataSourceProxy.java:118) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.createPool(DataSourceProxy.java:107) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.getConnection(DataSourceProxy.java:131) ~[tomcat-jdbc-8.5.9.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) ~[liquibase-core-3.5.3.jar:na]
+	... 25 common frames omitted
+
+2019-02-26 10:58:34.536  INFO 3240 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Starting CoderadarApplication on de-adn-fjrytc2 with PID 3240 (C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core\build\classes\java\main started by kkrause in C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core)
+2019-02-26 10:58:34.539 DEBUG 3240 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Running with Spring Boot v1.5.2.RELEASE, Spring v4.3.7.RELEASE
+2019-02-26 10:58:34.540  INFO 3240 --- [restartedMain] o.w.coderadar.CoderadarApplication       : No active profile set, falling back to default profiles: default
+2019-02-26 10:58:34.690  INFO 3240 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@7d6817e3: startup date [Tue Feb 26 10:58:34 CET 2019]; root of context hierarchy
+2019-02-26 10:58:43.309  WARN 3240 --- [restartedMain] o.s.c.a.ConfigurationClassEnhancer       : @Bean method CoderadarApplicationContextConfiguration.propertySourcesPlaceholderConfigurer is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+2019-02-26 10:58:43.970  INFO 3240 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$bb061eae] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:58:44.090  INFO 3240 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$53b3e6e8] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:58:44.120  INFO 3240 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'objectPostProcessor' of type [org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:58:44.125  INFO 3240 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@6001f3' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:58:44.145  INFO 3240 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$7888899a] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:58:44.174  INFO 3240 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:58:44.200  INFO 3240 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'commitMappingResourceProvider' of type [org.wickedsource.coderadar.commit.configuration.CommitMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:58:44.211  INFO 3240 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'metricValueMappingResourceProvider' of type [org.wickedsource.coderadar.metric.configuration.MetricValueMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 10:58:45.822  INFO 3240 --- [restartedMain] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 8080 (http)
+2019-02-26 10:58:45.847  INFO 3240 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2019-02-26 10:58:45.849  INFO 3240 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.9
+2019-02-26 10:58:46.091  INFO 3240 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-02-26 10:58:46.091  INFO 3240 --- [localhost-startStop-1] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 11406 ms
+2019-02-26 10:58:47.032  INFO 3240 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'metricsFilter' to: [/*]
+2019-02-26 10:58:47.033  INFO 3240 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-02-26 10:58:47.053  INFO 3240 --- [localhost-startStop-1] .s.DelegatingFilterProxyRegistrationBean : Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-02-26 10:58:47.055  INFO 3240 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'webRequestLoggingFilter' to: [/*]
+2019-02-26 10:58:47.062  INFO 3240 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'corsFilter' to: [/*]
+2019-02-26 10:58:47.065  INFO 3240 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'applicationContextIdFilter' to: [/*]
+2019-02-26 10:58:47.066  INFO 3240 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'dispatcherServlet' to [/]
+2019-02-26 10:58:47.069  INFO 3240 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'webServlet' to [/h2-console/*]
+2019-02-26 10:58:48.228 ERROR 3240 --- [restartedMain] o.a.tomcat.jdbc.pool.ConnectionPool      : Unable to create initial connections of pool.
+
+org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2455) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.readStartupMessages(QueryExecutorImpl.java:2586) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.<init>(QueryExecutorImpl.java:113) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:222) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connectUsingDriver(PooledConnection.java:310) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connect(PooledConnection.java:203) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.createConnection(ConnectionPool.java:732) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.borrowConnection(ConnectionPool.java:664) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.init(ConnectionPool.java:479) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.<init>(ConnectionPool.java:154) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.pCreatePool(DataSourceProxy.java:118) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.createPool(DataSourceProxy.java:107) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.getConnection(DataSourceProxy.java:131) [tomcat-jdbc-8.5.9.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) [liquibase-core-3.5.3.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:296) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1081) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:856) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:737) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:370) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1162) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1151) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:20) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_191]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_191]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_191]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_191]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+
+2019-02-26 10:58:48.237  WARN 3240 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+2019-02-26 10:58:48.242  INFO 3240 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service Tomcat
+2019-02-26 10:58:48.268  WARN 3240 --- [restartedMain] o.s.boot.SpringApplication               : Error handling failed (Error creating bean with name 'delegatingApplicationListener' defined in class path resource [org/springframework/security/config/annotation/web/configuration/WebSecurityConfiguration.class]: BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'metaDataSourceAdvisor': Cannot resolve reference to bean 'methodSecurityMetadataSource' while setting constructor argument; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration': Initialization of bean failed; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'org.springframework.context.annotation.ConfigurationClassPostProcessor.importRegistry' available)
+2019-02-26 10:58:48.276 ERROR 3240 --- [restartedMain] o.s.boot.SpringApplication               : Application startup failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1628) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:296) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1081) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:856) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) ~[spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:737) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:370) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1162) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1151) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:20) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_191]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_191]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_191]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_191]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+Caused by: liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:390) ~[liquibase-core-3.5.3.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	... 23 common frames omitted
+Caused by: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2455) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.readStartupMessages(QueryExecutorImpl.java:2586) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.<init>(QueryExecutorImpl.java:113) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:222) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connectUsingDriver(PooledConnection.java:310) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connect(PooledConnection.java:203) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.createConnection(ConnectionPool.java:732) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.borrowConnection(ConnectionPool.java:664) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.init(ConnectionPool.java:479) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.<init>(ConnectionPool.java:154) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.pCreatePool(DataSourceProxy.java:118) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.createPool(DataSourceProxy.java:107) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.getConnection(DataSourceProxy.java:131) ~[tomcat-jdbc-8.5.9.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) ~[liquibase-core-3.5.3.jar:na]
+	... 25 common frames omitted
+
+2019-02-26 13:06:21.309  INFO 11528 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Starting CoderadarApplication on de-adn-fjrytc2 with PID 11528 (C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core\build\classes\java\main started by kkrause in C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core)
+2019-02-26 13:06:21.313 DEBUG 11528 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Running with Spring Boot v1.5.2.RELEASE, Spring v4.3.7.RELEASE
+2019-02-26 13:06:21.314  INFO 11528 --- [restartedMain] o.w.coderadar.CoderadarApplication       : No active profile set, falling back to default profiles: default
+2019-02-26 13:06:21.476  INFO 11528 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@2a4b5d5a: startup date [Tue Feb 26 13:06:21 CET 2019]; root of context hierarchy
+2019-02-26 13:06:27.678  WARN 11528 --- [restartedMain] o.s.c.a.ConfigurationClassEnhancer       : @Bean method CoderadarApplicationContextConfiguration.propertySourcesPlaceholderConfigurer is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+2019-02-26 13:06:28.172  INFO 11528 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$2cf063d8] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:06:28.287  INFO 11528 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$c59e2c12] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:06:28.307  INFO 11528 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'objectPostProcessor' of type [org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:06:28.310  INFO 11528 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@9c5c80' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:06:28.334  INFO 11528 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$ea72cec4] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:06:28.356  INFO 11528 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:06:28.373  INFO 11528 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'commitMappingResourceProvider' of type [org.wickedsource.coderadar.commit.configuration.CommitMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:06:28.382  INFO 11528 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'metricValueMappingResourceProvider' of type [org.wickedsource.coderadar.metric.configuration.MetricValueMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:06:29.529  INFO 11528 --- [restartedMain] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 8080 (http)
+2019-02-26 13:06:29.548  INFO 11528 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2019-02-26 13:06:29.550  INFO 11528 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.9
+2019-02-26 13:06:29.702  INFO 11528 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-02-26 13:06:29.702  INFO 11528 --- [localhost-startStop-1] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 8229 ms
+2019-02-26 13:06:30.438  INFO 11528 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'metricsFilter' to: [/*]
+2019-02-26 13:06:30.440  INFO 11528 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-02-26 13:06:30.442  INFO 11528 --- [localhost-startStop-1] .s.DelegatingFilterProxyRegistrationBean : Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-02-26 13:06:30.443  INFO 11528 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'webRequestLoggingFilter' to: [/*]
+2019-02-26 13:06:30.444  INFO 11528 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'corsFilter' to: [/*]
+2019-02-26 13:06:30.444  INFO 11528 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'applicationContextIdFilter' to: [/*]
+2019-02-26 13:06:30.444  INFO 11528 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'dispatcherServlet' to [/]
+2019-02-26 13:06:30.447  INFO 11528 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'webServlet' to [/h2-console/*]
+2019-02-26 13:06:31.319 ERROR 11528 --- [restartedMain] o.a.tomcat.jdbc.pool.ConnectionPool      : Unable to create initial connections of pool.
+
+org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2455) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.readStartupMessages(QueryExecutorImpl.java:2586) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.<init>(QueryExecutorImpl.java:113) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:222) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connectUsingDriver(PooledConnection.java:310) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connect(PooledConnection.java:203) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.createConnection(ConnectionPool.java:732) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.borrowConnection(ConnectionPool.java:664) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.init(ConnectionPool.java:479) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.<init>(ConnectionPool.java:154) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.pCreatePool(DataSourceProxy.java:118) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.createPool(DataSourceProxy.java:107) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.getConnection(DataSourceProxy.java:131) [tomcat-jdbc-8.5.9.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) [liquibase-core-3.5.3.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:296) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1081) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:856) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:737) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:370) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1162) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1151) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:20) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_191]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_191]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_191]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_191]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+
+2019-02-26 13:06:31.326  WARN 11528 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+2019-02-26 13:06:31.334  INFO 11528 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service Tomcat
+2019-02-26 13:06:31.355  WARN 11528 --- [restartedMain] o.s.boot.SpringApplication               : Error handling failed (Error creating bean with name 'delegatingApplicationListener' defined in class path resource [org/springframework/security/config/annotation/web/configuration/WebSecurityConfiguration.class]: BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'metaDataSourceAdvisor': Cannot resolve reference to bean 'methodSecurityMetadataSource' while setting constructor argument; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration': Initialization of bean failed; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'org.springframework.context.annotation.ConfigurationClassPostProcessor.importRegistry' available)
+2019-02-26 13:06:31.362 ERROR 11528 --- [restartedMain] o.s.boot.SpringApplication               : Application startup failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1628) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:296) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1081) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:856) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) ~[spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:737) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:370) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1162) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1151) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:20) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_191]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_191]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_191]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_191]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+Caused by: liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:390) ~[liquibase-core-3.5.3.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	... 23 common frames omitted
+Caused by: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2455) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.readStartupMessages(QueryExecutorImpl.java:2586) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.<init>(QueryExecutorImpl.java:113) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:222) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connectUsingDriver(PooledConnection.java:310) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connect(PooledConnection.java:203) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.createConnection(ConnectionPool.java:732) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.borrowConnection(ConnectionPool.java:664) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.init(ConnectionPool.java:479) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.<init>(ConnectionPool.java:154) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.pCreatePool(DataSourceProxy.java:118) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.createPool(DataSourceProxy.java:107) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.getConnection(DataSourceProxy.java:131) ~[tomcat-jdbc-8.5.9.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) ~[liquibase-core-3.5.3.jar:na]
+	... 25 common frames omitted
+
+2019-02-26 13:55:59.134  INFO 16360 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Starting CoderadarApplication on de-adn-fjrytc2 with PID 16360 (C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core\build\classes\java\main started by kkrause in C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core)
+2019-02-26 13:55:59.145 DEBUG 16360 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Running with Spring Boot v1.5.2.RELEASE, Spring v4.3.7.RELEASE
+2019-02-26 13:55:59.146  INFO 16360 --- [restartedMain] o.w.coderadar.CoderadarApplication       : No active profile set, falling back to default profiles: default
+2019-02-26 13:55:59.347  INFO 16360 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@69f1e48d: startup date [Tue Feb 26 13:55:59 CET 2019]; root of context hierarchy
+2019-02-26 13:56:05.033  WARN 16360 --- [restartedMain] o.s.c.a.ConfigurationClassEnhancer       : @Bean method CoderadarApplicationContextConfiguration.propertySourcesPlaceholderConfigurer is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+2019-02-26 13:56:05.506  INFO 16360 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$ca90e755] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:56:05.615  INFO 16360 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$633eaf8f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:56:05.635  INFO 16360 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'objectPostProcessor' of type [org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:56:05.638  INFO 16360 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@16da5e1c' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:56:05.647  INFO 16360 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$88135241] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:56:05.671  INFO 16360 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:56:05.688  INFO 16360 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'commitMappingResourceProvider' of type [org.wickedsource.coderadar.commit.configuration.CommitMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:56:05.696  INFO 16360 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'metricValueMappingResourceProvider' of type [org.wickedsource.coderadar.metric.configuration.MetricValueMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:56:06.875  INFO 16360 --- [restartedMain] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 8080 (http)
+2019-02-26 13:56:06.895  INFO 16360 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2019-02-26 13:56:06.897  INFO 16360 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.9
+2019-02-26 13:56:07.057  INFO 16360 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-02-26 13:56:07.057  INFO 16360 --- [localhost-startStop-1] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 7716 ms
+2019-02-26 13:56:07.749  INFO 16360 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'metricsFilter' to: [/*]
+2019-02-26 13:56:07.750  INFO 16360 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-02-26 13:56:07.752  INFO 16360 --- [localhost-startStop-1] .s.DelegatingFilterProxyRegistrationBean : Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-02-26 13:56:07.753  INFO 16360 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'webRequestLoggingFilter' to: [/*]
+2019-02-26 13:56:07.754  INFO 16360 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'corsFilter' to: [/*]
+2019-02-26 13:56:07.754  INFO 16360 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'applicationContextIdFilter' to: [/*]
+2019-02-26 13:56:07.755  INFO 16360 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'dispatcherServlet' to [/]
+2019-02-26 13:56:07.758  INFO 16360 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'webServlet' to [/h2-console/*]
+2019-02-26 13:56:08.622 ERROR 16360 --- [restartedMain] o.a.tomcat.jdbc.pool.ConnectionPool      : Unable to create initial connections of pool.
+
+org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2455) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.readStartupMessages(QueryExecutorImpl.java:2586) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.<init>(QueryExecutorImpl.java:113) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:222) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connectUsingDriver(PooledConnection.java:310) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connect(PooledConnection.java:203) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.createConnection(ConnectionPool.java:732) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.borrowConnection(ConnectionPool.java:664) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.init(ConnectionPool.java:479) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.<init>(ConnectionPool.java:154) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.pCreatePool(DataSourceProxy.java:118) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.createPool(DataSourceProxy.java:107) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.getConnection(DataSourceProxy.java:131) [tomcat-jdbc-8.5.9.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) [liquibase-core-3.5.3.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:296) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1081) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:856) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:737) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:370) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1162) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1151) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:20) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_191]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_191]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_191]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_191]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+
+2019-02-26 13:56:08.631  WARN 16360 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+2019-02-26 13:56:08.637  INFO 16360 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service Tomcat
+2019-02-26 13:56:08.667  WARN 16360 --- [restartedMain] o.s.boot.SpringApplication               : Error handling failed (Error creating bean with name 'delegatingApplicationListener' defined in class path resource [org/springframework/security/config/annotation/web/configuration/WebSecurityConfiguration.class]: BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'metaDataSourceAdvisor': Cannot resolve reference to bean 'methodSecurityMetadataSource' while setting constructor argument; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration': Initialization of bean failed; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'org.springframework.context.annotation.ConfigurationClassPostProcessor.importRegistry' available)
+2019-02-26 13:56:08.674 ERROR 16360 --- [restartedMain] o.s.boot.SpringApplication               : Application startup failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1628) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:296) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1081) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:856) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) ~[spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:737) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:370) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1162) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1151) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:20) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_191]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_191]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_191]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_191]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+Caused by: liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:390) ~[liquibase-core-3.5.3.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	... 23 common frames omitted
+Caused by: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2455) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.readStartupMessages(QueryExecutorImpl.java:2586) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.<init>(QueryExecutorImpl.java:113) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:222) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connectUsingDriver(PooledConnection.java:310) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connect(PooledConnection.java:203) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.createConnection(ConnectionPool.java:732) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.borrowConnection(ConnectionPool.java:664) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.init(ConnectionPool.java:479) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.<init>(ConnectionPool.java:154) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.pCreatePool(DataSourceProxy.java:118) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.createPool(DataSourceProxy.java:107) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.getConnection(DataSourceProxy.java:131) ~[tomcat-jdbc-8.5.9.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) ~[liquibase-core-3.5.3.jar:na]
+	... 25 common frames omitted
+
+2019-02-26 13:58:40.743  INFO 14452 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Starting CoderadarApplication on de-adn-fjrytc2 with PID 14452 (C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core\build\classes\java\main started by kkrause in C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core)
+2019-02-26 13:58:40.747 DEBUG 14452 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Running with Spring Boot v1.5.2.RELEASE, Spring v4.3.7.RELEASE
+2019-02-26 13:58:40.748  INFO 14452 --- [restartedMain] o.w.coderadar.CoderadarApplication       : No active profile set, falling back to default profiles: default
+2019-02-26 13:58:40.895  INFO 14452 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@474a823b: startup date [Tue Feb 26 13:58:40 CET 2019]; root of context hierarchy
+2019-02-26 13:58:46.759  WARN 14452 --- [restartedMain] o.s.c.a.ConfigurationClassEnhancer       : @Bean method CoderadarApplicationContextConfiguration.propertySourcesPlaceholderConfigurer is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+2019-02-26 13:58:47.276  INFO 14452 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$f9f36b76] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:58:47.372  INFO 14452 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$92a133b0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:58:47.389  INFO 14452 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'objectPostProcessor' of type [org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:58:47.392  INFO 14452 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@66801fda' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:58:47.411  INFO 14452 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$b775d662] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:58:47.430  INFO 14452 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:58:47.448  INFO 14452 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'commitMappingResourceProvider' of type [org.wickedsource.coderadar.commit.configuration.CommitMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:58:47.458  INFO 14452 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'metricValueMappingResourceProvider' of type [org.wickedsource.coderadar.metric.configuration.MetricValueMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 13:58:48.567  INFO 14452 --- [restartedMain] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 8080 (http)
+2019-02-26 13:58:48.587  INFO 14452 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2019-02-26 13:58:48.589  INFO 14452 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.9
+2019-02-26 13:58:48.739  INFO 14452 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-02-26 13:58:48.740  INFO 14452 --- [localhost-startStop-1] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 7848 ms
+2019-02-26 13:58:49.446  INFO 14452 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'metricsFilter' to: [/*]
+2019-02-26 13:58:49.447  INFO 14452 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-02-26 13:58:49.449  INFO 14452 --- [localhost-startStop-1] .s.DelegatingFilterProxyRegistrationBean : Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-02-26 13:58:49.452  INFO 14452 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'webRequestLoggingFilter' to: [/*]
+2019-02-26 13:58:49.453  INFO 14452 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'corsFilter' to: [/*]
+2019-02-26 13:58:49.455  INFO 14452 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'applicationContextIdFilter' to: [/*]
+2019-02-26 13:58:49.456  INFO 14452 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'dispatcherServlet' to [/]
+2019-02-26 13:58:49.458  INFO 14452 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'webServlet' to [/h2-console/*]
+2019-02-26 13:58:50.316 ERROR 14452 --- [restartedMain] o.a.tomcat.jdbc.pool.ConnectionPool      : Unable to create initial connections of pool.
+
+org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2455) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.readStartupMessages(QueryExecutorImpl.java:2586) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.<init>(QueryExecutorImpl.java:113) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:222) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connectUsingDriver(PooledConnection.java:310) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connect(PooledConnection.java:203) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.createConnection(ConnectionPool.java:732) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.borrowConnection(ConnectionPool.java:664) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.init(ConnectionPool.java:479) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.<init>(ConnectionPool.java:154) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.pCreatePool(DataSourceProxy.java:118) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.createPool(DataSourceProxy.java:107) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.getConnection(DataSourceProxy.java:131) [tomcat-jdbc-8.5.9.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) [liquibase-core-3.5.3.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:296) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1081) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:856) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:737) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:370) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1162) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1151) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:20) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_191]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_191]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_191]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_191]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+
+2019-02-26 13:58:50.325  WARN 14452 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+2019-02-26 13:58:50.334  INFO 14452 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service Tomcat
+2019-02-26 13:58:50.361  WARN 14452 --- [restartedMain] o.s.boot.SpringApplication               : Error handling failed (Error creating bean with name 'delegatingApplicationListener' defined in class path resource [org/springframework/security/config/annotation/web/configuration/WebSecurityConfiguration.class]: BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'metaDataSourceAdvisor': Cannot resolve reference to bean 'methodSecurityMetadataSource' while setting constructor argument; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration': Initialization of bean failed; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'org.springframework.context.annotation.ConfigurationClassPostProcessor.importRegistry' available)
+2019-02-26 13:58:50.366 ERROR 14452 --- [restartedMain] o.s.boot.SpringApplication               : Application startup failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1628) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:296) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1081) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:856) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) ~[spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:737) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:370) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1162) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1151) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:20) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_191]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_191]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_191]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_191]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+Caused by: liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:390) ~[liquibase-core-3.5.3.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	... 23 common frames omitted
+Caused by: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2455) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.readStartupMessages(QueryExecutorImpl.java:2586) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.<init>(QueryExecutorImpl.java:113) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:222) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connectUsingDriver(PooledConnection.java:310) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connect(PooledConnection.java:203) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.createConnection(ConnectionPool.java:732) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.borrowConnection(ConnectionPool.java:664) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.init(ConnectionPool.java:479) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.<init>(ConnectionPool.java:154) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.pCreatePool(DataSourceProxy.java:118) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.createPool(DataSourceProxy.java:107) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.getConnection(DataSourceProxy.java:131) ~[tomcat-jdbc-8.5.9.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) ~[liquibase-core-3.5.3.jar:na]
+	... 25 common frames omitted
+
+2019-02-26 14:00:16.205  INFO 8036 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Starting CoderadarApplication on de-adn-fjrytc2 with PID 8036 (C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core\build\classes\java\main started by kkrause in C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core)
+2019-02-26 14:00:16.224 DEBUG 8036 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Running with Spring Boot v1.5.2.RELEASE, Spring v4.3.7.RELEASE
+2019-02-26 14:00:16.225  INFO 8036 --- [restartedMain] o.w.coderadar.CoderadarApplication       : No active profile set, falling back to default profiles: default
+2019-02-26 14:00:16.436  INFO 8036 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@241224d4: startup date [Tue Feb 26 14:00:16 CET 2019]; root of context hierarchy
+2019-02-26 14:00:23.855  WARN 8036 --- [restartedMain] o.s.c.a.ConfigurationClassEnhancer       : @Bean method CoderadarApplicationContextConfiguration.propertySourcesPlaceholderConfigurer is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+2019-02-26 14:00:24.430  INFO 8036 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$7d7fca53] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:00:24.520  INFO 8036 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$162d928d] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:00:24.536  INFO 8036 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'objectPostProcessor' of type [org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:00:24.539  INFO 8036 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@11f6eaa7' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:00:24.553  INFO 8036 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$3b02353f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:00:24.573  INFO 8036 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:00:24.594  INFO 8036 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'commitMappingResourceProvider' of type [org.wickedsource.coderadar.commit.configuration.CommitMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:00:24.604  INFO 8036 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'metricValueMappingResourceProvider' of type [org.wickedsource.coderadar.metric.configuration.MetricValueMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:00:25.786  INFO 8036 --- [restartedMain] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 8080 (http)
+2019-02-26 14:00:25.809  INFO 8036 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2019-02-26 14:00:25.811  INFO 8036 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.9
+2019-02-26 14:00:25.983  INFO 8036 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-02-26 14:00:25.984  INFO 8036 --- [localhost-startStop-1] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 9553 ms
+2019-02-26 14:00:26.822  INFO 8036 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'metricsFilter' to: [/*]
+2019-02-26 14:00:26.823  INFO 8036 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-02-26 14:00:26.826  INFO 8036 --- [localhost-startStop-1] .s.DelegatingFilterProxyRegistrationBean : Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-02-26 14:00:26.826  INFO 8036 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'webRequestLoggingFilter' to: [/*]
+2019-02-26 14:00:26.827  INFO 8036 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'corsFilter' to: [/*]
+2019-02-26 14:00:26.828  INFO 8036 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'applicationContextIdFilter' to: [/*]
+2019-02-26 14:00:26.829  INFO 8036 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'dispatcherServlet' to [/]
+2019-02-26 14:00:26.831  INFO 8036 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'webServlet' to [/h2-console/*]
+2019-02-26 14:00:27.861 ERROR 8036 --- [restartedMain] o.a.tomcat.jdbc.pool.ConnectionPool      : Unable to create initial connections of pool.
+
+org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2455) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.readStartupMessages(QueryExecutorImpl.java:2586) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.<init>(QueryExecutorImpl.java:113) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:222) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connectUsingDriver(PooledConnection.java:310) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connect(PooledConnection.java:203) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.createConnection(ConnectionPool.java:732) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.borrowConnection(ConnectionPool.java:664) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.init(ConnectionPool.java:479) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.<init>(ConnectionPool.java:154) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.pCreatePool(DataSourceProxy.java:118) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.createPool(DataSourceProxy.java:107) [tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.getConnection(DataSourceProxy.java:131) [tomcat-jdbc-8.5.9.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) [liquibase-core-3.5.3.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:296) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) [spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1081) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:856) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542) [spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:737) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:370) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1162) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1151) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:20) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_191]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_191]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_191]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_191]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+
+2019-02-26 14:00:27.866  WARN 8036 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+2019-02-26 14:00:27.873  INFO 8036 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service Tomcat
+2019-02-26 14:00:27.899  WARN 8036 --- [restartedMain] o.s.boot.SpringApplication               : Error handling failed (Error creating bean with name 'delegatingApplicationListener' defined in class path resource [org/springframework/security/config/annotation/web/configuration/WebSecurityConfiguration.class]: BeanPostProcessor before instantiation of bean failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'metaDataSourceAdvisor': Cannot resolve reference to bean 'methodSecurityMetadataSource' while setting constructor argument; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration': Initialization of bean failed; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'org.springframework.context.annotation.ConfigurationClassPostProcessor.importRegistry' available)
+2019-02-26 14:00:27.907 ERROR 8036 --- [restartedMain] o.s.boot.SpringApplication               : Application startup failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/springframework/boot/autoconfigure/liquibase/LiquibaseAutoConfiguration$LiquibaseConfiguration.class]: Invocation of init method failed; nested exception is liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1628) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:483) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:296) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1081) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:856) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:542) ~[spring-context-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:122) ~[spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:737) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:370) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:314) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1162) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1151) [spring-boot-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+	at org.wickedsource.coderadar.CoderadarApplication.main(CoderadarApplication.java:20) [main/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_191]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_191]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_191]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[na:1.8.0_191]
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:49) [spring-boot-devtools-1.5.2.RELEASE.jar:1.5.2.RELEASE]
+Caused by: liquibase.exception.DatabaseException: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:390) ~[liquibase-core-3.5.3.jar:na]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1687) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1624) ~[spring-beans-4.3.7.RELEASE.jar:4.3.7.RELEASE]
+	... 23 common frames omitted
+Caused by: org.postgresql.util.PSQLException: FATAL: Datenbank »coderadar« existiert nicht (pgjdbc: autodetected server-encoding to be ISO8859_1, if the message is not readable, please check database logs and/or host, port, dbname, user, password, pg_hba.conf)
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2455) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.readStartupMessages(QueryExecutorImpl.java:2586) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.QueryExecutorImpl.<init>(QueryExecutorImpl.java:113) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:222) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:52) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.jdbc.PgConnection.<init>(PgConnection.java:216) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.makeConnection(Driver.java:404) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.postgresql.Driver.connect(Driver.java:272) ~[postgresql-9.4.1212.jar:9.4.1212]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connectUsingDriver(PooledConnection.java:310) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.PooledConnection.connect(PooledConnection.java:203) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.createConnection(ConnectionPool.java:732) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.borrowConnection(ConnectionPool.java:664) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.init(ConnectionPool.java:479) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.ConnectionPool.<init>(ConnectionPool.java:154) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.pCreatePool(DataSourceProxy.java:118) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.createPool(DataSourceProxy.java:107) ~[tomcat-jdbc-8.5.9.jar:na]
+	at org.apache.tomcat.jdbc.pool.DataSourceProxy.getConnection(DataSourceProxy.java:131) ~[tomcat-jdbc-8.5.9.jar:na]
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:385) ~[liquibase-core-3.5.3.jar:na]
+	... 25 common frames omitted
+
+2019-02-26 14:01:16.507  INFO 12084 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Starting CoderadarApplication on de-adn-fjrytc2 with PID 12084 (C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core\build\classes\java\main started by kkrause in C:\Users\kkrause\Desktop\coderadar\hateoas\coderadar\coderadar-server\coderadar-core)
+2019-02-26 14:01:16.510 DEBUG 12084 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Running with Spring Boot v1.5.2.RELEASE, Spring v4.3.7.RELEASE
+2019-02-26 14:01:16.510  INFO 12084 --- [restartedMain] o.w.coderadar.CoderadarApplication       : No active profile set, falling back to default profiles: default
+2019-02-26 14:01:16.660  INFO 12084 --- [restartedMain] ationConfigEmbeddedWebApplicationContext : Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@241224d4: startup date [Tue Feb 26 14:01:16 CET 2019]; root of context hierarchy
+2019-02-26 14:01:22.991  WARN 12084 --- [restartedMain] o.s.c.a.ConfigurationClassEnhancer       : @Bean method CoderadarApplicationContextConfiguration.propertySourcesPlaceholderConfigurer is non-static and returns an object assignable to Spring's BeanFactoryPostProcessor interface. This will result in a failure to process annotations such as @Autowired, @Resource and @PostConstruct within the method's declaring @Configuration class. Add the 'static' modifier to this method to avoid these container lifecycle issues; see @Bean javadoc for complete details.
+2019-02-26 14:01:23.569  INFO 12084 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$bd21dbd7] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:01:23.662  INFO 12084 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$55cfa411] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:01:23.681  INFO 12084 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'objectPostProcessor' of type [org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:01:23.684  INFO 12084 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@6386db4d' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:01:23.705  INFO 12084 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$7aa446c3] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:01:23.722  INFO 12084 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:01:23.740  INFO 12084 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'commitMappingResourceProvider' of type [org.wickedsource.coderadar.commit.configuration.CommitMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:01:23.748  INFO 12084 --- [restartedMain] trationDelegate$BeanPostProcessorChecker : Bean 'metricValueMappingResourceProvider' of type [org.wickedsource.coderadar.metric.configuration.MetricValueMappingResourceProvider] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2019-02-26 14:01:24.996  INFO 12084 --- [restartedMain] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat initialized with port(s): 8080 (http)
+2019-02-26 14:01:25.019  INFO 12084 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service Tomcat
+2019-02-26 14:01:25.021  INFO 12084 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet Engine: Apache Tomcat/8.5.9
+2019-02-26 14:01:25.188  INFO 12084 --- [localhost-startStop-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2019-02-26 14:01:25.188  INFO 12084 --- [localhost-startStop-1] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 8532 ms
+2019-02-26 14:01:26.021  INFO 12084 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'metricsFilter' to: [/*]
+2019-02-26 14:01:26.022  INFO 12084 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'characterEncodingFilter' to: [/*]
+2019-02-26 14:01:26.025  INFO 12084 --- [localhost-startStop-1] .s.DelegatingFilterProxyRegistrationBean : Mapping filter: 'springSecurityFilterChain' to: [/*]
+2019-02-26 14:01:26.026  INFO 12084 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'webRequestLoggingFilter' to: [/*]
+2019-02-26 14:01:26.027  INFO 12084 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'corsFilter' to: [/*]
+2019-02-26 14:01:26.027  INFO 12084 --- [localhost-startStop-1] o.s.b.w.servlet.FilterRegistrationBean   : Mapping filter: 'applicationContextIdFilter' to: [/*]
+2019-02-26 14:01:26.031  INFO 12084 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'dispatcherServlet' to [/]
+2019-02-26 14:01:26.036  INFO 12084 --- [localhost-startStop-1] o.s.b.w.servlet.ServletRegistrationBean  : Mapping servlet: 'webServlet' to [/h2-console/*]
+2019-02-26 14:01:27.834  INFO 12084 --- [restartedMain] liquibase                                : Successfully acquired change log lock
+2019-02-26 14:01:29.264  INFO 12084 --- [restartedMain] liquibase                                : Reading from public.databasechangelog
+2019-02-26 14:01:29.374  INFO 12084 --- [restartedMain] liquibase                                : Successfully released change log lock
+2019-02-26 14:01:29.922  INFO 12084 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Building JPA container EntityManagerFactory for persistence unit 'default'
+2019-02-26 14:01:29.950  INFO 12084 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2019-02-26 14:01:30.063  INFO 12084 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate Core {5.2.3.Final}
+2019-02-26 14:01:30.066  INFO 12084 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2019-02-26 14:01:30.070  INFO 12084 --- [restartedMain] org.hibernate.cfg.Environment            : HHH000021: Bytecode provider name : javassist
+2019-02-26 14:01:30.141  INFO 12084 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.1.Final}
+2019-02-26 14:01:30.823  INFO 12084 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+2019-02-26 14:01:31.054  INFO 12084 --- [restartedMain] o.h.e.j.e.i.LobCreatorBuilderImpl        : HHH000424: Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+2019-02-26 14:01:31.590  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:31.593  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:31.593  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:31.596  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:31.596  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:31.597  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:31.597  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:31.598  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:31.599  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:31.602  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:31.603  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:31.604  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:31.605  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:31.606  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:31.606  WARN 12084 --- [restartedMain] org.hibernate.orm.deprecation            : HHH90000014: Found use of deprecated [org.hibernate.id.SequenceHiLoGenerator] sequence-based id generator; use org.hibernate.id.enhanced.SequenceStyleGenerator instead.  See Hibernate Domain Model Mapping Guide for details.
+2019-02-26 14:01:32.658  INFO 12084 --- [restartedMain] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2019-02-26 14:01:33.060  INFO 12084 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2019-02-26 14:01:33.763  INFO 12084 --- [restartedMain] o.w.c.a.service.AnalyzerPluginRegistry   : registered analyzer plugin class org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin
+2019-02-26 14:01:33.764  INFO 12084 --- [restartedMain] o.w.c.a.service.AnalyzerPluginRegistry   : registered analyzer plugin class org.wickedsource.coderadar.analyzer.loc.LocAnalyzerPlugin
+2019-02-26 14:01:35.377  WARN 12084 --- [restartedMain] figurationPropertiesBindingPostProcessor : The @ConfigurationProperties bean class org.wickedsource.coderadar.core.configuration.CoderadarConfiguration contains validation constraints but had not been annotated with @Validated.
+2019-02-26 14:01:35.445  WARN 12084 --- [restartedMain] figurationPropertiesBindingPostProcessor : The @ConfigurationProperties bean class org.wickedsource.coderadar.core.configuration.CoderadarConfiguration contains validation constraints but had not been annotated with @Validated.
+2019-02-26 14:01:35.446  WARN 12084 --- [restartedMain] figurationPropertiesBindingPostProcessor : The @ConfigurationProperties bean class org.wickedsource.coderadar.core.configuration.CoderadarConfiguration contains validation constraints but had not been annotated with @Validated.
+2019-02-26 14:01:35.556  INFO 12084 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.master is set to 'true'
+2019-02-26 14:01:35.557  INFO 12084 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.slave is set to 'true'
+2019-02-26 14:01:35.557  INFO 12084 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.workdir is set to 'coderadar-workdir'
+2019-02-26 14:01:35.557  INFO 12084 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.dateLocale is set to 'de_DE'
+2019-02-26 14:01:35.558  INFO 12084 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.scanIntervalInSeconds is set to '30'
+2019-02-26 14:01:35.558  INFO 12084 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.authentication.accessTokenDurationInMinutes is set to '15'
+2019-02-26 14:01:35.559  INFO 12084 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.authentication.refreshTokenDurationInMinutes is set to '86400'
+2019-02-26 14:01:35.559  INFO 12084 --- [restartedMain] o.w.c.c.c.CoderadarConfiguration         : coderadar.authentication.enabled is set to 'false'
+2019-02-26 14:01:38.135  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/analyzers],methods=[GET],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<java.util.List<org.wickedsource.coderadar.analyzer.rest.AnalyzerResource>> org.wickedsource.coderadar.analyzer.rest.AnalyzerController.listAnalyzers()
+2019-02-26 14:01:38.138  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/analyzers],methods=[POST]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationResource> org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationController.setAnalyzerConfiguration(java.lang.Long,org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationResource)
+2019-02-26 14:01:38.139  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/analyzers/{analyzerConfigurationId}],methods=[POST]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationResource> org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationController.updateAnalyzerConfiguration(java.lang.Long,java.lang.Long,org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationResource)
+2019-02-26 14:01:38.142  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/analyzers],methods=[GET],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<java.util.List<org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationResource>> org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationController.getAnalyzerConfigurationsForProject(java.lang.Long)
+2019-02-26 14:01:38.143  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/analyzers/{analyzerConfigurationId}],methods=[GET]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationResource> org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationController.getSingleAnalyzerConfigurationForProject(java.lang.Long,java.lang.Long)
+2019-02-26 14:01:38.144  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/analyzers/{analyzerConfigurationId}],methods=[DELETE]}" onto public org.springframework.http.ResponseEntity<java.lang.String> org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationController.deleteAnalyzerConfigurationFromProject(java.lang.Long,java.lang.Long)
+2019-02-26 14:01:38.146  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/analyzers/{analyzerConfigurationId}/file],methods=[POST]}" onto public org.springframework.http.ResponseEntity<java.lang.String> org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationFileController.uploadConfigurationFile(java.lang.Long,java.lang.Long,org.springframework.web.multipart.MultipartFile)
+2019-02-26 14:01:38.147  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/analyzers/{analyzerConfigurationId}/file],methods=[GET]}" onto public org.springframework.http.ResponseEntity<org.springframework.core.io.ByteArrayResource> org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationFileController.downloadConfigurationFile(java.lang.Long,java.lang.Long)
+2019-02-26 14:01:38.148  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/analyzingJob],methods=[POST]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.analyzingjob.rest.AnalyzingJobResource> org.wickedsource.coderadar.analyzingjob.rest.AnalyzingJobController.setAnalyzingJob(java.lang.Long,org.wickedsource.coderadar.analyzingjob.rest.AnalyzingJobResource)
+2019-02-26 14:01:38.149  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/analyzingJob],methods=[GET]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.analyzingjob.rest.AnalyzingJobResource> org.wickedsource.coderadar.analyzingjob.rest.AnalyzingJobController.getAnalyzingJob(java.lang.Long)
+2019-02-26 14:01:38.150  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/commits],methods=[GET],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<java.util.List<org.wickedsource.coderadar.commit.rest.CommitResource>> org.wickedsource.coderadar.commit.rest.CommitController.listCommits(long)
+2019-02-26 14:01:38.152  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/files],methods=[POST]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.filepattern.rest.FilePatternResource> org.wickedsource.coderadar.filepattern.rest.FilePatternController.setFilePatterns(java.lang.Long,org.wickedsource.coderadar.filepattern.rest.FilePatternResource)
+2019-02-26 14:01:38.153  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/files],methods=[GET]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.filepattern.rest.FilePatternResource> org.wickedsource.coderadar.filepattern.rest.FilePatternController.getFilePatterns(java.lang.Long)
+2019-02-26 14:01:38.155  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/metrics],methods=[GET],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<java.util.List<org.wickedsource.coderadar.metric.rest.MetricResource>> org.wickedsource.coderadar.metric.rest.MetricsController.listMetrics(java.lang.Long)
+2019-02-26 14:01:38.163  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/metricvalues/history],methods=[GET || POST],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.metricquery.rest.commit.metric.MetricValueHistoryResource> org.wickedsource.coderadar.metricquery.rest.commit.metric.CommitMetricValuesController.queryMetricsHistory(java.lang.Long,org.wickedsource.coderadar.metricquery.rest.commit.metric.CommitMetricsHistoryQuery)
+2019-02-26 14:01:38.163  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/metricvalues/perCommit],methods=[GET || POST],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.metricquery.rest.commit.metric.CommitMetricsResource> org.wickedsource.coderadar.metricquery.rest.commit.metric.CommitMetricValuesController.queryMetrics(java.lang.Long,org.wickedsource.coderadar.metricquery.rest.commit.metric.CommitMetricsQuery)
+2019-02-26 14:01:38.164  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/profileratings/perCommit],methods=[GET || POST],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.metricquery.rest.commit.profilerating.CommitProfileRatingsOutputResource> org.wickedsource.coderadar.metricquery.rest.commit.profilerating.CommitProfileRatingsController.queryProfileRatings(java.lang.Long,org.wickedsource.coderadar.metricquery.rest.commit.profilerating.CommitProfileRatingsQuery)
+2019-02-26 14:01:38.166  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/metricvalues/deltaTree],methods=[GET || POST],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.metricquery.rest.tree.MetricsTreeResource> org.wickedsource.coderadar.metricquery.rest.tree.MetricsTreeController.queryMetricsDelta(java.lang.Long,org.wickedsource.coderadar.metricquery.rest.tree.delta.DeltaTreeQuery)
+2019-02-26 14:01:38.166  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/metricvalues/tree],methods=[GET || POST],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.metricquery.rest.tree.MetricsTreeResource> org.wickedsource.coderadar.metricquery.rest.tree.MetricsTreeController.queryMetricsForSingleCommit(java.lang.Long,org.wickedsource.coderadar.metricquery.rest.tree.MetricsTreeQuery)
+2019-02-26 14:01:38.168  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/modules/{moduleId}],methods=[GET]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.module.rest.ModuleResource> org.wickedsource.coderadar.module.rest.ModuleController.getModule(java.lang.Long,java.lang.Long)
+2019-02-26 14:01:38.169  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/modules/{moduleId}],methods=[DELETE]}" onto public org.springframework.http.ResponseEntity<java.lang.String> org.wickedsource.coderadar.module.rest.ModuleController.deleteModule(java.lang.Long,java.lang.Long)
+2019-02-26 14:01:38.169  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/modules],methods=[POST]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.module.rest.ModuleResource> org.wickedsource.coderadar.module.rest.ModuleController.createModule(org.wickedsource.coderadar.module.rest.ModuleResource,java.lang.Long)
+2019-02-26 14:01:38.170  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/modules/{moduleId}],methods=[POST]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.module.rest.ModuleResource> org.wickedsource.coderadar.module.rest.ModuleController.updateModule(org.wickedsource.coderadar.module.rest.ModuleResource,java.lang.Long,java.lang.Long)
+2019-02-26 14:01:38.172  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/modules],methods=[GET]}" onto public org.springframework.http.ResponseEntity<java.util.List<org.wickedsource.coderadar.module.rest.ModuleResource>> org.wickedsource.coderadar.module.rest.ModuleController.listModules(long)
+2019-02-26 14:01:38.176  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{id}],methods=[GET]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.project.rest.ProjectResource> org.wickedsource.coderadar.project.rest.ProjectController.getProject(java.lang.Long)
+2019-02-26 14:01:38.177  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{id}],methods=[DELETE]}" onto public org.springframework.http.ResponseEntity<java.lang.String> org.wickedsource.coderadar.project.rest.ProjectController.deleteProject(java.lang.Long)
+2019-02-26 14:01:38.178  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects],methods=[POST]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.project.rest.ProjectResource> org.wickedsource.coderadar.project.rest.ProjectController.createProject(org.wickedsource.coderadar.project.rest.ProjectResource)
+2019-02-26 14:01:38.178  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{id}],methods=[POST]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.project.rest.ProjectResource> org.wickedsource.coderadar.project.rest.ProjectController.updateProject(org.wickedsource.coderadar.project.rest.ProjectResource,java.lang.Long)
+2019-02-26 14:01:38.179  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects],methods=[GET],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<java.util.List<org.wickedsource.coderadar.project.rest.ProjectResource>> org.wickedsource.coderadar.project.rest.ProjectController.getProjects()
+2019-02-26 14:01:38.181  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/qualityprofiles/{profileId}],methods=[DELETE],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<java.lang.String> org.wickedsource.coderadar.qualityprofile.rest.QualityProfileController.deleteQualityProfile(java.lang.Long,java.lang.Long)
+2019-02-26 14:01:38.182  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/qualityprofiles],methods=[POST],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.qualityprofile.rest.QualityProfileResource> org.wickedsource.coderadar.qualityprofile.rest.QualityProfileController.createQualityProfile(org.wickedsource.coderadar.qualityprofile.rest.QualityProfileResource,java.lang.Long)
+2019-02-26 14:01:38.183  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/qualityprofiles/{profileId}],methods=[GET],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.qualityprofile.rest.QualityProfileResource> org.wickedsource.coderadar.qualityprofile.rest.QualityProfileController.getQualityProfile(java.lang.Long,java.lang.Long)
+2019-02-26 14:01:38.184  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/qualityprofiles],methods=[GET],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<java.util.List<org.wickedsource.coderadar.qualityprofile.rest.QualityProfileResource>> org.wickedsource.coderadar.qualityprofile.rest.QualityProfileController.listQualityProfiles(long)
+2019-02-26 14:01:38.185  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/projects/{projectId}/qualityprofiles/{profileId}],methods=[POST],produces=[application/hal+json]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.qualityprofile.rest.QualityProfileResource> org.wickedsource.coderadar.qualityprofile.rest.QualityProfileController.updateQualityProfile(org.wickedsource.coderadar.qualityprofile.rest.QualityProfileResource,java.lang.Long,java.lang.Long)
+2019-02-26 14:01:38.187  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/user/registration],methods=[POST]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.user.domain.UserResource> org.wickedsource.coderadar.user.rest.UserController.register(org.wickedsource.coderadar.user.domain.UserRegistrationDataResource)
+2019-02-26 14:01:38.188  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/user/refresh],methods=[POST]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.security.domain.AccessTokenResource> org.wickedsource.coderadar.user.rest.UserController.refresh(org.wickedsource.coderadar.security.domain.RefreshTokenResource)
+2019-02-26 14:01:38.188  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/user/auth],methods=[POST]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.security.domain.InitializeTokenResource> org.wickedsource.coderadar.user.rest.UserController.login(org.wickedsource.coderadar.user.domain.UserLoginResource)
+2019-02-26 14:01:38.189  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/user/{userId}],methods=[GET]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.user.domain.UserResource> org.wickedsource.coderadar.user.rest.UserController.getUser(java.lang.Long)
+2019-02-26 14:01:38.189  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/user/password/change],methods=[POST]}" onto public org.springframework.http.ResponseEntity<org.wickedsource.coderadar.security.domain.ChangePasswordResponseResource> org.wickedsource.coderadar.user.rest.UserController.changePassword(org.wickedsource.coderadar.security.domain.PasswordChangeResource)
+2019-02-26 14:01:38.195  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2019-02-26 14:01:38.196  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2019-02-26 14:01:38.584  INFO 12084 --- [restartedMain] s.w.s.m.m.a.RequestMappingHandlerAdapter : Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@241224d4: startup date [Tue Feb 26 14:01:16 CET 2019]; root of context hierarchy
+2019-02-26 14:01:38.702  INFO 12084 --- [restartedMain] .m.m.a.ExceptionHandlerExceptionResolver : Detected @ExceptionHandler methods in controllerExceptionHandler
+2019-02-26 14:01:39.551  INFO 12084 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: org.springframework.security.web.util.matcher.AnyRequestMatcher@1, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@23d5afdd, org.springframework.security.web.context.SecurityContextPersistenceFilter@55fb7798, org.springframework.security.web.header.HeaderWriterFilter@46741f44, org.springframework.security.web.authentication.logout.LogoutFilter@2801f7c0, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@474a51c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@614790e3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5ea015ee, org.springframework.security.web.session.SessionManagementFilter@7d5116be, org.springframework.security.web.access.ExceptionTranslationFilter@ac35383]
+2019-02-26 14:01:39.666  INFO 12084 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: Ant [pattern='/h2-console/**'], [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@e1b1abd, org.springframework.security.web.context.SecurityContextPersistenceFilter@6ab33817, org.springframework.security.web.header.HeaderWriterFilter@3ee8be4d, org.springframework.security.web.authentication.logout.LogoutFilter@30602fd, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@1d6eca37, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3c4b0047, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@47aadb55, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@f9dacc8, org.springframework.security.web.session.SessionManagementFilter@4590e641, org.springframework.security.web.access.ExceptionTranslationFilter@61b6f31d, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@3d078006]
+2019-02-26 14:01:39.679  INFO 12084 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration$LazyEndpointPathRequestMatcher@35070654, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6029dc3b, org.springframework.security.web.context.SecurityContextPersistenceFilter@1c3861db, org.springframework.security.web.header.HeaderWriterFilter@d6f0e11, org.springframework.security.web.authentication.logout.LogoutFilter@5a60e490, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@c44b2bc, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@74ca2419, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@120a317, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3fe47df9, org.springframework.security.web.session.SessionManagementFilter@3e3ca4ff, org.springframework.security.web.access.ExceptionTranslationFilter@3cba9419, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@306dfff8]
+2019-02-26 14:01:41.490  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/autoconfig || /autoconfig.json],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2019-02-26 14:01:41.492  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/dump || /dump.json],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2019-02-26 14:01:41.493  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/configprops || /configprops.json],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2019-02-26 14:01:41.497  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/mappings || /mappings.json],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2019-02-26 14:01:41.498  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/metrics/{name:.*}],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.MetricsMvcEndpoint.value(java.lang.String)
+2019-02-26 14:01:41.498  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/metrics || /metrics.json],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2019-02-26 14:01:41.500  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/logfile || /logfile.json],methods=[GET || HEAD]}" onto public void org.springframework.boot.actuate.endpoint.mvc.LogFileMvcEndpoint.invoke(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse) throws javax.servlet.ServletException,java.io.IOException
+2019-02-26 14:01:41.502  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/prometheus || /prometheus.json],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2019-02-26 14:01:41.503  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/trace || /trace.json],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2019-02-26 14:01:41.505  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/health || /health.json],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.HealthMvcEndpoint.invoke(javax.servlet.http.HttpServletRequest,java.security.Principal)
+2019-02-26 14:01:41.506  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/info || /info.json],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2019-02-26 14:01:41.508  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/loggers/{name:.*}],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.LoggersMvcEndpoint.get(java.lang.String)
+2019-02-26 14:01:41.509  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/loggers/{name:.*}],methods=[POST],consumes=[application/vnd.spring-boot.actuator.v1+json || application/json],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.LoggersMvcEndpoint.set(java.lang.String,java.util.Map<java.lang.String, java.lang.String>)
+2019-02-26 14:01:41.510  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/loggers || /loggers.json],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2019-02-26 14:01:41.515  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/beans || /beans.json],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2019-02-26 14:01:41.517  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/liquibase || /liquibase.json],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2019-02-26 14:01:41.518  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/auditevents || /auditevents.json],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public org.springframework.http.ResponseEntity<?> org.springframework.boot.actuate.endpoint.mvc.AuditEventsMvcEndpoint.findByPrincipalAndAfterAndType(java.lang.String,java.util.Date,java.lang.String)
+2019-02-26 14:01:41.520  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/heapdump || /heapdump.json],methods=[GET],produces=[application/octet-stream]}" onto public void org.springframework.boot.actuate.endpoint.mvc.HeapdumpMvcEndpoint.invoke(boolean,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse) throws java.io.IOException,javax.servlet.ServletException
+2019-02-26 14:01:41.521  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/env/{name:.*}],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EnvironmentMvcEndpoint.value(java.lang.String)
+2019-02-26 14:01:41.522  INFO 12084 --- [restartedMain] o.s.b.a.e.mvc.EndpointHandlerMapping     : Mapped "{[/env || /env.json],methods=[GET],produces=[application/vnd.spring-boot.actuator.v1+json || application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+2019-02-26 14:01:42.043  INFO 12084 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2019-02-26 14:01:42.249  INFO 12084 --- [restartedMain] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2019-02-26 14:01:42.273  INFO 12084 --- [restartedMain] o.s.c.support.DefaultLifecycleProcessor  : Starting beans in phase 0
+2019-02-26 14:01:42.520  INFO 12084 --- [restartedMain] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2019-02-26 14:01:42.689  INFO 12084 --- [restartedMain] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 8080 (http)
+2019-02-26 14:01:42.701  INFO 12084 --- [restartedMain] o.w.coderadar.CoderadarApplication       : Started CoderadarApplication in 28.004 seconds (JVM running for 29.042)
+2019-02-26 14:01:58.238  INFO 12084 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring FrameworkServlet 'dispatcherServlet'
+2019-02-26 14:01:58.240  INFO 12084 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization started
+2019-02-26 14:01:58.335  INFO 12084 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : FrameworkServlet 'dispatcherServlet': initialization completed in 95 ms
