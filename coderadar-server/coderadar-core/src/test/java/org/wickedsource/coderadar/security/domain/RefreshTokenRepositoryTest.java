@@ -3,8 +3,9 @@ package org.wickedsource.coderadar.security.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import java.util.Optional;
 import javax.transaction.Transactional;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.factories.databases.DbUnitFactory;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
@@ -18,9 +19,9 @@ public class RefreshTokenRepositoryTest extends IntegrationTestTemplate {
   @Test
   @DatabaseSetup(DbUnitFactory.RefreshTokens.REFRESH_TOKENS)
   public void load() throws Exception {
-    RefreshToken refreshToken = repository.findOne(100L);
-    assertThat(refreshToken).isNotNull();
-    User user = refreshToken.getUser();
+    Optional<RefreshToken> refreshToken = repository.findById(100L);
+    assertThat(refreshToken.isPresent()).isTrue();
+    User user = refreshToken.get().getUser();
     assertThat(user).isNotNull();
     assertThat(user.getUsername()).isEqualTo("radar");
   }

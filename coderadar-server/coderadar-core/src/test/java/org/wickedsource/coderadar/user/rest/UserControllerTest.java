@@ -16,9 +16,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import java.util.Date;
+import java.util.Optional;
 import org.joda.time.DateTime;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
@@ -26,14 +27,12 @@ import org.wickedsource.coderadar.factories.databases.DbUnitFactory;
 import org.wickedsource.coderadar.security.TokenType;
 import org.wickedsource.coderadar.security.domain.*;
 import org.wickedsource.coderadar.security.service.SecretKeyService;
-import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 import org.wickedsource.coderadar.user.domain.UserLoginResource;
 import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.user.domain.UserRepository;
 import org.wickedsource.coderadar.user.domain.UserResource;
 
-@Category(ControllerTest.class)
 public class UserControllerTest extends ControllerTestTemplate {
 
   @Autowired private UserRepository userRepository;
@@ -147,9 +146,10 @@ public class UserControllerTest extends ControllerTestTemplate {
     String refreshToken = createRefreshToken();
 
     // save valid refresh token
-    RefreshToken refreshTokenEntity = refreshTokenRepository.findOne(100L);
-    refreshTokenEntity.setToken(refreshToken);
-    refreshTokenRepository.save(refreshTokenEntity);
+    Optional<RefreshToken> refreshTokenEntity = refreshTokenRepository.findById(100L);
+    Assertions.assertTrue(refreshTokenEntity.isPresent());
+    refreshTokenEntity.get().setToken(refreshToken);
+    refreshTokenRepository.save(refreshTokenEntity.get());
 
     RefreshTokenResource refreshTokenResource =
         new RefreshTokenResource(expiredAccessToken, refreshToken);
@@ -170,9 +170,11 @@ public class UserControllerTest extends ControllerTestTemplate {
     // we need to create token here to pass the validation with the current key
     String refreshToken = createRefreshToken();
     // save valid refresh token
-    RefreshToken refreshTokenEntity = refreshTokenRepository.findOne(100L);
-    refreshTokenEntity.setToken(refreshToken);
-    refreshTokenRepository.save(refreshTokenEntity);
+    Optional<RefreshToken> refreshTokenEntity = refreshTokenRepository.findById(100L);
+    Assertions.assertTrue(refreshTokenEntity.isPresent());
+
+    refreshTokenEntity.get().setToken(refreshToken);
+    refreshTokenRepository.save(refreshTokenEntity.get());
 
     PasswordChangeResource passwordChangeResource =
         passwordChangeResource().passwordChangeResource();

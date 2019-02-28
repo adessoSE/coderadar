@@ -21,7 +21,7 @@ import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfiguration;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationFile;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationFileRepository;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationRepository;
-import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
+import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
 import org.wickedsource.coderadar.core.rest.validation.ValidationException;
 
 @Controller

@@ -1,7 +1,7 @@
 package org.wickedsource.coderadar.analyzer.loc;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.coderadar.analyzer.api.AnalyzerFileFilter;
 
 public class LocAnalyzerPluginFilterTest {
@@ -10,8 +10,8 @@ public class LocAnalyzerPluginFilterTest {
   public void filterAcceptsTheCorrectFiles() {
     AnalyzerFileFilter filter = new LocAnalyzerFileFilter();
 
-    Assert.assertTrue(filter.acceptFilename("Testfile.java"));
-    Assert.assertFalse(filter.acceptFilename("Testfile.txt"));
-    Assert.assertFalse(filter.acceptFilename("Testfile"));
+    Assertions.assertTrue(filter.acceptFilename("Testfile.java"));
+    Assertions.assertFalse(filter.acceptFilename("Testfile.txt"));
+    Assertions.assertFalse(filter.acceptFilename("Testfile"));
   }
 }

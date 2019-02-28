@@ -4,11 +4,14 @@ apply plugin: "com.diffplug.gradle.spotless"
 dependencies {
     compile project(":coderadar-server:coderadar-graph:coderadar-graph-api")
     compile "org.springframework.boot:spring-boot-starter-data-neo4j:${version_spring_boot}"
-    runtime "org.neo4j:neo4j:3.1.0"
+    runtime "org.neo4j:neo4j:3.2.9"
     testCompile "org.springframework.boot:spring-boot-starter-test:${version_spring_boot}"
-    testCompile "org.neo4j:neo4j-ogm-embedded-driver:2.1.1"
-    testCompile "junit:junit:4.12"
+    testCompile "org.neo4j:neo4j-ogm-embedded-driver:3.1.6"
     testCompile "org.assertj:assertj-core:3.5.1"
+
+    configurations.all {
+        exclude(group: 'junit', module: 'junit')
+    }
 }
 
 spotless {

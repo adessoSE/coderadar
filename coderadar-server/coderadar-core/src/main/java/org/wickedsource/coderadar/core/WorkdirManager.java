@@ -1,8 +1,10 @@
 package org.wickedsource.coderadar.core;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
 import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
@@ -29,10 +31,14 @@ public class WorkdirManager {
    * @return path to the local GIT repository of the specified project.
    */
   public Path getLocalGitRoot(Long projectId) {
-    Project project = projectRepository.findOne(projectId);
-    Path workdir = config.getWorkdir().resolve("projects/" + project.getWorkdirName());
-    createDirIfNecessary(workdir);
-    return workdir;
+    Optional<Project> project = projectRepository.findById(projectId);
+    if (project.isPresent()) {
+      Path workdir = config.getWorkdir().resolve("projects/" + project.get().getWorkdirName());
+      createDirIfNecessary(workdir);
+      return workdir;
+    } else {
+      throw new ResourceNotFoundException("Project with id:" + projectId + " not found");
+    }
   }
 
   private void createDirIfNecessary(Path workdir) {

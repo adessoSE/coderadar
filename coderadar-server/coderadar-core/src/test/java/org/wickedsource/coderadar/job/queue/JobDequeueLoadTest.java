@@ -4,10 +4,11 @@ import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Proje
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.job;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,10 @@ public class JobDequeueLoadTest extends IntegrationTestTemplate {
   @DatabaseSetup(SINGLE_PROJECT)
   public void loadTestDequeueJob() throws InterruptedException {
     for (int i = 0; i < 100; i++) {
-      Project project = projectRepository.findOne(1L);
+      Optional<Project> project = projectRepository.findById(1L);
       ScanCommitsJob job = job().waitingPullJob();
       job.setId(null);
-      job.setProject(project);
+      job.setProject(project.get());
       repository.save(job);
     }
 

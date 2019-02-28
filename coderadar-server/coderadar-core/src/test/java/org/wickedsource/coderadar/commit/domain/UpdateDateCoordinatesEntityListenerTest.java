@@ -2,7 +2,8 @@ package org.wickedsource.coderadar.commit.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.factories.entities.EntityFactory;
 import org.wickedsource.coderadar.project.domain.Project;
@@ -23,7 +24,9 @@ public class UpdateDateCoordinatesEntityListenerTest extends IntegrationTestTemp
     commit.setProject(project);
     Commit savedCommit = commitRepository.save(commit);
 
-    Commit loadedCommit = commitRepository.findOne(savedCommit.getId());
+    Optional<Commit> loadedCommitOptional = commitRepository.findById(savedCommit.getId());
+    assertThat(loadedCommitOptional.isPresent()).isTrue();
+    Commit loadedCommit = loadedCommitOptional.get();
     assertThat(loadedCommit.getDateCoordinates()).isNotNull();
     assertThat(loadedCommit.getDateCoordinates().getDayOfMonth()).isNotNull();
     assertThat(loadedCommit.getDateCoordinates().getYear()).isNotNull();

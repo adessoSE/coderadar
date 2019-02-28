@@ -10,11 +10,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.apache.commons.io.FileUtils;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
@@ -29,7 +25,6 @@ import org.wickedsource.coderadar.job.LocalGitRepositoryManager;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
-import org.wickedsource.coderadar.testframework.category.IntegrationTest;
 import org.wickedsource.coderadar.testframework.template.GitTestTemplate;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryChecker;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryCloner;
@@ -58,7 +53,7 @@ public class CommitMetadataScannerIntegrationTest extends GitTestTemplate {
 
   @Mock private MetricRegistry metricRegistry;
 
-  @Before
+  @BeforeEach
   public void setup() {
     MockitoAnnotations.initMocks(this);
     mock(workdirManager);
@@ -67,7 +62,7 @@ public class CommitMetadataScannerIntegrationTest extends GitTestTemplate {
     updater = new LocalGitRepositoryManager(gitUpdater, gitCloner, gitChecker, workdirManager);
   }
 
-  @After
+  @AfterEach
   public void cleanup() {
     try {
       if (!Boolean.valueOf(System.getProperty("coderadar.keepTempFiles"))) {
@@ -79,7 +74,7 @@ public class CommitMetadataScannerIntegrationTest extends GitTestTemplate {
   }
 
   @Test
-  @Category(IntegrationTest.class)
+  @Tag("IntegrationTest")
   public void scan() {
     Project project = project().validProject();
     Profiler profiler = new Profiler("Scanner");
@@ -87,14 +82,15 @@ public class CommitMetadataScannerIntegrationTest extends GitTestTemplate {
     when(metricRegistry.meter(anyString())).thenReturn(new Meter());
     CommitMetadataScanner scanner =
         new CommitMetadataScanner(commitRepository, updater, metricRegistry);
-    when(projectRepository.findOne(project.getId())).thenReturn(createProject());
+    when(projectRepository.findById(project.getId()))
+        .thenReturn(java.util.Optional.ofNullable(createProject()));
     profiler.start("scanning without local repository present");
     File repoRoot = scanner.scan(project).getParentFile();
-    Assert.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
+    Assertions.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
     // scanning again should be fairly quick, since the repository is already cloned
     profiler.start("re-scanning with local repository present from last test");
     scanner.scan(project);
-    Assert.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
+    Assertions.assertTrue(gitChecker.isRepository(repoRoot.toPath()));
 
     verify(commitRepository, atLeast(20)).save(any(Commit.class));
     profiler.stop().log();

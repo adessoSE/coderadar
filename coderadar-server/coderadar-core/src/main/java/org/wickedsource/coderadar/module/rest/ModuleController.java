@@ -1,5 +1,6 @@
 package org.wickedsource.coderadar.module.rest;
 
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
+import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
 import org.wickedsource.coderadar.core.rest.validation.UserException;
 import org.wickedsource.coderadar.module.domain.Module;
 import org.wickedsource.coderadar.module.domain.ModuleRepository;
@@ -110,12 +111,12 @@ public class ModuleController {
   public ResponseEntity<String> deleteModule(
       @PathVariable Long moduleId, @PathVariable Long projectId) {
     projectVerifier.checkProjectExistsOrThrowException(projectId);
-    Module module = moduleRepository.findOne(moduleId);
-    if (module == null) {
+    Optional<Module> module = moduleRepository.findById(moduleId);
+    if (!module.isPresent()) {
       throw new ResourceNotFoundException();
     }
-    moduleAssociationService.disassociate(module);
-    moduleRepository.delete(module);
+    moduleAssociationService.disassociate(module.get());
+    moduleRepository.delete(module.get());
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }
