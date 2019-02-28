@@ -11,16 +11,17 @@ import com.auth0.jwt.exceptions.SignatureVerificationException;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import org.joda.time.DateTime;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
 import org.wickedsource.coderadar.security.TokenType;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 public class TokenServiceTest {
 
   public static final byte[] KEY = "symmetric key to sign and verify".getBytes();
@@ -31,7 +32,7 @@ public class TokenServiceTest {
 
   @Mock private SecretKeyService secretKeyService;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     SecretKey secretKey = mock(SecretKey.class);
     when(secretKey.getEncoded()).thenReturn(KEY);
@@ -46,19 +47,24 @@ public class TokenServiceTest {
     JWT.require(Algorithm.HMAC256(KEY)).build().verify(token);
   }
 
-  @Test(expected = InvalidClaimException.class)
+  @Test
   public void verifyTokenFails() throws Exception {
     Date expireDate = DateTime.now().minusMinutes(1).toDate();
     String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
-    JWT.require(Algorithm.HMAC256(KEY)).build().verify(token);
+    Assertions.assertThrows(
+        InvalidClaimException.class,
+        () -> JWT.require(Algorithm.HMAC256(KEY)).build().verify(token));
   }
 
-  @Test(expected = SignatureVerificationException.class)
+  @Test
   public void verifyTokenSignatureFails() throws Exception {
     Date expireDate = DateTime.now().minusMinutes(1).toDate();
     String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
     token = token.concat("add string");
-    JWT.require(Algorithm.HMAC256(KEY)).build().verify(token);
+    String finalToken = token;
+    Assertions.assertThrows(
+        SignatureVerificationException.class,
+        () -> JWT.require(Algorithm.HMAC256(KEY)).build().verify(finalToken));
   }
 
   @Test
@@ -77,12 +83,14 @@ public class TokenServiceTest {
     assertThat(result).isFalse();
   }
 
-  @Test(expected = SignatureVerificationException.class)
+  @Test
   public void tokenNotExpiredAndSignatureNotValid() throws Exception {
     Date expireDate = DateTime.now().plusMinutes(5).toDate();
     String token = tokenService.generateToken(1L, "user", expireDate, TokenType.ACCESS);
     token = token.concat("invalid");
-    tokenService.isExpired(token);
+    String finalToken = token;
+    Assertions.assertThrows(
+        SignatureVerificationException.class, () -> tokenService.isExpired(finalToken));
   }
 
   @Test

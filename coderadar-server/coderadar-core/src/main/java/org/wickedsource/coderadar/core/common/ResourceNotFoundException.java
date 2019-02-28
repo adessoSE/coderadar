@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.core.rest.validation;
+package org.wickedsource.coderadar.core.common;
 
 public class ResourceNotFoundException extends RuntimeException {
 

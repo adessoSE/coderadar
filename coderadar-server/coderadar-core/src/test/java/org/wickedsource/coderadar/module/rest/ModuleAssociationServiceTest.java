@@ -4,7 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Modules.MODULE_ASSOCIATION;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import org.junit.Test;
+import java.util.Optional;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.wickedsource.coderadar.commit.domain.*;
@@ -54,11 +56,16 @@ public class ModuleAssociationServiceTest extends IntegrationTestTemplate {
   @Test
   @DatabaseSetup(MODULE_ASSOCIATION)
   public void associateFileToModules() {
-    Commit commit = commitRepository.findOne(1L);
-    File file = fileRepository.findOne(4L);
-    CommitToFileAssociation ctf =
-        commitToFileAssociationRepository.findOne(new CommitToFileId(commit, file));
-    CommitToFileAssociatedEvent event = new CommitToFileAssociatedEvent(ctf);
+    Optional<Commit> commit = commitRepository.findById(1L);
+    Optional<File> file = fileRepository.findById(4L);
+    Assertions.assertTrue(commit.isPresent());
+    Assertions.assertTrue(file.isPresent());
+
+    Optional<CommitToFileAssociation> ctf =
+        commitToFileAssociationRepository.findById(new CommitToFileId(commit.get(), file.get()));
+    Assertions.assertTrue(ctf.isPresent());
+
+    CommitToFileAssociatedEvent event = new CommitToFileAssociatedEvent(ctf.get());
     moduleAssociationService.associate(event);
 
     // the file should be associated with modules "server" (5), "server/module1" (1) and
@@ -75,11 +82,16 @@ public class ModuleAssociationServiceTest extends IntegrationTestTemplate {
   @Test
   @DatabaseSetup(MODULE_ASSOCIATION)
   public void associateFileToModulesWithSimilarNames() {
-    Commit commit = commitRepository.findOne(1L);
-    File file = fileRepository.findOne(6L);
-    CommitToFileAssociation ctf =
-        commitToFileAssociationRepository.findOne(new CommitToFileId(commit, file));
-    CommitToFileAssociatedEvent event = new CommitToFileAssociatedEvent(ctf);
+    Optional<Commit> commit = commitRepository.findById(1L);
+    Optional<File> file = fileRepository.findById(6L);
+    Assertions.assertTrue(commit.isPresent());
+    Assertions.assertTrue(file.isPresent());
+
+    Optional<CommitToFileAssociation> ctf =
+        commitToFileAssociationRepository.findById(new CommitToFileId(commit.get(), file.get()));
+    Assertions.assertTrue(ctf.isPresent());
+
+    CommitToFileAssociatedEvent event = new CommitToFileAssociatedEvent(ctf.get());
     moduleAssociationService.associate(event);
 
     // the file should be associated with modules "server2" only and NOT with module "server"

@@ -8,3 +8,5 @@
 !/gradle/wrapper/gradle-wrapper.jar
 build
 coderadar-server/local.application.properties
+*.class
+/classes

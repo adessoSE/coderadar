@@ -5,18 +5,20 @@ import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.Optional;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
 import org.wickedsource.coderadar.user.domain.User;
 import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.user.domain.UserRepository;
 import org.wickedsource.coderadar.user.service.RegistrationService;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 public class RegistrationServiceTest {
 
   @InjectMocks private RegistrationService registrationService;
@@ -43,14 +45,14 @@ public class RegistrationServiceTest {
   public void getUser() throws Exception {
     User user = new User();
     user.setUsername("user");
-    when(userRepository.findOne(anyLong())).thenReturn(user);
+    when(userRepository.findById(anyLong())).thenReturn(java.util.Optional.of(user));
     User foundUser = registrationService.getUser(1L);
     assertThat(foundUser).isSameAs(user);
   }
 
-  @Test(expected = ResourceNotFoundException.class)
+  @Test
   public void getUserNotFound() throws Exception {
-    when(userRepository.findOne(anyLong())).thenReturn(null);
-    registrationService.getUser(1L);
+    when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+    Assertions.assertThrows(ResourceNotFoundException.class, () -> registrationService.getUser(1L));
   }
 }

@@ -50,7 +50,7 @@ public class FilePatternController {
     FilePatternResourceAssembler assembler = new FilePatternResourceAssembler(projectId);
     filePatternRepository.deleteByProjectId(projectId);
     List<FilePattern> filePatterns = assembler.toEntity(resource, project);
-    Iterable<FilePattern> savedFilePatterns = filePatternRepository.save(filePatterns);
+    Iterable<FilePattern> savedFilePatterns = filePatternRepository.saveAll(filePatterns);
     FilePatternResource savedResource = assembler.toResource(savedFilePatterns);
     return new ResponseEntity<>(savedResource, HttpStatus.CREATED);
   }

@@ -2,8 +2,8 @@ package org.wickedsource.coderadar.filepattern.match;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FileSetType;
 import org.wickedsource.coderadar.project.domain.InclusionType;
@@ -48,14 +48,14 @@ public class FilePatternMatcherTest {
   }
 
   private void assertMatches(FilePatternMatcher matcher) {
-    Assert.assertTrue(matcher.matches("root/sub/a/b/c/match.jsp"));
-    Assert.assertTrue(matcher.matches("root/sub/a/match.jsp"));
-    Assert.assertTrue(matcher.matches("root/sub/match.jsp"));
-    Assert.assertTrue(matcher.matches("root/sub/a/b/c/match.java"));
-    Assert.assertTrue(matcher.matches("root/sub/a/match.java"));
-    Assert.assertTrue(matcher.matches("root/sub/match.java"));
-    Assert.assertFalse(matcher.matches("root/sub/a/b/c/ignored.java"));
-    Assert.assertFalse(matcher.matches("root/sub/a/ignored.java"));
-    Assert.assertFalse(matcher.matches("root/sub/ignored.java"));
+    Assertions.assertTrue(matcher.matches("root/sub/a/b/c/match.jsp"));
+    Assertions.assertTrue(matcher.matches("root/sub/a/match.jsp"));
+    Assertions.assertTrue(matcher.matches("root/sub/match.jsp"));
+    Assertions.assertTrue(matcher.matches("root/sub/a/b/c/match.java"));
+    Assertions.assertTrue(matcher.matches("root/sub/a/match.java"));
+    Assertions.assertTrue(matcher.matches("root/sub/match.java"));
+    Assertions.assertFalse(matcher.matches("root/sub/a/b/c/ignored.java"));
+    Assertions.assertFalse(matcher.matches("root/sub/a/ignored.java"));
+    Assertions.assertFalse(matcher.matches("root/sub/ignored.java"));
   }
 }

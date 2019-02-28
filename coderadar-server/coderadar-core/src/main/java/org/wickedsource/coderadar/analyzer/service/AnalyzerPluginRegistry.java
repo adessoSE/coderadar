@@ -50,17 +50,18 @@ public class AnalyzerPluginRegistry {
     List<String> analyzerList = new ArrayList<>(sourceCodeFileAnalyzerPlugins.keySet());
     analyzerList.sort(String::compareTo);
 
-    int fromIndex = pageable.getOffset();
+    long fromIndex = pageable.getOffset();
     if (fromIndex > analyzerList.size() - 1) {
-      fromIndex = analyzerList.size() - 1;
+      fromIndex = analyzerList.size() - 1L;
     }
 
-    int toIndex = pageable.getOffset() + pageable.getPageSize();
+    long toIndex = pageable.getOffset() + pageable.getPageSize();
     if (toIndex > analyzerList.size()) {
       toIndex = analyzerList.size();
     }
 
-    return new PageImpl<>(analyzerList.subList(fromIndex, toIndex), pageable, analyzerList.size());
+    return new PageImpl<>(
+        analyzerList.subList((int) fromIndex, (int) toIndex), pageable, analyzerList.size());
   }
 
   /**
