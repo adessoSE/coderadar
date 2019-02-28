@@ -13,6 +13,7 @@ public class AnalyzerConfigurationResource {
   public AnalyzerConfigurationResource() {}
 
   public AnalyzerConfigurationResource(Long id, String analyzerName, boolean enabled) {
+    this.id = id;
     this.analyzerName = analyzerName;
     this.enabled = enabled;
   }
