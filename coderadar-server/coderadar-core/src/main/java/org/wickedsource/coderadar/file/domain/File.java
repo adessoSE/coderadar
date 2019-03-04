@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.file.domain;
 
 import javax.persistence.*;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -8,6 +9,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @Entity
 @Table(name = "file")
 @SequenceGenerator(name = "file_sequence", sequenceName = "seq_file_id", allocationSize = 1)
+@Data
 public class File {
 
   @Id
@@ -21,30 +23,6 @@ public class File {
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "identity_id")
   private FileIdentity identity;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getFilepath() {
-    return filepath;
-  }
-
-  public void setFilepath(String filepath) {
-    this.filepath = filepath;
-  }
-
-  public FileIdentity getIdentity() {
-    return identity;
-  }
-
-  public void setIdentity(FileIdentity identity) {
-    this.identity = identity;
-  }
 
   @Override
   public String toString() {

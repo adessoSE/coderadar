@@ -1,5 +1,8 @@
 package org.wickedsource.coderadar.core.rest.validation;
 
+import lombok.Getter;
+
+@Getter
 public class ValidationException extends UserException {
 
   private final String field;
@@ -10,13 +13,5 @@ public class ValidationException extends UserException {
     super("Validation Error");
     this.field = field;
     this.validationMessage = validationMessage;
-  }
-
-  public String getField() {
-    return field;
-  }
-
-  public String getValidationMessage() {
-    return validationMessage;
   }
 }

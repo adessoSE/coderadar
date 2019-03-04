@@ -44,7 +44,7 @@ public class AnalyzerConfigurationResourceAssembler
   public AnalyzerConfiguration updateEntity(
       AnalyzerConfigurationResource resource, Project project, AnalyzerConfiguration entity) {
     entity.setAnalyzerName(resource.getAnalyzerName());
-    entity.setEnabled(resource.isEnabled());
+    entity.setEnabled(resource.getEnabled());
     entity.setProject(project);
     return entity;
   }

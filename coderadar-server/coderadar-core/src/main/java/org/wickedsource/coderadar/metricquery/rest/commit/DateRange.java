@@ -6,7 +6,13 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.time.LocalDate;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class DateRange {
 
   @NotNull
@@ -18,27 +24,4 @@ public class DateRange {
   @JsonSerialize(using = LocalDateSerializer.class)
   @JsonDeserialize(using = LocalDateDeserializer.class)
   private LocalDate endDate;
-
-  public DateRange(LocalDate startDate, LocalDate endDate) {
-    this.startDate = startDate;
-    this.endDate = endDate;
-  }
-
-  public DateRange() {}
-
-  public LocalDate getStartDate() {
-    return startDate;
-  }
-
-  public void setStartDate(LocalDate startDate) {
-    this.startDate = startDate;
-  }
-
-  public LocalDate getEndDate() {
-    return endDate;
-  }
-
-  public void setEndDate(LocalDate endDate) {
-    this.endDate = endDate;
-  }
 }

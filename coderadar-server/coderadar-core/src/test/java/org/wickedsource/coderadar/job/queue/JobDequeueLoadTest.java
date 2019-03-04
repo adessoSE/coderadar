@@ -2,7 +2,6 @@ package org.wickedsource.coderadar.job.queue;
 
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Projects.SINGLE_PROJECT;
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.job;
-import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import java.util.Optional;

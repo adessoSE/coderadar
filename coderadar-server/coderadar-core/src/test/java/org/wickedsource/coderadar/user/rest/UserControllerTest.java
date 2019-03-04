@@ -7,9 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.EMPTY;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Users.USERS;
-import static org.wickedsource.coderadar.factories.resources.ResourceFactory.passwordChangeResource;
-import static org.wickedsource.coderadar.factories.resources.ResourceFactory.userCredentialsResource;
-import static org.wickedsource.coderadar.factories.resources.ResourceFactory.userLoginResource;
+import static org.wickedsource.coderadar.factories.resources.ResourceFactory.*;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;

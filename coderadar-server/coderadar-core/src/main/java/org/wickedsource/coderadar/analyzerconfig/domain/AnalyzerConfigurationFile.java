@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.analyzerconfig.domain;
 
 import javax.persistence.*;
+import lombok.Data;
 
 /**
  * A configuration file for an analyzer. May have any ASCII content, depending on what kind of
@@ -13,6 +14,7 @@ import javax.persistence.*;
   sequenceName = "seq_acof_id",
   allocationSize = 1
 )
+@Data
 public class AnalyzerConfigurationFile {
 
   @Id
@@ -39,52 +41,4 @@ public class AnalyzerConfigurationFile {
 
   @Column(name = "size_in_bytes")
   private long sizeInBytes;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public byte[] getFileData() {
-    return fileData;
-  }
-
-  public void setFileData(byte[] fileData) {
-    this.fileData = fileData;
-  }
-
-  public AnalyzerConfiguration getAnalyzerConfiguration() {
-    return analyzerConfiguration;
-  }
-
-  public void setAnalyzerConfiguration(AnalyzerConfiguration analyzerConfiguration) {
-    this.analyzerConfiguration = analyzerConfiguration;
-  }
-
-  public String getContentType() {
-    return contentType;
-  }
-
-  public void setContentType(String contentType) {
-    this.contentType = contentType;
-  }
-
-  public String getFileName() {
-    return fileName;
-  }
-
-  public void setFileName(String fileName) {
-    this.fileName = fileName;
-  }
-
-  public long getSizeInBytes() {
-    return sizeInBytes;
-  }
-
-  public void setSizeInBytes(long sizeInBytes) {
-    this.sizeInBytes = sizeInBytes;
-  }
 }

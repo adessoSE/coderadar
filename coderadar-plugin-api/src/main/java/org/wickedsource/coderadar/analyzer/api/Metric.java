@@ -1,16 +1,13 @@
 package org.wickedsource.coderadar.analyzer.api;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public class Metric {
 
   private final String id;
-
-  public Metric(String id) {
-    this.id = id;
-  }
-
-  public String getId() {
-    return id;
-  }
 
   public String toString() {
     return id;
