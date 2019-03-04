@@ -4,10 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import lombok.Data;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueId;
 
 @Entity
 @Table(name = "finding")
+@Data
 public class Finding {
 
   @EmbeddedId private MetricValueId id;
@@ -23,44 +25,4 @@ public class Finding {
 
   @Column(name = "char_end")
   private Integer charEnd;
-
-  public MetricValueId getId() {
-    return id;
-  }
-
-  public void setId(MetricValueId id) {
-    this.id = id;
-  }
-
-  public Integer getLineStart() {
-    return lineStart;
-  }
-
-  public void setLineStart(Integer lineStart) {
-    this.lineStart = lineStart;
-  }
-
-  public Integer getLineEnd() {
-    return lineEnd;
-  }
-
-  public void setLineEnd(Integer lineEnd) {
-    this.lineEnd = lineEnd;
-  }
-
-  public Integer getCharStart() {
-    return charStart;
-  }
-
-  public void setCharStart(Integer charStart) {
-    this.charStart = charStart;
-  }
-
-  public Integer getCharEnd() {
-    return charEnd;
-  }
-
-  public void setCharEnd(Integer charEnd) {
-    this.charEnd = charEnd;
-  }
 }

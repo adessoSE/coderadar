@@ -4,11 +4,17 @@ import java.io.Serializable;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.wickedsource.coderadar.file.domain.File;
 
 @Embeddable
+@NoArgsConstructor
+@Data
+@AllArgsConstructor
 public class CommitToFileId implements Serializable {
 
   @ManyToOne
@@ -19,32 +25,9 @@ public class CommitToFileId implements Serializable {
   @JoinColumn(name = "file_id")
   private File file;
 
-  public CommitToFileId() {}
-
-  public CommitToFileId(Commit commit, File file) {
-    this.commit = commit;
-    this.file = file;
-  }
-
-  public Commit getCommit() {
-    return commit;
-  }
-
-  public void setCommit(Commit commit) {
-    this.commit = commit;
-  }
-
-  public File getFile() {
-    return file;
-  }
-
-  public void setFile(File file) {
-    this.file = file;
-  }
-
   @Override
   public boolean equals(Object obj) {
-    if (obj == null || !(obj instanceof CommitToFileId)) {
+    if (!(obj instanceof CommitToFileId)) {
       return false;
     }
     CommitToFileId that = (CommitToFileId) obj;

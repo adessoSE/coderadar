@@ -1,13 +1,23 @@
 package org.wickedsource.coderadar.analyzer.loc;
 
+import lombok.Data;
+
+@Data
 public class Loc {
 
+  /** Lines of code. Total lines of code, including comments and empty lines. */
   private int loc;
 
+  /** Source lines of code. Total lines of code, excluding comments and empty lines. */
   private int sloc;
 
+  /** Comment lines of code. Total number of lines that only contain comments. */
   private int cloc;
 
+  /**
+   * Effective lines of code. Total lines of code, excluding comments, empty lines and "header" and
+   * "footer" lines (e.g. single braces and import statements).
+   */
   private int eloc;
 
   public void incrementLoc() {
@@ -24,44 +34,5 @@ public class Loc {
 
   public void incrementEloc() {
     this.eloc++;
-  }
-
-  /** Lines of code. Total lines of code, including comments and empty lines. */
-  public int getLoc() {
-    return loc;
-  }
-
-  public void setLoc(int loc) {
-    this.loc = loc;
-  }
-
-  /** Source lines of code. Total lines of code, excluding comments and empty lines. */
-  public int getSloc() {
-    return sloc;
-  }
-
-  public void setSloc(int sloc) {
-    this.sloc = sloc;
-  }
-
-  /** Comment lines of code. Total number of lines that only contain comments. */
-  public int getCloc() {
-    return cloc;
-  }
-
-  public void setCloc(int cloc) {
-    this.cloc = cloc;
-  }
-
-  /**
-   * Effective lines of code. Total lines of code, excluding comments, empty lines and "header" and
-   * "footer" lines (e.g. single braces and import statements).
-   */
-  public int getEloc() {
-    return eloc;
-  }
-
-  public void setEloc(int eloc) {
-    this.eloc = eloc;
   }
 }

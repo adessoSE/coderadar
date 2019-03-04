@@ -3,12 +3,12 @@ package org.wickedsource.coderadar.core.rest.dates.series;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class Series<X, Y> {
 
   @JsonUnwrapped private List<Point<X, Y>> points = new ArrayList<>();
-
-  public Series() {}
 
   public Series(List<Point<X, Y>> points) {
     this.points = points;

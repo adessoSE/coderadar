@@ -2,12 +2,19 @@ package org.wickedsource.coderadar.project.domain;
 
 import java.net.URL;
 import java.util.Date;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /** Coordinates to enable access to a source control system. */
 @Embeddable
+@NoArgsConstructor
+@Data
 public class VcsCoordinates {
 
   @Column(name = "vcs_url", nullable = false)
@@ -30,58 +37,8 @@ public class VcsCoordinates {
   @Column(name = "vcs_online")
   private boolean online = true;
 
-  public VcsCoordinates() {}
-
   public VcsCoordinates(URL url) {
     this.url = url;
-  }
-
-  public URL getUrl() {
-    return url;
-  }
-
-  public void setUrl(URL url) {
-    this.url = url;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public Date getStartDate() {
-    return startDate;
-  }
-
-  public void setStartDate(Date startDate) {
-    this.startDate = startDate;
-  }
-
-  public Date getEndDate() {
-    return endDate;
-  }
-
-  public void setEndDate(Date endDate) {
-    this.endDate = endDate;
-  }
-
-  public boolean isOnline() {
-    return online;
-  }
-
-  public void setOnline(boolean online) {
-    this.online = online;
   }
 
   @Override

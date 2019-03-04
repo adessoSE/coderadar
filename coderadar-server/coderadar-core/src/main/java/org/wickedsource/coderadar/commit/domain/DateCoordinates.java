@@ -5,8 +5,12 @@ import java.util.Date;
 import java.util.Locale;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Embeddable
+@NoArgsConstructor
+@Data
 public class DateCoordinates {
 
   @Column(name = "year", nullable = false)
@@ -18,60 +22,18 @@ public class DateCoordinates {
   @Column(name = "day_of_month", nullable = false)
   private Integer dayOfMonth;
 
+  /**
+   * The year to which the week belongs. This is only significant for a week that laps over the end
+   * of a year into the next one. Such weeks are either counted to the previous or the next year.
+   */
   @Column(name = "week_of_year", nullable = false)
   private Integer weekOfYear;
 
   @Column(name = "year_of_week", nullable = false)
   private Integer yearOfWeek;
 
-  public DateCoordinates() {}
-
   public DateCoordinates(Date date, Locale locale) {
     updateFromDate(date, locale);
-  }
-
-  public Integer getYear() {
-    return year;
-  }
-
-  public void setYear(Integer year) {
-    this.year = year;
-  }
-
-  public Integer getMonth() {
-    return month;
-  }
-
-  public void setMonth(Integer month) {
-    this.month = month;
-  }
-
-  public Integer getDayOfMonth() {
-    return dayOfMonth;
-  }
-
-  public void setDayOfMonth(Integer dayOfMonth) {
-    this.dayOfMonth = dayOfMonth;
-  }
-
-  public Integer getWeekOfYear() {
-    return weekOfYear;
-  }
-
-  public void setWeekOfYear(Integer weekOfYear) {
-    this.weekOfYear = weekOfYear;
-  }
-
-  /**
-   * The year to which the week belongs. This is only significant for a week that laps over the end
-   * of a year into the next one. Such weeks are either counted to the previous or the next year.
-   */
-  public Integer getYearOfWeek() {
-    return yearOfWeek;
-  }
-
-  public void setYearOfWeek(Integer yearOfWeek) {
-    this.yearOfWeek = yearOfWeek;
   }
 
   public void updateFromDate(Date date, Locale locale) {
