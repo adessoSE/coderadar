@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {UserService} from '../user.service';
-import {User} from '../user';
-import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -11,13 +9,11 @@ import {FormControl, Validators} from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
 
-  public username: string;
-  public password: string;
+  username: string;
+  password: string;
 
-  private accessToken = '';
-  private refreshToken = '';
-
-  invalidData = false;
+  invalidUser = false;
+  invalidPassword = false;
 
   constructor(private router: Router, private userService: UserService) { }
 
@@ -25,18 +21,23 @@ export class LoginComponent implements OnInit {
   }
 
   submitForm() {
-
-    const user = this.userService.login(this.username, this.password);
-
-    user.forEach(e => {
-      console.log(e);
-      if (e.body.accessToken !== undefined && e.body.refreshToken !== undefined) {
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.invalidData = true;
-      }});
-
-    this.invalidData = true;
+    this.userService.login(this.username, this.password).toPromise().then(e =>
+      this.router.navigate(['/dashboard']))
+      .catch(e => {
+        if (e.hasOwnProperty('error')) {
+          if (e.error.errorMessage === 'Validation Error') {
+            if (e.error.fieldErrors.length > 0) {
+              if (e.error.fieldErrors[0].field === 'password') {
+                this.invalidPassword = true;
+                this.invalidUser = false;
+              }
+            }
+          } else if (e.status === 500) {
+            this.invalidUser = true;
+            this.invalidPassword = false;
+          }
+        }
+      });
   }
 }
 

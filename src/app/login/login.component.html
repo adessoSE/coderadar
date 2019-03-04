@@ -6,12 +6,13 @@
       </mat-card-header>
       <mat-card-content fxLayout="column">
         <mat-form-field>
-          <input type="text" matInput placeholder="Username"  name="username" [(ngModel)]="username">
+          <input type="text" matInput placeholder="Username"  name="username" [(ngModel)]="username" required>
         </mat-form-field>
         <mat-form-field>
-          <input type="password" matInput placeholder="Password" name="password" [(ngModel)]="password">
+          <input type="password" matInput placeholder="Password" name="password" [(ngModel)]="password" required>
         </mat-form-field>
-        <mat-error *ngIf="invalidData">Wrong username or password</mat-error>
+        <mat-error *ngIf="invalidUser">No such user or password is incorrect!</mat-error>
+        <mat-error *ngIf="invalidPassword">Password too short!</mat-error>
       </mat-card-content>
       <mat-card-actions style="padding-bottom: 30px">
         <a style="padding-left: 20px;padding-right: 20px;padding-top: 5px" routerLink="/register">No account? Sign up</a>
