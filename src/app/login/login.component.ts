@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import {UserService} from '../user.service';
 import {User} from '../user';
+import {FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -13,8 +14,10 @@ export class LoginComponent implements OnInit {
   public username: string;
   public password: string;
 
-  private accessToken: string;
-  private refreshToken: string;
+  private accessToken = '';
+  private refreshToken = '';
+
+  invalidData = false;
 
   constructor(private router: Router, private userService: UserService) { }
 
@@ -22,16 +25,18 @@ export class LoginComponent implements OnInit {
   }
 
   submitForm() {
+
     const user = this.userService.login(this.username, this.password);
 
-    user.forEach(e => this.accessToken = e.body.accessToken);
-    user.forEach(e => this.refreshToken = e.body.refreshToken);
+    user.forEach(e => {
+      console.log(e);
+      if (e.body.accessToken !== undefined && e.body.refreshToken !== undefined) {
+        this.router.navigate(['/dashboard']);
+      } else {
+        this.invalidData = true;
+      }});
 
-    if (this.accessToken === undefined || this.refreshToken === undefined) {
-      alert('Wrong username or password');
-    } else {
-      this.router.navigate(['/dashboard']);
-    }
+    this.invalidData = true;
   }
-
 }
+

@@ -9,7 +9,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import {HttpClientModule} from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AddProjectComponent } from './add-project/add-project.component';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import {MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule} from '@angular/material';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -31,7 +33,18 @@ const appRoutes: Routes = [
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    BrowserAnimationsModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    FlexLayoutModule,
+    MatFormFieldModule,
+
+    MatInputModule,
+
+    MatCardModule,
+
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

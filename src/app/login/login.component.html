@@ -1,8 +1,22 @@
-<div style="justify-content:center; width: 100%; align-items: center; display: flex; min-height: 100%;
-padding: 200px;">
+<div fxLayout="row" fxLayoutAlign="center center" class="login-main">
   <form (ngSubmit)="submitForm()">
-    <input type="text" placeholder="Username" name="username" [(ngModel)]="username"><br>
-    <input type="password" placeholder="Password" name="password" [(ngModel)]="password"><br>
-    <a routerLink="/register">No account? Sign up</a><input type="submit" value="Login">
+    <mat-card>
+      <mat-card-header>
+        <h1 style="padding-left: 25px">Coderadar</h1>
+      </mat-card-header>
+      <mat-card-content fxLayout="column">
+        <mat-form-field>
+          <input type="text" matInput placeholder="Username"  name="username" [(ngModel)]="username">
+        </mat-form-field>
+        <mat-form-field>
+          <input type="password" matInput placeholder="Password" name="password" [(ngModel)]="password">
+        </mat-form-field>
+        <mat-error *ngIf="invalidData">Wrong username or password</mat-error>
+      </mat-card-content>
+      <mat-card-actions style="padding-bottom: 30px">
+        <a style="padding-left: 20px;padding-right: 20px;padding-top: 5px" routerLink="/register">No account? Sign up</a>
+        <button type="submit" mat-raised-button color="primary">Login</button>
+      </mat-card-actions>
+    </mat-card>
   </form>
 </div>
