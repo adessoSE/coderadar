@@ -10,10 +10,20 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AddProjectComponent} from './add-project/add-project.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule,
-  MatGridListModule, MatMenuModule, MatIconModule, MatListModule, MatToolbarModule, MatSidenavModule} from '@angular/material';
-import { MainDashboardComponent } from './main-dashboard/main-dashboard.component';
-import { LayoutModule } from '@angular/cdk/layout';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatFormFieldModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatSidenavModule,
+  MatToolbarModule
+} from '@angular/material';
+import {MainDashboardComponent} from './main-dashboard/main-dashboard.component';
+import {LayoutModule} from '@angular/cdk/layout';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
