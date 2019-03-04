@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.module.domain;
 
 import javax.persistence.*;
+import lombok.Data;
 import org.wickedsource.coderadar.project.domain.Project;
 
 /**
@@ -13,6 +14,7 @@ import org.wickedsource.coderadar.project.domain.Project;
   uniqueConstraints = {@UniqueConstraint(columnNames = {"project_id", "path"})}
 )
 @SequenceGenerator(name = "module_sequence", sequenceName = "seq_modu_id", allocationSize = 1)
+@Data
 public class Module {
 
   @Id
@@ -26,28 +28,4 @@ public class Module {
 
   @Column(name = "path", nullable = false)
   private String path;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public Project getProject() {
-    return project;
-  }
-
-  public void setProject(Project project) {
-    this.project = project;
-  }
-
-  public String getPath() {
-    return path;
-  }
-
-  public void setPath(String path) {
-    this.path = path;
-  }
 }

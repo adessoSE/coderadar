@@ -3,6 +3,7 @@ package org.wickedsource.coderadar.qualityprofile.domain;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
+import lombok.Data;
 import org.wickedsource.coderadar.project.domain.Project;
 
 @Entity
@@ -12,6 +13,7 @@ import org.wickedsource.coderadar.project.domain.Project;
   sequenceName = "seq_qupr_id",
   allocationSize = 1
 )
+@Data
 public class QualityProfile {
 
   @Id
@@ -33,36 +35,4 @@ public class QualityProfile {
   @ManyToOne
   @JoinColumn(name = "project_id")
   private Project project;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public List<QualityProfileMetric> getMetrics() {
-    return metrics;
-  }
-
-  public void setMetrics(List<QualityProfileMetric> metrics) {
-    this.metrics = metrics;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Project getProject() {
-    return project;
-  }
-
-  public void setProject(Project project) {
-    this.project = project;
-  }
 }

@@ -2,9 +2,11 @@ package org.wickedsource.coderadar.commit.domain;
 
 import java.io.Serializable;
 import javax.persistence.Column;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+@Data
 public class ModuleAssociationId implements Serializable {
 
   @Column(name = "commit_id")
@@ -16,30 +18,6 @@ public class ModuleAssociationId implements Serializable {
   @Column(name = "module_id")
   private Long moduleId;
 
-  public Long getCommitId() {
-    return commitId;
-  }
-
-  public void setCommitId(Long commitId) {
-    this.commitId = commitId;
-  }
-
-  public Long getFileId() {
-    return fileId;
-  }
-
-  public void setFileId(Long fileId) {
-    this.fileId = fileId;
-  }
-
-  public Long getModuleId() {
-    return moduleId;
-  }
-
-  public void setModuleId(Long moduleId) {
-    this.moduleId = moduleId;
-  }
-
   @Override
   public int hashCode() {
     return 31 + commitId.hashCode() + fileId.hashCode() + moduleId.hashCode();
@@ -47,7 +25,7 @@ public class ModuleAssociationId implements Serializable {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == null || !(obj instanceof ModuleAssociationId)) {
+    if (!(obj instanceof ModuleAssociationId)) {
       return false;
     }
     ModuleAssociationId that = (ModuleAssociationId) obj;

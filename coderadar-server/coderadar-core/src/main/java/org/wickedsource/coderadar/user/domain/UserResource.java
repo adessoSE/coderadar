@@ -1,23 +1,17 @@
 package org.wickedsource.coderadar.user.domain;
 
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.hateoas.ResourceSupport;
 
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class UserResource extends ResourceSupport {
 
   @NotNull private String username;
-
-  public UserResource() {}
-
-  public UserResource(String username) {
-    this.username = username;
-  }
-
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
 }
