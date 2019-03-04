@@ -1,13 +1,50 @@
-<div style="justify-content:center; width: 100%; align-items: center; display: flex; min-height: 100%;
-padding: 200px;">
+<!--
+<div fxLayout="row" fxLayoutAlign="center center" class="login-main">
+
+</div>
+-->
+
+<mat-toolbar style="height: 90px" color="primary">
+  <h1>Coderadar</h1>
+</mat-toolbar>
+<div class="grid-container">
+  <h1 class="mat-h1">Add project</h1>
+  <div fxLayout="row" fxLayoutAlign="center center" class="login-main">
+
   <form (ngSubmit)="submitForm()">
-    Project name: <input type="text" name="name" [(ngModel)]="project.name"><br>
-    VCS URL: <input type="url" name="vcsUrl" [(ngModel)]="project.vcsUrl"><br>
-    VCS user: <input type="text" name="vcsUser" [(ngModel)]="project.vcsUser"><br>
-    VCS password: <input type="password" name="vcsPassword" [(ngModel)]="project.vcsPassword"><br>
-    VCS online: <input type="checkbox" name="vcsOnline" [(ngModel)]="project.vcsOnline"><br>
-    Start date: <input type="date" name="startDate" [(ngModel)]="project.startDate"><br>
-    End date: <input type="date" name="endDate" [(ngModel)]="project.endDate"><br>
-    <input value="Cancel" type="button" routerLink="/dashboard"><input type="submit" value="Next">
+
+
+    <mat-card style="width: 100%">
+      <mat-card-header>
+        <h1>Add project</h1>
+      </mat-card-header>
+      <mat-card-content fxLayout="column">
+        <mat-form-field>
+          <input type="text" matInput name="name" placeholder="Project name" [(ngModel)]="project.name" required>
+        </mat-form-field>
+        <mat-form-field>
+          <input type="url" matInput name="vcsUrl" placeholder="VCS URL" [(ngModel)]="project.vcsUrl" required>
+        </mat-form-field>
+        <mat-form-field>
+          <input type="text" matInput name="vcsUser" placeholder="VCS user" [(ngModel)]="project.vcsUser" required>
+        </mat-form-field>
+        <mat-form-field>
+          <input type="password" matInput name="vcsPassword" placeholder="VCS password" [(ngModel)]="project.vcsPassword" required>
+        </mat-form-field>
+        <mat-form-field>
+          <input type="date" matInput name="startDate" placeholder="Start date" [(ngModel)]="project.startDate" required>
+        </mat-form-field>
+        <mat-form-field>
+          <input type="date" matInput name="endDate" placeholder="End date" [(ngModel)]="project.endDate" required>
+        </mat-form-field>
+       <!-- <mat-error *ngIf="invalidUser">The user does not exist<br> or the password is incorrect!</mat-error>
+        <mat-error *ngIf="invalidPassword">Password too short!</mat-error>-->
+      </mat-card-content>
+      <mat-card-actions style="margin-left: 17%; padding-bottom: 30px">
+        <button mat-raised-button color="warn" routerLink="/dashboard">Cancel</button>
+        <button mat-raised-button color="primary" style="width: 60px" type="submit">Next</button>
+      </mat-card-actions>
+    </mat-card>
   </form>
+  </div>
 </div>

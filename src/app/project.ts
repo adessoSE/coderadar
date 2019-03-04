@@ -4,7 +4,7 @@ export class Project {
   public vcsUrl: string;
   public vcsUser: string;
   public vcsPassword: string;
-  public vcsOnline: boolean;
-  public startDate: Date;
-  public endDate: Date;
+  public vcsOnline = true;
+  public startDate;
+  public endDate;
 }

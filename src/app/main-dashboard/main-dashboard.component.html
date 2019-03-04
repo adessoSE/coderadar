@@ -1,0 +1,33 @@
+<mat-toolbar style="height: 90px" color="primary">
+  <h1>Coderadar</h1>
+</mat-toolbar>
+
+<div class="grid-container">
+  <h1 class="mat-h1">Dashboard</h1>
+  <mat-grid-list cols="2" rowHeight="200px" style="width: 70%;float:right;margin-right: 100px">
+    <mat-grid-tile *ngFor="let project of projects" [colspan]="2" [rowspan]="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            {{project.name}}
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Edit</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content style="padding-left: 30px" class="mat-card-content">
+          <h4>Project URL: {{project.vcsUrl}}</h4>
+          <h4>Project start date: {{project.startDate.toDateString()}}</h4>
+          <h4>Project etart date: {{project.endDate.toDateString()}}</h4>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <a class="add-button" mat-fab color="warn" routerLink="/add-project">
+      <mat-icon class="add-icon">+</mat-icon>
+    </a>
+  </mat-grid-list>
+</div>

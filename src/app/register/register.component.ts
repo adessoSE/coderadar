@@ -36,7 +36,6 @@ export class RegisterComponent implements OnInit {
       this.userService.register(this.username, this.password).toPromise().then(e =>
         this.router.navigate(['/dashboard']))
         .catch(e => {
-          console.log(e);
           if (e.hasOwnProperty('error')) {
             if (e.error.errorMessage === 'Validation Error') {
               if (e.error.fieldErrors.length > 0) {
