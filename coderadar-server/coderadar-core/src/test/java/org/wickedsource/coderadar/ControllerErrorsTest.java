@@ -9,16 +9,13 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.c
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.wickedsource.coderadar.core.rest.validation.ErrorDTO;
 import org.wickedsource.coderadar.filepattern.rest.FilePatternResource;
 import org.wickedsource.coderadar.project.rest.ProjectResource;
-import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
-@Category(ControllerTest.class)
 public class ControllerErrorsTest extends ControllerTestTemplate {
 
   @Test

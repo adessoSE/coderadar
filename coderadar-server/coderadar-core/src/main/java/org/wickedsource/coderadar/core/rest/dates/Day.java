@@ -1,5 +1,8 @@
 package org.wickedsource.coderadar.core.rest.dates;
 
+import lombok.Value;
+
+@Value
 public class Day implements Comparable<Day> {
 
   private final int year;
@@ -7,24 +10,6 @@ public class Day implements Comparable<Day> {
   private final int month;
 
   private final int dayOfMonth;
-
-  public Day(int year, int month, int dayOfMonth) {
-    this.year = year;
-    this.month = month;
-    this.dayOfMonth = dayOfMonth;
-  }
-
-  public int getYear() {
-    return year;
-  }
-
-  public int getMonth() {
-    return month;
-  }
-
-  public int getDayOfMonth() {
-    return dayOfMonth;
-  }
 
   @Override
   public int compareTo(Day o) {
@@ -40,13 +25,7 @@ public class Day implements Comparable<Day> {
     if (this.month > o.month) {
       return 1;
     }
-    if (this.dayOfMonth < o.dayOfMonth) {
-      return -1;
-    }
-    if (this.dayOfMonth > o.dayOfMonth) {
-      return 1;
-    }
-    return 0;
+    return Integer.compare(this.dayOfMonth, o.dayOfMonth);
   }
 
   @Override

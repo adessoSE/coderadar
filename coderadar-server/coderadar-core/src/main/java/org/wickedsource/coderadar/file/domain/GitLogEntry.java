@@ -1,17 +1,7 @@
 package org.wickedsource.coderadar.file.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
+import lombok.Data;
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.project.domain.Project;
@@ -28,6 +18,7 @@ import org.wickedsource.coderadar.project.domain.Project;
   sequenceName = "seq_glen_id",
   allocationSize = 1
 )
+@Data
 public class GitLogEntry {
 
   @Id
@@ -55,60 +46,4 @@ public class GitLogEntry {
 
   @Column(name = "file_hash")
   private String fileHash;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public ChangeType getChangeType() {
-    return changeType;
-  }
-
-  public void setChangeType(ChangeType changeType) {
-    this.changeType = changeType;
-  }
-
-  public String getFilepath() {
-    return filepath;
-  }
-
-  public void setFilepath(String filepath) {
-    this.filepath = filepath;
-  }
-
-  public String getOldFilepath() {
-    return oldFilepath;
-  }
-
-  public void setOldFilepath(String oldFilepath) {
-    this.oldFilepath = oldFilepath;
-  }
-
-  public Project getProject() {
-    return project;
-  }
-
-  public void setProject(Project project) {
-    this.project = project;
-  }
-
-  public Commit getCommit() {
-    return commit;
-  }
-
-  public void setCommit(Commit commit) {
-    this.commit = commit;
-  }
-
-  public String getFileHash() {
-    return fileHash;
-  }
-
-  public void setFileHash(String fileHash) {
-    this.fileHash = fileHash;
-  }
 }

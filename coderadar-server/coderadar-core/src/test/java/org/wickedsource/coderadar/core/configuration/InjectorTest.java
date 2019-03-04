@@ -2,7 +2,7 @@ package org.wickedsource.coderadar.core.configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
 public class InjectorTest extends IntegrationTestTemplate {

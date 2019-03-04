@@ -14,18 +14,16 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.*
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
-import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
-@Category(ControllerTest.class)
 public class ProjectControllerTest extends ControllerTestTemplate {
 
   @Autowired private ProjectRepository projectRepository;
@@ -43,7 +41,10 @@ public class ProjectControllerTest extends ControllerTestTemplate {
         .andExpect(containsResource(ProjectResource.class))
         .andDo(documentCreateProject());
 
-    Project savedProject = projectRepository.findOne(1L);
+    Optional<Project> savedProjectOptional = projectRepository.findById(1L);
+    assertThat(savedProjectOptional.isPresent()).isTrue();
+    Project savedProject = savedProjectOptional.get();
+
     assertThat(savedProject).isNotNull();
     assertThat(savedProject.getWorkdirName()).isNotEmpty();
     assertThat(savedProject.getName()).isEqualTo(project.getName());

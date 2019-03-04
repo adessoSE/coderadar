@@ -2,8 +2,8 @@ package org.wickedsource.coderadar.analyzer.todo;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 
 public class ServiceLoaderTest {
@@ -14,6 +14,6 @@ public class ServiceLoaderTest {
         ServiceLoader.load(SourceCodeFileAnalyzerPlugin.class);
     Iterator<SourceCodeFileAnalyzerPlugin> plugins = loader.iterator();
     SourceCodeFileAnalyzerPlugin plugin = plugins.next();
-    Assert.assertTrue(plugin instanceof TodoSourceCodeFileAnalyzerPlugin);
+    Assertions.assertTrue(plugin instanceof TodoSourceCodeFileAnalyzerPlugin);
   }
 }

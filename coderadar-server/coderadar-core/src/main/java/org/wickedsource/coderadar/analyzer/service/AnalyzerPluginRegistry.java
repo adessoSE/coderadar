@@ -4,11 +4,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,17 +46,18 @@ public class AnalyzerPluginRegistry {
     List<String> analyzerList = new ArrayList<>(sourceCodeFileAnalyzerPlugins.keySet());
     analyzerList.sort(String::compareTo);
 
-    int fromIndex = pageable.getOffset();
+    long fromIndex = pageable.getOffset();
     if (fromIndex > analyzerList.size() - 1) {
-      fromIndex = analyzerList.size() - 1;
+      fromIndex = analyzerList.size() - 1L;
     }
 
-    int toIndex = pageable.getOffset() + pageable.getPageSize();
+    long toIndex = pageable.getOffset() + pageable.getPageSize();
     if (toIndex > analyzerList.size()) {
       toIndex = analyzerList.size();
     }
 
-    return new PageImpl<>(analyzerList.subList(fromIndex, toIndex), pageable, analyzerList.size());
+    return new PageImpl<>(
+        analyzerList.subList((int) fromIndex, (int) toIndex), pageable, analyzerList.size());
   }
 
   /**

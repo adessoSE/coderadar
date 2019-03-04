@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.qualityprofile.domain;
 
 import javax.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "quality_profile_metric")
@@ -9,6 +10,7 @@ import javax.persistence.*;
   sequenceName = "seq_qpme_id",
   allocationSize = 1
 )
+@Data
 public class QualityProfileMetric {
 
   @Id
@@ -26,36 +28,4 @@ public class QualityProfileMetric {
   @ManyToOne
   @JoinColumn(name = "profile_id")
   private QualityProfile profile;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public MetricType getMetricType() {
-    return metricType;
-  }
-
-  public void setMetricType(MetricType metricType) {
-    this.metricType = metricType;
-  }
-
-  public QualityProfile getProfile() {
-    return profile;
-  }
-
-  public void setProfile(QualityProfile profile) {
-    this.profile = profile;
-  }
 }

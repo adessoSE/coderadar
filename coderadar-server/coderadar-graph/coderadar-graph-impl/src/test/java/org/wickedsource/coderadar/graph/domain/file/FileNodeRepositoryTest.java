@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDateTime;
 import java.util.Set;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.graph.Neo4jIntegrationTestTemplate;
 import org.wickedsource.coderadar.graph.domain.commit.CommitName;
@@ -59,7 +59,7 @@ public class FileNodeRepositoryTest extends Neo4jIntegrationTestTemplate {
     assertThat(touchedFilesCountsForCommit4.getRenamedFiles()).isEqualTo(0);
   }
 
-  @Before
+  @BeforeEach
   public void createTestData() {
 
     FileNode file1 = new FileNode(FileId.from("file1"));

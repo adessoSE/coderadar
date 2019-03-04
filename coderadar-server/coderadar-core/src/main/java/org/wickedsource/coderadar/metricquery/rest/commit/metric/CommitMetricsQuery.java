@@ -5,19 +5,22 @@ import java.util.Arrays;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Provides parameters to query for values of one or more metrics values at the time of a specific
  * commit.
  */
+@NoArgsConstructor
 public class CommitMetricsQuery {
 
-  @NotNull private String commit;
+  @Getter @Setter @NotNull private String commit;
 
+  @Getter
   @Size(min = 1)
   private List<String> metrics;
-
-  public CommitMetricsQuery() {}
 
   private void initMetrics() {
     if (metrics == null) {
@@ -33,17 +36,5 @@ public class CommitMetricsQuery {
   public void addMetric(String metric) {
     initMetrics();
     this.metrics.add(metric);
-  }
-
-  public String getCommit() {
-    return commit;
-  }
-
-  public void setCommit(String commit) {
-    this.commit = commit;
-  }
-
-  public List<String> getMetrics() {
-    return metrics;
   }
 }

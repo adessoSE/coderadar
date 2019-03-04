@@ -11,7 +11,7 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.s
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;

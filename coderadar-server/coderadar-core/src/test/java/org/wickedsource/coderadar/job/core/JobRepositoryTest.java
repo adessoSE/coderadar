@@ -4,8 +4,8 @@ import static org.wickedsource.coderadar.factories.entities.EntityFactory.job;
 import static org.wickedsource.coderadar.factories.entities.EntityFactory.project;
 
 import java.util.Date;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.wickedsource.coderadar.job.scan.commit.ScanCommitsJob;
@@ -38,6 +38,6 @@ public class JobRepositoryTest extends IntegrationTestTemplate {
 
     Job foundJob = repository.findTop1ByProcessingStatusOrderByQueuedDate(ProcessingStatus.WAITING);
 
-    Assert.assertEquals(job1.getId(), foundJob.getId());
+    Assertions.assertEquals(job1.getId(), foundJob.getId());
   }
 }

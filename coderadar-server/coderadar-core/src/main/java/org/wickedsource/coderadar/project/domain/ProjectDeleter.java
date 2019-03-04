@@ -110,6 +110,9 @@ public class ProjectDeleter {
     logger.debug("deleted {} FileIdentity entities", fileIdentityRepository.deleteByProjectId(id));
     logger.debug("deleted {} Commit entities", commitRepository.deleteByProjectId(id));
     logger.debug("deleted {} FilePattern entities", filePatternRepository.deleteByProjectId(id));
-    logger.debug("deleted {} Project entities", projectRepository.deleteById(id));
+
+    // DeleteById is predefined in spring data 2, but it always delete one entity.
+    projectRepository.deleteById(id);
+    logger.debug("deleted 1 Project entity");
   }
 }

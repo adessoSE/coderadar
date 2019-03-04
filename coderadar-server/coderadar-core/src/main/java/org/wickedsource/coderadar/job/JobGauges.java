@@ -17,20 +17,10 @@ public class JobGauges {
 
     metricRegistry.register(
         name(JobLogger.class, "inProgress"),
-        new Gauge() {
-          @Override
-          public Object getValue() {
-            return jobRepository.countByProcessingStatus(ProcessingStatus.PROCESSING);
-          }
-        });
+        (Gauge) () -> jobRepository.countByProcessingStatus(ProcessingStatus.PROCESSING));
 
     metricRegistry.register(
         name(JobLogger.class, "waiting"),
-        new Gauge() {
-          @Override
-          public Object getValue() {
-            return jobRepository.countByProcessingStatus(ProcessingStatus.WAITING);
-          }
-        });
+        (Gauge) () -> jobRepository.countByProcessingStatus(ProcessingStatus.WAITING));
   }
 }

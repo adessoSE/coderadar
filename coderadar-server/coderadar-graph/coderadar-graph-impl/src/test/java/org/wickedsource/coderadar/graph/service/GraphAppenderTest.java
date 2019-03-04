@@ -6,7 +6,7 @@ import static org.wickedsource.coderadar.graph.service.CommitNodeAssert.assertTh
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.graph.GitChange;
 import org.wickedsource.coderadar.graph.Neo4jIntegrationTestTemplate;
