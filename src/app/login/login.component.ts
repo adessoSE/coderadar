@@ -7,7 +7,7 @@ import {UserService} from '../user.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
 
   username: string;
   password: string;
@@ -17,12 +17,10 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router, private userService: UserService) { }
 
-  ngOnInit() {
-  }
-
   submitForm() {
-    this.userService.login(this.username, this.password).toPromise().then(e =>
-      this.router.navigate(['/dashboard']))
+    this.userService.login(this.username, this.password).then(e => {
+      console.log(e);
+      this.router.navigate(['/dashboard']); })
       .catch(e => {
         if (e.hasOwnProperty('error')) {
           if (e.error.errorMessage === 'Validation Error') {

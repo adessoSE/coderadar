@@ -5,7 +5,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
 import {RegisterComponent} from './register/register.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AddProjectComponent} from './add-project/add-project.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -24,6 +24,7 @@ import {
 } from '@angular/material';
 import {MainDashboardComponent} from './main-dashboard/main-dashboard.component';
 import {LayoutModule} from '@angular/cdk/layout';
+import {AuthInterceptor} from './auth.interceptor';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -63,7 +64,12 @@ const appRoutes: Routes = [
     MatToolbarModule,
     MatSidenavModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

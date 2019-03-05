@@ -18,7 +18,7 @@ export class AddProjectComponent implements OnInit {
   }
 
   submitForm() {
-    this.projectService.addProject(this.project, ' ').toPromise().then(response => console.log(response));
+    this.projectService.addProject(this.project).then(response => console.log(response));
     this.router.navigate(['/dashboard']);
   }
 }

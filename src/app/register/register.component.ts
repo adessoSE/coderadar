@@ -7,20 +7,17 @@ import {UserService} from '../user.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
 
-  public username: string;
-  public password: string;
-  public confirmPassword: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
 
   invalidUser = false;
   invalidPassword = false;
   passwordsDoNotMatch = false;
 
   constructor(private router: Router, private userService: UserService) { }
-
-  ngOnInit() {
-  }
 
   submitForm() {
     this.invalidUser = false;
@@ -33,8 +30,8 @@ export class RegisterComponent implements OnInit {
     if (this.password.length < 8) {
       this.invalidPassword = true;
     }  else {
-      this.userService.register(this.username, this.password).toPromise().then(e =>
-        this.router.navigate(['/dashboard']))
+      this.userService.register(this.username, this.password).then(e =>
+        this.router.navigate(['/login']))
         .catch(e => {
           if (e.hasOwnProperty('error')) {
             if (e.error.errorMessage === 'Validation Error') {
@@ -50,5 +47,4 @@ export class RegisterComponent implements OnInit {
         });
     }
   }
-
 }
