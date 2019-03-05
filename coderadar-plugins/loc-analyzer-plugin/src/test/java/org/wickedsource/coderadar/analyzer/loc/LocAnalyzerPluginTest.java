@@ -2,8 +2,8 @@ package org.wickedsource.coderadar.analyzer.loc;
 
 import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 import org.wickedsource.coderadar.analyzer.api.Metric;
 
@@ -18,6 +18,7 @@ public class LocAnalyzerPluginTest {
     LocAnalyzerPlugin analyzer = new LocAnalyzerPlugin();
     FileMetrics results = analyzer.analyzeFile("TestFile.java", fileContent);
 
-    Assert.assertEquals(20, (long) results.getMetricCount(new Metric("coderadar:size:loc:java")));
+    Assertions.assertEquals(
+        20, (long) results.getMetricCount(new Metric("coderadar:size:loc:java")));
   }
 }

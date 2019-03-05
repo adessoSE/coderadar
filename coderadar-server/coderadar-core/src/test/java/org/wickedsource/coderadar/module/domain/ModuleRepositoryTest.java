@@ -6,7 +6,7 @@ import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Modul
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociation;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;

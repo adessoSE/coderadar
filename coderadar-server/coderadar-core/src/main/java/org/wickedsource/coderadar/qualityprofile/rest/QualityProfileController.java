@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.qualityprofile.rest;
 
 import java.util.List;
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
+import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 import org.wickedsource.coderadar.qualityprofile.domain.QualityProfile;
@@ -55,13 +56,13 @@ public class QualityProfileController {
       @PathVariable Long projectId) {
     Project project = projectVerifier.loadProjectOrThrowException(projectId);
     QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
-    QualityProfile profile = qualityProfileRepository.findOne(profileId);
-    if (profile == null) {
+    Optional<QualityProfile> profile = qualityProfileRepository.findById(profileId);
+    if (!profile.isPresent()) {
       throw new ResourceNotFoundException();
     }
-    profile = assembler.updateEntity(qualityProfileResource, profile);
-    profile = qualityProfileRepository.save(profile);
-    return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.OK);
+    QualityProfile qualityProfile = assembler.updateEntity(qualityProfileResource, profile.get());
+    qualityProfile = qualityProfileRepository.save(qualityProfile);
+    return new ResponseEntity<>(assembler.toResource(qualityProfile), HttpStatus.OK);
   }
 
   @RequestMapping(
@@ -73,11 +74,11 @@ public class QualityProfileController {
       @PathVariable Long profileId, @PathVariable Long projectId) {
     Project project = projectVerifier.loadProjectOrThrowException(projectId);
     QualityProfileResourceAssembler assembler = new QualityProfileResourceAssembler(project);
-    QualityProfile profile = qualityProfileRepository.findOne(profileId);
-    if (profile == null) {
+    Optional<QualityProfile> profile = qualityProfileRepository.findById(profileId);
+    if (!profile.isPresent()) {
       throw new ResourceNotFoundException();
     }
-    return new ResponseEntity<>(assembler.toResource(profile), HttpStatus.OK);
+    return new ResponseEntity<>(assembler.toResource(profile.get()), HttpStatus.OK);
   }
 
   @RequestMapping(
@@ -88,7 +89,7 @@ public class QualityProfileController {
   public ResponseEntity<String> deleteQualityProfile(
       @PathVariable Long profileId, @PathVariable Long projectId) {
     projectVerifier.checkProjectExistsOrThrowException(projectId);
-    qualityProfileRepository.delete(profileId);
+    qualityProfileRepository.deleteById(profileId);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 

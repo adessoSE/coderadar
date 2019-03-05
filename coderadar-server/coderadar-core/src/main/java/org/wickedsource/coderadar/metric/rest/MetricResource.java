@@ -1,20 +1,15 @@
 package org.wickedsource.coderadar.metric.rest;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class MetricResource {
 
   private String metricName;
-
-  public MetricResource() {}
-
-  public MetricResource(String metricName) {
-    this.metricName = metricName;
-  }
-
-  public String getMetricName() {
-    return metricName;
-  }
-
-  public void setMetricName(String metricName) {
-    this.metricName = metricName;
-  }
 }

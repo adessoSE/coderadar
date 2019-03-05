@@ -2,8 +2,8 @@ package org.wickedsource.coderadar.analyzer.checkstyle;
 
 import java.io.IOException;
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.coderadar.analyzer.api.AnalyzerException;
 import org.wickedsource.coderadar.analyzer.api.FileMetrics;
 import org.wickedsource.coderadar.analyzer.api.Metric;
@@ -19,7 +19,7 @@ public class CheckstyleSourceCodeFileAnalyzerPluginTest {
     CheckstyleSourceCodeFileAnalyzerPlugin analyzer = new CheckstyleSourceCodeFileAnalyzerPlugin();
     FileMetrics metrics = analyzer.analyzeFile("abc", fileContent);
 
-    Assert.assertEquals(
+    Assertions.assertEquals(
         Long.valueOf(11L),
         metrics.getMetricCount(
             new Metric(
@@ -34,7 +34,7 @@ public class CheckstyleSourceCodeFileAnalyzerPluginTest {
     CheckstyleSourceCodeFileAnalyzerPlugin analyzer = new CheckstyleSourceCodeFileAnalyzerPlugin();
     FileMetrics metrics = analyzer.analyzeFile("abc", fileContent);
 
-    Assert.assertEquals(
+    Assertions.assertEquals(
         Long.valueOf(78L),
         metrics.getMetricCount(
             new Metric(

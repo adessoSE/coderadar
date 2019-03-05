@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.file.domain;
 
 import javax.persistence.*;
+import lombok.Data;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -16,20 +17,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
   sequenceName = "seq_fiid_id",
   allocationSize = 1
 )
+@Data
 public class FileIdentity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_identity_sequence")
   @Column(name = "id")
   private Long id;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
 
   @Override
   public String toString() {

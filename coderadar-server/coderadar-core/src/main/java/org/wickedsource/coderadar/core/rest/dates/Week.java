@@ -1,23 +1,13 @@
 package org.wickedsource.coderadar.core.rest.dates;
 
+import lombok.Value;
+
+@Value
 public class Week implements Comparable<Week> {
 
   private final int year;
 
   private final int weekOfYear;
-
-  public Week(int year, int weekOfYear) {
-    this.year = year;
-    this.weekOfYear = weekOfYear;
-  }
-
-  public int getYear() {
-    return year;
-  }
-
-  public int getWeekOfYear() {
-    return weekOfYear;
-  }
 
   @Override
   public int compareTo(Week o) {
@@ -27,13 +17,7 @@ public class Week implements Comparable<Week> {
     if (this.year > o.year) {
       return 1;
     }
-    if (this.weekOfYear < o.weekOfYear) {
-      return -1;
-    }
-    if (this.weekOfYear > o.weekOfYear) {
-      return 1;
-    }
-    return 0;
+    return Integer.compare(this.weekOfYear, o.weekOfYear);
   }
 
   @Override

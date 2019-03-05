@@ -3,6 +3,8 @@ package org.wickedsource.coderadar.commit.domain;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
 import org.wickedsource.coderadar.file.domain.File;
 import org.wickedsource.coderadar.module.domain.Module;
@@ -18,6 +20,8 @@ import org.wickedsource.coderadar.module.domain.Module;
   @AssociationOverride(name = "id.commit", joinColumns = @JoinColumn(name = "commit_id")),
   @AssociationOverride(name = "id.file", joinColumns = @JoinColumn(name = "file_id"))
 })
+@NoArgsConstructor
+@Data
 public class CommitToFileAssociation {
 
   @EmbeddedId private CommitToFileId id;
@@ -47,8 +51,6 @@ public class CommitToFileAssociation {
   )
   private List<Module> modules = new ArrayList<>();
 
-  public CommitToFileAssociation() {}
-
   public CommitToFileAssociation(Commit commit, File sourcefile, ChangeType changeType) {
     this.id = new CommitToFileId(commit, sourcefile);
     this.changeType = changeType;
@@ -64,33 +66,9 @@ public class CommitToFileAssociation {
     return id.getFile();
   }
 
-  public CommitToFileId getId() {
-    return id;
-  }
-
-  public void setId(CommitToFileId id) {
-    this.id = id;
-  }
-
-  public ChangeType getChangeType() {
-    return changeType;
-  }
-
-  public void setChangeType(ChangeType changeType) {
-    this.changeType = changeType;
-  }
-
-  public List<Module> getModules() {
-    return modules;
-  }
-
-  public void setModule(List<Module> modules) {
-    this.modules = modules;
-  }
-
   @Override
   public boolean equals(Object obj) {
-    if (obj == null || !(obj instanceof CommitToFileAssociation)) {
+    if (!(obj instanceof CommitToFileAssociation)) {
       return false;
     }
     CommitToFileAssociation that = (CommitToFileAssociation) obj;

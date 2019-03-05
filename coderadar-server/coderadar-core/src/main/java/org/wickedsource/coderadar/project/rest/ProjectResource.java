@@ -6,9 +6,13 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import java.time.LocalDate;
 import javax.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
+@EqualsAndHashCode
+@Data
 public class ProjectResource {
 
   private Long id;
@@ -34,68 +38,4 @@ public class ProjectResource {
   private LocalDate endDate;
 
   private boolean vcsOnline = true;
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getVcsUrl() {
-    return vcsUrl;
-  }
-
-  public void setVcsUrl(String vcsUrl) {
-    this.vcsUrl = vcsUrl;
-  }
-
-  public String getVcsUser() {
-    return vcsUser;
-  }
-
-  public void setVcsUser(String vcsUser) {
-    this.vcsUser = vcsUser;
-  }
-
-  public String getVcsPassword() {
-    return vcsPassword;
-  }
-
-  public void setVcsPassword(String vcsPassword) {
-    this.vcsPassword = vcsPassword;
-  }
-
-  public LocalDate getStartDate() {
-    return startDate;
-  }
-
-  public void setStartDate(LocalDate startDate) {
-    this.startDate = startDate;
-  }
-
-  public LocalDate getEndDate() {
-    return endDate;
-  }
-
-  public void setEndDate(LocalDate endDate) {
-    this.endDate = endDate;
-  }
-
-  public boolean isVcsOnline() {
-    return vcsOnline;
-  }
-
-  public void setVcsOnline(boolean vcsOnline) {
-    this.vcsOnline = vcsOnline;
-  }
 }

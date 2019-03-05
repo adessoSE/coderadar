@@ -4,15 +4,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueDTO;
 
 /** Result of a query for values of selected metrics at the time of a given commit. */
 @SuppressWarnings("unchecked")
+@NoArgsConstructor
+@Data
+@EqualsAndHashCode
 public class CommitMetricsResource {
 
   private Map<String, Long> metrics;
-
-  public CommitMetricsResource() {}
 
   @JsonIgnore
   public void addMetricValues(List<MetricValueDTO> metricValuesPerCommit) {
@@ -30,14 +34,6 @@ public class CommitMetricsResource {
     if (metrics == null) {
       metrics = new HashMap<>();
     }
-  }
-
-  public Map<String, Long> getMetrics() {
-    return metrics;
-  }
-
-  public void setMetrics(Map<String, Long> metrics) {
-    this.metrics = metrics;
   }
 
   public void addAbsentMetrics(List<String> metrics) {

@@ -2,9 +2,9 @@ package org.wickedsource.coderadar.graph.domain.file;
 
 import java.util.Set;
 import org.springframework.data.neo4j.annotation.Query;
-import org.springframework.data.neo4j.repository.GraphRepository;
+import org.springframework.data.neo4j.repository.Neo4jRepository;
 
-public interface FileNodeRepository extends GraphRepository<FileNode> {
+public interface FileNodeRepository extends Neo4jRepository<FileNode, Long> {
 
   @Query(
       "MATCH (c:Commit {name:{0}})"

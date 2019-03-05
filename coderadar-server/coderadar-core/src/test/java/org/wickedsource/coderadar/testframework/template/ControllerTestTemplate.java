@@ -7,12 +7,14 @@ import static org.springframework.restdocs.snippet.Attributes.key;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Properties;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.hypermedia.JsonPathLinksSnippet;
 import org.springframework.restdocs.hypermedia.JsonPathResponseFieldsSnippet;
@@ -27,7 +29,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 
+@ExtendWith(RestDocumentationExtension.class)
+@Tag(ControllerTestTemplate.TAG)
 public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
+
+  public static final String TAG = "ControllerTest";
 
   private MockMvc mvc;
 
@@ -35,21 +41,16 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
 
   @Autowired private SequenceResetter sequenceResetter;
 
-  @Rule
-  public JUnitRestDocumentation restDocumentation =
-      new JUnitRestDocumentation("build/generated-snippets");
-
-  @Before
-  public void setup() {
+  @BeforeEach
+  public void setup(RestDocumentationContextProvider restDocumentation) {
     MockitoAnnotations.initMocks(this);
-
     mvc =
         MockMvcBuilders.webAppContextSetup(applicationContext)
-            .apply(MockMvcRestDocumentation.documentationConfiguration(this.restDocumentation))
+            .apply(MockMvcRestDocumentation.documentationConfiguration(restDocumentation))
             .build();
   }
 
-  @After
+  @AfterEach
   public void reset() {
     sequenceResetter.resetSequences(
         "seq_proj_id",

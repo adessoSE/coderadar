@@ -9,14 +9,11 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.s
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import java.util.List;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MvcResult;
-import org.wickedsource.coderadar.testframework.category.ControllerTest;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 import org.wickedsource.coderadar.testframework.template.JsonHelper;
 
-@Category(ControllerTest.class)
 public class MetricsControllerTest extends ControllerTestTemplate {
 
   @Test

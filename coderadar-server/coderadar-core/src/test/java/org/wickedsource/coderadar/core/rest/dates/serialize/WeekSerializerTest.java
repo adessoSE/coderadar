@@ -5,7 +5,7 @@ import static org.wickedsource.coderadar.core.rest.dates.serialize.ObjectMapperP
 
 import java.io.IOException;
 import java.io.StringWriter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.wickedsource.coderadar.core.rest.dates.Week;
 
 public class WeekSerializerTest {

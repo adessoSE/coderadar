@@ -1,5 +1,10 @@
 package org.wickedsource.coderadar.analyzer.loc;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public class LineMarker implements Comparable<LineMarker> {
 
   public enum Type {
@@ -12,19 +17,6 @@ public class LineMarker implements Comparable<LineMarker> {
   private final Integer startIndex;
 
   private final Type type;
-
-  public LineMarker(Integer startIndex, Type type) {
-    this.startIndex = startIndex;
-    this.type = type;
-  }
-
-  public Integer getStartIndex() {
-    return startIndex;
-  }
-
-  public Type getType() {
-    return type;
-  }
 
   @Override
   public int compareTo(LineMarker o) {

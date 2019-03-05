@@ -1,34 +1,19 @@
 package org.wickedsource.coderadar.security.domain;
 
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.wickedsource.coderadar.security.ValidPassword;
 
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class PasswordChangeResource {
 
   @NotNull private String refreshToken;
 
   @ValidPassword private String newPassword;
-
-  public PasswordChangeResource() {}
-
-  public PasswordChangeResource(String refreshToken, String newPassword) {
-    this.refreshToken = refreshToken;
-    this.newPassword = newPassword;
-  }
-
-  public String getNewPassword() {
-    return newPassword;
-  }
-
-  public void setNewPassword(String newPassword) {
-    this.newPassword = newPassword;
-  }
-
-  public String getRefreshToken() {
-    return refreshToken;
-  }
-
-  public void setRefreshToken(String refreshToken) {
-    this.refreshToken = refreshToken;
-  }
 }

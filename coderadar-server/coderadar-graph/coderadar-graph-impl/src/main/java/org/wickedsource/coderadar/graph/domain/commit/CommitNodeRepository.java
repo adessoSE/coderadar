@@ -3,9 +3,9 @@ package org.wickedsource.coderadar.graph.domain.commit;
 import java.util.Collection;
 import java.util.Set;
 import org.springframework.data.neo4j.annotation.Query;
-import org.springframework.data.neo4j.repository.GraphRepository;
+import org.springframework.data.neo4j.repository.Neo4jRepository;
 
-public interface CommitNodeRepository extends GraphRepository<CommitNode> {
+public interface CommitNodeRepository extends Neo4jRepository<CommitNode, Long> {
 
   CommitNode findByName(CommitName name);
 

@@ -3,12 +3,13 @@ package org.wickedsource.coderadar.user.service;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.wickedsource.coderadar.core.rest.validation.RefreshTokenNotFoundException;
 import org.wickedsource.coderadar.security.domain.RefreshToken;
 import org.wickedsource.coderadar.security.domain.RefreshTokenRepository;
@@ -16,7 +17,7 @@ import org.wickedsource.coderadar.security.service.TokenService;
 import org.wickedsource.coderadar.user.domain.User;
 import org.wickedsource.coderadar.user.domain.UserRepository;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 public class TokenRefreshServiceTest {
 
   @InjectMocks private TokenRefreshService tokenRefreshService;
@@ -41,13 +42,14 @@ public class TokenRefreshServiceTest {
     verify(tokenService, times(1)).verify(anyString());
   }
 
-  @Test(expected = RefreshTokenNotFoundException.class)
+  @Test
   public void checkNoToken() {
     when(refreshTokenRepository.findByToken(anyString())).thenReturn(null);
-    tokenRefreshService.checkUser("jwtToken");
+    Assertions.assertThrows(
+        RefreshTokenNotFoundException.class, () -> tokenRefreshService.checkUser("jwtToken"));
   }
 
-  @Test(expected = UsernameNotFoundException.class)
+  @Test
   public void checkNoUser() {
     RefreshToken refreshToken = new RefreshToken();
 
@@ -55,6 +57,7 @@ public class TokenRefreshServiceTest {
     when(tokenService.getUsername(anyString())).thenReturn("radar");
     when(userRepository.findByUsername("radar")).thenReturn(null);
 
-    tokenRefreshService.checkUser("jwtToken");
+    Assertions.assertThrows(
+        UsernameNotFoundException.class, () -> tokenRefreshService.checkUser("jwtToken"));
   }
 }

@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
+import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,18 +15,19 @@ import org.springframework.stereotype.Component;
 /** Provides access to all configuration parameters of the coderadar application. */
 @Component
 @ConfigurationProperties("coderadar")
+@Data
 public class CoderadarConfiguration {
 
-  private Logger logger = LoggerFactory.getLogger(CoderadarConfiguration.class);
+  private static final Logger logger = LoggerFactory.getLogger(CoderadarConfiguration.class);
 
   private static final String CONFIG_PARAM_LOG_PATTERN = "%s is set to '%s'";
 
   /** Number of milliseconds that @Scheduled tasks should wait before executing again. */
   public static final int TIMER_INTERVAL = 100;
 
-  @NotNull private Boolean master;
+  @NotNull private boolean master;
 
-  @NotNull private Boolean slave;
+  @NotNull private boolean slave;
 
   @NotNull private Path workdir;
 
@@ -34,54 +36,6 @@ public class CoderadarConfiguration {
   @NotNull private Locale dateLocale = Locale.ENGLISH;
 
   private Authentication authentication = new Authentication();
-
-  public Boolean isMaster() {
-    return master;
-  }
-
-  public void setMaster(Boolean master) {
-    this.master = master;
-  }
-
-  public Boolean isSlave() {
-    return slave;
-  }
-
-  public void setSlave(Boolean slave) {
-    this.slave = slave;
-  }
-
-  public Path getWorkdir() {
-    return workdir;
-  }
-
-  public void setWorkdir(Path workdir) {
-    this.workdir = workdir;
-  }
-
-  public Locale getDateLocale() {
-    return dateLocale;
-  }
-
-  public void setDateLocale(Locale dateLocale) {
-    this.dateLocale = dateLocale;
-  }
-
-  public Integer getScanIntervalInSeconds() {
-    return scanIntervalInSeconds;
-  }
-
-  public void setScanIntervalInSeconds(Integer scanIntervalInSeconds) {
-    this.scanIntervalInSeconds = scanIntervalInSeconds;
-  }
-
-  public Authentication getAuthentication() {
-    return authentication;
-  }
-
-  public void setAuthentication(Authentication authentication) {
-    this.authentication = authentication;
-  }
 
   @PostConstruct
   public void logConfig() {
@@ -128,6 +82,7 @@ public class CoderadarConfiguration {
     }
   }
 
+  @Data
   public static class Authentication {
 
     @NotNull private Integer accessTokenDurationInMinutes = 15;
@@ -135,29 +90,5 @@ public class CoderadarConfiguration {
     @NotNull private Boolean enabled = Boolean.TRUE;
 
     @NotNull private Integer refreshTokenDurationInMinutes = 86400;
-
-    public Integer getAccessTokenDurationInMinutes() {
-      return accessTokenDurationInMinutes;
-    }
-
-    public void setAccessTokenDurationInMinutes(Integer accessTokenDurationInMinutes) {
-      this.accessTokenDurationInMinutes = accessTokenDurationInMinutes;
-    }
-
-    public Boolean getEnabled() {
-      return enabled;
-    }
-
-    public void setEnabled(Boolean enabled) {
-      this.enabled = enabled;
-    }
-
-    public Integer getRefreshTokenDurationInMinutes() {
-      return refreshTokenDurationInMinutes;
-    }
-
-    public void setRefreshTokenDurationInMinutes(Integer refreshTokenDurationInMinutes) {
-      this.refreshTokenDurationInMinutes = refreshTokenDurationInMinutes;
-    }
   }
 }

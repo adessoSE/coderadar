@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
-import org.wickedsource.coderadar.core.rest.validation.ResourceNotFoundException;
+import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
 import org.wickedsource.coderadar.metric.domain.metricvalue.ChangedFileDTO;
 import org.wickedsource.coderadar.metric.domain.metricvalue.GroupedMetricValueDTO;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
