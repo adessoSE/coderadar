@@ -20,17 +20,20 @@ import {
   MatListModule,
   MatMenuModule,
   MatSidenavModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatCheckboxModule
 } from '@angular/material';
 import {MainDashboardComponent} from './main-dashboard/main-dashboard.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {AuthInterceptor} from './auth.interceptor';
+import { ConfigureProjectComponent } from './configure-project/configure-project.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: MainDashboardComponent },
   { path: 'add-project', component: AddProjectComponent },
+  { path: 'project-configure/:id', component: ConfigureProjectComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full'}
 ];
 
@@ -40,7 +43,8 @@ const appRoutes: Routes = [
     LoginComponent,
     RegisterComponent,
     AddProjectComponent,
-    MainDashboardComponent
+    MainDashboardComponent,
+    ConfigureProjectComponent
   ],
   imports: [
     BrowserModule,
@@ -63,6 +67,7 @@ const appRoutes: Routes = [
     LayoutModule,
     MatToolbarModule,
     MatSidenavModule,
+    MatCheckboxModule,
   ],
   providers: [
     {

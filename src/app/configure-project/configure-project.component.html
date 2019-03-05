@@ -1,0 +1,84 @@
+
+<mat-toolbar style="height: 90px" color="primary">
+  <h1>Coderadar</h1>
+</mat-toolbar>
+<div class="grid-container">
+      <h1 class="mat-h1">Add project</h1>
+      <div fxLayout="row" fxLayoutAlign="center center" class="login-main">
+
+      <form (ngSubmit)="submitForm()">
+
+      <mat-card style="width: 100%">
+        <mat-card-header>
+          <h1>Configure the project</h1>
+        </mat-card-header>
+
+        <mat-label>Select analyzers:</mat-label>
+        <div>&nbsp;</div>
+
+        <mat-card-content fxLayout="column">
+          <div *ngFor="let analyzer of analyzers">
+            <mat-checkbox name="analyzer" [(ngModel)]="analyzer.enabled">{{formatAnalyzerName(analyzer.analyzerName)}}</mat-checkbox>
+          </div>
+          <div>&nbsp;</div>
+          <mat-label>Included file patterns:</mat-label>
+          <div>&nbsp;</div>
+
+          <div *ngFor="let pattern of filePatterns">
+            <div *ngIf="pattern.inclusionType === 'INCLUDE'">
+              {{pattern.pattern}}
+            </div>
+          </div>
+          <div>&nbsp;</div>
+          <div class="row">
+            <mat-form-field style="width: 90%">
+              <input  style="position: static;" type="text" matInput name="includePatterns" placeholder="Included file patterns" [(ngModel)]="filePatternIncludeInput">
+            </mat-form-field>
+           <button type="button" mat-mini-fab style="float:right" (click)="addToIncludedPatterns()">+</button>
+          </div>
+
+          <mat-label>Excluded file patterns: </mat-label>
+          <div>&nbsp;</div>
+
+          <div *ngFor="let pattern of filePatterns">
+            <div *ngIf="pattern.inclusionType === 'EXCLUDE'">
+              {{pattern.pattern}}
+            </div>
+          </div>
+          <div>&nbsp;</div>
+          <div class="row">
+            <mat-form-field style="width: 90%">
+              <input  style="position: static;" type="text" matInput name="includePatterns" placeholder="Excluded file patterns" [(ngModel)]="filePatternExcludeInput">
+            </mat-form-field>
+            <button type="button" mat-mini-fab style="float:right" (click)="addToExcludedPatterns()">+</button>
+          </div>
+
+          <!-- <mat-form-field>
+             <input type="text" matInput name="name" placeholder="Project name" [(ngModel)]="project.name" required>
+           </mat-form-field>
+           <mat-form-field>
+             <input type="url" matInput name="vcsUrl" placeholder="VCS URL" [(ngModel)]="project.vcsUrl" required>
+           </mat-form-field>
+           <mat-form-field>
+             <input type="text" matInput name="vcsUser" placeholder="VCS user" [(ngModel)]="project.vcsUser" required>
+           </mat-form-field>
+           <mat-form-field>
+             <input type="password" matInput name="vcsPassword" placeholder="VCS password" [(ngModel)]="project.vcsPassword" required>
+           </mat-form-field>
+           <mat-form-field>
+             <input type="date" matInput name="startDate" placeholder="Start date" [(ngModel)]="project.startDate" required>
+           </mat-form-field>
+           <mat-form-field>
+             <input type="date" matInput name="endDate" placeholder="End date" [(ngModel)]="project.endDate" required>
+           </mat-form-field>-->
+          <!-- <mat-error *ngIf="invalidUser">The user does not exist<br> or the password is incorrect!</mat-error>
+           <mat-error *ngIf="invalidPassword">Password too short!</mat-error>-->
+        </mat-card-content>
+        <mat-card-actions style="margin-left: 17%; padding-bottom: 30px">
+          <button mat-raised-button color="warn" routerLink="/dashboard">Cancel</button>
+          <button mat-raised-button color="primary" style="width: 60px" type="submit">Next</button>
+        </mat-card-actions>
+      </mat-card>
+    </form>
+  </div>
+</div>
