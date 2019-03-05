@@ -6,6 +6,8 @@
 
 coderadar-server/local.application.properties
 coderadar-server/coderadar-core/coderadar-workdir/
+classes/
+.attach_pid*
 
 ### Eclipse ###
 
