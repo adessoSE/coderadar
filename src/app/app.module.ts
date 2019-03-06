@@ -28,6 +28,7 @@ import {LayoutModule} from '@angular/cdk/layout';
 import {AuthInterceptor} from './auth.interceptor';
 import { ConfigureProjectComponent } from './configure-project/configure-project.component';
 import { EditProjectComponent } from './edit-project/edit-project.component';
+import { HeaderComponent } from './header/header.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -47,7 +48,8 @@ const appRoutes: Routes = [
     AddProjectComponent,
     MainDashboardComponent,
     ConfigureProjectComponent,
-    EditProjectComponent
+    EditProjectComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

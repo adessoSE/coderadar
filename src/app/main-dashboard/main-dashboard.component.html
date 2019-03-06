@@ -1,11 +1,6 @@
-<mat-toolbar style="top:0; position:fixed; height: 60px;z-index: 6" class="mat-elevation-z6" color="primary">
-  <h1>Coderadar</h1>
-</mat-toolbar>
-<div style="top:0; height: 60px" ></div>
+<app-header [title]="'Dashboard'"></app-header>
 
-<mat-toolbar style="height: 90px; z-index: 5" class="md-elevation-z5" color="primary">
-  <h1>Dashboard</h1>
-</mat-toolbar>
+
 <div class="grid-container">
   <p style="font-size: x-large" align="center" fxLayoutAlign="center center" *ngIf="projects.length == 0">
     Hello there, it looks like you haven't added any projects yet. <br>
