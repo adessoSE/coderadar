@@ -23,12 +23,12 @@
 .add-button {
   right: 5%;
   bottom: 5%;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   font-size: large;
   position: fixed;
 }
 
 .add-icon {
-  margin-top: 17px;
+  margin-top: 9px;
 }
