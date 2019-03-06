@@ -35,7 +35,8 @@ const appRoutes: Routes = [
   { path: 'dashboard', component: MainDashboardComponent },
   { path: 'add-project', component: AddProjectComponent },
   { path: 'project-configure/:id', component: ConfigureProjectComponent },
-  { path: '', redirectTo: '/login', pathMatch: 'full'}
+  { path: 'project-edit/:id', component: EditProjectComponent },
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
 
 @NgModule({
