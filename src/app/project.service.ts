@@ -32,24 +32,35 @@ export class ProjectService {
         .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
 
-  public setProjectFilePatterns(id: number, filePatterns: FilePatterns[]) {
-    console.log(JSON.stringify(filePatterns));
-    return this.httpClient.post(this.apiURL + 'projects/' + id + '/files', JSON.stringify(filePatterns), {headers: new HttpHeaders()
-        .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
+  public setProjectFilePatterns(id: number, filePatternss: FilePatterns[]) {
+    console.log({ filePatterns: filePatternss});
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/files', { filePatterns: filePatternss},
+      {headers: new HttpHeaders().set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
 
-  public addProjectModules(id: number, module: string) {
+  public addProjectModule(id: number, module: string) {
       return this.httpClient.post(this.apiURL + 'projects/' + id + '/modules', {modulePath: module}, {headers: new HttpHeaders()
           .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
 
   public addAnalyzerConfigurationToProject(id: number, analyzer: AnalyzerConfiguration) {
+    console.log(JSON.stringify(analyzer));
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyzers', JSON.stringify(analyzer), {headers: new HttpHeaders()
         .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
 
   public getAnalyzers() {
     return this.httpClient.get<AnalyzerConfiguration[]>(this.apiURL + 'analyzers', {headers: new HttpHeaders()
+        .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
+  }
+
+  public startAnalyzingJob(id: number) {
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyzingJob', {fromDate: 0, active: true, rescan: true},
+      {headers: new HttpHeaders().set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
+  }
+
+  public getAnalyzingJob(id: number) {
+    return this.httpClient.get<any>(this.apiURL + 'projects/' + id + '/analyzingJob', {headers: new HttpHeaders()
         .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
 }

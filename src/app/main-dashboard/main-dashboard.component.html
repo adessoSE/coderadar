@@ -1,4 +1,4 @@
-<mat-toolbar style="top:0; position:fixed; z-index: 2; height: 90px" color="primary">
+<mat-toolbar style="top:0; position:fixed; height: 90px;z-index: 6" class="mat-elevation-z6" color="primary">
   <h1>Coderadar</h1>
 </mat-toolbar>
 <div style="top:0; height: 90px" ></div>
@@ -19,15 +19,16 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu" xPosition="before">
-              <button mat-menu-item>Edit</button>
+              <button mat-menu-item routerLink="/project-configure/{{project.id}}">Edit</button>
               <button mat-menu-item (click)="removeProject(project)">Remove</button>
             </mat-menu>
           </mat-card-title>
         </mat-card-header>
         <mat-card-content style="padding-left: 30px" class="mat-card-content">
-          <h4>Project URL: {{project.vcsUrl}}</h4>
-          <h4>Project start date: {{project.startDate.toDateString()}}</h4>
-          <h4>Project etart date: {{project.endDate.toDateString()}}</h4>
+          <mat-label>Project URL: {{project.vcsUrl}}</mat-label><br>
+          <mat-label>Project start date: {{project.startDate.toDateString()}}</mat-label><br>
+          <mat-label>Project etart date: {{project.endDate.toDateString()}}</mat-label><br>
+          <mat-label>Analaysis: <b>{{project.analysisStatus}}</b></mat-label>
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>

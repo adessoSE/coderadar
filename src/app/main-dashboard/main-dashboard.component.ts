@@ -25,7 +25,9 @@ export class MainDashboardComponent {
         this.projects.forEach(p => {
           p.startDate = new Date(p.startDate[0], p.startDate[1] - 1, p.startDate[2]);
           p.endDate = new Date(p.endDate[0], p.endDate[1] - 1, p.endDate[2]);
-        }); }
+        });
+        this.checkProjectsStatus();
+      }
     ).catch(e => {
       console.log(e);
       if (e.status) {
@@ -33,6 +35,28 @@ export class MainDashboardComponent {
           this.userService.refresh().then( (() => this.updateProjectsList()));
         }
       }
+    });
+  }
+
+  checkProjectsStatus() {
+    this.projects.forEach(project => {
+      this.projectService.getAnalyzingJob(project.id).then(response => {
+        console.log(response.body);
+        if (response.body.active === true) {
+          project.analysisStatus = 'running';
+        } else {
+          project.analysisStatus = 'complete';
+        }
+      }).catch(error => {
+        console.log(error);
+        if (error.status) {
+          if (error.status === 403) {
+            this.userService.refresh().then(() => this.checkProjectsStatus());
+          } else if (error.status === 404) {
+            project.analysisStatus = 'not running';
+          }
+        }
+      });
     });
   }
 

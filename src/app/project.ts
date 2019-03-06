@@ -7,4 +7,5 @@ export class Project {
   public vcsOnline = true;
   public startDate;
   public endDate;
+  public analysisStatus = 'not running';
 }

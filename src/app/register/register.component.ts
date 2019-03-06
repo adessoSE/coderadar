@@ -33,6 +33,7 @@ export class RegisterComponent {
       this.userService.register(this.username, this.password).then(e =>
         this.router.navigate(['/login']))
         .catch(e => {
+          console.log(e);
           if (e.hasOwnProperty('error')) {
             if (e.error.errorMessage === 'Validation Error') {
               if (e.error.fieldErrors.length > 0) {

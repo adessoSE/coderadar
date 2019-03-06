@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import {Project} from '../project';
+import {AnalyzerConfiguration} from '../analyzer-configuration';
+import {FilePatterns} from '../file-patterns';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../user.service';
 import {ProjectService} from '../project.service';
-import {AnalyzerConfiguration} from '../analyzer-configuration';
-import {FilePatterns} from '../file-patterns';
 
 @Component({
-  selector: 'app-configure-project',
-  templateUrl: './configure-project.component.html',
-  styleUrls: ['./configure-project.component.css']
+  selector: 'app-edit-project',
+  templateUrl: './edit-project.component.html',
+  styleUrls: ['./edit-project.component.css']
 })
-export class ConfigureProjectComponent implements OnInit {
+export class EditProjectComponent implements OnInit {
 
   project: Project = new Project();
   private projectId: any;
@@ -112,13 +112,14 @@ export class ConfigureProjectComponent implements OnInit {
         response.body.forEach(a => this.analyzers.push(new AnalyzerConfiguration(a.analyzerName, false))); })
       .catch(error => {
         if (error.status) {
-        if (error.status === 403) {
-          this.userService.refresh().then(response => this.getAnalyzersFromService());
-        }
-      }});
+          if (error.status === 403) {
+            this.userService.refresh().then(response => this.getAnalyzersFromService());
+          }
+        }});
   }
 
   formatAnalyzerName(name: string) {
     return name.split('.').pop();
   }
+
 }
