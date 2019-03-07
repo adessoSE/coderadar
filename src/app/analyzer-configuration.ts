@@ -1,4 +1,5 @@
 export class AnalyzerConfiguration {
+  id: number;
   analyzerName: string;
   enabled: boolean;
 

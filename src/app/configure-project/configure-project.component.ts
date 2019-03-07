@@ -6,6 +6,9 @@ import {ProjectService} from '../project.service';
 import {AnalyzerConfiguration} from '../analyzer-configuration';
 import {FilePatterns} from '../file-patterns';
 
+/**
+ * I really need to rewrite this entire thing...
+ */
 @Component({
   selector: 'app-configure-project',
   templateUrl: './configure-project.component.html',
@@ -13,7 +16,7 @@ import {FilePatterns} from '../file-patterns';
 })
 export class ConfigureProjectComponent implements OnInit {
 
-  project: Project = new Project();
+  projectName = '';
   private projectId: any;
 
   analyzers: AnalyzerConfiguration[] = [];
@@ -25,13 +28,15 @@ export class ConfigureProjectComponent implements OnInit {
   startScan = false;
   noAnalyzersForJob = false;
 
+  analyzersExist = false;
+
   constructor(private router: Router, private userService: UserService,
               private projectService: ProjectService, private route: ActivatedRoute) {}
 
   getModulesForProject() {
     this.projectService.getProjectModules(this.projectId).then(response => {
       console.log(response);
-      this.modules = response.body;
+      response.body.forEach(module => this.modules.push(module.modulePath));
     }).catch(error => {
       console.log(error);
       if (error.status === 403) {
@@ -72,14 +77,26 @@ export class ConfigureProjectComponent implements OnInit {
   }
 
   sendAnalzyerConfiuguration(analyzerConfiguration: AnalyzerConfiguration) {
-    this.projectService.addAnalyzerConfigurationToProject(this.projectId, analyzerConfiguration).then().catch(error => {
-      console.log(error);
-      if (error.status) {
-        if (error.status === 403) {
-          this.userService.refresh().then(() => this.sendAnalzyerConfiuguration(analyzerConfiguration));
+    if (this.analyzersExist) {
+      this.projectService.editAnalyzerConfigurationForProject(this.projectId, analyzerConfiguration).then().catch(error => {
+        console.log(error);
+        if (error.status) {
+          if (error.status === 403) {
+            this.userService.refresh().then(() => this.sendAnalzyerConfiuguration(analyzerConfiguration));
+          }
         }
-      }
-    });
+      });
+    } else {
+      this.projectService.addAnalyzerConfigurationToProject(this.projectId, analyzerConfiguration).then().catch(error => {
+        console.log(error);
+        if (error.status) {
+          if (error.status === 403) {
+            this.userService.refresh().then(() => this.sendAnalzyerConfiuguration(analyzerConfiguration));
+          }
+        }
+      });
+    }
+
   }
 
   submitForm() {
@@ -120,6 +137,44 @@ export class ConfigureProjectComponent implements OnInit {
       this.projectId = params.id;
       this.getAnalyzersFromService();
       this.getModulesForProject();
+      this.getProjectName();
+      this.getProjectFilePatterns();
+      this.getProjectAnalyzers();
+    });
+  }
+
+  private getProjectAnalyzers() {
+    this.projectService.getProjectAnalyzers(this.projectId).then(response => {
+      if (response.body.length > 0) {
+        this.analyzers = response.body;
+        this.analyzersExist = true;
+      }
+    }).catch(error => {
+      console.log(error);
+      if (error.status === 403) {
+        this.userService.refresh().then(() => this.getProjectAnalyzers());
+      }
+    });
+  }
+
+  private getProjectFilePatterns() {
+    this.projectService.getProjectFilePatterns(this.projectId).then(response => {
+      console.log(response.body.filePatterns);
+      this.filePatterns = response.body.filePatterns;
+    }).catch(error => {
+      if (error.status === 403) {
+        this.userService.refresh().then(() => this.getProjectFilePatterns());
+      }
+    });
+  }
+
+  private getProjectName() {
+    this.projectService.getProject(this.projectId).then(response => {
+      this.projectName = response.body.name;
+    }).catch(error => {
+      if (error.status === 403) {
+        this.userService.refresh().then(() => this.getProjectName());
+      }
     });
   }
 

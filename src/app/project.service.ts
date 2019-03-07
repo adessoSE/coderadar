@@ -28,12 +28,12 @@ export class ProjectService {
   }
 
   public getProjectFilePatterns(id: number) {
-    return this.httpClient.get<FilePatterns[]>(this.apiURL + 'projects/' + id + '/files', {headers: new HttpHeaders()
+    return this.httpClient.get<any>(this.apiURL + 'projects/' + id + '/files', {headers: new HttpHeaders()
         .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
 
   public getProjectModules(id: number) {
-    return this.httpClient.get<string[]>(this.apiURL + 'projects/' + id + '/modules', {headers: new HttpHeaders()
+    return this.httpClient.get<any[]>(this.apiURL + 'projects/' + id + '/modules', {headers: new HttpHeaders()
         .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
 
@@ -64,6 +64,12 @@ export class ProjectService {
         .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
 
+  public editAnalyzerConfigurationForProject(id: number, analyzer: AnalyzerConfiguration) {
+    console.log(JSON.stringify(analyzer));
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyzers/' + analyzer.id, JSON.stringify(analyzer),
+      {headers: new HttpHeaders().set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
+  }
+
   public getAnalyzers() {
     return this.httpClient.get<AnalyzerConfiguration[]>(this.apiURL + 'analyzers', {headers: new HttpHeaders()
         .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
@@ -76,6 +82,11 @@ export class ProjectService {
 
   public getAnalyzingJob(id: number) {
     return this.httpClient.get<any>(this.apiURL + 'projects/' + id + '/analyzingJob', {headers: new HttpHeaders()
+        .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
+  }
+
+  public getProjectAnalyzers(id: number) {
+    return this.httpClient.get<any>(this.apiURL + 'projects/' + id + '/analyzers', {headers: new HttpHeaders()
         .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
 }

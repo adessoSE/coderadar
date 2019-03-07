@@ -17,6 +17,7 @@
               </button>
               <mat-menu #menu="matMenu" xPosition="before">
                 <button mat-menu-item routerLink="/project-edit/{{project.id}}">Edit</button>
+                <button mat-menu-item routerLink="/project-configure/{{project.id}}">Configure</button>
                 <button mat-menu-item (click)="removeProject(project)">Remove</button>
               </mat-menu>
             </mat-card-title>
@@ -25,7 +26,7 @@
             <mat-label>Project URL: {{project.vcsUrl}}</mat-label><br>
             <mat-label>Project start date: {{project.startDate}}</mat-label><br>
             <mat-label>Project end date: {{project.endDate}}</mat-label><br>
-            <mat-label>Analaysis: <b>{{project.analysisStatus}}</b></mat-label>
+            <mat-label>Analysis: <b>{{project.analysisStatus}}</b></mat-label>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>

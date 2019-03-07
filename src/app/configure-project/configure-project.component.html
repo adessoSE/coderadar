@@ -5,13 +5,13 @@
         <form (ngSubmit)="submitForm()">
           <mat-card style="width: 400px">
             <mat-card-header style="justify-content: center">
-              <mat-card-title style="font-size: 20pt">Configure the project</mat-card-title>
+              <mat-card-title style="font-size: 20pt">Configure {{projectName}}</mat-card-title>
             </mat-card-header>
             <mat-label>Select analyzers:</mat-label>
             <div>&nbsp;</div>
             <mat-card-content fxLayout="column">
               <div *ngFor="let analyzer of analyzers">
-                <mat-checkbox name="analyzer" [(ngModel)]="analyzer.enabled">{{formatAnalyzerName(analyzer.analyzerName)}}</mat-checkbox>
+                <mat-checkbox name="analyzer-{{analyzer.analyzerName}}" [(ngModel)]="analyzer.enabled">{{formatAnalyzerName(analyzer.analyzerName)}}</mat-checkbox>
               </div>
               <div>&nbsp;</div>
               <mat-label>Included file patterns:</mat-label>
@@ -58,13 +58,12 @@
                 <button type="button" mat-mini-fab style="float:right" (click)="modules.push(modulesInput)">+</button>
               </div>
               <mat-checkbox name="analyzer" [(ngModel)]="startScan">Start analyzing job</mat-checkbox>
-
               <mat-error *ngIf="noAnalyzersForJob">Please select at least one analyzer to start an analyzing job.</mat-error>
               <div align="center">
-                <button mat-stroked-button color="accent" style="width: 35%; margin: 10px" routerLink="/dashboard">
-                  Configure later
+                <button mat-stroked-button style="width: 25%; margin: 10px" routerLink="/dashboard">
+                  Cancel
                 </button>
-                <button mat-raised-button color="primary" style="width: 35%; margin: 10px" type="submit">Done</button>
+                <button mat-raised-button color="primary" style="width: 25%; margin: 10px" type="submit">Done</button>
               </div>
             </mat-card-content>
         </mat-card>
