@@ -22,6 +22,21 @@ export class ProjectService {
         .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
 
+  public getProject(id: number) {
+    return this.httpClient.get<Project>(this.apiURL + 'projects/' + id , {headers: new HttpHeaders()
+        .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
+  }
+
+  public getProjectFilePatterns(id: number) {
+    return this.httpClient.get<FilePatterns[]>(this.apiURL + 'projects/' + id + '/files', {headers: new HttpHeaders()
+        .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
+  }
+
+  public getProjectModules(id: number) {
+    return this.httpClient.get<string[]>(this.apiURL + 'projects/' + id + '/modules', {headers: new HttpHeaders()
+        .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
+  }
+
   public getProjects() {
     return this.httpClient.get<Project[]>(this.apiURL + 'projects', {headers: new HttpHeaders()
         .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();

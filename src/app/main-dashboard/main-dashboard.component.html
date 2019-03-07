@@ -1,4 +1,5 @@
 <app-header [title]="'Dashboard'"></app-header>
+
 <main>
   <div class="grid-container">
     <div  style="font-size: x-large" align="center" *ngIf="projects.length == 0">
@@ -28,7 +29,7 @@
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>
-      <a class="add-button" mat-fab color="warn" routerLink="/add-project">
+      <a class="add-button" mat-fab color="accent" routerLink="/add-project">
         <mat-icon class="add-icon">+</mat-icon>
       </a>
     </mat-grid-list>

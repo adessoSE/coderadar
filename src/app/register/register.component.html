@@ -1,8 +1,8 @@
 <div fxLayout="row" fxLayoutAlign="center center" class="login-main">
   <form (ngSubmit)="submitForm()">
     <mat-card>
-      <mat-card-header>
-        <h1 style="padding-left: 25px">Coderadar</h1>
+      <mat-card-header style="justify-content: center">
+        <mat-card-title style="font-size: 30pt">Coderadar</mat-card-title>
       </mat-card-header>
       <mat-card-content fxLayout="column">
         <mat-form-field>
@@ -18,10 +18,10 @@
         <mat-error *ngIf="invalidPassword">Password must be at least <br>8 symbols long and contain a digit!</mat-error>
         <mat-error *ngIf="passwordsDoNotMatch">Passwords do not match!</mat-error>
       </mat-card-content>
-      <mat-card-actions style="padding-bottom: 30px">
-        <a style="padding-left: 20px;padding-right: 20px;padding-top: 5px" routerLink="/login">Have an account? Log in</a>
-        <button type="submit" mat-raised-button color="primary">Sign up</button>
-      </mat-card-actions>
+      <div align="center">
+        <button style="margin: 10px" mat-button routerLink="/login">Have an account? Log in</button>
+        <button style="margin: 10px" mat-raised-button type="submit"  color="primary">Sign up</button>
+      </div>
     </mat-card>
   </form>
 </div>

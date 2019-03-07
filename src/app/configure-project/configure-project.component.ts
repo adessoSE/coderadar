@@ -26,8 +26,18 @@ export class ConfigureProjectComponent implements OnInit {
   noAnalyzersForJob = false;
 
   constructor(private router: Router, private userService: UserService,
-              private projectService: ProjectService, private route: ActivatedRoute) {
-    this.getAnalyzersFromService();
+              private projectService: ProjectService, private route: ActivatedRoute) {}
+
+  getModulesForProject() {
+    this.projectService.getProjectModules(this.projectId).then(response => {
+      console.log(response);
+      this.modules = response.body;
+    }).catch(error => {
+      console.log(error);
+      if (error.status === 403) {
+        this.userService.refresh().then(() => this.getModulesForProject());
+      }
+    });
   }
 
   sendFilePatterns() {
@@ -74,7 +84,7 @@ export class ConfigureProjectComponent implements OnInit {
 
   submitForm() {
     this.noAnalyzersForJob = false;
-    if ( this.analyzers.filter(analyzer => analyzer.enabled).length === 0 ){
+    if ( this.analyzers.filter(analyzer => analyzer.enabled).length === 0 && this.startScan === true) {
       this.noAnalyzersForJob = true;
       return;
     }
@@ -108,6 +118,8 @@ export class ConfigureProjectComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.projectId = params.id;
+      this.getAnalyzersFromService();
+      this.getModulesForProject();
     });
   }
 
