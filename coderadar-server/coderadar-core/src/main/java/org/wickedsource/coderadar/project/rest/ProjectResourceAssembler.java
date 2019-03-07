@@ -29,12 +29,22 @@ public class ProjectResourceAssembler extends AbstractResourceAssembler<Project,
       resource.setVcsUrl(project.getVcsCoordinates().getUrl().toString());
       resource.setVcsUser(project.getVcsCoordinates().getUsername());
       resource.setVcsPassword(project.getVcsCoordinates().getPassword());
-      resource.setStartDate(
-          Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
-              project.getVcsCoordinates().getStartDate()));
-      resource.setEndDate(
-          Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
-              project.getVcsCoordinates().getEndDate()));
+
+      //Check if dates are null
+      if(project.getVcsCoordinates().getStartDate() == null){
+        resource.setStartDate(null);
+      }else {
+        resource.setStartDate(Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
+                project.getVcsCoordinates().getStartDate()));
+      }
+
+      if(project.getVcsCoordinates().getEndDate() == null){
+        resource.setEndDate(null);
+      }else {
+        resource.setEndDate(Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
+                        project.getVcsCoordinates().getEndDate()));
+      }
+
       resource.setVcsOnline(project.getVcsCoordinates().isOnline());
     }
     resource.add(
@@ -57,10 +67,20 @@ public class ProjectResourceAssembler extends AbstractResourceAssembler<Project,
       VcsCoordinates vcs = new VcsCoordinates(new URL(resource.getVcsUrl()));
       vcs.setUsername(resource.getVcsUser());
       vcs.setPassword(resource.getVcsPassword());
-      vcs.setStartDate(
-          Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(resource.getStartDate()));
-      vcs.setEndDate(
-          Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(resource.getEndDate()));
+
+      //Check if dates in resource are null
+      if(resource.getStartDate() == null){
+        vcs.setStartDate(null);
+      }else{
+        vcs.setStartDate(Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(resource.getStartDate()));
+      }
+
+      if(resource.getEndDate() == null){
+        vcs.setEndDate(null);
+      }else{
+        vcs.setEndDate(Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(resource.getEndDate()));
+      }
+
       vcs.setOnline(resource.isVcsOnline());
       entity.setVcsCoordinates(vcs);
       return entity;
