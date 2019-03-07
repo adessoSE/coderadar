@@ -1,4 +1,28 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: whitesmoke }
+html { height: 100%;}
+
+body {
+  margin: 0;
+  font-family: Roboto,"Helvetica Neue", sans-serif;
+  background-color: whitesmoke;
+}
+
+header {
+
+}
+
+footer {
+  position: static;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  height: 60px;
+}
+
+
+main {
+  min-height: calc(100vh - 246px);
+  /* 80px header + 40px footer = 120px  */
+}

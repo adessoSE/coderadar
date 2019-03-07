@@ -22,6 +22,8 @@ export class UserService {
     return this.httpClient.post<any>(this.apiURL + 'user/auth',
       { username: usernameValue, password: passwordValue }).toPromise().then(user => {
         if (user && user.accessToken && user.refreshToken) {
+          console.log(JSON.stringify(user));
+          user.username = usernameValue;
           localStorage.setItem('currentUser', JSON.stringify(user));
         }
       });
@@ -51,5 +53,9 @@ export class UserService {
   public logout() {
     localStorage.removeItem('currentUser');
     this.router.navigate(['/login']);
+  }
+
+  public getLoggedInUser() {
+    return JSON.parse(localStorage.getItem('currentUser'));
   }
 }

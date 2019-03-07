@@ -19,7 +19,6 @@ export class LoginComponent {
 
   submitForm() {
     this.userService.login(this.username, this.password).then(e => {
-      console.log(e);
       this.router.navigate(['/dashboard']); })
       .catch(e => {
         if (e.hasOwnProperty('error')) {

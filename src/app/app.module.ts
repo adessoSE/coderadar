@@ -21,7 +21,8 @@ import {
   MatMenuModule,
   MatSidenavModule,
   MatToolbarModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatCommonModule,
 } from '@angular/material';
 import {MainDashboardComponent} from './main-dashboard/main-dashboard.component';
 import {LayoutModule} from '@angular/cdk/layout';
@@ -29,6 +30,7 @@ import {AuthInterceptor} from './auth.interceptor';
 import { ConfigureProjectComponent } from './configure-project/configure-project.component';
 import { EditProjectComponent } from './edit-project/edit-project.component';
 import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -49,7 +51,8 @@ const appRoutes: Routes = [
     MainDashboardComponent,
     ConfigureProjectComponent,
     EditProjectComponent,
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
