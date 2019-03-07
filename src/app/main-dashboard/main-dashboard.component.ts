@@ -30,7 +30,7 @@ export class MainDashboardComponent {
           }
 
           if (p.endDate !== null) {
-            p.endDate = new Date(p.endDate[0], p.endDate[1] - 1, p.endDate[2]);
+            p.endDate = new Date(p.endDate[0], p.endDate[1] - 1, p.endDate[2].toDateString());
           } else {
             p.endDate = 'current';
           }
