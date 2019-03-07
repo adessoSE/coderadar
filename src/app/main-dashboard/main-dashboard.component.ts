@@ -23,8 +23,17 @@ export class MainDashboardComponent {
       response => {
         this.projects = response.body;
         this.projects.forEach(p => {
-          p.startDate = new Date(p.startDate[0], p.startDate[1] - 1, p.startDate[2]);
-          p.endDate = new Date(p.endDate[0], p.endDate[1] - 1, p.endDate[2]);
+          if (p.startDate !== null) {
+            p.startDate = new Date(p.startDate[0], p.startDate[1] - 1, p.startDate[2]).toDateString();
+          } else {
+            p.startDate = 'first commit';
+          }
+
+          if (p.endDate !== null) {
+            p.endDate = new Date(p.endDate[0], p.endDate[1] - 1, p.endDate[2]);
+          } else {
+            p.endDate = 'current';
+          }
         });
         this.checkProjectsStatus();
       }

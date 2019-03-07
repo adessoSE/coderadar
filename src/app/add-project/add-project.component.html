@@ -1,5 +1,4 @@
 <app-header [title]="'Add project'"></app-header>
-
 <main>
   <div class="grid-container">
     <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 2%">
@@ -16,19 +15,20 @@
             <input type="url" matInput name="vcsUrl" placeholder="VCS URL" [(ngModel)]="project.vcsUrl" required>
           </mat-form-field>
           <mat-form-field>
-            <input type="text" matInput name="vcsUser" placeholder="VCS user" [(ngModel)]="project.vcsUser" required>
+            <input type="text" matInput name="vcsUser" placeholder="VCS user" [(ngModel)]="project.vcsUser">
           </mat-form-field>
           <mat-form-field>
-            <input type="password" matInput name="vcsPassword" placeholder="VCS password" [(ngModel)]="project.vcsPassword" required>
+            <input type="password" matInput name="vcsPassword" placeholder="VCS password" [(ngModel)]="project.vcsPassword">
           </mat-form-field>
           <mat-form-field>
-            <input type="date" matInput name="startDate" placeholder="Start date" [(ngModel)]="project.startDate" required>
+            <input type="date" matInput name="startDate" placeholder="Start date" [(ngModel)]="project.startDate">
           </mat-form-field>
           <mat-form-field>
-            <input type="date" matInput name="endDate" placeholder="End date" [(ngModel)]="project.endDate" required>
+            <input type="date" matInput name="endDate" placeholder="End date" [(ngModel)]="project.endDate">
           </mat-form-field>
-         <!-- <mat-error *ngIf="invalidUser">The user does not exist<br> or the password is incorrect!</mat-error>
-          <mat-error *ngIf="invalidPassword">Password too short!</mat-error>-->
+          <mat-error *ngIf="nameEmpty">The project name must not be empty!</mat-error>
+          <mat-error *ngIf="projectExists">A project with this name already exists! Please choose another name.</mat-error>
+          <mat-error *ngIf="incorrectURL">The VCS URL is invalid!</mat-error>
         </mat-card-content>
         <mat-card-actions style="margin-left: 17%; padding-bottom: 30px">
           <button mat-stroked-button color="accent" routerLink="/dashboard">Cancel</button>
