@@ -59,10 +59,9 @@
                 </div>
                 <mat-checkbox name="analyzer" [(ngModel)]="startScan">Start analyzing job</mat-checkbox>
 
-                <!--
-                           <mat-error *ngIf="invalidPassword">Password too short!</mat-error>
-                -->
-          </mat-card-content>
+                <mat-error *ngIf="noAnalyzersForJob">Please select at least one analyzer to start an analyzing job.</mat-error>
+
+              </mat-card-content>
           <mat-card-actions style="margin-left: 17%; padding-bottom: 30px">
             <button mat-stroked-button color="accent" routerLink="/dashboard">Cancel</button>
             <button mat-raised-button color="primary" style="width: 60px" type="submit">Done</button>

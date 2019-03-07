@@ -23,6 +23,7 @@ export class ConfigureProjectComponent implements OnInit {
   modulesInput = '';
   modules: string[] = [];
   startScan = false;
+  noAnalyzersForJob = false;
 
   constructor(private router: Router, private userService: UserService,
               private projectService: ProjectService, private route: ActivatedRoute) {
@@ -72,6 +73,11 @@ export class ConfigureProjectComponent implements OnInit {
   }
 
   submitForm() {
+    this.noAnalyzersForJob = false;
+    if ( this.analyzers.filter(analyzer => analyzer.enabled).length === 0 ){
+      this.noAnalyzersForJob = true;
+      return;
+    }
     this.sendAnalzyerConfiugurations();
     this.sendFilePatterns();
     this.sendModules();
