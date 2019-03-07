@@ -30,19 +30,21 @@ public class ProjectResourceAssembler extends AbstractResourceAssembler<Project,
       resource.setVcsUser(project.getVcsCoordinates().getUsername());
       resource.setVcsPassword(project.getVcsCoordinates().getPassword());
 
-      //Check if dates are null
-      if(project.getVcsCoordinates().getStartDate() == null){
+      // Check if dates are null
+      if (project.getVcsCoordinates().getStartDate() == null) {
         resource.setStartDate(null);
-      }else {
-        resource.setStartDate(Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
+      } else {
+        resource.setStartDate(
+            Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
                 project.getVcsCoordinates().getStartDate()));
       }
 
-      if(project.getVcsCoordinates().getEndDate() == null){
+      if (project.getVcsCoordinates().getEndDate() == null) {
         resource.setEndDate(null);
-      }else {
-        resource.setEndDate(Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
-                        project.getVcsCoordinates().getEndDate()));
+      } else {
+        resource.setEndDate(
+            Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
+                project.getVcsCoordinates().getEndDate()));
       }
 
       resource.setVcsOnline(project.getVcsCoordinates().isOnline());
@@ -68,17 +70,19 @@ public class ProjectResourceAssembler extends AbstractResourceAssembler<Project,
       vcs.setUsername(resource.getVcsUser());
       vcs.setPassword(resource.getVcsPassword());
 
-      //Check if dates in resource are null
-      if(resource.getStartDate() == null){
+      // Check if dates in resource are null
+      if (resource.getStartDate() == null) {
         vcs.setStartDate(null);
-      }else{
-        vcs.setStartDate(Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(resource.getStartDate()));
+      } else {
+        vcs.setStartDate(
+            Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(resource.getStartDate()));
       }
 
-      if(resource.getEndDate() == null){
+      if (resource.getEndDate() == null) {
         vcs.setEndDate(null);
-      }else{
-        vcs.setEndDate(Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(resource.getEndDate()));
+      } else {
+        vcs.setEndDate(
+            Jsr310Converters.LocalDateToDateConverter.INSTANCE.convert(resource.getEndDate()));
       }
 
       vcs.setOnline(resource.isVcsOnline());
