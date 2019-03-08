@@ -5,7 +5,7 @@
       <form (ngSubmit)="submitForm()">
         <mat-card style="width: 400px">
           <mat-card-header style="justify-content: center">
-            <mat-card-title style="font-size: 20pt">Edit {{project.name}}</mat-card-title>
+            <mat-card-title style="font-size: 20pt">Edit {{projectName}}</mat-card-title>
           </mat-card-header>
           <mat-card-content fxLayout="column">
             <mat-form-field>
@@ -31,7 +31,7 @@
             <mat-error *ngIf="incorrectURL">The VCS URL is invalid!</mat-error>
             <div align="center">
               <button mat-stroked-button style="width: 25%; margin: 10px" routerLink="/dashboard">Cancel</button>
-              <button mat-raised-button color="primary" style="width: 25%; margin: 10px" type="submit">Next</button>
+              <button mat-raised-button color="primary" style="width: 25%; margin: 10px" type="submit">Save</button>
             </div>
           </mat-card-content>
         </mat-card>

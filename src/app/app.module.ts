@@ -31,6 +31,7 @@ import { ConfigureProjectComponent } from './configure-project/configure-project
 import { EditProjectComponent } from './edit-project/edit-project.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { UserSettingsComponent } from './user-settings/user-settings.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -52,7 +53,8 @@ const appRoutes: Routes = [
     ConfigureProjectComponent,
     EditProjectComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    UserSettingsComponent
   ],
   imports: [
     BrowserModule,

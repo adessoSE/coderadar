@@ -18,33 +18,12 @@ export class EditProjectComponent implements OnInit {
   }
 
   project: Project = new Project();
+  projectName = '';
   private projectId: any;
 
   incorrectURL = false;
   projectExists = false;
   nameEmpty = false;
-
-  sendModule(module: string) {
-    this.projectService.addProjectModule(this.projectId, module).then().catch(error => {
-      console.log(error);
-      if (error.status) {
-        if (error.status === 403) {
-          this.userService.refresh().then(() => this.sendModule(module));
-        }
-      }
-    });
-  }
-
-  sendAnalzyerConfiuguration(analyzerConfiguration: AnalyzerConfiguration) {
-    this.projectService.addAnalyzerConfigurationToProject(this.projectId, analyzerConfiguration).then().catch(error => {
-      console.log(error);
-      if (error.status) {
-        if (error.status === 403) {
-          this.userService.refresh().then(() => this.sendAnalzyerConfiuguration(analyzerConfiguration));
-        }
-      }
-    });
-  }
 
   submitForm() {
     this.incorrectURL = false;
@@ -92,23 +71,27 @@ export class EditProjectComponent implements OnInit {
   private getProject() {
     this.projectService.getProject(this.projectId).then(response => {
       if (response.body.startDate != null) {
-        response.body.startDate = new Date(response.body.startDate.startDate[0],
-          response.body.startDate[1] - 1, response.body.startDate.startDate[2]);
+        response.body.startDate = new Date(response.body.startDate[0],
+          response.body.startDate[1] - 1, response.body.startDate[2] + 1).toISOString().split('T')[0];
       } else {
         response.body.startDate = null;
       }
       if (response.body.endDate != null) {
         response.body.endDate = new Date(response.body.endDate[0],
-          response.body.endDate[1] - 1, response.body.endDate[2]);
+          response.body.endDate[1] - 1, response.body.endDate[2] + 1).toISOString().split('T')[0];
+        console.log(response.body.endDate);
       } else {
         response.body.endDate = null;
       }
+      this.projectName = response.body.name;
       this.project = response.body;
     }).catch(error => {
       console.log(error);
       if (error.status) {
         if (error.status === 403) {
           this.userService.refresh().then(response => this.getProject());
+        } else if (error.status === 404) {
+          this.router.navigate(['/dashboard']);
         }
       }});
   }

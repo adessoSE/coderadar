@@ -20,6 +20,7 @@
               <div *ngFor="let pattern of filePatterns">
                 <div *ngIf="pattern.inclusionType === 'INCLUDE'">
                   {{pattern.pattern}}
+                  <button style="width: 10px" mat-button (click)="filePatterns.splice(filePatterns.indexOf(pattern), 1)">-</button>
                 </div>
               </div>
               <div>&nbsp;</div>
@@ -35,6 +36,7 @@
               <div *ngFor="let pattern of filePatterns">
                 <div *ngIf="pattern.inclusionType === 'EXCLUDE'">
                   {{pattern.pattern}}
+                  <button style="width: 10px" mat-button (click)="filePatterns.splice(filePatterns.indexOf(pattern), 1)">-</button>
                 </div>
               </div>
               <div>&nbsp;</div>
@@ -49,13 +51,14 @@
               <div>&nbsp;</div>
               <div *ngFor="let module of modules">
                 {{module}}
+                <button style="width: 10px" mat-button (click)="modules.splice(modules.indexOf(module), 1)">-</button>
               </div>
               <div>&nbsp;</div>
               <div class="row">
                 <mat-form-field style="width: 80%">
                   <input  style="position: static;" type="text" matInput name="modules" placeholder="Project modules" [(ngModel)]="modulesInput">
                 </mat-form-field>
-                <button type="button" mat-button style="float:right" (click)="modules.push(modulesInput)">+</button>
+                <button type="button" mat-button style="float:right" (click)="modules.push(modulesInput); modulesInput = ''">+</button>
               </div>
               <mat-checkbox name="analyzer" [(ngModel)]="startScan">Start analyzing job</mat-checkbox>
               <mat-error *ngIf="noAnalyzersForJob">Please select at least one analyzer to start an analyzing job.</mat-error>
