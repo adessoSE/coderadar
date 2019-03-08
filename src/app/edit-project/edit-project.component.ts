@@ -13,37 +13,16 @@ import {ProjectService} from '../project.service';
 })
 export class EditProjectComponent implements OnInit {
 
+  constructor(private router: Router, private userService: UserService,
+              private projectService: ProjectService, private route: ActivatedRoute) {
+  }
+
   project: Project = new Project();
   private projectId: any;
 
-  analyzers: AnalyzerConfiguration[] = [];
-  filePatterns: FilePatterns[] = [];
-  filePatternIncludeInput = '';
-  filePatternExcludeInput = '';
-  modulesInput = '';
-  modules: string[] = [];
-  startScan = false;
-
-  constructor(private router: Router, private userService: UserService,
-              private projectService: ProjectService, private route: ActivatedRoute) {
-    this.getAnalyzersFromService();
-  }
-
-  sendFilePatterns() {
-    this.projectService.setProjectFilePatterns(this.projectId, this.filePatterns).then().catch(error => {
-      console.log(error);
-      if (error.status) {
-        if (error.status === 403) {
-          this.userService.refresh().then(() => this.sendFilePatterns());
-        }
-      }
-    });
-  }
-
-  sendModules() {
-    this.modules.forEach(module => this.sendModule(module));
-  }
-
+  incorrectURL = false;
+  projectExists = false;
+  nameEmpty = false;
 
   sendModule(module: string) {
     this.projectService.addProjectModule(this.projectId, module).then().catch(error => {
@@ -54,10 +33,6 @@ export class EditProjectComponent implements OnInit {
         }
       }
     });
-  }
-
-  sendAnalzyerConfiugurations() {
-    this.analyzers.forEach(analyzer => this.sendAnalzyerConfiuguration(analyzer));
   }
 
   sendAnalzyerConfiuguration(analyzerConfiguration: AnalyzerConfiguration) {
@@ -72,54 +47,69 @@ export class EditProjectComponent implements OnInit {
   }
 
   submitForm() {
-    this.sendAnalzyerConfiugurations();
-    this.sendFilePatterns();
-    this.sendModules();
-    if (this.startScan) {
-      this.projectService.startAnalyzingJob(this.projectId).catch(error => console.log(error));
+    this.incorrectURL = false;
+    this.projectExists = false;
+    this.nameEmpty = false;
+
+    this.incorrectURL = this.project.vcsUrl.trim().length === 0;
+    this.nameEmpty = this.project.name.trim().length === 0;
+
+    if (this.nameEmpty || this.incorrectURL) {
+      return;
     }
-    this.router.navigate(['/dashboard']);
-  }
 
-  addToIncludedPatterns() {
-    const pattern = new FilePatterns();
-    pattern.pattern = this.filePatternIncludeInput;
-    pattern.fileSetType = 'SOURCE';
-    pattern.inclusionType = 'INCLUDE';
-    this.filePatterns.push(pattern);
-    this.filePatternIncludeInput = '';
-  }
-
-  addToExcludedPatterns() {
-    const pattern = new FilePatterns();
-    pattern.pattern = this.filePatternExcludeInput;
-    pattern.fileSetType = 'SOURCE';
-    pattern.inclusionType = 'EXCLUDE';
-    this.filePatterns.push(pattern);
-    this.filePatternExcludeInput = '';
+    this.projectService.editProject(this.project).then(response => {
+      console.log(response);
+      this.router.navigate(['/dashboard']);
+    }).catch(response => {
+      if (response.status) {
+        console.log(response);
+        if (response.status === 403) {
+          this.userService.refresh().then(r => this.submitForm());
+        } else if (response.status === 400) {
+          if (response.error && response.error.errorMessage === 'Validation Error') {
+            response.error.fieldErrors.forEach(field => {
+              if (field.field === 'vcsUrl') {
+                this.incorrectURL = true;
+              }
+            });
+          }
+        } else if (response.status === 500 &&
+          response.error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
+          this.projectExists = true;
+        }
+      }
+    });
   }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.projectId = params.id;
+      this.getProject();
     });
   }
 
-  private getAnalyzersFromService() {
-    this.projectService.getAnalyzers()
-      .then(response => {
-        console.log(response);
-        response.body.forEach(a => this.analyzers.push(new AnalyzerConfiguration(a.analyzerName, false))); })
-      .catch(error => {
-        if (error.status) {
-          if (error.status === 403) {
-            this.userService.refresh().then(response => this.getAnalyzersFromService());
-          }
-        }});
+  private getProject() {
+    this.projectService.getProject(this.projectId).then(response => {
+      if (response.body.startDate != null) {
+        response.body.startDate = new Date(response.body.startDate.startDate[0],
+          response.body.startDate[1] - 1, response.body.startDate.startDate[2]);
+      } else {
+        response.body.startDate = null;
+      }
+      if (response.body.endDate != null) {
+        response.body.endDate = new Date(response.body.endDate[0],
+          response.body.endDate[1] - 1, response.body.endDate[2]);
+      } else {
+        response.body.endDate = null;
+      }
+      this.project = response.body;
+    }).catch(error => {
+      console.log(error);
+      if (error.status) {
+        if (error.status === 403) {
+          this.userService.refresh().then(response => this.getProject());
+        }
+      }});
   }
-
-  formatAnalyzerName(name: string) {
-    return name.split('.').pop();
-  }
-
 }

@@ -14,7 +14,7 @@ import {FilePatterns} from '../file-patterns';
   templateUrl: './configure-project.component.html',
   styleUrls: ['./configure-project.component.css']
 })
-export class ConfigureProjectComponent implements OnInit {
+export class ConfigureProjectComponent {
 
   projectName = '';
   private projectId: any;
@@ -31,7 +31,17 @@ export class ConfigureProjectComponent implements OnInit {
   analyzersExist = false;
 
   constructor(private router: Router, private userService: UserService,
-              private projectService: ProjectService, private route: ActivatedRoute) {}
+              private projectService: ProjectService, private route: ActivatedRoute) {
+    this.analyzersExist = false;
+    this.route.params.subscribe(params => {
+      this.projectId = params.id;
+      this.getAnalyzersFromService();
+      this.getModulesForProject();
+      this.getProjectName();
+      this.getProjectFilePatterns();
+      this.getProjectAnalyzers();
+    });
+  }
 
   getModulesForProject() {
     this.projectService.getProjectModules(this.projectId).then(response => {
@@ -130,17 +140,6 @@ export class ConfigureProjectComponent implements OnInit {
     pattern.inclusionType = 'EXCLUDE';
     this.filePatterns.push(pattern);
     this.filePatternExcludeInput = '';
-  }
-
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.projectId = params.id;
-      this.getAnalyzersFromService();
-      this.getModulesForProject();
-      this.getProjectName();
-      this.getProjectFilePatterns();
-      this.getProjectAnalyzers();
-    });
   }
 
   private getProjectAnalyzers() {

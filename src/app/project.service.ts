@@ -89,4 +89,9 @@ export class ProjectService {
     return this.httpClient.get<any>(this.apiURL + 'projects/' + id + '/analyzers', {headers: new HttpHeaders()
         .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
+
+  public editProject(project: Project) {
+    return this.httpClient.post<Project>(this.apiURL + 'projects/' + project.id, JSON.stringify(project),
+      {headers: new HttpHeaders().set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
+  }
 }

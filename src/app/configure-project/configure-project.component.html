@@ -24,10 +24,10 @@
               </div>
               <div>&nbsp;</div>
               <div class="row">
-                <mat-form-field style="width: 85%">
+                <mat-form-field style="width: 80%">
                   <input  style="position: static;" type="text" matInput name="includePatterns" placeholder="Included file patterns" [(ngModel)]="filePatternIncludeInput">
                 </mat-form-field>
-                <button type="button"  mat-mini-fab style="float:right" (click)="addToIncludedPatterns()">+</button>
+                <button type="button"  mat-button style="float:right" (click)="addToIncludedPatterns()">+</button>
               </div>
 
               <mat-label>Excluded file patterns: </mat-label>
@@ -39,10 +39,10 @@
               </div>
               <div>&nbsp;</div>
               <div class="row">
-                <mat-form-field style="width: 85%">
+                <mat-form-field style="width: 80%">
                   <input  style="position: static;" type="text" matInput name="excludePatterns" placeholder="Excluded file patterns" [(ngModel)]="filePatternExcludeInput">
                 </mat-form-field>
-                <button type="button" mat-mini-fab style="float:right" (click)="addToExcludedPatterns()">+</button>
+                <button type="button" mat-button style="float:right" (click)="addToExcludedPatterns()">+</button>
               </div>
 
               <mat-label>Project modules: </mat-label>
@@ -52,10 +52,10 @@
               </div>
               <div>&nbsp;</div>
               <div class="row">
-                <mat-form-field style="width: 85%">
+                <mat-form-field style="width: 80%">
                   <input  style="position: static;" type="text" matInput name="modules" placeholder="Project modules" [(ngModel)]="modulesInput">
                 </mat-form-field>
-                <button type="button" mat-mini-fab style="float:right" (click)="modules.push(modulesInput)">+</button>
+                <button type="button" mat-button style="float:right" (click)="modules.push(modulesInput)">+</button>
               </div>
               <mat-checkbox name="analyzer" [(ngModel)]="startScan">Start analyzing job</mat-checkbox>
               <mat-error *ngIf="noAnalyzersForJob">Please select at least one analyzer to start an analyzing job.</mat-error>
