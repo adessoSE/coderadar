@@ -70,10 +70,18 @@ export class MainDashboardComponent {
   }
 
   removeProject(project: Project) {
-    this.projectService.deleteProject(project.id).then(response => console.log(response));
-    const index = this.projects.indexOf(project, 0);
-    if (index > -1) {
-      this.projects.splice(index, 1);
-    }
+    this.projectService.deleteProject(project.id).then(response => {
+      const index = this.projects.indexOf(project, 0);
+      if (index > -1) {
+        this.projects.splice(index, 1);
+      }
+    }).catch(error => {
+      console.log(error);
+      if (error.status) {
+        if (error.status === 403) {
+          this.userService.refresh().then(() => this.removeProject(project));
+        }
+      }
+    });
   }
 }

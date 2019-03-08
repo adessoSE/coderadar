@@ -125,21 +125,25 @@ export class ConfigureProjectComponent {
   }
 
   addToIncludedPatterns() {
-    const pattern = new FilePatterns();
-    pattern.pattern = this.filePatternIncludeInput;
-    pattern.fileSetType = 'SOURCE';
-    pattern.inclusionType = 'INCLUDE';
-    this.filePatterns.push(pattern);
-    this.filePatternIncludeInput = '';
+    if (this.filePatternIncludeInput.trim() !== '') {
+      const pattern = new FilePatterns();
+      pattern.pattern = this.filePatternIncludeInput;
+      pattern.fileSetType = 'SOURCE';
+      pattern.inclusionType = 'INCLUDE';
+      this.filePatterns.push(pattern);
+      this.filePatternIncludeInput = '';
+    }
   }
 
   addToExcludedPatterns() {
-    const pattern = new FilePatterns();
-    pattern.pattern = this.filePatternExcludeInput;
-    pattern.fileSetType = 'SOURCE';
-    pattern.inclusionType = 'EXCLUDE';
-    this.filePatterns.push(pattern);
-    this.filePatternExcludeInput = '';
+    if (this.filePatternExcludeInput.trim() !== '') {
+      const pattern = new FilePatterns();
+      pattern.pattern = this.filePatternExcludeInput;
+      pattern.fileSetType = 'SOURCE';
+      pattern.inclusionType = 'EXCLUDE';
+      this.filePatterns.push(pattern);
+      this.filePatternExcludeInput = '';
+    }
   }
 
   private getProjectAnalyzers() {
