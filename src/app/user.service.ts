@@ -58,4 +58,10 @@ export class UserService {
   public getLoggedInUser() {
     return JSON.parse(localStorage.getItem('currentUser'));
   }
+
+  public changeUserPassword(newPassowrd: string) {
+    return this.httpClient.post<User>(this.apiURL + 'user/password/change',
+      {refreshToken: this.getLoggedInUser().refreshToken, newPassword: newPassowrd},
+      {headers: new HttpHeaders().set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
+  }
 }

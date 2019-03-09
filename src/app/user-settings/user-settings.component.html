@@ -1,3 +1,33 @@
-<p>
-  user-settings works!
-</p>
+<app-header [title]="'User setting'"></app-header>
+<main>
+  <div class="grid-container">
+    <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 2%">
+      <form (ngSubmit)="submitForm()">
+        <mat-card style="width: 400px">
+          <mat-card-header style="justify-content: center">
+            <mat-card-title style="font-size: 20pt">User settings</mat-card-title>
+          </mat-card-header>
+          <mat-card-content fxLayout="column">
+            <mat-form-field>
+              <input type="password" matInput name="oldPassword" placeholder="Current password" [(ngModel)]="oldPassword" required>
+            </mat-form-field>
+            <mat-form-field>
+              <input type="password" matInput name="newPassword" placeholder="New password" [(ngModel)]="newPassword" required>
+            </mat-form-field>
+            <mat-form-field>
+              <input type="password" matInput name="confirmPassword" placeholder="Confirm new password" [(ngModel)]="newPasswordConfirm" required>
+            </mat-form-field>
+            <mat-error *ngIf="currentPasswordWrong">The current password is wrong!</mat-error>
+            <mat-error *ngIf="invalidPassword">Password must be at least <br>8 symbols long and contain a digit!</mat-error>
+            <mat-error *ngIf="passwordsDoNotMatch">Passwords do not match!</mat-error>
+            <div align="center">
+              <button mat-stroked-button style="width: 25%; margin: 10px" routerLink="/dashboard">Cancel</button>
+              <button mat-raised-button color="primary" style="width: 25%; margin: 10px" type="submit">Save</button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </form>
+    </div>
+  </div>
+</main>
+<app-footer></app-footer>

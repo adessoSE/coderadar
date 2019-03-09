@@ -14,7 +14,7 @@ import {FilePatterns} from '../file-patterns';
   templateUrl: './configure-project.component.html',
   styleUrls: ['./configure-project.component.css']
 })
-export class ConfigureProjectComponent {
+export class ConfigureProjectComponent implements OnInit {
 
   projectName = '';
   private projectId: any;
@@ -32,15 +32,6 @@ export class ConfigureProjectComponent {
 
   constructor(private router: Router, private userService: UserService,
               private projectService: ProjectService, private route: ActivatedRoute) {
-    this.analyzersExist = false;
-    this.route.params.subscribe(params => {
-      this.projectId = params.id;
-      this.getAnalyzersFromService();
-      this.getModulesForProject();
-      this.getProjectName();
-      this.getProjectFilePatterns();
-      this.getProjectAnalyzers();
-    });
   }
 
   getModulesForProject() {
@@ -196,5 +187,17 @@ export class ConfigureProjectComponent {
 
   formatAnalyzerName(name: string) {
     return name.split('.').pop();
+  }
+
+  ngOnInit(): void {
+    this.analyzersExist = false;
+    this.route.params.subscribe(params => {
+      this.projectId = params.id;
+      this.getAnalyzersFromService();
+      this.getModulesForProject();
+      this.getProjectName();
+      this.getProjectFilePatterns();
+      this.getProjectAnalyzers();
+    });
   }
 }

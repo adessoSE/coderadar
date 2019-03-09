@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Project} from '../project';
 import {ProjectService} from '../project.service';
 import {Router} from '@angular/router';
@@ -10,12 +10,11 @@ import {hasLifecycleHook} from '@angular/compiler/src/lifecycle_reflector';
   templateUrl: './main-dashboard.component.html',
   styleUrls: ['./main-dashboard.component.css']
 })
-export class MainDashboardComponent {
+export class MainDashboardComponent implements OnInit {
 
   projects: Project[] = [];
 
   constructor(private userService: UserService, private router: Router, private projectService: ProjectService) {
-    this.updateProjectsList();
   }
 
   updateProjectsList() {
@@ -83,5 +82,9 @@ export class MainDashboardComponent {
         }
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.updateProjectsList();
   }
 }

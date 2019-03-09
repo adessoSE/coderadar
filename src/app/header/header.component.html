@@ -8,7 +8,7 @@
       {{getUsername()}}
       <img src="../../assets/account.png" height="60px" width="60px" alt="user">
       <mat-menu class="mat-menu-panel" style="max-width:none; width: 1000px; " #userDropdown="matMenu" xPosition="before">
-        <button mat-menu-item >User settings</button>
+        <button mat-menu-item routerLink="/user-settings">User settings</button>
         <button mat-menu-item (click)="logout()">Logout</button>
       </mat-menu>
     </button>

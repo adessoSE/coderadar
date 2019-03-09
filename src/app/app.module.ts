@@ -22,7 +22,6 @@ import {
   MatSidenavModule,
   MatToolbarModule,
   MatCheckboxModule,
-  MatCommonModule,
 } from '@angular/material';
 import {MainDashboardComponent} from './main-dashboard/main-dashboard.component';
 import {LayoutModule} from '@angular/cdk/layout';
@@ -37,6 +36,7 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'dashboard', component: MainDashboardComponent },
+  { path: 'user-settings', component: UserSettingsComponent },
   { path: 'add-project', component: AddProjectComponent },
   { path: 'project-configure/:id', component: ConfigureProjectComponent },
   { path: 'project-edit/:id', component: EditProjectComponent },
