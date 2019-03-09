@@ -69,17 +69,18 @@ public class CommitMetadataScanner {
     }
 
     // only include commits within the project's specified date range
-    if (project.getVcsCoordinates().getStartDate() != null
-        || project.getVcsCoordinates().getEndDate() != null) {
-      LocalDate startDate =
-          Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
+    LocalDate startDate = null;
+    LocalDate endDate = null;
+    if (project.getVcsCoordinates().getStartDate() != null) {
+      startDate = Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
               project.getVcsCoordinates().getStartDate());
-      LocalDate endDate =
-          Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
-              project.getVcsCoordinates().getEndDate());
-      DateRangeCommitFilter filter = new DateRangeCommitFilter(startDate, endDate);
-      walker.addFilter(filter);
     }
+    if(project.getVcsCoordinates().getEndDate() != null) {
+      endDate = Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
+              project.getVcsCoordinates().getEndDate());
+    }
+    DateRangeCommitFilter filter = new DateRangeCommitFilter(startDate, endDate);
+    walker.addFilter(filter);
 
     PersistingCommitProcessor commitProcessor =
         new PersistingCommitProcessor(commitRepository, project, commitsMeter);
