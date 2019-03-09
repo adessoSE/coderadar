@@ -10,7 +10,7 @@
         <mat-card class="dashboard-card">
           <mat-card-header>
             <mat-card-title>
-              <button style="font-size: 15pt" mat-button routerLink="/project-dashboard/{{project.id}}">{{project.name}}</button>
+              <a style="font-size: 15pt" mat-button routerLink="/project-dashboard/{{project.id}}">{{project.name}}</a>
               <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
                 <mat-icon>more_vert</mat-icon>
               </button>

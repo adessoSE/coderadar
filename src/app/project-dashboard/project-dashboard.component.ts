@@ -14,7 +14,7 @@ export class ProjectDashboardComponent implements OnInit {
 
   projectId;
   commits: Commit[] = [];
-  project: Project;
+  project: Project = new Project();
 
   constructor(private router: Router, private userService: UserService,
               private projectService: ProjectService, private route: ActivatedRoute) {

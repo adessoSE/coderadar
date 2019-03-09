@@ -95,4 +95,10 @@ export class ProjectService {
     return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/commits', {headers: new HttpHeaders()
         .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
+
+  public getCommitsMetricValues(id: number, commitName: string, metricsNames: string[]) {
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/metricvalues/perCommit',
+      {commit: commitName, metrics: metricsNames}, {headers: new HttpHeaders()
+        .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
+  }
 }

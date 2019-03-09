@@ -32,6 +32,7 @@ import {HeaderComponent} from './header/header.component';
 import {FooterComponent} from './footer/footer.component';
 import {UserSettingsComponent} from './user-settings/user-settings.component';
 import { ProjectDashboardComponent } from './project-dashboard/project-dashboard.component';
+import { ViewCommitComponent } from './view-commit/view-commit.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -42,6 +43,7 @@ const appRoutes: Routes = [
   { path: 'project-configure/:id', component: ConfigureProjectComponent },
   { path: 'project-edit/:id', component: EditProjectComponent },
   { path: 'project-dashboard/:id', component: ProjectDashboardComponent },
+  { path: 'project/:id/:name', component: ViewCommitComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
 
@@ -57,7 +59,8 @@ const appRoutes: Routes = [
     HeaderComponent,
     FooterComponent,
     UserSettingsComponent,
-    ProjectDashboardComponent
+    ProjectDashboardComponent,
+    ViewCommitComponent
   ],
   imports: [
     BrowserModule,
