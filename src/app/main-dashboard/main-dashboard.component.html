@@ -1,5 +1,4 @@
 <app-header [title]="'Dashboard'"></app-header>
-
 <main>
   <div class="grid-container">
     <div  style="font-size: x-large" align="center" *ngIf="projects.length == 0">
@@ -11,7 +10,7 @@
         <mat-card class="dashboard-card">
           <mat-card-header>
             <mat-card-title>
-              {{project.name}}
+              <button style="font-size: 15pt" mat-button routerLink="/project-dashboard/{{project.id}}">{{project.name}}</button>
               <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
                 <mat-icon>more_vert</mat-icon>
               </button>

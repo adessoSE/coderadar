@@ -1,0 +1,7 @@
+.dashboard-card {
+  position: absolute;
+  top: 1px;
+  left: 15px;
+  right: 15px;
+  bottom: 5px;
+}

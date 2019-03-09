@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {UserService} from './user.service';
 import {FilePatterns} from './file-patterns';
 import {AnalyzerConfiguration} from './analyzer-configuration';
+import {Commit} from './commit';
 
 @Injectable({
   providedIn: 'root'
@@ -88,5 +89,10 @@ export class ProjectService {
   public editProject(project: Project) {
     return this.httpClient.post<Project>(this.apiURL + 'projects/' + project.id, JSON.stringify(project),
       {headers: new HttpHeaders().set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
+  }
+
+  public getCommits(id: number) {
+    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/commits', {headers: new HttpHeaders()
+        .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
 }
