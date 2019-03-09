@@ -3,9 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Project} from './project';
 import {Router} from '@angular/router';
 import {UserService} from './user.service';
-import {User} from './user';
 import {FilePatterns} from './file-patterns';
-import {forEach} from '@angular/router/src/utils/collection';
 import {AnalyzerConfiguration} from './analyzer-configuration';
 
 @Injectable({
@@ -48,7 +46,6 @@ export class ProjectService {
   }
 
   public setProjectFilePatterns(id: number, filePatternss: FilePatterns[]) {
-    console.log({ filePatterns: filePatternss});
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/files', { filePatterns: filePatternss},
       {headers: new HttpHeaders().set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
@@ -59,13 +56,11 @@ export class ProjectService {
   }
 
   public addAnalyzerConfigurationToProject(id: number, analyzer: AnalyzerConfiguration) {
-    console.log(JSON.stringify(analyzer));
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyzers', JSON.stringify(analyzer), {headers: new HttpHeaders()
         .set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }
 
   public editAnalyzerConfigurationForProject(id: number, analyzer: AnalyzerConfiguration) {
-    console.log(JSON.stringify(analyzer));
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyzers/' + analyzer.id, JSON.stringify(analyzer),
       {headers: new HttpHeaders().set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
   }

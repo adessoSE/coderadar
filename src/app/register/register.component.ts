@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {UserService} from '../user.service';
 
@@ -21,19 +21,13 @@ export class RegisterComponent {
 
   submitForm() {
     this.invalidUser = false;
-    this.passwordsDoNotMatch = false;
-    this.invalidPassword = false;
+    this.passwordsDoNotMatch = this.password !== this.confirmPassword;
+    this.invalidPassword = this.password.length < 8;
 
-    if (this.password !== this.confirmPassword) {
-      this.passwordsDoNotMatch = true;
-    }
-    if (this.password.length < 8) {
-      this.invalidPassword = true;
-    }  else {
+    if (!this.invalidPassword && !this.passwordsDoNotMatch) {
       this.userService.register(this.username, this.password).then(e =>
         this.router.navigate(['/login']))
         .catch(e => {
-          console.log(e);
           if (e.hasOwnProperty('error')) {
             if (e.error.errorMessage === 'Validation Error') {
               if (e.error.fieldErrors.length > 0) {

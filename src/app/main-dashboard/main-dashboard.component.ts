@@ -3,7 +3,6 @@ import {Project} from '../project';
 import {ProjectService} from '../project.service';
 import {Router} from '@angular/router';
 import {UserService} from '../user.service';
-import {hasLifecycleHook} from '@angular/compiler/src/lifecycle_reflector';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -37,7 +36,6 @@ export class MainDashboardComponent implements OnInit {
         this.checkProjectsStatus();
       }
     ).catch(e => {
-      console.log(e);
       if (e.status) {
         if (e.status === 403) {
           this.userService.refresh().then( (() => this.updateProjectsList()));
@@ -49,14 +47,12 @@ export class MainDashboardComponent implements OnInit {
   checkProjectsStatus() {
     this.projects.forEach(project => {
       this.projectService.getAnalyzingJob(project.id).then(response => {
-        console.log(response.body);
         if (response.body.active === true) {
           project.analysisStatus = 'running';
         } else {
           project.analysisStatus = 'complete';
         }
       }).catch(error => {
-        console.log(error);
         if (error.status) {
           if (error.status === 403) {
             this.userService.refresh().then(() => this.checkProjectsStatus());
@@ -75,7 +71,6 @@ export class MainDashboardComponent implements OnInit {
         this.projects.splice(index, 1);
       }
     }).catch(error => {
-      console.log(error);
       if (error.status) {
         if (error.status === 403) {
           this.userService.refresh().then(() => this.removeProject(project));

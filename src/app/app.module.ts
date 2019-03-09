@@ -13,6 +13,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {
   MatButtonModule,
   MatCardModule,
+  MatCheckboxModule,
   MatFormFieldModule,
   MatGridListModule,
   MatIconModule,
@@ -21,16 +22,16 @@ import {
   MatMenuModule,
   MatSidenavModule,
   MatToolbarModule,
-  MatCheckboxModule,
 } from '@angular/material';
 import {MainDashboardComponent} from './main-dashboard/main-dashboard.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {AuthInterceptor} from './auth.interceptor';
-import { ConfigureProjectComponent } from './configure-project/configure-project.component';
-import { EditProjectComponent } from './edit-project/edit-project.component';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
-import { UserSettingsComponent } from './user-settings/user-settings.component';
+import {ConfigureProjectComponent} from './configure-project/configure-project.component';
+import {EditProjectComponent} from './edit-project/edit-project.component';
+import {HeaderComponent} from './header/header.component';
+import {FooterComponent} from './footer/footer.component';
+import {UserSettingsComponent} from './user-settings/user-settings.component';
+import { ProjectDashboardComponent } from './project-dashboard/project-dashboard.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -54,7 +55,8 @@ const appRoutes: Routes = [
     EditProjectComponent,
     HeaderComponent,
     FooterComponent,
-    UserSettingsComponent
+    UserSettingsComponent,
+    ProjectDashboardComponent
   ],
   imports: [
     BrowserModule,

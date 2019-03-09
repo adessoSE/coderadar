@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {Project} from '../project';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../user.service';
 import {ProjectService} from '../project.service';
@@ -36,10 +35,8 @@ export class ConfigureProjectComponent implements OnInit {
 
   getModulesForProject() {
     this.projectService.getProjectModules(this.projectId).then(response => {
-      console.log(response);
       response.body.forEach(module => this.modules.push(module.modulePath));
     }).catch(error => {
-      console.log(error);
       if (error.status === 403) {
         this.userService.refresh().then(() => this.getModulesForProject());
       }
@@ -48,7 +45,6 @@ export class ConfigureProjectComponent implements OnInit {
 
   sendFilePatterns() {
     this.projectService.setProjectFilePatterns(this.projectId, this.filePatterns).then().catch(error => {
-      console.log(error);
       if (error.status) {
         if (error.status === 403) {
           this.userService.refresh().then(() => this.sendFilePatterns());
@@ -64,7 +60,6 @@ export class ConfigureProjectComponent implements OnInit {
 
   sendModule(module: string) {
     this.projectService.addProjectModule(this.projectId, module).then().catch(error => {
-      console.log(error);
       if (error.status) {
         if (error.status === 403) {
           this.userService.refresh().then(() => this.sendModule(module));
@@ -80,7 +75,6 @@ export class ConfigureProjectComponent implements OnInit {
   sendAnalzyerConfiuguration(analyzerConfiguration: AnalyzerConfiguration) {
     if (this.analyzersExist) {
       this.projectService.editAnalyzerConfigurationForProject(this.projectId, analyzerConfiguration).then().catch(error => {
-        console.log(error);
         if (error.status) {
           if (error.status === 403) {
             this.userService.refresh().then(() => this.sendAnalzyerConfiuguration(analyzerConfiguration));
@@ -89,7 +83,6 @@ export class ConfigureProjectComponent implements OnInit {
       });
     } else {
       this.projectService.addAnalyzerConfigurationToProject(this.projectId, analyzerConfiguration).then().catch(error => {
-        console.log(error);
         if (error.status) {
           if (error.status === 403) {
             this.userService.refresh().then(() => this.sendAnalzyerConfiuguration(analyzerConfiguration));
@@ -110,7 +103,7 @@ export class ConfigureProjectComponent implements OnInit {
     this.sendFilePatterns();
     this.sendModules();
     if (this.startScan) {
-      this.projectService.startAnalyzingJob(this.projectId).catch(error => console.log(error));
+      this.projectService.startAnalyzingJob(this.projectId).catch();
     }
     this.router.navigate(['/dashboard']);
   }
@@ -144,7 +137,6 @@ export class ConfigureProjectComponent implements OnInit {
         this.analyzersExist = true;
       }
     }).catch(error => {
-      console.log(error);
       if (error.status === 403) {
         this.userService.refresh().then(() => this.getProjectAnalyzers());
       }
@@ -153,7 +145,6 @@ export class ConfigureProjectComponent implements OnInit {
 
   private getProjectFilePatterns() {
     this.projectService.getProjectFilePatterns(this.projectId).then(response => {
-      console.log(response.body.filePatterns);
       this.filePatterns = response.body.filePatterns;
     }).catch(error => {
       if (error.status === 403) {
@@ -175,7 +166,6 @@ export class ConfigureProjectComponent implements OnInit {
   private getAnalyzersFromService() {
     this.projectService.getAnalyzers()
       .then(response => {
-        console.log(response);
         response.body.forEach(a => this.analyzers.push(new AnalyzerConfiguration(a.analyzerName, false))); })
       .catch(error => {
         if (error.status) {

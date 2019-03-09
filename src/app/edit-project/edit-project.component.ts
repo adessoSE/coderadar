@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Project} from '../project';
-import {AnalyzerConfiguration} from '../analyzer-configuration';
-import {FilePatterns} from '../file-patterns';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../user.service';
 import {ProjectService} from '../project.service';
@@ -38,11 +36,9 @@ export class EditProjectComponent implements OnInit {
     }
 
     this.projectService.editProject(this.project).then(response => {
-      console.log(response);
       this.router.navigate(['/dashboard']);
     }).catch(response => {
       if (response.status) {
-        console.log(response);
         if (response.status === 403) {
           this.userService.refresh().then(r => this.submitForm());
         } else if (response.status === 400) {
@@ -79,14 +75,12 @@ export class EditProjectComponent implements OnInit {
       if (response.body.endDate != null) {
         response.body.endDate = new Date(response.body.endDate[0],
           response.body.endDate[1] - 1, response.body.endDate[2] + 1).toISOString().split('T')[0];
-        console.log(response.body.endDate);
       } else {
         response.body.endDate = null;
       }
       this.projectName = response.body.name;
       this.project = response.body;
     }).catch(error => {
-      console.log(error);
       if (error.status) {
         if (error.status === 403) {
           this.userService.refresh().then(response => this.getProject());

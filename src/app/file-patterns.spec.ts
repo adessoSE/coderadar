@@ -1,4 +1,4 @@
-import { FilePatterns } from './file-patterns';
+import {FilePatterns} from './file-patterns';
 
 describe('FilePatterns', () => {
   it('should create an instance', () => {

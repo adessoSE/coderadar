@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {UserService} from '../user.service';
 
@@ -25,16 +25,11 @@ export class UserSettingsComponent implements OnInit {
   }
 
   submitForm() {
-    this.passwordsDoNotMatch = false;
-    this.invalidPassword = false;
     this.currentPasswordWrong = false;
+    this.passwordsDoNotMatch = this.newPassword !== this.newPasswordConfirm;
+    this.invalidPassword = this.newPassword.length < 8;
 
-    if (this.newPassword !== this.newPasswordConfirm) {
-      this.passwordsDoNotMatch = true;
-    }
-    if (this.newPassword.length < 8) {
-      this.invalidPassword = true;
-    } else {
+    if (!this.passwordsDoNotMatch && !this.invalidPassword) {
       this.userService.login(this.userService.getLoggedInUser().username, this.oldPassword) // authenticate with the current password
         .then(() => this.userService.changeUserPassword(this.newPassword) // change the password
           .then(() => { // login again to refresh the token and navigate to the dashboard when done

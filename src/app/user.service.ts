@@ -22,7 +22,6 @@ export class UserService {
     return this.httpClient.post<any>(this.apiURL + 'user/auth',
       { username: usernameValue, password: passwordValue }).toPromise().then(user => {
         if (user && user.accessToken && user.refreshToken) {
-          console.log(JSON.stringify(user));
           user.username = usernameValue;
           localStorage.setItem('currentUser', JSON.stringify(user));
         }
@@ -34,7 +33,6 @@ export class UserService {
   // If no user is found in the local storage or the refresh token has expired->logout.
   public refresh() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    console.log(currentUser);
     if (currentUser && currentUser.refreshToken && currentUser.accessToken) {
       return this.httpClient.post<any>(this.apiURL + 'user/refresh',
         { accessToken: currentUser.accessToken, refreshToken: currentUser.refreshToken }).toPromise().then(user => {

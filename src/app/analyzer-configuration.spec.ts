@@ -1,4 +1,4 @@
-import { AnalyzerConfiguration } from './analyzer-configuration';
+import {AnalyzerConfiguration} from './analyzer-configuration';
 
 describe('AnalyzerConfiguration', () => {
   it('should create an instance', () => {

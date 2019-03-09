@@ -15,7 +15,7 @@
           <input type="password" matInput placeholder="Confirm password" name="confirmPassword" [(ngModel)]="confirmPassword" required>
         </mat-form-field>
         <mat-error *ngIf="invalidUser">The chosen username is already in use!</mat-error>
-        <mat-error *ngIf="invalidPassword">Password must be at least <br>8 symbols long and contain a digit!</mat-error>
+        <mat-error *ngIf="invalidPassword">Password must be at least <br>8 symbols long and contain a character and a digit!</mat-error>
         <mat-error *ngIf="passwordsDoNotMatch">Passwords do not match!</mat-error>
       </mat-card-content>
       <div align="center">
