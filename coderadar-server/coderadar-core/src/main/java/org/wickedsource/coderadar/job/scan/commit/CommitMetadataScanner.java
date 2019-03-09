@@ -72,11 +72,13 @@ public class CommitMetadataScanner {
     LocalDate startDate = null;
     LocalDate endDate = null;
     if (project.getVcsCoordinates().getStartDate() != null) {
-      startDate = Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
+      startDate =
+          Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
               project.getVcsCoordinates().getStartDate());
     }
-    if(project.getVcsCoordinates().getEndDate() != null) {
-      endDate = Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
+    if (project.getVcsCoordinates().getEndDate() != null) {
+      endDate =
+          Jsr310Converters.DateToLocalDateConverter.INSTANCE.convert(
               project.getVcsCoordinates().getEndDate());
     }
     DateRangeCommitFilter filter = new DateRangeCommitFilter(startDate, endDate);
