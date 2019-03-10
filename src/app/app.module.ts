@@ -42,7 +42,7 @@ const appRoutes: Routes = [
   { path: 'add-project', component: AddProjectComponent },
   { path: 'project-configure/:id', component: ConfigureProjectComponent },
   { path: 'project-edit/:id', component: EditProjectComponent },
-  { path: 'project-dashboard/:id', component: ProjectDashboardComponent },
+  { path: 'project/:id', component: ProjectDashboardComponent },
   { path: 'project/:id/:name', component: ViewCommitComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];

@@ -63,7 +63,7 @@
               <mat-checkbox name="analyzer" [(ngModel)]="startScan">Start analyzing job</mat-checkbox>
               <mat-error *ngIf="noAnalyzersForJob">Please select at least one analyzer to start an analyzing job.</mat-error>
               <div align="center">
-                <button mat-stroked-button style="width: 25%; margin: 10px" routerLink="/dashboard">
+                <button mat-stroked-button type="button" style="width: 25%; margin: 10px" routerLink="/dashboard">
                   Cancel
                 </button>
                 <button mat-raised-button color="primary" style="width: 25%; margin: 10px" type="submit">Done</button>

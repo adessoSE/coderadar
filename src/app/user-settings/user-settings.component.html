@@ -21,7 +21,7 @@
             <mat-error *ngIf="invalidPassword">Password must be at least <br>8 symbols long and contain a digit!</mat-error>
             <mat-error *ngIf="passwordsDoNotMatch">Passwords do not match!</mat-error>
             <div align="center">
-              <button mat-stroked-button style="width: 25%; margin: 10px" routerLink="/dashboard">Cancel</button>
+              <button mat-stroked-button type="button" style="width: 25%; margin: 10px" routerLink="/dashboard">Cancel</button>
               <button mat-raised-button color="primary" style="width: 25%; margin: 10px" type="submit">Save</button>
             </div>
           </mat-card-content>

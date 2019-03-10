@@ -1,7 +1,7 @@
 <app-header [title]="'Project dashboard'"></app-header>
 <main>
   <p style="font-size:15pt;margin-right:100px; width: 70%; top: 15px; float:right">{{getTitleText()}}</p>
-  <mat-grid-list cols="4" rowHeight="130px" style="margin-right:100px; margin-bottom:50px; width: 70%; top: 15px; float:right">
+  <mat-grid-list cols="4" rowHeight="130px" style="margin-right:10%; margin-bottom:50px; width: 70%; top: 15px; float:right">
     <mat-grid-tile *ngFor="let commit of commits" [colspan]="2" [rowspan]="1">
       <mat-card class="dashboard-card">
         <mat-card-content style="margin-left: 5%" class="mat-card-content">

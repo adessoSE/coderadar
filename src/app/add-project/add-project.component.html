@@ -30,7 +30,7 @@
           <mat-error *ngIf="projectExists">A project with this name already exists! Please choose another name.</mat-error>
           <mat-error *ngIf="incorrectURL">The VCS URL is invalid!</mat-error>
           <div align="center">
-            <button mat-stroked-button style="width: 25%; margin: 10px" routerLink="/dashboard">Cancel</button>
+            <button mat-stroked-button type="button" style="width: 25%; margin: 10px" routerLink="/dashboard">Cancel</button>
             <button mat-raised-button color="primary" style="width: 25%; margin: 10px" type="submit">Next</button>
           </div>
         </mat-card-content>
