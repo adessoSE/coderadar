@@ -4,6 +4,7 @@ import {UserService} from '../user.service';
 import {ProjectService} from '../project.service';
 import {AnalyzerConfiguration} from '../analyzer-configuration';
 import {FilePatterns} from '../file-patterns';
+import {FORBIDDEN} from 'http-status-codes';
 
 @Component({
   selector: 'app-configure-project',
@@ -65,7 +66,7 @@ export class ConfigureProjectComponent implements OnInit {
     this.projectService.getProjectModules(this.projectId).then(response => {
       response.body.forEach(module => this.modules.push(module.modulePath));
     }).catch(error => {
-      if (error.status && error.status === 403) {
+      if (error.status && error.status === FORBIDDEN) {
         this.userService.refresh().then(() => this.getModulesForProject());
       }
     });
@@ -82,7 +83,7 @@ export class ConfigureProjectComponent implements OnInit {
         this.analyzersExist = true;
       }})
       .catch(error => {
-        if (error.status && error.status === 403) {
+        if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.getProjectAnalyzers());
         }
     });
@@ -98,7 +99,7 @@ export class ConfigureProjectComponent implements OnInit {
         response.body.forEach(a => this.analyzers.push(new AnalyzerConfiguration(a.analyzerName, false)));
       })
       .catch(error => {
-        if (error.status && error.status === 403) {
+        if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.getAvailableAnalyzers());
         }});
   }
@@ -111,7 +112,7 @@ export class ConfigureProjectComponent implements OnInit {
     this.projectService.getProjectFilePatterns(this.projectId)
       .then(response => this.filePatterns = response.body.filePatterns)
       .catch(error => {
-        if (error.status && error.status === 403) {
+        if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.getProjectFilePatterns());
         }
       });
@@ -125,7 +126,7 @@ export class ConfigureProjectComponent implements OnInit {
     this.projectService.getProject(this.projectId)
       .then(response => this.projectName = response.body.name)
       .catch(error => {
-        if (error.status && error.status === 403) {
+        if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.getProjectName());
         }
     });
@@ -156,7 +157,7 @@ export class ConfigureProjectComponent implements OnInit {
   private submitFilePatterns(): void {
     this.projectService.setProjectFilePatterns(this.projectId, this.filePatterns)
       .catch(error => {
-        if (error.status && error.status === 403) {
+        if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.submitFilePatterns());
         }
       });
@@ -176,7 +177,7 @@ export class ConfigureProjectComponent implements OnInit {
    */
   private submitModule(module: string): void {
     this.projectService.addProjectModule(this.projectId, module).then().catch(error => {
-      if (error.status && error.status === 403) {
+      if (error.status && error.status === FORBIDDEN) {
         this.userService.refresh().then(() => this.submitModule(module));
       }
     });
@@ -200,14 +201,14 @@ export class ConfigureProjectComponent implements OnInit {
     if (this.analyzersExist) {
       this.projectService.editAnalyzerConfigurationForProject(this.projectId, analyzerConfiguration)
         .catch(error => {
-          if (error.status && error.status === 403) {
+          if (error.status && error.status === FORBIDDEN) {
             this.userService.refresh().then(() => this.submitAnalyzerConfiguration(analyzerConfiguration));
           }
       });
     } else {
       this.projectService.addAnalyzerConfigurationToProject(this.projectId, analyzerConfiguration)
         .catch(error => {
-          if (error.status && error.status === 403) {
+          if (error.status && error.status === FORBIDDEN) {
             this.userService.refresh().then(() => this.submitAnalyzerConfiguration(analyzerConfiguration));
           }
       });

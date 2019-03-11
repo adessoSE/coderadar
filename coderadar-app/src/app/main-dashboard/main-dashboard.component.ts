@@ -3,6 +3,7 @@ import {Project} from '../project';
 import {ProjectService} from '../project.service';
 import {Router} from '@angular/router';
 import {UserService} from '../user.service';
+import {FORBIDDEN} from 'http-status-codes';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -27,7 +28,7 @@ export class MainDashboardComponent implements OnInit {
     this.projectService.getProjects()
       .then(response => response.body.forEach(project => this.projects.push(new Project(project))))
       .catch(e => {
-        if (e.status && e.status === 403) {
+        if (e.status && e.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.getProjects());
         }
     });
@@ -46,7 +47,7 @@ export class MainDashboardComponent implements OnInit {
           this.projects.splice(index, 1);
         }})
       .catch(error => {
-        if (error.status && error.status === 403) {
+        if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.deleteProject(project));
         }
     });

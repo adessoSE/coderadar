@@ -3,6 +3,7 @@ import {Project} from '../project';
 import {ProjectService} from '../project.service';
 import {Router} from '@angular/router';
 import {UserService} from '../user.service';
+import {BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR} from 'http-status-codes';
 
 @Component({
   selector: 'app-add-project',
@@ -39,10 +40,10 @@ export class AddProjectComponent {
         this.router.navigate(['/project-configure', this.project.id]);
       })
       .catch(error => {
-        if (error.status && error.status === 403) { // If access is denied
+        if (error.status && error.status === FORBIDDEN) { // If access is denied
             this.userService.refresh()
               .then(() => this.submitForm());
-        } else if (error.status && error.status === 400) {   // If there is a field error
+        } else if (error.status && error.status === BAD_REQUEST) {   // If there is a field error
             if (error.error && error.error.errorMessage === 'Validation Error') {
               error.error.fieldErrors.forEach(field => {  // Check which field
                 if (field.field === 'vcsUrl') {
@@ -50,7 +51,7 @@ export class AddProjectComponent {
                 }
               });
             }
-        } else if (error.status === 500 && // If we get a general server error, then a project with this name exists already
+        } else if (error.status === INTERNAL_SERVER_ERROR &&
             error.error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
               this.projectExists = true;
         }

@@ -4,6 +4,7 @@ import {UserService} from '../user.service';
 import {ProjectService} from '../project.service';
 import {Commit} from '../commit';
 import {Project} from '../project';
+import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 
 @Component({
   selector: 'app-project-dashboard',
@@ -35,7 +36,7 @@ export class ProjectDashboardComponent implements OnInit {
       this.commits.reverse();
     }).catch(e => {
       if (e.status) {
-        if (e.status === 403) {
+        if (e.status === FORBIDDEN) {
           this.userService.refresh().then( (() => this.getCommits()));
         }
       }
@@ -59,9 +60,9 @@ export class ProjectDashboardComponent implements OnInit {
       this.project = new Project(response.body);
     }).catch(error => {
       if (error.status) {
-        if (error.status === 403) {
+        if (error.status === FORBIDDEN) {
           this.userService.refresh().then(response => this.getProject());
-        } else if (error.status === 404) {
+        } else if (error.status === NOT_FOUND) {
           this.router.navigate(['/dashboard']);
         }
       }});

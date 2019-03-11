@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../user.service';
 import {ProjectService} from '../project.service';
 import {Commit} from '../commit';
+import {FORBIDDEN} from 'http-status-codes';
 
 @Component({
   selector: 'app-view-commit',
@@ -35,7 +36,7 @@ export class ViewCommitComponent implements OnInit {
       'EmptyStatement',
       'UnusedImports']).then(response => this.metrics = JSON.stringify(response.body)).catch(e => {
       if (e.status) {
-        if (e.status === 403) {
+        if (e.status === FORBIDDEN) {
           this.userService.refresh().then( (() => this.getCommitInfo()));
         }
       }

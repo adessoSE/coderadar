@@ -3,6 +3,7 @@ import {Project} from '../project';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../user.service';
 import {ProjectService} from '../project.service';
+import {BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND} from 'http-status-codes';
 
 @Component({
   selector: 'app-edit-project',
@@ -41,9 +42,9 @@ export class EditProjectComponent implements OnInit {
     this.projectService.getProject(this.projectId)
       .then(response => this.project = new Project(response.body))
       .catch(error => {
-        if (error.status && error.status === 403) {
+        if (error.status && error.status === FORBIDDEN) {
             this.userService.refresh().then(() => this.getProject());
-        } else if (error.status && error.status === 404) {
+        } else if (error.status && error.status === NOT_FOUND) {
           this.router.navigate(['/dashboard']);
         }
       });
@@ -60,9 +61,9 @@ export class EditProjectComponent implements OnInit {
       this.projectService.editProject(this.project)
         .then(() => this.router.navigate(['/dashboard']))
         .catch(error => {
-          if (error.status && error.status === 403) {
+          if (error.status && error.status === FORBIDDEN) {
               this.userService.refresh().then(r => this.submitForm());
-          } else if (error.status && error.status === 400) {
+          } else if (error.status && error.status === BAD_REQUEST) {
             if (error.error && error.error.errorMessage === 'Validation Error') {
               error.error.fieldErrors.forEach(field => {
                 if (field.field === 'vcsUrl') {
@@ -70,7 +71,7 @@ export class EditProjectComponent implements OnInit {
                 }
               });
             }
-          } else if (error.status === 500 &&
+          } else if (error.status === INTERNAL_SERVER_ERROR &&
             error.error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
             this.projectExists = true;
           }

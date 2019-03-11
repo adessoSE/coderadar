@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {UserService} from '../user.service';
+import {INTERNAL_SERVER_ERROR} from 'http-status-codes';
 
 @Component({
   selector: 'app-login',
@@ -26,7 +27,7 @@ export class LoginComponent {
           this.router.navigate(['/dashboard']);
         })
         .catch(e => {
-          if (e.status === 500) {
+          if (e.status === INTERNAL_SERVER_ERROR) {
             this.invalidUser = true;
           }
         });
