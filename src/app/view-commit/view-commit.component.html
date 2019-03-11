@@ -1,12 +1,13 @@
 <app-header [title]="'Project dashboard'"></app-header>
-<main style="margin-bottom: 1%">
-    <mat-card class="commit-card" >
-      <mat-card-content style="margin-left: 5%;" class="mat-card-content">
+
+<main class="commit-card" style="">
+    <mat-card>
+      <mat-card-content class="mat-card-content">
         <mat-label><b>{{commit.name}}</b></mat-label><br>
         <mat-label>Metrics:</mat-label><br>
         <mat-label>{{metrics}}</mat-label><br>
       </mat-card-content>
     </mat-card>
 </main>
-<app-footer>
-</app-footer>
+
+<app-footer></app-footer>

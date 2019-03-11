@@ -1,13 +1,21 @@
 <app-header [title]="'Add project'"></app-header>
-<main>
-  <div class="grid-container">
-    <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 2%">
+
+<main class="mat-card-form">
+  <div id="cardContainer" class="grid-container">
+    <div fxLayoutAlign="center center">
     <form (ngSubmit)="submitForm()">
-      <mat-card style="width: 400px">
-        <mat-card-header style="justify-content: center">
-          <mat-card-title style="font-size: 20pt">Add project</mat-card-title>
+      <mat-card>
+
+        <!--Card title-->
+        <mat-card-header>
+          <mat-card-title>
+            <span>Add project</span>
+          </mat-card-title>
         </mat-card-header>
+
         <mat-card-content fxLayout="column">
+
+          <!--Form fields-->
           <mat-form-field>
             <input type="text" matInput name="name" placeholder="Project name" [(ngModel)]="project.name" required>
           </mat-form-field>
@@ -26,19 +34,24 @@
           <mat-form-field>
             <input type="date" matInput name="endDate" placeholder="End date - leave empty to scan incoming commits" [(ngModel)]="project.endDate">
           </mat-form-field>
+
+          <!--Possible errors-->
           <mat-error *ngIf="nameEmpty">The project name must not be empty!</mat-error>
           <mat-error *ngIf="projectExists">A project with this name already exists! Please choose another name.</mat-error>
           <mat-error *ngIf="incorrectURL">The VCS URL is invalid!</mat-error>
-          <div align="center">
-            <button mat-stroked-button type="button" style="width: 25%; margin: 10px" routerLink="/dashboard">Cancel</button>
-            <button mat-raised-button color="primary" style="width: 25%; margin: 10px" type="submit">Next</button>
+
+          <!--Cancel and submit buttons-->
+          <div id="cardButtons" align="center">
+            <button mat-stroked-button type="button" routerLink="/dashboard">Cancel</button>
+            <button mat-raised-button color="primary" type="submit">Next</button>
           </div>
+
         </mat-card-content>
       </mat-card>
     </form>
     </div>
   </div>
 </main>
-<app-footer>
-</app-footer>
+
+<app-footer></app-footer>
 

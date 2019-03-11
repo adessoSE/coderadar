@@ -5,3 +5,23 @@
   right: 15px;
   bottom: 5px;
 }
+
+.card-list p {
+  font-size:15pt;
+  margin-right:100px;
+  width: 70%;
+  top: 15px;
+  float:right;
+}
+
+.card-list mat-grid-list {
+  margin-right:10%;
+  margin-bottom:50px;
+  width: 70%;
+  top: 15px;
+  float:right
+}
+
+.card-list mat-card-content{
+  margin-left: 5%;
+}

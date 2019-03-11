@@ -1,0 +1,15 @@
+.list {
+  margin-bottom: 20px;
+}
+
+.list > .list-title {
+  margin-bottom: 15px;
+}
+
+.list mat-form-field {
+  width: 80%;
+}
+
+.list div.row button {
+  float: right;
+}

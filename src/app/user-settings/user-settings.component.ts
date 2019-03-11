@@ -17,24 +17,27 @@ export class UserSettingsComponent implements OnInit {
   invalidPassword = false;
   currentPasswordWrong = false;
 
-  constructor(private router: Router, private userService: UserService) {
-  }
+  constructor(private router: Router, private userService: UserService) {}
 
   ngOnInit(): void {
-    this.userService.getLoggedInUser();
+    UserService.getLoggedInUser();
   }
 
+  /**
+   * Is called upon form submission. Validates user input and calls
+   * UserService.changeUserPassword().
+   */
   submitForm() {
     this.currentPasswordWrong = false;
     this.passwordsDoNotMatch = this.newPassword !== this.newPasswordConfirm;
-    this.invalidPassword = this.newPassword.length < 8;
+    this.invalidPassword = UserService.validatePassword(this.newPassword);
 
     if (!this.passwordsDoNotMatch && !this.invalidPassword) {
-      this.userService.login(this.userService.getLoggedInUser().username, this.oldPassword) // authenticate with the current password
+      this.userService.login(UserService.getLoggedInUser().username, this.oldPassword) // authenticate with the current password
         .then(() => this.userService.changeUserPassword(this.newPassword) // change the password
           .then(() => { // login again to refresh the token and navigate to the dashboard when done
             this.router.navigate(['/dashboard']);
-            this.userService.login(this.userService.getLoggedInUser().username, this.newPassword);
+            this.userService.login(UserService.getLoggedInUser().username, this.newPassword);
           })
           .catch(() => this.invalidPassword = true))
         .catch(() => this.currentPasswordWrong = true);

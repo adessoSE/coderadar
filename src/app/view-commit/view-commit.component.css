@@ -1,7 +1,15 @@
 .commit-card {
+  margin-bottom: 1%
+}
+
+.commit-card mat-card {
   position: relative;
   width: 70%;
   margin-top: 15px;
   margin-right: 10%;
   float: right;
+}
+
+.commit-card mat-card mat-card-content{
+  margin-left: 5%;
 }

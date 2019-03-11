@@ -19,23 +19,26 @@ export class RegisterComponent {
 
   constructor(private router: Router, private userService: UserService) { }
 
+  /**
+   * Is called upon registration form submit.
+   * Validates users input and sends the appropriate requests to the server
+   * using the UserService.
+   */
   submitForm() {
     this.invalidUser = false;
     this.passwordsDoNotMatch = this.password !== this.confirmPassword;
-    this.invalidPassword = this.password.length < 8;
+    this.invalidPassword = UserService.validatePassword(this.password);
 
     if (!this.invalidPassword && !this.passwordsDoNotMatch) {
-      this.userService.register(this.username, this.password).then(e =>
-        this.router.navigate(['/login']))
+      this.userService.register(this.username, this.password)
+        .then(e => {
+        this.userService.login(this.username, this.password)
+          .then(
+            () => this.router.navigate(['/dashboard']));
+        })
         .catch(e => {
-          if (e.hasOwnProperty('error')) {
-            if (e.error.errorMessage === 'Validation Error') {
-              if (e.error.fieldErrors.length > 0) {
-                if (e.error.fieldErrors[0].field === 'password') {
-                  this.invalidPassword = true;
-                }
-              }
-            } else if (e.error.errorMessage === 'User ' + this.username + ' is already registered') {
+          if (e.error && e.error.errorMessage === 'Validation Error') {
+            if (e.error.errorMessage === 'User ' + this.username + ' is already registered') {
               this.invalidUser = true;
             }
           }

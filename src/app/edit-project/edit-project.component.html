@@ -1,14 +1,22 @@
 <app-header [title]="'Edit project'"></app-header>
-<main>
+
+<main class="mat-card-form">
   <div class="grid-container">
-    <div fxLayout="row" fxLayoutAlign="center center" style="margin-top: 2%">
+    <div  id="cardContainer" fxLayoutAlign="center center">
       <form (ngSubmit)="submitForm()">
-        <mat-card style="width: 400px">
-          <mat-card-header style="justify-content: center">
-            <mat-card-title style="font-size: 20pt">Edit {{projectName}}</mat-card-title>
+        <mat-card>
+
+        <!--Card title-->
+          <mat-card-header>
+            <mat-card-title>
+              <span>Edit {{projectName}}</span>
+            </mat-card-title>
           </mat-card-header>
-          <mat-card-content fxLayout="column">
-            <mat-form-field>
+
+        <mat-card-content fxLayout="column">
+
+          <!--Form fields-->
+          <mat-form-field>
               <input type="text" matInput name="name" placeholder="Project name" [(ngModel)]="project.name" required>
             </mat-form-field>
             <mat-form-field>
@@ -29,15 +37,18 @@
             <mat-error *ngIf="nameEmpty">The project name must not be empty!</mat-error>
             <mat-error *ngIf="projectExists">A project with this name already exists! Please choose another name.</mat-error>
             <mat-error *ngIf="incorrectURL">The VCS URL is invalid!</mat-error>
-            <div align="center">
-              <button mat-stroked-button type="button" style="width: 25%; margin: 10px" routerLink="/dashboard">Cancel</button>
-              <button mat-raised-button color="primary" style="width: 25%; margin: 10px" type="submit">Save</button>
+
+            <!--Cancel and submit buttons-->
+            <div id="cardButtons" align="center">
+              <button mat-stroked-button type="button" routerLink="/dashboard">Cancel</button>
+              <button mat-raised-button color="primary" type="submit">Save</button>
             </div>
+
           </mat-card-content>
         </mat-card>
       </form>
     </div>
   </div>
 </main>
-<app-footer>
-</app-footer>
+
+<app-footer></app-footer>

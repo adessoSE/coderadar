@@ -1,16 +1,21 @@
 <app-header [title]="'Dashboard'"></app-header>
-<main>
+
+<main class="card-list">
   <div class="grid-container">
-    <div  style="font-size: x-large" align="center" *ngIf="projects.length == 0">
+
+    <!--Message displayed if no projects are found-->
+    <div id="noProjectsMessage" align="center" *ngIf="projects.length == 0">
       Hello there, it looks like you haven't added any projects yet. <br>
       click on the plus button to add one.
     </div>
-    <mat-grid-list cols="2" rowHeight="200px" style="width: 70%;float:right;margin-right: 10%">
+
+    <!--Project card list-->
+    <mat-grid-list cols="2" rowHeight="200px">
       <mat-grid-tile *ngFor="let project of projects" [colspan]="2" [rowspan]="1">
         <mat-card class="dashboard-card">
           <mat-card-header>
             <mat-card-title>
-              <a style="font-size: 15pt" mat-button routerLink="/project/{{project.id}}">{{project.name}}</a>
+              <a mat-button routerLink="/project/{{project.id}}">{{project.name}}</a>
               <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
                 <mat-icon>more_vert</mat-icon>
               </button>
@@ -21,7 +26,7 @@
               </mat-menu>
             </mat-card-title>
           </mat-card-header>
-          <mat-card-content style="padding-left: 30px" class="mat-card-content">
+          <mat-card-content class="mat-card-content">
             <mat-label>Project URL: <a href="{{project.vcsUrl}}">{{project.vcsUrl}}</a></mat-label><br>
             <mat-label>Project start date: {{project.startDate}}</mat-label><br>
             <mat-label>Project end date: {{project.endDate}}</mat-label><br>
@@ -29,11 +34,13 @@
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>
+
       <a class="add-button" mat-fab color="accent" routerLink="/add-project">
         <mat-icon class="add-icon">+</mat-icon>
       </a>
+
     </mat-grid-list>
   </div>
 </main>
-<app-footer>
-</app-footer>
+
+<app-footer></app-footer>

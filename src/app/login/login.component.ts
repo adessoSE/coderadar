@@ -18,23 +18,19 @@ export class LoginComponent {
   constructor(private router: Router, private userService: UserService) { }
 
   submitForm() {
-    this.userService.login(this.username, this.password).then(e => {
-      this.router.navigate(['/dashboard']); })
-      .catch(e => {
-        if (e.hasOwnProperty('error')) {
-          if (e.error.errorMessage === 'Validation Error') {
-            if (e.error.fieldErrors.length > 0) {
-              if (e.error.fieldErrors[0].field === 'password') {
-                this.invalidPassword = true;
-                this.invalidUser = false;
-              }
-            }
-          } else if (e.status === 500) {
+    this.invalidUser = false;
+    this.invalidPassword = UserService.validatePassword(this.password);
+    if (!this.invalidPassword) {
+      this.userService.login(this.username, this.password)
+        .then(e => {
+          this.router.navigate(['/dashboard']);
+        })
+        .catch(e => {
+          if (e.status === 500) {
             this.invalidUser = true;
-            this.invalidPassword = false;
           }
-        }
-      });
+        });
+    }
   }
 }
 

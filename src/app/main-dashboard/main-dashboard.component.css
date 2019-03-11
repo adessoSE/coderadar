@@ -16,10 +16,6 @@
   right: 10px;
 }
 
-.dashboard-card-content {
-  text-align: center;
-}
-
 .add-button {
   right: 7%;
   bottom: 8%;
@@ -31,4 +27,22 @@
 
 .add-icon {
   margin-top: 8px;
+}
+
+.card-list mat-grid-list {
+  width: 70%;
+  float:right;
+  margin-right: 10%;
+}
+
+.card-list mat-card-header a {
+  font-size: 18pt;
+}
+
+.card-list mat-card-content {
+  padding-left: 30px;
+}
+
+.card-list #noProjectsMessage {
+  font-size: x-large;
 }

@@ -1,23 +1,35 @@
-<div fxLayout="row" fxLayoutAlign="center center" class="login-main">
+<div fxLayoutAlign="center center" class="login-card-form">
   <form (ngSubmit)="submitForm()">
     <mat-card>
-      <mat-card-header style="justify-content: center">
-        <mat-card-title style="font-size: 30pt">Coderadar</mat-card-title>
+
+      <!--Card title-->
+      <mat-card-header>
+        <mat-card-title>
+          <span>Coderadar</span>
+        </mat-card-title>
       </mat-card-header>
+
       <mat-card-content fxLayout="column">
+
+        <!--Form fields-->
         <mat-form-field>
           <input type="text" matInput placeholder="Username"  name="username" [(ngModel)]="username" required>
         </mat-form-field>
         <mat-form-field>
           <input type="password" matInput placeholder="Password" name="password" [(ngModel)]="password" required>
         </mat-form-field>
+
+        <!--Possible errors-->
         <mat-error *ngIf="invalidUser">The user does not exist<br> or the password is incorrect!</mat-error>
         <mat-error *ngIf="invalidPassword">Password too short!</mat-error>
+
+        <!--Buttons-->
+        <div id="cardButtons" align="center">
+          <button mat-button type="button" routerLink="/register">No account? Sign up</button>
+          <button mat-raised-button type="submit" color="primary">Log in</button>
+        </div>
+
       </mat-card-content>
-      <div align="center">
-        <button style="margin: 10px" mat-button type="button" routerLink="/register">No account? Sign up</button>
-        <button style="margin: 10px" mat-raised-button type="submit"  color="primary">Log in</button>
-      </div>
     </mat-card>
   </form>
 </div>
