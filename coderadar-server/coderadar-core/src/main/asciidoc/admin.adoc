@@ -1,0 +1,100 @@
+= coderadar Administration Guide
+v{version}, {date}
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:highlightjs-theme: github
+:toc: left
+:toclevels: 3
+:sectlinks:
+:sectnums:
+
+[introduction]
+== Introduction
+
+This guide is intended for administrators and developers who want to get a coderadar server up and running.
+
+== Getting coderadar up and running
+A coderadar distribution contains a WAR (Java Web Archive) file and a properties
+file that contains the default configuration.
+
+=== Configuration Parameters
+
+WARNING: This documentation is work in progress. If you want to contribute, have a look at this task in the
+ issue tracker: https://github.com/reflectoring/coderadar/issues/146.
+
+=== Starting coderadar standalone
+
+WARNING: This documentation is work in progress. If you want to contribute, have a look at this task in the
+ issue tracker: https://github.com/reflectoring/coderadar/issues/147.
+
+=== Deploying coderadar on an application server
+
+WARNING: This documentation is work in progress. If you want to contribute, have a look at this task in the
+ issue tracker: https://github.com/reflectoring/coderadar/issues/148.
+
+== Clustering
+
+WARNING: This documentation is work in progress. If you want to contribute, have a look at this task in the
+ issue tracker: https://github.com/reflectoring/coderadar/issues/149.
+
+== Monitoring
+
+Coderadar makes use of http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready[Spring Boot Actuator],
+which provides a mechanism to expose certain metrics via HTTP. A list of the monitoring endpoints can by default be accessed via
+"/actuator" on each server node in a coderadar cluster.
+
+For an explanation of the endpoints and monitoring metrics provided by Spring Boot Actuator, please
+consult the manual.
+
+=== Coderadar-specific Monitoring Metrics
+
+Coderadar exposes the following monitoring metrics as a JSON object via the "/metrics" endpoint.
+All metrics starting with the prefix `coderadar.` are coderadar-specific metrics.
+
+.Coderadar Monitoring Metrics
+|===
+|Metric name |Description
+
+| coderadar.CommitAnalyzer.commits.*
+| Count and throughput of commits having been analyzed.
+
+| coderadar.CommitAnalyzer.files.*
+| Count and throughput of files having been analyzed.
+
+| coderadar.CommitMetaDataScanner.commits.*
+| Count and throughput of commits having been scanned for metadata.
+
+| coderadar.CommitToFileAssociator.commits.*
+| Count and throughput of commits whose files have been associated with it.
+
+| coderadar.CommitToFileAssociator.files.*
+| Count and throughput of files having been associated with a commit.
+
+| coderadar.FileMetadataScanner.commits.count.*
+| Count and throughput of commits whose files have been scanned for metadata.
+
+| coderadar.FileMetadataScanner.files.*
+| Count and throughput of files having been scanned for metadata.
+
+| coderadar.jobs.acquisitionConflicts.*
+| Count and rate of conflicts between server nodes who tried to acquire the same
+  job for processing. It's OK if this happens and the `coderadar.jobs.inProgress`
+  counter stays at approximately the number of coderadar slaves in the cluster.
+  If the `coderadar.jobs.inProgress` counter falls significantly below the number
+  of coderadar slaved in the cluster, they are probably contesting too much for
+  the jobs waiting in queue.
+
+| coderadar.jobs.failed.*
+| Count and rate of failed jobs.
+
+| coderadar.jobs.finished.*
+| Count and throughput of successfully finished jobs.
+
+| coderadar.jobs.inProgress
+| Current number of jobs that are in progress over all coderadar servers in the cluster.
+
+| coderadar.jobs.waiting
+| Current number of jobs that are waiting for processing over all coderadar servers in the cluster.
+
+|===

@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20
+      author: thombergs
+      changes:
+        - renameTable:
+            newTableName: user_account
+            oldTableName: user
+            schemaName: public

@@ -1,0 +1,13 @@
+apply plugin: "com.diffplug.gradle.spotless"
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}
+
+dependencies {
+    compile project(':coderadar-plugin-api')
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+    testCompile group: 'commons-io', name: 'commons-io', version: '2.4'
+}

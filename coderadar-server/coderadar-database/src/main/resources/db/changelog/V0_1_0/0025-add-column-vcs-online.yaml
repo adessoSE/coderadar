@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 25
+      author: thombergs
+      changes:
+        - addColumn:
+            columns:
+            - column:
+                name: vcs_online
+                type: boolean
+                defaultValue: true
+            schemaName: public
+            tableName: project

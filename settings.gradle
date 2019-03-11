@@ -1,0 +1,10 @@
+include 'coderadar-plugin-api'
+include 'coderadar-plugins:loc-analyzer-plugin'
+include 'coderadar-plugins:todo-analyzer-plugin'
+include 'coderadar-plugins:checkstyle-analyzer-plugin'
+include 'coderadar-server:coderadar-core'
+include 'coderadar-server:coderadar-graph:coderadar-graph-api'
+include 'coderadar-server:coderadar-graph:coderadar-graph-impl'
+include 'coderadar-server:coderadar-database'
+
+

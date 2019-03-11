@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6
+      author: thombergs
+      changes:
+        - createTable:
+            tableName: file_identity
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            constraintName: pk_fiid_id
+            schemaName: public
+            tableName: file_identity
+            columnNames: id
+        - addUniqueConstraint:
+            constraintName: uk_fiid_id
+            schemaName: public
+            tableName: file_identity
+            columnNames: id
+        - createSequence:
+            schemaName: public
+            sequenceName: seq_fiid_id
+
+

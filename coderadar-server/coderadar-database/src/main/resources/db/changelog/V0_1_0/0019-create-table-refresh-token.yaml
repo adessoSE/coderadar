@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: 19
+      author: thombergs
+      changes:
+        - createTable:
+            tableName: refresh_token
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: token
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            constraintName: pk_reto_id
+            schemaName: public
+            tableName: refresh_token
+            columnNames: id
+        - addUniqueConstraint:
+            constraintName: uk_reto_id
+            schemaName: public
+            tableName: refresh_token
+            columnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_reto_user_id
+            baseColumnNames: user_id
+            baseTableName: refresh_token
+            referencedColumnNames: id
+            referencedTableName: user
+        - createIndex:
+            indexName: idx_reto_user_id
+            schemaName: public
+            tableName: refresh_token
+            columns:
+              - column:
+                  name: user_id
+        - createSequence:
+            schemaName: public
+            sequenceName: seq_reto_id
