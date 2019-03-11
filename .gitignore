@@ -117,7 +117,6 @@ fabric.properties
 
 # Package Files #
 *.jar
-<<<<<<< HEAD
 *.war
 *.nar
 *.ear
@@ -228,7 +227,6 @@ gradle-app.setting
 
 # End of https://www.gitignore.io/api/java,macos,linux,gradle,eclipse,windows,intellij,visualstudiocode
 
-
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
@@ -237,7 +235,7 @@ gradle-app.setting
 /out-tsc
 
 # dependencies
-/node_modules
+**/node_modules
 
 # profiling files
 chrome-profiler-events.json
@@ -273,10 +271,8 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-=======
 !/gradle/wrapper/gradle-wrapper.jar
 build
 coderadar-server/local.application.properties
 *.class
 /classes
->>>>>>> 0c4cca4ba02a0becec2504851aa63e722aac5eb3
