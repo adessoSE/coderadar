@@ -11,51 +11,19 @@ import {ProjectService} from '../project.service';
 })
 export class EditProjectComponent implements OnInit {
 
-  constructor(private router: Router, private userService: UserService,
-              private projectService: ProjectService, private route: ActivatedRoute) {
-  }
+  private projectId: number;
+  project: Project;
 
-  project: Project = new Project();
-  projectName = '';
-  private projectId: any;
-
+  // Error fields
   incorrectURL = false;
   projectExists = false;
   nameEmpty = false;
 
-  submitForm() {
-    this.incorrectURL = false;
-    this.projectExists = false;
-    this.nameEmpty = false;
-
-    this.incorrectURL = this.project.vcsUrl.trim().length === 0;
-    this.nameEmpty = this.project.name.trim().length === 0;
-
-    if (this.nameEmpty || this.incorrectURL) {
-      return;
-    }
-
-    this.projectService.editProject(this.project).then(response => {
-      this.router.navigate(['/dashboard']);
-    }).catch(response => {
-      if (response.status) {
-        if (response.status === 403) {
-          this.userService.refresh().then(r => this.submitForm());
-        } else if (response.status === 400) {
-          if (response.error && response.error.errorMessage === 'Validation Error') {
-            response.error.fieldErrors.forEach(field => {
-              if (field.field === 'vcsUrl') {
-                this.incorrectURL = true;
-              }
-            });
-          }
-        } else if (response.status === 500 &&
-          response.error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
-          this.projectExists = true;
-        }
-      }
-    });
+  constructor(private router: Router, private userService: UserService,
+              private projectService: ProjectService, private route: ActivatedRoute) {
+    this.project = new Project();
   }
+
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -64,29 +32,63 @@ export class EditProjectComponent implements OnInit {
     });
   }
 
-  private getProject() {
-    this.projectService.getProject(this.projectId).then(response => {
-      if (response.body.startDate != null) {
-        response.body.startDate = new Date(response.body.startDate[0],
-          response.body.startDate[1] - 1, response.body.startDate[2] + 1).toISOString().split('T')[0];
-      } else {
-        response.body.startDate = null;
-      }
-      if (response.body.endDate != null) {
-        response.body.endDate = new Date(response.body.endDate[0],
-          response.body.endDate[1] - 1, response.body.endDate[2] + 1).toISOString().split('T')[0];
-      } else {
-        response.body.endDate = null;
-      }
-      this.projectName = response.body.name;
-      this.project = response.body;
-    }).catch(error => {
-      if (error.status) {
-        if (error.status === 403) {
-          this.userService.refresh().then(response => this.getProject());
-        } else if (error.status === 404) {
+  /**
+   * Gets the project from the service and saves it this.project.
+   * If access is denied (403) sends the refresh token and tries to submit again.
+   * If the project does not exists (404) redirects to the dashboard.
+   */
+  private getProject(): void {
+    this.projectService.getProject(this.projectId)
+      .then(response => this.project = new Project(response.body))
+      .catch(error => {
+        if (error.status && error.status === 403) {
+            this.userService.refresh().then(() => this.getProject());
+        } else if (error.status && error.status === 404) {
           this.router.navigate(['/dashboard']);
         }
-      }});
+      });
+  }
+
+  /**
+   * Called when the form is submitted.
+   * Does input validation and calls ProjectService.editProject().
+   * Handles errors from the server.
+   * If access is denied (403) sends the refresh token and tries to submit again.
+   */
+  submitForm(): void {
+    if (this.validateInput()) {
+      this.projectService.editProject(this.project)
+        .then(() => this.router.navigate(['/dashboard']))
+        .catch(error => {
+          if (error.status && error.status === 403) {
+              this.userService.refresh().then(r => this.submitForm());
+          } else if (error.status && error.status === 400) {
+            if (error.error && error.error.errorMessage === 'Validation Error') {
+              error.error.fieldErrors.forEach(field => {
+                if (field.field === 'vcsUrl') {
+                  this.incorrectURL = true;
+                }
+              });
+            }
+          } else if (error.status === 500 &&
+            error.error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
+            this.projectExists = true;
+          }
+      });
+    }
+  }
+
+  /**
+   * Checks for empty form fields.
+   */
+  private validateInput(): boolean {
+    this.incorrectURL = false;
+    this.projectExists = false;
+    this.nameEmpty = false;
+
+    this.incorrectURL = this.project.vcsUrl.trim().length === 0;
+    this.nameEmpty = this.project.name.trim().length === 0;
+
+    return this.nameEmpty || this.incorrectURL;
   }
 }

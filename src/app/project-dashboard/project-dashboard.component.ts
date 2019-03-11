@@ -56,19 +56,7 @@ export class ProjectDashboardComponent implements OnInit {
 
   private getProject() {
     this.projectService.getProject(this.projectId).then(response => {
-      if (response.body.startDate != null) {
-        response.body.startDate = new Date(response.body.startDate[0],
-          response.body.startDate[1] - 1, response.body.startDate[2] + 1).toISOString().split('T')[0];
-      } else {
-        response.body.startDate = null;
-      }
-      if (response.body.endDate != null) {
-        response.body.endDate = new Date(response.body.endDate[0],
-          response.body.endDate[1] - 1, response.body.endDate[2] + 1).toISOString().split('T')[0];
-      } else {
-        response.body.endDate = null;
-      }
-      this.project = response.body;
+      this.project = new Project(response.body);
     }).catch(error => {
       if (error.status) {
         if (error.status === 403) {

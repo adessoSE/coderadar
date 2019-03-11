@@ -9,7 +9,7 @@
             <!--Card title-->
             <mat-card-header>
               <mat-card-title>
-                <span>Configure {{projectName}}</span>
+                <span>Configure {{(projectName)}}</span>
               </mat-card-title>
             </mat-card-header>
 
@@ -21,7 +21,9 @@
                   <mat-label>Select analyzers:</mat-label>
                 </div>
                 <div *ngFor="let analyzer of analyzers">
-                  <mat-checkbox name="analyzer-{{analyzer.analyzerName}}" [(ngModel)]="analyzer.enabled">{{formatAnalyzerName(analyzer.analyzerName)}}</mat-checkbox>
+                  <mat-checkbox name="analyzer-{{analyzer.analyzerName}}" [(ngModel)]="analyzer.enabled">
+                    {{analyzer.analyzerName.split('.').pop()}}
+                  </mat-checkbox>
                 </div>
               </div>
 

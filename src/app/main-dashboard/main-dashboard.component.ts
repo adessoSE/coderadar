@@ -13,73 +13,44 @@ export class MainDashboardComponent implements OnInit {
 
   projects: Project[] = [];
 
-  constructor(private userService: UserService, private router: Router, private projectService: ProjectService) {
-  }
-
-  updateProjectsList() {
-    this.projectService.getProjects().then(
-      response => {
-        this.projects = response.body;
-        this.projects.forEach(p => {
-          if (p.startDate !== null) {
-            p.startDate = new Date(p.startDate[0], p.startDate[1] - 1, p.startDate[2]).toDateString();
-          } else {
-            p.startDate = 'first commit';
-          }
-
-          if (p.endDate !== null) {
-            p.endDate = new Date(p.endDate[0], p.endDate[1] - 1, p.endDate[2]).toDateString();
-          } else {
-            p.endDate = 'current';
-          }
-        });
-        this.checkProjectsStatus();
-      }
-    ).catch(e => {
-      if (e.status) {
-        if (e.status === 403) {
-          this.userService.refresh().then( (() => this.updateProjectsList()));
-        }
-      }
-    });
-  }
-
-  checkProjectsStatus() {
-    this.projects.forEach(project => {
-      this.projectService.getAnalyzingJob(project.id).then(response => {
-        if (response.body.active === true) {
-          project.analysisStatus = 'running';
-        } else {
-          project.analysisStatus = 'complete';
-        }
-      }).catch(error => {
-        if (error.status) {
-          if (error.status === 403) {
-            this.userService.refresh().then(() => this.checkProjectsStatus());
-          } else if (error.status === 404) {
-            project.analysisStatus = 'not running';
-          }
-        }
-      });
-    });
-  }
-
-  removeProject(project: Project) {
-    this.projectService.deleteProject(project.id).then(response => {
-      const index = this.projects.indexOf(project, 0);
-      if (index > -1) {
-        this.projects.splice(index, 1);
-      }
-    }).catch(error => {
-      if (error.status) {
-        if (error.status === 403) {
-          this.userService.refresh().then(() => this.removeProject(project));
-        }
-      }
-    });
-  }
+  constructor(private userService: UserService, private router: Router, private projectService: ProjectService) {}
 
   ngOnInit(): void {
-    this.updateProjectsList();
+    this.getProjects();
   }
+
+  /**
+   * Gets all projects from the project service and constructs a new array of Project objects
+   * from the returned JSON. Sends a refresh token if access is denied.
+   */
+  private getProjects(): void {
+    this.projectService.getProjects()
+      .then(response => response.body.forEach(project => this.projects.push(new Project(project))))
+      .catch(e => {
+        if (e.status && e.status === 403) {
+          this.userService.refresh().then(() => this.getProjects());
+        }
+    });
+  }
+
+  /**
+   * Deletes a project from the database.
+   * Only works if project is not currently being analyzed.
+   * @param project The project to delete
+   */
+  deleteProject(project: Project): void {
+    this.projectService.deleteProject(project.id)
+      .then(() => {
+        const index = this.projects.indexOf(project, 0);
+        if (this.projects.indexOf(project, 0) > -1) {
+          this.projects.splice(index, 1);
+        }})
+      .catch(error => {
+        if (error.status && error.status === 403) {
+          this.userService.refresh().then(() => this.deleteProject(project));
+        }
+    });
+  }
+
+
 }
