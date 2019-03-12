@@ -14,13 +14,14 @@ import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 export class ProjectDashboardComponent implements OnInit {
 
   projectId;
-  commits: Commit[] = [];
-  project: Project = new Project();
+  commits: Commit[];
+  project: Project;
 
   constructor(private router: Router, private userService: UserService,
               private projectService: ProjectService, private route: ActivatedRoute) {
+    this.project = new Project();
+    this.commits = [];
   }
-
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -30,20 +31,26 @@ export class ProjectDashboardComponent implements OnInit {
     });
   }
 
-  private getCommits() {
-    this.projectService.getCommits(this.projectId).then(response => {
-      this.commits = response.body;
-      this.commits.reverse();
-    }).catch(e => {
-      if (e.status) {
-        if (e.status === FORBIDDEN) {
+  /**
+   * Gets all commits for this project from the service and saves them in this.commits.
+   */
+  private getCommits(): void {
+    this.projectService.getCommits(this.projectId)
+      .then(response => {
+        this.commits = response.body;
+        this.commits.reverse(); })
+      .catch(e => {
+        if (e.status && e.status === FORBIDDEN) {
           this.userService.refresh().then( (() => this.getCommits()));
         }
-      }
     });
   }
 
-  booleanToString(arg: boolean) {
+  /**
+   * Return 'yes' for true and 'no' for false.
+   * @param arg boolean
+   */
+  booleanToString(arg: boolean): string {
     if (arg) {
       return 'yes';
     } else {
@@ -51,24 +58,33 @@ export class ProjectDashboardComponent implements OnInit {
     }
   }
 
-  timestampToDate(timestamp: number) {
+  /**
+   * Constructs a date from a timestamp and returns it in string form.
+   * @param timestamp The timestamp to construct a date from.
+   */
+  timestampToDate(timestamp: number): string {
     return new Date(timestamp).toLocaleDateString();
   }
 
-  private getProject() {
-    this.projectService.getProject(this.projectId).then(response => {
-      this.project = new Project(response.body);
-    }).catch(error => {
-      if (error.status) {
-        if (error.status === FORBIDDEN) {
-          this.userService.refresh().then(response => this.getProject());
-        } else if (error.status === NOT_FOUND) {
+  /**
+   * Gets the project from the service and saves it in this.project
+   */
+  private getProject(): void {
+    this.projectService.getProject(this.projectId)
+      .then(response => this.project = new Project(response.body))
+      .catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+            this.userService.refresh().then(() => this.getProject());
+        } else if (error.status && error.status === NOT_FOUND) {
           this.router.navigate(['/dashboard']);
         }
-      }});
+      });
   }
 
-  getTitleText() {
+  /**
+   * Formats the title text according to the project start and end dates.
+   */
+  getTitleText(): string {
     if (this.project.startDate == null && this.project.endDate == null) {
       return 'Showing all commits for project ' + this.project.name;
     } else if (this.project.startDate != null && this.project.endDate == null) {

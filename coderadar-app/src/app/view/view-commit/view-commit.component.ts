@@ -29,17 +29,18 @@ export class ViewCommitComponent implements OnInit {
   }
 
   getCommitInfo() {
-    this.projectService.getCommitsMetricValues(this.projectId, this.commit.name, [
+    this.projectService.getCommitsMetricValues(this.projectId, this.commit.name,
+      [
       'ImportOrder',
       'FileLength',
       'EqualsHashCode',
       'EmptyStatement',
-      'UnusedImports']).then(response => this.metrics = JSON.stringify(response.body)).catch(e => {
-      if (e.status) {
-        if (e.status === FORBIDDEN) {
-          this.userService.refresh().then( (() => this.getCommitInfo()));
-        }
-      }
+      'UnusedImports'])
+        .then(response => this.metrics = JSON.stringify(response.body))
+        .catch(e => {
+          if (e.status && e.status === FORBIDDEN) {
+              this.userService.refresh().then( (() => this.getCommitInfo()));
+          }
     });
   }
 }
