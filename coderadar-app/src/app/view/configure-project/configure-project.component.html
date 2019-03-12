@@ -71,14 +71,14 @@
                   <mat-label>Project modules:</mat-label>
                 </div>
                 <div *ngFor="let module of modules">
-                  {{module}}
-                  <button mat-button (click)="modules.splice(modules.indexOf(module), 1)">-</button>
+                    {{module.modulePath}}
+                    <button mat-button (click)="addToDeletedModules(module)">-</button>
                 </div>
                 <div class="row">
                   <mat-form-field>
                     <input type="text" matInput name="modules" placeholder="Module" [(ngModel)]="modulesInput">
                   </mat-form-field>
-                  <button type="button" mat-button style="float:right" (click)="modules.push(modulesInput); modulesInput = ''">+</button>
+                  <button type="button" mat-button style="float:right" (click)="addToModules()">+</button>
                 </div>
               </div>
 

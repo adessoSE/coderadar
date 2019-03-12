@@ -85,11 +85,11 @@ export class ProjectDashboardComponent implements OnInit {
    * Formats the title text according to the project start and end dates.
    */
   getTitleText(): string {
-    if (this.project.startDate == null && this.project.endDate == null) {
+    if (this.project.startDate === 'first commit' && this.project.endDate === 'current') {
       return 'Showing all commits for project ' + this.project.name;
-    } else if (this.project.startDate != null && this.project.endDate == null) {
+    } else if (this.project.startDate !== 'first commit' && this.project.endDate === 'current') {
       return 'Showing all commits for project ' + this.project.name + ' from ' + this.project.startDate + ' up until today';
-    } else if (this.project.startDate == null && this.project.endDate != null) {
+    } else if (this.project.startDate === 'first commit' && this.project.endDate !== 'current') {
       return 'Showing all commits for project ' + this.project.name + ' from '
         + new Date(this.commits[this.commits.length - 1].timestamp).toLocaleDateString() + ' up until ' + this.project.endDate;
     } else {

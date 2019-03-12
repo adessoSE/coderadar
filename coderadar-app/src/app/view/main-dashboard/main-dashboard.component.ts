@@ -54,4 +54,17 @@ export class MainDashboardComponent implements OnInit {
   }
 
 
+  /**
+   * Stars a new analyzing job for the selected project.
+   * @param projectId The project id.
+   */
+  rescanProject(projectId: number): void {
+    this.projectService.startAnalyzingJob(projectId)
+      .catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh().then(() => this.rescanProject(projectId));
+        }
+      });
+  }
+
 }

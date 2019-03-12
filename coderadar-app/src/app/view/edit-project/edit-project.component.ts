@@ -63,7 +63,6 @@ export class EditProjectComponent implements OnInit {
    * If access is denied (403) sends the refresh token and tries to submit again.
    */
   submitForm(): void {
-    console.log(!this.validateInput());
     if (!this.validateInput()) {
       this.projectService.editProject(this.project)
         .then(() => this.router.navigate(['/dashboard']))

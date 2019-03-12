@@ -6,6 +6,7 @@ import {UserService} from './user.service';
 import {FilePatterns} from '../model/file-patterns';
 import {AnalyzerConfiguration} from '../model/analyzer-configuration';
 import {Commit} from '../model/commit';
+import {Module} from '../model/module';
 
 @Injectable({
   providedIn: 'root'
@@ -85,8 +86,8 @@ export class ProjectService {
    * Sends a GET request to /projects/{id}/modules
    * @param id The id of the  project.
    */
-  public getProjectModules(id: number): Promise<HttpResponse<any>> {
-    return this.httpClient.get<any>(this.apiURL + 'projects/' + id + '/modules', {observe: 'response'}).toPromise();
+  public getProjectModules(id: number): Promise<HttpResponse<Module[]>> {
+    return this.httpClient.get<Module[]>(this.apiURL + 'projects/' + id + '/modules', {observe: 'response'}).toPromise();
   }
 
   /**
@@ -95,8 +96,30 @@ export class ProjectService {
    * @param id The id of the project.
    * @param module The name (path) of the module.
    */
-  public addProjectModule(id: number, module: string): Promise<HttpResponse<any>> {
-      return this.httpClient.post(this.apiURL + 'projects/' + id + '/modules', {modulePath: module}, {observe: 'response'}).toPromise();
+  public addProjectModule(id: number, module: Module): Promise<HttpResponse<any>> {
+      return this.httpClient.post(this.apiURL + 'projects/' + id + '/modules', {modulePath: module.modulePath},
+        {observe: 'response'}).toPromise();
+  }
+
+  /**
+   * Edits a module of a project.
+   * Sends a POST request to /projects/{id}/modules/{moduleId}
+   * @param id The id of the project.
+   * @param module The name (path) of the module.
+   */
+  public editProjectModule(id: number, module: Module): Promise<HttpResponse<any>> {
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/modules/' + module.id, JSON.stringify(module),
+      {observe: 'response'}).toPromise();
+  }
+
+  /**
+   * Deletes a module of a project.
+   * Sends a DELETE request to /projects/{id}/modules/{moduleId}
+   * @param id The id of the project.
+   * @param module The name (path) of the module.
+   */
+  public deleteProjectModule(id: number, module: Module): Promise<HttpResponse<any>> {
+    return this.httpClient.delete(this.apiURL + 'projects/' + id + '/modules/' + module.id, {observe: 'response'}).toPromise();
   }
 
   /**
@@ -153,6 +176,16 @@ export class ProjectService {
    */
   public startAnalyzingJob(id: number): Promise<HttpResponse<any>> {
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyzingJob', {fromDate: 0, active: true, rescan: true},
+      {observe: 'response'}).toPromise();
+  }
+
+  /**
+   * Start a new analyzing for a project.
+   * Sends a POST request to /projects/{id}/analyzingJob
+   * @param id The id of the project.
+   */
+  public stopAnalyzingJob(id: number): Promise<HttpResponse<any>> {
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyzingJob', {fromDate: 0, active: false, rescan: true},
       {observe: 'response'}).toPromise();
   }
 

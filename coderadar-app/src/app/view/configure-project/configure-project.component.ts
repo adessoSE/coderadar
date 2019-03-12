@@ -5,6 +5,7 @@ import {ProjectService} from '../../service/project.service';
 import {AnalyzerConfiguration} from '../../model/analyzer-configuration';
 import {FilePatterns} from '../../model/file-patterns';
 import {FORBIDDEN} from 'http-status-codes';
+import {Module} from '../../model/module';
 
 @Component({
   selector: 'app-configure-project',
@@ -24,7 +25,8 @@ export class ConfigureProjectComponent implements OnInit {
   filePatternIncludeInput;
   filePatternExcludeInput;
   modulesInput;
-  modules: string[];
+  modules: Module[];
+  deletedModules: Module[];
   startScan: boolean;
 
   // Error fields
@@ -38,6 +40,7 @@ export class ConfigureProjectComponent implements OnInit {
     this.filePatternExcludeInput = '';
     this.modulesInput = '';
     this.modules = [];
+    this.deletedModules = [];
     this.analyzers = [];
     this.filePatterns = [];
     this.startScan = false;
@@ -63,12 +66,12 @@ export class ConfigureProjectComponent implements OnInit {
    * Sends the refresh token if access is denied and repeats the request.
    */
   private getModulesForProject(): void {
-    this.projectService.getProjectModules(this.projectId).then(response => {
-      response.body.forEach(module => this.modules.push(module.modulePath));
-    }).catch(error => {
-      if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh().then(() => this.getModulesForProject());
-      }
+    this.projectService.getProjectModules(this.projectId)
+      .then(response => this.modules = response.body)
+      .catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh().then(() => this.getModulesForProject());
+        }
     });
   }
 
@@ -164,19 +167,42 @@ export class ConfigureProjectComponent implements OnInit {
   }
 
   /**
-   * Calls submitModule for every string in this.modules (as the REST API doesn't allow to send them all at once).
+   * Calls submitModule or deleteModule for every string in this.modules (as the REST API doesn't allow to send them all at once).
    */
   private submitModules(): void {
+    this.deletedModules.forEach(module => this.deleteModule(module));
     this.modules.forEach(module => this.submitModule(module));
   }
 
   /**
-   * Calls ProjectService.addProjectModule().
+   * Calls ProjectService.addProjectModule() or editProjectModule()
+   * depending on whether or not the module is new.
    * Sends the refresh token if access is denied and repeats the request.
    * @param module The module to add to the project
    */
-  private submitModule(module: string): void {
-    this.projectService.addProjectModule(this.projectId, module).then().catch(error => {
+  private submitModule(module: Module): void {
+    if (module.id == null) {
+      this.projectService.addProjectModule(this.projectId, module).catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh().then(() => this.submitModule(module));
+        }
+      });
+    } else if (module.id >= 0) {
+      this.projectService.editProjectModule(this.projectId, module).catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh().then(() => this.submitModule(module));
+        }
+      });
+    }
+  }
+
+  /**
+   * Calls ProjectService.deleteProjectModule()
+   * Sends the refresh token if access is denied and repeats the request.
+   * @param module The module to delete from the project
+   */
+  private deleteModule(module: Module): void {
+    this.projectService.deleteProjectModule(this.projectId, module).catch(error => {
       if (error.status && error.status === FORBIDDEN) {
         this.userService.refresh().then(() => this.submitModule(module));
       }
@@ -220,7 +246,7 @@ export class ConfigureProjectComponent implements OnInit {
    * Constructs a new FilePatterns object (INCLUDE) with whatever is in filePatternIncludeInput
    * and adds it to filePatterns.
    */
-  addToIncludedPatterns() {
+  addToIncludedPatterns(): void {
     if (this.filePatternIncludeInput.trim() !== '') {
       const pattern = new FilePatterns();
       pattern.pattern = this.filePatternIncludeInput;
@@ -235,7 +261,7 @@ export class ConfigureProjectComponent implements OnInit {
    * Constructs a new FilePatterns object (EXCLUDE) with whatever is in filePatternIncludeInput
    * and adds it to filePatterns.
    */
-  addToExcludedPatterns() {
+  addToExcludedPatterns(): void {
     if (this.filePatternExcludeInput.trim() !== '') {
       const pattern = new FilePatterns();
       pattern.pattern = this.filePatternExcludeInput;
@@ -243,6 +269,34 @@ export class ConfigureProjectComponent implements OnInit {
       pattern.inclusionType = 'EXCLUDE';
       this.filePatterns.push(pattern);
       this.filePatternExcludeInput = '';
+    }
+  }
+
+  /**
+   * Constructs a new Module object (EXCLUDE) with whatever is in modulesInput
+   * and adds it to modules.
+   */
+  addToModules(): void {
+    if (this.modulesInput.trim() !== '' && this.modules.filter(m => m.modulePath === this.modulesInput).length === 0) {
+      const deletedModules = this.deletedModules.filter(m => m.modulePath === this.modulesInput);
+      if (deletedModules.length !== 0) {
+        this.modules.push(deletedModules[0]);
+        this.deletedModules.splice(this.deletedModules.indexOf(deletedModules[0]), 1);
+      } else {
+        const module = new Module(null, this.modulesInput);
+        this.modules.push(module);
+      }
+      this.modulesInput = '';
+    }
+  }
+
+  /**
+   * Removes the Module from this.modules and adds it this.deleteModules
+   */
+  addToDeletedModules(module: Module): void {
+    this.modules.splice(this.modules.indexOf(module), 1);
+    if (module.id != null) {
+      this.deletedModules.push(module);
     }
   }
 }

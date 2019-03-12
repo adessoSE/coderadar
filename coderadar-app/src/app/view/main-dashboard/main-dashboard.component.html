@@ -22,14 +22,15 @@
               <mat-menu #menu="matMenu" xPosition="before">
                 <button mat-menu-item routerLink="/project-edit/{{project.id}}">Edit</button>
                 <button mat-menu-item routerLink="/project-configure/{{project.id}}">Configure</button>
+                <button mat-menu-item (click)="rescanProject(project.id)">Rescan</button>
                 <button mat-menu-item (click)="deleteProject(project)">Remove</button>
               </mat-menu>
             </mat-card-title>
           </mat-card-header>
           <mat-card-content class="mat-card-content">
-            <div style="padding-bottom: 0">Project URL: <a mat-flat-button href="{{project.vcsUrl}}">{{project.vcsUrl}}</a></div>
-            <div>Project start date: <b>&nbsp;&nbsp;{{project.startDate}}</b></div>
-            <div>Project end date: <b>&nbsp;&nbsp;{{project.endDate}}</b></div>
+              <div style="padding-bottom: 0">Project URL: <a mat-flat-button href="{{project.vcsUrl}}">{{project.vcsUrl}}</a></div>
+              <div>Project start date: <b>&nbsp;&nbsp;{{project.startDate}}</b></div>
+              <div>Project end date: <b>&nbsp;&nbsp;{{project.endDate}}</b></div>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>
