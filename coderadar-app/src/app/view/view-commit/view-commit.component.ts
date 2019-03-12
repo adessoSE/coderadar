@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../user.service';
-import {ProjectService} from '../project.service';
-import {Commit} from '../commit';
+import {UserService} from '../../service/user.service';
+import {ProjectService} from '../../service/project.service';
+import {Commit} from '../../model/commit';
 import {FORBIDDEN} from 'http-status-codes';
 
 @Component({

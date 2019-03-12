@@ -35,7 +35,7 @@ export class UserService {
    */
   public register(usernameValue: string, passwordValue: string) {
     return this.httpClient.post(this.apiURL + 'user/registration', {username: usernameValue, password: passwordValue},
-      {headers: new HttpHeaders().set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
+      {observe: 'response'}).toPromise();
   }
 
   /**
@@ -93,7 +93,6 @@ export class UserService {
    */
   public changeUserPassword(password: string) {
     return this.httpClient.post(this.apiURL + 'user/password/change',
-      {refreshToken: UserService.getLoggedInUser().refreshToken, newPassword: password},
-      {headers: new HttpHeaders().set('Content-Type', 'application/json'), observe: 'response'}).toPromise();
+      {refreshToken: UserService.getLoggedInUser().refreshToken, newPassword: password}, {observe: 'response'}).toPromise();
   }
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../user.service';
-import {ProjectService} from '../project.service';
-import {Commit} from '../commit';
-import {Project} from '../project';
+import {UserService} from '../../service/user.service';
+import {ProjectService} from '../../service/project.service';
+import {Commit} from '../../model/commit';
+import {Project} from '../../model/project';
 import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 
 @Component({

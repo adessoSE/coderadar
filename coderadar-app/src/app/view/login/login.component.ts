@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {UserService} from '../user.service';
+import {UserService} from '../../service/user.service';
 import {INTERNAL_SERVER_ERROR} from 'http-status-codes';
 
 @Component({

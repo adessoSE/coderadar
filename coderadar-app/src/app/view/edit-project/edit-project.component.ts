@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Project} from '../project';
+import {Project} from '../../model/project';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../user.service';
-import {ProjectService} from '../project.service';
+import {UserService} from '../../service/user.service';
+import {ProjectService} from '../../service/project.service';
 import {BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND} from 'http-status-codes';
 
 @Component({
@@ -13,6 +13,8 @@ import {BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND} from 'http-sta
 export class EditProjectComponent implements OnInit {
 
   private projectId: number;
+
+  projectName: string;
   project: Project;
 
   // Error fields
@@ -23,6 +25,7 @@ export class EditProjectComponent implements OnInit {
   constructor(private router: Router, private userService: UserService,
               private projectService: ProjectService, private route: ActivatedRoute) {
     this.project = new Project();
+    this.projectName = '';
   }
 
 
@@ -40,7 +43,10 @@ export class EditProjectComponent implements OnInit {
    */
   private getProject(): void {
     this.projectService.getProject(this.projectId)
-      .then(response => this.project = new Project(response.body))
+      .then(response => {
+        this.project = new Project(response.body);
+        this.projectName = this.project.name;
+      })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
             this.userService.refresh().then(() => this.getProject());
@@ -57,12 +63,14 @@ export class EditProjectComponent implements OnInit {
    * If access is denied (403) sends the refresh token and tries to submit again.
    */
   submitForm(): void {
-    if (this.validateInput()) {
+    console.log(!this.validateInput());
+    if (!this.validateInput()) {
       this.projectService.editProject(this.project)
         .then(() => this.router.navigate(['/dashboard']))
         .catch(error => {
+          console.log(error);
           if (error.status && error.status === FORBIDDEN) {
-              this.userService.refresh().then(r => this.submitForm());
+              this.userService.refresh().then(() => this.submitForm());
           } else if (error.status && error.status === BAD_REQUEST) {
             if (error.error && error.error.errorMessage === 'Validation Error') {
               error.error.fieldErrors.forEach(field => {
@@ -89,6 +97,14 @@ export class EditProjectComponent implements OnInit {
 
     this.incorrectURL = this.project.vcsUrl.trim().length === 0;
     this.nameEmpty = this.project.name.trim().length === 0;
+
+    if (this.project.startDate === 'first commit') {
+      this.project.startDate = null;
+    }
+
+    if (this.project.endDate === 'current') {
+      this.project.endDate = null;
+    }
 
     return this.nameEmpty || this.incorrectURL;
   }

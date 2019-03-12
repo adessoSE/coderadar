@@ -46,3 +46,7 @@
 .card-list #noProjectsMessage {
   font-size: x-large;
 }
+
+.card-list mat-card-content > div {
+  padding-bottom: 10px;
+}

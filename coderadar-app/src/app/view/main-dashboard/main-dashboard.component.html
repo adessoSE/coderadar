@@ -27,9 +27,9 @@
             </mat-card-title>
           </mat-card-header>
           <mat-card-content class="mat-card-content">
-            <mat-label>Project URL: <a href="{{project.vcsUrl}}">{{project.vcsUrl}}</a></mat-label><br>
-            <mat-label>Project start date: {{project.startDate}}</mat-label><br>
-            <mat-label>Project end date: {{project.endDate}}</mat-label><br>
+            <div style="padding-bottom: 0">Project URL: <a mat-flat-button href="{{project.vcsUrl}}">{{project.vcsUrl}}</a></div>
+            <div>Project start date: <b>&nbsp;&nbsp;{{project.startDate}}</b></div>
+            <div>Project end date: <b>&nbsp;&nbsp;{{project.endDate}}</b></div>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>

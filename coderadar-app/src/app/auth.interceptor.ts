@@ -10,7 +10,8 @@ export class AuthInterceptor implements HttpInterceptor {
     if (currentUser && currentUser.accessToken) {
       request = request.clone({
         setHeaders: {
-          Authorization: currentUser.accessToken
+          Authorization: currentUser.accessToken,
+          'Content-Type': 'application/json'
         }
       });
     }

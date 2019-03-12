@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from '../user.service';
-import {ProjectService} from '../project.service';
-import {AnalyzerConfiguration} from '../analyzer-configuration';
-import {FilePatterns} from '../file-patterns';
+import {UserService} from '../../service/user.service';
+import {ProjectService} from '../../service/project.service';
+import {AnalyzerConfiguration} from '../../model/analyzer-configuration';
+import {FilePatterns} from '../../model/file-patterns';
 import {FORBIDDEN} from 'http-status-codes';
 
 @Component({

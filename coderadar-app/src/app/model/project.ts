@@ -23,13 +23,17 @@ export class Project {
       this.vcsPassword = project.vcsPassword;
 
       if (project.startDate !== null) {
-        this.startDate = new Date(project.startDate[0], project.startDate[1] - 1, project.startDate[2]).toDateString();
+        const startDate = new Date(project.startDate);
+        startDate.setDate(startDate.getDate() + 1);
+        this.startDate = startDate.toISOString().split('T')[0];
       } else {
         this.startDate = 'first commit';
       }
 
       if (project.endDate !== null) {
-        this.endDate = new Date(project.endDate[0], project.endDate[1] - 1, project.endDate[2]).toDateString();
+        const endDate = new Date(project.endDate);
+        endDate.setDate(endDate.getDate() + 1);
+        this.endDate = endDate.toISOString().split('T')[0];
       } else {
         this.endDate = 'current';
       }
