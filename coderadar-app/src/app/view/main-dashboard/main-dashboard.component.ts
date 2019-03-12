@@ -3,7 +3,7 @@ import {Project} from '../../model/project';
 import {ProjectService} from '../../service/project.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
-import {FORBIDDEN} from 'http-status-codes';
+import {FORBIDDEN, INTERNAL_SERVER_ERROR} from 'http-status-codes';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -26,7 +26,11 @@ export class MainDashboardComponent implements OnInit {
    */
   private getProjects(): void {
     this.projectService.getProjects()
-      .then(response => response.body.forEach(project => this.projects.push(new Project(project))))
+      .then(response => response.body.forEach(project => {
+        const newProject = new Project(project);
+        this.projects.push(newProject);
+        this.setProjectAnalysisEnabled(newProject);
+      }))
       .catch(e => {
         if (e.status && e.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.getProjects());
@@ -53,18 +57,42 @@ export class MainDashboardComponent implements OnInit {
     });
   }
 
-
   /**
-   * Stars a new analyzing job for the selected project.
-   * @param projectId The project id.
+   * Sets the analysisActive flag of a project if it has active analyzers.
+   * @param project The project.
    */
-  rescanProject(projectId: number): void {
-    this.projectService.startAnalyzingJob(projectId)
+  setProjectAnalysisEnabled(project: Project): void {
+    this.projectService.getAnalyzingJob(project.id)
+      .then(response => {
+        project.analysisActive = response.body.active;
+      })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.rescanProject(projectId));
+          this.userService.refresh().then(() => this.setProjectAnalysisEnabled(project));
         }
       });
   }
 
+
+  /**
+   * Activates or deactivates an analysis on a project.
+   * @param project The project.
+   */
+  toggleProjectAnalysis(project: Project): void {
+    if (project.analysisActive) {
+      this.projectService.stopAnalyzingJob(project.id)
+        .catch(error => {
+          if (error.status && error.status === FORBIDDEN) {
+            this.userService.refresh().then(() => this.toggleProjectAnalysis(project));
+          }
+        });
+    } else {
+      this.projectService.startAnalyzingJob(project.id, false)
+        .catch(error => {
+          if (error.status && error.status === FORBIDDEN) {
+            this.userService.refresh().then(() => this.toggleProjectAnalysis(project));
+          }
+        });
+    }
+  }
 }

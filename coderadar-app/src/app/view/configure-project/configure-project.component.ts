@@ -147,7 +147,7 @@ export class ConfigureProjectComponent implements OnInit {
       this.submitFilePatterns();
       this.submitModules();
       if (this.startScan) {
-        this.projectService.startAnalyzingJob(this.projectId).catch();
+        this.projectService.startAnalyzingJob(this.projectId, true).catch();
       }
       this.router.navigate(['/dashboard']);
     }

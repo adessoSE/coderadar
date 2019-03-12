@@ -7,7 +7,7 @@ export class Project {
   public vcsOnline = true;
   public startDate: string;
   public endDate: string;
-
+  public analysisActive: boolean;
 
   /**
    * Construct a new project from the object delivered by the server.
@@ -21,6 +21,7 @@ export class Project {
       this.vcsUrl = project.vcsUrl;
       this.vcsUser = project.vcsUser;
       this.vcsPassword = project.vcsPassword;
+      this.analysisActive = false;
 
       if (project.startDate !== null) {
         const startDate = new Date(project.startDate);

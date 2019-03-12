@@ -173,9 +173,10 @@ export class ProjectService {
    * Start a new analyzing for a project.
    * Sends a POST request to /projects/{id}/analyzingJob
    * @param id The id of the project.
+   * @param rescanProject Rescan all commits if true.
    */
-  public startAnalyzingJob(id: number): Promise<HttpResponse<any>> {
-    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyzingJob', {fromDate: 0, active: true, rescan: true},
+  public startAnalyzingJob(id: number, rescanProject: boolean): Promise<HttpResponse<any>> {
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyzingJob', {fromDate: 0, active: true, rescan: rescanProject},
       {observe: 'response'}).toPromise();
   }
 
@@ -185,7 +186,7 @@ export class ProjectService {
    * @param id The id of the project.
    */
   public stopAnalyzingJob(id: number): Promise<HttpResponse<any>> {
-    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyzingJob', {fromDate: 0, active: false, rescan: true},
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyzingJob', {fromDate: 0, active: false, rescan: false},
       {observe: 'response'}).toPromise();
   }
 
