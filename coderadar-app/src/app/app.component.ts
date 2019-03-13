@@ -6,5 +6,11 @@ import {Component} from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  private static apiUrl = 'http://localhost:8080/';
+
   title = 'coderadar';
+
+  public static getApiUrl() {
+    return this.apiUrl;
+  }
 }

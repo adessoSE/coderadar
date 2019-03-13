@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Router} from '@angular/router';
+import {AppComponent} from '../app.component';
 
 
 @Injectable({
@@ -10,10 +11,10 @@ export class UserService {
 
   constructor(private router: Router, private httpClient: HttpClient) { }
 
-  private apiURL = 'http://localhost:8080/';
+  private apiURL = AppComponent.getApiUrl();
 
   /**
-   * Returns true if a the given string is at least 8 symbols long
+   * Returns true if the given string is at least 8 symbols long
    * and contains both a digit and a character.
    * @param password the string to check.
    */

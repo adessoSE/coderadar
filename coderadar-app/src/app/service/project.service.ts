@@ -7,6 +7,7 @@ import {FilePatterns} from '../model/file-patterns';
 import {AnalyzerConfiguration} from '../model/analyzer-configuration';
 import {Commit} from '../model/commit';
 import {Module} from '../model/module';
+import {AppComponent} from '../app.component';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class ProjectService {
 
   constructor(private userService: UserService, private router: Router, private httpClient: HttpClient) { }
 
-  private apiURL = 'http://localhost:8080/';
+  private apiURL = AppComponent.getApiUrl();
 
   /**
    * Gets all the projects from the server.

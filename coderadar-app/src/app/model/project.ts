@@ -4,7 +4,7 @@ export class Project {
   public vcsUrl: string;
   public vcsUser: string;
   public vcsPassword: string;
-  public vcsOnline = true;
+  public vcsOnline = true; // always online
   public startDate: string;
   public endDate: string;
   public analysisActive: boolean;
