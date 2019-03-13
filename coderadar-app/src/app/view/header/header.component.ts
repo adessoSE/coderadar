@@ -16,11 +16,15 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
   }
 
-  logout() {
+
+  logout(): void {
     this.userService.logout();
   }
 
-  getUsername() {
+  /**
+   * Gets the current username from the user service.
+   */
+  getUsername(): string {
     return UserService.getLoggedInUser().username;
   }
 

@@ -17,16 +17,16 @@
 
           <!--Form fields-->
           <mat-form-field>
-            <input type="text" matInput name="name" placeholder="Project name" [(ngModel)]="project.name" required>
+            <input maxlength="100" type="text" matInput name="name" placeholder="Project name" [(ngModel)]="project.name" required>
           </mat-form-field>
           <mat-form-field>
             <input type="url" matInput name="vcsUrl" placeholder="VCS URL" [(ngModel)]="project.vcsUrl" required>
           </mat-form-field>
           <mat-form-field>
-            <input type="text" matInput name="vcsUser" placeholder="VCS user" [(ngModel)]="project.vcsUser">
+            <input maxlength="100" type="text" matInput name="vcsUser" placeholder="VCS user" [(ngModel)]="project.vcsUser">
           </mat-form-field>
           <mat-form-field>
-            <input type="password" matInput name="vcsPassword" placeholder="VCS password" [(ngModel)]="project.vcsPassword">
+            <input maxlength="100" type="password" matInput name="vcsPassword" placeholder="VCS password" [(ngModel)]="project.vcsPassword">
           </mat-form-field>
           <mat-form-field>
             <input type="date" matInput name="startDate" placeholder="Start date - leave empty to start with first commit" [(ngModel)]="project.startDate">

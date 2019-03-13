@@ -13,15 +13,14 @@
 
         <!--Form fields-->
         <mat-form-field>
-          <input type="text" matInput placeholder="Username"  name="username" [(ngModel)]="username" required>
+          <input maxlength="32" type="text" matInput placeholder="Username"  name="username" [(ngModel)]="username" required>
         </mat-form-field>
         <mat-form-field>
           <input type="password" matInput placeholder="Password" name="password" [(ngModel)]="password" required>
         </mat-form-field>
 
         <!--Possible errors-->
-        <mat-error *ngIf="invalidUser">The user does not exist<br> or the password is incorrect!</mat-error>
-        <mat-error *ngIf="invalidPassword">Password too short!</mat-error>
+        <mat-error *ngIf="invalidUser || invalidPassword">The user does not exist<br> or the password is incorrect!</mat-error>
 
         <!--Buttons-->
         <div id="cardButtons" align="center">

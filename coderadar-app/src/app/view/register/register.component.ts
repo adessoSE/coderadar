@@ -24,7 +24,7 @@ export class RegisterComponent {
    * Validates users input and sends the appropriate requests to the server
    * using the UserService.
    */
-  submitForm() {
+  submitForm(): void {
     this.invalidUser = false;
     this.passwordsDoNotMatch = this.password !== this.confirmPassword;
     this.invalidPassword = UserService.validatePassword(this.password);
@@ -37,10 +37,8 @@ export class RegisterComponent {
             () => this.router.navigate(['/dashboard']));
         })
         .catch(e => {
-          if (e.error && e.error.errorMessage === 'Validation Error') {
-            if (e.error.errorMessage === 'User ' + this.username + ' is already registered') {
-              this.invalidUser = true;
-            }
+          if (e.error && e.error.errorMessage === 'User ' + this.username + ' is already registered') {
+            this.invalidUser = true;
           }
         });
     }

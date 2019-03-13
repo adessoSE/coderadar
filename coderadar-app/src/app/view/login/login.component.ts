@@ -18,7 +18,11 @@ export class LoginComponent {
 
   constructor(private router: Router, private userService: UserService) { }
 
-  submitForm() {
+  /**
+   * Called when the form is submitted, upon successful login, redirects
+   * to the dashboard.
+   */
+  submitForm(): void {
     this.invalidUser = false;
     this.invalidPassword = UserService.validatePassword(this.password);
     if (!this.invalidPassword) {

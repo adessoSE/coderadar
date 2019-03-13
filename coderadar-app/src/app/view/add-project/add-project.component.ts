@@ -62,9 +62,7 @@ export class AddProjectComponent {
    * Checks for empty form fields.
    */
   private validateInput(): boolean {
-    this.incorrectURL = false;
     this.projectExists = false;
-    this.nameEmpty = false;
 
     this.incorrectURL = this.project.vcsUrl.trim().length === 0;
     this.nameEmpty = this.project.name.trim().length === 0;

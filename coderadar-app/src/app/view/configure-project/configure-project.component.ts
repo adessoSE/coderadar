@@ -247,7 +247,8 @@ export class ConfigureProjectComponent implements OnInit {
    * and adds it to filePatterns.
    */
   addToIncludedPatterns(): void {
-    if (this.filePatternIncludeInput.trim() !== '') {
+    if (this.filePatternIncludeInput.trim() !== '' &&
+      this.filePatterns.filter(p => p.pattern === this.filePatternIncludeInput).length === 0) {
       const pattern = new FilePatterns();
       pattern.pattern = this.filePatternIncludeInput;
       pattern.fileSetType = 'SOURCE';
@@ -262,7 +263,8 @@ export class ConfigureProjectComponent implements OnInit {
    * and adds it to filePatterns.
    */
   addToExcludedPatterns(): void {
-    if (this.filePatternExcludeInput.trim() !== '') {
+    if (this.filePatternExcludeInput.trim() !== '' &&
+      this.filePatterns.filter(p => p.pattern === this.filePatternExcludeInput).length === 0) {
       const pattern = new FilePatterns();
       pattern.pattern = this.filePatternExcludeInput;
       pattern.fileSetType = 'SOURCE';

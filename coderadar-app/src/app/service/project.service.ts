@@ -210,4 +210,12 @@ export class ProjectService {
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/metricvalues/perCommit',
       {commit: commitName, metrics: metricsNames}, {observe: 'response'}).toPromise();
   }
+
+  /**
+   * Returns all metrics that have been measured for a project.
+   * @param id The project id.
+   */
+  public getAvailableMetrics(id: number): Promise<HttpResponse<any>> {
+    return this.httpClient.get(this.apiURL + 'projects/' + id + '/metrics', {observe: 'response'}).toPromise();
+  }
 }

@@ -21,7 +21,7 @@ export class Project {
       this.vcsUrl = project.vcsUrl;
       this.vcsUser = project.vcsUser;
       this.vcsPassword = project.vcsPassword;
-      this.analysisActive = false;
+      this.analysisActive = true;
 
       if (project.startDate !== null) {
         const startDate = new Date(project.startDate);

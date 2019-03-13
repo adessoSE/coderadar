@@ -4,6 +4,7 @@ import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
 import {Commit} from '../../model/commit';
 import {FORBIDDEN} from 'http-status-codes';
+import {HttpResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-view-commit',
@@ -13,7 +14,7 @@ import {FORBIDDEN} from 'http-status-codes';
 export class ViewCommitComponent implements OnInit {
 
   commit: Commit = new Commit();
-  metrics = '';
+  metrics = [];
   projectId;
 
   constructor(private router: Router, private userService: UserService,
@@ -28,19 +29,38 @@ export class ViewCommitComponent implements OnInit {
     });
   }
 
-  getCommitInfo() {
-    this.projectService.getCommitsMetricValues(this.projectId, this.commit.name,
-      [
-      'ImportOrder',
-      'FileLength',
-      'EqualsHashCode',
-      'EmptyStatement',
-      'UnusedImports'])
-        .then(response => this.metrics = JSON.stringify(response.body))
+  /**
+   * Gets the values for all the metrics in this project and
+   * saves them in this.metrics;
+   */
+  private getCommitInfo(): void {
+    this.getMetrics().then(response => {
+      const metricsArray: string[] = [];
+      response.body.forEach(m => metricsArray.push(m.metricName));
+      this.projectService.getCommitsMetricValues(this.projectId, this.commit.name, metricsArray)
+        .then(res => {
+          for (const i in res.body.metrics) {
+            if (res.body.metrics[i]) {
+              this.metrics.push([i, res.body.metrics[i]]);
+            }
+          }
+        })
         .catch(e => {
           if (e.status && e.status === FORBIDDEN) {
-              this.userService.refresh().then( (() => this.getCommitInfo()));
+            this.userService.refresh().then( (() => this.getCommitInfo()));
           }
+        });
+    }).catch(e => {
+      if (e.status && e.status === FORBIDDEN) {
+        this.userService.refresh().then( (() => this.getCommitInfo()));
+      }
     });
+  }
+
+  /**
+   * Calls ProjectService.getAvailableMetrics with the current project id.
+   */
+  private getMetrics(): Promise<HttpResponse<any>> {
+    return this.projectService.getAvailableMetrics(this.projectId);
   }
 }

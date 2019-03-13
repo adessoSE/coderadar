@@ -13,3 +13,7 @@
 .list div.row button {
   float: right;
 }
+
+.list span {
+  overflow-wrap: break-word;
+}

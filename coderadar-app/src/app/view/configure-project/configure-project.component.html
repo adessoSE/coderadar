@@ -34,13 +34,13 @@
                 </div>
                 <div *ngFor="let pattern of filePatterns">
                   <div *ngIf="pattern.inclusionType === 'INCLUDE'">
-                    {{pattern.pattern}}
+                    <span>{{pattern.pattern}}</span>
                     <button mat-button (click)="filePatterns.splice(filePatterns.indexOf(pattern), 1)">-</button>
                   </div>
                 </div>
                 <div class="row">
                   <mat-form-field>
-                    <input type="text" matInput name="includePatterns" placeholder="Pattern" [(ngModel)]="filePatternIncludeInput">
+                    <input maxlength="100" type="text" matInput name="includePatterns" placeholder="Pattern" [(ngModel)]="filePatternIncludeInput">
                   </mat-form-field>
                   <button type="button" mat-button (click)="addToIncludedPatterns()">+</button>
                 </div>
@@ -53,13 +53,13 @@
                 </div>
                 <div *ngFor="let pattern of filePatterns">
                   <div *ngIf="pattern.inclusionType === 'EXCLUDE'">
-                    {{pattern.pattern}}
+                    <span>{{pattern.pattern}}</span>
                     <button mat-button (click)="filePatterns.splice(filePatterns.indexOf(pattern), 1)">-</button>
                   </div>
                 </div>
                 <div class="row">
                   <mat-form-field>
-                    <input type="text" matInput name="excludePatterns" placeholder="Pattern" [(ngModel)]="filePatternExcludeInput">
+                    <input maxlength="100" type="text" matInput name="excludePatterns" placeholder="Pattern" [(ngModel)]="filePatternExcludeInput">
                   </mat-form-field>
                   <button type="button" mat-button style="float:right" (click)="addToExcludedPatterns()">+</button>
                 </div>
@@ -71,12 +71,12 @@
                   <mat-label>Project modules:</mat-label>
                 </div>
                 <div *ngFor="let module of modules">
-                    {{module.modulePath}}
+                  <span>{{module.modulePath}}</span>
                     <button mat-button (click)="addToDeletedModules(module)">-</button>
                 </div>
                 <div class="row">
                   <mat-form-field>
-                    <input type="text" matInput name="modules" placeholder="Module" [(ngModel)]="modulesInput">
+                    <input maxlength="100" type="text" matInput name="modules" placeholder="Module" [(ngModel)]="modulesInput">
                   </mat-form-field>
                   <button type="button" mat-button style="float:right" (click)="addToModules()">+</button>
                 </div>

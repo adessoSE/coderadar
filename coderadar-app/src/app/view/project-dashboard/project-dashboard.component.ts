@@ -86,15 +86,17 @@ export class ProjectDashboardComponent implements OnInit {
    */
   getTitleText(): string {
     if (this.project.startDate === 'first commit' && this.project.endDate === 'current') {
-      return 'Showing all commits for project ' + this.project.name;
+      return 'Showing all commits for project ' + this.project.name + ' (' + this.commits.length + ')';
     } else if (this.project.startDate !== 'first commit' && this.project.endDate === 'current') {
-      return 'Showing all commits for project ' + this.project.name + ' from ' + this.project.startDate + ' up until today';
+      return 'Showing all commits for project ' + this.project.name + ' from ' + this.project.startDate + ' up until today'
+        + ' (' + this.commits.length + ')';
     } else if (this.project.startDate === 'first commit' && this.project.endDate !== 'current') {
       return 'Showing all commits for project ' + this.project.name + ' from '
-        + new Date(this.commits[this.commits.length - 1].timestamp).toLocaleDateString() + ' up until ' + this.project.endDate;
+        + new Date(this.commits[this.commits.length - 1].timestamp).toLocaleDateString() + ' up until ' + this.project.endDate
+        + ' (' + this.commits.length + ')';
     } else {
       return 'Showing all commits for project ' + this.project.name + ' from '
-        + this.project.startDate + ' up until ' + this.project.endDate;
+        + this.project.startDate + ' up until ' + this.project.endDate + ' (' + this.commits.length + ')';
     }
   }
 }
