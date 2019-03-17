@@ -38,7 +38,16 @@ export class ProjectDashboardComponent implements OnInit {
     this.projectService.getCommits(this.projectId)
       .then(response => {
         this.commits = response.body;
-        this.commits.reverse(); })
+        this.commits.sort((a, b) => {
+          if (a.timestamp === b.timestamp) {
+            return 0;
+          } else if (a.timestamp > b.timestamp) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+      })
       .catch(e => {
         if (e.status && e.status === FORBIDDEN) {
           this.userService.refresh().then( (() => this.getCommits()));
