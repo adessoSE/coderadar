@@ -7,15 +7,14 @@ import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.hateoas.ResourceSupport;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueDTO;
 
 /** Result of a query for values of selected metrics at the time of a given commit. */
 @SuppressWarnings("unchecked")
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class CommitMetricsResource extends ResourceSupport {
+@EqualsAndHashCode
+public class CommitMetricsResource {
 
   private Map<String, Long> metrics;
 

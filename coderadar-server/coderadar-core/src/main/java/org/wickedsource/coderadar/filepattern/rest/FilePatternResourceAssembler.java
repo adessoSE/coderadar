@@ -1,22 +1,17 @@
 package org.wickedsource.coderadar.filepattern.rest;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.project.domain.Project;
-import org.wickedsource.coderadar.project.rest.ProjectController;
 
 public class FilePatternResourceAssembler
-    extends ResourceAssemblerSupport<Iterable<FilePattern>, FilePatternResource> {
+    extends AbstractResourceAssembler<Iterable<FilePattern>, FilePatternResource> {
 
   private Long projectId;
 
   FilePatternResourceAssembler(Long projectId) {
-    super(FilePatternController.class, FilePatternResource.class);
     this.projectId = projectId;
   }
 
@@ -30,10 +25,6 @@ public class FilePatternResourceAssembler
       dto.setPattern(entity.getPattern());
       resource.addFilePattern(dto);
     }
-    resource.add(
-        linkTo(methodOn(FilePatternController.class).getFilePatterns(projectId)).withSelfRel());
-    resource.add(
-        linkTo(methodOn(ProjectController.class).getProject(projectId)).withRel("project"));
     return resource;
   }
 
