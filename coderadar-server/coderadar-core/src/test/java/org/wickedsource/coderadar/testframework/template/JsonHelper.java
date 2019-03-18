@@ -6,11 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import org.springframework.hateoas.PagedResources;
-import org.springframework.hateoas.hal.Jackson2HalModule;
 import org.springframework.restdocs.hypermedia.Link;
 
 /** Collection of utility methods to work with JSON strings. */
@@ -21,7 +17,6 @@ public class JsonHelper {
   static {
     halMapper = new ObjectMapper();
     halMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    halMapper.registerModule(new Jackson2HalModule());
   }
 
   private JsonHelper() {}
@@ -85,31 +80,5 @@ public class JsonHelper {
   private abstract class IgnoreLinksMixin {
     @JsonIgnore
     abstract List<Link> getLinks();
-  }
-
-  /**
-   * Parses the given JSON string into a PagedResources object using a Jackson mapper configured for
-   * HAL type HATEOAS resources.
-   *
-   * @param json the JSON string to parse.
-   * @param contentType class of the type of the objects contained within the PagedResources
-   *     wrapper.
-   * @param <T> the type of the objects contained within the PagedResources wrapper.
-   * @return a PagedResources object if parsing was successful.
-   * @throws IOException if the JSON string could not be parsed into an object of the given target
-   *     type.
-   */
-  @SuppressWarnings("unchecked")
-  public static <T> PagedResources<T> fromPagedResourceJson(String json, Class<T> contentType)
-      throws IOException {
-    List<T> contentItems = new ArrayList<>();
-    PagedResources<Map<String, Object>> pagedResources =
-        halMapper.readValue(json, PagedResources.class);
-    for (Map<String, Object> contentItem : pagedResources.getContent()) {
-      String objectJson = halMapper.writeValueAsString(contentItem);
-      T object = halMapper.readValue(objectJson, contentType);
-      contentItems.add(object);
-    }
-    return new PagedResources<T>(contentItems, pagedResources.getMetadata());
   }
 }

@@ -7,8 +7,8 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.s
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.springframework.hateoas.PagedResources;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
 public class AnalyzerControllerTest extends ControllerTestTemplate {
@@ -20,7 +20,7 @@ public class AnalyzerControllerTest extends ControllerTestTemplate {
     mvc()
         .perform(get("/analyzers?page=0&size=2"))
         .andExpect(status().isOk())
-        .andExpect(containsResource(PagedResources.class))
+        .andExpect(containsResource(List.class))
         .andDo(document("analyzer/list"));
   }
 }

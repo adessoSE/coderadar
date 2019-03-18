@@ -7,14 +7,13 @@ import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.hateoas.ResourceSupport;
 import org.wickedsource.coderadar.metric.domain.metricvalue.ProfileValuePerCommitDTO;
 
 @SuppressWarnings("unchecked")
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class CommitProfileRatingsOutputResource extends ResourceSupport {
+@EqualsAndHashCode
+public class CommitProfileRatingsOutputResource {
 
   private Map<String, ProfileRatingDTO> profiles;
 

@@ -3,11 +3,10 @@ package org.wickedsource.coderadar.commit.rest;
 import java.util.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.hateoas.ResourceSupport;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class CommitResource extends ResourceSupport {
+@EqualsAndHashCode
+public class CommitResource {
 
   private String name;
 

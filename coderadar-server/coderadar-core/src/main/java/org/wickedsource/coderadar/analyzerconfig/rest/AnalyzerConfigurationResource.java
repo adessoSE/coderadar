@@ -5,13 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.hateoas.ResourceSupport;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnalyzerConfigurationResource extends ResourceSupport {
+public class AnalyzerConfigurationResource {
+
+  private Long id;
 
   @NotNull private String analyzerName;
 

@@ -79,7 +79,6 @@ war {
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-data-jpa:${version_spring_boot}"
     compile "org.springframework.boot:spring-boot-starter-web:${version_spring_boot}"
-    compile "org.springframework.boot:spring-boot-starter-hateoas:${version_spring_boot}"
     compile "org.springframework.boot:spring-boot-starter-security:${version_spring_boot}"
     compile "org.springframework.boot:spring-boot-starter-actuator:${version_spring_boot}"
     compile "org.springframework.boot:spring-boot-devtools:${version_spring_boot}"

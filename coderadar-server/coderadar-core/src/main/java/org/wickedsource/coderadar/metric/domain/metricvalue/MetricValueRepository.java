@@ -1,8 +1,6 @@
 package org.wickedsource.coderadar.metric.domain.metricvalue;
 
 import java.util.List;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -47,7 +45,7 @@ public interface MetricValueRepository extends CrudRepository<MetricValue, Long>
 
   @Query(
       "select distinct m.id.metricName from MetricValue m where m.id.commit.project.id = :projectId order by m.id.metricName")
-  Page<String> findMetricsInProject(@Param("projectId") Long projectId, Pageable pageable);
+  List<String> findMetricsInProject(@Param("projectId") Long projectId);
 
   @Query(name = "MetricValue.findValuesAggregatedByModule")
   List<GroupedMetricValueDTO> findValuesAggregatedByModule(

@@ -1,13 +1,13 @@
 package org.wickedsource.coderadar.user.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.EMPTY;
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Users.USERS;
 import static org.wickedsource.coderadar.factories.resources.ResourceFactory.*;
+import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJson;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
 import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
@@ -31,7 +31,6 @@ import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 import org.wickedsource.coderadar.user.domain.UserLoginResource;
 import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.user.domain.UserRepository;
-import org.wickedsource.coderadar.user.domain.UserResource;
 
 public class UserControllerTest extends ControllerTestTemplate {
 
@@ -76,7 +75,6 @@ public class UserControllerTest extends ControllerTestTemplate {
     ConstrainedFields fields = fields(UserRegistrationDataResource.class);
     return document(
         "user/registration",
-        links(halLinks(), linkWithRel("self").description("Link to the user.")),
         requestFields(
             fields.withPath("username").description("The name of the user to be registered."),
             fields
@@ -88,7 +86,6 @@ public class UserControllerTest extends ControllerTestTemplate {
     ConstrainedFields fields = fields(UserLoginResource.class);
     return document(
         "user/auth",
-        links(halLinks(), linkWithRel("self").description("Link to the user.")),
         requestFields(
             fields.withPath("username").description("The name of the user to be logged in."),
             fields.withPath("password").description("The password of the user as plaintext")));
@@ -183,7 +180,7 @@ public class UserControllerTest extends ControllerTestTemplate {
     mvc()
         .perform(
             post("/user/password/change")
-                .content(toJsonWithoutLinks(passwordChangeResource))
+                .content(toJson(passwordChangeResource))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(containsResource(ChangePasswordResponseResource.class))
@@ -194,7 +191,6 @@ public class UserControllerTest extends ControllerTestTemplate {
     ConstrainedFields fields = fields(PasswordChangeResource.class);
     return document(
         "user/password/change",
-        links(halLinks(), linkWithRel("self").description("Link to the user.")),
         requestFields(
             fields.withPath("refreshToken").description("the current refresh token of the user"),
             fields
