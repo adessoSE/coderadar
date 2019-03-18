@@ -1,8 +1,6 @@
 package org.wickedsource.coderadar.module.domain;
 
 import java.util.List;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -14,7 +12,7 @@ public interface ModuleRepository extends CrudRepository<Module, Long> {
 
   Module findByIdAndProjectId(Long id, Long projectId);
 
-  Page<Module> findByProjectId(Long projectId, Pageable pageable);
+  List<Module> findByProjectId(Long projectId);
 
   @Query(
       "select a from CommitToFileAssociation a where a.id.file.filepath LIKE CONCAT(:modulePath,'/%') order by a.id.file.filepath")

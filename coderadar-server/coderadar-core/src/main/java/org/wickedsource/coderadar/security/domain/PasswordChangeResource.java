@@ -5,14 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.hateoas.ResourceSupport;
 import org.wickedsource.coderadar.security.ValidPassword;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PasswordChangeResource extends ResourceSupport {
+public class PasswordChangeResource {
 
   @NotNull private String refreshToken;
 

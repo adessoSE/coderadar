@@ -3,7 +3,6 @@ package org.wickedsource.coderadar.metricquery.rest.commit.metric;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,7 +16,6 @@ import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
 import org.wickedsource.coderadar.core.rest.dates.Day;
 import org.wickedsource.coderadar.core.rest.dates.series.Series;
-import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValue;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueDTO;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
 import org.wickedsource.coderadar.metricquery.rest.commit.metric.series.DaySeriesFactory;
@@ -25,7 +23,6 @@ import org.wickedsource.coderadar.metricquery.rest.commit.metric.series.WeekSeri
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
 @Controller
-@ExposesResourceFor(MetricValue.class)
 @Transactional
 @RequestMapping(path = "/projects/{projectId}/metricvalues")
 public class CommitMetricValuesController {

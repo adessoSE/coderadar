@@ -7,12 +7,11 @@ import javax.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.hateoas.ResourceSupport;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @Data
 @NoArgsConstructor
-public class AnalyzingJobResource extends ResourceSupport {
+public class AnalyzingJobResource {
 
   private Date fromDate;
 

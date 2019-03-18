@@ -8,9 +8,6 @@ import java.util.*;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.analyzer.api.ConfigurableAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
@@ -42,22 +39,10 @@ public class AnalyzerPluginRegistry {
     initRegistry(packageName);
   }
 
-  public Page<String> getAvailableAnalyzers(Pageable pageable) {
+  public List<String> getAvailableAnalyzers() {
     List<String> analyzerList = new ArrayList<>(sourceCodeFileAnalyzerPlugins.keySet());
     analyzerList.sort(String::compareTo);
-
-    long fromIndex = pageable.getOffset();
-    if (fromIndex > analyzerList.size() - 1) {
-      fromIndex = analyzerList.size() - 1L;
-    }
-
-    long toIndex = pageable.getOffset() + pageable.getPageSize();
-    if (toIndex > analyzerList.size()) {
-      toIndex = analyzerList.size();
-    }
-
-    return new PageImpl<>(
-        analyzerList.subList((int) fromIndex, (int) toIndex), pageable, analyzerList.size());
+    return analyzerList;
   }
 
   /**

@@ -1,8 +1,5 @@
 package org.wickedsource.coderadar.user.service;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.security.domain.InitializeTokenResource;
@@ -11,7 +8,6 @@ import org.wickedsource.coderadar.security.domain.RefreshTokenRepository;
 import org.wickedsource.coderadar.security.service.TokenService;
 import org.wickedsource.coderadar.user.domain.User;
 import org.wickedsource.coderadar.user.domain.UserRepository;
-import org.wickedsource.coderadar.user.rest.UserController;
 
 @Service
 public class LoginService {
@@ -45,11 +41,7 @@ public class LoginService {
     String accessToken = tokenService.generateAccessToken(user.getId(), user.getUsername());
     String refreshToken = tokenService.generateRefreshToken(user.getId(), user.getUsername());
     saveRefreshToken(user, refreshToken);
-    InitializeTokenResource initializeTokenResource =
-        new InitializeTokenResource(accessToken, refreshToken);
-    initializeTokenResource.add(
-        linkTo(methodOn(UserController.class).getUser(user.getId())).withRel("self"));
-    return initializeTokenResource;
+    return new InitializeTokenResource(accessToken, refreshToken);
   }
 
   /**

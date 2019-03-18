@@ -1,17 +1,18 @@
-package org.wickedsource.coderadar.user.domain;
+package org.wickedsource.coderadar.user.rest;
 
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.hateoas.ResourceSupport;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserResource extends ResourceSupport {
+public class UserResource {
+
+  private Long id;
 
   @NotNull private String username;
 }

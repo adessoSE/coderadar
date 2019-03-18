@@ -10,11 +10,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
-import org.springframework.hateoas.ResourceSupport;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @Data
-public class ProjectResource extends ResourceSupport {
+public class ProjectResource {
+
+  private Long id;
 
   @NotNull
   @Length(max = 100)
