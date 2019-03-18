@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,7 +22,6 @@ import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
 import org.wickedsource.coderadar.metric.domain.metricvalue.ChangedFileDTO;
 import org.wickedsource.coderadar.metric.domain.metricvalue.GroupedMetricValueDTO;
-import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValue;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
 import org.wickedsource.coderadar.metricquery.rest.tree.delta.ChangedFilesMap;
 import org.wickedsource.coderadar.metricquery.rest.tree.delta.Changes;
@@ -32,7 +30,6 @@ import org.wickedsource.coderadar.metricquery.rest.tree.delta.DeltaTreeQuery;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
 @Controller
-@ExposesResourceFor(MetricValue.class)
 @Transactional
 @RequestMapping(path = "/projects/{projectId}/metricvalues")
 public class MetricsTreeController {

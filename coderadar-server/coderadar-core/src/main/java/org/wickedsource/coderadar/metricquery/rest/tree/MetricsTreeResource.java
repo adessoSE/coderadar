@@ -5,13 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.springframework.hateoas.ResourceSupport;
 
 /**
  * Tree structure that contains nested modules. For each module it contains a set of selected metric
  * values. Parent modules aggregate the metric values of their sub modules.
  */
-public class MetricsTreeResource<P extends MetricsTreePayload> extends ResourceSupport {
+public class MetricsTreeResource<P extends MetricsTreePayload> {
 
   private String name;
 

@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.hateoas.ResourceSupport;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @Data
-public class FilePatternResource extends ResourceSupport {
+public class FilePatternResource {
 
   private List<FilePatternDTO> filePatterns = new ArrayList<>();
 

@@ -5,12 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.hateoas.ResourceSupport;
 
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class AccessTokenResource extends ResourceSupport {
+public class AccessTokenResource {
   @NotNull private String token;
 }

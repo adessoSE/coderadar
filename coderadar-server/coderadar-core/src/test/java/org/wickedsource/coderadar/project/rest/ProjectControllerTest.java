@@ -1,7 +1,6 @@
 package org.wickedsource.coderadar.project.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -14,10 +13,10 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.*
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Resources;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.wickedsource.coderadar.project.domain.Project;
@@ -57,13 +56,8 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     ConstrainedFields fields = fields(ProjectResource.class);
     return document(
         "projects/create",
-        links(
-            halLinks(),
-            linkWithRel("self").description("Link to the project."),
-            linkWithRel("files").description("Link to the project's file patterns."),
-            linkWithRel("analyzers").description("Link to the project's analyzer configurations."),
-            linkWithRel("strategy").description("Link to the project's analyzing strategy.")),
         requestFields(
+            fields.withPath("id").description("The id of the project."),
             fields.withPath("name").description("The name of the project to be analyzed."),
             fields
                 .withPath("vcsUrl")
@@ -172,7 +166,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     mvc()
         .perform(get("/projects"))
         .andExpect(status().isOk())
-        .andExpect(containsResource(Resources.class))
+        .andExpect(containsResource(List.class))
         .andDo(document("projects/list"));
   }
 
