@@ -2,15 +2,8 @@ package org.wickedsource.coderadar.core.rest;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.hateoas.ResourceSupport;
-import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
-public abstract class AbstractResourceAssembler<E, R extends ResourceSupport>
-    extends ResourceAssemblerSupport<E, R> {
-
-  public AbstractResourceAssembler(Class<?> controllerClass, Class<R> resourceType) {
-    super(controllerClass, resourceType);
-  }
+public abstract class AbstractResourceAssembler<E, R> {
 
   public List<R> toResourceList(Iterable<E> entities) {
     List<R> resourceList = new ArrayList<>();
@@ -19,4 +12,6 @@ public abstract class AbstractResourceAssembler<E, R extends ResourceSupport>
     }
     return resourceList;
   }
+
+  protected abstract R toResource(E entity);
 }

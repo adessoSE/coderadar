@@ -65,7 +65,7 @@ public class FileMetrics {
   public void incrementMetricCount(Metric metric, Long increment) {
     Long count = counts.get(metric);
     if (count == null) {
-      count = 0l;
+      count = 0L;
     }
     counts.put(metric, count + increment);
   }
@@ -147,7 +147,7 @@ public class FileMetrics {
     for (Metric metric : metrics.getMetrics()) {
       Long currentValue = counts.get(metric);
       if (currentValue == null) {
-        currentValue = 0l;
+        currentValue = 0L;
       }
       counts.put(metric, currentValue + metrics.getMetricCount(metric));
       findings.put(metric, metrics.getFindings(metric));

@@ -1,6 +1,5 @@
 package org.wickedsource.coderadar.module.rest;
 
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.*;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -9,10 +8,12 @@ import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Modul
 import static org.wickedsource.coderadar.factories.databases.DbUnitFactory.Projects.SINGLE_PROJECT;
 import static org.wickedsource.coderadar.factories.resources.ModuleResourceFactory.module;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJsonWithoutLinks;
-import static org.wickedsource.coderadar.testframework.template.ResultMatchers.*;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.containsResource;
+import static org.wickedsource.coderadar.testframework.template.ResultMatchers.status;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
@@ -36,12 +37,8 @@ public class ModuleControllerTest extends ControllerTestTemplate {
         .andDo(
             document(
                 "modules/create",
-                links(
-                    halLinks(),
-                    linkWithRel("self").description("Link to this module."),
-                    linkWithRel("project")
-                        .description("Link to the project this module belongs to.")),
                 requestFields(
+                    fields.withPath("id").description("The id of the module."),
                     fields
                         .withPath("modulePath")
                         .description(
@@ -82,7 +79,7 @@ public class ModuleControllerTest extends ControllerTestTemplate {
     mvc()
         .perform(get("/projects/1/modules"))
         .andExpect(status().isOk())
-        .andExpect(containsPagedResources(ModuleResource.class))
+        .andExpect(containsResource(List.class))
         .andDo(document("modules/list"));
   }
 

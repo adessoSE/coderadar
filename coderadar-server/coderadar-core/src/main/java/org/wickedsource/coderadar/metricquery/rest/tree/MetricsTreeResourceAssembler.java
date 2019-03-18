@@ -3,17 +3,13 @@ package org.wickedsource.coderadar.metricquery.rest.tree;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
 import org.wickedsource.coderadar.metric.domain.metricvalue.GroupedByFileMetricValueDTO;
 import org.wickedsource.coderadar.metric.domain.metricvalue.GroupedByModuleMetricValueDTO;
 import org.wickedsource.coderadar.metric.domain.metricvalue.GroupedMetricValueDTO;
 
 public class MetricsTreeResourceAssembler
-    extends ResourceAssemblerSupport<List<GroupedMetricValueDTO>, MetricsTreeResource> {
-
-  public MetricsTreeResourceAssembler() {
-    super(MetricsTreeController.class, MetricsTreeResource.class);
-  }
+    extends AbstractResourceAssembler<List<GroupedMetricValueDTO>, MetricsTreeResource> {
 
   @Override
   public MetricsTreeResource<CommitMetricsPayload> toResource(

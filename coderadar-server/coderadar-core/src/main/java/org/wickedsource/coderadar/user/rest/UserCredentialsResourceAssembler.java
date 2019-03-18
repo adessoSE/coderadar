@@ -15,7 +15,6 @@ public class UserCredentialsResourceAssembler
 
   @Autowired
   public UserCredentialsResourceAssembler(PasswordService passwordService) {
-    super(UserController.class, UserRegistrationDataResource.class);
     this.passwordService = passwordService;
   }
 

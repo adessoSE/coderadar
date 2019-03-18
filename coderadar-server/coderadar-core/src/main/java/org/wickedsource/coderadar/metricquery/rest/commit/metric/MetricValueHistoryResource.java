@@ -2,10 +2,9 @@ package org.wickedsource.coderadar.metricquery.rest.commit.metric;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.hateoas.ResourceSupport;
 import org.wickedsource.coderadar.core.rest.dates.series.Point;
 
-public class MetricValueHistoryResource<T> extends ResourceSupport {
+public class MetricValueHistoryResource<T> {
 
   private List<Point<T, Long>> points = new ArrayList<>();
 
