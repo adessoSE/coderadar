@@ -30,6 +30,8 @@
             <mat-error *ngIf="currentPasswordWrong">The current password is wrong!</mat-error>
             <mat-error *ngIf="invalidPassword">Password must be at least <br>8 symbols long and contain a digit!</mat-error>
             <mat-error *ngIf="passwordsDoNotMatch">Passwords do not match!</mat-error>
+            <mat-error *ngIf="passwordsAreSame">The new password must not<br> be the same as the old one!</mat-error>
+
 
             <!--Cancel and submit buttons-->
             <div id="cardButtons" align="center">
