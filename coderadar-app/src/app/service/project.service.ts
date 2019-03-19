@@ -128,7 +128,7 @@ export class ProjectService {
    * Sends a GET request to /projects/{id}/analyzers
    * @param id The id of the project.
    */
-  public getProjectAnalyzers(id: number): Promise<HttpResponse<any>> {
+  public getProjectAnalyzers(id: number): Promise<HttpResponse<AnalyzerConfiguration[]>> {
     return this.httpClient.get<any>(this.apiURL + 'projects/' + id + '/analyzers', {observe: 'response'}).toPromise();
   }
 

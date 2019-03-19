@@ -29,7 +29,6 @@ export class MainDashboardComponent implements OnInit {
       .then(response => response.body.forEach(project => {
         const newProject = new Project(project);
         this.projects.push(newProject);
-        this.setProjectAnalysisEnabled(newProject);
       }))
       .catch(e => {
         if (e.status && e.status === FORBIDDEN) {
@@ -55,44 +54,5 @@ export class MainDashboardComponent implements OnInit {
           this.userService.refresh().then(() => this.deleteProject(project));
         }
     });
-  }
-
-  /**
-   * Sets the analysisActive flag of a project if it has active analyzers.
-   * @param project The project.
-   */
-  setProjectAnalysisEnabled(project: Project): void {
-    this.projectService.getAnalyzingJob(project.id)
-      .then(response => {
-        project.analysisActive = response.body.active;
-      })
-      .catch(error => {
-        if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.setProjectAnalysisEnabled(project));
-        }
-      });
-  }
-
-
-  /**
-   * Activates or deactivates an analysis on a project.
-   * @param project The project.
-   */
-  toggleProjectAnalysis(project: Project): void {
-    if (project.analysisActive) {
-      this.projectService.stopAnalyzingJob(project.id)
-        .catch(error => {
-          if (error.status && error.status === FORBIDDEN) {
-            this.userService.refresh().then(() => this.toggleProjectAnalysis(project));
-          }
-        });
-    } else {
-      this.projectService.startAnalyzingJob(project.id, false)
-        .catch(error => {
-          if (error.status && error.status === FORBIDDEN) {
-            this.userService.refresh().then(() => this.toggleProjectAnalysis(project));
-          }
-        });
-    }
   }
 }

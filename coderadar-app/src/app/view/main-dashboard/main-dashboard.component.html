@@ -10,7 +10,7 @@
     </div>
 
     <!--Project card list-->
-    <mat-grid-list cols="2" rowHeight="230px">
+    <mat-grid-list cols="2" rowHeight="200px">
       <mat-grid-tile *ngFor="let project of projects" [colspan]="2" [rowspan]="1">
         <mat-card class="dashboard-card">
           <mat-card-header>
@@ -30,7 +30,6 @@
               <div style="padding-bottom: 0">Project URL: <a mat-flat-button href="{{project.vcsUrl}}">{{project.vcsUrl}}</a></div>
               <div>Project start date: <b>&nbsp;&nbsp;{{project.startDate}}</b></div>
               <div>Project end date: <b>&nbsp;&nbsp;{{project.endDate}}</b></div>
-              <div><mat-checkbox (click)="toggleProjectAnalysis(project)" [(ngModel)]="project.analysisActive">Analyze incoming commits</mat-checkbox></div>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>

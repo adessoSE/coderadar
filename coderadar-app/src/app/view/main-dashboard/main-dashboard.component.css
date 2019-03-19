@@ -50,3 +50,9 @@
 .card-list mat-card-content > div {
   padding-bottom: 10px;
 }
+
+.card-list mat-error {
+  float: right;
+  margin-right: 100px;
+  margin-top: 2px;
+}
