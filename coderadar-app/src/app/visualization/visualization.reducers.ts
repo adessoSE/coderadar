@@ -23,6 +23,7 @@ const initialState: VisualizationState = {
 
 export const VisualizationReducer: ActionReducer<VisualizationState> = (state = initialState, action: IActionWithPayload<any>) => {
     let newState;
+    console.log(action.payload);
     switch (action.type) {
         case VisualizationActions.LOAD_AVAILABLE_METRICS:
             newState = Object.assign({}, state);

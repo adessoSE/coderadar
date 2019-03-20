@@ -3,7 +3,6 @@ import {Store} from '@ngrx/store';
 import * as fromRoot from '../shared/reducers';
 import {changeCommit, loadCommits} from './control-panel.actions';
 import {ICommit} from '../interfaces/ICommit';
-import {ScreenShotService} from '../service/screenshot.service';
 import {FocusService} from '../service/focus.service';
 import {ViewType} from '../model/enum/ViewType';
 import {CommitType} from '../model/enum/CommitType';
@@ -35,7 +34,7 @@ export class ControlPanelComponent implements OnInit {
     // disable the second commit chooser for demo purposes
     disableRightSelect: true;
 
-    constructor(private store: Store<fromRoot.AppState>, private screenShotService: ScreenShotService, private focusService: FocusService) {
+    constructor(private store: Store<fromRoot.AppState>, private focusService: FocusService) {
     }
 
     ngOnInit() {
@@ -49,7 +48,6 @@ export class ControlPanelComponent implements OnInit {
         this.uniqueFileList$ = this.store.select(fromRoot.getUniqueFileList);
 
         this.activeViewType$ = this.store.select(fromRoot.getActiveViewType);
-        this.screenShots$ = this.screenShotService.getScreenShots();
     }
 
     handleCommitChanged(payload: {commitType: CommitType, commit: ICommit}) {
@@ -59,13 +57,4 @@ export class ControlPanelComponent implements OnInit {
     handleSearchStarted(chosenItem: string) {
         this.focusService.focusElement(chosenItem);
     }
-
-    handleTakeScreenshot() {
-        this.screenShotService.requestScreenShot();
-    }
-
-    handleRemoveScreenshots() {
-        this.screenShotService.clearScreenShots();
-    }
-
 }

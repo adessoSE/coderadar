@@ -11,7 +11,6 @@ import {CommitService} from '../service/commit.service';
 import {SearchComponent} from './search/search.component';
 import {FilterComponent} from './settings/filter/filter.component';
 import {MetricMappingComponent} from './settings/metric-mapping/metric-mapping.component';
-import {ScreenshotComponent} from './screenshot/screenshot.component';
 import {AutosuggestWrapperComponent} from '../autosuggest-wrapper/autosuggest-wrapper.component';
 
 @NgModule({
@@ -29,7 +28,6 @@ import {AutosuggestWrapperComponent} from '../autosuggest-wrapper/autosuggest-wr
         SearchComponent,
         FilterComponent,
         MetricMappingComponent,
-        ScreenshotComponent,
         AutosuggestWrapperComponent
     ],
     exports: [

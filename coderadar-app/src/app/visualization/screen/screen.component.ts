@@ -1,7 +1,9 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges, OnDestroy} from '@angular/core';
-import {WebGLRenderer, Scene, AmbientLight, DirectionalLight, PerspectiveCamera} from 'three';
+import * as THREE from 'three';
+import * as TWEEN from '@tweenjs/tween.js';
+
 import {Subscription} from 'rxjs';
-import {OrbitControls} from 'three-orbitcontrols';
+import {OrbitControls} from 'three-orbitcontrols-ts';
 import {AbstractView} from '../view/abstract-view';
 import {SplitView} from '../view/split-view';
 import {MergedView} from '../view/merged-view';
@@ -9,7 +11,6 @@ import {IFilter} from '../../interfaces/IFilter';
 import {InteractionHandler} from '../interaction-handler/interaction-handler';
 import {AppConfig} from '../../AppConfig';
 import {INode} from '../../interfaces/INode';
-import {ScreenShotService} from '../../service/screenshot.service';
 import {FocusService} from '../../service/focus.service';
 import {TooltipService} from '../../service/tooltip.service';
 import {IMetricMapping} from '../../interfaces/IMetricMapping';
@@ -19,8 +20,7 @@ import {ViewType} from '../../model/enum/ViewType';
 import {BlockConnection} from '../../model/geometry/block-connection';
 import {NodeType} from '../../model/enum/NodeType';
 import {ElementAnalyzer} from '../../helper/element-analyzer';
-declare var TWEEN: any;
-declare var THREE: any;
+import {Scene, WebGLRenderer} from 'three';
 
 @Component({
     selector: 'app-screen',
@@ -46,7 +46,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
 
     // use THREE.PerspectiveCamera instead of importing PerspectiveCamera to avoid warning for panning and zooming are disabled
     // (see https://github.com/nicolaspanel/three-orbitcontrols-ts/issues/1)
-    camera: PerspectiveCamera;
+    camera: THREE.PerspectiveCamera;
     controls: OrbitControls;
 
     interactionHandler: InteractionHandler;
@@ -54,7 +54,6 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     view: AbstractView;
 
     constructor(
-        private screenShotService: ScreenShotService,
         private focusService: FocusService,
         private tooltipService: TooltipService,
         private comparisonPanelService: ComparisonPanelService
@@ -123,17 +122,6 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
                 });
             })
         );
-
-        this.subscriptions.push(
-            this.screenShotService.screenShotRequested$.subscribe(() => {
-                const imgFromCanvas = this.renderer.domElement.toDataURL('image/png');
-                const pngFile = imgFromCanvas.replace(/^data:image\/png/, 'data:application/octet-stream');
-                this.screenShotService.addScreenShot({
-                    screenType: this.screenType,
-                    file: pngFile
-                });
-            })
-        );
     }
 
     ngOnDestroy() {
@@ -155,10 +143,10 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     createLight() {
-        const ambientLight = new AmbientLight(0xcccccc, 0.5);
+        const ambientLight = new THREE.AmbientLight(0xcccccc, 0.5);
         this.scene.add(ambientLight);
 
-        const directionalLight = new DirectionalLight(0xffffff, 0.4);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.4);
         directionalLight.position.set(0, 1, 0);
         this.scene.add(directionalLight);
     }
@@ -188,7 +176,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     createControls() {
-        this.controls = new THREE.OrbitControls(this.camera, document.querySelector('#stage') as HTMLElement);
+        this.controls = new OrbitControls(this.camera, document.querySelector('#stage') as HTMLElement);
     }
 
     resetControls() {

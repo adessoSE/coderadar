@@ -24,7 +24,7 @@ export class AppEffects {
                 () => this.commitService.loadCommits()
                     .pipe(
                         map((result: ICommitsGetResponse) => {
-                            return actions.loadCommitsSuccess(result._embedded.commitResourceList);
+                            return actions.loadCommitsSuccess(result.commitResourceList);
                         }),
                         catchError((response: ICommitsGetErrorResponse) => {
                             return of(actions.loadCommitsError(response.error));
@@ -38,8 +38,10 @@ export class AppEffects {
                 () => this.metricService.loadAvailableMetrics()
                     .pipe(
                         mergeMap((result: IAvailableMetricsGetResponse) => {
-                            const availableMetrics = result._embedded.metricResourceList.map(
-                                metric => AppConfig.getShortNameByMetricName(metric.metricName)
+                            const availableMetrics = result.metricResourceList.map(
+                                metric => {
+                                  return AppConfig.getShortNameByMetricName(metric.metricName);
+                                }
                             );
                             // TODO: Error handling when less than three metrics are available
                             return [

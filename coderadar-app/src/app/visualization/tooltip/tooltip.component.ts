@@ -67,5 +67,4 @@ export class TooltipComponent implements OnInit {
         this.tooltipElement.style.left = '-1000px';
         this.tooltipElement.style.top = '-1000px';
     }
-
 }

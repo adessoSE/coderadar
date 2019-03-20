@@ -7,6 +7,7 @@ import {ScreenType} from '../../model/enum/ScreenType';
 import {NodeType} from '../../model/enum/NodeType';
 import {CommitReferenceType} from '../../model/enum/CommitReferenceType';
 import {ElementAnalyzer} from '../../helper/element-analyzer';
+
 declare var GrowingPacker: any;
 
 export abstract class AbstractView {

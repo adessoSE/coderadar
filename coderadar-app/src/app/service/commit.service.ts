@@ -11,7 +11,7 @@ export class CommitService {
     }
 
     loadCommits(): Observable<ICommitsGetResponse> {
-      return this.http.get<ICommitsGetResponse>(`${AppConfig.BASE_URL}/projects/1/commits`);
+      return this.http.get<ICommitsGetResponse>(`${AppConfig.BASE_URL}/projects/18/commits`);
     }
 
 }

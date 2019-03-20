@@ -21,9 +21,9 @@ export class FilterComponent implements OnInit {
 
     ngOnInit() {
         // prevent bootstrap dropdown from being closed by clicking on its content
-        $(document).on('click', '#filter-dropdown', (e) => {
+        /*$(document).on('click', '#filter-dropdown', (e) => {
             e.stopPropagation();
-        });
+        });*/
     }
 
     handleFilterChanged() {

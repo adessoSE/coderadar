@@ -30,8 +30,8 @@ export class ViewControlComponent implements OnInit {
     }
 
     ngOnInit() {
-        $(this.splitScreenLabelRef.nativeElement).tooltip();
-        $(this.fullScreenLabelRef.nativeElement).tooltip();
+        // $(this.splitScreenLabelRef.nativeElement).tooltip();
+        // $(this.fullScreenLabelRef.nativeElement).tooltip();
     }
 
     changeViewType(value) {

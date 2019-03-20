@@ -39,7 +39,6 @@ import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {AppEffects} from './shared/effects';
-import {ScreenShotService} from './service/screenshot.service';
 import {FocusService} from './service/focus.service';
 import {TooltipService} from './service/tooltip.service';
 import {ComparisonPanelService} from './service/comparison-panel.service';
@@ -110,7 +109,6 @@ const appRoutes: Routes = [
       useClass: AuthInterceptor,
       multi: true
     },
-    ScreenShotService,
     FocusService,
     TooltipService,
     ComparisonPanelService,
