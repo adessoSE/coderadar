@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
-import org.wickedsource.coderadar.projectadministration.port.in.CreateProjectCommand;
-import org.wickedsource.coderadar.projectadministration.port.in.CreateProjectUseCase;
-import org.wickedsource.coderadar.projectadministration.port.out.CreateProjectPort;
+import org.wickedsource.coderadar.projectadministration.port.driven.CreateProjectPort;
+import org.wickedsource.coderadar.projectadministration.port.driver.CreateProjectCommand;
+import org.wickedsource.coderadar.projectadministration.port.driver.CreateProjectUseCase;
 
 @Service
 public class CreateProjectService implements CreateProjectUseCase {
