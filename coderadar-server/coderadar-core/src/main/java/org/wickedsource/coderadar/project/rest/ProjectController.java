@@ -1,7 +1,6 @@
 package org.wickedsource.coderadar.project.rest;
 
 import java.util.List;
-import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.wickedsource.coderadar.core.rest.validation.UserException;
 import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectDeleter;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
@@ -46,22 +44,6 @@ public class ProjectController {
   public ResponseEntity<List<ProjectResource>> getProjects() {
     Iterable<Project> projects = projectRepository.findAll();
     return new ResponseEntity<>(projectAssembler.toResourceList(projects), HttpStatus.OK);
-  }
-
-  @RequestMapping(method = RequestMethod.POST)
-  public ResponseEntity<ProjectResource> createProject(
-      @Valid @RequestBody ProjectResource projectResource) {
-    if (projectRepository.countByName(projectResource.getName()) > 0) {
-      throw new UserException(
-          String.format(
-              "Project with name '%s' already exists. Please choose another name.",
-              projectResource.getName()));
-    }
-    Project project = projectAssembler.updateEntity(projectResource, new Project());
-    project.setWorkdirName(UUID.randomUUID().toString());
-    Project savedProject = projectRepository.save(project);
-    ProjectResource resultResource = projectAssembler.toResource(savedProject);
-    return new ResponseEntity<>(resultResource, HttpStatus.CREATED);
   }
 
   @RequestMapping(path = "/{id}", method = RequestMethod.GET)
