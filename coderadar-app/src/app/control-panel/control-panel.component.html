@@ -1,0 +1,41 @@
+<div class="container-fluid">
+    <form id="control-panel" class="row align-items-center justify-content-between">
+        <div class="col-4">
+            <div class="row">
+                <div class="col-6">
+                    <small>Erste Revision</small>
+                    <app-commit-chooser
+                            [commitType]="commitTypes.left"
+                            [commits]="commits$ | async"
+                            [loading]="commitsLoading$ | async"
+                            [selected]="leftCommit$ | async"
+                            (changeCommit)="handleCommitChanged($event)"></app-commit-chooser>
+                </div>
+
+                <div class="col-6">
+                    <small>Zweite Revision</small>
+                    <app-commit-chooser
+                            [commitType]="commitTypes.right"
+                            [commits]="commits$ | async"
+                            [loading]="commitsLoading$ | async"
+                            [selected]="rightCommit$ | async"
+                            [isDisabled]="disableRightSelect"
+                            (changeCommit)="handleCommitChanged($event)"></app-commit-chooser>
+                </div>
+            </div>
+        </div>
+        <div id="settings-panel" class="col-6">
+            <app-settings></app-settings>
+            <app-screenshot
+                    [activeViewType]="activeViewType$ | async"
+                    [screenShots]="screenShots$ | async"
+                    (handleTakeScreenshot)="handleTakeScreenshot()"
+                    (handleRemoveScreenshots)="handleRemoveScreenshots()">
+            </app-screenshot>
+        </div>
+        <div class="col-2">
+            <small>Suche</small>
+            <app-search [uniqueFileList]="uniqueFileList$ | async" (startSearch)="handleSearchStarted($event)"></app-search>
+        </div>
+    </form>
+</div>

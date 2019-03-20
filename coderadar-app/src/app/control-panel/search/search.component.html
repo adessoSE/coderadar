@@ -1,0 +1,8 @@
+<app-autosuggest-wrapper
+        [placeholder]="'Datei, Modul, ...'"
+        [source]="uniqueFileList"
+        [noMatchFoundText]="'Nichts gefunden.'"
+        [listFormatter]="autocompleteListFormatter"
+        (valueChanged)="handleSearchChanged($event)"
+        [alignRight]="true">
+</app-autosuggest-wrapper>

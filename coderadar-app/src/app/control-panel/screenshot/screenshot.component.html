@@ -1,0 +1,26 @@
+<div class="btn-group">
+    <button type="button" class="btn btn-outline-secondary" (click)="takeScreenshot()">
+        <fa-icon [icon]="faCamera"></fa-icon>
+        <span *ngIf="screenShots.length" class="badge badge-pill badge-secondary ml-1">{{screenShots.length}}</span>
+    </button>
+    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <div id="screenshot-dropdown" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div class="form-group">
+            <label>GIF erstellen für:</label>
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary" (click)="generateGif(screenTypes.left)">{{activeViewType === viewTypes.split ? 'Erster Commit' : 'Kombinierte Ansicht'}}</button>
+                <button type="button" class="btn btn-outline-primary" (click)="generateGif(screenTypes.right)" *ngIf="activeViewType === viewTypes.split">Zweiter Commit</button>
+            </div>
+        </div>
+
+        <img *ngIf="gifSource && !isGenerating" id="gif" src="{{gifSource}}">
+        <p *ngIf="isGenerating">GIF wird erstellt ...</p>
+        <small *ngIf="!gifSource && !isGenerating">Ein GIF wird aus gespeicherten Screenshots erzeugt (Button <fa-icon [icon]="faCamera"></fa-icon> )</small>
+
+        <div class="form-group" *ngIf="gifSource">
+            <button type="button" class="btn btn-danger" (click)="removeScreenshots()">zurücksetzen</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div id="stage" class="split">
+    <div class="vertical-line"></div>
+    <app-loading-indicator *ngIf="metricsLoading$ | async"></app-loading-indicator>
+
+    <app-screen
+            [screenType]="screenTypes.left"
+            [activeViewType]="activeViewType$ | async"
+            [activeFilter]="activeFilter$ | async"
+            [metricTree]="metricTree$ | async"
+            [metricMapping]="metricMapping$ | async">
+    </app-screen>
+
+    <app-screen
+            [screenType]="screenTypes.right"
+            [activeViewType]="activeViewType$ | async"
+            [activeFilter]="activeFilter$ | async"
+            [metricTree]="metricTree$ | async"
+            [metricMapping]="metricMapping$ | async">
+    </app-screen>
+
+    <app-comparison-panel
+            [metricMapping]="metricMapping$ | async"
+            [leftCommit]="leftCommit$ | async"
+            [rightCommit]="rightCommit$ | async">
+    </app-comparison-panel>
+
+    <app-legend [activeViewType]="activeViewType$ | async"></app-legend>
+</div>
+<app-tooltip></app-tooltip>
