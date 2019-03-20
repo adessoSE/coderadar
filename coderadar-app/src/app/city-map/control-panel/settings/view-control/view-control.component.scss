@@ -1,0 +1,12 @@
+@import "../../../../config";
+
+label {
+    cursor: pointer;
+}
+
+fa-icon {
+    color: $font-color-light;
+    & + fa-icon {
+        margin-left: 1px;
+    }
+}

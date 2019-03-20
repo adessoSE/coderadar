@@ -3,7 +3,7 @@ import {Project} from '../../model/project';
 import {ProjectService} from '../../service/project.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
-import {FORBIDDEN, INTERNAL_SERVER_ERROR} from 'http-status-codes';
+import {FORBIDDEN} from 'http-status-codes';
 
 @Component({
   selector: 'app-main-dashboard',

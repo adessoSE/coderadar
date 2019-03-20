@@ -17,8 +17,8 @@ import {EditProjectComponent} from './view/edit-project/edit-project.component';
 import {HeaderComponent} from './view/header/header.component';
 import {FooterComponent} from './view/footer/footer.component';
 import {UserSettingsComponent} from './view/user-settings/user-settings.component';
-import { ProjectDashboardComponent } from './view/project-dashboard/project-dashboard.component';
-import { ViewCommitComponent } from './view/view-commit/view-commit.component';
+import {ProjectDashboardComponent} from './view/project-dashboard/project-dashboard.component';
+import {ViewCommitComponent} from './view/view-commit/view-commit.component';
 import {
   MatButtonModule,
   MatCardModule,
@@ -32,13 +32,13 @@ import {
   MatSidenavModule,
   MatToolbarModule,
 } from '@angular/material';
-import {ControlPanelModule} from './control-panel/control-panel.module';
-import {VisualizationModule} from './visualization/visualization.module';
-import {REDUCER_TOKEN, getReducers} from './shared/reducers';
+import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
+import {VisualizationModule} from './city-map/visualization/visualization.module';
+import {getReducers, REDUCER_TOKEN} from './city-map/shared/reducers';
 import {StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
-import {AppEffects} from './shared/effects';
+import {AppEffects} from './city-map/shared/effects';
 import {FocusService} from './service/focus.service';
 import {TooltipService} from './service/tooltip.service';
 import {ComparisonPanelService} from './service/comparison-panel.service';

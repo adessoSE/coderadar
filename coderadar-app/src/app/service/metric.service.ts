@@ -1,14 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {IDeltaTreeGetResponse} from '../interfaces/IDeltaTreeGetResponse';
-import {ICommit} from '../interfaces/ICommit';
-import {INode} from '../interfaces/INode';
-import {IMetricMapping} from '../interfaces/IMetricMapping';
+import {IDeltaTreeGetResponse} from '../city-map/interfaces/IDeltaTreeGetResponse';
+import {ICommit} from '../city-map/interfaces/ICommit';
+import {INode} from '../city-map/interfaces/INode';
+import {IMetricMapping} from '../city-map/interfaces/IMetricMapping';
 import {AppConfig} from '../AppConfig';
-import {delay, map} from 'rxjs/operators';
-import { IAvailableMetricsGetResponse } from '../interfaces/IAvailableMetricsGetResponse';
-import {environment} from '../../environments/environment';
+import {map} from 'rxjs/operators';
+import {IAvailableMetricsGetResponse} from '../city-map/interfaces/IAvailableMetricsGetResponse';
 
 @Injectable()
 export class MetricService {

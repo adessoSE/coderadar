@@ -43,7 +43,8 @@
     "three-orbitcontrols": "^2.102.1",
     "three-orbitcontrols-ts": "^0.1.2",
     "tslib": "^1.9.3",
-    "zone.js": "~0.8.29"
+    "zone.js": "~0.8.29",
+    "lodash": "latest"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.13.0",
@@ -52,6 +53,7 @@
     "@angular/language-service": "~7.2.0",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
+    "@types/lodash": "^4.14.123",
     "@types/node": "~8.9.4",
     "codelyzer": "~4.5.0",
     "jasmine-core": "~2.99.1",

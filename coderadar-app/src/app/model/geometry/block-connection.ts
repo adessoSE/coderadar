@@ -1,4 +1,4 @@
-import {Geometry, LineBasicMaterial, Line, Vector3, QuadraticBezierCurve3} from 'three';
+import {Geometry, Line, LineBasicMaterial, QuadraticBezierCurve3, Vector3} from 'three';
 import {NodeType} from '../enum/NodeType';
 import {AppConfig} from '../../AppConfig';
 

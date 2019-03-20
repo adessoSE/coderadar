@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {ICommitsGetResponse} from '../interfaces/ICommitsGetResponse';
 import {Observable} from 'rxjs';
 import {AppConfig} from '../AppConfig';
+import {ICommitsGetResponse} from '../city-map/interfaces/ICommitsGetResponse';
 
 @Injectable()
 export class CommitService {

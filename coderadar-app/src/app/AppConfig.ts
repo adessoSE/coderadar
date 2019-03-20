@@ -1,5 +1,4 @@
-import {environment} from '../environments/environment';
-import { IMetric } from './interfaces/IMetric';
+import {IMetric} from './city-map/interfaces/IMetric';
 
 export class AppConfig {
     // CODERADAR SERVER CONFIG
