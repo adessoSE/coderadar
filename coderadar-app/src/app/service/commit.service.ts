@@ -10,8 +10,8 @@ export class CommitService {
     constructor(private http: HttpClient) {
     }
 
-    loadCommits(): Observable<ICommitsGetResponse> {
-      return this.http.get<ICommitsGetResponse>(`${AppConfig.BASE_URL}/projects/7/commits`);
+    loadCommits(projectId: number): Observable<ICommitsGetResponse> {
+      return this.http.get<ICommitsGetResponse>(`${AppConfig.BASE_URL}/projects/${projectId}/commits`);
     }
 
 }

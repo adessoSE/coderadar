@@ -22,10 +22,12 @@ import {IMetricMapping} from '../interfaces/IMetricMapping';
 @Injectable()
 export class AppEffects {
 
+    public currentProjectId: number;
+
     @Effect()
     loadCommitsEffects$ = this.actions$.pipe(ofType(LOAD_COMMITS),
             switchMap(
-                () => this.commitService.loadCommits()
+                () => this.commitService.loadCommits(this.currentProjectId)
                     .pipe(
                         map((result: any) => {
                           console.log(result);
@@ -41,7 +43,7 @@ export class AppEffects {
     @Effect()
     loadAvailableMetricsEffects$ = this.actions$.pipe(ofType(LOAD_AVAILABLE_METRICS),
             switchMap(
-                () => this.metricService.loadAvailableMetrics()
+                () => this.metricService.loadAvailableMetrics(this.currentProjectId)
                     .pipe(
                         mergeMap((result: any) => {
                           const availableMetrics = result.map(
@@ -75,7 +77,7 @@ export class AppEffects {
   loadMetricTreeEffects$ = this.actions$.pipe(ofType(LOAD_METRIC_TREE),
     map((action: IActionWithPayload<any>) => action.payload),
     switchMap(
-      (payload) => this.metricService.loadDeltaTree(payload.leftCommit, payload.rightCommit, payload.metricMapping)
+      (payload) => this.metricService.loadDeltaTree(payload.leftCommit, payload.rightCommit, payload.metricMapping, this.currentProjectId)
         .pipe(
             mergeMap((result: IDeltaTreeGetResponse) => {
                 return [

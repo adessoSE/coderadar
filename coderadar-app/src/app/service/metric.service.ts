@@ -15,18 +15,19 @@ export class MetricService {
     constructor(private http: HttpClient) {
     }
 
-    loadAvailableMetrics(): Observable<IAvailableMetricsGetResponse> {
-      return this.http.get<IAvailableMetricsGetResponse>(`${AppConfig.BASE_URL}/projects/7/metrics`);
+    loadAvailableMetrics(projectId: number): Observable<IAvailableMetricsGetResponse> {
+      return this.http.get<IAvailableMetricsGetResponse>(`${AppConfig.BASE_URL}/projects/${projectId}/metrics`);
     }
 
-    loadDeltaTree(leftCommit: ICommit, rightCommit: ICommit, metricMapping: IMetricMapping): Observable<IDeltaTreeGetResponse> {
+    loadDeltaTree(leftCommit: ICommit, rightCommit: ICommit, metricMapping: IMetricMapping, projectId: number):
+      Observable<IDeltaTreeGetResponse> {
       const body = {
           commit1: leftCommit.name,
           commit2: rightCommit.name,
           metrics: [metricMapping.heightMetricName, metricMapping.groundAreaMetricName, metricMapping.colorMetricName]
       };
 
-      return this.http.post<INode>(`${AppConfig.BASE_URL}/projects/7/metricvalues/deltaTree`, body)
+      return this.http.post<INode>(`${AppConfig.BASE_URL}/projects/${projectId}/metricvalues/deltaTree`, body)
           .pipe(
               map((res) => {
                   return {

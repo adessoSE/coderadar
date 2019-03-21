@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {AppEffects} from '../../city-map/shared/effects';
 
 @Component({
   selector: 'app-city-view',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CityViewComponent implements OnInit {
 
-  constructor() { }
+  constructor( private route: ActivatedRoute, private cityEffects: AppEffects) { }
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.cityEffects.currentProjectId = params.id;
+    });
   }
 
 }
