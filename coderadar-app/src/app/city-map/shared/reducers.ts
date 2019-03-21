@@ -35,8 +35,6 @@ export const getLeftCommit = createSelector(getControlPanelState, fromControlPan
 
 export const getRightCommit = createSelector(getControlPanelState, fromControlPanel.getRightCommit);
 
-export const getScreenshots = createSelector(getControlPanelState, fromControlPanel.getScreenshots);
-
 export const getMetricsLoading = createSelector(getVisualizationState, fromVisualization.getMetricsLoading);
 
 export const getMetricTree = createSelector(getVisualizationState, fromVisualization.getMetricTree);

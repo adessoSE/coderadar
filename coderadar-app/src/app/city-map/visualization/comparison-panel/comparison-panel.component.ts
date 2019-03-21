@@ -66,10 +66,9 @@ export class ComparisonPanelComponent implements OnInit, OnDestroy {
     }
 
     prepareTableData(foundElement: INode) {
-        const rows = [];
-        for (const key of Object.keys(this.metricMapping)) {
+      const rows = [];
+      for (const key of Object.keys(this.metricMapping)) {
             const metricName = this.metricMapping[key];
-
             let leftCommitValue;
             if (foundElement.commit1Metrics && foundElement.commit1Metrics[metricName]) {
                 leftCommitValue = foundElement.commit1Metrics[metricName];
@@ -92,7 +91,7 @@ export class ComparisonPanelComponent implements OnInit, OnDestroy {
                 difference
             });
         }
-        this.tableRows = rows;
+      this.tableRows = rows;
     }
 
     show() {

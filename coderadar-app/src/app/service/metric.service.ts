@@ -16,7 +16,7 @@ export class MetricService {
     }
 
     loadAvailableMetrics(): Observable<IAvailableMetricsGetResponse> {
-      return this.http.get<IAvailableMetricsGetResponse>(`${AppConfig.BASE_URL}/projects/18/metrics`);
+      return this.http.get<IAvailableMetricsGetResponse>(`${AppConfig.BASE_URL}/projects/7/metrics`);
     }
 
     loadDeltaTree(leftCommit: ICommit, rightCommit: ICommit, metricMapping: IMetricMapping): Observable<IDeltaTreeGetResponse> {
@@ -26,7 +26,7 @@ export class MetricService {
           metrics: [metricMapping.heightMetricName, metricMapping.groundAreaMetricName, metricMapping.colorMetricName]
       };
 
-      return this.http.post<INode>(`${AppConfig.BASE_URL}/projects/18/metricvalues/deltaTree`, body)
+      return this.http.post<INode>(`${AppConfig.BASE_URL}/projects/7/metricvalues/deltaTree`, body)
           .pipe(
               map((res) => {
                   return {

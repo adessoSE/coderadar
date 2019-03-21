@@ -35,6 +35,7 @@ export const ControlPanelReducer: ActionReducer<ControlPanelState> = (state = in
             newState.commitsLoading = false;
             newState.leftCommit = newState.commits[0];
             newState.rightCommit = newState.commits[1];
+            console.log(newState);
             return newState;
 
         case ControlPanelActions.LOAD_COMMITS_ERROR:

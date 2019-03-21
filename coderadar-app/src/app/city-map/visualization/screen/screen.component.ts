@@ -1,5 +1,6 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import * as THREE from 'three';
+
 import {Scene, WebGLRenderer} from 'three';
 import * as TWEEN from '@tweenjs/tween.js';
 

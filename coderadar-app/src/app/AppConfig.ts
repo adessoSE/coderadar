@@ -5,6 +5,7 @@ export class AppConfig {
     static BASE_URL = 'http://localhost:8080';
 
     // METRIC NAME MAPPING
+  // TODO: DELETE
     static METRIC_NAME_MAPPING: IMetric[] = [
         { shortName: 'Lines of Code (LOC)', metricName: 'coderadar:size:loc:java' },
         { shortName: 'Comment Lines of Code (CLOC)', metricName: 'coderadar:size:cloc:java' },
@@ -49,6 +50,10 @@ export class AppConfig {
     static COLOR_UNCHANGED_FILE = '#cccccc';
 
     static getShortNameByMetricName(metricName: string): IMetric {
-        return this.METRIC_NAME_MAPPING.find(namePair => namePair.metricName === metricName);
+        const shortname = metricName.split('.').pop();
+        return {
+          metricName,
+          shortName: shortname
+        };
     }
 }
