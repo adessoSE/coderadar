@@ -1,19 +1,20 @@
-<div class="autosuggest-wrapper-container" [ngClass]="{'align-right': alignRight}">
-    <input #inputElement class="form-control"
-           [placeholder]="placeholder"
-           ngui-auto-complete
-           [(ngModel)]="model"
-           [source]="source"
-           value-property-name="id"
-           display-property-name="name"
-           [value-formatter]="valueFormatter"
-           [list-formatter]="listFormatter"
-           [no-match-found-text]="noMatchFoundText"
-           [match-formatted]="matchFormatted"
-           [accept-user-input]=false
-           [disabled]="isDisabled"
-           (valueChanged)="handleValueChanged($event)" />
-    <button type="button" class="close" aria-label="Close" (click)="handleClearInputClicked()" [disabled]="isDisabled">
+<span>
+   <input #inputElement
+          [placeholder]="placeholder"
+          ngui-auto-complete
+          [(ngModel)]="model"
+          [source]="source"
+          value-property-name="id"
+          display-property-name="name"
+          [value-formatter]="valueFormatter"
+          [list-formatter]="listFormatter"
+          [no-match-found-text]="noMatchFoundText"
+          [match-formatted]="matchFormatted"
+          [accept-user-input]=false
+          [disabled]="isDisabled"
+          (valueChanged)="handleValueChanged($event)" />
+
+   <!-- <button type="button" class="close" aria-label="Close" (click)="handleClearInputClicked()" [disabled]="isDisabled">
         <span aria-hidden="true">&times;</span>
-    </button>
-</div>
+    </button>-->
+</span>

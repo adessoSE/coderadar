@@ -1,5 +1,5 @@
 <div>
-    <small>Einstellungen</small>
+    <small>Settings</small>
 </div>
 <app-view-control [activeViewType]="activeViewType$ | async" (viewTypeChanged)="handleViewTypeChanged($event)"></app-view-control>
 <app-filter [activeFilter]="activeFilter$ | async" (filterChanged)="handleFilterChanged($event)"></app-filter>

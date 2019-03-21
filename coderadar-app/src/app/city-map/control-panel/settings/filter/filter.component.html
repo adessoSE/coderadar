@@ -1,29 +1,8 @@
-<div class="btn-group">
-    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <fa-icon [icon]="faFilter"></fa-icon>
-    </button>
-    <div id="filter-dropdown" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <div class="custom-controls-stacked">
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" id="checkbox-unchanged" class="custom-control-input" [(ngModel)]="activeFilter.unmodified" (change)="handleFilterChanged()">
-                <label class="custom-control-label" for="checkbox-unchanged">unverändert</label>
-            </div>
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" id="checkbox-changed" class="custom-control-input" [(ngModel)]="activeFilter.modified" (change)="handleFilterChanged()">
-                <label class="custom-control-label" for="checkbox-changed">verändert</label>
-            </div>
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" id="checkbox-deleted" class="custom-control-input" [(ngModel)]="activeFilter.deleted" (change)="handleFilterChanged()">
-                <label class="custom-control-label" for="checkbox-deleted">gelöscht</label>
-            </div>
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" id="checkbox-added" class="custom-control-input" [(ngModel)]="activeFilter.added" (change)="handleFilterChanged()">
-                <label class="custom-control-label" for="checkbox-added">hinzugefügt</label>
-            </div>
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" id="checkbox-moved" class="custom-control-input" [(ngModel)]="activeFilter.renamed" (change)="handleFilterChanged()">
-                <label class="custom-control-label" for="checkbox-moved">umbenannt/verschoben</label>
-            </div>
-        </div>
-    </div>
+<div>
+<!--TODO: DROPDOWN-->
+    <mat-checkbox type="checkbox" id="checkbox-unchanged" class="custom-control-input" [(ngModel)]="activeFilter.unmodified" (change)="handleFilterChanged()">unchanged</mat-checkbox>
+    <mat-checkbox type="checkbox" id="checkbox-changed" class="custom-control-input" [(ngModel)]="activeFilter.modified" (change)="handleFilterChanged()">changed</mat-checkbox>
+    <mat-checkbox type="checkbox" id="checkbox-deleted" class="custom-control-input" [(ngModel)]="activeFilter.deleted" (change)="handleFilterChanged()">deleted</mat-checkbox>
+    <mat-checkbox type="checkbox" id="checkbox-added" class="custom-control-input" [(ngModel)]="activeFilter.added" (change)="handleFilterChanged()">added</mat-checkbox>
+    <mat-checkbox type="checkbox" id="checkbox-moved" class="custom-control-input" [(ngModel)]="activeFilter.renamed" (change)="handleFilterChanged()">renamed/moved</mat-checkbox>
 </div>

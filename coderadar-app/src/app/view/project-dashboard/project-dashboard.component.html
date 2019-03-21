@@ -1,10 +1,11 @@
 <app-header [title]="'Project dashboard'"></app-header>
 
 <main class="card-list">
+  <button mat-button routerLink="/city/{{project.id}}">Show 3D city map</button>
   <p>{{getTitleText()}}</p>
   <mat-grid-list cols="4" rowHeight="130px">
     <mat-grid-tile *ngFor="let commit of commits" [colspan]="2" [rowspan]="1">
-      <mat-card tabindex="{{commit.selected}}" (click)="$event.currentTarget.focus()" class="dashboard-card">
+      <mat-card class="dashboard-card">
         <mat-card-content class="mat-card-content">
           <a mat-button routerLink="/project/{{project.id}}/{{commit.name}}"><b>{{commit.name}}</b></a><br>
           <mat-label>Author: {{commit.author}}</mat-label><br>

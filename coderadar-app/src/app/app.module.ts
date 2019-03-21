@@ -43,6 +43,8 @@ import {FocusService} from './service/focus.service';
 import {TooltipService} from './service/tooltip.service';
 import {ComparisonPanelService} from './service/comparison-panel.service';
 import {environment} from '../environments/environment';
+import { CityViewComponent } from './view/city-view/city-view.component';
+import { CityViewHeaderComponent } from './view/city-view/city-view-header/city-view-header.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -51,6 +53,7 @@ const appRoutes: Routes = [
   { path: 'user-settings', component: UserSettingsComponent },
   { path: 'add-project', component: AddProjectComponent },
   { path: 'project-configure/:id', component: ConfigureProjectComponent },
+  { path: 'city/:id', component: CityViewComponent },
   { path: 'project-edit/:id', component: EditProjectComponent },
   { path: 'project/:id', component: ProjectDashboardComponent },
   { path: 'project/:id/:name', component: ViewCommitComponent },
@@ -70,7 +73,9 @@ const appRoutes: Routes = [
     FooterComponent,
     UserSettingsComponent,
     ProjectDashboardComponent,
-    ViewCommitComponent
+    ViewCommitComponent,
+    CityViewComponent,
+    CityViewHeaderComponent
   ],
   imports: [
     BrowserModule,

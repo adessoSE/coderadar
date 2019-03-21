@@ -11,7 +11,7 @@ import {Observable} from 'rxjs';
 @Component({
     selector: 'app-control-panel',
     templateUrl: './control-panel.component.html',
-    styleUrls: ['./control-panel.component.scss']
+    styleUrls: ['./control-panel.component.css']
 })
 export class ControlPanelComponent implements OnInit {
 
