@@ -2,7 +2,7 @@ package org.wickedsource.coderadar.filepattern.match;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.wickedsource.coderadar.filepattern.domain.FilePattern;
+import org.wickedsource.coderadar.projectadministration.domain.FilePattern;
 
 /**
  * This class allows to specify a set of include patterns and exclude patterns that define a set of

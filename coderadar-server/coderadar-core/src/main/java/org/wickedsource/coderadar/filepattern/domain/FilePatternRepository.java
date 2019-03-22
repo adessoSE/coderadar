@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.filepattern.domain;
 
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
+import org.wickedsource.coderadar.projectadministration.domain.FilePattern;
 
 public interface FilePatternRepository extends CrudRepository<FilePattern, Long> {
 

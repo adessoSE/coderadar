@@ -3,8 +3,8 @@ package org.wickedsource.coderadar.user.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
+import org.wickedsource.coderadar.projectadministration.domain.User;
 import org.wickedsource.coderadar.security.service.PasswordService;
-import org.wickedsource.coderadar.user.domain.User;
 import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 
 @Component

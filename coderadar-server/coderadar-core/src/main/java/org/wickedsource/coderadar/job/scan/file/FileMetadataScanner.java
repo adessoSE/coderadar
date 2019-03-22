@@ -23,12 +23,12 @@ import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.file.domain.GitLogEntry;
 import org.wickedsource.coderadar.file.domain.GitLogEntryRepository;
-import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.filepattern.domain.FileSetType;
 import org.wickedsource.coderadar.filepattern.match.FilePatternMatcher;
 import org.wickedsource.coderadar.job.LocalGitRepositoryManager;
 import org.wickedsource.coderadar.job.core.FirstCommitFinder;
+import org.wickedsource.coderadar.projectadministration.domain.FilePattern;
 import org.wickedsource.coderadar.vcs.git.ChangeTypeMapper;
 import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
 

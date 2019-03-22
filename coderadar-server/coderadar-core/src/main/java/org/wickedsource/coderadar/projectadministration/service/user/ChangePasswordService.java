@@ -8,10 +8,10 @@ import org.wickedsource.coderadar.projectadministration.port.driver.user.ChangeP
 @Service
 public class ChangePasswordService implements ChangePasswordUseCase {
 
-    private final ChangePasswordPort port;
+  private final ChangePasswordPort port;
 
-    @Autowired
-    public ChangePasswordService(ChangePasswordPort port) {
-        this.port = port;
-    }
+  @Autowired
+  public ChangePasswordService(ChangePasswordPort port) {
+    this.port = port;
+  }
 }

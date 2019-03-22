@@ -13,7 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
-import org.wickedsource.coderadar.user.domain.User;
+import org.wickedsource.coderadar.projectadministration.domain.User;
 import org.wickedsource.coderadar.user.domain.UserRegistrationDataResource;
 import org.wickedsource.coderadar.user.domain.UserRepository;
 import org.wickedsource.coderadar.user.service.RegistrationService;

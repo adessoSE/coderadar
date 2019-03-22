@@ -2,7 +2,6 @@ package org.wickedsource.coderadar.projectadministration.domain;
 
 import javax.persistence.*;
 import lombok.Data;
-import org.wickedsource.coderadar.project.domain.Project;
 
 /** An AnalyzerConfiguration stores the configuration for a single analyzer plugin in a project. */
 @Entity

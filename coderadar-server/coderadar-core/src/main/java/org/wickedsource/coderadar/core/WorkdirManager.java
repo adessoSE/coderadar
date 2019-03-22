@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
 import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
-import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 /** Centralizes the access to local working directories needed for some tasks. */
 @Service

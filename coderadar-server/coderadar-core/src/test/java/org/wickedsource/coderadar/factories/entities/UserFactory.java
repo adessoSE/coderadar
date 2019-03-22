@@ -1,6 +1,6 @@
 package org.wickedsource.coderadar.factories.entities;
 
-import org.wickedsource.coderadar.user.domain.User;
+import org.wickedsource.coderadar.projectadministration.domain.User;
 
 public class UserFactory {
 

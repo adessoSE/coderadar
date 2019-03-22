@@ -1,12 +1,10 @@
 package org.wickedsource.coderadar.projectadministration.domain;
 
-import lombok.Data;
-import org.wickedsource.coderadar.project.domain.Project;
-import org.wickedsource.coderadar.qualityprofile.domain.QualityProfileMetric;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.*;
+import lombok.Data;
+import org.wickedsource.coderadar.qualityprofile.domain.QualityProfileMetric;
 
 @Entity
 @Table(name = "quality_profile")

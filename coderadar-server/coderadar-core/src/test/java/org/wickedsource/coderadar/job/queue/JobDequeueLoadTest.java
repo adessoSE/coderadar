@@ -15,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.job.core.JobRepository;
 import org.wickedsource.coderadar.job.scan.commit.ScanCommitsJob;
-import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
 public class JobDequeueLoadTest extends IntegrationTestTemplate {

@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociation;
+import org.wickedsource.coderadar.projectadministration.domain.Module;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
 public class ModuleRepositoryTest extends IntegrationTestTemplate {

@@ -2,8 +2,8 @@ package org.wickedsource.coderadar.projectadministration.service.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.VcsCoordinates;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 import org.wickedsource.coderadar.projectadministration.port.driven.project.CreateProjectPort;
 import org.wickedsource.coderadar.projectadministration.port.driver.project.CreateProjectCommand;
 import org.wickedsource.coderadar.projectadministration.port.driver.project.CreateProjectUseCase;

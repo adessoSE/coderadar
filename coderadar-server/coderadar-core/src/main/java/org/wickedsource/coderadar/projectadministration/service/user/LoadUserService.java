@@ -8,10 +8,10 @@ import org.wickedsource.coderadar.projectadministration.port.driver.user.LoadUse
 @Service
 public class LoadUserService implements LoadUserUseCase {
 
-    private final LoadUserPort port;
+  private final LoadUserPort port;
 
-    @Autowired
-    public LoadUserService(LoadUserPort port) {
-        this.port = port;
-    }
+  @Autowired
+  public LoadUserService(LoadUserPort port) {
+    this.port = port;
+  }
 }

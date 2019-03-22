@@ -3,7 +3,7 @@ package org.wickedsource.coderadar.job.core;
 import java.util.Date;
 import javax.persistence.*;
 import lombok.Data;
-import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 /** The Job entity defines a task in the coderadar application that is run asynchronously. */
 @Entity

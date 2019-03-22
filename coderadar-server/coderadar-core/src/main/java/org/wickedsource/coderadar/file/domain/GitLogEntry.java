@@ -4,7 +4,7 @@ import javax.persistence.*;
 import lombok.Data;
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
 import org.wickedsource.coderadar.commit.domain.Commit;
-import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 /**
  * Stores metadata about a file that has been part of a commit to a VCS (i.e. metadata of a log

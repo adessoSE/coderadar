@@ -1,7 +1,7 @@
 package org.wickedsource.coderadar.factories.entities;
 
-import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfiguration;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationFile;
+import org.wickedsource.coderadar.projectadministration.domain.AnalyzerConfiguration;
 
 public class AnalyzerConfigurationFactory {
 

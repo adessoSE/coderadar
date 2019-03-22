@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfiguration;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationRepository;
 import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
 import org.wickedsource.coderadar.core.rest.validation.UserException;
-import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
+import org.wickedsource.coderadar.projectadministration.domain.AnalyzerConfiguration;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 @Controller
 @Transactional

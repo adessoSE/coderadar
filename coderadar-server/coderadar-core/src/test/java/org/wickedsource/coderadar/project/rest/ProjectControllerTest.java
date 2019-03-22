@@ -19,8 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
-import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 import org.wickedsource.coderadar.testframework.template.ControllerTestTemplate;
 
 public class ProjectControllerTest extends ControllerTestTemplate {

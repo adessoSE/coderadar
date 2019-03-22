@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.core.rest.validation.RefreshTokenNotFoundException;
+import org.wickedsource.coderadar.projectadministration.domain.User;
 import org.wickedsource.coderadar.security.domain.RefreshToken;
 import org.wickedsource.coderadar.security.domain.RefreshTokenRepository;
 import org.wickedsource.coderadar.security.service.TokenService;
-import org.wickedsource.coderadar.user.domain.User;
 import org.wickedsource.coderadar.user.domain.UserRepository;
 
 /** Service for refreshing a access token, if access token is expired. */

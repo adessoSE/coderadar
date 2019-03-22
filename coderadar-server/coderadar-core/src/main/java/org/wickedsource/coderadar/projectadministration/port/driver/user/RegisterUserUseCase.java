@@ -1,5 +1,5 @@
 package org.wickedsource.coderadar.projectadministration.port.driver.user;
 
 public interface RegisterUserUseCase {
-    RegisterUserCommand register(RegisterUserCommand command);
+  RegisterUserCommand register(RegisterUserCommand command);
 }

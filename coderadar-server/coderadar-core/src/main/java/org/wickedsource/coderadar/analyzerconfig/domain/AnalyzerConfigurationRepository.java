@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.analyzerconfig.domain;
 
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
+import org.wickedsource.coderadar.projectadministration.domain.AnalyzerConfiguration;
 
 public interface AnalyzerConfigurationRepository
     extends CrudRepository<AnalyzerConfiguration, Long> {

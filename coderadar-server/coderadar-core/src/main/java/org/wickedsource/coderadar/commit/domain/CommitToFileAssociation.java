@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.wickedsource.coderadar.analyzer.api.ChangeType;
 import org.wickedsource.coderadar.file.domain.File;
-import org.wickedsource.coderadar.module.domain.Module;
+import org.wickedsource.coderadar.projectadministration.domain.Module;
 
 /**
  * Associates a Commit to a File. Each Commit is associated to all Files that have been modified in

@@ -1,8 +1,8 @@
 package org.wickedsource.coderadar.module.rest;
 
 import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
-import org.wickedsource.coderadar.module.domain.Module;
-import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.Module;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 public class ModuleResourceAssembler extends AbstractResourceAssembler<Module, ModuleResource> {
 

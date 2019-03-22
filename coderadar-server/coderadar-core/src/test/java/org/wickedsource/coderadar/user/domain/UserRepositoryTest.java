@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.factories.databases.DbUnitFactory;
 import org.wickedsource.coderadar.factories.entities.EntityFactory;
+import org.wickedsource.coderadar.projectadministration.domain.User;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
 public class UserRepositoryTest extends IntegrationTestTemplate {

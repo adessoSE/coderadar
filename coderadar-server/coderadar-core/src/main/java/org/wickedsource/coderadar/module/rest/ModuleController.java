@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
 import org.wickedsource.coderadar.core.rest.validation.UserException;
-import org.wickedsource.coderadar.module.domain.Module;
 import org.wickedsource.coderadar.module.domain.ModuleRepository;
-import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
+import org.wickedsource.coderadar.projectadministration.domain.Module;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 @Controller
 @Transactional

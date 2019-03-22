@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
 import lombok.Data;
-import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 /** Metadata about a commit to a Git repository. */
 @Entity

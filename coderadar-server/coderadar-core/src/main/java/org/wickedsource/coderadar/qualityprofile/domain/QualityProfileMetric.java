@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.qualityprofile.domain;
 
 import javax.persistence.*;
 import lombok.Data;
+import org.wickedsource.coderadar.projectadministration.domain.QualityProfile;
 
 @Entity
 @Table(name = "quality_profile_metric")

@@ -2,7 +2,7 @@ package org.wickedsource.coderadar.analyzingjob.rest;
 
 import org.wickedsource.coderadar.analyzingjob.domain.AnalyzingJob;
 import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
-import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 public class AnalyzingJobResourceAssembler
     extends AbstractResourceAssembler<AnalyzingJob, AnalyzingJobResource> {

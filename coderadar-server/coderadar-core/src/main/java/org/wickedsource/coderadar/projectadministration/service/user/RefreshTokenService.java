@@ -8,10 +8,10 @@ import org.wickedsource.coderadar.projectadministration.port.driver.user.Refresh
 @Service
 public class RefreshTokenService implements RefreshTokenUseCase {
 
-    private final RefreshTokenPort port;
+  private final RefreshTokenPort port;
 
-    @Autowired
-    public RefreshTokenService(RefreshTokenPort port) {
-        this.port = port;
-    }
+  @Autowired
+  public RefreshTokenService(RefreshTokenPort port) {
+    this.port = port;
+  }
 }

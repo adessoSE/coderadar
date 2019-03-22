@@ -1,4 +1,3 @@
 package org.wickedsource.coderadar.projectadministration.port.driven.user;
 
-public interface ChangePasswordPort {
-}
+public interface ChangePasswordPort {}

@@ -11,9 +11,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.wickedsource.coderadar.projectadministration.domain.User;
 import org.wickedsource.coderadar.security.domain.RefreshToken;
 import org.wickedsource.coderadar.security.domain.RefreshTokenRepository;
-import org.wickedsource.coderadar.user.domain.User;
 
 @ExtendWith(SpringExtension.class)
 public class LoginServiceTest {

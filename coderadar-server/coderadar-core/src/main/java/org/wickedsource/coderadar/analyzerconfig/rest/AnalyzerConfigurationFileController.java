@@ -16,12 +16,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.wickedsource.coderadar.analyzer.api.ConfigurableAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.service.AnalyzerPluginRegistry;
-import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfiguration;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationFile;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationFileRepository;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationRepository;
 import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
 import org.wickedsource.coderadar.core.rest.validation.ValidationException;
+import org.wickedsource.coderadar.projectadministration.domain.AnalyzerConfiguration;
 
 @Controller
 @Transactional

@@ -2,11 +2,11 @@ package org.wickedsource.coderadar.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.wickedsource.coderadar.projectadministration.domain.User;
 import org.wickedsource.coderadar.security.domain.InitializeTokenResource;
 import org.wickedsource.coderadar.security.domain.RefreshToken;
 import org.wickedsource.coderadar.security.domain.RefreshTokenRepository;
 import org.wickedsource.coderadar.security.service.TokenService;
-import org.wickedsource.coderadar.user.domain.User;
 import org.wickedsource.coderadar.user.domain.UserRepository;
 
 @Service

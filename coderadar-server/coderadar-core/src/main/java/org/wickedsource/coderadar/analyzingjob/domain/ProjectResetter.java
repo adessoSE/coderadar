@@ -10,7 +10,7 @@ import org.wickedsource.coderadar.job.analyze.AnalyzeCommitJobRepository;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
 import org.wickedsource.coderadar.metric.domain.finding.FindingRepository;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
-import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 @Component
 public class ProjectResetter {

@@ -8,10 +8,10 @@ import org.wickedsource.coderadar.projectadministration.port.driver.user.LoginUs
 @Service
 public class LoginUserService implements LoginUserUseCase {
 
-    private final LoginUserPort port;
+  private final LoginUserPort port;
 
-    @Autowired
-    public LoginUserService(LoginUserPort port) {
-        this.port = port;
-    }
+  @Autowired
+  public LoginUserService(LoginUserPort port) {
+    this.port = port;
+  }
 }

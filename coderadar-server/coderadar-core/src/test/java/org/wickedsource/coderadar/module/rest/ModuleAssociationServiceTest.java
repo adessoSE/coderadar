@@ -13,8 +13,8 @@ import org.wickedsource.coderadar.commit.domain.*;
 import org.wickedsource.coderadar.commit.event.CommitToFileAssociatedEvent;
 import org.wickedsource.coderadar.file.domain.File;
 import org.wickedsource.coderadar.file.domain.FileRepository;
-import org.wickedsource.coderadar.module.domain.Module;
 import org.wickedsource.coderadar.module.domain.ModuleRepository;
+import org.wickedsource.coderadar.projectadministration.domain.Module;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
 
 @Transactional

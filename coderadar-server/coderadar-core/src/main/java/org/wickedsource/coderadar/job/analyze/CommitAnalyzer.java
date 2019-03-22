@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.analyzer.api.*;
 import org.wickedsource.coderadar.analyzer.service.AnalyzerPluginRegistry;
-import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfiguration;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationFile;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationFileRepository;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationRepository;
@@ -27,7 +26,6 @@ import org.wickedsource.coderadar.file.domain.File;
 import org.wickedsource.coderadar.file.domain.FileRepository;
 import org.wickedsource.coderadar.file.domain.GitLogEntry;
 import org.wickedsource.coderadar.file.domain.GitLogEntryRepository;
-import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
 import org.wickedsource.coderadar.filepattern.domain.FileSetType;
 import org.wickedsource.coderadar.filepattern.match.FilePatternMatcher;
@@ -36,7 +34,9 @@ import org.wickedsource.coderadar.metric.domain.finding.FindingRepository;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValue;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueId;
 import org.wickedsource.coderadar.metric.domain.metricvalue.MetricValueRepository;
-import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.AnalyzerConfiguration;
+import org.wickedsource.coderadar.projectadministration.domain.FilePattern;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 import org.wickedsource.coderadar.vcs.git.GitCommitFinder;
 
 @Service

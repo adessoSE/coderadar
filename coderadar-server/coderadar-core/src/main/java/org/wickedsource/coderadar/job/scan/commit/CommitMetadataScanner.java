@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.job.LocalGitRepositoryManager;
-import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 import org.wickedsource.coderadar.vcs.git.walk.CommitWalker;
 import org.wickedsource.coderadar.vcs.git.walk.filter.DateRangeCommitFilter;
 import org.wickedsource.coderadar.vcs.git.walk.filter.LastKnownCommitFilter;

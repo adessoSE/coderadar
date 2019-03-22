@@ -8,8 +8,8 @@ import javax.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.wickedsource.coderadar.factories.databases.DbUnitFactory;
+import org.wickedsource.coderadar.projectadministration.domain.User;
 import org.wickedsource.coderadar.testframework.template.IntegrationTestTemplate;
-import org.wickedsource.coderadar.user.domain.User;
 
 @Transactional
 public class RefreshTokenRepositoryTest extends IntegrationTestTemplate {

@@ -2,7 +2,6 @@ package org.wickedsource.coderadar.projectadministration.domain;
 
 import javax.persistence.*;
 import lombok.Data;
-import org.wickedsource.coderadar.project.domain.Project;
 
 /**
  * The codebase may be organized into modules, each module starting at a certain path. All files

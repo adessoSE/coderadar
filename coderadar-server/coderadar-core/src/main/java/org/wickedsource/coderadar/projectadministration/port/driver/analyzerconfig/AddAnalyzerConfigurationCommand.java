@@ -4,7 +4,7 @@ import lombok.Value;
 
 @Value
 public class AddAnalyzerConfigurationCommand {
-    private Long id;
-    private String analyzerName;
-    private Boolean enabled;
+  private Long id;
+  private String analyzerName;
+  private Boolean enabled;
 }

@@ -6,8 +6,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociation;
 import org.wickedsource.coderadar.commit.event.CommitToFileAssociatedEvent;
-import org.wickedsource.coderadar.module.domain.Module;
 import org.wickedsource.coderadar.module.domain.ModuleRepository;
+import org.wickedsource.coderadar.projectadministration.domain.Module;
 
 /**
  * Service that associates files with modules. The methods of this service will run asynchronously

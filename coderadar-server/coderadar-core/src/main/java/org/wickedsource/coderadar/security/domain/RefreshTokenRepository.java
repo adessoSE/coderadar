@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import org.wickedsource.coderadar.user.domain.User;
+import org.wickedsource.coderadar.projectadministration.domain.User;
 
 public interface RefreshTokenRepository extends CrudRepository<RefreshToken, Long> {
 

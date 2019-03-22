@@ -3,7 +3,7 @@ package org.wickedsource.coderadar.analyzingjob.domain;
 import java.util.Date;
 import javax.persistence.*;
 import lombok.Data;
-import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 /**
  * A job that defines which commits are to be analyzed. Storing an entity of this type in the

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.wickedsource.coderadar.commit.domain.CommitToFileAssociation;
+import org.wickedsource.coderadar.projectadministration.domain.Module;
 
 public interface ModuleRepository extends CrudRepository<Module, Long> {
 

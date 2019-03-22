@@ -3,8 +3,8 @@ package org.wickedsource.coderadar.filepattern.rest;
 import java.util.ArrayList;
 import java.util.List;
 import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
-import org.wickedsource.coderadar.filepattern.domain.FilePattern;
-import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.FilePattern;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 public class FilePatternResourceAssembler
     extends AbstractResourceAssembler<Iterable<FilePattern>, FilePatternResource> {

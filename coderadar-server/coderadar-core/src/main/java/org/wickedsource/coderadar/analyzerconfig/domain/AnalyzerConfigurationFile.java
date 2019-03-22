@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.analyzerconfig.domain;
 
 import javax.persistence.*;
 import lombok.Data;
+import org.wickedsource.coderadar.projectadministration.domain.AnalyzerConfiguration;
 
 /**
  * A configuration file for an analyzer. May have any ASCII content, depending on what kind of

@@ -1,9 +1,9 @@
 package org.wickedsource.coderadar.qualityprofile.rest;
 
 import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
-import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.QualityProfile;
 import org.wickedsource.coderadar.qualityprofile.domain.MetricDTO;
-import org.wickedsource.coderadar.qualityprofile.domain.QualityProfile;
 import org.wickedsource.coderadar.qualityprofile.domain.QualityProfileMetric;
 
 public class QualityProfileResourceAssembler

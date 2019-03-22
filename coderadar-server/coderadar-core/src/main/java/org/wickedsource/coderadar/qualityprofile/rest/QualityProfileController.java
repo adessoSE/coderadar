@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
-import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
-import org.wickedsource.coderadar.qualityprofile.domain.QualityProfile;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.QualityProfile;
 import org.wickedsource.coderadar.qualityprofile.domain.QualityProfileRepository;
 
 @Controller

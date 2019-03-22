@@ -6,7 +6,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
-import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 import org.wickedsource.coderadar.vcs.git.walk.CommitProcessor;
 import org.wickedsource.coderadar.vcs.git.walk.RevCommitWithSequenceNumber;
 

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.job.core.Job;
-import org.wickedsource.coderadar.project.domain.Project;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 /**
  * Central logger for logging informations about running and queuing jobs. This way, all log

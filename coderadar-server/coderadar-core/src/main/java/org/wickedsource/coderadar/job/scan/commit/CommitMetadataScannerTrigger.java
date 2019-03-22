@@ -10,8 +10,8 @@ import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
 import org.wickedsource.coderadar.job.JobLogger;
 import org.wickedsource.coderadar.job.core.Job;
 import org.wickedsource.coderadar.job.core.ProcessingStatus;
-import org.wickedsource.coderadar.project.domain.Project;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 @Service
 @ConditionalOnProperty("coderadar.master")
