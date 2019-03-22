@@ -5,7 +5,7 @@ import {AppComponent} from './app.component';
 import {LoginComponent} from './view/login/login.component';
 import {RegisterComponent} from './view/register/register.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AddProjectComponent} from './view/add-project/add-project.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';

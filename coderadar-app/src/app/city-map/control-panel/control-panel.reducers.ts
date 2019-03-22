@@ -1,15 +1,15 @@
 import * as ControlPanelActions from './control-panel.actions';
 import {ActionReducer} from '@ngrx/store';
-import {ICommit} from '../interfaces/ICommit';
 import {IActionWithPayload} from '../interfaces/IActionWithPayload';
 import {CommitType} from '../../model/enum/CommitType';
 import * as _ from 'lodash';
+import {Commit} from '../../model/commit';
 
 export interface ControlPanelState {
-    commits: ICommit[];
+    commits: Commit[];
     commitsLoading: boolean;
-    leftCommit: ICommit;
-    rightCommit: ICommit;
+    leftCommit: Commit;
+    rightCommit: Commit;
     screenshots: any[];
 }
 
@@ -31,7 +31,7 @@ export const ControlPanelReducer: ActionReducer<ControlPanelState> = (state = in
 
         case ControlPanelActions.LOAD_COMMITS_SUCCESS:
             newState = Object.assign({}, state);
-            newState.commits = _.sortBy(action.payload, (commit: ICommit) => commit.timestamp);
+            newState.commits = _.sortBy(action.payload, (commit: Commit) => commit.timestamp);
             newState.commitsLoading = false;
             newState.leftCommit = newState.commits[0];
             newState.rightCommit = newState.commits[1];

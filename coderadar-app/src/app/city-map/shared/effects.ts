@@ -10,6 +10,9 @@ import {MetricService} from '../../service/metric.service';
 import {catchError, map, switchMap, mergeMap} from 'rxjs/operators';
 import { IActionWithPayload } from '../interfaces/IActionWithPayload';
 import {LOAD_AVAILABLE_METRICS, LOAD_COMMITS, LOAD_METRIC_TREE} from './actions';
+import {ProjectService} from '../../service/project.service';
+import {FORBIDDEN} from 'http-status-codes';
+import {UserService} from '../../service/user.service';
 
 @Injectable()
 export class AppEffects {
@@ -18,23 +21,16 @@ export class AppEffects {
 
     @Effect()
     loadCommitsEffects$ = this.actions$.pipe(ofType(LOAD_COMMITS),
-            switchMap(
-                () => this.commitService.loadCommits(this.currentProjectId)
-                    .pipe(
-                        map((result: any) => {
-                          return actions.loadCommitsSuccess(result);
-                        }),
-                        catchError((response: ICommitsGetErrorResponse) => {
-                            return of(actions.loadCommitsError(response.error));
-                        })
-                    )
+            switchMap(() => this.projectService.getCommits(this.currentProjectId)
+                .then(response => {
+                  return actions.loadCommitsSuccess(response.body);
+                })
             )
-        );
+          );
 
     @Effect()
     loadAvailableMetricsEffects$ = this.actions$.pipe(ofType(LOAD_AVAILABLE_METRICS),
-            switchMap(
-                () => this.metricService.loadAvailableMetrics(this.currentProjectId)
+            switchMap(() => this.metricService.loadAvailableMetrics(this.currentProjectId)
                     .pipe(
                         mergeMap((result: any) => {
                           const availableMetrics = result.map(
@@ -85,7 +81,8 @@ export class AppEffects {
 
     constructor(
         private actions$: Actions<IActionWithPayload<any>>,
-        private commitService: CommitService,
-        private metricService: MetricService
+        private projectService: ProjectService,
+        private metricService: MetricService,
+        private userService: UserService
     ) { }
 }

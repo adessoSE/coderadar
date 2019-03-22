@@ -19,22 +19,22 @@
     </div>
     <div id="legend-item-commit-1" class="legend-item" *ngIf="activeViewType === viewTypes.merged">
         <span class="legend-color" [ngStyle]="{'background': colorFirstCommit}"></span>
-        <small class="legend-label">Erste Revision</small>
+        <small class="legend-label">First revision</small>
     </div>
     <div id="legend-item-commit-2" class="legend-item" *ngIf="activeViewType === viewTypes.merged">
         <span class="legend-color" [ngStyle]="{'background': colorSecondCommit}"></span>
-        <small class="legend-label">Zweite Revision</small>
+        <small class="legend-label">Second revision</small>
     </div>
     <div id="legend-item-added-files" class="legend-item" *ngIf="activeViewType === viewTypes.merged">
         <span class="legend-color" [ngStyle]="{'background': colorAddedFile}"></span>
-        <small class="legend-label">hinzugefügt</small>
+        <small class="legend-label">added</small>
     </div>
     <div id="legend-item-deleted-files" class="legend-item" *ngIf="activeViewType === viewTypes.merged">
         <span class="legend-color" [ngStyle]="{'background': colorDeletedFile}"></span>
-        <small class="legend-label">gelöscht</small>
+        <small class="legend-label">deleted</small>
     </div>
     <div id="legend-item-unchanged-files" class="legend-item" *ngIf="activeViewType === viewTypes.merged">
         <span class="legend-color" [ngStyle]="{'background': colorUnchangedFile}"></span>
-        <small class="legend-label">unverändert</small>
+        <small class="legend-label">unchanged</small>
     </div>
 </div>

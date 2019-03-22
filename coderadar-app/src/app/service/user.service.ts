@@ -73,7 +73,11 @@ export class UserService {
           currentUser.accessToken = user.token;
           localStorage.setItem('currentUser', JSON.stringify(currentUser));
         }})
-        .catch(() => this.logout());
+        .catch(error => {
+          if (error.error.errorMessage !== 'Access token ist still valid. This token must be used for authentication.') {
+            this.logout();
+          }
+        });
     } else {
       this.logout();
     }
