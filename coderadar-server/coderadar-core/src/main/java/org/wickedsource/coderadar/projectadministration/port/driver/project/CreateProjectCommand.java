@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.projectadministration.port.driver;
+package org.wickedsource.coderadar.projectadministration.port.driver.project;
 
 import java.net.URL;
 import java.util.Date;

@@ -1,10 +1,10 @@
-package org.wickedsource.coderadar.projectadministration.service;
+package org.wickedsource.coderadar.projectadministration.service.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.wickedsource.coderadar.projectadministration.port.driven.UpdateProjectPort;
-import org.wickedsource.coderadar.projectadministration.port.driver.UpdateProjectCommand;
-import org.wickedsource.coderadar.projectadministration.port.driver.UpdateProjectUseCase;
+import org.wickedsource.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
+import org.wickedsource.coderadar.projectadministration.port.driver.project.UpdateProjectCommand;
+import org.wickedsource.coderadar.projectadministration.port.driver.project.UpdateProjectUseCase;
 
 @Service
 public class UpdateProjectService implements UpdateProjectUseCase {
