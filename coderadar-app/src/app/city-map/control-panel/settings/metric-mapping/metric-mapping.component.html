@@ -1,23 +1,17 @@
-<div style="width: 100%;">
-  <span style="padding-right: 21%;">
-    <mat-label ><fa-icon [icon]="faArrowsAltV"></fa-icon> Height</mat-label>
-  </span>
-  <span style="padding-right: 21%;">
-    <mat-label><fa-icon [icon]="faArrowsAlt"></fa-icon> Surface</mat-label>
-  </span>
-  <mat-label ><fa-icon [icon]="faPalette"></fa-icon> Color</mat-label><br>
-
-  <mat-select style="padding-right:11%;width: 15%" [(ngModel)]="metricMapping.heightMetricName">
-    <mat-option *ngFor="let metric of availableMetrics" (onSelectionChange)="applyMetricMappings()" [value]="metric.metricName">{{metric.shortName}}</mat-option>
+<div>
+  <fa-icon [icon]="faArrowsAltV"></fa-icon>&nbsp;
+  <mat-select (selectionChange)="applyMetricMappings()" style="padding-right:5%;width: 10%" [(ngModel)]="metricMapping.heightMetricName">
+    <mat-option *ngFor="let metric of availableMetrics" [value]="metric.metricName">{{metric.shortName}}</mat-option>
   </mat-select>
 
-  <mat-select style="padding-right:11%; width: 15%" [(ngModel)]="metricMapping.groundAreaMetricName">
-      <mat-option *ngFor="let metric of availableMetrics" (onSelectionChange)="applyMetricMappings()" [value]="metric.metricName">{{metric.shortName}}</mat-option>
+  <fa-icon [icon]="faArrowsAlt"></fa-icon>&nbsp;
+  <mat-select (selectionChange)="applyMetricMappings()" style="padding-right:5%; width: 10%" [(ngModel)]="metricMapping.groundAreaMetricName">
+      <mat-option *ngFor="let metric of availableMetrics" [value]="metric.metricName">{{metric.shortName}}</mat-option>
   </mat-select>
 
-  <mat-select style="width: 15%" [(ngModel)]="metricMapping.colorMetricName">
-      <mat-option *ngFor="let metric of availableMetrics" (onSelectionChange)="applyMetricMappings()" [value]="metric.metricName">{{metric.shortName}}</mat-option>
+  <fa-icon [icon]="faPalette"></fa-icon>&nbsp;
+  <mat-select (selectionChange)="applyMetricMappings()" style="width: 10%" [(ngModel)]="metricMapping.colorMetricName">
+      <mat-option *ngFor="let metric of availableMetrics" [value]="metric.metricName">{{metric.shortName}}</mat-option>
   </mat-select>
 
-  <button mat-button type="button" (click)="applyMetricMappings()">Apply</button>
 </div>

@@ -19,6 +19,6 @@ header .spacer {
 }
 
 mat-toolbar:last-child {
-  height: 160px;
+  height: 80px;
   z-index: 5;
 }

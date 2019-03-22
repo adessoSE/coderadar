@@ -1,5 +1,5 @@
 
-<div style="float: right">
+<div style="float: left;padding-right: 50px">
   <small>First revision</small>
   <app-commit-chooser
     [commitType]="commitTypes.left"
@@ -10,7 +10,7 @@
   </app-commit-chooser>
 </div>
 
-<div style="float: right">
+<div style="float: left;padding-right: 50px">
   <small>Second revision</small>
   <app-commit-chooser
     [commitType]="commitTypes.right"
@@ -21,12 +21,15 @@
     (changeCommit)="handleCommitChanged($event)">
   </app-commit-chooser>
 </div>
-<app-settings></app-settings>
 
-<div style="float: right">
+<div style="float: left; padding-right: 50px">
   <small>Search</small>
   <app-search [uniqueFileList]="uniqueFileList$ | async" (startSearch)="handleSearchStarted($event)"></app-search>
 </div>
+
+<app-settings></app-settings>
+
+
 
 
 
