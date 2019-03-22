@@ -1,4 +1,6 @@
 package org.wickedsource.coderadar.projectadministration.port.driver.project;
 
-public class UpdateProjectCommand {
-}
+import lombok.Value;
+
+@Value
+public class UpdateProjectCommand {}

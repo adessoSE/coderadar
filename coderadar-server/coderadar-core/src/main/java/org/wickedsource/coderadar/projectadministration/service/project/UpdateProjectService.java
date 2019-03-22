@@ -9,15 +9,15 @@ import org.wickedsource.coderadar.projectadministration.port.driver.project.Upda
 @Service
 public class UpdateProjectService implements UpdateProjectUseCase {
 
-    private final UpdateProjectPort updateProjectPort;
+  private final UpdateProjectPort updateProjectPort;
 
-    @Autowired
-    public UpdateProjectService(UpdateProjectPort updateProjectPort) {
-        this.updateProjectPort = updateProjectPort;
-    }
+  @Autowired
+  public UpdateProjectService(UpdateProjectPort updateProjectPort) {
+    this.updateProjectPort = updateProjectPort;
+  }
 
-    @Override
-    public UpdateProjectCommand updateProject(UpdateProjectCommand command) {
-        return null;
-    }
+  @Override
+  public UpdateProjectCommand updateProject(UpdateProjectCommand command) {
+    return null;
+  }
 }

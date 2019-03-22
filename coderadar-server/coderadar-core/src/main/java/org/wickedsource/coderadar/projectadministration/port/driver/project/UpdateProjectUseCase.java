@@ -1,5 +1,5 @@
 package org.wickedsource.coderadar.projectadministration.port.driver.project;
 
 public interface UpdateProjectUseCase {
-    UpdateProjectCommand updateProject(UpdateProjectCommand command);
+  UpdateProjectCommand updateProject(UpdateProjectCommand command);
 }

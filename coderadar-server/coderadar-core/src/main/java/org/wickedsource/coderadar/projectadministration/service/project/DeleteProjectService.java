@@ -8,15 +8,15 @@ import org.wickedsource.coderadar.projectadministration.port.driver.project.Dele
 @Service
 public class DeleteProjectService implements DeleteProjectUseCase {
 
-    private final DeleteProjectPort deleteProjectPort;
+  private final DeleteProjectPort deleteProjectPort;
 
-    @Autowired
-    public DeleteProjectService(DeleteProjectPort deleteProjectPort) {
-        this.deleteProjectPort = deleteProjectPort;
-    }
+  @Autowired
+  public DeleteProjectService(DeleteProjectPort deleteProjectPort) {
+    this.deleteProjectPort = deleteProjectPort;
+  }
 
-    @Override
-    public void deleteProject(Long projectId) {
-        // TODO
-    }
+  @Override
+  public void deleteProject(Long projectId) {
+    // TODO
+  }
 }
