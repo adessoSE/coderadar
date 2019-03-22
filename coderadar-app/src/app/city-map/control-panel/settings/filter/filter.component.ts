@@ -20,12 +20,7 @@ export class FilterComponent implements OnInit {
     constructor() {
     }
 
-    ngOnInit() {
-        // prevent bootstrap dropdown from being closed by clicking on its content
-        /*$(document).on('click', '#filter-dropdown', (e) => {
-            e.stopPropagation();
-        });*/
-    }
+    ngOnInit() {}
 
     handleFilterChanged() {
         this.filterChanged.emit(this.activeFilter);

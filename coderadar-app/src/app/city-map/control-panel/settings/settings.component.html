@@ -1,6 +1,5 @@
-<div>
-    <small>Settings</small>
-</div>
-<app-view-control [activeViewType]="activeViewType$ | async" (viewTypeChanged)="handleViewTypeChanged($event)"></app-view-control>
+<app-metric-mapping [metricMapping]="metricMapping$ | async" [availableMetrics]="availableMetrics$ | async"
+                    (metricMappingChanged)="handleMetricMappingChanged($event)"></app-metric-mapping>
+
 <app-filter [activeFilter]="activeFilter$ | async" (filterChanged)="handleFilterChanged($event)"></app-filter>
-<app-metric-mapping [metricMapping]="metricMapping$ | async" [availableMetrics]="availableMetrics$ | async" (metricMappingChanged)="handleMetricMappingChanged($event)"></app-metric-mapping>
+<app-view-control [activeViewType]="activeViewType$ | async" (viewTypeChanged)="handleViewTypeChanged($event)"></app-view-control>

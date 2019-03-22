@@ -17,6 +17,7 @@ import {
   MatCardModule,
   MatCheckboxModule,
   MatFormFieldModule,
+  MatSelectModule,
   MatGridListModule,
   MatIconModule,
   MatInputModule,
@@ -46,6 +47,7 @@ import {LayoutModule} from '@angular/cdk/layout';
       LayoutModule,
       MatToolbarModule,
       MatSidenavModule,
+      MatSelectModule,
       MatCheckboxModule
     ],
     declarations: [

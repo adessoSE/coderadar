@@ -1,18 +1,23 @@
-<span>
-  <label for="height-metric-name"><fa-icon [icon]="faArrowsAltV"></fa-icon> Height</label>
-  <select id="height-metric-name" class="custom-select w-auto" [(ngModel)]="metricMapping.heightMetricName">
-      <option *ngFor="let metric of availableMetrics" [ngValue]="metric.metricName">{{metric.shortName}}</option>
-  </select>
+<div style="width: 100%;">
+  <span style="padding-right: 21%;">
+    <mat-label ><fa-icon [icon]="faArrowsAltV"></fa-icon> Height</mat-label>
+  </span>
+  <span style="padding-right: 21%;">
+    <mat-label><fa-icon [icon]="faArrowsAlt"></fa-icon> Surface</mat-label>
+  </span>
+  <mat-label ><fa-icon [icon]="faPalette"></fa-icon> Color</mat-label><br>
 
-  <label for="groundarea-metric-name"><fa-icon [icon]="faArrowsAlt"></fa-icon> Surface</label>
-  <select id="groundarea-metric-name" class="custom-select w-auto" [(ngModel)]="metricMapping.groundAreaMetricName">
-      <option *ngFor="let metric of availableMetrics" [ngValue]="metric.metricName">{{metric.shortName}}</option>
-  </select>
+  <mat-select style="padding-right:11%;width: 15%" [(ngModel)]="metricMapping.heightMetricName">
+    <mat-option *ngFor="let metric of availableMetrics" (onSelectionChange)="applyMetricMappings()" [value]="metric.metricName">{{metric.shortName}}</mat-option>
+  </mat-select>
 
-  <label for="color-metric-name"><fa-icon [icon]="faPalette"></fa-icon> Color</label>
-  <select id="color-metric-name" class="custom-select w-auto" [(ngModel)]="metricMapping.colorMetricName">
-      <option *ngFor="let metric of availableMetrics" [ngValue]="metric.metricName">{{metric.shortName}}</option>
-  </select>
+  <mat-select style="padding-right:11%; width: 15%" [(ngModel)]="metricMapping.groundAreaMetricName">
+      <mat-option *ngFor="let metric of availableMetrics" (onSelectionChange)="applyMetricMappings()" [value]="metric.metricName">{{metric.shortName}}</mat-option>
+  </mat-select>
 
-  <button mat-button type="button" class="btn btn-primary" (click)="applyMetricMappings()">Apply</button>
-</span>
+  <mat-select style="width: 15%" [(ngModel)]="metricMapping.colorMetricName">
+      <mat-option *ngFor="let metric of availableMetrics" (onSelectionChange)="applyMetricMappings()" [value]="metric.metricName">{{metric.shortName}}</mat-option>
+  </mat-select>
+
+  <button mat-button type="button" (click)="applyMetricMappings()">Apply</button>
+</div>
