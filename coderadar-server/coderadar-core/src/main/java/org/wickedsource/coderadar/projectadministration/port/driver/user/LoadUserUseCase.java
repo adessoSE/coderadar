@@ -1,3 +1,7 @@
 package org.wickedsource.coderadar.projectadministration.port.driver.user;
 
-public interface LoadUserUseCase {}
+import org.wickedsource.coderadar.projectadministration.domain.User;
+
+public interface LoadUserUseCase {
+    LoadUserCommand loadUser(Long id);
+}
