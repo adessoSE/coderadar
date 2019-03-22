@@ -3,5 +3,4 @@ package org.wickedsource.coderadar.projectadministration.port.driver.analyzercon
 import lombok.Value;
 
 @Value
-public class UpdateAnalyzerConfigurationCommand {
-}
+public class UpdateAnalyzerConfigurationCommand {}

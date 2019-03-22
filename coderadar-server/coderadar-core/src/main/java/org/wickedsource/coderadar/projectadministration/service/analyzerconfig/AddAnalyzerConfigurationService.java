@@ -17,7 +17,8 @@ public class AddAnalyzerConfigurationService implements AddAnalyzerConfiguration
   }
 
   @Override
-  public AddAnalyzerConfigurationCommand addAnalyzerConfiguration(AddAnalyzerConfigurationCommand command) {
+  public AddAnalyzerConfigurationCommand addAnalyzerConfiguration(
+      AddAnalyzerConfigurationCommand command) {
     return null;
   }
 }

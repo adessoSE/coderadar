@@ -17,7 +17,8 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
   }
 
   @Override
-  public UpdateAnalyzerConfigurationCommand updateAnalyzerConfiguration(UpdateAnalyzerConfigurationCommand command) {
+  public UpdateAnalyzerConfigurationCommand updateAnalyzerConfiguration(
+      UpdateAnalyzerConfigurationCommand command) {
     return null;
   }
 }
