@@ -8,10 +8,10 @@ import org.wickedsource.coderadar.projectadministration.port.driver.project.List
 @Service
 public class ListProjectsService implements ListProjectsUseCase {
 
-    private final ListProjectsPort listProjectsPort;
+  private final ListProjectsPort listProjectsPort;
 
-    @Autowired
-    public ListProjectsService(ListProjectsPort listProjectsPort) {
-        this.listProjectsPort = listProjectsPort;
-    }
+  @Autowired
+  public ListProjectsService(ListProjectsPort listProjectsPort) {
+    this.listProjectsPort = listProjectsPort;
+  }
 }

@@ -1,4 +1,3 @@
 package org.wickedsource.coderadar.projectadministration.port.driven.module;
 
-public interface ListModulesOfProjectPort {
-}
+public interface ListModulesOfProjectPort {}

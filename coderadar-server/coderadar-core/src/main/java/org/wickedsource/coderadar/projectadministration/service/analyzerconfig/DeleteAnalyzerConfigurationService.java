@@ -8,10 +8,15 @@ import org.wickedsource.coderadar.projectadministration.port.driver.analyzerconf
 @Service
 public class DeleteAnalyzerConfigurationService implements DeleteAnalyzerConfigurationUseCase {
 
-    private final DeleteAnalyzerConfigurationPort port;
+  private final DeleteAnalyzerConfigurationPort port;
 
-    @Autowired
-    public DeleteAnalyzerConfigurationService(DeleteAnalyzerConfigurationPort port) {
-        this.port = port;
-    }
+  @Autowired
+  public DeleteAnalyzerConfigurationService(DeleteAnalyzerConfigurationPort port) {
+    this.port = port;
+  }
+
+  @Override
+  public void deleteAnalyzerConfiguration(Long projectId, Long analyzerConfigurationId) {
+    // TODO
+  }
 }

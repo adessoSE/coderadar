@@ -6,12 +6,13 @@ import org.wickedsource.coderadar.projectadministration.port.driven.analyzerconf
 import org.wickedsource.coderadar.projectadministration.port.driver.analyzerconfig.ListSingleAnalyzerConfigurationUseCase;
 
 @Service
-public class ListSingleAnalyzerConfigurationService implements ListSingleAnalyzerConfigurationUseCase {
+public class ListSingleAnalyzerConfigurationService
+    implements ListSingleAnalyzerConfigurationUseCase {
 
-    private final ListSingleAnalyzerConfigurationPort port;
+  private final ListSingleAnalyzerConfigurationPort port;
 
-    @Autowired
-    public ListSingleAnalyzerConfigurationService(ListSingleAnalyzerConfigurationPort port) {
-        this.port = port;
-    }
+  @Autowired
+  public ListSingleAnalyzerConfigurationService(ListSingleAnalyzerConfigurationPort port) {
+    this.port = port;
+  }
 }

@@ -8,10 +8,10 @@ import org.wickedsource.coderadar.projectadministration.port.driver.module.ListM
 @Service
 public class ListModulesOfProjectService implements ListModulesOfProjectUseCase {
 
-    private final ListModulesOfProjectPort listModulesOfProjectPort;
+  private final ListModulesOfProjectPort listModulesOfProjectPort;
 
-    @Autowired
-    public ListModulesOfProjectService(ListModulesOfProjectPort listModulesOfProjectPort) {
-        this.listModulesOfProjectPort = listModulesOfProjectPort;
-    }
+  @Autowired
+  public ListModulesOfProjectService(ListModulesOfProjectPort listModulesOfProjectPort) {
+    this.listModulesOfProjectPort = listModulesOfProjectPort;
+  }
 }
