@@ -1,0 +1,20 @@
+<app-header [title]="'View commit'"></app-header>
+
+<main class="commit-card">
+    <mat-card>
+      <mat-card-content class="mat-card-content">
+        <mat-label><b>{{commit.name}}</b></mat-label><br><br>
+        <mat-label><b>Metrics:</b></mat-label><br><br>
+        <div *ngIf="metrics.length === 0">
+          <mat-label>Not yet analyzed</mat-label>
+        </div>
+        <div *ngFor="let metric of metrics">
+          <mat-label>{{metric[0].split('.').pop() + ' : '}}
+            <b>{{metric[1]}}</b>
+          </mat-label><br>
+        </div>
+      </mat-card-content>
+    </mat-card>
+</main>
+
+<app-footer></app-footer>
