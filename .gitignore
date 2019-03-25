@@ -18,7 +18,7 @@ tmp/
 *.bak
 *.swp
 *~.nib
-local.properties
+local.application.properties
 .settings/
 .loadpath
 .recommenders
