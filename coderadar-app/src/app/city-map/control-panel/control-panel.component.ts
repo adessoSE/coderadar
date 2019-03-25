@@ -3,7 +3,7 @@ import {Store} from '@ngrx/store';
 import * as fromRoot from '../shared/reducers';
 import {changeCommit, loadCommits} from './control-panel.actions';
 import {ICommit} from '../interfaces/ICommit';
-import {FocusService} from '../../service/focus.service';
+import {FocusService} from '../service/focus.service';
 import {ViewType} from '../../model/enum/ViewType';
 import {CommitType} from '../../model/enum/CommitType';
 import {Observable} from 'rxjs';

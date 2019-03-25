@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AppConfig} from '../AppConfig';
-import {ICommitsGetResponse} from '../city-map/interfaces/ICommitsGetResponse';
+import {ICommitsGetResponse} from '../interfaces/ICommitsGetResponse';
+import {AppComponent} from '../../app.component';
 
 @Injectable()
 export class CommitService {
@@ -11,7 +11,7 @@ export class CommitService {
     }
 
     loadCommits(projectId: number): Observable<ICommitsGetResponse> {
-      return this.http.get<ICommitsGetResponse>(`${AppConfig.BASE_URL}/projects/${projectId}/commits`);
+      return this.http.get<ICommitsGetResponse>(`${AppComponent.getApiUrl()}projects/${projectId}/commits`);
     }
 
 }

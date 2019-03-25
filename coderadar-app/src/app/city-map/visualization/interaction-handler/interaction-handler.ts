@@ -1,6 +1,6 @@
 import {Intersection, Object3D, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer} from 'three';
-import {FocusService} from '../../../service/focus.service';
-import {TooltipService} from '../../../service/tooltip.service';
+import {FocusService} from '../../service/focus.service';
+import {TooltipService} from '../../service/tooltip.service';
 import {ScreenType} from '../../../model/enum/ScreenType';
 
 export class InteractionHandler {

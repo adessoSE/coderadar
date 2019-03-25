@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {IDeltaTreeGetResponse} from '../city-map/interfaces/IDeltaTreeGetResponse';
-import {ICommit} from '../city-map/interfaces/ICommit';
-import {INode} from '../city-map/interfaces/INode';
-import {IMetricMapping} from '../city-map/interfaces/IMetricMapping';
-import {AppConfig} from '../AppConfig';
+import {IDeltaTreeGetResponse} from '../interfaces/IDeltaTreeGetResponse';
+import {ICommit} from '../interfaces/ICommit';
+import {INode} from '../interfaces/INode';
+import {IMetricMapping} from '../interfaces/IMetricMapping';
 import {map} from 'rxjs/operators';
-import {IAvailableMetricsGetResponse} from '../city-map/interfaces/IAvailableMetricsGetResponse';
+import {IAvailableMetricsGetResponse} from '../interfaces/IAvailableMetricsGetResponse';
+import {AppComponent} from '../../app.component';
 
 @Injectable()
 export class MetricService {
@@ -16,7 +16,7 @@ export class MetricService {
     }
 
     loadAvailableMetrics(projectId: number): Observable<IAvailableMetricsGetResponse> {
-      return this.http.get<IAvailableMetricsGetResponse>(`${AppConfig.BASE_URL}/projects/${projectId}/metrics`);
+      return this.http.get<IAvailableMetricsGetResponse>(`${AppComponent.getApiUrl()}projects/${projectId}/metrics`);
     }
 
     loadDeltaTree(leftCommit: ICommit, rightCommit: ICommit, metricMapping: IMetricMapping, projectId: number):
@@ -27,7 +27,7 @@ export class MetricService {
           metrics: [metricMapping.heightMetricName, metricMapping.groundAreaMetricName, metricMapping.colorMetricName]
       };
 
-      return this.http.post<INode>(`${AppConfig.BASE_URL}/projects/${projectId}/metricvalues/deltaTree`, body)
+      return this.http.post<INode>(`${AppComponent.getApiUrl()}projects/${projectId}/metricvalues/deltaTree`, body)
           .pipe(
               map((res) => {
                   return {

@@ -5,7 +5,7 @@ import {ICommit} from '../../interfaces/ICommit';
 import {IMetricMapping} from '../../interfaces/IMetricMapping';
 import {INode} from '../../interfaces/INode';
 import {faCaretDown, faCaretRight, faCaretUp} from '@fortawesome/free-solid-svg-icons';
-import {ComparisonPanelService} from '../../../service/comparison-panel.service';
+import {ComparisonPanelService} from '../../service/comparison-panel.service';
 import {AppConfig} from '../../../AppConfig';
 import {Subscription} from 'rxjs';
 

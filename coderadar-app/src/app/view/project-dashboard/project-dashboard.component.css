@@ -8,8 +8,7 @@
 
 .card-list p {
   font-size:15pt;
-  margin-right:100px;
-  width: 70%;
+  width: 60%;
   top: 15px;
   float:right;
 }
@@ -18,7 +17,7 @@
   font-size:15pt;
   top: 15px;
   float:right;
-  margin-right: 12%;
+  margin-right: 10%;
 }
 
 .card-list mat-grid-list {

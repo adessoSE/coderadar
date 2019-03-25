@@ -3,7 +3,7 @@
 #stage {
   position: absolute;
   width: 100%;
-  height: 82%;
+  height: calc(100% - 140px);
   overflow: hidden;
 
   & > .vertical-line {

@@ -1,7 +1,7 @@
 <app-header [title]="'Project dashboard'"></app-header>
 
 <main class="card-list">
-  <button mat-button routerLink="/city/{{project.id}}">Show 3D city map</button>
+  <button mat-button routerLink="/city/{{project.id}}">3D project map</button>
   <p>{{getTitleText()}}</p>
   <mat-grid-list cols="4" rowHeight="130px">
     <mat-grid-tile *ngFor="let commit of commits" [colspan]="2" [rowspan]="1">

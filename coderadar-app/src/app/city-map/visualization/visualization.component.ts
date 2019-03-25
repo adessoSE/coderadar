@@ -10,7 +10,7 @@ import {IMetricMapping} from '../interfaces/IMetricMapping';
 import {ICommit} from '../interfaces/ICommit';
 import {IMetric} from '../interfaces/IMetric';
 import {ViewType} from '../../model/enum/ViewType';
-import {ComparisonPanelService} from '../../service/comparison-panel.service';
+import {ComparisonPanelService} from '../service/comparison-panel.service';
 import {ScreenType} from '../../model/enum/ScreenType';
 
 @Component({

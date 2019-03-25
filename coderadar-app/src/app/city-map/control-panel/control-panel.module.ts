@@ -7,7 +7,7 @@ import {ViewControlComponent} from './settings/view-control/view-control.compone
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NguiAutoCompleteModule} from '@ngui/auto-complete';
 import {CommitChooserComponent} from './commit-chooser/commit-chooser.component';
-import {CommitService} from '../../service/commit.service';
+import {CommitService} from '../service/commit.service';
 import {SearchComponent} from './search/search.component';
 import {FilterComponent} from './settings/filter/filter.component';
 import {MetricMappingComponent} from './settings/metric-mapping/metric-mapping.component';

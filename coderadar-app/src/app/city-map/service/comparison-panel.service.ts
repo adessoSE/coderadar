@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
-import {INode} from '../city-map/interfaces/INode';
+import {INode} from '../interfaces/INode';
 
 @Injectable()
 export class ComparisonPanelService {

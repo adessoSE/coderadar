@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {VisualizationComponent} from './visualization.component';
 import {ScreenComponent} from './screen/screen.component';
-import {MetricService} from '../../service/metric.service';
+import {MetricService} from '../service/metric.service';
 import {TooltipComponent} from './tooltip/tooltip.component';
 import {ComparisonPanelComponent} from './comparison-panel/comparison-panel.component';
 import {LegendComponent} from './legend/legend.component';

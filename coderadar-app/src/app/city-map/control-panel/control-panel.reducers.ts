@@ -35,7 +35,6 @@ export const ControlPanelReducer: ActionReducer<ControlPanelState> = (state = in
             newState.commitsLoading = false;
             newState.leftCommit = newState.commits[0];
             newState.rightCommit = newState.commits[1];
-            console.log(newState);
             return newState;
 
         case ControlPanelActions.LOAD_COMMITS_ERROR:
@@ -57,16 +56,6 @@ export const ControlPanelReducer: ActionReducer<ControlPanelState> = (state = in
 
             return newState;
 
-        case ControlPanelActions.ADD_SCREENSHOT:
-            newState = Object.assign({}, state);
-            newState.screenshots = [...state.screenshots, action.payload];
-            return newState;
-
-        case ControlPanelActions.CLEAR_SCREENSHOTS:
-            newState = Object.assign({}, state);
-            newState.screenshots = [];
-            return newState;
-
         default:
             return state;
     }
@@ -79,5 +68,3 @@ export const getCommitsLoading = (state: ControlPanelState) => state.commitsLoad
 export const getLeftCommit = (state: ControlPanelState) => state.leftCommit;
 
 export const getRightCommit = (state: ControlPanelState) => state.rightCommit;
-
-export const getScreenshots = (state: ControlPanelState) => state.screenshots;

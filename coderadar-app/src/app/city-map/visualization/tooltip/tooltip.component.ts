@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {TooltipService} from '../../../service/tooltip.service';
+import {TooltipService} from '../../service/tooltip.service';
 import {map} from 'rxjs/operators';
 import {AppConfig} from '../../../AppConfig';
 import {Observable} from 'rxjs';
