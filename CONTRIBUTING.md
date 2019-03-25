@@ -73,7 +73,7 @@ When committing, you should follow the following rules (see [this blog post](htt
 5. Use the imperative mood in the subject line
 6. Wrap the body at 72 characters
 7. Use the body to explain what and why vs. how
-8. Reference the relevant issues
+8. Reference the relevant issues / PRs
 
 Here's the example from the blog post for a good commit:
 
