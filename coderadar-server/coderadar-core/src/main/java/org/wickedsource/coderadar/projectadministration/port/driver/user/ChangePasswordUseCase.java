@@ -1,3 +1,7 @@
 package org.wickedsource.coderadar.projectadministration.port.driver.user;
 
-public interface ChangePasswordUseCase {}
+import org.wickedsource.coderadar.projectadministration.domain.User;
+
+public interface ChangePasswordUseCase {
+    User changePassword(String refreshToken, String newPassword);
+}

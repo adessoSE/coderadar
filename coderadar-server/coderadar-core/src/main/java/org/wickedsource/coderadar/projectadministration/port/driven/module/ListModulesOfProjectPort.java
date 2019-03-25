@@ -1,3 +1,9 @@
 package org.wickedsource.coderadar.projectadministration.port.driven.module;
 
-public interface ListModulesOfProjectPort {}
+import org.wickedsource.coderadar.projectadministration.domain.Module;
+
+import java.util.List;
+
+public interface ListModulesOfProjectPort {
+    List<Module> listModules(Long projectId);
+}
