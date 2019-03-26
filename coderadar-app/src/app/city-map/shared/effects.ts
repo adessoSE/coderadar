@@ -5,12 +5,14 @@ import * as actions from './actions';
 import {IDeltaTreeGetErrorResponse} from '../interfaces/IDeltaTreeGetErrorResponse';
 import {catchError, map, switchMap, mergeMap} from 'rxjs/operators';
 import { IActionWithPayload } from '../interfaces/IActionWithPayload';
-import {LOAD_AVAILABLE_METRICS, LOAD_COMMITS, LOAD_METRIC_TREE} from './actions';
+import {LOAD_AVAILABLE_METRICS, LOAD_COMMITS, LOAD_METRIC_TREE, loadAvailableMetrics, loadCommits, loadMetricTree} from './actions';
 import {ProjectService} from '../../service/project.service';
-import {FORBIDDEN} from 'http-status-codes';
 import {UserService} from '../../service/user.service';
 import {HttpResponse} from '@angular/common/http';
 import {INode} from '../interfaces/INode';
+import {ICommitsGetErrorResponse} from '../interfaces/ICommitsGetErrorResponse';
+import {Store} from '@ngrx/store';
+import * as fromRoot from './reducers';
 
 @Injectable()
 export class AppEffects {
@@ -19,21 +21,19 @@ export class AppEffects {
 
   @Effect()
   loadCommitsEffects$ = this.actions$.pipe(ofType(LOAD_COMMITS),
-          switchMap(() => this.projectService.getCommits(this.currentProjectId)
-              .then(response => {
-                return actions.loadCommitsSuccess(response.body);
-              }).catch(
-                error => {
-                  if (error.status && error.status === FORBIDDEN) { // If access is denied
-                    this.userService.refresh()
-                      .then(() => this.projectService.getCommits(this.currentProjectId)
-                        .then(response => {
-                          return actions.loadCommitsSuccess(response.body);
-                        }));
-                  }
-                })
-          )
-        );
+    switchMap(
+      () => from(this.projectService.getCommits(this.currentProjectId))
+        .pipe(
+          map((result: any) => {
+            return actions.loadCommitsSuccess(result.body);
+          }),
+          catchError((response: ICommitsGetErrorResponse) => {
+            this.userService.refresh().then(() => this.store.dispatch(loadCommits()));
+            return of(actions.loadCommitsError(response.error));
+          })
+        )
+    )
+  );
 
   @Effect()
   loadAvailableMetricsEffects$ = this.actions$.pipe(ofType(LOAD_AVAILABLE_METRICS),
@@ -60,6 +60,7 @@ export class AppEffects {
                           ];
                       }),
                       catchError((response: any) => {
+                        this.userService.refresh().then(() => this.store.dispatch(loadAvailableMetrics()));
                         return of(actions.loadAvailableMetricsError(response.error));
                       })
                   )
@@ -81,15 +82,18 @@ export class AppEffects {
                 ];
             }),
             catchError((response: IDeltaTreeGetErrorResponse) => {
-                return of(actions.loadMetricTreeError(response.error));
+              this.userService.refresh().then(() => this.store.dispatch(loadMetricTree(payload.leftCommit, payload.rightCommit,
+                payload.metricMapping)));
+              return of(actions.loadMetricTreeError(response.error));
             })
         )
     )
   );
 
     constructor(
-        private actions$: Actions<IActionWithPayload<any>>,
-        private projectService: ProjectService,
-        private userService: UserService
+      private store: Store<fromRoot.AppState>,
+      private actions$: Actions<IActionWithPayload<any>>,
+      private projectService: ProjectService,
+      private userService: UserService
     ) { }
 }
