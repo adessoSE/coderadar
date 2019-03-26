@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.wickedsource.coderadar.plugin.ConfigurableAnalyzerPlugin;
-import org.wickedsource.coderadar.plugin.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.service.AnalyzerPluginRegistry;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationFile;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationFileRepository;
 import org.wickedsource.coderadar.analyzerconfig.domain.AnalyzerConfigurationRepository;
 import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
 import org.wickedsource.coderadar.core.rest.validation.ValidationException;
+import org.wickedsource.coderadar.plugin.ConfigurableAnalyzerPlugin;
+import org.wickedsource.coderadar.plugin.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.projectadministration.domain.AnalyzerConfiguration;
 
 @Controller

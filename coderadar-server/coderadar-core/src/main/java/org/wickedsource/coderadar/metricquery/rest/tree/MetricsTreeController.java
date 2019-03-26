@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.wickedsource.coderadar.plugin.ChangeType;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.core.common.ResourceNotFoundException;
@@ -27,6 +26,7 @@ import org.wickedsource.coderadar.metricquery.rest.tree.delta.ChangedFilesMap;
 import org.wickedsource.coderadar.metricquery.rest.tree.delta.Changes;
 import org.wickedsource.coderadar.metricquery.rest.tree.delta.DeltaTreePayload;
 import org.wickedsource.coderadar.metricquery.rest.tree.delta.DeltaTreeQuery;
+import org.wickedsource.coderadar.plugin.ChangeType;
 import org.wickedsource.coderadar.project.rest.ProjectVerifier;
 
 @Controller

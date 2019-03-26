@@ -21,7 +21,8 @@
     <user_account/>
     <refresh_token/>
 
-    <project vcs_online="true" id="1" vcs_url="http://valid.url" vcs_username="user" vcs_password="pass" name="name" workdir_name="foo"
+    <project vcs_online="true" id="1" vcs_url="http://valid.url" vcs_username="user" vcs_password="pass" name="name"
+             workdir_name="foo"
              vcs_start_date="2016-01-01 00:00:00" vcs_end_date="2016-12-31 00:00:00"/>
     <module id="1" path="server/coderadar-webapp" project_id="1"/>
 

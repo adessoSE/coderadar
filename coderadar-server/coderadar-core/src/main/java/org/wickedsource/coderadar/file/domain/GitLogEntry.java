@@ -2,8 +2,8 @@ package org.wickedsource.coderadar.file.domain;
 
 import javax.persistence.*;
 import lombok.Data;
-import org.wickedsource.coderadar.plugin.ChangeType;
 import org.wickedsource.coderadar.commit.domain.Commit;
+import org.wickedsource.coderadar.plugin.ChangeType;
 import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 /**

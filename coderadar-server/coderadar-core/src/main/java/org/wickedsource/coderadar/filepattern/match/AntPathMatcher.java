@@ -151,8 +151,8 @@ public class AntPathMatcher {
    * arbitrary permutations of patterns are coming in, with little chance for encountering a
    * recurring pattern.
    *
-   * @since 4.0.1
    * @see #getStringMatcher(String)
+   * @since 4.0.1
    */
   public void setCachePatterns(boolean cachePatterns) {
     this.cachePatterns = cachePatterns;
@@ -618,7 +618,7 @@ public class AntPathMatcher {
    *   <li>{@code /hotels/*}
    * </ol>
    *
-   * the returned comparator will sort this list so that the order will be as indicated.
+   * <p>the returned comparator will sort this list so that the order will be as indicated.
    *
    * <p>The full path given as parameter is used to test for exact matches. So when the given path
    * is {@code /hotels/2}, the pattern {@code /hotels/2} will be sorted before {@code /hotels/1}.

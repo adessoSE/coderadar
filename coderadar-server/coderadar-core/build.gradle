@@ -13,7 +13,7 @@ ext {
     snippetsDir = file("build/generated-snippets")
 }
 
-sourceSets{
+sourceSets {
     test {
         java {
             srcDir "src/test/performance"
@@ -35,20 +35,20 @@ processResources {
 
 test {
     outputs.dir snippetsDir
-    useJUnitPlatform  {
+    useJUnitPlatform {
         // disable long-running integration tests by default
         excludeTags 'IntegrationTest'
     }
 }
 
 task integrationTest(type: Test) {
-    useJUnitPlatform  {
+    useJUnitPlatform {
         includeTags "IntegrationTest"
     }
 }
 
 task controllerTest(type: Test) {
-    useJUnitPlatform  {
+    useJUnitPlatform {
         includeTags "ControllerTest"
     }
 }

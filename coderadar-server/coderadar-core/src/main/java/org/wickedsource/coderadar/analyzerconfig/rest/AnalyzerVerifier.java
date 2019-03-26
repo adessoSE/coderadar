@@ -2,9 +2,9 @@ package org.wickedsource.coderadar.analyzerconfig.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.wickedsource.coderadar.plugin.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.service.AnalyzerPluginRegistry;
 import org.wickedsource.coderadar.core.rest.validation.ValidationException;
+import org.wickedsource.coderadar.plugin.SourceCodeFileAnalyzerPlugin;
 
 @Component
 public class AnalyzerVerifier {

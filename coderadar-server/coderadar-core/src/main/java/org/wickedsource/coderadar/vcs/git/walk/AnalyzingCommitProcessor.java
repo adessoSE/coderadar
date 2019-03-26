@@ -13,10 +13,10 @@ import org.gitective.core.BlobUtils;
 import org.gitective.core.CommitUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.wickedsource.coderadar.job.analyze.FileAnalyzer;
 import org.wickedsource.coderadar.plugin.FileMetrics;
 import org.wickedsource.coderadar.plugin.FileMetricsWithChangeType;
 import org.wickedsource.coderadar.plugin.SourceCodeFileAnalyzerPlugin;
-import org.wickedsource.coderadar.job.analyze.FileAnalyzer;
 import org.wickedsource.coderadar.vcs.MetricsProcessor;
 import org.wickedsource.coderadar.vcs.git.ChangeTypeMapper;
 

@@ -1,9 +1,8 @@
 package org.wickedsource.coderadar.projectadministration.port.driver.project;
 
+import java.util.List;
 import org.wickedsource.coderadar.projectadministration.domain.Project;
 
-import java.util.List;
-
 public interface ListProjectsUseCase {
-    List<Project> listProjects();
+  List<Project> listProjects();
 }
