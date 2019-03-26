@@ -1,6 +1,6 @@
 import {AbstractView} from './abstract-view';
 import {INode} from '../../interfaces/INode';
-import {AppConfig} from '../../../AppConfig';
+import {VisualizationConfig} from '../../VisualizationConfig';
 import {Scene} from 'three';
 import {IMetricMapping} from '../../interfaces/IMetricMapping';
 import {BlockConnection} from '../../../model/geometry/block-connection';
@@ -67,11 +67,11 @@ export class MergedView extends AbstractView {
                     [this.metricMapping.colorMetricName]: orangeColorMetric
                 };
 
-                blueHeight = blueHeightMetric * AppConfig.HEIGHT_FACTOR;
-                const orangeHeight = orangeHeightMetric * AppConfig.HEIGHT_FACTOR;
+                blueHeight = blueHeightMetric * VisualizationConfig.HEIGHT_FACTOR;
+                const orangeHeight = orangeHeightMetric * VisualizationConfig.HEIGHT_FACTOR;
 
-                const blueEdgeLength = Math.sqrt(blueGroundAreaMetric) * AppConfig.EDGE_LENGTH_FACTOR;
-                const orangeEdgeLength = Math.sqrt(orangeGroundAreaMetric) * AppConfig.EDGE_LENGTH_FACTOR;
+                const blueEdgeLength = Math.sqrt(blueGroundAreaMetric) * VisualizationConfig.EDGE_LENGTH_FACTOR;
+                const orangeEdgeLength = Math.sqrt(orangeGroundAreaMetric) * VisualizationConfig.EDGE_LENGTH_FACTOR;
 
                 const blueColor = ColorHelper.getColorByPosition(this.screenType);
                 const orangeColor = ColorHelper.getContraryColorByColor(blueColor);
@@ -178,7 +178,7 @@ export class MergedView extends AbstractView {
                             this.createBlock(
                                 node,
                                 parent,
-                                AppConfig.COLOR_UNCHANGED_FILE,
+                                VisualizationConfig.COLOR_UNCHANGED_FILE,
                                 orangeEdgeLength,
                                 bottom,
                                 orangeHeight,
@@ -204,7 +204,7 @@ export class MergedView extends AbstractView {
                     this.createBlock(
                         node,
                         parent,
-                        AppConfig.COLOR_DELETED_FILE,
+                        VisualizationConfig.COLOR_DELETED_FILE,
                         blueEdgeLength,
                         bottom,
                         blueHeight,
@@ -220,7 +220,7 @@ export class MergedView extends AbstractView {
                     this.createBlock(
                         node,
                         parent,
-                        AppConfig.COLOR_ADDED_FILE,
+                        VisualizationConfig.COLOR_ADDED_FILE,
                         orangeEdgeLength,
                         bottom,
                         orangeHeight,
@@ -235,7 +235,7 @@ export class MergedView extends AbstractView {
             } else {
                 // don't draw empty modules
                 if (ElementAnalyzer.hasChildrenForCurrentCommit(node, true, this.screenType)) {
-                    blueHeight = AppConfig.MODULE_BLOCK_HEIGHT;
+                    blueHeight = VisualizationConfig.MODULE_BLOCK_HEIGHT;
                     const moduleColor = ColorHelper.getColorByLevelValue(level, this.minModuleLevel, this.maxModuleLevel);
                     this.createBlock(node, parent, moduleColor, undefined, bottom, blueHeight, false);
                 }

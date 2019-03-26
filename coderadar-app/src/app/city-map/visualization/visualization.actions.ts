@@ -1,9 +1,9 @@
-import {ICommit} from '../interfaces/ICommit';
 import {IMetricMapping} from '../interfaces/IMetricMapping';
 import {INode} from '../interfaces/INode';
 import {IActionWithPayload} from '../interfaces/IActionWithPayload';
 import {IMetric} from '../interfaces/IMetric';
 import {Action} from '@ngrx/store';
+import {Commit} from '../../model/commit';
 
 export const LOAD_AVAILABLE_METRICS = 'LOAD_AVAILABLE_METRICS';
 export const LOAD_AVAILABLE_METRICS_SUCCESS = 'LOAD_AVAILABLE_METRICS_SUCCESS';
@@ -34,10 +34,10 @@ export function loadAvailableMetricsError(error: string): IActionWithPayload<str
 }
 
 export function loadMetricTree(
-    leftCommit: ICommit,
-    rightCommit: ICommit,
+    leftCommit: Commit,
+    rightCommit: Commit,
     metricMapping: IMetricMapping
-): IActionWithPayload<{leftCommit: ICommit, rightCommit: ICommit, metricMapping: IMetricMapping}> {
+): IActionWithPayload<{leftCommit: Commit, rightCommit: Commit, metricMapping: IMetricMapping}> {
     return {
         type: LOAD_METRIC_TREE,
         payload: {

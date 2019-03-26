@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ICommit} from '../../interfaces/ICommit';
 import * as moment from 'moment';
 import {CommitType} from '../../../model/enum/CommitType';
+import {Commit} from '../../../model/commit';
 
 @Component({
     selector: 'app-commit-chooser',
@@ -11,8 +11,8 @@ import {CommitType} from '../../../model/enum/CommitType';
 export class CommitChooserComponent implements OnInit {
 
     @Input() commitType: CommitType;
-    @Input() commits: ICommit[];
-    @Input() selected: ICommit;
+    @Input() commits: Commit[];
+    @Input() selected: Commit;
     @Input() loading: boolean;
     @Input() isDisabled: boolean;
 
@@ -24,7 +24,7 @@ export class CommitChooserComponent implements OnInit {
     ngOnInit() {
     }
 
-    handleCommitChanged(chosenModel: ICommit) {
+    handleCommitChanged(chosenModel: Commit) {
         this.changeCommit.emit({commitType: this.commitType, commit: chosenModel});
     }
 

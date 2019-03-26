@@ -1,4 +1,4 @@
-import {AppConfig} from '../../AppConfig';
+import {VisualizationConfig} from '../VisualizationConfig';
 import {Color} from 'three';
 import {ScreenType} from '../../model/enum/ScreenType';
 
@@ -7,19 +7,19 @@ declare var chroma: any;
 export class ColorHelper {
 
     static getColorByPosition(screenType: ScreenType): string {
-        return screenType === ScreenType.LEFT ? AppConfig.COLOR_FIRST_COMMIT : AppConfig.COLOR_SECOND_COMMIT;
+        return screenType === ScreenType.LEFT ? VisualizationConfig.COLOR_FIRST_COMMIT : VisualizationConfig.COLOR_SECOND_COMMIT;
     }
 
     static getContraryColorByColor(color: string): string {
-        return color === AppConfig.COLOR_FIRST_COMMIT ? AppConfig.COLOR_SECOND_COMMIT : AppConfig.COLOR_FIRST_COMMIT;
+        return color === VisualizationConfig.COLOR_FIRST_COMMIT ? VisualizationConfig.COLOR_SECOND_COMMIT : VisualizationConfig.COLOR_FIRST_COMMIT;
     }
 
     static getColorByMetricValue(value: number, max: number, min: number): Color {
-        return this.getColorScale(AppConfig.COLOR_HEATMAP_RANGE, value, max, min);
+        return this.getColorScale(VisualizationConfig.COLOR_HEATMAP_RANGE, value, max, min);
     }
 
     static getColorByLevelValue(value: number, max: number, min: number): Color {
-        return this.getColorScale(AppConfig.COLOR_HIERARCHY_RANGE, value, max, min);
+        return this.getColorScale(VisualizationConfig.COLOR_HIERARCHY_RANGE, value, max, min);
     }
 
     static getColorScale(range, value: number, max: number, min: number): Color {

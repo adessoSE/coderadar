@@ -11,7 +11,7 @@ import {SplitView} from '../view/split-view';
 import {MergedView} from '../view/merged-view';
 import {IFilter} from '../../interfaces/IFilter';
 import {InteractionHandler} from '../interaction-handler/interaction-handler';
-import {AppConfig} from '../../../AppConfig';
+import {VisualizationConfig} from '../../VisualizationConfig';
 import {INode} from '../../interfaces/INode';
 import {FocusService} from '../../service/focus.service';
 import {TooltipService} from '../../service/tooltip.service';
@@ -156,8 +156,8 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
         this.camera = new THREE.PerspectiveCamera(
             45,
             (this.getScreenWidth() - 0) / window.innerHeight,
-            AppConfig.CAMERA_NEAR,
-            AppConfig.CAMERA_FAR
+            VisualizationConfig.CAMERA_NEAR,
+            VisualizationConfig.CAMERA_FAR
         );
         this.scene.add(this.camera);
     }
@@ -268,7 +268,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
                 x: element.position.x + root.scale.x / 5,
                 y: element.position.y + diagonal / 5,
                 z: element.position.z + root.scale.z / 5
-            }, AppConfig.CAMERA_ANIMATION_DURATION)
+            }, VisualizationConfig.CAMERA_ANIMATION_DURATION)
             .easing(TWEEN.Easing.Sinusoidal.InOut)
             .start();
 
@@ -277,7 +277,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
                 x: element.position.x + element.scale.x / 2,
                 y: element.position.y,
                 z: element.position.z + element.scale.z / 2
-            }, AppConfig.CAMERA_ANIMATION_DURATION)
+            }, VisualizationConfig.CAMERA_ANIMATION_DURATION)
             .easing(TWEEN.Easing.Sinusoidal.InOut)
             .start();
     }

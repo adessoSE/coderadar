@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {AppConfig} from '../../../AppConfig';
+import {VisualizationConfig} from '../../VisualizationConfig';
 import {IMetric} from '../../interfaces/IMetric';
 import {faArrowsAlt, faArrowsAltV, faPalette} from '@fortawesome/free-solid-svg-icons';
 import {Store} from '@ngrx/store';
@@ -51,16 +51,16 @@ export class LegendComponent implements OnInit {
       this.metricMapping$ = this.store.select(fromRoot.getMetricMapping);
       console.log(this.metricMapping$);
       this.metricMapping$.toPromise().then(metricMapping => {
-            this.heightMetric = AppConfig.getShortNameByMetricName(metricMapping.heightMetricName);
-            this.groundAreaMetric = AppConfig.getShortNameByMetricName(metricMapping.groundAreaMetricName);
-            this.colorMetric = AppConfig.getShortNameByMetricName(metricMapping.colorMetricName);
+            this.heightMetric = VisualizationConfig.getShortNameByMetricName(metricMapping.heightMetricName);
+            this.groundAreaMetric = VisualizationConfig.getShortNameByMetricName(metricMapping.groundAreaMetricName);
+            this.colorMetric = VisualizationConfig.getShortNameByMetricName(metricMapping.colorMetricName);
         });
 
-      this.colorFirstCommit = AppConfig.COLOR_FIRST_COMMIT;
-      this.colorSecondCommit = AppConfig.COLOR_SECOND_COMMIT;
-      this.colorAddedFile = AppConfig.COLOR_ADDED_FILE;
-      this.colorDeletedFile = AppConfig.COLOR_DELETED_FILE;
-      this.colorUnchangedFile = AppConfig.COLOR_UNCHANGED_FILE;
+      this.colorFirstCommit = VisualizationConfig.COLOR_FIRST_COMMIT;
+      this.colorSecondCommit = VisualizationConfig.COLOR_SECOND_COMMIT;
+      this.colorAddedFile = VisualizationConfig.COLOR_ADDED_FILE;
+      this.colorDeletedFile = VisualizationConfig.COLOR_DELETED_FILE;
+      this.colorUnchangedFile = VisualizationConfig.COLOR_UNCHANGED_FILE;
 
       this.legendItemCommit1 = document.querySelector('#legend-item-commit-1') as HTMLElement;
       this.legendItemCommit2 = document.querySelector('#legend-item-commit-2') as HTMLElement;

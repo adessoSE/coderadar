@@ -1,5 +1,4 @@
 import {Action} from '@ngrx/store';
-import {ICommit} from '../interfaces/ICommit';
 import {IActionWithPayload} from '../interfaces/IActionWithPayload';
 import {CommitType} from '../../model/enum/CommitType';
 import {Commit} from '../../model/commit';

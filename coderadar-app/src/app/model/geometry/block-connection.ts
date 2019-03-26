@@ -1,6 +1,6 @@
 import {Geometry, Line, LineBasicMaterial, QuadraticBezierCurve3, Vector3} from 'three';
 import {NodeType} from '../enum/NodeType';
-import {AppConfig} from '../../AppConfig';
+import {VisualizationConfig} from '../../city-map/VisualizationConfig';
 
 export class BlockConnection {
 
@@ -25,7 +25,7 @@ export class BlockConnection {
 
         const geometry = new Geometry();
         geometry.vertices = curve.getPoints(50);
-        const material = new LineBasicMaterial({ color: AppConfig.COLOR_CONNECTION });
+        const material = new LineBasicMaterial({ color: VisualizationConfig.COLOR_CONNECTION });
         this.curveObject = new Line(geometry, material);
 
         this.curveObject.userData = {

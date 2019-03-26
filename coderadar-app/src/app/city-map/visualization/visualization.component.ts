@@ -7,11 +7,11 @@ import {loadAvailableMetrics, loadMetricTree} from './visualization.actions';
 import {IFilter} from '../interfaces/IFilter';
 import {INode} from '../interfaces/INode';
 import {IMetricMapping} from '../interfaces/IMetricMapping';
-import {ICommit} from '../interfaces/ICommit';
 import {IMetric} from '../interfaces/IMetric';
 import {ViewType} from '../../model/enum/ViewType';
 import {ComparisonPanelService} from '../service/comparison-panel.service';
 import {ScreenType} from '../../model/enum/ScreenType';
+import {Commit} from '../../model/commit';
 
 @Component({
     selector: 'app-visualization',
@@ -26,8 +26,8 @@ export class VisualizationComponent implements OnInit, OnDestroy {
     metricTree$: Observable<INode>;
     availableMetrics$: Observable<IMetric[]>;
     metricMapping$: Observable<IMetricMapping>;
-    leftCommit$: Observable<ICommit>;
-    rightCommit$: Observable<ICommit>;
+    leftCommit$: Observable<Commit>;
+    rightCommit$: Observable<Commit>;
     colorMetric$: Observable<IMetric>;
 
     subscriptions: Subscription[] = [];

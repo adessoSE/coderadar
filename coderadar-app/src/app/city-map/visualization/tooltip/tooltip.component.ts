@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {TooltipService} from '../../service/tooltip.service';
 import {map} from 'rxjs/operators';
-import {AppConfig} from '../../../AppConfig';
+import {VisualizationConfig} from '../../VisualizationConfig';
 import {Observable} from 'rxjs';
 
 @Component({
@@ -28,7 +28,7 @@ export class TooltipComponent implements OnInit {
 
                     if (tooltipObject.metrics) {
                         Object.keys(tooltipObject.metrics).map((key) => {
-                            readableMetrics[AppConfig.getShortNameByMetricName(key).shortName] = tooltipObject.metrics[key];
+                            readableMetrics[VisualizationConfig.getShortNameByMetricName(key).shortName] = tooltipObject.metrics[key];
                         });
                     }
 

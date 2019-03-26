@@ -1,6 +1,6 @@
 import {INode} from '../../interfaces/INode';
 import {IPackerElement} from '../../interfaces/IPackerElement';
-import {AppConfig} from '../../../AppConfig';
+import {VisualizationConfig} from '../../VisualizationConfig';
 import {BoxGeometry, Geometry, Mesh, MeshLambertMaterial} from 'three';
 import {IMetricMapping} from '../../interfaces/IMetricMapping';
 import {ScreenType} from '../../../model/enum/ScreenType';
@@ -54,16 +54,16 @@ export abstract class AbstractView {
                 if (!edgeLength) {
                     element.w = element.h = 0;
                 } else {
-                    element.w = edgeLength * AppConfig.EDGE_LENGTH_FACTOR + 2 * AppConfig.BLOCK_SPACING;
-                    element.h = edgeLength * AppConfig.EDGE_LENGTH_FACTOR + 2 * AppConfig.BLOCK_SPACING;
+                    element.w = edgeLength * VisualizationConfig.EDGE_LENGTH_FACTOR + 2 * VisualizationConfig.BLOCK_SPACING;
+                    element.h = edgeLength * VisualizationConfig.EDGE_LENGTH_FACTOR + 2 * VisualizationConfig.BLOCK_SPACING;
                 }
             }
 
             // recursion
             if (node.children && node.children.length > 0) {
                 const result = this.calculateGroundAreas(node.children);
-                element.w = result.w + 2 * AppConfig.BLOCK_SPACING;
-                element.h = result.h + 2 * AppConfig.BLOCK_SPACING;
+                element.w = result.w + 2 * VisualizationConfig.BLOCK_SPACING;
+                element.h = result.h + 2 * VisualizationConfig.BLOCK_SPACING;
             }
 
             node.packerInfo = element;
@@ -103,17 +103,17 @@ export abstract class AbstractView {
         let finalDepth;
 
         const cube = this.createCubeGeometry(color, isTransparent, node.name);
-        finalX = node.packerInfo.fit.x + (parent ? parent.packerInfo.renderedX : 0) + AppConfig.BLOCK_SPACING;
+        finalX = node.packerInfo.fit.x + (parent ? parent.packerInfo.renderedX : 0) + VisualizationConfig.BLOCK_SPACING;
         finalY = bottom;
-        finalZ = node.packerInfo.fit.y + (parent ? parent.packerInfo.renderedY : 0) + AppConfig.BLOCK_SPACING;
+        finalZ = node.packerInfo.fit.y + (parent ? parent.packerInfo.renderedY : 0) + VisualizationConfig.BLOCK_SPACING;
 
         // save the rendered positions to draw children relative to their parent
         node.packerInfo.renderedX = finalX;
         node.packerInfo.renderedY = finalZ;
 
-        finalWidth = node.type === NodeType.FILE ? edgeLength : node.packerInfo.w - 2 * AppConfig.BLOCK_SPACING;
+        finalWidth = node.type === NodeType.FILE ? edgeLength : node.packerInfo.w - 2 * VisualizationConfig.BLOCK_SPACING;
         finalHeight = height;
-        finalDepth = node.type === NodeType.FILE ? edgeLength : node.packerInfo.h - 2 * AppConfig.BLOCK_SPACING;
+        finalDepth = node.type === NodeType.FILE ? edgeLength : node.packerInfo.h - 2 * VisualizationConfig.BLOCK_SPACING;
 
         cube.position.x = finalX;
         cube.position.y = finalY;

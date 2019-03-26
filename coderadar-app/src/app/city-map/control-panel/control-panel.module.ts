@@ -7,7 +7,6 @@ import {ViewControlComponent} from './settings/view-control/view-control.compone
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NguiAutoCompleteModule} from '@ngui/auto-complete';
 import {CommitChooserComponent} from './commit-chooser/commit-chooser.component';
-import {CommitService} from '../service/commit.service';
 import {SearchComponent} from './search/search.component';
 import {FilterComponent} from './settings/filter/filter.component';
 import {MetricMappingComponent} from './settings/metric-mapping/metric-mapping.component';
@@ -22,11 +21,13 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatMenuModule, MatRadioModule,
+  MatMenuModule,
+  MatRadioModule,
   MatSidenavModule,
   MatToolbarModule,
 } from '@angular/material';
 import {LayoutModule} from '@angular/cdk/layout';
+import {ProjectService} from '../../service/project.service';
 
 @NgModule({
     imports: [
@@ -64,7 +65,7 @@ import {LayoutModule} from '@angular/cdk/layout';
         ControlPanelComponent
     ],
     providers: [
-        CommitService
+        ProjectService
     ]
 })
 export class ControlPanelModule {

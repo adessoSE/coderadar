@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import * as fromRoot from '../shared/reducers';
 import {changeCommit, loadCommits} from './control-panel.actions';
-import {ICommit} from '../interfaces/ICommit';
 import {FocusService} from '../service/focus.service';
 import {ViewType} from '../../model/enum/ViewType';
 import {CommitType} from '../../model/enum/CommitType';
 import {Observable} from 'rxjs';
+import {Commit} from '../../model/commit';
 
 @Component({
     selector: 'app-control-panel',
@@ -20,9 +20,9 @@ export class ControlPanelComponent implements OnInit {
         right: CommitType.RIGHT
     };
 
-    commits$: Observable<ICommit[]>;
-    leftCommit$: Observable<ICommit>;
-    rightCommit$: Observable<ICommit>;
+    commits$: Observable<Commit[]>;
+    leftCommit$: Observable<Commit>;
+    rightCommit$: Observable<Commit>;
     commitsLoading$: Observable<boolean>;
 
     uniqueFileList$: Observable<string[]>;
@@ -49,7 +49,7 @@ export class ControlPanelComponent implements OnInit {
         this.activeViewType$ = this.store.select(fromRoot.getActiveViewType);
     }
 
-    handleCommitChanged(payload: {commitType: CommitType, commit: ICommit}) {
+    handleCommitChanged(payload: {commitType: CommitType, commit: Commit}) {
         this.store.dispatch(changeCommit(payload.commitType, payload.commit));
     }
 

@@ -1,16 +1,16 @@
 import {Injectable} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
-import {of} from 'rxjs';
+import {from, of} from 'rxjs';
 import * as actions from './actions';
 import {IDeltaTreeGetErrorResponse} from '../interfaces/IDeltaTreeGetErrorResponse';
-import {IDeltaTreeGetResponse} from '../interfaces/IDeltaTreeGetResponse';
-import {MetricService} from '../service/metric.service';
 import {catchError, map, switchMap, mergeMap} from 'rxjs/operators';
 import { IActionWithPayload } from '../interfaces/IActionWithPayload';
 import {LOAD_AVAILABLE_METRICS, LOAD_COMMITS, LOAD_METRIC_TREE} from './actions';
 import {ProjectService} from '../../service/project.service';
 import {FORBIDDEN} from 'http-status-codes';
 import {UserService} from '../../service/user.service';
+import {HttpResponse} from '@angular/common/http';
+import {INode} from '../interfaces/INode';
 
 @Injectable()
 export class AppEffects {
@@ -37,10 +37,10 @@ export class AppEffects {
 
   @Effect()
   loadAvailableMetricsEffects$ = this.actions$.pipe(ofType(LOAD_AVAILABLE_METRICS),
-          switchMap(() => this.metricService.loadAvailableMetrics(this.currentProjectId)
+          switchMap(() => from(this.projectService.getAvailableMetrics(this.currentProjectId))
                   .pipe(
                       mergeMap((result: any) => {
-                        const availableMetrics = result.map(
+                        const availableMetrics = result.body.map(
                               metric => {
                                 const shortName = metric.metricName.split('.').pop();
                                 return {
@@ -71,12 +71,13 @@ export class AppEffects {
   loadMetricTreeEffects$ = this.actions$.pipe(ofType(LOAD_METRIC_TREE),
     map((action: IActionWithPayload<any>) => action.payload),
     switchMap(
-      (payload) => this.metricService.loadDeltaTree(payload.leftCommit, payload.rightCommit, payload.metricMapping, this.currentProjectId)
+      (payload) => from(this.projectService.getDeltaTree(payload.leftCommit, payload.rightCommit,
+        payload.metricMapping, this.currentProjectId))
         .pipe(
-            mergeMap((result: IDeltaTreeGetResponse) => {
+            mergeMap((result: HttpResponse<INode>) => {
                 return [
-                    actions.loadMetricTreeSuccess(result.rootNode),
-                    actions.generateUniqueFileList(result.rootNode)
+                    actions.loadMetricTreeSuccess(result.body),
+                    actions.generateUniqueFileList(result.body)
                 ];
             }),
             catchError((response: IDeltaTreeGetErrorResponse) => {
@@ -89,7 +90,6 @@ export class AppEffects {
     constructor(
         private actions$: Actions<IActionWithPayload<any>>,
         private projectService: ProjectService,
-        private metricService: MetricService,
         private userService: UserService
     ) { }
 }

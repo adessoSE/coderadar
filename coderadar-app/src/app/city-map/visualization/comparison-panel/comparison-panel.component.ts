@@ -1,13 +1,13 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import * as fromRoot from '../../shared/reducers';
-import {ICommit} from '../../interfaces/ICommit';
 import {IMetricMapping} from '../../interfaces/IMetricMapping';
 import {INode} from '../../interfaces/INode';
 import {faCaretDown, faCaretRight, faCaretUp} from '@fortawesome/free-solid-svg-icons';
 import {ComparisonPanelService} from '../../service/comparison-panel.service';
-import {AppConfig} from '../../../AppConfig';
+import {VisualizationConfig} from '../../VisualizationConfig';
 import {Subscription} from 'rxjs';
+import {Commit} from '../../../model/commit';
 
 @Component({
     selector: 'app-comparison-panel',
@@ -21,8 +21,8 @@ export class ComparisonPanelComponent implements OnInit, OnDestroy {
     faCaretRight = faCaretRight;
 
     @Input() metricMapping: IMetricMapping;
-    @Input() leftCommit: ICommit;
-    @Input() rightCommit: ICommit;
+    @Input() leftCommit: Commit;
+    @Input() rightCommit: Commit;
 
     comparisonPanel: HTMLElement;
 
@@ -85,7 +85,7 @@ export class ComparisonPanelComponent implements OnInit, OnDestroy {
             }
 
             rows.push({
-                metricName: AppConfig.getShortNameByMetricName(metricName).shortName,
+                metricName: VisualizationConfig.getShortNameByMetricName(metricName).shortName,
                 leftCommitValue: leftCommitValue || 'N/A',
                 rightCommitValue: rightCommitValue || 'N/A',
                 difference

@@ -1,6 +1,6 @@
 import {AbstractView} from './abstract-view';
 import {INode} from '../../interfaces/INode';
-import {AppConfig} from '../../../AppConfig';
+import {VisualizationConfig} from '../../VisualizationConfig';
 import {IMetricMapping} from '../../interfaces/IMetricMapping';
 import {ElementAnalyzer} from '../../helper/element-analyzer';
 import {ScreenType} from '../../../model/enum/ScreenType';
@@ -72,9 +72,9 @@ export class SplitView extends AbstractView {
                     return;
                 }
 
-                myHeight = heightMetric * AppConfig.HEIGHT_FACTOR;
+                myHeight = heightMetric * VisualizationConfig.HEIGHT_FACTOR;
 
-                const myEdgeLength = Math.sqrt(groundAreaMetric) * AppConfig.EDGE_LENGTH_FACTOR;
+                const myEdgeLength = Math.sqrt(groundAreaMetric) * VisualizationConfig.EDGE_LENGTH_FACTOR;
 
                 const otherGroundAreaMetric = ElementAnalyzer.getMetricValueOfElementAndCommitReferenceType(
                     node,
@@ -82,7 +82,7 @@ export class SplitView extends AbstractView {
                     CommitReferenceType.OTHER,
                     this.screenType
                 );
-                const otherEdgeLength = Math.sqrt(otherGroundAreaMetric) * AppConfig.EDGE_LENGTH_FACTOR;
+                const otherEdgeLength = Math.sqrt(otherGroundAreaMetric) * VisualizationConfig.EDGE_LENGTH_FACTOR;
 
                 const myColor = ColorHelper.getColorByMetricValue(colorMetric, this.maxColorMetricValue, this.minColorMetricValue);
 
@@ -93,7 +93,7 @@ export class SplitView extends AbstractView {
                 this.createBlock(node, parent, myColor, myEdgeLength, bottom, myHeight, false, metrics, null, node.changes);
 
             } else {
-                myHeight = AppConfig.MODULE_BLOCK_HEIGHT;
+                myHeight = VisualizationConfig.MODULE_BLOCK_HEIGHT;
                 const moduleColor = ColorHelper.getColorByLevelValue(level, this.minModuleLevel, this.maxModuleLevel);
                 this.createBlock(node, parent, moduleColor, undefined, bottom, myHeight, false, metrics);
             }

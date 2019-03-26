@@ -8,6 +8,11 @@ import {AnalyzerConfiguration} from '../model/analyzer-configuration';
 import {Commit} from '../model/commit';
 import {Module} from '../model/module';
 import {AppComponent} from '../app.component';
+import {IAvailableMetricsGetResponse} from '../city-map/interfaces/IAvailableMetricsGetResponse';
+import {Observable} from 'rxjs';
+import {IMetricMapping} from '../city-map/interfaces/IMetricMapping';
+import {IDeltaTreeGetResponse} from '../city-map/interfaces/IDeltaTreeGetResponse';
+import {INode} from '../city-map/interfaces/INode';
 
 @Injectable({
   providedIn: 'root'
@@ -218,5 +223,17 @@ export class ProjectService {
    */
   public getAvailableMetrics(id: number): Promise<HttpResponse<any>> {
     return this.httpClient.get(this.apiURL + 'projects/' + id + '/metrics', {observe: 'response'}).toPromise();
+  }
+
+  public getDeltaTree(leftCommit: Commit, rightCommit: Commit, metricMapping: IMetricMapping, projectId: number):
+    Promise<HttpResponse<INode>> {
+    const body = {
+      commit1: leftCommit.name,
+      commit2: rightCommit.name,
+      metrics: [metricMapping.heightMetricName, metricMapping.groundAreaMetricName, metricMapping.colorMetricName]
+    };
+
+    return this.httpClient.post<INode>(this.apiURL + 'projects/' + projectId + '/metricvalues/deltaTree', body,
+      {observe: 'response'}).toPromise();
   }
 }
