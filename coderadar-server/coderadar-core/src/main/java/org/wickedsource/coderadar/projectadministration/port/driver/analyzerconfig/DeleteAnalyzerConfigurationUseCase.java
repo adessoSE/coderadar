@@ -3,6 +3,5 @@ package org.wickedsource.coderadar.projectadministration.port.driver.analyzercon
 import org.wickedsource.coderadar.projectadministration.domain.AnalyzerConfiguration;
 
 public interface DeleteAnalyzerConfigurationUseCase {
-  void deleteAnalyzerConfiguration(AnalyzerConfiguration entity);
-  void deleteAnalyzerConfiguration(Long id);
+  void deleteAnalyzerConfiguration(DeleteAnalyzerConfigurationCommand command);
 }
