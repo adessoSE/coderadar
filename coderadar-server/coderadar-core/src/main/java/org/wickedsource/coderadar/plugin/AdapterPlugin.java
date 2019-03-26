@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.api;
+package org.wickedsource.coderadar.plugin;
 
 import java.io.InputStream;
 

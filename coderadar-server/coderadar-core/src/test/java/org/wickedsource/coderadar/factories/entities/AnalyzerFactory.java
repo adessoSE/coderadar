@@ -1,6 +1,6 @@
 package org.wickedsource.coderadar.factories.entities;
 
-import org.wickedsource.coderadar.analyzer.api.*;
+import org.wickedsource.coderadar.plugin.*;
 
 public class AnalyzerFactory {
 

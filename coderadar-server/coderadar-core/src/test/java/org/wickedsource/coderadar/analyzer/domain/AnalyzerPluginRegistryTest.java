@@ -2,7 +2,7 @@ package org.wickedsource.coderadar.analyzer.domain;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
+import org.wickedsource.coderadar.plugin.SourceCodeFileAnalyzerPlugin;
 import org.wickedsource.coderadar.analyzer.service.AnalyzerPluginRegistry;
 
 public class AnalyzerPluginRegistryTest {

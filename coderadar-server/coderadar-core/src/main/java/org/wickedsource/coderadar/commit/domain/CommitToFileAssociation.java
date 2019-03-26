@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.wickedsource.coderadar.analyzer.api.ChangeType;
+import org.wickedsource.coderadar.plugin.ChangeType;
 import org.wickedsource.coderadar.file.domain.File;
 import org.wickedsource.coderadar.projectadministration.domain.Module;
 

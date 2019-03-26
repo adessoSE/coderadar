@@ -7,7 +7,7 @@ import java.util.List;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.wickedsource.coderadar.analyzer.api.*;
+import org.wickedsource.coderadar.plugin.*;
 import org.wickedsource.coderadar.testframework.template.GitTestTemplate;
 import org.wickedsource.coderadar.vcs.MetricsProcessor;
 import org.wickedsource.coderadar.vcs.git.walk.AnalyzingCommitProcessor;

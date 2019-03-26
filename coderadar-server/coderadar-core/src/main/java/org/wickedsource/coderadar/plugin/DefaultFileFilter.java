@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.api;
+package org.wickedsource.coderadar.plugin;
 
 /** Default AnalyzerFilter that accepts all file names but does not accept binary files. */
 public class DefaultFileFilter implements AnalyzerFileFilter {

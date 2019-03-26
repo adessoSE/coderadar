@@ -7,7 +7,7 @@ spotless {
 }
 
 dependencies {
-    compile project(':coderadar-plugin-api')
+    compile project(':coderadar-server:coderadar-core')
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
     testCompile group: 'commons-io', name: 'commons-io', version: '2.4'
 }

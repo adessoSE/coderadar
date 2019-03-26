@@ -2,7 +2,7 @@ package org.wickedsource.coderadar.vcs;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.AnyObjectId;
-import org.wickedsource.coderadar.analyzer.api.FileMetricsWithChangeType;
+import org.wickedsource.coderadar.plugin.FileMetricsWithChangeType;
 
 public interface MetricsProcessor {
 

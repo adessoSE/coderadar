@@ -1,6 +1,6 @@
 package org.wickedsource.coderadar.analyzer.domain;
 
-import org.wickedsource.coderadar.analyzer.api.*;
+import org.wickedsource.coderadar.plugin.*;
 
 public abstract class AbstractDummyAnalyzer
     implements SourceCodeFileAnalyzerPlugin, ConfigurableAnalyzerPlugin {

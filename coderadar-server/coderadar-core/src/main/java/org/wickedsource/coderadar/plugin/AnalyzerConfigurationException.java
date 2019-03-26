@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.api;
+package org.wickedsource.coderadar.plugin;
 
 /** This exception is thrown during configuration of an analyzer. */
 public class AnalyzerConfigurationException extends AnalyzerException {

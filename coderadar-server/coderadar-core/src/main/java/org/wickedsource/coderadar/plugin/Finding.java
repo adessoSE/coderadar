@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.api;
+package org.wickedsource.coderadar.plugin;
 
 /** A Finding defines a position within a source code file where a certain metric found an issue. */
 public class Finding {

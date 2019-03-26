@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.api;
+package org.wickedsource.coderadar.plugin;
 
 /** Interface for analyzer plugins that analyze source code files. */
 public interface SourceCodeFileAnalyzerPlugin extends AnalyzerPlugin {

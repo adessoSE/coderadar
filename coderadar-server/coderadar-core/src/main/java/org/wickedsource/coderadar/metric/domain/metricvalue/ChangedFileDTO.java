@@ -2,7 +2,7 @@ package org.wickedsource.coderadar.metric.domain.metricvalue;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.wickedsource.coderadar.analyzer.api.ChangeType;
+import org.wickedsource.coderadar.plugin.ChangeType;
 
 @AllArgsConstructor
 @Getter

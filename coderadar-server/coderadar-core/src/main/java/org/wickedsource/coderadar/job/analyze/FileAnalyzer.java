@@ -4,9 +4,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.wickedsource.coderadar.analyzer.api.AnalyzerFileFilter;
-import org.wickedsource.coderadar.analyzer.api.FileMetrics;
-import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
+import org.wickedsource.coderadar.plugin.AnalyzerFileFilter;
+import org.wickedsource.coderadar.plugin.FileMetrics;
+import org.wickedsource.coderadar.plugin.SourceCodeFileAnalyzerPlugin;
 
 /** Combines multiple FileAnalyzerPlugins to calculate metrics for a single file. */
 @Component

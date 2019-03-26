@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.analyzer.api;
+package org.wickedsource.coderadar.plugin;
 
 /**
  * This interface can be implemented by AnalyzerPlugin to mark them as configurable, meaning that

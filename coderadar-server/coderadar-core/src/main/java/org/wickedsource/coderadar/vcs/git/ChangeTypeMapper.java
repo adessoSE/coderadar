@@ -1,7 +1,7 @@
 package org.wickedsource.coderadar.vcs.git;
 
 import org.eclipse.jgit.diff.DiffEntry;
-import org.wickedsource.coderadar.analyzer.api.ChangeType;
+import org.wickedsource.coderadar.plugin.ChangeType;
 
 public class ChangeTypeMapper {
 

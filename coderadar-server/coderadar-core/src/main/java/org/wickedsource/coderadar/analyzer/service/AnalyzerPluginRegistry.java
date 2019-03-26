@@ -9,8 +9,8 @@ import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.wickedsource.coderadar.analyzer.api.ConfigurableAnalyzerPlugin;
-import org.wickedsource.coderadar.analyzer.api.SourceCodeFileAnalyzerPlugin;
+import org.wickedsource.coderadar.plugin.ConfigurableAnalyzerPlugin;
+import org.wickedsource.coderadar.plugin.SourceCodeFileAnalyzerPlugin;
 
 @Service
 public class AnalyzerPluginRegistry {
