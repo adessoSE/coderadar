@@ -21,10 +21,11 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
+  MatAutocompleteModule,
   MatMenuModule,
   MatRadioModule,
   MatSidenavModule,
-  MatToolbarModule,
+  MatToolbarModule, MatTooltipModule,
 } from '@angular/material';
 import {LayoutModule} from '@angular/cdk/layout';
 import {ProjectService} from '../../service/project.service';
@@ -48,6 +49,8 @@ import {ProjectService} from '../../service/project.service';
       LayoutModule,
       MatToolbarModule,
       MatSidenavModule,
+      MatAutocompleteModule,
+      MatTooltipModule,
       MatSelectModule,
       MatCheckboxModule
     ],

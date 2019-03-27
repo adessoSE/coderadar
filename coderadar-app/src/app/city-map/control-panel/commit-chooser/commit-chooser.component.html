@@ -1,15 +1,9 @@
 <app-autosuggest-wrapper
-        [placeholder]="'Datum, Commit-ID, Autor'"
-        [(model)]="selected"
+        [model]="selected"
         [source]="commits"
-        [valuePropertyName]="'id'"
-        [displayPropertyName]="'name'"
-        [noMatchFoundText]="'Nichts gefunden.'"
-        [matchFormatted]="true"
-        [valueFormatter]="formatCommit"
-        [listFormatter]="formatCommit"
         [isDisabled]="isDisabled"
-        (valueChanged)="handleCommitChanged($event)">
+        (valueChanged)="handleCommitChanged($event)"
+        [label]="label">
 </app-autosuggest-wrapper>
 
 <p *ngIf="loading">Loading</p>

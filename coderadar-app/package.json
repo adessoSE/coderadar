@@ -37,6 +37,7 @@
     "binpacking": "0.0.1",
     "chroma-js": "^2.0.3",
     "core-js": "^2.5.4",
+    "hammerjs": "^2.0.8",
     "http-status-codes": "^1.3.1",
     "lodash": "latest",
     "moment": "latest",

@@ -15,6 +15,7 @@ export class CommitChooserComponent implements OnInit {
     @Input() selected: Commit;
     @Input() loading: boolean;
     @Input() isDisabled: boolean;
+    @Input() label: string;
 
     @Output() changeCommit = new EventEmitter();
 
@@ -27,10 +28,4 @@ export class CommitChooserComponent implements OnInit {
     handleCommitChanged(chosenModel: Commit) {
         this.changeCommit.emit({commitType: this.commitType, commit: chosenModel});
     }
-
-    formatCommit(data: any): string {
-        const formattedDateAndTime = moment(data.timestamp).format('DD.MM.YYYY HH:mm');
-        return `${formattedDateAndTime} ${data.author}, ${data.name}`;
-    }
-
 }

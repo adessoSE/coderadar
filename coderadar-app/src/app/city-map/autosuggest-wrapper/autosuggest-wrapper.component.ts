@@ -1,4 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Commit} from '../../model/commit';
+import {from, Observable} from 'rxjs';
+import {startWith} from 'rxjs/internal/operators/startWith';
+import {catchError, map} from 'rxjs/operators';
+import {FormControl} from '@angular/forms';
+import {isNull} from 'util';
 
 @Component({
     selector: 'app-autosuggest-wrapper',
@@ -12,31 +18,54 @@ export class AutosuggestWrapperComponent implements OnInit {
 
     @Input() model: any;
     @Input() source: any;
-    @Input() placeholder: string;
-    @Input() noMatchFoundText: string;
-    @Input() matchFormatted: boolean;
-    @Input() valuePropertyName: string;
-    @Input() displayPropertyName: string;
-    @Input() valueFormatter: any;
-    @Input() listFormatter: any;
     @Input() isDisabled: boolean;
     @Input() alignRight = false;
-
+    @Input() label: string;
     @Output() valueChanged = new EventEmitter();
 
-    constructor() {
+  filteredOptions: Observable<any[]>;
+  formControl = new FormControl();
+
+  ngOnInit() {
+    this.filteredOptions = this.formControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
+  }
+
+  private _filter(value: any): string[] {
+    let filterValue = '';
+    if (value.hasOwnProperty('name')) {
+      filterValue = value.name.toLowerCase();
+    } else {
+      filterValue = value.toLowerCase();
     }
 
-    ngOnInit() {
-    }
+    return this.source.filter(option => {
+      if (option.hasOwnProperty('name')) {
+        return option.name.toLowerCase().includes(filterValue)
+          || option.author.toLowerCase().includes(filterValue)
+          || new Date(option.timestamp).toDateString().toLowerCase().includes(filterValue);
+      } else {
+        return option.toLowerCase().includes(filterValue);
+      }
+    });
+  }
 
-    handleClearInputClicked() {
-        this.model = null;
-        this.inputElement.nativeElement.focus();
-    }
+  handleValueChanged(chosenModel: any) {
+      this.valueChanged.emit(chosenModel);
+  }
 
-    handleValueChanged(chosenModel: any) {
-        this.valueChanged.emit(chosenModel);
+  formatValue(value: any) {
+    if (value === null) {
+      return '';
     }
+    if (value.hasOwnProperty('name')) {
+      return value.name + ', ' + value.author + ', ' + new Date(value.timestamp).toDateString();
+    } else {
+      return value;
+    }
+  }
 
 }

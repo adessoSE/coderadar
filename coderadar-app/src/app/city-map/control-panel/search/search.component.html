@@ -1,8 +1,6 @@
 <app-autosuggest-wrapper
-        [placeholder]="'Date, Module, ...'"
         [source]="uniqueFileList"
-        [noMatchFoundText]="'Nothing found.'"
-        [listFormatter]="autocompleteListFormatter"
         (valueChanged)="handleSearchChanged($event)"
-        [alignRight]="true">
+        [alignRight]="true"
+        [label]="'Search'">
 </app-autosuggest-wrapper>

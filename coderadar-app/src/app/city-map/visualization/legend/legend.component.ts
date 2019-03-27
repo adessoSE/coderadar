@@ -49,7 +49,6 @@ export class LegendComponent implements OnInit {
 
     ngOnInit() {
       this.metricMapping$ = this.store.select(fromRoot.getMetricMapping);
-      console.log(this.metricMapping$);
       this.metricMapping$.toPromise().then(metricMapping => {
             this.heightMetric = VisualizationConfig.getShortNameByMetricName(metricMapping.heightMetricName);
             this.groundAreaMetric = VisualizationConfig.getShortNameByMetricName(metricMapping.groundAreaMetricName);

@@ -1,20 +1,10 @@
-<span>
-   <input #inputElement
-          [placeholder]="placeholder"
-          ngui-auto-complete
-          [(ngModel)]="model"
-          [source]="source"
-          value-property-name="id"
-          display-property-name="name"
-          [value-formatter]="valueFormatter"
-          [list-formatter]="listFormatter"
-          [no-match-found-text]="noMatchFoundText"
-          [match-formatted]="matchFormatted"
-          [accept-user-input]=false
-          [disabled]="isDisabled"
-          (valueChanged)="handleValueChanged($event)" />
-
-   <!-- <button type="button" class="close" aria-label="Close" (click)="handleClearInputClicked()" [disabled]="isDisabled">
-        <span aria-hidden="true">&times;</span>
-    </button>-->
-</span>
+<form style="padding-top: 20px">
+  <mat-form-field>
+    <input  [formControl]="formControl" type="text" placeholder="{{label}}" matInput [matAutocomplete]="auto" >
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="formatValue" [panelWidth]="500">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option" (onSelectionChange)="handleValueChanged(option)">
+          {{formatValue(option)}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</form>
