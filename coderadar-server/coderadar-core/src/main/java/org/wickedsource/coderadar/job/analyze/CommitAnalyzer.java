@@ -29,7 +29,6 @@ import org.wickedsource.coderadar.file.domain.GitLogEntry;
 import org.wickedsource.coderadar.file.domain.GitLogEntryRepository;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
-import org.wickedsource.coderadar.filepattern.domain.FileSetType;
 import org.wickedsource.coderadar.filepattern.match.FilePatternMatcher;
 import org.wickedsource.coderadar.job.LocalGitRepositoryManager;
 import org.wickedsource.coderadar.metric.domain.finding.FindingRepository;
@@ -182,8 +181,7 @@ public class CommitAnalyzer {
   }
 
   private FilePatternMatcher getPatternMatcher(long projectId) {
-    List<FilePattern> sourceFilePatterns =
-        filePatternRepository.findByProjectIdAndFileSetType(projectId, FileSetType.SOURCE);
+    List<FilePattern> sourceFilePatterns = filePatternRepository.findByProjectId(projectId);
     return new FilePatternMatcher(sourceFilePatterns);
   }
 

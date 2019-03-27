@@ -20,7 +20,6 @@ public class FilePatternResourceAssembler
     FilePatternResource resource = new FilePatternResource();
     for (FilePattern entity : entities) {
       FilePatternDTO dto = new FilePatternDTO();
-      dto.setFileSetType(entity.getFileSetType());
       dto.setInclusionType(entity.getInclusionType());
       dto.setPattern(entity.getPattern());
       resource.addFilePattern(dto);
@@ -34,7 +33,6 @@ public class FilePatternResourceAssembler
       FilePattern entity = new FilePattern();
       entity.setPattern(dto.getPattern());
       entity.setInclusionType(dto.getInclusionType());
-      entity.setFileSetType(dto.getFileSetType());
       entity.setProject(project);
       entities.add(entity);
     }

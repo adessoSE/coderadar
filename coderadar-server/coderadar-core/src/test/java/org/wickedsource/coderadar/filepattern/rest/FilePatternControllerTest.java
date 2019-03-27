@@ -43,11 +43,7 @@ public class FilePatternControllerTest extends ControllerTestTemplate {
                     fields
                         .withPath("filePatterns[].inclusionType")
                         .description(
-                            "Either 'INCLUDE' if the matching set of files is to be included or 'EXCLUDE' if it is to be excluded."),
-                    fields
-                        .withPath("filePatterns[].fileSetType")
-                        .description(
-                            "The set of files the files matching this pattern belong to. Currently, the only available value is 'SOURCE' describing source code files."))));
+                            "Either 'INCLUDE' if the matching set of files is to be included or 'EXCLUDE' if it is to be excluded."))));
   }
 
   @Test

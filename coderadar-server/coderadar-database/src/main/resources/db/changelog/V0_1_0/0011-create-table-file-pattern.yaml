@@ -23,11 +23,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: file_set_type
-                  type: varchar(10)
-                  constraints:
-                    nullable: false
-              - column:
                   name: project_id
                   type: bigint
                   constraints:

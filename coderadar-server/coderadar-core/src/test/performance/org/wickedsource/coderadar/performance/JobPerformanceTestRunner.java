@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationResource;
 import org.wickedsource.coderadar.analyzingjob.rest.AnalyzingJobResource;
-import org.wickedsource.coderadar.filepattern.domain.FileSetType;
 import org.wickedsource.coderadar.filepattern.rest.FilePatternDTO;
 import org.wickedsource.coderadar.filepattern.rest.FilePatternResource;
 import org.wickedsource.coderadar.project.domain.InclusionType;
@@ -82,7 +81,6 @@ public class JobPerformanceTestRunner {
     FilePatternResource patterns = new FilePatternResource();
     FilePatternDTO pattern = new FilePatternDTO();
     pattern.setInclusionType(InclusionType.INCLUDE);
-    pattern.setFileSetType(FileSetType.SOURCE);
     pattern.setPattern("**/src/main/java/**/*.java");
     patterns.addFilePattern(pattern);
     return client.setFilePatterns(1L, patterns);

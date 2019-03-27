@@ -5,7 +5,6 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.wickedsource.coderadar.filepattern.domain.FilePattern;
-import org.wickedsource.coderadar.filepattern.domain.FileSetType;
 import org.wickedsource.coderadar.project.domain.InclusionType;
 
 public class FilePatternMatcherTest {
@@ -25,19 +24,16 @@ public class FilePatternMatcherTest {
     List<FilePattern> patterns = new ArrayList<>();
 
     FilePattern pattern1 = new FilePattern();
-    pattern1.setFileSetType(FileSetType.SOURCE);
     pattern1.setInclusionType(InclusionType.INCLUDE);
     pattern1.setPattern("root/sub/**/*.jsp");
     patterns.add(pattern1);
 
     FilePattern pattern2 = new FilePattern();
-    pattern2.setFileSetType(FileSetType.SOURCE);
     pattern2.setInclusionType(InclusionType.INCLUDE);
     pattern2.setPattern("root/sub/**/*.java");
     patterns.add(pattern2);
 
     FilePattern pattern3 = new FilePattern();
-    pattern3.setFileSetType(FileSetType.SOURCE);
     pattern3.setInclusionType(InclusionType.EXCLUDE);
     pattern3.setPattern("root/sub/**/ignored.java");
     patterns.add(pattern3);

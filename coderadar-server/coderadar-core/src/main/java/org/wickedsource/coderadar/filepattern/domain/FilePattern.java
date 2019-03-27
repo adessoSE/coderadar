@@ -28,10 +28,6 @@ public class FilePattern {
   @Enumerated(EnumType.STRING)
   private InclusionType inclusionType;
 
-  @Column(name = "file_set_type")
-  @Enumerated(EnumType.STRING)
-  private FileSetType fileSetType;
-
   @ManyToOne
   @JoinColumn(name = "project_id")
   private Project project;
