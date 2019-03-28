@@ -19,7 +19,6 @@ public class LoadUserService implements LoadUserUseCase {
 
   @Override
   public User loadUser(LoadUserCommand command) {
-    // TODO
-    return null;
+    return port.loadUser(command.getId());
   }
 }
