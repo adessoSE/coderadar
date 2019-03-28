@@ -1,3 +1,9 @@
 package org.wickedsource.coderadar.projectadministration.port.driver.qualityprofile;
 
-public class CreateQualityProfileCommand {}
+import lombok.Value;
+
+@Value
+public class CreateQualityProfileCommand {
+    private Long id;
+    private String name;
+}
