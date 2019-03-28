@@ -4,22 +4,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.projectadministration.domain.Module;
 import org.wickedsource.coderadar.projectadministration.port.driven.module.CreateModulePort;
+import org.wickedsource.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import org.wickedsource.coderadar.projectadministration.port.driver.module.CreateModuleCommand;
 import org.wickedsource.coderadar.projectadministration.port.driver.module.CreateModuleUseCase;
 
 @Service
 public class CreateModuleService implements CreateModuleUseCase {
 
+  private final GetProjectPort getProjectPort;
   private final CreateModulePort createModulePort;
 
   @Autowired
-  public CreateModuleService(CreateModulePort createModulePort) {
+  public CreateModuleService(GetProjectPort getProjectPort, CreateModulePort createModulePort) {
+    this.getProjectPort = getProjectPort;
     this.createModulePort = createModulePort;
   }
 
   @Override
   public Long createModule(CreateModuleCommand command) {
     Module module = new Module();
+    module.setProject(getProjectPort.get(command.getProjectId()));
     module.setPath(command.getPath());
     module = createModulePort.createModule(module);
     return module.getId();
