@@ -1,16 +1,16 @@
 <div>
   <fa-icon [icon]="faArrowsAltV"></fa-icon>&nbsp;
-  <mat-select (selectionChange)="applyMetricMappings()" style="padding-right:5%;width: 10%" [(ngModel)]="metricMapping.heightMetricName">
+  <mat-select (selectionChange)="applyMetricMappings()" style="padding-right:5%;width: 13%" [(ngModel)]="metricMapping.heightMetricName">
     <mat-option *ngFor="let metric of availableMetrics" [value]="metric.metricName">{{metric.shortName}}</mat-option>
   </mat-select>
 
   <fa-icon [icon]="faArrowsAlt"></fa-icon>&nbsp;
-  <mat-select (selectionChange)="applyMetricMappings()" style="padding-right:5%; width: 10%" [(ngModel)]="metricMapping.groundAreaMetricName">
+  <mat-select (selectionChange)="applyMetricMappings()" style="padding-right:5%; width: 13%" [(ngModel)]="metricMapping.groundAreaMetricName">
       <mat-option *ngFor="let metric of availableMetrics" [value]="metric.metricName">{{metric.shortName}}</mat-option>
   </mat-select>
 
   <fa-icon [icon]="faPalette"></fa-icon>&nbsp;
-  <mat-select (selectionChange)="applyMetricMappings()" style="width: 10%" [(ngModel)]="metricMapping.colorMetricName">
+  <mat-select (selectionChange)="applyMetricMappings()" style="width: 13%" [(ngModel)]="metricMapping.colorMetricName">
       <mat-option *ngFor="let metric of availableMetrics" [value]="metric.metricName">{{metric.shortName}}</mat-option>
   </mat-select>
 

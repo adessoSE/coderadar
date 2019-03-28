@@ -8,7 +8,7 @@ import {BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR} from 'http-status-codes';
 @Component({
   selector: 'app-add-project',
   templateUrl: './add-project.component.html',
-  styleUrls: ['./add-project.component.css']
+  styleUrls: ['./add-project.component.scss']
 })
 export class AddProjectComponent {
 

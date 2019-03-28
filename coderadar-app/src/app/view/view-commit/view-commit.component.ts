@@ -9,7 +9,7 @@ import {HttpResponse} from '@angular/common/http';
 @Component({
   selector: 'app-view-commit',
   templateUrl: './view-commit.component.html',
-  styleUrls: ['./view-commit.component.css']
+  styleUrls: ['./view-commit.component.scss']
 })
 export class ViewCommitComponent implements OnInit {
 

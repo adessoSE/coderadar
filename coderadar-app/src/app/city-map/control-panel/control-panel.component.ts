@@ -11,7 +11,7 @@ import {Commit} from '../../model/commit';
 @Component({
     selector: 'app-control-panel',
     templateUrl: './control-panel.component.html',
-    styleUrls: ['./control-panel.component.css']
+    styleUrls: ['./control-panel.component.scss']
 })
 export class ControlPanelComponent implements OnInit {
 

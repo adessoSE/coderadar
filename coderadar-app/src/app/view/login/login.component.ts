@@ -6,7 +6,7 @@ import {INTERNAL_SERVER_ERROR} from 'http-status-codes';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
 

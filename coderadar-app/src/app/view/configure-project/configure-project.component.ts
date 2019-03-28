@@ -10,7 +10,7 @@ import {Module} from '../../model/module';
 @Component({
   selector: 'app-configure-project',
   templateUrl: './configure-project.component.html',
-  styleUrls: ['./configure-project.component.css']
+  styleUrls: ['./configure-project.component.scss']
 })
 export class ConfigureProjectComponent implements OnInit {
 

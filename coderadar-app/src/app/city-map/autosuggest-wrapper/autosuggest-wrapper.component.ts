@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Commit} from '../../model/commit';
 import {from, Observable} from 'rxjs';
 import {startWith} from 'rxjs/internal/operators/startWith';
@@ -12,27 +12,21 @@ import {isNull} from 'util';
     templateUrl: './autosuggest-wrapper.component.html',
     styleUrls: ['./autosuggest-wrapper.component.scss']
 })
-export class AutosuggestWrapperComponent implements OnInit {
+export class AutosuggestWrapperComponent implements OnInit, OnChanges {
 
-    @ViewChild('inputElement') inputElement;
+  @ViewChild('inputElement') inputElement;
 
-    @Input() model: any;
-    @Input() source: any;
-    @Input() isDisabled: boolean;
-    @Input() alignRight = false;
-    @Input() label: string;
-    @Output() valueChanged = new EventEmitter();
+  @Input() model: any;
+  @Input() source: any;
+  @Input() isDisabled: boolean;
+  @Input() alignRight = false;
+  @Input() label: string;
+  @Output() valueChanged = new EventEmitter();
 
   filteredOptions: Observable<any[]>;
   formControl = new FormControl();
 
-  ngOnInit() {
-    this.filteredOptions = this.formControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
-  }
+  ngOnInit() {}
 
   private _filter(value: any): string[] {
     let filterValue = '';
@@ -66,6 +60,14 @@ export class AutosuggestWrapperComponent implements OnInit {
     } else {
       return value;
     }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.filteredOptions = this.formControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
   }
 
 }
