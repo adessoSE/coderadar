@@ -18,11 +18,11 @@ public class LoginUserService implements LoginUserUseCase {
   }
 
   @Override
-  public LoginUserCommand login(LoginUserCommand command) {
+  public User login(LoginUserCommand command) {
     User user = new User();
     user.setUsername(command.getUsername());
     user.setPassword(command.getPassword());
     user = port.login(user);
-    return new LoginUserCommand(user.getId(), user.getUsername(), user.getPassword());
+    return user;
   }
 }

@@ -18,8 +18,8 @@ public class LoadUserService implements LoadUserUseCase {
   }
 
   @Override
-  public LoadUserCommand loadUser(Long id) {
-    User user = port.loadUser(id);
-    return new LoadUserCommand(user.getId(), user.getUsername());
+  public User loadUser(LoadUserCommand command) {
+    // TODO
+    return null;
   }
 }

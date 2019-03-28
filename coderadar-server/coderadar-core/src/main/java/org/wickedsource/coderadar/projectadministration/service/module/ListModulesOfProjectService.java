@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.projectadministration.domain.Module;
 import org.wickedsource.coderadar.projectadministration.port.driven.module.ListModulesOfProjectPort;
+import org.wickedsource.coderadar.projectadministration.port.driver.module.ListModulesOfProjectCommand;
 import org.wickedsource.coderadar.projectadministration.port.driver.module.ListModulesOfProjectUseCase;
 
 @Service
@@ -18,7 +19,7 @@ public class ListModulesOfProjectService implements ListModulesOfProjectUseCase 
   }
 
   @Override
-  public List<Module> listModules(Long projectId) {
-    return port.listModules(projectId);
+  public List<Module> listModules(ListModulesOfProjectCommand command) {
+    return port.listModules(command.getProjectId());
   }
 }

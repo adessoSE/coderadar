@@ -1,5 +1,7 @@
 package org.wickedsource.coderadar.projectadministration.port.driver.module;
 
+import org.wickedsource.coderadar.projectadministration.domain.Module;
+
 public interface UpdateModuleUseCase {
-  UpdateModuleCommand updateModule(UpdateModuleCommand command);
+  Module updateModule(UpdateModuleCommand command);
 }

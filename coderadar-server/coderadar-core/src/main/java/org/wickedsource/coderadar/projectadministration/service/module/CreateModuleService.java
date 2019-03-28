@@ -18,10 +18,10 @@ public class CreateModuleService implements CreateModuleUseCase {
   }
 
   @Override
-  public CreateModuleCommand createModule(CreateModuleCommand command) {
+  public Long createModule(CreateModuleCommand command) {
     Module module = new Module();
     module.setPath(command.getPath());
     module = createModulePort.createModule(module);
-    return new CreateModuleCommand(module.getId(), module.getPath());
+    return module.getId();
   }
 }

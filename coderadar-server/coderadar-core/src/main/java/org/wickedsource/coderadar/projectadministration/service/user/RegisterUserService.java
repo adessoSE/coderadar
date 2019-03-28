@@ -18,11 +18,11 @@ public class RegisterUserService implements RegisterUserUseCase {
   }
 
   @Override
-  public RegisterUserCommand register(RegisterUserCommand command) {
+  public User register(RegisterUserCommand command) {
     User user = new User();
     user.setUsername(command.getUsername());
     user.setPassword(command.getPassword());
     user = port.register(user);
-    return new RegisterUserCommand(user.getId(), user.getUsername(), user.getPassword());
+    return user;
   }
 }

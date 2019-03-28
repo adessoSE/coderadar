@@ -1,3 +1,7 @@
 package org.wickedsource.coderadar.projectadministration.port.driven.qualityprofile;
 
-public interface CreateQualityProfilePort {}
+import org.wickedsource.coderadar.projectadministration.domain.QualityProfile;
+
+public interface CreateQualityProfilePort {
+  QualityProfile createQualityProfile(QualityProfile qualityProfile);
+}

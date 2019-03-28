@@ -19,7 +19,6 @@ public class ListProjectsService implements ListProjectsUseCase {
 
   @Override
   public List<Project> listProjects() {
-    // TODO
-    return null;
+    return listProjectsPort.getProjects();
   }
 }

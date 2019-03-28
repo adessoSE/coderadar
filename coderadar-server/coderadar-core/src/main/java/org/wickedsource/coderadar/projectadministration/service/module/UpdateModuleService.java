@@ -18,10 +18,10 @@ public class UpdateModuleService implements UpdateModuleUseCase {
   }
 
   @Override
-  public UpdateModuleCommand updateModule(UpdateModuleCommand command) {
+  public Module updateModule(UpdateModuleCommand command) {
     Module module = new Module();
     module.setPath(command.getPath());
     module = updateModulePort.updateModule(module);
-    return new UpdateModuleCommand(module.getId(), module.getPath());
+    return module;
   }
 }

@@ -19,7 +19,7 @@ public class CreateProjectService implements CreateProjectUseCase {
   }
 
   @Override
-  public CreateProjectCommand createProject(CreateProjectCommand command) {
+  public Long createProject(CreateProjectCommand command) {
     Project project = new Project();
     VcsCoordinates coordinates = new VcsCoordinates();
     coordinates.setUrl(command.getVcsUrl());
@@ -32,15 +32,6 @@ public class CreateProjectService implements CreateProjectUseCase {
     project.setWorkdirName(command.getWorkdir());
     project.setVcsCoordinates(coordinates);
     project = createProjectPort.createProject(project);
-    return new CreateProjectCommand(
-        project.getId(),
-        project.getName(),
-        project.getWorkdirName(),
-        project.getVcsCoordinates().getUsername(),
-        project.getVcsCoordinates().getPassword(),
-        project.getVcsCoordinates().getUrl(),
-        project.getVcsCoordinates().isOnline(),
-        project.getVcsCoordinates().getStartDate(),
-        project.getVcsCoordinates().getEndDate());
+    return project.getId();
   }
 }

@@ -18,7 +18,6 @@ public class RefreshTokenService implements RefreshTokenUseCase {
 
   @Override
   public String refreshToken(RefreshTokenCommand command) {
-    // TODO
-    return null;
+    return port.createAccessToken(command.getRefreshToken());
   }
 }

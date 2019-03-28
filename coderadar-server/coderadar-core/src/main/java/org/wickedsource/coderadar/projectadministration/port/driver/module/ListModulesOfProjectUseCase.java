@@ -4,5 +4,5 @@ import java.util.List;
 import org.wickedsource.coderadar.projectadministration.domain.Module;
 
 public interface ListModulesOfProjectUseCase {
-  List<Module> listModules(Long projectId);
+  List<Module> listModules(ListModulesOfProjectCommand command);
 }

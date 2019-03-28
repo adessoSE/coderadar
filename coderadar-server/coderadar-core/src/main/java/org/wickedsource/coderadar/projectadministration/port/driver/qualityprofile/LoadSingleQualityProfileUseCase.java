@@ -1,3 +1,7 @@
 package org.wickedsource.coderadar.projectadministration.port.driver.qualityprofile;
 
-public interface LoadSingleQualityProfileUseCase {}
+import org.wickedsource.coderadar.projectadministration.domain.QualityProfile;
+
+public interface LoadSingleQualityProfileUseCase {
+  QualityProfile getQualityProfile(LoadSingleQualityProfileCommand command);
+}

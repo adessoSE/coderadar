@@ -1,3 +1,7 @@
 package org.wickedsource.coderadar.projectadministration.port.driven.qualityprofile;
 
-public interface DeleteQualityProfilePort {}
+import org.wickedsource.coderadar.projectadministration.domain.QualityProfile;
+
+public interface DeleteQualityProfilePort {
+  void deleteQualityProfile(QualityProfile qualityProfile);
+}

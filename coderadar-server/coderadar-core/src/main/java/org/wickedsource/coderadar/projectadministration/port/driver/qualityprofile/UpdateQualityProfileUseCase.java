@@ -1,3 +1,7 @@
 package org.wickedsource.coderadar.projectadministration.port.driver.qualityprofile;
 
-public interface UpdateQualityProfileUseCase {}
+import org.wickedsource.coderadar.projectadministration.domain.QualityProfile;
+
+public interface UpdateQualityProfileUseCase {
+    QualityProfile updateQualityProfile(UpdateQualityProfileCommand command);
+}

@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.projectadministration.service.project;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.wickedsource.coderadar.projectadministration.domain.Project;
 import org.wickedsource.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
 import org.wickedsource.coderadar.projectadministration.port.driver.project.UpdateProjectCommand;
 import org.wickedsource.coderadar.projectadministration.port.driver.project.UpdateProjectUseCase;
@@ -17,7 +18,8 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   }
 
   @Override
-  public UpdateProjectCommand updateProject(UpdateProjectCommand command) {
+  public Project updateProject(UpdateProjectCommand command) {
+    // TODO
     return null;
   }
 }
