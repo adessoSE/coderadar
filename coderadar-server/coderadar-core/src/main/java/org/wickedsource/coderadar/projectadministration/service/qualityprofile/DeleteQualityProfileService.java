@@ -18,6 +18,6 @@ public class DeleteQualityProfileService implements DeleteQualityProfileUseCase 
 
   @Override
   public void deleteQualityProfile(DeleteQualityProfileCommand command) {
-    // TODO
+    // TODO: Quality profiles will be added in a later version.
   }
 }

@@ -18,7 +18,7 @@ public class CreateQualityProfileService implements CreateQualityProfileUseCase 
 
   @Override
   public Long createQualityProfile(CreateQualityProfileCommand command) {
-    // TODO
+    // TODO: Quality profiles will be added in a later version.
     return null;
   }
 }

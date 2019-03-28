@@ -19,7 +19,7 @@ public class LoadSingleQualityProfileService implements LoadSingleQualityProfile
 
   @Override
   public QualityProfile getQualityProfile(LoadSingleQualityProfileCommand command) {
-    // TODO
+    // TODO: Quality profiles will be added in a later version.
     return null;
   }
 }

@@ -19,7 +19,7 @@ public class UpdateQualityProfileService implements UpdateQualityProfileUseCase 
 
   @Override
   public QualityProfile updateQualityProfile(UpdateQualityProfileCommand command) {
-    // TODO
+    // TODO: Quality profiles will be added in a later version.
     return null;
   }
 }
