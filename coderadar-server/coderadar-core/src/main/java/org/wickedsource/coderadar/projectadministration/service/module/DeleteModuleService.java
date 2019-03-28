@@ -18,9 +18,7 @@ public class DeleteModuleService implements DeleteModuleUseCase {
   }
 
   @Override
-  public void deleteModule(DeleteModuleCommand command) {
-    Module module = new Module();
-    module.setId(command.getId());
-    deleteModulePort.deleteModule(module);
+  public void delete(DeleteModuleCommand command) {
+   deleteModulePort.delete(command.getId());
   }
 }
