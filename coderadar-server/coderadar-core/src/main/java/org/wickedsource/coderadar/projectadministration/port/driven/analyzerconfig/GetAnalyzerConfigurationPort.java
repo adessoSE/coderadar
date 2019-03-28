@@ -2,7 +2,6 @@ package org.wickedsource.coderadar.projectadministration.port.driven.analyzercon
 
 import org.wickedsource.coderadar.projectadministration.domain.AnalyzerConfiguration;
 
-public interface ListSingleAnalyzerConfigurationPort {
-  AnalyzerConfiguration listSingleAnalyzerConfiguration(
-      Long projectId, Long analyzerConfigurationId);
+public interface GetAnalyzerConfigurationPort {
+  AnalyzerConfiguration getAnalyzerConfiguration(Long id);
 }

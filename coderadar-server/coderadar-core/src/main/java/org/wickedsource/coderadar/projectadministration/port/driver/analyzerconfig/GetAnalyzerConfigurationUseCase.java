@@ -2,7 +2,7 @@ package org.wickedsource.coderadar.projectadministration.port.driver.analyzercon
 
 import org.wickedsource.coderadar.projectadministration.domain.AnalyzerConfiguration;
 
-public interface ListSingleAnalyzerConfigurationUseCase {
+public interface GetAnalyzerConfigurationUseCase {
   AnalyzerConfiguration getSingleAnalyzerConfiguration(
-      ListSingleAnalyzerConfigurationCommand command);
+      GetAnalyzerConfigurationCommand command);
 }
