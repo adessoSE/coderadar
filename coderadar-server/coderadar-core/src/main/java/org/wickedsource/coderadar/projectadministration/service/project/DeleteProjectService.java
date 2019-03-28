@@ -18,9 +18,7 @@ public class DeleteProjectService implements DeleteProjectUseCase {
   }
 
   @Override
-  public void deleteProject(DeleteProjectCommand command) {
-    Project project = new Project();
-    project.setId(command.getId());
-    deleteProjectPort.deleteProject(project);
+  public void delete(DeleteProjectCommand command) {
+    deleteProjectPort.delete(command.getId());
   }
 }

@@ -1,5 +1,5 @@
 package org.wickedsource.coderadar.projectadministration.port.driver.project;
 
 public interface DeleteProjectUseCase {
-  void deleteProject(DeleteProjectCommand command);
+  void delete(DeleteProjectCommand command);
 }
