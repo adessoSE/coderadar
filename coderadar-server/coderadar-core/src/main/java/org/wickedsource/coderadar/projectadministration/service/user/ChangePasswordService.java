@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.wickedsource.coderadar.projectadministration.domain.User;
 import org.wickedsource.coderadar.projectadministration.port.driven.user.ChangePasswordPort;
+import org.wickedsource.coderadar.projectadministration.port.driver.user.ChangePasswordCommand;
 import org.wickedsource.coderadar.projectadministration.port.driver.user.ChangePasswordUseCase;
 
 @Service
@@ -17,8 +18,7 @@ public class ChangePasswordService implements ChangePasswordUseCase {
   }
 
   @Override
-  public User changePassword(String refreshToken, String newPassword) {
-    // TODO
-    return null;
+  public void changePassword(ChangePasswordCommand command) {
+    port.changePassword(command.getId(), command.getNewPassword());
   }
 }
