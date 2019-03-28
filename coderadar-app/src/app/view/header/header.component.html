@@ -1,15 +1,15 @@
 <header>
   <mat-toolbar class="mat-elevation-z6 toolbar" color="primary">
     <a id="dashboardLink" mat-button routerLink="/dashboard">
-      <img src="../../../assets/logo.png" alt="logo">
+      <img alt="logo" src="../../../assets/logo.png">
       &nbsp;Coderadar
     </a>
-    <button mat-button [matMenuTriggerFor]="userDropdown">
+    <button [matMenuTriggerFor]="userDropdown" mat-button>
       {{getUsername()}}
-      <img src="../../../assets/account.png" height="60px" width="60px" alt="user">
-      <mat-menu class="mat-menu-panel" #userDropdown="matMenu" xPosition="before">
+      <img alt="user" height="60px" src="../../../assets/account.png" width="60px">
+      <mat-menu #userDropdown="matMenu" class="mat-menu-panel" xPosition="before">
         <a mat-menu-item routerLink="/user-settings">User settings</a>
-        <a mat-menu-item (click)="logout()">Logout</a>
+        <a (click)="logout()" mat-menu-item>Logout</a>
       </mat-menu>
     </button>
   </mat-toolbar>

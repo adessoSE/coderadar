@@ -1,4 +1,4 @@
-@import "../../../config";
+@import "../../config";
 
 .loading-indicator-container {
   position: fixed;
@@ -28,6 +28,7 @@
       -o-animation: uil-cube-css 1s cubic-bezier(0.2, 0.8, 0.2, 0.8) infinite;
       animation: uil-cube-css 1s cubic-bezier(0.2, 0.8, 0.2, 0.8) infinite;
     }
+
     & > div:nth-of-type(1) {
       top: 10px;
       left: 10px;
@@ -39,6 +40,7 @@
       -o-animation-delay: 0s;
       animation-delay: 0s;
     }
+
     & > div:nth-of-type(2) {
       top: 10px;
       left: 110px;
@@ -50,6 +52,7 @@
       -o-animation-delay: 0.1s;
       animation-delay: 0.1s;
     }
+
     & > div:nth-of-type(3) {
       top: 110px;
       left: 10px;
@@ -61,6 +64,7 @@
       -o-animation-delay: 0.3s;
       animation-delay: 0.3s;
     }
+
     & > div:nth-of-type(4) {
       top: 110px;
       left: 110px;
@@ -91,6 +95,7 @@
     transform: scale(1);
   }
 }
+
 @-webkit-keyframes uil-cube-css {
   0% {
     -ms-transform: scale(1.4);
@@ -107,6 +112,7 @@
     transform: scale(1);
   }
 }
+
 @-moz-keyframes uil-cube-css {
   0% {
     -ms-transform: scale(1.4);
@@ -123,6 +129,7 @@
     transform: scale(1);
   }
 }
+
 @-ms-keyframes uil-cube-css {
   0% {
     -ms-transform: scale(1.4);
@@ -139,6 +146,7 @@
     transform: scale(1);
   }
 }
+
 @-moz-keyframes uil-cube-css {
   0% {
     -ms-transform: scale(1.4);
@@ -155,6 +163,7 @@
     transform: scale(1);
   }
 }
+
 @-webkit-keyframes uil-cube-css {
   0% {
     -ms-transform: scale(1.4);
@@ -171,6 +180,7 @@
     transform: scale(1);
   }
 }
+
 @-o-keyframes uil-cube-css {
   0% {
     -ms-transform: scale(1.4);
@@ -187,6 +197,7 @@
     transform: scale(1);
   }
 }
+
 @keyframes uil-cube-css {
   0% {
     -ms-transform: scale(1.4);

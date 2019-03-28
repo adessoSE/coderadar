@@ -5,7 +5,7 @@ import {AppComponent} from './app.component';
 import {LoginComponent} from './view/login/login.component';
 import {RegisterComponent} from './view/register/register.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AddProjectComponent} from './view/add-project/add-project.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
@@ -43,21 +43,21 @@ import {FocusService} from './city-map/service/focus.service';
 import {TooltipService} from './city-map/service/tooltip.service';
 import {ComparisonPanelService} from './city-map/service/comparison-panel.service';
 import {environment} from '../environments/environment';
-import { CityViewComponent } from './view/city-view/city-view.component';
-import { CityViewHeaderComponent } from './view/city-view/city-view-header/city-view-header.component';
+import {CityViewComponent} from './view/city-view/city-view.component';
+import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
 
 const appRoutes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'dashboard', component: MainDashboardComponent },
-  { path: 'user-settings', component: UserSettingsComponent },
-  { path: 'add-project', component: AddProjectComponent },
-  { path: 'project-configure/:id', component: ConfigureProjectComponent },
-  { path: 'city/:id', component: CityViewComponent },
-  { path: 'project-edit/:id', component: EditProjectComponent },
-  { path: 'project/:id', component: ProjectDashboardComponent },
-  { path: 'project/:id/:name', component: ViewCommitComponent },
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full'}
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},
+  {path: 'dashboard', component: MainDashboardComponent},
+  {path: 'user-settings', component: UserSettingsComponent},
+  {path: 'add-project', component: AddProjectComponent},
+  {path: 'project-configure/:id', component: ConfigureProjectComponent},
+  {path: 'city/:id', component: CityViewComponent},
+  {path: 'project-edit/:id', component: EditProjectComponent},
+  {path: 'project/:id', component: ProjectDashboardComponent},
+  {path: 'project/:id/:name', component: ViewCommitComponent},
+  {path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
 
 @NgModule({
@@ -95,6 +95,7 @@ const appRoutes: Routes = [
     MatMenuModule,
     MatListModule,
     MatIconModule,
+    RouterModule,
     LayoutModule,
     MatToolbarModule,
     MatSidenavModule,
@@ -106,7 +107,7 @@ const appRoutes: Routes = [
     VisualizationModule,
     StoreModule.forRoot(REDUCER_TOKEN),
     EffectsModule.forRoot([AppEffects]),
-    environment.production ? [] : StoreDevtoolsModule.instrument({ maxAge: 50 })
+    environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 50})
   ],
   providers: [
     {
@@ -123,4 +124,5 @@ const appRoutes: Routes = [
     }],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

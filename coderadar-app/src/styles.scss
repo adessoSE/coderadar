@@ -1,15 +1,17 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import './app/_config.scss';
+@import 'app/city-map/config';
 
 /**
 General styles
  */
 
-html { height: 100%;}
+html {
+  height: 100%;
+}
 
 body {
   margin: 0;
-  font-family: Roboto,"Helvetica Neue", sans-serif;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: whitesmoke;
 }
 
@@ -23,7 +25,7 @@ footer {
 }
 
 main {
-  min-height: calc(100vh -  240px);
+  min-height: calc(100vh - 240px);
 }
 
 /*
@@ -72,46 +74,85 @@ Styles for the login and register forms
   margin: 10px;
 }
 
-.login-card-form mat-card{
+.login-card-form mat-card {
   min-width: 22%;
 }
 
-.login-card-form form{
+.login-card-form form {
   min-width: 22%;
 }
 
-#stage canvas{position:absolute;cursor:-webkit-grab;transition:all 1s ease}
-#stage canvas:first-child{left:0}
-#stage canvas:last-child{opacity:0;left:100%}
-#stage.split canvas:last-child{opacity:1;left:50%}
-.dropdown-menu{padding:1.25rem}
-.ngui-auto-complete>ul{min-width:100%;box-shadow:rgba(0,0,0,0.2) 0 2px 6px 0;white-space:nowrap;max-height:250px}
-.ngui-auto-complete>ul li{cursor:pointer;padding:10px 15px !important;max-width:400px;overflow:hidden;text-overflow:ellipsis}
-.ngui-auto-complete>ul li.selected{color:#000;background-color:#f3f3f3 !important}
-.ngui-auto-complete>ul li:hover{color:#000;background-color:#f3f3f3 !important}
-
-#stage {
-canvas {
+#stage canvas {
   position: absolute;
   cursor: -webkit-grab;
-  transition: all 1s ease;
-
-&:first-child {
-   left: 0;
- }
-
-&:last-child {
-   opacity: 0;
-   left: 100%;
- }
+  transition: all 1s ease
 }
 
-&.split {
-canvas:last-child {
+#stage canvas:first-child {
+  left: 0
+}
+
+#stage canvas:last-child {
+  opacity: 0;
+  left: 100%
+}
+
+#stage.split canvas:last-child {
   opacity: 1;
-  left: 50%;
+  left: 50%
 }
+
+.dropdown-menu {
+  padding: 1.25rem
 }
+
+.ngui-auto-complete > ul {
+  min-width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
+  white-space: nowrap;
+  max-height: 250px
+}
+
+.ngui-auto-complete > ul li {
+  cursor: pointer;
+  padding: 10px 15px !important;
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
+.ngui-auto-complete > ul li.selected {
+  color: #000;
+  background-color: #f3f3f3 !important
+}
+
+.ngui-auto-complete > ul li:hover {
+  color: #000;
+  background-color: #f3f3f3 !important
+}
+
+#stage {
+  canvas {
+    position: absolute;
+    cursor: -webkit-grab;
+    transition: all 1s ease;
+
+    &:first-child {
+      left: 0;
+    }
+
+    &:last-child {
+      opacity: 0;
+      left: 100%;
+    }
+  }
+
+  &.split {
+    canvas:last-child {
+      opacity: 1;
+      left: 50%;
+    }
+  }
 }
 
 .dropdown-menu {
@@ -122,28 +163,28 @@ canvas:last-child {
 .ngui-auto-complete {
   width: auto;
 
-    & > ul {
-        min-width: 100%;
-        box-shadow: rgba(0,0,0,0.2) 0 2px 6px 0;
-        white-space: nowrap;
-        max-height: 250px;
+  & > ul {
+    min-width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
+    white-space: nowrap;
+    max-height: 250px;
 
-        & li {
-            cursor: pointer;
-            padding: 10px 15px !important;
-            max-width: 500px;
-            overflow: hidden;
-            text-overflow: ellipsis;
+    & li {
+      cursor: pointer;
+      padding: 10px 15px !important;
+      max-width: 500px;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
-            &.selected {
-               color: $state-active-color;
-               background-color: $state-hover-color !important;
-             }
+      &.selected {
+        color: $state-active-color;
+        background-color: $state-hover-color !important;
+      }
 
-            &:hover {
-               color: $state-active-color;
-               background-color: $state-hover-color !important;
-             }
-        }
+      &:hover {
+        color: $state-active-color;
+        background-color: $state-hover-color !important;
+      }
     }
+  }
 }

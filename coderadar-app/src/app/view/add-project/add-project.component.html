@@ -1,54 +1,60 @@
 <app-header [title]="'Add project'"></app-header>
 
 <main class="mat-card-form">
-  <div id="cardContainer" class="grid-container">
+  <div class="grid-container" id="cardContainer">
     <div fxLayoutAlign="center center">
-    <form (ngSubmit)="submitForm()">
-      <mat-card>
+      <form (ngSubmit)="submitForm()">
+        <mat-card>
 
-        <!--Card title-->
-        <mat-card-header>
-          <mat-card-title>
-            <span>Add project</span>
-          </mat-card-title>
-        </mat-card-header>
+          <!--Card title-->
+          <mat-card-header>
+            <mat-card-title>
+              <span>Add project</span>
+            </mat-card-title>
+          </mat-card-header>
 
-        <mat-card-content fxLayout="column">
+          <mat-card-content fxLayout="column">
 
-          <!--Form fields-->
-          <mat-form-field>
-            <input maxlength="100" type="text" matInput name="name" placeholder="Project name" [(ngModel)]="project.name" required>
-          </mat-form-field>
-          <mat-form-field>
-            <input type="url" matInput name="vcsUrl" placeholder="VCS URL" [(ngModel)]="project.vcsUrl" required>
-          </mat-form-field>
-          <mat-form-field>
-            <input maxlength="100" type="text" matInput name="vcsUser" placeholder="VCS user" [(ngModel)]="project.vcsUser">
-          </mat-form-field>
-          <mat-form-field>
-            <input maxlength="100" type="password" matInput name="vcsPassword" placeholder="VCS password" [(ngModel)]="project.vcsPassword">
-          </mat-form-field>
-          <mat-form-field>
-            <input type="date" matInput name="startDate" placeholder="Start date - leave empty to start with first commit" [(ngModel)]="project.startDate">
-          </mat-form-field>
-          <mat-form-field>
-            <input type="date" matInput name="endDate" placeholder="End date - leave empty to scan incoming commits" [(ngModel)]="project.endDate">
-          </mat-form-field>
+            <!--Form fields-->
+            <mat-form-field>
+              <input [(ngModel)]="project.name" matInput maxlength="100" name="name" placeholder="Project name"
+                     required type="text">
+            </mat-form-field>
+            <mat-form-field>
+              <input [(ngModel)]="project.vcsUrl" matInput name="vcsUrl" placeholder="VCS URL" required type="url">
+            </mat-form-field>
+            <mat-form-field>
+              <input [(ngModel)]="project.vcsUser" matInput maxlength="100" name="vcsUser" placeholder="VCS user"
+                     type="text">
+            </mat-form-field>
+            <mat-form-field>
+              <input [(ngModel)]="project.vcsPassword" matInput maxlength="100" name="vcsPassword" placeholder="VCS password"
+                     type="password">
+            </mat-form-field>
+            <mat-form-field>
+              <input [(ngModel)]="project.startDate" matInput name="startDate"
+                     placeholder="Start date - leave empty to start with first commit" type="date">
+            </mat-form-field>
+            <mat-form-field>
+              <input [(ngModel)]="project.endDate" matInput name="endDate" placeholder="End date - leave empty to scan incoming commits"
+                     type="date">
+            </mat-form-field>
 
-          <!--Possible errors-->
-          <mat-error *ngIf="nameEmpty">The project name must not be empty!</mat-error>
-          <mat-error *ngIf="projectExists">A project with this name already exists! Please choose another name.</mat-error>
-          <mat-error *ngIf="incorrectURL">The VCS URL is invalid!</mat-error>
+            <!--Possible errors-->
+            <mat-error *ngIf="nameEmpty">The project name must not be empty!</mat-error>
+            <mat-error *ngIf="projectExists">A project with this name already exists! Please choose another name.
+            </mat-error>
+            <mat-error *ngIf="incorrectURL">The VCS URL is invalid!</mat-error>
 
-          <!--Cancel and submit buttons-->
-          <div id="cardButtons" align="center">
-            <button mat-stroked-button type="button" routerLink="/dashboard">Cancel</button>
-            <button mat-raised-button color="primary" type="submit">Next</button>
-          </div>
+            <!--Cancel and submit buttons-->
+            <div align="center" id="cardButtons">
+              <button mat-stroked-button routerLink="/dashboard" type="button">Cancel</button>
+              <button color="primary" mat-raised-button type="submit">Next</button>
+            </div>
 
-        </mat-card-content>
-      </mat-card>
-    </form>
+          </mat-card-content>
+        </mat-card>
+      </form>
     </div>
   </div>
 </main>

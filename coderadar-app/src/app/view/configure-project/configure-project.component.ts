@@ -15,12 +15,9 @@ import {Module} from '../../model/module';
 export class ConfigureProjectComponent implements OnInit {
 
 
-  private projectId: any;
   projectName: string;
-
   analyzers: AnalyzerConfiguration[];
   filePatterns: FilePatterns[];
-
   // Fields for input binding
   filePatternIncludeInput;
   filePatternExcludeInput;
@@ -28,10 +25,10 @@ export class ConfigureProjectComponent implements OnInit {
   modules: Module[];
   deletedModules: Module[];
   startScan: boolean;
-
   // Error fields
   noAnalyzersForJob: boolean;
   analyzersExist: boolean;
+  private projectId: any;
 
   constructor(private router: Router, private userService: UserService,
               private projectService: ProjectService, private route: ActivatedRoute) {
@@ -60,6 +57,83 @@ export class ConfigureProjectComponent implements OnInit {
     });
   }
 
+  /**
+   * Is called when the form is submitted.
+   * Does input validation and calls the appropriate submit method for each part of the form.
+   */
+  submitForm(): void {
+    this.noAnalyzersForJob = this.analyzers.filter(analyzer => analyzer.enabled).length === 0 && this.startScan === true;
+    if (!this.noAnalyzersForJob) {
+      this.noAnalyzersForJob = true;
+      this.submitAnalyzerConfigurations();
+      this.submitFilePatterns();
+      this.submitModules();
+      if (this.startScan) {
+        this.projectService.startAnalyzingJob(this.projectId, true).catch();
+      }
+      this.router.navigate(['/dashboard']);
+    }
+  }
+
+  /**
+   * Constructs a new FilePatterns object (INCLUDE) with whatever is in filePatternIncludeInput
+   * and adds it to filePatterns.
+   */
+  addToIncludedPatterns(): void {
+    if (this.filePatternIncludeInput.trim() !== '' &&
+      this.filePatterns.filter(p => p.pattern === this.filePatternIncludeInput).length === 0) {
+      const pattern = new FilePatterns();
+      pattern.pattern = this.filePatternIncludeInput;
+      pattern.fileSetType = 'SOURCE';
+      pattern.inclusionType = 'INCLUDE';
+      this.filePatterns.push(pattern);
+      this.filePatternIncludeInput = '';
+    }
+  }
+
+  /**
+   * Constructs a new FilePatterns object (EXCLUDE) with whatever is in filePatternIncludeInput
+   * and adds it to filePatterns.
+   */
+  addToExcludedPatterns(): void {
+    if (this.filePatternExcludeInput.trim() !== '' &&
+      this.filePatterns.filter(p => p.pattern === this.filePatternExcludeInput).length === 0) {
+      const pattern = new FilePatterns();
+      pattern.pattern = this.filePatternExcludeInput;
+      pattern.fileSetType = 'SOURCE';
+      pattern.inclusionType = 'EXCLUDE';
+      this.filePatterns.push(pattern);
+      this.filePatternExcludeInput = '';
+    }
+  }
+
+  /**
+   * Constructs a new Module object (EXCLUDE) with whatever is in modulesInput
+   * and adds it to modules.
+   */
+  addToModules(): void {
+    if (this.modulesInput.trim() !== '' && this.modules.filter(m => m.modulePath === this.modulesInput).length === 0) {
+      const deletedModules = this.deletedModules.filter(m => m.modulePath === this.modulesInput);
+      if (deletedModules.length !== 0) {
+        this.modules.push(deletedModules[0]);
+        this.deletedModules.splice(this.deletedModules.indexOf(deletedModules[0]), 1);
+      } else {
+        const module = new Module(null, this.modulesInput);
+        this.modules.push(module);
+      }
+      this.modulesInput = '';
+    }
+  }
+
+  /**
+   * Removes the Module from this.modules and adds it this.deleteModules
+   */
+  addToDeletedModules(module: Module): void {
+    this.modules.splice(this.modules.indexOf(module), 1);
+    if (module.id != null) {
+      this.deletedModules.push(module);
+    }
+  }
 
   /**
    * Gets all of the modules for the current project and saves them in this.modules.
@@ -72,7 +146,7 @@ export class ConfigureProjectComponent implements OnInit {
         if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.getModulesForProject());
         }
-    });
+      });
   }
 
   /**
@@ -84,12 +158,13 @@ export class ConfigureProjectComponent implements OnInit {
       if (response.body.length > 0) {
         this.analyzers = response.body;
         this.analyzersExist = true;
-      }})
+      }
+    })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.getProjectAnalyzers());
         }
-    });
+      });
   }
 
   /**
@@ -104,7 +179,8 @@ export class ConfigureProjectComponent implements OnInit {
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.getAvailableAnalyzers());
-        }});
+        }
+      });
   }
 
   /**
@@ -132,25 +208,7 @@ export class ConfigureProjectComponent implements OnInit {
         if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.getProjectName());
         }
-    });
-  }
-
-  /**
-   * Is called when the form is submitted.
-   * Does input validation and calls the appropriate submit method for each part of the form.
-   */
-  submitForm(): void {
-    this.noAnalyzersForJob = this.analyzers.filter(analyzer => analyzer.enabled).length === 0 && this.startScan === true;
-    if (!this.noAnalyzersForJob ) {
-      this.noAnalyzersForJob = true;
-      this.submitAnalyzerConfigurations();
-      this.submitFilePatterns();
-      this.submitModules();
-      if (this.startScan) {
-        this.projectService.startAnalyzingJob(this.projectId, true).catch();
-      }
-      this.router.navigate(['/dashboard']);
-    }
+      });
   }
 
   /**
@@ -230,75 +288,15 @@ export class ConfigureProjectComponent implements OnInit {
           if (error.status && error.status === FORBIDDEN) {
             this.userService.refresh().then(() => this.submitAnalyzerConfiguration(analyzerConfiguration));
           }
-      });
+        });
     } else {
       this.projectService.addAnalyzerConfigurationToProject(this.projectId, analyzerConfiguration)
         .catch(error => {
           if (error.status && error.status === FORBIDDEN) {
             this.userService.refresh().then(() => this.submitAnalyzerConfiguration(analyzerConfiguration));
           }
-      });
+        });
     }
 
-  }
-
-  /**
-   * Constructs a new FilePatterns object (INCLUDE) with whatever is in filePatternIncludeInput
-   * and adds it to filePatterns.
-   */
-  addToIncludedPatterns(): void {
-    if (this.filePatternIncludeInput.trim() !== '' &&
-      this.filePatterns.filter(p => p.pattern === this.filePatternIncludeInput).length === 0) {
-      const pattern = new FilePatterns();
-      pattern.pattern = this.filePatternIncludeInput;
-      pattern.fileSetType = 'SOURCE';
-      pattern.inclusionType = 'INCLUDE';
-      this.filePatterns.push(pattern);
-      this.filePatternIncludeInput = '';
-    }
-  }
-
-  /**
-   * Constructs a new FilePatterns object (EXCLUDE) with whatever is in filePatternIncludeInput
-   * and adds it to filePatterns.
-   */
-  addToExcludedPatterns(): void {
-    if (this.filePatternExcludeInput.trim() !== '' &&
-      this.filePatterns.filter(p => p.pattern === this.filePatternExcludeInput).length === 0) {
-      const pattern = new FilePatterns();
-      pattern.pattern = this.filePatternExcludeInput;
-      pattern.fileSetType = 'SOURCE';
-      pattern.inclusionType = 'EXCLUDE';
-      this.filePatterns.push(pattern);
-      this.filePatternExcludeInput = '';
-    }
-  }
-
-  /**
-   * Constructs a new Module object (EXCLUDE) with whatever is in modulesInput
-   * and adds it to modules.
-   */
-  addToModules(): void {
-    if (this.modulesInput.trim() !== '' && this.modules.filter(m => m.modulePath === this.modulesInput).length === 0) {
-      const deletedModules = this.deletedModules.filter(m => m.modulePath === this.modulesInput);
-      if (deletedModules.length !== 0) {
-        this.modules.push(deletedModules[0]);
-        this.deletedModules.splice(this.deletedModules.indexOf(deletedModules[0]), 1);
-      } else {
-        const module = new Module(null, this.modulesInput);
-        this.modules.push(module);
-      }
-      this.modulesInput = '';
-    }
-  }
-
-  /**
-   * Removes the Module from this.modules and adds it this.deleteModules
-   */
-  addToDeletedModules(module: Module): void {
-    this.modules.splice(this.modules.indexOf(module), 1);
-    if (module.id != null) {
-      this.deletedModules.push(module);
-    }
   }
 }

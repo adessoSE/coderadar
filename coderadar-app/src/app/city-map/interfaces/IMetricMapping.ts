@@ -1,5 +1,5 @@
 export interface IMetricMapping {
-    heightMetricName: string;
-    groundAreaMetricName: string;
-    colorMetricName: string;
+  heightMetricName: string;
+  groundAreaMetricName: string;
+  colorMetricName: string;
 }

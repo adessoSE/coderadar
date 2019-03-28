@@ -1,4 +1,4 @@
 export enum CommitReferenceType {
-    THIS,
-    OTHER
+  THIS,
+  OTHER
 }

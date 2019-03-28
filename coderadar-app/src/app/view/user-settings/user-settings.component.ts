@@ -18,7 +18,8 @@ export class UserSettingsComponent implements OnInit {
   currentPasswordWrong = false;
   passwordsAreSame = false;
 
-  constructor(private router: Router, private userService: UserService) {}
+  constructor(private router: Router, private userService: UserService) {
+  }
 
   ngOnInit(): void {
     UserService.getLoggedInUser();

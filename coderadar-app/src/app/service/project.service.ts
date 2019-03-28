@@ -8,10 +8,7 @@ import {AnalyzerConfiguration} from '../model/analyzer-configuration';
 import {Commit} from '../model/commit';
 import {Module} from '../model/module';
 import {AppComponent} from '../app.component';
-import {IAvailableMetricsGetResponse} from '../city-map/interfaces/IAvailableMetricsGetResponse';
-import {Observable} from 'rxjs';
 import {IMetricMapping} from '../city-map/interfaces/IMetricMapping';
-import {IDeltaTreeGetResponse} from '../city-map/interfaces/IDeltaTreeGetResponse';
 import {INode} from '../city-map/interfaces/INode';
 
 @Injectable({
@@ -19,9 +16,10 @@ import {INode} from '../city-map/interfaces/INode';
 })
 export class ProjectService {
 
-  constructor(private userService: UserService, private router: Router, private httpClient: HttpClient) { }
-
   private apiURL = AppComponent.getApiUrl();
+
+  constructor(private userService: UserService, private router: Router, private httpClient: HttpClient) {
+  }
 
   /**
    * Gets all the projects from the server.
@@ -37,7 +35,7 @@ export class ProjectService {
    * @param id The id of the project.
    */
   public getProject(id: number): Promise<HttpResponse<any>> {
-    return this.httpClient.get<any>(this.apiURL + 'projects/' + id , {observe: 'response'}).toPromise();
+    return this.httpClient.get<any>(this.apiURL + 'projects/' + id, {observe: 'response'}).toPromise();
   }
 
   /**
@@ -103,8 +101,8 @@ export class ProjectService {
    * @param module The name (path) of the module.
    */
   public addProjectModule(id: number, module: Module): Promise<HttpResponse<any>> {
-      return this.httpClient.post(this.apiURL + 'projects/' + id + '/modules', {modulePath: module.modulePath},
-        {observe: 'response'}).toPromise();
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/modules', {modulePath: module.modulePath},
+      {observe: 'response'}).toPromise();
   }
 
   /**

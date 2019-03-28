@@ -2,14 +2,19 @@
 
 <main class="card-list">
   <button mat-button routerLink="/city/{{project.id}}">3D project map</button>
-  <p>{{getTitleText()}}</p>
+  <p>{{getTitleText()}}
+    <br>
+    <mat-label style="font-size: 12pt">Analyzed {{commitsAnalyzed}}/{{commits.length}} commits</mat-label>
+  </p>
   <mat-grid-list cols="4" rowHeight="130px">
     <mat-grid-tile *ngFor="let commit of commits" [colspan]="2" [rowspan]="1">
       <mat-card class="dashboard-card">
         <mat-card-content class="mat-card-content">
           <a mat-button routerLink="/project/{{project.id}}/{{commit.name}}"><b>{{commit.name}}</b></a><br>
-          <mat-label>Author: {{commit.author}}</mat-label><br>
-          <mat-label>Date: {{timestampToDate(commit.timestamp)}}</mat-label><br>
+          <mat-label>Author: {{commit.author}}</mat-label>
+          <br>
+          <mat-label>Date: {{timestampToDate(commit.timestamp)}}</mat-label>
+          <br>
           <mat-label>Analyzed: {{booleanToString(commit.analyzed)}}</mat-label>
         </mat-card-content>
       </mat-card>

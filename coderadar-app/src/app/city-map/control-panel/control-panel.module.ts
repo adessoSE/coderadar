@@ -12,64 +12,65 @@ import {FilterComponent} from './settings/filter/filter.component';
 import {MetricMappingComponent} from './settings/metric-mapping/metric-mapping.component';
 import {AutosuggestWrapperComponent} from '../autosuggest-wrapper/autosuggest-wrapper.component';
 import {
+  MatAutocompleteModule,
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
   MatFormFieldModule,
-  MatSelectModule,
   MatGridListModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatAutocompleteModule,
   MatMenuModule,
   MatRadioModule,
+  MatSelectModule,
   MatSidenavModule,
-  MatToolbarModule, MatTooltipModule,
+  MatToolbarModule,
+  MatTooltipModule,
 } from '@angular/material';
 import {LayoutModule} from '@angular/cdk/layout';
 import {ProjectService} from '../../service/project.service';
 
 @NgModule({
-    imports: [
-      CommonModule,
-      FormsModule,
-      NguiAutoCompleteModule,
-      FontAwesomeModule,
-      MatFormFieldModule,
-      MatInputModule,
-      MatRadioModule,
-      MatCardModule,
-      MatButtonModule,
-      ReactiveFormsModule,
-      MatGridListModule,
-      MatMenuModule,
-      MatListModule,
-      MatIconModule,
-      LayoutModule,
-      MatToolbarModule,
-      MatSidenavModule,
-      MatAutocompleteModule,
-      MatTooltipModule,
-      MatSelectModule,
-      MatCheckboxModule
-    ],
-    declarations: [
-        ControlPanelComponent,
-        SettingsComponent,
-        ViewControlComponent,
-        CommitChooserComponent,
-        SearchComponent,
-        FilterComponent,
-        MetricMappingComponent,
-        AutosuggestWrapperComponent
-    ],
-    exports: [
-        ControlPanelComponent
-    ],
-    providers: [
-        ProjectService
-    ]
+  imports: [
+    CommonModule,
+    FormsModule,
+    NguiAutoCompleteModule,
+    FontAwesomeModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatCardModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatGridListModule,
+    MatMenuModule,
+    MatListModule,
+    MatIconModule,
+    LayoutModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatAutocompleteModule,
+    MatTooltipModule,
+    MatSelectModule,
+    MatCheckboxModule
+  ],
+  declarations: [
+    ControlPanelComponent,
+    SettingsComponent,
+    ViewControlComponent,
+    CommitChooserComponent,
+    SearchComponent,
+    FilterComponent,
+    MetricMappingComponent,
+    AutosuggestWrapperComponent
+  ],
+  exports: [
+    ControlPanelComponent
+  ],
+  providers: [
+    ProjectService
+  ]
 })
 export class ControlPanelModule {
 }

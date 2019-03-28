@@ -1,4 +1,4 @@
 export interface IErrorResponse {
-    success: boolean;
-    error: string;
+  success: boolean;
+  error: string;
 }

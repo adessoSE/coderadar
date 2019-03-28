@@ -11,25 +11,25 @@ import {LoadingIndicatorComponent} from './loading-indicator/loading-indicator.c
 import {ProjectService} from '../../service/project.service';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FontAwesomeModule
-    ],
-    declarations: [
-        VisualizationComponent,
-        ScreenComponent,
-        TooltipComponent,
-        ComparisonPanelComponent,
-        LegendComponent,
-        KeyValuePipe,
-        LoadingIndicatorComponent
-    ],
-    exports: [
-        VisualizationComponent
-    ],
-    providers: [
-        ProjectService
-    ]
+  imports: [
+    CommonModule,
+    FontAwesomeModule
+  ],
+  declarations: [
+    VisualizationComponent,
+    ScreenComponent,
+    TooltipComponent,
+    ComparisonPanelComponent,
+    LegendComponent,
+    KeyValuePipe,
+    LoadingIndicatorComponent
+  ],
+  exports: [
+    VisualizationComponent
+  ],
+  providers: [
+    ProjectService
+  ]
 })
 export class VisualizationModule {
 }

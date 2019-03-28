@@ -8,9 +8,9 @@ describe('ViewCommitComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ViewCommitComponent ]
+      declarations: [ViewCommitComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

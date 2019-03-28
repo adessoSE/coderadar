@@ -5,25 +5,26 @@ import {IFilter} from '../../../interfaces/IFilter';
 declare var $: any;
 
 @Component({
-    selector: 'app-filter',
-    templateUrl: './filter.component.html',
-    styleUrls: ['./filter.component.scss']
+  selector: 'app-filter',
+  templateUrl: './filter.component.html',
+  styleUrls: ['./filter.component.scss']
 })
 export class FilterComponent implements OnInit {
 
-    faFilter = faFilter;
+  faFilter = faFilter;
 
-    @Input() activeFilter: IFilter;
+  @Input() activeFilter: IFilter;
 
-    @Output() filterChanged = new EventEmitter();
+  @Output() filterChanged = new EventEmitter();
 
-    constructor() {
-    }
+  constructor() {
+  }
 
-    ngOnInit() {}
+  ngOnInit() {
+  }
 
-    handleFilterChanged() {
-        this.filterChanged.emit(this.activeFilter);
-    }
+  handleFilterChanged() {
+    this.filterChanged.emit(this.activeFilter);
+  }
 
 }

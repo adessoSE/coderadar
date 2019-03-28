@@ -1,9 +1,10 @@
 <form style="padding-top: 20px">
   <mat-form-field>
-    <input  [formControl]="formControl" type="text" placeholder="{{label}}" matInput [matAutocomplete]="auto" >
+    <input [formControl]="formControl" [matAutocomplete]="auto" matInput placeholder="{{label}}" type="text">
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="formatValue" [panelWidth]="500">
-      <mat-option *ngFor="let option of filteredOptions | async" [value]="option" (onSelectionChange)="handleValueChanged(option)">
-          {{formatValue(option)}}
+      <mat-option (onSelectionChange)="handleValueChanged(option)" *ngFor="let option of filteredOptions | async"
+                  [value]="option">
+        {{formatValue(option)}}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>

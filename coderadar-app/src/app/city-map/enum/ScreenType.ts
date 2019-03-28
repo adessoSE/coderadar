@@ -1,4 +1,4 @@
 export enum ScreenType {
-    LEFT,
-    RIGHT
+  LEFT,
+  RIGHT
 }

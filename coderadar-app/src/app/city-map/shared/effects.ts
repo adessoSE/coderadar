@@ -2,10 +2,10 @@ import {Injectable} from '@angular/core';
 import {Actions, Effect, ofType} from '@ngrx/effects';
 import {from, of} from 'rxjs';
 import * as actions from './actions';
-import {IDeltaTreeGetErrorResponse} from '../interfaces/IDeltaTreeGetErrorResponse';
-import {catchError, map, switchMap, mergeMap} from 'rxjs/operators';
-import { IActionWithPayload } from '../interfaces/IActionWithPayload';
 import {LOAD_AVAILABLE_METRICS, LOAD_COMMITS, LOAD_METRIC_TREE, loadAvailableMetrics, loadCommits, loadMetricTree} from './actions';
+import {IDeltaTreeGetErrorResponse} from '../interfaces/IDeltaTreeGetErrorResponse';
+import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
+import {IActionWithPayload} from '../interfaces/IActionWithPayload';
 import {ProjectService} from '../../service/project.service';
 import {UserService} from '../../service/user.service';
 import {HttpResponse} from '@angular/common/http';
@@ -37,35 +37,35 @@ export class AppEffects {
 
   @Effect()
   loadAvailableMetricsEffects$ = this.actions$.pipe(ofType(LOAD_AVAILABLE_METRICS),
-          switchMap(() => from(this.projectService.getAvailableMetrics(this.currentProjectId))
-                  .pipe(
-                      mergeMap((result: any) => {
-                        const availableMetrics = result.body.map(
-                              metric => {
-                                const shortName = metric.metricName.split('.').pop();
-                                return {
-                                  metricName: metric.metricName,
-                                  shortName
-                                };
-                              }
-                          );
-                          // TODO: Error handling when less than three metrics are available
-                        return [
-                              actions.loadAvailableMetricsSuccess(availableMetrics),
-                              actions.setMetricMapping({
-                                  heightMetricName: availableMetrics[0].metricName,
-                                  groundAreaMetricName: availableMetrics[1].metricName,
-                                  colorMetricName: availableMetrics[2].metricName
-                              })
-                          ];
-                      }),
-                      catchError((response: any) => {
-                        this.userService.refresh().then(() => this.store.dispatch(loadAvailableMetrics()));
-                        return of(actions.loadAvailableMetricsError(response.error));
-                      })
-                  )
-          )
-      );
+    switchMap(() => from(this.projectService.getAvailableMetrics(this.currentProjectId))
+      .pipe(
+        mergeMap((result: any) => {
+          const availableMetrics = result.body.map(
+            metric => {
+              const shortName = metric.metricName.split('.').pop();
+              return {
+                metricName: metric.metricName,
+                shortName
+              };
+            }
+          );
+          // TODO: Error handling when less than three metrics are available
+          return [
+            actions.loadAvailableMetricsSuccess(availableMetrics),
+            actions.setMetricMapping({
+              heightMetricName: availableMetrics[0].metricName,
+              groundAreaMetricName: availableMetrics[1].metricName,
+              colorMetricName: availableMetrics[2].metricName
+            })
+          ];
+        }),
+        catchError((response: any) => {
+          this.userService.refresh().then(() => this.store.dispatch(loadAvailableMetrics()));
+          return of(actions.loadAvailableMetricsError(response.error));
+        })
+      )
+    )
+  );
 
 
   @Effect()
@@ -75,25 +75,26 @@ export class AppEffects {
       (payload) => from(this.projectService.getDeltaTree(payload.leftCommit, payload.rightCommit,
         payload.metricMapping, this.currentProjectId))
         .pipe(
-            mergeMap((result: HttpResponse<INode>) => {
-                return [
-                    actions.loadMetricTreeSuccess(result.body),
-                    actions.generateUniqueFileList(result.body)
-                ];
-            }),
-            catchError((response: IDeltaTreeGetErrorResponse) => {
-              this.userService.refresh().then(() => this.store.dispatch(loadMetricTree(payload.leftCommit, payload.rightCommit,
-                payload.metricMapping)));
-              return of(actions.loadMetricTreeError(response.error));
-            })
+          mergeMap((result: HttpResponse<INode>) => {
+            return [
+              actions.loadMetricTreeSuccess(result.body),
+              actions.generateUniqueFileList(result.body)
+            ];
+          }),
+          catchError((response: IDeltaTreeGetErrorResponse) => {
+            this.userService.refresh().then(() => this.store.dispatch(loadMetricTree(payload.leftCommit, payload.rightCommit,
+              payload.metricMapping)));
+            return of(actions.loadMetricTreeError(response.error));
+          })
         )
     )
   );
 
-    constructor(
-      private store: Store<fromRoot.AppState>,
-      private actions$: Actions<IActionWithPayload<any>>,
-      private projectService: ProjectService,
-      private userService: UserService
-    ) { }
+  constructor(
+    private store: Store<fromRoot.AppState>,
+    private actions$: Actions<IActionWithPayload<any>>,
+    private projectService: ProjectService,
+    private userService: UserService
+  ) {
+  }
 }

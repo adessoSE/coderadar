@@ -9,9 +9,10 @@ import {AppComponent} from '../app.component';
 })
 export class UserService {
 
-  constructor(private router: Router, private httpClient: HttpClient) { }
-
   private apiURL = AppComponent.getApiUrl();
+
+  constructor(private router: Router, private httpClient: HttpClient) {
+  }
 
   /**
    * Returns true if the given string is at least 8 symbols long
@@ -48,7 +49,7 @@ export class UserService {
    */
   public login(usernameValue: string, passwordValue: string) {
     return this.httpClient.post<any>(this.apiURL + 'user/auth',
-      { username: usernameValue, password: passwordValue }).toPromise()
+      {username: usernameValue, password: passwordValue}).toPromise()
       .then(user => {
         if (user && user.accessToken && user.refreshToken) {
           user.username = usernameValue;
@@ -67,12 +68,13 @@ export class UserService {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (currentUser && currentUser.refreshToken && currentUser.accessToken) {
       return this.httpClient.post<any>(this.apiURL + 'user/refresh',
-        { accessToken: currentUser.accessToken, refreshToken: currentUser.refreshToken }).toPromise()
+        {accessToken: currentUser.accessToken, refreshToken: currentUser.refreshToken}).toPromise()
         .then(user => {
-        if (user && user.token) {
-          currentUser.accessToken = user.token;
-          localStorage.setItem('currentUser', JSON.stringify(currentUser));
-        }})
+          if (user && user.token) {
+            currentUser.accessToken = user.token;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+          }
+        })
         .catch(error => {
           if (error.error.errorMessage !== 'Access token ist still valid. This token must be used for authentication.') {
             this.logout();

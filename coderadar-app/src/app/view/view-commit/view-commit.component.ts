@@ -47,12 +47,12 @@ export class ViewCommitComponent implements OnInit {
         })
         .catch(e => {
           if (e.status && e.status === FORBIDDEN) {
-            this.userService.refresh().then( (() => this.getCommitInfo()));
+            this.userService.refresh().then((() => this.getCommitInfo()));
           }
         });
     }).catch(e => {
       if (e.status && e.status === FORBIDDEN) {
-        this.userService.refresh().then( (() => this.getCommitInfo()));
+        this.userService.refresh().then((() => this.getCommitInfo()));
       }
     });
   }

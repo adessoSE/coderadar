@@ -15,6 +15,7 @@ export class ProjectDashboardComponent implements OnInit {
 
   projectId;
   commits: Commit[];
+  commitsAnalyzed = 0;
   project: Project;
 
   constructor(private router: Router, private userService: UserService,
@@ -28,30 +29,6 @@ export class ProjectDashboardComponent implements OnInit {
       this.projectId = params.id;
       this.getCommits();
       this.getProject();
-    });
-  }
-
-  /**
-   * Gets all commits for this project from the service and saves them in this.commits.
-   */
-  private getCommits(): void {
-    this.projectService.getCommits(this.projectId)
-      .then(response => {
-        this.commits = response.body;
-        this.commits.sort((a, b) => {
-          if (a.timestamp === b.timestamp) {
-            return 0;
-          } else if (a.timestamp > b.timestamp) {
-            return -1;
-          } else {
-            return 1;
-          }
-        });
-      })
-      .catch(e => {
-        if (e.status && e.status === FORBIDDEN) {
-          this.userService.refresh().then( (() => this.getCommits()));
-        }
     });
   }
 
@@ -76,21 +53,6 @@ export class ProjectDashboardComponent implements OnInit {
   }
 
   /**
-   * Gets the project from the service and saves it in this.project
-   */
-  private getProject(): void {
-    this.projectService.getProject(this.projectId)
-      .then(response => this.project = new Project(response.body))
-      .catch(error => {
-        if (error.status && error.status === FORBIDDEN) {
-            this.userService.refresh().then(() => this.getProject());
-        } else if (error.status && error.status === NOT_FOUND) {
-          this.router.navigate(['/dashboard']);
-        }
-      });
-  }
-
-  /**
    * Formats the title text according to the project start and end dates.
    */
   getTitleText(): string {
@@ -107,5 +69,49 @@ export class ProjectDashboardComponent implements OnInit {
       return 'Showing all commits for project ' + this.project.name + ' from '
         + this.project.startDate + ' up until ' + this.project.endDate + ' (' + this.commits.length + ')';
     }
+  }
+
+  /**
+   * Gets all commits for this project from the service and saves them in this.commits.
+   */
+  private getCommits(): void {
+    this.projectService.getCommits(this.projectId)
+      .then(response => {
+        this.commits = response.body;
+        this.commits.forEach(c => {
+          if (c.analyzed) {
+            this.commitsAnalyzed++;
+          }
+        });
+        this.commits.sort((a, b) => {
+          if (a.timestamp === b.timestamp) {
+            return 0;
+          } else if (a.timestamp > b.timestamp) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+      })
+      .catch(e => {
+        if (e.status && e.status === FORBIDDEN) {
+          this.userService.refresh().then((() => this.getCommits()));
+        }
+      });
+  }
+
+  /**
+   * Gets the project from the service and saves it in this.project
+   */
+  private getProject(): void {
+    this.projectService.getProject(this.projectId)
+      .then(response => this.project = new Project(response.body))
+      .catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh().then(() => this.getProject());
+        } else if (error.status && error.status === NOT_FOUND) {
+          this.router.navigate(['/dashboard']);
+        }
+      });
   }
 }

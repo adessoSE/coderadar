@@ -6,19 +6,19 @@ import {InjectionToken} from '@angular/core';
 import {ActionReducerMap} from '@ngrx/store';
 
 export interface AppState {
-    controlPanelState: fromControlPanel.ControlPanelState;
-    settingsState: fromSettings.SettingsState;
-    visualizationState: fromVisualization.VisualizationState;
+  controlPanelState: fromControlPanel.ControlPanelState;
+  settingsState: fromSettings.SettingsState;
+  visualizationState: fromVisualization.VisualizationState;
 }
 
 export const REDUCER_TOKEN = new InjectionToken<ActionReducerMap<AppState>>('Registered Reducers');
 
 export function getReducers() {
-    return {
-        controlPanelState: fromControlPanel.ControlPanelReducer,
-        settingsState: fromSettings.SettingsReducer,
-        visualizationState: fromVisualization.VisualizationReducer
-    };
+  return {
+    controlPanelState: fromControlPanel.ControlPanelReducer,
+    settingsState: fromSettings.SettingsReducer,
+    visualizationState: fromVisualization.VisualizationReducer
+  };
 }
 
 export const getControlPanelState = (state: AppState) => state.controlPanelState;

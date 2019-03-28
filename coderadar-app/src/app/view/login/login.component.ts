@@ -16,7 +16,8 @@ export class LoginComponent {
   invalidUser = false;
   invalidPassword = false;
 
-  constructor(private router: Router, private userService: UserService) { }
+  constructor(private router: Router, private userService: UserService) {
+  }
 
   /**
    * Called when the form is submitted, upon successful login, redirects

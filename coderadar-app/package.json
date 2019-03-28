@@ -2,8 +2,8 @@
   "name": "coderadar",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
+    "ng": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng",
+    "start": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

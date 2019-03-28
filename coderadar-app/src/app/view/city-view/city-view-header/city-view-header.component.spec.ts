@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CityViewHeaderComponent } from './city-view-header.component';
+import {CityViewHeaderComponent} from './city-view-header.component';
 
 describe('CityViewHeaderComponent', () => {
   let component: CityViewHeaderComponent;
@@ -8,9 +8,9 @@ describe('CityViewHeaderComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CityViewHeaderComponent ]
+      declarations: [CityViewHeaderComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,8 +1,9 @@
 <span>
 <!--TODO: DROPDOWN-->
-    <mat-checkbox style="padding-right: 10px" [(ngModel)]="activeFilter.unmodified" (change)="handleFilterChanged()">unchanged</mat-checkbox>
-    <mat-checkbox style="padding-right: 10px" [(ngModel)]="activeFilter.modified" (change)="handleFilterChanged()">changed</mat-checkbox>
-    <mat-checkbox style="padding-right: 10px" [(ngModel)]="activeFilter.deleted" (change)="handleFilterChanged()">deleted</mat-checkbox>
-    <mat-checkbox style="padding-right: 10px" [(ngModel)]="activeFilter.added" (change)="handleFilterChanged()">added</mat-checkbox>
-    <mat-checkbox style="padding-right: 10px" [(ngModel)]="activeFilter.renamed" (change)="handleFilterChanged()">renamed/moved</mat-checkbox>
+    <mat-checkbox (change)="handleFilterChanged()" [(ngModel)]="activeFilter.unmodified" style="padding-right: 10px">unchanged</mat-checkbox>
+    <mat-checkbox (change)="handleFilterChanged()" [(ngModel)]="activeFilter.modified" style="padding-right: 10px">changed</mat-checkbox>
+    <mat-checkbox (change)="handleFilterChanged()" [(ngModel)]="activeFilter.deleted" style="padding-right: 10px">deleted</mat-checkbox>
+    <mat-checkbox (change)="handleFilterChanged()" [(ngModel)]="activeFilter.added"
+                  style="padding-right: 10px">added</mat-checkbox>
+    <mat-checkbox (change)="handleFilterChanged()" [(ngModel)]="activeFilter.renamed" style="padding-right: 10px">renamed/moved</mat-checkbox>
 </span>

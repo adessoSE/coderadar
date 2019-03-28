@@ -4,12 +4,12 @@ import {Subject} from 'rxjs';
 @Injectable()
 export class FocusService {
 
-    private focusElementSource = new Subject<string>();
+  private focusElementSource = new Subject<string>();
 
-    elementFocussed$ = this.focusElementSource.asObservable();
+  elementFocussed$ = this.focusElementSource.asObservable();
 
-    focusElement(elementName: string) {
-        this.focusElementSource.next(elementName);
-    }
+  focusElement(elementName: string) {
+    this.focusElementSource.next(elementName);
+  }
 
 }

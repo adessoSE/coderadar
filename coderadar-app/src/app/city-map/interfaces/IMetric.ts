@@ -1,4 +1,4 @@
 export interface IMetric {
-    shortName: string;
-    metricName: string;
+  shortName: string;
+  metricName: string;
 }

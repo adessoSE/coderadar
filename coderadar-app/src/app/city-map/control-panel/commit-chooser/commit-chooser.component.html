@@ -1,9 +1,9 @@
 <app-autosuggest-wrapper
-        [model]="selected"
-        [source]="commits"
-        [isDisabled]="isDisabled"
-        (valueChanged)="handleCommitChanged($event)"
-        [label]="label">
+  (valueChanged)="handleCommitChanged($event)"
+  [isDisabled]="isDisabled"
+  [label]="label"
+  [model]="selected"
+  [source]="commits">
 </app-autosuggest-wrapper>
 
 <p *ngIf="loading">Loading</p>

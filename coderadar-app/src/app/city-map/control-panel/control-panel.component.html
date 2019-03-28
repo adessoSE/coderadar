@@ -1,29 +1,28 @@
-
 <div style="float: left;padding-right: 50px">
   <app-commit-chooser
+    (changeCommit)="handleCommitChanged($event)"
     [commitType]="commitTypes.left"
     [commits]="commits$ | async"
+    [label]="'First revision'"
     [loading]="commitsLoading$ | async"
-    [selected]="leftCommit$ | async"
-    (changeCommit)="handleCommitChanged($event)"
-    [label]="'First revision'">
+    [selected]="leftCommit$ | async">
   </app-commit-chooser>
 </div>
 
 <div style="float: left;padding-right: 50px">
   <app-commit-chooser
+    (changeCommit)="handleCommitChanged($event)"
     [commitType]="commitTypes.right"
     [commits]="commits$ | async"
-    [loading]="commitsLoading$ | async"
-    [selected]="rightCommit$ | async"
     [isDisabled]="disableRightSelect"
-    (changeCommit)="handleCommitChanged($event)"
-    [label]="'Second revision'">
+    [label]="'Second revision'"
+    [loading]="commitsLoading$ | async"
+    [selected]="rightCommit$ | async">
   </app-commit-chooser>
 </div>
 
 <div style="float: left; padding-right: 50px">
-  <app-search [uniqueFileList]="uniqueFileList$ | async" (startSearch)="handleSearchStarted($event)"></app-search>
+  <app-search (startSearch)="handleSearchStarted($event)" [uniqueFileList]="uniqueFileList$ | async"></app-search>
 </div>
 
 <app-settings></app-settings>

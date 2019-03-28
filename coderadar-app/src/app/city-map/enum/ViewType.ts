@@ -1,4 +1,4 @@
 export enum ViewType {
-    SPLIT,
-    MERGED
+  SPLIT,
+  MERGED
 }

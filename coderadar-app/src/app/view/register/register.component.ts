@@ -17,7 +17,8 @@ export class RegisterComponent {
   invalidPassword = false;
   passwordsDoNotMatch = false;
 
-  constructor(private router: Router, private userService: UserService) { }
+  constructor(private router: Router, private userService: UserService) {
+  }
 
   /**
    * Is called upon registration form submit.
@@ -32,9 +33,9 @@ export class RegisterComponent {
     if (!this.invalidPassword && !this.passwordsDoNotMatch) {
       this.userService.register(this.username, this.password)
         .then(e => {
-        this.userService.login(this.username, this.password)
-          .then(
-            () => this.router.navigate(['/dashboard']));
+          this.userService.login(this.username, this.password)
+            .then(
+              () => this.router.navigate(['/dashboard']));
         })
         .catch(e => {
           if (e.error && e.error.errorMessage === 'User ' + this.username + ' is already registered') {

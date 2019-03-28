@@ -1,14 +1,20 @@
 <span style="margin-left: 3%">
-  <mat-radio-button id="radio-splitscreen" name="radio-group-screen" class="custom-control-input" [value]="viewTypes.split"
-                    (click)="changeViewType(viewTypes.split)" [checked]="activeViewType === viewTypes.split"></mat-radio-button>
-  <label class="custom-control-label" for="radio-splitscreen" data-toggle="tooltip" data-placement="bottom" title="Split view" #splitScreenLabel>
-      <fa-icon [icon]="faSquare" style="color:white;" size="lg"></fa-icon>
-      <fa-icon [icon]="faSquare" style="color:white;" size="lg"></fa-icon>
+  <mat-radio-button (click)="changeViewType(viewTypes.split)" [checked]="activeViewType === viewTypes.split" [value]="viewTypes.split"
+                    class="custom-control-input"
+                    id="radio-splitscreen"
+                    name="radio-group-screen"></mat-radio-button>
+  <label #splitScreenLabel class="custom-control-label" data-placement="bottom" data-toggle="tooltip"
+         for="radio-splitscreen" title="Split view">
+      <fa-icon [icon]="faSquare" size="lg" style="color:white;"></fa-icon>
+      <fa-icon [icon]="faSquare" size="lg" style="color:white;"></fa-icon>
   </label>
   &nbsp;
-  <mat-radio-button id="radio-fullscreen" name="radio-group-screen" class="custom-control-input" [value]="viewTypes.merged"
-                    (click)="changeViewType(viewTypes.merged)" [checked]="activeViewType === viewTypes.merged"></mat-radio-button>
-  <label class="custom-control-label" for="radio-fullscreen" data-toggle="tooltip" data-placement="bottom" title="Combined view" #fullScreenLabel>
-      <fa-icon [icon]="faClone" style="color:white;" size="lg"></fa-icon>
+  <mat-radio-button (click)="changeViewType(viewTypes.merged)" [checked]="activeViewType === viewTypes.merged" [value]="viewTypes.merged"
+                    class="custom-control-input"
+                    id="radio-fullscreen"
+                    name="radio-group-screen"></mat-radio-button>
+  <label #fullScreenLabel class="custom-control-label" data-placement="bottom" data-toggle="tooltip"
+         for="radio-fullscreen" title="Combined view">
+      <fa-icon [icon]="faClone" size="lg" style="color:white;"></fa-icon>
   </label>
 </span>

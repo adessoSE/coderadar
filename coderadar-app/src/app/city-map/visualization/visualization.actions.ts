@@ -14,57 +14,57 @@ export const LOAD_METRIC_TREE_ERROR = 'LOAD_METRIC_TREE_ERROR';
 export const GENERATE_UNIQUE_FILE_LIST = 'GENERATE_UNIQUE_FILE_LIST';
 
 export function loadAvailableMetrics(): Action {
-    return {
-        type: LOAD_AVAILABLE_METRICS
-    };
+  return {
+    type: LOAD_AVAILABLE_METRICS
+  };
 }
 
 export function loadAvailableMetricsSuccess(metricNames: IMetric[]): IActionWithPayload<IMetric[]> {
-    return {
-        type: LOAD_AVAILABLE_METRICS_SUCCESS,
-        payload: metricNames
-    };
+  return {
+    type: LOAD_AVAILABLE_METRICS_SUCCESS,
+    payload: metricNames
+  };
 }
 
 export function loadAvailableMetricsError(error: string): IActionWithPayload<string> {
-    return {
-        type: LOAD_AVAILABLE_METRICS_ERROR,
-        payload: error
-    };
+  return {
+    type: LOAD_AVAILABLE_METRICS_ERROR,
+    payload: error
+  };
 }
 
 export function loadMetricTree(
-    leftCommit: Commit,
-    rightCommit: Commit,
-    metricMapping: IMetricMapping
-): IActionWithPayload<{leftCommit: Commit, rightCommit: Commit, metricMapping: IMetricMapping}> {
-    return {
-        type: LOAD_METRIC_TREE,
-        payload: {
-            leftCommit,
-            rightCommit,
-            metricMapping
-        }
-    };
+  leftCommit: Commit,
+  rightCommit: Commit,
+  metricMapping: IMetricMapping
+): IActionWithPayload<{ leftCommit: Commit, rightCommit: Commit, metricMapping: IMetricMapping }> {
+  return {
+    type: LOAD_METRIC_TREE,
+    payload: {
+      leftCommit,
+      rightCommit,
+      metricMapping
+    }
+  };
 }
 
 export function loadMetricTreeSuccess(metricTree: INode): IActionWithPayload<INode> {
-    return {
-        type: LOAD_METRIC_TREE_SUCCESS,
-        payload: metricTree
-    };
+  return {
+    type: LOAD_METRIC_TREE_SUCCESS,
+    payload: metricTree
+  };
 }
 
 export function loadMetricTreeError(error: string): IActionWithPayload<string> {
-    return {
-        type: LOAD_METRIC_TREE_ERROR,
-        payload: error
-    };
+  return {
+    type: LOAD_METRIC_TREE_ERROR,
+    payload: error
+  };
 }
 
 export function generateUniqueFileList(metricTree: INode): IActionWithPayload<INode> {
-    return {
-        type: GENERATE_UNIQUE_FILE_LIST,
-        payload: metricTree
-    };
+  return {
+    type: GENERATE_UNIQUE_FILE_LIST,
+    payload: metricTree
+  };
 }

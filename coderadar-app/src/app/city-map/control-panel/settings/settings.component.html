@@ -1,10 +1,10 @@
-
 <div style="margin-top: 20px">
-  <app-metric-mapping [metricMapping]="metricMapping$ | async" [availableMetrics]="availableMetrics$ | async"
-                      (metricMappingChanged)="handleMetricMappingChanged($event)"></app-metric-mapping>
+  <app-metric-mapping (metricMappingChanged)="handleMetricMappingChanged($event)" [availableMetrics]="availableMetrics$ | async"
+                      [metricMapping]="metricMapping$ | async"></app-metric-mapping>
 
-  <app-filter [activeFilter]="activeFilter$ | async" (filterChanged)="handleFilterChanged($event)"></app-filter>
+  <app-filter (filterChanged)="handleFilterChanged($event)" [activeFilter]="activeFilter$ | async"></app-filter>
 
-  <app-view-control [activeViewType]="activeViewType$ | async" (viewTypeChanged)="handleViewTypeChanged($event)"></app-view-control>
+  <app-view-control (viewTypeChanged)="handleViewTypeChanged($event)"
+                    [activeViewType]="activeViewType$ | async"></app-view-control>
 
 </div>

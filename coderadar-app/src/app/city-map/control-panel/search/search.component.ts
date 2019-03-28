@@ -1,28 +1,28 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
-    selector: 'app-search',
-    templateUrl: './search.component.html',
-    styleUrls: ['./search.component.scss']
+  selector: 'app-search',
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.scss']
 })
 export class SearchComponent implements OnInit {
 
-    @Input() uniqueFileList: string[] = [];
+  @Input() uniqueFileList: string[] = [];
 
-    @Output() startSearch = new EventEmitter();
+  @Output() startSearch = new EventEmitter();
 
-    constructor() {
-    }
+  constructor() {
+  }
 
-    ngOnInit() {
-    }
+  ngOnInit() {
+  }
 
-    handleSearchChanged(chosenItem: string) {
-        this.startSearch.emit(chosenItem);
-    }
+  handleSearchChanged(chosenItem: string) {
+    this.startSearch.emit(chosenItem);
+  }
 
-    autocompleteListFormatter(data: string): string {
-        return `<span title="${data}">${data}</span>`;
-    }
+  autocompleteListFormatter(data: string): string {
+    return `<span title="${data}">${data}</span>`;
+  }
 
 }

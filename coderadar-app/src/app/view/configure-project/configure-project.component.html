@@ -1,99 +1,103 @@
 <app-header [title]="'Configure project'"></app-header>
 
 <main class="mat-card-form">
-  <div id="cardContainer" class="grid-container">
+  <div class="grid-container" id="cardContainer">
     <div fxLayoutAlign="center center">
       <form (ngSubmit)="submitForm()">
-          <mat-card>
+        <mat-card>
 
-            <!--Card title-->
-            <mat-card-header>
-              <mat-card-title>
-                <span>Configure {{(projectName)}}</span>
-              </mat-card-title>
-            </mat-card-header>
+          <!--Card title-->
+          <mat-card-header>
+            <mat-card-title>
+              <span>Configure {{(projectName)}}</span>
+            </mat-card-title>
+          </mat-card-header>
 
-            <mat-card-content>
+          <mat-card-content>
 
-              <!--Analyzers-->
-              <div class="list">
-                <div class="list-title">
-                  <mat-label>Select analyzers:</mat-label>
-                </div>
-                <div *ngFor="let analyzer of analyzers">
-                  <mat-checkbox name="analyzer-{{analyzer.analyzerName}}" [(ngModel)]="analyzer.enabled">
-                    {{analyzer.analyzerName.split('.').pop()}}
-                  </mat-checkbox>
-                </div>
+            <!--Analyzers-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Select analyzers:</mat-label>
               </div>
-
-              <!--Included file patterns-->
-              <div class="list">
-                <div class="list-title">
-                  <mat-label>Included file patterns:</mat-label>
-                </div>
-                <div *ngFor="let pattern of filePatterns">
-                  <div *ngIf="pattern.inclusionType === 'INCLUDE'">
-                    <span>{{pattern.pattern}}</span>
-                    <button mat-button (click)="filePatterns.splice(filePatterns.indexOf(pattern), 1)">-</button>
-                  </div>
-                </div>
-                <div class="row">
-                  <mat-form-field>
-                    <input maxlength="100" type="text" matInput name="includePatterns" placeholder="Pattern" [(ngModel)]="filePatternIncludeInput">
-                  </mat-form-field>
-                  <button type="button" mat-button (click)="addToIncludedPatterns()">+</button>
-                </div>
+              <div *ngFor="let analyzer of analyzers">
+                <mat-checkbox [(ngModel)]="analyzer.enabled" name="analyzer-{{analyzer.analyzerName}}">
+                  {{analyzer.analyzerName.split('.').pop()}}
+                </mat-checkbox>
               </div>
-
-              <!--Excluded file patterns-->
-              <div class="list">
-                <div class="list-title">
-                  <mat-label>Excluded file patterns:</mat-label>
-                </div>
-                <div *ngFor="let pattern of filePatterns">
-                  <div *ngIf="pattern.inclusionType === 'EXCLUDE'">
-                    <span>{{pattern.pattern}}</span>
-                    <button mat-button (click)="filePatterns.splice(filePatterns.indexOf(pattern), 1)">-</button>
-                  </div>
-                </div>
-                <div class="row">
-                  <mat-form-field>
-                    <input maxlength="100" type="text" matInput name="excludePatterns" placeholder="Pattern" [(ngModel)]="filePatternExcludeInput">
-                  </mat-form-field>
-                  <button type="button" mat-button style="float:right" (click)="addToExcludedPatterns()">+</button>
-                </div>
-              </div>
-
-              <!--Project modules-->
-              <div class="list">
-                <div class="list-title">
-                  <mat-label>Project modules:</mat-label>
-                </div>
-                <div *ngFor="let module of modules">
-                  <span>{{module.modulePath}}</span>
-                    <button mat-button (click)="addToDeletedModules(module)">-</button>
-                </div>
-                <div class="row">
-                  <mat-form-field>
-                    <input maxlength="100" type="text" matInput name="modules" placeholder="Module" [(ngModel)]="modulesInput">
-                  </mat-form-field>
-                  <button type="button" mat-button style="float:right" (click)="addToModules()">+</button>
-                </div>
-              </div>
-
-              <mat-checkbox name="analyzer" [(ngModel)]="startScan">Start analyzing job</mat-checkbox>
-
-            </mat-card-content>
-
-            <!--Possible errors-->
-            <mat-error *ngIf="noAnalyzersForJob">Please select at least one analyzer to start an analyzing job.</mat-error>
-
-            <!--Cancel and submit buttons-->
-            <div id="cardButtons" align="center">
-              <button mat-stroked-button type="button" routerLink="/dashboard">Cancel</button>
-              <button mat-raised-button color="primary" type="submit">Done</button>
             </div>
+
+            <!--Included file patterns-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Included file patterns:</mat-label>
+              </div>
+              <div *ngFor="let pattern of filePatterns">
+                <div *ngIf="pattern.inclusionType === 'INCLUDE'">
+                  <span>{{pattern.pattern}}</span>
+                  <button (click)="filePatterns.splice(filePatterns.indexOf(pattern), 1)" mat-button>-</button>
+                </div>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <input [(ngModel)]="filePatternIncludeInput" matInput maxlength="100" name="includePatterns" placeholder="Pattern"
+                         type="text">
+                </mat-form-field>
+                <button (click)="addToIncludedPatterns()" mat-button type="button">+</button>
+              </div>
+            </div>
+
+            <!--Excluded file patterns-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Excluded file patterns:</mat-label>
+              </div>
+              <div *ngFor="let pattern of filePatterns">
+                <div *ngIf="pattern.inclusionType === 'EXCLUDE'">
+                  <span>{{pattern.pattern}}</span>
+                  <button (click)="filePatterns.splice(filePatterns.indexOf(pattern), 1)" mat-button>-</button>
+                </div>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <input [(ngModel)]="filePatternExcludeInput" matInput maxlength="100" name="excludePatterns" placeholder="Pattern"
+                         type="text">
+                </mat-form-field>
+                <button (click)="addToExcludedPatterns()" mat-button style="float:right" type="button">+</button>
+              </div>
+            </div>
+
+            <!--Project modules-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Project modules:</mat-label>
+              </div>
+              <div *ngFor="let module of modules">
+                <span>{{module.modulePath}}</span>
+                <button (click)="addToDeletedModules(module)" mat-button>-</button>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <input [(ngModel)]="modulesInput" matInput maxlength="100" name="modules" placeholder="Module"
+                         type="text">
+                </mat-form-field>
+                <button (click)="addToModules()" mat-button style="float:right" type="button">+</button>
+              </div>
+            </div>
+
+            <mat-checkbox [(ngModel)]="startScan" name="analyzer">Start analyzing job</mat-checkbox>
+
+          </mat-card-content>
+
+          <!--Possible errors-->
+          <mat-error *ngIf="noAnalyzersForJob">Please select at least one analyzer to start an analyzing job.
+          </mat-error>
+
+          <!--Cancel and submit buttons-->
+          <div align="center" id="cardButtons">
+            <button mat-stroked-button routerLink="/dashboard" type="button">Cancel</button>
+            <button color="primary" mat-raised-button type="submit">Done</button>
+          </div>
         </mat-card>
       </form>
     </div>

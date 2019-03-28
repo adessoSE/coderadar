@@ -41,21 +41,21 @@ export class AddProjectComponent {
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) { // If access is denied
-            this.userService.refresh()
-              .then(() => this.submitForm());
+          this.userService.refresh()
+            .then(() => this.submitForm());
         } else if (error.status && error.status === BAD_REQUEST) {   // If there is a field error
-            if (error.error && error.error.errorMessage === 'Validation Error') {
-              error.error.fieldErrors.forEach(field => {  // Check which field
-                if (field.field === 'vcsUrl') {
-                  this.incorrectURL = true;
-                }
-              });
-            }
+          if (error.error && error.error.errorMessage === 'Validation Error') {
+            error.error.fieldErrors.forEach(field => {  // Check which field
+              if (field.field === 'vcsUrl') {
+                this.incorrectURL = true;
+              }
+            });
+          }
         } else if (error.status === INTERNAL_SERVER_ERROR &&
-            error.error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
-              this.projectExists = true;
+          error.error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
+          this.projectExists = true;
         }
-    });
+      });
   }
 
   /**

@@ -5,21 +5,20 @@ import {INode} from '../interfaces/INode';
 @Injectable()
 export class ComparisonPanelService {
 
-    private showComparisonPanelSource = new Subject<{elementName: string, foundElement: INode}>();
-    private hideComparisonPanelSource = new Subject();
+  private showComparisonPanelSource = new Subject<{ elementName: string, foundElement: INode }>();
+  showComparisonPanel$ = this.showComparisonPanelSource.asObservable();
+  private hideComparisonPanelSource = new Subject();
+  hideComparisonPanel$ = this.hideComparisonPanelSource.asObservable();
 
-    showComparisonPanel$ = this.showComparisonPanelSource.asObservable();
-    hideComparisonPanel$ = this.hideComparisonPanelSource.asObservable();
+  constructor() {
+  }
 
-    constructor() {
-    }
+  hide() {
+    this.hideComparisonPanelSource.next();
+  }
 
-    hide() {
-        this.hideComparisonPanelSource.next();
-    }
-
-    show(params: {elementName: string, foundElement: INode}) {
-        this.showComparisonPanelSource.next(params);
-    }
+  show(params: { elementName: string, foundElement: INode }) {
+    this.showComparisonPanelSource.next(params);
+  }
 
 }

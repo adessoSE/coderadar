@@ -1,4 +1,4 @@
 export enum CommitType {
-    LEFT,
-    RIGHT
+  LEFT,
+  RIGHT
 }
