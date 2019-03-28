@@ -18,11 +18,10 @@ public class RegisterUserService implements RegisterUserUseCase {
   }
 
   @Override
-  public User register(RegisterUserCommand command) {
+  public Long register(RegisterUserCommand command) {
     User user = new User();
     user.setUsername(command.getUsername());
     user.setPassword(command.getPassword());
-    user = port.register(user);
-    return user;
+    return port.register(user);
   }
 }
