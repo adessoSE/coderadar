@@ -3,5 +3,5 @@ package org.wickedsource.coderadar.projectadministration.port.driven.analyzercon
 import org.wickedsource.coderadar.projectadministration.domain.AnalyzerConfiguration;
 
 public interface UpdateAnalyzerConfigurationPort {
-  AnalyzerConfiguration updateAnalyzerConfiguration(AnalyzerConfiguration configuration);
+  void update(AnalyzerConfiguration entity);
 }

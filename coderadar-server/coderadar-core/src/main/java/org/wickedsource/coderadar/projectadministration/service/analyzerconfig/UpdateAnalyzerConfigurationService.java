@@ -18,9 +18,12 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
   }
 
   @Override
-  public AnalyzerConfiguration updateAnalyzerConfiguration(
+  public void update(
       UpdateAnalyzerConfigurationCommand command) {
-    // TODO
-    return null;
+    AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
+    analyzerConfiguration.setId(command.getId());
+    analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
+    analyzerConfiguration.setEnabled(command.getEnabled());
+    port.update(analyzerConfiguration);
   }
 }
