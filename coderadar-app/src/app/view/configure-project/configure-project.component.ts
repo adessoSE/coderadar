@@ -74,14 +74,14 @@ export class ConfigureProjectComponent implements OnInit {
         if (this.startScan) {
           this.projectService.startAnalyzingJob(this.projectId, true).catch(error => {
             if (error.status && error.status === FORBIDDEN) {
-              this.userService.refresh().then(() => this.getModulesForProject());
+              this.userService.refresh().then(() => this.projectService.startAnalyzingJob(this.projectId, true));
             }
           });
         }
         this.router.navigate(['/dashboard']);
       }).catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getModulesForProject());
+          this.userService.refresh().then(() => this.submitForm());
         }
       });
     }
