@@ -18,6 +18,7 @@ export class ConfigureProjectComponent implements OnInit {
   projectName: string;
   analyzers: AnalyzerConfiguration[];
   filePatterns: FilePatterns[];
+
   // Fields for input binding
   filePatternIncludeInput;
   filePatternExcludeInput;
@@ -65,13 +66,24 @@ export class ConfigureProjectComponent implements OnInit {
     this.noAnalyzersForJob = this.analyzers.filter(analyzer => analyzer.enabled).length === 0 && this.startScan === true;
     if (!this.noAnalyzersForJob) {
       this.noAnalyzersForJob = true;
-      this.submitAnalyzerConfigurations();
-      this.submitFilePatterns();
-      this.submitModules();
-      if (this.startScan) {
-        this.projectService.startAnalyzingJob(this.projectId, true).catch();
-      }
-      this.router.navigate(['/dashboard']);
+      Promise.all([
+        this.submitAnalyzerConfigurations(),
+        this.submitFilePatterns(),
+        this.submitModules()
+      ]).then(() => {
+        if (this.startScan) {
+          this.projectService.startAnalyzingJob(this.projectId, true).catch(error => {
+            if (error.status && error.status === FORBIDDEN) {
+              this.userService.refresh().then(() => this.getModulesForProject());
+            }
+          });
+        }
+        this.router.navigate(['/dashboard']);
+      }).catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh().then(() => this.getModulesForProject());
+        }
+      });
     }
   }
 

@@ -223,11 +223,18 @@ export class ProjectService {
     return this.httpClient.get(this.apiURL + 'projects/' + id + '/metrics', {observe: 'response'}).toPromise();
   }
 
-  public getDeltaTree(leftCommit: Commit, rightCommit: Commit, metricMapping: IMetricMapping, projectId: number):
+  /**
+   * Returnsthe delta three of a project given two commits and a metric mapping
+   * @param firstCommit The first commit
+   * @param secondCommit The second commit
+   * @param metricMapping The metric mapping
+   * @param projectId The project id.
+   */
+  public getDeltaTree(firstCommit: Commit, secondCommit: Commit, metricMapping: IMetricMapping, projectId: number):
     Promise<HttpResponse<INode>> {
     const body = {
-      commit1: leftCommit.name,
-      commit2: rightCommit.name,
+      commit1: firstCommit.name,
+      commit2: secondCommit.name,
       metrics: [metricMapping.heightMetricName, metricMapping.groundAreaMetricName, metricMapping.colorMetricName]
     };
 
