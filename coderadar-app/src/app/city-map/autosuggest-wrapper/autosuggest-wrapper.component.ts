@@ -53,7 +53,6 @@ export class AutosuggestWrapperComponent implements OnChanges, OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (this.model !== null && this.model !== undefined) {
       this.formControl.setValue(this.model);
-      this.handleValueChanged(this.model);
     }
     this.filteredOptions = this.formControl.valueChanges
       .pipe(

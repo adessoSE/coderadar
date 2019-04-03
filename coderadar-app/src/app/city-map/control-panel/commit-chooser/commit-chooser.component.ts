@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {CommitType} from '../../enum/CommitType';
 import {Commit} from '../../../model/commit';
 
@@ -7,7 +7,7 @@ import {Commit} from '../../../model/commit';
   templateUrl: './commit-chooser.component.html',
   styleUrls: ['./commit-chooser.component.scss']
 })
-export class CommitChooserComponent implements OnInit {
+export class CommitChooserComponent implements OnInit, OnChanges {
 
   @Input() commitType: CommitType;
   @Input() commits: Commit[];
@@ -21,9 +21,18 @@ export class CommitChooserComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    if (this.selected !== null && this.selected !== undefined) {
+      this.handleCommitChanged(this.selected);
+    }
   }
 
   handleCommitChanged(chosenModel: Commit) {
     this.changeCommit.emit({commitType: this.commitType, commit: chosenModel});
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.selected !== null && this.selected !== undefined) {
+      this.handleCommitChanged(this.selected);
+    }
   }
 }
