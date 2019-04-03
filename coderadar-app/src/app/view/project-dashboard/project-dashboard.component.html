@@ -8,7 +8,8 @@
   </p>
   <mat-grid-list cols="4" rowHeight="130px">
     <mat-grid-tile *ngFor="let commit of commits" [colspan]="2" [rowspan]="1">
-      <mat-card class="dashboard-card">
+      <mat-card [ngClass]="{'dashboard-card' : commit !== selectedCommit1 || commit !== selectedCommit2,
+      'dashboard-card-selected' : commit === selectedCommit1 || commit === selectedCommit2}" (click)="selectCard(commit)">
         <mat-card-content class="mat-card-content">
           <a mat-button routerLink="/project/{{project.id}}/{{commit.name}}"><b>{{commit.name}}</b></a><br>
           <mat-label>Author: {{commit.author}}</mat-label>

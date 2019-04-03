@@ -5,9 +5,10 @@ import {changeCommit, loadCommits} from './control-panel.actions';
 import {FocusService} from '../service/focus.service';
 import {ViewType} from '../enum/ViewType';
 import {CommitType} from '../enum/CommitType';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {Commit} from '../../model/commit';
 import {map} from 'rxjs/operators';
+import { AppEffects } from '../shared/effects';
 
 @Component({
   selector: 'app-control-panel',
@@ -34,7 +35,8 @@ export class ControlPanelComponent implements OnInit {
   // disable the second commit chooser for demo purposes
   disableRightSelect: true;
 
-  constructor(private store: Store<fromRoot.AppState>, private focusService: FocusService) {
+  constructor(private store: Store<fromRoot.AppState>, private focusService: FocusService,
+              private cityEffects: AppEffects) {
   }
 
   ngOnInit() {
@@ -51,11 +53,15 @@ export class ControlPanelComponent implements OnInit {
         }
       })));
       this.commitsLoading$ = this.store.select(fromRoot.getCommitsLoading);
-      this.leftCommit$ = this.store.select(fromRoot.getLeftCommit);
-      this.rightCommit$ = this.store.select(fromRoot.getRightCommit);
 
+      if (this.cityEffects.firstCommit !== null && this.cityEffects.secondCommit !== null) {
+        this.leftCommit$ = of(this.cityEffects.firstCommit);
+        this.rightCommit$ = of(this.cityEffects.secondCommit);
+      } else {
+        this.leftCommit$ = this.store.select(fromRoot.getLeftCommit);
+        this.rightCommit$ = this.store.select(fromRoot.getRightCommit);
+      }
       this.uniqueFileList$ = this.store.select(fromRoot.getUniqueFileList);
-
       this.activeViewType$ = this.store.select(fromRoot.getActiveViewType);
     }
   }

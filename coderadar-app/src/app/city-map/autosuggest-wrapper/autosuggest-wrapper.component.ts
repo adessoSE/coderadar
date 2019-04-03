@@ -1,4 +1,15 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, ViewEncapsulation} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild,
+  ViewEncapsulation
+} from '@angular/core';
 import {Observable} from 'rxjs';
 import {startWith} from 'rxjs/internal/operators/startWith';
 import {map} from 'rxjs/operators';
@@ -10,7 +21,7 @@ import {FormControl} from '@angular/forms';
   templateUrl: './autosuggest-wrapper.component.html',
   styleUrls: ['./autosuggest-wrapper.component.scss']
 })
-export class AutosuggestWrapperComponent implements OnChanges {
+export class AutosuggestWrapperComponent implements OnChanges, OnInit {
 
   @ViewChild('inputElement') inputElement;
 
@@ -29,7 +40,7 @@ export class AutosuggestWrapperComponent implements OnChanges {
   }
 
   formatValue(value: any) {
-    if (value === null) {
+    if (value === null || value === undefined) {
       return '';
     }
     if (value.hasOwnProperty('name')) {
@@ -40,6 +51,10 @@ export class AutosuggestWrapperComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if (this.model !== null && this.model !== undefined) {
+      this.formControl.setValue(this.model);
+      this.handleValueChanged(this.model);
+    }
     this.filteredOptions = this.formControl.valueChanges
       .pipe(
         startWith(''),
@@ -50,7 +65,10 @@ export class AutosuggestWrapperComponent implements OnChanges {
   private _filter(value: any): string[] {
     if (this.source === undefined) {
       return [];
+    } else if (value === undefined) {
+      return this.source;
     }
+
     let filterValue = '';
     if (value.hasOwnProperty('name')) {
       filterValue = value.name.toLowerCase();
@@ -62,11 +80,22 @@ export class AutosuggestWrapperComponent implements OnChanges {
       if (option.hasOwnProperty('name')) {
         return option.name.toLowerCase().includes(filterValue)
           || option.author.toLowerCase().includes(filterValue)
-          || new Date(option.timestamp).toDateString().toLowerCase().includes(filterValue);
+          || new Date(option.timestamp).toUTCString().toLowerCase().includes(filterValue) ||
+          filterValue.includes(this.formatValue(option).toLowerCase());
       } else {
         return option.toLowerCase().includes(filterValue);
       }
     });
   }
 
+  ngOnInit(): void {
+    if (this.model !== null && this.model !== undefined) {
+      this.formControl.setValue(this.model);
+    }
+    this.filteredOptions = this.formControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
+  }
 }

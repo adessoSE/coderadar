@@ -4,6 +4,7 @@
   left: 15px;
   right: 15px;
   bottom: 5px;
+  animation: card-deselect 0.5s;
 }
 
 .card-list p {
@@ -30,4 +31,29 @@
 
 .card-list mat-card-content {
   margin-left: 5%;
+}
+
+.dashboard-card-selected {
+  @extend .dashboard-card;
+  animation: card-select 0.5s;
+  background-color: lightgray;
+  border-color: black;
+}
+
+@keyframes card-select {
+  0% {
+    background-color: white;
+  }
+  100% {
+    background-color: lightgray;
+  }
+}
+
+@keyframes card-deselect {
+  0% {
+    background-color: lightgray;
+  }
+  100% {
+    background-color: white;
+  }
 }

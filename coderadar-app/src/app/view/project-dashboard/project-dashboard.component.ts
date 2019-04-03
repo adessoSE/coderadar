@@ -6,6 +6,7 @@ import {Commit} from '../../model/commit';
 import {Project} from '../../model/project';
 import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
+import { AppEffects } from 'src/app/city-map/shared/effects';
 
 @Component({
   selector: 'app-project-dashboard',
@@ -19,10 +20,16 @@ export class ProjectDashboardComponent implements OnInit {
   commitsAnalyzed = 0;
   project: Project;
 
+  selectedCommit1: Commit;
+  selectedCommit2: Commit;
+
   constructor(private router: Router, private userService: UserService, private titleService: Title,
-              private projectService: ProjectService, private route: ActivatedRoute) {
+              private projectService: ProjectService, private route: ActivatedRoute,
+              private cityEffects: AppEffects) {
     this.project = new Project();
     this.commits = [];
+    this.selectedCommit1 = null;
+    this.selectedCommit2 = null;
   }
 
   ngOnInit(): void {
@@ -117,5 +124,21 @@ export class ProjectDashboardComponent implements OnInit {
           this.router.navigate(['/dashboard']);
         }
       });
+  }
+
+  selectCard(selectedCommit: Commit): void {
+
+    if (this.selectedCommit1 === null && this.selectedCommit2 !== selectedCommit) {
+      this.selectedCommit1 = selectedCommit;
+    } else if (this.selectedCommit1 === selectedCommit) {
+      this.selectedCommit1 = null;
+    } else if (this.selectedCommit2 === selectedCommit) {
+      this.selectedCommit2 = null;
+    } else {
+      this.selectedCommit2 = selectedCommit;
+    }
+
+    this.cityEffects.firstCommit = this.selectedCommit1;
+    this.cityEffects.secondCommit = this.selectedCommit2;
   }
 }

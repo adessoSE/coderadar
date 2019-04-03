@@ -13,11 +13,14 @@ import {INode} from '../interfaces/INode';
 import {ICommitsGetErrorResponse} from '../interfaces/ICommitsGetErrorResponse';
 import {Store} from '@ngrx/store';
 import * as fromRoot from './reducers';
+import { Commit } from 'src/app/model/commit';
 
 @Injectable()
 export class AppEffects {
 
   public currentProjectId: number;
+  public firstCommit: Commit = null;
+  public secondCommit: Commit = null;
 
   @Effect()
   loadCommitsEffects$ = this.actions$.pipe(ofType(LOAD_COMMITS),
@@ -95,6 +98,5 @@ export class AppEffects {
     private actions$: Actions<IActionWithPayload<any>>,
     private projectService: ProjectService,
     private userService: UserService
-  ) {
-  }
+  ) {}
 }
