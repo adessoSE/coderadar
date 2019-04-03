@@ -51,7 +51,8 @@ export class ControlPanelComponent implements OnInit {
         } else {
           return 1;
         }
-      })));
+      })), map((elements => elements.filter(val => val.analyzed))));
+
       this.commitsLoading$ = this.store.select(fromRoot.getCommitsLoading);
 
       if (this.cityEffects.firstCommit !== null && this.cityEffects.secondCommit !== null) {

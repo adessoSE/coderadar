@@ -23,7 +23,8 @@
       </mat-card>
     </mat-grid-tile>
 
-    <a *ngIf="selectedCommit1 !== null && selectedCommit2 != null" class="compare-button" color="accent" mat-fab routerLink="/city/{{project.id}}">
+    <a *ngIf="selectedCommit1 !== null && selectedCommit2 != null && selectedCommit1.analyzed && selectedCommit2.analyzed"
+       class="compare-button" color="accent" mat-fab routerLink="/city/{{project.id}}">
       <div>
         <fa-icon [icon]="faClone" size="1x" style="color:white"></fa-icon>
       </div>
