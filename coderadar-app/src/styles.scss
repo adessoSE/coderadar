@@ -1,5 +1,7 @@
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import 'app/city-map/config';
+@import "./app/theme.scss";
+@include mat-core();
+@include angular-material-theme($coderadar-theme);
 
 /**
 General styles

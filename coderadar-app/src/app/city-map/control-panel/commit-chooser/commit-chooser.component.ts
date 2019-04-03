@@ -18,8 +18,7 @@ export class CommitChooserComponent implements OnInit {
 
   @Output() changeCommit = new EventEmitter();
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit() {
   }
