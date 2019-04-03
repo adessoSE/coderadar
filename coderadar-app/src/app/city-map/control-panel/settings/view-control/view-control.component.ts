@@ -2,8 +2,6 @@ import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} f
 import {faClone, faSquare} from '@fortawesome/free-regular-svg-icons';
 import {ViewType} from '../../../enum/ViewType';
 
-declare var $: any;
-
 @Component({
   selector: 'app-view-control',
   templateUrl: './view-control.component.html',

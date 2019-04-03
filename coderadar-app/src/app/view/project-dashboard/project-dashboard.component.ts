@@ -7,6 +7,8 @@ import {Project} from '../../model/project';
 import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import { AppEffects } from 'src/app/city-map/shared/effects';
+import {faClone, faSquare} from '@fortawesome/free-regular-svg-icons';
+
 
 @Component({
   selector: 'app-project-dashboard',
@@ -20,8 +22,14 @@ export class ProjectDashboardComponent implements OnInit {
   commitsAnalyzed = 0;
   project: Project;
 
+  faClone = faClone;
+
   selectedCommit1: Commit;
   selectedCommit2: Commit;
+
+  // These are needed for the deselection css to work
+  prevSelectedCommit1: Commit;
+  prevSelectedCommit2: Commit;
 
   constructor(private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute,
@@ -127,13 +135,14 @@ export class ProjectDashboardComponent implements OnInit {
   }
 
   selectCard(selectedCommit: Commit): void {
-
     if (this.selectedCommit1 === null && this.selectedCommit2 !== selectedCommit) {
       this.selectedCommit1 = selectedCommit;
     } else if (this.selectedCommit1 === selectedCommit) {
       this.selectedCommit1 = null;
+      this.prevSelectedCommit1 = selectedCommit;
     } else if (this.selectedCommit2 === selectedCommit) {
       this.selectedCommit2 = null;
+      this.prevSelectedCommit2 = selectedCommit;
     } else {
       this.selectedCommit2 = selectedCommit;
     }

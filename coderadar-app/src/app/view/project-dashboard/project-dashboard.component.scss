@@ -4,6 +4,9 @@
   left: 15px;
   right: 15px;
   bottom: 5px;
+}
+
+.dashboard-card-deselected {
   animation: card-deselect 0.5s;
 }
 
@@ -12,13 +15,7 @@
   width: 60%;
   top: 15px;
   float: right;
-}
-
-.city-map-link {
-  font-size: 15pt;
-  top: 15px;
-  float: right;
-  margin-right: 10%;
+  margin-right: 15%;
 }
 
 .card-list mat-grid-list {
@@ -34,10 +31,8 @@
 }
 
 .dashboard-card-selected {
-  @extend .dashboard-card;
   animation: card-select 0.5s;
-  background-color: lightgray;
-  border-color: black;
+  background-color: #fadab3;
 }
 
 @keyframes card-select {
@@ -45,15 +40,32 @@
     background-color: white;
   }
   100% {
-    background-color: lightgray;
+    background-color: #fadab3;
   }
 }
 
 @keyframes card-deselect {
   0% {
-    background-color: lightgray;
+    background-color: #fadab3;
   }
   100% {
     background-color: white;
+  }
+}
+
+.compare-button {
+  right: 7%;
+  bottom: 8%;
+  position: fixed;
+  animation: show 0.2s;
+  transform: scale(1.5, 1.5);
+}
+
+@keyframes show {
+  0% {
+    transform: scale(1, 1);
+  }
+  100% {
+    transform: scale(1.5, 1.5);
   }
 }

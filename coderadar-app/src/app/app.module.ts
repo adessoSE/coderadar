@@ -45,6 +45,7 @@ import {ComparisonPanelService} from './city-map/service/comparison-panel.servic
 import {environment} from '../environments/environment';
 import {CityViewComponent} from './view/city-view/city-view.component';
 import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -84,6 +85,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     BrowserAnimationsModule,
     BrowserModule,
+    FontAwesomeModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
     MatFormFieldModule,
