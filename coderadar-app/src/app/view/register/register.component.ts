@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,8 @@ export class RegisterComponent {
   invalidPassword = false;
   passwordsDoNotMatch = false;
 
-  constructor(private router: Router, private userService: UserService) {
+  constructor(private router: Router, private userService: UserService, private titleService: Title) {
+    titleService.setTitle('Coderadar - Sign up');
   }
 
   /**

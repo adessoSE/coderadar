@@ -6,6 +6,7 @@ import {AnalyzerConfiguration} from '../../model/analyzer-configuration';
 import {FilePatterns} from '../../model/file-patterns';
 import {FORBIDDEN} from 'http-status-codes';
 import {Module} from '../../model/module';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-configure-project',
@@ -31,7 +32,7 @@ export class ConfigureProjectComponent implements OnInit {
   analyzersExist: boolean;
   private projectId: any;
 
-  constructor(private router: Router, private userService: UserService,
+  constructor(private router: Router, private userService: UserService,  private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute) {
     this.projectName = '';
     this.filePatternIncludeInput = '';
@@ -215,7 +216,10 @@ export class ConfigureProjectComponent implements OnInit {
    */
   private getProjectName(): void {
     this.projectService.getProject(this.projectId)
-      .then(response => this.projectName = response.body.name)
+      .then(response => {
+        this.projectName = response.body.name;
+        this.titleService.setTitle('Coderadar - Configure ' + this.projectName);
+      })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.getProjectName());

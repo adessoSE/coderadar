@@ -1,7 +1,7 @@
 <app-header [title]="'Project dashboard'"></app-header>
 
 <main class="card-list">
-  <button [disabled]="commits.length !== commitsAnalyzed" [title]="" mat-button routerLink="/city/{{project.id}}">3D project map</button>
+  <a class="city-map-link" [disabled]="commits.length !== commitsAnalyzed" [title]="" mat-button routerLink="/city/{{project.id}}">3D project map</a>
   <p>{{getTitleText()}}
     <br>
     <mat-label style="font-size: 12pt">Analyzed {{commitsAnalyzed}}/{{commits.length}} commits</mat-label>

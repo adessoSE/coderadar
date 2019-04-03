@@ -4,6 +4,7 @@ import {ProjectService} from '../../service/project.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {FORBIDDEN} from 'http-status-codes';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -14,7 +15,9 @@ export class MainDashboardComponent implements OnInit {
 
   projects: Project[] = [];
 
-  constructor(private userService: UserService, private router: Router, private projectService: ProjectService) {
+  constructor(private titleService: Title, private userService: UserService,
+              private router: Router, private projectService: ProjectService) {
+    titleService.setTitle('Coderadar - Dashboard');
   }
 
   ngOnInit(): void {

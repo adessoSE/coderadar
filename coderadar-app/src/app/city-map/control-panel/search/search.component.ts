@@ -20,9 +20,4 @@ export class SearchComponent implements OnInit {
   handleSearchChanged(chosenItem: string) {
     this.startSearch.emit(chosenItem);
   }
-
-  autocompleteListFormatter(data: string): string {
-    return `<span title="${data}">${data}</span>`;
-  }
-
 }

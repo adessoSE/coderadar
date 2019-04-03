@@ -9,11 +9,13 @@ import {LegendComponent} from './legend/legend.component';
 import {KeyValuePipe} from '../pipes/key-value.pipe';
 import {LoadingIndicatorComponent} from './loading-indicator/loading-indicator.component';
 import {ProjectService} from '../../service/project.service';
+import {MatButtonModule} from '@angular/material';
 
 @NgModule({
   imports: [
     CommonModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    MatButtonModule
   ],
   declarations: [
     VisualizationComponent,

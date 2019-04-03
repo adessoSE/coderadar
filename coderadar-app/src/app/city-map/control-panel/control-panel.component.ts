@@ -7,6 +7,7 @@ import {ViewType} from '../enum/ViewType';
 import {CommitType} from '../enum/CommitType';
 import {Observable} from 'rxjs';
 import {Commit} from '../../model/commit';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-control-panel',
@@ -40,7 +41,15 @@ export class ControlPanelComponent implements OnInit {
     if (this.store !== undefined) {
       this.store.dispatch(loadCommits());
 
-      this.commits$ = this.store.select(fromRoot.getCommits);
+      this.commits$ = this.store.select(fromRoot.getCommits).pipe(map(elements => elements.sort((a, b) => {
+        if (a.timestamp === b.timestamp) {
+          return 0;
+        } else if (a.timestamp > b.timestamp) {
+          return -1;
+        } else {
+          return 1;
+        }
+      })));
       this.commitsLoading$ = this.store.select(fromRoot.getCommitsLoading);
       this.leftCommit$ = this.store.select(fromRoot.getLeftCommit);
       this.rightCommit$ = this.store.select(fromRoot.getRightCommit);

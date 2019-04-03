@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
 import {BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND} from 'http-status-codes';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-edit-project',
@@ -24,7 +25,7 @@ export class EditProjectComponent implements OnInit {
   nameEmpty = false;
   private projectId: number;
 
-  constructor(private router: Router, private userService: UserService,
+  constructor(private router: Router, private userService: UserService,  private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute) {
     this.project = new Project();
     this.projectName = '';
@@ -79,6 +80,7 @@ export class EditProjectComponent implements OnInit {
       .then(response => {
         this.project = new Project(response.body);
         this.projectName = this.project.name;
+        this.titleService.setTitle('Coderadar - Edit ' + this.projectName);
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {

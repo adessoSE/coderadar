@@ -4,6 +4,7 @@ import {ProjectService} from '../../service/project.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR} from 'http-status-codes';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-add-project',
@@ -18,10 +19,12 @@ export class AddProjectComponent {
   projectExists = false;
   nameEmpty = false;
 
-  constructor(private router: Router, private userService: UserService, private projectService: ProjectService) {
+  constructor(private router: Router, private userService: UserService, private projectService: ProjectService,
+              private titleService: Title) {
     this.project = new Project();
     this.project.name = '';
     this.project.vcsUrl = '';
+    titleService.setTitle('Coderadar - Add project');
   }
 
   /**

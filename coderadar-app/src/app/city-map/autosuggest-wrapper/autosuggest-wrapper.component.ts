@@ -33,7 +33,7 @@ export class AutosuggestWrapperComponent implements OnChanges {
       return '';
     }
     if (value.hasOwnProperty('name')) {
-      return value.name + ', ' + value.author + ', ' + new Date(value.timestamp).toDateString();
+      return new Date(value.timestamp).toUTCString() + ',  ' + value.name.substring(0, 7) + ', ' + value.author;
     } else {
       return value;
     }

@@ -5,6 +5,7 @@ import {ProjectService} from '../../service/project.service';
 import {Commit} from '../../model/commit';
 import {Project} from '../../model/project';
 import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-project-dashboard',
@@ -18,7 +19,7 @@ export class ProjectDashboardComponent implements OnInit {
   commitsAnalyzed = 0;
   project: Project;
 
-  constructor(private router: Router, private userService: UserService,
+  constructor(private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute) {
     this.project = new Project();
     this.commits = [];
@@ -105,7 +106,10 @@ export class ProjectDashboardComponent implements OnInit {
    */
   private getProject(): void {
     this.projectService.getProject(this.projectId)
-      .then(response => this.project = new Project(response.body))
+      .then(response => {
+        this.project = new Project(response.body);
+        this.titleService.setTitle('Coderadar - ' + this.project.name);
+      })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.getProject());
