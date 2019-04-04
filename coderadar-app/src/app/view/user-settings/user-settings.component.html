@@ -1,4 +1,6 @@
-<app-header [title]="'User setting'"></app-header>
+<app-header [title]="[{location: '/dashboard', name: 'Dashboard'},
+{location: '/user-setting/', name: 'User settings'}]">
+</app-header>
 
 <main class="mat-card-form">
   <div class="grid-container">

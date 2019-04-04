@@ -23,7 +23,7 @@ export class EditProjectComponent implements OnInit {
   incorrectURL = false;
   projectExists = false;
   nameEmpty = false;
-  private projectId: number;
+  projectId: number;
 
   constructor(private router: Router, private userService: UserService,  private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute) {

@@ -8,8 +8,9 @@ import {UserService} from '../../service/user.service';
 })
 export class HeaderComponent implements OnInit {
 
+
   @Input()
-  title: string;
+  title: any[];
 
   constructor(private userService: UserService) {
   }

@@ -30,7 +30,7 @@ export class ConfigureProjectComponent implements OnInit {
   // Error fields
   noAnalyzersForJob: boolean;
   analyzersExist: boolean;
-  private projectId: any;
+  projectId: any;
 
   constructor(private router: Router, private userService: UserService,  private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute) {
