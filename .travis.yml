@@ -12,7 +12,7 @@ stages:
 - name: build
 
 - name: publish_gh
-  if: branch = ascii-docs AND type IN (push)
+  if: branch = master AND type IN (push)
 
 jobs:
   include:
