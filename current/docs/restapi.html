@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v0.2.1.327, 2018-12-14">
+<meta name="author" content="v0.2.3.null, 2019-04-04">
 <title>coderadar REST API</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v0.2.1.327, 2018-12-14</span><br>
+<span id="author" class="author">v0.2.3.null, 2019-04-04</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2129,13 +2129,12 @@ table.tableblock.grid-all {
 <ul class="sectlevel2">
 <li><a href="#_users">2.1. Users</a>
 <ul class="sectlevel3">
-<li><a href="#_hypermedia_links">2.1.1. Hypermedia links</a></li>
-<li><a href="#_registering_a_user">2.1.2. Registering a User</a></li>
-<li><a href="#_loading_a_user">2.1.3. Loading a User</a></li>
-<li><a href="#_login">2.1.4. Login</a></li>
-<li><a href="#_token_refresh">2.1.5. Token Refresh</a></li>
-<li><a href="#_password_change">2.1.6. Password Change</a></li>
-<li><a href="#_authentication">2.1.7. Authentication</a></li>
+<li><a href="#_registering_a_user">2.1.1. Registering a User</a></li>
+<li><a href="#_loading_a_user">2.1.2. Loading a User</a></li>
+<li><a href="#_login">2.1.3. Login</a></li>
+<li><a href="#_token_refresh">2.1.4. Token Refresh</a></li>
+<li><a href="#_password_change">2.1.5. Password Change</a></li>
+<li><a href="#_authentication">2.1.6. Authentication</a></li>
 </ul>
 </li>
 </ul>
@@ -2145,40 +2144,36 @@ table.tableblock.grid-all {
 <li><a href="#_project">3.1. Project</a>
 <ul class="sectlevel3">
 <li><a href="#_structure">3.1.1. Structure</a></li>
-<li><a href="#_hypermedia_links_2">3.1.2. Hypermedia Links</a></li>
-<li><a href="#_listing_projects">3.1.3. Listing Projects</a></li>
-<li><a href="#_creating_a_project">3.1.4. Creating a Project</a></li>
-<li><a href="#_updating_a_project">3.1.5. Updating a Project</a></li>
-<li><a href="#_deleting_a_project">3.1.6. Deleting a Project</a></li>
+<li><a href="#_listing_projects">3.1.2. Listing Projects</a></li>
+<li><a href="#_creating_a_project">3.1.3. Creating a Project</a></li>
+<li><a href="#_updating_a_project">3.1.4. Updating a Project</a></li>
+<li><a href="#_deleting_a_project">3.1.5. Deleting a Project</a></li>
 </ul>
 </li>
 <li><a href="#_modules">3.2. Modules</a>
 <ul class="sectlevel3">
 <li><a href="#_structure_2">3.2.1. Structure</a></li>
-<li><a href="#_hypermedia_links_3">3.2.2. Hypermedia Links</a></li>
-<li><a href="#_creating_a_module">3.2.3. Creating a Module</a></li>
-<li><a href="#_updating_a_module">3.2.4. Updating a Module</a></li>
-<li><a href="#_listing_all_modules_of_a_project">3.2.5. Listing all Modules of a Project</a></li>
-<li><a href="#_deleting_a_module">3.2.6. Deleting a Module</a></li>
+<li><a href="#_creating_a_module">3.2.2. Creating a Module</a></li>
+<li><a href="#_updating_a_module">3.2.3. Updating a Module</a></li>
+<li><a href="#_listing_all_modules_of_a_project">3.2.4. Listing all Modules of a Project</a></li>
+<li><a href="#_deleting_a_module">3.2.5. Deleting a Module</a></li>
 </ul>
 </li>
 <li><a href="#_file_patterns">3.3. File Patterns</a>
 <ul class="sectlevel3">
 <li><a href="#_structure_3">3.3.1. Structure</a></li>
-<li><a href="#_hypermedia_links_4">3.3.2. Hypermedia Links</a></li>
-<li><a href="#_listing_a_project_s_file_patterns">3.3.3. Listing a Project&#8217;s File Patterns</a></li>
-<li><a href="#_setting_a_project_s_file_patterns">3.3.4. Setting a Project&#8217;s File Patterns</a></li>
+<li><a href="#_listing_a_project_s_file_patterns">3.3.2. Listing a Project&#8217;s File Patterns</a></li>
+<li><a href="#_setting_a_project_s_file_patterns">3.3.3. Setting a Project&#8217;s File Patterns</a></li>
 </ul>
 </li>
 <li><a href="#_analyzer_configuration">3.4. Analyzer Configuration</a>
 <ul class="sectlevel3">
 <li><a href="#_structure_4">3.4.1. Structure</a></li>
-<li><a href="#_hypermedia_links_5">3.4.2. Hypermedia Links</a></li>
-<li><a href="#_adding_an_analyzer_configuration">3.4.3. Adding an Analyzer Configuration</a></li>
-<li><a href="#_deleting_an_analyzer_configuration">3.4.4. Deleting an Analyzer Configuration</a></li>
-<li><a href="#_updating_an_analyzer_configuration">3.4.5. Updating an Analyzer Configuration</a></li>
-<li><a href="#_listing_a_project_s_analyzer_configurations">3.4.6. Listing a Project&#8217;s Analyzer Configurations</a></li>
-<li><a href="#_loading_a_single_analyzer_configuration">3.4.7. Loading a single Analyzer Configuration</a></li>
+<li><a href="#_adding_an_analyzer_configuration">3.4.2. Adding an Analyzer Configuration</a></li>
+<li><a href="#_deleting_an_analyzer_configuration">3.4.3. Deleting an Analyzer Configuration</a></li>
+<li><a href="#_updating_an_analyzer_configuration">3.4.4. Updating an Analyzer Configuration</a></li>
+<li><a href="#_listing_a_project_s_analyzer_configurations">3.4.5. Listing a Project&#8217;s Analyzer Configurations</a></li>
+<li><a href="#_loading_a_single_analyzer_configuration">3.4.6. Loading a single Analyzer Configuration</a></li>
 </ul>
 </li>
 <li><a href="#_analyzer_configuration_file">3.5. Analyzer Configuration File</a>
@@ -2190,20 +2185,18 @@ table.tableblock.grid-all {
 <li><a href="#_analyzing_job">3.6. Analyzing Job</a>
 <ul class="sectlevel3">
 <li><a href="#_structure_5">3.6.1. Structure</a></li>
-<li><a href="#_hypermedia_links_6">3.6.2. Hypermedia Links</a></li>
-<li><a href="#_starting_an_analyzing_job">3.6.3. Starting an Analyzing Job</a></li>
-<li><a href="#_retrieving_an_analyzing_job">3.6.4. Retrieving an Analyzing Job</a></li>
+<li><a href="#_starting_an_analyzing_job">3.6.2. Starting an Analyzing Job</a></li>
+<li><a href="#_retrieving_an_analyzing_job">3.6.3. Retrieving an Analyzing Job</a></li>
 </ul>
 </li>
 <li><a href="#_quality_profile">3.7. Quality Profile</a>
 <ul class="sectlevel3">
 <li><a href="#_structure_6">3.7.1. Structure</a></li>
-<li><a href="#_hypermedia_links_7">3.7.2. Hypermedia Links</a></li>
-<li><a href="#_creating_a_quality_profile">3.7.3. Creating a Quality Profile</a></li>
-<li><a href="#_updating_a_quality_profile">3.7.4. Updating a Quality Profile</a></li>
-<li><a href="#_loading_a_single_quality_profile">3.7.5. Loading a single Quality Profile</a></li>
-<li><a href="#_deleting_a_quality_profile">3.7.6. Deleting a Quality Profile</a></li>
-<li><a href="#_listing_a_project_s_quality_profiles">3.7.7. Listing a Project&#8217;s Quality Profiles</a></li>
+<li><a href="#_creating_a_quality_profile">3.7.2. Creating a Quality Profile</a></li>
+<li><a href="#_updating_a_quality_profile">3.7.3. Updating a Quality Profile</a></li>
+<li><a href="#_loading_a_single_quality_profile">3.7.4. Loading a single Quality Profile</a></li>
+<li><a href="#_deleting_a_quality_profile">3.7.5. Deleting a Quality Profile</a></li>
+<li><a href="#_listing_a_project_s_quality_profiles">3.7.6. Listing a Project&#8217;s Quality Profiles</a></li>
 </ul>
 </li>
 </ul>
@@ -2227,8 +2220,7 @@ table.tableblock.grid-all {
 <li><a href="#_commit">5.2. Commit</a>
 <ul class="sectlevel3">
 <li><a href="#_structure_7">5.2.1. Structure</a></li>
-<li><a href="#_hypermedia_links_8">5.2.2. Hypermedia Links</a></li>
-<li><a href="#_listing_a_project_s_commits">5.2.3. Listing a Project&#8217;s Commits</a></li>
+<li><a href="#_listing_a_project_s_commits">5.2.2. Listing a Project&#8217;s Commits</a></li>
 </ul>
 </li>
 <li><a href="#_commit_metric_values">5.3. Commit Metric Values</a>
@@ -2352,8 +2344,8 @@ an error JSON structure object that looks like this:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 400 Bad Request
-Content-Type: application/json;charset=UTF-8
 Content-Length: 195
+Content-Type: application/json;charset=UTF-8
 
 {
   "errorMessage" : "Validation Error",
@@ -2429,28 +2421,7 @@ You need to define a username and a password. The password will be sent as
 plain text and hashed on server side for persisting.</p>
 </div>
 <div class="sect3">
-<h4 id="_hypermedia_links"><a class="link" href="#_hypermedia_links">2.1.1. Hypermedia links</a></h4>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Relation</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the user.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_registering_a_user"><a class="link" href="#_registering_a_user">2.1.2. Registering a User</a></h4>
+<h4 id="_registering_a_user"><a class="link" href="#_registering_a_user">2.1.1. Registering a User</a></h4>
 <div class="sect4">
 <h5 id="_registration_data_structure"><a class="link" href="#_registration_data_structure">Registration Data Structure</a></h5>
 <table class="tableblock frame-all grid-all spread">
@@ -2488,8 +2459,8 @@ plain text and hashed on server side for persisting.</p>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /user/registration HTTP/1.1
 Content-Type: application/json
-Host: localhost:8080
 Content-Length: 56
+Host: localhost:8080
 
 {
   "username" : "radar",
@@ -2503,23 +2474,19 @@ Content-Length: 56
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 113
+Content-Length: 38
+Content-Type: application/json;charset=UTF-8
 
 {
-  "username" : "radar",
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/user/1"
-    }
-  }
+  "id" : 1,
+  "username" : "radar"
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_loading_a_user"><a class="link" href="#_loading_a_user">2.1.3. Loading a User</a></h4>
+<h4 id="_loading_a_user"><a class="link" href="#_loading_a_user">2.1.2. Loading a User</a></h4>
 <div class="sect4">
 <h5 id="_example_request_2"><a class="link" href="#_example_request_2">Example Request</a></h5>
 <div class="listingblock">
@@ -2534,23 +2501,19 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 112
+Content-Type: application/json;charset=UTF-8
+Content-Length: 37
 
 {
-  "username" : "user",
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/user/1"
-    }
-  }
+  "id" : 1,
+  "username" : "user"
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_login"><a class="link" href="#_login">2.1.4. Login</a></h4>
+<h4 id="_login"><a class="link" href="#_login">2.1.3. Login</a></h4>
 <div class="paragraph">
 <p><a id="login"></a>
 A user has to log in to use other endpoints of coderadar.
@@ -2606,8 +2569,8 @@ If the log in is successful, user obtains two JSON Web Tokens <a href="https://j
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /user/auth HTTP/1.1
 Content-Type: application/json
-Host: localhost:8080
 Content-Length: 56
+Host: localhost:8080
 
 {
   "username" : "radar",
@@ -2621,24 +2584,19 @@ Content-Length: 56
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 535
+Content-Type: application/json;charset=UTF-8
+Content-Length: 448
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDQ3ODU1MTUsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NDQ3ODQ2MTUsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.9fAXv2Q3svQmaQW8nqdqHUbTJRsjLiMbzZo41dJ-bsE",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDk5Njg2MTUsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTQ0Nzg0NjE1LCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.9DDerVMRhlHjT5SrysbVM-BuS1Fx6IJJbXraZOtxT9k",
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/user/2"
-    }
-  }
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NTQzODM0MzEsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NTQzODI1MzEsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.lUP8QbgmGj93ZcZ2XFtmj46FGVl80Np6kSHaaxs6PYo",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NTk1NjY1MzEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTU0MzgyNTMxLCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.QTtYLQTiWffHXt81AG1-jFpdJ3YKgDwayy7_JzmOGck"
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_token_refresh"><a class="link" href="#_token_refresh">2.1.5. Token Refresh</a></h4>
+<h4 id="_token_refresh"><a class="link" href="#_token_refresh">2.1.4. Token Refresh</a></h4>
 <div class="paragraph">
 <p><a id="refresh"></a>
 To get a new access token after the current token has been expired you have
@@ -2685,8 +2643,8 @@ Host: localhost:8080
 Content-Length: 443
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDQ3ODM3NzUsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NDQ3ODI4NzUsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.W_fEk7IAq28MfHnx9TGpGsazJ7O8ZyNytSyCtkzPe4Q",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDQ5NjQ2MTUsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTQ0NjA0NjE1LCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.Qk1p-ER81HtnyXRBzqtQ-_pogSpzJXqPcorZsf9G84U"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NTQzODE2OTEsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NTQzODA3OTEsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.NY3KNNbdhCXycndMty_F55z8ZGtM2ly4XgoWghNuyHo",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NTQ1NjI1MzEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTU0MjAyNTMxLCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.bDM9LY3S-RRy2u4zuf7SzNL5YqvIYMNMwFM1dPC07is"
 }</code></pre>
 </div>
 </div>
@@ -2696,18 +2654,18 @@ Content-Length: 443
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 218
+Content-Type: application/json;charset=UTF-8
 
 {
-  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDQ3ODU1MTUsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NDQ3ODQ2MTUsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.9fAXv2Q3svQmaQW8nqdqHUbTJRsjLiMbzZo41dJ-bsE"
+  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NTQzODM0MzIsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NTQzODI1MzIsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.Nw9jVrxVcCHl-lEpDj3eQzZtwlPnLEt0tQ5SSRIMoaU"
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_password_change"><a class="link" href="#_password_change">2.1.6. Password Change</a></h4>
+<h4 id="_password_change"><a class="link" href="#_password_change">2.1.5. Password Change</a></h4>
 <div class="paragraph">
 <p>To change the password user has to be authenticated by the access token
 and has to send a new password and thе refresh token to the server. The user will be found by the
@@ -2755,7 +2713,7 @@ Host: localhost:8080
 Content-Length: 256
 
 {
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NDQ5NjQ2MTUsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTQ0NjA0NjE1LCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.Qk1p-ER81HtnyXRBzqtQ-_pogSpzJXqPcorZsf9G84U",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NTQ1NjI1MzEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTU0MjAyNTMxLCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.bDM9LY3S-RRy2u4zuf7SzNL5YqvIYMNMwFM1dPC07is",
   "newPassword" : "Coderadar4"
 }</code></pre>
 </div>
@@ -2766,15 +2724,11 @@ Content-Length: 256
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 89
+Content-Type: application/json;charset=UTF-8
+Content-Length: 25
 
 {
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/user/2"
-    }
-  }
+  "successful" : true
 }</code></pre>
 </div>
 </div>
@@ -2784,7 +2738,7 @@ Content-Length: 89
 </div>
 </div>
 <div class="sect3">
-<h4 id="_authentication"><a class="link" href="#_authentication">2.1.7. Authentication</a></h4>
+<h4 id="_authentication"><a class="link" href="#_authentication">2.1.6. Authentication</a></h4>
 <div class="paragraph">
 <p>After a user registered, he or she can start working with coderadar.
 The first step is login. To log in in coderadar use the <a href="#login">Login</a> endpoint. The user must use the username and the password
@@ -2905,6 +2859,12 @@ and its sub-resources you provide coderadar with the information it needs to ana
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The id of the project.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The name of the project to be analyzed.</p></td>
@@ -2950,40 +2910,7 @@ and its sub-resources you provide coderadar with the information it needs to ana
 </table>
 </div>
 <div class="sect3">
-<h4 id="_hypermedia_links_2"><a class="link" href="#_hypermedia_links_2">3.1.2. Hypermedia Links</a></h4>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Relation</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>files</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project&#8217;s file patterns.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>analyzers</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project&#8217;s analyzer configurations.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>strategy</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project&#8217;s analyzing strategy.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_listing_projects"><a class="link" href="#_listing_projects">3.1.3. Listing Projects</a></h4>
+<h4 id="_listing_projects"><a class="link" href="#_listing_projects">3.1.2. Listing Projects</a></h4>
 <div class="sect4">
 <h5 id="_example_request_6"><a class="link" href="#_example_request_6">Example Request</a></h5>
 <div class="listingblock">
@@ -2999,63 +2926,33 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 1308
+Content-Length: 398
 
-{
-  "_embedded" : {
-    "projectResourceList" : [ {
-      "name" : "name",
-      "vcsUrl" : "http://valid.url",
-      "vcsUser" : "user",
-      "vcsPassword" : "pass",
-      "startDate" : [ 2016, 1, 1 ],
-      "endDate" : [ 2016, 12, 31 ],
-      "vcsOnline" : true,
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/projects/1"
-        },
-        "files" : {
-          "href" : "http://localhost:8080/projects/1/files"
-        },
-        "analyzers" : {
-          "href" : "http://localhost:8080/projects/1/analyzers"
-        },
-        "strategy" : {
-          "href" : "http://localhost:8080/projects/1/analyzingJob"
-        }
-      }
-    }, {
-      "name" : "name2",
-      "vcsUrl" : "http://valid.url2",
-      "vcsUser" : "user2",
-      "vcsPassword" : "pass2",
-      "startDate" : [ 2016, 1, 1 ],
-      "endDate" : [ 2016, 12, 31 ],
-      "vcsOnline" : true,
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/projects/2"
-        },
-        "files" : {
-          "href" : "http://localhost:8080/projects/2/files"
-        },
-        "analyzers" : {
-          "href" : "http://localhost:8080/projects/2/analyzers"
-        },
-        "strategy" : {
-          "href" : "http://localhost:8080/projects/2/analyzingJob"
-        }
-      }
-    } ]
-  }
-}</code></pre>
+[ {
+  "id" : 1,
+  "name" : "name",
+  "vcsUrl" : "http://valid.url",
+  "vcsUser" : "user",
+  "vcsPassword" : "pass",
+  "startDate" : "2016-01-01",
+  "endDate" : "2016-12-31",
+  "vcsOnline" : true
+}, {
+  "id" : 2,
+  "name" : "name2",
+  "vcsUrl" : "http://valid.url2",
+  "vcsUser" : "user2",
+  "vcsPassword" : "pass2",
+  "startDate" : "2016-01-01",
+  "endDate" : "2016-12-31",
+  "vcsOnline" : true
+} ]</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_creating_a_project"><a class="link" href="#_creating_a_project">3.1.4. Creating a Project</a></h4>
+<h4 id="_creating_a_project"><a class="link" href="#_creating_a_project">3.1.3. Creating a Project</a></h4>
 <div class="paragraph">
 <p><a id="creating-a-project"></a></p>
 </div>
@@ -3064,11 +2961,12 @@ Content-Length: 1308
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects HTTP/1.1
+Content-Length: 203
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 188
 
 {
+  "id" : null,
   "name" : "name",
   "vcsUrl" : "http://valid.url",
   "vcsUser" : "user",
@@ -3085,56 +2983,43 @@ Content-Length: 188
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 534
+Content-Length: 194
+Content-Type: application/json;charset=UTF-8
 
 {
+  "id" : 1,
   "name" : "name",
   "vcsUrl" : "http://valid.url",
   "vcsUser" : "user",
   "vcsPassword" : "pass",
-  "startDate" : [ 2016, 1, 1 ],
-  "endDate" : [ 2016, 12, 31 ],
-  "vcsOnline" : true,
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/projects/1"
-    },
-    "files" : {
-      "href" : "http://localhost:8080/projects/1/files"
-    },
-    "analyzers" : {
-      "href" : "http://localhost:8080/projects/1/analyzers"
-    },
-    "strategy" : {
-      "href" : "http://localhost:8080/projects/1/analyzingJob"
-    }
-  }
+  "startDate" : "2016-01-01",
+  "endDate" : "2016-12-31",
+  "vcsOnline" : true
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_updating_a_project"><a class="link" href="#_updating_a_project">3.1.5. Updating a Project</a></h4>
+<h4 id="_updating_a_project"><a class="link" href="#_updating_a_project">3.1.4. Updating a Project</a></h4>
 <div class="sect4">
 <h5 id="_example_request_8"><a class="link" href="#_example_request_8">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1 HTTP/1.1
+Content-Length: 207
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 209
 
 {
+  "id" : null,
   "name" : "name2",
   "vcsUrl" : "http://valid.url2",
   "vcsUser" : "user2",
   "vcsPassword" : "pass2",
   "startDate" : [ 2016, 1, 1 ],
   "endDate" : [ 2016, 12, 31 ],
-  "vcsOnline" : true,
-  "links" : [ ]
+  "vcsOnline" : true
 }</code></pre>
 </div>
 </div>
@@ -3144,38 +3029,25 @@ Content-Length: 209
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 538
+Content-Length: 198
+Content-Type: application/json;charset=UTF-8
 
 {
+  "id" : 1,
   "name" : "name2",
   "vcsUrl" : "http://valid.url2",
   "vcsUser" : "user2",
   "vcsPassword" : "pass2",
-  "startDate" : [ 2016, 1, 1 ],
-  "endDate" : [ 2016, 12, 31 ],
-  "vcsOnline" : true,
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/projects/1"
-    },
-    "files" : {
-      "href" : "http://localhost:8080/projects/1/files"
-    },
-    "analyzers" : {
-      "href" : "http://localhost:8080/projects/1/analyzers"
-    },
-    "strategy" : {
-      "href" : "http://localhost:8080/projects/1/analyzingJob"
-    }
-  }
+  "startDate" : "2016-01-01",
+  "endDate" : "2016-12-31",
+  "vcsOnline" : true
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_deleting_a_project"><a class="link" href="#_deleting_a_project">3.1.6. Deleting a Project</a></h4>
+<h4 id="_deleting_a_project"><a class="link" href="#_deleting_a_project">3.1.5. Deleting a Project</a></h4>
 <div class="sect4">
 <h5 id="_example_request_9"><a class="link" href="#_example_request_9">Example Request</a></h5>
 <div class="listingblock">
@@ -3225,6 +3097,12 @@ files in all commits have to be updated during these operations.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The id of the module.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">modulePath</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The path of this module starting at the VCS root. All files below that path are considered to be part of the module.</p></td>
@@ -3234,42 +3112,18 @@ files in all commits have to be updated during these operations.</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_hypermedia_links_3"><a class="link" href="#_hypermedia_links_3">3.2.2. Hypermedia Links</a></h4>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Relation</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to this module.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project this module belongs to.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_creating_a_module"><a class="link" href="#_creating_a_module">3.2.3. Creating a Module</a></h4>
+<h4 id="_creating_a_module"><a class="link" href="#_creating_a_module">3.2.2. Creating a Module</a></h4>
 <div class="sect4">
 <h5 id="_example_request_10"><a class="link" href="#_example_request_10">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/modules HTTP/1.1
+Content-Length: 61
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 46
 
 {
+  "id" : null,
   "modulePath" : "server/coderadar-webapp"
 }</code></pre>
 </div>
@@ -3280,36 +3134,30 @@ Content-Length: 46
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 222
+Content-Type: application/json;charset=UTF-8
+Content-Length: 58
 
 {
-  "modulePath" : "server/coderadar-webapp",
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/modules/1"
-    },
-    "project" : {
-      "href" : "http://localhost:8080/projects/1"
-    }
-  }
+  "id" : 1,
+  "modulePath" : "server/coderadar-webapp"
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_updating_a_module"><a class="link" href="#_updating_a_module">3.2.4. Updating a Module</a></h4>
+<h4 id="_updating_a_module"><a class="link" href="#_updating_a_module">3.2.3. Updating a Module</a></h4>
 <div class="sect4">
 <h5 id="_example_request_11"><a class="link" href="#_example_request_11">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/modules/1 HTTP/1.1
+Content-Length: 61
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 46
 
 {
+  "id" : null,
   "modulePath" : "server/coderadar-server"
 }</code></pre>
 </div>
@@ -3320,26 +3168,19 @@ Content-Length: 46
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 222
+Content-Type: application/json;charset=UTF-8
+Content-Length: 58
 
 {
-  "modulePath" : "server/coderadar-server",
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/modules/1"
-    },
-    "project" : {
-      "href" : "http://localhost:8080/projects/1"
-    }
-  }
+  "id" : 1,
+  "modulePath" : "server/coderadar-server"
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_listing_all_modules_of_a_project"><a class="link" href="#_listing_all_modules_of_a_project">3.2.5. Listing all Modules of a Project</a></h4>
+<h4 id="_listing_all_modules_of_a_project"><a class="link" href="#_listing_all_modules_of_a_project">3.2.4. Listing all Modules of a Project</a></h4>
 <div class="sect4">
 <h5 id="_example_request_12"><a class="link" href="#_example_request_12">Example Request</a></h5>
 <div class="listingblock">
@@ -3354,71 +3195,28 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 1300
+Content-Type: application/json;charset=UTF-8
+Content-Length: 233
 
-{
-  "_embedded" : {
-    "moduleResourceList" : [ {
-      "modulePath" : "client/coderadar-app",
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/projects/1/modules/2"
-        },
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    }, {
-      "modulePath" : "server/analyzer",
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/projects/1/modules/3"
-        },
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    }, {
-      "modulePath" : "server/analyzer/submodule",
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/projects/1/modules/4"
-        },
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    }, {
-      "modulePath" : "server/coderadar-webapp",
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/projects/1/modules/1"
-        },
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    } ]
-  },
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/modules"
-    }
-  },
-  "page" : {
-    "size" : 10,
-    "totalElements" : 4,
-    "totalPages" : 1,
-    "number" : 0
-  }
-}</code></pre>
+[ {
+  "id" : 2,
+  "modulePath" : "client/coderadar-app"
+}, {
+  "id" : 3,
+  "modulePath" : "server/analyzer"
+}, {
+  "id" : 4,
+  "modulePath" : "server/analyzer/submodule"
+}, {
+  "id" : 1,
+  "modulePath" : "server/coderadar-webapp"
+} ]</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_deleting_a_module"><a class="link" href="#_deleting_a_module">3.2.6. Deleting a Module</a></h4>
+<h4 id="_deleting_a_module"><a class="link" href="#_deleting_a_module">3.2.5. Deleting a Module</a></h4>
 <div class="sect4">
 <h5 id="_example_request_13"><a class="link" href="#_example_request_13">Example Request</a></h5>
 <div class="listingblock">
@@ -3491,32 +3289,7 @@ patterns. Thus, the file set will include all INCLUDED files except those that w
 </table>
 </div>
 <div class="sect3">
-<h4 id="_hypermedia_links_4"><a class="link" href="#_hypermedia_links_4">3.3.2. Hypermedia Links</a></h4>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Relation</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the list of file patterns of this project.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project these file patterns belong to.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_listing_a_project_s_file_patterns"><a class="link" href="#_listing_a_project_s_file_patterns">3.3.3. Listing a Project&#8217;s File Patterns</a></h4>
+<h4 id="_listing_a_project_s_file_patterns"><a class="link" href="#_listing_a_project_s_file_patterns">3.3.2. Listing a Project&#8217;s File Patterns</a></h4>
 <div class="sect4">
 <h5 id="_example_request_14"><a class="link" href="#_example_request_14">Example Request</a></h5>
 <div class="listingblock">
@@ -3531,8 +3304,8 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 434
+Content-Length: 262
+Content-Type: application/json;charset=UTF-8
 
 {
   "filePatterns" : [ {
@@ -3543,22 +3316,14 @@ Content-Length: 434
     "pattern" : "src/main/java/**/generated/**/*.java",
     "inclusionType" : "EXCLUDE",
     "fileSetType" : "SOURCE"
-  } ],
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/files"
-    },
-    "project" : {
-      "href" : "http://localhost:8080/projects/1"
-    }
-  }
+  } ]
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_setting_a_project_s_file_patterns"><a class="link" href="#_setting_a_project_s_file_patterns">3.3.4. Setting a Project&#8217;s File Patterns</a></h4>
+<h4 id="_setting_a_project_s_file_patterns"><a class="link" href="#_setting_a_project_s_file_patterns">3.3.3. Setting a Project&#8217;s File Patterns</a></h4>
 <div class="paragraph">
 <p><a id="setting-filepatterns"></a></p>
 </div>
@@ -3571,9 +3336,9 @@ all file patterns of a project at once.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/files HTTP/1.1
+Content-Length: 262
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 262
 
 {
   "filePatterns" : [ {
@@ -3594,8 +3359,8 @@ Content-Length: 262
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 434
+Content-Length: 262
+Content-Type: application/json;charset=UTF-8
 
 {
   "filePatterns" : [ {
@@ -3606,15 +3371,7 @@ Content-Length: 434
     "pattern" : "src/main/java/**/generated/**/*.java",
     "inclusionType" : "EXCLUDE",
     "fileSetType" : "SOURCE"
-  } ],
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/files"
-    },
-    "project" : {
-      "href" : "http://localhost:8080/projects/1"
-    }
-  }
+  } ]
 }</code></pre>
 </div>
 </div>
@@ -3645,6 +3402,12 @@ plugin via the AnalyzerConfiguration resource.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id of the AnalyzerConfiguration</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">analyzerName</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Name of the analyzer plugin to which the AnalyzerConfiguration is applied. This should always be the fully qualified class name of the class that implements the plugin interface.</p></td>
@@ -3660,36 +3423,7 @@ plugin via the AnalyzerConfiguration resource.</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_hypermedia_links_5"><a class="link" href="#_hypermedia_links_5">3.4.2. Hypermedia Links</a></h4>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Relation</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the AnalyzerConfiguration itself.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>list</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the list of AnalyzerConfigurations for this project.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project to which the AnalyzerConfiguration belongs.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_adding_an_analyzer_configuration"><a class="link" href="#_adding_an_analyzer_configuration">3.4.3. Adding an Analyzer Configuration</a></h4>
+<h4 id="_adding_an_analyzer_configuration"><a class="link" href="#_adding_an_analyzer_configuration">3.4.2. Adding an Analyzer Configuration</a></h4>
 <div class="paragraph">
 <p><a id="create-analyzer"></a></p>
 </div>
@@ -3698,11 +3432,12 @@ plugin via the AnalyzerConfiguration resource.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers HTTP/1.1
+Content-Length: 116
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 101
 
 {
+  "id" : null,
   "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
   "enabled" : true
 }</code></pre>
@@ -3714,30 +3449,20 @@ Content-Length: 101
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 361
+Content-Type: application/json;charset=UTF-8
+Content-Length: 113
 
 {
+  "id" : 1,
   "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
-  "enabled" : true,
-  "_links" : {
-    "project" : {
-      "href" : "http://localhost:8080/projects/1"
-    },
-    "list" : {
-      "href" : "http://localhost:8080/projects/1/analyzers"
-    },
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/analyzers/1"
-    }
-  }
+  "enabled" : true
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_deleting_an_analyzer_configuration"><a class="link" href="#_deleting_an_analyzer_configuration">3.4.4. Deleting an Analyzer Configuration</a></h4>
+<h4 id="_deleting_an_analyzer_configuration"><a class="link" href="#_deleting_an_analyzer_configuration">3.4.3. Deleting an Analyzer Configuration</a></h4>
 <div class="sect4">
 <h5 id="_example_request_17"><a class="link" href="#_example_request_17">Example Request</a></h5>
 <div class="listingblock">
@@ -3757,17 +3482,18 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_updating_an_analyzer_configuration"><a class="link" href="#_updating_an_analyzer_configuration">3.4.5. Updating an Analyzer Configuration</a></h4>
+<h4 id="_updating_an_analyzer_configuration"><a class="link" href="#_updating_an_analyzer_configuration">3.4.4. Updating an Analyzer Configuration</a></h4>
 <div class="sect4">
 <h5 id="_example_request_18"><a class="link" href="#_example_request_18">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers/1 HTTP/1.1
 Content-Type: application/json
+Content-Length: 117
 Host: localhost:8080
-Content-Length: 102
 
 {
+  "id" : null,
   "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
   "enabled" : false
 }</code></pre>
@@ -3779,30 +3505,20 @@ Content-Length: 102
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 362
+Content-Type: application/json;charset=UTF-8
+Content-Length: 114
 
 {
+  "id" : 1,
   "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
-  "enabled" : false,
-  "_links" : {
-    "project" : {
-      "href" : "http://localhost:8080/projects/1"
-    },
-    "list" : {
-      "href" : "http://localhost:8080/projects/1/analyzers"
-    },
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/analyzers/1"
-    }
-  }
+  "enabled" : false
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_listing_a_project_s_analyzer_configurations"><a class="link" href="#_listing_a_project_s_analyzer_configurations">3.4.6. Listing a Project&#8217;s Analyzer Configurations</a></h4>
+<h4 id="_listing_a_project_s_analyzer_configurations"><a class="link" href="#_listing_a_project_s_analyzer_configurations">3.4.5. Listing a Project&#8217;s Analyzer Configurations</a></h4>
 <div class="sect4">
 <h5 id="_example_request_19"><a class="link" href="#_example_request_19">Example Request</a></h5>
 <div class="listingblock">
@@ -3818,47 +3534,23 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 910
+Content-Length: 234
 
-{
-  "_embedded" : {
-    "analyzerConfigurationResourceList" : [ {
-      "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
-      "enabled" : true,
-      "_links" : {
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        },
-        "list" : {
-          "href" : "http://localhost:8080/projects/1/analyzers"
-        },
-        "self" : {
-          "href" : "http://localhost:8080/projects/1/analyzers/1"
-        }
-      }
-    }, {
-      "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer2",
-      "enabled" : true,
-      "_links" : {
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        },
-        "list" : {
-          "href" : "http://localhost:8080/projects/1/analyzers"
-        },
-        "self" : {
-          "href" : "http://localhost:8080/projects/1/analyzers/51"
-        }
-      }
-    } ]
-  }
-}</code></pre>
+[ {
+  "id" : 1,
+  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
+  "enabled" : true
+}, {
+  "id" : 51,
+  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer2",
+  "enabled" : true
+} ]</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_loading_a_single_analyzer_configuration"><a class="link" href="#_loading_a_single_analyzer_configuration">3.4.7. Loading a single Analyzer Configuration</a></h4>
+<h4 id="_loading_a_single_analyzer_configuration"><a class="link" href="#_loading_a_single_analyzer_configuration">3.4.6. Loading a single Analyzer Configuration</a></h4>
 <div class="sect4">
 <h5 id="_example_request_20"><a class="link" href="#_example_request_20">Example Request</a></h5>
 <div class="listingblock">
@@ -3873,23 +3565,13 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 361
+Content-Type: application/json;charset=UTF-8
+Content-Length: 113
 
 {
+  "id" : 1,
   "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
-  "enabled" : true,
-  "_links" : {
-    "project" : {
-      "href" : "http://localhost:8080/projects/1"
-    },
-    "list" : {
-      "href" : "http://localhost:8080/projects/1/analyzers"
-    },
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/analyzers/1"
-    }
-  }
+  "enabled" : true
 }</code></pre>
 </div>
 </div>
@@ -3915,7 +3597,7 @@ Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
 Host: localhost:8080
 
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=file
+Content-Disposition: form-data; name=file; filename=config.txt
 Content-Type: text/plain
 
 abc
@@ -3948,6 +3630,7 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Accept-Ranges: bytes
 Content-Length: 3
 Content-Type: text/plain
 
@@ -4017,32 +3700,7 @@ Job is set to inactive.</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_hypermedia_links_6"><a class="link" href="#_hypermedia_links_6">3.6.2. Hypermedia Links</a></h4>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Relation</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to this AnalyzingJob resource.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project resource this AnalyzingJob belongs to.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_starting_an_analyzing_job"><a class="link" href="#_starting_an_analyzing_job">3.6.3. Starting an Analyzing Job</a></h4>
+<h4 id="_starting_an_analyzing_job"><a class="link" href="#_starting_an_analyzing_job">3.6.2. Starting an Analyzing Job</a></h4>
 <div class="paragraph">
 <p><a id="creating-analyzing-job"></a></p>
 </div>
@@ -4051,9 +3709,9 @@ Job is set to inactive.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzingJob HTTP/1.1
+Content-Length: 70
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 70
 
 {
   "fromDate" : 1451606400000,
@@ -4068,27 +3726,19 @@ Content-Length: 70
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 230
+Content-Type: application/json;charset=UTF-8
+Content-Length: 68
 
 {
-  "fromDate" : 1451606400000,
-  "active" : true,
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/analyzingJob"
-    },
-    "project" : {
-      "href" : "http://localhost:8080/projects/1"
-    }
-  }
+  "fromDate" : "2016-01-01T00:00:00.000+0000",
+  "active" : true
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_retrieving_an_analyzing_job"><a class="link" href="#_retrieving_an_analyzing_job">3.6.4. Retrieving an Analyzing Job</a></h4>
+<h4 id="_retrieving_an_analyzing_job"><a class="link" href="#_retrieving_an_analyzing_job">3.6.3. Retrieving an Analyzing Job</a></h4>
 <div class="sect4">
 <h5 id="_example_request_24"><a class="link" href="#_example_request_24">Example Request</a></h5>
 <div class="listingblock">
@@ -4103,20 +3753,12 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 230
+Content-Type: application/json;charset=UTF-8
+Content-Length: 68
 
 {
-  "fromDate" : 1451606400000,
-  "active" : true,
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/analyzingJob"
-    },
-    "project" : {
-      "href" : "http://localhost:8080/projects/1"
-    }
-  }
+  "fromDate" : "2016-01-01T00:00:00.000+0000",
+  "active" : true
 }</code></pre>
 </div>
 </div>
@@ -4149,6 +3791,12 @@ part of the quality profile and thus are most important to you.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The id of the profile.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">profileName</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The display name of the profile.</p></td>
@@ -4170,42 +3818,18 @@ part of the quality profile and thus are most important to you.</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_hypermedia_links_7"><a class="link" href="#_hypermedia_links_7">3.7.2. Hypermedia Links</a></h4>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Relation</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>self</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to this quality profile.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Link to the project this quality profile belongs to.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_creating_a_quality_profile"><a class="link" href="#_creating_a_quality_profile">3.7.3. Creating a Quality Profile</a></h4>
+<h4 id="_creating_a_quality_profile"><a class="link" href="#_creating_a_quality_profile">3.7.2. Creating a Quality Profile</a></h4>
 <div class="sect4">
 <h5 id="_example_request_25"><a class="link" href="#_example_request_25">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/qualityprofiles HTTP/1.1
+Content-Length: 219
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 204
 
 {
+  "id" : null,
   "profileName" : "Quality Profile",
   "metrics" : [ {
     "metricName" : "dummyMetric1",
@@ -4224,9 +3848,10 @@ Content-Length: 204
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 388
+Content-Length: 216
 
 {
+  "id" : 1,
   "profileName" : "Quality Profile",
   "metrics" : [ {
     "metricName" : "dummyMetric1",
@@ -4234,32 +3859,25 @@ Content-Length: 388
   }, {
     "metricName" : "dummyMetric2",
     "metricType" : "COMPLIANCE"
-  } ],
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/qualityprofiles/1"
-    },
-    "project" : {
-      "href" : "http://localhost:8080/projects/1"
-    }
-  }
+  } ]
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_updating_a_quality_profile"><a class="link" href="#_updating_a_quality_profile">3.7.4. Updating a Quality Profile</a></h4>
+<h4 id="_updating_a_quality_profile"><a class="link" href="#_updating_a_quality_profile">3.7.3. Updating a Quality Profile</a></h4>
 <div class="sect4">
 <h5 id="_example_request_26"><a class="link" href="#_example_request_26">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/qualityprofiles/1 HTTP/1.1
+Content-Length: 229
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 214
 
 {
+  "id" : null,
   "profileName" : "Quality Profile (updated)",
   "metrics" : [ {
     "metricName" : "dummyMetric3",
@@ -4278,9 +3896,10 @@ Content-Length: 214
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 398
+Content-Length: 226
 
 {
+  "id" : 1,
   "profileName" : "Quality Profile (updated)",
   "metrics" : [ {
     "metricName" : "dummyMetric3",
@@ -4288,32 +3907,25 @@ Content-Length: 398
   }, {
     "metricName" : "dummyMetric4",
     "metricType" : "COMPLIANCE"
-  } ],
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/qualityprofiles/1"
-    },
-    "project" : {
-      "href" : "http://localhost:8080/projects/1"
-    }
-  }
+  } ]
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_loading_a_single_quality_profile"><a class="link" href="#_loading_a_single_quality_profile">3.7.5. Loading a single Quality Profile</a></h4>
+<h4 id="_loading_a_single_quality_profile"><a class="link" href="#_loading_a_single_quality_profile">3.7.4. Loading a single Quality Profile</a></h4>
 <div class="sect4">
 <h5 id="_example_request_27"><a class="link" href="#_example_request_27">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/qualityprofiles/1 HTTP/1.1
+Content-Length: 219
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 204
 
 {
+  "id" : null,
   "profileName" : "Quality Profile",
   "metrics" : [ {
     "metricName" : "dummyMetric1",
@@ -4332,9 +3944,10 @@ Content-Length: 204
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 388
+Content-Length: 216
 
 {
+  "id" : 1,
   "profileName" : "Quality Profile",
   "metrics" : [ {
     "metricName" : "dummyMetric1",
@@ -4342,22 +3955,14 @@ Content-Length: 388
   }, {
     "metricName" : "dummyMetric2",
     "metricType" : "COMPLIANCE"
-  } ],
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/qualityprofiles/1"
-    },
-    "project" : {
-      "href" : "http://localhost:8080/projects/1"
-    }
-  }
+  } ]
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_deleting_a_quality_profile"><a class="link" href="#_deleting_a_quality_profile">3.7.6. Deleting a Quality Profile</a></h4>
+<h4 id="_deleting_a_quality_profile"><a class="link" href="#_deleting_a_quality_profile">3.7.5. Deleting a Quality Profile</a></h4>
 <div class="sect4">
 <h5 id="_example_request_28"><a class="link" href="#_example_request_28">Example Request</a></h5>
 <div class="listingblock">
@@ -4377,12 +3982,12 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_listing_a_project_s_quality_profiles"><a class="link" href="#_listing_a_project_s_quality_profiles">3.7.7. Listing a Project&#8217;s Quality Profiles</a></h4>
+<h4 id="_listing_a_project_s_quality_profiles"><a class="link" href="#_listing_a_project_s_quality_profiles">3.7.6. Listing a Project&#8217;s Quality Profiles</a></h4>
 <div class="sect4">
 <h5 id="_example_request_29"><a class="link" href="#_example_request_29">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/qualityprofiles?page=0&amp;size=2&amp;page=0&amp;size=2 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/qualityprofiles?page=0&amp;size=2 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -4393,67 +3998,59 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 1509
+Content-Length: 1102
 
-{
-  "_embedded" : {
-    "qualityProfileResourceList" : [ {
-      "profileName" : "Quality Profile 1",
-      "metrics" : [ {
-        "metricName" : "dummyMetric1",
-        "metricType" : "VIOLATION"
-      }, {
-        "metricName" : "dummyMetric2",
-        "metricType" : "COMPLIANCE"
-      } ],
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/projects/1/qualityprofiles/1"
-        },
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    }, {
-      "profileName" : "Quality Profile 2",
-      "metrics" : [ {
-        "metricName" : "dummyMetric1",
-        "metricType" : "VIOLATION"
-      }, {
-        "metricName" : "dummyMetric2",
-        "metricType" : "COMPLIANCE"
-      } ],
-      "_links" : {
-        "self" : {
-          "href" : "http://localhost:8080/projects/1/qualityprofiles/2"
-        },
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    } ]
-  },
-  "_links" : {
-    "first" : {
-      "href" : "http://localhost:8080/projects/1/qualityprofiles?page=0&amp;size=2"
-    },
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/qualityprofiles?page=0&amp;size=2"
-    },
-    "next" : {
-      "href" : "http://localhost:8080/projects/1/qualityprofiles?page=1&amp;size=2"
-    },
-    "last" : {
-      "href" : "http://localhost:8080/projects/1/qualityprofiles?page=2&amp;size=2"
-    }
-  },
-  "page" : {
-    "size" : 2,
-    "totalElements" : 5,
-    "totalPages" : 3,
-    "number" : 0
-  }
-}</code></pre>
+[ {
+  "id" : 1,
+  "profileName" : "Quality Profile 1",
+  "metrics" : [ {
+    "metricName" : "dummyMetric1",
+    "metricType" : "VIOLATION"
+  }, {
+    "metricName" : "dummyMetric2",
+    "metricType" : "COMPLIANCE"
+  } ]
+}, {
+  "id" : 2,
+  "profileName" : "Quality Profile 2",
+  "metrics" : [ {
+    "metricName" : "dummyMetric1",
+    "metricType" : "VIOLATION"
+  }, {
+    "metricName" : "dummyMetric2",
+    "metricType" : "COMPLIANCE"
+  } ]
+}, {
+  "id" : 3,
+  "profileName" : "Quality Profile 3",
+  "metrics" : [ {
+    "metricName" : "dummyMetric1",
+    "metricType" : "VIOLATION"
+  }, {
+    "metricName" : "dummyMetric2",
+    "metricType" : "COMPLIANCE"
+  } ]
+}, {
+  "id" : 4,
+  "profileName" : "Quality Profile 4",
+  "metrics" : [ {
+    "metricName" : "dummyMetric1",
+    "metricType" : "VIOLATION"
+  }, {
+    "metricName" : "dummyMetric2",
+    "metricType" : "COMPLIANCE"
+  } ]
+}, {
+  "id" : 5,
+  "profileName" : "Quality Profile 5",
+  "metrics" : [ {
+    "metricName" : "dummyMetric1",
+    "metricType" : "VIOLATION"
+  }, {
+    "metricName" : "dummyMetric2",
+    "metricType" : "COMPLIANCE"
+  } ]
+} ]</code></pre>
 </div>
 </div>
 </div>
@@ -4481,7 +4078,7 @@ Content-Length: 1509
 <h5 id="_example_request_30"><a class="link" href="#_example_request_30">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /analyzers?page=0&amp;size=2&amp;page=0&amp;size=2 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /analyzers?page=0&amp;size=2 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -4492,37 +4089,25 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 720
+Content-Length: 750
 
-{
-  "_embedded" : {
-    "analyzerResourceList" : [ {
-      "analyzerName" : "org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin"
-    }, {
-      "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.AbstractDummyAnalyzer"
-    } ]
-  },
-  "_links" : {
-    "first" : {
-      "href" : "http://localhost:8080/analyzers?page=0&amp;size=2"
-    },
-    "self" : {
-      "href" : "http://localhost:8080/analyzers"
-    },
-    "next" : {
-      "href" : "http://localhost:8080/analyzers?page=1&amp;size=2"
-    },
-    "last" : {
-      "href" : "http://localhost:8080/analyzers?page=3&amp;size=2"
-    }
-  },
-  "page" : {
-    "size" : 2,
-    "totalElements" : 8,
-    "totalPages" : 4,
-    "number" : 0
-  }
-}</code></pre>
+[ {
+  "analyzerName" : "org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin"
+}, {
+  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.AbstractDummyAnalyzer"
+}, {
+  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.AndAnotherDummyAnalyzer"
+}, {
+  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.AnotherDummyAnalyzer"
+}, {
+  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer"
+}, {
+  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.YetAnotherDummyAnalyzer"
+}, {
+  "analyzerName" : "org.wickedsource.coderadar.analyzer.loc.LocAnalyzerPlugin"
+}, {
+  "analyzerName" : "org.wickedsource.coderadar.factories.entities.AnalyzerFactory$DummyAnalyzer"
+} ]</code></pre>
 </div>
 </div>
 </div>
@@ -4580,33 +4165,18 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Length: 130
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 413
 
-{
-  "_embedded" : {
-    "metricResourceList" : [ {
-      "metricName" : "metric1"
-    }, {
-      "metricName" : "metric2"
-    }, {
-      "metricName" : "metric3"
-    }, {
-      "metricName" : "metric4"
-    } ]
-  },
-  "_links" : {
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/metrics"
-    }
-  },
-  "page" : {
-    "size" : 10,
-    "totalElements" : 4,
-    "totalPages" : 1,
-    "number" : 0
-  }
-}</code></pre>
+[ {
+  "metricName" : "metric1"
+}, {
+  "metricName" : "metric2"
+}, {
+  "metricName" : "metric3"
+}, {
+  "metricName" : "metric4"
+} ]</code></pre>
 </div>
 </div>
 </div>
@@ -4648,7 +4218,7 @@ are available.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>timestamp</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The timestamp of the commit in milliseconds since epoch.</p></td>
 </tr>
 <tr>
@@ -4660,33 +4230,12 @@ are available.</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_hypermedia_links_8"><a class="link" href="#_hypermedia_links_8">5.2.2. Hypermedia Links</a></h4>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Relation</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>project</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The project resource this commit belongs to.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_listing_a_project_s_commits"><a class="link" href="#_listing_a_project_s_commits">5.2.3. Listing a Project&#8217;s Commits</a></h4>
+<h4 id="_listing_a_project_s_commits"><a class="link" href="#_listing_a_project_s_commits">5.2.2. Listing a Project&#8217;s Commits</a></h4>
 <div class="sect4">
 <h5 id="_example_request_32"><a class="link" href="#_example_request_32">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/commits?page=3&amp;size=5&amp;page=3&amp;size=5 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/commits HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -4697,53 +4246,94 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 1022
+Content-Length: 2014
 
-{
-  "_embedded" : {
-    "commitResourceList" : [ {
-      "name" : "cafebabe15",
-      "author" : "Tom",
-      "timestamp" : 1462424705000,
-      "analyzed" : false,
-      "_links" : {
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    }, {
-      "name" : "cafebabe16",
-      "author" : "Tom",
-      "timestamp" : 1462424705000,
-      "analyzed" : false,
-      "_links" : {
-        "project" : {
-          "href" : "http://localhost:8080/projects/1"
-        }
-      }
-    } ]
-  },
-  "_links" : {
-    "first" : {
-      "href" : "http://localhost:8080/projects/1/commits?page=0&amp;size=5"
-    },
-    "prev" : {
-      "href" : "http://localhost:8080/projects/1/commits?page=2&amp;size=5"
-    },
-    "self" : {
-      "href" : "http://localhost:8080/projects/1/commits?page=3&amp;size=5"
-    },
-    "last" : {
-      "href" : "http://localhost:8080/projects/1/commits?page=3&amp;size=5"
-    }
-  },
-  "page" : {
-    "size" : 5,
-    "totalElements" : 17,
-    "totalPages" : 4,
-    "number" : 3
-  }
-}</code></pre>
+[ {
+  "name" : "cafebabe",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe1",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe2",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe3",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe4",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe5",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe6",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe7",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe8",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe9",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe10",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe11",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe12",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe13",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe14",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe15",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+}, {
+  "name" : "cafebabe16",
+  "author" : "Tom",
+  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "analyzed" : false
+} ]</code></pre>
 </div>
 </div>
 </div>
@@ -4823,9 +4413,9 @@ analysis will take a while.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metricvalues/perCommit HTTP/1.1
+Content-Length: 121
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 121
 
 {
   "commit" : "eb7cbd429530dc26d06a9ea2a62794421dce1e9a",
@@ -4922,8 +4512,8 @@ Content-Length: 102
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 195
+Content-Type: application/hal+json;charset=UTF-8
 
 {
   "profiles" : {
@@ -5008,9 +4598,9 @@ Content-Length: 195
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metricvalues/history HTTP/1.1
+Content-Length: 137
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 137
 
 {
   "metric" : "metric1",
@@ -5172,9 +4762,9 @@ time of a specified commit.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metricvalues/tree HTTP/1.1
+Content-Length: 110
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 110
 
 {
   "commit" : "eb7cbd429530dc26d06a9ea2a62794421dce1e9a",
@@ -5188,8 +4778,8 @@ Content-Length: 110
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
 Content-Length: 1341
+Content-Type: application/hal+json;charset=UTF-8
 
 {
   "name" : "root",
@@ -5541,7 +5131,7 @@ Content-Length: 2928
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-12-14 10:45:39 UTC
+Last updated 2019-04-04 12:52:39 +00:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
