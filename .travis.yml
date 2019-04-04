@@ -21,9 +21,6 @@ jobs:
     script: "./gradlew --stacktrace build"
 
   - stage: publish_gh
-    script:
-   - "cd coderadar-server/coderadar-core"
-   - "../../gradlew --console=plain clean preparePages"
-   - "../../gradlew gitPublishPush --stacktrace"
+    script: "cd coderadar-server/coderadar-core && ../../gradlew --console=plain clean preparePages && ../../gradlew gitPublishPush --stacktrace"
 #   - "../../gradlew bintrayUpload --stacktrace"
 
