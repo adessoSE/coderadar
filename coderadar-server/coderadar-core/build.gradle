@@ -16,6 +16,7 @@ ext {
 sourceSets{
     test {
         java {
+            gitPublishPush
             srcDir "src/test/performance"
         }
     }
