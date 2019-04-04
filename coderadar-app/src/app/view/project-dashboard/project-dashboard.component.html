@@ -5,8 +5,9 @@
     <br>
     <mat-label style="font-size: 12pt">Analyzed {{commitsAnalyzed}}/{{commits.length}} commits</mat-label>
   </p>
-  <mat-grid-list cols="4" rowHeight="130px">
-    <mat-grid-tile *ngFor="let commit of commits" [colspan]="2" [rowspan]="1">
+  <mat-grid-list cols="1" rowHeight="130px">
+    <mat-grid-tile *ngFor="let commit of commits.slice(pageEvent.pageIndex*pageEvent.pageSize, (pageEvent.pageIndex*pageEvent.pageSize) + pageEvent.pageSize)"
+                     [colspan]="1" [rowspan]="1">
       <mat-card [ngClass]=
                   "{'dashboard-card-deselected' : commit !== selectedCommit1 && commit !== selectedCommit2
                     && (prevSelectedCommit1 === commit || prevSelectedCommit2 === commit),
@@ -31,6 +32,11 @@
     </a>
 
   </mat-grid-list>
-</main>
 
+</main>
+<mat-paginator [showFirstLastButtons]="true" class="paginator" [length]="commits.length"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="pageSizeOptions"
+               (page)="pageEvent = $event">
+</mat-paginator>
 <app-footer></app-footer>

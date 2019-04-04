@@ -28,7 +28,7 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatMenuModule,
+  MatMenuModule, MatPaginatorModule,
   MatSidenavModule,
   MatToolbarModule,
 } from '@angular/material';
@@ -109,7 +109,8 @@ const appRoutes: Routes = [
     VisualizationModule,
     StoreModule.forRoot(REDUCER_TOKEN),
     EffectsModule.forRoot([AppEffects]),
-    environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 50})
+    environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 50}),
+    MatPaginatorModule
   ],
   providers: [
     {

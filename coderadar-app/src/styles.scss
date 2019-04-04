@@ -13,16 +13,16 @@ html {
 
 body {
   margin: 0;
+  height: 100%;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: whitesmoke;
 }
 
 footer {
-  position: static;
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: -1;
+  z-index: 10;
   height: 60px;
 }
 

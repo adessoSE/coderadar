@@ -8,6 +8,7 @@ import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import { AppEffects } from 'src/app/city-map/shared/effects';
 import {faClone, faSquare} from '@fortawesome/free-regular-svg-icons';
+import {PageEvent} from '@angular/material';
 
 
 @Component({
@@ -24,12 +25,18 @@ export class ProjectDashboardComponent implements OnInit {
 
   faClone = faClone;
 
+  pageEvent: PageEvent;
+
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+
   selectedCommit1: Commit;
   selectedCommit2: Commit;
 
   // These are needed for the deselection css to work
   prevSelectedCommit1: Commit;
   prevSelectedCommit2: Commit;
+
+  pageSize = 5;
 
   constructor(private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute,
@@ -38,6 +45,9 @@ export class ProjectDashboardComponent implements OnInit {
     this.commits = [];
     this.selectedCommit1 = null;
     this.selectedCommit2 = null;
+    this.pageEvent = new PageEvent();
+    this.pageEvent.pageSize = 5;
+    this.pageEvent.pageIndex = 0;
   }
 
   ngOnInit(): void {
@@ -60,6 +70,10 @@ export class ProjectDashboardComponent implements OnInit {
     }
   }
 
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+    this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+  }
+
   /**
    * Constructs a date from a timestamp and returns it in string form.
    * @param timestamp The timestamp to construct a date from.
@@ -73,16 +87,16 @@ export class ProjectDashboardComponent implements OnInit {
    */
   getTitleText(): string {
     if (this.project.startDate === 'first commit' && this.project.endDate === 'current') {
-      return 'Showing all commits for project ' + this.project.name + ' (' + this.commits.length + ')';
+      return 'Showing commits for project ' + this.project.name + ' (' + this.commits.length + ')';
     } else if (this.project.startDate !== 'first commit' && this.project.endDate === 'current') {
-      return 'Showing all commits for project ' + this.project.name + ' from ' + this.project.startDate + ' up until today'
+      return 'Showing commits for project ' + this.project.name + ' from ' + this.project.startDate + ' up until today'
         + ' (' + this.commits.length + ')';
     } else if (this.project.startDate === 'first commit' && this.project.endDate !== 'current') {
-      return 'Showing all commits for project ' + this.project.name + ' from '
+      return 'Showing commits for project ' + this.project.name + ' from '
         + new Date(this.commits[this.commits.length - 1].timestamp).toLocaleDateString() + ' up until ' + this.project.endDate
         + ' (' + this.commits.length + ')';
     } else {
-      return 'Showing all commits for project ' + this.project.name + ' from '
+      return 'Showing commits for project ' + this.project.name + ' from '
         + this.project.startDate + ' up until ' + this.project.endDate + ' (' + this.commits.length + ')';
     }
   }
