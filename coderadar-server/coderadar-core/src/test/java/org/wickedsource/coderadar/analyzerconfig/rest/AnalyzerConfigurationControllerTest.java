@@ -38,7 +38,10 @@ public class AnalyzerConfigurationControllerTest extends ControllerTestTemplate 
             document(
                 "analyzerConfiguration/post",
                 requestFields(
-                    fields.withPath("id").description("id of the AnalyzerConfiguration"),
+                    fields
+                        .withPath("id")
+                        .description("id of the AnalyzerConfiguration")
+                        .type("Long"),
                     fields
                         .withPath("analyzerName")
                         .description(

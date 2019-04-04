@@ -85,9 +85,6 @@ To access the functionality of coderadar you have to register a user.
 You need to define a username and a password. The password will be sent as
 plain text and hashed on server side for persisting.
 
-==== Hypermedia links
-include::{snippets}/user/registration/links.adoc[]
-
 ==== Registering a User
 
 ===== Registration Data Structure
@@ -220,10 +217,6 @@ and its sub-resources you provide coderadar with the information it needs to ana
 
 include::{snippets}/projects/create/request-fields.adoc[]
 
-==== Hypermedia Links
-
-include::{snippets}/projects/create/links.adoc[]
-
 ==== Listing Projects
 
 ===== Example Request
@@ -278,10 +271,6 @@ files in all commits have to be updated during these operations.
 ==== Structure
 
 include::{snippets}/modules/create/request-fields.adoc[]
-
-==== Hypermedia Links
-
-include::{snippets}/modules/create/links.adoc[]
 
 ==== Creating a Module
 
@@ -339,10 +328,6 @@ If a project has no file patterns defined, no files will be analyzed.
 
 include::{snippets}/filepatterns/create-update/request-fields.adoc[]
 
-==== Hypermedia Links
-
-include::{snippets}/filepatterns/create-update/links.adoc[]
-
 ==== Listing a Project's File Patterns
 
 ===== Example Request
@@ -376,10 +361,6 @@ plugin via the AnalyzerConfiguration resource.
 ==== Structure
 
 include::{snippets}/analyzerConfiguration/post/request-fields.adoc[]
-
-==== Hypermedia Links
-
-include::{snippets}/analyzerConfiguration/post/links.adoc[]
 
 ==== Adding an Analyzer Configuration
 anchor:create-analyzer[]
@@ -477,10 +458,6 @@ Job is set to inactive.
 
 include::{snippets}/analyzing-job/create-update/request-fields.adoc[]
 
-==== Hypermedia Links
-
-include::{snippets}/analyzing-job/create-update/links.adoc[]
-
 ==== Starting an Analyzing Job
 anchor:creating-analyzing-job[]
 
@@ -513,10 +490,6 @@ part of the quality profile and thus are most important to you.
 ==== Structure
 
 include::{snippets}/qualityprofiles/create/request-fields.adoc[]
-
-==== Hypermedia Links
-
-include::{snippets}/qualityprofiles/create/links.adoc[]
 
 ==== Creating a Quality Profile
 
@@ -625,9 +598,6 @@ are available.
 
 ==== Structure
 include::{snippets}/commit/list/response-fields.adoc[]
-
-==== Hypermedia Links
-include::{snippets}/commit/list/links.adoc[]
 
 ==== Listing a Project's Commits
 

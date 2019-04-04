@@ -42,7 +42,7 @@ public class QualityProfileControllerTest extends ControllerTestTemplate {
             document(
                 "qualityprofiles/create",
                 requestFields(
-                    fields.withPath("id").description("The id of the profile."),
+                    fields.withPath("id").description("The id of the profile.").type("Long"),
                     fields.withPath("profileName").description("The display name of the profile."),
                     fields
                         .withPath("metrics[].metricName")
