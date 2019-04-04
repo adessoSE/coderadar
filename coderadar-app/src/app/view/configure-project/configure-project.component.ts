@@ -251,7 +251,6 @@ export class ConfigureProjectComponent implements OnInit {
       this.filePatterns.filter(p => p.pattern === this.filePatternIncludeInput).length === 0) {
       const pattern = new FilePatterns();
       pattern.pattern = this.filePatternIncludeInput;
-      pattern.fileSetType = 'SOURCE';
       pattern.inclusionType = 'INCLUDE';
       this.filePatterns.push(pattern);
       this.filePatternIncludeInput = '';
@@ -267,7 +266,6 @@ export class ConfigureProjectComponent implements OnInit {
       this.filePatterns.filter(p => p.pattern === this.filePatternExcludeInput).length === 0) {
       const pattern = new FilePatterns();
       pattern.pattern = this.filePatternExcludeInput;
-      pattern.fileSetType = 'SOURCE';
       pattern.inclusionType = 'EXCLUDE';
       this.filePatterns.push(pattern);
       this.filePatternExcludeInput = '';
