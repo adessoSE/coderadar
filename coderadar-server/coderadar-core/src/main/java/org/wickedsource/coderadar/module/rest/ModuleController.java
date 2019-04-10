@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -89,7 +90,8 @@ public class ModuleController {
 
   @SuppressWarnings("unchecked")
   @RequestMapping(method = RequestMethod.GET)
-  public ResponseEntity<List<ModuleResource>> listModules(@PathVariable long projectId) {
+  public ResponseEntity<List<ModuleResource>> listModules(
+      @PathVariable long projectId, Pageable pageable) {
     Project project = projectVerifier.loadProjectOrThrowException(projectId);
     List<Module> modules = moduleRepository.findByProjectId(projectId);
     ModuleResourceAssembler assembler = new ModuleResourceAssembler(project);

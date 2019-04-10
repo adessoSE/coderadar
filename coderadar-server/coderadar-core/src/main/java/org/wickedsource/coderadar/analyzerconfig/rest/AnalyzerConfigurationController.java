@@ -3,6 +3,7 @@ package org.wickedsource.coderadar.analyzerconfig.rest;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -70,7 +71,7 @@ public class AnalyzerConfigurationController {
 
   @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
   public ResponseEntity<List<AnalyzerConfigurationResource>> getAnalyzerConfigurationsForProject(
-      @PathVariable Long projectId) {
+      @PathVariable Long projectId, Pageable pageable) {
     projectVerifier.checkProjectExistsOrThrowException(projectId);
     List<AnalyzerConfiguration> configurations =
         analyzerConfigurationRepository.findByProjectId(projectId);

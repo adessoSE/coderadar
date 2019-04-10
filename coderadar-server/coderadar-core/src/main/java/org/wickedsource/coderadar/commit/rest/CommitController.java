@@ -2,6 +2,7 @@ package org.wickedsource.coderadar.commit.rest;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,8 @@ public class CommitController {
   }
 
   @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
-  public ResponseEntity<List<CommitResource>> listCommits(@PathVariable long projectId) {
+  public ResponseEntity<List<CommitResource>> listCommits(
+      @PathVariable long projectId, Pageable pageable) {
     List<Commit> commits = commitRepository.findByProjectId(projectId);
     CommitResourceAssembler commitResourceAssembler = new CommitResourceAssembler();
     List<CommitResource> commitResources = commitResourceAssembler.toResourceList(commits);

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -43,7 +44,7 @@ public class ProjectController {
   }
 
   @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
-  public ResponseEntity<List<ProjectResource>> getProjects() {
+  public ResponseEntity<List<ProjectResource>> getProjects(Pageable pageable) {
     Iterable<Project> projects = projectRepository.findAll();
     return new ResponseEntity<>(projectAssembler.toResourceList(projects), HttpStatus.OK);
   }

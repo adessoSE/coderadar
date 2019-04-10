@@ -3,6 +3,7 @@ package org.wickedsource.coderadar.filepattern.rest;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,8 @@ public class FilePatternController {
   }
 
   @RequestMapping(method = RequestMethod.GET)
-  public ResponseEntity<FilePatternResource> getFilePatterns(@PathVariable Long projectId) {
+  public ResponseEntity<FilePatternResource> getFilePatterns(
+      @PathVariable Long projectId, Pageable pageable) {
     projectVerifier.checkProjectExistsOrThrowException(projectId);
     FilePatternResourceAssembler assembler = new FilePatternResourceAssembler(projectId);
     List<FilePattern> filePatternList = filePatternRepository.findByProjectId(projectId);
