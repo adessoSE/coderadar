@@ -37,22 +37,14 @@ export class FilterComponent implements OnInit {
         return this.activeFilter.renamed;
       }
     });
-    console.log(this.filterList);
-    console.log(this.selectedList);
   }
 
   handleFilterChanged() {
-    this.filterChanged.emit(this.activeFilter);
-  }
-
-  handleFilterChanged2() {
     this.activeFilter.unmodified = this.selectedList.indexOf('unmodified') !== -1;
     this.activeFilter.added = this.selectedList.indexOf('added') !== -1;
     this.activeFilter.deleted = this.selectedList.indexOf('deleted') !== -1;
     this.activeFilter.modified = this.selectedList.indexOf('modified') !== -1;
     this.activeFilter.renamed = this.selectedList.indexOf('renamed') !== -1;
-
     this.filterChanged.emit(this.activeFilter);
-    console.log(this.selectedList);
   }
 }

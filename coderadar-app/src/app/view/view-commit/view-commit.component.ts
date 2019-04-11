@@ -7,6 +7,7 @@ import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {HttpResponse} from '@angular/common/http';
 import {Title} from '@angular/platform-browser';
 import {Project} from '../../model/project';
+import {AppComponent} from '../../app.component';
 
 @Component({
   selector: 'app-view-commit',
@@ -14,6 +15,8 @@ import {Project} from '../../model/project';
   styleUrls: ['./view-commit.component.scss']
 })
 export class ViewCommitComponent implements OnInit {
+
+  appComponent = AppComponent;
 
   commit: Commit = new Commit();
   metrics = [];
@@ -77,7 +80,7 @@ export class ViewCommitComponent implements OnInit {
     this.projectService.getProject(this.projectId)
       .then(response => {
         this.project = new Project(response.body);
-        this.titleService.setTitle('Coderadar - ' + this.commit.name.substring(0, 7) + ' - ' + this.project.name);
+        this.titleService.setTitle('Coderadar - ' + this.commit.name.substring(0, 7) + ' - ' + AppComponent.trimProjectName(this.project.name));
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {

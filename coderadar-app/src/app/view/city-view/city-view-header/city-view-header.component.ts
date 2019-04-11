@@ -5,6 +5,7 @@ import {Project} from '../../../model/project';
 import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {ProjectService} from '../../../service/project.service';
 import {Router} from '@angular/router';
+import {AppComponent} from '../../../app.component';
 
 @Component({
   selector: 'app-city-view-header',
@@ -12,6 +13,7 @@ import {Router} from '@angular/router';
   styleUrls: ['./city-view-header.component.css']
 })
 export class CityViewHeaderComponent implements OnInit {
+  appComponent = AppComponent;
 
   projectId: number;
   project: Project;
@@ -54,7 +56,4 @@ export class CityViewHeaderComponent implements OnInit {
   getUsername(): string {
     return UserService.getLoggedInUser().username;
   }
-  
-  
-
 }

@@ -19,7 +19,7 @@
       <a mat-button routerLink="/project/{{project.id}}" style="width: auto;">
         <mat-icon style="font-size: 16pt; color: white;">arrow_back_ios</mat-icon>
         <mat-label style="font-size: 20pt;">
-          {{project.name}}
+          {{appComponent.trimProjectNameToLength(project.name, 16)}}
         </mat-label>
       </a>
     </span>

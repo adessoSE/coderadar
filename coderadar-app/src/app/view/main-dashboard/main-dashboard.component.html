@@ -15,7 +15,7 @@
         <mat-card class="dashboard-card">
           <mat-card-header>
             <mat-card-title>
-              <a mat-button routerLink="/project/{{project.id}}">{{project.name}}</a>
+              <a mat-button routerLink="/project/{{project.id}}">{{appComponent.trimProjectName(project.name)}}</a>
               <button [matMenuTriggerFor]="menu" aria-label="Toggle menu" class="more-button" mat-icon-button>
                 <mat-icon>more_vert</mat-icon>
               </button>
@@ -27,8 +27,7 @@
             </mat-card-title>
           </mat-card-header>
           <mat-card-content class="mat-card-content">
-            <div style="padding-bottom: 0">Project URL: <a href="{{project.vcsUrl}}"
-                                                           mat-flat-button>{{project.vcsUrl}}</a></div>
+            <div style="padding-bottom: 0">Project URL: <a href="{{project.vcsUrl}}" mat-flat-button>{{project.vcsUrl}}</a></div>
             <div>Project start date: <b>&nbsp;&nbsp;{{project.startDate}}</b></div>
             <div>Project end date: <b>&nbsp;&nbsp;{{project.endDate}}</b></div>
           </mat-card-content>

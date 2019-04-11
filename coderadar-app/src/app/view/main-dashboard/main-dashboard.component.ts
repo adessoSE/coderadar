@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {FORBIDDEN} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
+import {AppComponent} from '../../app.component';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -14,6 +15,8 @@ import {Title} from '@angular/platform-browser';
 export class MainDashboardComponent implements OnInit {
 
   projects: Project[] = [];
+
+  appComponent = AppComponent;
 
   constructor(private titleService: Title, private userService: UserService,
               private router: Router, private projectService: ProjectService) {
@@ -60,4 +63,6 @@ export class MainDashboardComponent implements OnInit {
         }
       });
   }
+
+
 }

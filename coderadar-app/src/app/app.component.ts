@@ -13,4 +13,22 @@ export class AppComponent {
   public static getApiUrl() {
     return this.apiUrl;
   }
+
+  static trimProjectName(name: string) {
+    if (name.length > 50) {
+      let result = name.substr(0, 50);
+      result += '...';
+      return result;
+    }
+    return  name;
+  }
+
+  static trimProjectNameToLength(name: string, length: number) {
+    if (name.length > length) {
+      let result = name.substr(0, length);
+      result += '...';
+      return result;
+    }
+    return  name;
+  }
 }

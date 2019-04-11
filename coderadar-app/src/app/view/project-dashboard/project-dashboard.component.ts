@@ -9,6 +9,7 @@ import {Title} from '@angular/platform-browser';
 import { AppEffects } from 'src/app/city-map/shared/effects';
 import {faClone, faSquare} from '@fortawesome/free-regular-svg-icons';
 import {PageEvent} from '@angular/material';
+import {AppComponent} from '../../app.component';
 
 
 @Component({
@@ -18,12 +19,12 @@ import {PageEvent} from '@angular/material';
 })
 export class ProjectDashboardComponent implements OnInit {
 
+  appComponent = AppComponent;
+
   projectId;
   commits: Commit[];
   commitsAnalyzed = 0;
   project: Project;
-
-  faClone = faClone;
 
   pageEvent: PageEvent;
 
@@ -86,17 +87,18 @@ export class ProjectDashboardComponent implements OnInit {
    * Formats the title text according to the project start and end dates.
    */
   getTitleText(): string {
+    const projectName = this.appComponent.trimProjectName(this.project.name);
     if (this.project.startDate === 'first commit' && this.project.endDate === 'current') {
-      return 'Showing commits for project ' + this.project.name + ' (' + this.commits.length + ')';
+      return 'Showing commits for project ' + projectName + ' (' + this.commits.length + ')';
     } else if (this.project.startDate !== 'first commit' && this.project.endDate === 'current') {
-      return 'Showing commits for project ' + this.project.name + ' from ' + this.project.startDate + ' up until today'
+      return 'Showing commits for project ' + projectName + ' from ' + this.project.startDate + ' up until today'
         + ' (' + this.commits.length + ')';
     } else if (this.project.startDate === 'first commit' && this.project.endDate !== 'current') {
-      return 'Showing commits for project ' + this.project.name + ' from '
+      return 'Showing commits for project ' + projectName + ' from '
         + new Date(this.commits[this.commits.length - 1].timestamp).toLocaleDateString() + ' up until ' + this.project.endDate
         + ' (' + this.commits.length + ')';
     } else {
-      return 'Showing commits for project ' + this.project.name + ' from '
+      return 'Showing commits for project ' + projectName + ' from '
         + this.project.startDate + ' up until ' + this.project.endDate + ' (' + this.commits.length + ')';
     }
   }
@@ -137,7 +139,7 @@ export class ProjectDashboardComponent implements OnInit {
     this.projectService.getProject(this.projectId)
       .then(response => {
         this.project = new Project(response.body);
-        this.titleService.setTitle('Coderadar - ' + this.project.name);
+        this.titleService.setTitle('Coderadar - ' + AppComponent.trimProjectName(this.project.name));
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {

@@ -6,6 +6,7 @@ import {Project} from '../../model/project';
 import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {ProjectService} from '../../service/project.service';
 import {UserService} from '../../service/user.service';
+import {AppComponent} from '../../app.component';
 
 @Component({
   selector: 'app-city-view',
@@ -29,7 +30,7 @@ export class CityViewComponent implements OnInit {
   private setTitle(id: number) {
     this.projectService.getProject(id)
       .then(response => {
-        this.titleService.setTitle('Coderadar - ' + response.body.name + ' - 3D view');
+        this.titleService.setTitle('Coderadar - ' + AppComponent.trimProjectName(response.body.name) + ' - 3D view');
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
