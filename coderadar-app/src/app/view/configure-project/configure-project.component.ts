@@ -29,6 +29,7 @@ export class ConfigureProjectComponent implements OnInit {
   startScan: boolean;
   // Error fields
   noAnalyzersForJob: boolean;
+  noPatternsForJob: boolean;
   analyzersExist: boolean;
   projectId: any;
 
@@ -44,6 +45,7 @@ export class ConfigureProjectComponent implements OnInit {
     this.filePatterns = [];
     this.startScan = false;
     this.noAnalyzersForJob = false;
+    this.noPatternsForJob = false;
     this.analyzersExist = false;
   }
 
@@ -65,7 +67,8 @@ export class ConfigureProjectComponent implements OnInit {
    */
   submitForm(): void {
     this.noAnalyzersForJob = this.analyzers.filter(analyzer => analyzer.enabled).length === 0 && this.startScan === true;
-    if (!this.noAnalyzersForJob) {
+    this.noPatternsForJob = this.filePatterns.length === 0 && this.startScan === true;
+    if (!this.noAnalyzersForJob && !this.noPatternsForJob) {
       this.noAnalyzersForJob = true;
       Promise.all([
         this.submitAnalyzerConfigurations(),

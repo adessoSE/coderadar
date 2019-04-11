@@ -92,6 +92,8 @@
           <!--Possible errors-->
           <mat-error *ngIf="noAnalyzersForJob">Please select at least one analyzer to start an analyzing job.
           </mat-error>
+          <mat-error *ngIf="noPatternsForJob">Please include at least one file pattern to start an analyzing job.
+          </mat-error>
 
           <!--Cancel and submit buttons-->
           <div align="center" id="cardButtons">
