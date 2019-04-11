@@ -1,4 +1,4 @@
-<div style="float: left;padding-right: 3%">
+<div style="float: left;padding-right: 1%; width: 15%">
   <app-commit-chooser
     (changeCommit)="handleCommitChanged($event)"
     [commitType]="commitTypes.left"
@@ -9,7 +9,7 @@
   </app-commit-chooser>
 </div>
 
-<div style="float: left;padding-right: 3%">
+<div style="float: left;padding-right: 1%; width: 15%">
   <app-commit-chooser
     (changeCommit)="handleCommitChanged($event)"
     [commitType]="commitTypes.right"
@@ -21,7 +21,7 @@
   </app-commit-chooser>
 </div>
 
-<div style="float: left; padding-right: 3%">
+<div style="float: left; padding-right: 1%; width: 15%">
   <app-search (startSearch)="handleSearchStarted($event)" [uniqueFileList]="uniqueFileList$ | async"></app-search>
 </div>
 

@@ -14,8 +14,19 @@
     </button>
   </mat-toolbar>
   <div class="spacer"></div>
-  <mat-toolbar class="md-elevation-z5" color="primary">
-    <app-control-panel style="width: 100%;"></app-control-panel>
+  <mat-toolbar class="md-elevation-z5" style="width: 100%" color="primary">
+    <span style="margin-right: 10px">
+      <a mat-button routerLink="/project/{{project.id}}" style="width: auto;">
+        <mat-icon style="font-size: 16pt; color: white;">arrow_back_ios</mat-icon>
+        <mat-label style="font-size: 20pt;">
+          {{project.name}}
+        </mat-label>
+      </a>
+    </span>
+
+    <span style="width: 90%;float: right">
+      <app-control-panel ></app-control-panel>
+    </span>
   </mat-toolbar>
 </header>
 

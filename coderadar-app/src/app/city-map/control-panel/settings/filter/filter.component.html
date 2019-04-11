@@ -1,9 +1,8 @@
-<span>
-<!--TODO: DROPDOWN-->
-    <mat-checkbox (change)="handleFilterChanged()" [(ngModel)]="activeFilter.unmodified" style="padding-right: 10px">unchanged</mat-checkbox>
-    <mat-checkbox (change)="handleFilterChanged()" [(ngModel)]="activeFilter.modified" style="padding-right: 10px">changed</mat-checkbox>
-    <mat-checkbox (change)="handleFilterChanged()" [(ngModel)]="activeFilter.deleted" style="padding-right: 10px">deleted</mat-checkbox>
-    <mat-checkbox (change)="handleFilterChanged()" [(ngModel)]="activeFilter.added"
-                  style="padding-right: 10px">added</mat-checkbox>
-    <mat-checkbox (change)="handleFilterChanged()" [(ngModel)]="activeFilter.renamed" style="padding-right: 10px">renamed/moved</mat-checkbox>
+<span style="margin-right: 2%">
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <mat-select multiple disableRipple [(ngModel)]="selectedList" (selectionChange)="handleFilterChanged2()">
+    <mat-option *ngFor="let filter of filterList" [value]="filter">{{filter}}</mat-option>
+  </mat-select>
+</mat-form-field>
 </span>

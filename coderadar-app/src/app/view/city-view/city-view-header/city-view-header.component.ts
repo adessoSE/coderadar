@@ -1,5 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../../service/user.service';
+import {AppEffects} from '../../../city-map/shared/effects';
+import {Project} from '../../../model/project';
+import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
+import {ProjectService} from '../../../service/project.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-city-view-header',
@@ -8,10 +13,34 @@ import {UserService} from '../../../service/user.service';
 })
 export class CityViewHeaderComponent implements OnInit {
 
-  constructor(private userService: UserService) {
+  projectId: number;
+  project: Project;
+
+  constructor(private userService: UserService, private appEffects: AppEffects,
+              private projectService: ProjectService, private router: Router) {
+    this.project = new Project();
   }
 
   ngOnInit() {
+    this.projectId = this.appEffects.currentProjectId;
+    this.getProject();
+  }
+
+  /**
+   * Gets the project from the service and saves it in this.project
+   */
+  private getProject(): void {
+    this.projectService.getProject(this.projectId)
+      .then(response => {
+        this.project = new Project(response.body);
+      })
+      .catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh().then(() => this.getProject());
+        } else if (error.status && error.status === NOT_FOUND) {
+          this.router.navigate(['/dashboard']);
+        }
+      });
   }
 
 
@@ -25,5 +54,7 @@ export class CityViewHeaderComponent implements OnInit {
   getUsername(): string {
     return UserService.getLoggedInUser().username;
   }
+  
+  
 
 }
