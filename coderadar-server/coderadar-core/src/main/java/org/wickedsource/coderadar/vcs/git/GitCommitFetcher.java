@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.stereotype.Service;
-import org.wickedsource.coderadar.project.domain.VcsCoordinates;
+import org.wickedsource.coderadar.projectadministration.domain.VcsCoordinates;
 
 @Service
 public class GitCommitFetcher {

@@ -2,7 +2,6 @@ package org.wickedsource.coderadar.projectadministration.domain;
 
 import javax.persistence.*;
 import lombok.Data;
-import org.wickedsource.coderadar.project.domain.VcsCoordinates;
 
 /** A coderadar project that defines the source of files that are to be analyzed. */
 @Entity

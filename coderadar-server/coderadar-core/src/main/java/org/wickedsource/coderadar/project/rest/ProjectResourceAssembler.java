@@ -5,7 +5,7 @@ import java.net.URL;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.core.rest.AbstractResourceAssembler;
-import org.wickedsource.coderadar.project.domain.VcsCoordinates;
+import org.wickedsource.coderadar.projectadministration.domain.VcsCoordinates;
 import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 @Component
