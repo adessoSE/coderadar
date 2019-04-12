@@ -1,7 +1,7 @@
 package org.wickedsource.coderadar.factories.entities;
 
-import org.wickedsource.coderadar.filepattern.domain.FileSetType;
-import org.wickedsource.coderadar.project.domain.InclusionType;
+import org.wickedsource.coderadar.projectadministration.domain.FileSetType;
+import org.wickedsource.coderadar.projectadministration.domain.InclusionType;
 import org.wickedsource.coderadar.projectadministration.domain.FilePattern;
 
 public class FilePatternFactory {

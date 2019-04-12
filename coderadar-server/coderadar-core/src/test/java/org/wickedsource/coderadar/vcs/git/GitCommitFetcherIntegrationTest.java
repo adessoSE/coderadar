@@ -8,7 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.wickedsource.coderadar.project.domain.VcsCoordinates;
+import org.wickedsource.coderadar.projectadministration.domain.VcsCoordinates;
 
 public class GitCommitFetcherIntegrationTest {
 
