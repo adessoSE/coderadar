@@ -2,7 +2,7 @@ package org.wickedsource.coderadar.factories.entities;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.wickedsource.coderadar.project.domain.VcsCoordinates;
+import org.wickedsource.coderadar.projectadministration.domain.VcsCoordinates;
 import org.wickedsource.coderadar.projectadministration.domain.Project;
 
 public class ProjectFactory {

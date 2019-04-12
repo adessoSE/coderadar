@@ -9,10 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wickedsource.coderadar.analyzerconfig.rest.AnalyzerConfigurationResource;
 import org.wickedsource.coderadar.analyzingjob.rest.AnalyzingJobResource;
-import org.wickedsource.coderadar.filepattern.domain.FileSetType;
+import org.wickedsource.coderadar.projectadministration.domain.FileSetType;
 import org.wickedsource.coderadar.filepattern.rest.FilePatternDTO;
 import org.wickedsource.coderadar.filepattern.rest.FilePatternResource;
-import org.wickedsource.coderadar.project.domain.InclusionType;
+import org.wickedsource.coderadar.projectadministration.domain.InclusionType;
 import org.wickedsource.coderadar.project.rest.ProjectResource;
 import org.wickedsource.coderadar.restclient.CoderadarRestClient;
 

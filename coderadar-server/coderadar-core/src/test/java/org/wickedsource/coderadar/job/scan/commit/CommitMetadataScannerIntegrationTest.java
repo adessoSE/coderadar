@@ -23,7 +23,7 @@ import org.wickedsource.coderadar.core.WorkdirManager;
 import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
 import org.wickedsource.coderadar.job.LocalGitRepositoryManager;
 import org.wickedsource.coderadar.project.domain.ProjectRepository;
-import org.wickedsource.coderadar.project.domain.VcsCoordinates;
+import org.wickedsource.coderadar.projectadministration.domain.VcsCoordinates;
 import org.wickedsource.coderadar.projectadministration.domain.Project;
 import org.wickedsource.coderadar.testframework.template.GitTestTemplate;
 import org.wickedsource.coderadar.vcs.git.GitRepositoryChecker;

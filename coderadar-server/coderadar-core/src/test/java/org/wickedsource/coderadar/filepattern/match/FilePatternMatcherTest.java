@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.wickedsource.coderadar.filepattern.domain.FileSetType;
-import org.wickedsource.coderadar.project.domain.InclusionType;
+import org.wickedsource.coderadar.projectadministration.domain.FileSetType;
+import org.wickedsource.coderadar.projectadministration.domain.InclusionType;
 import org.wickedsource.coderadar.projectadministration.domain.FilePattern;
 
 public class FilePatternMatcherTest {

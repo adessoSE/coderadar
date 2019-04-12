@@ -1,4 +1,4 @@
-package org.wickedsource.coderadar.project.domain;
+package org.wickedsource.coderadar.projectadministration.domain;
 
 import java.net.URL;
 import java.util.Date;

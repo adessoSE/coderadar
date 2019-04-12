@@ -23,7 +23,7 @@ import org.wickedsource.coderadar.commit.domain.CommitRepository;
 import org.wickedsource.coderadar.file.domain.GitLogEntry;
 import org.wickedsource.coderadar.file.domain.GitLogEntryRepository;
 import org.wickedsource.coderadar.filepattern.domain.FilePatternRepository;
-import org.wickedsource.coderadar.filepattern.domain.FileSetType;
+import org.wickedsource.coderadar.projectadministration.domain.FileSetType;
 import org.wickedsource.coderadar.filepattern.match.FilePatternMatcher;
 import org.wickedsource.coderadar.job.LocalGitRepositoryManager;
 import org.wickedsource.coderadar.job.core.FirstCommitFinder;

@@ -2,8 +2,8 @@ package org.wickedsource.coderadar.filepattern.rest;
 
 import javax.validation.constraints.NotNull;
 import lombok.Data;
-import org.wickedsource.coderadar.filepattern.domain.FileSetType;
-import org.wickedsource.coderadar.project.domain.InclusionType;
+import org.wickedsource.coderadar.projectadministration.domain.FileSetType;
+import org.wickedsource.coderadar.projectadministration.domain.InclusionType;
 
 @Data
 public class FilePatternDTO {
