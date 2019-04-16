@@ -1,6 +1,7 @@
 package org.wickedsource.coderadar.analyzer.checkstyle;
 
 import com.puppycrawl.tools.checkstyle.PropertyResolver;
+
 import java.util.Properties;
 
 /**
@@ -11,19 +12,19 @@ import java.util.Properties;
  */
 public class CheckstylePropertiesResolver implements PropertyResolver {
 
-  private Properties backingProperties;
+    private Properties backingProperties;
 
-  /**
-   * @param backingProperties the properties from which to resolve properties. The names of these
-   *     Properties all start with the class name of the CheckstyleAnalyzer.
-   */
-  public CheckstylePropertiesResolver(Properties backingProperties) {
-    this.backingProperties = backingProperties;
-  }
+    /**
+     * @param backingProperties the properties from which to resolve properties. The names of these
+     *                          Properties all start with the class name of the CheckstyleAnalyzer.
+     */
+    public CheckstylePropertiesResolver(Properties backingProperties) {
+        this.backingProperties = backingProperties;
+    }
 
-  @Override
-  public String resolve(String name) {
-    return (String)
-        backingProperties.get(CheckstyleSourceCodeFileAnalyzerPlugin.class.getName() + "." + name);
-  }
+    @Override
+    public String resolve(String name) {
+        return (String)
+                backingProperties.get(CheckstyleSourceCodeFileAnalyzerPlugin.class.getName() + "." + name);
+    }
 }

@@ -7,7 +7,7 @@ spotless {
 }
 
 dependencies {
-    compile project(':coderadar-server:coderadar-core')
     testCompile group: 'commons-io', name: 'commons-io', version: '2.4'
     testCompile 'org.assertj:assertj-core:3.5.1'
+    compile project(":coderadar-plugin-api")
 }
