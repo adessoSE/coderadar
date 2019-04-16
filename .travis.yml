@@ -1,15 +1,33 @@
 language: java
-install: true
 sudo: true
 addons:
   apt:
+    sources:
+      - google-chrome
     packages:
     - oracle-java8-installer
     - oracle-java8-set-default
+    - google-chrome-stable
 
-stages:
+env:
+  - TEST_ENV=false
 
-- name: build
+install: true
+
+before_install:
+  - npm i npm@latest -g
+  - cd ./coderadar-app/
+  - npm install
+  - npm install -g @angular/cli
+  - cd ../
+
+#stages:
+#
+#- name: build
+
+cache:
+  directories:
+    - ./node_modules
 
 #- name: release
 #  if: branch = master AND type IN (push)
@@ -18,7 +36,14 @@ jobs:
   include:
 
   - stage: build
-    script: "./gradlew --stacktrace build"
+    script:
+      - ./gradlew --stacktrace build
+  - stage: test
+    if: env(TEST_ENV) = true
+    script:
+      - cd ./coderadar-app/
+      - ng test --no-watch --no-progress --browsers=ChromeHeadlessCI
+      - ng e2e --protractor-config='e2e/protractor-ci.conf.js'
 
 #  - stage: release
 #    script:
