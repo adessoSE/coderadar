@@ -10,7 +10,7 @@ addons:
     - google-chrome-stable
 
 env:
-  - TEST_ENV=false
+  - TEST_ENV=true
 
 install: true
 
