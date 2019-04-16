@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeleteProjectService implements DeleteProjectUseCase {
 
-    private final DeleteProjectPort deleteProjectPort;
+  private final DeleteProjectPort deleteProjectPort;
 
-    @Autowired
-    public DeleteProjectService(DeleteProjectPort deleteProjectPort) {
-        this.deleteProjectPort = deleteProjectPort;
-    }
+  @Autowired
+  public DeleteProjectService(DeleteProjectPort deleteProjectPort) {
+    this.deleteProjectPort = deleteProjectPort;
+  }
 
-    @Override
-    public void delete(DeleteProjectCommand command) {
-        deleteProjectPort.delete(command.getId());
-    }
+  @Override
+  public void delete(DeleteProjectCommand command) {
+    deleteProjectPort.delete(command.getId());
+  }
 }

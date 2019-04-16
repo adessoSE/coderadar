@@ -5,11 +5,11 @@ import lombok.Data;
 @Data
 public class Changes {
 
-    private boolean renamed;
+  private boolean renamed;
 
-    private boolean modified;
+  private boolean modified;
 
-    private boolean deleted;
+  private boolean deleted;
 
-    private boolean added;
+  private boolean added;
 }

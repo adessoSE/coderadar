@@ -4,5 +4,5 @@ import lombok.Value;
 
 @Value
 public class ListModulesOfProjectCommand {
-    private Long projectId;
+  private Long projectId;
 }

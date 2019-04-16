@@ -10,15 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoadUserService implements LoadUserUseCase {
 
-    private final LoadUserPort port;
+  private final LoadUserPort port;
 
-    @Autowired
-    public LoadUserService(LoadUserPort port) {
-        this.port = port;
-    }
+  @Autowired
+  public LoadUserService(LoadUserPort port) {
+    this.port = port;
+  }
 
-    @Override
-    public User loadUser(LoadUserCommand command) {
-        return port.loadUser(command.getId());
-    }
+  @Override
+  public User loadUser(LoadUserCommand command) {
+    return port.loadUser(command.getId());
+  }
 }

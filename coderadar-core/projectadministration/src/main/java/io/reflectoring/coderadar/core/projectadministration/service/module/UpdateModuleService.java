@@ -11,20 +11,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class UpdateModuleService implements UpdateModuleUseCase {
 
-    private final GetModulePort getModulePort;
-    private final UpdateModulePort updateModulePort;
+  private final GetModulePort getModulePort;
+  private final UpdateModulePort updateModulePort;
 
-    @Autowired
-    public UpdateModuleService(GetModulePort getModulePort, UpdateModulePort updateModulePort) {
-        this.getModulePort = getModulePort;
-        this.updateModulePort = updateModulePort;
-    }
+  @Autowired
+  public UpdateModuleService(GetModulePort getModulePort, UpdateModulePort updateModulePort) {
+    this.getModulePort = getModulePort;
+    this.updateModulePort = updateModulePort;
+  }
 
-    @Override
-    public Module updateModule(UpdateModuleCommand command) {
-        Module module = getModulePort.get(command.getId());
-        module.setPath(command.getPath());
-        module = updateModulePort.updateModule(module);
-        return module;
-    }
+  @Override
+  public Module updateModule(UpdateModuleCommand command) {
+    Module module = getModulePort.get(command.getId());
+    module.setPath(command.getPath());
+    module = updateModulePort.updateModule(module);
+    return module;
+  }
 }

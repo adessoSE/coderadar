@@ -8,9 +8,9 @@ import lombok.Getter;
 @Getter
 public class ChangedFileDTO {
 
-    private final String oldFileName;
+  private final String oldFileName;
 
-    private final String newFileName;
+  private final String newFileName;
 
-    private final ChangeType changeType;
+  private final ChangeType changeType;
 }

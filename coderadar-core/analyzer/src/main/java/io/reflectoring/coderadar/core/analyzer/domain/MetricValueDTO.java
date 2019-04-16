@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class MetricValueDTO {
 
-    private String metric;
+  private String metric;
 
-    private Long value;
+  private Long value;
 }

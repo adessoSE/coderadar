@@ -1,11 +1,11 @@
 package io.reflectoring.coderadar.core.query.domain;
 
 public enum Interval {
-    DAY,
+  DAY,
 
-    WEEK,
+  WEEK,
 
-    MONTH,
+  MONTH,
 
-    YEAR;
+  YEAR;
 }

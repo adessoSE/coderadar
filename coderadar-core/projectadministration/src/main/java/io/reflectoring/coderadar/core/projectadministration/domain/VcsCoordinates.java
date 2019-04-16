@@ -1,46 +1,43 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import java.net.URL;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.net.URL;
-import java.util.Date;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-/**
- * Coordinates to enable access to a source control system.
- */
+/** Coordinates to enable access to a source control system. */
 @Embeddable
 @NoArgsConstructor
 @Data
 public class VcsCoordinates {
 
-    @Column(name = "vcs_url", nullable = false)
-    private URL url;
+  @Column(name = "vcs_url", nullable = false)
+  private URL url;
 
-    @Column(name = "vcs_username")
-    private String username;
+  @Column(name = "vcs_username")
+  private String username;
 
-    @Column(name = "vcs_password")
-    private String password;
+  @Column(name = "vcs_password")
+  private String password;
 
-    @Column(name = "vcs_start_date")
-    @Temporal(TemporalType.DATE)
-    private Date startDate;
+  @Column(name = "vcs_start_date")
+  @Temporal(TemporalType.DATE)
+  private Date startDate;
 
-    @Column(name = "vcs_end_date")
-    @Temporal(TemporalType.DATE)
-    private Date endDate;
+  @Column(name = "vcs_end_date")
+  @Temporal(TemporalType.DATE)
+  private Date endDate;
 
-    @Column(name = "vcs_online")
-    private boolean online = true;
+  @Column(name = "vcs_online")
+  private boolean online = true;
 
-    public VcsCoordinates(URL url) {
-        this.url = url;
-    }
+  public VcsCoordinates(URL url) {
+    this.url = url;
+  }
 
   /*
   @Override

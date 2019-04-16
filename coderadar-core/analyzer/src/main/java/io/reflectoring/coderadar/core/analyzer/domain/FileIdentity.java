@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.core.analyzer.domain;
 
-import lombok.Data;
-
 import javax.persistence.*;
+import lombok.Data;
 
 /**
  * A FileIdentity connects Files that have been renamed at some point in time. Two Files with the
@@ -12,17 +11,17 @@ import javax.persistence.*;
 @Entity
 @Table(name = "file_identity")
 @SequenceGenerator(
-        name = "file_identity_sequence",
-        sequenceName = "seq_fiid_id",
-        allocationSize = 1
+  name = "file_identity_sequence",
+  sequenceName = "seq_fiid_id",
+  allocationSize = 1
 )
 @Data
 public class FileIdentity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_identity_sequence")
-    @Column(name = "id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_identity_sequence")
+  @Column(name = "id")
+  private Long id;
 
   /*
   @Override

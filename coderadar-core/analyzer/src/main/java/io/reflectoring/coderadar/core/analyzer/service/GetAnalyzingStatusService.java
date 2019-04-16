@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GetAnalyzingStatusService implements GetAnalyzingStatusUseCase {
-    private final GetAnalyzingStatusPort getAnalyzingStatusPort;
+  private final GetAnalyzingStatusPort getAnalyzingStatusPort;
 
-    @Autowired
-    public GetAnalyzingStatusService(GetAnalyzingStatusPort getAnalyzingStatusPort) {
-        this.getAnalyzingStatusPort = getAnalyzingStatusPort;
-    }
+  @Autowired
+  public GetAnalyzingStatusService(GetAnalyzingStatusPort getAnalyzingStatusPort) {
+    this.getAnalyzingStatusPort = getAnalyzingStatusPort;
+  }
 
-    @Override
-    public AnalyzingJob get(Long projectId) {
-        return getAnalyzingStatusPort.get(projectId);
-    }
+  @Override
+  public AnalyzingJob get(Long projectId) {
+    return getAnalyzingStatusPort.get(projectId);
+  }
 }

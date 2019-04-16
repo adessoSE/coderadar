@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor // Default constructor is needed for JSON mapping.
 public class FieldErrorDTO {
 
-    private String field;
+  private String field;
 
-    private String message;
+  private String message;
 
-    public String getField() {
-        return field;
-    }
+  public String getField() {
+    return field;
+  }
 
-    public String getMessage() {
-        return message;
-    }
+  public String getMessage() {
+    return message;
+  }
 }

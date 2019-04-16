@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class StartAnalyzingService implements StartAnalyzingUseCase {
-    private final StartAnalyzingPort startAnalyzingPort;
+  private final StartAnalyzingPort startAnalyzingPort;
 
-    @Autowired
-    public StartAnalyzingService(StartAnalyzingPort startAnalyzingPort) {
-        this.startAnalyzingPort = startAnalyzingPort;
-    }
+  @Autowired
+  public StartAnalyzingService(StartAnalyzingPort startAnalyzingPort) {
+    this.startAnalyzingPort = startAnalyzingPort;
+  }
 
-    @Override
-    public void start(StartAnalyzingCommand command) {
-        startAnalyzingPort.start(command);
-    }
+  @Override
+  public void start(StartAnalyzingCommand command) {
+    startAnalyzingPort.start(command);
+  }
 }

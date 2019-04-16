@@ -4,6 +4,6 @@ import lombok.Value;
 
 @Value
 public class CreateModuleCommand {
-    private Long projectId;
-    private String path;
+  private Long projectId;
+  private String path;
 }

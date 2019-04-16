@@ -4,6 +4,6 @@ import lombok.Value;
 
 @Value
 public class RefreshTokenCommand {
-    private String accessToken;
-    private String refreshToken;
+  private String accessToken;
+  private String refreshToken;
 }

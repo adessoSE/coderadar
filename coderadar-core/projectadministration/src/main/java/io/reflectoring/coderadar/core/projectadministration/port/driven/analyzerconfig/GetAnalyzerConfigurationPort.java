@@ -3,5 +3,5 @@ package io.reflectoring.coderadar.core.projectadministration.port.driven.analyze
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 
 public interface GetAnalyzerConfigurationPort {
-    AnalyzerConfiguration getAnalyzerConfiguration(Long id);
+  AnalyzerConfiguration getAnalyzerConfiguration(Long id);
 }

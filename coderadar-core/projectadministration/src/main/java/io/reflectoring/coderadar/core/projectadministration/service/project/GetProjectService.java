@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class GetProjectService implements GetProjectUseCase {
 
-    private final GetProjectPort port;
+  private final GetProjectPort port;
 
-    public GetProjectService(GetProjectPort port) {
-        this.port = port;
-    }
+  public GetProjectService(GetProjectPort port) {
+    this.port = port;
+  }
 
-    @Override
-    public Project get(GetProjectCommand command) {
-        return port.get(command.getId());
-    }
+  @Override
+  public Project get(GetProjectCommand command) {
+    return port.get(command.getId());
+  }
 }

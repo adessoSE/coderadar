@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GetModuleService implements GetModuleUseCase {
-    private final GetModulePort getModulePort;
+  private final GetModulePort getModulePort;
 
-    @Autowired
-    public GetModuleService(GetModulePort getModulePort) {
-        this.getModulePort = getModulePort;
-    }
+  @Autowired
+  public GetModuleService(GetModulePort getModulePort) {
+    this.getModulePort = getModulePort;
+  }
 
-    @Override
-    public Module get(GetModuleCommand command) {
-        return getModulePort.get(command.getId());
-    }
+  @Override
+  public Module get(GetModuleCommand command) {
+    return getModulePort.get(command.getId());
+  }
 }

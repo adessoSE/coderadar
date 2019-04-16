@@ -4,5 +4,5 @@ import lombok.Value;
 
 @Value
 public class GetAnalyzerConfigurationCommand {
-    private Long id;
+  private Long id;
 }

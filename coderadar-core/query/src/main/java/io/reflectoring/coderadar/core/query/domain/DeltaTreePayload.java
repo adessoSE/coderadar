@@ -9,17 +9,16 @@ import lombok.Data;
 @Data
 public class DeltaTreePayload implements MetricsTreePayload<DeltaTreePayload> {
 
-    private MetricValuesSet commit1Metrics;
+  private MetricValuesSet commit1Metrics;
 
-    private MetricValuesSet commit2Metrics;
+  private MetricValuesSet commit2Metrics;
 
-    private String renamedFrom;
+  private String renamedFrom;
 
-    private String renamedTo;
+  private String renamedTo;
 
-    private Changes changes;
+  private Changes changes;
 
-    @Override
-    public void add(DeltaTreePayload payload) {
-    }
+  @Override
+  public void add(DeltaTreePayload payload) {}
 }

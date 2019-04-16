@@ -4,6 +4,6 @@ import lombok.Value;
 
 @Value
 public class UpdateModuleCommand {
-    private Long id;
-    private String path;
+  private Long id;
+  private String path;
 }

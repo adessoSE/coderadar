@@ -11,10 +11,9 @@ import org.springframework.jmx.support.MetricType;
 @NoArgsConstructor
 public class ProfileValuePerCommitDTO {
 
-    @JsonIgnore
-    private String profile;
+  @JsonIgnore private String profile;
 
-    private MetricType metricType;
+  private MetricType metricType;
 
-    private Long value;
+  private Long value;
 }

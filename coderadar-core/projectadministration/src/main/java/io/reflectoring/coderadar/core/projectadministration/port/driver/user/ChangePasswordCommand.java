@@ -4,6 +4,6 @@ import lombok.Value;
 
 @Value
 public class ChangePasswordCommand {
-    Long id;
-    String newPassword;
+  Long id;
+  String newPassword;
 }

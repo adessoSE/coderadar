@@ -10,19 +10,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginUserService implements LoginUserUseCase {
 
-    private final LoginUserPort port;
+  private final LoginUserPort port;
 
-    @Autowired
-    public LoginUserService(LoginUserPort port) {
-        this.port = port;
-    }
+  @Autowired
+  public LoginUserService(LoginUserPort port) {
+    this.port = port;
+  }
 
-    @Override
-    public User login(LoginUserCommand command) {
-        User user = new User();
-        user.setUsername(command.getUsername());
-        user.setPassword(command.getPassword());
-        user = port.login(user);
-        return user;
-    }
+  @Override
+  public User login(LoginUserCommand command) {
+    User user = new User();
+    user.setUsername(command.getUsername());
+    user.setPassword(command.getPassword());
+    user = port.login(user);
+    return user;
+  }
 }

@@ -11,22 +11,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigurationUseCase {
 
-    private final GetAnalyzerConfigurationPort getAnalyzerConfigurationPort;
-    private final UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort;
+  private final GetAnalyzerConfigurationPort getAnalyzerConfigurationPort;
+  private final UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort;
 
-    @Autowired
-    public UpdateAnalyzerConfigurationService(UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort, GetAnalyzerConfigurationPort getAnalyzerConfigurationPort) {
-        this.updateAnalyzerConfigurationPort = updateAnalyzerConfigurationPort;
-        this.getAnalyzerConfigurationPort = getAnalyzerConfigurationPort;
-    }
+  @Autowired
+  public UpdateAnalyzerConfigurationService(
+      UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort,
+      GetAnalyzerConfigurationPort getAnalyzerConfigurationPort) {
+    this.updateAnalyzerConfigurationPort = updateAnalyzerConfigurationPort;
+    this.getAnalyzerConfigurationPort = getAnalyzerConfigurationPort;
+  }
 
-    @Override
-    public void update(
-            UpdateAnalyzerConfigurationCommand command) {
-        AnalyzerConfiguration analyzerConfiguration =
-                getAnalyzerConfigurationPort.getAnalyzerConfiguration(command.getId());
-        analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
-        analyzerConfiguration.setEnabled(command.getEnabled());
-        updateAnalyzerConfigurationPort.update(analyzerConfiguration);
-    }
+  @Override
+  public void update(UpdateAnalyzerConfigurationCommand command) {
+    AnalyzerConfiguration analyzerConfiguration =
+        getAnalyzerConfigurationPort.getAnalyzerConfiguration(command.getId());
+    analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
+    analyzerConfiguration.setEnabled(command.getEnabled());
+    updateAnalyzerConfigurationPort.update(analyzerConfiguration);
+  }
 }

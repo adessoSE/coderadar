@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class RefreshTokenService implements RefreshTokenUseCase {
 
-    private final RefreshTokenPort port;
+  private final RefreshTokenPort port;
 
-    @Autowired
-    public RefreshTokenService(RefreshTokenPort port) {
-        this.port = port;
-    }
+  @Autowired
+  public RefreshTokenService(RefreshTokenPort port) {
+    this.port = port;
+  }
 
-    @Override
-    public String refreshToken(RefreshTokenCommand command) {
-        return port.createAccessToken(command.getRefreshToken());
-    }
+  @Override
+  public String refreshToken(RefreshTokenCommand command) {
+    return port.createAccessToken(command.getRefreshToken());
+  }
 }

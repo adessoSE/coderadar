@@ -8,18 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GetAnalyzerConfigurationService
-        implements GetAnalyzerConfigurationUseCase {
+public class GetAnalyzerConfigurationService implements GetAnalyzerConfigurationUseCase {
 
-    private final GetAnalyzerConfigurationPort port;
+  private final GetAnalyzerConfigurationPort port;
 
-    @Autowired
-    public GetAnalyzerConfigurationService(GetAnalyzerConfigurationPort port) {
-        this.port = port;
-    }
+  @Autowired
+  public GetAnalyzerConfigurationService(GetAnalyzerConfigurationPort port) {
+    this.port = port;
+  }
 
-    @Override
-    public AnalyzerConfiguration getSingleAnalyzerConfiguration(GetAnalyzerConfigurationCommand command) {
-        return port.getAnalyzerConfiguration(command.getId());
-    }
+  @Override
+  public AnalyzerConfiguration getSingleAnalyzerConfiguration(
+      GetAnalyzerConfigurationCommand command) {
+    return port.getAnalyzerConfiguration(command.getId());
+  }
 }

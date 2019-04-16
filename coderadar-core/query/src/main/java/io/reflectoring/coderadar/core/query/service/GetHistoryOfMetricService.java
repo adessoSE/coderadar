@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GetHistoryOfMetricService implements GetHistoryOfMetricUseCase {
-    private final GetHistoryOfMetricPort getHistoryOfMetricPort;
+  private final GetHistoryOfMetricPort getHistoryOfMetricPort;
 
-    @Autowired
-    public GetHistoryOfMetricService(GetHistoryOfMetricPort getHistoryOfMetricPort) {
-        this.getHistoryOfMetricPort = getHistoryOfMetricPort;
-    }
+  @Autowired
+  public GetHistoryOfMetricService(GetHistoryOfMetricPort getHistoryOfMetricPort) {
+    this.getHistoryOfMetricPort = getHistoryOfMetricPort;
+  }
 
-    @Override
-    public Series get(GetHistoryOfMetricCommand command) {
-        return getHistoryOfMetricPort.get(command);
-    }
+  @Override
+  public Series get(GetHistoryOfMetricCommand command) {
+    return getHistoryOfMetricPort.get(command);
+  }
 }

@@ -5,8 +5,8 @@ import org.wickedsource.coderadar.analyzer.loc.profiles.Profiles;
 
 public class LocAnalyzerFileFilter implements AnalyzerFileFilter {
 
-    @Override
-    public boolean acceptFilename(String filename) {
-        return Profiles.getForFile(filename) != null;
-    }
+  @Override
+  public boolean acceptFilename(String filename) {
+    return Profiles.getForFile(filename) != null;
+  }
 }

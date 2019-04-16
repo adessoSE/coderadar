@@ -7,15 +7,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class StopAnalyzingService implements StopAnalyzingUseCase {
-    private final StopAnalyzingPort stopAnalyzingPort;
+  private final StopAnalyzingPort stopAnalyzingPort;
 
-    @Autowired
-    public StopAnalyzingService(StopAnalyzingPort stopAnalyzingPort) {
-        this.stopAnalyzingPort = stopAnalyzingPort;
-    }
+  @Autowired
+  public StopAnalyzingService(StopAnalyzingPort stopAnalyzingPort) {
+    this.stopAnalyzingPort = stopAnalyzingPort;
+  }
 
-    @Override
-    public void stop(Long projectId) {
-        stopAnalyzingPort.stop(projectId);
-    }
+  @Override
+  public void stop(Long projectId) {
+    stopAnalyzingPort.stop(projectId);
+  }
 }

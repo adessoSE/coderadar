@@ -4,5 +4,5 @@ import lombok.Value;
 
 @Value
 public class GetModuleCommand {
-    Long id;
+  Long id;
 }

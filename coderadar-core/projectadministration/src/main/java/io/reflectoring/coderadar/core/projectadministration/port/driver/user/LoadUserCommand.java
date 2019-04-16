@@ -4,5 +4,5 @@ import lombok.Value;
 
 @Value
 public class LoadUserCommand {
-    private Long id;
+  private Long id;
 }

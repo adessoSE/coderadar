@@ -4,5 +4,5 @@ import lombok.Value;
 
 @Value
 public class DeleteModuleCommand {
-    private Long id;
+  private Long id;
 }

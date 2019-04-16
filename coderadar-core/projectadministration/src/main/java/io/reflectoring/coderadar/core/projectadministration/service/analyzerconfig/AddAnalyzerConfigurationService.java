@@ -11,21 +11,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class AddAnalyzerConfigurationService implements AddAnalyzerConfigurationUseCase {
 
-    private final AddAnalyzerConfigurationPort addAnalyzerConfigurationPort;
-    private final GetProjectPort getProjectPort;
+  private final AddAnalyzerConfigurationPort addAnalyzerConfigurationPort;
+  private final GetProjectPort getProjectPort;
 
-    @Autowired
-    public AddAnalyzerConfigurationService(AddAnalyzerConfigurationPort addAnalyzerConfigurationPort, GetProjectPort getProjectPort) {
-        this.addAnalyzerConfigurationPort = addAnalyzerConfigurationPort;
-        this.getProjectPort = getProjectPort;
-    }
+  @Autowired
+  public AddAnalyzerConfigurationService(
+      AddAnalyzerConfigurationPort addAnalyzerConfigurationPort, GetProjectPort getProjectPort) {
+    this.addAnalyzerConfigurationPort = addAnalyzerConfigurationPort;
+    this.getProjectPort = getProjectPort;
+  }
 
-    @Override
-    public Long add(AddAnalyzerConfigurationCommand command) {
-        AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
-        analyzerConfiguration.setEnabled(command.getEnabled());
-        analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
-        analyzerConfiguration.setProject(getProjectPort.get(command.getProjectId()));
-        return addAnalyzerConfigurationPort.add(analyzerConfiguration);
-    }
+  @Override
+  public Long add(AddAnalyzerConfigurationCommand command) {
+    AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
+    analyzerConfiguration.setEnabled(command.getEnabled());
+    analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
+    analyzerConfiguration.setProject(getProjectPort.get(command.getProjectId()));
+    return addAnalyzerConfigurationPort.add(analyzerConfiguration);
+  }
 }
