@@ -2,6 +2,8 @@ package org.wickedsource.coderadar.commit.domain;
 
 import java.util.Date;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -65,5 +67,5 @@ public interface CommitRepository extends PagingAndSortingRepository<Commit, Lon
       "select c from Commit c where c.project.id = :projectId and c.timestamp = (select min(c2.timestamp) from Commit c2 where c2.timestamp >= :date)")
   Commit findFirstCommitAfterDate(@Param("projectId") Long projectId, @Param("date") Date date);
 
-  List<Commit> findByProjectId(Long projectId);
+  Page<Commit> findByProjectId(Long projectId, Pageable pageable);
 }

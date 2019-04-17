@@ -3,10 +3,16 @@ package org.wickedsource.coderadar.testframework.template;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.fail;
 import static org.wickedsource.coderadar.testframework.template.JsonHelper.fromJson;
+import static org.wickedsource.coderadar.testframework.template.JsonHelper.toJson;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import org.junit.jupiter.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.wickedsource.coderadar.core.rest.validation.ErrorDTO;
 
@@ -35,6 +41,27 @@ public class ResultMatchers {
             String.format("expected JSON representation of class %s but found '%s'", clazz, json),
             e);
       }
+    };
+  }
+
+  /**
+   * Tests if the response contains the JSON representation of an object in a Spring Data Page.
+   *
+   * @param clazz the class of the expected object.
+   * @param <T> the type of the expected object.
+   * @return ResultMatcher that performs the test described above.
+   */
+  public static <T> ResultMatcher containsPageableResource(Class<T> clazz) {
+    return result -> {
+      GsonJsonParser parser = new GsonJsonParser();
+      Map<String, Object> jsonResponse = parser.parseMap(result.getResponse().getContentAsString());
+      Assertions.assertTrue(jsonResponse.get("content") instanceof List);
+      try {
+        fromJson(toJson(((List) jsonResponse.get("content")).get(0)), clazz);
+      } catch (IOException e) {
+        Assertions.fail();
+      }
+      Assertions.assertNotNull((jsonResponse.get("pageable")));
     };
   }
 

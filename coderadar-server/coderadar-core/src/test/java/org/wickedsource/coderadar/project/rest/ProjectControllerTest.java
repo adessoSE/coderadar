@@ -13,7 +13,6 @@ import static org.wickedsource.coderadar.testframework.template.ResultMatchers.*
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,7 +165,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
     mvc()
         .perform(get("/projects"))
         .andExpect(status().isOk())
-        .andExpect(containsResource(List.class))
+        .andExpect(containsPageableResource(ProjectResource.class))
         .andDo(document("projects/list"));
   }
 

@@ -1,9 +1,10 @@
 package org.wickedsource.coderadar.project.rest;
 
-import java.util.List;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,9 +45,12 @@ public class ProjectController {
   }
 
   @RequestMapping(method = RequestMethod.GET, produces = "application/hal+json")
-  public ResponseEntity<List<ProjectResource>> getProjects(Pageable pageable) {
-    Iterable<Project> projects = projectRepository.findAll();
-    return new ResponseEntity<>(projectAssembler.toResourceList(projects), HttpStatus.OK);
+  public ResponseEntity<Page<ProjectResource>> getProjects(Pageable pageable) {
+    Page<Project> projects = projectRepository.findAll(pageable);
+    Page<ProjectResource> projectResources =
+        new PageImpl<>(
+            projectAssembler.toResourceList(projects), pageable, projects.getTotalElements());
+    return new ResponseEntity<>(projectResources, HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.POST)
