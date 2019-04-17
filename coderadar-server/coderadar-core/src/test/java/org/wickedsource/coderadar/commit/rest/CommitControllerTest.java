@@ -18,7 +18,7 @@ public class CommitControllerTest extends ControllerTestTemplate {
   public void getCommits() throws Exception {
     ConstrainedFields fields = fields(CommitResource.class);
     mvc()
-        .perform(get("/projects/1/commits"))
+        .perform(get("/projects/1/commits?page=0&size=10"))
         .andExpect(status().isOk())
         .andExpect(containsPageableResource(CommitResource.class))
         .andDo(

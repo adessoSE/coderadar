@@ -163,7 +163,7 @@ public class ProjectControllerTest extends ControllerTestTemplate {
   @ExpectedDatabase(PROJECT_LIST)
   public void getProjectsSuccessfully() throws Exception {
     mvc()
-        .perform(get("/projects"))
+        .perform(get("/projects?page=0&size=10"))
         .andExpect(status().isOk())
         .andExpect(containsPageableResource(ProjectResource.class))
         .andDo(document("projects/list"));
