@@ -23,7 +23,7 @@ export class ProjectService {
    * Sends a GET request to /projects
    */
   public getProjects(): Promise<HttpResponse<any>> {
-    return this.httpClient.get<any>(this.apiURL + 'projects', {observe: 'response'}).toPromise();
+    return this.httpClient.get<any>(this.apiURL + 'projects?page=0&size=2147483647', {observe: 'response'}).toPromise();
   }
 
   /**
@@ -196,8 +196,8 @@ export class ProjectService {
    * Sends a GET request to /projects/{id}/commits
    * @param id The project id.
    */
-  public getCommits(id: number): Promise<HttpResponse<Commit[]>> {
-    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/commits', {observe: 'response'}).toPromise();
+  public getCommits(id: number): Promise<HttpResponse<any>> {
+    return this.httpClient.get<any>(this.apiURL + 'projects/' + id + '/commits?page=0&size=2147483647', {observe: 'response'}).toPromise();
   }
 
   /**

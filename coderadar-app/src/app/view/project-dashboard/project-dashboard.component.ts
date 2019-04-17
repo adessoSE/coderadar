@@ -37,7 +37,7 @@ export class ProjectDashboardComponent implements OnInit {
   private getCommits(): void {
     this.projectService.getCommits(this.projectId)
       .then(response => {
-        this.commits = response.body;
+        this.commits = response.body.content;
         this.commits.sort((a, b) => {
           if (a.timestamp === b.timestamp) {
             return 0;

@@ -26,7 +26,7 @@ export class MainDashboardComponent implements OnInit {
    */
   private getProjects(): void {
     this.projectService.getProjects()
-      .then(response => response.body.forEach(project => {
+      .then(response => response.body.content.forEach(project => {
         const newProject = new Project(project);
         this.projects.push(newProject);
       }))
