@@ -37,6 +37,7 @@ public class JobExecutionServiceTest extends IntegrationTestTemplate {
     Optional<Job> jobBeforeExecution = jobRepository.findById(1L);
     Assertions.assertTrue(jobBeforeExecution.isPresent());
 
+
     JobExecutionService executionService =
         new JobExecutionService(jobLogger, jobQueueService, jobUpdater, jobExecutor);
     executionService.executeNextJobInQueue();

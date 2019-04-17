@@ -167,15 +167,17 @@ public class CommitAnalyzer {
     List<AnalyzerConfiguration> configs =
         analyzerConfigurationRepository.findByProjectId(project.getId());
     for (AnalyzerConfiguration config : configs) {
-      AnalyzerConfigurationFile configFile =
-          analyzerConfigurationFileRepository
-              .findByAnalyzerConfigurationProjectIdAndAnalyzerConfigurationId(
-                  project.getId(), config.getId());
-      if (configFile != null) {
-        analyzers.add(
-            analyzerRegistry.createAnalyzer(config.getAnalyzerName(), configFile.getFileData()));
-      } else {
-        analyzers.add(analyzerRegistry.createAnalyzer(config.getAnalyzerName()));
+      if (config.getEnabled()) {
+        AnalyzerConfigurationFile configFile =
+            analyzerConfigurationFileRepository
+                .findByAnalyzerConfigurationProjectIdAndAnalyzerConfigurationId(
+                    project.getId(), config.getId());
+        if (configFile != null) {
+          analyzers.add(
+              analyzerRegistry.createAnalyzer(config.getAnalyzerName(), configFile.getFileData()));
+        } else {
+          analyzers.add(analyzerRegistry.createAnalyzer(config.getAnalyzerName()));
+        }
       }
     }
     return analyzers;
