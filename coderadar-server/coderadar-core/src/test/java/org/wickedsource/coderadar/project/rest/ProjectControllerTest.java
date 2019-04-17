@@ -15,6 +15,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -135,6 +136,26 @@ public class ProjectControllerTest extends ControllerTestTemplate {
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(containsResource(ProjectResource.class))
+        .andDo(document("projects/update"));
+  }
+
+  @Test
+  @DatabaseSetup(PROJECT_LIST)
+  @ExpectedDatabase(PROJECT_LIST)
+  public void updateProjectWhenNameExistsFails() throws Exception {
+    ProjectResource projectResource = projectResource().validProjectResource2();
+    mvc()
+        .perform(
+            post("/projects/1")
+                .content(toJson(projectResource))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().is(500))
+        .andExpect(
+            result -> {
+              Assertions.assertEquals(
+                  "{\"errorMessage\":\"Project with name 'name2' already exists. Please choose another name.\"}",
+                  result.getResponse().getContentAsString());
+            })
         .andDo(document("projects/update"));
   }
 

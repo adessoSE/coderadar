@@ -16,10 +16,6 @@ export class EditProjectComponent implements OnInit {
 
   projectName: string;
 
-  // I need all project at the moment,
-  // because coderadar does not check if the project name exists already
-  projects: Project[] = [];
-
   project: Project;
 
   // Error fields
@@ -35,7 +31,6 @@ export class EditProjectComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getProjects();
     this.route.params.subscribe(params => {
       this.projectId = params.id;
       this.getProject();
@@ -98,8 +93,6 @@ export class EditProjectComponent implements OnInit {
   private validateInput(): boolean {
     this.incorrectURL = this.project.vcsUrl.trim().length === 0;
     this.nameEmpty = this.project.name.trim().length === 0;
-    this.projectExists = this.projects.filter(p => (p.name === this.project.name) && p.name !== this.projectName).length !== 0;
-
 
     if (this.project.startDate === 'first commit') {
       this.project.startDate = null;
@@ -109,24 +102,6 @@ export class EditProjectComponent implements OnInit {
       this.project.endDate = null;
     }
 
-    return this.nameEmpty || this.incorrectURL || this.projectExists;
-  }
-
-
-  /**
-   * Gets all projects from the project service and constructs a new array of Project objects
-   * from the returned JSON. Sends a refresh token if access is denied.
-   */
-  private getProjects(): void {
-    this.projectService.getProjects()
-      .then(response => response.body.forEach(project => {
-        const newProject = new Project(project);
-        this.projects.push(newProject);
-      }))
-      .catch(e => {
-        if (e.status && e.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getProjects());
-        }
-      });
+    return this.nameEmpty || this.incorrectURL;
   }
 }

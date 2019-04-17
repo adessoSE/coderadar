@@ -82,6 +82,13 @@ public class ProjectController {
   public ResponseEntity<ProjectResource> updateProject(
       @Valid @RequestBody ProjectResource projectResource, @PathVariable Long id) {
     Project project = projectVerifier.loadProjectOrThrowException(id);
+    if (projectRepository.countByName(projectResource.getName()) > 0
+        && !project.getName().equals(projectResource.getName())) {
+      throw new UserException(
+          String.format(
+              "Project with name '%s' already exists. Please choose another name.",
+              projectResource.getName()));
+    }
     project = projectAssembler.updateEntity(projectResource, project);
     Project savedProject = projectRepository.save(project);
     ProjectResource resultResource = projectAssembler.toResource(savedProject);
