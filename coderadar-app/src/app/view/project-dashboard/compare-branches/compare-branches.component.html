@@ -1,0 +1,9 @@
+<div style="align-content: center; margin-left: 20%">
+  <span #graph (mousedown)="selectCommit($event.target)"></span>
+</div>
+<a *ngIf="selectedCommit1 !== null && selectedCommit2 != null && selectedCommit1.analyzed && selectedCommit2.analyzed"
+   class="compare-button" color="accent" mat-fab routerLink="/city/{{project.id}}">
+  <div>
+    <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">library_books</mat-icon>
+  </div>
+</a>

@@ -80,7 +80,8 @@ export class ViewCommitComponent implements OnInit {
     this.projectService.getProject(this.projectId)
       .then(response => {
         this.project = new Project(response.body);
-        this.titleService.setTitle('Coderadar - ' + this.commit.name.substring(0, 7) + ' - ' + AppComponent.trimProjectName(this.project.name));
+        this.titleService.setTitle('Coderadar - ' + this.commit.name.substring(0, 7) + ' - ' +
+          AppComponent.trimProjectName(this.project.name));
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {

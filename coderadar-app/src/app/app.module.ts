@@ -29,7 +29,7 @@ import {
   MatInputModule,
   MatListModule,
   MatMenuModule, MatPaginatorModule,
-  MatSidenavModule,
+  MatSidenavModule, MatTabsModule,
   MatToolbarModule,
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
@@ -46,6 +46,8 @@ import {environment} from '../environments/environment';
 import {CityViewComponent} from './view/city-view/city-view.component';
 import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import { CommitListComponent } from './view/project-dashboard/commit-list/commit-list.component';
+import { CompareBranchesComponent } from './view/project-dashboard/compare-branches/compare-branches.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -76,7 +78,9 @@ const appRoutes: Routes = [
     ProjectDashboardComponent,
     ViewCommitComponent,
     CityViewComponent,
-    CityViewHeaderComponent
+    CityViewHeaderComponent,
+    CommitListComponent,
+    CompareBranchesComponent
   ],
   imports: [
     BrowserModule,
@@ -97,6 +101,7 @@ const appRoutes: Routes = [
     MatMenuModule,
     MatListModule,
     MatIconModule,
+    MatTabsModule,
     RouterModule,
     LayoutModule,
     MatToolbarModule,

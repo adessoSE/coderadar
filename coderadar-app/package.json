@@ -26,6 +26,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.16",
     "@fortawesome/free-regular-svg-icons": "^5.8.0",
     "@fortawesome/free-solid-svg-icons": "^5.8.0",
+    "@gitgraph/js": "^1.0.0",
     "@ngrx/core": "^1.2.0",
     "@ngrx/effects": "^7.3.0",
     "@ngrx/store": "^7.3.0",
@@ -46,7 +47,8 @@
     "three": "^0.102.1",
     "three-orbitcontrols-ts": "git+https://git@github.com/nicolaspanel/three-orbitcontrols-ts.git",
     "tslib": "^1.9.3",
-    "zone.js": "~0.8.29"
+    "zone.js": "~0.8.29",
+    "@angular/elements": "latest"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.13.0",

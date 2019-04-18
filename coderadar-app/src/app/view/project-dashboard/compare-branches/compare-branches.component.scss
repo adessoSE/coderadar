@@ -1,0 +1,17 @@
+.compare-button {
+  right: 7%;
+  bottom: 8%;
+  position: fixed;
+  animation: show 0.2s;
+  z-index: 3;
+  transform: scale(1.5, 1.5);
+}
+
+@keyframes show {
+  0% {
+    transform: scale(1, 1);
+  }
+  100% {
+    transform: scale(1.5, 1.5);
+  }
+}
