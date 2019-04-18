@@ -6,3 +6,5 @@ include 'coderadar-core:projectadministration'
 include 'coderadar-core:analyzer'
 include 'coderadar-core:query'
 include 'coderadar-app'
+include 'coderadar-graph'
+
