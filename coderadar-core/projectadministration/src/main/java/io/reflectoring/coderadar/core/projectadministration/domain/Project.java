@@ -33,4 +33,7 @@ public class Project {
 
   @Relationship("HAS")
   private List<AnalyzerConfiguration> analyzerConfigurations;
+
+  @Relationship("HAS")
+  private AnalyzingJob analyzingJob;
 }
