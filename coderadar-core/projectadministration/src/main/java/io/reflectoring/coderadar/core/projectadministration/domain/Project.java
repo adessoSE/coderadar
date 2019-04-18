@@ -27,4 +27,7 @@ public class Project {
   // https://en.wikipedia.org/wiki/Directed_acyclic_graph
   @Relationship("HAS")
   private List<Module> modules;
+
+  @Relationship("HAS")
+  private List<FilePattern> filePatterns;
 }
