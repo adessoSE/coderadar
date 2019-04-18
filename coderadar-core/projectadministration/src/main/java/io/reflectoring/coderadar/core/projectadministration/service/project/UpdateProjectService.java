@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.core.projectadministration.service.project;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.domain.VcsCoordinates;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.UpdateProjectCommand;
@@ -24,15 +23,14 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   @Override
   public void update(UpdateProjectCommand command) {
     Project project = getProjectPort.get(command.getId());
-    VcsCoordinates coordinates = new VcsCoordinates();
-    coordinates.setUrl(command.getVcsUrl());
-    coordinates.setOnline(command.getVcsOnline());
-    coordinates.setUsername(command.getVcsUsername());
-    coordinates.setPassword(command.getVcsPassword());
-    coordinates.setStartDate(command.getStart());
-    coordinates.setEndDate(command.getEnd());
-    project.setVcsCoordinates(coordinates);
     project.setName(command.getName());
     project.setWorkdirName(command.getWorkdir());
+    project.setVcsUrl(command.getVcsUrl());
+    project.setVcsUsername(command.getVcsUsername());
+    project.setVcsPassword(command.getVcsPassword());
+    project.setVcsOnline(command.getVcsOnline());
+    project.setVcsStart(command.getStart());
+    project.setVcsEnd(command.getEnd());
+    updateProjectPort.update(project);
   }
 }

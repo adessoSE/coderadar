@@ -2,31 +2,24 @@ package io.reflectoring.coderadar.core.projectadministration.domain;
 
 import javax.persistence.*;
 import lombok.Data;
+import org.neo4j.ogm.annotation.NodeEntity;
+
+import java.net.URL;
+import java.util.Date;
 
 /** A coderadar project that defines the source of files that are to be analyzed. */
-@Entity
-@Table(
-  name = "project",
-  uniqueConstraints = {@UniqueConstraint(columnNames = "name")}
-)
-@SequenceGenerator(name = "project_sequence", sequenceName = "seq_proj_id", allocationSize = 1)
+@NodeEntity
 @Data
 public class Project {
-  @Id
-  @Column(name = "id")
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "project_sequence")
   private Long id;
-
-  @Column(name = "name", nullable = false)
   private String name;
-
-  @Embedded private VcsCoordinates vcsCoordinates;
-
-  @Column(name = "workdir_name", nullable = false)
   private String workdirName;
 
-  @Override
-  public String toString() {
-    return String.format("[Project: id=%d; name=%s]", this.id, this.name);
-  }
+  // Information about the VCS
+  private URL vcsUrl;
+  private String vcsUsername;
+  private String vcsPassword;
+  private boolean vcsOnline;
+  private Date vcsStart;
+  private Date vcsEnd;
 }
