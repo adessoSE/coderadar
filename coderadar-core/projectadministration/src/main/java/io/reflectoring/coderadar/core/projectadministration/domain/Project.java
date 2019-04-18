@@ -30,4 +30,7 @@ public class Project {
 
   @Relationship("HAS")
   private List<FilePattern> filePatterns;
+
+  @Relationship("HAS")
+  private List<AnalyzerConfiguration> analyzerConfigurations;
 }
