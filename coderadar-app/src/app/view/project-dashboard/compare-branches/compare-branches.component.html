@@ -1,11 +1,18 @@
-
-  <div  style="align-content: center; margin-left: 27%">
-    <span #graph (mousedown)="selectCommit($event.target)"></span>
+<div  style="align-content: center; margin-left: 27%">
+  <mat-form-field style="margin-left: 0%; width: 40%; margin-top: 10px">
+    <input matInput type="text" placeholder="Search for commits or branches">
+  </mat-form-field>
+  <mat-form-field>
+    <input type="date" matInput placeholder="Start date">
+  </mat-form-field>
+  <mat-form-field>
+    <input type="date" matInput placeholder="End date">
+  </mat-form-field>
+  <span style="cursor: pointer;" #graph (mousedown)="handleClickEvent($event.target)"></span>
+</div>
+<a *ngIf="selectedCommit1 !== null && selectedCommit2 != null && selectedCommit1.analyzed && selectedCommit2.analyzed"
+   class="compare-button" color="accent" mat-fab routerLink="/city/{{project.id}}">
+  <div>
+    <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">library_books</mat-icon>
   </div>
-  <a *ngIf="selectedCommit1 !== null && selectedCommit2 != null && selectedCommit1.analyzed && selectedCommit2.analyzed"
-     class="compare-button" color="accent" mat-fab routerLink="/city/{{project.id}}">
-    <div>
-      <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">library_books</mat-icon>
-    </div>
-  </a>
-
+</a>
