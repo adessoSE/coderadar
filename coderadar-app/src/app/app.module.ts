@@ -48,6 +48,7 @@ import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-vi
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import { CommitListComponent } from './view/project-dashboard/commit-list/commit-list.component';
 import { CompareBranchesComponent } from './view/project-dashboard/compare-branches/compare-branches.component';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -115,7 +116,8 @@ const appRoutes: Routes = [
     StoreModule.forRoot(REDUCER_TOKEN),
     EffectsModule.forRoot([AppEffects]),
     environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 50}),
-    MatPaginatorModule
+    MatPaginatorModule,
+    ScrollingModule
   ],
   providers: [
     {

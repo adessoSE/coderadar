@@ -6,10 +6,6 @@
       <app-commit-list [commits]="commits" [project]="project" [commitsAnalyzed]="commitsAnalyzed">
       </app-commit-list>
     </mat-tab>
-    <mat-tab label="Analyzed commits">
-      <app-commit-list [commits]="filterAnalyzedCommits()" [project]="project" [commitsAnalyzed]="commitsAnalyzed">
-      </app-commit-list>
-    </mat-tab>
     <mat-tab label="Graph view">
       <ng-template matTabContent>
         <app-compare-branches [commits]="commits" [project]="project"></app-compare-branches>

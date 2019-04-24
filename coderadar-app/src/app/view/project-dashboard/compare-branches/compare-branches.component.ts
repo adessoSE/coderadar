@@ -1,9 +1,12 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, Input, OnInit, ViewChild} from '@angular/core';
 import {createGitgraph, Orientation} from '@gitgraph/js';
 import {Commit} from '../../../model/commit';
 import {AppEffects} from '../../../city-map/shared/effects';
 import {Project} from '../../../model/project';
-import {GitgraphUserApi} from '@gitgraph/core';
+import {GitgraphUserApi, BranchUserApi} from '@gitgraph/core';
+import {CdkScrollable, ScrollDispatcher} from '@angular/cdk/scrolling';
+import {MatSidenavContainer, ScrollDirection} from '@angular/material';
+import {Directionality} from '@angular/cdk/bidi';
 
 
 @Component({
@@ -11,14 +14,16 @@ import {GitgraphUserApi} from '@gitgraph/core';
   templateUrl: './compare-branches.component.html',
   styleUrls: ['./compare-branches.component.scss']
 })
-export class CompareBranchesComponent implements OnInit {
+export class CompareBranchesComponent implements OnInit, AfterViewInit {
 
-  constructor(private cityEffects: AppEffects) {
+
+  constructor(private cityEffects: AppEffects,  private scrollDispatcher: ScrollDispatcher) {
     this.selectedCommit1 = null;
     this.selectedCommit2 = null;
   }
 
   @ViewChild('graph', {read: ElementRef})graph: ElementRef;
+
   @Input() commits: Commit[];
   @Input() project: Project;
 
@@ -28,7 +33,12 @@ export class CompareBranchesComponent implements OnInit {
   public prevSelectedCommit1: Commit;
   public prevSelectedCommit2: Commit;
 
+  private loadIndex = 15;
+  private windowHeight = window.screen.availHeight;
+
   private gitgraph: GitgraphUserApi<SVGElement>;
+
+  master: BranchUserApi<SVGElement>;
 
   private static extractCommitHash(markup: any): string {
     let result = '';
@@ -46,19 +56,40 @@ export class CompareBranchesComponent implements OnInit {
     return null;
   }
 
+  ngAfterViewInit() {
+/*    this.scrollDispatcher.scrolled().subscribe(x => console.log(this.sidenavContainer.scrollable.measureScrollOffset('start')));
+    this.sidenavContainer.scrollable.elementScrolled().subscribe(x => {
+      console.log(x);
+    });*/
+  }
+
   ngOnInit() {
     this.gitgraph = createGitgraph(this.graph.nativeElement, {orientation: Orientation.VerticalReverse});
     this.redraw();
+
   }
 
   redraw() {
 
     this.gitgraph.clear();
-    const master = this.gitgraph.branch('master');
+    this.master = this.gitgraph.branch('master');
 
-    this.commits.forEach(value => {
+    for (let i = 0; i < this.loadIndex && i < this.commits.length; i++) {
+      if (i === 7) { // dummy commits
+        const newFeature = this.gitgraph.branch('new-feature');
+        newFeature.commit('Implement an awesome feature');
+        newFeature.commit('Fix tests');
+
+        const newBranch = this.gitgraph.branch('fixes');
+        newBranch.commit('Implemented someting');
+        newBranch.commit('Fix something');
+
+        this.master.merge(newFeature, 'Release new version');
+        this.master.merge(newBranch, 'Release new version');
+      }
+      const value = this.commits[i];
       if (value === this.selectedCommit1 || value === this.selectedCommit2) {
-        master.commit({
+        this.master.commit({
           hash: value.name,
           subject: new Date(value.timestamp).toDateString(),
           author: value.author,
@@ -72,24 +103,15 @@ export class CompareBranchesComponent implements OnInit {
           }
         });
       } else {
-        master.commit({
+        this.master.commit({
           hash: value.name,
           subject: new Date(value.timestamp).toDateString(),
           author: value.author
         });
       }
-    });
+    }
 
-    const newFeature = this.gitgraph.branch('new-feature');
-    newFeature.commit('Implement an awesome feature');
-    newFeature.commit('Fix tests');
 
-    const newBranch = this.gitgraph.branch('fixes');
-    newBranch.commit('Implemented someting');
-    newBranch.commit('Fix something');
-
-    master.merge(newFeature, 'Release new version');
-    master.merge(newBranch, 'Release new version');
   }
 
   public selectCommit(selectedCommitHash: EventTarget): void {
@@ -116,6 +138,39 @@ export class CompareBranchesComponent implements OnInit {
       this.cityEffects.secondCommit = this.selectedCommit2;
       this.redraw();
     }
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  handleScroll(event) {
+    if (window.pageYOffset > (this.windowHeight + window.screenY - 700)) {
+      for (let i = this.loadIndex; i < this.loadIndex + 15 && i < this.commits.length; i++) {
+        const value = this.commits[i];
+        if (value === this.selectedCommit1 || value === this.selectedCommit2) {
+          this.master.commit({
+            hash: value.name,
+            subject: new Date(value.timestamp).toDateString(),
+            author: value.author,
+            style: {
+              dot: {
+                color: '#f60',
+              },
+              message: {
+                color: '#f60'
+              },
+            }
+          });
+        } else {
+          this.master.commit({
+            hash: value.name,
+            subject: new Date(value.timestamp).toDateString(),
+            author: value.author
+          });
+        }
+      }
+      this.loadIndex += 15;
+      this.windowHeight = window.pageYOffset + window.screen.height * 1.5;
+    }
+
   }
 }
 

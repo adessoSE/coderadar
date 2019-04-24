@@ -8,7 +8,6 @@ import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import {AppComponent} from '../../app.component';
 
-
 @Component({
   selector: 'app-project-dashboard',
   templateUrl: './project-dashboard.component.html',
