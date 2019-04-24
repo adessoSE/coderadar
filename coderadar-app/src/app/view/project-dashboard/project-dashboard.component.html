@@ -6,7 +6,8 @@
     <mat-grid-tile *ngFor="let commit of commits" [colspan]="2" [rowspan]="1">
       <mat-card class="dashboard-card">
         <mat-card-content class="mat-card-content">
-          <a mat-button routerLink="/project/{{project.id}}/{{commit.name}}"><b>{{commit.name}}</b></a><br>
+          <a mat-button routerLink="/project/{{project.id}}/{{commit.name}}"><b>{{commit.name}}</b></a>
+          <a mat-button routerLink="/structure-map/{{project.id}}/{{commit.name}}">..</a><br>
           <mat-label>Author: {{commit.author}}</mat-label><br>
           <mat-label>Date: {{timestampToDate(commit.timestamp)}}</mat-label><br>
           <mat-label>Analyzed: {{booleanToString(commit.analyzed)}}</mat-label>

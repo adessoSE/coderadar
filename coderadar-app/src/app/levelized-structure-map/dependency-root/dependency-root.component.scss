@@ -1,0 +1,118 @@
+#canvas {
+  position:absolute;
+  width:100%;
+  z-index: -1;
+}
+
+.root-file {
+  width: max-content;
+  margin-left: 15px;
+}
+
+.list {
+  padding: 0 0 0 5px;
+  margin: 0;
+}
+
+.list__root {
+  display: grid;
+  grid-template-columns: 30% 30% 30%;
+  align-items: start;
+  grid-column-gap: 5%;
+}
+
+.package {
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none;
+  display: block;
+  border: 1px solid black;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  width: max-content;
+  padding: 5px;
+  margin: 5px;
+}
+
+.package__base {
+  width: unset;
+}
+
+.package:before {
+  font-family: 'files-n-folders', sans-serif;
+  content: "\e900";
+  color: black;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.package-down::before {
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Safari */
+  transform: rotate(90deg);
+}
+
+.class {
+  display: block;
+  cursor: default;
+}
+
+.class:before {
+  font-family: 'files-n-folders', sans-serif;
+  content: "\e901";
+  display: inline-block;
+  margin-right: 6px;
+  font-weight: bold;
+}
+
+.class--dependency {
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none;
+}
+
+.class--dependency:before {
+  font-family: 'files-n-folders', sans-serif;
+  content: "\e900";
+  display: inline-block;
+  margin-right: 6px;
+  color: red;
+}
+
+.class-down--dependency::before {
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Safari */
+  transform: rotate(90deg);
+}
+
+.package, .class, .class--dependency {
+  padding-left: 15px;
+}
+
+.nested {
+  display: none;
+}
+
+.active {
+  display: block;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+
+
+@font-face {
+  font-family: 'files-n-folders';
+  src:  url('../../../assets/fonts/files-n-folders/files-n-folders.eot?l001h2');
+  src:  url('../../../assets/fonts/files-n-folders/files-n-folders.eot?l001h2#iefix') format('embedded-opentype'),
+  url('../../../assets/fonts/files-n-folders/files-n-folders.ttf?l001h2') format('truetype'),
+  url('../../../assets/fonts/files-n-folders/files-n-folders.woff?l001h2') format('woff'),
+  url('../../../assets/fonts/files-n-folders/files-n-folders.svg?l001h2#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}

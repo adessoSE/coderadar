@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AppComponent} from './app.component';
 import {LoginComponent} from './view/login/login.component';
@@ -32,6 +32,10 @@ import {
   MatSidenavModule,
   MatToolbarModule,
 } from '@angular/material';
+import {DependencyTreeComponent} from "./levelized-structure-map/dependency-tree/dependency-tree.component";
+import {DependencyRootComponent} from "./levelized-structure-map/dependency-root/dependency-root.component";
+import {DependencyTreeProvider} from "./levelized-structure-map/DependencyTreeProvider";
+import {Globals} from "./levelized-structure-map/Globals";
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -43,8 +47,13 @@ const appRoutes: Routes = [
   { path: 'project-edit/:id', component: EditProjectComponent },
   { path: 'project/:id', component: ProjectDashboardComponent },
   { path: 'project/:id/:name', component: ViewCommitComponent },
+  { path: 'structure-map/:id/:name', component: DependencyRootComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
+
+export function dependencyTreeProviderFactory(provider: DependencyTreeProvider) {
+  return () => provider.load();
+}
 
 @NgModule({
   declarations: [
@@ -59,7 +68,9 @@ const appRoutes: Routes = [
     FooterComponent,
     UserSettingsComponent,
     ProjectDashboardComponent,
-    ViewCommitComponent
+    ViewCommitComponent,
+    DependencyTreeComponent,
+    DependencyRootComponent
   ],
   imports: [
     BrowserModule,
@@ -84,12 +95,19 @@ const appRoutes: Routes = [
     MatSidenavModule,
     MatCheckboxModule
   ],
+  exports: [
+    DependencyTreeComponent
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true
-    }],
+      multi: true,
+    },
+    DependencyTreeProvider,
+    {provide: APP_INITIALIZER, useFactory: dependencyTreeProviderFactory, deps: [DependencyTreeProvider], multi: true},
+    Globals
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
