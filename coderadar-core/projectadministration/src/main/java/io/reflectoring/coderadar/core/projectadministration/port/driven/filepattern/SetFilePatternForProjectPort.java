@@ -1,3 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.port.driven.filepattern;
 
-public interface SetFilePatternForProjectPort {}
+import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
+
+public interface SetFilePatternForProjectPort {
+  void setFilePattern(FilePattern filePattern);
+}
