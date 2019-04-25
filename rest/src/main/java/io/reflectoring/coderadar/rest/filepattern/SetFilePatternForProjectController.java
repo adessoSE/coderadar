@@ -14,16 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "/projects/{projectId}/files")
 public class SetFilePatternForProjectController {
 
-    private final SetFilePatternForProjectUseCase setFilePatternForProjectUseCase;
+  private final SetFilePatternForProjectUseCase setFilePatternForProjectUseCase;
 
-    @Autowired
-    public SetFilePatternForProjectController(SetFilePatternForProjectUseCase setFilePatternForProjectUseCase) {
-        this.setFilePatternForProjectUseCase = setFilePatternForProjectUseCase;
-    }
+  @Autowired
+  public SetFilePatternForProjectController(
+      SetFilePatternForProjectUseCase setFilePatternForProjectUseCase) {
+    this.setFilePatternForProjectUseCase = setFilePatternForProjectUseCase;
+  }
 
-    @PostMapping
-    public ResponseEntity<String> setFilePattern(@RequestBody SetFilePatternForProjectCommand command) {
-        setFilePatternForProjectUseCase.setFilePattern(command);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
+  @PostMapping
+  public ResponseEntity<String> setFilePattern(
+      @RequestBody SetFilePatternForProjectCommand command) {
+    setFilePatternForProjectUseCase.setFilePattern(command);
+    return new ResponseEntity<>(HttpStatus.CREATED);
+  }
 }
