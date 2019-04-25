@@ -8,7 +8,7 @@
   <mat-form-field>
     <input type="date" matInput placeholder="End date">
   </mat-form-field>
-  <span style="cursor: pointer;" #graph (mousedown)="handleClickEvent($event.target)"></span>
+  <span style="cursor: pointer;" #graph></span>
 </div>
 <a *ngIf="selectedCommit1 !== null && selectedCommit2 != null && selectedCommit1.analyzed && selectedCommit2.analyzed"
    class="compare-button" color="accent" mat-fab routerLink="/city/{{project.id}}">
