@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.core.projectadministration.service.project;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.DeleteProjectPort;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.DeleteProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.DeleteProjectUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ public class DeleteProjectService implements DeleteProjectUseCase {
   }
 
   @Override
-  public void delete(DeleteProjectCommand command) {
-    deleteProjectPort.delete(command.getId());
+  public void delete(Long id) {
+    deleteProjectPort.delete(id);
   }
 }

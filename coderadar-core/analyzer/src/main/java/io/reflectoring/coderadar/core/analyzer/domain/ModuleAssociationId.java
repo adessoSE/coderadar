@@ -1,8 +1,9 @@
 package io.reflectoring.coderadar.core.analyzer.domain;
 
-import java.io.Serializable;
-import javax.persistence.Column;
 import lombok.Data;
+
+import javax.persistence.Column;
+import java.io.Serializable;
 
 @Data
 public class ModuleAssociationId implements Serializable {

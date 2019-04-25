@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.core.analyzer.domain;
 
-import javax.persistence.*;
 import lombok.Data;
+
+import javax.persistence.*;
 
 /** Represents a file in a VCS repository. */
 @Entity

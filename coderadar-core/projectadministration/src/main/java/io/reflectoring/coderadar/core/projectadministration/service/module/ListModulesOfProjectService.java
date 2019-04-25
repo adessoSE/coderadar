@@ -4,9 +4,10 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.ListModulesOfProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.ListModulesOfProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.ListModulesOfProjectUseCase;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ListModulesOfProjectService implements ListModulesOfProjectUseCase {

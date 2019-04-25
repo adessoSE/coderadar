@@ -2,11 +2,11 @@ package io.reflectoring.coderadar.core.projectadministration.service.analyzercon
 
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationsFromProjectPort;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.GetAnalyzerConfigurationsFromProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.GetAnalyzerConfigurationsFromProjectUseCase;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class GetAnalyzerConfigurationsFromProjectService
@@ -20,7 +20,7 @@ public class GetAnalyzerConfigurationsFromProjectService
   }
 
   @Override
-  public List<AnalyzerConfiguration> get(GetAnalyzerConfigurationsFromProjectCommand command) {
-    return port.get(command.getId());
+  public List<AnalyzerConfiguration> get(Long projectId) {
+    return port.get(projectId);
   }
 }

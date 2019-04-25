@@ -1,13 +1,14 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
-import java.net.URL;
-import java.util.Date;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.net.URL;
+import java.util.Date;
 
 /** Coordinates to enable access to a source control system. */
 @Embeddable

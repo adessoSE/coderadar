@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.core.projectadministration.service.project;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.GetProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.GetProjectUseCase;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,7 @@ public class GetProjectService implements GetProjectUseCase {
   }
 
   @Override
-  public Project get(GetProjectCommand command) {
-    return port.get(command.getId());
+  public Project get(Long id) {
+    return port.get(id);
   }
 }

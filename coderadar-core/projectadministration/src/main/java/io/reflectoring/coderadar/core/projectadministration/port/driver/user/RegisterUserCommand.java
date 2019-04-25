@@ -4,7 +4,6 @@ import lombok.Value;
 
 @Value
 public class RegisterUserCommand {
-  private Long id;
   private String username;
   private String password;
 }

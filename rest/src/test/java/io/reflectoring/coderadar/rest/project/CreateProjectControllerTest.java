@@ -1,0 +1,43 @@
+package io.reflectoring.coderadar.rest.project;
+
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.CreateProjectCommand;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.CreateProjectUseCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Date;
+
+@ExtendWith(SpringExtension.class)
+public class CreateProjectControllerTest {
+
+    @Mock
+    private CreateProjectUseCase createProjectUseCase;
+    private CreateProjectController testSubject;
+
+    @BeforeEach
+    public void setup() {
+        testSubject = new CreateProjectController(createProjectUseCase);
+    }
+
+    @Test
+    public void createNewProjectSuccessfully() throws MalformedURLException {
+        URL url = new URL("http://valid.url");
+        CreateProjectCommand command = new CreateProjectCommand("test", "test workdir", "testUsername", "testPassword", url, true, new Date(), new Date());
+
+        Mockito.when(createProjectUseCase.createProject(command)).thenReturn(1L);
+
+        ResponseEntity<Long> responseEntity = testSubject.createProject(command);
+
+        Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        Assertions.assertEquals(1L, responseEntity.getBody().longValue());
+    }
+}

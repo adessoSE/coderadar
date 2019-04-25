@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.core.query.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.*;
 
 /**

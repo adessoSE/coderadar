@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.core.projectadministration.service.user;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.LoadUserPort;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.LoadUserCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.LoadUserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ public class LoadUserService implements LoadUserUseCase {
   }
 
   @Override
-  public User loadUser(LoadUserCommand command) {
-    return port.loadUser(command.getId());
+  public User loadUser(Long id) {
+    return port.loadUser(id);
   }
 }

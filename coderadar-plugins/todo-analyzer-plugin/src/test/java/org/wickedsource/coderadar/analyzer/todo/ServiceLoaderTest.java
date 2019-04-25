@@ -1,10 +1,11 @@
 package org.wickedsource.coderadar.analyzer.todo;
 
-import java.util.Iterator;
-import java.util.ServiceLoader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.wickedsource.coderadar.plugin.SourceCodeFileAnalyzerPlugin;
+
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
 public class ServiceLoaderTest {
 

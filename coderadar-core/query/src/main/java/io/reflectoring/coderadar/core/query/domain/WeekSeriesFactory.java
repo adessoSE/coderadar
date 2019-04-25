@@ -1,15 +1,16 @@
 package io.reflectoring.coderadar.core.query.domain;
 
-import static java.time.temporal.ChronoUnit.WEEKS;
-
-import java.time.LocalDate;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.stereotype.Component;
 import org.wickedsource.coderadar.commit.domain.Commit;
 import org.wickedsource.coderadar.commit.domain.DateCoordinates;
 import org.wickedsource.coderadar.core.configuration.CoderadarConfiguration;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import static java.time.temporal.ChronoUnit.WEEKS;
 
 @Component
 public class WeekSeriesFactory extends MetricValueSeriesFactory<Week> {

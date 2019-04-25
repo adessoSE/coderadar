@@ -4,7 +4,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.1.4.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.4.RELEASE'
     compile group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.16.Final'
-    testCompile "org.springframework.boot:spring-boot-starter-test:${version_spring_boot}"
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.4.RELEASE'
     compile project(":coderadar-core:projectadministration")
     compile project(":coderadar-core:analyzer")
 }

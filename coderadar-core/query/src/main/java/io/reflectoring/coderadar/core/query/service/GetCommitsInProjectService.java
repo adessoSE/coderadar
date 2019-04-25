@@ -3,9 +3,10 @@ package io.reflectoring.coderadar.core.query.service;
 import io.reflectoring.coderadar.core.analyzer.domain.Commit;
 import io.reflectoring.coderadar.core.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.core.query.port.driver.GetCommitsInProjectUseCase;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {

@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.core.projectadministration.service.analyzercon
 
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.GetAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.GetAnalyzerConfigurationUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +17,7 @@ public class GetAnalyzerConfigurationService implements GetAnalyzerConfiguration
   }
 
   @Override
-  public AnalyzerConfiguration getSingleAnalyzerConfiguration(
-      GetAnalyzerConfigurationCommand command) {
-    return port.getAnalyzerConfiguration(command.getId());
+  public AnalyzerConfiguration getSingleAnalyzerConfiguration(Long id) {
+    return port.getAnalyzerConfiguration(id);
   }
 }

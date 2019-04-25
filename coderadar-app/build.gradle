@@ -111,7 +111,7 @@ dependencies {
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${version_spring_boot}"
     providedRuntime group: 'org.apache.tomcat', name: 'tomcat-juli', version: property('tomcat.version')
 
-    testCompile "org.springframework.boot:spring-boot-starter-test:${version_spring_boot}"
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.4.RELEASE'
 
     testCompile "org.slf4j:slf4j-ext:1.7.25"
     testCompile "org.springframework.restdocs:spring-restdocs-mockmvc:${version_spring_restdocs}"

@@ -2,11 +2,12 @@ package io.reflectoring.coderadar.core.analyzer.domain;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Associates a Commit to a File. Each Commit is associated to all Files that have been modified in

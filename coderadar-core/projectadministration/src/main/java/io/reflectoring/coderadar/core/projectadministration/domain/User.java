@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
-import javax.persistence.*;
 import lombok.Data;
+
+import javax.persistence.*;
 
 /** a user of application, who has to login to access to functionality */
 @Entity
