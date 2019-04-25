@@ -76,9 +76,11 @@
   -moz-user-select: none; /* Firefox 2+ */
   -ms-user-select: none; /* IE 10+ */
   user-select: none;
+  display: block;
 }
 
 .class--dependency:before {
+  cursor: unset;
   font-family: 'files-n-folders', sans-serif;
   content: "\e900";
   display: inline-block;
@@ -96,6 +98,10 @@
   padding-left: 15px;
 }
 
+.activeDependency {
+  background-color: #49fb35;
+}
+
 .nested {
   display: none;
 }
@@ -104,11 +110,13 @@
   display: block;
 }
 
+.active__root {
+  display: grid;
+}
+
 .clickable {
   cursor: pointer;
 }
-
-
 
 @font-face {
   font-family: 'files-n-folders';

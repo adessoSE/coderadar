@@ -3,12 +3,9 @@ import {async, TestBed} from '@angular/core/testing';
 import {DependencyRootComponent} from './dependency-root.component';
 import {DependencyTreeProvider} from '../DependencyTreeProvider';
 import {APP_INITIALIZER} from '@angular/core';
-import {Globals} from '../Globals';
-import {dependencyTreeProviderFactory} from '../app.module';
-import {StructureMapComponent} from '../structure-map/structure-map.component';
-import {DependencyTreeComponent} from '../dependency-tree/dependency-tree.component';
 import {BrowserModule} from '@angular/platform-browser';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {dependencyTreeProviderFactory} from "../../app.module";
 
 
 describe('DependencyRootComponent', () => {
@@ -9365,8 +9362,6 @@ describe('DependencyRootComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        StructureMapComponent,
-        DependencyTreeComponent,
         DependencyRootComponent
       ],
       imports: [
@@ -9375,8 +9370,7 @@ describe('DependencyRootComponent', () => {
       ],
       providers: [
         DependencyTreeProvider,
-        {provide: APP_INITIALIZER, useFactory: dependencyTreeProviderFactory, deps: [DependencyTreeProvider], multi: true},
-        Globals
+        {provide: APP_INITIALIZER, useFactory: dependencyTreeProviderFactory, deps: [DependencyTreeProvider], multi: true}
       ],
     });
     httpTestingController = TestBed.get(HttpTestingController);

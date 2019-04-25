@@ -32,10 +32,8 @@ import {
   MatSidenavModule,
   MatToolbarModule,
 } from '@angular/material';
-import {DependencyTreeComponent} from "./levelized-structure-map/dependency-tree/dependency-tree.component";
 import {DependencyRootComponent} from "./levelized-structure-map/dependency-root/dependency-root.component";
 import {DependencyTreeProvider} from "./levelized-structure-map/DependencyTreeProvider";
-import {Globals} from "./levelized-structure-map/Globals";
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -69,7 +67,6 @@ export function dependencyTreeProviderFactory(provider: DependencyTreeProvider) 
     UserSettingsComponent,
     ProjectDashboardComponent,
     ViewCommitComponent,
-    DependencyTreeComponent,
     DependencyRootComponent
   ],
   imports: [
@@ -102,8 +99,7 @@ export function dependencyTreeProviderFactory(provider: DependencyTreeProvider) 
       multi: true,
     },
     DependencyTreeProvider,
-    {provide: APP_INITIALIZER, useFactory: dependencyTreeProviderFactory, deps: [DependencyTreeProvider], multi: true},
-    Globals
+    {provide: APP_INITIALIZER, useFactory: dependencyTreeProviderFactory, deps: [DependencyTreeProvider], multi: true}
   ],
   bootstrap: [AppComponent]
 })
