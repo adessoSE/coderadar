@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
-import lombok.Data;
-
 import javax.persistence.*;
+import lombok.Data;
 
 /**
  * The codebase may be organized into modules, each module starting at a certain path. All files

@@ -10,17 +10,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 public class UpdateProjectControllerTest {
 
-    @Mock
-    private UpdateProjectUseCase updateProjectUseCase;
-    private UpdateProjectController testSubject;
+  @Mock private UpdateProjectUseCase updateProjectUseCase;
+  private UpdateProjectController testSubject;
 
-    @BeforeEach
-    public void setup() {
-        testSubject = new UpdateProjectController(updateProjectUseCase);
-    }
+  @BeforeEach
+  public void setup() {
+    testSubject = new UpdateProjectController(updateProjectUseCase);
+  }
 
-    @Test
-    public void updateProjectWithIdOne() {
-        // TODO
-    }
+  @Test
+  public void updateProjectWithIdOne() {
+    // TODO
+  }
 }

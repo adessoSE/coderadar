@@ -1,12 +1,11 @@
 package org.wickedsource.coderadar.analyzer.loc;
 
+import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.wickedsource.coderadar.plugin.FileMetrics;
 import org.wickedsource.coderadar.plugin.Metric;
-
-import java.io.InputStream;
 
 public class LocAnalyzerPluginTest {
 

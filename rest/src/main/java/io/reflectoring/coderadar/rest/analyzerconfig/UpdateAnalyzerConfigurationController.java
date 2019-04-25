@@ -22,8 +22,9 @@ public class UpdateAnalyzerConfigurationController {
   }
 
   @PostMapping("/{analyzerConfigurationId}")
-  public ResponseEntity<String> updateAnalyzerConfiguration(@RequestBody UpdateAnalyzerConfigurationCommand command) {
+  public ResponseEntity<String> updateAnalyzerConfiguration(
+      @RequestBody UpdateAnalyzerConfigurationCommand command) {
     updateAnalyzerConfigurationUseCase.update(command);
-      return new ResponseEntity<>(HttpStatus.OK);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }

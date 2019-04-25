@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
-import lombok.Data;
-
 import javax.persistence.*;
+import lombok.Data;
 
 /** A coderadar project that defines the source of files that are to be analyzed. */
 @Entity

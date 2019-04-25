@@ -16,34 +16,34 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 public class GetAnalyzerConfigurationControllerTest {
 
-    @Mock
-    private GetAnalyzerConfigurationUseCase getAnalyzerConfigurationUseCase;
-    private GetAnalyzerConfigurationController testSubject;
+  @Mock private GetAnalyzerConfigurationUseCase getAnalyzerConfigurationUseCase;
+  private GetAnalyzerConfigurationController testSubject;
 
-    @BeforeEach
-    public void setup() {
-        testSubject = new GetAnalyzerConfigurationController(getAnalyzerConfigurationUseCase);
-    }
+  @BeforeEach
+  public void setup() {
+    testSubject = new GetAnalyzerConfigurationController(getAnalyzerConfigurationUseCase);
+  }
 
-    @Test
-    public void returnsAnalyzerConfigurationWithIdOne() {
-        Project project = new Project();
-        project.setId(5L);
+  @Test
+  public void returnsAnalyzerConfigurationWithIdOne() {
+    Project project = new Project();
+    project.setId(5L);
 
-        AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
-        analyzerConfiguration.setId(1L);
-        analyzerConfiguration.setAnalyzerName("analyzer");
-        analyzerConfiguration.setEnabled(true);
-        analyzerConfiguration.setProject(project);
+    AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
+    analyzerConfiguration.setId(1L);
+    analyzerConfiguration.setAnalyzerName("analyzer");
+    analyzerConfiguration.setEnabled(true);
+    analyzerConfiguration.setProject(project);
 
-        Mockito.when(getAnalyzerConfigurationUseCase.getSingleAnalyzerConfiguration(1L)).thenReturn(analyzerConfiguration);
+    Mockito.when(getAnalyzerConfigurationUseCase.getSingleAnalyzerConfiguration(1L))
+        .thenReturn(analyzerConfiguration);
 
-        ResponseEntity<AnalyzerConfiguration> responseEntity =  testSubject.getAnalyzerConfiguration(1L);
+    ResponseEntity<AnalyzerConfiguration> responseEntity = testSubject.getAnalyzerConfiguration(1L);
 
-        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
-        Assertions.assertEquals("analyzer", responseEntity.getBody().getAnalyzerName());
-        Assertions.assertEquals(true, responseEntity.getBody().getEnabled());
-        Assertions.assertEquals(5L, responseEntity.getBody().getProject().getId().longValue());
-    }
+    Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
+    Assertions.assertEquals("analyzer", responseEntity.getBody().getAnalyzerName());
+    Assertions.assertEquals(true, responseEntity.getBody().getEnabled());
+    Assertions.assertEquals(5L, responseEntity.getBody().getProject().getId().longValue());
+  }
 }

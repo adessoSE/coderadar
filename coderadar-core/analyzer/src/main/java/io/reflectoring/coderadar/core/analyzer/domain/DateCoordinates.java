@@ -1,13 +1,12 @@
 package io.reflectoring.coderadar.core.analyzer.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Embeddable
 @NoArgsConstructor

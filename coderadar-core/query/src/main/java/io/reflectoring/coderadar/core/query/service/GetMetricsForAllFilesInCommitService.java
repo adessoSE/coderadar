@@ -4,10 +4,9 @@ import io.reflectoring.coderadar.core.analyzer.domain.GroupedMetricValueDTO;
 import io.reflectoring.coderadar.core.query.port.driven.GetMetricsForAllFilesInCommitPort;
 import io.reflectoring.coderadar.core.query.port.driver.GetMetricsForAllFilesInCommitCommand;
 import io.reflectoring.coderadar.core.query.port.driver.GetMetricsForAllFilesInCommitUseCase;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class GetMetricsForAllFilesInCommitService implements GetMetricsForAllFilesInCommitUseCase {

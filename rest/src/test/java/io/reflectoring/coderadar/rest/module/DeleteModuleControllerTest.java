@@ -7,17 +7,16 @@ import org.mockito.Mock;
 
 public class DeleteModuleControllerTest {
 
-    @Mock
-    private DeleteModuleUseCase deleteModuleUseCase;
-    private DeleteModuleController testSubject;
+  @Mock private DeleteModuleUseCase deleteModuleUseCase;
+  private DeleteModuleController testSubject;
 
-    @BeforeEach
-    public void setup() {
-        testSubject = new DeleteModuleController(deleteModuleUseCase);
-    }
+  @BeforeEach
+  public void setup() {
+    testSubject = new DeleteModuleController(deleteModuleUseCase);
+  }
 
-    @Test
-    public void deleteModuleWithIdOne() {
-        // TODO
-    }
+  @Test
+  public void deleteModuleWithIdOne() {
+    // TODO
+  }
 }

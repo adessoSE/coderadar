@@ -7,17 +7,16 @@ import org.mockito.Mock;
 
 public class ChangePasswordControllerTest {
 
-    @Mock
-    private ChangePasswordUseCase changePasswordUseCase;
-    private ChangePasswordController testSubject;
+  @Mock private ChangePasswordUseCase changePasswordUseCase;
+  private ChangePasswordController testSubject;
 
-    @BeforeEach
-    public void setup() {
-        testSubject = new ChangePasswordController(changePasswordUseCase);
-    }
+  @BeforeEach
+  public void setup() {
+    testSubject = new ChangePasswordController(changePasswordUseCase);
+  }
 
-    @Test
-    public void changePasswordSuccessfully() {
-        // TODO
-    }
+  @Test
+  public void changePasswordSuccessfully() {
+    // TODO
+  }
 }

@@ -7,17 +7,18 @@ import org.mockito.Mock;
 
 public class GetAnalyzerConfigurationsFromProjectControllerTest {
 
-    @Mock
-    private GetAnalyzerConfigurationsFromProjectUseCase getAnalyzerConfigurationsFromProjectUseCase;
-    private GetAnalyzerConfigurationsFromProjectController testSubject;
+  @Mock
+  private GetAnalyzerConfigurationsFromProjectUseCase getAnalyzerConfigurationsFromProjectUseCase;
 
-    @BeforeEach
-    public void setup() {
-        testSubject = new GetAnalyzerConfigurationsFromProjectController(getAnalyzerConfigurationsFromProjectUseCase);
-    }
+  private GetAnalyzerConfigurationsFromProjectController testSubject;
 
-    @Test
-    public void todo() {
+  @BeforeEach
+  public void setup() {
+    testSubject =
+        new GetAnalyzerConfigurationsFromProjectController(
+            getAnalyzerConfigurationsFromProjectUseCase);
+  }
 
-    }
+  @Test
+  public void todo() {}
 }

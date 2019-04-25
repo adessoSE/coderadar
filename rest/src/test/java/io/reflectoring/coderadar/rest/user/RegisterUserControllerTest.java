@@ -15,24 +15,23 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 public class RegisterUserControllerTest {
 
-    @Mock
-    private RegisterUserUseCase registerUserUseCase;
-    private RegisterUserController testSubject;
+  @Mock private RegisterUserUseCase registerUserUseCase;
+  private RegisterUserController testSubject;
 
-    @BeforeEach
-    public void setup() {
-        testSubject = new RegisterUserController(registerUserUseCase);
-    }
+  @BeforeEach
+  public void setup() {
+    testSubject = new RegisterUserController(registerUserUseCase);
+  }
 
-    @Test
-    public void registerUserWithIdOne() {
-        RegisterUserCommand command = new RegisterUserCommand("username", "password");
+  @Test
+  public void registerUserWithIdOne() {
+    RegisterUserCommand command = new RegisterUserCommand("username", "password");
 
-        Mockito.when(registerUserUseCase.register(command)).thenReturn(1L);
+    Mockito.when(registerUserUseCase.register(command)).thenReturn(1L);
 
-        ResponseEntity<Long> responseEntity = testSubject.register(command);
+    ResponseEntity<Long> responseEntity = testSubject.register(command);
 
-        Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        Assertions.assertEquals(1L, responseEntity.getBody().longValue());
-    }
+    Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+    Assertions.assertEquals(1L, responseEntity.getBody().longValue());
+  }
 }

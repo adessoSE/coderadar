@@ -7,17 +7,16 @@ import org.mockito.Mock;
 
 public class UpdateModuleControllerTest {
 
-    @Mock
-    private UpdateModuleUseCase updateModuleUseCase;
-    private UpdateModuleController testSubject;
+  @Mock private UpdateModuleUseCase updateModuleUseCase;
+  private UpdateModuleController testSubject;
 
-    @BeforeEach
-    public void setup() {
-        testSubject = new UpdateModuleController(updateModuleUseCase);
-    }
+  @BeforeEach
+  public void setup() {
+    testSubject = new UpdateModuleController(updateModuleUseCase);
+  }
 
-    @Test
-    public void updateModuleWithIdOne() {
-        // TODO
-    }
+  @Test
+  public void updateModuleWithIdOne() {
+    // TODO
+  }
 }

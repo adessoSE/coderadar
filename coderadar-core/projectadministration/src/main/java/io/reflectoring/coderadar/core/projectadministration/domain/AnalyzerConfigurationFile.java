@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
-import lombok.Data;
-
 import javax.persistence.*;
+import lombok.Data;
 
 /**
  * A configuration file for an analyzer. May have any ASCII content, depending on what kind of

@@ -15,26 +15,25 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 public class GetModuleControllerTest {
 
-    @Mock
-    private GetModuleUseCase getModuleUseCase;
-    private GetModuleController testSubject;
+  @Mock private GetModuleUseCase getModuleUseCase;
+  private GetModuleController testSubject;
 
-    @BeforeEach
-    public void setup() {
-        testSubject = new GetModuleController(getModuleUseCase);
-    }
+  @BeforeEach
+  public void setup() {
+    testSubject = new GetModuleController(getModuleUseCase);
+  }
 
-    @Test
-    public void returnsModuleWithIdOne() {
-        Module module = new Module();
-        module.setId(1L);
-        module.setPath("module-path");
+  @Test
+  public void returnsModuleWithIdOne() {
+    Module module = new Module();
+    module.setId(1L);
+    module.setPath("module-path");
 
-        Mockito.when(getModuleUseCase.get(1L)).thenReturn(module);
-        ResponseEntity<Module> responseEntity = testSubject.getModule(1L);
+    Mockito.when(getModuleUseCase.get(1L)).thenReturn(module);
+    ResponseEntity<Module> responseEntity = testSubject.getModule(1L);
 
-        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
-        Assertions.assertEquals("module-path", responseEntity.getBody().getPath());
-    }
+    Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
+    Assertions.assertEquals("module-path", responseEntity.getBody().getPath());
+  }
 }

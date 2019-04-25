@@ -10,22 +10,21 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 public class DeleteProjectControllerTest {
 
-    @Mock
-    private DeleteProjectUseCase deleteProjectUseCase;
-    private DeleteProjectController testSubject;
+  @Mock private DeleteProjectUseCase deleteProjectUseCase;
+  private DeleteProjectController testSubject;
 
-    @BeforeEach
-    public void setup() {
-        testSubject = new DeleteProjectController(deleteProjectUseCase);
-    }
+  @BeforeEach
+  public void setup() {
+    testSubject = new DeleteProjectController(deleteProjectUseCase);
+  }
 
-    @Test
-    public void deleteProjectWithIdOne() {
-        // TODO
-    }
+  @Test
+  public void deleteProjectWithIdOne() {
+    // TODO
+  }
 
-    @Test
-    public void throwsExceptionIfProjectDoesNotExist() {
-        // TODO
-    }
+  @Test
+  public void throwsExceptionIfProjectDoesNotExist() {
+    // TODO
+  }
 }

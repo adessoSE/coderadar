@@ -7,17 +7,16 @@ import org.mockito.Mock;
 
 public class DeleteAnalyzerConfigurationControllerTest {
 
-    @Mock
-    private DeleteAnalyzerConfigurationUseCase deleteAnalyzerConfigurationUseCase;
-    private DeleteAnalyzerConfigurationController testSubject;
+  @Mock private DeleteAnalyzerConfigurationUseCase deleteAnalyzerConfigurationUseCase;
+  private DeleteAnalyzerConfigurationController testSubject;
 
-    @BeforeEach
-    public void setup() {
-        testSubject = new DeleteAnalyzerConfigurationController(deleteAnalyzerConfigurationUseCase);
-    }
+  @BeforeEach
+  public void setup() {
+    testSubject = new DeleteAnalyzerConfigurationController(deleteAnalyzerConfigurationUseCase);
+  }
 
-    @Test
-    public void deleteAnalyzerConfigurationWithIdOne() {
-        // TODO
-    }
+  @Test
+  public void deleteAnalyzerConfigurationWithIdOne() {
+    // TODO
+  }
 }

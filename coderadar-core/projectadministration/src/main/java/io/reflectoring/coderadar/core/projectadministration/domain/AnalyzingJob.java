@@ -1,9 +1,8 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
-import lombok.Data;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.*;
+import lombok.Data;
 
 /**
  * A job that defines which commits are to be analyzed. Storing an entity of this type in the

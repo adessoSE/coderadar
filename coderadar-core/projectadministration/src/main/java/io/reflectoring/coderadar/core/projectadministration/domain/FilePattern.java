@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
-import lombok.Data;
-
 import javax.persistence.*;
+import lombok.Data;
 
 /**
  * Contains an Ant-style path pattern to define a certain set of files that is of importance to a

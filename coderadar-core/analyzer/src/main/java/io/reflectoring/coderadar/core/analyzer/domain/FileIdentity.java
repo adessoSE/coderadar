@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.core.analyzer.domain;
 
-import lombok.Data;
-
 import javax.persistence.*;
+import lombok.Data;
 
 /**
  * A FileIdentity connects Files that have been renamed at some point in time. Two Files with the

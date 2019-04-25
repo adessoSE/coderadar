@@ -1,12 +1,11 @@
 package io.reflectoring.coderadar.core.analyzer.domain;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import lombok.Data;
-
-import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.*;
+import lombok.Data;
 
 /** Metadata about a commit to a Git repository. */
 @Entity

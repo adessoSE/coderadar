@@ -7,17 +7,16 @@ import org.mockito.Mock;
 
 public class ListModulesOfProjectControllerTest {
 
-    @Mock
-    private ListModulesOfProjectUseCase listModulesOfProjectUseCase;
-    private ListModulesOfProjectController testSubject;
+  @Mock private ListModulesOfProjectUseCase listModulesOfProjectUseCase;
+  private ListModulesOfProjectController testSubject;
 
-    @BeforeEach
-    public void setup() {
-        testSubject = new ListModulesOfProjectController(listModulesOfProjectUseCase);
-    }
+  @BeforeEach
+  public void setup() {
+    testSubject = new ListModulesOfProjectController(listModulesOfProjectUseCase);
+  }
 
-    @Test
-    public void returnsModulesForProjectWithIdOne() {
-        // TODO
-    }
+  @Test
+  public void returnsModulesForProjectWithIdOne() {
+    // TODO
+  }
 }

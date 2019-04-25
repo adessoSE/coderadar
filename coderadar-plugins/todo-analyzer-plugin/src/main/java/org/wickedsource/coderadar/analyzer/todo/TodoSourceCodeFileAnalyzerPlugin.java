@@ -1,7 +1,6 @@
 package org.wickedsource.coderadar.analyzer.todo;
 
 import io.reflectoring.coderadar.plugin.api.*;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;

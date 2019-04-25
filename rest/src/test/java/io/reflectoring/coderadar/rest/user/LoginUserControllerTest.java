@@ -16,30 +16,29 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 public class LoginUserControllerTest {
 
-    @Mock
-    private LoginUserUseCase loginUserUseCase;
-    private LoginUserController testSubject;
+  @Mock private LoginUserUseCase loginUserUseCase;
+  private LoginUserController testSubject;
 
-    @BeforeEach
-    public void setup() {
-        testSubject = new LoginUserController(loginUserUseCase);
-    }
+  @BeforeEach
+  public void setup() {
+    testSubject = new LoginUserController(loginUserUseCase);
+  }
 
-    @Test
-    public void loginUserWithUsernameAndPassword() {
-        LoginUserCommand command = new LoginUserCommand("username", "password");
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("username");
-        user.setPassword("password");
+  @Test
+  public void loginUserWithUsernameAndPassword() {
+    LoginUserCommand command = new LoginUserCommand("username", "password");
+    User user = new User();
+    user.setId(1L);
+    user.setUsername("username");
+    user.setPassword("password");
 
-        Mockito.when(loginUserUseCase.login(command)).thenReturn(user);
+    Mockito.when(loginUserUseCase.login(command)).thenReturn(user);
 
-        ResponseEntity<User> responseEntity = testSubject.login(command);
+    ResponseEntity<User> responseEntity = testSubject.login(command);
 
-        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
-        Assertions.assertEquals("username", responseEntity.getBody().getUsername());
-        Assertions.assertEquals("password", responseEntity.getBody().getPassword());
-    }
+    Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
+    Assertions.assertEquals("username", responseEntity.getBody().getUsername());
+    Assertions.assertEquals("password", responseEntity.getBody().getPassword());
+  }
 }

@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
-import lombok.Data;
-
 import javax.persistence.*;
+import lombok.Data;
 
 /** An AnalyzerConfiguration stores the configuration for a single analyzer plugin in a project. */
 @Entity

@@ -15,22 +15,21 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 public class RefreshTokenControllerTest {
 
-    @Mock
-    private RefreshTokenUseCase refreshTokenUseCase;
-    private RefreshTokenController testSubject;
+  @Mock private RefreshTokenUseCase refreshTokenUseCase;
+  private RefreshTokenController testSubject;
 
-    @BeforeEach
-    public void setup() {
-        testSubject = new RefreshTokenController(refreshTokenUseCase);
-    }
+  @BeforeEach
+  public void setup() {
+    testSubject = new RefreshTokenController(refreshTokenUseCase);
+  }
 
-    @Test
-    public void refreshTokenSuccessfully() {
-        RefreshTokenCommand command = new RefreshTokenCommand("accessToken", "refreshToken");
-        Mockito.when(refreshTokenUseCase.refreshToken(command)).thenReturn("newAccessToken");
-        ResponseEntity<String> responseEntity = testSubject.refreshToken(command);
+  @Test
+  public void refreshTokenSuccessfully() {
+    RefreshTokenCommand command = new RefreshTokenCommand("accessToken", "refreshToken");
+    Mockito.when(refreshTokenUseCase.refreshToken(command)).thenReturn("newAccessToken");
+    ResponseEntity<String> responseEntity = testSubject.refreshToken(command);
 
-        Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        Assertions.assertEquals("newAccessToken", responseEntity.getBody());
-    }
+    Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    Assertions.assertEquals("newAccessToken", responseEntity.getBody());
+  }
 }

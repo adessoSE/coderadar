@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.core.query.domain;
 
 import io.reflectoring.coderadar.core.analyzer.domain.Commit;
 import io.reflectoring.coderadar.core.analyzer.domain.MetricValueDTO;
-
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
