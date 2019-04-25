@@ -1,7 +1,11 @@
 #canvas {
-  position:absolute;
-  width:100%;
+  position: absolute;
+  width: 100%;
   z-index: -1;
+}
+
+.canvas-container {
+  height: min-content;
 }
 
 .root-file {

@@ -95,9 +95,6 @@ export function dependencyTreeProviderFactory(provider: DependencyTreeProvider) 
     MatSidenavModule,
     MatCheckboxModule
   ],
-  exports: [
-    DependencyTreeComponent
-  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

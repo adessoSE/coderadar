@@ -1,18 +1,19 @@
-<app-header id="structure-map-header" [title]="'Structure Map'"></app-header>
+<app-header #customStructureMapHeader id="customStructureMapHeader" [title]="'Structure Map'"></app-header>
 
+<div class="canvas-container" #canvasContainer>
 <canvas #canvas id="canvas"></canvas>
-<h3 id="activeDependency" class="root-file" *ngIf="global.activeDependency">{{global.activeDependency.filename}}</h3>
-<h3 id="activeDependency" class="root-file" *ngIf="!global.activeDependency">Choose File...</h3>
-<div class="package package__base" id="dependencyTree">
+<h3 #activeDependency id="activeDependency" class="root-file">Choose File...</h3>
+<div class="package package__base" #dependencyTree>
   <span [ngClass]="{'clickable': node.children.length > 0 || node.dependencies.length > 0}"
         (click)="node.children.length > 0 && toggle(node)">
     {{node.filename}}
   </span>
   <div *ngIf="node.expanded" class="list list__root">
-    <app-tree-node *ngFor="let child of node.children" [canvasElement]="canvas" [node]="child"
+    <app-tree-node *ngFor="let child of node.children" [node]="child" (toggleEmitter)="toggleOnEvent($event)" (toggleDependencyEmitter)="toggleDependencyOnEvent($event)"
                    [ngClass]="{'package': child.children.length > 0, 'class--dependency': child.dependencies.length > 0,
                      'class': child.children.length === 0 && child.dependencies.length === 0}"
                    id="{{child.packageName}}">
     </app-tree-node>
   </div>
+</div>
 </div>
