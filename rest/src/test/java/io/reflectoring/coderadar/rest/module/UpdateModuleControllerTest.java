@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.module;
 
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.UpdateModuleUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

@@ -4,8 +4,8 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.domain.VcsCoordinates;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.UpdateProjectCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.UpdateProjectUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +22,8 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   }
 
   @Override
-  public void update(UpdateProjectCommand command) {
-    Project project = getProjectPort.get(command.getId());
+  public void update(UpdateProjectCommand command, Long projectId) {
+    Project project = getProjectPort.get(projectId);
     VcsCoordinates coordinates = new VcsCoordinates();
     coordinates.setUrl(command.getVcsUrl());
     coordinates.setOnline(command.getVcsOnline());
@@ -33,6 +33,6 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     coordinates.setEndDate(command.getEnd());
     project.setVcsCoordinates(coordinates);
     project.setName(command.getName());
-    project.setWorkdirName(command.getWorkdir());
+    updateProjectPort.update(project);
   }
 }

@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.rest.analyzerconfig;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.GetAnalyzerConfigurationUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,24 +25,18 @@ public class GetAnalyzerConfigurationControllerTest {
 
   @Test
   public void returnsAnalyzerConfigurationWithIdOne() {
-    Project project = new Project();
-    project.setId(5L);
-
-    AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
-    analyzerConfiguration.setId(1L);
-    analyzerConfiguration.setAnalyzerName("analyzer");
-    analyzerConfiguration.setEnabled(true);
-    analyzerConfiguration.setProject(project);
+    GetAnalyzerConfigurationResponse analyzerConfiguration =
+        new GetAnalyzerConfigurationResponse(1L, "analyzer", true);
 
     Mockito.when(getAnalyzerConfigurationUseCase.getSingleAnalyzerConfiguration(1L))
         .thenReturn(analyzerConfiguration);
 
-    ResponseEntity<AnalyzerConfiguration> responseEntity = testSubject.getAnalyzerConfiguration(1L);
+    ResponseEntity<GetAnalyzerConfigurationResponse> responseEntity =
+        testSubject.getAnalyzerConfiguration(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
     Assertions.assertEquals("analyzer", responseEntity.getBody().getAnalyzerName());
     Assertions.assertEquals(true, responseEntity.getBody().getEnabled());
-    Assertions.assertEquals(5L, responseEntity.getBody().getProject().getId().longValue());
   }
 }

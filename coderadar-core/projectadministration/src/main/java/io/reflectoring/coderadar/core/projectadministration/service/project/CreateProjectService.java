@@ -3,8 +3,9 @@ package io.reflectoring.coderadar.core.projectadministration.service.project;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.domain.VcsCoordinates;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.CreateProjectPort;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.CreateProjectCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.CreateProjectUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectUseCase;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,7 @@ public class CreateProjectService implements CreateProjectUseCase {
     coordinates.setStartDate(command.getStart());
     coordinates.setEndDate(command.getEnd());
     project.setName(command.getName());
-    project.setWorkdirName(command.getWorkdir());
+    project.setWorkdirName(UUID.randomUUID().toString());
     project.setVcsCoordinates(coordinates);
     project = createProjectPort.createProject(project);
     return project.getId();

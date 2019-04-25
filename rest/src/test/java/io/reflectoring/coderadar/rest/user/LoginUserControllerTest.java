@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.User;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.LoginUserCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.LoginUserUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserCommand;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserResponse;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,18 +27,16 @@ public class LoginUserControllerTest {
   @Test
   public void loginUserWithUsernameAndPassword() {
     LoginUserCommand command = new LoginUserCommand("username", "password");
-    User user = new User();
-    user.setId(1L);
-    user.setUsername("username");
-    user.setPassword("password");
+    LoginUserResponse loginUserResponse = new LoginUserResponse("accessToken", "refreshToken");
 
-    Mockito.when(loginUserUseCase.login(command)).thenReturn(user);
+    Mockito.when(loginUserUseCase.login(command)).thenReturn(loginUserResponse);
 
-    ResponseEntity<User> responseEntity = testSubject.login(command);
+    ResponseEntity<LoginUserResponse> responseEntity = testSubject.login(command);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
-    Assertions.assertEquals("username", responseEntity.getBody().getUsername());
-    Assertions.assertEquals("password", responseEntity.getBody().getPassword());
+    Assertions.assertEquals(
+        loginUserResponse.getAccessToken(), responseEntity.getBody().getAccessToken());
+    Assertions.assertEquals(
+        loginUserResponse.getRefreshToken(), responseEntity.getBody().getRefreshToken());
   }
 }

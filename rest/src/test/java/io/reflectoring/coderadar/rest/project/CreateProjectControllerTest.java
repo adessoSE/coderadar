@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.project;
 
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.CreateProjectCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.CreateProjectUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
@@ -31,14 +31,7 @@ public class CreateProjectControllerTest {
     URL url = new URL("http://valid.url");
     CreateProjectCommand command =
         new CreateProjectCommand(
-            "test",
-            "test workdir",
-            "testUsername",
-            "testPassword",
-            url,
-            true,
-            new Date(),
-            new Date());
+            "test", "testUsername", "testPassword", url, true, new Date(), new Date());
 
     Mockito.when(createProjectUseCase.createProject(command)).thenReturn(1L);
 

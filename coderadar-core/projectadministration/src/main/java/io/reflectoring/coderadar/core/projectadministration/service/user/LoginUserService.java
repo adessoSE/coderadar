@@ -2,8 +2,9 @@ package io.reflectoring.coderadar.core.projectadministration.service.user;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.LoginUserPort;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.LoginUserCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.LoginUserUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserCommand;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserResponse;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,11 @@ public class LoginUserService implements LoginUserUseCase {
   }
 
   @Override
-  public User login(LoginUserCommand command) {
+  public LoginUserResponse login(LoginUserCommand command) {
     User user = new User();
     user.setUsername(command.getUsername());
     user.setPassword(command.getPassword());
     user = port.login(user);
-    return user;
+    return new LoginUserResponse("abalfgubhfuo[oi3y0823pdyu", "ift021789f21897f2187fg");
   }
 }

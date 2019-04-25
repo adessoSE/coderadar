@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.project;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.GetProjectUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,12 +25,12 @@ public class GetProjectControllerTest {
 
   @Test
   public void returnsProjectWithIdOne() {
-    Project project = new Project();
+    GetProjectResponse project = new GetProjectResponse();
     project.setId(1L);
 
     Mockito.when(getProjectUseCase.get(1L)).thenReturn(project);
 
-    ResponseEntity<Project> responseEntity = testSubject.getProject(1L);
+    ResponseEntity<GetProjectResponse> responseEntity = testSubject.getProject(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());

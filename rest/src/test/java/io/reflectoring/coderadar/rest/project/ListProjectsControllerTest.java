@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.project;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.ListProjectsUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.ListProjectsUseCase;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -27,18 +27,18 @@ public class ListProjectsControllerTest {
 
   @Test
   public void listAllProjects() {
-    Project project1 = new Project();
-    Project project2 = new Project();
-    Project project3 = new Project();
+    GetProjectResponse project1 = new GetProjectResponse();
+    GetProjectResponse project2 = new GetProjectResponse();
+    GetProjectResponse project3 = new GetProjectResponse();
 
-    List<Project> projects = new ArrayList<>();
+    List<GetProjectResponse> projects = new ArrayList<>();
     projects.add(project1);
     projects.add(project2);
     projects.add(project3);
 
     Mockito.when(listProjectsUseCase.listProjects()).thenReturn(projects);
 
-    ResponseEntity<List<Project>> responseEntity = testSubject.listProjects();
+    ResponseEntity<List<GetProjectResponse>> responseEntity = testSubject.listProjects();
 
     Assertions.assertEquals(3L, responseEntity.getBody().size());
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

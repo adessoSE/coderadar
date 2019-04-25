@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.User;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.LoadUserUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserResponse;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class LoadUserController {
   }
 
   @GetMapping("/{userId}")
-  public ResponseEntity<User> loadUser(@PathVariable Long userId) {
+  public ResponseEntity<LoadUserResponse> loadUser(@PathVariable Long userId) {
     return new ResponseEntity<>(loadUserUseCase.loadUser(userId), HttpStatus.OK);
   }
 }

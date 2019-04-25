@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.analyzerconfig;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.GetAnalyzerConfigurationUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class GetAnalyzerConfigurationController {
   }
 
   @GetMapping("/{analyzerConfigurationId}")
-  public ResponseEntity<AnalyzerConfiguration> getAnalyzerConfiguration(
+  public ResponseEntity<GetAnalyzerConfigurationResponse> getAnalyzerConfiguration(
       @PathVariable Long analyzerConfigurationId) {
     return new ResponseEntity<>(
         getAnalyzerConfigurationUseCase.getSingleAnalyzerConfiguration(analyzerConfigurationId),

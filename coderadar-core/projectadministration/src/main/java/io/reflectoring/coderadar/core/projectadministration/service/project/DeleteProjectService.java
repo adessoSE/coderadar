@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.service.project;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.DeleteProjectPort;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.DeleteProjectUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.delete.DeleteProjectUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

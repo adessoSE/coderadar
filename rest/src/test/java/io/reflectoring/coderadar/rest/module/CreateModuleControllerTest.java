@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.module;
 
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.CreateModuleCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.CreateModuleUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.module.create.CreateModuleCommand;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,10 +25,10 @@ public class CreateModuleControllerTest {
 
   @Test
   public void createModuleSuccessfully() {
-    CreateModuleCommand command = new CreateModuleCommand(5L, "module-path-test");
-    Mockito.when(createModuleUseCase.createModule(command)).thenReturn(1L);
+    CreateModuleCommand command = new CreateModuleCommand("module-path-test");
+    Mockito.when(createModuleUseCase.createModule(command, 5L)).thenReturn(1L);
 
-    ResponseEntity<Long> responseEntity = testSubject.createModule(command);
+    ResponseEntity<Long> responseEntity = testSubject.createModule(command, 5L);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
     Assertions.assertEquals(1L, responseEntity.getBody().longValue());

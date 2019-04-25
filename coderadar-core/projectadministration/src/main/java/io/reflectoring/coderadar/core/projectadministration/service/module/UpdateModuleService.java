@@ -3,8 +3,8 @@ package io.reflectoring.coderadar.core.projectadministration.service.module;
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.GetModulePort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.UpdateModulePort;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.UpdateModuleCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.UpdateModuleUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleCommand;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +21,9 @@ public class UpdateModuleService implements UpdateModuleUseCase {
   }
 
   @Override
-  public Module updateModule(UpdateModuleCommand command) {
-    Module module = getModulePort.get(command.getId());
+  public void updateModule(UpdateModuleCommand command, Long moduleId) {
+    Module module = getModulePort.get(moduleId);
     module.setPath(command.getPath());
-    module = updateModulePort.updateModule(module);
-    return module;
+    updateModulePort.updateModule(module);
   }
 }

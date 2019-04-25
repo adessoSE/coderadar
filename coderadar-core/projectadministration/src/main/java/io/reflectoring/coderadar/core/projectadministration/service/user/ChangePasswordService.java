@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.core.projectadministration.service.user;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.ChangePasswordPort;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.ChangePasswordCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.ChangePasswordUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.user.password.ChangePasswordCommand;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.user.password.ChangePasswordUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +18,6 @@ public class ChangePasswordService implements ChangePasswordUseCase {
 
   @Override
   public void changePassword(ChangePasswordCommand command) {
-    port.changePassword(command.getId(), command.getNewPassword());
+    port.changePassword(command.getRefreshToken(), command.getNewPassword());
   }
 }
