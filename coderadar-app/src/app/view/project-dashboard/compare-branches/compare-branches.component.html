@@ -3,10 +3,10 @@
     <input matInput type="text" placeholder="Search for commits or branches">
   </mat-form-field>
   <mat-form-field>
-    <input type="date" matInput placeholder="Start date">
+    <input type="date" [(ngModel)]="startDate" (ngModelChange)="showCommitsInRange()" matInput placeholder="Start date">
   </mat-form-field>
   <mat-form-field>
-    <input type="date" matInput placeholder="End date">
+    <input type="date" [(ngModel)]="endDate" (ngModelChange)="showCommitsInRange()" matInput placeholder="End date">
   </mat-form-field>
   <span style="cursor: pointer;" #graph></span>
 </div>

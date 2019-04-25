@@ -26,8 +26,8 @@ export class CompareBranchesComponent implements OnInit {
   public selectedCommit1: Commit;
   public selectedCommit2: Commit;
 
-  selectedCommit1Element: GitGraphCommit;
-  selectedCommit2Element: GitGraphCommit;
+  private selectedCommit1Element: GitGraphCommit;
+  private selectedCommit2Element: GitGraphCommit;
 
   private loadIndex = 15;
   private windowHeight = window.screen.availHeight;
@@ -36,6 +36,9 @@ export class CompareBranchesComponent implements OnInit {
 
   private selectedCommitColor = '#f60';
   private deselectedCommitColor = '#979797';
+
+  public startDate: string = null;
+  public endDate: string = null;
 
   master: BranchUserApi<SVGElement>;
 
@@ -145,6 +148,44 @@ export class CompareBranchesComponent implements OnInit {
       this.loadIndex += 15;
       this.windowHeight = window.pageYOffset + window.screen.height * 1.5;
     }
+  }
+
+  showCommitsInRange() {
+
+    let endDate: Date;
+    if (this.endDate === null) {
+      endDate = new Date(this.commits[0].timestamp);
+    } else {
+      endDate = new Date(this.endDate);
+    }
+
+    let startDate: Date;
+    if (this.startDate === null) {
+      startDate = new Date(this.commits[this.commits.length - 1].timestamp);
+    } else {
+      startDate = new Date(this.startDate);
+    }
+
+    const filteredCommits: Commit[] = this.commits.filter(value =>
+      value.timestamp >= startDate.getTime() && value.timestamp <= endDate.getTime());
+
+    this.gitgraph.clear();
+    this.master = this.gitgraph.branch( 'master');
+
+    filteredCommits.forEach(value => {
+      this.master.commit({
+        hash: value.name,
+        subject: new Date(value.timestamp).toDateString(),
+        author: value.author,
+        onClick: commit => {
+          this.handleClickEvent(commit);
+        },
+        onMessageClick: commit => {
+          this.handleClickEvent(commit);
+        }
+      });
+    });
+    this.loadIndex = this.commits.length;
   }
 }
 
