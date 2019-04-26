@@ -1,6 +1,8 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
 import javax.persistence.*;
+
+import io.reflectoring.coderadar.core.analyzer.domain.Commit;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
@@ -36,4 +38,7 @@ public class Project {
 
   @Relationship("HAS")
   private AnalyzingJob analyzingJob;
+
+  @Relationship("HAS")
+  private List<Commit> commits;
 }
