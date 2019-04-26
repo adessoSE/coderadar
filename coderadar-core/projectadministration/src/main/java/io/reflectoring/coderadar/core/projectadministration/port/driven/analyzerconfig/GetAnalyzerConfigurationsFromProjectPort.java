@@ -4,5 +4,5 @@ import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfi
 import java.util.List;
 
 public interface GetAnalyzerConfigurationsFromProjectPort {
-  List<AnalyzerConfiguration> get(Long id);
+  List<AnalyzerConfiguration> get(Long projectId);
 }

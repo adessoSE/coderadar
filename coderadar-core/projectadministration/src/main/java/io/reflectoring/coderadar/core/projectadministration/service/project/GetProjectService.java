@@ -19,6 +19,7 @@ public class GetProjectService implements GetProjectUseCase {
   public GetProjectResponse get(Long id) {
     Project project = port.get(id);
     GetProjectResponse response = new GetProjectResponse();
+    response.setId(project.getId());
     response.setName(project.getName());
     response.setVcsUsername(project.getVcsCoordinates().getUsername());
     response.setVcsPassword(project.getVcsCoordinates().getPassword());

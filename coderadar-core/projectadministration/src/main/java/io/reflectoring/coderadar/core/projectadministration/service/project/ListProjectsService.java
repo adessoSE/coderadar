@@ -24,6 +24,7 @@ public class ListProjectsService implements ListProjectsUseCase {
     List<GetProjectResponse> response = new ArrayList<>();
     for (Project project : listProjectsPort.getProjects()) {
       GetProjectResponse resource = new GetProjectResponse();
+      resource.setId(project.getId());
       resource.setName(project.getName());
       resource.setVcsUsername(project.getVcsCoordinates().getUsername());
       resource.setVcsPassword(project.getVcsCoordinates().getPassword());

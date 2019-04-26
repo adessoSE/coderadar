@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.filepattern;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.update.UpdateFilePatternCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.update.UpdateFilePatternForProjectUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.update.UpdateFilePatternUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UpdateFilePatternController {
-  private final UpdateFilePatternForProjectUseCase updateFilePatternForProjectUseCase;
+  private final UpdateFilePatternUseCase updateFilePatternForProjectUseCase;
 
   @Autowired
-  public UpdateFilePatternController(
-      UpdateFilePatternForProjectUseCase updateFilePatternForProjectUseCase) {
+  public UpdateFilePatternController(UpdateFilePatternUseCase updateFilePatternForProjectUseCase) {
     this.updateFilePatternForProjectUseCase = updateFilePatternForProjectUseCase;
   }
 

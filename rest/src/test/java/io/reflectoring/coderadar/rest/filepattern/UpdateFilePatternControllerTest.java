@@ -1,13 +1,13 @@
 package io.reflectoring.coderadar.rest.filepattern;
 
-import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.update.UpdateFilePatternForProjectUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.update.UpdateFilePatternUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
 public class UpdateFilePatternControllerTest {
 
-  @Mock private UpdateFilePatternForProjectUseCase updateFilePatternForProjectUseCase;
+  @Mock private UpdateFilePatternUseCase updateFilePatternForProjectUseCase;
   private UpdateFilePatternController testSubject;
 
   @BeforeEach

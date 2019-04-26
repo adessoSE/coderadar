@@ -15,7 +15,7 @@ public class CreateModuleService implements CreateModuleUseCase {
   private final CreateModulePort createModulePort;
 
   @Autowired
-  public CreateModuleService(GetProjectPort getProjectPort, CreateModulePort createModulePort) {
+  public CreateModuleService(CreateModulePort createModulePort, GetProjectPort getProjectPort) {
     this.getProjectPort = getProjectPort;
     this.createModulePort = createModulePort;
   }
