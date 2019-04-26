@@ -43,6 +43,10 @@ export class CompareBranchesComponent implements OnInit {
   master: BranchUserApi<SVGElement>;
 
   ngOnInit() {
+    this.commits = this.commits.filter(commit => commit.analyzed);
+    if (this.commits.length === 0) {
+      return;
+    }
     this.gitgraph = createGitgraph(this.graph.nativeElement, {orientation: Orientation.VerticalReverse});
     this.master = this.gitgraph.branch( 'master');
 

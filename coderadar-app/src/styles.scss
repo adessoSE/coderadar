@@ -28,6 +28,7 @@ footer {
 
 main {
   min-height: calc(100vh - 240px);
+  padding-bottom: 17px;
 }
 
 /*
@@ -85,8 +86,8 @@ Styles for the login and register forms
 }
 
 #stage canvas {
+  cursor: grab;
   position: absolute;
-  cursor: -webkit-grab;
   transition: all 1s ease
 }
 
@@ -136,7 +137,7 @@ Styles for the login and register forms
 #stage {
   canvas {
     position: absolute;
-    cursor: -webkit-grab;
+    cursor: grab;
     transition: all 1s ease;
 
     &:first-child {
