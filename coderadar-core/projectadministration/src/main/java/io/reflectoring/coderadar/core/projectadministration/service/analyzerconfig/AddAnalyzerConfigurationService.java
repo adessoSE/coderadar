@@ -1,10 +1,14 @@
 package io.reflectoring.coderadar.core.projectadministration.service.analyzerconfig;
 
+import io.reflectoring.coderadar.core.projectadministration.ProjectNotFound;
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
+import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.AddAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
+import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.AddAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.AddAnalyzerConfigurationUseCase;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +16,16 @@ import org.springframework.stereotype.Service;
 public class AddAnalyzerConfigurationService implements AddAnalyzerConfigurationUseCase {
 
   private final AddAnalyzerConfigurationPort addAnalyzerConfigurationPort;
+  private final UpdateProjectPort updateProjectPort;
   private final GetProjectPort getProjectPort;
 
   @Autowired
   public AddAnalyzerConfigurationService(
-      AddAnalyzerConfigurationPort addAnalyzerConfigurationPort, GetProjectPort getProjectPort) {
+      AddAnalyzerConfigurationPort addAnalyzerConfigurationPort,
+      UpdateProjectPort updateProjectPort,
+      GetProjectPort getProjectPort) {
     this.addAnalyzerConfigurationPort = addAnalyzerConfigurationPort;
+    this.updateProjectPort = updateProjectPort;
     this.getProjectPort = getProjectPort;
   }
 
@@ -26,7 +34,16 @@ public class AddAnalyzerConfigurationService implements AddAnalyzerConfiguration
     AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
     analyzerConfiguration.setEnabled(command.getEnabled());
     analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
-    analyzerConfiguration.setProject(getProjectPort.get(command.getProjectId()));
+
+    Optional<Project> project = getProjectPort.get(command.getProjectId());
+
+    if (project.isPresent()) {
+      project.get().getAnalyzerConfigurations().add(analyzerConfiguration);
+      updateProjectPort.update(project.get());
+    } else {
+      throw new ProjectNotFound();
+    }
+
     return addAnalyzerConfigurationPort.add(analyzerConfiguration);
   }
 }
