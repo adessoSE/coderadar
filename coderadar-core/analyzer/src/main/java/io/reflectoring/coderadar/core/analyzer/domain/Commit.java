@@ -1,9 +1,7 @@
 package io.reflectoring.coderadar.core.analyzer.domain;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.*;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -24,8 +22,7 @@ public class Commit {
   private Integer sequenceNumber;
   private String firstParent;
 
-  @Relationship
-  private List<CommitToFileAssociation> touchedFiles;
+  @Relationship private List<CommitToFileAssociation> touchedFiles;
 
   public void setComment(String comment) {
     if (comment.length() > 255) {
