@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.core.projectadministration.domain;
+package io.reflectoring.coderadar.core.analyzer.domain;
 
 import java.util.Date;
 import javax.persistence.*;
