@@ -1,15 +1,14 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
-import javax.persistence.*;
-
+import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
 import io.reflectoring.coderadar.core.analyzer.domain.Commit;
+import java.net.URL;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-
-import java.net.URL;
-import java.util.Date;
-import java.util.List;
 
 /** A coderadar project that defines the source of files that are to be analyzed. */
 @NodeEntity
@@ -27,18 +26,18 @@ public class Project {
 
   // The graph starts from a project and goes only in one direction.
   // https://en.wikipedia.org/wiki/Directed_acyclic_graph
-  @Relationship("HAS")
-  private List<Module> modules;
+  @Relationship(type = "HAS")
+  private List<Module> modules = new LinkedList<>();
 
-  @Relationship("HAS")
+  @Relationship(type = "HAS")
   private List<FilePattern> filePatterns;
 
-  @Relationship("HAS")
+  @Relationship(type = "HAS")
   private List<AnalyzerConfiguration> analyzerConfigurations;
 
-  @Relationship("HAS")
+  @Relationship(type = "HAS")
   private AnalyzingJob analyzingJob;
 
-  @Relationship("HAS")
+  @Relationship(type = "HAS")
   private List<Commit> commits;
 }

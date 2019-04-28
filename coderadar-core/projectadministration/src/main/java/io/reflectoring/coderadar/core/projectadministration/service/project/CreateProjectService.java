@@ -10,24 +10,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class CreateProjectService implements CreateProjectUseCase {
 
-    private final CreateProjectPort createProjectPort;
+  private final CreateProjectPort createProjectPort;
 
-    @Autowired
-    public CreateProjectService(CreateProjectPort createProjectPort) {
-        this.createProjectPort = createProjectPort;
-    }
+  @Autowired
+  public CreateProjectService(CreateProjectPort createProjectPort) {
+    this.createProjectPort = createProjectPort;
+  }
 
-    @Override
-    public Long createProject(CreateProjectCommand command) {
-        Project project = new Project();
-        project.setName(command.getName());
-        project.setWorkdirName(command.getWorkdir());
-        project.setVcsUrl(command.getVcsUrl());
-        project.setVcsUsername(command.getVcsUsername());
-        project.setVcsPassword(command.getVcsPassword());
-        project.setVcsOnline(command.getVcsOnline());
-        project.setVcsStart(command.getStart());
-        project.setVcsEnd(command.getEnd());
-        return createProjectPort.createProject(project).getId();
-    }
+  @Override
+  public Long createProject(CreateProjectCommand command) {
+    Project project = new Project();
+    project.setName(command.getName());
+    project.setWorkdirName(command.getWorkdir());
+    project.setVcsUrl(command.getVcsUrl());
+    project.setVcsUsername(command.getVcsUsername());
+    project.setVcsPassword(command.getVcsPassword());
+    project.setVcsOnline(command.getVcsOnline());
+    project.setVcsStart(command.getStart());
+    project.setVcsEnd(command.getEnd());
+    return createProjectPort.createProject(project);
+  }
 }
