@@ -1,7 +1,10 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
+import static org.neo4j.ogm.annotation.Relationship.INCOMING;
+
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
 
 /**
  * The codebase may be organized into modules, each module starting at a certain path. All files
@@ -10,6 +13,9 @@ import org.neo4j.ogm.annotation.NodeEntity;
 @NodeEntity
 @Data
 public class Module {
-    private Long id;
-    private String path;
+  private Long id;
+  private String path;
+
+  @Relationship(direction = INCOMING)
+  private Project project;
 }

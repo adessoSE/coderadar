@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.GetModulePort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.GetModuleCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.GetModuleUseCase;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ public class GetModuleService implements GetModuleUseCase {
   }
 
   @Override
-  public Module get(GetModuleCommand command) {
+  public Optional<Module> get(GetModuleCommand command) {
     return getModulePort.get(command.getId());
   }
 }
