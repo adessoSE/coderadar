@@ -1,0 +1,39 @@
+<div fxLayoutAlign="center center" class="login-card-form">
+  <form (ngSubmit)="submitForm()">
+    <mat-card>
+
+      <!--Card title-->
+      <mat-card-header>
+        <mat-card-title>
+          <span>Coderadar</span>
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content fxLayout="column">
+
+        <!--Form fields-->
+        <mat-form-field>
+          <input maxlength="32" type="text" matInput placeholder="Username"  name="username" [(ngModel)]="username" required>
+        </mat-form-field>
+        <mat-form-field>
+          <input type="password" matInput placeholder="Password" name="password" [(ngModel)]="password" required>
+        </mat-form-field>
+        <mat-form-field>
+          <input type="password" matInput placeholder="Confirm password" name="confirmPassword" [(ngModel)]="confirmPassword" required>
+        </mat-form-field>
+
+        <!--Possible errors-->
+        <mat-error *ngIf="invalidUser">The chosen username is already in use!</mat-error>
+        <mat-error *ngIf="invalidPassword">Password must be at least <br>8 symbols long and contain a character and a digit!</mat-error>
+        <mat-error *ngIf="passwordsDoNotMatch">Passwords do not match!</mat-error>
+
+        <div id="cardButtons" align="center">
+          <button mat-button type="button" routerLink="/login">Have an account? Log in</button>
+          <button mat-raised-button type="submit"  color="primary">Sign up</button>
+        </div>
+
+      </mat-card-content>
+
+    </mat-card>
+  </form>
+</div>

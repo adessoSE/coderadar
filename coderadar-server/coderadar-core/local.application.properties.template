@@ -9,6 +9,7 @@ coderadar.dateLocale=de_DE
 coderadar.authentication.accessToken.durationInMinutes=15
 coderadar.authentication.refreshToken.durationInMinutes=86400
 coderadar.authentication.enabled=true
+coderadar.cors.enabled=true
 
 logging.level.org.wickedsource.coderadar=DEBUG
 logging.level.org.wickedsource.coderadar.job.JobLogger=INFO

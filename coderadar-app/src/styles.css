@@ -1,0 +1,80 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+/**
+General styles
+ */
+
+html { height: 100%;}
+
+body {
+  margin: 0;
+  font-family: Roboto,"Helvetica Neue", sans-serif;
+  background-color: whitesmoke;
+}
+
+footer {
+  position: static;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  height: 60px;
+}
+
+main {
+  min-height: calc(100vh -  240px);
+}
+
+/*
+Styles for most forms in the app
+ */
+
+.mat-card-form #cardContainer {
+  margin-top: 2%;
+}
+
+.mat-card-form mat-card {
+  width: 400px;
+}
+
+.mat-card-form mat-card-header {
+  justify-content: center;
+}
+
+.mat-card-form mat-card-title > span {
+  font-size: 20pt;
+}
+
+.mat-card-form #cardButtons button {
+  width: 25%;
+  margin: 10px;
+}
+
+/*
+Styles for the login and register forms
+ */
+
+
+.login-card-form {
+  margin-top: 10%;
+}
+
+.login-card-form mat-card-header {
+  justify-content: center;
+}
+
+.login-card-form mat-card-title > span {
+  font-size: 30pt;
+}
+
+.login-card-form #cardButtons button {
+  margin: 10px;
+}
+
+.login-card-form mat-card{
+  min-width: 22%;
+}
+
+.login-card-form form{
+  min-width: 22%;
+}

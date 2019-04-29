@@ -1,0 +1,46 @@
+<app-header [title]="'Dashboard'"></app-header>
+
+<main class="card-list">
+  <div class="grid-container">
+
+    <!--Message displayed if no projects are found-->
+    <div id="noProjectsMessage" align="center" *ngIf="projects.length == 0">
+      Hello there, it looks like you haven't added any projects yet. <br>
+      Click on the plus button to add one.
+    </div>
+
+    <!--Project card list-->
+    <mat-grid-list cols="2" rowHeight="200px">
+      <mat-grid-tile *ngFor="let project of projects" [colspan]="2" [rowspan]="1">
+        <mat-card class="dashboard-card">
+          <mat-card-header>
+            <mat-card-title>
+              <a mat-button routerLink="/project/{{project.id}}">{{project.name}}</a>
+              <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu" xPosition="before">
+                <button mat-menu-item routerLink="/project-edit/{{project.id}}">Edit</button>
+                <button mat-menu-item routerLink="/project-configure/{{project.id}}">Configure</button>
+                <button mat-menu-item (click)="deleteProject(project)">Remove</button>
+              </mat-menu>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="mat-card-content">
+              <div style="padding-bottom: 0">Project URL: <a mat-flat-button href="{{project.vcsUrl}}">{{project.vcsUrl}}</a></div>
+              <div>Project start date: <b>&nbsp;&nbsp;{{project.startDate}}</b></div>
+              <div>Project end date: <b>&nbsp;&nbsp;{{project.endDate}}</b></div>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+
+      <!--The big plus button-->
+      <a class="add-button" mat-fab color="accent" routerLink="/add-project">
+        <mat-icon class="add-icon">+</mat-icon>
+      </a>
+
+    </mat-grid-list>
+  </div>
+</main>
+
+<app-footer></app-footer>
