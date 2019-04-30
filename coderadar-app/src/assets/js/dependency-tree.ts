@@ -1,67 +1,84 @@
-let activeDependency = undefined;
 let jsonData, rootOffset = 0;
 let ctx;
+let htmlBuffer = [];
 
 export function afterLoad() {
   let data = JSON.parse((document.getElementById('input') as HTMLInputElement).value);
   jsonData = data;
-  document.getElementById('dependencyTree').innerHTML = buildRoot('', data);
+  buildRoot(data);
+  document.getElementById('dependencyTree').innerHTML = htmlBuffer.join('');
   ctx = (document.getElementById('canvas') as HTMLCanvasElement).getContext('2d');
-  rootOffset = document.getElementById('header').offsetHeight + 19;
-
+  // rootOffset = 19;
+  console.log(rootOffset);
   let toggler = document.getElementsByClassName('clickable');
   for (let i = 0; i < toggler.length; i++) {
-    if (toggler[i].parentElement.classList.contains('package')) {
-      toggler[i].addEventListener('click', () => {
-        toggle(toggler[i]);
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        if (activeDependency) {
-          listDependencies(findDataNode(activeDependency), ctx, 0);
-        }
-      });
-    } else if (toggler[i].parentElement.classList.contains('class--dependency')) {
-      toggler[i].addEventListener('click', () => {
-        toggleDependency(toggler[i]);
-      });
+    toggler[i].addEventListener('click', () => {
+      toggle(toggler[i]);
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      loadDependencies(data);
+    });
+  }
+  ctx.canvas.height = document.getElementById('dependencyTree').offsetHeight;
+  ctx.canvas.width = document.getElementById('dependencyTree').offsetWidth;
+  loadDependencies(data);
+}
+
+function loadDependencies(node) {
+  if (node.dependencies.length > 0 && node.children.length === 0) {
+    for (let dependency of node.dependencies) {
+      listDependencies(dependency, ctx);
+    }
+  }
+  if (node.children.length > 0) {
+    for (let child of node.children) {
+      loadDependencies(child);
     }
   }
 }
 
-function buildRoot(htmlString, currentNode) {
-  htmlString += `<div class="package package__base">`;
-  htmlString += `<span id="${currentNode.packageName}" class="${(currentNode.children.length > 0
-    || currentNode.dependencies.length > 0) ? 'clickable' : ''}">${currentNode.filename}</span>`;
+function buildRoot(currentNode) {
+  htmlBuffer.push(`<table class="table__base">`);
+  htmlBuffer.push(`<tr><td id="${currentNode.packageName}" class="package package__base">` +
+    `<span class="${currentNode.children.length > 0 ? 'clickable' : ''}">${currentNode.filename}</span>`);
 
   if (currentNode.children.length > 0) {
-    htmlString += `<div class="list list__root nested">`;
-    currentNode.children.forEach((child) => htmlString = buildTree(htmlString, child));
-    htmlString += `</div>`;
+    htmlBuffer.push(`<table class="list nested">`);
+    htmlBuffer.push(buildTree(currentNode));
+    htmlBuffer.push('</table>');
   }
-  htmlString += `</div>`;
-  return htmlString;
+  htmlBuffer.push(`</td></tr></table>`);
 }
 
-function buildTree(htmlString, currentNode) {
-  let classString;
-  if (currentNode.children.length > 0) {
-    classString = 'package';
-  } else if (currentNode.dependencies.length > 0) {
-    classString = 'class--dependency';
-  } else if (currentNode.children.length === 0 && currentNode.dependencies.length === 0) {
-    classString = 'class';
+function buildTree(currentNode) {
+  let layer = 0;
+  htmlBuffer.push('<tr style="display: none">');
+  for (const child of currentNode.children) {
+    let classString;
+    if (child.children.length > 0) {
+      classString = 'package';
+    } else if (child.dependencies.length > 0) {
+      classString = 'class--dependency';
+    } else if (child.children.length === 0 && child.dependencies.length === 0) {
+      classString = 'class';
+    }
+    if (layer === child.layer) {
+      // add in same row as child
+      htmlBuffer.push(`<td class="${classString}">` +
+        `<span id="${child.packageName}" class="${child.children.length > 0 ? 'clickable' : ''}">${child.filename}</span>`);
+    } else {
+      // create new row
+      htmlBuffer.push(`</tr><tr><td class="${classString}">` +
+        `<span id="${child.packageName}" class="${child.children.length > 0 ? 'clickable' : ''}">${child.filename}</span>`);
+    }
+    layer = child.layer;
+    if (child.children.length > 0) {
+      htmlBuffer.push(`<table class="list nested">`);
+      htmlBuffer.push(buildTree(child));
+      htmlBuffer.push('</table>');
+    }
+    htmlBuffer.push('</td>')
   }
-
-  htmlString += `<div class="${classString}">`;
-  htmlString += `<span id="${currentNode.packageName}" class="${(currentNode.children.length > 0
-    || currentNode.dependencies.length > 0) ? 'clickable' : ''}">${currentNode.filename}</span>`;
-
-  if (currentNode.children.length > 0) {
-    htmlString += `<div class="list nested">`;
-    currentNode.children.forEach((child) => htmlString = buildTree(htmlString, child));
-    htmlString += `</div>`;
-  }
-  htmlString += `</div>`;
-  return htmlString;
+  htmlBuffer.push(`</tr>`);
 }
 
 function toggle(currentNode) {
@@ -82,53 +99,31 @@ function toggle(currentNode) {
     }
   }
 
-  ctx.canvas.height = document.getElementById('dependencyTree').offsetHeight + 48;
+  ctx.canvas.height = document.getElementById('dependencyTree').offsetHeight;
   ctx.canvas.width = document.getElementById('dependencyTree').offsetWidth;
   // set height of canvas
 }
 
-function toggleDependency(currentNode) {
-  let unset = currentNode.classList.contains('activeDependency');
-  if (activeDependency) {
-    document.getElementById('activeDependency').innerText = 'Choose File...';
-    [].forEach.call(document.getElementsByClassName('activeDependency'), element => {
-      element.classList.remove('activeDependency');
-    });
-    activeDependency = undefined;
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  }
-  if (!unset) {
-    currentNode.classList.add('activeDependency');
-    activeDependency = currentNode;
-    let dataNode = findDataNode(currentNode);
-    listDependencies(dataNode, ctx, 0)
-  }
-}
-
-function listDependencies(currentNode, ctx, redValue) {
-  ctx.lineWidth = 3;
+function listDependencies(currentNode, ctx) {
+  ctx.lineWidth = 1;
   // draw arrows to my dependencies and call this function for my dependencies
   if (currentNode.dependencies.length > 0) {
     currentNode.dependencies.forEach(dependency => {
+      console.log(`draw from ${currentNode.packageName} to ${dependency.packageName}`);
       // find start for arrow
-      let start;
       // find end for arrow
-      const end = findLastHTMLElement(dependency).parentElement;
-      ctx.strokeStyle = `rgb(${redValue}, 0, 0)`;
+      const end = findLastHTMLElement(dependency);
       // draw arrow to dependency
       // draw from start to end
-      if (document.getElementById(currentNode.packageName) === activeDependency) {
-        start = document.getElementById('activeDependency');
-        canvasArrow(ctx, start.offsetLeft + start.offsetWidth, start.offsetTop - rootOffset + start.offsetHeight,
-          end.offsetLeft + end.offsetWidth, end.offsetTop - rootOffset + end.offsetHeight / 2);
-      } else {
-        start = findLastHTMLElement(currentNode).parentElement;
-        canvasArrow(ctx, start.offsetLeft, start.offsetTop - rootOffset + start.offsetHeight / 2,
-          end.offsetLeft + end.offsetWidth, end.offsetTop - rootOffset + end.offsetHeight / 2);
-      }
+
+      let start = findLastHTMLElement(currentNode);
+      // console.log(start);
+      // console.log(end);
+      canvasArrow(ctx, start.offsetLeft, start.offsetTop - rootOffset + start.offsetHeight / 2,
+        end.offsetLeft + end.offsetWidth, end.offsetTop - rootOffset + end.offsetHeight / 2);
       // call this function for dependency
       if (dependency.dependencies.length > 0) {
-        listDependencies(dependency, ctx, redValue + 40);
+        listDependencies(dependency, ctx);
       }
     });
   }
@@ -148,9 +143,7 @@ function findLastHTMLElement(node) {
 }
 
 function findDataNode(clickable) {
-  let filenameBits = activeDependency.id.split('.');
-  document.getElementById('activeDependency')
-    .innerText = filenameBits[filenameBits.length - 2] + '.' + filenameBits[filenameBits.length - 1];
+  let filenameBits = clickable.id.split('.');
 
   let dataNode = jsonData;
   let beginIndex = filenameBits.findIndex((filenameBit) => {
@@ -169,6 +162,7 @@ function findDataNode(clickable) {
 }
 
 function canvasArrow(context, fromx, fromy, tox, toy) {
+  // console.log(`draw arrow from (${fromx}|${fromy}) to (${tox}|${toy})`);
   const headlen = 10;
   const angle = Math.atan2(toy - fromy, tox - fromx);
   // draw line
@@ -192,17 +186,9 @@ function collapseChildren(currentNode) {
   if (currentNode.nextSibling) {
     let toCollapse = currentNode.nextSibling.getElementsByClassName('clickable');
     for (let i = 0; i < toCollapse.length; i++) {
-      if (activeDependency === toCollapse[i]) {
-        activeDependency = undefined;
-        activeDependency
-      }
       if (toCollapse[i].nextSibling) {
         toCollapse[i].nextSibling.classList.add('nested');
-        if (toCollapse[i].nextSibling.classList.contains('list__root')) {
-          toCollapse[i].nextSibling.classList.remove('active__root');
-        } else {
-          toCollapse[i].nextSibling.classList.remove('active');
-        }
+        toCollapse[i].nextSibling.classList.remove('active');
       }
     }
   }
