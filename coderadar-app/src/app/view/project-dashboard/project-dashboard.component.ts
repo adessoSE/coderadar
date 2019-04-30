@@ -37,7 +37,7 @@ export class ProjectDashboardComponent implements OnInit {
   prevSelectedCommit1: Commit;
   prevSelectedCommit2: Commit;
 
-  pageSize = 5;
+  pageSize = 25;
 
   constructor(private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute,
@@ -47,7 +47,7 @@ export class ProjectDashboardComponent implements OnInit {
     this.selectedCommit1 = null;
     this.selectedCommit2 = null;
     this.pageEvent = new PageEvent();
-    this.pageEvent.pageSize = 5;
+    this.pageEvent.pageSize = 25;
     this.pageEvent.pageIndex = 0;
   }
 

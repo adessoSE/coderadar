@@ -1,6 +1,5 @@
 .dashboard-card {
   position: absolute;
-  top: 1px;
   left: 15px;
   right: 15px;
 }
@@ -31,7 +30,7 @@
 
 .dashboard-card-selected {
   animation: card-select 0.5s;
-  background-color: #fadab3;
+  background-color: #fdf0e0;
 }
 
 @keyframes card-select {
@@ -39,13 +38,13 @@
     background-color: white;
   }
   100% {
-    background-color: #fadab3;
+    background-color: #fdf0e0;
   }
 }
 
 @keyframes card-deselect {
   0% {
-    background-color: #fadab3;
+    background-color: #fdf0e0;
   }
   100% {
     background-color: white;

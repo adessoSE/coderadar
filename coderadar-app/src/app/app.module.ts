@@ -31,6 +31,7 @@ import {
   MatMenuModule, MatPaginatorModule,
   MatSidenavModule,
   MatToolbarModule,
+  MatExpansionModule
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
@@ -102,6 +103,7 @@ const appRoutes: Routes = [
     MatToolbarModule,
     MatSidenavModule,
     MatCheckboxModule,
+    MatExpansionModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,
