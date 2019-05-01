@@ -46,7 +46,7 @@ export class ViewCommitComponent implements OnInit {
     this.getMetrics().then(response => {
       const metricsArray: string[] = [];
       response.body.forEach(m => metricsArray.push(m.metricName));
-      this.projectService.getCommitsMetricValues(this.projectId, this.commit.name, metricsArray)
+      this.projectService.getCommitMetricValues(this.projectId, this.commit.name, metricsArray)
         .then(res => {
           for (const i in res.body.metrics) {
             if (res.body.metrics[i]) {
@@ -80,7 +80,8 @@ export class ViewCommitComponent implements OnInit {
     this.projectService.getProject(this.projectId)
       .then(response => {
         this.project = new Project(response.body);
-        this.titleService.setTitle('Coderadar - ' + this.commit.name.substring(0, 7) + ' - ' + AppComponent.trimProjectName(this.project.name));
+        this.titleService.setTitle('Coderadar - ' + this.commit.name.substring(0, 7) + ' - ' +
+          AppComponent.trimProjectName(this.project.name));
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {

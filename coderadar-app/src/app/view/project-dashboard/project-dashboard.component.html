@@ -17,10 +17,12 @@
               </mat-panel-title>
               <mat-panel-description>
                 Author: {{commit.author}}
+              </mat-panel-description>
+              <mat-panel-description style="position: absolute; left: 63%;">
                 Date: {{timestampToDate(commit.timestamp)}}
               </mat-panel-description>
             </mat-expansion-panel-header>
-            <mat-label>Analyzed: <b>{{booleanToString(commit.analyzed)}}</b></mat-label>
+            <mat-label>Analyzed: <b>{{booleanToString(commit.analyzed)}}</b></mat-label><br>
             <mat-action-row>
               <a mat-button routerLink="/project/{{project.id}}/{{commit.name}}"><b>Raw metrics</b></a><br>
             </mat-action-row>

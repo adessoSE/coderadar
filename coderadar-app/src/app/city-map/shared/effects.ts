@@ -13,29 +13,21 @@ import {INode} from '../interfaces/INode';
 import {ICommitsGetErrorResponse} from '../interfaces/ICommitsGetErrorResponse';
 import {Store} from '@ngrx/store';
 import * as fromRoot from './reducers';
-import { Commit } from 'src/app/model/commit';
-import {IMetricMapping} from '../interfaces/IMetricMapping';
-import {IFilter} from '../interfaces/IFilter';
 
 @Injectable()
 export class AppEffects {
 
-  public currentProjectId: number;
-  public firstCommit: Commit = null;
-  public secondCommit: Commit = null;
-  public metricMapping: IMetricMapping = null;
-  public activeFilter: IFilter = null;
-
   @Effect()
   loadCommitsEffects$ = this.actions$.pipe(ofType(LOAD_COMMITS),
+    map((action: IActionWithPayload<number>) => action.payload),
     switchMap(
-      () => from(this.projectService.getCommits(this.currentProjectId))
+      (payload) => from(this.projectService.getCommits(payload))
         .pipe(
           map((result: any) => {
             return actions.loadCommitsSuccess(result.body);
           }),
           catchError((response: ICommitsGetErrorResponse) => {
-            this.userService.refresh().then(() => this.store.dispatch(loadCommits()));
+            this.userService.refresh().then(() => this.store.dispatch(loadCommits(payload)));
             return of(actions.loadCommitsError(response.error));
           })
         )
@@ -44,7 +36,8 @@ export class AppEffects {
 
   @Effect()
   loadAvailableMetricsEffects$ = this.actions$.pipe(ofType(LOAD_AVAILABLE_METRICS),
-    switchMap(() => from(this.projectService.getAvailableMetrics(this.currentProjectId))
+    map((action: IActionWithPayload<number>) => action.payload),
+    switchMap((payload) => from(this.projectService.getAvailableMetrics(payload))
       .pipe(
         mergeMap((result: any) => {
           const availableMetrics = result.body.map(
@@ -56,21 +49,10 @@ export class AppEffects {
               };
             }
           );
-          if (this.metricMapping === null) {
-            return [
-              actions.loadAvailableMetricsSuccess(availableMetrics),
-              actions.setMetricMapping({
-                heightMetricName: availableMetrics[0].metricName,
-                groundAreaMetricName: availableMetrics[1].metricName,
-                colorMetricName: availableMetrics[2].metricName
-              })
-            ];
-          } else {
-            return [actions.loadAvailableMetricsSuccess(availableMetrics)];
-          }
+          return [actions.loadAvailableMetricsSuccess(availableMetrics)];
         }),
         catchError((response: any) => {
-          this.userService.refresh().then(() => this.store.dispatch(loadAvailableMetrics()));
+          this.userService.refresh().then(() => this.store.dispatch(loadAvailableMetrics(payload)));
           return of(actions.loadAvailableMetricsError(response.error));
         })
       )
@@ -83,7 +65,7 @@ export class AppEffects {
     map((action: IActionWithPayload<any>) => action.payload),
     switchMap(
       (payload) => from(this.projectService.getDeltaTree(payload.leftCommit, payload.rightCommit,
-        payload.metricMapping, this.currentProjectId))
+        payload.metricMapping, payload.projectId))
         .pipe(
           mergeMap((result: HttpResponse<INode>) => {
             return [
@@ -93,7 +75,7 @@ export class AppEffects {
           }),
           catchError((response: IDeltaTreeGetErrorResponse) => {
             this.userService.refresh().then(() => this.store.dispatch(loadMetricTree(payload.leftCommit, payload.rightCommit,
-              payload.metricMapping)));
+              payload.metricMapping,  payload.projectId)));
             return of(actions.loadMetricTreeError(response.error));
           })
         )

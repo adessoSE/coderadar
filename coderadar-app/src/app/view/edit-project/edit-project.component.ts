@@ -51,7 +51,6 @@ export class EditProjectComponent implements OnInit {
       this.projectService.editProject(this.project)
         .then(() => this.router.navigate(['/dashboard']))
         .catch(error => {
-          console.log(error);
           if (error.status && error.status === FORBIDDEN) {
             this.userService.refresh().then(() => this.submitForm());
           } else if (error.status && error.status === BAD_REQUEST) {

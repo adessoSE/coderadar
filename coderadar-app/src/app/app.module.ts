@@ -19,20 +19,21 @@ import {FooterComponent} from './view/footer/footer.component';
 import {UserSettingsComponent} from './view/user-settings/user-settings.component';
 import {ProjectDashboardComponent} from './view/project-dashboard/project-dashboard.component';
 import {ViewCommitComponent} from './view/view-commit/view-commit.component';
-import { SatPopoverModule } from '@ncstate/sat-popover';
+import {SatPopoverModule} from '@ncstate/sat-popover';
 import {
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
+  MatExpansionModule,
   MatFormFieldModule,
   MatGridListModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatMenuModule, MatPaginatorModule,
+  MatMenuModule,
+  MatPaginatorModule,
   MatSidenavModule,
-  MatToolbarModule,
-  MatExpansionModule
+  MatToolbarModule
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';

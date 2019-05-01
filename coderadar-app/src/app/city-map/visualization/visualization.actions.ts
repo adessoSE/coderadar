@@ -2,7 +2,6 @@ import {IMetricMapping} from '../interfaces/IMetricMapping';
 import {INode} from '../interfaces/INode';
 import {IActionWithPayload} from '../interfaces/IActionWithPayload';
 import {IMetric} from '../interfaces/IMetric';
-import {Action} from '@ngrx/store';
 import {Commit} from '../../model/commit';
 
 export const LOAD_AVAILABLE_METRICS = 'LOAD_AVAILABLE_METRICS';
@@ -13,9 +12,10 @@ export const LOAD_METRIC_TREE_SUCCESS = 'LOAD_METRIC_TREE_SUCCESS';
 export const LOAD_METRIC_TREE_ERROR = 'LOAD_METRIC_TREE_ERROR';
 export const GENERATE_UNIQUE_FILE_LIST = 'GENERATE_UNIQUE_FILE_LIST';
 
-export function loadAvailableMetrics(): Action {
+export function loadAvailableMetrics(projectId: number): IActionWithPayload<number> {
   return {
-    type: LOAD_AVAILABLE_METRICS
+    type: LOAD_AVAILABLE_METRICS,
+    payload: projectId
   };
 }
 
@@ -36,14 +36,16 @@ export function loadAvailableMetricsError(error: string): IActionWithPayload<str
 export function loadMetricTree(
   leftCommit: Commit,
   rightCommit: Commit,
-  metricMapping: IMetricMapping
-): IActionWithPayload<{ leftCommit: Commit, rightCommit: Commit, metricMapping: IMetricMapping }> {
+  metricMapping: IMetricMapping,
+  projectId: number
+): IActionWithPayload<{ leftCommit: Commit, rightCommit: Commit, metricMapping: IMetricMapping, projectId: number }> {
   return {
     type: LOAD_METRIC_TREE,
     payload: {
       leftCommit,
       rightCommit,
-      metricMapping
+      metricMapping,
+      projectId
     }
   };
 }

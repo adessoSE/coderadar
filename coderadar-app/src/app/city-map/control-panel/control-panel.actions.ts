@@ -1,4 +1,3 @@
-import {Action} from '@ngrx/store';
 import {IActionWithPayload} from '../interfaces/IActionWithPayload';
 import {CommitType} from '../enum/CommitType';
 import {Commit} from '../../model/commit';
@@ -10,9 +9,10 @@ export const CHANGE_COMMIT = 'CHANGE_COMMIT';
 export const ADD_SCREENSHOT = 'ADD_SCREENSHOT';
 export const CLEAR_SCREENSHOTS = 'CLEAR_SCREENSHOTS';
 
-export function loadCommits(): Action {
+export function loadCommits(projectId: number): IActionWithPayload<number> {
   return {
-    type: LOAD_COMMITS
+    type: LOAD_COMMITS,
+    payload: projectId
   };
 }
 

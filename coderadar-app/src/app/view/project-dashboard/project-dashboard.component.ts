@@ -6,9 +6,13 @@ import {Commit} from '../../model/commit';
 import {Project} from '../../model/project';
 import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
-import { AppEffects } from 'src/app/city-map/shared/effects';
 import {PageEvent} from '@angular/material';
 import {AppComponent} from '../../app.component';
+import {Store} from '@ngrx/store';
+import * as fromRoot from '../../city-map/shared/reducers';
+import {changeCommit, loadCommits} from '../../city-map/control-panel/control-panel.actions';
+import {CommitType} from '../../city-map/enum/CommitType';
+import {changeActiveFilter, setMetricMapping} from '../../city-map/control-panel/settings/settings.actions';
 
 
 @Component({
@@ -40,7 +44,7 @@ export class ProjectDashboardComponent implements OnInit {
 
   constructor(private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute,
-              private cityEffects: AppEffects) {
+              private store: Store<fromRoot.AppState>) {
     this.project = new Project();
     this.commits = [];
     this.selectedCommit1 = null;
@@ -70,16 +74,13 @@ export class ProjectDashboardComponent implements OnInit {
     }
   }
 
-  setPageSizeOptions(setPageSizeOptionsInput: string) {
-    this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
-  }
-
   /**
    * Constructs a date from a timestamp and returns it in string form.
    * @param timestamp The timestamp to construct a date from.
    */
   timestampToDate(timestamp: number): string {
-    return new Date(timestamp).toLocaleDateString();
+    const date = new Date(timestamp);
+    return date.toDateString() + ' ' + date.toLocaleTimeString();
   }
 
   /**
@@ -106,29 +107,25 @@ export class ProjectDashboardComponent implements OnInit {
    * Gets all commits for this project from the service and saves them in this.commits.
    */
   private getCommits(): void {
-    this.projectService.getCommits(this.projectId)
-      .then(response => {
-        this.commits = response.body;
-        this.commits.forEach(c => {
-          if (c.analyzed) {
-            this.commitsAnalyzed++;
-          }
-        });
-        this.commits.sort((a, b) => {
-          if (a.timestamp === b.timestamp) {
-            return 0;
-          } else if (a.timestamp > b.timestamp) {
-            return -1;
-          } else {
-            return 1;
-          }
-        });
-      })
-      .catch(e => {
-        if (e.status && e.status === FORBIDDEN) {
-          this.userService.refresh().then((() => this.getCommits()));
+    this.store.dispatch(loadCommits(this.projectId));
+    const commits = this.store.select(fromRoot.getCommits);
+    commits.subscribe(result => {
+      this.commits = result;
+      this.commits.sort((a, b) => {
+        if (a.timestamp === b.timestamp) {
+          return 0;
+        } else if (a.timestamp > b.timestamp) {
+          return -1;
+        } else {
+          return 1;
         }
       });
+      result.forEach(value => {
+        if (value.analyzed) {
+          this.commitsAnalyzed++;
+        }
+      });
+    });
   }
 
   /**
@@ -149,6 +146,10 @@ export class ProjectDashboardComponent implements OnInit {
       });
   }
 
+  /**
+   * Selects one of the two commits to compare.
+   * @param selectedCommit The Commit to select
+   */
   selectCard(selectedCommit: Commit): void {
     if (this.selectedCommit1 === null && this.selectedCommit2 !== selectedCommit) {
       this.selectedCommit1 = selectedCommit;
@@ -159,30 +160,32 @@ export class ProjectDashboardComponent implements OnInit {
     } else {
       this.selectedCommit2 = selectedCommit;
     }
-    this.cityEffects.firstCommit = this.selectedCommit1;
-    this.cityEffects.secondCommit = this.selectedCommit2;
   }
 
-  startComplexityAnalysis() {
-    this.cityEffects.metricMapping = {
+  /**
+   * Opens the 3D city-map with the complexity preset (LOC+LOC+Complexity, without unmodified) for the selected commits.
+   * Switches the commit positions if the first one is newer than the second one.
+   */
+  startComplexityAnalysis(): void {
+    this.store.dispatch(setMetricMapping({
       colorMetricName: 'checkstyle:com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck',
       groundAreaMetricName: 'coderadar:size:sloc:java',
       heightMetricName: 'coderadar:size:sloc:java',
-    };
-    this.cityEffects.activeFilter = {
+    }));
+    this.store.dispatch(changeActiveFilter({
       added: true,
       deleted: true,
       modified: true,
       renamed: true,
       unmodified: false
-    };
+    }));
     if (this.selectedCommit1.timestamp > this.selectedCommit2.timestamp) {
       const temp = this.selectedCommit1;
       this.selectedCommit1 = this.selectedCommit2;
       this.selectedCommit2 = temp;
-      this.cityEffects.firstCommit = this.selectedCommit1;
-      this.cityEffects.secondCommit = this.selectedCommit2;
     }
+    this.store.dispatch(changeCommit(CommitType.LEFT, this.selectedCommit1));
+    this.store.dispatch(changeCommit(CommitType.RIGHT, this.selectedCommit2));
     this.router.navigate(['/city/' + this.projectId]);
   }
 }

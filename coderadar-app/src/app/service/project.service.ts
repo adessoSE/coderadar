@@ -210,7 +210,7 @@ export class ProjectService {
    * @param commitName The name (hash) of the commit.
    * @param metricsNames The names of the wanted metrics.
    */
-  public getCommitsMetricValues(id: number, commitName: string, metricsNames: string[]): Promise<HttpResponse<any>> {
+  public getCommitMetricValues(id: number, commitName: string, metricsNames: string[]): Promise<HttpResponse<any>> {
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/metricvalues/perCommit',
       {commit: commitName, metrics: metricsNames}, {observe: 'response'}).toPromise();
   }
@@ -240,5 +240,17 @@ export class ProjectService {
 
     return this.httpClient.post<INode>(this.apiURL + 'projects/' + projectId + '/metricvalues/deltaTree', body,
       {observe: 'response'}).toPromise();
+  }
+
+  /**
+   * Gets the metric values for a commit given it's name and the metric names.
+   * Sends a POST request to /projects/{id}/metricvalues/perCommit
+   * @param id The project id.
+   * @param commitName The name (hash) of the commit.
+   * @param metricsNames The names of the wanted metrics.
+   */
+  public getCommitMetricTree(id: number, commitName: string, metricsNames: string[]): Promise<HttpResponse<any>> {
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/metricvalues/tree',
+      {commit: commitName, metrics: metricsNames}, {observe: 'response'}).toPromise();
   }
 }

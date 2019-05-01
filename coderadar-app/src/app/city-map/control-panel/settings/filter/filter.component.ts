@@ -1,7 +1,5 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {faFilter} from '@fortawesome/free-solid-svg-icons';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {IFilter} from '../../../interfaces/IFilter';
-import {FormControl} from '@angular/forms';
 
 declare var $: any;
 

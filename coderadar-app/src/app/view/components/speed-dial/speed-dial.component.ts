@@ -1,12 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition,
-  query,
-} from '@angular/animations';
+import {animate, query, state, style, transition, trigger,} from '@angular/animations';
 
 @Component({
   selector: 'app-speed-dial',

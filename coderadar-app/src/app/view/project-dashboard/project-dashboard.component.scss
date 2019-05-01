@@ -22,7 +22,7 @@
 
 .dashboard-card-selected {
   animation: card-select 0.5s;
-  background-color: #f7c180;
+  background-color: #fadab3;
 }
 
 @keyframes card-select {
@@ -30,7 +30,7 @@
     background-color: white;
   }
   100% {
-    background-color: #f7c180;
+    background-color: #fadab3;
   }
 }
 

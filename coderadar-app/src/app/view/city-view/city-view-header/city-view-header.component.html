@@ -16,16 +16,16 @@
   <div class="spacer"></div>
   <mat-toolbar class="md-elevation-z5" style="width: 100%" color="primary">
     <span style="margin-right: 10px">
-      <a mat-button routerLink="/project/{{project.id}}" style="width: auto;">
+      <a mat-button routerLink="/project/{{projectId}}" style="width: auto;">
         <mat-icon style="font-size: 16pt; color: white;">arrow_back_ios</mat-icon>
         <mat-label style="font-size: 20pt;">
-          {{appComponent.trimProjectNameToLength(project.name, 16)}}
+          {{appComponent.trimProjectNameToLength(projectName, 16)}}
         </mat-label>
       </a>
     </span>
 
     <span style="width: 90%;float: right">
-      <app-control-panel ></app-control-panel>
+      <app-control-panel></app-control-panel>
     </span>
   </mat-toolbar>
 </header>

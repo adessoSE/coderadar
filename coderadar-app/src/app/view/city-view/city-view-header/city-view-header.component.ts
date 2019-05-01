@@ -1,10 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {UserService} from '../../../service/user.service';
-import {AppEffects} from '../../../city-map/shared/effects';
 import {Project} from '../../../model/project';
-import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
-import {ProjectService} from '../../../service/project.service';
-import {Router} from '@angular/router';
 import {AppComponent} from '../../../app.component';
 
 @Component({
@@ -12,39 +8,19 @@ import {AppComponent} from '../../../app.component';
   templateUrl: './city-view-header.component.html',
   styleUrls: ['./city-view-header.component.css']
 })
-export class CityViewHeaderComponent implements OnInit {
+export class CityViewHeaderComponent implements OnInit, OnChanges {
   appComponent = AppComponent;
 
-  projectId: number;
-  project: Project;
+  projectId = 0;
+  projectName = '';
 
-  constructor(private userService: UserService, private appEffects: AppEffects,
-              private projectService: ProjectService, private router: Router) {
-    this.project = new Project();
+  @Input() project: Project;
+
+  constructor(private userService: UserService) {
   }
 
   ngOnInit() {
-    this.projectId = this.appEffects.currentProjectId;
-    this.getProject();
   }
-
-  /**
-   * Gets the project from the service and saves it in this.project
-   */
-  private getProject(): void {
-    this.projectService.getProject(this.projectId)
-      .then(response => {
-        this.project = new Project(response.body);
-      })
-      .catch(error => {
-        if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getProject());
-        } else if (error.status && error.status === NOT_FOUND) {
-          this.router.navigate(['/dashboard']);
-        }
-      });
-  }
-
 
   logout(): void {
     this.userService.logout();
@@ -55,5 +31,12 @@ export class CityViewHeaderComponent implements OnInit {
    */
   getUsername(): string {
     return UserService.getLoggedInUser().username;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.project !== undefined) {
+      this.projectId = this.project.id;
+      this.projectName = this.project.name;
+    }
   }
 }

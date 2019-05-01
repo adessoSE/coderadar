@@ -1,14 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import * as fromRoot from '../shared/reducers';
-import {changeCommit, loadCommits} from './control-panel.actions';
+import {changeCommit} from './control-panel.actions';
 import {FocusService} from '../service/focus.service';
 import {ViewType} from '../enum/ViewType';
 import {CommitType} from '../enum/CommitType';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Commit} from '../../model/commit';
 import {map} from 'rxjs/operators';
-import { AppEffects } from '../shared/effects';
 
 @Component({
   selector: 'app-control-panel',
@@ -34,13 +33,15 @@ export class ControlPanelComponent implements OnInit {
   // disable the second commit chooser for demo purposes
   disableRightSelect: true;
 
-  constructor(private store: Store<fromRoot.AppState>, private focusService: FocusService,
-              private cityEffects: AppEffects) {
+  constructor(private store: Store<fromRoot.AppState>, private focusService: FocusService) {
   }
 
   ngOnInit() {
     if (this.store !== undefined) {
-      this.store.dispatch(loadCommits());
+      this.leftCommit$ = this.store.select(fromRoot.getLeftCommit);
+      this.rightCommit$ = this.store.select(fromRoot.getRightCommit);
+
+      /*this.store.dispatch(loadCommits());*/
 
       this.commits$ = this.store.select(fromRoot.getCommits).pipe(map(elements => elements.sort((a, b) => {
         if (a.timestamp === b.timestamp) {
@@ -53,14 +54,8 @@ export class ControlPanelComponent implements OnInit {
       })), map((elements => elements.filter(val => val.analyzed))));
 
       this.commitsLoading$ = this.store.select(fromRoot.getCommitsLoading);
-
-      if (this.cityEffects.firstCommit !== null && this.cityEffects.secondCommit !== null) {
-        this.leftCommit$ = of(this.cityEffects.firstCommit);
-        this.rightCommit$ = of(this.cityEffects.secondCommit);
-      } else {
-        this.leftCommit$ = this.store.select(fromRoot.getLeftCommit);
-        this.rightCommit$ = this.store.select(fromRoot.getRightCommit);
-      }
+      this.leftCommit$ = this.store.select(fromRoot.getLeftCommit);
+      this.rightCommit$ = this.store.select(fromRoot.getRightCommit);
       this.uniqueFileList$ = this.store.select(fromRoot.getUniqueFileList);
       this.activeViewType$ = this.store.select(fromRoot.getActiveViewType);
     }

@@ -53,7 +53,6 @@ export const ControlPanelReducer: ActionReducer<ControlPanelState> = (state = in
       } else {
         throw new Error(`Invalid CommitType ${action.payload.commitType}!`);
       }
-
       return newState;
 
     default:
