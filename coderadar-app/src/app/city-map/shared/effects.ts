@@ -14,6 +14,8 @@ import {ICommitsGetErrorResponse} from '../interfaces/ICommitsGetErrorResponse';
 import {Store} from '@ngrx/store';
 import * as fromRoot from './reducers';
 import { Commit } from 'src/app/model/commit';
+import {IMetricMapping} from '../interfaces/IMetricMapping';
+import {IFilter} from '../interfaces/IFilter';
 
 @Injectable()
 export class AppEffects {
@@ -21,6 +23,8 @@ export class AppEffects {
   public currentProjectId: number;
   public firstCommit: Commit = null;
   public secondCommit: Commit = null;
+  public metricMapping: IMetricMapping = null;
+  public activeFilter: IFilter = null;
 
   @Effect()
   loadCommitsEffects$ = this.actions$.pipe(ofType(LOAD_COMMITS),
@@ -52,15 +56,18 @@ export class AppEffects {
               };
             }
           );
-          // TODO: Error handling when less than three metrics are available
-          return [
-            actions.loadAvailableMetricsSuccess(availableMetrics),
-            actions.setMetricMapping({
-              heightMetricName: availableMetrics[0].metricName,
-              groundAreaMetricName: availableMetrics[1].metricName,
-              colorMetricName: availableMetrics[2].metricName
-            })
-          ];
+          if (this.metricMapping === null) {
+            return [
+              actions.loadAvailableMetricsSuccess(availableMetrics),
+              actions.setMetricMapping({
+                heightMetricName: availableMetrics[0].metricName,
+                groundAreaMetricName: availableMetrics[1].metricName,
+                colorMetricName: availableMetrics[2].metricName
+              })
+            ];
+          } else {
+            return [actions.loadAvailableMetricsSuccess(availableMetrics)];
+          }
         }),
         catchError((response: any) => {
           this.userService.refresh().then(() => this.store.dispatch(loadAvailableMetrics()));

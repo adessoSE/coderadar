@@ -7,7 +7,6 @@ import * as fromRoot from '../../shared/reducers';
 import {IMetricMapping} from '../../interfaces/IMetricMapping';
 import {Observable} from 'rxjs';
 import {ViewType} from '../../enum/ViewType';
-import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-legend',
@@ -56,7 +55,6 @@ export class LegendComponent implements OnInit {
         this.groundAreaMetric = VisualizationConfig.getShortNameByMetricName(metricMapping.groundAreaMetricName);
         this.colorMetric = VisualizationConfig.getShortNameByMetricName(metricMapping.colorMetricName);
       }
-
     });
 
     this.colorFirstCommit = VisualizationConfig.COLOR_FIRST_COMMIT;

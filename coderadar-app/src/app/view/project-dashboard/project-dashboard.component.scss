@@ -4,10 +4,6 @@
   right: 15px;
 }
 
-.dashboard-card-deselected {
-  animation: card-deselect 0.5s;
-}
-
 .card-list p {
   font-size: 15pt;
   width: 60%;
@@ -24,13 +20,9 @@
   float: right
 }
 
-.card-list mat-card-content {
-  margin-left: 5%;
-}
-
 .dashboard-card-selected {
   animation: card-select 0.5s;
-  background-color: #fdf0e0;
+  background-color: #f7c180;
 }
 
 @keyframes card-select {
@@ -38,34 +30,7 @@
     background-color: white;
   }
   100% {
-    background-color: #fdf0e0;
-  }
-}
-
-@keyframes card-deselect {
-  0% {
-    background-color: #fdf0e0;
-  }
-  100% {
-    background-color: white;
-  }
-}
-
-.compare-button {
-  right: 7%;
-  bottom: 8%;
-  position: fixed;
-  animation: show 0.2s;
-  z-index: 3;
-  transform: scale(1.5, 1.5);
-}
-
-@keyframes show {
-  0% {
-    transform: scale(1, 1);
-  }
-  100% {
-    transform: scale(1.5, 1.5);
+    background-color: #f7c180;
   }
 }
 

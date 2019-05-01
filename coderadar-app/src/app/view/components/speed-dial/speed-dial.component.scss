@@ -1,0 +1,49 @@
+:host {
+  display: block;
+  padding: 64px;
+}
+
+.speed-dial-wrapper {
+  display: block;
+  right: 7%;
+  bottom: 8%;
+  position: fixed;
+  // Remove default margin given to each demo
+  margin-bottom: 0 !important;
+  transform: scale(1.5, 1.5);
+}
+
+// Position the icon in the center so multiple
+// ones will overlap
+.mat-fab .mat-icon {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+}
+
+.dial {
+  margin-bottom: 20px;
+
+  // Tab direction moves away from anchor
+  display: flex;
+  flex-direction: column-reverse;
+
+  .mat-mini-fab {
+    margin: 8px 0;
+  }
+  transform: scale(1.1, 1.1);
+
+}
+
+.main_icon {
+  color: white; font-size: 14pt; margin-top: 3px
+}
+
+.tooltip {
+  padding: 4px 8px;
+  background: rgba(50,50,50,0.9);
+  color: white;
+  border-radius: 4px;
+  margin: 8px;
+  font-size: 12px;
+}

@@ -5,8 +5,9 @@ import {changeActiveFilter, changeViewType, setMetricMapping} from './settings.a
 import {IFilter} from '../../interfaces/IFilter';
 import {IMetricMapping} from '../../interfaces/IMetricMapping';
 import {IMetric} from '../../interfaces/IMetric';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {ViewType} from '../../enum/ViewType';
+import {AppEffects} from '../../shared/effects';
 
 @Component({
   selector: 'app-settings',

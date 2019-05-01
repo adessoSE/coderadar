@@ -19,6 +19,7 @@ import {FooterComponent} from './view/footer/footer.component';
 import {UserSettingsComponent} from './view/user-settings/user-settings.component';
 import {ProjectDashboardComponent} from './view/project-dashboard/project-dashboard.component';
 import {ViewCommitComponent} from './view/view-commit/view-commit.component';
+import { SatPopoverModule } from '@ncstate/sat-popover';
 import {
   MatButtonModule,
   MatCardModule,
@@ -47,6 +48,7 @@ import {environment} from '../environments/environment';
 import {CityViewComponent} from './view/city-view/city-view.component';
 import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {SpeedDialComponent} from './view/components/speed-dial/speed-dial.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -77,7 +79,8 @@ const appRoutes: Routes = [
     ProjectDashboardComponent,
     ViewCommitComponent,
     CityViewComponent,
-    CityViewHeaderComponent
+    CityViewHeaderComponent,
+    SpeedDialComponent
   ],
   imports: [
     BrowserModule,
@@ -112,7 +115,8 @@ const appRoutes: Routes = [
     StoreModule.forRoot(REDUCER_TOKEN),
     EffectsModule.forRoot([AppEffects]),
     environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 50}),
-    MatPaginatorModule
+    MatPaginatorModule,
+    SatPopoverModule
   ],
   providers: [
     {

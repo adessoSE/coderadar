@@ -7,7 +7,6 @@ import {Project} from '../../model/project';
 import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import { AppEffects } from 'src/app/city-map/shared/effects';
-import {faClone, faSquare} from '@fortawesome/free-regular-svg-icons';
 import {PageEvent} from '@angular/material';
 import {AppComponent} from '../../app.component';
 
@@ -33,9 +32,9 @@ export class ProjectDashboardComponent implements OnInit {
   selectedCommit1: Commit;
   selectedCommit2: Commit;
 
-  // These are needed for the deselection css to work
-  prevSelectedCommit1: Commit;
-  prevSelectedCommit2: Commit;
+  actions = [{ name: 'Complexity Hot-spots', icon: 'bar_chart', onclick: () => this.startComplexityAnalysis()},
+            { name: 'Modification Hot-spots', icon: 'low_priority', onclick: () => this.startComplexityAnalysis() },
+            { name: 'Know-how Hot-spots', icon: 'group', onclick: () => this.startComplexityAnalysis() }];
 
   pageSize = 25;
 
@@ -155,15 +154,35 @@ export class ProjectDashboardComponent implements OnInit {
       this.selectedCommit1 = selectedCommit;
     } else if (this.selectedCommit1 === selectedCommit) {
       this.selectedCommit1 = null;
-      this.prevSelectedCommit1 = selectedCommit;
     } else if (this.selectedCommit2 === selectedCommit) {
       this.selectedCommit2 = null;
-      this.prevSelectedCommit2 = selectedCommit;
     } else {
       this.selectedCommit2 = selectedCommit;
     }
-
     this.cityEffects.firstCommit = this.selectedCommit1;
     this.cityEffects.secondCommit = this.selectedCommit2;
+  }
+
+  startComplexityAnalysis() {
+    this.cityEffects.metricMapping = {
+      colorMetricName: 'checkstyle:com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck',
+      groundAreaMetricName: 'coderadar:size:sloc:java',
+      heightMetricName: 'coderadar:size:sloc:java',
+    };
+    this.cityEffects.activeFilter = {
+      added: true,
+      deleted: true,
+      modified: true,
+      renamed: true,
+      unmodified: false
+    };
+    if (this.selectedCommit1.timestamp > this.selectedCommit2.timestamp) {
+      const temp = this.selectedCommit1;
+      this.selectedCommit1 = this.selectedCommit2;
+      this.selectedCommit2 = temp;
+      this.cityEffects.firstCommit = this.selectedCommit1;
+      this.cityEffects.secondCommit = this.selectedCommit2;
+    }
+    this.router.navigate(['/city/' + this.projectId]);
   }
 }

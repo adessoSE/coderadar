@@ -30,7 +30,6 @@ export class ControlPanelComponent implements OnInit {
   uniqueFileList$: Observable<string[]>;
 
   activeViewType$: Observable<ViewType>;
-  screenShots$: Observable<any[]>;
 
   // disable the second commit chooser for demo purposes
   disableRightSelect: true;
