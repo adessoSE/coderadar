@@ -21,17 +21,7 @@
 }
 
 .dashboard-card-selected {
-  animation: card-select 0.5s;
   background-color: #fadab3;
-}
-
-@keyframes card-select {
-  0% {
-    background-color: white;
-  }
-  100% {
-    background-color: #fadab3;
-  }
 }
 
 .paginator {

@@ -13,7 +13,7 @@ import * as fromRoot from '../../city-map/shared/reducers';
 import {changeCommit, loadCommits} from '../../city-map/control-panel/control-panel.actions';
 import {CommitType} from '../../city-map/enum/CommitType';
 import {changeActiveFilter, setMetricMapping} from '../../city-map/control-panel/settings/settings.actions';
-import {Observable} from 'rxjs';
+import {Observable, timer} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 @Component({
@@ -60,6 +60,13 @@ export class ProjectDashboardComponent implements OnInit {
       this.projectId = params.id;
       this.getCommits();
       this.getProject();
+
+      // Schedule a task to check if all commits are analyzed and update them if they're not
+      timer(4000, 4000).subscribe(x => {
+        if (this.commitsAnalyzed < this.commits.length) {
+          this.store.dispatch(loadCommits(this.projectId));
+        }
+      });
     });
   }
 
@@ -138,6 +145,12 @@ export class ProjectDashboardComponent implements OnInit {
           this.commitsAnalyzed++;
         }
       });
+      if (this.selectedCommit1 !== null) {
+        this.selectedCommit1 = this.commits.find(value => value.name === this.selectedCommit1.name);
+      }
+      if (this.selectedCommit2 !== null) {
+        this.selectedCommit2 = this.commits.find(value => value.name === this.selectedCommit2.name);
+      }
     });
   }
 
