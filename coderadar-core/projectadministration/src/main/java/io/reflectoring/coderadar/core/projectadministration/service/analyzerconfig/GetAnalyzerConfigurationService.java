@@ -7,6 +7,8 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class GetAnalyzerConfigurationService implements GetAnalyzerConfigurationUseCase {
 
@@ -18,7 +20,7 @@ public class GetAnalyzerConfigurationService implements GetAnalyzerConfiguration
   }
 
   @Override
-  public AnalyzerConfiguration getSingleAnalyzerConfiguration(
+  public Optional<AnalyzerConfiguration> getSingleAnalyzerConfiguration(
       GetAnalyzerConfigurationCommand command) {
     return port.getAnalyzerConfiguration(command.getId());
   }

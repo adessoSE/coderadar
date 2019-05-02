@@ -44,6 +44,6 @@ public class AddAnalyzerConfigurationService implements AddAnalyzerConfiguration
       throw new ProjectNotFound();
     }
 
-    return addAnalyzerConfigurationPort.add(analyzerConfiguration);
+    return addAnalyzerConfigurationPort.add(command.getProjectId(), analyzerConfiguration);
   }
 }
