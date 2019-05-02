@@ -13,6 +13,8 @@ import * as fromRoot from '../../city-map/shared/reducers';
 import {changeCommit, loadCommits} from '../../city-map/control-panel/control-panel.actions';
 import {CommitType} from '../../city-map/enum/CommitType';
 import {changeActiveFilter, setMetricMapping} from '../../city-map/control-panel/settings/settings.actions';
+import {Observable} from 'rxjs';
+import {take} from 'rxjs/operators';
 
 
 @Component({
@@ -107,8 +109,19 @@ export class ProjectDashboardComponent implements OnInit {
    * Gets all commits for this project from the service and saves them in this.commits.
    */
   private getCommits(): void {
-    this.store.dispatch(loadCommits(this.projectId));
-    const commits = this.store.select(fromRoot.getCommits);
+    const id = this.store.select(fromRoot.getProjectId);
+    id.pipe(take(1)).subscribe(result => {
+      if (result === this.projectId && this.commits.length === 0) {
+        this.setCommits(this.store.select(fromRoot.getCommits));
+      } else {
+        this.store.dispatch(loadCommits(this.projectId));
+        this.setCommits(this.store.select(fromRoot.getCommits));
+      }
+    });
+  }
+
+
+  private setCommits(commits: Observable<Commit[]>) {
     commits.subscribe(result => {
       this.commits = result;
       this.commits.sort((a, b) => {
@@ -120,7 +133,8 @@ export class ProjectDashboardComponent implements OnInit {
           return 1;
         }
       });
-      result.forEach(value => {
+      this.commitsAnalyzed = 0;
+      this.commits.forEach(value => {
         if (value.analyzed) {
           this.commitsAnalyzed++;
         }

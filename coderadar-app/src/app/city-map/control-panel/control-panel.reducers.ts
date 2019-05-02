@@ -10,7 +10,7 @@ export interface ControlPanelState {
   commitsLoading: boolean;
   leftCommit: Commit;
   rightCommit: Commit;
-  screenshots: any[];
+  projectId: number;
 }
 
 const initialState: ControlPanelState = {
@@ -18,7 +18,7 @@ const initialState: ControlPanelState = {
   commitsLoading: false,
   leftCommit: null,
   rightCommit: null,
-  screenshots: []
+  projectId: null
 };
 
 export const ControlPanelReducer: ActionReducer<ControlPanelState> = (state = initialState, action: IActionWithPayload<any>) => {
@@ -27,6 +27,7 @@ export const ControlPanelReducer: ActionReducer<ControlPanelState> = (state = in
     case ControlPanelActions.LOAD_COMMITS:
       newState = Object.assign({}, state);
       newState.commitsLoading = true;
+      newState.projectId = action.payload;
       return newState;
 
     case ControlPanelActions.LOAD_COMMITS_SUCCESS:
@@ -61,6 +62,8 @@ export const ControlPanelReducer: ActionReducer<ControlPanelState> = (state = in
 };
 
 export const getCommits = (state: ControlPanelState) => state.commits;
+
+export const getProjectId = (state: ControlPanelState) => state.projectId;
 
 export const getCommitsLoading = (state: ControlPanelState) => state.commitsLoading;
 

@@ -31,6 +31,8 @@ export const getCommitsLoading = createSelector(getControlPanelState, fromContro
 
 export const getCommits = createSelector(getControlPanelState, fromControlPanel.getCommits);
 
+export const getProjectId = createSelector(getControlPanelState, fromControlPanel.getProjectId);
+
 export const getLeftCommit = createSelector(getControlPanelState, fromControlPanel.getLeftCommit);
 
 export const getRightCommit = createSelector(getControlPanelState, fromControlPanel.getRightCommit);
