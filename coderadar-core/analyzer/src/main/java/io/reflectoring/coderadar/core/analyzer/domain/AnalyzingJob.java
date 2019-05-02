@@ -4,6 +4,9 @@ import java.util.Date;
 import javax.persistence.*;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
+
+import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
 /**
  * A job that defines which commits are to be analyzed. Storing an entity of this type in the
@@ -24,5 +27,6 @@ public class AnalyzingJob {
    * If set to false, no new commits will be analyzed for the project. Analyses that are already
    * queued will be performed, however.
    */
-  private boolean active = false;
+  private boolean active;
+  private boolean rescan;
 }

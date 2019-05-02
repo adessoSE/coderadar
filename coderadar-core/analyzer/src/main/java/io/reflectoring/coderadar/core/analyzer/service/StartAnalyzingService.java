@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.core.analyzer.service;
 
+import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
 import io.reflectoring.coderadar.core.analyzer.port.driven.StartAnalyzingPort;
 import io.reflectoring.coderadar.core.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.core.analyzer.port.driver.StartAnalyzingUseCase;
@@ -16,7 +17,11 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   }
 
   @Override
-  public void start(StartAnalyzingCommand command) {
-    startAnalyzingPort.start(command);
+  public Long start(StartAnalyzingCommand command) {
+    AnalyzingJob analyzingJob = new AnalyzingJob();
+    analyzingJob.setFromDate(command.getFrom());
+    analyzingJob.setRescan(command.getRescan());
+    analyzingJob.setActive(true);
+    return startAnalyzingPort.start(command.getProjectId(), analyzingJob);
   }
 }

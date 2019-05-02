@@ -6,6 +6,8 @@ import io.reflectoring.coderadar.core.analyzer.port.driver.GetAnalyzingStatusUse
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class GetAnalyzingStatusService implements GetAnalyzingStatusUseCase {
   private final GetAnalyzingStatusPort getAnalyzingStatusPort;
@@ -16,7 +18,7 @@ public class GetAnalyzingStatusService implements GetAnalyzingStatusUseCase {
   }
 
   @Override
-  public AnalyzingJob get(Long projectId) {
+  public Optional<AnalyzingJob> get(Long projectId) {
     return getAnalyzingStatusPort.get(projectId);
   }
 }
