@@ -18,10 +18,6 @@ public class CreateProjectService implements CreateProjectPort {
 
   @Override
   public Long createProject(Project project) {
-    if (project == null) {
-      throw new InvalidArgumentException("When saving a project, no null may be passed.");
-    }
-
     return createProjectRepository.save(project).getId();
   }
 }

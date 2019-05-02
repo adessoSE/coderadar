@@ -27,18 +27,6 @@ public class CreateModuleServiceTest {
   @InjectMocks private CreateModuleService createModuleService;
 
   @Test
-  public void withInvalidProjectIdShouldThrowInvalidArgumentException() {
-    Assertions.assertThrows(
-        InvalidArgumentException.class, () -> createModuleService.createModule(null, null));
-  }
-
-  @Test
-  public void withInvalidModuleShouldThrowInvalidArgumentException() {
-    Assertions.assertThrows(
-        InvalidArgumentException.class, () -> createModuleService.createModule(1L, null));
-  }
-
-  @Test
   public void withNoPersistedProjectShouldThrowProjectNotFoundException() {
     Assertions.assertThrows(
         ProjectNotFoundException.class, () -> createModuleService.createModule(1L, new Module()));

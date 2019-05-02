@@ -29,12 +29,6 @@ public class GetAnalyzerConfigurationsFromProjectServiceTest {
     private GetAnalyzerConfigurationsFromProjectService getAnalyzerConfigurationsFromProjectService;
 
     @Test
-    public void withInvalidArgumentShouldThrowIllegalArgumentException() {
-        org.junit.jupiter.api.Assertions.assertThrows(
-                IllegalArgumentException.class, () -> getAnalyzerConfigurationsFromProjectService.get(null));
-    }
-
-    @Test
     public void withNoPersistedProjectShouldThrowProjectNotFoundException() {
         org.junit.jupiter.api.Assertions.assertThrows(
                 ProjectNotFoundException.class, () -> getAnalyzerConfigurationsFromProjectService.get(1L));

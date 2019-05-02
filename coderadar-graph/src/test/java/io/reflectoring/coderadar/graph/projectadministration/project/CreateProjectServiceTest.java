@@ -20,12 +20,6 @@ public class CreateProjectServiceTest {
   @InjectMocks private CreateProjectService createProjectService;
 
   @Test
-  public void withInvalidArgumentShouldThrowInvalidArgumentException() {
-    Assertions.assertThrows(
-        InvalidArgumentException.class, () -> createProjectService.createProject(null));
-  }
-
-  @Test
   public void withValidArgumentShouldCallCreateProjectMethodOfRepository() {
     Project project = new Project();
     when(createProjectRepository.save(project)).thenReturn(project);

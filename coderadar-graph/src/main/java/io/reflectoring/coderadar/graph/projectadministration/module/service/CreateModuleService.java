@@ -25,12 +25,6 @@ public class CreateModuleService implements CreateModulePort {
 
   @Override
   public Long createModule(Long projectId, Module module) {
-    if (projectId == null) {
-      throw new InvalidArgumentException("A valid project ID is required to save a module.");
-    } else if (module == null) {
-      throw new InvalidArgumentException("A valid module is required to save a module.");
-    }
-
     Optional<Project> project = getProjectRepository.findById(1L);
 
     if (project.isPresent()) {

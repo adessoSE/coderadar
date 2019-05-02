@@ -25,10 +25,6 @@ public class GetAnalyzerConfigurationsFromProjectService implements GetAnalyzerC
 
     @Override
     public List<AnalyzerConfiguration> get(Long id) {
-        if (id == null) {
-            throw new IllegalArgumentException("When listing analyzer configurations of project, no null may be passed.");
-        }
-
         Optional<Project> persistedProject = getProjectRepository.findById(id);
 
         if (persistedProject.isPresent()) {

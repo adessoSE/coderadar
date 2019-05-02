@@ -26,12 +26,6 @@ public class UpdateModuleServiceTest {
   @InjectMocks private UpdateModuleService updateModuleService;
 
   @Test
-  public void withInvalidArgumentShouldThrowInvalidArgumentException() {
-    Assertions.assertThrows(
-        InvalidArgumentException.class, () -> updateModuleService.updateModule(null));
-  }
-
-  @Test
   public void withNoPersistedModuleShouldThrowModuleNotFoundException() {
     Assertions.assertThrows(
         ModuleNotFoundException.class, () -> updateModuleService.updateModule(new Module()));

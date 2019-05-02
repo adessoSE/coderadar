@@ -30,18 +30,6 @@ public class AddAnalyzerConfigurationServiceTest {
     private AddAnalyzerConfigurationService addAnalyzerConfigurationService;
 
     @Test
-    public void withInvalidEntityShouldThrowInvalidArgumentException() {
-        Assertions.assertThrows(
-                InvalidArgumentException.class, () -> addAnalyzerConfigurationService.add(1L, null));
-    }
-
-    @Test
-    public void withInvalidProjectIdShouldThrowInvalidArgumentException() {
-        Assertions.assertThrows(
-                InvalidArgumentException.class, () -> addAnalyzerConfigurationService.add(null, new AnalyzerConfiguration()));
-    }
-
-    @Test
     public void withNoPersistedProjectShouldThrowProjectNotFoundException() {
         Assertions.assertThrows(
                 ProjectNotFoundException.class, () -> addAnalyzerConfigurationService.add(1L, new AnalyzerConfiguration()));

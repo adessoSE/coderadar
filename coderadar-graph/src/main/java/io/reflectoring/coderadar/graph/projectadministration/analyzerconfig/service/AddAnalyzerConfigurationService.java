@@ -25,12 +25,6 @@ public class AddAnalyzerConfigurationService implements AddAnalyzerConfiguration
 
     @Override
     public Long add(Long projectId, AnalyzerConfiguration entity) {
-        if (entity == null) {
-            throw new InvalidArgumentException("A valid entity is required to save a analyzer configuration.");
-        } else if (projectId == null) {
-            throw new InvalidArgumentException("A valid project ID is required to save a analyzer configuration.");
-        }
-
         Optional<Project > persisted = getProjectRepository.findById(projectId);
 
         if (persisted.isPresent()) {

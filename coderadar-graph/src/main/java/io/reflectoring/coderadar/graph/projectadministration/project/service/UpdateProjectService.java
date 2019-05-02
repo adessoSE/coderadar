@@ -24,10 +24,6 @@ public class UpdateProjectService implements UpdateProjectPort {
 
   @Override
   public void update(Project project) {
-    if (project == null) {
-      throw new InvalidArgumentException("When saving a project, no null may be passed.");
-    }
-
     Optional<Project> oldProject = getProjectRepository.findById(project.getId());
 
     if (oldProject.isPresent()) {

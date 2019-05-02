@@ -23,10 +23,6 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
 
     @Override
     public void update(AnalyzerConfiguration entity) {
-        if (entity == null) {
-            throw new IllegalArgumentException("When updating a analyzer configuration, no null may be passed.");
-        }
-
         Optional<AnalyzerConfiguration> peristedAnalyzerConfiguration = getAnalyzerConfigurationsFromProjectRepository.findById(entity.getId());
 
         if (peristedAnalyzerConfiguration.isPresent()) {

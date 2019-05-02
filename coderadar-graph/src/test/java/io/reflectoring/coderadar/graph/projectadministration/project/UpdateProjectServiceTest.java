@@ -25,12 +25,6 @@ public class UpdateProjectServiceTest {
   @InjectMocks private UpdateProjectService updateProjectService;
 
   @Test
-  public void withInvalidArgumentShouldThrowInvalidArgumentException() {
-    Assertions.assertThrows(
-        InvalidArgumentException.class, () -> updateProjectService.update(null));
-  }
-
-  @Test
   public void withInvalidProjectIdShouldThrowProjectNotFoundException() {
     Assertions.assertThrows(
         ProjectNotFoundException.class, () -> updateProjectService.update(new Project()));

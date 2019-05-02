@@ -24,10 +24,6 @@ public class UpdateModuleService implements UpdateModulePort {
 
   @Override
   public Module updateModule(Module module) {
-    if (module == null) {
-      throw new InvalidArgumentException("When saving a module, no null may be passed.");
-    }
-
     Optional<Module> oldModule = getModuleRepository.findById(module.getId());
 
     if (oldModule.isPresent()) {

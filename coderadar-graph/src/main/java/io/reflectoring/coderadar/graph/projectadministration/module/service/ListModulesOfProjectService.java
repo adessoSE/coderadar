@@ -25,10 +25,6 @@ public class ListModulesOfProjectService implements ListModulesOfProjectPort {
 
   @Override
   public List<Module> listModules(Long projectId) {
-    if (projectId == null) {
-      throw new InvalidArgumentException("When listing modules of project, no null may be passed.");
-    }
-
     if (getProjectRepository.findById(projectId).isPresent()) {
       return listModulesOfProjectRepository.findByProject_Id(projectId);
     } else {

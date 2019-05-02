@@ -26,12 +26,6 @@ public class ListModulesOfProjectServiceTest {
   @InjectMocks private ListModulesOfProjectService listModulesOfProjectService;
 
   @Test
-  public void withInvalidArgumentShouldThrowInvalidArgumentException() {
-    org.junit.jupiter.api.Assertions.assertThrows(
-        InvalidArgumentException.class, () -> listModulesOfProjectService.listModules(null));
-  }
-
-  @Test
   public void withNoPersistedProjectShouldThrowProjectNotFoundException() {
     org.junit.jupiter.api.Assertions.assertThrows(
         ProjectNotFoundException.class, () -> listModulesOfProjectService.listModules(1L));

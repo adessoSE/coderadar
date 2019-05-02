@@ -29,12 +29,6 @@ public class UpdateAnalyzerConfigurationServiceTest {
     private UpdateAnalyzerConfigurationService updateAnalyzerConfigurationService;
 
     @Test
-    public void withInvalidArgumentShouldThrowIllegalArgumentException() {
-        Assertions.assertThrows(
-                IllegalArgumentException.class, () -> updateAnalyzerConfigurationService.update(null));
-    }
-
-    @Test
     public void withNoPersistedAnalyzerConfigurationShouldThrowAnalyzerConfigurationNotFoundException() {
         Assertions.assertThrows(
                 AnalyzerConfigurationNotFoundException.class, () -> updateAnalyzerConfigurationService.update(new AnalyzerConfiguration()));
