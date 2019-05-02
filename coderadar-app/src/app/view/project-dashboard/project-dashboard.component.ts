@@ -16,7 +16,6 @@ import {changeActiveFilter, setMetricMapping} from '../../city-map/control-panel
 import {Observable} from 'rxjs';
 import {take} from 'rxjs/operators';
 
-
 @Component({
   selector: 'app-project-dashboard',
   templateUrl: './project-dashboard.component.html',
