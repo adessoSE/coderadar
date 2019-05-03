@@ -18,7 +18,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class AddAnalyzerConfigurationServiceTest {
+class AddAnalyzerConfigurationServiceTest {
     @Mock
     private AddAnalyzerConfigurationRepository addAnalyzerConfigurationRepository;
 
@@ -29,13 +29,13 @@ public class AddAnalyzerConfigurationServiceTest {
     private AddAnalyzerConfigurationService addAnalyzerConfigurationService;
 
     @Test
-    public void withNoPersistedProjectShouldThrowProjectNotFoundException() {
+    void withNoPersistedProjectShouldThrowProjectNotFoundException() {
         Assertions.assertThrows(
                 ProjectNotFoundException.class, () -> addAnalyzerConfigurationService.add(1L, new AnalyzerConfiguration()));
     }
 
     @Test
-    public void withValidEntityShouldReturnIdFromPersistedEntity() {
+    void withValidEntityShouldReturnIdFromPersistedEntity() {
         AnalyzerConfiguration mockItem = new AnalyzerConfiguration();
         mockItem.setId(10L);
         Project mockProject = new Project();

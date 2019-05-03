@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class GetAnalyzerConfigurationsFromProjectServiceTest {
+class GetAnalyzerConfigurationsFromProjectServiceTest {
     @Mock
     private GetAnalyzerConfigurationsFromProjectRepository getAnalyzerConfigurationsFromProjectRepository;
 
@@ -29,13 +29,13 @@ public class GetAnalyzerConfigurationsFromProjectServiceTest {
     private GetAnalyzerConfigurationsFromProjectService getAnalyzerConfigurationsFromProjectService;
 
     @Test
-    public void withNoPersistedProjectShouldThrowProjectNotFoundException() {
+    void withNoPersistedProjectShouldThrowProjectNotFoundException() {
         org.junit.jupiter.api.Assertions.assertThrows(
                 ProjectNotFoundException.class, () -> getAnalyzerConfigurationsFromProjectService.get(1L));
     }
 
     @Test
-    public void withNoAnalyzerConfigurationsShouldReturnEmptyList() {
+    void withNoAnalyzerConfigurationsShouldReturnEmptyList() {
         Project mockedProject = new Project();
         when(getProjectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
         when(getAnalyzerConfigurationsFromProjectRepository.findByProject_Id(1L)).thenReturn(new LinkedList<>());
@@ -46,7 +46,7 @@ public class GetAnalyzerConfigurationsFromProjectServiceTest {
     }
 
     @Test
-    public void withOnePersistedAnalyzerConfigurationsShouldReturnListOfSizeOne() {
+    void withOnePersistedAnalyzerConfigurationsShouldReturnListOfSizeOne() {
         Project mockedProject = new Project();
         LinkedList<AnalyzerConfiguration> mockedAnalyzerConfigurations = new LinkedList<>();
         mockedAnalyzerConfigurations.add(new AnalyzerConfiguration());
@@ -59,7 +59,7 @@ public class GetAnalyzerConfigurationsFromProjectServiceTest {
     }
 
     @Test
-    public void withTwoPersistedAnalyzerConfigurationsShouldReturnListOfSizeTwo() {
+    void withTwoPersistedAnalyzerConfigurationsShouldReturnListOfSizeTwo() {
         Project mockedProject = new Project();
         LinkedList<AnalyzerConfiguration> mockedAnalyzerConfigurations = new LinkedList<>();
         mockedAnalyzerConfigurations.add(new AnalyzerConfiguration());

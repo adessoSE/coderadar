@@ -18,7 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class UpdateAnalyzerConfigurationServiceTest {
+class UpdateAnalyzerConfigurationServiceTest {
     @Mock
     private UpdateAnalyzerConfigurationRepository updateAnalyzerConfigurationRepository;
 
@@ -29,13 +29,13 @@ public class UpdateAnalyzerConfigurationServiceTest {
     private UpdateAnalyzerConfigurationService updateAnalyzerConfigurationService;
 
     @Test
-    public void withNoPersistedAnalyzerConfigurationShouldThrowAnalyzerConfigurationNotFoundException() {
+    void withNoPersistedAnalyzerConfigurationShouldThrowAnalyzerConfigurationNotFoundException() {
         Assertions.assertThrows(
                 AnalyzerConfigurationNotFoundException.class, () -> updateAnalyzerConfigurationService.update(new AnalyzerConfiguration()));
     }
 
     @Test
-    public void withPersistedAnalyzerConfigurationShouldUpdateAnalyzerConfiguration() {
+    void withPersistedAnalyzerConfigurationShouldUpdateAnalyzerConfiguration() {
         AnalyzerConfiguration mockedOldItem = new AnalyzerConfiguration();
         mockedOldItem.setId(1L);
         mockedOldItem.setAnalyzerName("LoC");

@@ -17,7 +17,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class StopAnalyzingServiceTest {
+class StopAnalyzingServiceTest {
     @Mock
     private StopAnalyzingRepository stopAnalyzingRepository;
 
@@ -31,12 +31,12 @@ public class StopAnalyzingServiceTest {
     private StopAnalyzingService stopAnalyzingService;
 
     @Test
-    public void withNoPersistedProjectShouldThrowProjectNotFoundException() {
+    void withNoPersistedProjectShouldThrowProjectNotFoundException() {
         Assertions.assertThrows(ProjectNotFoundException.class, () -> stopAnalyzingService.stop(1L));
     }
 
     @Test
-    public void withNoActiveAnalyzingJobShouldThrowAnalyzingJobNotStartedException() {
+    void withNoActiveAnalyzingJobShouldThrowAnalyzingJobNotStartedException() {
         Project mockProject = new Project();
         mockProject.setId(1L);
         AnalyzingJob mockItem = new AnalyzingJob();
@@ -49,7 +49,7 @@ public class StopAnalyzingServiceTest {
     }
 
     @Test
-    public void withActiveAnalyzingJobShouldStopAnalyzingJob() {
+    void withActiveAnalyzingJobShouldStopAnalyzingJob() {
         Project mockProject = new Project();
         mockProject.setId(1L);
         AnalyzingJob mockItem = new AnalyzingJob();

@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class GetProjectServiceTest {
+class GetProjectServiceTest {
     @Mock
     private GetProjectRepository getProjectRepository;
 
@@ -24,7 +24,7 @@ public class GetProjectServiceTest {
     private GetProjectService getProjectService;
 
     @Test
-    public void withProjectIdShouldReturnProjectEntityAsOptional() {
+    void withProjectIdShouldReturnProjectEntityAsOptional() {
         Project mockedItem = new Project();
         mockedItem.setId(1L);
         when(getProjectRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedItem));

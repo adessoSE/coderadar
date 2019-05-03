@@ -18,7 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class UpdateModuleServiceTest {
+ class UpdateModuleServiceTest {
     @Mock
     private UpdateModuleRepository updateModuleRepository;
 
@@ -29,13 +29,13 @@ public class UpdateModuleServiceTest {
     private UpdateModuleService updateModuleService;
 
     @Test
-    public void withNoPersistedModuleShouldThrowModuleNotFoundException() {
+     void withNoPersistedModuleShouldThrowModuleNotFoundException() {
         Assertions.assertThrows(
                 ModuleNotFoundException.class, () -> updateModuleService.updateModule(new Module()));
     }
 
     @Test
-    public void withPersistedModuleShouldUpdateModule() {
+     void withPersistedModuleShouldUpdateModule() {
         Module mockedOldItem = new Module();
         mockedOldItem.setId(1L);
         mockedOldItem.setPath("/dev/null");

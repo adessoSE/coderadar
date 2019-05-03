@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class ListModulesOfProjectServiceTest {
+class ListModulesOfProjectServiceTest {
     @Mock
     private ListModulesOfProjectRepository listModulesOfProjectRepository;
 
@@ -29,13 +29,13 @@ public class ListModulesOfProjectServiceTest {
     private ListModulesOfProjectService listModulesOfProjectService;
 
     @Test
-    public void withNoPersistedProjectShouldThrowProjectNotFoundException() {
+    void withNoPersistedProjectShouldThrowProjectNotFoundException() {
         org.junit.jupiter.api.Assertions.assertThrows(
                 ProjectNotFoundException.class, () -> listModulesOfProjectService.listModules(1L));
     }
 
     @Test
-    public void withNoModulesShouldReturnEmptyList() {
+    void withNoModulesShouldReturnEmptyList() {
         Project mockedProject = new Project();
         when(getProjectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
         when(listModulesOfProjectRepository.findByProject_Id(1L)).thenReturn(new LinkedList<>());
@@ -46,7 +46,7 @@ public class ListModulesOfProjectServiceTest {
     }
 
     @Test
-    public void withOneModuleShouldReturnListWithSizeOfOne() {
+    void withOneModuleShouldReturnListWithSizeOfOne() {
         LinkedList<Module> mockedItem = new LinkedList<>();
         mockedItem.add(new Module());
         Project mockedProject = new Project();
@@ -59,7 +59,7 @@ public class ListModulesOfProjectServiceTest {
     }
 
     @Test
-    public void withTwoModulesShouldReturnListWithSizeOf() {
+    void withTwoModulesShouldReturnListWithSizeOf() {
         LinkedList<Module> mockedItem = new LinkedList<>();
         mockedItem.add(new Module());
         mockedItem.add(new Module());

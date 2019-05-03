@@ -12,7 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class DeleteProjectServiceTest {
+class DeleteProjectServiceTest {
     @Mock
     private DeleteProjectRepository deleteProjectRepository;
 
@@ -20,14 +20,14 @@ public class DeleteProjectServiceTest {
     private DeleteProjectService deleteProjectService;
 
     @Test
-    public void withProjectEntityShouldCallDeleteProjectMethodOfRepository() {
+    void withProjectEntityShouldCallDeleteProjectMethodOfRepository() {
         doNothing().when(deleteProjectRepository).delete(isA(Project.class));
         deleteProjectService.delete(new Project());
         verify(deleteProjectRepository, times(1)).delete(any(Project.class));
     }
 
     @Test
-    public void withProjectIdShouldCallDeleteProjectMethodOfRepository() {
+    void withProjectIdShouldCallDeleteProjectMethodOfRepository() {
         doNothing().when(deleteProjectRepository).deleteById(isA(Long.class));
         deleteProjectService.delete(1L);
         verify(deleteProjectRepository, times(1)).deleteById(any(Long.class));

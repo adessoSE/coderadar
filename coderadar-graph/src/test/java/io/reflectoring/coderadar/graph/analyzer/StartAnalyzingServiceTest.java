@@ -15,7 +15,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class StartAnalyzingServiceTest {
+class StartAnalyzingServiceTest {
     @Mock
     private StartAnalyzingRepository startAnalyzingRepository;
 
@@ -26,12 +26,12 @@ public class StartAnalyzingServiceTest {
     private StartAnalyzingService startAnalyzingService;
 
     @Test
-    public void withNoPersistedProjectShouldThrowProjectNotFoundException() {
+    void withNoPersistedProjectShouldThrowProjectNotFoundException() {
         Assertions.assertThrows(ProjectNotFoundException.class, () -> startAnalyzingService.start(1L, new AnalyzingJob()));
     }
 
     @Test
-    public void withValidArgumentShouldSaveAnalyzer() {
+    void withValidArgumentShouldSaveAnalyzer() {
         AnalyzingJob mockItem = new AnalyzingJob();
         mockItem.setId(10L);
         Project mockProject = new Project();

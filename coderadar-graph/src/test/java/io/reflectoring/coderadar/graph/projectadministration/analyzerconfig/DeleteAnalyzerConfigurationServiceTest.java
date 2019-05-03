@@ -13,7 +13,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class DeleteAnalyzerConfigurationServiceTest {
+class DeleteAnalyzerConfigurationServiceTest {
     @Mock
     private DeleteAnalyzerConfigurationRepository deleteAnalyzerConfigurationRepository;
 
@@ -21,7 +21,7 @@ public class DeleteAnalyzerConfigurationServiceTest {
     private DeleteAnalyzerConfigurationService deleteAnalyzerConfigurationService;
 
     @Test
-    public void withAnalyzerConfigurationIdShouldCallDeleteAnalyzerConfigurationMethodOfRepository() {
+    void withAnalyzerConfigurationIdShouldCallDeleteAnalyzerConfigurationMethodOfRepository() {
         doNothing().when(deleteAnalyzerConfigurationRepository).deleteById(isA(Long.class));
         deleteAnalyzerConfigurationService.deleteAnalyzerConfiguration(1L);
         verify(deleteAnalyzerConfigurationRepository, times(1)).deleteById(any(Long.class));

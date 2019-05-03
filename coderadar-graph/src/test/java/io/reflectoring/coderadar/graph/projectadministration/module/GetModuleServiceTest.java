@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class GetModuleServiceTest {
+class GetModuleServiceTest {
     @Mock
     private GetModuleRepository getModuleRepository;
 
@@ -24,7 +24,7 @@ public class GetModuleServiceTest {
     private GetModuleService getModuleService;
 
     @Test
-    public void withModuleIdShouldReturnModuleEntityAsOptional() {
+    void withModuleIdShouldReturnModuleEntityAsOptional() {
         Module mockedItem = new Module();
         mockedItem.setId(1L);
         when(getModuleRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedItem));
@@ -38,7 +38,7 @@ public class GetModuleServiceTest {
     }
 
     @Test
-    public void withNoPersistedModuleShouldReturnEmptyOptional() {
+    void withNoPersistedModuleShouldReturnEmptyOptional() {
         Optional<Module> mockedItem = Optional.empty();
         when(getModuleRepository.findById(any(Long.class))).thenReturn(mockedItem);
 

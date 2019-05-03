@@ -17,7 +17,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class UpdateProjectServiceTest {
+class UpdateProjectServiceTest {
     @Mock
     private GetProjectRepository getProjectRepository;
 
@@ -28,13 +28,13 @@ public class UpdateProjectServiceTest {
     private UpdateProjectService updateProjectService;
 
     @Test
-    public void withInvalidProjectIdShouldThrowProjectNotFoundException() {
+    void withInvalidProjectIdShouldThrowProjectNotFoundException() {
         Assertions.assertThrows(
                 ProjectNotFoundException.class, () -> updateProjectService.update(new Project()));
     }
 
     @Test
-    public void withValidArgumentShouldCallMethodOfRepositoryToGetOldProject() {
+    void withValidArgumentShouldCallMethodOfRepositoryToGetOldProject() {
         Project mockedItem = new Project();
         mockedItem.setId(1L);
         when(getProjectRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedItem));
@@ -47,7 +47,7 @@ public class UpdateProjectServiceTest {
     }
 
     @Test
-    public void withValidArgumentShouldCallMethodOfRepositoryToUpdateProject() {
+    void withValidArgumentShouldCallMethodOfRepositoryToUpdateProject() {
         Project mockedOldItem = new Project();
         mockedOldItem.setId(1L);
         mockedOldItem.setName("Mustermann");

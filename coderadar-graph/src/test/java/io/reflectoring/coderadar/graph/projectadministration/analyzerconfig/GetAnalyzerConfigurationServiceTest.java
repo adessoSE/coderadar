@@ -16,7 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class GetAnalyzerConfigurationServiceTest {
+class GetAnalyzerConfigurationServiceTest {
     @Mock
     private GetAnalyzerConfigurationRepository getAnalyzerConfigurationRepository;
 
@@ -24,7 +24,7 @@ public class GetAnalyzerConfigurationServiceTest {
     private GetAnalyzerConfigurationService getAnalyzerConfigurationService;
 
     @Test
-    public void withAnalyzerConfigurationIdShouldReturnAnalyzerConfigurationEntityAsOptional() {
+    void withAnalyzerConfigurationIdShouldReturnAnalyzerConfigurationEntityAsOptional() {
         AnalyzerConfiguration mockedItem = new AnalyzerConfiguration();
         mockedItem.setId(1L);
         when(getAnalyzerConfigurationRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedItem));
@@ -38,7 +38,7 @@ public class GetAnalyzerConfigurationServiceTest {
     }
 
     @Test
-    public void withNoPersistedAnalyzerConfigurationShouldReturnEmptyOptional() {
+    void withNoPersistedAnalyzerConfigurationShouldReturnEmptyOptional() {
         Optional<AnalyzerConfiguration> mockedItem = Optional.empty();
         when(getAnalyzerConfigurationRepository.findById(any(Long.class))).thenReturn(mockedItem);
 

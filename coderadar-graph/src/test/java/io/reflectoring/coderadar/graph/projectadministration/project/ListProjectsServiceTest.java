@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class ListProjectsServiceTest {
+class ListProjectsServiceTest {
     @Mock
     private ListProjectsRepository listProjectsRepository;
 
@@ -23,7 +23,7 @@ public class ListProjectsServiceTest {
     private ListProjectsService listProjectsService;
 
     @Test
-    public void withNoProjectsShouldReturnEmptyList() {
+    void withNoProjectsShouldReturnEmptyList() {
         when(listProjectsRepository.findAll()).thenReturn(new LinkedList<>());
 
         Iterable<Project> projects = listProjectsService.getProjects();
@@ -32,7 +32,7 @@ public class ListProjectsServiceTest {
     }
 
     @Test
-    public void withOneProjectShouldReturnListWithSizeOfOne() {
+    void withOneProjectShouldReturnListWithSizeOfOne() {
         LinkedList<Project> mockedItem = new LinkedList<>();
         mockedItem.add(new Project());
         when(listProjectsRepository.findAll()).thenReturn(mockedItem);
@@ -43,7 +43,7 @@ public class ListProjectsServiceTest {
     }
 
     @Test
-    public void withTwoProjectShouldReturnListWithSizeOfTwo() {
+    void withTwoProjectShouldReturnListWithSizeOfTwo() {
         LinkedList<Project> mockedItem = new LinkedList<>();
         mockedItem.add(new Project());
         mockedItem.add(new Project());

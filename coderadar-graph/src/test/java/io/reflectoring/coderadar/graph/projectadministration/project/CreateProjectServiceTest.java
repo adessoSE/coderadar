@@ -13,7 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class CreateProjectServiceTest {
+class CreateProjectServiceTest {
     @Mock
     private CreateProjectRepository createProjectRepository;
 
@@ -21,7 +21,7 @@ public class CreateProjectServiceTest {
     private CreateProjectService createProjectService;
 
     @Test
-    public void withValidArgumentShouldCallCreateProjectMethodOfRepository() {
+    void withValidArgumentShouldCallCreateProjectMethodOfRepository() {
         Project project = new Project();
         when(createProjectRepository.save(project)).thenReturn(project);
         createProjectService.createProject(project);
@@ -29,7 +29,7 @@ public class CreateProjectServiceTest {
     }
 
     @Test
-    public void withCreatedProjectShouldReturnProjectWithId() {
+    void withCreatedProjectShouldReturnProjectWithId() {
         Project mockedItem = new Project();
         mockedItem.setId(1L);
         Project newItem = new Project();

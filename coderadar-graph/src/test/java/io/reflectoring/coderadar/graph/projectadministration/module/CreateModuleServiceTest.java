@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @ExtendWith(SpringExtension.class)
-public class CreateModuleServiceTest {
+class CreateModuleServiceTest {
     @Mock
     private CreateModuleRepository createModuleRepository;
 
@@ -29,13 +29,13 @@ public class CreateModuleServiceTest {
     private CreateModuleService createModuleService;
 
     @Test
-    public void withNoPersistedProjectShouldThrowProjectNotFoundException() {
+    void withNoPersistedProjectShouldThrowProjectNotFoundException() {
         Assertions.assertThrows(
                 ProjectNotFoundException.class, () -> createModuleService.createModule(1L, new Module()));
     }
 
     @Test
-    public void withCreatedModuleShouldReturnModuleWithId() {
+    void withCreatedModuleShouldReturnModuleWithId() {
         Module mockedItem = new Module();
         mockedItem.setId(1L);
         Module newItem = new Module();

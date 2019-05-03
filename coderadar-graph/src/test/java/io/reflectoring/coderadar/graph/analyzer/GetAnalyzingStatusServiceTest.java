@@ -14,7 +14,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class GetAnalyzingStatusServiceTest {
+class GetAnalyzingStatusServiceTest {
     @Mock
     private GetAnalyzingStatusRepository getAnalyzingStatusRepository;
 
@@ -22,7 +22,7 @@ public class GetAnalyzingStatusServiceTest {
     private GetAnalyzingStatusService getanalyzingStatusService;
 
     @Test
-    public void withAnalyzingJobIdShouldReturnAnalyzingJobEntityAsOptional() {
+    void withAnalyzingJobIdShouldReturnAnalyzingJobEntityAsOptional() {
         AnalyzingJob mockedItem = new AnalyzingJob();
         mockedItem.setId(1L);
         when(getAnalyzingStatusRepository.findByProject_Id(any(Long.class))).thenReturn(Optional.of(mockedItem));
@@ -36,7 +36,7 @@ public class GetAnalyzingStatusServiceTest {
     }
 
     @Test
-    public void withNoPersistedAnalyzingJobShouldReturnEmptyOptional() {
+    void withNoPersistedAnalyzingJobShouldReturnEmptyOptional() {
         Optional<AnalyzingJob> mockedItem = Optional.empty();
         when(getAnalyzingStatusRepository.findByProject_Id(any(Long.class))).thenReturn(mockedItem);
 

@@ -14,7 +14,7 @@ import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class DeleteModuleServiceTest {
+class DeleteModuleServiceTest {
     @Mock
     private DeleteModuleRepository deleteModuleRepository;
 
@@ -22,14 +22,14 @@ public class DeleteModuleServiceTest {
     private DeleteModuleService deleteModuleService;
 
     @Test
-    public void withModuleEntityShouldCallDeleteModuleMethodOfRepository() {
+    void withModuleEntityShouldCallDeleteModuleMethodOfRepository() {
         doNothing().when(deleteModuleRepository).delete(isA(Module.class));
         deleteModuleService.delete(new Module());
         verify(deleteModuleRepository, times(1)).delete(any(Module.class));
     }
 
     @Test
-    public void withModuleIdShouldCallDeleteModuleMethodOfRepository() {
+    void withModuleIdShouldCallDeleteModuleMethodOfRepository() {
         doNothing().when(deleteModuleRepository).deleteById(isA(Long.class));
         deleteModuleService.delete(1L);
         verify(deleteModuleRepository, times(1)).deleteById(any(Long.class));
