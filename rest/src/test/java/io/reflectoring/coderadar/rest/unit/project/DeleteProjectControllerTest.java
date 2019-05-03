@@ -2,9 +2,9 @@ package io.reflectoring.coderadar.rest.unit.project;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.delete.DeleteProjectUseCase;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
@@ -15,12 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class DeleteProjectControllerTest {
 
   @Mock private DeleteProjectUseCase deleteProjectUseCase;
-  private DeleteProjectController testSubject;
-
-  @BeforeEach
-  public void setup() {
-    testSubject = new DeleteProjectController(deleteProjectUseCase);
-  }
+  @InjectMocks private DeleteProjectController testSubject;
 
   @Test
   public void deleteProjectWithIdOne() {
@@ -28,10 +23,5 @@ public class DeleteProjectControllerTest {
     Mockito.verify(deleteProjectUseCase, Mockito.times(1)).delete(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-  }
-
-  @Test
-  public void throwsExceptionIfProjectDoesNotExist() {
-    // TODO
   }
 }

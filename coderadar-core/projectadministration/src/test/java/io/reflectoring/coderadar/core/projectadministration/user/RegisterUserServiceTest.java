@@ -5,9 +5,9 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.user.Reg
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.register.RegisterUserCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.user.RegisterUserService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -15,12 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 class RegisterUserServiceTest {
   @Mock private RegisterUserPort registerUserPort;
-  private RegisterUserService testSubject;
-
-  @BeforeEach
-  void setup() {
-    testSubject = new RegisterUserService(registerUserPort);
-  }
+  @InjectMocks private RegisterUserService testSubject;
 
   @Test
   void returnsNewUserIdWhenRegister() {

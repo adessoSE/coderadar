@@ -5,9 +5,9 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzer
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.analyzerconfig.UpdateAnalyzerConfigurationService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -16,14 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class UpdateAnalyzerConfigurationServiceTest {
   @Mock private UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort;
   @Mock private GetAnalyzerConfigurationPort getAnalyzerConfigurationPort;
-  private UpdateAnalyzerConfigurationService testSubject;
-
-  @BeforeEach
-  void setup() {
-    testSubject =
-        new UpdateAnalyzerConfigurationService(
-            updateAnalyzerConfigurationPort, getAnalyzerConfigurationPort);
-  }
+  @InjectMocks private UpdateAnalyzerConfigurationService testSubject;
 
   @Test
   void updateAnalyzerConfigurationWithIdOne() {

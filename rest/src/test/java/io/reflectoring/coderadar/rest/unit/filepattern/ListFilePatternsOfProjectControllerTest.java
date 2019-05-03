@@ -1,22 +1,18 @@
 package io.reflectoring.coderadar.rest.unit.filepattern;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 public class ListFilePatternsOfProjectControllerTest {
 
   @Mock private ListFilePatternsOfProjectUseCase listFilePatternsOfProjectUseCase;
-  private ListFilePatternsOfProjectController testSubject;
-
-  @BeforeEach
-  public void setup() {
-    testSubject = new ListFilePatternsOfProjectController(listFilePatternsOfProjectUseCase);
-  }
+  @InjectMocks private ListFilePatternsOfProjectController testSubject;
 
   @Test
   public void returnsModulesForProjectWithIdOne() {
-    // TODO
+    Assertions.fail();
   }
 }

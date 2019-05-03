@@ -4,9 +4,9 @@ import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.GetFilePatternUseCase;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
@@ -17,12 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class GetFilePatternControllerTest {
 
   @Mock private GetFilePatternUseCase getFilePatternUseCase;
-  private GetFilePatternController testSubject;
-
-  @BeforeEach
-  public void setup() {
-    testSubject = new GetFilePatternController(getFilePatternUseCase);
-  }
+  @InjectMocks private GetFilePatternController testSubject;
 
   @Test
   public void returnsFilePatternWithIdOne() {

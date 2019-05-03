@@ -7,9 +7,9 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.module.CreateModuleService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -18,12 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class CreateModuleServiceTest {
   @Mock private CreateModulePort createModulePort;
   @Mock private GetProjectPort getProjectPort;
-  private CreateModuleService testSubject;
-
-  @BeforeEach
-  void setup() {
-    testSubject = new CreateModuleService(createModulePort, getProjectPort);
-  }
+  @InjectMocks private CreateModuleService testSubject;
 
   @Test
   void returnsNewModuleId() {

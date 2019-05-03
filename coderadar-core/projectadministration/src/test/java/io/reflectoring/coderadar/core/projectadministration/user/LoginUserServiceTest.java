@@ -6,9 +6,9 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.user.log
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.service.user.LoginUserService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -16,12 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 class LoginUserServiceTest {
   @Mock private LoginUserPort loginUserPort;
-  private LoginUserService testSubject;
-
-  @BeforeEach
-  void setup() {
-    testSubject = new LoginUserService(loginUserPort);
-  }
+  @InjectMocks private LoginUserService testSubject;
 
   @Test
   void loginUserWithUsernameAndPassword() {
@@ -33,9 +28,7 @@ class LoginUserServiceTest {
     LoginUserCommand command = new LoginUserCommand("username", "password");
     LoginUserResponse response = testSubject.login(command);
 
-    response.getRefreshToken();
-    response.getAccessToken();
-
-    Assertions.fail();
+    Assertions.assertEquals("abalfgubhfuo[oi3y0823pdyu", response.getAccessToken());
+    Assertions.assertEquals("ift021789f21897f2187fg", response.getRefreshToken());
   }
 }

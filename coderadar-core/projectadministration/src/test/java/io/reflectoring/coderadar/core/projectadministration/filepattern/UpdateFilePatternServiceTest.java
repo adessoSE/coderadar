@@ -6,9 +6,9 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.filepatt
 import io.reflectoring.coderadar.core.projectadministration.port.driven.filepattern.UpdateFilePatternPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.update.UpdateFilePatternCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.filepattern.UpdateFilePatternService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -17,12 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class UpdateFilePatternServiceTest {
   @Mock private GetFilePatternPort getFilePatternPort;
   @Mock private UpdateFilePatternPort updateFilePatternPort;
-  private UpdateFilePatternService testSubject;
-
-  @BeforeEach
-  void setup() {
-    testSubject = new UpdateFilePatternService(getFilePatternPort, updateFilePatternPort);
-  }
+  @InjectMocks private UpdateFilePatternService testSubject;
 
   @Test
   void updateFilePatternWithIdOne() {

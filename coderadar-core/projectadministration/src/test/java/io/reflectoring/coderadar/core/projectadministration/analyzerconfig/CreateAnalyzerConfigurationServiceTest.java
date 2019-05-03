@@ -6,9 +6,9 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.analyzerconfig.CreateAnalyzerConfigurationService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -17,13 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class CreateAnalyzerConfigurationServiceTest {
   @Mock private CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort;
   @Mock private GetProjectPort getProjectPort;
-  private CreateAnalyzerConfigurationService testSubject;
-
-  @BeforeEach
-  void setup() {
-    testSubject =
-        new CreateAnalyzerConfigurationService(createAnalyzerConfigurationPort, getProjectPort);
-  }
+  @InjectMocks private CreateAnalyzerConfigurationService testSubject;
 
   @Test
   void returnsNewAnalyzerConfigurationId() {

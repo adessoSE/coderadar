@@ -8,9 +8,9 @@ import io.reflectoring.coderadar.core.projectadministration.service.project.Upda
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -19,12 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class UpdateProjectServiceTest {
   @Mock private GetProjectPort getProjectPort;
   @Mock private UpdateProjectPort updateProjectPort;
-  private UpdateProjectService testSubject;
-
-  @BeforeEach
-  void setup() {
-    testSubject = new UpdateProjectService(getProjectPort, updateProjectPort);
-  }
+  @InjectMocks private UpdateProjectService testSubject;
 
   @Test
   void updateProjectWithIdOne() throws MalformedURLException {

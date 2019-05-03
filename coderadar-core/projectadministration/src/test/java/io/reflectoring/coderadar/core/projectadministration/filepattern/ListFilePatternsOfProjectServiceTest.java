@@ -8,9 +8,9 @@ import io.reflectoring.coderadar.core.projectadministration.service.filepattern.
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -18,12 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 class ListFilePatternsOfProjectServiceTest {
   @Mock private ListFilePatternsOfProjectPort port;
-  private ListFilePatternsOfProjectService testSubject;
-
-  @BeforeEach
-  void setup() {
-    testSubject = new ListFilePatternsOfProjectService(port);
-  }
+  @InjectMocks private ListFilePatternsOfProjectService testSubject;
 
   @Test
   void returnsTwoFilePatternsFromProject() {

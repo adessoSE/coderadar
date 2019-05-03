@@ -3,9 +3,9 @@ package io.reflectoring.coderadar.rest.unit.analyzerconfig;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationUseCase;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
@@ -16,12 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class CreateAnalyzerConfigurationControllerTest {
 
   @Mock private CreateAnalyzerConfigurationUseCase createAnalyzerConfigurationUseCase;
-  private CreateAnalyzerConfigurationController testSubject;
-
-  @BeforeEach
-  public void setup() {
-    testSubject = new CreateAnalyzerConfigurationController(createAnalyzerConfigurationUseCase);
-  }
+  @InjectMocks private CreateAnalyzerConfigurationController testSubject;
 
   @Test
   public void returnsIdOneForNewAnalyzerConfiguration() {

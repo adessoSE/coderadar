@@ -5,9 +5,9 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.project.
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
@@ -18,12 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class ListProjectsControllerTest {
 
   @Mock private ListProjectsUseCase listProjectsUseCase;
-  private ListProjectsController testSubject;
-
-  @BeforeEach
-  public void setup() {
-    testSubject = new ListProjectsController(listProjectsUseCase);
-  }
+  @InjectMocks private ListProjectsController testSubject;
 
   @Test
   public void listAllProjects() {

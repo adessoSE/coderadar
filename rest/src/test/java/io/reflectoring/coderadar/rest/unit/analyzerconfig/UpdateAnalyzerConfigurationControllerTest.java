@@ -3,9 +3,9 @@ package io.reflectoring.coderadar.rest.unit.analyzerconfig;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
@@ -16,12 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class UpdateAnalyzerConfigurationControllerTest {
 
   @Mock private UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase;
-  private UpdateAnalyzerConfigurationController testSubject;
-
-  @BeforeEach
-  public void setup() {
-    testSubject = new UpdateAnalyzerConfigurationController(updateAnalyzerConfigurationUseCase);
-  }
+  @InjectMocks private UpdateAnalyzerConfigurationController testSubject;
 
   @Test
   public void updateAnalyzerConfigurationWithIdOne() {

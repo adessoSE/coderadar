@@ -3,9 +3,9 @@ package io.reflectoring.coderadar.rest.unit.module;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.GetModuleUseCase;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
@@ -16,12 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class GetModuleControllerTest {
 
   @Mock private GetModuleUseCase getModuleUseCase;
-  private GetModuleController testSubject;
-
-  @BeforeEach
-  public void setup() {
-    testSubject = new GetModuleController(getModuleUseCase);
-  }
+  @InjectMocks private GetModuleController testSubject;
 
   @Test
   public void returnsModuleWithIdOne() {

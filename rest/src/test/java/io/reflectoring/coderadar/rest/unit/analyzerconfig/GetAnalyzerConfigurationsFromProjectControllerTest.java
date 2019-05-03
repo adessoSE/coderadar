@@ -5,9 +5,9 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzer
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
@@ -20,14 +20,7 @@ public class GetAnalyzerConfigurationsFromProjectControllerTest {
   @Mock
   private GetAnalyzerConfigurationsFromProjectUseCase getAnalyzerConfigurationsFromProjectUseCase;
 
-  private GetAnalyzerConfigurationsFromProjectController testSubject;
-
-  @BeforeEach
-  public void setup() {
-    testSubject =
-        new GetAnalyzerConfigurationsFromProjectController(
-            getAnalyzerConfigurationsFromProjectUseCase);
-  }
+  @InjectMocks private GetAnalyzerConfigurationsFromProjectController testSubject;
 
   @Test
   public void returnsTwoGetAnalyzerConfigurationResponsesFromProject() {

@@ -4,9 +4,9 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.user.log
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserUseCase;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
@@ -14,18 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class LoginUserControllerTest {
+class LoginUserControllerTest {
 
   @Mock private LoginUserUseCase loginUserUseCase;
-  private LoginUserController testSubject;
-
-  @BeforeEach
-  public void setup() {
-    testSubject = new LoginUserController(loginUserUseCase);
-  }
+  @InjectMocks private LoginUserController testSubject;
 
   @Test
-  public void loginUserWithUsernameAndPassword() {
+  void loginUserWithUsernameAndPassword() {
     LoginUserCommand command = new LoginUserCommand("username", "password");
     LoginUserResponse loginUserResponse = new LoginUserResponse("accessToken", "refreshToken");
 
