@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.graph.projectadministration.module.repository.G
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.UpdateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.service.UpdateModuleService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
+@DisplayName("Update module")
  class UpdateModuleServiceTest {
     @Mock
     private UpdateModuleRepository updateModuleRepository;
@@ -29,13 +31,15 @@ import static org.mockito.Mockito.*;
     private UpdateModuleService updateModuleService;
 
     @Test
-     void withNoPersistedModuleShouldThrowModuleNotFoundException() {
+    @DisplayName("Should throw exception when a module with the passing ID doesn't exists")
+     void shouldThrowExceptionWhenAModuleWithThePassingIdDoesntExists() {
         Assertions.assertThrows(
                 ModuleNotFoundException.class, () -> updateModuleService.updateModule(new Module()));
     }
 
     @Test
-     void withPersistedModuleShouldUpdateModule() {
+    @DisplayName("Should update project when a module with the passing ID exists")
+     void shouldUpdateProjectWhenAModuleWithThePassingIdExists() {
         Module mockedOldItem = new Module();
         mockedOldItem.setId(1L);
         mockedOldItem.setPath("/dev/null");

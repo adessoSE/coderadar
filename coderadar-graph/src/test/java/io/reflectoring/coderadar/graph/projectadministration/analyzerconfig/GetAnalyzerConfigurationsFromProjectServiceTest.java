@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repo
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.GetAnalyzerConfigurationsFromProjectService;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +19,7 @@ import java.util.LinkedList;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
+@DisplayName("Get analyzer configurations from project")
 class GetAnalyzerConfigurationsFromProjectServiceTest {
     @Mock
     private GetAnalyzerConfigurationsFromProjectRepository getAnalyzerConfigurationsFromProjectRepository;
@@ -29,13 +31,15 @@ class GetAnalyzerConfigurationsFromProjectServiceTest {
     private GetAnalyzerConfigurationsFromProjectService getAnalyzerConfigurationsFromProjectService;
 
     @Test
-    void withNoPersistedProjectShouldThrowProjectNotFoundException() {
+    @DisplayName("Should throw exception when a project with the passing ID doesn't exists")
+    void shouldThrowExceptionWhenAProjectWithThePassingIdDoesntExists() {
         org.junit.jupiter.api.Assertions.assertThrows(
                 ProjectNotFoundException.class, () -> getAnalyzerConfigurationsFromProjectService.get(1L));
     }
 
     @Test
-    void withNoAnalyzerConfigurationsShouldReturnEmptyList() {
+    @DisplayName("Should return empty list when no analyzer configurations in the project exist")
+    void shouldReturnEmptyListWhenNoAnalyzerConfigurationsInTheProjectExist() {
         Project mockedProject = new Project();
         when(getProjectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
         when(getAnalyzerConfigurationsFromProjectRepository.findByProject_Id(1L)).thenReturn(new LinkedList<>());
@@ -46,7 +50,8 @@ class GetAnalyzerConfigurationsFromProjectServiceTest {
     }
 
     @Test
-    void withOnePersistedAnalyzerConfigurationsShouldReturnListOfSizeOne() {
+    @DisplayName("Should return list of size of one when one analyzer configuration in the project exists")
+    void shouldReturnListOfSizeOfOneWhenOneAnalyzerConfigurationInTheProjectExists() {
         Project mockedProject = new Project();
         LinkedList<AnalyzerConfiguration> mockedAnalyzerConfigurations = new LinkedList<>();
         mockedAnalyzerConfigurations.add(new AnalyzerConfiguration());
@@ -59,7 +64,8 @@ class GetAnalyzerConfigurationsFromProjectServiceTest {
     }
 
     @Test
-    void withTwoPersistedAnalyzerConfigurationsShouldReturnListOfSizeTwo() {
+    @DisplayName("Should return list of size of two when two analyzer configurations in the project exist")
+    void shouldReturnListOfSizeOfTwoWhenTwoAnalzerConfigurationsInTheProjectExist() {
         Project mockedProject = new Project();
         LinkedList<AnalyzerConfiguration> mockedAnalyzerConfigurations = new LinkedList<>();
         mockedAnalyzerConfigurations.add(new AnalyzerConfiguration());

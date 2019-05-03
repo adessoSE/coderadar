@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.graph.analyzer;
 
 import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +15,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
+@DisplayName("Get analyzing status")
 class GetAnalyzingStatusServiceTest {
     @Mock
     private GetAnalyzingStatusRepository getAnalyzingStatusRepository;
@@ -22,7 +24,8 @@ class GetAnalyzingStatusServiceTest {
     private GetAnalyzingStatusService getanalyzingStatusService;
 
     @Test
-    void withAnalyzingJobIdShouldReturnAnalyzingJobEntityAsOptional() {
+    @DisplayName("Should return analyzing job as optional when a analyzing job exists in the project with the passing ID")
+    void shouldReturnAnalyzingJobAsOptionalWhenAAnalyzingJobExistsInTheProjectWithThePassingId() {
         AnalyzingJob mockedItem = new AnalyzingJob();
         mockedItem.setId(1L);
         when(getAnalyzingStatusRepository.findByProject_Id(any(Long.class))).thenReturn(Optional.of(mockedItem));
@@ -36,7 +39,8 @@ class GetAnalyzingStatusServiceTest {
     }
 
     @Test
-    void withNoPersistedAnalyzingJobShouldReturnEmptyOptional() {
+    @DisplayName("Should return analyzing job as empty optional when a analyzing job doesn't exists in the project with the passing ID")
+    void shouldReturnAnalyzingJobAsEmptyOptionalWhenAAnalyzingJobDoesntExistsInTheProjectWithThePassingId() {
         Optional<AnalyzingJob> mockedItem = Optional.empty();
         when(getAnalyzingStatusRepository.findByProject_Id(any(Long.class))).thenReturn(mockedItem);
 

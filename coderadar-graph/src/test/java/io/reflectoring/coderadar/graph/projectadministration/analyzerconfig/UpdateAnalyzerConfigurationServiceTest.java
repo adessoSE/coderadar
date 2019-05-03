@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repo
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.UpdateAnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.UpdateAnalyzerConfigurationService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
+@DisplayName("Update analyzer configuration")
 class UpdateAnalyzerConfigurationServiceTest {
     @Mock
     private UpdateAnalyzerConfigurationRepository updateAnalyzerConfigurationRepository;
@@ -29,13 +31,15 @@ class UpdateAnalyzerConfigurationServiceTest {
     private UpdateAnalyzerConfigurationService updateAnalyzerConfigurationService;
 
     @Test
-    void withNoPersistedAnalyzerConfigurationShouldThrowAnalyzerConfigurationNotFoundException() {
+    @DisplayName("Should throw exception when a analyzer configuration with the passing ID doesn't exists")
+    void shouldThrowExceptionWhenAAnalyzerConfigurationWithThePassingIdDoesntExists() {
         Assertions.assertThrows(
                 AnalyzerConfigurationNotFoundException.class, () -> updateAnalyzerConfigurationService.update(new AnalyzerConfiguration()));
     }
 
     @Test
-    void withPersistedAnalyzerConfigurationShouldUpdateAnalyzerConfiguration() {
+    @DisplayName("Should update analyzer configuration when a analyzer configuration with the passing ID exists")
+    void shouldUpdateAnalyzerConfigurationWhenAAnalyzerConfigurationWithThePassingIdExists() {
         AnalyzerConfiguration mockedOldItem = new AnalyzerConfiguration();
         mockedOldItem.setId(1L);
         mockedOldItem.setAnalyzerName("LoC");

@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repo
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.AddAnalyzerConfigurationService;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,6 +19,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
+@DisplayName("Add analyzer configuration")
 class AddAnalyzerConfigurationServiceTest {
     @Mock
     private AddAnalyzerConfigurationRepository addAnalyzerConfigurationRepository;
@@ -29,13 +31,15 @@ class AddAnalyzerConfigurationServiceTest {
     private AddAnalyzerConfigurationService addAnalyzerConfigurationService;
 
     @Test
-    void withNoPersistedProjectShouldThrowProjectNotFoundException() {
+    @DisplayName("Should throw exception when a project with the passing ID doesn't exists")
+    void shouldThrowExceptionWhenAProjectWithThePassingIdDoesntExists() {
         Assertions.assertThrows(
                 ProjectNotFoundException.class, () -> addAnalyzerConfigurationService.add(1L, new AnalyzerConfiguration()));
     }
 
     @Test
-    void withValidEntityShouldReturnIdFromPersistedEntity() {
+    @DisplayName("Should return ID when saving an analyzer configuration")
+    void shouldReturnIdWhenSavingAnAnalyzerConfiguration() {
         AnalyzerConfiguration mockItem = new AnalyzerConfiguration();
         mockItem.setId(10L);
         Project mockProject = new Project();

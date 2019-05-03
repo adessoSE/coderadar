@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfi
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.GetAnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.GetAnalyzerConfigurationService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
+@DisplayName("Get analyzer configuration")
 class GetAnalyzerConfigurationServiceTest {
     @Mock
     private GetAnalyzerConfigurationRepository getAnalyzerConfigurationRepository;
@@ -24,7 +26,8 @@ class GetAnalyzerConfigurationServiceTest {
     private GetAnalyzerConfigurationService getAnalyzerConfigurationService;
 
     @Test
-    void withAnalyzerConfigurationIdShouldReturnAnalyzerConfigurationEntityAsOptional() {
+    @DisplayName("Should return analyzer configuration as optional when a analyzer configuration with the passing ID exists")
+    void shouldReturnAnalzerConfigurationAsOptionalWhenAAnalzerConfigurationWithThePassingIdExists() {
         AnalyzerConfiguration mockedItem = new AnalyzerConfiguration();
         mockedItem.setId(1L);
         when(getAnalyzerConfigurationRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedItem));
@@ -38,7 +41,8 @@ class GetAnalyzerConfigurationServiceTest {
     }
 
     @Test
-    void withNoPersistedAnalyzerConfigurationShouldReturnEmptyOptional() {
+    @DisplayName("Should return analyzer configuration as empty optional when a analyzer configuration with the passing ID doesn't exists")
+    void shouldReturnAnalyzerConfigurationAsEmptyOptionalWhenAAnalzerConfigurationWithThePassingIdDoesntExists() {
         Optional<AnalyzerConfiguration> mockedItem = Optional.empty();
         when(getAnalyzerConfigurationRepository.findById(any(Long.class))).thenReturn(mockedItem);
 

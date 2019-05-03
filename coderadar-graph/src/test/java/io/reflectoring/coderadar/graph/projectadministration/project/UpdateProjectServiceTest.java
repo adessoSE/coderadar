@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.UpdateProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.service.UpdateProjectService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
+@DisplayName("Update project")
 class UpdateProjectServiceTest {
     @Mock
     private GetProjectRepository getProjectRepository;
@@ -28,26 +30,15 @@ class UpdateProjectServiceTest {
     private UpdateProjectService updateProjectService;
 
     @Test
-    void withInvalidProjectIdShouldThrowProjectNotFoundException() {
+    @DisplayName("Should throw exception when a project with the passing ID doesn't exists")
+    void shouldThrowExceptionWhenAProjectWithThePassingIdDoesntExists() {
         Assertions.assertThrows(
                 ProjectNotFoundException.class, () -> updateProjectService.update(new Project()));
     }
 
     @Test
-    void withValidArgumentShouldCallMethodOfRepositoryToGetOldProject() {
-        Project mockedItem = new Project();
-        mockedItem.setId(1L);
-        when(getProjectRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedItem));
-
-        Project project = new Project();
-        project.setId(1L);
-        updateProjectService.update(project);
-
-        verify(getProjectRepository, times(1)).findById(1L);
-    }
-
-    @Test
-    void withValidArgumentShouldCallMethodOfRepositoryToUpdateProject() {
+    @DisplayName("Should update project when a project with the passing ID exists")
+    void shouldUpdateProjectWhenAProjectWithThePassingIdExists() {
         Project mockedOldItem = new Project();
         mockedOldItem.setId(1L);
         mockedOldItem.setName("Mustermann");

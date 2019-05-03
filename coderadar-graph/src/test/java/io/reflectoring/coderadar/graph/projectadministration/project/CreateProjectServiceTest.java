@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.service.CreateProjectService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
+@DisplayName("Create project")
 class CreateProjectServiceTest {
     @Mock
     private CreateProjectRepository createProjectRepository;
@@ -21,15 +23,19 @@ class CreateProjectServiceTest {
     private CreateProjectService createProjectService;
 
     @Test
-    void withValidArgumentShouldCallCreateProjectMethodOfRepository() {
+    @DisplayName("Should save project when passing a valid project entity")
+    void shouldSaveProjectWhenPassingAValidProjectEntity() {
         Project project = new Project();
         when(createProjectRepository.save(project)).thenReturn(project);
+
         createProjectService.createProject(project);
+
         verify(createProjectRepository, times(1)).save(project);
     }
 
     @Test
-    void withCreatedProjectShouldReturnProjectWithId() {
+    @DisplayName("Should return ID when saving project")
+    void shouldReturnIdWhenSavingProject() {
         Project mockedItem = new Project();
         mockedItem.setId(1L);
         Project newItem = new Project();
