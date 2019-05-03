@@ -1,66 +1,69 @@
 package io.reflectoring.coderadar.graph.projectadministration.project;
 
-import static org.mockito.Mockito.*;
-
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.graph.exception.InvalidArgumentException;
 import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.UpdateProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.service.UpdateProjectService;
-import java.util.Optional;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+import java.util.Optional;
+
+import static org.mockito.Mockito.*;
+
+@ExtendWith(SpringExtension.class)
 public class UpdateProjectServiceTest {
-  @Mock private GetProjectRepository getProjectRepository;
+    @Mock
+    private GetProjectRepository getProjectRepository;
 
-  @Mock private UpdateProjectRepository updateProjectRepository;
+    @Mock
+    private UpdateProjectRepository updateProjectRepository;
 
-  @InjectMocks private UpdateProjectService updateProjectService;
+    @InjectMocks
+    private UpdateProjectService updateProjectService;
 
-  @Test
-  public void withInvalidProjectIdShouldThrowProjectNotFoundException() {
-    Assertions.assertThrows(
-        ProjectNotFoundException.class, () -> updateProjectService.update(new Project()));
-  }
+    @Test
+    public void withInvalidProjectIdShouldThrowProjectNotFoundException() {
+        Assertions.assertThrows(
+                ProjectNotFoundException.class, () -> updateProjectService.update(new Project()));
+    }
 
-  @Test
-  public void withValidArgumentShouldCallMethodOfRepositoryToGetOldProject() {
-    Project mockedItem = new Project();
-    mockedItem.setId(1L);
-    when(getProjectRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedItem));
+    @Test
+    public void withValidArgumentShouldCallMethodOfRepositoryToGetOldProject() {
+        Project mockedItem = new Project();
+        mockedItem.setId(1L);
+        when(getProjectRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedItem));
 
-    Project project = new Project();
-    project.setId(1L);
-    updateProjectService.update(project);
+        Project project = new Project();
+        project.setId(1L);
+        updateProjectService.update(project);
 
-    verify(getProjectRepository, times(1)).findById(1L);
-  }
+        verify(getProjectRepository, times(1)).findById(1L);
+    }
 
-  @Test
-  public void withValidArgumentShouldCallMethodOfRepositoryToUpdateProject() {
-    Project mockedOldItem = new Project();
-    mockedOldItem.setId(1L);
-    mockedOldItem.setName("Mustermann");
-    when(getProjectRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedOldItem));
+    @Test
+    public void withValidArgumentShouldCallMethodOfRepositoryToUpdateProject() {
+        Project mockedOldItem = new Project();
+        mockedOldItem.setId(1L);
+        mockedOldItem.setName("Mustermann");
+        when(getProjectRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedOldItem));
 
-    Project mockedItem = new Project();
-    mockedItem.setId(1L);
-    mockedItem.setName("Musterfrau");
-    when(updateProjectRepository.save(any(Project.class))).thenReturn(mockedItem);
+        Project mockedItem = new Project();
+        mockedItem.setId(1L);
+        mockedItem.setName("Musterfrau");
+        when(updateProjectRepository.save(any(Project.class))).thenReturn(mockedItem);
 
-    Project project = new Project();
-    project.setId(1L);
-    project.setName("Musterfrau");
-    updateProjectService.update(project);
+        Project project = new Project();
+        project.setId(1L);
+        project.setName("Musterfrau");
+        updateProjectService.update(project);
 
-    verify(updateProjectRepository, times(1)).save(mockedItem);
-    Assertions.assertNotEquals(mockedOldItem, project);
-  }
+        verify(updateProjectRepository, times(1)).save(mockedItem);
+        Assertions.assertNotEquals(mockedOldItem, project);
+    }
 }

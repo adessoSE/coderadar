@@ -1,23 +1,20 @@
 package io.reflectoring.coderadar.graph.analyzer;
 
 import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
-import io.reflectoring.coderadar.core.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.Date;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(SpringExtension.class)
 public class StartAnalyzingServiceTest {
     @Mock
     private StartAnalyzingRepository startAnalyzingRepository;
