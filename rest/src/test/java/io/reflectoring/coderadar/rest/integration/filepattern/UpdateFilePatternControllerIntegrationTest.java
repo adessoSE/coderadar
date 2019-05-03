@@ -7,10 +7,10 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.filepatt
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Test;
 
-public class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate {
+class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
-  public void updateFilePatternWithIdOne() throws Exception {
+  void updateFilePatternWithIdOne() throws Exception {
     UpdateFilePatternCommand command =
         new UpdateFilePatternCommand("**/*.java", InclusionType.EXCLUDE);
     mvc().perform(post("/projects/1/filePatterns/1").content(toJson(command)));

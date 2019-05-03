@@ -6,10 +6,10 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzer
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Test;
 
-public class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate {
+class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
-  public void createAnalyzerConfigurationSuccessfully() throws Exception {
+  void createAnalyzerConfigurationSuccessfully() throws Exception {
     CreateAnalyzerConfigurationCommand command =
         new CreateAnalyzerConfigurationCommand("analyer", true);
     mvc().perform(post("/projects/1/analyzers").content(toJson(command)));

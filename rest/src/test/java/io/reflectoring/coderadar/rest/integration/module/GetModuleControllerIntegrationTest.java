@@ -5,10 +5,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Test;
 
-public class GetModuleControllerIntegrationTest extends ControllerTestTemplate {
+class GetModuleControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
-  public void getModuleWithIdOne() throws Exception {
+  void getModuleWithIdOne() throws Exception {
     mvc().perform(get("/projects/1/modules/1"));
   }
 }

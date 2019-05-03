@@ -5,10 +5,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Test;
 
-public class ListFilePatternsOfProjectControllerIntegrationTest extends ControllerTestTemplate {
+class ListFilePatternsOfProjectControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
-  public void listAllFilePatternsOfProjectWithIdOne() throws Exception {
+  void listAllFilePatternsOfProjectWithIdOne() throws Exception {
     mvc().perform(get("/projects/1/filePatterns"));
   }
 }

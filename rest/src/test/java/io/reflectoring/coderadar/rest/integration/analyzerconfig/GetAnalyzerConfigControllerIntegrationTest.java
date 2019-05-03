@@ -5,10 +5,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Test;
 
-public class GetAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate {
+class GetAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
-  public void getAnalyzerConfigurationWithIdOne() throws Exception {
+  void getAnalyzerConfigurationWithIdOne() throws Exception {
     mvc().perform(get("/projects/1/analyzers/1"));
   }
 }
