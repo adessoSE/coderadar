@@ -17,7 +17,7 @@ public class DeleteProjectController {
     this.deleteProjectUseCase = deleteProjectUseCase;
   }
 
-  @DeleteMapping("/projects/{projectId}")
+  @DeleteMapping(path = "/projects/{projectId}")
   public ResponseEntity<String> deleteProject(@PathVariable Long projectId) {
     deleteProjectUseCase.delete(projectId);
     return new ResponseEntity<>(HttpStatus.OK);

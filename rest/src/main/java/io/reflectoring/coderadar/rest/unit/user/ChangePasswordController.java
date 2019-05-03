@@ -18,7 +18,7 @@ public class ChangePasswordController {
     this.changePasswordUseCase = changePasswordUseCase;
   }
 
-  @PostMapping("/user/password/change")
+  @PostMapping(path = "/user/password/change")
   public ResponseEntity<String> changePassword(@RequestBody ChangePasswordCommand command) {
     changePasswordUseCase.changePassword(command);
     return new ResponseEntity<>(HttpStatus.OK);

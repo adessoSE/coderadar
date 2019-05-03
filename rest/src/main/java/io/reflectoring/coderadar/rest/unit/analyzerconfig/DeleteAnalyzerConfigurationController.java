@@ -6,11 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/projects/{projectId}/analyzers")
 public class DeleteAnalyzerConfigurationController {
   private final DeleteAnalyzerConfigurationUseCase deleteAnalyzerConfigurationUseCase;
 
@@ -20,7 +18,7 @@ public class DeleteAnalyzerConfigurationController {
     this.deleteAnalyzerConfigurationUseCase = deleteAnalyzerConfigurationUseCase;
   }
 
-  @DeleteMapping("/{analyzerConfigurationId}")
+  @DeleteMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}")
   public ResponseEntity<String> deleteAnalyzerConfiguration(
       @PathVariable Long analyzerConfigurationId) {
     deleteAnalyzerConfigurationUseCase.deleteAnalyzerConfiguration(analyzerConfigurationId);

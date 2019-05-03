@@ -8,11 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/user")
 public class LoginUserController {
   private final LoginUserUseCase loginUserUseCase;
 
@@ -21,7 +19,7 @@ public class LoginUserController {
     this.loginUserUseCase = loginUserUseCase;
   }
 
-  @PostMapping("/auth")
+  @PostMapping(path = "/user/auth")
   public ResponseEntity<LoginUserResponse> login(@RequestBody LoginUserCommand command) {
     return new ResponseEntity<>(loginUserUseCase.login(command), HttpStatus.OK);
   }

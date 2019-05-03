@@ -1,12 +1,12 @@
 package org.wickedsource.coderadar.analyzer.checkstyle;
 
+import io.reflectoring.coderadar.plugin.api.AnalyzerException;
+import io.reflectoring.coderadar.plugin.api.FileMetrics;
+import io.reflectoring.coderadar.plugin.api.Metric;
 import java.io.IOException;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.wickedsource.coderadar.plugin.AnalyzerException;
-import org.wickedsource.coderadar.plugin.FileMetrics;
-import org.wickedsource.coderadar.plugin.Metric;
 
 public class CheckstyleSourceCodeFileAnalyzerPluginTest {
 

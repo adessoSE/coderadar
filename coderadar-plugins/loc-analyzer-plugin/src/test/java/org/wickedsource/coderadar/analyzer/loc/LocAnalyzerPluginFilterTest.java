@@ -1,8 +1,8 @@
 package org.wickedsource.coderadar.analyzer.loc;
 
+import io.reflectoring.coderadar.plugin.api.AnalyzerFileFilter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.wickedsource.coderadar.plugin.AnalyzerFileFilter;
 
 public class LocAnalyzerPluginFilterTest {
 

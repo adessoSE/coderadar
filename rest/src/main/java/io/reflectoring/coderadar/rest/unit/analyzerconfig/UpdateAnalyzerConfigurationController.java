@@ -20,7 +20,7 @@ public class UpdateAnalyzerConfigurationController {
     this.updateAnalyzerConfigurationUseCase = updateAnalyzerConfigurationUseCase;
   }
 
-  @PostMapping("/projects/{projectId}/analyzers/{analyzerConfigurationId}")
+  @PostMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}")
   public ResponseEntity<String> updateAnalyzerConfiguration(
       @RequestBody UpdateAnalyzerConfigurationCommand command,
       @PathVariable(name = "analyzerConfigurationId") Long analyzerConfigurationId) {

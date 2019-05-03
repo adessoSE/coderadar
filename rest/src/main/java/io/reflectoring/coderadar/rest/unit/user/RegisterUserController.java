@@ -7,11 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/user")
 public class RegisterUserController {
   private final RegisterUserUseCase registerUserUseCase;
 
@@ -20,7 +18,7 @@ public class RegisterUserController {
     this.registerUserUseCase = registerUserUseCase;
   }
 
-  @PostMapping("/registration")
+  @PostMapping(path = "/user/registration")
   public ResponseEntity<Long> register(@RequestBody RegisterUserCommand command) {
     return new ResponseEntity<>(registerUserUseCase.register(command), HttpStatus.CREATED);
   }

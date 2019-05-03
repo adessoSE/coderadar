@@ -18,7 +18,7 @@ public class GetProjectController {
     this.getProjectUseCase = getProjectUseCase;
   }
 
-  @GetMapping("/projects/{projectId}")
+  @GetMapping(path = "/projects/{projectId}")
   public ResponseEntity<GetProjectResponse> getProject(@PathVariable Long projectId) {
     return new ResponseEntity<>(getProjectUseCase.get(projectId), HttpStatus.OK);
   }

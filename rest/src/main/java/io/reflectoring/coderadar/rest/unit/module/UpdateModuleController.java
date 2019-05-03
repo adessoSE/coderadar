@@ -19,7 +19,7 @@ public class UpdateModuleController {
     this.updateModuleUseCase = updateModuleUseCase;
   }
 
-  @PostMapping("/projects/{projectId}/modules/{moduleId}")
+  @PostMapping(path = "/projects/{projectId}/modules/{moduleId}")
   public ResponseEntity<String> updateModule(
       @RequestBody UpdateModuleCommand command, @PathVariable(name = "moduleId") Long moduleId) {
     updateModuleUseCase.updateModule(command, moduleId);
