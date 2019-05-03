@@ -20,7 +20,7 @@ public class UpdateFilePatternController {
   }
 
   @PostMapping(path = "/projects/{projectId}/filePatterns/{filePatternId}")
-  public ResponseEntity<String> updateModule(
+  public ResponseEntity<String> updateFilePattern(
       @RequestBody UpdateFilePatternCommand command,
       @PathVariable(name = "filePatternId") Long filePatternId) {
     updateFilePatternForProjectUseCase.updateFilePattern(command, filePatternId);
