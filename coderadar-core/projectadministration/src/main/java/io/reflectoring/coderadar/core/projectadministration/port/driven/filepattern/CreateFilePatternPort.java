@@ -3,5 +3,5 @@ package io.reflectoring.coderadar.core.projectadministration.port.driven.filepat
 import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
 
 public interface CreateFilePatternPort {
-  FilePattern createFilePattern(FilePattern filePattern);
+  Long createFilePattern(FilePattern filePattern);
 }

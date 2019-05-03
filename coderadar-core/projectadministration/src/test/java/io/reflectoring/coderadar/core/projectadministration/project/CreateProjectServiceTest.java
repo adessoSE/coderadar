@@ -29,16 +29,17 @@ class CreateProjectServiceTest {
   void returnsNewProjectId() throws MalformedURLException {
     URL url = new URL("http://valid.url");
 
-    Project project = new Project();
-    project.setId(1L);
-    project.setName("project");
-    Mockito.when(createProjectPort.createProject(project)).thenReturn(project);
-
     CreateProjectCommand command =
         new CreateProjectCommand(
             "project", "username", "password", url, true, new Date(), new Date());
+
+    Project project = new Project();
+    project.setName("project");
+
+    Mockito.when(createProjectPort.createProject(project)).thenReturn(1L);
+
     Long projectId = testSubject.createProject(command);
 
-    Assertions.assertEquals(project.getId(), projectId);
+    Assertions.assertEquals(1L, projectId.longValue());
   }
 }

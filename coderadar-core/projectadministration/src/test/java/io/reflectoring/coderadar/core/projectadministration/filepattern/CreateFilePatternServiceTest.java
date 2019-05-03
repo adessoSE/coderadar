@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class CreateFilePatternServiceTest {
   @Mock private GetProjectPort getProjectPort;
   @Mock private CreateFilePatternPort createFilePatternPort;
+
   private CreateFilePatternService testSubject;
 
   @BeforeEach
@@ -37,13 +38,13 @@ class CreateFilePatternServiceTest {
     FilePattern filePattern = new FilePattern();
     filePattern.setPattern("**/*.java");
     filePattern.setInclusionType(InclusionType.INCLUDE);
-    filePattern.setId(1L);
-    Mockito.when(createFilePatternPort.createFilePattern(filePattern)).thenReturn(filePattern);
+    filePattern.setProject(project);
+    Mockito.when(createFilePatternPort.createFilePattern(filePattern)).thenReturn(1L);
 
     CreateFilePatternCommand command =
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     Long filePatternId = testSubject.createFilePattern(command, project.getId());
 
-    Assertions.assertEquals(filePattern.getId(), filePatternId);
+    Assertions.assertEquals(1L, filePatternId.longValue());
   }
 }

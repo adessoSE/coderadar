@@ -27,7 +27,6 @@ public class CreateFilePatternService implements CreateFilePatternUseCase {
     filePattern.setProject(getProjectPort.get(projectId));
     filePattern.setPattern(command.getPattern());
     filePattern.setInclusionType(command.getInclusionType());
-    filePattern = createFilePatternPort.createFilePattern(filePattern);
-    return filePattern.getId();
+    return createFilePatternPort.createFilePattern(filePattern);
   }
 }

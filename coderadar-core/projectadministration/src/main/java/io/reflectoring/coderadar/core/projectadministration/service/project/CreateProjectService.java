@@ -32,7 +32,6 @@ public class CreateProjectService implements CreateProjectUseCase {
     project.setName(command.getName());
     project.setWorkdirName(UUID.randomUUID().toString());
     project.setVcsCoordinates(coordinates);
-    project = createProjectPort.createProject(project);
-    return project.getId();
+    return createProjectPort.createProject(project);
   }
 }

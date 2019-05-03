@@ -34,14 +34,13 @@ class CreateModuleServiceTest {
     Mockito.when(getProjectPort.get(2L)).thenReturn(project);
 
     Module module = new Module();
-    module.setId(1L);
     module.setProject(project);
     module.setPath("module-path");
-    Mockito.when(createModulePort.createModule(module)).thenReturn(module);
+    Mockito.when(createModulePort.createModule(module)).thenReturn(1L);
 
     CreateModuleCommand command = new CreateModuleCommand("module-path");
     Long moduleId = testSubject.createModule(command, project.getId());
 
-    Assertions.assertEquals(module.getId(), moduleId);
+    Assertions.assertEquals(1L, moduleId.longValue());
   }
 }

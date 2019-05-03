@@ -25,7 +25,6 @@ public class CreateModuleService implements CreateModuleUseCase {
     Module module = new Module();
     module.setProject(getProjectPort.get(projectId));
     module.setPath(command.getPath());
-    module = createModulePort.createModule(module);
-    return module.getId();
+    return createModulePort.createModule(module);
   }
 }
