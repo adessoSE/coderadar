@@ -3,6 +3,8 @@ package io.reflectoring.coderadar.rest.unit.filepattern;
 import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,9 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @ExtendWith(SpringExtension.class)
 class ListFilePatternsOfProjectControllerTest {
 
@@ -24,8 +23,10 @@ class ListFilePatternsOfProjectControllerTest {
 
   @Test
   void returnsModulesForProjectWithIdOne() {
-    GetFilePatternResponse response1 = new GetFilePatternResponse(1L, "**/*.java", InclusionType.INCLUDE);
-    GetFilePatternResponse response2 = new GetFilePatternResponse(2L, "**/*.xml", InclusionType.EXCLUDE);
+    GetFilePatternResponse response1 =
+        new GetFilePatternResponse(1L, "**/*.java", InclusionType.INCLUDE);
+    GetFilePatternResponse response2 =
+        new GetFilePatternResponse(2L, "**/*.xml", InclusionType.EXCLUDE);
     List<GetFilePatternResponse> responses = new ArrayList<>();
     responses.add(response1);
     responses.add(response2);

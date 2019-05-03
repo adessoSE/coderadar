@@ -21,10 +21,12 @@ class UpdateFilePatternControllerTest {
 
   @Test
   void updateFilePatternWithIdOne() {
-    UpdateFilePatternCommand command = new UpdateFilePatternCommand("**/*.java", InclusionType.EXCLUDE);
+    UpdateFilePatternCommand command =
+        new UpdateFilePatternCommand("**/*.java", InclusionType.EXCLUDE);
     ResponseEntity<String> responseEntity = testSubject.updateFilePattern(command, 1L);
 
-    Mockito.verify(updateFilePatternForProjectUseCase, Mockito.times(1)).updateFilePattern(command, 1L);
+    Mockito.verify(updateFilePatternForProjectUseCase, Mockito.times(1))
+        .updateFilePattern(command, 1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
   }
