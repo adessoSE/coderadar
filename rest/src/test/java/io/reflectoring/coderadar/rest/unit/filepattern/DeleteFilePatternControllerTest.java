@@ -12,13 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class DeleteFilePatternControllerTest {
+class DeleteFilePatternControllerTest {
 
   @Mock private DeleteFilePatternFromProjectUseCase deleteFilePatternFromProjectUseCase;
   @InjectMocks private DeleteFilePatternController testSubject;
 
   @Test
-  public void deleteFilePatternWithIdOne() {
+  void deleteFilePatternWithIdOne() {
     ResponseEntity<String> responseEntity = testSubject.deleteFilePattern(1L);
 
     Mockito.verify(deleteFilePatternFromProjectUseCase, Mockito.times(1)).delete(1L);

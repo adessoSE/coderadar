@@ -13,13 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class RefreshTokenControllerTest {
+class RefreshTokenControllerTest {
 
   @Mock private RefreshTokenUseCase refreshTokenUseCase;
   @InjectMocks private RefreshTokenController testSubject;
 
   @Test
-  public void refreshTokenSuccessfully() {
+  void refreshTokenSuccessfully() {
     RefreshTokenCommand command = new RefreshTokenCommand("accessToken", "refreshToken");
     Mockito.when(refreshTokenUseCase.refreshToken(command)).thenReturn("newAccessToken");
     ResponseEntity<String> responseEntity = testSubject.refreshToken(command);

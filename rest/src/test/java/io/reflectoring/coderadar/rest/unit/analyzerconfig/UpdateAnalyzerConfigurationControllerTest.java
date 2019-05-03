@@ -13,13 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class UpdateAnalyzerConfigurationControllerTest {
+class UpdateAnalyzerConfigurationControllerTest {
 
   @Mock private UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase;
   @InjectMocks private UpdateAnalyzerConfigurationController testSubject;
 
   @Test
-  public void updateAnalyzerConfigurationWithIdOne() {
+  void updateAnalyzerConfigurationWithIdOne() {
     UpdateAnalyzerConfigurationCommand command =
         new UpdateAnalyzerConfigurationCommand("analyzer", true);
     ResponseEntity<String> responseEntity = testSubject.updateAnalyzerConfiguration(command, 1L);

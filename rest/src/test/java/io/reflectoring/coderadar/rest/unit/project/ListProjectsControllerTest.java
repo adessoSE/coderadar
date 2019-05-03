@@ -15,13 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class ListProjectsControllerTest {
+class ListProjectsControllerTest {
 
   @Mock private ListProjectsUseCase listProjectsUseCase;
   @InjectMocks private ListProjectsController testSubject;
 
   @Test
-  public void listAllProjects() {
+  void listAllProjects() {
     GetProjectResponse project1 = new GetProjectResponse();
     GetProjectResponse project2 = new GetProjectResponse();
     GetProjectResponse project3 = new GetProjectResponse();

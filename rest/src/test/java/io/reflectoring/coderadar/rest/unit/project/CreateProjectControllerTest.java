@@ -16,13 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class CreateProjectControllerTest {
+class CreateProjectControllerTest {
 
   @Mock private CreateProjectUseCase createProjectUseCase;
   @InjectMocks private CreateProjectController testSubject;
 
   @Test
-  public void createNewProjectSuccessfully() throws MalformedURLException {
+  void createNewProjectSuccessfully() throws MalformedURLException {
     URL url = new URL("http://valid.url");
     CreateProjectCommand command =
         new CreateProjectCommand(

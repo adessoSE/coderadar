@@ -6,13 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-public class ListModulesOfProjectControllerTest {
+class ListModulesOfProjectControllerTest {
 
   @Mock private ListModulesOfProjectUseCase listModulesOfProjectUseCase;
   @InjectMocks private ListModulesOfProjectController testSubject;
 
   @Test
-  public void returnsModulesForProjectWithIdOne() {
+  void returnsModulesForProjectWithIdOne() {
     Assertions.fail();
   }
 }

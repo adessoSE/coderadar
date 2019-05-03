@@ -13,13 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class CreateAnalyzerConfigurationControllerTest {
+class CreateAnalyzerConfigurationControllerTest {
 
   @Mock private CreateAnalyzerConfigurationUseCase createAnalyzerConfigurationUseCase;
   @InjectMocks private CreateAnalyzerConfigurationController testSubject;
 
   @Test
-  public void returnsIdOneForNewAnalyzerConfiguration() {
+  void returnsIdOneForNewAnalyzerConfiguration() {
     CreateAnalyzerConfigurationCommand command =
         new CreateAnalyzerConfigurationCommand("analyzer", true);
     Mockito.when(createAnalyzerConfigurationUseCase.create(command, 5L)).thenReturn(1L);

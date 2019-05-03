@@ -13,13 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class CreateModuleControllerTest {
+class CreateModuleControllerTest {
 
   @Mock private CreateModuleUseCase createModuleUseCase;
   @InjectMocks private CreateModuleController testSubject;
 
   @Test
-  public void createModuleSuccessfully() {
+  void createModuleSuccessfully() {
     CreateModuleCommand command = new CreateModuleCommand("module-path-test");
     Mockito.when(createModuleUseCase.createModule(command, 5L)).thenReturn(1L);
 

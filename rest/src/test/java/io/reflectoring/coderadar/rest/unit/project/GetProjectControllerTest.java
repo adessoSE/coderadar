@@ -13,13 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class GetProjectControllerTest {
+class GetProjectControllerTest {
 
   @Mock private GetProjectUseCase getProjectUseCase;
   @InjectMocks private GetProjectController testSubject;
 
   @Test
-  public void returnsProjectWithIdOne() {
+  void returnsProjectWithIdOne() {
     GetProjectResponse project = new GetProjectResponse();
     project.setId(1L);
 

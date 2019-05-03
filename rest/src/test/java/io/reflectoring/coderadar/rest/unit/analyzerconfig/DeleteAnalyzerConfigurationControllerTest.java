@@ -12,13 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class DeleteAnalyzerConfigurationControllerTest {
+class DeleteAnalyzerConfigurationControllerTest {
 
   @Mock private DeleteAnalyzerConfigurationUseCase deleteAnalyzerConfigurationUseCase;
   @InjectMocks private DeleteAnalyzerConfigurationController testSubject;
 
   @Test
-  public void deleteAnalyzerConfigurationWithIdOne() {
+  void deleteAnalyzerConfigurationWithIdOne() {
     ResponseEntity<String> responseEntity = testSubject.deleteAnalyzerConfiguration(1L);
 
     Mockito.verify(deleteAnalyzerConfigurationUseCase, Mockito.times(1))

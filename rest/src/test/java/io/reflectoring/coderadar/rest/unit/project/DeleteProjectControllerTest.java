@@ -12,13 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class DeleteProjectControllerTest {
+class DeleteProjectControllerTest {
 
   @Mock private DeleteProjectUseCase deleteProjectUseCase;
   @InjectMocks private DeleteProjectController testSubject;
 
   @Test
-  public void deleteProjectWithIdOne() {
+  void deleteProjectWithIdOne() {
     ResponseEntity<String> responseEntity = testSubject.deleteProject(1L);
     Mockito.verify(deleteProjectUseCase, Mockito.times(1)).delete(1L);
 

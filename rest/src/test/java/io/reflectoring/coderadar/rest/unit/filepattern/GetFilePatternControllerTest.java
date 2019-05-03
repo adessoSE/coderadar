@@ -14,13 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class GetFilePatternControllerTest {
+class GetFilePatternControllerTest {
 
   @Mock private GetFilePatternUseCase getFilePatternUseCase;
   @InjectMocks private GetFilePatternController testSubject;
 
   @Test
-  public void returnsFilePatternWithIdOne() {
+  void returnsFilePatternWithIdOne() {
     GetFilePatternResponse filePattern =
         new GetFilePatternResponse(1L, "**/*.java", InclusionType.INCLUDE);
 

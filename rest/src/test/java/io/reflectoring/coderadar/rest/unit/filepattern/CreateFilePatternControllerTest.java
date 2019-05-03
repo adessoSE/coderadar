@@ -14,13 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class CreateFilePatternControllerTest {
+class CreateFilePatternControllerTest {
 
   @Mock private CreateFilePatternUseCase createFilePatternUseCase;
   @InjectMocks private CreateFilePatternController testSubject;
 
   @Test
-  public void createFilePatternSuccessfully() {
+  void createFilePatternSuccessfully() {
     CreateFilePatternCommand command =
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     Mockito.when(createFilePatternUseCase.createFilePattern(command, 5L)).thenReturn(1L);

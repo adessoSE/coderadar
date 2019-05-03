@@ -13,13 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class UpdateModuleControllerTest {
+class UpdateModuleControllerTest {
 
   @Mock private UpdateModuleUseCase updateModuleUseCase;
   @InjectMocks private UpdateModuleController testSubject;
 
   @Test
-  public void updateModuleWithIdOne() {
+  void updateModuleWithIdOne() {
     UpdateModuleCommand command = new UpdateModuleCommand("new-path");
 
     ResponseEntity<String> responseEntity = testSubject.updateModule(command, 1L);

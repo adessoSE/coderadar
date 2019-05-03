@@ -13,13 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-public class LoadUserControllerTest {
+class LoadUserControllerTest {
 
   @Mock private LoadUserUseCase loadUserUseCase;
   @InjectMocks private LoadUserController testSubject;
 
   @Test
-  public void loadUserWithIdOne() {
+  void loadUserWithIdOne() {
     LoadUserResponse user = new LoadUserResponse("username");
 
     Mockito.when(loadUserUseCase.loadUser(1L)).thenReturn(user);
