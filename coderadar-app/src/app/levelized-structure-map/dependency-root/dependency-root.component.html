@@ -1,9 +1,7 @@
 <app-header id="header" [title]="'Structure Map'"></app-header>
-
-<div class="canvas-container">
-  <canvas id="canvas"></canvas>
-  <div id="dependencyTree">
-
-  </div>
+<label for="showAllDependencies">Show all Dependencies: </label>
+<input type="checkbox" #showAllDependencies id="showAllDependencies" checked>
+<div><canvas id="canvas"></canvas>
+  <div id="dependencyTree"></div>
   <input type="hidden" #input id="input">
 </div>

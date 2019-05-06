@@ -1,15 +1,16 @@
-let jsonData, rootOffset = 0;
+let jsonData;
 let ctx;
 let htmlBuffer = [];
+let checked;
 
 export function afterLoad() {
   let data = JSON.parse((document.getElementById('input') as HTMLInputElement).value);
   jsonData = data;
   buildRoot(data);
   document.getElementById('dependencyTree').innerHTML = htmlBuffer.join('');
+  checked = (document.getElementById('showAllDependencies') as HTMLInputElement).checked;
   ctx = (document.getElementById('canvas') as HTMLCanvasElement).getContext('2d');
-  // rootOffset = 19;
-  console.log(rootOffset);
+
   let toggler = document.getElementsByClassName('clickable');
   for (let i = 0; i < toggler.length; i++) {
     toggler[i].addEventListener('click', () => {
@@ -18,6 +19,11 @@ export function afterLoad() {
       loadDependencies(data);
     });
   }
+  document.getElementById('showAllDependencies').addEventListener('change', () => {
+    checked = (document.getElementById('showAllDependencies') as HTMLInputElement).checked;
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    loadDependencies(data);
+  });
   ctx.canvas.height = document.getElementById('dependencyTree').offsetHeight;
   ctx.canvas.width = document.getElementById('dependencyTree').offsetWidth;
   loadDependencies(data);
@@ -28,6 +34,7 @@ function loadDependencies(node) {
     for (let dependency of node.dependencies) {
       listDependencies(dependency, ctx);
     }
+    listDependencies(node.dependencies[0], ctx);
   }
   if (node.children.length > 0) {
     for (let child of node.children) {
@@ -37,9 +44,9 @@ function loadDependencies(node) {
 }
 
 function buildRoot(currentNode) {
-  htmlBuffer.push(`<table class="table__base">`);
-  htmlBuffer.push(`<tr><td id="${currentNode.packageName}" class="package package__base">` +
-    `<span class="${currentNode.children.length > 0 ? 'clickable' : ''}">${currentNode.filename}</span>`);
+  htmlBuffer.push(`<table class="list list__root active">`);
+  htmlBuffer.push(`<tr><td class="package package__base">` +
+    `<span id="${currentNode.packageName}" ${currentNode.children.length > 0 ? 'class="clickable"' : ''}>${currentNode.filename}</span>`);
 
   if (currentNode.children.length > 0) {
     htmlBuffer.push(`<table class="list nested">`);
@@ -50,9 +57,11 @@ function buildRoot(currentNode) {
 }
 
 function buildTree(currentNode) {
-  let layer = 0;
+  let layer = -1;
   htmlBuffer.push('<tr style="display: none">');
   for (const child of currentNode.children) {
+    if (child.packageName === 'org.wickedsource.coderadar.vcs.git.walk.CommitProcessor.java'){
+    }
     let classString;
     if (child.children.length > 0) {
       classString = 'package';
@@ -64,11 +73,11 @@ function buildTree(currentNode) {
     if (layer === child.layer) {
       // add in same row as child
       htmlBuffer.push(`<td class="${classString}">` +
-        `<span id="${child.packageName}" class="${child.children.length > 0 ? 'clickable' : ''}">${child.filename}</span>`);
+        `<span id="${child.packageName}" ${child.children.length > 0 ? 'class="clickable"' : ''}>${child.filename}</span>`);
     } else {
       // create new row
       htmlBuffer.push(`</tr><tr><td class="${classString}">` +
-        `<span id="${child.packageName}" class="${child.children.length > 0 ? 'clickable' : ''}">${child.filename}</span>`);
+        `<span id="${child.packageName}" ${child.children.length > 0 ? 'class="clickable"' : ''}>${child.filename}</span>`);
     }
     layer = child.layer;
     if (child.children.length > 0) {
@@ -98,10 +107,9 @@ function toggle(currentNode) {
       currentNode.nextSibling.classList.remove('active');
     }
   }
-
+  // set height of canvas to the height of dependencyTree after toggle
   ctx.canvas.height = document.getElementById('dependencyTree').offsetHeight;
   ctx.canvas.width = document.getElementById('dependencyTree').offsetWidth;
-  // set height of canvas
 }
 
 function listDependencies(currentNode, ctx) {
@@ -109,21 +117,34 @@ function listDependencies(currentNode, ctx) {
   // draw arrows to my dependencies and call this function for my dependencies
   if (currentNode.dependencies.length > 0) {
     currentNode.dependencies.forEach(dependency => {
-      console.log(`draw from ${currentNode.packageName} to ${dependency.packageName}`);
-      // find start for arrow
-      // find end for arrow
-      const end = findLastHTMLElement(dependency);
-      // draw arrow to dependency
-      // draw from start to end
+      // find last visible element for dependency as end
+      const end = findLastHTMLElement(dependency).parentNode;
+      // find last visible element for currentNode as start
+      let start = findLastHTMLElement(currentNode).parentNode;
 
-      let start = findLastHTMLElement(currentNode);
-      // console.log(start);
-      // console.log(end);
-      canvasArrow(ctx, start.offsetLeft, start.offsetTop - rootOffset + start.offsetHeight / 2,
-        end.offsetLeft + end.offsetWidth, end.offsetTop - rootOffset + end.offsetHeight / 2);
-      // call this function for dependency
-      if (dependency.dependencies.length > 0) {
-        listDependencies(dependency, ctx);
+      let startx = 0, starty = 0, endx = 0, endy = 0;
+      // calculate offsets across all parents for start and end
+      let tmp = start;
+      do {
+        startx += tmp.offsetLeft;
+        starty += tmp.offsetTop;
+        tmp = tmp.offsetParent;
+      } while (!tmp.classList.contains('list__root'));
+      tmp = end;
+      do {
+        endx += tmp.offsetLeft;
+        endy += tmp.offsetTop;
+        tmp = tmp.offsetParent;
+      } while (!tmp.classList.contains('list__root'));
+
+      // check if all dependencies or only 'circular' dependencies should be shown
+      if (!checked) {
+        // check if current dependency is 'circular'
+        if (starty >= endy) {
+          canvasArrow(ctx, startx, starty + start.offsetHeight / 2, endx + end.offsetWidth, endy + end.offsetHeight / 2);
+        }
+      } else {
+        canvasArrow(ctx, startx, starty + start.offsetHeight / 2, endx + end.offsetWidth, endy + end.offsetHeight / 2);
       }
     });
   }
@@ -142,36 +163,32 @@ function findLastHTMLElement(node) {
   return element;
 }
 
-function findDataNode(clickable) {
-  let filenameBits = clickable.id.split('.');
-
-  let dataNode = jsonData;
-  let beginIndex = filenameBits.findIndex((filenameBit) => {
-    return filenameBit === jsonData.filename;
-  });
-  let last = filenameBits.splice( -1, 1);
-  filenameBits[filenameBits.length - 1] += '.' + last;
-  for (let j = beginIndex; j < filenameBits.length; j++) {
-    dataNode.children.forEach(child => {
-      if (child.filename === filenameBits[j]) {
-        dataNode = child;
-      }
-    });
-  }
-  return dataNode;
-}
-
 function canvasArrow(context, fromx, fromy, tox, toy) {
-  // console.log(`draw arrow from (${fromx}|${fromy}) to (${tox}|${toy})`);
   const headlen = 10;
-  const angle = Math.atan2(toy - fromy, tox - fromx);
-  // draw line
+
+  // draw curved line
   context.beginPath();
   context.setLineDash([10]);
   context.moveTo(fromx, fromy);
-  context.lineTo(tox, toy);
+  // span right triangle with X, Y and Z with X = (fromx, fromy) and Y = (tox, toy) and Z as the point at the right angle
+  // calculate all sides x, y as the sides leading to the right angle
+  let x = Math.abs(fromx - tox), y = Math.abs(fromy - toy);
+  // calculate z with (zx, zy)
+  let zx, zy;
+  if (fromy <= toy) {
+    zx = Math.max(fromx, tox)-x;
+    zy = Math.max(fromy, toy);
+  } else {
+    zx = Math.max(fromx, tox);
+    zy = Math.min(fromy, toy)+y;
+  }
+
+  // draw quadratic curve from X over Z to Y
+  context.quadraticCurveTo(zx, zy, tox, toy);
   context.stroke();
 
+  // calculate angle for arrow head in relation to line
+  let angle = Math.atan2(toy - zy, tox - zx);
   // draw arrow head
   context.beginPath();
   context.moveTo(tox, toy);

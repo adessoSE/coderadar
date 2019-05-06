@@ -4,17 +4,8 @@
   z-index: -1;
 }
 
-ul {
-  list-style-type: none;
-  white-space: nowrap;
-}
-
 tr {
   vertical-align: top;
-}
-
-.canvas-container {
-  height: min-content;
 }
 
 .root-file {
@@ -30,6 +21,10 @@ tr {
   width: -moz-available;
 }
 
+.list__root {
+  padding: 0;
+}
+
 .package {
   -webkit-user-select: none; /* Safari 3.1+ */
   -moz-user-select: none; /* Firefox 2+ */
@@ -41,7 +36,6 @@ tr {
   -moz-border-radius: 5px;
   border-radius: 5px;
   width: max-content;
-  padding: 5px;
   margin: 5px;
 }
 
@@ -67,6 +61,7 @@ tr {
 .class {
   display: block;
   cursor: default;
+  margin: 6px;
 }
 
 .class:before {
@@ -83,6 +78,7 @@ tr {
   -ms-user-select: none; /* IE 10+ */
   user-select: none;
   display: block;
+  margin: 6px;
 }
 
 .class--dependency:before {
@@ -101,13 +97,9 @@ tr {
 }
 
 .package, .class, .class--dependency {
-  padding-left: 15px;
+  padding: 5px 5px 5px 15px;
   display: inline-block;
   text-align: left;
-}
-
-.activeDependency {
-  background-color: #49fb35;
 }
 
 .nested {
@@ -116,10 +108,6 @@ tr {
 
 .active {
   display: table;
-}
-
-.active__root {
-  display: grid;
 }
 
 .clickable {
