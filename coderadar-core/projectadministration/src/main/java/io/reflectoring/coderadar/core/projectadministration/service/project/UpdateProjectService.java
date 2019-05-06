@@ -1,12 +1,14 @@
 package io.reflectoring.coderadar.core.projectadministration.service.project;
 
-import io.reflectoring.coderadar.core.projectadministration.ProjectNotFound;
+import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.UpdateProjectCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.UpdateProjectUseCase;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +25,13 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   }
 
   @Override
-  public void update(UpdateProjectCommand command) {
-    Optional<Project> project = getProjectPort.get(command.getId());
+  public void update(UpdateProjectCommand command, Long projectId) {
+    Optional<Project> project = getProjectPort.get(projectId);
 
     if (project.isPresent()) {
       Project updatedProject = project.get();
       updatedProject.setName(command.getName());
-      updatedProject.setWorkdirName(command.getWorkdir());
+      updatedProject.setWorkdirName(UUID.randomUUID().toString());
       updatedProject.setVcsUrl(command.getVcsUrl());
       updatedProject.setVcsUsername(command.getVcsUsername());
       updatedProject.setVcsPassword(command.getVcsPassword());
@@ -38,7 +40,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       updatedProject.setVcsEnd(command.getEnd());
       updateProjectPort.update(updatedProject);
     } else {
-      throw new ProjectNotFound();
+      throw new ProjectNotFoundException();
     }
   }
 }

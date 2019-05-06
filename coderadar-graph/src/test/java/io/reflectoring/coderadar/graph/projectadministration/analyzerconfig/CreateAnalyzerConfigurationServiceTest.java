@@ -7,8 +7,8 @@ import static org.mockito.Mockito.*;
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
-import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AddAnalyzerConfigurationRepository;
-import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.AddAnalyzerConfigurationService;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.CreateAnalyzerConfigurationService;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -20,20 +20,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @DisplayName("Add analyzer configuration")
-class AddAnalyzerConfigurationServiceTest {
-  @Mock private AddAnalyzerConfigurationRepository addAnalyzerConfigurationRepository;
+class CreateAnalyzerConfigurationServiceTest {
+  @Mock private CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository;
 
-  @Mock private GetProjectRepository getProjectRepository;
-
-  @InjectMocks private AddAnalyzerConfigurationService addAnalyzerConfigurationService;
-
-  @Test
-  @DisplayName("Should throw exception when a project with the passing ID doesn't exists")
-  void shouldThrowExceptionWhenAProjectWithThePassingIdDoesntExists() {
-    Assertions.assertThrows(
-        ProjectNotFoundException.class,
-        () -> addAnalyzerConfigurationService.add(1L, new AnalyzerConfiguration()));
-  }
+  @InjectMocks private CreateAnalyzerConfigurationService createAnalyzerConfigurationService;
 
   @Test
   @DisplayName("Should return ID when saving an analyzer configuration")
@@ -42,17 +32,14 @@ class AddAnalyzerConfigurationServiceTest {
     mockItem.setId(10L);
     Project mockProject = new Project();
     mockProject.setId(1L);
-    when(getProjectRepository.findById(anyLong())).thenReturn(java.util.Optional.of(mockProject));
-    when(addAnalyzerConfigurationRepository.save(any(AnalyzerConfiguration.class)))
+    when(createAnalyzerConfigurationRepository.save(any(AnalyzerConfiguration.class)))
         .thenReturn(mockItem);
 
     AnalyzerConfiguration item = new AnalyzerConfiguration();
-    Long idFromItem = addAnalyzerConfigurationService.add(1L, item);
+    Long idFromItem = createAnalyzerConfigurationService.create(item);
 
-    verify(getProjectRepository, times(1)).findById(1L);
-    verify(addAnalyzerConfigurationRepository, times(1)).save(item);
-    verifyNoMoreInteractions(getProjectRepository);
-    verifyNoMoreInteractions(addAnalyzerConfigurationRepository);
+    verify(createAnalyzerConfigurationRepository, times(1)).save(item);
+    verifyNoMoreInteractions(createAnalyzerConfigurationRepository);
     org.assertj.core.api.Assertions.assertThat(idFromItem).isEqualTo(10L);
   }
 }

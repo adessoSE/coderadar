@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.analyzer.service;
 
 import io.reflectoring.coderadar.core.analyzer.AnalyzingJobNotStartedException;
-import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
 import io.reflectoring.coderadar.core.analyzer.port.driven.StopAnalyzingPort;
+import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzingJob;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.analyzer.repository.GetAnalyzingStatusRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.StopAnalyzingRepository;

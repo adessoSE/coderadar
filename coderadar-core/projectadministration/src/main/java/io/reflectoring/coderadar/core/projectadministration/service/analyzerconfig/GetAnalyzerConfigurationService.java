@@ -1,11 +1,14 @@
 package io.reflectoring.coderadar.core.projectadministration.service.analyzerconfig;
 
+import io.reflectoring.coderadar.core.projectadministration.AnalyzerConfigurationNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class GetAnalyzerConfigurationService implements GetAnalyzerConfigurationUseCase {
@@ -19,8 +22,13 @@ public class GetAnalyzerConfigurationService implements GetAnalyzerConfiguration
 
   @Override
   public GetAnalyzerConfigurationResponse getSingleAnalyzerConfiguration(Long id) {
-    AnalyzerConfiguration analyzerConfiguration = port.getAnalyzerConfiguration(id);
-    return new GetAnalyzerConfigurationResponse(
-        id, analyzerConfiguration.getAnalyzerName(), analyzerConfiguration.getEnabled());
+    Optional<AnalyzerConfiguration> analyzerConfiguration = port.getAnalyzerConfiguration(id);
+
+    if (analyzerConfiguration.isPresent()) {
+      return new GetAnalyzerConfigurationResponse(
+              id, analyzerConfiguration.get().getAnalyzerName(), analyzerConfiguration.get().getEnabled());
+    } else {
+      throw new AnalyzerConfigurationNotFoundException();
+    }
   }
 }

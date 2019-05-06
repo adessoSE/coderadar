@@ -12,27 +12,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CreateModuleService implements CreateModulePort {
-  private final GetProjectRepository getProjectRepository;
   private final CreateModuleRepository createModuleRepository;
 
   @Autowired
-  public CreateModuleService(
-      GetProjectRepository getProjectRepository, CreateModuleRepository createModuleRepository) {
-    this.getProjectRepository = getProjectRepository;
+  public CreateModuleService(CreateModuleRepository createModuleRepository) {
     this.createModuleRepository = createModuleRepository;
   }
 
   @Override
-  public Long createModule(Long projectId, Module module) {
-    Optional<Project> project = getProjectRepository.findById(1L);
-
-    if (project.isPresent()) {
-      module.setProject(project.get());
-      return createModuleRepository.save(module).getId();
-    } else {
-      throw new ProjectNotFoundException(
-          String.format(
-              "There is no project with the ID %d. Creation of module failed.", projectId));
-    }
+  public Long createModule(Module module) {
+    return createModuleRepository.save(module).getId();
   }
 }

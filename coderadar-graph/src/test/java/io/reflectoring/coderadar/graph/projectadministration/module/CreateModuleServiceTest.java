@@ -23,28 +23,19 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class CreateModuleServiceTest {
   @Mock private CreateModuleRepository createModuleRepository;
 
-  @Mock private GetProjectRepository getProjectRepository;
-
   @InjectMocks private CreateModuleService createModuleService;
-
-  @Test
-  @DisplayName("Should throw exception when a project with the passing ID doesn't exists")
-  void shouldThrowExceptionWhenAProjectWithThePassingIdDoesntExists() {
-    Assertions.assertThrows(
-        ProjectNotFoundException.class, () -> createModuleService.createModule(1L, new Module()));
-  }
 
   @Test
   @DisplayName("Should return ID when saving a module")
   void shouldReturnIdWhenSavingAModule() {
+    Project mockedProject = new Project();
     Module mockedItem = new Module();
     mockedItem.setId(1L);
+    mockedItem.setProject(mockedProject);
     Module newItem = new Module();
-    Project mockedProject = new Project();
-    when(getProjectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
     when(createModuleRepository.save(any(Module.class))).thenReturn(mockedItem);
 
-    Long returnedId = createModuleService.createModule(1L, newItem);
+    Long returnedId = createModuleService.createModule(newItem);
 
     verify(createModuleRepository, times(1)).save(newItem);
     verifyNoMoreInteractions(createModuleRepository);

@@ -22,11 +22,11 @@ public class UpdateModuleService implements UpdateModulePort {
   }
 
   @Override
-  public Module updateModule(Module module) {
+  public void updateModule(Module module) {
     Optional<Module> oldModule = getModuleRepository.findById(module.getId());
 
     if (oldModule.isPresent()) {
-      return updateModuleRepository.save(module);
+      updateModuleRepository.save(module);
     } else {
       throw new ModuleNotFoundException(
           String.format("There is no module with the ID %d. Updating failed.", module.getId()));

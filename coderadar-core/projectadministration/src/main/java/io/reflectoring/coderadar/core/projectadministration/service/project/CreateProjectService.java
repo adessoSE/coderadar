@@ -22,7 +22,7 @@ public class CreateProjectService implements CreateProjectUseCase {
   public Long createProject(CreateProjectCommand command) {
     Project project = new Project();
     project.setName(command.getName());
-    project.setWorkdirName(command.getWorkdir());
+    project.setWorkdirName(UUID.randomUUID().toString());
     project.setVcsUrl(command.getVcsUrl());
     project.setVcsUsername(command.getVcsUsername());
     project.setVcsPassword(command.getVcsPassword());
