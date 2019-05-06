@@ -1,9 +1,9 @@
-package io.reflectoring.coderadar.graph.analyzer;
+package io.reflectoring.coderadar.graph.analyzer.service;
 
 import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
 import io.reflectoring.coderadar.core.analyzer.port.driven.StartAnalyzingPort;
-import io.reflectoring.coderadar.core.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
+import io.reflectoring.coderadar.graph.analyzer.repository.StartAnalyzingRepository;
 import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;

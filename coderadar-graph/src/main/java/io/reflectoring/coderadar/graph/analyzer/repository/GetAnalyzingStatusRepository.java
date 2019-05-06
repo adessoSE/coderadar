@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.graph.analyzer;
+package io.reflectoring.coderadar.graph.analyzer.repository;
 
 import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface GetAnalyzingStatusRepository extends Neo4jRepository<AnalyzingJob, Long> {
-    @Query() // TODO: Add query to find a AnalyzingJob in spezific project.
+    @Query()
+        // TODO: Add query to find a AnalyzingJob in spezific project.
     Optional<AnalyzingJob> findByProject_Id(Long projectId);
 }

@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.ser
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.AddAnalyzerConfigurationPort;
-import io.reflectoring.coderadar.graph.exception.InvalidArgumentException;
 import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AddAnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
@@ -25,7 +24,7 @@ public class AddAnalyzerConfigurationService implements AddAnalyzerConfiguration
 
     @Override
     public Long add(Long projectId, AnalyzerConfiguration entity) {
-        Optional<Project > persisted = getProjectRepository.findById(projectId);
+        Optional<Project> persisted = getProjectRepository.findById(projectId);
 
         if (persisted.isPresent()) {
             entity.setProject(persisted.get());

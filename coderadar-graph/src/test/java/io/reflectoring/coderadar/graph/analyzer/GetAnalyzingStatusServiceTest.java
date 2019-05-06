@@ -1,6 +1,8 @@
 package io.reflectoring.coderadar.graph.analyzer;
 
 import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
+import io.reflectoring.coderadar.graph.analyzer.repository.GetAnalyzingStatusRepository;
+import io.reflectoring.coderadar.graph.analyzer.service.GetAnalyzingStatusService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -8,20 +8,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DeleteProjectService implements DeleteProjectPort {
-  private final DeleteProjectRepository deleteProjectRepository;
+    private final DeleteProjectRepository deleteProjectRepository;
 
-  @Autowired
-  public DeleteProjectService(DeleteProjectRepository deleteProjectRepository) {
-    this.deleteProjectRepository = deleteProjectRepository;
-  }
+    @Autowired
+    public DeleteProjectService(DeleteProjectRepository deleteProjectRepository) {
+        this.deleteProjectRepository = deleteProjectRepository;
+    }
 
-  @Override
-  public void delete(Long id) {
-    deleteProjectRepository.deleteById(id);
-  }
+    @Override
+    public void delete(Long id) {
+        deleteProjectRepository.deleteById(id);
+    }
 
-  @Override
-  public void delete(Project project) {
-    deleteProjectRepository.delete(project);
-  }
+    @Override
+    public void delete(Project project) {
+        deleteProjectRepository.delete(project);
+    }
 }

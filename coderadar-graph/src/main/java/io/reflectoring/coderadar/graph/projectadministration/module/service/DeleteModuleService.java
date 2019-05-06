@@ -9,24 +9,24 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DeleteModuleService implements DeleteModulePort {
-  private final DeleteModuleRepository deleteModuleRepository;
-  private final DeleteProjectRepository deleteProjectRepository;
+    private final DeleteModuleRepository deleteModuleRepository;
+    private final DeleteProjectRepository deleteProjectRepository;
 
-  @Autowired
-  public DeleteModuleService(
-      DeleteModuleRepository deleteModuleRepository,
-      DeleteProjectRepository deleteProjectRepository) {
-    this.deleteModuleRepository = deleteModuleRepository;
-    this.deleteProjectRepository = deleteProjectRepository;
-  }
+    @Autowired
+    public DeleteModuleService(
+            DeleteModuleRepository deleteModuleRepository,
+            DeleteProjectRepository deleteProjectRepository) {
+        this.deleteModuleRepository = deleteModuleRepository;
+        this.deleteProjectRepository = deleteProjectRepository;
+    }
 
-  @Override
-  public void delete(Long id) {
-    deleteModuleRepository.deleteById(id);
-  }
+    @Override
+    public void delete(Long id) {
+        deleteModuleRepository.deleteById(id);
+    }
 
-  @Override
-  public void delete(Module module) {
-    deleteModuleRepository.delete(module);
-  }
+    @Override
+    public void delete(Module module) {
+        deleteModuleRepository.delete(module);
+    }
 }

@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @DisplayName("Update module")
- class UpdateModuleServiceTest {
+class UpdateModuleServiceTest {
     @Mock
     private UpdateModuleRepository updateModuleRepository;
 
@@ -32,14 +32,14 @@ import static org.mockito.Mockito.*;
 
     @Test
     @DisplayName("Should throw exception when a module with the passing ID doesn't exists")
-     void shouldThrowExceptionWhenAModuleWithThePassingIdDoesntExists() {
+    void shouldThrowExceptionWhenAModuleWithThePassingIdDoesntExists() {
         Assertions.assertThrows(
                 ModuleNotFoundException.class, () -> updateModuleService.updateModule(new Module()));
     }
 
     @Test
     @DisplayName("Should update project when a module with the passing ID exists")
-     void shouldUpdateProjectWhenAModuleWithThePassingIdExists() {
+    void shouldUpdateProjectWhenAModuleWithThePassingIdExists() {
         Module mockedOldItem = new Module();
         mockedOldItem.setId(1L);
         mockedOldItem.setPath("/dev/null");

@@ -2,6 +2,8 @@ package io.reflectoring.coderadar.graph.analyzer;
 
 import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
+import io.reflectoring.coderadar.graph.analyzer.repository.StartAnalyzingRepository;
+import io.reflectoring.coderadar.graph.analyzer.service.StartAnalyzingService;
 import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import org.junit.jupiter.api.Assertions;
