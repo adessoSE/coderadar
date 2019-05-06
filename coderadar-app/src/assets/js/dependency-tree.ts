@@ -31,10 +31,7 @@ export function afterLoad() {
 
 function loadDependencies(node) {
   if (node.dependencies.length > 0 && node.children.length === 0) {
-    for (let dependency of node.dependencies) {
-      listDependencies(dependency, ctx);
-    }
-    listDependencies(node.dependencies[0], ctx);
+    listDependencies(node, ctx);
   }
   if (node.children.length > 0) {
     for (let child of node.children) {
@@ -60,8 +57,6 @@ function buildTree(currentNode) {
   let layer = -1;
   htmlBuffer.push('<tr style="display: none">');
   for (const child of currentNode.children) {
-    if (child.packageName === 'org.wickedsource.coderadar.vcs.git.walk.CommitProcessor.java'){
-    }
     let classString;
     if (child.children.length > 0) {
       classString = 'package';
@@ -175,11 +170,17 @@ function canvasArrow(context, fromx, fromy, tox, toy) {
   let x = Math.abs(fromx - tox), y = Math.abs(fromy - toy);
   // calculate z with (zx, zy)
   let zx, zy;
-  if (fromy <= toy) {
+  if (fromx <= tox && fromy <= toy) {
     zx = Math.max(fromx, tox)-x;
     zy = Math.max(fromy, toy);
-  } else {
+  } else if (fromx <= tox && fromy > toy) {
     zx = Math.max(fromx, tox);
+    zy = Math.min(fromy, toy)+y;
+  } else if (fromx > tox && fromy <= toy) {
+    zx = Math.min(fromx, tox)+x;
+    zy = Math.max(fromy, toy);
+  } else if (fromx > tox && fromy > toy) {
+    zx = Math.min(fromx, tox);
     zy = Math.min(fromy, toy)+y;
   }
 
