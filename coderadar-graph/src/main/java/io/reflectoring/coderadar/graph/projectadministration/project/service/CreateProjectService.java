@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CreateProjectService implements CreateProjectPort {
-    private final CreateProjectRepository createProjectRepository;
+  private final CreateProjectRepository createProjectRepository;
 
-    @Autowired
-    public CreateProjectService(CreateProjectRepository createProjectRepository) {
-        this.createProjectRepository = createProjectRepository;
-    }
+  @Autowired
+  public CreateProjectService(CreateProjectRepository createProjectRepository) {
+    this.createProjectRepository = createProjectRepository;
+  }
 
-    @Override
-    public Long createProject(Project project) {
-        return createProjectRepository.save(project).getId();
-    }
+  @Override
+  public Long createProject(Project project) {
+    return createProjectRepository.save(project).getId();
+  }
 }

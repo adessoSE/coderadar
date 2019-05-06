@@ -18,13 +18,13 @@ public class YearPoint extends Point<Year, Long> {
   }
 
   @Override
-  public Long getY() {
-    return value;
+  public void setX(Year year) {
+    this.year = year;
   }
 
   @Override
-  public void setX(Year year) {
-    this.year = year;
+  public Long getY() {
+    return value;
   }
 
   @Override

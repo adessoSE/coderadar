@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.core.analyzer.port.driver;
 
-import lombok.Value;
-
 import java.util.Date;
+import lombok.Value;
 
 @Value
 public class StartAnalyzingCommand {

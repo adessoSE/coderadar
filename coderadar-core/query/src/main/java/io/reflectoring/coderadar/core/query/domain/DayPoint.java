@@ -33,13 +33,13 @@ public class DayPoint extends Point<Day, Long> {
     return day;
   }
 
+  public void setX(Day day) {
+    this.day = day;
+  }
+
   @Override
   public Long getY() {
     return value;
-  }
-
-  public void setX(Day day) {
-    this.day = day;
   }
 
   public void setY(Long value) {

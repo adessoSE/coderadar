@@ -5,5 +5,4 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ListProjectsRepository extends Neo4jRepository<Project, Long> {
-}
+public interface ListProjectsRepository extends Neo4jRepository<Project, Long> {}

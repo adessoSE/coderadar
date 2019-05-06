@@ -14,9 +14,9 @@ public abstract class Point<X, Y> {
 
   public abstract X getX();
 
-  public abstract Y getY();
-
   public abstract void setX(X x);
+
+  public abstract Y getY();
 
   public abstract void setY(Y y);
 

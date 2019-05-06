@@ -7,15 +7,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DeleteAnalyzerConfigurationService implements DeleteAnalyzerConfigurationPort {
-    private final DeleteAnalyzerConfigurationRepository deleteAnalyzerConfigurationRepository;
+  private final DeleteAnalyzerConfigurationRepository deleteAnalyzerConfigurationRepository;
 
-    @Autowired
-    public DeleteAnalyzerConfigurationService(DeleteAnalyzerConfigurationRepository deleteAnalyzerConfigurationRepository) {
-        this.deleteAnalyzerConfigurationRepository = deleteAnalyzerConfigurationRepository;
-    }
+  @Autowired
+  public DeleteAnalyzerConfigurationService(
+      DeleteAnalyzerConfigurationRepository deleteAnalyzerConfigurationRepository) {
+    this.deleteAnalyzerConfigurationRepository = deleteAnalyzerConfigurationRepository;
+  }
 
-    @Override
-    public void deleteAnalyzerConfiguration(Long id) {
-        deleteAnalyzerConfigurationRepository.deleteById(id);
-    }
+  @Override
+  public void deleteAnalyzerConfiguration(Long id) {
+    deleteAnalyzerConfigurationRepository.deleteById(id);
+  }
 }

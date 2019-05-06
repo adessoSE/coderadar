@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.core.analyzer.domain;
 
 import java.util.Date;
 import java.util.List;
-import javax.persistence.*;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;

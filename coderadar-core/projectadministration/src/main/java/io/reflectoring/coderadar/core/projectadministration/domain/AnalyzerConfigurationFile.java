@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
-import javax.persistence.*;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 

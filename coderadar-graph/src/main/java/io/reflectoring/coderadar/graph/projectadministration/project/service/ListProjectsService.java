@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ListProjectsService implements ListProjectsPort {
-    private final ListProjectsRepository listProjectsRepository;
+  private final ListProjectsRepository listProjectsRepository;
 
-    @Autowired
-    public ListProjectsService(ListProjectsRepository listProjectsRepository) {
-        this.listProjectsRepository = listProjectsRepository;
-    }
+  @Autowired
+  public ListProjectsService(ListProjectsRepository listProjectsRepository) {
+    this.listProjectsRepository = listProjectsRepository;
+  }
 
-    @Override
-    public Iterable<Project> getProjects() {
-        return listProjectsRepository.findAll();
-    }
+  @Override
+  public Iterable<Project> getProjects() {
+    return listProjectsRepository.findAll();
+  }
 }

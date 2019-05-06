@@ -3,10 +3,9 @@ package io.reflectoring.coderadar.core.analyzer.service;
 import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
 import io.reflectoring.coderadar.core.analyzer.port.driven.GetAnalyzingStatusPort;
 import io.reflectoring.coderadar.core.analyzer.port.driver.GetAnalyzingStatusUseCase;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class GetAnalyzingStatusService implements GetAnalyzingStatusUseCase {

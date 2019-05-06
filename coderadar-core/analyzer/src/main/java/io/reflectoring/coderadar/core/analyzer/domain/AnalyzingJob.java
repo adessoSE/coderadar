@@ -1,12 +1,8 @@
 package io.reflectoring.coderadar.core.analyzer.domain;
 
 import java.util.Date;
-import javax.persistence.*;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
-
-import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
 /**
  * A job that defines which commits are to be analyzed. Storing an entity of this type in the
@@ -28,5 +24,6 @@ public class AnalyzingJob {
    * queued will be performed, however.
    */
   private boolean active;
+
   private boolean rescan;
 }
