@@ -24,13 +24,13 @@ public class WeekPoint extends Point<Week, Long> {
   }
 
   @Override
-  public Long getY() {
-    return value;
+  public void setX(Week week) {
+    this.week = week;
   }
 
   @Override
-  public void setX(Week week) {
-    this.week = week;
+  public Long getY() {
+    return value;
   }
 
   @Override

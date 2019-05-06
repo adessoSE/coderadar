@@ -1,32 +1,20 @@
 package io.reflectoring.coderadar.core.analyzer.domain;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.neo4j.ogm.annotation.EndNode;
+import org.neo4j.ogm.annotation.RelationshipEntity;
+import org.neo4j.ogm.annotation.StartNode;
 
-@Entity
-@Table(name = "metric_value")
+@RelationshipEntity("HAS_VALUE")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class MetricValue {
+  private Long id;
 
-  @EmbeddedId private MetricValueId id;
+  @StartNode private File file;
 
-  private Long value;
-
-  public Commit getCommit() {
-    return id.getCommit();
-  }
-
-  public File getFile() {
-    return id.getFile();
-  }
-
-  public String getMetricName() {
-    return id.getMetricName();
-  }
+  @EndNode private Metric metric;
 }

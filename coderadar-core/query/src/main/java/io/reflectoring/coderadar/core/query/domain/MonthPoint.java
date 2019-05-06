@@ -18,13 +18,13 @@ public class MonthPoint extends Point<Month, Long> {
   }
 
   @Override
-  public Long getY() {
-    return value;
+  public void setX(Month month) {
+    this.month = month;
   }
 
   @Override
-  public void setX(Month month) {
-    this.month = month;
+  public Long getY() {
+    return value;
   }
 
   @Override

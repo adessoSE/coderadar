@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.core.analyzer.port.driven;
 
-import io.reflectoring.coderadar.core.analyzer.port.driver.StartAnalyzingCommand;
+import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
 
 public interface StartAnalyzingPort {
-  void start(StartAnalyzingCommand command);
+  Long start(Long projectId, AnalyzingJob analyzingJob);
 }

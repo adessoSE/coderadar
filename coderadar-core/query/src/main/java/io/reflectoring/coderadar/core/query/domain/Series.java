@@ -14,12 +14,12 @@ public class Series<X, Y> {
     this.points = points;
   }
 
-  public void setPoints(List<Point<X, Y>> points) {
-    this.points = points;
-  }
-
   public List<Point<X, Y>> getPoints() {
     return points;
+  }
+
+  public void setPoints(List<Point<X, Y>> points) {
+    this.points = points;
   }
 
   public void addPoint(Point<X, Y> point) {

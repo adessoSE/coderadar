@@ -1,30 +1,22 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
-import javax.persistence.*;
+import static org.neo4j.ogm.annotation.Relationship.INCOMING;
+
 import lombok.Data;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
 
 /** An AnalyzerConfiguration stores the configuration for a single analyzer plugin in a project. */
-@Entity
-@Table(name = "analyzer_configuration")
-@SequenceGenerator(
-  name = "analyzer_configuration_sequence",
-  sequenceName = "seq_acon_id",
-  allocationSize = 1
-)
+@NodeEntity
 @Data
 public class AnalyzerConfiguration {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "analyzer_configuration_sequence")
-  @Column(name = "id")
   private Long id;
+  private String analyzerName;
+  private Boolean enabled;
 
-  @ManyToOne
-  @JoinColumn(name = "project_id")
+  @Relationship(direction = INCOMING)
   private Project project;
 
-  @Column(name = "analyzer_name")
-  private String analyzerName;
-
-  @Column(name = "enabled")
-  private Boolean enabled;
+  @Relationship("CONTENT_FROM")
+  private AnalyzerConfigurationFile analyzerConfigurationFile;
 }

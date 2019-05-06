@@ -1,0 +1,13 @@
+apply plugin: "com.diffplug.gradle.spotless"
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}
+
+dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-neo4j', version: '2.1.4.RELEASE'
+    compile project(":coderadar-core:query")
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.4.RELEASE'
+}

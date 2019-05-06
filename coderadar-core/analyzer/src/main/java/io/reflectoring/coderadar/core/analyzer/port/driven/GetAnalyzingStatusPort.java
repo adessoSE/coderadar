@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.core.analyzer.port.driven;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzingJob;
+import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
+import java.util.Optional;
 
 public interface GetAnalyzingStatusPort {
-  AnalyzingJob get(Long projectId);
+  Optional<AnalyzingJob> get(Long projectId);
 }

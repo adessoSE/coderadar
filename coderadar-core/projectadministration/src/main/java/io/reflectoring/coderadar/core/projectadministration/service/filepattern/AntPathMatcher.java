@@ -76,20 +76,13 @@ public class AntPathMatcher {
   private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{[^/]+?\\}");
 
   private static final char[] WILDCARD_CHARS = {'*', '?', '{'};
-
-  private String pathSeparator;
-
-  private PathSeparatorPatternCache pathSeparatorPatternCache;
-
-  private boolean caseSensitive = true;
-
-  private boolean trimTokens = true;
-
-  private volatile Boolean cachePatterns;
-
   private final Map<String, String[]> tokenizedPatternCache = new ConcurrentHashMap<>(256);
-
   private final Map<String, AntPathStringMatcher> stringMatcherCache = new ConcurrentHashMap<>(256);
+  private String pathSeparator;
+  private PathSeparatorPatternCache pathSeparatorPatternCache;
+  private boolean caseSensitive = true;
+  private boolean trimTokens = true;
+  private volatile Boolean cachePatterns;
 
   /** Create a new instance with the {@link #DEFAULT_PATH_SEPARATOR}. */
   public AntPathMatcher() {

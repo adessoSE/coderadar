@@ -103,6 +103,7 @@ dependencies {
     compile project(":coderadar-core:projectadministration")
     compile project(":coderadar-core:query")
     compile project(":coderadar-core:analyzer")
+    compile project(":coderadar-graph")
 
     runtime "mysql:mysql-connector-java:5.1.6"
     runtime "org.postgresql:postgresql:42.2.5"

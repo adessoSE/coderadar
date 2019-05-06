@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class Finding {
 
-  @EmbeddedId private MetricValueId id;
+  @EmbeddedId private MetricValue id;
 
   @Column(name = "line_start")
   private Integer lineStart;
