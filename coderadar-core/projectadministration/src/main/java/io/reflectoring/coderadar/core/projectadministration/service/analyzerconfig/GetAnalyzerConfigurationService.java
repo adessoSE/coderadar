@@ -26,7 +26,9 @@ public class GetAnalyzerConfigurationService implements GetAnalyzerConfiguration
 
     if (analyzerConfiguration.isPresent()) {
       return new GetAnalyzerConfigurationResponse(
-              id, analyzerConfiguration.get().getAnalyzerName(), analyzerConfiguration.get().getEnabled());
+          id,
+          analyzerConfiguration.get().getAnalyzerName(),
+          analyzerConfiguration.get().getEnabled());
     } else {
       throw new AnalyzerConfigurationNotFoundException();
     }

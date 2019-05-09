@@ -36,7 +36,7 @@ public class CreateFilePatternService implements CreateFilePatternUseCase {
       filePattern.setInclusionType(command.getInclusionType());
       return createFilePatternPort.createFilePattern(filePattern);
     } else {
-      throw new ProjectNotFoundException();
+      throw new ProjectNotFoundException(projectId);
     }
   }
 }

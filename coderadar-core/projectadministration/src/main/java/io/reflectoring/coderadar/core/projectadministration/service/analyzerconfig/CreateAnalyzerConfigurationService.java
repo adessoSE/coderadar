@@ -6,12 +6,12 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
-import java.util.Optional;
-
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service("CreateAnalyzerConfigurationService")
 public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigurationUseCase {
@@ -22,7 +22,7 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
 
   @Autowired
   public CreateAnalyzerConfigurationService(
-          CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort,
+      CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort,
       UpdateProjectPort updateProjectPort,
       GetProjectPort getProjectPort) {
     this.createAnalyzerConfigurationPort = createAnalyzerConfigurationPort;
@@ -35,14 +35,12 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
     AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
     analyzerConfiguration.setEnabled(command.getEnabled());
     analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
-
-    Optional<Project> project = getProjectPort.get(projectId);
-
-    if (project.isPresent()) {
-      analyzerConfiguration.setProject(project.get());
+    Optional<Project> projectOptional = getProjectPort.get(projectId);
+    if (projectOptional.isPresent()) {
+      analyzerConfiguration.setProject(projectOptional.get());
       return createAnalyzerConfigurationPort.create(analyzerConfiguration);
     } else {
-      throw new ProjectNotFoundException();
+      throw new ProjectNotFoundException(projectId);
     }
   }
 }

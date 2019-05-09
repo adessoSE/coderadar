@@ -6,9 +6,10 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzer
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service("UpdateAnalyzerConfigurationService")
 public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigurationUseCase {
@@ -27,7 +28,7 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
   @Override
   public void update(UpdateAnalyzerConfigurationCommand command, Long analyzerId) {
     Optional<AnalyzerConfiguration> analyzerConfiguration =
-            getAnalyzerConfigurationPort.getAnalyzerConfiguration(analyzerId);
+        getAnalyzerConfigurationPort.getAnalyzerConfiguration(analyzerId);
 
     if (analyzerConfiguration.isPresent()) {
       AnalyzerConfiguration newAnalyzerConfiguration = analyzerConfiguration.get();
@@ -36,7 +37,7 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
       updateAnalyzerConfigurationPort.update(newAnalyzerConfiguration);
     } else {
       throw new AnalyzerConfigurationNotFoundException(
-              "Can't update a not persisted analyzer configuration.");
+          "Can't update a not persisted analyzer configuration.");
     }
   }
 }

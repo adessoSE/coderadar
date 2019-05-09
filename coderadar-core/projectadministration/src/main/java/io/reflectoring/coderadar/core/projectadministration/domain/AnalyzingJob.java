@@ -11,11 +11,11 @@ import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 @Data
 @NodeEntity
 public class AnalyzingJob {
-    private Long id;
-    private Date from; // TODO: Maybe use date converter.
-    private boolean active;
-    private boolean rescan;
+  private Long id;
+  private Date from; // TODO: Maybe use date converter.
+  private boolean active;
+  private boolean rescan;
 
-    @Relationship(direction = INCOMING)
-    private Project project;
+  @Relationship(direction = INCOMING)
+  private Project project;
 }

@@ -1,8 +1,5 @@
 package io.reflectoring.coderadar.graph.analyzer;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
-
 import io.reflectoring.coderadar.core.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzingJob;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
@@ -20,6 +17,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Date;
 
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
+
 @ExtendWith(SpringExtension.class)
 @DisplayName("Start analyzing")
 class StartAnalyzingServiceTest {
@@ -33,7 +33,8 @@ class StartAnalyzingServiceTest {
   @DisplayName("Should throw exception when a project with the passing ID doesn't exists")
   void shouldThrowExceptionWhenAProjectWithThePassingIdDoesntExists() {
     Assertions.assertThrows(
-        ProjectNotFoundException.class, () -> startAnalyzingService.start(new StartAnalyzingCommand(1L, new Date(), true)));
+        ProjectNotFoundException.class,
+        () -> startAnalyzingService.start(new StartAnalyzingCommand(1L, new Date(), true)));
   }
 
   @Test

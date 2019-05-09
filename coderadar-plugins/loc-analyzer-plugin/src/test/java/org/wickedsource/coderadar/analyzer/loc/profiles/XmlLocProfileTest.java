@@ -1,10 +1,11 @@
 package org.wickedsource.coderadar.analyzer.loc.profiles;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import org.wickedsource.coderadar.analyzer.loc.Loc;
+
+import java.io.IOException;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class XmlLocProfileTest extends AbstractLocProfileTest {
 

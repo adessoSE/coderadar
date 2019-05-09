@@ -3,9 +3,10 @@ package io.reflectoring.coderadar.graph.projectadministration.project.service;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service("GetProjectServiceNeo4j")
 public class GetProjectService implements GetProjectPort {

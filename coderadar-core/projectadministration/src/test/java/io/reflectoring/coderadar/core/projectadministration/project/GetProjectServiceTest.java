@@ -5,8 +5,6 @@ import io.reflectoring.coderadar.core.projectadministration.domain.VcsCoordinate
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.core.projectadministration.service.project.GetProjectService;
-import java.net.MalformedURLException;
-import java.net.URL;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +12,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 @ExtendWith(SpringExtension.class)
 class GetProjectServiceTest {

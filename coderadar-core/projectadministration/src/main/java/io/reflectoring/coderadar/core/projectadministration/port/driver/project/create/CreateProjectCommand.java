@@ -1,8 +1,9 @@
 package io.reflectoring.coderadar.core.projectadministration.port.driver.project.create;
 
+import lombok.Value;
+
 import java.net.URL;
 import java.util.Date;
-import lombok.Value;
 
 @Value
 public class CreateProjectCommand {
