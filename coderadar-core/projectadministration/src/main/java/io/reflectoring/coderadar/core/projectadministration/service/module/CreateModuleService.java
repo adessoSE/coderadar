@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.core.projectadministration.service.module;
 
-import io.reflectoring.coderadar.core.projectadministration.ProjectNotFound;
+import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.CreateModulePort;
@@ -40,7 +40,7 @@ public class CreateModuleService implements CreateModuleUseCase {
       project.get().getModules().add(module);
       updateProjectPort.update(project.get());
     } else {
-      throw new ProjectNotFound();
+      throw new ProjectNotFoundException();
     }
 
     return id;

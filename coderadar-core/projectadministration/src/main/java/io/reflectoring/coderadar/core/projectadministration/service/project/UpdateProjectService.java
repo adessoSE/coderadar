@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.core.projectadministration.service.project;
 
-import io.reflectoring.coderadar.core.projectadministration.ProjectNotFound;
+import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
@@ -38,7 +38,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       updatedProject.setVcsEnd(command.getEnd());
       updateProjectPort.update(updatedProject);
     } else {
-      throw new ProjectNotFound();
+      throw new ProjectNotFoundException();
     }
   }
 }

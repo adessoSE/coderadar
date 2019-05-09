@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GetAnalyzingStatusRepository extends Neo4jRepository<AnalyzingJob, Long> {
   @Query()
-  // TODO: Add query to find a AnalyzingJob in spezific project.
+  // TODO: Add query to find a AnalyzingJob in specific project.
   Optional<AnalyzingJob> findByProject_Id(Long projectId);
 }

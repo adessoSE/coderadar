@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.core.projectadministration.service.analyzerconfig;
 
-import io.reflectoring.coderadar.core.projectadministration.ProjectNotFound;
+import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.AddAnalyzerConfigurationPort;
@@ -41,7 +41,7 @@ public class AddAnalyzerConfigurationService implements AddAnalyzerConfiguration
       project.get().getAnalyzerConfigurations().add(analyzerConfiguration);
       updateProjectPort.update(project.get());
     } else {
-      throw new ProjectNotFound();
+      throw new ProjectNotFoundException();
     }
 
     return addAnalyzerConfigurationPort.add(command.getProjectId(), analyzerConfiguration);

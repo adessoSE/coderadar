@@ -8,4 +8,4 @@ include 'coderadar-core:query'
 include 'coderadar-app'
 include 'rest'
 include 'coderadar-graph'
-
+include 'coderadar-core:vcs'
