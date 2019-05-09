@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.graph.analyzer.service;
 
-import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
 import io.reflectoring.coderadar.core.analyzer.port.driven.StartAnalyzingPort;
+import io.reflectoring.coderadar.core.analyzer.port.driver.StartAnalyzingCommand;
+import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzingJob;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.analyzer.repository.StartAnalyzingRepository;
 import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
@@ -24,10 +25,16 @@ public class StartAnalyzingService implements StartAnalyzingPort {
   }
 
   @Override
-  public Long start(Long projectId, AnalyzingJob analyzingJob) {
-    Optional<Project> persistedProject = getProjectRepository.findById(projectId);
+  public Long start(StartAnalyzingCommand command) {
+    AnalyzingJob analyzingJob = new AnalyzingJob();
+    analyzingJob.setRescan(command.getRescan());
+    analyzingJob.setFrom(command.getFrom());
+    analyzingJob.setActive(true);
+
+    Optional<Project> persistedProject = getProjectRepository.findById(command.getProjectId());
 
     if (persistedProject.isPresent()) {
+      analyzingJob.setProject(persistedProject.get());
       return startAnalyzingRepository.save(analyzingJob).getId();
     } else {
       throw new ProjectNotFoundException("Can't analyze a non-existing project.");

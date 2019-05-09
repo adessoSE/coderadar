@@ -8,6 +8,6 @@ import org.eclipse.jgit.api.Git;
 @Data
 @AllArgsConstructor
 public class WalkCommitsCommand {
-    private Git gitClient;
-    private CommitProcessor commitProcessor;
+  private Git gitClient;
+  private CommitProcessor commitProcessor;
 }

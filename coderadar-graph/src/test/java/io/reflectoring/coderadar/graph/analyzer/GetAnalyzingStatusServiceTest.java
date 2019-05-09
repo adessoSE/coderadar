@@ -3,7 +3,8 @@ package io.reflectoring.coderadar.graph.analyzer;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
+import io.reflectoring.coderadar.core.analyzer.AnalyzingJobNotStartedException;
+import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzingJob;
 import io.reflectoring.coderadar.graph.analyzer.repository.GetAnalyzingStatusRepository;
 import io.reflectoring.coderadar.graph.analyzer.service.GetAnalyzingStatusService;
 import java.util.Optional;
@@ -23,34 +24,42 @@ class GetAnalyzingStatusServiceTest {
   @InjectMocks private GetAnalyzingStatusService getanalyzingStatusService;
 
   @Test
-  @DisplayName(
-      "Should return analyzing job as optional when a analyzing job exists in the project with the passing ID")
-  void shouldReturnAnalyzingJobAsOptionalWhenAAnalyzingJobExistsInTheProjectWithThePassingId() {
+  @DisplayName("Should throw exception when a analyzing job hasn't been started")
+  void shouldThrowExceptionWhenAAnalyzingJobHasntBeenStarted() {
+    Assertions.assertThrows(
+        AnalyzingJobNotStartedException.class, () -> getanalyzingStatusService.get(1L));
+  }
+
+  @Test
+  @DisplayName("Should return true when a analyzing job exists in the project with the passing ID")
+  void shouldReturnTrueWhenAAnalyzingJobExistsInTheProjectWithThePassingId() {
     AnalyzingJob mockedItem = new AnalyzingJob();
     mockedItem.setId(1L);
+    mockedItem.setActive(true);
     when(getAnalyzingStatusRepository.findByProject_Id(any(Long.class)))
         .thenReturn(Optional.of(mockedItem));
 
-    Optional<AnalyzingJob> returned = getanalyzingStatusService.get(1L);
+    boolean active = getanalyzingStatusService.get(1L);
 
     verify(getAnalyzingStatusRepository, times(1)).findByProject_Id(1L);
     verifyNoMoreInteractions(getAnalyzingStatusRepository);
-    Assertions.assertTrue(returned.isPresent());
-    Assertions.assertEquals(new Long(1L), returned.get().getId());
+    Assertions.assertTrue(active);
   }
 
   @Test
   @DisplayName(
-      "Should return analyzing job as empty optional when a analyzing job doesn't exists in the project with the passing ID")
-  void
-      shouldReturnAnalyzingJobAsEmptyOptionalWhenAAnalyzingJobDoesntExistsInTheProjectWithThePassingId() {
-    Optional<AnalyzingJob> mockedItem = Optional.empty();
-    when(getAnalyzingStatusRepository.findByProject_Id(any(Long.class))).thenReturn(mockedItem);
+      "Should return false when a analyzing job doesn't exists in the project with the passing ID")
+  void shouldReturnFalseWhenAAnalyzingJobDoesntExistsInTheProjectWithThePassingId() {
+    AnalyzingJob mockedItem = new AnalyzingJob();
+    mockedItem.setId(1L);
+    mockedItem.setActive(false);
+    when(getAnalyzingStatusRepository.findByProject_Id(any(Long.class)))
+        .thenReturn(Optional.of(mockedItem));
 
-    Optional<AnalyzingJob> returned = getanalyzingStatusService.get(1L);
+    boolean active = getanalyzingStatusService.get(1L);
 
     verify(getAnalyzingStatusRepository, times(1)).findByProject_Id(1L);
     verifyNoMoreInteractions(getAnalyzingStatusRepository);
-    Assertions.assertFalse(returned.isPresent());
+    Assertions.assertFalse(active);
   }
 }

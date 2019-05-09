@@ -4,9 +4,9 @@ import io.reflectoring.coderadar.core.vcs.domain.CommitProcessor;
 import io.reflectoring.coderadar.core.vcs.domain.RevCommitWithSequenceNumber;
 import io.reflectoring.coderadar.core.vcs.service.ChangeTypeMapper;
 import io.reflectoring.coderadar.core.vcs.service.MetricsProcessor;
-import io.reflectoring.coderadar.plugin.api.FileMetrics;
-import io.reflectoring.coderadar.plugin.api.FileMetricsWithChangeType;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
+import java.io.IOException;
+import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
@@ -19,14 +19,11 @@ import org.gitective.core.CommitUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.util.List;
-
 public class AnalyzingCommitProcessor implements CommitProcessor {
 
   private Logger logger = LoggerFactory.getLogger(AnalyzingCommitProcessor.class);
 
-  private FileAnalyzer fileAnalyzer = new FileAnalyzer();
+  // private FileAnalyzer fileAnalyzer = new FileAnalyzer();
 
   private ChangeTypeMapper changeTypeMapper = new ChangeTypeMapper();
 
@@ -75,11 +72,12 @@ public class AnalyzingCommitProcessor implements CommitProcessor {
       String filePath = diff.getPath(DiffEntry.Side.NEW);
       byte[] fileContent =
           BlobUtils.getRawContent(gitClient.getRepository(), commit.getId(), filePath);
-      FileMetrics metrics = fileAnalyzer.analyzeFile(analyzers, filePath, fileContent);
-      FileMetricsWithChangeType metricsWithChangeType =
+      // TODO: FileAnalyzer needed
+      // FileMetrics metrics = fileAnalyzer.analyzeFile(analyzers, filePath, fileContent);
+      /*FileMetricsWithChangeType metricsWithChangeType =
           new FileMetricsWithChangeType(
               metrics, changeTypeMapper.jgitToCoderadar(diff.getChangeType()));
-      metricsProcessor.processMetrics(metricsWithChangeType, gitClient, commit.getId(), filePath);
+      metricsProcessor.processMetrics(metricsWithChangeType, gitClient, commit.getId(), filePath);*/
     }
     metricsProcessor.onCommitFinished(gitClient, commit.getId());
   }

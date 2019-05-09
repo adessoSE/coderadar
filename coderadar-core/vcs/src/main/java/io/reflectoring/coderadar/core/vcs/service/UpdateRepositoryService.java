@@ -3,6 +3,8 @@ package io.reflectoring.coderadar.core.vcs.service;
 import io.reflectoring.coderadar.core.vcs.port.driven.UpdateRepositoryPort;
 import io.reflectoring.coderadar.core.vcs.port.driver.ResetRepositoryUseCase;
 import io.reflectoring.coderadar.core.vcs.port.driver.UpdateRepositoryUseCase;
+import java.io.IOException;
+import java.nio.file.Path;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -12,51 +14,49 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
 @Service
 public class UpdateRepositoryService implements UpdateRepositoryUseCase {
 
-    public final UpdateRepositoryPort updateRepositoryPort;
+  public final UpdateRepositoryPort updateRepositoryPort;
 
-    private ResetRepositoryUseCase resetter;
+  private ResetRepositoryUseCase resetter;
 
-    @Autowired
-    public UpdateRepositoryService(UpdateRepositoryPort updateRepositoryPort, ResetRepositoryUseCase resetter) {
-        this.resetter = resetter;
-        this.updateRepositoryPort = updateRepositoryPort;
+  @Autowired
+  public UpdateRepositoryService(
+      UpdateRepositoryPort updateRepositoryPort, ResetRepositoryUseCase resetter) {
+    this.resetter = resetter;
+    this.updateRepositoryPort = updateRepositoryPort;
+  }
+
+  @Override
+  public Git updateRepository(Path repositoryRoot) {
+    try {
+      return updateInternal(repositoryRoot);
+    } catch (CheckoutConflictException e) {
+      // When having a checkout conflict, someone or something fiddled with the working directory.
+      // Since the working directory is designed to be read only, we just revert it and try again.
+      resetter.resetRepository(repositoryRoot);
+      try {
+        return updateInternal(repositoryRoot);
+      } catch (Exception e2) {
+        throw createException(e2, repositoryRoot);
+      }
+    } catch (Exception e) {
+      throw createException(e, repositoryRoot);
     }
+  }
 
-    @Override
-    public Git updateRepository(Path repositoryRoot) {
-        try {
-            return updateInternal(repositoryRoot);
-        } catch (CheckoutConflictException e) {
-            // When having a checkout conflict, someone or something fiddled with the working directory.
-            // Since the working directory is designed to be read only, we just revert it and try again.
-            resetter.resetRepository(repositoryRoot);
-            try {
-                return updateInternal(repositoryRoot);
-            } catch (Exception e2) {
-                throw createException(e2, repositoryRoot);
-            }
-        } catch (Exception e) {
-            throw createException(e, repositoryRoot);
-        }
-    }
+  private IllegalStateException createException(Exception cause, Path repositoryRoot) {
+    return new IllegalStateException(
+        String.format("error accessing local GIT repository at %s", repositoryRoot), cause);
+  }
 
-    private IllegalStateException createException(Exception cause, Path repositoryRoot) {
-        return new IllegalStateException(
-                String.format("error accessing local GIT repository at %s", repositoryRoot), cause);
-    }
-
-    private Git updateInternal(Path repositoryRoot) throws GitAPIException, IOException {
-        FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        Repository repository = builder.setWorkTree(repositoryRoot.toFile()).build();
-        Git git = new Git(repository);
-        git.pull().setStrategy(MergeStrategy.THEIRS).call();
-        // TODO: Update repo in graph DB using port
-        return git;
-    }
+  private Git updateInternal(Path repositoryRoot) throws GitAPIException, IOException {
+    FileRepositoryBuilder builder = new FileRepositoryBuilder();
+    Repository repository = builder.setWorkTree(repositoryRoot.toFile()).build();
+    Git git = new Git(repository);
+    git.pull().setStrategy(MergeStrategy.THEIRS).call();
+    // TODO: Update repo in graph DB using port
+    return git;
+  }
 }

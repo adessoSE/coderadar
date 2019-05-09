@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.graph.analyzer.service;
 
-import io.reflectoring.coderadar.core.analyzer.domain.AnalyzingJob;
+import io.reflectoring.coderadar.core.analyzer.AnalyzingJobNotStartedException;
 import io.reflectoring.coderadar.core.analyzer.port.driven.GetAnalyzingStatusPort;
+import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzingJob;
 import io.reflectoring.coderadar.graph.analyzer.repository.GetAnalyzingStatusRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,13 @@ public class GetAnalyzingStatusService implements GetAnalyzingStatusPort {
   }
 
   @Override
-  public Optional<AnalyzingJob> get(Long projectId) {
-    return getAnalyzingStatusRepository.findByProject_Id(projectId);
+  public boolean get(Long projectId) {
+    Optional<AnalyzingJob> analyzingJob = getAnalyzingStatusRepository.findByProject_Id(projectId);
+
+    if (analyzingJob.isPresent()) {
+      return analyzingJob.get().isActive();
+    } else {
+      throw new AnalyzingJobNotStartedException("Analyzing job hasn't been started yet.");
+    }
   }
 }

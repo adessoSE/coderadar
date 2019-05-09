@@ -7,6 +7,6 @@ import org.eclipse.jgit.api.Git;
 @Data
 @AllArgsConstructor
 public class FindGitCommitCommand {
-    private Git gitClient;
-    private String commitName;
+  private Git gitClient;
+  private String commitName;
 }

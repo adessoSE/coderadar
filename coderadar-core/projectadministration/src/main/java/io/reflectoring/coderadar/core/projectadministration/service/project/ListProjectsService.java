@@ -26,12 +26,12 @@ public class ListProjectsService implements ListProjectsUseCase {
       GetProjectResponse resource = new GetProjectResponse();
       resource.setId(project.getId());
       resource.setName(project.getName());
-      resource.setVcsUsername(project.getVcsCoordinates().getUsername());
-      resource.setVcsPassword(project.getVcsCoordinates().getPassword());
-      resource.setVcsOnline(project.getVcsCoordinates().isOnline());
-      resource.setVcsUrl(project.getVcsCoordinates().getUrl());
-      resource.setStart(project.getVcsCoordinates().getStartDate());
-      resource.setEnd(project.getVcsCoordinates().getEndDate());
+      resource.setVcsUsername(project.getVcsUsername());
+      resource.setVcsPassword(project.getVcsPassword());
+      resource.setVcsOnline(project.isVcsOnline());
+      resource.setVcsUrl(project.getVcsUrl());
+      resource.setStart(project.getVcsStart());
+      resource.setEnd(project.getVcsEnd());
       response.add(resource);
     }
     return response;

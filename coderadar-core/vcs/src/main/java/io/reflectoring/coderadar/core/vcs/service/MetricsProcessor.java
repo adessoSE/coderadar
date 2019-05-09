@@ -16,7 +16,7 @@ public interface MetricsProcessor {
    * @param filePath path of the analyzed file within the git repository.
    */
   void processMetrics(
-          FileMetricsWithChangeType fileMetrics, Git gitClient, AnyObjectId commitId, String filePath);
+      FileMetricsWithChangeType fileMetrics, Git gitClient, AnyObjectId commitId, String filePath);
 
   /**
    * This method is called after processMetrics() has been called for all files within a commit. A

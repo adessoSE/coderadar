@@ -17,13 +17,15 @@ public class LastKnownCommitFilter implements CommitWalkerFilter {
    * @param findGitCommitUseCase AAAAAAAAAAA
    * @param gitClient the git client pointing to the local git repository.
    * @param lastKnownCommitName the name of the last known commit. Only commits newer than this
-   * commits are walked. If the name is null, all commits will be walked. If a commit with the
-   * specified name does not exist, an {@link IllegalArgumentException} is thrown.
+   *     commits are walked. If the name is null, all commits will be walked. If a commit with the
+   *     specified name does not exist, an {@link IllegalArgumentException} is thrown.
    */
   @Autowired
-  public LastKnownCommitFilter(FindGitCommitUseCase findGitCommitUseCase, Git gitClient, String lastKnownCommitName) {
+  public LastKnownCommitFilter(
+      FindGitCommitUseCase findGitCommitUseCase, Git gitClient, String lastKnownCommitName) {
     if (lastKnownCommitName != null) {
-      lastKnownCommit = findGitCommitUseCase.findCommit(new FindGitCommitCommand(gitClient, lastKnownCommitName));
+      lastKnownCommit =
+          findGitCommitUseCase.findCommit(new FindGitCommitCommand(gitClient, lastKnownCommitName));
       if (lastKnownCommit == null) {
         throw new IllegalArgumentException(
             String.format("Last known commit with name %s does not exist!", lastKnownCommitName));
