@@ -7,10 +7,9 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.analyzer.repository.StartAnalyzingRepository;
 import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service("StartAnalyzingServiceNeo4j")
 public class StartAnalyzingService implements StartAnalyzingPort {

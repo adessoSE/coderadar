@@ -5,11 +5,9 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.core.vcs.port.driven.CloneRepositoryPort;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.util.UUID;
 
 @Service("CreateProjectService")
 public class CreateProjectService implements CreateProjectUseCase {
@@ -35,8 +33,8 @@ public class CreateProjectService implements CreateProjectUseCase {
     project.setVcsOnline(command.getVcsOnline());
     project.setVcsStart(command.getStart());
     project.setVcsEnd(command.getEnd());
-    cloneRepositoryPort.cloneRepository(
-        command.getVcsUrl().toString(), new File(project.getWorkdirName()));
+    /*    cloneRepositoryPort.cloneRepository(
+    command.getVcsUrl().toString(), new File(project.getWorkdirName()));*/
     return createProjectPort.createProject(project);
   }
 }

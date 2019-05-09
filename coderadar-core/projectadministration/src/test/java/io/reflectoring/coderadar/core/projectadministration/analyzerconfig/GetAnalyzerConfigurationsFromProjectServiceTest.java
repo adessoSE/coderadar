@@ -4,6 +4,8 @@ import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfi
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationsFromProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.core.projectadministration.service.analyzerconfig.GetAnalyzerConfigurationsFromProjectService;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,9 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 class GetAnalyzerConfigurationsFromProjectServiceTest {

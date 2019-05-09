@@ -3,6 +3,8 @@ package io.reflectoring.coderadar.core.vcs.service;
 import io.reflectoring.coderadar.core.vcs.port.driven.UpdateRepositoryPort;
 import io.reflectoring.coderadar.core.vcs.port.driver.ResetRepositoryUseCase;
 import io.reflectoring.coderadar.core.vcs.port.driver.UpdateRepositoryUseCase;
+import java.io.IOException;
+import java.nio.file.Path;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -11,9 +13,6 @@ import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.nio.file.Path;
 
 @Service
 public class UpdateRepositoryService implements UpdateRepositoryUseCase {

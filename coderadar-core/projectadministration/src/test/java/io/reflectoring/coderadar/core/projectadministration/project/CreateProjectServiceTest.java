@@ -1,10 +1,14 @@
 package io.reflectoring.coderadar.core.projectadministration.project;
 
+import static org.mockito.ArgumentMatchers.any;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.domain.VcsCoordinates;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.CreateProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.project.CreateProjectService;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,10 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Date;
 
 @ExtendWith(SpringExtension.class)
 class CreateProjectServiceTest {
@@ -32,15 +32,14 @@ class CreateProjectServiceTest {
 
     Project project = new Project();
     project.setName("project");
-    VcsCoordinates coordinates = new VcsCoordinates(url);
-    coordinates.setUsername("username");
-    coordinates.setPassword("password");
-    coordinates.setOnline(true);
-    coordinates.setStartDate(new Date());
-    coordinates.setEndDate(new Date());
-    project.setVcsCoordinates(coordinates);
+    project.setVcsUrl(url);
+    project.setVcsUsername("username");
+    project.setVcsPassword("password");
+    project.setVcsOnline(true);
+    project.setVcsStart(new Date());
+    project.setVcsEnd(new Date());
 
-    Mockito.when(createProjectPort.createProject(project)).thenReturn(1L);
+    Mockito.when(createProjectPort.createProject(any())).thenReturn(1L);
 
     Long projectId = testSubject.createProject(command);
 

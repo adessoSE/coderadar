@@ -7,7 +7,6 @@ import com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck;
 import com.puppycrawl.tools.checkstyle.checks.metrics.JavaNCSSCheck;
 import com.puppycrawl.tools.checkstyle.checks.metrics.NPathComplexityCheck;
 import com.puppycrawl.tools.checkstyle.checks.sizes.ExecutableStatementCountCheck;
-
 import java.lang.reflect.Field;
 
 /**

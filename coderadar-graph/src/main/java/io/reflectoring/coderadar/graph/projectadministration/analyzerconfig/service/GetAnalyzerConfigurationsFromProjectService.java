@@ -6,11 +6,10 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzer
 import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.GetAnalyzerConfigurationsFromProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service("GetAnalyzerConfigurationsFromProjectServiceNeo4j")
 public class GetAnalyzerConfigurationsFromProjectService

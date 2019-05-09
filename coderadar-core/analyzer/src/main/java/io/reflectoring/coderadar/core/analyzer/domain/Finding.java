@@ -1,11 +1,10 @@
 package io.reflectoring.coderadar.core.analyzer.domain;
 
-import lombok.Data;
-
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(name = "finding")

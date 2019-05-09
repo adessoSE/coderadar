@@ -1,5 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
@@ -10,9 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @DisplayName("Add analyzer configuration")

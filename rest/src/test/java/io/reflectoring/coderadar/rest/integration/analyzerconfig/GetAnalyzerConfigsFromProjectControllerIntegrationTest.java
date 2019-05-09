@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.rest.integration.analyzerconfig;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Test;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 class GetAnalyzerConfigsFromProjectControllerIntegrationTest extends ControllerTestTemplate {
 

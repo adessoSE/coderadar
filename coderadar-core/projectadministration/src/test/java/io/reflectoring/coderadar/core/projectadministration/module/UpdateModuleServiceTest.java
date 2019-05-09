@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.module.G
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.UpdateModulePort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.module.UpdateModuleService;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +27,7 @@ class UpdateModuleServiceTest {
     module.setPath("new-module-path");
     module.setId(1L);
 
-    Mockito.when(getModulePort.get(1L)).thenReturn(module);
+    Mockito.when(getModulePort.get(1L)).thenReturn(Optional.of(module));
 
     testSubject.updateModule(command, 1L);
 

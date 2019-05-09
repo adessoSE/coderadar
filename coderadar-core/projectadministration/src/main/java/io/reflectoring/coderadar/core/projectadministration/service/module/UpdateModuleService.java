@@ -6,10 +6,9 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.module.G
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.UpdateModulePort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleUseCase;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service("UpdateModuleService")
 public class UpdateModuleService implements UpdateModuleUseCase {

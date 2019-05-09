@@ -5,5 +5,4 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GetFilePatternRepository extends Neo4jRepository<FilePattern, Long> {
-}
+public interface GetFilePatternRepository extends Neo4jRepository<FilePattern, Long> {}

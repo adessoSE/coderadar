@@ -5,13 +5,12 @@ import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import io.reflectoring.coderadar.plugin.api.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.InputSource;
-
 import java.io.*;
 import java.util.Arrays;
 import java.util.Properties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.InputSource;
 
 public class CheckstyleSourceCodeFileAnalyzerPlugin
     implements SourceCodeFileAnalyzerPlugin, ConfigurableAnalyzerPlugin {

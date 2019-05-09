@@ -3,6 +3,8 @@ package io.reflectoring.coderadar.rest.unit.filepattern;
 import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,9 +14,6 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 class ListFilePatternsOfProjectControllerTest {

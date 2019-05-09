@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 @Service("LoadUserServiceNeo4j")
 public class LoadUserService implements LoadUserPort {
-    @Override
-    public User loadUser(Long id) {
-        return new User();
-    }
+  @Override
+  public User loadUser(Long id) {
+    return new User();
+  }
 }

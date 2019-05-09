@@ -1,10 +1,9 @@
 package io.reflectoring.coderadar.core.vcs.port.driver.walk.fetchCommit;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 import java.net.URL;
 import java.nio.file.Path;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Data
 @AllArgsConstructor

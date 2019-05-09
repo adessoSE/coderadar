@@ -12,10 +12,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @DisplayName("Change password")
 public class ChangePasswordServiceTest {
-    @Mock
-    private ChangePasswordRepository changePasswordRepository;
+  @Mock private ChangePasswordRepository changePasswordRepository;
 
-    @InjectMocks
-    @Qualifier("ChangePasswordServiceNeo4j")
-    private ChangePasswordService changePasswordService;
+  @InjectMocks
+  @Qualifier("ChangePasswordServiceNeo4j")
+  private ChangePasswordService changePasswordService;
 }

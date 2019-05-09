@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.filepatt
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.filepattern.CreateFilePatternService;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +29,7 @@ class CreateFilePatternServiceTest {
     project.setId(1L);
     project.setName("project name");
 
-    Mockito.when(getProjectPort.get(1L)).thenReturn(project);
+    Mockito.when(getProjectPort.get(1L)).thenReturn(Optional.of(project));
 
     FilePattern filePattern = new FilePattern();
     filePattern.setPattern("**/*.java");

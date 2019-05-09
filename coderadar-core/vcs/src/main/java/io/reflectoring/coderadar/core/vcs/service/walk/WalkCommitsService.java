@@ -4,16 +4,15 @@ import io.reflectoring.coderadar.core.vcs.domain.RevCommitWithSequenceNumber;
 import io.reflectoring.coderadar.core.vcs.port.driver.walk.walkCommit.WalkCommitsCommand;
 import io.reflectoring.coderadar.core.vcs.port.driver.walk.walkCommit.WalkCommitsUseCase;
 import io.reflectoring.coderadar.core.vcs.service.walk.filter.CommitWalkerFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class WalkCommitsService implements WalkCommitsUseCase {

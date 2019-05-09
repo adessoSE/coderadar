@@ -6,10 +6,9 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzer
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service("UpdateAnalyzerConfigurationService")
 public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigurationUseCase {

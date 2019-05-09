@@ -5,10 +5,9 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.UpdateModulePort;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.GetModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.UpdateModuleRepository;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service("UpdateModuleServiceNeo4j")
 public class UpdateModuleService implements UpdateModulePort {

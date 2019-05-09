@@ -1,5 +1,9 @@
 package io.reflectoring.coderadar.graph.projectadministration.module;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
@@ -11,10 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @ExtendWith(SpringExtension.class)
 @DisplayName("Create module")

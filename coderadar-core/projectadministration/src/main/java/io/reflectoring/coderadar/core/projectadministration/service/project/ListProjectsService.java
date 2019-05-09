@@ -4,11 +4,10 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.ListProjectsPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.ListProjectsUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service("ListProjectsService")
 public class ListProjectsService implements ListProjectsUseCase {

@@ -1,10 +1,9 @@
 package org.wickedsource.coderadar.analyzer.loc;
 
 import io.reflectoring.coderadar.plugin.api.*;
+import java.io.IOException;
 import org.wickedsource.coderadar.analyzer.loc.profiles.LocProfile;
 import org.wickedsource.coderadar.analyzer.loc.profiles.Profiles;
-
-import java.io.IOException;
 
 /** Counts several types of lines of code. */
 public class LocAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin {

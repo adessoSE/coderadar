@@ -5,10 +5,9 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.project.
 import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.UpdateProjectRepository;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service("UpdateProjectServiceNeo4j")
 public class UpdateProjectService implements UpdateProjectPort {

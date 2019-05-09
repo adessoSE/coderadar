@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 @Service("GetFilePatternServiceNeo4j")
 public class GetFilePatternService implements GetFilePatternPort {
-    @Override
-    public FilePattern get(Long id) {
-        return new FilePattern();
-    }
+  @Override
+  public FilePattern get(Long id) {
+    return new FilePattern();
+  }
 }

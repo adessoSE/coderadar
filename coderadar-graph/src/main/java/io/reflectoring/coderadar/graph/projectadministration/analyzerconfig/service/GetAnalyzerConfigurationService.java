@@ -3,10 +3,9 @@ package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.ser
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.GetAnalyzerConfigurationRepository;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service("GetAnalyzerConfigurationServiceNeo4j")
 public class GetAnalyzerConfigurationService implements GetAnalyzerConfigurationPort {

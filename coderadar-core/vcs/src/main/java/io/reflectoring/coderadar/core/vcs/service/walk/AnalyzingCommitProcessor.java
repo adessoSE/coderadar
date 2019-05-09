@@ -5,6 +5,8 @@ import io.reflectoring.coderadar.core.vcs.domain.RevCommitWithSequenceNumber;
 import io.reflectoring.coderadar.core.vcs.service.ChangeTypeMapper;
 import io.reflectoring.coderadar.core.vcs.service.MetricsProcessor;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
+import java.io.IOException;
+import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
@@ -16,9 +18,6 @@ import org.gitective.core.BlobUtils;
 import org.gitective.core.CommitUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.List;
 
 public class AnalyzingCommitProcessor implements CommitProcessor {
 

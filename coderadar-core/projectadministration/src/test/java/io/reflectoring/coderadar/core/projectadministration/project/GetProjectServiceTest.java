@@ -1,10 +1,13 @@
 package io.reflectoring.coderadar.core.projectadministration.project;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.domain.VcsCoordinates;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.core.projectadministration.service.project.GetProjectService;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Date;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,9 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 @ExtendWith(SpringExtension.class)
 class GetProjectServiceTest {
@@ -30,20 +30,21 @@ class GetProjectServiceTest {
     project.setId(1L);
     project.setName("project name");
     project.setWorkdirName("workdir name");
-    VcsCoordinates coordinates = new VcsCoordinates(url);
-    coordinates.setOnline(true);
-    coordinates.setUsername("username");
-    coordinates.setPassword("password");
-    project.setVcsCoordinates(coordinates);
+    project.setVcsUrl(url);
+    project.setVcsUsername("username");
+    project.setVcsPassword("password");
+    project.setVcsOnline(true);
+    project.setVcsStart(new Date());
+    project.setVcsEnd(new Date());
 
-    Mockito.when(getProjectPort.get(1L)).thenReturn(project);
+    Mockito.when(getProjectPort.get(1L)).thenReturn(Optional.of(project));
 
     GetProjectResponse response = testSubject.get(1L);
 
     Assertions.assertEquals(project.getId(), response.getId());
     Assertions.assertEquals(project.getName(), response.getName());
-    Assertions.assertEquals(project.getVcsCoordinates().isOnline(), response.getVcsOnline());
-    Assertions.assertEquals(project.getVcsCoordinates().getUsername(), response.getVcsUsername());
-    Assertions.assertEquals(project.getVcsCoordinates().getPassword(), response.getVcsPassword());
+    Assertions.assertEquals(project.isVcsOnline(), response.getVcsOnline());
+    Assertions.assertEquals(project.getVcsUsername(), response.getVcsUsername());
+    Assertions.assertEquals(project.getVcsPassword(), response.getVcsPassword());
   }
 }

@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar.rest.integration.module;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleCommand;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Test;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class UpdateModuleControllerIntegrationTest extends ControllerTestTemplate {
 

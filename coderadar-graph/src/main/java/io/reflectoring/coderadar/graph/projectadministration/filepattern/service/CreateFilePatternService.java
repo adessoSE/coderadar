@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 @Service("CreateFilePatternServiceNeo4j")
 public class CreateFilePatternService implements CreateFilePatternPort {
-    @Override
-    public Long createFilePattern(FilePattern filePattern) {
-        return 100L;
-    }
+  @Override
+  public Long createFilePattern(FilePattern filePattern) {
+    return 100L;
+  }
 }

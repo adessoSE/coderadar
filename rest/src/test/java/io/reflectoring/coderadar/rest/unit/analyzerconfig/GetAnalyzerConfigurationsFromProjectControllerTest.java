@@ -2,6 +2,8 @@ package io.reflectoring.coderadar.rest.unit.analyzerconfig;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationsFromProjectUseCase;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,9 +13,6 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 class GetAnalyzerConfigurationsFromProjectControllerTest {

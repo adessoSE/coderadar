@@ -13,16 +13,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @DisplayName("Refresh token")
 public class RefreshTokenServiceTest {
-    @Mock
-    private RefreshTokenRepository refreshTokenRepository;
+  @Mock private RefreshTokenRepository refreshTokenRepository;
 
-    @InjectMocks
-    private RefreshTokenService refreshTokenService;
+  @InjectMocks private RefreshTokenService refreshTokenService;
 
-    @Test
-    @DisplayName("Should return new access token when passing refresh token")
-    void shouldReturnNewAccessTokenWhenPassingRefreshToken() {
-        String returnedAccessToken = refreshTokenService.createAccessToken("1A");
-        Assertions.assertThat(returnedAccessToken).isNotNull();
-    }
+  @Test
+  @DisplayName("Should return new access token when passing refresh token")
+  void shouldReturnNewAccessTokenWhenPassingRefreshToken() {
+    String returnedAccessToken = refreshTokenService.createAccessToken("1A");
+    Assertions.assertThat(returnedAccessToken).isNotNull();
+  }
 }

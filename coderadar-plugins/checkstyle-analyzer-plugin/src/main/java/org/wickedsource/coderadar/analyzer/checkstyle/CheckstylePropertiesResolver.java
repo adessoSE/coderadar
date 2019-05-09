@@ -1,7 +1,6 @@
 package org.wickedsource.coderadar.analyzer.checkstyle;
 
 import com.puppycrawl.tools.checkstyle.PropertyResolver;
-
 import java.util.Properties;
 
 /**
