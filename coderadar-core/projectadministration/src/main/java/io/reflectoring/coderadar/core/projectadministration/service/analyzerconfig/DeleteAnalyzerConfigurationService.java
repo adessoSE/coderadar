@@ -5,7 +5,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("DeleteAnalyzerConfigurationService")
 public class DeleteAnalyzerConfigurationService implements DeleteAnalyzerConfigurationUseCase {
 
   private final DeleteAnalyzerConfigurationPort port;

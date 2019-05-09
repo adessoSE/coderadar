@@ -5,7 +5,7 @@ import io.reflectoring.coderadar.core.analyzer.port.driver.GetAnalyzingStatusUse
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("GetAnalyzingStatusService")
 public class GetAnalyzingStatusService implements GetAnalyzingStatusUseCase {
   private final GetAnalyzingStatusPort getAnalyzingStatusPort;
 

@@ -6,7 +6,7 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("DeleteProjectServiceNeo4j")
 public class DeleteProjectService implements DeleteProjectPort {
   private final DeleteProjectRepository deleteProjectRepository;
 

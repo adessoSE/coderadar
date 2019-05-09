@@ -6,7 +6,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.user.ref
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("RefreshTokenService")
 public class RefreshTokenService implements RefreshTokenUseCase {
 
   private final RefreshTokenPort port;

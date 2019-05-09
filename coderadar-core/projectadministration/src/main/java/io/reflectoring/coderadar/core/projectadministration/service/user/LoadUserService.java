@@ -6,7 +6,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.user.loa
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("LoadUserService")
 public class LoadUserService implements LoadUserUseCase {
 
   private final LoadUserPort port;

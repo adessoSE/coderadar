@@ -8,7 +8,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.filepatt
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("UpdateFilePatternService")
 public class UpdateFilePatternService implements UpdateFilePatternUseCase {
 
   private final GetFilePatternPort getFilePatternPort;

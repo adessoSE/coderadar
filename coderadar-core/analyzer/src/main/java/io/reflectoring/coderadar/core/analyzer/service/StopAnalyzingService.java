@@ -5,7 +5,7 @@ import io.reflectoring.coderadar.core.analyzer.port.driver.StopAnalyzingUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("StopAnalyzingService")
 public class StopAnalyzingService implements StopAnalyzingUseCase {
   private final StopAnalyzingPort stopAnalyzingPort;
 

@@ -7,7 +7,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.user.reg
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("RegisterUserService")
 public class RegisterUserService implements RegisterUserUseCase {
 
   private final RegisterUserPort port;

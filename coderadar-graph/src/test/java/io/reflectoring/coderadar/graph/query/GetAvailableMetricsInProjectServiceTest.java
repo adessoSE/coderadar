@@ -11,11 +11,15 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+
+import io.reflectoring.coderadar.graph.query.repository.GetAvailableMetricsInProjectRepository;
+import io.reflectoring.coderadar.graph.query.service.GetAvailableMetricsInProjectService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
@@ -23,6 +27,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 class GetAvailableMetricsInProjectServiceTest {
   @Mock private GetProjectRepository getProjectRepository;
   @Mock private GetAvailableMetricsInProjectRepository getAvailableMetricsInProjectRepository;
+
   @InjectMocks private GetAvailableMetricsInProjectService getAvailableMetricsInProjectService;
 
   @Test

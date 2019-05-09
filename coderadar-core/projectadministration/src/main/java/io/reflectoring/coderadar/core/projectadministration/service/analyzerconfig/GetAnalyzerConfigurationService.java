@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
+@Service("GetAnalyzerConfigurationService")
 public class GetAnalyzerConfigurationService implements GetAnalyzerConfigurationUseCase {
 
   private final GetAnalyzerConfigurationPort port;

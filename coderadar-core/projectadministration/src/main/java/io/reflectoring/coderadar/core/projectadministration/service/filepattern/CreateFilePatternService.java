@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
+@Service("CreateFilePatternService")
 public class CreateFilePatternService implements CreateFilePatternUseCase {
 
   private final GetProjectPort getProjectPort;

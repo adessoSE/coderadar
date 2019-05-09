@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("GetAvailableMetricsInProjectService")
 public class GetAvailableMetricsInProjectService implements GetAvailableMetricsInProjectUseCase {
   private final GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort;
 

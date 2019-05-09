@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
+@Service("GetModuleService")
 public class GetModuleService implements GetModuleUseCase {
   private final GetModulePort getModulePort;
 

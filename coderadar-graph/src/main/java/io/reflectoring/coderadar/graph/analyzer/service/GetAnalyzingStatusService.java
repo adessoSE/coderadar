@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
+@Service("GetAnalyzingStatusServiceNeo4j")
 public class GetAnalyzingStatusService implements GetAnalyzingStatusPort {
   private final GetAnalyzingStatusRepository getAnalyzingStatusRepository;
 

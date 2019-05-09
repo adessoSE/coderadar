@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("GetAnalyzerConfigurationServiceNeo4j")
 public class GetAnalyzerConfigurationService implements GetAnalyzerConfigurationPort {
   private final GetAnalyzerConfigurationRepository getAnalyzerConfigurationRepository;
 

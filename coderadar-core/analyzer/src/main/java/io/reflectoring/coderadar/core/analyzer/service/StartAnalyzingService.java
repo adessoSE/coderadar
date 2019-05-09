@@ -6,7 +6,7 @@ import io.reflectoring.coderadar.core.analyzer.port.driver.StartAnalyzingUseCase
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("StartAnalyzingService")
 public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final StartAnalyzingPort startAnalyzingPort;
 

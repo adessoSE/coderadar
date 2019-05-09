@@ -11,7 +11,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("GetAnalyzerConfigurationsFromProjectServiceNeo4j")
 public class GetAnalyzerConfigurationsFromProjectService
     implements GetAnalyzerConfigurationsFromProjectPort {
   private final GetProjectRepository getProjectRepository;

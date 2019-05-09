@@ -9,7 +9,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("ListModulesOfProjectService")
 public class ListModulesOfProjectService implements ListModulesOfProjectUseCase {
 
   private final ListModulesOfProjectPort port;

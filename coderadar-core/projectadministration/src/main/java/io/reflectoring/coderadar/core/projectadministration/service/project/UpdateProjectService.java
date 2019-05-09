@@ -12,7 +12,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("UpdateProjectService")
 public class UpdateProjectService implements UpdateProjectUseCase {
 
   private final GetProjectPort getProjectPort;

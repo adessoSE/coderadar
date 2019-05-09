@@ -7,7 +7,7 @@ import io.reflectoring.coderadar.core.query.port.driver.GetHistoryOfMetricUseCas
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("GetHistoryOfMetricService")
 public class GetHistoryOfMetricService implements GetHistoryOfMetricUseCase {
   private final GetHistoryOfMetricPort getHistoryOfMetricPort;
 

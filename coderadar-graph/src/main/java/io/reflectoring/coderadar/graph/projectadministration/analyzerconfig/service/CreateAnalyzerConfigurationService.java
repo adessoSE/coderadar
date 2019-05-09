@@ -6,7 +6,7 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repo
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("CreateAnalyzerConfigurationServiceNeo4j")
 public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigurationPort {
   private final CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository;
 

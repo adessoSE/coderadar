@@ -12,18 +12,15 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("CreateModuleService")
 public class CreateModuleService implements CreateModuleUseCase {
-  private final UpdateProjectPort updateProjectPort;
   private final GetProjectPort getProjectPort;
   private final CreateModulePort createModulePort;
 
   @Autowired
   public CreateModuleService(
-      UpdateProjectPort updateProjectPort,
       GetProjectPort getProjectPort,
       CreateModulePort createModulePort) {
-    this.updateProjectPort = updateProjectPort;
     this.getProjectPort = getProjectPort;
     this.createModulePort = createModulePort;
   }

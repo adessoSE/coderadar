@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("GetModuleServiceNeo4j")
 public class GetModuleService implements GetModulePort {
   private final GetModuleRepository getModuleRepository;
 

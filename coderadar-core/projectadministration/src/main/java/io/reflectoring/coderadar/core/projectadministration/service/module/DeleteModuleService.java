@@ -5,7 +5,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.module.d
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("DeleteModuleService")
 public class DeleteModuleService implements DeleteModuleUseCase {
 
   private final DeleteModulePort deleteModulePort;

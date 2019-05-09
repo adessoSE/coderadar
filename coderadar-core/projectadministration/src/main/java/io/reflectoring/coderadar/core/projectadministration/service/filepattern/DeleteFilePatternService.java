@@ -5,7 +5,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.filepatt
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("DeleteFilePatternService")
 public class DeleteFilePatternService implements DeleteFilePatternFromProjectUseCase {
 
   private final DeleteFilePatternPort deleteFilePatternPort;

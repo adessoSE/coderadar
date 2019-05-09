@@ -9,7 +9,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("UpdateModuleServiceNeo4j")
 public class UpdateModuleService implements UpdateModulePort {
   private final GetModuleRepository getModuleRepository;
   private final UpdateModuleRepository updateModuleRepository;

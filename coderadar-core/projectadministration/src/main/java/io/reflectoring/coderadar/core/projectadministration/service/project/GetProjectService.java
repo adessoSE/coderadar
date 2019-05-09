@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.nio.file.ProviderNotFoundException;
 import java.util.Optional;
 
-@Service
+@Service("GetProjectService")
 public class GetProjectService implements GetProjectUseCase {
 
   private final GetProjectPort port;

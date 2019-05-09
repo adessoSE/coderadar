@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("GetCommitsInProjectService")
 public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {
   private final GetCommitsInProjectPort getCommitsInProjectPort;
 

@@ -6,7 +6,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.user.pas
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("ChangePasswordService")
 public class ChangePasswordService implements ChangePasswordUseCase {
 
   private final ChangePasswordPort port;

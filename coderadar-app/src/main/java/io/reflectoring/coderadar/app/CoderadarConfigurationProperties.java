@@ -16,9 +16,9 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties("coderadar")
 @Data
-public class CoderadarConfiguration {
+public class CoderadarConfigurationProperties {
 
-  private static final Logger logger = LoggerFactory.getLogger(CoderadarConfiguration.class);
+  private static final Logger logger = LoggerFactory.getLogger(CoderadarConfigurationProperties.class);
 
   private static final String CONFIG_PARAM_LOG_PATTERN = "%s is set to '%s'";
 

@@ -5,7 +5,7 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repo
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("DeleteAnalyzerConfigurationServiceNeo4j")
 public class DeleteAnalyzerConfigurationService implements DeleteAnalyzerConfigurationPort {
   private final DeleteAnalyzerConfigurationRepository deleteAnalyzerConfigurationRepository;
 

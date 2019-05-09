@@ -8,7 +8,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.user.log
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("LoginUserService")
 public class LoginUserService implements LoginUserUseCase {
 
   private final LoginUserPort port;

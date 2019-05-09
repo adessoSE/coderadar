@@ -5,7 +5,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.project.
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("DeleteProjectService")
 public class DeleteProjectService implements DeleteProjectUseCase {
 
   private final DeleteProjectPort deleteProjectPort;

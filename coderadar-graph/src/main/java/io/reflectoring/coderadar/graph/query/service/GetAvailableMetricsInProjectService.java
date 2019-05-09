@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.graph.query;
+package io.reflectoring.coderadar.graph.query.service;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.query.port.driven.GetAvailableMetricsInProjectPort;
@@ -6,10 +6,12 @@ import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import java.util.List;
 import java.util.Optional;
+
+import io.reflectoring.coderadar.graph.query.repository.GetAvailableMetricsInProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("GetAvailableMetricsInProjectServiceNeo4j")
 public class GetAvailableMetricsInProjectService implements GetAvailableMetricsInProjectPort {
   private final GetProjectRepository getProjectRepository;
   private final GetAvailableMetricsInProjectRepository getAvailableMetricsInProjectRepository;

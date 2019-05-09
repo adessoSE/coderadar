@@ -12,7 +12,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("StopAnalyzingServiceNeo4j")
 public class StopAnalyzingService implements StopAnalyzingPort {
   private final GetAnalyzingStatusRepository getAnalyzingStatusRepository;
   private final StopAnalyzingRepository stopAnalyzingRepository;
