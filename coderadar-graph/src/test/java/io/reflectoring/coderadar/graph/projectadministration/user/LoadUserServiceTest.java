@@ -14,13 +14,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @DisplayName("Load user")
 public class LoadUserServiceTest {
-    @Mock private LoadUserRepository loadUserRepository;
-    @InjectMocks private LoadUserService loadUserService;
+  @Mock private LoadUserRepository loadUserRepository;
+  @InjectMocks private LoadUserService loadUserService;
 
-    @Test
-    @DisplayName("Should return user when passing valid argument")
-    void shouldReturnUserWhenPassingValidArgument() {
-        User returnedUser = loadUserService.loadUser(1L);
-        Assertions.assertThat(returnedUser).isNotNull();
-    }
+  @Test
+  @DisplayName("Should return user when passing valid argument")
+  void shouldReturnUserWhenPassingValidArgument() {
+    User returnedUser = loadUserService.loadUser(1L);
+    Assertions.assertThat(returnedUser).isNotNull();
+  }
 }

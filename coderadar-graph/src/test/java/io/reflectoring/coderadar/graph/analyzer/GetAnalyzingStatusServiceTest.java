@@ -26,12 +26,12 @@ class GetAnalyzingStatusServiceTest {
   @Test
   @DisplayName("Should throw exception when a analyzing job hasn't been started")
   void shouldThrowExceptionWhenAAnalyzingJobHasntBeenStarted() {
-    Assertions.assertThrows(AnalyzingJobNotStartedException.class, () -> getanalyzingStatusService.get(1L));
+    Assertions.assertThrows(
+        AnalyzingJobNotStartedException.class, () -> getanalyzingStatusService.get(1L));
   }
 
   @Test
-  @DisplayName(
-      "Should return true when a analyzing job exists in the project with the passing ID")
+  @DisplayName("Should return true when a analyzing job exists in the project with the passing ID")
   void shouldReturnTrueWhenAAnalyzingJobExistsInTheProjectWithThePassingId() {
     AnalyzingJob mockedItem = new AnalyzingJob();
     mockedItem.setId(1L);
@@ -49,13 +49,12 @@ class GetAnalyzingStatusServiceTest {
   @Test
   @DisplayName(
       "Should return false when a analyzing job doesn't exists in the project with the passing ID")
-  void
-      shouldReturnFalseWhenAAnalyzingJobDoesntExistsInTheProjectWithThePassingId() {
+  void shouldReturnFalseWhenAAnalyzingJobDoesntExistsInTheProjectWithThePassingId() {
     AnalyzingJob mockedItem = new AnalyzingJob();
     mockedItem.setId(1L);
     mockedItem.setActive(false);
     when(getAnalyzingStatusRepository.findByProject_Id(any(Long.class)))
-            .thenReturn(Optional.of(mockedItem));
+        .thenReturn(Optional.of(mockedItem));
 
     boolean active = getanalyzingStatusService.get(1L);
 

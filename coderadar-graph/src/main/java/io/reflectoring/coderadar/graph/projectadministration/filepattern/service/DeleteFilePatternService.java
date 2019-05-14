@@ -6,13 +6,9 @@ import org.springframework.stereotype.Service;
 
 @Service("DeleteFilePatternServiceNeo4j")
 public class DeleteFilePatternService implements DeleteFilePatternPort {
-    @Override
-    public void delete(Long id) {
+  @Override
+  public void delete(Long id) {}
 
-    }
-
-    @Override
-    public void delete(FilePattern filePattern) {
-
-    }
+  @Override
+  public void delete(FilePattern filePattern) {}
 }

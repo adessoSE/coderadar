@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 
 @Service("ChangePasswordServiceNeo4j")
 public class ChangePasswordService implements ChangePasswordPort {
-    @Override
-    public void changePassword(String refreshToken, String newPassword) {
-
-    }
+  @Override
+  public void changePassword(String refreshToken, String newPassword) {}
 }

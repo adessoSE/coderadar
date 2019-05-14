@@ -13,15 +13,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 public class RegisterUserServiceTest {
-    @Mock
-    private RegisterUserRepository registerUserRepository;
-    @InjectMocks
-    RegisterUserService registerUserService;
+  @Mock private RegisterUserRepository registerUserRepository;
+  @InjectMocks RegisterUserService registerUserService;
 
-    @Test
-    @DisplayName("Should return long when passing valid argument")
-    void shouldReturnLongWhenPassingValidArgument() {
-        Long returned = registerUserService.register(new User());
-        Assertions.assertThat(returned).isNotNull();
-    }
+  @Test
+  @DisplayName("Should return long when passing valid argument")
+  void shouldReturnLongWhenPassingValidArgument() {
+    Long returned = registerUserService.register(new User());
+    Assertions.assertThat(returned).isNotNull();
+  }
 }

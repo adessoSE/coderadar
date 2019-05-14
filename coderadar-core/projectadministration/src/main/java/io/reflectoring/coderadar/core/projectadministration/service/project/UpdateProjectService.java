@@ -8,7 +8,6 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import java.util.Optional;
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -5,10 +5,9 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
+import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
 import java.util.List;
 import java.util.Optional;
-
-import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

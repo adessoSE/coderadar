@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 @Service("RegisterUserServiceNeo4j")
 public class RegisterUserService implements RegisterUserPort {
-    @Override
-    public Long register(User user) {
-        return 1000L;
-    }
+  @Override
+  public Long register(User user) {
+    return 1000L;
+  }
 }
