@@ -34,7 +34,7 @@ public class GetProjectService implements GetProjectUseCase {
       response.setEnd(persistedProject.getVcsEnd());
       return response;
     } else {
-      throw new ProjectNotFoundException();
+      throw new ProjectNotFoundException(id);
     }
   }
 }

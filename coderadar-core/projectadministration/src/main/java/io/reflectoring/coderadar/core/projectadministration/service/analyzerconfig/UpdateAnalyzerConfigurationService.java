@@ -35,8 +35,7 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
       newAnalyzerConfiguration.setEnabled(command.getEnabled());
       updateAnalyzerConfigurationPort.update(newAnalyzerConfiguration);
     } else {
-      throw new AnalyzerConfigurationNotFoundException(
-          "Can't update a not persisted analyzer configuration.");
+      throw new AnalyzerConfigurationNotFoundException(analyzerId);
     }
   }
 }

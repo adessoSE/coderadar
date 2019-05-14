@@ -39,7 +39,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       updatedProject.setVcsEnd(command.getEnd());
       updateProjectPort.update(updatedProject);
     } else {
-      throw new ProjectNotFoundException();
+      throw new ProjectNotFoundException(projectId);
     }
   }
 }

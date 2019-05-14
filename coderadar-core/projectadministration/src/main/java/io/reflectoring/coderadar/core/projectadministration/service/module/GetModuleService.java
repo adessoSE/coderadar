@@ -25,7 +25,7 @@ public class GetModuleService implements GetModuleUseCase {
     if (module.isPresent()) {
       return new GetModuleResponse(id, module.get().getPath());
     } else {
-      throw new ModuleNotFoundException();
+      throw new ModuleNotFoundException(id);
     }
   }
 }

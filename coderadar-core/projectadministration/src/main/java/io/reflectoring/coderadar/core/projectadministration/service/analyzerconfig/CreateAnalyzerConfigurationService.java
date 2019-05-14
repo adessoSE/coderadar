@@ -41,7 +41,7 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
       analyzerConfiguration.setProject(project.get());
       return createAnalyzerConfigurationPort.create(analyzerConfiguration);
     } else {
-      throw new ProjectNotFoundException();
+      throw new ProjectNotFoundException(projectId);
     }
   }
 }

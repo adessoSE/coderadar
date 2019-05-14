@@ -31,7 +31,7 @@ public class CreateModuleService implements CreateModuleUseCase {
     if (project.isPresent()) {
       module.setProject(project.get());
     } else {
-      throw new ProjectNotFoundException();
+      throw new ProjectNotFoundException(projectId);
     }
 
     return createModulePort.createModule(module);

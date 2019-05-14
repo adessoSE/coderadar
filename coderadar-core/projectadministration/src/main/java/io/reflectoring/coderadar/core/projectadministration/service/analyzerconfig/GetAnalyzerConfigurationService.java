@@ -29,7 +29,7 @@ public class GetAnalyzerConfigurationService implements GetAnalyzerConfiguration
           analyzerConfiguration.get().getAnalyzerName(),
           analyzerConfiguration.get().getEnabled());
     } else {
-      throw new AnalyzerConfigurationNotFoundException();
+      throw new AnalyzerConfigurationNotFoundException(id);
     }
   }
 }
