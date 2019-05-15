@@ -29,7 +29,7 @@ public class GetAvailableMetricsInProjectService implements GetAvailableMetricsI
     Optional<Project> persistedProject = getProjectRepository.findById(projectId);
 
     if (persistedProject.isPresent()) {
-      return getAvailableMetricsInProjectRepository.findMetricsInProject(projectId);
+      return getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(projectId);
     } else {
       throw new ProjectNotFoundException(
           String.format("A project with the ID '%d' doesn't exists.", projectId));

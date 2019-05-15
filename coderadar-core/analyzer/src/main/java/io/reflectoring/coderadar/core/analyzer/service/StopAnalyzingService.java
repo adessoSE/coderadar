@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.core.analyzer.service;
 import io.reflectoring.coderadar.core.analyzer.port.driven.StopAnalyzingPort;
 import io.reflectoring.coderadar.core.analyzer.port.driver.StopAnalyzingUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service("StopAnalyzingService")
@@ -10,7 +11,7 @@ public class StopAnalyzingService implements StopAnalyzingUseCase {
   private final StopAnalyzingPort stopAnalyzingPort;
 
   @Autowired
-  public StopAnalyzingService(StopAnalyzingPort stopAnalyzingPort) {
+  public StopAnalyzingService(@Qualifier("StopAnalyzingServiceNeo4j") StopAnalyzingPort stopAnalyzingPort) {
     this.stopAnalyzingPort = stopAnalyzingPort;
   }
 

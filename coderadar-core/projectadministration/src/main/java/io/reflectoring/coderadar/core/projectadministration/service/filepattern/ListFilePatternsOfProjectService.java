@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.filepatt
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service("ListFilePatternsOfProjectService")
@@ -15,7 +16,7 @@ public class ListFilePatternsOfProjectService implements ListFilePatternsOfProje
   private final ListFilePatternsOfProjectPort port;
 
   @Autowired
-  public ListFilePatternsOfProjectService(ListFilePatternsOfProjectPort port) {
+  public ListFilePatternsOfProjectService(@Qualifier("ListFilePatternsOfProjectServiceNeo4j") ListFilePatternsOfProjectPort port) {
     this.port = port;
   }
 

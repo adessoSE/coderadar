@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.user.log
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service("LoginUserService")
@@ -14,7 +15,7 @@ public class LoginUserService implements LoginUserUseCase {
   private final LoginUserPort port;
 
   @Autowired
-  public LoginUserService(LoginUserPort port) {
+  public LoginUserService(@Qualifier("LoginUserServiceNeo4j") LoginUserPort port) {
     this.port = port;
   }
 

@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectUseCase;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.ProviderNotFoundException;
@@ -15,7 +16,7 @@ public class GetProjectService implements GetProjectUseCase {
 
   private final GetProjectPort port;
 
-  public GetProjectService(GetProjectPort port) {
+  public GetProjectService(@Qualifier("GetProjectServiceNeo4j") GetProjectPort port) {
     this.port = port;
   }
 

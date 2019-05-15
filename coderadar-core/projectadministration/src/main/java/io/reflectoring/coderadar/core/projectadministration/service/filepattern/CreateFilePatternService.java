@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.create.CreateFilePatternUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class CreateFilePatternService implements CreateFilePatternUseCase {
 
   @Autowired
   public CreateFilePatternService(
-      GetProjectPort getProjectPort, CreateFilePatternPort createFilePatternPort) {
+          @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort, @Qualifier("CreateFilePatternServiceNeo4j") CreateFilePatternPort createFilePatternPort) {
     this.getProjectPort = getProjectPort;
     this.createFilePatternPort = createFilePatternPort;
   }

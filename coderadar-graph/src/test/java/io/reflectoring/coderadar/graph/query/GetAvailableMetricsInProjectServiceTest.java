@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
@@ -47,7 +46,7 @@ class GetAvailableMetricsInProjectServiceTest {
     Optional<Project> mockProject = Optional.of(new Project());
     List<String> mockListOfMetrics = new LinkedList<>();
     when(getProjectRepository.findById(anyLong())).thenReturn(mockProject);
-    when(getAvailableMetricsInProjectRepository.findMetricsInProject(anyLong()))
+    when(getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(anyLong()))
         .thenReturn(mockListOfMetrics);
 
     List<String> returnedMetrics = getAvailableMetricsInProjectService.get(1L);
@@ -62,7 +61,7 @@ class GetAvailableMetricsInProjectServiceTest {
     List<String> mockListOfMetrics = new LinkedList<>();
     mockListOfMetrics.add("loc");
     when(getProjectRepository.findById(anyLong())).thenReturn(mockProject);
-    when(getAvailableMetricsInProjectRepository.findMetricsInProject(anyLong()))
+    when(getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(anyLong()))
         .thenReturn(mockListOfMetrics);
 
     List<String> returnedMetrics = getAvailableMetricsInProjectService.get(1L);
@@ -78,7 +77,7 @@ class GetAvailableMetricsInProjectServiceTest {
     mockListOfMetrics.add("sloc");
     mockListOfMetrics.add("cloc");
     when(getProjectRepository.findById(anyLong())).thenReturn(mockProject);
-    when(getAvailableMetricsInProjectRepository.findMetricsInProject(anyLong()))
+    when(getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(anyLong()))
         .thenReturn(mockListOfMetrics);
 
     List<String> returnedMetrics = getAvailableMetricsInProjectService.get(1L);

@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service("UpdateProjectService")
@@ -19,7 +20,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final UpdateProjectPort updateProjectPort;
 
   @Autowired
-  public UpdateProjectService(GetProjectPort getProjectPort, UpdateProjectPort updateProjectPort) {
+  public UpdateProjectService(@Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort, @Qualifier("UpdateProjectServiceNeo4j") UpdateProjectPort updateProjectPort) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
   }

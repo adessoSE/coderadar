@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.user.Reg
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.register.RegisterUserCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.register.RegisterUserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service("RegisterUserService")
@@ -13,7 +14,7 @@ public class RegisterUserService implements RegisterUserUseCase {
   private final RegisterUserPort port;
 
   @Autowired
-  public RegisterUserService(RegisterUserPort port) {
+  public RegisterUserService(@Qualifier("RegisterUserServiceNeo4j") RegisterUserPort port) {
     this.port = port;
   }
 

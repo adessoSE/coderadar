@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.module.g
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service("ListModulesOfProjectService")
@@ -15,7 +16,7 @@ public class ListModulesOfProjectService implements ListModulesOfProjectUseCase 
   private final ListModulesOfProjectPort port;
 
   @Autowired
-  public ListModulesOfProjectService(ListModulesOfProjectPort port) {
+  public ListModulesOfProjectService(@Qualifier("ListModulesOfProjectServiceNeo4j") ListModulesOfProjectPort port) {
     this.port = port;
   }
 

@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service("CreateProjectService")
@@ -14,7 +15,7 @@ public class CreateProjectService implements CreateProjectUseCase {
   private final CreateProjectPort createProjectPort;
 
   @Autowired
-  public CreateProjectService(CreateProjectPort createProjectPort) {
+  public CreateProjectService(@Qualifier("CreateProjectServiceNeo4j") CreateProjectPort createProjectPort) {
     this.createProjectPort = createProjectPort;
   }
 

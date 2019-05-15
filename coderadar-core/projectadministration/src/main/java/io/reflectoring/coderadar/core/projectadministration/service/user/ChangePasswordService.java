@@ -4,20 +4,20 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.user.Cha
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.password.ChangePasswordCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.password.ChangePasswordUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service("ChangePasswordService")
 public class ChangePasswordService implements ChangePasswordUseCase {
+    private final ChangePasswordPort port;
 
-  private final ChangePasswordPort port;
+    @Autowired
+    public ChangePasswordService(@Qualifier("ChangePasswordServiceNeo4j") ChangePasswordPort port) {
+        this.port = port;
+    }
 
-  @Autowired
-  public ChangePasswordService(ChangePasswordPort port) {
-    this.port = port;
-  }
-
-  @Override
-  public void changePassword(ChangePasswordCommand command) {
-    port.changePassword(command.getRefreshToken(), command.getNewPassword());
-  }
+    @Override
+    public void changePassword(ChangePasswordCommand command) {
+        port.changePassword(command.getRefreshToken(), command.getNewPassword());
+    }
 }

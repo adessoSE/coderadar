@@ -10,6 +10,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.module.c
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service("CreateModuleService")
@@ -19,8 +20,8 @@ public class CreateModuleService implements CreateModuleUseCase {
 
   @Autowired
   public CreateModuleService(
-      GetProjectPort getProjectPort,
-      CreateModulePort createModulePort) {
+      @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort,
+      @Qualifier("CreateModuleServiceNeo4j") CreateModulePort createModulePort) {
     this.getProjectPort = getProjectPort;
     this.createModulePort = createModulePort;
   }

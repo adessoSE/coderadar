@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzer
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service("UpdateAnalyzerConfigurationService")
@@ -18,8 +19,8 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
 
   @Autowired
   public UpdateAnalyzerConfigurationService(
-      UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort,
-      GetAnalyzerConfigurationPort getAnalyzerConfigurationPort) {
+      @Qualifier("UpdateAnalyzerConfigurationServiceNeo4j") UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort,
+      @Qualifier("GetAnalyzerConfigurationServiceNeo4j") GetAnalyzerConfigurationPort getAnalyzerConfigurationPort) {
     this.updateAnalyzerConfigurationPort = updateAnalyzerConfigurationPort;
     this.getAnalyzerConfigurationPort = getAnalyzerConfigurationPort;
   }

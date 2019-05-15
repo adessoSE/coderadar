@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.core.query.port.driven.GetMetricValuesOfCommitP
 import io.reflectoring.coderadar.core.query.port.driver.GetMetricValuesOfCommitUseCase;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service("GetMetricValuesOfCommitService")
@@ -13,7 +14,7 @@ public class GetMetricValuesOfCommitService implements GetMetricValuesOfCommitUs
   private final GetMetricValuesOfCommitPort getMetricValuesOfCommitPort;
 
   @Autowired
-  public GetMetricValuesOfCommitService(GetMetricValuesOfCommitPort getMetricValuesOfCommitPort) {
+  public GetMetricValuesOfCommitService(@Qualifier("GetMetricValuesOfCommitServiceNeo4j") GetMetricValuesOfCommitPort getMetricValuesOfCommitPort) {
     this.getMetricValuesOfCommitPort = getMetricValuesOfCommitPort;
   }
 
