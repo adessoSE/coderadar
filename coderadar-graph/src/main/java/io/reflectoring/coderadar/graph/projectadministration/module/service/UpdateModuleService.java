@@ -28,8 +28,7 @@ public class UpdateModuleService implements UpdateModulePort {
     if (oldModule.isPresent()) {
       updateModuleRepository.save(module);
     } else {
-      throw new ModuleNotFoundException(
-          String.format("There is no module with the ID %d. Updating failed.", module.getId()));
+      throw new ModuleNotFoundException(module.getId());
     }
   }
 }

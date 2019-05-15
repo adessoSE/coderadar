@@ -1,9 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration;
 
 public class ModuleNotFoundException extends RuntimeException {
-  public ModuleNotFoundException() {}
-
-  public ModuleNotFoundException(String message) {
-    super(message);
+  public ModuleNotFoundException(Long moduleId) {
+    super("Module with id " + moduleId + " not found.");
   }
 }

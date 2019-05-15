@@ -5,7 +5,6 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import java.util.Optional;
@@ -35,7 +34,7 @@ public class CreateModuleService implements CreateModuleUseCase {
     if (project.isPresent()) {
       module.setProject(project.get());
     } else {
-      throw new ProjectNotFoundException();
+      throw new ProjectNotFoundException(projectId);
     }
 
     return createModulePort.createModule(module);

@@ -6,10 +6,8 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectUseCase;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-
-import java.nio.file.ProviderNotFoundException;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service("GetProjectService")
 public class GetProjectService implements GetProjectUseCase {
@@ -37,7 +35,7 @@ public class GetProjectService implements GetProjectUseCase {
       response.setEnd(persistedProject.getVcsEnd());
       return response;
     } else {
-      throw new ProjectNotFoundException();
+      throw new ProjectNotFoundException(id);
     }
   }
 }

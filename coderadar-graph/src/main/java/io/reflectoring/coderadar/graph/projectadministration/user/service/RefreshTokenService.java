@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 
 @Service("RefreshTokenServiceNeo4j")
 public class RefreshTokenService implements RefreshTokenPort {
-    @Override
-    public String createAccessToken(String refreshToken) {
-        return "1";
-    }
+  @Override
+  public String createAccessToken(String refreshToken) {
+    return "1";
+  }
 }

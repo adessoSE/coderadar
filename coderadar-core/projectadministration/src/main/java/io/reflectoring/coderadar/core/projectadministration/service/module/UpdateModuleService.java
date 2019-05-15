@@ -32,7 +32,7 @@ public class UpdateModuleService implements UpdateModuleUseCase {
       updatedModule.setPath(command.getPath());
       updateModulePort.updateModule(updatedModule);
     } else {
-      throw new ModuleNotFoundException();
+      throw new ModuleNotFoundException(moduleId);
     }
   }
 }

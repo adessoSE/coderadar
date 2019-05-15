@@ -4,5 +4,4 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GetMetricsForAllFilesInCommitRepository extends Neo4jRepository {
-}
+public interface GetMetricsForAllFilesInCommitRepository extends Neo4jRepository {}

@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 @Service("LoginUserServiceNeo4j")
 public class LoginUserService implements LoginUserPort {
-    @Override
-    public User login(User user) {
-        return user;
-    }
+  @Override
+  public User login(User user) {
+    return user;
+  }
 }

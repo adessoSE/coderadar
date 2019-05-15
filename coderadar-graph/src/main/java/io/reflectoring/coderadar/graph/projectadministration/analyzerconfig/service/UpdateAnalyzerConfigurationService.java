@@ -32,8 +32,7 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
     if (peristedAnalyzerConfiguration.isPresent()) {
       updateAnalyzerConfigurationRepository.save(entity);
     } else {
-      throw new AnalyzerConfigurationNotFoundException(
-          "Can't update a non-existing analyzer configuration.");
+      throw new AnalyzerConfigurationNotFoundException(entity.getId());
     }
   }
 }

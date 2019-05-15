@@ -6,10 +6,9 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
-import java.util.Optional;
-
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationUseCase;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -43,7 +42,7 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
       analyzerConfiguration.setProject(project.get());
       return createAnalyzerConfigurationPort.create(analyzerConfiguration);
     } else {
-      throw new ProjectNotFoundException();
+      throw new ProjectNotFoundException(projectId);
     }
   }
 }

@@ -5,11 +5,10 @@ import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfi
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationUseCase;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service("GetAnalyzerConfigurationService")
 public class GetAnalyzerConfigurationService implements GetAnalyzerConfigurationUseCase {
@@ -27,9 +26,11 @@ public class GetAnalyzerConfigurationService implements GetAnalyzerConfiguration
 
     if (analyzerConfiguration.isPresent()) {
       return new GetAnalyzerConfigurationResponse(
-              id, analyzerConfiguration.get().getAnalyzerName(), analyzerConfiguration.get().getEnabled());
+          id,
+          analyzerConfiguration.get().getAnalyzerName(),
+          analyzerConfiguration.get().getEnabled());
     } else {
-      throw new AnalyzerConfigurationNotFoundException();
+      throw new AnalyzerConfigurationNotFoundException(id);
     }
   }
 }

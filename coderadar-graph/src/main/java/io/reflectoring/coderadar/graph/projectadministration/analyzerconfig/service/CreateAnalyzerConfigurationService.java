@@ -11,7 +11,8 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
   private final CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository;
 
   @Autowired
-  public CreateAnalyzerConfigurationService(CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository) {
+  public CreateAnalyzerConfigurationService(
+      CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository) {
     this.createAnalyzerConfigurationRepository = createAnalyzerConfigurationRepository;
   }
 

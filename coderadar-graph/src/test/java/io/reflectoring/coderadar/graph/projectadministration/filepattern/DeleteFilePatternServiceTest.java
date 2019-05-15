@@ -11,6 +11,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @DisplayName("Delete file pattern")
 public class DeleteFilePatternServiceTest {
-    @Mock private DeleteFilePatternRepository deleteFilePatternRepository;
-    @InjectMocks private DeleteFilePatternService deleteFilePatternService;
+  @Mock private DeleteFilePatternRepository deleteFilePatternRepository;
+  @InjectMocks private DeleteFilePatternService deleteFilePatternService;
 }

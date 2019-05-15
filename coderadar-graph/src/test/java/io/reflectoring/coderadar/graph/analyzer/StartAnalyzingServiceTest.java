@@ -10,6 +10,7 @@ import io.reflectoring.coderadar.graph.analyzer.repository.StartAnalyzingReposit
 import io.reflectoring.coderadar.graph.analyzer.service.StartAnalyzingService;
 import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
+import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,8 +18,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.Date;
 
 @ExtendWith(SpringExtension.class)
 @DisplayName("Start analyzing")
@@ -33,7 +32,8 @@ class StartAnalyzingServiceTest {
   @DisplayName("Should throw exception when a project with the passing ID doesn't exists")
   void shouldThrowExceptionWhenAProjectWithThePassingIdDoesntExists() {
     Assertions.assertThrows(
-        ProjectNotFoundException.class, () -> startAnalyzingService.start(new StartAnalyzingCommand(1L, new Date(), true)));
+        ProjectNotFoundException.class,
+        () -> startAnalyzingService.start(new StartAnalyzingCommand(1L, new Date(), true)));
   }
 
   @Test

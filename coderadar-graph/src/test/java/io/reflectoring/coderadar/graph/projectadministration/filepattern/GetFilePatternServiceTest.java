@@ -14,13 +14,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @DisplayName("Get file pattern")
 public class GetFilePatternServiceTest {
-    @Mock private GetFilePatternRepository getFilePatternRepository;
-    @InjectMocks private GetFilePatternService getFilePatternService;
+  @Mock private GetFilePatternRepository getFilePatternRepository;
+  @InjectMocks private GetFilePatternService getFilePatternService;
 
-    @Test
-    @DisplayName("Should return file pattern when passing a valid argument")
-    void shouldReturnFilePatternWhenPassingAValidArgument() {
-        FilePattern returnedFilePattern = getFilePatternService.get(1L);
-        Assertions.assertThat(returnedFilePattern).isNotNull();
-    }
+  @Test
+  @DisplayName("Should return file pattern when passing a valid argument")
+  void shouldReturnFilePatternWhenPassingAValidArgument() {
+    FilePattern returnedFilePattern = getFilePatternService.get(1L);
+    Assertions.assertThat(returnedFilePattern).isNotNull();
+  }
 }

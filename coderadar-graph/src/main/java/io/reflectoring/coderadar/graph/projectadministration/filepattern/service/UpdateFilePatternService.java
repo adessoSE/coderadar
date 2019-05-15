@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service("UpdateFilePatternServiceNeo4j")
 public class UpdateFilePatternService implements UpdateFilePatternPort {
-    @Override
-    public void updateFilePattern(FilePattern filePattern) {
-    }
+  @Override
+  public void updateFilePattern(FilePattern filePattern) {}
 }

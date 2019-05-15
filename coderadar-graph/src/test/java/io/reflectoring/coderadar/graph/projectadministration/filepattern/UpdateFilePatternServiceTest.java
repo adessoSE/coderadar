@@ -11,6 +11,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ExtendWith(SpringExtension.class)
 @DisplayName("Update file pattern")
 public class UpdateFilePatternServiceTest {
-    @Mock private UpdateFilePatternRepository updateFilePatternRepository;
-    @InjectMocks private UpdateFilePatternService updateFilePatternService;
+  @Mock private UpdateFilePatternRepository updateFilePatternRepository;
+  @InjectMocks private UpdateFilePatternService updateFilePatternService;
 }
