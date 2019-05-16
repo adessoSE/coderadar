@@ -2,7 +2,6 @@ apply plugin: "com.diffplug.gradle.spotless"
 
 dependencies {
     compile project(":coderadar-plugin-api")
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.1.4.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-neo4j', version: '2.1.4.RELEASE'
     testCompile "org.springframework.boot:spring-boot-starter-test:${version_spring_boot}"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8"

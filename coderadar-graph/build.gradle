@@ -7,7 +7,9 @@ spotless {
 }
 
 dependencies {
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-neo4j', version: '2.1.4.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-neo4j', version: version_spring_boot
+    compile project(":coderadar-core:projectadministration")
+    compile project(":coderadar-core:analyzer")
     compile project(":coderadar-core:query")
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.4.RELEASE'
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: version_spring_boot
 }
