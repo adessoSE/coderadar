@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.core.projectadministration.project;
 
+import static org.mockito.ArgumentMatchers.any;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.domain.VcsCoordinates;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.CreateProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.project.CreateProjectService;
@@ -23,23 +24,20 @@ class CreateProjectServiceTest {
 
   @Test
   void returnsNewProjectId() throws MalformedURLException {
-    URL url = new URL("http://valid.url");
-
     CreateProjectCommand command =
         new CreateProjectCommand(
-            "project", "username", "password", url, true, new Date(), new Date());
+            "project", "username", "password", "http://valid.url", true, new Date(), new Date());
 
     Project project = new Project();
     project.setName("project");
-    VcsCoordinates coordinates = new VcsCoordinates(url);
-    coordinates.setUsername("username");
-    coordinates.setPassword("password");
-    coordinates.setOnline(true);
-    coordinates.setStartDate(new Date());
-    coordinates.setEndDate(new Date());
-    project.setVcsCoordinates(coordinates);
+    project.setVcsUrl(new URL("http://valid.url"));
+    project.setVcsUsername("username");
+    project.setVcsPassword("password");
+    project.setVcsOnline(true);
+    project.setVcsStart(new Date());
+    project.setVcsEnd(new Date());
 
-    Mockito.when(createProjectPort.createProject(project)).thenReturn(1L);
+    Mockito.when(createProjectPort.createProject(any())).thenReturn(1L);
 
     Long projectId = testSubject.createProject(command);
 

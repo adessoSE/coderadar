@@ -3,5 +3,6 @@ package io.reflectoring.coderadar.core.projectadministration.port.driver.analyze
 import io.reflectoring.coderadar.core.projectadministration.AnalyzerConfigurationNotFoundException;
 
 public interface GetAnalyzerConfigurationUseCase {
-  GetAnalyzerConfigurationResponse getSingleAnalyzerConfiguration(Long id) throws AnalyzerConfigurationNotFoundException;
+  GetAnalyzerConfigurationResponse getSingleAnalyzerConfiguration(Long id)
+      throws AnalyzerConfigurationNotFoundException;
 }

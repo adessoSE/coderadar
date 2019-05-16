@@ -3,5 +3,6 @@ package io.reflectoring.coderadar.core.projectadministration.port.driver.filepat
 import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 
 public interface CreateFilePatternUseCase {
-  Long createFilePattern(CreateFilePatternCommand command, Long projectId) throws ProjectNotFoundException;
+  Long createFilePattern(CreateFilePatternCommand command, Long projectId)
+      throws ProjectNotFoundException;
 }

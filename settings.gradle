@@ -5,7 +5,7 @@ include 'coderadar-plugins:checkstyle-analyzer-plugin'
 include 'coderadar-core:projectadministration'
 include 'coderadar-core:analyzer'
 include 'coderadar-core:query'
+include 'coderadar-core:vcs'
 include 'coderadar-app'
 include 'rest'
 include 'coderadar-graph'
-

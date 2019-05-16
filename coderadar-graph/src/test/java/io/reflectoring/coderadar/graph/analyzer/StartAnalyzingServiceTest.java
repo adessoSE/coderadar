@@ -4,11 +4,11 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.core.analyzer.port.driver.StartAnalyzingCommand;
+import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzingJob;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.analyzer.repository.StartAnalyzingRepository;
 import io.reflectoring.coderadar.graph.analyzer.service.StartAnalyzingService;
-import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import java.util.Date;
 import org.junit.jupiter.api.Assertions;

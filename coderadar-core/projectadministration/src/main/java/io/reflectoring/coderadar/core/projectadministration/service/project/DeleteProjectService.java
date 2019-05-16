@@ -16,14 +16,15 @@ public class DeleteProjectService implements DeleteProjectUseCase {
 
   @Autowired
   public DeleteProjectService(
-          @Qualifier("DeleteProjectServiceNeo4j") DeleteProjectPort deleteProjectPort, @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort) {
+      @Qualifier("DeleteProjectServiceNeo4j") DeleteProjectPort deleteProjectPort,
+      @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort) {
     this.deleteProjectPort = deleteProjectPort;
     this.getProjectPort = getProjectPort;
   }
 
   @Override
-  public void delete(Long id) throws ProjectNotFoundException{
-    if(getProjectPort.get(id).isPresent()) {
+  public void delete(Long id) throws ProjectNotFoundException {
+    if (getProjectPort.get(id).isPresent()) {
       deleteProjectPort.delete(id);
     } else {
       throw new ProjectNotFoundException(id);

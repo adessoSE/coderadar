@@ -28,7 +28,8 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
   }
 
   @Override
-  public void update(UpdateAnalyzerConfigurationCommand command, Long analyzerId) throws AnalyzerConfigurationNotFoundException {
+  public void update(UpdateAnalyzerConfigurationCommand command, Long analyzerId)
+      throws AnalyzerConfigurationNotFoundException {
     Optional<AnalyzerConfiguration> analyzerConfiguration =
         getAnalyzerConfigurationPort.getAnalyzerConfiguration(analyzerId);
     if (analyzerConfiguration.isPresent()) {

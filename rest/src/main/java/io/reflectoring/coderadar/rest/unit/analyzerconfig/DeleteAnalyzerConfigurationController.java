@@ -20,11 +20,12 @@ public class DeleteAnalyzerConfigurationController {
   }
 
   @DeleteMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}")
-  public ResponseEntity<String> deleteAnalyzerConfiguration(@PathVariable Long analyzerConfigurationId) {
+  public ResponseEntity<String> deleteAnalyzerConfiguration(
+      @PathVariable Long analyzerConfigurationId) {
     try {
       deleteAnalyzerConfigurationUseCase.deleteAnalyzerConfiguration(analyzerConfigurationId);
       return new ResponseEntity<>(HttpStatus.OK);
-    } catch (AnalyzerConfigurationNotFoundException e){
+    } catch (AnalyzerConfigurationNotFoundException e) {
       return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
   }

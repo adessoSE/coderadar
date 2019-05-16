@@ -9,22 +9,19 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.filepatt
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired
-  private CreateProjectRepository createProjectRepository;
+  @Autowired private CreateProjectRepository createProjectRepository;
 
-  @Autowired
-  private CreateFilePatternRepository createFilePatternRepository;
+  @Autowired private CreateFilePatternRepository createFilePatternRepository;
 
   @BeforeEach
   public void setUp() throws MalformedURLException {
@@ -41,23 +38,37 @@ class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
 
   @Test
   void updateFilePatternWithIdOne() throws Exception {
-    UpdateFilePatternCommand command = new UpdateFilePatternCommand("**/*.java", InclusionType.EXCLUDE);
-    mvc().perform(post("/projects/0/filePatterns/1").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isOk());
+    UpdateFilePatternCommand command =
+        new UpdateFilePatternCommand("**/*.java", InclusionType.EXCLUDE);
+    mvc()
+        .perform(
+            post("/projects/0/filePatterns/1")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isOk());
   }
 
   @Test
   void updateFilePatternReturnsErrorWhenNotFound() throws Exception {
-    UpdateFilePatternCommand command = new UpdateFilePatternCommand("**/*.java", InclusionType.EXCLUDE);
-    mvc().perform(post("/projects/0/filePatterns/2").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andExpect(MockMvcResultMatchers.content().string("FilePattern with id 2 not found."));
+    UpdateFilePatternCommand command =
+        new UpdateFilePatternCommand("**/*.java", InclusionType.EXCLUDE);
+    mvc()
+        .perform(
+            post("/projects/0/filePatterns/2")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.content().string("FilePattern with id 2 not found."));
   }
 
   @Test
   void updateFilePatternReturnsErrorWhenRequestIsInvalid() throws Exception {
     UpdateFilePatternCommand command = new UpdateFilePatternCommand("", null);
-    mvc().perform(post("/projects/0/filePatterns/1").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    mvc()
+        .perform(
+            post("/projects/0/filePatterns/1")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 }

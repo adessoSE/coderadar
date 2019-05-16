@@ -25,9 +25,10 @@ public class ListAnalyzerConfigurationsFromProjectController {
   @GetMapping(path = "/projects/{projectId}/analyzers")
   public ResponseEntity getAnalyzerConfigurationsFromProject(@PathVariable Long projectId) {
     try {
-      List<GetAnalyzerConfigurationResponse> analyzerConfigurations = getAnalyzerConfigurationsFromProjectUseCase.get(projectId);
+      List<GetAnalyzerConfigurationResponse> analyzerConfigurations =
+          getAnalyzerConfigurationsFromProjectUseCase.get(projectId);
       return new ResponseEntity<>(analyzerConfigurations, HttpStatus.OK);
-    } catch (ProjectNotFoundException e){
+    } catch (ProjectNotFoundException e) {
       return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
   }

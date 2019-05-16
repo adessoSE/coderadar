@@ -26,7 +26,8 @@ public class UpdateModuleService implements UpdateModuleUseCase {
   }
 
   @Override
-  public void updateModule(UpdateModuleCommand command, Long moduleId) throws ModuleNotFoundException {
+  public void updateModule(UpdateModuleCommand command, Long moduleId)
+      throws ModuleNotFoundException {
     Optional<Module> module = getModulePort.get(moduleId);
     if (module.isPresent()) {
       Module updatedModule = module.get();

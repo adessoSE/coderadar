@@ -9,21 +9,18 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.module.g
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 class GetModuleControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired
-  private CreateProjectRepository createProjectRepository;
+  @Autowired private CreateProjectRepository createProjectRepository;
 
-  @Autowired
-  private CreateModuleRepository createModuleRepository;
+  @Autowired private CreateModuleRepository createModuleRepository;
 
   @BeforeEach
   public void setUp() throws MalformedURLException {
@@ -39,15 +36,17 @@ class GetModuleControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void getModuleWithIdOne() throws Exception {
-    mvc().perform(get("/projects/0/modules/1"))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(containsResource(GetModuleResponse.class));
+    mvc()
+        .perform(get("/projects/0/modules/1"))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(containsResource(GetModuleResponse.class));
   }
 
   @Test
   void getModuleReturnsErrorWhenModuleNotFound() throws Exception {
-    mvc().perform(get("/projects/0/modules/0"))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andExpect(MockMvcResultMatchers.content().string("Module with id 0 not found."));
+    mvc()
+        .perform(get("/projects/0/modules/0"))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.content().string("Module with id 0 not found."));
   }
 }

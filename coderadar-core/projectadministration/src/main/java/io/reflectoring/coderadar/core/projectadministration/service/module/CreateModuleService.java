@@ -26,7 +26,8 @@ public class CreateModuleService implements CreateModuleUseCase {
   }
 
   @Override
-  public Long createModule(CreateModuleCommand command, Long projectId) throws ProjectNotFoundException {
+  public Long createModule(CreateModuleCommand command, Long projectId)
+      throws ProjectNotFoundException {
     Module module = new Module();
     module.setPath(command.getPath());
     Optional<Project> project = getProjectPort.get(projectId);

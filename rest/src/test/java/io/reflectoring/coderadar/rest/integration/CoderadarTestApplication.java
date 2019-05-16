@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication(scanBasePackages = "io.reflectoring.coderadar")
 @EntityScan(basePackages = "io.reflectoring.coderadar")
 public class CoderadarTestApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(CoderadarTestApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(CoderadarTestApplication.class, args);
+  }
 }

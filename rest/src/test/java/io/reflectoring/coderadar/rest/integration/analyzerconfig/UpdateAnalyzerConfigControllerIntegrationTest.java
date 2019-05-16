@@ -8,22 +8,19 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzer
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired
-  private CreateProjectRepository createProjectRepository;
+  @Autowired private CreateProjectRepository createProjectRepository;
 
-  @Autowired
-  private CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository;
+  @Autowired private CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository;
 
   @BeforeEach
   public void setUp() throws MalformedURLException {
@@ -42,22 +39,36 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
   void updateAnalyzerConfigurationWithIdOne() throws Exception {
     UpdateAnalyzerConfigurationCommand command =
         new UpdateAnalyzerConfigurationCommand("new analyzer name", false);
-    mvc().perform(post("/projects/0/analyzers/1").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isOk());
+    mvc()
+        .perform(
+            post("/projects/0/analyzers/1")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isOk());
   }
 
   @Test
   void updateAnalyzerConfigurationReturnsErrorWhenNotFound() throws Exception {
-    UpdateAnalyzerConfigurationCommand command = new UpdateAnalyzerConfigurationCommand("new analyzer name", false);
-    mvc().perform(post("/projects/0/analyzers/2").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andExpect(MockMvcResultMatchers.content().string("AnalyzerConfiguration with id 2 not found."));
+    UpdateAnalyzerConfigurationCommand command =
+        new UpdateAnalyzerConfigurationCommand("new analyzer name", false);
+    mvc()
+        .perform(
+            post("/projects/0/analyzers/2")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(
+            MockMvcResultMatchers.content().string("AnalyzerConfiguration with id 2 not found."));
   }
 
   @Test
   void updateAnalyzerConfigurationReturnsErrorWhenRequestInvalid() throws Exception {
     UpdateAnalyzerConfigurationCommand command = new UpdateAnalyzerConfigurationCommand("", false);
-    mvc().perform(post("/projects/0/analyzers/1").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    mvc()
+        .perform(
+            post("/projects/0/analyzers/1")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 }

@@ -3,5 +3,6 @@ package io.reflectoring.coderadar.core.projectadministration.port.driver.filepat
 import io.reflectoring.coderadar.core.projectadministration.FilePatternNotFoundException;
 
 public interface UpdateFilePatternUseCase {
-  void updateFilePattern(UpdateFilePatternCommand command, Long filePatternId) throws FilePatternNotFoundException;
+  void updateFilePattern(UpdateFilePatternCommand command, Long filePatternId)
+      throws FilePatternNotFoundException;
 }

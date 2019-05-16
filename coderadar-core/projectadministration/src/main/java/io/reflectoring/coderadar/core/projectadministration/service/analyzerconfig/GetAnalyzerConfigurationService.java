@@ -22,7 +22,8 @@ public class GetAnalyzerConfigurationService implements GetAnalyzerConfiguration
   }
 
   @Override
-  public GetAnalyzerConfigurationResponse getSingleAnalyzerConfiguration(Long id) throws AnalyzerConfigurationNotFoundException {
+  public GetAnalyzerConfigurationResponse getSingleAnalyzerConfiguration(Long id)
+      throws AnalyzerConfigurationNotFoundException {
     Optional<AnalyzerConfiguration> analyzerConfiguration = port.getAnalyzerConfiguration(id);
 
     if (analyzerConfiguration.isPresent()) {

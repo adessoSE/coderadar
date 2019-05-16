@@ -27,7 +27,8 @@ public class CreateFilePatternService implements CreateFilePatternUseCase {
   }
 
   @Override
-  public Long createFilePattern(CreateFilePatternCommand command, Long projectId) throws ProjectNotFoundException {
+  public Long createFilePattern(CreateFilePatternCommand command, Long projectId)
+      throws ProjectNotFoundException {
     Optional<Project> project = getProjectPort.get(projectId);
     if (project.isPresent()) {
       FilePattern filePattern = new FilePattern();

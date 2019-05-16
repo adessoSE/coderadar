@@ -6,8 +6,8 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.4.RELEASE'
     compile project(":coderadar-app")
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.4.RELEASE'
-    testCompile group: 'org.springframework.restdocs', name: 'spring-restdocs-mockmvc', version: '2.0.3.RELEASE'
-    testCompile 'com.jayway.jsonpath:json-path-assert:2.2.0'
+    testCompile "org.springframework.restdocs:spring-restdocs-mockmvc:${version_spring_restdocs}"
+    testCompile "org.springframework.restdocs:spring-restdocs-core:${version_spring_restdocs}"
 }
 
 spotless {

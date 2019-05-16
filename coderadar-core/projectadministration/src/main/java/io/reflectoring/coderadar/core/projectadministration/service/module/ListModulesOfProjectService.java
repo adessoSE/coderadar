@@ -20,14 +20,15 @@ public class ListModulesOfProjectService implements ListModulesOfProjectUseCase 
 
   @Autowired
   public ListModulesOfProjectService(
-          @Qualifier("ListModulesOfProjectServiceNeo4j") ListModulesOfProjectPort port, GetProjectPort getProjectPort) {
+      @Qualifier("ListModulesOfProjectServiceNeo4j") ListModulesOfProjectPort port,
+      GetProjectPort getProjectPort) {
     this.port = port;
     this.getProjectPort = getProjectPort;
   }
 
   @Override
   public List<GetModuleResponse> listModules(Long projectId) throws ProjectNotFoundException {
-    if(getProjectPort.get(projectId).isPresent()) {
+    if (getProjectPort.get(projectId).isPresent()) {
       List<GetModuleResponse> modules = new ArrayList<>();
       for (Module module : port.listModules(projectId)) {
         modules.add(new GetModuleResponse(module.getId(), module.getPath()));

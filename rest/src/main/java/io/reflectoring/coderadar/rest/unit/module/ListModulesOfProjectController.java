@@ -21,8 +21,9 @@ public class ListModulesOfProjectController {
   @GetMapping(path = "/projects/{projectId}/modules")
   public ResponseEntity listModules(@PathVariable Long projectId) {
     try {
-      return new ResponseEntity<>(listModulesOfProjectUseCase.listModules(projectId), HttpStatus.OK);
-    } catch (ProjectNotFoundException e){
+      return new ResponseEntity<>(
+          listModulesOfProjectUseCase.listModules(projectId), HttpStatus.OK);
+    } catch (ProjectNotFoundException e) {
       return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
   }

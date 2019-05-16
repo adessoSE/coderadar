@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.rest.unit.project;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,7 +24,13 @@ class CreateProjectControllerTest {
   void createNewProjectSuccessfully() throws MalformedURLException {
     CreateProjectCommand command =
         new CreateProjectCommand(
-            "test", "testUsername", "testPassword", "http://valid.url", true, new Date(), new Date());
+            "test",
+            "testUsername",
+            "testPassword",
+            "http://valid.url",
+            true,
+            new Date(),
+            new Date());
 
     Mockito.when(createProjectUseCase.createProject(command)).thenReturn(1L);
 

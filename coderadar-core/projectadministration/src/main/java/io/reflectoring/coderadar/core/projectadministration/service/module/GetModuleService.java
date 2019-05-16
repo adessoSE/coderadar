@@ -20,7 +20,7 @@ public class GetModuleService implements GetModuleUseCase {
   }
 
   @Override
-  public GetModuleResponse get(Long id) throws ModuleNotFoundException{
+  public GetModuleResponse get(Long id) throws ModuleNotFoundException {
     Optional<Module> module = getModulePort.get(id);
 
     if (module.isPresent()) {

@@ -23,12 +23,13 @@ public class UpdateAnalyzerConfigurationController {
   }
 
   @PostMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}")
-  public ResponseEntity<String> updateAnalyzerConfiguration(@RequestBody @Validated UpdateAnalyzerConfigurationCommand command,
-                                                            @PathVariable(name = "analyzerConfigurationId") Long analyzerConfigurationId) {
+  public ResponseEntity<String> updateAnalyzerConfiguration(
+      @RequestBody @Validated UpdateAnalyzerConfigurationCommand command,
+      @PathVariable(name = "analyzerConfigurationId") Long analyzerConfigurationId) {
     try {
       updateAnalyzerConfigurationUseCase.update(command, analyzerConfigurationId);
       return new ResponseEntity<>(HttpStatus.OK);
-    } catch (AnalyzerConfigurationNotFoundException e){
+    } catch (AnalyzerConfigurationNotFoundException e) {
       return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
   }

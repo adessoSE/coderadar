@@ -32,7 +32,8 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
   }
 
   @Override
-  public Long create(CreateAnalyzerConfigurationCommand command, Long projectId) throws ProjectNotFoundException {
+  public Long create(CreateAnalyzerConfigurationCommand command, Long projectId)
+      throws ProjectNotFoundException {
     AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
     analyzerConfiguration.setEnabled(command.getEnabled());
     analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());

@@ -22,11 +22,13 @@ public class UpdateFilePatternController {
   }
 
   @PostMapping(path = "/projects/{projectId}/filePatterns/{filePatternId}")
-  public ResponseEntity<String> updateFilePattern(@RequestBody @Validated  UpdateFilePatternCommand command, @PathVariable(name = "filePatternId") Long filePatternId) {
+  public ResponseEntity<String> updateFilePattern(
+      @RequestBody @Validated UpdateFilePatternCommand command,
+      @PathVariable(name = "filePatternId") Long filePatternId) {
     try {
       updateFilePatternForProjectUseCase.updateFilePattern(command, filePatternId);
       return new ResponseEntity<>(HttpStatus.OK);
-    } catch (FilePatternNotFoundException e){
+    } catch (FilePatternNotFoundException e) {
       return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
   }

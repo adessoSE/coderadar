@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.graph.query;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 
-import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
+import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
 import io.reflectoring.coderadar.graph.query.service.GetCommitsInProjectService;
@@ -28,6 +28,6 @@ public class GetCommitsInProjectServiceTest {
     assertThat(thrown)
         .isInstanceOf(ProjectNotFoundException.class)
         .hasNoCause()
-        .hasMessage("A project with the ID '1' doesn't exists.");
+        .hasMessage("Project with id 1 not found.");
   }
 }

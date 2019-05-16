@@ -6,9 +6,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectUseCase;
-
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.Optional;
 import java.util.UUID;

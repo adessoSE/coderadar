@@ -16,16 +16,17 @@ public class DeleteFilePatternService implements DeleteFilePatternFromProjectUse
 
   @Autowired
   public DeleteFilePatternService(
-          @Qualifier("DeleteFilePatternServiceNeo4j") DeleteFilePatternPort deleteFilePatternPort, GetFilePatternPort getFilePatternPort) {
+      @Qualifier("DeleteFilePatternServiceNeo4j") DeleteFilePatternPort deleteFilePatternPort,
+      GetFilePatternPort getFilePatternPort) {
     this.deleteFilePatternPort = deleteFilePatternPort;
     this.getFilePatternPort = getFilePatternPort;
   }
 
   @Override
   public void delete(Long id) {
-    if(getFilePatternPort.get(id).isPresent()) {
+    if (getFilePatternPort.get(id).isPresent()) {
       deleteFilePatternPort.delete(id);
-    }else {
+    } else {
       throw new FilePatternNotFoundException(id);
     }
   }

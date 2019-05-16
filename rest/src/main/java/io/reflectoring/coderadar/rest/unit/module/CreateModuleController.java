@@ -23,10 +23,12 @@ public class CreateModuleController {
 
   @PostMapping(path = "/projects/{projectId}/modules")
   public ResponseEntity createModule(
-          @RequestBody @Validated CreateModuleCommand command, @PathVariable(name = "projectId") Long projectId) {
+      @RequestBody @Validated CreateModuleCommand command,
+      @PathVariable(name = "projectId") Long projectId) {
     try {
-      return new ResponseEntity<>(createModuleUseCase.createModule(command, projectId), HttpStatus.CREATED);
-    } catch (ProjectNotFoundException e){
+      return new ResponseEntity<>(
+          createModuleUseCase.createModule(command, projectId), HttpStatus.CREATED);
+    } catch (ProjectNotFoundException e) {
       return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
   }

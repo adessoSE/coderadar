@@ -15,16 +15,18 @@ public class DeleteModuleService implements DeleteModuleUseCase {
   private final GetModulePort getModulePort;
 
   @Autowired
-  public DeleteModuleService(@Qualifier("DeleteModuleServiceNeo4j") DeleteModulePort deleteModulePort, GetModulePort getModulePort) {
+  public DeleteModuleService(
+      @Qualifier("DeleteModuleServiceNeo4j") DeleteModulePort deleteModulePort,
+      GetModulePort getModulePort) {
     this.deleteModulePort = deleteModulePort;
     this.getModulePort = getModulePort;
   }
 
   @Override
   public void delete(Long id) throws ModuleNotFoundException {
-    if(getModulePort.get(id).isPresent()) {
+    if (getModulePort.get(id).isPresent()) {
       deleteModulePort.delete(id);
-    }else {
+    } else {
       throw new ModuleNotFoundException(id);
     }
   }

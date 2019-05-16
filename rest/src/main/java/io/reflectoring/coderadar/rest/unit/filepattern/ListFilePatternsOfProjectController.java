@@ -20,10 +20,11 @@ public class ListFilePatternsOfProjectController {
   }
 
   @GetMapping(path = "/projects/{projectId}/filePatterns")
-  public ResponseEntity listFilePatterns( @PathVariable Long projectId) {
+  public ResponseEntity listFilePatterns(@PathVariable Long projectId) {
     try {
-      return new ResponseEntity<>(listFilePatternsOfProjectUseCase.listFilePatterns(projectId), HttpStatus.OK);
-    } catch (ProjectNotFoundException e){
+      return new ResponseEntity<>(
+          listFilePatternsOfProjectUseCase.listFilePatterns(projectId), HttpStatus.OK);
+    } catch (ProjectNotFoundException e) {
       return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
   }

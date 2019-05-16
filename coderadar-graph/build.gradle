@@ -9,5 +9,6 @@ spotless {
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-neo4j', version: '2.1.4.RELEASE'
     compile project(":coderadar-core:query")
+    compile project(":coderadar-core:vcs")
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.4.RELEASE'
 }

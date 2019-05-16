@@ -22,10 +22,13 @@ public class CreateFilePatternController {
   }
 
   @PostMapping(path = "/projects/{projectId}/filePatterns")
-  public ResponseEntity createFilePattern(@RequestBody @Validated CreateFilePatternCommand command, @PathVariable(name = "projectId") Long projectId) {
+  public ResponseEntity createFilePattern(
+      @RequestBody @Validated CreateFilePatternCommand command,
+      @PathVariable(name = "projectId") Long projectId) {
     try {
-      return new ResponseEntity<>(createFilePatternUseCase.createFilePattern(command, projectId), HttpStatus.CREATED);
-    } catch (ProjectNotFoundException e){
+      return new ResponseEntity<>(
+          createFilePatternUseCase.createFilePattern(command, projectId), HttpStatus.CREATED);
+    } catch (ProjectNotFoundException e) {
       return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
   }

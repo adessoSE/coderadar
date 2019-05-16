@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.core.analyzer.domain;
 
 import lombok.Data;
 
-
 @Data
 public class Finding {
 

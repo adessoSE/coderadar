@@ -11,6 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(SpringExtension.class)
 @DisplayName("Create file pattern")
 public class CreateFilePatternServiceTest {
@@ -21,7 +24,11 @@ public class CreateFilePatternServiceTest {
   @DisplayName("Should return long when passing a valid argument")
   void shouldReturnLongWhenPassingAValidArgument() {
     FilePattern filePattern = new FilePattern();
+    filePattern.setId(2L);
+
+    when(createFilePatternRepository.save(any())).thenReturn(filePattern);
     Long returnedId = createFilePatternService.createFilePattern(filePattern);
     Assertions.assertThat(returnedId).isNotNull();
+    Assertions.assertThat(returnedId).isEqualTo(2L);
   }
 }

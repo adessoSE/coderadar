@@ -21,9 +21,12 @@ public class CreateAnalyzerConfigurationController {
   }
 
   @PostMapping
-  public ResponseEntity addAnalyzerConfiguration(@RequestBody @Validated CreateAnalyzerConfigurationCommand command, @PathVariable Long projectId) {
+  public ResponseEntity addAnalyzerConfiguration(
+      @RequestBody @Validated CreateAnalyzerConfigurationCommand command,
+      @PathVariable Long projectId) {
     try {
-      return new ResponseEntity<>(createAnalyzerConfigurationUseCase.create(command, projectId), HttpStatus.CREATED);
+      return new ResponseEntity<>(
+          createAnalyzerConfigurationUseCase.create(command, projectId), HttpStatus.CREATED);
     } catch (ProjectNotFoundException e) {
       return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }

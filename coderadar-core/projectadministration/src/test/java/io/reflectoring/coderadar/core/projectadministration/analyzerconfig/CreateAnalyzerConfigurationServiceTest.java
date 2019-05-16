@@ -1,10 +1,14 @@
 package io.reflectoring.coderadar.core.projectadministration.analyzerconfig;
 
+import static org.mockito.ArgumentMatchers.any;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
+import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.analyzerconfig.CreateAnalyzerConfigurationService;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +32,8 @@ class CreateAnalyzerConfigurationServiceTest {
     analyzerConfiguration.setAnalyzerName("analyzer");
     analyzerConfiguration.setEnabled(true);
 
-    Mockito.when(createAnalyzerConfigurationPort.create(analyzerConfiguration)).thenReturn(1L);
+    Mockito.when(createAnalyzerConfigurationPort.create(any())).thenReturn(1L);
+    Mockito.when(getProjectPort.get(1L)).thenReturn(Optional.of(new Project()));
 
     Long analyzerConfigurationId = testSubject.create(command, 1L);
 

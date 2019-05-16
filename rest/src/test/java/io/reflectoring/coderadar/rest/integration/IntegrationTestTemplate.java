@@ -2,11 +2,9 @@ package io.reflectoring.coderadar.rest.integration;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 /** Base class for integration tests that need the full context of the Spring Boot application. */
 @SpringBootTest

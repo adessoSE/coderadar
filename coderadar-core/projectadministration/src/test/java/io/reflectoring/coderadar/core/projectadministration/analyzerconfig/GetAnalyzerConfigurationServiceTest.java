@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfi
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.core.projectadministration.service.analyzerconfig.GetAnalyzerConfigurationService;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +24,7 @@ class GetAnalyzerConfigurationServiceTest {
     analyzerConfiguration.setId(1L);
     analyzerConfiguration.setAnalyzerName("analyzer");
     analyzerConfiguration.setEnabled(true);
-    Mockito.when(port.getAnalyzerConfiguration(1L)).thenReturn(analyzerConfiguration);
+    Mockito.when(port.getAnalyzerConfiguration(1L)).thenReturn(Optional.of(analyzerConfiguration));
 
     GetAnalyzerConfigurationResponse response = testSubject.getSingleAnalyzerConfiguration(1L);
 

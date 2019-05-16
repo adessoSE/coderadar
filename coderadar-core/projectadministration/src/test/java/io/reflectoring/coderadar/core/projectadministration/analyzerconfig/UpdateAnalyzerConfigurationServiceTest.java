@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzer
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.analyzerconfig.UpdateAnalyzerConfigurationService;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +30,7 @@ class UpdateAnalyzerConfigurationServiceTest {
     analyzerConfiguration.setEnabled(true);
 
     Mockito.when(getAnalyzerConfigurationPort.getAnalyzerConfiguration(1L))
-        .thenReturn(analyzerConfiguration);
+        .thenReturn(Optional.of(analyzerConfiguration));
 
     testSubject.update(command, 1L);
 

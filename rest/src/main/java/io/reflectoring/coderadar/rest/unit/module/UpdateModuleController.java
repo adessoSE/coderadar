@@ -22,13 +22,14 @@ public class UpdateModuleController {
   }
 
   @PostMapping(path = "/projects/{projectId}/modules/{moduleId}")
-  public ResponseEntity<String> updateModule(@RequestBody @Validated UpdateModuleCommand command, @PathVariable(name = "moduleId") Long moduleId) {
+  public ResponseEntity<String> updateModule(
+      @RequestBody @Validated UpdateModuleCommand command,
+      @PathVariable(name = "moduleId") Long moduleId) {
     try {
       updateModuleUseCase.updateModule(command, moduleId);
       return new ResponseEntity<>(HttpStatus.OK);
-    } catch (ModuleNotFoundException e){
+    } catch (ModuleNotFoundException e) {
       return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-
   }
 }

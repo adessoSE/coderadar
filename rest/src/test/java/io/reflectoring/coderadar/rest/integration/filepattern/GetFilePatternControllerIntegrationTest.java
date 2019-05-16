@@ -10,21 +10,18 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.filepatt
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 class GetFilePatternControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired
-  private CreateProjectRepository createProjectRepository;
+  @Autowired private CreateProjectRepository createProjectRepository;
 
-  @Autowired
-  private CreateFilePatternRepository createFilePatternRepository;
+  @Autowired private CreateFilePatternRepository createFilePatternRepository;
 
   @BeforeEach
   public void setUp() throws MalformedURLException {
@@ -41,15 +38,17 @@ class GetFilePatternControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void getFilePatternWithIdOne() throws Exception {
-    mvc().perform(get("/projects/0/filePatterns/1"))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(containsResource(GetFilePatternResponse.class));
+    mvc()
+        .perform(get("/projects/0/filePatterns/1"))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(containsResource(GetFilePatternResponse.class));
   }
 
   @Test
   void getFilePatternReturnsErrorWhenNotFound() throws Exception {
-    mvc().perform(get("/projects/0/filePatterns/2"))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andExpect(MockMvcResultMatchers.content().string("FilePattern with id 2 not found."));
+    mvc()
+        .perform(get("/projects/0/filePatterns/2"))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.content().string("FilePattern with id 2 not found."));
   }
 }

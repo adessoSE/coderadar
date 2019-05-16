@@ -6,8 +6,8 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.project.UpdateProjectService;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,16 +23,21 @@ class UpdateProjectServiceTest {
 
   @Test
   void updateProjectWithIdOne() throws MalformedURLException {
-    URL url = new URL("http://valid.url");
     UpdateProjectCommand command =
         new UpdateProjectCommand(
-            "new project name", "username", "password", url, true, new Date(), new Date());
+            "new project name",
+            "username",
+            "password",
+            "http://valid.url",
+            true,
+            new Date(),
+            new Date());
 
     Project project = new Project();
     project.setId(1L);
     project.setName("new project name");
 
-    Mockito.when(getProjectPort.get(1L)).thenReturn(project);
+    Mockito.when(getProjectPort.get(1L)).thenReturn(Optional.of(project));
 
     testSubject.update(command, 1L);
 

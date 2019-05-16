@@ -9,21 +9,18 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzer
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 class ListAnalyzerConfigsFromProjectControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired
-  private CreateProjectRepository createProjectRepository;
+  @Autowired private CreateProjectRepository createProjectRepository;
 
-  @Autowired
-  private CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository;
+  @Autowired private CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository;
 
   @BeforeEach
   public void setUp() throws MalformedURLException {
@@ -48,15 +45,17 @@ class ListAnalyzerConfigsFromProjectControllerIntegrationTest extends Controller
 
   @Test
   void listAnalyzerConfigurationsFromProjectWithIdZero() throws Exception {
-    mvc().perform(get("/projects/0/analyzers"))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(containsResource(GetAnalyzerConfigurationResponse[].class));
+    mvc()
+        .perform(get("/projects/0/analyzers"))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(containsResource(GetAnalyzerConfigurationResponse[].class));
   }
 
   @Test
   void listAnalyzerConfigurationsReturnsErrorWhenProjectNotFound() throws Exception {
-    mvc().perform(get("/projects/1/analyzers"))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andExpect(MockMvcResultMatchers.content().string("Project with id 1 not found."));
+    mvc()
+        .perform(get("/projects/1/analyzers"))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.content().string("Project with id 1 not found."));
   }
 }

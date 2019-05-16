@@ -3,10 +3,9 @@ package io.reflectoring.coderadar.graph.projectadministration.filepattern.servic
 import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.filepattern.GetFilePatternPort;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.GetFilePatternRepository;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service("GetFilePatternServiceNeo4j")
 public class GetFilePatternService implements GetFilePatternPort {

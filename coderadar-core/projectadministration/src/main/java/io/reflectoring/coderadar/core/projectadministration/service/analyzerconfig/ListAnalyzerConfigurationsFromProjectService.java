@@ -19,22 +19,25 @@ public class ListAnalyzerConfigurationsFromProjectService
   private final GetProjectPort getProjectPort;
 
   @Autowired
-  public ListAnalyzerConfigurationsFromProjectService(@Qualifier("GetAnalyzerConfigurationsFromProjectServiceNeo4j") GetAnalyzerConfigurationsFromProjectPort port,
-                                                      @Qualifier("GetProjectServiceNeo4j")GetProjectPort getProjectPort) {
+  public ListAnalyzerConfigurationsFromProjectService(
+      @Qualifier("GetAnalyzerConfigurationsFromProjectServiceNeo4j")
+          GetAnalyzerConfigurationsFromProjectPort port,
+      @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort) {
     this.port = port;
     this.getProjectPort = getProjectPort;
   }
 
   @Override
-  public List<GetAnalyzerConfigurationResponse> get(Long projectId) throws ProjectNotFoundException {
-    if(getProjectPort.get(projectId).isPresent()) {
+  public List<GetAnalyzerConfigurationResponse> get(Long projectId)
+      throws ProjectNotFoundException {
+    if (getProjectPort.get(projectId).isPresent()) {
       List<GetAnalyzerConfigurationResponse> configurations = new ArrayList<>();
       for (AnalyzerConfiguration analyzerConfiguration : port.get(projectId)) {
         configurations.add(
-                new GetAnalyzerConfigurationResponse(
-                        analyzerConfiguration.getId(),
-                        analyzerConfiguration.getAnalyzerName(),
-                        analyzerConfiguration.getEnabled()));
+            new GetAnalyzerConfigurationResponse(
+                analyzerConfiguration.getId(),
+                analyzerConfiguration.getAnalyzerName(),
+                analyzerConfiguration.getEnabled()));
       }
       return configurations;
     } else {

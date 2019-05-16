@@ -18,12 +18,14 @@ public class DeleteModuleController {
     this.deleteModuleUseCase = deleteModuleUseCase;
   }
 
-  @DeleteMapping(path = "/projects/{projectId}/modules/{moduleId}") //TODO: We don't really need the projectId here.
+  @DeleteMapping(
+    path = "/projects/{projectId}/modules/{moduleId}"
+  ) // TODO: We don't really need the projectId here.
   public ResponseEntity deleteModule(@PathVariable(name = "moduleId") Long moduleId) {
     try {
       deleteModuleUseCase.delete(moduleId);
       return new ResponseEntity<>(HttpStatus.OK);
-    } catch (ModuleNotFoundException e){
+    } catch (ModuleNotFoundException e) {
       return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
   }

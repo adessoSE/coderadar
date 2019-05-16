@@ -6,12 +6,11 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.filepatt
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service("ListFilePatternsOfProjectService")
 public class ListFilePatternsOfProjectService implements ListFilePatternsOfProjectUseCase {
@@ -21,20 +20,21 @@ public class ListFilePatternsOfProjectService implements ListFilePatternsOfProje
 
   @Autowired
   public ListFilePatternsOfProjectService(
-          @Qualifier("ListFilePatternsOfProjectServiceNeo4j") ListFilePatternsOfProjectPort port,
-          @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort) {
+      @Qualifier("ListFilePatternsOfProjectServiceNeo4j") ListFilePatternsOfProjectPort port,
+      @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort) {
     this.port = port;
     this.getProjectPort = getProjectPort;
   }
 
   @Override
-  public List<GetFilePatternResponse> listFilePatterns(Long projectId) throws ProjectNotFoundException {
-    if(getProjectPort.get(projectId).isPresent()){
+  public List<GetFilePatternResponse> listFilePatterns(Long projectId)
+      throws ProjectNotFoundException {
+    if (getProjectPort.get(projectId).isPresent()) {
       List<GetFilePatternResponse> patterns = new ArrayList<>();
       for (FilePattern filePattern : port.listFilePatterns(projectId)) {
         patterns.add(
-                new GetFilePatternResponse(
-                        filePattern.getId(), filePattern.getPattern(), filePattern.getInclusionType()));
+            new GetFilePatternResponse(
+                filePattern.getId(), filePattern.getPattern(), filePattern.getInclusionType()));
       }
       return patterns;
     } else {
