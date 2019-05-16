@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.core.projectadministration.service.filepattern;
 
+import io.reflectoring.coderadar.core.projectadministration.FilePatternNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.filepattern.GetFilePatternPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.filepattern.UpdateFilePatternPort;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service("UpdateFilePatternService")
 public class UpdateFilePatternService implements UpdateFilePatternUseCase {
 
@@ -17,16 +20,22 @@ public class UpdateFilePatternService implements UpdateFilePatternUseCase {
 
   @Autowired
   public UpdateFilePatternService(
-          @Qualifier("GetFilePatternServiceNeo4j") GetFilePatternPort getFilePatternPort, @Qualifier("UpdateFilePatternServiceNeo4j") UpdateFilePatternPort updateFilePatternPort) {
+      @Qualifier("GetFilePatternServiceNeo4j") GetFilePatternPort getFilePatternPort,
+      @Qualifier("UpdateFilePatternServiceNeo4j") UpdateFilePatternPort updateFilePatternPort) {
     this.getFilePatternPort = getFilePatternPort;
     this.updateFilePatternPort = updateFilePatternPort;
   }
 
   @Override
-  public void updateFilePattern(UpdateFilePatternCommand command, Long filePatternId) {
-    FilePattern filePattern = getFilePatternPort.get(filePatternId);
-    filePattern.setPattern(command.getPattern());
-    filePattern.setInclusionType(command.getInclusionType());
-    updateFilePatternPort.updateFilePattern(filePattern);
+  public void updateFilePattern(UpdateFilePatternCommand command, Long filePatternId) throws FilePatternNotFoundException {
+    Optional<FilePattern> filePattern = getFilePatternPort.get(filePatternId);
+    if(filePattern.isPresent()){
+      filePattern.get().setPattern(command.getPattern());
+      filePattern.get().setInclusionType(command.getInclusionType());
+      updateFilePatternPort.updateFilePattern(filePattern.get());
+    } else {
+      throw new FilePatternNotFoundException(filePatternId);
+    }
+
   }
 }

@@ -11,7 +11,8 @@ public class StopAnalyzingService implements StopAnalyzingUseCase {
   private final StopAnalyzingPort stopAnalyzingPort;
 
   @Autowired
-  public StopAnalyzingService(@Qualifier("StopAnalyzingServiceNeo4j") StopAnalyzingPort stopAnalyzingPort) {
+  public StopAnalyzingService(
+      @Qualifier("StopAnalyzingServiceNeo4j") StopAnalyzingPort stopAnalyzingPort) {
     this.stopAnalyzingPort = stopAnalyzingPort;
   }
 

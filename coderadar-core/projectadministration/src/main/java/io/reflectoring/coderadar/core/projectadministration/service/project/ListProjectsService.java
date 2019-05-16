@@ -16,7 +16,8 @@ public class ListProjectsService implements ListProjectsUseCase {
   private final ListProjectsPort listProjectsPort;
 
   @Autowired
-  public ListProjectsService(@Qualifier("ListProjectsServiceNeo4j") ListProjectsPort listProjectsPort) {
+  public ListProjectsService(
+      @Qualifier("ListProjectsServiceNeo4j") ListProjectsPort listProjectsPort) {
     this.listProjectsPort = listProjectsPort;
   }
 

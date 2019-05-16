@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.unit.project;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.delete.DeleteProjectUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ class DeleteProjectControllerTest {
   @InjectMocks private DeleteProjectController testSubject;
 
   @Test
-  void deleteProjectWithIdOne() {
+  void deleteProjectWithIdOne() throws JsonProcessingException {
     ResponseEntity<String> responseEntity = testSubject.deleteProject(1L);
     Mockito.verify(deleteProjectUseCase, Mockito.times(1)).delete(1L);
 

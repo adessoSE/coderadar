@@ -11,7 +11,8 @@ public class GetAnalyzingStatusService implements GetAnalyzingStatusUseCase {
   private final GetAnalyzingStatusPort getAnalyzingStatusPort;
 
   @Autowired
-  public GetAnalyzingStatusService(@Qualifier("GetAnalyzingStatusServiceNeo4j") GetAnalyzingStatusPort getAnalyzingStatusPort) {
+  public GetAnalyzingStatusService(
+      @Qualifier("GetAnalyzingStatusServiceNeo4j") GetAnalyzingStatusPort getAnalyzingStatusPort) {
     this.getAnalyzingStatusPort = getAnalyzingStatusPort;
   }
 

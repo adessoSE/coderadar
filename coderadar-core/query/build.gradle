@@ -1,7 +1,6 @@
 apply plugin: "com.diffplug.gradle.spotless"
 
 dependencies {
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.1.4.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.4.RELEASE'
     compile group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.16.Final'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.4.RELEASE'

@@ -7,15 +7,28 @@ import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import java.net.URL;
 import java.util.Date;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void createProjectSuccessfully() throws Exception {
-    URL url = new URL("http://valid.url");
     CreateProjectCommand command =
         new CreateProjectCommand(
-            "project", "username", "password", url, true, new Date(), new Date());
-    mvc().perform(post("/projects").content(toJson(command)));
+            "project", "username", "password", "https://valid.url", true, new Date(), new Date());
+    mvc().perform(post("/projects").contentType(MediaType.APPLICATION_JSON)
+            .content(toJson(command)))
+            .andExpect(MockMvcResultMatchers.status().isCreated());
+  }
+
+  @Test
+  void createProjectReturnsErrorOnInvalidData() throws Exception {
+    CreateProjectCommand command =
+            new CreateProjectCommand(
+                    "project", "username", "password", "invalid", true, new Date(), new Date());
+    mvc().perform(post("/projects").contentType(MediaType.APPLICATION_JSON)
+            .content(toJson(command)))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 }

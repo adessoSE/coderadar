@@ -16,12 +16,13 @@ public class GetAnalyzerConfigurationService implements GetAnalyzerConfiguration
   private final GetAnalyzerConfigurationPort port;
 
   @Autowired
-  public GetAnalyzerConfigurationService(@Qualifier("GetAnalyzerConfigurationServiceNeo4j") GetAnalyzerConfigurationPort port) {
+  public GetAnalyzerConfigurationService(
+      @Qualifier("GetAnalyzerConfigurationServiceNeo4j") GetAnalyzerConfigurationPort port) {
     this.port = port;
   }
 
   @Override
-  public GetAnalyzerConfigurationResponse getSingleAnalyzerConfiguration(Long id) {
+  public GetAnalyzerConfigurationResponse getSingleAnalyzerConfiguration(Long id) throws AnalyzerConfigurationNotFoundException {
     Optional<AnalyzerConfiguration> analyzerConfiguration = port.getAnalyzerConfiguration(id);
 
     if (analyzerConfiguration.isPresent()) {

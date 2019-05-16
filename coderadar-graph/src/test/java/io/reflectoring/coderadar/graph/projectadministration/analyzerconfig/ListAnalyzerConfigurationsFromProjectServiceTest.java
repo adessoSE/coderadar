@@ -19,7 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @DisplayName("Get analyzer configurations from project")
-class GetAnalyzerConfigurationsFromProjectServiceTest {
+class ListAnalyzerConfigurationsFromProjectServiceTest {
   @Mock
   private GetAnalyzerConfigurationsFromProjectRepository
       getAnalyzerConfigurationsFromProjectRepository;

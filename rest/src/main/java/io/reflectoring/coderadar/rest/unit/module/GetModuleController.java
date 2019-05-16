@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.unit.module;
 
+import io.reflectoring.coderadar.core.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.GetModuleUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,11 @@ public class GetModuleController {
   }
 
   @GetMapping(path = "/projects/{projectId}/modules/{moduleId}")
-  public ResponseEntity<GetModuleResponse> getModule(
-      @PathVariable(name = "moduleId") Long moduleId) {
-    return new ResponseEntity<>(getModuleUseCase.get(moduleId), HttpStatus.OK);
+  public ResponseEntity getModule(@PathVariable(name = "moduleId") Long moduleId) {
+    try {
+      return new ResponseEntity<>(getModuleUseCase.get(moduleId), HttpStatus.OK);
+    } catch (ModuleNotFoundException e){
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
   }
 }

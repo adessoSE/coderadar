@@ -19,17 +19,18 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
 
   @Autowired
   public UpdateAnalyzerConfigurationService(
-      @Qualifier("UpdateAnalyzerConfigurationServiceNeo4j") UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort,
-      @Qualifier("GetAnalyzerConfigurationServiceNeo4j") GetAnalyzerConfigurationPort getAnalyzerConfigurationPort) {
+      @Qualifier("UpdateAnalyzerConfigurationServiceNeo4j")
+          UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort,
+      @Qualifier("GetAnalyzerConfigurationServiceNeo4j")
+          GetAnalyzerConfigurationPort getAnalyzerConfigurationPort) {
     this.updateAnalyzerConfigurationPort = updateAnalyzerConfigurationPort;
     this.getAnalyzerConfigurationPort = getAnalyzerConfigurationPort;
   }
 
   @Override
-  public void update(UpdateAnalyzerConfigurationCommand command, Long analyzerId) {
+  public void update(UpdateAnalyzerConfigurationCommand command, Long analyzerId) throws AnalyzerConfigurationNotFoundException {
     Optional<AnalyzerConfiguration> analyzerConfiguration =
         getAnalyzerConfigurationPort.getAnalyzerConfiguration(analyzerId);
-
     if (analyzerConfiguration.isPresent()) {
       AnalyzerConfiguration newAnalyzerConfiguration = analyzerConfiguration.get();
       newAnalyzerConfiguration.setAnalyzerName(command.getAnalyzerName());

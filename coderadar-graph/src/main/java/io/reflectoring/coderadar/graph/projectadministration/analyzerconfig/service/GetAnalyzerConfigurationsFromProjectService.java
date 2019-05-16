@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service;
 
+import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationsFromProjectPort;
-import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.GetAnalyzerConfigurationsFromProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import java.util.List;
@@ -31,7 +31,6 @@ public class GetAnalyzerConfigurationsFromProjectService
   @Override
   public List<AnalyzerConfiguration> get(Long id) {
     Optional<Project> persistedProject = getProjectRepository.findById(id);
-
     if (persistedProject.isPresent()) {
       return getAnalyzerConfigurationsFromProjectRepository.findByProject_Id(id);
     } else {

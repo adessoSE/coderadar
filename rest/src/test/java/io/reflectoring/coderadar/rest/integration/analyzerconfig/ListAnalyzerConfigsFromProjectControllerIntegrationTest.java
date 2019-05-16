@@ -1,23 +1,23 @@
 package io.reflectoring.coderadar.rest.integration.analyzerconfig;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
-import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate {
+class ListAnalyzerConfigsFromProjectControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired
   private CreateProjectRepository createProjectRepository;
@@ -34,20 +34,29 @@ class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
     AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
     analyzerConfiguration.setProject(testProject);
     analyzerConfiguration.setAnalyzerName("analyzer");
+    analyzerConfiguration.setEnabled(true);
 
     createAnalyzerConfigurationRepository.save(analyzerConfiguration);
+
+    AnalyzerConfiguration analyzerConfiguration2 = new AnalyzerConfiguration();
+    analyzerConfiguration2.setProject(testProject);
+    analyzerConfiguration2.setAnalyzerName("analyzer2");
+    analyzerConfiguration2.setEnabled(false);
+
+    createAnalyzerConfigurationRepository.save(analyzerConfiguration2);
   }
 
   @Test
-  void deleteAnalyzerConfigurationWithIdOne() throws Exception {
-    mvc().perform(delete("/projects/0/analyzers/1"))
-    .andExpect(MockMvcResultMatchers.status().isOk());
+  void listAnalyzerConfigurationsFromProjectWithIdZero() throws Exception {
+    mvc().perform(get("/projects/0/analyzers"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(containsResource(GetAnalyzerConfigurationResponse[].class));
   }
 
   @Test
-  void deleteAnalyzerConfigurationRetrunsErrorWhenAnalyzerNotFound() throws Exception {
-    mvc().perform(delete("/projects/0/analyzers/2"))
+  void listAnalyzerConfigurationsReturnsErrorWhenProjectNotFound() throws Exception {
+    mvc().perform(get("/projects/1/analyzers"))
             .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andExpect(MockMvcResultMatchers.content().string("AnalyzerConfiguration with id 2 not found."));
+            .andExpect(MockMvcResultMatchers.content().string("Project with id 1 not found."));
   }
 }

@@ -13,7 +13,8 @@ public class GetAvailableMetricsInProjectService implements GetAvailableMetricsI
 
   @Autowired
   public GetAvailableMetricsInProjectService(
-      @Qualifier("GetAvailableMetricsInProjectServiceNeo4j") GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort) {
+      @Qualifier("GetAvailableMetricsInProjectServiceNeo4j")
+          GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort) {
     this.getAvailableMetricsInProjectPort = getAvailableMetricsInProjectPort;
   }
 

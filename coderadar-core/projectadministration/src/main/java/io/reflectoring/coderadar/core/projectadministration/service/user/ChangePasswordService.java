@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 
 @Service("ChangePasswordService")
 public class ChangePasswordService implements ChangePasswordUseCase {
-    private final ChangePasswordPort port;
+  private final ChangePasswordPort port;
 
-    @Autowired
-    public ChangePasswordService(@Qualifier("ChangePasswordServiceNeo4j") ChangePasswordPort port) {
-        this.port = port;
-    }
+  @Autowired
+  public ChangePasswordService(@Qualifier("ChangePasswordServiceNeo4j") ChangePasswordPort port) {
+    this.port = port;
+  }
 
-    @Override
-    public void changePassword(ChangePasswordCommand command) {
-        port.changePassword(command.getRefreshToken(), command.getNewPassword());
-    }
+  @Override
+  public void changePassword(ChangePasswordCommand command) {
+    port.changePassword(command.getRefreshToken(), command.getNewPassword());
+  }
 }

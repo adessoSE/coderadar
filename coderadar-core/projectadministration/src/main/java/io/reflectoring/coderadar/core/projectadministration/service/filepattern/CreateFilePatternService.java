@@ -20,15 +20,15 @@ public class CreateFilePatternService implements CreateFilePatternUseCase {
 
   @Autowired
   public CreateFilePatternService(
-          @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort, @Qualifier("CreateFilePatternServiceNeo4j") CreateFilePatternPort createFilePatternPort) {
+      @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort,
+      @Qualifier("CreateFilePatternServiceNeo4j") CreateFilePatternPort createFilePatternPort) {
     this.getProjectPort = getProjectPort;
     this.createFilePatternPort = createFilePatternPort;
   }
 
   @Override
-  public Long createFilePattern(CreateFilePatternCommand command, Long projectId) {
+  public Long createFilePattern(CreateFilePatternCommand command, Long projectId) throws ProjectNotFoundException {
     Optional<Project> project = getProjectPort.get(projectId);
-
     if (project.isPresent()) {
       FilePattern filePattern = new FilePattern();
       filePattern.setProject(project.get());

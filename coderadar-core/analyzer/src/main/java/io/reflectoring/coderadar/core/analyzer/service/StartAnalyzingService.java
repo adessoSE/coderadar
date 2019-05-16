@@ -12,7 +12,8 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final StartAnalyzingPort startAnalyzingPort;
 
   @Autowired
-  public StartAnalyzingService(@Qualifier("StartAnalyzingServiceNeo4j") StartAnalyzingPort startAnalyzingPort) {
+  public StartAnalyzingService(
+      @Qualifier("StartAnalyzingServiceNeo4j") StartAnalyzingPort startAnalyzingPort) {
     this.startAnalyzingPort = startAnalyzingPort;
   }
 

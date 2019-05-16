@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.unit.analyzerconfig;
 
+import io.reflectoring.coderadar.core.projectadministration.AnalyzerConfigurationNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.delete.DeleteAnalyzerConfigurationUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,9 +20,12 @@ public class DeleteAnalyzerConfigurationController {
   }
 
   @DeleteMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}")
-  public ResponseEntity<String> deleteAnalyzerConfiguration(
-      @PathVariable Long analyzerConfigurationId) {
-    deleteAnalyzerConfigurationUseCase.deleteAnalyzerConfiguration(analyzerConfigurationId);
-    return new ResponseEntity<>(HttpStatus.OK);
+  public ResponseEntity<String> deleteAnalyzerConfiguration(@PathVariable Long analyzerConfigurationId) {
+    try {
+      deleteAnalyzerConfigurationUseCase.deleteAnalyzerConfiguration(analyzerConfigurationId);
+      return new ResponseEntity<>(HttpStatus.OK);
+    } catch (AnalyzerConfigurationNotFoundException e){
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
   }
 }

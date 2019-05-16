@@ -15,12 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-class GetAnalyzerConfigurationsFromProjectControllerTest {
+class ListAnalyzerConfigurationsFromProjectControllerTest {
 
   @Mock
   private GetAnalyzerConfigurationsFromProjectUseCase getAnalyzerConfigurationsFromProjectUseCase;
 
-  @InjectMocks private GetAnalyzerConfigurationsFromProjectController testSubject;
+  @InjectMocks private ListAnalyzerConfigurationsFromProjectController testSubject;
 
   @Test
   void returnsTwoGetAnalyzerConfigurationResponsesFromProject() {

@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.unit.project;
 
+import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,11 @@ public class GetProjectController {
   }
 
   @GetMapping(path = "/projects/{projectId}")
-  public ResponseEntity<GetProjectResponse> getProject(@PathVariable Long projectId) {
-    return new ResponseEntity<>(getProjectUseCase.get(projectId), HttpStatus.OK);
+  public ResponseEntity getProject(@PathVariable Long projectId) {
+    try {
+      return new ResponseEntity<>(getProjectUseCase.get(projectId), HttpStatus.OK);
+    } catch (ProjectNotFoundException e){
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
   }
 }

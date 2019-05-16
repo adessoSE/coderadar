@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.unit.filepattern;
 
+import io.reflectoring.coderadar.core.projectadministration.FilePatternNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.GetFilePatternUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,11 @@ public class GetFilePatternController {
   }
 
   @GetMapping(path = "/projects/{projectId}/filePatterns/{filePatternId}")
-  public ResponseEntity<GetFilePatternResponse> getFilePattern(
-      @PathVariable(name = "filePatternId") Long filePatternId) {
-    return new ResponseEntity<>(getFilePatternUseCase.get(filePatternId), HttpStatus.OK);
+  public ResponseEntity getFilePattern(@PathVariable(name = "filePatternId") Long filePatternId) {
+    try {
+      return new ResponseEntity<>(getFilePatternUseCase.get(filePatternId), HttpStatus.OK);
+    } catch (FilePatternNotFoundException e){
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
   }
 }

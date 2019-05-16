@@ -22,7 +22,8 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
 
   @Autowired
   public CreateAnalyzerConfigurationService(
-          @Qualifier("CreateAnalyzerConfigurationServiceNeo4j") CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort,
+      @Qualifier("CreateAnalyzerConfigurationServiceNeo4j")
+          CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort,
       @Qualifier("UpdateProjectServiceNeo4j") UpdateProjectPort updateProjectPort,
       @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort) {
     this.createAnalyzerConfigurationPort = createAnalyzerConfigurationPort;
@@ -31,7 +32,7 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
   }
 
   @Override
-  public Long create(CreateAnalyzerConfigurationCommand command, Long projectId) {
+  public Long create(CreateAnalyzerConfigurationCommand command, Long projectId) throws ProjectNotFoundException {
     AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
     analyzerConfiguration.setEnabled(command.getEnabled());
     analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());

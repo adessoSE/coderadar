@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
@@ -34,7 +35,8 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
 
   private MockMvc mvc;
 
-  @Autowired private WebApplicationContext applicationContext;
+  @Autowired
+  private WebApplicationContext applicationContext;
 
   @BeforeEach
   public void setup(RestDocumentationContextProvider restDocumentation) {

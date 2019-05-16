@@ -11,9 +11,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAsync(proxyTargetClass = true)
 @EnableTransactionManagement(proxyTargetClass = true)
 @EnableConfigurationProperties
-@SpringBootApplication(scanBasePackages = "io.reflectoring.coderadar")
+@SpringBootApplication
 public class CoderadarApplication {
-
   public static void main(String[] args) {
     SpringApplication.run(CoderadarApplication.class, args);
   }

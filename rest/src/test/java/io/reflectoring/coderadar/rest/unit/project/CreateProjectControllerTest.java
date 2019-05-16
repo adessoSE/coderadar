@@ -23,10 +23,9 @@ class CreateProjectControllerTest {
 
   @Test
   void createNewProjectSuccessfully() throws MalformedURLException {
-    URL url = new URL("http://valid.url");
     CreateProjectCommand command =
         new CreateProjectCommand(
-            "test", "testUsername", "testPassword", url, true, new Date(), new Date());
+            "test", "testUsername", "testPassword", "http://valid.url", true, new Date(), new Date());
 
     Mockito.when(createProjectUseCase.createProject(command)).thenReturn(1L);
 

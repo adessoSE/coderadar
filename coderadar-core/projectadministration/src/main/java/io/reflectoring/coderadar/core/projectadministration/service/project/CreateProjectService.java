@@ -4,6 +4,9 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.CreateProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectUseCase;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,16 +18,17 @@ public class CreateProjectService implements CreateProjectUseCase {
   private final CreateProjectPort createProjectPort;
 
   @Autowired
-  public CreateProjectService(@Qualifier("CreateProjectServiceNeo4j") CreateProjectPort createProjectPort) {
+  public CreateProjectService(
+      @Qualifier("CreateProjectServiceNeo4j") CreateProjectPort createProjectPort) {
     this.createProjectPort = createProjectPort;
   }
 
   @Override
-  public Long createProject(CreateProjectCommand command) {
+  public Long createProject(CreateProjectCommand command) throws MalformedURLException {
     Project project = new Project();
     project.setName(command.getName());
     project.setWorkdirName(UUID.randomUUID().toString());
-    project.setVcsUrl(command.getVcsUrl());
+    project.setVcsUrl(new URL(command.getVcsUrl()));
     project.setVcsUsername(command.getVcsUsername());
     project.setVcsPassword(command.getVcsPassword());
     project.setVcsOnline(command.getVcsOnline());

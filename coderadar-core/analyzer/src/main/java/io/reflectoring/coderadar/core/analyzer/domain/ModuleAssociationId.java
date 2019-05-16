@@ -1,19 +1,18 @@
 package io.reflectoring.coderadar.core.analyzer.domain;
 
-import java.io.Serializable;
-import javax.persistence.Column;
 import lombok.Data;
+import org.neo4j.ogm.annotation.NodeEntity;
+
+import java.io.Serializable;
 
 @Data
+@NodeEntity
 public class ModuleAssociationId implements Serializable {
 
-  @Column(name = "commit_id")
   private Long commitId;
 
-  @Column(name = "file_id")
   private Long fileId;
 
-  @Column(name = "module_id")
   private Long moduleId;
 
   @Override

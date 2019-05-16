@@ -1,12 +1,13 @@
 apply plugin: "com.diffplug.gradle.spotless"
 
 dependencies {
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.1.4.RELEASE'
+    compile 'org.neo4j:neo4j:3.1.9'
+    compile 'org.neo4j:neo4j-ogm-embedded-driver:3.1.9'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.4.RELEASE'
+    compile project(":coderadar-app")
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.4.RELEASE'
     testCompile group: 'org.springframework.restdocs', name: 'spring-restdocs-mockmvc', version: '2.0.3.RELEASE'
-
-    compile project(":coderadar-core:projectadministration")
+    testCompile 'com.jayway.jsonpath:json-path-assert:2.2.0'
 }
 
 spotless {

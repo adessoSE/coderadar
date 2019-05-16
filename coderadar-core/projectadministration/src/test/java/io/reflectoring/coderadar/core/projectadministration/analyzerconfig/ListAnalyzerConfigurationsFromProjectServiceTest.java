@@ -3,9 +3,10 @@ package io.reflectoring.coderadar.core.projectadministration.analyzerconfig;
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationsFromProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
-import io.reflectoring.coderadar.core.projectadministration.service.analyzerconfig.GetAnalyzerConfigurationsFromProjectService;
+import io.reflectoring.coderadar.core.projectadministration.service.analyzerconfig.ListAnalyzerConfigurationsFromProjectService;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,9 +16,9 @@ import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-class GetAnalyzerConfigurationsFromProjectServiceTest {
+class ListAnalyzerConfigurationsFromProjectServiceTest {
   @Mock private GetAnalyzerConfigurationsFromProjectPort port;
-  @InjectMocks private GetAnalyzerConfigurationsFromProjectService testSubject;
+  @InjectMocks private ListAnalyzerConfigurationsFromProjectService testSubject;
 
   @Test
   void returnsTwoAnalyzerConfigurationsFromProject() {

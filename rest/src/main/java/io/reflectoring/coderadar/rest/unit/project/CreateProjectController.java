@@ -5,11 +5,15 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.project.
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.net.MalformedURLException;
 
 @RestController
+@Transactional
 public class CreateProjectController {
   private final CreateProjectUseCase createProjectUseCase;
 
@@ -18,8 +22,8 @@ public class CreateProjectController {
     this.createProjectUseCase = createProjectUseCase;
   }
 
-  @PostMapping(path = "/projects")
-  public ResponseEntity<Long> createProject(@RequestBody CreateProjectCommand command) {
+  @PostMapping(produces = "application/json", path = "/projects")
+  public ResponseEntity<Long> createProject(@RequestBody @Validated CreateProjectCommand command) throws MalformedURLException {
     return new ResponseEntity<>(createProjectUseCase.createProject(command), HttpStatus.CREATED);
   }
 }

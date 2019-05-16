@@ -14,7 +14,9 @@ public class GetMetricValuesOfCommitService implements GetMetricValuesOfCommitUs
   private final GetMetricValuesOfCommitPort getMetricValuesOfCommitPort;
 
   @Autowired
-  public GetMetricValuesOfCommitService(@Qualifier("GetMetricValuesOfCommitServiceNeo4j") GetMetricValuesOfCommitPort getMetricValuesOfCommitPort) {
+  public GetMetricValuesOfCommitService(
+      @Qualifier("GetMetricValuesOfCommitServiceNeo4j")
+          GetMetricValuesOfCommitPort getMetricValuesOfCommitPort) {
     this.getMetricValuesOfCommitPort = getMetricValuesOfCommitPort;
   }
 

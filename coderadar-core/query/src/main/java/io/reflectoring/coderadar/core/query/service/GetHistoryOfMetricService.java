@@ -13,7 +13,8 @@ public class GetHistoryOfMetricService implements GetHistoryOfMetricUseCase {
   private final GetHistoryOfMetricPort getHistoryOfMetricPort;
 
   @Autowired
-  public GetHistoryOfMetricService(@Qualifier("GetHistoryOfMetricServiceNeo4j") GetHistoryOfMetricPort getHistoryOfMetricPort) {
+  public GetHistoryOfMetricService(
+      @Qualifier("GetHistoryOfMetricServiceNeo4j") GetHistoryOfMetricPort getHistoryOfMetricPort) {
     this.getHistoryOfMetricPort = getHistoryOfMetricPort;
   }
 

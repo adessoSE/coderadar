@@ -13,7 +13,9 @@ public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {
   private final GetCommitsInProjectPort getCommitsInProjectPort;
 
   @Autowired
-  public GetCommitsInProjectService(@Qualifier("GetCommitsInProjectServiceNeo4j") GetCommitsInProjectPort getCommitsInProjectPort) {
+  public GetCommitsInProjectService(
+      @Qualifier("GetCommitsInProjectServiceNeo4j")
+          GetCommitsInProjectPort getCommitsInProjectPort) {
     this.getCommitsInProjectPort = getCommitsInProjectPort;
   }
 

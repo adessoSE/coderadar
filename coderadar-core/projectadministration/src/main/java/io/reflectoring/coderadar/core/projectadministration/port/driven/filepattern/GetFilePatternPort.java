@@ -2,6 +2,8 @@ package io.reflectoring.coderadar.core.projectadministration.port.driven.filepat
 
 import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
 
+import java.util.Optional;
+
 public interface GetFilePatternPort {
-  FilePattern get(Long id);
+  Optional<FilePattern> get(Long id);
 }

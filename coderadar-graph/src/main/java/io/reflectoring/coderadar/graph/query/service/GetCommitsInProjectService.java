@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.graph.query.service;
 
 import io.reflectoring.coderadar.core.analyzer.domain.Commit;
+import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.query.port.driven.GetCommitsInProjectPort;
-import io.reflectoring.coderadar.graph.exception.ProjectNotFoundException;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
 import java.util.List;
@@ -31,7 +31,7 @@ public class GetCommitsInProjectService implements GetCommitsInProjectPort {
     if (persistedProject.isPresent()) {
       return null;
     } else {
-      throw new ProjectNotFoundException("A project with the ID '1' doesn't exists.");
+      throw new ProjectNotFoundException(projectId);
     }
   }
 }

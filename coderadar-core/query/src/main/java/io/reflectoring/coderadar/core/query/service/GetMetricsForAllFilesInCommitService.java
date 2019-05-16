@@ -15,7 +15,8 @@ public class GetMetricsForAllFilesInCommitService implements GetMetricsForAllFil
 
   @Autowired
   public GetMetricsForAllFilesInCommitService(
-      @Qualifier("GetMetricsForAllFilesInCommitServiceNeo4j") GetMetricsForAllFilesInCommitPort getMetricsForAllFilesInCommitPort) {
+      @Qualifier("GetMetricsForAllFilesInCommitServiceNeo4j")
+          GetMetricsForAllFilesInCommitPort getMetricsForAllFilesInCommitPort) {
     this.getMetricsForAllFilesInCommitPort = getMetricsForAllFilesInCommitPort;
   }
 

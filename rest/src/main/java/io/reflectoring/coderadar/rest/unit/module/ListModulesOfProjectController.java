@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.module;
 
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.GetModuleResponse;
+import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,11 @@ public class ListModulesOfProjectController {
   }
 
   @GetMapping(path = "/projects/{projectId}/modules")
-  public ResponseEntity<List<GetModuleResponse>> listModules(@PathVariable Long projectId) {
-    return new ResponseEntity<>(listModulesOfProjectUseCase.listModules(projectId), HttpStatus.OK);
+  public ResponseEntity listModules(@PathVariable Long projectId) {
+    try {
+      return new ResponseEntity<>(listModulesOfProjectUseCase.listModules(projectId), HttpStatus.OK);
+    } catch (ProjectNotFoundException e){
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
   }
 }
