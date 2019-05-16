@@ -85,8 +85,6 @@ dependencies {
     compile "commons-io:commons-io:2.4"
     compile "io.fabric8:gitective-core:0.9.10"
     compile "org.apache.commons:commons-lang3:3.4"
-    compile "org.hibernate:hibernate-core:${version_hibernate}"
-    compile "org.hibernate:hibernate-validator:${version_hibernate}"
     compile "org.reflections:reflections:0.9.10"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8"
     compile "com.auth0:java-jwt:3.1.0"
@@ -103,8 +101,8 @@ dependencies {
     compile project(":coderadar-core:query")
     compile project(":coderadar-core:analyzer")
     compile project(":coderadar-graph")
-
-    runtime "com.googlecode.log4jdbc:log4jdbc:1.2"
+    compile project(":coderadar-core:vcs")
+    compile project(":rest")
 
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${version_spring_boot}"
     providedRuntime group: 'org.apache.tomcat', name: 'tomcat-juli', version: property('tomcat.version')
@@ -112,13 +110,12 @@ dependencies {
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.4.RELEASE'
 
     testCompile "org.slf4j:slf4j-ext:1.7.25"
-
+    runtime "com.googlecode.log4jdbc:log4jdbc:1.2"
 
     testCompile "com.jayway.jsonpath:json-path:2.2.0"
     testCompile "org.assertj:assertj-core:3.5.1"
 
     configurations.all {
-        exclude(group: 'org.hibernate', module: 'hibernate-entitymanager')
         exclude(group: 'junit', module: 'junit')
     }
 }
