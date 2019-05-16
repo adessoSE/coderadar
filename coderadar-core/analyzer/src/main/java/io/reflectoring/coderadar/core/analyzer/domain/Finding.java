@@ -1,27 +1,14 @@
 package io.reflectoring.coderadar.core.analyzer.domain;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import lombok.Data;
+import org.neo4j.ogm.annotation.NodeEntity;
 
-@Entity
-@Table(name = "finding")
+@NodeEntity
 @Data
 public class Finding {
-
-  @EmbeddedId private MetricValue id;
-
-  @Column(name = "line_start")
+  private Long id;
   private Integer lineStart;
-
-  @Column(name = "line_end")
   private Integer lineEnd;
-
-  @Column(name = "char_start")
   private Integer charStart;
-
-  @Column(name = "char_end")
   private Integer charEnd;
 }
