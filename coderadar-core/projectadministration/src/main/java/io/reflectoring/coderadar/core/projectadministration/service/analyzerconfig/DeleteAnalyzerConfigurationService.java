@@ -17,7 +17,7 @@ public class DeleteAnalyzerConfigurationService implements DeleteAnalyzerConfigu
   @Autowired
   public DeleteAnalyzerConfigurationService(
       @Qualifier("DeleteAnalyzerConfigurationServiceNeo4j") DeleteAnalyzerConfigurationPort port,
-      GetAnalyzerConfigurationPort getAnalyzerConfigurationPort) {
+      @Qualifier("GetAnalyzerConfigurationServiceNeo4j") GetAnalyzerConfigurationPort getAnalyzerConfigurationPort) {
     this.port = port;
     this.getAnalyzerConfigurationPort = getAnalyzerConfigurationPort;
   }

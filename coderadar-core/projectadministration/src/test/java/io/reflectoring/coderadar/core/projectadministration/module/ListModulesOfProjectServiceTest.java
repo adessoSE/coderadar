@@ -3,10 +3,13 @@ package io.reflectoring.coderadar.core.projectadministration.module;
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.ListModulesOfProjectPort;
+import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.core.projectadministration.service.module.ListModulesOfProjectService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,13 +18,21 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.mockito.ArgumentMatchers.anyLong;
+
 @ExtendWith(SpringExtension.class)
 class ListModulesOfProjectServiceTest {
   @Mock private ListModulesOfProjectPort port;
+  @Mock private GetProjectPort getProjectPort;
+
   @InjectMocks private ListModulesOfProjectService testSubject;
 
   @Test
   void returnsTwoModulesFromProject() {
+
+    Mockito.when(getProjectPort.get(anyLong())).thenReturn(Optional.of(new Project()));
+
+
     Project project = new Project();
     project.setId(1L);
 

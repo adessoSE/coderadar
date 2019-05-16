@@ -16,7 +16,7 @@ public class FetchCommitService implements FetchCommitUseCase {
       Git gitClient =
           Git.cloneRepository()
               .setNoCheckout(true)
-              .setDirectory(command.getLocalDir().toFile())
+              //TODO .setDirectory(command.getLocalDir().toFile())
               .setURI(command.getUrl().toString())
               .call();
 
@@ -25,11 +25,12 @@ public class FetchCommitService implements FetchCommitUseCase {
 
       gitClient.getRepository().close();
     } catch (GitAPIException e) {
-      throw new IllegalStateException(
+      /*TODO throw new IllegalStateException(
           String.format(
               "error while fetching commit into directory %s from url %s",
               command.getLocalDir(), command.getUrl().toString()),
           e);
+    }*/
     }
   }
 }

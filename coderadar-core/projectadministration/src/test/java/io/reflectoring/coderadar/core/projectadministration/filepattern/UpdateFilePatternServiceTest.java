@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
 @ExtendWith(SpringExtension.class)
 class UpdateFilePatternServiceTest {
   @Mock private GetFilePatternPort getFilePatternPort;
@@ -26,7 +28,7 @@ class UpdateFilePatternServiceTest {
     filePattern.setPattern("**/*.java");
     filePattern.setInclusionType(InclusionType.INCLUDE);
 
-    Mockito.when(getFilePatternPort.get(1L)).thenReturn(filePattern);
+    Mockito.when(getFilePatternPort.get(1L)).thenReturn(Optional.of(filePattern));
 
     UpdateFilePatternCommand command =
         new UpdateFilePatternCommand("**/*.java", InclusionType.INCLUDE);

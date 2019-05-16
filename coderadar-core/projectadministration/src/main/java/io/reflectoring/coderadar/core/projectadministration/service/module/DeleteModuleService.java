@@ -17,7 +17,7 @@ public class DeleteModuleService implements DeleteModuleUseCase {
   @Autowired
   public DeleteModuleService(
       @Qualifier("DeleteModuleServiceNeo4j") DeleteModulePort deleteModulePort,
-      GetModulePort getModulePort) {
+      @Qualifier("GetModuleServiceNeo4j") GetModulePort getModulePort) {
     this.deleteModulePort = deleteModulePort;
     this.getModulePort = getModulePort;
   }
