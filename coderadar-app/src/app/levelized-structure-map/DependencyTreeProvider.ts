@@ -4,20 +4,20 @@ import {HttpClient} from '@angular/common/http';
 @Injectable()
 export class DependencyTreeProvider {
 
-  private node: Node = null;
+  private node: any = null;
 
   constructor(private http: HttpClient) {
 
   }
 
-  public getDependencyTree(): Node {
+  public getDependencyTree(): any {
     return this.node;
   }
 
   load() {
     return new Promise((resolve, reject) => {
       this.http
-        .get<Node>('http://localhost:8082/getTree')
+        .get<any>('http://localhost:8082/getTree')
         .subscribe(res => {
           this.node = res;
           resolve(true);
