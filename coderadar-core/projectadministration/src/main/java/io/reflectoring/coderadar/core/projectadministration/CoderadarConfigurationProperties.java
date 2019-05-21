@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.app;
+package io.reflectoring.coderadar.core.projectadministration;
 
 import java.io.IOException;
 import java.nio.file.Files;

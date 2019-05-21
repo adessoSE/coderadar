@@ -8,9 +8,6 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.module.u
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.net.MalformedURLException;
-import java.net.URL;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,24 +19,23 @@ class UpdateModuleControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private CreateModuleRepository createModuleRepository;
 
-  @BeforeEach
-  public void setUp() {
+  @Test
+  void updateModuleWithId() throws Exception {
+    // Set up
     Project testProject = new Project();
     testProject.setVcsUrl("https://valid.url");
-    createProjectRepository.save(testProject);
+    testProject = createProjectRepository.save(testProject);
 
     Module module = new Module();
     module.setPath("test-module");
     module.setProject(testProject);
-    createModuleRepository.save(module);
-  }
+    module = createModuleRepository.save(module);
 
-  @Test
-  void updateModuleWithIdOne() throws Exception {
+    // Test
     UpdateModuleCommand command = new UpdateModuleCommand("new-module-path");
     mvc()
         .perform(
-            post("/projects/0/modules/1")
+            post("/projects/" + testProject.getId() + "/modules/" + module.getId())
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk());
@@ -47,6 +43,8 @@ class UpdateModuleControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void updateModuleReturnsErrorWhenModuleNotFound() throws Exception {
+    createModuleRepository.deleteAll();
+
     UpdateModuleCommand command = new UpdateModuleCommand("new-module-path");
     mvc()
         .perform(

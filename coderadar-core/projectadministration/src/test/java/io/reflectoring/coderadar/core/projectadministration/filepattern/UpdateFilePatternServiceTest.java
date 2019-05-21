@@ -6,14 +6,13 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.filepatt
 import io.reflectoring.coderadar.core.projectadministration.port.driven.filepattern.UpdateFilePatternPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.update.UpdateFilePatternCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.filepattern.UpdateFilePatternService;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 class UpdateFilePatternServiceTest {

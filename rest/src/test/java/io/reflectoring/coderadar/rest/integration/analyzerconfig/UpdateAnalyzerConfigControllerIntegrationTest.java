@@ -8,9 +8,6 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzer
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.net.MalformedURLException;
-import java.net.URL;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,26 +19,23 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
 
   @Autowired private CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository;
 
-  @BeforeEach
-  public void setUp() throws MalformedURLException {
+  @Test
+  void updateAnalyzerConfigurationWithId() throws Exception {
     Project testProject = new Project();
     testProject.setVcsUrl("https://valid.url");
-    createProjectRepository.save(testProject);
+    testProject = createProjectRepository.save(testProject);
 
     AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
     analyzerConfiguration.setProject(testProject);
     analyzerConfiguration.setAnalyzerName("analyzer");
 
-    createAnalyzerConfigurationRepository.save(analyzerConfiguration);
-  }
+    analyzerConfiguration = createAnalyzerConfigurationRepository.save(analyzerConfiguration);
 
-  @Test
-  void updateAnalyzerConfigurationWithIdOne() throws Exception {
     UpdateAnalyzerConfigurationCommand command =
         new UpdateAnalyzerConfigurationCommand("new analyzer name", false);
     mvc()
         .perform(
-            post("/projects/0/analyzers/1")
+            post("/projects/" + testProject.getId() + "/analyzers/" + analyzerConfiguration.getId())
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk());
@@ -49,6 +43,8 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
 
   @Test
   void updateAnalyzerConfigurationReturnsErrorWhenNotFound() throws Exception {
+    createAnalyzerConfigurationRepository.deleteAll();
+
     UpdateAnalyzerConfigurationCommand command =
         new UpdateAnalyzerConfigurationCommand("new analyzer name", false);
     mvc()

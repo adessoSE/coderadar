@@ -5,6 +5,8 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.user.pas
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,8 +21,12 @@ public class ChangePasswordController {
   }
 
   @PostMapping(path = "/user/password/change")
-  public ResponseEntity<String> changePassword(@RequestBody ChangePasswordCommand command) {
-    changePasswordUseCase.changePassword(command);
-    return new ResponseEntity<>(HttpStatus.OK);
+  public ResponseEntity<String> changePassword(@RequestBody @Validated ChangePasswordCommand command) {
+    try {
+      changePasswordUseCase.changePassword(command);
+      return new ResponseEntity<>(HttpStatus.OK);
+    } catch (AuthenticationException e){
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
+    }
   }
 }

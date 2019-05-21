@@ -8,9 +8,6 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.net.MalformedURLException;
-import java.net.URL;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -21,28 +18,29 @@ class DeleteFilePatternControllerIntegrationTest extends ControllerTestTemplate 
 
   @Autowired private CreateFilePatternRepository createFilePatternRepository;
 
-  @BeforeEach
-  public void setUp() {
+  @Test
+  void deleteFilePatternWithId() throws Exception {
+    // Set up
     Project testProject = new Project();
     testProject.setVcsUrl("https://valid.url");
-    createProjectRepository.save(testProject);
+    testProject = createProjectRepository.save(testProject);
 
     FilePattern filePattern = new FilePattern();
     filePattern.setInclusionType(InclusionType.INCLUDE);
     filePattern.setPattern("**/*.java");
     filePattern.setProject(testProject);
-    createFilePatternRepository.save(filePattern);
-  }
+    filePattern = createFilePatternRepository.save(filePattern);
 
-  @Test
-  void deleteFilePatternWithIdOne() throws Exception {
     mvc()
-        .perform(delete("/projects/0/filePatterns/1"))
+        .perform(
+            delete("/projects/" + testProject.getId() + "/filePatterns/" + filePattern.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk());
   }
 
   @Test
   void deleteFilePatternReturnsErrorWhenNotFound() throws Exception {
+    createFilePatternRepository.deleteAll();
+
     mvc()
         .perform(delete("/projects/0/filePatterns/2"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())

@@ -10,9 +10,6 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.filepatt
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.net.MalformedURLException;
-import java.net.URL;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -23,11 +20,12 @@ class ListFilePatternsOfProjectControllerIntegrationTest extends ControllerTestT
 
   @Autowired private CreateFilePatternRepository createFilePatternRepository;
 
-  @BeforeEach
-  public void setUp() {
+  @Test
+  void listAllFilePatternsOfProjectWithId() throws Exception {
+    // Set up
     Project testProject = new Project();
     testProject.setVcsUrl("https://valid.url");
-    createProjectRepository.save(testProject);
+    testProject = createProjectRepository.save(testProject);
 
     FilePattern filePattern = new FilePattern();
     filePattern.setInclusionType(InclusionType.INCLUDE);
@@ -40,18 +38,18 @@ class ListFilePatternsOfProjectControllerIntegrationTest extends ControllerTestT
     filePattern2.setPattern("**/*.xml");
     filePattern2.setProject(testProject);
     createFilePatternRepository.save(filePattern2);
-  }
 
-  @Test
-  void listAllFilePatternsOfProjectWithIdZero() throws Exception {
+    // Test
     mvc()
-        .perform(get("/projects/0/filePatterns"))
+        .perform(get("/projects/" + testProject.getId() + "/filePatterns"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetFilePatternResponse[].class));
   }
 
   @Test
   void listAllFilePatternsReturnsErrorWhenProjectNotFound() throws Exception {
+    createProjectRepository.deleteAll();
+
     mvc()
         .perform(get("/projects/1/filePatterns"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())

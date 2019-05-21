@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserResponse;
+import io.reflectoring.coderadar.core.projectadministration.UserNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,11 @@ public class LoadUserController {
   }
 
   @GetMapping(path = "/user/{userId}")
-  public ResponseEntity<LoadUserResponse> loadUser(@PathVariable Long userId) {
-    return new ResponseEntity<>(loadUserUseCase.loadUser(userId), HttpStatus.OK);
+  public ResponseEntity loadUser(@PathVariable Long userId) {
+    try {
+      return new ResponseEntity<>(loadUserUseCase.loadUser(userId), HttpStatus.OK);
+    } catch (UserNotFoundException e) {
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
   }
 }

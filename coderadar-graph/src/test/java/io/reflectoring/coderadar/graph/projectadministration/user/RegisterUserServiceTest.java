@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.graph.projectadministration.user;
 
+import static org.mockito.ArgumentMatchers.any;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
 import io.reflectoring.coderadar.graph.projectadministration.user.service.RegisterUserService;
@@ -9,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
@@ -19,6 +22,10 @@ public class RegisterUserServiceTest {
   @Test
   @DisplayName("Should return long when passing valid argument")
   void shouldReturnLongWhenPassingValidArgument() {
+    User testUser = new User();
+    testUser.setId(20L);
+    Mockito.when(registerUserRepository.save(any())).thenReturn(testUser);
+
     Long returned = registerUserService.register(new User());
     Assertions.assertThat(returned).isNotNull();
   }

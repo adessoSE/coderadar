@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType
 import io.reflectoring.coderadar.core.projectadministration.port.driven.filepattern.GetFilePatternPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.core.projectadministration.service.filepattern.GetFilePatternService;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,8 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 class GetFilePatternServiceTest {

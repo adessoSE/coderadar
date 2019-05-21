@@ -1,8 +1,11 @@
 package io.reflectoring.coderadar.core.projectadministration.service.user;
 
+import io.reflectoring.coderadar.core.projectadministration.UserNotFoundException;
+import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserUseCase;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,11 @@ public class LoadUserService implements LoadUserUseCase {
 
   @Override
   public LoadUserResponse loadUser(Long id) {
-    return new LoadUserResponse(port.loadUser(id).getUsername());
+    Optional<User> user = port.loadUser(id);
+    if (user.isPresent()) {
+      return new LoadUserResponse(user.get().getId(), user.get().getUsername());
+    } else {
+      throw new UserNotFoundException(id);
+    }
   }
 }

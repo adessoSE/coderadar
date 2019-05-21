@@ -20,7 +20,7 @@ class LoadUserControllerTest {
 
   @Test
   void loadUserWithIdOne() {
-    LoadUserResponse user = new LoadUserResponse("username");
+    LoadUserResponse user = new LoadUserResponse(1L, "username");
 
     Mockito.when(loadUserUseCase.loadUser(1L)).thenReturn(user);
 

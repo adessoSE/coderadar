@@ -7,9 +7,6 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.net.MalformedURLException;
-import java.net.URL;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -19,20 +16,17 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
 
   @Autowired private CreateProjectRepository createProjectRepository;
 
-  @BeforeEach
-  public void setUp() throws MalformedURLException {
-    Project testProject = new Project();
-    testProject.setVcsUrl("https://valid.url");
-    createProjectRepository.save(testProject);
-  }
-
   @Test
   void createFilePatternSuccessfully() throws Exception {
+    Project testProject = new Project();
+    testProject.setVcsUrl("https://valid.url");
+    testProject = createProjectRepository.save(testProject);
+
     CreateFilePatternCommand command =
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/0/filePatterns")
+            post("/projects/" + testProject.getId() + "/filePatterns")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isCreated());
@@ -40,6 +34,8 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
 
   @Test
   void createFilePatternReturnsErrorWhenProjectDoesNotExist() throws Exception {
+    createProjectRepository.deleteAll();
+
     CreateFilePatternCommand command =
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
@@ -52,7 +48,7 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
   }
 
   @Test
-  void createFilePatternReturnsErrorWhenProjectRequestIsInvalid() throws Exception {
+  void createFilePatternReturnsErrorWhenRequestIsInvalid() throws Exception {
     CreateFilePatternCommand command = new CreateFilePatternCommand("", InclusionType.INCLUDE);
     mvc()
         .perform(

@@ -6,9 +6,6 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.net.MalformedURLException;
-import java.net.URL;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,20 +15,17 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
 
   @Autowired private CreateProjectRepository createProjectRepository;
 
-  @BeforeEach
-  public void setUp() {
-    Project testProject = new Project();
-    testProject.setVcsUrl("https://valid.url");
-    createProjectRepository.save(testProject);
-  }
-
   @Test
   void createAnalyzerConfigurationSuccessfully() throws Exception {
+    Project testProject = new Project();
+    testProject.setVcsUrl("https://valid.url");
+    testProject = createProjectRepository.save(testProject);
+
     CreateAnalyzerConfigurationCommand command =
         new CreateAnalyzerConfigurationCommand("analyzer", true);
     mvc()
         .perform(
-            post("/projects/0/analyzers")
+            post("/projects/" + testProject.getId() + "/analyzers")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isCreated());
@@ -39,6 +33,9 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
 
   @Test
   void createAnalyzerConfigurationReturnsErrorWhenProjectNotFound() throws Exception {
+    // Set up
+    createProjectRepository.deleteAll();
+
     CreateAnalyzerConfigurationCommand command =
         new CreateAnalyzerConfigurationCommand("analyzer", true);
     mvc()

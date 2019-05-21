@@ -1,10 +1,6 @@
 package org.wickedsource.coderadar.analyzer.checkstyle;
 
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
-
-import java.net.URI;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +10,10 @@ public class ServiceLoaderTest {
 
   @Test
   public void analyzerIsRegisteredWithServiceLoader() {
-    ServiceLoader<SourceCodeFileAnalyzerPlugin> loader = ServiceLoader.load(SourceCodeFileAnalyzerPlugin.class,  CheckstyleSourceCodeFileAnalyzerPlugin.class.getClassLoader());
+    ServiceLoader<SourceCodeFileAnalyzerPlugin> loader =
+        ServiceLoader.load(
+            SourceCodeFileAnalyzerPlugin.class,
+            CheckstyleSourceCodeFileAnalyzerPlugin.class.getClassLoader());
     Iterator<SourceCodeFileAnalyzerPlugin> plugins = loader.iterator();
     SourceCodeFileAnalyzerPlugin plugin = plugins.next();
     Assertions.assertTrue(plugin instanceof CheckstyleSourceCodeFileAnalyzerPlugin);

@@ -6,8 +6,6 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectUseCase;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +33,6 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     if (project.isPresent()) {
       Project updatedProject = project.get();
       updatedProject.setName(command.getName());
-      updatedProject.setWorkdirName(UUID.randomUUID().toString());
       updatedProject.setVcsUrl(command.getVcsUrl());
       updatedProject.setVcsUsername(command.getVcsUsername());
       updatedProject.setVcsPassword(command.getVcsPassword());

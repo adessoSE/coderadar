@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
 import io.reflectoring.coderadar.core.analyzer.domain.Commit;
-import java.net.URL;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;

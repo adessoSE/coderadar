@@ -1,10 +1,12 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
+import io.reflectoring.coderadar.core.projectadministration.UsernameAlreadyInUseException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.register.RegisterUserCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.register.RegisterUserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +21,11 @@ public class RegisterUserController {
   }
 
   @PostMapping(path = "/user/registration")
-  public ResponseEntity<Long> register(@RequestBody RegisterUserCommand command) {
-    return new ResponseEntity<>(registerUserUseCase.register(command), HttpStatus.CREATED);
+  public ResponseEntity register(@RequestBody @Validated RegisterUserCommand command) {
+    try {
+      return new ResponseEntity<>(registerUserUseCase.register(command), HttpStatus.CREATED);
+    } catch (UsernameAlreadyInUseException e) {
+      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
   }
 }

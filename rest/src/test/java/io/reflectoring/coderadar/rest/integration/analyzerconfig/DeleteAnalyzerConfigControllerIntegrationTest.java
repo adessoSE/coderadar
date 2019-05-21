@@ -7,9 +7,6 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.net.MalformedURLException;
-import java.net.URL;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -20,28 +17,30 @@ class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
 
   @Autowired private CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository;
 
-  @BeforeEach
-  public void setUp() {
+  @Test
+  void deleteAnalyzerConfigurationWithId() throws Exception {
     Project testProject = new Project();
     testProject.setVcsUrl("https://valid.url");
-    createProjectRepository.save(testProject);
+    testProject = createProjectRepository.save(testProject);
 
     AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
     analyzerConfiguration.setProject(testProject);
     analyzerConfiguration.setAnalyzerName("analyzer");
 
-    createAnalyzerConfigurationRepository.save(analyzerConfiguration);
-  }
+    analyzerConfiguration = createAnalyzerConfigurationRepository.save(analyzerConfiguration);
 
-  @Test
-  void deleteAnalyzerConfigurationWithIdOne() throws Exception {
     mvc()
-        .perform(delete("/projects/0/analyzers/1"))
+        .perform(
+            delete(
+                "/projects/" + testProject.getId() + "/analyzers/" + analyzerConfiguration.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk());
   }
 
   @Test
-  void deleteAnalyzerConfigurationRetrunsErrorWhenAnalyzerNotFound() throws Exception {
+  void deleteAnalyzerConfigurationReturnsErrorWhenAnalyzerNotFound() throws Exception {
+    // Set up
+    createAnalyzerConfigurationRepository.deleteAll();
+
     mvc()
         .perform(delete("/projects/0/analyzers/2"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())

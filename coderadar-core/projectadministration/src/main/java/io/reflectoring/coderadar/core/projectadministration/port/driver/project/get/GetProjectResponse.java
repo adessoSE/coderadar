@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.core.projectadministration.port.driver.project.get;
 
-import java.net.URL;
 import java.util.Date;
 import lombok.Data;
 

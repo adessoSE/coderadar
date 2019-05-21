@@ -9,9 +9,6 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.module.g
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.net.MalformedURLException;
-import java.net.URL;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -22,11 +19,12 @@ class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTempla
 
   @Autowired private CreateModuleRepository createModuleRepository;
 
-  @BeforeEach
-  public void setUp() {
+  @Test
+  void listAllModulesOfProjectWithId() throws Exception {
+    // Set up
     Project testProject = new Project();
     testProject.setVcsUrl("https://valid.url");
-    createProjectRepository.save(testProject);
+    testProject = createProjectRepository.save(testProject);
 
     Module module = new Module();
     module.setPath("test-module");
@@ -37,18 +35,18 @@ class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTempla
     module2.setPath("test-module");
     module2.setProject(testProject);
     createModuleRepository.save(module2);
-  }
 
-  @Test
-  void listAllModulesOfProjectWithIdOne() throws Exception {
+    // Test
     mvc()
-        .perform(get("/projects/0/modules"))
+        .perform(get("/projects/" + testProject.getId() + "/modules"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetModuleResponse[].class));
   }
 
   @Test
   void listAllModulesOfProjectReturnsErrorWhenProjectNotFound() throws Exception {
+    createProjectRepository.deleteAll();
+
     mvc()
         .perform(get("/projects/1/modules"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())

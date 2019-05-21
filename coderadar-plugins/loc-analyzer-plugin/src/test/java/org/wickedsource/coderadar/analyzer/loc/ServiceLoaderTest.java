@@ -10,7 +10,8 @@ public class ServiceLoaderTest {
 
   @Test
   public void analyzerIsRegisteredWithServiceLoader() {
-    ServiceLoader<SourceCodeFileAnalyzerPlugin> loader = ServiceLoader.load(SourceCodeFileAnalyzerPlugin.class);
+    ServiceLoader<SourceCodeFileAnalyzerPlugin> loader =
+        ServiceLoader.load(SourceCodeFileAnalyzerPlugin.class);
     Iterator<SourceCodeFileAnalyzerPlugin> plugins = loader.iterator();
     SourceCodeFileAnalyzerPlugin plugin = plugins.next();
     Assertions.assertTrue(plugin instanceof LocAnalyzerPlugin);

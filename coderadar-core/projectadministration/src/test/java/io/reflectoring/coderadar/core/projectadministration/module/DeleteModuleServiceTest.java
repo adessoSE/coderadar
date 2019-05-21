@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.module;
 
+import static org.mockito.ArgumentMatchers.anyLong;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.DeleteModulePort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.GetModulePort;
@@ -10,8 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import static org.mockito.ArgumentMatchers.anyLong;
 
 @ExtendWith(SpringExtension.class)
 class DeleteModuleServiceTest {

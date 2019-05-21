@@ -78,18 +78,13 @@ war {
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:${version_spring_boot}"
-    compile "org.springframework.boot:spring-boot-starter-security:${version_spring_boot}"
     compile "org.springframework.boot:spring-boot-starter-actuator:${version_spring_boot}"
     compile "org.springframework.boot:spring-boot-devtools:${version_spring_boot}"
     compile "org.eclipse.jgit:org.eclipse.jgit:4.6.0.201612231935-r"
     compile "commons-io:commons-io:2.4"
     compile "io.fabric8:gitective-core:0.9.10"
     compile "org.apache.commons:commons-lang3:3.4"
-    compile "org.reflections:reflections:0.9.10"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8"
-    compile "com.auth0:java-jwt:3.1.0"
-    compile "joda-time:joda-time:2.9.7"
-    compile "org.passay:passay:1.2.0"
     compile "io.dropwizard:dropwizard-metrics:1.0.6"
     compile group: 'io.dropwizard.metrics', name: 'metrics-annotation', version: '3.2.1'
     compile "io.prometheus:simpleclient:0.6.0"

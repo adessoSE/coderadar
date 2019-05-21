@@ -9,9 +9,6 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzer
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.net.MalformedURLException;
-import java.net.URL;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -22,30 +19,30 @@ class GetAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate 
 
   @Autowired private CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository;
 
-  @BeforeEach
-  public void setUp() {
+  @Test
+  void getAnalyzerConfigurationWithId() throws Exception {
     Project testProject = new Project();
     testProject.setVcsUrl("https://valid.url");
-    createProjectRepository.save(testProject);
+    testProject = createProjectRepository.save(testProject);
 
     AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
     analyzerConfiguration.setProject(testProject);
     analyzerConfiguration.setAnalyzerName("analyzer");
     analyzerConfiguration.setEnabled(true);
 
-    createAnalyzerConfigurationRepository.save(analyzerConfiguration);
-  }
+    analyzerConfiguration = createAnalyzerConfigurationRepository.save(analyzerConfiguration);
 
-  @Test
-  void getAnalyzerConfigurationWithIdOne() throws Exception {
     mvc()
-        .perform(get("/projects/0/analyzers/1"))
+        .perform(
+            get("/projects/" + testProject.getId() + "/analyzers/" + analyzerConfiguration.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetAnalyzerConfigurationResponse.class));
   }
 
   @Test
   void getAnalyzerConfigurationReturnsErrorWhenNotFound() throws Exception {
+    createAnalyzerConfigurationRepository.deleteAll();
+
     mvc()
         .perform(get("/projects/0/analyzers/2"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())

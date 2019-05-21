@@ -10,8 +10,6 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.filepatt
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.net.MalformedURLException;
-import java.net.URL;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,28 +22,32 @@ class GetFilePatternControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private CreateFilePatternRepository createFilePatternRepository;
 
   @BeforeEach
-  public void setUp() {
+  public void setUp() {}
+
+  @Test
+  void getFilePatternWithId() throws Exception {
+    // Set up
     Project testProject = new Project();
     testProject.setVcsUrl("https://valid.url");
-    createProjectRepository.save(testProject);
+    testProject = createProjectRepository.save(testProject);
 
     FilePattern filePattern = new FilePattern();
     filePattern.setInclusionType(InclusionType.INCLUDE);
     filePattern.setPattern("**/*.java");
     filePattern.setProject(testProject);
-    createFilePatternRepository.save(filePattern);
-  }
+    filePattern = createFilePatternRepository.save(filePattern);
 
-  @Test
-  void getFilePatternWithIdOne() throws Exception {
+    // Test
     mvc()
-        .perform(get("/projects/0/filePatterns/1"))
+        .perform(get("/projects/" + testProject.getId() + "/filePatterns/" + filePattern.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetFilePatternResponse.class));
   }
 
   @Test
   void getFilePatternReturnsErrorWhenNotFound() throws Exception {
+    createFilePatternRepository.deleteAll();
+
     mvc()
         .perform(get("/projects/0/filePatterns/2"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())

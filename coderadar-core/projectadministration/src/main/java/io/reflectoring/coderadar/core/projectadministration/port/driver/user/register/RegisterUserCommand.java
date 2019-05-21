@@ -1,11 +1,20 @@
 package io.reflectoring.coderadar.core.projectadministration.port.driver.user.register;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import lombok.Value;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.user.ValidPassword;
+import javax.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RegisterUserCommand {
-  @NotNull @NotEmpty private String username;
-  @NotNull @NotEmpty private String password;
+  @NotBlank private String username;
+
+  @NotBlank
+  @Length(min = 8, max = 64)
+  @ValidPassword
+  private String password;
 }

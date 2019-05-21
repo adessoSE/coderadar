@@ -9,9 +9,6 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.filepatt
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.net.MalformedURLException;
-import java.net.URL;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -23,26 +20,25 @@ class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
 
   @Autowired private CreateFilePatternRepository createFilePatternRepository;
 
-  @BeforeEach
-  public void setUp() {
+  @Test
+  void updateFilePatternWithId() throws Exception {
+    // Set up
     Project testProject = new Project();
     testProject.setVcsUrl("https://valid.url");
-    createProjectRepository.save(testProject);
+    testProject = createProjectRepository.save(testProject);
 
     FilePattern filePattern = new FilePattern();
     filePattern.setInclusionType(InclusionType.INCLUDE);
     filePattern.setPattern("**/*.java");
     filePattern.setProject(testProject);
-    createFilePatternRepository.save(filePattern);
-  }
+    filePattern = createFilePatternRepository.save(filePattern);
 
-  @Test
-  void updateFilePatternWithIdOne() throws Exception {
+    // Test
     UpdateFilePatternCommand command =
         new UpdateFilePatternCommand("**/*.java", InclusionType.EXCLUDE);
     mvc()
         .perform(
-            post("/projects/0/filePatterns/1")
+            post("/projects/" + testProject.getId() + "/filePatterns/" + filePattern.getId())
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk());
@@ -50,6 +46,8 @@ class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
 
   @Test
   void updateFilePatternReturnsErrorWhenNotFound() throws Exception {
+    createFilePatternRepository.deleteAll();
+
     UpdateFilePatternCommand command =
         new UpdateFilePatternCommand("**/*.java", InclusionType.EXCLUDE);
     mvc()

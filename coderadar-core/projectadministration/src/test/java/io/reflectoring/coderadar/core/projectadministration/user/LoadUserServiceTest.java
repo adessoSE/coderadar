@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.service.user.LoadUserService;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +24,7 @@ class LoadUserServiceTest {
     user.setId(1L);
     user.setUsername("username");
 
-    Mockito.when(loadUserPort.loadUser(user.getId())).thenReturn(user);
+    Mockito.when(loadUserPort.loadUser(user.getId())).thenReturn(Optional.of(user));
 
     LoadUserResponse response = testSubject.loadUser(1L);
 

@@ -4,8 +4,6 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.core.projectadministration.service.project.GetProjectService;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;

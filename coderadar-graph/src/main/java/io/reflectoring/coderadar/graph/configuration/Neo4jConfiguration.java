@@ -14,27 +14,30 @@ import org.springframework.transaction.PlatformTransactionManager;
 @EnableNeo4jRepositories(basePackages = "io.reflectoring.coderadar.graph")
 @EnableConfigurationProperties(value = Neo4jProperties.class)
 public class Neo4jConfiguration {
-    private final Neo4jProperties properties;
+  private final Neo4jProperties properties;
 
-    public Neo4jConfiguration(Neo4jProperties properties) {
-        this.properties = properties;
-    }
+  public Neo4jConfiguration(Neo4jProperties properties) {
+    this.properties = properties;
+  }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public org.neo4j.ogm.config.Configuration configuration() {
-        return this.properties.createConfiguration();
-    }
+  @Bean
+  @ConditionalOnMissingBean
+  public org.neo4j.ogm.config.Configuration configuration() {
+    return this.properties.createConfiguration();
+  }
 
-    @Bean(name = "transactionManager")
-    public PlatformTransactionManager transactionManager() {
-        Neo4jTransactionManager txManager = new Neo4jTransactionManager();
-        txManager.setSessionFactory(sessionFactory(configuration()));
-        return txManager;
-    }
+  @Bean(name = "transactionManager")
+  public PlatformTransactionManager transactionManager() {
+    Neo4jTransactionManager txManager = new Neo4jTransactionManager();
+    txManager.setSessionFactory(sessionFactory(configuration()));
+    return txManager;
+  }
 
-    @Bean
-    public SessionFactory sessionFactory(org.neo4j.ogm.config.Configuration configuration) {
-        return new SessionFactory(configuration, "io.reflectoring.coderadar.core.projectadministration.domain", "io.reflectoring.coderadar.core.analyzer.domain");
-    }
+  @Bean
+  public SessionFactory sessionFactory(org.neo4j.ogm.config.Configuration configuration) {
+    return new SessionFactory(
+        configuration,
+        "io.reflectoring.coderadar.core.projectadministration.domain",
+        "io.reflectoring.coderadar.core.analyzer.domain");
+  }
 }
