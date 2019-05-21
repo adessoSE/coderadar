@@ -29,14 +29,14 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   }
 
   @Override
-  public void update(UpdateProjectCommand command, Long projectId) throws MalformedURLException {
+  public void update(UpdateProjectCommand command, Long projectId) {
     Optional<Project> project = getProjectPort.get(projectId);
 
     if (project.isPresent()) {
       Project updatedProject = project.get();
       updatedProject.setName(command.getName());
       updatedProject.setWorkdirName(UUID.randomUUID().toString());
-      updatedProject.setVcsUrl(new URL(command.getVcsUrl()));
+      updatedProject.setVcsUrl(command.getVcsUrl());
       updatedProject.setVcsUsername(command.getVcsUsername());
       updatedProject.setVcsPassword(command.getVcsPassword());
       updatedProject.setVcsOnline(command.getVcsOnline());

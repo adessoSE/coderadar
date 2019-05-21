@@ -20,9 +20,9 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private CreateProjectRepository createProjectRepository;
 
   @BeforeEach
-  public void setUp() throws MalformedURLException {
+  public void setUp() {
     Project testProject = new Project();
-    testProject.setVcsUrl(new URL("https://valid.url"));
+    testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsEnd(new Date());
     testProject.setVcsStart(new Date());

@@ -20,9 +20,9 @@ class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private CreateProjectRepository createProjectRepository;
 
   @BeforeEach
-  public void setUp() throws MalformedURLException {
+  public void setUp() {
     Project testProject = new Project();
-    testProject.setVcsUrl(new URL("https://valid.url"));
+    testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsEnd(new Date());
     testProject.setVcsStart(new Date());
@@ -31,7 +31,7 @@ class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
     testProject.setVcsUsername("testUser");
 
     Project testProject2 = new Project();
-    testProject2.setVcsUrl(new URL("https://valid.url"));
+    testProject2.setVcsUrl("https://valid.url");
     testProject2.setName("project");
     testProject2.setVcsEnd(new Date());
     testProject2.setVcsStart(new Date());

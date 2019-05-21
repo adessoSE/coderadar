@@ -21,9 +21,9 @@ class DeleteModuleControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private CreateModuleRepository createModuleRepository;
 
   @BeforeEach
-  public void setUp() throws MalformedURLException {
+  public void setUp() {
     Project testProject = new Project();
-    testProject.setVcsUrl(new URL("https://valid.url"));
+    testProject.setVcsUrl("https://valid.url");
     createProjectRepository.save(testProject);
 
     Module module = new Module();

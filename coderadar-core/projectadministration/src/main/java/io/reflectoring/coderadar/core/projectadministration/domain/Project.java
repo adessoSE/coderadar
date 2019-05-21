@@ -16,7 +16,7 @@ public class Project {
   private Long id;
   private String name;
   private String workdirName;
-  private URL vcsUrl;
+  private String vcsUrl;
   private String vcsUsername;
   private String vcsPassword;
   private boolean vcsOnline;

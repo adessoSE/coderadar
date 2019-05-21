@@ -23,14 +23,14 @@ class CreateProjectServiceTest {
   @InjectMocks private CreateProjectService testSubject;
 
   @Test
-  void returnsNewProjectId() throws MalformedURLException {
+  void returnsNewProjectId() {
     CreateProjectCommand command =
         new CreateProjectCommand(
             "project", "username", "password", "http://valid.url", true, new Date(), new Date());
 
     Project project = new Project();
     project.setName("project");
-    project.setVcsUrl(new URL("http://valid.url"));
+    project.setVcsUrl("http://valid.url");
     project.setVcsUsername("username");
     project.setVcsPassword("password");
     project.setVcsOnline(true);

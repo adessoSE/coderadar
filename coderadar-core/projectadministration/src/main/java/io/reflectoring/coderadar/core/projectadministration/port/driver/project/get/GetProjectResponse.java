@@ -10,7 +10,7 @@ public class GetProjectResponse {
   private String name;
   private String vcsUsername;
   private String vcsPassword;
-  private URL vcsUrl;
+  private String vcsUrl;
   private Boolean vcsOnline;
   private Date start;
   private Date end;

@@ -23,14 +23,12 @@ class GetProjectServiceTest {
   @InjectMocks private GetProjectService testSubject;
 
   @Test
-  void returnsGetProjectResponseWithIdOne() throws MalformedURLException {
-    URL url = new URL("http://valid.url");
-
+  void returnsGetProjectResponseWithIdOne() {
     Project project = new Project();
     project.setId(1L);
     project.setName("project name");
     project.setWorkdirName("workdir name");
-    project.setVcsUrl(url);
+    project.setVcsUrl("http://valid.url");
     project.setVcsUsername("username");
     project.setVcsPassword("password");
     project.setVcsOnline(true);

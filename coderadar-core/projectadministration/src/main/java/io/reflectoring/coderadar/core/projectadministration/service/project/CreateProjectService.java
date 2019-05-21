@@ -23,11 +23,11 @@ public class CreateProjectService implements CreateProjectUseCase {
   }
 
   @Override
-  public Long createProject(CreateProjectCommand command) throws MalformedURLException {
+  public Long createProject(CreateProjectCommand command) {
     Project project = new Project();
     project.setName(command.getName());
     project.setWorkdirName(UUID.randomUUID().toString());
-    project.setVcsUrl(new URL(command.getVcsUrl()));
+    project.setVcsUrl(command.getVcsUrl());
     project.setVcsUsername(command.getVcsUsername());
     project.setVcsPassword(command.getVcsPassword());
     project.setVcsOnline(command.getVcsOnline());
