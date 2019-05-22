@@ -6,7 +6,11 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectUseCase;
+
+import java.io.File;
 import java.util.Optional;
+
+import io.reflectoring.coderadar.core.vcs.port.driver.UpdateRepositoryUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -17,12 +21,15 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final GetProjectPort getProjectPort;
   private final UpdateProjectPort updateProjectPort;
 
+  private final UpdateRepositoryUseCase updateRepositoryUseCase;
+
   @Autowired
   public UpdateProjectService(
-      @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort,
-      @Qualifier("UpdateProjectServiceNeo4j") UpdateProjectPort updateProjectPort) {
+          @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort,
+          @Qualifier("UpdateProjectServiceNeo4j") UpdateProjectPort updateProjectPort, UpdateRepositoryUseCase updateRepositoryUseCase) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
+    this.updateRepositoryUseCase = updateRepositoryUseCase;
   }
 
   @Override
@@ -36,8 +43,13 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       updatedProject.setVcsUsername(command.getVcsUsername());
       updatedProject.setVcsPassword(command.getVcsPassword());
       updatedProject.setVcsOnline(command.getVcsOnline());
-      updatedProject.setVcsStart(command.getStart());
-      updatedProject.setVcsEnd(command.getEnd());
+      updatedProject.setVcsStart(command.getStartDate());
+      updatedProject.setVcsEnd(command.getEndDate());
+
+      new Thread(() -> {
+        updateRepositoryUseCase.updateRepository(new File(updatedProject.getWorkdirName()).toPath());
+      }).start();
+
       updateProjectPort.update(updatedProject);
     } else {
       throw new ProjectNotFoundException(projectId);

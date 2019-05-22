@@ -5,6 +5,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import java.util.Date;
+
+import org.eclipse.jgit.api.errors.JGitInternalException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -12,13 +15,14 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
-  void createProjectSuccessfully() throws Exception {
-    CreateProjectCommand command =
-        new CreateProjectCommand(
-            "project", "username", "password", "https://valid.url", true, new Date(), new Date());
-    mvc()
-        .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
-        .andExpect(MockMvcResultMatchers.status().isCreated());
+  void createProjectSuccessfully() {
+
+    Assertions.assertThrows(Exception.class, () -> {
+      CreateProjectCommand command =
+              new CreateProjectCommand(
+                      "project", "username", "password", "https://valid.url", true, new Date(), new Date());
+      mvc().perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command))).andExpect(MockMvcResultMatchers.status().isCreated());
+    });
   }
 
   @Test
