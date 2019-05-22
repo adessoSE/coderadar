@@ -1,16 +1,15 @@
-package io.reflectoring.coderadar.core.projectadministration.service.user;
+package io.reflectoring.coderadar.core.projectadministration.service.user.login;
 
 import io.reflectoring.coderadar.core.projectadministration.UserNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.domain.RefreshToken;
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.LoadUserPort;
-import io.reflectoring.coderadar.core.projectadministration.port.driven.user.LoginUserPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.RefreshTokenPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserUseCase;
+import io.reflectoring.coderadar.core.projectadministration.service.user.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,15 +21,13 @@ import java.util.Optional;
 @Service("LoginUserService")
 public class LoginUserService implements LoginUserUseCase {
 
-  private final LoginUserPort port;
   private final LoadUserPort loadUserPort;
   private final RefreshTokenPort refreshTokenPort;
   private final AuthenticationManager authenticationManager;
   private final TokenService tokenService;
 
   @Autowired
-  public LoginUserService(@Qualifier("LoginUserServiceNeo4j") LoginUserPort port, LoadUserPort loadUserPort, RefreshTokenPort refreshTokenPort, AuthenticationManager authenticationManager, TokenService tokenService) {
-    this.port = port;
+  public LoginUserService(LoadUserPort loadUserPort, RefreshTokenPort refreshTokenPort, AuthenticationManager authenticationManager, TokenService tokenService) {
     this.loadUserPort = loadUserPort;
     this.refreshTokenPort = refreshTokenPort;
     this.authenticationManager = authenticationManager;
@@ -65,6 +62,6 @@ public class LoginUserService implements LoginUserUseCase {
     RefreshToken refreshTokenEntity = new RefreshToken();
     refreshTokenEntity.setToken(refreshToken);
     refreshTokenEntity.setUser(user);
-    refreshTokenPort.createAccessToken(refreshTokenEntity.getToken());
+    refreshTokenPort.saveToken(refreshTokenEntity);
   }
 }

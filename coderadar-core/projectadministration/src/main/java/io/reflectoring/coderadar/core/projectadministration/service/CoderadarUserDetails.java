@@ -1,14 +1,12 @@
 package io.reflectoring.coderadar.core.projectadministration.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-@AllArgsConstructor
-@Getter
+@Value
 public class CoderadarUserDetails implements UserDetails {
 
   private final String username;

@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.core.projectadministration.service.user;
+package io.reflectoring.coderadar.core.projectadministration.service.user.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

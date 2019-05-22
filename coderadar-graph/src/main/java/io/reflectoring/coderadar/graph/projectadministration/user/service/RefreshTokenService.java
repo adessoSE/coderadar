@@ -19,11 +19,6 @@ public class RefreshTokenService implements RefreshTokenPort {
   }
 
   @Override
-  public String createAccessToken(String refreshToken) {
-    return "1";
-  }
-
-  @Override
   public RefreshToken findByToken(String refreshToken) {
     return refreshTokenRepository.findByToken(refreshToken);
   }
@@ -32,5 +27,17 @@ public class RefreshTokenService implements RefreshTokenPort {
   @Transactional
   public void deleteByUser(User user) {
     refreshTokenRepository.deleteByUser(user);
+  }
+
+  @Override
+  public void updateRefreshToken(String oldToken, String newToken) {
+    RefreshToken refreshToken = findByToken(oldToken);
+    refreshToken.setToken(newToken);
+    refreshTokenRepository.save(refreshToken);
+  }
+
+  @Override
+  public void saveToken(RefreshToken refreshTokenEntity) {
+    refreshTokenRepository.save(refreshTokenEntity);
   }
 }

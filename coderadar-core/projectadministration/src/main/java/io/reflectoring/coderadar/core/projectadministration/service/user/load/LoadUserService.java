@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.core.projectadministration.service.user;
+package io.reflectoring.coderadar.core.projectadministration.service.user.load;
 
 import io.reflectoring.coderadar.core.projectadministration.UserNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.domain.User;

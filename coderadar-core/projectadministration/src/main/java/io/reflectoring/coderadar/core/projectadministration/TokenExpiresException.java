@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.core.projectadministration.service.user;
+package io.reflectoring.coderadar.core.projectadministration;
 
 
 public class TokenExpiresException extends RuntimeException {

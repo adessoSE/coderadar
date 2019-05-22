@@ -32,7 +32,8 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
         .perform(
             post("/projects/" + testProject.getId() + "/modules")
                 .content(toJson(command))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "asdqupigpigu"))
         .andExpect(MockMvcResultMatchers.status().isCreated());
   }
 

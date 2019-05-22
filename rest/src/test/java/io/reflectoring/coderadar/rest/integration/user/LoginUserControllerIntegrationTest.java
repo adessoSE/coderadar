@@ -5,30 +5,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserCommand;
-import io.reflectoring.coderadar.core.projectadministration.service.user.PasswordService;
+import io.reflectoring.coderadar.core.projectadministration.service.user.security.PasswordUtil;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.regex.Matcher;
-
 class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired
   private RegisterUserRepository registerUserRepository;
-
-  @Autowired
-  private PasswordService passwordService;
 
   @Test
   void loginUserSuccessfully() throws Exception {
     registerUserRepository.deleteAll();
     User testUser = new User();
     testUser.setUsername("username");
-    testUser.setPassword(passwordService.hash("password1"));
+    testUser.setPassword(PasswordUtil.hash("password1"));
     registerUserRepository.save(testUser);
 
     LoginUserCommand command = new LoginUserCommand("username", "password1");
@@ -60,7 +54,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
     registerUserRepository.deleteAll();
     User testUser = new User();
     testUser.setUsername("username2");
-    testUser.setPassword(passwordService.hash("password1"));
+    testUser.setPassword(PasswordUtil.hash("password1"));
     registerUserRepository.save(testUser);
 
     //Test

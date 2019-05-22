@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.core.projectadministration.user;
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserResponse;
-import io.reflectoring.coderadar.core.projectadministration.service.user.LoadUserService;
+import io.reflectoring.coderadar.core.projectadministration.service.user.load.LoadUserService;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
