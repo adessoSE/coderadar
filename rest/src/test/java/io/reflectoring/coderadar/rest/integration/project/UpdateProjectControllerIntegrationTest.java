@@ -6,7 +6,10 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import java.io.File;
 import java.util.Date;
+import java.util.UUID;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -27,7 +30,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
     testProject.setVcsOnline(true);
     testProject.setVcsPassword("testPassword");
     testProject.setVcsUsername("testUser");
-
+    testProject.setWorkdirName(UUID.randomUUID().toString());
     testProject = createProjectRepository.save(testProject);
 
     // Test
@@ -39,7 +42,11 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
             post("/projects/" + testProject.getId())
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk());
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(
+            result -> {
+              FileUtils.deleteDirectory(new File("coderadar-workdir"));
+            });
   }
 
   @Test
@@ -53,7 +60,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
         .perform(
             post("/projects/1").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())
-        .andExpect(MockMvcResultMatchers.content().string("Project with id 1 not found."));
+            .andExpect(MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }
 
   @Test

@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.filepattern;
 
 import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class ListFilePatternsOfProjectController {
       return new ResponseEntity<>(
           listFilePatternsOfProjectUseCase.listFilePatterns(projectId), HttpStatus.OK);
     } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
   }
 }

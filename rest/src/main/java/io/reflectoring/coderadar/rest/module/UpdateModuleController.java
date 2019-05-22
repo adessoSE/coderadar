@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.module;
 import io.reflectoring.coderadar.core.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleUseCase;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +23,14 @@ public class UpdateModuleController {
   }
 
   @PostMapping(path = "/projects/{projectId}/modules/{moduleId}")
-  public ResponseEntity<String> updateModule(
+  public ResponseEntity updateModule(
       @RequestBody @Validated UpdateModuleCommand command,
       @PathVariable(name = "moduleId") Long moduleId) {
     try {
       updateModuleUseCase.updateModule(command, moduleId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (ModuleNotFoundException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
   }
 }

@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.service.user.security;
 
 import io.reflectoring.coderadar.core.projectadministration.CoderadarConfigurationProperties;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,15 +12,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.filter.CorsFilter;
-
-import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
@@ -35,8 +33,11 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
   private CorsFilter corsFilter;
 
   @Autowired
-  public CoderadarSecurityConfiguration(UserDetailsService userDetailsService, TokenService tokenService,
-      CoderadarConfigurationProperties coderadarConfiguration, Optional<CorsFilter> corsFilter) {
+  public CoderadarSecurityConfiguration(
+      UserDetailsService userDetailsService,
+      TokenService tokenService,
+      CoderadarConfigurationProperties coderadarConfiguration,
+      Optional<CorsFilter> corsFilter) {
     this.userDetailsService = userDetailsService;
     this.tokenService = tokenService;
     this.coderadarConfiguration = coderadarConfiguration;

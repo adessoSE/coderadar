@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.unit.analyzerconfig;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationUseCase;
+import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.analyzerconfig.CreateAnalyzerConfigurationController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,9 +26,9 @@ class CreateAnalyzerConfigurationControllerTest {
         new CreateAnalyzerConfigurationCommand("analyzer", true);
     Mockito.when(createAnalyzerConfigurationUseCase.create(command, 5L)).thenReturn(1L);
 
-    ResponseEntity<Long> responseEntity = testSubject.addAnalyzerConfiguration(command, 5L);
+    ResponseEntity<IdResponse> responseEntity = testSubject.addAnalyzerConfiguration(command, 5L);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-    Assertions.assertEquals(1L, responseEntity.getBody().longValue());
+    Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
   }
 }

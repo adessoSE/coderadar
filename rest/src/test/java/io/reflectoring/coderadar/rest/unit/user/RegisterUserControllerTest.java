@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.unit.user;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.register.RegisterUserCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.register.RegisterUserUseCase;
+import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.user.RegisterUserController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,9 +26,9 @@ class RegisterUserControllerTest {
 
     Mockito.when(registerUserUseCase.register(command)).thenReturn(1L);
 
-    ResponseEntity<Long> responseEntity = testSubject.register(command);
+    ResponseEntity<IdResponse> responseEntity = testSubject.register(command);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-    Assertions.assertEquals(1L, responseEntity.getBody().longValue());
+    Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
   }
 }

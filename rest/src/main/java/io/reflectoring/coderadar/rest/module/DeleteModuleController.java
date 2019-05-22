@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.module;
 
 import io.reflectoring.coderadar.core.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.delete.DeleteModuleUseCase;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class DeleteModuleController {
       deleteModuleUseCase.delete(moduleId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (ModuleNotFoundException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
   }
 }

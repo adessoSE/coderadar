@@ -2,10 +2,9 @@ package io.reflectoring.coderadar.rest.unit.project;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectUseCase;
+import io.reflectoring.coderadar.rest.project.UpdateProjectController;
 import java.net.MalformedURLException;
 import java.util.Date;
-
-import io.reflectoring.coderadar.rest.project.UpdateProjectController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

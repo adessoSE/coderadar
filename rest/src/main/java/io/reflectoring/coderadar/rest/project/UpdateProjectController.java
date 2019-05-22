@@ -4,6 +4,8 @@ import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundExcep
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import java.net.MalformedURLException;
+
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,7 @@ public class UpdateProjectController {
   }
 
   @PostMapping(path = "/projects/{projectId}")
-  public ResponseEntity<String> updateProject(
+  public ResponseEntity updateProject(
       @RequestBody @Validated UpdateProjectCommand command,
       @PathVariable(name = "projectId") Long projectId)
       throws MalformedURLException {
@@ -33,7 +35,7 @@ public class UpdateProjectController {
       updateProjectUseCase.update(command, projectId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
   }
 }

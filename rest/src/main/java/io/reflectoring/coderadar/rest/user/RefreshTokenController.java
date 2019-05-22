@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.core.projectadministration.UserNotFoundExceptio
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenUseCase;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +30,9 @@ public class RefreshTokenController {
       return new ResponseEntity<>(
           new RefreshTokenResponse(refreshTokenUseCase.refreshToken(command)), HttpStatus.OK);
     } catch (RefreshTokenNotFoundException | UserNotFoundException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
     } catch (AccessTokenNotExpiredException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
   }
 }

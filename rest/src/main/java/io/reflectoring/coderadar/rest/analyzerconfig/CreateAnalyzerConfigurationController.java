@@ -3,6 +3,8 @@ package io.reflectoring.coderadar.rest.analyzerconfig;
 import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationUseCase;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
+import io.reflectoring.coderadar.rest.IdResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +27,10 @@ public class CreateAnalyzerConfigurationController {
       @RequestBody @Validated CreateAnalyzerConfigurationCommand command,
       @PathVariable Long projectId) {
     try {
-      return new ResponseEntity<>(
-          createAnalyzerConfigurationUseCase.create(command, projectId), HttpStatus.CREATED);
+      return new ResponseEntity<>(new IdResponse(
+          createAnalyzerConfigurationUseCase.create(command, projectId)), HttpStatus.CREATED);
     } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
   }
 }

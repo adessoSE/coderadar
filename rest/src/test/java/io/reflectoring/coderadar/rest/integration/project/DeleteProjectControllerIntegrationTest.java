@@ -31,6 +31,6 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(delete("/projects/1"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())
-        .andExpect(MockMvcResultMatchers.content().string("Project with id 1 not found."));
+            .andExpect(MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }
 }

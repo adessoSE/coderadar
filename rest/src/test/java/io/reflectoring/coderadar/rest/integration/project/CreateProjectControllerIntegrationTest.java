@@ -1,28 +1,39 @@
 package io.reflectoring.coderadar.rest.integration.project;
 
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
-
-import org.eclipse.jgit.api.errors.JGitInternalException;
-import org.junit.jupiter.api.Assertions;
+import java.util.Optional;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
+  @Autowired private CreateProjectRepository createProjectRepository;
 
   @Test
-  void createProjectSuccessfully() {
-
-    Assertions.assertThrows(Exception.class, () -> {
-      CreateProjectCommand command =
-              new CreateProjectCommand(
-                      "project", "username", "password", "https://valid.url", true, new Date(), new Date());
-      mvc().perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command))).andExpect(MockMvcResultMatchers.status().isCreated());
-    });
+  void createProjectSuccessfully() throws Exception {
+    CreateProjectCommand command =
+        new CreateProjectCommand(
+            "project", "username", "password", "https://valid.url", true, new Date(), new Date());
+    mvc()
+        .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
+        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andDo(
+            result -> {
+                FileUtils.deleteDirectory(new File("coderadar-workdir"));
+            });
   }
 
   @Test

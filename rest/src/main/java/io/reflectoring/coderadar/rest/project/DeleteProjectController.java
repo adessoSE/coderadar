@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.project;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.delete.DeleteProjectUseCase;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +21,13 @@ public class DeleteProjectController {
   }
 
   @DeleteMapping(produces = "application/json", path = "/projects/{projectId}")
-  public ResponseEntity<String> deleteProject(@PathVariable(name = "projectId") Long projectId)
+  public ResponseEntity deleteProject(@PathVariable(name = "projectId") Long projectId)
       throws JsonProcessingException {
     try {
       deleteProjectUseCase.delete(projectId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
   }
 }

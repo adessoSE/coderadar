@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.user;
 import io.reflectoring.coderadar.core.projectadministration.RefreshTokenNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.password.ChangePasswordCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.password.ChangePasswordUseCase;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +23,13 @@ public class ChangePasswordController {
   }
 
   @PostMapping(path = "/user/password/change")
-  public ResponseEntity<String> changePassword(
+  public ResponseEntity changePassword(
       @RequestBody @Validated ChangePasswordCommand command) {
     try {
       changePasswordUseCase.changePassword(command);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (AuthenticationException | RefreshTokenNotFoundException e) {
-      return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
   }
 }

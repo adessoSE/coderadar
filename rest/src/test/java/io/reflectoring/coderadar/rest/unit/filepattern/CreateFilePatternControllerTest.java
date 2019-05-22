@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.unit.filepattern;
 import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.create.CreateFilePatternUseCase;
+import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.filepattern.CreateFilePatternController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,9 +27,9 @@ class CreateFilePatternControllerTest {
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     Mockito.when(createFilePatternUseCase.createFilePattern(command, 5L)).thenReturn(1L);
 
-    ResponseEntity<Long> responseEntity = testSubject.createFilePattern(command, 5L);
+    ResponseEntity<IdResponse> responseEntity = testSubject.createFilePattern(command, 5L);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-    Assertions.assertEquals(1L, responseEntity.getBody().longValue());
+    Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
   }
 }
