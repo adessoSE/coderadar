@@ -5,6 +5,8 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.filepatt
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reflectoring.coderadar.rest.filepattern.ListFilePatternsOfProjectController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

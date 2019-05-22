@@ -19,15 +19,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired
-  private RegisterUserRepository registerUserRepository;
+  @Autowired private RegisterUserRepository registerUserRepository;
 
-  @Autowired
-  private RefreshTokenRepository refreshTokenRepository;
+  @Autowired private RefreshTokenRepository refreshTokenRepository;
 
-  @Autowired
-  private TokenService tokenService;
-
+  @Autowired private TokenService tokenService;
 
   @Test
   void ChangePasswordSuccessfully() throws Exception {
@@ -38,15 +34,25 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
     testUser = registerUserRepository.save(testUser);
 
     RefreshToken refreshToken = new RefreshToken();
-    refreshToken.setToken(tokenService.generateRefreshToken(testUser.getId(), testUser.getUsername()));
+    refreshToken.setToken(
+        tokenService.generateRefreshToken(testUser.getId(), testUser.getUsername()));
     refreshToken.setUser(testUser);
     refreshTokenRepository.save(refreshToken);
 
-    ChangePasswordCommand command = new ChangePasswordCommand(refreshToken.getToken(), "newPassword1");
-    mvc().perform(post("/user/password/change").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isOk());
+    ChangePasswordCommand command =
+        new ChangePasswordCommand(refreshToken.getToken(), "newPassword1");
+    mvc()
+        .perform(
+            post("/user/password/change")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isOk());
 
-    Assertions.assertTrue(new BCryptPasswordEncoder().matches("newPassword1", registerUserRepository.findById(testUser.getId()).get().getPassword()));
+    Assertions.assertTrue(
+        new BCryptPasswordEncoder()
+            .matches(
+                "newPassword1",
+                registerUserRepository.findById(testUser.getId()).get().getPassword()));
   }
 
   @Test
@@ -58,14 +64,23 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
     testUser = registerUserRepository.save(testUser);
 
     RefreshToken refreshToken = new RefreshToken();
-    refreshToken.setToken(tokenService.generateRefreshToken(testUser.getId(), testUser.getUsername()));
+    refreshToken.setToken(
+        tokenService.generateRefreshToken(testUser.getId(), testUser.getUsername()));
     refreshToken.setUser(testUser);
     refreshTokenRepository.save(refreshToken);
 
     ChangePasswordCommand command = new ChangePasswordCommand("a", "newPassword1");
-    mvc().perform(post("/user/password/change").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    mvc()
+        .perform(
+            post("/user/password/change")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
-    Assertions.assertTrue(new BCryptPasswordEncoder().matches("password1", registerUserRepository.findById(testUser.getId()).get().getPassword()));
+    Assertions.assertTrue(
+        new BCryptPasswordEncoder()
+            .matches(
+                "password1",
+                registerUserRepository.findById(testUser.getId()).get().getPassword()));
   }
 }

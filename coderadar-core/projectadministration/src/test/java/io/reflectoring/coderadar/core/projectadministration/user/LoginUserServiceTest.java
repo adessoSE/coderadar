@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.user.log
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.service.user.login.LoginUserService;
 import io.reflectoring.coderadar.core.projectadministration.service.user.security.TokenService;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +16,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 class LoginUserServiceTest {
@@ -33,8 +32,10 @@ class LoginUserServiceTest {
     user.setId(1L);
     user.setUsername("username");
 
-    Mockito.when(tokenService.generateAccessToken(user.getId(), user.getUsername())).thenReturn("abalfgubhfuo[oi3y0823pdyu");
-    Mockito.when(tokenService.generateRefreshToken(user.getId(), user.getUsername())).thenReturn("ift021789f21897f2187fg");
+    Mockito.when(tokenService.generateAccessToken(user.getId(), user.getUsername()))
+        .thenReturn("abalfgubhfuo[oi3y0823pdyu");
+    Mockito.when(tokenService.generateRefreshToken(user.getId(), user.getUsername()))
+        .thenReturn("ift021789f21897f2187fg");
 
     Mockito.when(loadUserPort.loadUserByUsername(user.getUsername())).thenReturn(Optional.of(user));
 

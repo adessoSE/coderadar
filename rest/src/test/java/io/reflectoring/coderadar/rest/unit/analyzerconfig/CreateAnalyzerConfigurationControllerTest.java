@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.unit.analyzerconfig;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationUseCase;
+import io.reflectoring.coderadar.rest.analyzerconfig.CreateAnalyzerConfigurationController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

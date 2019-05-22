@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.unit.user;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenUseCase;
+import io.reflectoring.coderadar.rest.user.RefreshTokenController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

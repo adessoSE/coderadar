@@ -6,9 +6,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import java.util.Date;
-
 import io.reflectoring.coderadar.core.projectadministration.CoderadarConfigurationProperties;
+import java.util.Date;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,8 @@ public class TokenService {
   private final SecretKeyService secretKeyService;
 
   @Autowired
-  public TokenService(CoderadarConfigurationProperties configuration, SecretKeyService secretKeyService) {
+  public TokenService(
+      CoderadarConfigurationProperties configuration, SecretKeyService secretKeyService) {
     this.configuration = configuration;
     this.secretKeyService = secretKeyService;
   }

@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.unit.analyzerconfig;
+package io.reflectoring.coderadar.rest.analyzerconfig;
 
 import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;

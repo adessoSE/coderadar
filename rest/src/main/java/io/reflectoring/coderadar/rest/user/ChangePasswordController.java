@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.unit.user;
+package io.reflectoring.coderadar.rest.user;
 
 import io.reflectoring.coderadar.core.projectadministration.RefreshTokenNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.password.ChangePasswordCommand;
@@ -22,11 +22,12 @@ public class ChangePasswordController {
   }
 
   @PostMapping(path = "/user/password/change")
-  public ResponseEntity<String> changePassword(@RequestBody @Validated ChangePasswordCommand command) {
+  public ResponseEntity<String> changePassword(
+      @RequestBody @Validated ChangePasswordCommand command) {
     try {
       changePasswordUseCase.changePassword(command);
       return new ResponseEntity<>(HttpStatus.OK);
-    } catch (AuthenticationException | RefreshTokenNotFoundException e){
+    } catch (AuthenticationException | RefreshTokenNotFoundException e) {
       return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
   }

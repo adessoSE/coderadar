@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.unit.module;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleUseCase;
+import io.reflectoring.coderadar.rest.module.UpdateModuleController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

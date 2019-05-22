@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.unit.user;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.register.RegisterUserCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.register.RegisterUserUseCase;
+import io.reflectoring.coderadar.rest.user.RegisterUserController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

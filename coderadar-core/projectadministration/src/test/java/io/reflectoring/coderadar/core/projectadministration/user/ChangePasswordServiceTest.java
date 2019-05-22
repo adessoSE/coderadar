@@ -1,5 +1,8 @@
 package io.reflectoring.coderadar.core.projectadministration.user;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.ChangePasswordPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.RefreshTokenPort;
@@ -13,9 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(SpringExtension.class)
 class ChangePasswordServiceTest {
@@ -32,7 +32,6 @@ class ChangePasswordServiceTest {
     ChangePasswordCommand command = new ChangePasswordCommand("refresh token", "new password");
     testSubject.changePassword(command);
 
-    Mockito.verify(changePasswordPort, Mockito.times(1))
-        .changePassword(any());
+    Mockito.verify(changePasswordPort, Mockito.times(1)).changePassword(any());
   }
 }

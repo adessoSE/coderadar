@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.unit.user;
+package io.reflectoring.coderadar.rest.user;
 
 import io.reflectoring.coderadar.core.projectadministration.UsernameAlreadyInUseException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.register.RegisterUserCommand;
@@ -9,9 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping(path = "/user/registration")
 public class RegisterUserController {
   private final RegisterUserUseCase registerUserUseCase;
 
@@ -20,7 +22,7 @@ public class RegisterUserController {
     this.registerUserUseCase = registerUserUseCase;
   }
 
-  @PostMapping(path = "/user/registration")
+  @PostMapping
   public ResponseEntity register(@RequestBody @Validated RegisterUserCommand command) {
     try {
       return new ResponseEntity<>(registerUserUseCase.register(command), HttpStatus.CREATED);

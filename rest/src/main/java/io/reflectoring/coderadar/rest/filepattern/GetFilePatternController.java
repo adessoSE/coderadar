@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.unit.filepattern;
+package io.reflectoring.coderadar.rest.filepattern;
 
 import io.reflectoring.coderadar.core.projectadministration.FilePatternNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.GetFilePatternUseCase;

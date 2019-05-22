@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.unit.user;
+package io.reflectoring.coderadar.rest.user;
 
 import io.reflectoring.coderadar.core.projectadministration.UserNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserUseCase;

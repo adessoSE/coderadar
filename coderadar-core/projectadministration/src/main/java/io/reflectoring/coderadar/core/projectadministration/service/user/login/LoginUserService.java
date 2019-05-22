@@ -9,14 +9,13 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.user.log
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserUseCase;
 import io.reflectoring.coderadar.core.projectadministration.service.user.security.TokenService;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service("LoginUserService")
 public class LoginUserService implements LoginUserUseCase {
@@ -27,7 +26,11 @@ public class LoginUserService implements LoginUserUseCase {
   private final TokenService tokenService;
 
   @Autowired
-  public LoginUserService(LoadUserPort loadUserPort, RefreshTokenPort refreshTokenPort, AuthenticationManager authenticationManager, TokenService tokenService) {
+  public LoginUserService(
+      LoadUserPort loadUserPort,
+      RefreshTokenPort refreshTokenPort,
+      AuthenticationManager authenticationManager,
+      TokenService tokenService) {
     this.loadUserPort = loadUserPort;
     this.refreshTokenPort = refreshTokenPort;
     this.authenticationManager = authenticationManager;
@@ -36,15 +39,17 @@ public class LoginUserService implements LoginUserUseCase {
 
   @Override
   public LoginUserResponse login(LoginUserCommand command) {
-    Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            command.getUsername(), command.getPassword()));
+    Authentication authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(command.getUsername(), command.getPassword()));
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     Optional<User> user = loadUserPort.loadUserByUsername(command.getUsername());
-    if(user.isPresent()){
-      String accessToken = tokenService.generateAccessToken(user.get().getId(), user.get().getUsername());
-      String refreshToken = tokenService.generateRefreshToken(user.get().getId(), user.get().getUsername());
+    if (user.isPresent()) {
+      String accessToken =
+          tokenService.generateAccessToken(user.get().getId(), user.get().getUsername());
+      String refreshToken =
+          tokenService.generateRefreshToken(user.get().getId(), user.get().getUsername());
       saveRefreshToken(user.get(), refreshToken);
       return new LoginUserResponse(accessToken, refreshToken);
     } else {

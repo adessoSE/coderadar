@@ -19,8 +19,8 @@ public class RegisterUserService implements RegisterUserUseCase {
 
   @Autowired
   public RegisterUserService(
-          @Qualifier("RegisterUserServiceNeo4j") RegisterUserPort port,
-          @Qualifier("LoadUserServiceNeo4j") LoadUserPort loadUserPort) {
+      @Qualifier("RegisterUserServiceNeo4j") RegisterUserPort port,
+      @Qualifier("LoadUserServiceNeo4j") LoadUserPort loadUserPort) {
     this.port = port;
     this.loadUserPort = loadUserPort;
   }

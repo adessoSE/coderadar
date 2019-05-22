@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.unit.user;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserUseCase;
+import io.reflectoring.coderadar.rest.user.LoadUserController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

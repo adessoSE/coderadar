@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.unit.module;
+package io.reflectoring.coderadar.rest.module;
 
 import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;

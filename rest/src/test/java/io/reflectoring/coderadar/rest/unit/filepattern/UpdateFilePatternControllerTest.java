@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.unit.filepattern;
 import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.update.UpdateFilePatternCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.update.UpdateFilePatternUseCase;
+import io.reflectoring.coderadar.rest.filepattern.UpdateFilePatternController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

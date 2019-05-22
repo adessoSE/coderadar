@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.unit.project;
+package io.reflectoring.coderadar.rest.project;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;

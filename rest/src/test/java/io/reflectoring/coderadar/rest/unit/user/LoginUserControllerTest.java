@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.unit.user;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserUseCase;
+import io.reflectoring.coderadar.rest.user.LoginUserController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

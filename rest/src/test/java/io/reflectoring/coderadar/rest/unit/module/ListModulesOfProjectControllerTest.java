@@ -4,6 +4,8 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.module.g
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reflectoring.coderadar.rest.module.ListModulesOfProjectController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

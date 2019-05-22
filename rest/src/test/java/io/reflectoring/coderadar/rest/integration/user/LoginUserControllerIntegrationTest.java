@@ -14,8 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
-  @Autowired
-  private RegisterUserRepository registerUserRepository;
+  @Autowired private RegisterUserRepository registerUserRepository;
 
   @Test
   void loginUserSuccessfully() throws Exception {
@@ -26,17 +25,21 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
     registerUserRepository.save(testUser);
 
     LoginUserCommand command = new LoginUserCommand("username", "password1");
-    mvc().perform(post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.jsonPath("accessToken").value(any(String.class)))
-            .andExpect(MockMvcResultMatchers.jsonPath("refreshToken").value(any(String.class)));
+    mvc()
+        .perform(
+            post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("accessToken").value(any(String.class)))
+        .andExpect(MockMvcResultMatchers.jsonPath("refreshToken").value(any(String.class)));
   }
 
   @Test
   void loginUserReturnsErrorWhenRequestIsInvalid() throws Exception {
     LoginUserCommand command = new LoginUserCommand("username", "password");
-    mvc().perform(post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    mvc()
+        .perform(
+            post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 
   @Test
@@ -44,8 +47,10 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
     registerUserRepository.deleteAll();
 
     LoginUserCommand command = new LoginUserCommand("username", "password");
-    mvc().perform(post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    mvc()
+        .perform(
+            post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 
   @Test
@@ -57,10 +62,12 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
     testUser.setPassword(PasswordUtil.hash("password1"));
     registerUserRepository.save(testUser);
 
-    //Test
+    // Test
     LoginUserCommand command = new LoginUserCommand("username2", "password3");
-    mvc().perform(post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.content().string("Bad credentials"))
-            .andExpect(MockMvcResultMatchers.status().isForbidden());
+    mvc()
+        .perform(
+            post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.content().string("Bad credentials"))
+        .andExpect(MockMvcResultMatchers.status().isForbidden());
   }
 }

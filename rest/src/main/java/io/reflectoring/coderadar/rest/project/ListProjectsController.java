@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.unit.project;
+package io.reflectoring.coderadar.rest.project;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.ListProjectsUseCase;

@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.analyzerconfig;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.delete.DeleteAnalyzerConfigurationUseCase;
+import io.reflectoring.coderadar.rest.analyzerconfig.DeleteAnalyzerConfigurationController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

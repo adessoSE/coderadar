@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RefreshTokenRepository extends Neo4jRepository<RefreshToken, Long> {
-    RefreshToken findByToken(String token);
-    RefreshToken findByUser(User user);
-    Long deleteByUser(User user);
+  RefreshToken findByToken(String token);
+
+  RefreshToken findByUser(User user);
+
+  Long deleteByUser(User user);
 }
