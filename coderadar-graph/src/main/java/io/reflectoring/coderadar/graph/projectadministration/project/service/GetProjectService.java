@@ -20,4 +20,9 @@ public class GetProjectService implements GetProjectPort {
   public Optional<Project> get(Long id) {
     return getProjectRepository.findById(id);
   }
+
+  @Override
+  public Optional<Project> get(String name) {
+    return getProjectRepository.findByName(name);
+  }
 }

@@ -1,10 +1,11 @@
 package io.reflectoring.coderadar.rest.project;
 
+import io.reflectoring.coderadar.core.projectadministration.ProjectStillExistsException;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectUseCase;
-import java.net.MalformedURLException;
-
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.IdResponse;
+import java.net.MalformedURLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,11 @@ public class CreateProjectController {
   @PostMapping(produces = "application/json", path = "/projects")
   public ResponseEntity createProject(@RequestBody @Validated CreateProjectCommand command)
       throws MalformedURLException {
-    return new ResponseEntity<>(new IdResponse(createProjectUseCase.createProject(command)), HttpStatus.CREATED);
+    try {
+      return new ResponseEntity<>(
+          new IdResponse(createProjectUseCase.createProject(command)), HttpStatus.CREATED);
+    } catch (ProjectStillExistsException e) {
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
   }
 }

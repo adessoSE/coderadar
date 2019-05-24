@@ -5,4 +5,6 @@ import java.util.Optional;
 
 public interface GetProjectPort {
   Optional<Project> get(Long id);
+
+  Optional<Project> get(String name);
 }

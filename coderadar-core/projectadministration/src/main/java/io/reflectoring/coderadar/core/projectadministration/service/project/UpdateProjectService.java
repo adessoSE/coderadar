@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.core.projectadministration.service.project;
 
 import io.reflectoring.coderadar.core.projectadministration.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.core.projectadministration.ProjectStillExistsException;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
@@ -25,9 +26,10 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
   @Autowired
   public UpdateProjectService(
-          @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort,
-          @Qualifier("UpdateProjectServiceNeo4j") UpdateProjectPort updateProjectPort,
-          UpdateRepositoryUseCase updateRepositoryUseCase, CoderadarConfigurationProperties coderadarConfigurationProperties) {
+      @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort,
+      @Qualifier("UpdateProjectServiceNeo4j") UpdateProjectPort updateProjectPort,
+      UpdateRepositoryUseCase updateRepositoryUseCase,
+      CoderadarConfigurationProperties coderadarConfigurationProperties) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
     this.updateRepositoryUseCase = updateRepositoryUseCase;
@@ -39,6 +41,9 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     Optional<Project> project = getProjectPort.get(projectId);
 
     if (project.isPresent()) {
+      if (getProjectPort.get(command.getName()).isPresent()) {
+        throw new ProjectStillExistsException(command.getName());
+      }
       Project updatedProject = project.get();
       updatedProject.setName(command.getName());
       updatedProject.setVcsUrl(command.getVcsUrl());
@@ -51,7 +56,11 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       new Thread(
               () -> {
                 updateRepositoryUseCase.updateRepository(
-                    new File(coderadarConfigurationProperties.getWorkdir()+ "/" + updatedProject.getWorkdirName()).toPath());
+                    new File(
+                            coderadarConfigurationProperties.getWorkdir()
+                                + "/"
+                                + updatedProject.getWorkdirName())
+                        .toPath());
               })
           .start();
 
