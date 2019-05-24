@@ -3,21 +3,48 @@ import {Project} from '../../model/project';
 import {ProjectService} from '../../service/project.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
-import {FORBIDDEN, INTERNAL_SERVER_ERROR} from 'http-status-codes';
+import {FORBIDDEN} from 'http-status-codes';
+import {Title} from '@angular/platform-browser';
+import {AppComponent} from '../../app.component';
 
 @Component({
   selector: 'app-main-dashboard',
   templateUrl: './main-dashboard.component.html',
-  styleUrls: ['./main-dashboard.component.css']
+  styleUrls: ['./main-dashboard.component.scss']
 })
 export class MainDashboardComponent implements OnInit {
 
   projects: Project[] = [];
 
-  constructor(private userService: UserService, private router: Router, private projectService: ProjectService) {}
+  appComponent = AppComponent;
+
+  constructor(private titleService: Title, private userService: UserService,
+              private router: Router, private projectService: ProjectService) {
+    titleService.setTitle('Coderadar - Dashboard');
+  }
 
   ngOnInit(): void {
     this.getProjects();
+  }
+
+  /**
+   * Deletes a project from the database.
+   * Only works if project is not currently being analyzed.
+   * @param project The project to delete
+   */
+  deleteProject(project: Project): void {
+    this.projectService.deleteProject(project.id)
+      .then(() => {
+        const index = this.projects.indexOf(project, 0);
+        if (this.projects.indexOf(project, 0) > -1) {
+          this.projects.splice(index, 1);
+        }
+      })
+      .catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh().then(() => this.deleteProject(project));
+        }
+      });
   }
 
   /**
@@ -34,25 +61,8 @@ export class MainDashboardComponent implements OnInit {
         if (e.status && e.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.getProjects());
         }
-    });
+      });
   }
 
-  /**
-   * Deletes a project from the database.
-   * Only works if project is not currently being analyzed.
-   * @param project The project to delete
-   */
-  deleteProject(project: Project): void {
-    this.projectService.deleteProject(project.id)
-      .then(() => {
-        const index = this.projects.indexOf(project, 0);
-        if (this.projects.indexOf(project, 0) > -1) {
-          this.projects.splice(index, 1);
-        }})
-      .catch(error => {
-        if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.deleteProject(project));
-        }
-    });
-  }
+
 }

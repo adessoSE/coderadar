@@ -1,0 +1,78 @@
+@import '~@angular/material/theming';
+
+$adesso-primary: (
+  50: #e1eef8,
+  100: #b3d4ee,
+  200: #80b7e3,
+  300: #4d9ad8,
+  400: #2784cf,
+  500: #016ec7,
+  600: #0166c1,
+  700: #015bba,
+  800: #0151b3,
+  900: #003fa6,
+  A100: #d0deff,
+  A200: #9dbbff,
+  A400: #6a97ff,
+  A700: #5186ff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$adesso-accent: (
+  50 : #fdf0e0,
+  100 : #fadab3,
+  200 : #f7c180,
+  300 : #f4a84d,
+  400 : #f19526,
+  500 : #ef8200,
+  600 : #ed7a00,
+  700 : #eb6f00,
+  800 : #e86500,
+  900 : #e45200,
+  A100 : #ffffff,
+  A200 : #ffe3d8,
+  A400 : #ffbfa5,
+  A700 : #ffad8b,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #000000,
+    800 : #000000,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+
+
+$coderadar-theme-primary: mat-palette($adesso-primary);
+$coderadar-theme-accent : mat-palette($adesso-accent);
+$coderadar-theme-warn   : mat-palette($mat-red);
+$coderadar-theme: mat-light-theme(
+    $coderadar-theme-primary,
+    $coderadar-theme-accent,
+    $coderadar-theme-warn
+);

@@ -1,47 +1,53 @@
-<app-header [title]="'Edit project'"></app-header>
+<app-header [title]="[{location: '/dashboard', name: 'Dashboard'}, {location: '/project-edit/' + projectId, name: 'Edit ' + projectName}]"></app-header>
 
 <main class="mat-card-form">
   <div class="grid-container">
-    <div  id="cardContainer" fxLayoutAlign="center center">
+    <div fxLayoutAlign="center center" id="cardContainer">
       <form (ngSubmit)="submitForm()">
         <mat-card>
 
-        <!--Card title-->
+          <!--Card title-->
           <mat-card-header>
             <mat-card-title>
               <span>Edit {{projectName}}</span>
             </mat-card-title>
           </mat-card-header>
 
-        <mat-card-content fxLayout="column">
+          <mat-card-content fxLayout="column">
 
-          <!--Form fields-->
-          <mat-form-field>
-              <input maxlength="100" type="text" matInput name="name" placeholder="Project name" [(ngModel)]="project.name" required>
+            <!--Form fields-->
+            <mat-form-field>
+              <input [(ngModel)]="project.name" matInput maxlength="100" name="name" placeholder="Project name"
+                     required type="text">
             </mat-form-field>
             <mat-form-field>
-              <input type="url" matInput name="vcsUrl" placeholder="VCS URL" [(ngModel)]="project.vcsUrl" required>
+              <input [(ngModel)]="project.vcsUrl" matInput name="vcsUrl" placeholder="VCS URL" required type="url">
             </mat-form-field>
             <mat-form-field>
-              <input maxlength="100" type="text" matInput name="vcsUser" placeholder="VCS user" [(ngModel)]="project.vcsUser">
+              <input [(ngModel)]="project.vcsUser" matInput maxlength="100" name="vcsUser" placeholder="VCS user"
+                     type="text">
             </mat-form-field>
             <mat-form-field>
-              <input maxlength="100" type="password" matInput name="vcsPassword" placeholder="VCS password" [(ngModel)]="project.vcsPassword">
+              <input [(ngModel)]="project.vcsPassword" matInput maxlength="100" name="vcsPassword" placeholder="VCS password"
+                     type="password">
             </mat-form-field>
             <mat-form-field>
-              <input type="date" matInput name="startDate" placeholder="Start date - leave empty to start with first commit" [(ngModel)]="project.startDate">
+              <input [(ngModel)]="project.startDate" matInput name="startDate"
+                     placeholder="Start date - leave empty to start with first commit" type="date">
             </mat-form-field>
             <mat-form-field>
-              <input type="date" matInput name="endDate" placeholder="End date - leave empty to scan incoming commits" [(ngModel)]="project.endDate">
+              <input [(ngModel)]="project.endDate" matInput name="endDate" placeholder="End date - leave empty to scan incoming commits"
+                     type="date">
             </mat-form-field>
             <mat-error *ngIf="nameEmpty">The project name must not be empty!</mat-error>
-            <mat-error *ngIf="projectExists">A project with this name already exists! Please choose another name.</mat-error>
+            <mat-error *ngIf="projectExists">A project with this name already exists! Please choose another name.
+            </mat-error>
             <mat-error *ngIf="incorrectURL">The VCS URL is invalid!</mat-error>
 
             <!--Cancel and submit buttons-->
-            <div id="cardButtons" align="center">
-              <button mat-stroked-button type="button" routerLink="/dashboard">Cancel</button>
-              <button mat-raised-button color="primary" type="submit">Save</button>
+            <div align="center" id="cardButtons">
+              <button mat-stroked-button routerLink="/dashboard" type="button">Cancel</button>
+              <button color="primary" mat-raised-button type="submit">Save</button>
             </div>
 
           </mat-card-content>
