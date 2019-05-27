@@ -1,15 +1,19 @@
 let jsonData;
 let ctx;
 let htmlBuffer = [];
-let checked;
+let checkDown;
+let checkUp;
+let headerBackground;
 
 export function afterLoad() {
   let data = JSON.parse((document.getElementById('input') as HTMLInputElement).value);
   jsonData = data;
   buildRoot(data);
   document.getElementById('dependencyTree').innerHTML = htmlBuffer.join('');
-  checked = (document.getElementById('showAllDependencies') as HTMLInputElement).checked;
+  checkUp = (document.getElementById('showUpward') as HTMLInputElement).checked;
+  checkDown = (document.getElementById('showDownward') as HTMLInputElement).checked;
   ctx = (document.getElementById('canvas') as HTMLCanvasElement).getContext('2d');
+  headerBackground = (document.getElementById('headerBackground') as HTMLElement);
 
   let toggler = document.getElementsByClassName('clickable');
   for (let i = 0; i < toggler.length; i++) {
@@ -19,13 +23,20 @@ export function afterLoad() {
       loadDependencies(data);
     });
   }
-  document.getElementById('showAllDependencies').addEventListener('change', () => {
-    checked = (document.getElementById('showAllDependencies') as HTMLInputElement).checked;
+  document.getElementById('showUpward').addEventListener('change', () => {
+    checkUp = (document.getElementById('showUpward') as HTMLInputElement).checked;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     loadDependencies(data);
   });
-  ctx.canvas.height = document.getElementById('dependencyTree').offsetHeight;
-  ctx.canvas.width = document.getElementById('dependencyTree').offsetWidth;
+  document.getElementById('showDownward').addEventListener('change', () => {
+    checkDown = (document.getElementById('showDownward') as HTMLInputElement).checked;
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    loadDependencies(data);
+  });
+
+  ctx.canvas.height = document.getElementById('list__root').offsetHeight;
+  ctx.canvas.width = document.getElementById('list__root').offsetWidth;
+  headerBackground.style.width = document.getElementById('list__root').offsetWidth + 'px';
   loadDependencies(data);
 }
 
@@ -41,7 +52,7 @@ function loadDependencies(node) {
 }
 
 function buildRoot(currentNode) {
-  htmlBuffer.push(`<table class="list list__root active">`);
+  htmlBuffer.push(`<table id="list__root" class="list list__root active">`);
   htmlBuffer.push(`<tr><td class="package package__base">` +
     `<span id="${currentNode.packageName}" ${currentNode.children.length > 0 ? 'class="clickable"' : ''}>${currentNode.filename}</span>`);
 
@@ -65,14 +76,27 @@ function buildTree(currentNode) {
     } else if (child.children.length === 0 && child.dependencies.length === 0) {
       classString = 'class';
     }
+
+    // add line break to long filenames before an uppercase letter except the first letter
+    let fileName = '';
+    for (let i = 0; i < child.filename.length; i++) {
+      let c = child.filename.charAt(i);
+      if (i !== 0 && c.toUpperCase() === c) {
+        fileName += '<br><span class="span-margin">';
+      }
+      fileName += c;
+      if (i !== 0 && c.toUpperCase() === c) {
+        fileName += '</span>';
+      }
+    }
     if (layer === child.layer) {
       // add in same row as child
       htmlBuffer.push(`<td class="${classString}">` +
-        `<span id="${child.packageName}" ${child.children.length > 0 ? 'class="clickable"' : ''}>${child.filename}</span>`);
+        `<span id="${child.packageName}" ${child.children.length > 0 ? 'class="clickable"' : ''}>${fileName}</span>`);
     } else {
       // create new row
       htmlBuffer.push(`</tr><tr><td class="${classString}">` +
-        `<span id="${child.packageName}" ${child.children.length > 0 ? 'class="clickable"' : ''}>${child.filename}</span>`);
+        `<span id="${child.packageName}" ${child.children.length > 0 ? 'class="clickable"' : ''}>${fileName}</span>`);
     }
     layer = child.layer;
     if (child.children.length > 0) {
@@ -103,8 +127,9 @@ function toggle(currentNode) {
     }
   }
   // set height of canvas to the height of dependencyTree after toggle
-  ctx.canvas.height = document.getElementById('dependencyTree').offsetHeight;
-  ctx.canvas.width = document.getElementById('dependencyTree').offsetWidth;
+  ctx.canvas.height = document.getElementById('list__root').offsetHeight;
+  ctx.canvas.width = document.getElementById('list__root').offsetWidth;
+  headerBackground.style.width = document.getElementById('list__root').offsetWidth + 'px';
 }
 
 function listDependencies(currentNode, ctx) {
@@ -115,7 +140,7 @@ function listDependencies(currentNode, ctx) {
       // find last visible element for dependency as end
       const end = findLastHTMLElement(dependency).parentNode;
       // find last visible element for currentNode as start
-      let start = findLastHTMLElement(currentNode).parentNode;
+      const start = findLastHTMLElement(currentNode).parentNode;
 
       let startx = 0, starty = 0, endx = 0, endy = 0;
       // calculate offsets across all parents for start and end
@@ -132,14 +157,16 @@ function listDependencies(currentNode, ctx) {
         tmp = tmp.offsetParent;
       } while (!tmp.classList.contains('list__root'));
 
-      // check if all dependencies or only 'circular' dependencies should be shown
-      if (!checked) {
-        // check if current dependency is 'circular'
-        if (starty >= endy) {
-          canvasArrow(ctx, startx, starty + start.offsetHeight / 2, endx + end.offsetWidth, endy + end.offsetHeight / 2);
+      //ignore all arrows with same start and end node
+      if (start != end) {
+        // check if downward dependencies should be shown
+        if (checkDown && starty < endy) {
+          canvasArrow(ctx, startx + 13, starty + 13, endx + end.offsetWidth, endy + end.offsetHeight / 2, "black");
         }
-      } else {
-        canvasArrow(ctx, startx, starty + start.offsetHeight / 2, endx + end.offsetWidth, endy + end.offsetHeight / 2);
+        // check if upward Dependencies should be shown
+        if (checkUp && starty > endy) {
+          canvasArrow(ctx, startx + 13, starty + 13, endx + end.offsetWidth, endy + end.offsetHeight / 2, "red");
+        }
       }
     });
   }
@@ -158,13 +185,14 @@ function findLastHTMLElement(node) {
   return element;
 }
 
-function canvasArrow(context, fromx, fromy, tox, toy) {
+function canvasArrow(context, fromx, fromy, tox, toy, color) {
   const headlen = 10;
 
   // draw curved line
   context.beginPath();
   context.setLineDash([10]);
   context.moveTo(fromx, fromy);
+  context.strokeStyle = color;
   // span right triangle with X, Y and Z with X = (fromx, fromy) and Y = (tox, toy) and Z as the point at the right angle
   // calculate all sides x, y as the sides leading to the right angle
   let x = Math.abs(fromx - tox), y = Math.abs(fromy - toy);

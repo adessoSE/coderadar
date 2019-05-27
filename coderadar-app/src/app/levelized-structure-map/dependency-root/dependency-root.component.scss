@@ -1,6 +1,5 @@
 #canvas {
   position: absolute;
-  width: 100%;
   z-index: -1;
 }
 
@@ -84,7 +83,7 @@ tr {
 .class--dependency:before {
   cursor: unset;
   font-family: 'files-n-folders', sans-serif;
-  content: "\e900";
+  content: "\e901";
   display: inline-block;
   margin-right: 6px;
   color: red;
@@ -112,6 +111,18 @@ tr {
 
 .clickable {
   cursor: pointer;
+}
+
+.span-margin {
+  margin-left: 22px;
+}
+
+.header-background {
+  height: 140px;
+  position: absolute;
+  top: 0;
+  background-color: #3F51B5;
+  z-index: -1;
 }
 
 @font-face {

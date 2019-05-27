@@ -1,7 +1,12 @@
 <app-header id="header" [title]="'Structure Map'"></app-header>
-<label for="showAllDependencies">Show all Dependencies: </label>
-<input type="checkbox" #showAllDependencies id="showAllDependencies" checked>
-<div><canvas id="canvas"></canvas>
+<div class="header-background" id="headerBackground"></div>
+
+<label for="showUpward">Show all upward Dependencies: </label>
+<input type="checkbox" #showUpward id="showUpward" checked>
+<label for="showDownward">Show all downward Dependencies: </label>
+<input type="checkbox" #showDownward id="showDownward" checked>
+<div id="canvasContainer">
+  <canvas id="canvas"></canvas>
   <div id="dependencyTree"></div>
   <input type="hidden" #input id="input">
 </div>
