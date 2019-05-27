@@ -6,5 +6,6 @@ include 'coderadar-server:coderadar-core'
 include 'coderadar-server:coderadar-graph:coderadar-graph-api'
 include 'coderadar-server:coderadar-graph:coderadar-graph-impl'
 include 'coderadar-server:coderadar-database'
-
+include 'coderadar-plugins:levelized-structure-map-analyzer-plugin'
+findProject(':coderadar-plugins:levelized-structure-map-analyzer-plugin')?.name = 'levelized-structure-map-analyzer-plugin'
 

@@ -1,0 +1,12 @@
+apply plugin: "com.diffplug.gradle.spotless"
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}
+
+dependencies {
+    compile project(':coderadar-plugin-api')
+    testCompile 'org.assertj:assertj-core:3.5.1'
+}
