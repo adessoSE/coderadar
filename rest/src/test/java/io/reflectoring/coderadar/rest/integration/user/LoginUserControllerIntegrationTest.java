@@ -67,7 +67,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(
             post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.jsonPath("errorMessage").value("Bad credentials"))
+        .andExpect(MockMvcResultMatchers.jsonPath("errorMessage").value("Bad credentials"))
         .andExpect(MockMvcResultMatchers.status().isForbidden());
   }
 }

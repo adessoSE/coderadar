@@ -27,7 +27,8 @@ public class RegisterUserController {
   @PostMapping
   public ResponseEntity register(@RequestBody @Validated RegisterUserCommand command) {
     try {
-      return new ResponseEntity<>(new IdResponse(registerUserUseCase.register(command)), HttpStatus.CREATED);
+      return new ResponseEntity<>(
+          new IdResponse(registerUserUseCase.register(command)), HttpStatus.CREATED);
     } catch (UsernameAlreadyInUseException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }

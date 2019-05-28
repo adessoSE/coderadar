@@ -54,6 +54,7 @@ class ListAnalyzerConfigsFromProjectControllerIntegrationTest extends Controller
     mvc()
         .perform(get("/projects/1/analyzers"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andExpect(MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }
 }

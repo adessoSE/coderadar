@@ -30,7 +30,8 @@ public class RefreshTokenController {
       return new ResponseEntity<>(
           new RefreshTokenResponse(refreshTokenUseCase.refreshToken(command)), HttpStatus.OK);
     } catch (RefreshTokenNotFoundException | UserNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
+      return new ResponseEntity<>(
+          new ErrorMessageResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
     } catch (AccessTokenNotExpiredException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }

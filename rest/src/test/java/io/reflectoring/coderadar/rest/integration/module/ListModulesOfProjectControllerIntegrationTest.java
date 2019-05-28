@@ -50,6 +50,7 @@ class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTempla
     mvc()
         .perform(get("/projects/1/modules"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andExpect(MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }
 }

@@ -44,6 +44,8 @@ class DeleteFilePatternControllerIntegrationTest extends ControllerTestTemplate 
     mvc()
         .perform(delete("/projects/0/filePatterns/2"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andExpect(MockMvcResultMatchers.jsonPath("errorMessage").value("FilePattern with id 2 not found."));
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("errorMessage")
+                .value("FilePattern with id 2 not found."));
   }
 }
