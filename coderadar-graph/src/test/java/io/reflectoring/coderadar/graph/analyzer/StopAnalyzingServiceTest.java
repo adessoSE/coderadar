@@ -12,23 +12,27 @@ import io.reflectoring.coderadar.graph.analyzer.service.StopAnalyzingService;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("Stop analyzing")
 class StopAnalyzingServiceTest {
-  @Mock private StopAnalyzingRepository stopAnalyzingRepository;
+  private StopAnalyzingRepository stopAnalyzingRepository = mock(StopAnalyzingRepository.class);
 
-  @Mock private GetProjectRepository getProjectRepository;
+  private GetProjectRepository getProjectRepository = mock(GetProjectRepository.class);
 
-  @Mock private GetAnalyzingStatusRepository getAnalyzingStatusRepository;
+  private GetAnalyzingStatusRepository getAnalyzingStatusRepository =
+      mock(GetAnalyzingStatusRepository.class);
 
-  @InjectMocks private StopAnalyzingService stopAnalyzingService;
+  private StopAnalyzingService stopAnalyzingService;
+
+  @BeforeEach
+  void setUp() {
+    stopAnalyzingService =
+        new StopAnalyzingService(
+            getAnalyzingStatusRepository, stopAnalyzingRepository, getProjectRepository);
+  }
 
   @Test
   @DisplayName("Should throw exception when a project with the passing ID doesn't exists")

@@ -1,27 +1,25 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.register.RegisterUserCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.register.RegisterUserUseCase;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.user.RegisterUserController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class RegisterUserControllerTest {
 
-  @Mock private RegisterUserUseCase registerUserUseCase;
-  @InjectMocks private RegisterUserController testSubject;
+  private RegisterUserUseCase registerUserUseCase = mock(RegisterUserUseCase.class);
 
   @Test
   void registerUserWithIdOne() {
+    RegisterUserController testSubject = new RegisterUserController(registerUserUseCase);
+
     RegisterUserCommand command = new RegisterUserCommand("username", "password");
 
     Mockito.when(registerUserUseCase.register(command)).thenReturn(1L);

@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -28,20 +29,22 @@ class DeleteModuleControllerIntegrationTest extends ControllerTestTemplate {
     module.setPath("test-module");
     module.setProject(testProject);
     module = createModuleRepository.save(module);
+    final Long id = module.getId();
 
     // Test
     mvc()
         .perform(delete("/projects/" + testProject.getId() + "/modules/" + module.getId()))
-        .andExpect(MockMvcResultMatchers.status().isOk());
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(result -> Assertions.assertFalse(createModuleRepository.findById(id).isPresent()));
   }
 
   @Test
   void deleteModuleReturnsErrorWhenModuleNotFound() throws Exception {
-    createModuleRepository.deleteAll();
-
     mvc()
         .perform(delete("/projects/0/modules/0"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())
-        .andExpect(MockMvcResultMatchers.jsonPath("errorMessage").value("Module with id 0 not found."));
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("errorMessage").value("Module with id 0 not found."));
   }
 }

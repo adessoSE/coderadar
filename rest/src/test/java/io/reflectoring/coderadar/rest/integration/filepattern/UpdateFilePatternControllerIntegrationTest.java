@@ -9,6 +9,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.filepatt
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -32,22 +33,27 @@ class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
     filePattern.setPattern("**/*.java");
     filePattern.setProject(testProject);
     filePattern = createFilePatternRepository.save(filePattern);
+    final Long id = filePattern.getId();
 
     // Test
     UpdateFilePatternCommand command =
-        new UpdateFilePatternCommand("**/*.java", InclusionType.EXCLUDE);
+        new UpdateFilePatternCommand("**/*.xml", InclusionType.EXCLUDE);
     mvc()
         .perform(
             post("/projects/" + testProject.getId() + "/filePatterns/" + filePattern.getId())
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk());
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(
+            result -> {
+              FilePattern configuration = createFilePatternRepository.findById(id).get();
+              Assertions.assertEquals("**/*.xml", configuration.getPattern());
+              Assertions.assertEquals(InclusionType.EXCLUDE, configuration.getInclusionType());
+            });
   }
 
   @Test
   void updateFilePatternReturnsErrorWhenNotFound() throws Exception {
-    createFilePatternRepository.deleteAll();
-
     UpdateFilePatternCommand command =
         new UpdateFilePatternCommand("**/*.java", InclusionType.EXCLUDE);
     mvc()
@@ -56,7 +62,9 @@ class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andExpect(MockMvcResultMatchers.jsonPath("errorMessage").value("FilePattern with id 2 not found."));
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("errorMessage")
+                .value("FilePattern with id 2 not found."));
   }
 
   @Test

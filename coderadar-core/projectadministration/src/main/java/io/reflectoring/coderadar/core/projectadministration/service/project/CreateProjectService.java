@@ -25,8 +25,9 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   @Autowired
   public CreateProjectService(
-          @Qualifier("CreateProjectServiceNeo4j") CreateProjectPort createProjectPort,
-          CloneRepositoryUseCase cloneRepositoryUseCase, CoderadarConfigurationProperties coderadarConfigurationProperties) {
+      @Qualifier("CreateProjectServiceNeo4j") CreateProjectPort createProjectPort,
+      CloneRepositoryUseCase cloneRepositoryUseCase,
+      CoderadarConfigurationProperties coderadarConfigurationProperties) {
     this.createProjectPort = createProjectPort;
     this.cloneRepositoryUseCase = cloneRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
@@ -45,7 +46,10 @@ public class CreateProjectService implements CreateProjectUseCase {
     project.setVcsEnd(command.getEndDate());
 
     CloneRepositoryCommand cloneRepositoryCommand =
-        new CloneRepositoryCommand(command.getVcsUrl(), new File(coderadarConfigurationProperties.getWorkdir()+ "/" +project.getWorkdirName()));
+        new CloneRepositoryCommand(
+            command.getVcsUrl(),
+            new File(
+                coderadarConfigurationProperties.getWorkdir() + "/" + project.getWorkdirName()));
 
     new Thread(
             () -> {

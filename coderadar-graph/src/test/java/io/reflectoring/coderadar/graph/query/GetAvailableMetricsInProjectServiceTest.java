@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.graph.query;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
@@ -13,20 +14,24 @@ import io.reflectoring.coderadar.graph.query.service.GetAvailableMetricsInProjec
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("Get available metrics in project")
 class GetAvailableMetricsInProjectServiceTest {
-  @Mock private GetProjectRepository getProjectRepository;
-  @Mock private GetAvailableMetricsInProjectRepository getAvailableMetricsInProjectRepository;
+  private GetProjectRepository getProjectRepository = mock(GetProjectRepository.class);
+  private GetAvailableMetricsInProjectRepository getAvailableMetricsInProjectRepository =
+      mock(GetAvailableMetricsInProjectRepository.class);
 
-  @InjectMocks private GetAvailableMetricsInProjectService getAvailableMetricsInProjectService;
+  private GetAvailableMetricsInProjectService getAvailableMetricsInProjectService;
+
+  @BeforeEach
+  void setUp() {
+    getAvailableMetricsInProjectService =
+        new GetAvailableMetricsInProjectService(
+            getProjectRepository, getAvailableMetricsInProjectRepository);
+  }
 
   @Test
   @DisplayName("Should throw exception when a project with the passing ID doesn't exists")

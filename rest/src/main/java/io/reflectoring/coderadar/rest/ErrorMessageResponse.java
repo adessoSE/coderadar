@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorMessageResponse {
-    private String errorMessage;
+  private String errorMessage;
 }

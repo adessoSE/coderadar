@@ -2,11 +2,14 @@ package io.reflectoring.coderadar.rest.integration.filepattern;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
+import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,6 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private CreateProjectRepository createProjectRepository;
+  @Autowired private CreateFilePatternRepository createFilePatternRepository;
 
   @Test
   void createFilePatternSuccessfully() throws Exception {
@@ -29,13 +33,17 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
             post("/projects/" + testProject.getId() + "/filePatterns")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isCreated());
+        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andDo(
+            result -> {
+              FilePattern filePattern = createFilePatternRepository.findAll().iterator().next();
+              Assertions.assertEquals("**/*.java", filePattern.getPattern());
+              Assertions.assertEquals(InclusionType.INCLUDE, filePattern.getInclusionType());
+            });
   }
 
   @Test
   void createFilePatternReturnsErrorWhenProjectDoesNotExist() throws Exception {
-    createProjectRepository.deleteAll();
-
     CreateFilePatternCommand command =
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
@@ -44,7 +52,8 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andExpect(MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }
 
   @Test

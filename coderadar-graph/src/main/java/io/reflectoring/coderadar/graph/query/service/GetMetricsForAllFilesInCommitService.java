@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 @Service("GetMetricsForAllFilesInCommitServiceNeo4j")
 public class GetMetricsForAllFilesInCommitService implements GetMetricsForAllFilesInCommitPort {
+
+  // TODO
   @Override
   public List<GroupedMetricValueDTO> get(GetMetricsForAllFilesInCommitCommand command) {
     return new LinkedList<GroupedMetricValueDTO>();

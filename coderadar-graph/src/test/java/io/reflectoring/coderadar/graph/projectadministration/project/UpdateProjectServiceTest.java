@@ -9,21 +9,22 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.graph.projectadministration.project.service.UpdateProjectService;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("Update project")
 class UpdateProjectServiceTest {
-  @Mock private GetProjectRepository getProjectRepository;
+  private GetProjectRepository getProjectRepository = mock(GetProjectRepository.class);
 
-  @Mock private UpdateProjectRepository updateProjectRepository;
+  private UpdateProjectRepository updateProjectRepository = mock(UpdateProjectRepository.class);
 
-  @InjectMocks private UpdateProjectService updateProjectService;
+  private UpdateProjectService updateProjectService;
+
+  @BeforeEach
+  void setUp() {
+    updateProjectService = new UpdateProjectService(getProjectRepository, updateProjectRepository);
+  }
 
   @Test
   @DisplayName("Should throw exception when a project with the passing ID doesn't exists")

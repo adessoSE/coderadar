@@ -25,9 +25,10 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
   @Autowired
   public UpdateProjectService(
-          @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort,
-          @Qualifier("UpdateProjectServiceNeo4j") UpdateProjectPort updateProjectPort,
-          UpdateRepositoryUseCase updateRepositoryUseCase, CoderadarConfigurationProperties coderadarConfigurationProperties) {
+      @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort,
+      @Qualifier("UpdateProjectServiceNeo4j") UpdateProjectPort updateProjectPort,
+      UpdateRepositoryUseCase updateRepositoryUseCase,
+      CoderadarConfigurationProperties coderadarConfigurationProperties) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
     this.updateRepositoryUseCase = updateRepositoryUseCase;
@@ -51,7 +52,11 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       new Thread(
               () -> {
                 updateRepositoryUseCase.updateRepository(
-                    new File(coderadarConfigurationProperties.getWorkdir()+ "/" + updatedProject.getWorkdirName()).toPath());
+                    new File(
+                            coderadarConfigurationProperties.getWorkdir()
+                                + "/"
+                                + updatedProject.getWorkdirName())
+                        .toPath());
               })
           .start();
 

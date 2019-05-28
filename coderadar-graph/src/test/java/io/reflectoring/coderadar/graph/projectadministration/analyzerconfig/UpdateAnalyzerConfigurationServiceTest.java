@@ -10,23 +10,27 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repo
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.UpdateAnalyzerConfigurationService;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("Update analyzer configuration")
 class UpdateAnalyzerConfigurationServiceTest {
-  @Mock private UpdateAnalyzerConfigurationRepository updateAnalyzerConfigurationRepository;
+  private UpdateAnalyzerConfigurationRepository updateAnalyzerConfigurationRepository =
+      mock(UpdateAnalyzerConfigurationRepository.class);
 
-  @Mock
   private GetAnalyzerConfigurationsFromProjectRepository
-      getAnalyzerConfigurationsFromProjectRepository;
+      getAnalyzerConfigurationsFromProjectRepository =
+          mock(GetAnalyzerConfigurationsFromProjectRepository.class);
 
-  @InjectMocks private UpdateAnalyzerConfigurationService updateAnalyzerConfigurationService;
+  private UpdateAnalyzerConfigurationService updateAnalyzerConfigurationService;
+
+  @BeforeEach
+  void setUp() {
+    updateAnalyzerConfigurationService =
+        new UpdateAnalyzerConfigurationService(
+            getAnalyzerConfigurationsFromProjectRepository, updateAnalyzerConfigurationRepository);
+  }
 
   @Test
   @DisplayName(

@@ -7,19 +7,22 @@ import static org.mockito.Mockito.*;
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.DeleteModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.service.DeleteModuleService;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.DeleteProjectRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("Delete module")
 class DeleteModuleServiceTest {
-  @Mock private DeleteModuleRepository deleteModuleRepository;
+  private DeleteModuleRepository deleteModuleRepository = mock(DeleteModuleRepository.class);
+  private DeleteProjectRepository deleteProjectRepository = mock(DeleteProjectRepository.class);
 
-  @InjectMocks private DeleteModuleService deleteModuleService;
+  private DeleteModuleService deleteModuleService;
+
+  @BeforeEach
+  void setUp() {
+    deleteModuleService = new DeleteModuleService(deleteModuleRepository, deleteProjectRepository);
+  }
 
   @Test
   @DisplayName("Should delete module when passing a valid module entity")

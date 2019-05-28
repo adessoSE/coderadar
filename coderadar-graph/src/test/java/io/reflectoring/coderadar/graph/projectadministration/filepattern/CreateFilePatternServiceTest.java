@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.graph.projectadministration.filepattern;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
@@ -9,20 +10,18 @@ import io.reflectoring.coderadar.graph.projectadministration.filepattern.service
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("Create file pattern")
-public class CreateFilePatternServiceTest {
-  @Mock private CreateFilePatternRepository createFilePatternRepository;
-  @InjectMocks private CreateFilePatternService createFilePatternService;
+class CreateFilePatternServiceTest {
+  private CreateFilePatternRepository createFilePatternRepository =
+      mock(CreateFilePatternRepository.class);
 
   @Test
   @DisplayName("Should return long when passing a valid argument")
   void shouldReturnLongWhenPassingAValidArgument() {
+    CreateFilePatternService createFilePatternService =
+        new CreateFilePatternService(createFilePatternRepository);
+
     FilePattern filePattern = new FilePattern();
     filePattern.setId(2L);
 

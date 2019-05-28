@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.analyzerconfig;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
@@ -7,20 +9,20 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzer
 import io.reflectoring.coderadar.core.projectadministration.service.analyzerconfig.UpdateAnalyzerConfigurationService;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class UpdateAnalyzerConfigurationServiceTest {
-  @Mock private UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort;
-  @Mock private GetAnalyzerConfigurationPort getAnalyzerConfigurationPort;
-  @InjectMocks private UpdateAnalyzerConfigurationService testSubject;
+  private UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort =
+      mock(UpdateAnalyzerConfigurationPort.class);
+  private GetAnalyzerConfigurationPort getAnalyzerConfigurationPort =
+      mock(GetAnalyzerConfigurationPort.class);
 
   @Test
   void updateAnalyzerConfigurationWithIdOne() {
+    UpdateAnalyzerConfigurationService testSubject =
+        new UpdateAnalyzerConfigurationService(
+            updateAnalyzerConfigurationPort, getAnalyzerConfigurationPort);
+
     UpdateAnalyzerConfigurationCommand command =
         new UpdateAnalyzerConfigurationCommand("new analyzer name", true);
 

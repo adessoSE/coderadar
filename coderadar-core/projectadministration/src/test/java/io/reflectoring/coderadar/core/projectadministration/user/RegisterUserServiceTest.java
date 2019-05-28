@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.core.projectadministration.user;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.RegisterUserPort;
@@ -10,21 +11,16 @@ import io.reflectoring.coderadar.core.projectadministration.service.user.registe
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class RegisterUserServiceTest {
-  @Mock private RegisterUserPort registerUserPort;
-  @Mock private LoadUserPort loadUserPort;
-
-  @InjectMocks private RegisterUserService testSubject;
+  private RegisterUserPort registerUserPort = mock(RegisterUserPort.class);
+  private LoadUserPort loadUserPort = mock(LoadUserPort.class);
 
   @Test
   void returnsNewUserIdWhenRegister() {
+    RegisterUserService testSubject = new RegisterUserService(registerUserPort, loadUserPort);
+
     Mockito.when(registerUserPort.register(any())).thenReturn(1L);
     Mockito.when(loadUserPort.loadUserByUsername(anyString())).thenReturn(Optional.empty());
 

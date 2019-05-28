@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.project;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.core.projectadministration.CoderadarConfigurationProperties;
@@ -8,28 +9,26 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.CreateProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.project.CreateProjectService;
-
+import io.reflectoring.coderadar.core.vcs.port.driver.CloneRepositoryUseCase;
 import java.io.File;
 import java.util.Date;
-
-import io.reflectoring.coderadar.core.vcs.port.driver.CloneRepositoryUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class CreateProjectServiceTest {
-  @Mock private CreateProjectPort createProjectPort;
-  @Mock private CoderadarConfigurationProperties coderadarConfigurationProperties;
-  @InjectMocks private CreateProjectService testSubject;
+  private CreateProjectPort createProjectPort = mock(CreateProjectPort.class);
+  private CloneRepositoryUseCase cloneRepositoryUseCase = mock(CloneRepositoryUseCase.class);
+  private CoderadarConfigurationProperties coderadarConfigurationProperties =
+      mock(CoderadarConfigurationProperties.class);
 
   @Test
   void returnsNewProjectId() {
-    when(coderadarConfigurationProperties.getWorkdir()).thenReturn(new File("coderadar-workdir").toPath());
+    CreateProjectService testSubject =
+        new CreateProjectService(
+            createProjectPort, cloneRepositoryUseCase, coderadarConfigurationProperties);
+
+    when(coderadarConfigurationProperties.getWorkdir())
+        .thenReturn(new File("coderadar-workdir").toPath());
     CreateProjectCommand command =
         new CreateProjectCommand(
             "project", "username", "password", "http://valid.url", true, new Date(), new Date());

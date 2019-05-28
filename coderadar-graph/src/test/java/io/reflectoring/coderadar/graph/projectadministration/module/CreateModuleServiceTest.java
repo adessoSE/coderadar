@@ -11,21 +11,16 @@ import io.reflectoring.coderadar.graph.projectadministration.module.service.Crea
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("Create module")
 class CreateModuleServiceTest {
-  @Mock private CreateModuleRepository createModuleRepository;
-
-  @InjectMocks private CreateModuleService createModuleService;
+  private CreateModuleRepository createModuleRepository = mock(CreateModuleRepository.class);
 
   @Test
   @DisplayName("Should return ID when saving a module")
   void shouldReturnIdWhenSavingAModule() {
+    CreateModuleService createModuleService = new CreateModuleService(createModuleRepository);
+
     Project mockedProject = new Project();
     Module mockedItem = new Module();
     mockedItem.setId(1L);

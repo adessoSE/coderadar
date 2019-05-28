@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.user;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserResponse;
@@ -7,19 +9,15 @@ import io.reflectoring.coderadar.core.projectadministration.service.user.load.Lo
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class LoadUserServiceTest {
-  @Mock private LoadUserPort loadUserPort;
-  @InjectMocks private LoadUserService testSubject;
+  private LoadUserPort loadUserPort = mock(LoadUserPort.class);
 
   @Test
   void loadUserWithIdOne() {
+    LoadUserService testSubject = new LoadUserService(loadUserPort);
+
     User user = new User();
     user.setId(1L);
     user.setUsername("username");

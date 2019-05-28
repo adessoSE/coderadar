@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GetAvailableMetricsInProjectRepository extends Neo4jRepository {
-  // TODO: Add query to find a available metrics in spezific project.
+  // TODO: Add query to find a available metrics in specific project.
   @Query(value = "MATCH (p:Project) WHERE ID(p) = {projectId}")
   List<String> getAvailableMetricsInProject(@Param("projectId") long projectId);
 }

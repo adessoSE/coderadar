@@ -7,19 +7,20 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.graph.projectadministration.project.service.ListProjectsService;
 import java.util.LinkedList;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("List projects")
 class ListProjectsServiceTest {
-  @Mock private ListProjectsRepository listProjectsRepository;
+  private ListProjectsRepository listProjectsRepository = mock(ListProjectsRepository.class);
 
-  @InjectMocks private ListProjectsService listProjectsService;
+  private ListProjectsService listProjectsService;
+
+  @BeforeEach
+  void setUp() {
+    listProjectsService = new ListProjectsService(listProjectsRepository);
+  }
 
   @Test
   @DisplayName("Should return empty list when no projects exist")
