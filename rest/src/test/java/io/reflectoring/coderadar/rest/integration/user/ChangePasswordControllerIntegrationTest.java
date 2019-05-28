@@ -27,7 +27,6 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void ChangePasswordSuccessfully() throws Exception {
-    registerUserRepository.deleteAll();
     User testUser = new User();
     testUser.setUsername("username");
     testUser.setPassword(PasswordUtil.hash("password1"));
@@ -57,7 +56,6 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void ChangePasswordReturnsErrorWhenTokenInvalid() throws Exception {
-    registerUserRepository.deleteAll();
     User testUser = new User();
     testUser.setUsername("username");
     testUser.setPassword(PasswordUtil.hash("password1"));

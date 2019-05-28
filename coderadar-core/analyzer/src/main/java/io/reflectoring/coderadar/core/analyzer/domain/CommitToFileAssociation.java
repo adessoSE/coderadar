@@ -1,6 +1,5 @@
-package io.reflectoring.coderadar.core.query.domain;
+package io.reflectoring.coderadar.core.analyzer.domain;
 
-import io.reflectoring.coderadar.core.analyzer.domain.File;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 import lombok.Data;
 import lombok.NoArgsConstructor;

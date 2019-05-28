@@ -8,19 +8,20 @@ import io.reflectoring.coderadar.graph.projectadministration.module.repository.G
 import io.reflectoring.coderadar.graph.projectadministration.module.service.GetModuleService;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("Get module")
 class GetModuleServiceTest {
-  @Mock private GetModuleRepository getModuleRepository;
+  private GetModuleRepository getModuleRepository = mock(GetModuleRepository.class);
 
-  @InjectMocks private GetModuleService getModuleService;
+  private GetModuleService getModuleService;
+
+  @BeforeEach
+  void setUp() {
+    getModuleService = new GetModuleService(getModuleRepository);
+  }
 
   @Test
   @DisplayName("Should return module as optional when a module with the passing ID exists")

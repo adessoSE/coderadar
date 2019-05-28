@@ -23,13 +23,13 @@ public class ChangePasswordController {
   }
 
   @PostMapping(path = "/user/password/change")
-  public ResponseEntity changePassword(
-      @RequestBody @Validated ChangePasswordCommand command) {
+  public ResponseEntity changePassword(@RequestBody @Validated ChangePasswordCommand command) {
     try {
       changePasswordUseCase.changePassword(command);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (AuthenticationException | RefreshTokenNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
+      return new ResponseEntity<>(
+          new ErrorMessageResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
   }
 }

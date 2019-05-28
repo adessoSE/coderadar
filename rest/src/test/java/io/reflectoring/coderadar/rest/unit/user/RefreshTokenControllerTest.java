@@ -1,27 +1,25 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenUseCase;
 import io.reflectoring.coderadar.rest.user.RefreshTokenController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class RefreshTokenControllerTest {
 
-  @Mock private RefreshTokenUseCase refreshTokenUseCase;
-  @InjectMocks private RefreshTokenController testSubject;
+  private RefreshTokenUseCase refreshTokenUseCase = mock(RefreshTokenUseCase.class);
 
   @Test
   void refreshTokenSuccessfully() {
+    RefreshTokenController testSubject = new RefreshTokenController(refreshTokenUseCase);
+
     RefreshTokenCommand command = new RefreshTokenCommand("accessToken", "refreshToken");
     Mockito.when(refreshTokenUseCase.refreshToken(command)).thenReturn("newAccessToken");
     ResponseEntity<RefreshTokenResponse> responseEntity = testSubject.refreshToken(command);

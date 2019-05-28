@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.project;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.core.projectadministration.CoderadarConfigurationProperties;
@@ -10,25 +11,30 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.project.CreateProjectService;
+import io.reflectoring.coderadar.core.vcs.port.driver.CloneRepositoryUseCase;
 import java.io.File;
 import java.util.Date;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class CreateProjectServiceTest {
-  @Mock private CreateProjectPort createProjectPort;
-  @Mock private GetProjectPort getProjectPort;
-  @Mock private CoderadarConfigurationProperties coderadarConfigurationProperties;
-  @InjectMocks private CreateProjectService testSubject;
+
+  private CreateProjectPort createProjectPort = mock(CreateProjectPort.class);
+  private GetProjectPort getProjectPort = mock(GetProjectPort.class);
+  private CloneRepositoryUseCase cloneRepositoryUseCase = mock(CloneRepositoryUseCase.class);
+  private CoderadarConfigurationProperties coderadarConfigurationProperties =
+      mock(CoderadarConfigurationProperties.class);
 
   @Test
   void returnsNewProjectId() {
+    CreateProjectService testSubject =
+        new CreateProjectService(
+            createProjectPort,
+            getProjectPort,
+            cloneRepositoryUseCase,
+            coderadarConfigurationProperties);
+
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());
     CreateProjectCommand command =
@@ -54,6 +60,13 @@ class CreateProjectServiceTest {
 
   @Test
   void returnsErrorWhenProjectWithNameStillExists() {
+    CreateProjectService testSubject =
+        new CreateProjectService(
+            createProjectPort,
+            getProjectPort,
+            cloneRepositoryUseCase,
+            coderadarConfigurationProperties);
+
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());
     CreateProjectCommand command =

@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class GetAnalyzingStatusController {
-    private final GetAnalyzingStatusUseCase getAnalyzingStatusUseCase;
+  private final GetAnalyzingStatusUseCase getAnalyzingStatusUseCase;
 
-    @Autowired
-    public GetAnalyzingStatusController(GetAnalyzingStatusUseCase getAnalyzingStatusUseCase) {
-        this.getAnalyzingStatusUseCase = getAnalyzingStatusUseCase;
-    }
+  @Autowired
+  public GetAnalyzingStatusController(GetAnalyzingStatusUseCase getAnalyzingStatusUseCase) {
+    this.getAnalyzingStatusUseCase = getAnalyzingStatusUseCase;
+  }
 }

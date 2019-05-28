@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ListAnalyzerController {
-    private final ListAnalyzerUseCase listAnalyzerUseCase;
+  private final ListAnalyzerUseCase listAnalyzerUseCase;
 
-    @Autowired
-    public ListAnalyzerController(ListAnalyzerUseCase listAnalyzerUseCase) {
-        this.listAnalyzerUseCase = listAnalyzerUseCase;
-    }
+  @Autowired
+  public ListAnalyzerController(ListAnalyzerUseCase listAnalyzerUseCase) {
+    this.listAnalyzerUseCase = listAnalyzerUseCase;
+  }
 
-    @GetMapping(path = "/analyzers")
-    public ResponseEntity listAvailableAnalyzers() {
-        return new ResponseEntity<>(listAnalyzerUseCase.listAvailableAnalyzers(), HttpStatus.OK);
-    }
+  @GetMapping(path = "/analyzers")
+  public ResponseEntity listAvailableAnalyzers() {
+    return new ResponseEntity<>(listAnalyzerUseCase.listAvailableAnalyzers(), HttpStatus.OK);
+  }
 }

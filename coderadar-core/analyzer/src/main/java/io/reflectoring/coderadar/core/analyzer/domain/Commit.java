@@ -1,14 +1,10 @@
-package io.reflectoring.coderadar.core.query.domain;
+package io.reflectoring.coderadar.core.analyzer.domain;
 
 import java.util.Date;
 import java.util.List;
-
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-
-import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
 /** Metadata about a commit to a Git repository. */
 @NodeEntity
@@ -24,9 +20,6 @@ public class Commit {
   private boolean analyzed = false;
   private Integer sequenceNumber;
   private String firstParent;
-
-  @Relationship(direction = INCOMING)
-  private Project project;
 
   @Relationship private List<CommitToFileAssociation> touchedFiles;
 

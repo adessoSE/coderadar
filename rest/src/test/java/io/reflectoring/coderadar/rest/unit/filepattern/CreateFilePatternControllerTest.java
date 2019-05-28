@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.filepattern;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.create.CreateFilePatternUseCase;
@@ -7,22 +9,19 @@ import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.filepattern.CreateFilePatternController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class CreateFilePatternControllerTest {
 
-  @Mock private CreateFilePatternUseCase createFilePatternUseCase;
-  @InjectMocks private CreateFilePatternController testSubject;
+  private CreateFilePatternUseCase createFilePatternUseCase = mock(CreateFilePatternUseCase.class);
 
   @Test
   void createFilePatternSuccessfully() {
+    CreateFilePatternController testSubject =
+        new CreateFilePatternController(createFilePatternUseCase);
+
     CreateFilePatternCommand command =
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     Mockito.when(createFilePatternUseCase.createFilePattern(command, 5L)).thenReturn(1L);

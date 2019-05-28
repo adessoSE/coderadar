@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.project;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import io.reflectoring.coderadar.rest.project.UpdateProjectController;
@@ -7,22 +9,18 @@ import java.net.MalformedURLException;
 import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class UpdateProjectControllerTest {
 
-  @Mock private UpdateProjectUseCase updateProjectUseCase;
-  @InjectMocks private UpdateProjectController testSubject;
+  private UpdateProjectUseCase updateProjectUseCase = mock(UpdateProjectUseCase.class);
 
   @Test
   void updateProjectWithIdOne() throws MalformedURLException {
+    UpdateProjectController testSubject = new UpdateProjectController(updateProjectUseCase);
+
     UpdateProjectCommand command =
         new UpdateProjectCommand(
             "new name", "username", "password", "http://valid.url", true, new Date(), new Date());

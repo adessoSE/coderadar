@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class GetMetricsForAllFilesInCommitController {
-    private final GetMetricsForAllFilesInCommitUseCase getMetricsForAllFilesInCommitUseCase;
+  private final GetMetricsForAllFilesInCommitUseCase getMetricsForAllFilesInCommitUseCase;
 
-    @Autowired
-    public GetMetricsForAllFilesInCommitController(GetMetricsForAllFilesInCommitUseCase getMetricsForAllFilesInCommitUseCase) {
-        this.getMetricsForAllFilesInCommitUseCase = getMetricsForAllFilesInCommitUseCase;
-    }
+  @Autowired
+  public GetMetricsForAllFilesInCommitController(
+      GetMetricsForAllFilesInCommitUseCase getMetricsForAllFilesInCommitUseCase) {
+    this.getMetricsForAllFilesInCommitUseCase = getMetricsForAllFilesInCommitUseCase;
+  }
 }

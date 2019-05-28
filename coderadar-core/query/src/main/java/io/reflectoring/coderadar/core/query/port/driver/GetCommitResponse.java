@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class GetCommitResponse {
-    private String name;
-    private String author;
-    private String timestamp;
-    private Boolean analyzed;
+  private String name;
+  private String author;
+  private String timestamp;
+  private Boolean analyzed;
 }

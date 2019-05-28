@@ -27,8 +27,9 @@ public class CreateAnalyzerConfigurationController {
       @RequestBody @Validated CreateAnalyzerConfigurationCommand command,
       @PathVariable Long projectId) {
     try {
-      return new ResponseEntity<>(new IdResponse(
-          createAnalyzerConfigurationUseCase.create(command, projectId)), HttpStatus.CREATED);
+      return new ResponseEntity<>(
+          new IdResponse(createAnalyzerConfigurationUseCase.create(command, projectId)),
+          HttpStatus.CREATED);
     } catch (ProjectNotFoundException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }

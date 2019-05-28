@@ -33,7 +33,6 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void refreshTokenSuccessfully() throws Exception {
-    registerUserRepository.deleteAll();
     User testUser = new User();
     testUser.setUsername("radar");
     testUser.setPassword(PasswordUtil.hash("Password12!"));
@@ -57,7 +56,6 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void refreshTokenReturnsErrorOnInvalidToken() throws Exception {
-    registerUserRepository.deleteAll();
     User testUser = new User();
     testUser.setUsername("radar");
     testUser.setPassword(PasswordUtil.hash("Password12!"));
@@ -74,7 +72,6 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void refreshTokenReturnsErrorOnNonExpiredAccessToken() throws Exception {
-    registerUserRepository.deleteAll();
     User testUser = new User();
     testUser.setUsername("radar");
     testUser.setPassword(PasswordUtil.hash("Password12!"));

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 @Service("GetHistoryOfMetricServiceNeo4j")
 public class GetHistoryOfMetricService implements GetHistoryOfMetricPort {
+
+  // TODO
   @Override
   public Series get(GetHistoryOfMetricCommand command) {
     return new Series();

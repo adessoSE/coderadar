@@ -1,26 +1,24 @@
 package io.reflectoring.coderadar.rest.unit.module;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleUseCase;
 import io.reflectoring.coderadar.rest.module.UpdateModuleController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class UpdateModuleControllerTest {
 
-  @Mock private UpdateModuleUseCase updateModuleUseCase;
-  @InjectMocks private UpdateModuleController testSubject;
+  private UpdateModuleUseCase updateModuleUseCase = mock(UpdateModuleUseCase.class);
 
   @Test
   void updateModuleWithIdOne() {
+    UpdateModuleController testSubject = new UpdateModuleController(updateModuleUseCase);
+
     UpdateModuleCommand command = new UpdateModuleCommand("new-path");
 
     ResponseEntity<String> responseEntity = testSubject.updateModule(command, 1L);

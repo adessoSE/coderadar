@@ -28,8 +28,9 @@ public class CreateFilePatternController {
       @RequestBody @Validated CreateFilePatternCommand command,
       @PathVariable(name = "projectId") Long projectId) {
     try {
-      return new ResponseEntity<>(new IdResponse(
-          createFilePatternUseCase.createFilePattern(command, projectId)), HttpStatus.CREATED);
+      return new ResponseEntity<>(
+          new IdResponse(createFilePatternUseCase.createFilePattern(command, projectId)),
+          HttpStatus.CREATED);
     } catch (ProjectNotFoundException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }

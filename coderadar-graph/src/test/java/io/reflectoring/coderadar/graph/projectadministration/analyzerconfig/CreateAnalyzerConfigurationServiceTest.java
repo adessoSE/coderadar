@@ -9,21 +9,18 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repo
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.CreateAnalyzerConfigurationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("Add analyzer configuration")
 class CreateAnalyzerConfigurationServiceTest {
-  @Mock private CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository;
-
-  @InjectMocks private CreateAnalyzerConfigurationService createAnalyzerConfigurationService;
+  private CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository =
+      mock(CreateAnalyzerConfigurationRepository.class);
 
   @Test
   @DisplayName("Should return ID when saving an analyzer configuration")
   void shouldReturnIdWhenSavingAnAnalyzerConfiguration() {
+    CreateAnalyzerConfigurationService createAnalyzerConfigurationService =
+        new CreateAnalyzerConfigurationService(createAnalyzerConfigurationRepository);
+
     AnalyzerConfiguration mockItem = new AnalyzerConfiguration();
     mockItem.setId(10L);
     Project mockProject = new Project();

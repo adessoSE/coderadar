@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class GetMetricValuesOfCommitController {
-    private final GetMetricValuesOfCommitUseCase getMetricValuesOfCommitUseCase;
+  private final GetMetricValuesOfCommitUseCase getMetricValuesOfCommitUseCase;
 
-    @Autowired
-    public GetMetricValuesOfCommitController(GetMetricValuesOfCommitUseCase getMetricValuesOfCommitUseCase) {
-        this.getMetricValuesOfCommitUseCase = getMetricValuesOfCommitUseCase;
-    }
+  @Autowired
+  public GetMetricValuesOfCommitController(
+      GetMetricValuesOfCommitUseCase getMetricValuesOfCommitUseCase) {
+    this.getMetricValuesOfCommitUseCase = getMetricValuesOfCommitUseCase;
+  }
 }

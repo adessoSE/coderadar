@@ -10,21 +10,22 @@ import io.reflectoring.coderadar.graph.projectadministration.module.repository.U
 import io.reflectoring.coderadar.graph.projectadministration.module.service.UpdateModuleService;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("Update module")
 class UpdateModuleServiceTest {
-  @Mock private UpdateModuleRepository updateModuleRepository;
+  private UpdateModuleRepository updateModuleRepository = mock(UpdateModuleRepository.class);
 
-  @Mock private GetModuleRepository getModuleRepository;
+  private GetModuleRepository getModuleRepository = mock(GetModuleRepository.class);
 
-  @InjectMocks private UpdateModuleService updateModuleService;
+  private UpdateModuleService updateModuleService;
+
+  @BeforeEach
+  void setUp() {
+    updateModuleService = new UpdateModuleService(getModuleRepository, updateModuleRepository);
+  }
 
   @Test
   @DisplayName("Should throw exception when a module with the passing ID doesn't exists")

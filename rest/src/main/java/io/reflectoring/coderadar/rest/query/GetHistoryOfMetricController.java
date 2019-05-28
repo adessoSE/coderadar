@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class GetHistoryOfMetricController {
-    private final GetHistoryOfMetricUseCase getHistoryOfMetricUseCase;
+  private final GetHistoryOfMetricUseCase getHistoryOfMetricUseCase;
 
-    @Autowired
-    public GetHistoryOfMetricController(GetHistoryOfMetricUseCase getHistoryOfMetricUseCase) {
-        this.getHistoryOfMetricUseCase = getHistoryOfMetricUseCase;
-    }
+  @Autowired
+  public GetHistoryOfMetricController(GetHistoryOfMetricUseCase getHistoryOfMetricUseCase) {
+    this.getHistoryOfMetricUseCase = getHistoryOfMetricUseCase;
+  }
 
-    @GetMapping(path = "/projects/{projectId}/metricvalues/history")
-    public ResponseEntity<Series> getHistoryOfMetric(@Validated GetHistoryOfMetricCommand command) {
-        return new ResponseEntity<>(getHistoryOfMetricUseCase.get(command), HttpStatus.OK);
-    }
+  @GetMapping(path = "/projects/{projectId}/metricvalues/history")
+  public ResponseEntity<Series> getHistoryOfMetric(@Validated GetHistoryOfMetricCommand command) {
+    return new ResponseEntity<>(getHistoryOfMetricUseCase.get(command), HttpStatus.OK);
+  }
 }

@@ -1,12 +1,16 @@
 package io.reflectoring.coderadar.rest.integration.module;
 
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.create.CreateModuleCommand;
+import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,9 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private CreateProjectRepository createProjectRepository;
-
-  @BeforeEach
-  public void setUp() {}
+  @Autowired private CreateModuleRepository createModuleRepository;
 
   @Test
   void createModuleSuccessfully() throws Exception {
@@ -32,15 +34,19 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
         .perform(
             post("/projects/" + testProject.getId() + "/modules")
                 .content(toJson(command))
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "asdqupigpigu"))
-        .andExpect(MockMvcResultMatchers.status().isCreated());
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andDo(
+            result -> {
+              Long id =
+                  fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
+              Module module = createModuleRepository.findById(id).get();
+              Assertions.assertEquals("module-path", module.getPath());
+            });
   }
 
   @Test
   void createModuleReturnsErrorWhenProjectNotFound() throws Exception {
-    createProjectRepository.deleteAll();
-
     CreateModuleCommand command = new CreateModuleCommand("module-path");
     mvc()
         .perform(
@@ -48,7 +54,8 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andExpect(MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }
 
   @Test

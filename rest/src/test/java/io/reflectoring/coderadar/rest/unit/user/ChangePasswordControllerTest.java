@@ -1,26 +1,23 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.password.ChangePasswordCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.password.ChangePasswordUseCase;
 import io.reflectoring.coderadar.rest.user.ChangePasswordController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class ChangePasswordControllerTest {
 
-  @Mock private ChangePasswordUseCase changePasswordUseCase;
-  @InjectMocks private ChangePasswordController testSubject;
+  private ChangePasswordUseCase changePasswordUseCase = mock(ChangePasswordUseCase.class);
 
   @Test
   void changePasswordSuccessfully() {
+    ChangePasswordController testSubject = new ChangePasswordController(changePasswordUseCase);
     ChangePasswordCommand command = new ChangePasswordCommand("refreshToken", "newPassword");
 
     ResponseEntity<String> responseEntity = testSubject.changePassword(command);

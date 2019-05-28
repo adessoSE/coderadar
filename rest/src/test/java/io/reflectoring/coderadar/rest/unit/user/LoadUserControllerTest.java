@@ -1,26 +1,24 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserUseCase;
 import io.reflectoring.coderadar.rest.user.LoadUserController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class LoadUserControllerTest {
 
-  @Mock private LoadUserUseCase loadUserUseCase;
-  @InjectMocks private LoadUserController testSubject;
+  private LoadUserUseCase loadUserUseCase = mock(LoadUserUseCase.class);
 
   @Test
   void loadUserWithIdOne() {
+    LoadUserController testSubject = new LoadUserController(loadUserUseCase);
+
     LoadUserResponse user = new LoadUserResponse(1L, "username");
 
     Mockito.when(loadUserUseCase.loadUser(1L)).thenReturn(user);

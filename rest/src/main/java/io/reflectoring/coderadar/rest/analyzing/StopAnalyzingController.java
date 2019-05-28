@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class StopAnalyzingController {
-    private final StopAnalyzingUseCase stopAnalyzingUseCase;
+  private final StopAnalyzingUseCase stopAnalyzingUseCase;
 
-    @Autowired
-    public StopAnalyzingController(StopAnalyzingUseCase stopAnalyzingUseCase) {
-        this.stopAnalyzingUseCase = stopAnalyzingUseCase;
-    }
+  @Autowired
+  public StopAnalyzingController(StopAnalyzingUseCase stopAnalyzingUseCase) {
+    this.stopAnalyzingUseCase = stopAnalyzingUseCase;
+  }
 }

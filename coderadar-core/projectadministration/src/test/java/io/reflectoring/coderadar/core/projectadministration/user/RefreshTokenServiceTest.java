@@ -7,7 +7,6 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.user.Ref
 import io.reflectoring.coderadar.core.projectadministration.service.user.refresh.RefreshTokenService;
 import io.reflectoring.coderadar.core.projectadministration.service.user.security.TokenService;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.InjectMocks;
 
 class RefreshTokenServiceTest {
 
@@ -15,7 +14,7 @@ class RefreshTokenServiceTest {
   private TokenService tokenService = mock(TokenService.class);
   private LoadUserPort loadUserPort = mock(LoadUserPort.class);
 
-  @InjectMocks private RefreshTokenService testSubject;
+  private RefreshTokenService testSubject;
 
   @BeforeEach
   public void setUp() {

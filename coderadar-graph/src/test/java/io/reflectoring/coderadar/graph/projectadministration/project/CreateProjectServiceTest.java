@@ -6,19 +6,20 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.service.CreateProjectService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("Create project")
 class CreateProjectServiceTest {
-  @Mock private CreateProjectRepository createProjectRepository;
+  private CreateProjectRepository createProjectRepository = mock(CreateProjectRepository.class);
 
-  @InjectMocks private CreateProjectService createProjectService;
+  private CreateProjectService createProjectService;
+
+  @BeforeEach
+  void setUp() {
+    createProjectService = new CreateProjectService(createProjectRepository);
+  }
 
   @Test
   @DisplayName("Should save project when passing a valid project entity")

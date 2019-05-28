@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.filepattern;
 
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType;
@@ -14,21 +15,17 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class ListFilePatternsOfProjectServiceTest {
-  @Mock private ListFilePatternsOfProjectPort port;
-  @Mock private GetProjectPort getProjectPort;
-
-  @InjectMocks private ListFilePatternsOfProjectService testSubject;
+  private ListFilePatternsOfProjectPort port = mock(ListFilePatternsOfProjectPort.class);
+  private GetProjectPort getProjectPort = mock(GetProjectPort.class);
 
   @Test
   void returnsTwoFilePatternsFromProject() {
+    ListFilePatternsOfProjectService testSubject =
+        new ListFilePatternsOfProjectService(port, getProjectPort);
+
     Mockito.when(getProjectPort.get(anyLong())).thenReturn(Optional.of(new Project()));
 
     List<FilePattern> filePatterns = new ArrayList<>();

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 @Service("GetMetricValuesOfCommitServiceNeo4j")
 public class GetMetricValuesOfCommitService implements GetMetricValuesOfCommitPort {
+
+  // TODO
   @Override
   public List<MetricValueDTO> get(String commitHash) {
     return new LinkedList<>();
