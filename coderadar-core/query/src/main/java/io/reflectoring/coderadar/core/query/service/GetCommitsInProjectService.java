@@ -1,8 +1,11 @@
 package io.reflectoring.coderadar.core.query.service;
 
-import io.reflectoring.coderadar.core.analyzer.domain.Commit;
+import io.reflectoring.coderadar.core.query.domain.Commit;
 import io.reflectoring.coderadar.core.query.port.driven.GetCommitsInProjectPort;
+import io.reflectoring.coderadar.core.query.port.driver.GetCommitResponse;
 import io.reflectoring.coderadar.core.query.port.driver.GetCommitsInProjectUseCase;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +23,15 @@ public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {
   }
 
   @Override
-  public List<Commit> get(Long projectId) {
-    return getCommitsInProjectPort.get(projectId);
+  public List<GetCommitResponse> get(Long projectId) {
+    List<GetCommitResponse> response = new ArrayList<>();
+    for (Commit commit : getCommitsInProjectPort.get(projectId)) {
+      GetCommitResponse getCommitResponse = new GetCommitResponse();
+      getCommitResponse.setName(commit.getName());
+      getCommitResponse.setAuthor(commit.getAuthor());
+      getCommitResponse.setTimestamp(commit.getTimestamp().toString());
+      getCommitResponse.setAnalyzed(commit.isAnalyzed());
+    }
+    return response;
   }
 }

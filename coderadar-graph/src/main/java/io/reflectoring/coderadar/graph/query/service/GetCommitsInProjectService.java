@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph.query.service;
 
-import io.reflectoring.coderadar.core.analyzer.domain.Commit;
+import io.reflectoring.coderadar.core.query.domain.Commit;
 import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.query.port.driven.GetCommitsInProjectPort;

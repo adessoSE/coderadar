@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "projects/{projectId}/analyze")
 public class StartAnalyzingController {
   private final StartAnalyzingUseCase startAnalyzingUseCase;
 
@@ -19,7 +18,9 @@ public class StartAnalyzingController {
     this.startAnalyzingUseCase = startAnalyzingUseCase;
   }
 
-  @PostMapping
+  @PostMapping(path = "projects/{projectId}/analyze")
   public void startAnalyze(
-      @PathVariable("projectId") Long projectId, @Validated StartAnalyzingCommand command) {}
+      @PathVariable("projectId") Long projectId, @Validated StartAnalyzingCommand command) {
+    startAnalyzingUseCase.start(command);
+  }
 }

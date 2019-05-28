@@ -1,14 +1,20 @@
 package io.reflectoring.coderadar.core.query.port.driver;
 
 import io.reflectoring.coderadar.core.query.domain.Interval;
-import java.util.Date;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+import javax.validation.constraints.NotBlank;
+import java.util.Date;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class GetHistoryOfMetricCommand {
-  Long projectId;
-  String metricName;
-  Date start;
-  Date end;
-  Interval interval;
+  @NotBlank private Long projectId;
+  @NotBlank private String metricName;
+  private Date start;
+  private Date end;
+  private Interval interval;
 }
