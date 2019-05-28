@@ -44,8 +44,6 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void loginUserReturnsErrorWhenUserDoesNotExist() throws Exception {
-    registerUserRepository.deleteAll();
-
     LoginUserCommand command = new LoginUserCommand("username", "password");
     mvc()
         .perform(
@@ -55,8 +53,6 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void loginUserReturnsErrorWhenPasswordIsWrong() throws Exception {
-    // Set up
-    registerUserRepository.deleteAll();
     User testUser = new User();
     testUser.setUsername("username2");
     testUser.setPassword(PasswordUtil.hash("password1"));

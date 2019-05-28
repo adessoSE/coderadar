@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.analyzerconfig;
 
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
@@ -13,21 +14,18 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class ListAnalyzerConfigurationsFromProjectServiceTest {
-  @Mock private GetAnalyzerConfigurationsFromProjectPort port;
-  @Mock private GetProjectPort getProjectPort;
-
-  @InjectMocks private ListAnalyzerConfigurationsFromProjectService testSubject;
+  private GetAnalyzerConfigurationsFromProjectPort port =
+      mock(GetAnalyzerConfigurationsFromProjectPort.class);
+  private GetProjectPort getProjectPort = mock(GetProjectPort.class);
 
   @Test
   void returnsTwoAnalyzerConfigurationsFromProject() {
+    ListAnalyzerConfigurationsFromProjectService testSubject =
+        new ListAnalyzerConfigurationsFromProjectService(port, getProjectPort);
+
     Mockito.when(getProjectPort.get(anyLong())).thenReturn(Optional.of(new Project()));
 
     AnalyzerConfiguration analyzerConfiguration1 = new AnalyzerConfiguration();

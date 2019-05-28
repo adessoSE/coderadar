@@ -10,24 +10,26 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.serv
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import java.util.LinkedList;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("Get analyzer configurations from project")
 class ListAnalyzerConfigurationsFromProjectServiceTest {
-  @Mock
   private GetAnalyzerConfigurationsFromProjectRepository
-      getAnalyzerConfigurationsFromProjectRepository;
+      getAnalyzerConfigurationsFromProjectRepository =
+          mock(GetAnalyzerConfigurationsFromProjectRepository.class);
 
-  @Mock private GetProjectRepository getProjectRepository;
+  private GetProjectRepository getProjectRepository = mock(GetProjectRepository.class);
 
-  @InjectMocks
   private GetAnalyzerConfigurationsFromProjectService getAnalyzerConfigurationsFromProjectService;
+
+  @BeforeEach
+  void setUp() {
+    getAnalyzerConfigurationsFromProjectService =
+        new GetAnalyzerConfigurationsFromProjectService(
+            getProjectRepository, getAnalyzerConfigurationsFromProjectRepository);
+  }
 
   @Test
   @DisplayName("Should throw exception when a project with the passing ID doesn't exists")

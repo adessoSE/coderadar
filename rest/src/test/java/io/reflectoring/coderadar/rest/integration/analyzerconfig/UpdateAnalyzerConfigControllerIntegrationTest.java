@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzer
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -30,6 +31,7 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
     analyzerConfiguration.setAnalyzerName("analyzer");
 
     analyzerConfiguration = createAnalyzerConfigurationRepository.save(analyzerConfiguration);
+    final Long id = analyzerConfiguration.getId();
 
     UpdateAnalyzerConfigurationCommand command =
         new UpdateAnalyzerConfigurationCommand("new analyzer name", false);
@@ -38,13 +40,18 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             post("/projects/" + testProject.getId() + "/analyzers/" + analyzerConfiguration.getId())
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk());
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(
+            result -> {
+              AnalyzerConfiguration configuration =
+                  createAnalyzerConfigurationRepository.findById(id).get();
+              Assertions.assertEquals("new analyzer name", configuration.getAnalyzerName());
+              Assertions.assertFalse(configuration.getEnabled());
+            });
   }
 
   @Test
   void updateAnalyzerConfigurationReturnsErrorWhenNotFound() throws Exception {
-    createAnalyzerConfigurationRepository.deleteAll();
-
     UpdateAnalyzerConfigurationCommand command =
         new UpdateAnalyzerConfigurationCommand("new analyzer name", false);
     mvc()

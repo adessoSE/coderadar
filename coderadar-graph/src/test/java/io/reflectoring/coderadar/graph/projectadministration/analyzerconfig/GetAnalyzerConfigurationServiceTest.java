@@ -8,19 +8,22 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repo
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.GetAnalyzerConfigurationService;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("Get analyzer configuration")
 class GetAnalyzerConfigurationServiceTest {
-  @Mock private GetAnalyzerConfigurationRepository getAnalyzerConfigurationRepository;
+  private GetAnalyzerConfigurationRepository getAnalyzerConfigurationRepository =
+      mock(GetAnalyzerConfigurationRepository.class);
 
-  @InjectMocks private GetAnalyzerConfigurationService getAnalyzerConfigurationService;
+  private GetAnalyzerConfigurationService getAnalyzerConfigurationService;
+
+  @BeforeEach
+  void setUp() {
+    getAnalyzerConfigurationService =
+        new GetAnalyzerConfigurationService(getAnalyzerConfigurationRepository);
+  }
 
   @Test
   @DisplayName(

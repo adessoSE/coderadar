@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.integration.analyzerconfig;
 
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -9,6 +10,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzer
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -36,13 +38,20 @@ class GetAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate 
         .perform(
             get("/projects/" + testProject.getId() + "/analyzers/" + analyzerConfiguration.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(containsResource(GetAnalyzerConfigurationResponse.class));
+        .andExpect(containsResource(GetAnalyzerConfigurationResponse.class))
+        .andDo(
+            result -> {
+              GetAnalyzerConfigurationResponse response =
+                  fromJson(
+                      result.getResponse().getContentAsString(),
+                      GetAnalyzerConfigurationResponse.class);
+              Assertions.assertEquals("analyzer", response.getAnalyzerName());
+              Assertions.assertTrue(response.getEnabled());
+            });
   }
 
   @Test
   void getAnalyzerConfigurationReturnsErrorWhenNotFound() throws Exception {
-    createAnalyzerConfigurationRepository.deleteAll();
-
     mvc()
         .perform(get("/projects/0/analyzers/2"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())

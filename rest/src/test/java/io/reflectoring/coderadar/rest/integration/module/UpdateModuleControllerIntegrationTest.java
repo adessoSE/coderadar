@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.module.u
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -30,6 +31,7 @@ class UpdateModuleControllerIntegrationTest extends ControllerTestTemplate {
     module.setPath("test-module");
     module.setProject(testProject);
     module = createModuleRepository.save(module);
+    final Long id = module.getId();
 
     // Test
     UpdateModuleCommand command = new UpdateModuleCommand("new-module-path");
@@ -38,13 +40,16 @@ class UpdateModuleControllerIntegrationTest extends ControllerTestTemplate {
             post("/projects/" + testProject.getId() + "/modules/" + module.getId())
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk());
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(
+            result -> {
+              Module module1 = createModuleRepository.findById(id).get();
+              Assertions.assertEquals("new-module-path", module1.getPath());
+            });
   }
 
   @Test
   void updateModuleReturnsErrorWhenModuleNotFound() throws Exception {
-    createModuleRepository.deleteAll();
-
     UpdateModuleCommand command = new UpdateModuleCommand("new-module-path");
     mvc()
         .perform(

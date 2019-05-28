@@ -5,12 +5,14 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
 /** A coderadar project that defines the source of files that are to be analyzed. */
 @NodeEntity
 @Data
+@EqualsAndHashCode(exclude = {"filePatterns", "modules", "analyzerConfigurations"})
 public class Project {
   private Long id;
   private String name;

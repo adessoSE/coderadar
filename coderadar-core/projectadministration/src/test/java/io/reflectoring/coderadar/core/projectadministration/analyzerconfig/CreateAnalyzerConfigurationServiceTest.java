@@ -1,30 +1,32 @@
 package io.reflectoring.coderadar.core.projectadministration.analyzerconfig;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
+import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.analyzerconfig.CreateAnalyzerConfigurationService;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class CreateAnalyzerConfigurationServiceTest {
-  @Mock private CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort;
-  @Mock private GetProjectPort getProjectPort;
-  @InjectMocks private CreateAnalyzerConfigurationService testSubject;
+  private CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort =
+      mock(CreateAnalyzerConfigurationPort.class);
+  private GetProjectPort getProjectPort = mock(GetProjectPort.class);
+  private UpdateProjectPort updateProjectPort = mock(UpdateProjectPort.class);
 
   @Test
   void returnsNewAnalyzerConfigurationId() {
+    CreateAnalyzerConfigurationService testSubject =
+        new CreateAnalyzerConfigurationService(
+            createAnalyzerConfigurationPort, updateProjectPort, getProjectPort);
+
     CreateAnalyzerConfigurationCommand command =
         new CreateAnalyzerConfigurationCommand("analyzer", true);
 

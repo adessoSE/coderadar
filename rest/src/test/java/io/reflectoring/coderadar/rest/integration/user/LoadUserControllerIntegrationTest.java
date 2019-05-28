@@ -41,9 +41,6 @@ class LoadUserControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void loadUserWithIdOneReturnsErrorWhenUserNotFound() throws Exception {
-    // Set up
-    registerUserRepository.deleteAll();
-
     mvc()
         .perform(get("/user/1"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())

@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.UUID;
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -32,6 +33,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
     testProject.setVcsUsername("testUser");
     testProject.setWorkdirName(UUID.randomUUID().toString());
     testProject = createProjectRepository.save(testProject);
+    final Long id = testProject.getId();
 
     // Test
     UpdateProjectCommand command =
@@ -46,13 +48,17 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
         .andDo(
             result -> {
               FileUtils.deleteDirectory(new File("coderadar-workdir"));
+              Project project = createProjectRepository.findById(id).get();
+              Assertions.assertEquals("name", project.getName());
+              Assertions.assertEquals("username", project.getVcsUsername());
+              Assertions.assertEquals("password", project.getVcsPassword());
+              Assertions.assertEquals("http://valid.url", project.getVcsUrl());
+              Assertions.assertTrue(project.isVcsOnline());
             });
   }
 
   @Test
   void updateProjectReturnsErrorWhenProjectDoesNotExist() throws Exception {
-    createProjectRepository.deleteAll();
-
     UpdateProjectCommand command =
         new UpdateProjectCommand(
             "name", "username", "password", "http://valid.url", true, new Date(), new Date());

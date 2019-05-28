@@ -1,27 +1,25 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserUseCase;
 import io.reflectoring.coderadar.rest.user.LoginUserController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class LoginUserControllerTest {
 
-  @Mock private LoginUserUseCase loginUserUseCase;
-  @InjectMocks private LoginUserController testSubject;
+  private LoginUserUseCase loginUserUseCase = mock(LoginUserUseCase.class);
 
   @Test
   void loginUserWithUsernameAndPassword() {
+    LoginUserController testSubject = new LoginUserController(loginUserUseCase);
+
     LoginUserCommand command = new LoginUserCommand("username", "password");
     LoginUserResponse loginUserResponse = new LoginUserResponse("accessToken", "refreshToken");
 

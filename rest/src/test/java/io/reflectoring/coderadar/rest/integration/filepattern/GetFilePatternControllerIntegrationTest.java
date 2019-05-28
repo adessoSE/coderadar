@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.integration.filepattern;
 
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -10,6 +11,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.filepatt
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,13 +43,18 @@ class GetFilePatternControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(get("/projects/" + testProject.getId() + "/filePatterns/" + filePattern.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(containsResource(GetFilePatternResponse.class));
+        .andExpect(containsResource(GetFilePatternResponse.class))
+        .andDo(
+            result -> {
+              GetFilePatternResponse response =
+                  fromJson(result.getResponse().getContentAsString(), GetFilePatternResponse.class);
+              Assertions.assertEquals("**/*.java", response.getPattern());
+              Assertions.assertEquals(InclusionType.INCLUDE, response.getInclusionType());
+            });
   }
 
   @Test
   void getFilePatternReturnsErrorWhenNotFound() throws Exception {
-    createFilePatternRepository.deleteAll();
-
     mvc()
         .perform(get("/projects/0/filePatterns/2"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())

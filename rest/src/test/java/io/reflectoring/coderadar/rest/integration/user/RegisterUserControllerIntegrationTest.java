@@ -50,8 +50,6 @@ class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void registerNewUserReturnErrorWhenUsernameExists() throws Exception {
-    // Set up
-    registerUserRepository.deleteAll();
     User testUser = new User();
     testUser.setUsername("username2");
     testUser.setPassword("password1");

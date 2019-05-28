@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -18,16 +19,20 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
     Project testProject = new Project();
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
+    final Long id = testProject.getId();
 
     mvc()
         .perform(delete("/projects/" + testProject.getId()))
-        .andExpect(MockMvcResultMatchers.status().isOk());
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(
+            result -> {
+              Assertions.assertFalse(createProjectRepository.findById(id).isPresent());
+            });
   }
 
   @Test
   void deleteProjectReturnsErrorWhenProjectNotFound() throws Exception {
-    createProjectRepository.deleteAll();
-
     mvc()
         .perform(delete("/projects/1"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())

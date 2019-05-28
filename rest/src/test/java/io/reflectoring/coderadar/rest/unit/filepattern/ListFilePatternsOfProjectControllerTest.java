@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.filepattern;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
@@ -8,22 +10,20 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class ListFilePatternsOfProjectControllerTest {
 
-  @Mock private ListFilePatternsOfProjectUseCase listFilePatternsOfProjectUseCase;
-  @InjectMocks private ListFilePatternsOfProjectController testSubject;
+  private ListFilePatternsOfProjectUseCase listFilePatternsOfProjectUseCase =
+      mock(ListFilePatternsOfProjectUseCase.class);
 
   @Test
   void returnsModulesForProjectWithIdOne() {
+    ListFilePatternsOfProjectController testSubject =
+        new ListFilePatternsOfProjectController(listFilePatternsOfProjectUseCase);
+
     GetFilePatternResponse response1 =
         new GetFilePatternResponse(1L, "**/*.java", InclusionType.INCLUDE);
     GetFilePatternResponse response2 =

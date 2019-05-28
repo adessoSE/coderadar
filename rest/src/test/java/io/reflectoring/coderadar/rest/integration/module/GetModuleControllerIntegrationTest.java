@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.integration.module;
 
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -9,6 +10,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.module.g
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -35,13 +37,17 @@ class GetModuleControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(get("/projects/" + testProject.getId() + "/modules/" + module.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(containsResource(GetModuleResponse.class));
+        .andExpect(containsResource(GetModuleResponse.class))
+        .andDo(
+            result -> {
+              GetModuleResponse response =
+                  fromJson(result.getResponse().getContentAsString(), GetModuleResponse.class);
+              Assertions.assertEquals("test-module", response.getPath());
+            });
   }
 
   @Test
   void getModuleReturnsErrorWhenModuleNotFound() throws Exception {
-    createModuleRepository.deleteAll();
-
     mvc()
         .perform(get("/projects/0/modules/0"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())

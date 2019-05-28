@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.integration.project;
 
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -8,6 +9,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.project.
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import java.util.Date;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -32,13 +34,17 @@ class GetProjectControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(get("/projects/" + testProject.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(containsResource(GetProjectResponse.class));
+        .andExpect(containsResource(GetProjectResponse.class))
+        .andDo(
+            result -> {
+              GetProjectResponse response =
+                  fromJson(result.getResponse().getContentAsString(), GetProjectResponse.class);
+              Assertions.assertEquals("project", response.getName());
+            });
   }
 
   @Test
   void getProjectWithIdThrowsErrorWhenProjectDoesNotExist() throws Exception {
-    createProjectRepository.deleteAll();
-
     mvc()
         .perform(get("/projects/1"))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())

@@ -1,28 +1,35 @@
 package io.reflectoring.coderadar.core.projectadministration.project;
 
+import static org.mockito.Mockito.mock;
+
+import io.reflectoring.coderadar.core.projectadministration.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.project.UpdateProjectService;
-import java.net.MalformedURLException;
+import io.reflectoring.coderadar.core.vcs.port.driver.UpdateRepositoryUseCase;
 import java.util.Date;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class UpdateProjectServiceTest {
-  @Mock private GetProjectPort getProjectPort;
-  @Mock private UpdateProjectPort updateProjectPort;
-  @InjectMocks private UpdateProjectService testSubject;
+  private GetProjectPort getProjectPort = mock(GetProjectPort.class);
+  private UpdateProjectPort updateProjectPort = mock(UpdateProjectPort.class);
+  private UpdateRepositoryUseCase updateRepositoryUseCase = mock(UpdateRepositoryUseCase.class);
+  private CoderadarConfigurationProperties coderadarConfigurationProperties =
+      mock(CoderadarConfigurationProperties.class);
 
   @Test
-  void updateProjectWithIdOne() throws MalformedURLException {
+  void updateProjectWithIdOne() {
+    UpdateProjectService testSubject =
+        new UpdateProjectService(
+            getProjectPort,
+            updateProjectPort,
+            updateRepositoryUseCase,
+            coderadarConfigurationProperties);
+
     UpdateProjectCommand command =
         new UpdateProjectCommand(
             "new project name",

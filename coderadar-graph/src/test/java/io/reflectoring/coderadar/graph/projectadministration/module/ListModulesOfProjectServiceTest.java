@@ -10,21 +10,24 @@ import io.reflectoring.coderadar.graph.projectadministration.module.service.List
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import java.util.LinkedList;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 @DisplayName("List modules of project")
 class ListModulesOfProjectServiceTest {
-  @Mock private ListModulesOfProjectRepository listModulesOfProjectRepository;
+  private ListModulesOfProjectRepository listModulesOfProjectRepository =
+      mock(ListModulesOfProjectRepository.class);
 
-  @Mock private GetProjectRepository getProjectRepository;
+  private GetProjectRepository getProjectRepository = mock(GetProjectRepository.class);
 
-  @InjectMocks private ListModulesOfProjectService listModulesOfProjectService;
+  private ListModulesOfProjectService listModulesOfProjectService;
+
+  @BeforeEach
+  void setUp() {
+    listModulesOfProjectService =
+        new ListModulesOfProjectService(getProjectRepository, listModulesOfProjectRepository);
+  }
 
   @Test
   @DisplayName("Should throw exception when a project with the passing ID doesn't exists")
@@ -38,10 +41,10 @@ class ListModulesOfProjectServiceTest {
   void shouldReturnEmptyListWhenNoModulesInTheProjectExist() {
     Project mockedProject = new Project();
     when(getProjectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
-    when(listModulesOfProjectRepository.findByProject_Id(1L)).thenReturn(new LinkedList<>());
+    when(listModulesOfProjectRepository.findByProjectId(1L)).thenReturn(new LinkedList<>());
 
     Iterable<Module> modules = listModulesOfProjectService.listModules(1L);
-    verify(listModulesOfProjectRepository, times(1)).findByProject_Id(1L);
+    verify(listModulesOfProjectRepository, times(1)).findByProjectId(1L);
     Assertions.assertThat(modules).hasSize(0);
   }
 
@@ -52,10 +55,10 @@ class ListModulesOfProjectServiceTest {
     mockedItem.add(new Module());
     Project mockedProject = new Project();
     when(getProjectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
-    when(listModulesOfProjectRepository.findByProject_Id(1L)).thenReturn(mockedItem);
+    when(listModulesOfProjectRepository.findByProjectId(1L)).thenReturn(mockedItem);
 
     Iterable<Module> modules = listModulesOfProjectService.listModules(1L);
-    verify(listModulesOfProjectRepository, times(1)).findByProject_Id(1L);
+    verify(listModulesOfProjectRepository, times(1)).findByProjectId(1L);
     Assertions.assertThat(modules).hasSize(1);
   }
 
@@ -67,10 +70,10 @@ class ListModulesOfProjectServiceTest {
     mockedItem.add(new Module());
     Project mockedProject = new Project();
     when(getProjectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
-    when(listModulesOfProjectRepository.findByProject_Id(1L)).thenReturn(mockedItem);
+    when(listModulesOfProjectRepository.findByProjectId(1L)).thenReturn(mockedItem);
 
     Iterable<Module> modules = listModulesOfProjectService.listModules(1L);
-    verify(listModulesOfProjectRepository, times(1)).findByProject_Id(1L);
+    verify(listModulesOfProjectRepository, times(1)).findByProjectId(1L);
     Assertions.assertThat(modules).hasSize(2);
   }
 }

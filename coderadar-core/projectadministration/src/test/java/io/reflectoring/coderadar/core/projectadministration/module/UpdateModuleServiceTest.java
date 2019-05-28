@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.module;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.GetModulePort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.UpdateModulePort;
@@ -7,20 +9,16 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.module.u
 import io.reflectoring.coderadar.core.projectadministration.service.module.UpdateModuleService;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class UpdateModuleServiceTest {
-  @Mock private GetModulePort getModulePort;
-  @Mock private UpdateModulePort updateModulePort;
-  @InjectMocks private UpdateModuleService testSubject;
+  private GetModulePort getModulePort = mock(GetModulePort.class);
+  private UpdateModulePort updateModulePort = mock(UpdateModulePort.class);
 
   @Test
   void updateModuleWithIdOne() {
+    UpdateModuleService testSubject = new UpdateModuleService(getModulePort, updateModulePort);
+
     UpdateModuleCommand command = new UpdateModuleCommand("new-module-path");
 
     Module module = new Module();

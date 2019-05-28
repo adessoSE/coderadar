@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.project;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
@@ -8,20 +10,16 @@ import java.util.Date;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class GetProjectServiceTest {
 
-  @Mock private GetProjectPort getProjectPort;
-  @InjectMocks private GetProjectService testSubject;
+  private GetProjectPort getProjectPort = mock(GetProjectPort.class);
 
   @Test
   void returnsGetProjectResponseWithIdOne() {
+    GetProjectService testSubject = new GetProjectService(getProjectPort);
+
     Project project = new Project();
     project.setId(1L);
     project.setName("project name");

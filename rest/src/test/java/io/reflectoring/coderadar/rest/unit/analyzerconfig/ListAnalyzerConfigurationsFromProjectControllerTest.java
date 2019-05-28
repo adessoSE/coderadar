@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.analyzerconfig;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationsFromProjectUseCase;
 import io.reflectoring.coderadar.rest.analyzerconfig.ListAnalyzerConfigurationsFromProjectController;
@@ -7,24 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
 class ListAnalyzerConfigurationsFromProjectControllerTest {
 
-  @Mock
-  private GetAnalyzerConfigurationsFromProjectUseCase getAnalyzerConfigurationsFromProjectUseCase;
-
-  @InjectMocks private ListAnalyzerConfigurationsFromProjectController testSubject;
+  private GetAnalyzerConfigurationsFromProjectUseCase getAnalyzerConfigurationsFromProjectUseCase =
+      mock(GetAnalyzerConfigurationsFromProjectUseCase.class);
 
   @Test
   void returnsTwoGetAnalyzerConfigurationResponsesFromProject() {
+    ListAnalyzerConfigurationsFromProjectController testSubject =
+        new ListAnalyzerConfigurationsFromProjectController(
+            getAnalyzerConfigurationsFromProjectUseCase);
+
     GetAnalyzerConfigurationResponse response1 =
         new GetAnalyzerConfigurationResponse(1L, "analyzer1", true);
     GetAnalyzerConfigurationResponse response2 =
