@@ -1,9 +1,10 @@
 package io.reflectoring.coderadar.core.vcs.service.walk.filter;
 
+import org.eclipse.jgit.revwalk.RevCommit;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import org.eclipse.jgit.revwalk.RevCommit;
 
 /**
  * A Commit filter that only includes a commit if it was performed within a specified date range.

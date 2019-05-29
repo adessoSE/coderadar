@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.core.analyzer.domain;
+package io.reflectoring.coderadar.core.projectadministration.domain;
 
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 import lombok.Data;

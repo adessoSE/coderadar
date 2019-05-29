@@ -1,17 +1,18 @@
 package io.reflectoring.coderadar.core.projectadministration.project;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.ListProjectsPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.core.projectadministration.service.project.ListProjectsService;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static org.mockito.Mockito.mock;
 
 class ListProjectsServiceTest {
   private ListProjectsPort port = mock(ListProjectsPort.class);

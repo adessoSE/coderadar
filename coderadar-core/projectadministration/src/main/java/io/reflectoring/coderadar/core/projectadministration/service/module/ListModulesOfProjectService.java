@@ -6,11 +6,12 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.module.L
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("ListModulesOfProjectService")
 public class ListModulesOfProjectService implements ListModulesOfProjectUseCase {

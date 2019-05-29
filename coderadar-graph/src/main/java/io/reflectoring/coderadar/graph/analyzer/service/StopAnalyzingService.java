@@ -8,9 +8,10 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.analyzer.repository.GetAnalyzingStatusRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.StopAnalyzingRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service("StopAnalyzingServiceNeo4j")
 public class StopAnalyzingService implements StopAnalyzingPort {

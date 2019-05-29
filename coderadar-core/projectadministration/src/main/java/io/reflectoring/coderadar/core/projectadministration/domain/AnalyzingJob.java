@@ -1,11 +1,12 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
-import static org.neo4j.ogm.annotation.Relationship.INCOMING;
-
-import java.util.Date;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+
+import java.util.Date;
+
+import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
 @Data
 @NodeEntity

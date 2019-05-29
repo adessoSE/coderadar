@@ -4,7 +4,6 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-neo4j', version: '2.1.4.RELEASE'
     compile group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.16.Final'
     compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
-    compile project(":coderadar-core:analyzer")
     compile project(":coderadar-core:vcs")
     compile "org.passay:passay:1.2.0"
     compile "org.reflections:reflections:0.9.10"

@@ -1,9 +1,5 @@
 package io.reflectoring.coderadar.core.projectadministration.user;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.ChangePasswordPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.RefreshTokenPort;
@@ -13,6 +9,10 @@ import io.reflectoring.coderadar.core.projectadministration.service.user.passwor
 import io.reflectoring.coderadar.core.projectadministration.service.user.refresh.RefreshTokenService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 
 class ChangePasswordServiceTest {
   private ChangePasswordPort changePasswordPort = mock(ChangePasswordPort.class);

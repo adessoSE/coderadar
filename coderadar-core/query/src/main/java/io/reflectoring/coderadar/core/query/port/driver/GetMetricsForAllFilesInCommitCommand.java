@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.core.query.port.driver;
 
-import java.util.List;
 import lombok.Value;
+
+import java.util.List;
 
 @Value
 public class GetMetricsForAllFilesInCommitCommand {

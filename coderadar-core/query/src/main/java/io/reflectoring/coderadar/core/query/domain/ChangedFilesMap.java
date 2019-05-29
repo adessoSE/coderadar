@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.core.query.domain;
 
 import io.reflectoring.coderadar.plugin.api.ChangeType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

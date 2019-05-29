@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get;
 
 import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
+
 import java.util.List;
 
 public interface GetAnalyzerConfigurationsFromProjectUseCase {

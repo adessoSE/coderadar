@@ -4,9 +4,10 @@ import io.reflectoring.coderadar.core.analyzer.AnalyzingJobNotStartedException;
 import io.reflectoring.coderadar.core.analyzer.port.driven.GetAnalyzingStatusPort;
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzingJob;
 import io.reflectoring.coderadar.graph.analyzer.repository.GetAnalyzingStatusRepository;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service("GetAnalyzingStatusServiceNeo4j")
 public class GetAnalyzingStatusService implements GetAnalyzingStatusPort {

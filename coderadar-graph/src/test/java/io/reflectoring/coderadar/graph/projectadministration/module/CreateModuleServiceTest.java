@@ -1,9 +1,5 @@
 package io.reflectoring.coderadar.graph.projectadministration.module;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.mockito.internal.verification.VerificationModeFactory.times;
-
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
@@ -11,6 +7,10 @@ import io.reflectoring.coderadar.graph.projectadministration.module.service.Crea
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @DisplayName("Create module")
 class CreateModuleServiceTest {

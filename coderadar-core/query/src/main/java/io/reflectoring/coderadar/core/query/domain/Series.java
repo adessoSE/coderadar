@@ -1,9 +1,10 @@
 package io.reflectoring.coderadar.core.query.domain;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
-import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class Series<X, Y> {

@@ -9,12 +9,13 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.core.vcs.port.driver.CloneRepositoryCommand;
 import io.reflectoring.coderadar.core.vcs.port.driver.CloneRepositoryUseCase;
-import java.io.File;
-import java.util.UUID;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.util.UUID;
 
 @Service("CreateProjectService")
 public class CreateProjectService implements CreateProjectUseCase {

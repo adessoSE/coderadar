@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.core.analyzer.domain;
+package io.reflectoring.coderadar.core.projectadministration.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

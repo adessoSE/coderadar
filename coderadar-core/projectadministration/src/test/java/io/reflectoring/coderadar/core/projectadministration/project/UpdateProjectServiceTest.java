@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.core.projectadministration.project;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.core.projectadministration.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.core.projectadministration.ProjectStillExistsException;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
@@ -10,11 +8,14 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.project.UpdateProjectService;
 import io.reflectoring.coderadar.core.vcs.port.driver.UpdateRepositoryUseCase;
-import java.util.Date;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.Date;
+import java.util.Optional;
+
+import static org.mockito.Mockito.mock;
 
 class UpdateProjectServiceTest {
   private GetProjectPort getProjectPort = mock(GetProjectPort.class);

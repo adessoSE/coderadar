@@ -1,18 +1,19 @@
 package io.reflectoring.coderadar.graph.projectadministration.module;
 
-import static org.mockito.Mockito.*;
-
 import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ListModulesOfProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.service.ListModulesOfProjectService;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
-import java.util.LinkedList;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.LinkedList;
+
+import static org.mockito.Mockito.*;
 
 @DisplayName("List modules of project")
 class ListModulesOfProjectServiceTest {

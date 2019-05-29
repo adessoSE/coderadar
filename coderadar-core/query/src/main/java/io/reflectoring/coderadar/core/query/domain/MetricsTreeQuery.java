@@ -1,13 +1,14 @@
 package io.reflectoring.coderadar.core.query.domain;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Provides parameters to query for values of one or more metrics values at the time of a specific

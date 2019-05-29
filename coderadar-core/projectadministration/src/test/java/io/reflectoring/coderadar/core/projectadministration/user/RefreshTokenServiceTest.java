@@ -1,12 +1,12 @@
 package io.reflectoring.coderadar.core.projectadministration.user;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.RefreshTokenPort;
 import io.reflectoring.coderadar.core.projectadministration.service.user.refresh.RefreshTokenService;
 import io.reflectoring.coderadar.core.projectadministration.service.user.security.TokenService;
 import org.junit.jupiter.api.BeforeEach;
+
+import static org.mockito.Mockito.mock;
 
 class RefreshTokenServiceTest {
 

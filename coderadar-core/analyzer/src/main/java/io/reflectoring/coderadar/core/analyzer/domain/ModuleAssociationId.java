@@ -1,8 +1,9 @@
 package io.reflectoring.coderadar.core.analyzer.domain;
 
-import java.io.Serializable;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
+
+import java.io.Serializable;
 
 @Data
 @NodeEntity
@@ -29,11 +30,4 @@ public class ModuleAssociationId implements Serializable {
         && this.fileId.equals(that.fileId)
         && this.moduleId.equals(that.moduleId);
   }
-
-  /*
-  @Override
-  public String toString() {
-    return ReflectionToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-  }
-  */
 }

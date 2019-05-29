@@ -1,9 +1,5 @@
 package io.reflectoring.coderadar.core.projectadministration.project;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import io.reflectoring.coderadar.core.projectadministration.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.core.projectadministration.ProjectStillExistsException;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
@@ -12,11 +8,16 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.project.CreateProjectService;
 import io.reflectoring.coderadar.core.vcs.port.driver.CloneRepositoryUseCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.util.Date;
 import java.util.Optional;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class CreateProjectServiceTest {
 

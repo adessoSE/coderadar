@@ -10,11 +10,12 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.user.Ref
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenUseCase;
 import io.reflectoring.coderadar.core.projectadministration.service.user.security.TokenService;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service("RefreshTokenService")
 public class RefreshTokenService implements RefreshTokenUseCase {

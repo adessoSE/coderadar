@@ -1,16 +1,17 @@
 package io.reflectoring.coderadar.graph.projectadministration.filepattern;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.GetFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.service.GetFilePatternService;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @DisplayName("Get file pattern")
 public class GetFilePatternServiceTest {
