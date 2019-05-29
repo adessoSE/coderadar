@@ -53,7 +53,8 @@ class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTempla
               GetModuleResponse[] moduleResponses =
                   fromJson(result.getResponse().getContentAsString(), GetModuleResponse[].class);
               Assertions.assertEquals(2, moduleResponses.length);
-            });
+            })
+            .andDo(document("modules/list"));
   }
 
   @Test

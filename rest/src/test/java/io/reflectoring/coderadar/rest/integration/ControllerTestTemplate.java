@@ -60,7 +60,7 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
       try {
         this.constraintDescriptions = new ConstraintDescriptions(input);
         this.customValidationDescription.load(
-            getClass().getResourceAsStream("CustomValidationDescription.properties"));
+            getClass().getClassLoader().getResourceAsStream("CustomValidationDescription.properties"));
       } catch (IOException e) {
         throw new IllegalArgumentException(
             "unable to load properties for custom validation description");

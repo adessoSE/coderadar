@@ -2,15 +2,18 @@ package io.reflectoring.coderadar.rest.integration.user;
 
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserResponse;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserCommand;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class LoadUserControllerIntegrationTest extends ControllerTestTemplate {
@@ -36,7 +39,9 @@ class LoadUserControllerIntegrationTest extends ControllerTestTemplate {
               LoadUserResponse response = fromJson(a, LoadUserResponse.class);
               Assertions.assertEquals("username2", response.getUsername());
               Assertions.assertEquals(userId, response.getId());
-            });
+            })
+            .andDo(document("user/get"));
+
   }
 
   @Test
@@ -47,4 +52,7 @@ class LoadUserControllerIntegrationTest extends ControllerTestTemplate {
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("User with id 1 not found."));
   }
+
+
+
 }

@@ -1,10 +1,12 @@
 package io.reflectoring.coderadar.rest.integration.module;
 
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleCommand;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class UpdateModuleControllerIntegrationTest extends ControllerTestTemplate {
@@ -45,7 +48,8 @@ class UpdateModuleControllerIntegrationTest extends ControllerTestTemplate {
             result -> {
               Module module1 = createModuleRepository.findById(id).get();
               Assertions.assertEquals("new-module-path", module1.getPath());
-            });
+            })
+            .andDo(document("modules/update"));
   }
 
   @Test
@@ -71,4 +75,6 @@ class UpdateModuleControllerIntegrationTest extends ControllerTestTemplate {
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
+
+
 }

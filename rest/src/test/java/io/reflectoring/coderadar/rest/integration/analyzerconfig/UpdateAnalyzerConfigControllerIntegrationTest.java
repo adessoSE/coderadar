@@ -47,7 +47,9 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
                   createAnalyzerConfigurationRepository.findById(id).get();
               Assertions.assertEquals("new analyzer name", configuration.getAnalyzerName());
               Assertions.assertFalse(configuration.getEnabled());
-            });
+            })
+            .andDo(document("analyzerConfiguration/update"));
+
   }
 
   @Test

@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.integration.module;
 
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
@@ -28,6 +29,8 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
 
+    ConstrainedFields fields = fields(CreateModuleCommand.class);
+
     // Test
     CreateModuleCommand command = new CreateModuleCommand("module-path");
     mvc()
@@ -42,7 +45,15 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
               Module module = createModuleRepository.findById(id).get();
               Assertions.assertEquals("module-path", module.getPath());
-            });
+            })
+            .andDo(
+                    document(
+                            "modules/create",
+                            requestFields(
+                                    fields
+                                            .withPath("path")
+                                            .description(
+                                                    "The path of this module starting at the VCS root. All files below that path are considered to be part of the module."))));
   }
 
   @Test

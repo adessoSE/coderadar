@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.integration.user;
 
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import com.auth0.jwt.JWT;
@@ -7,6 +8,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import io.reflectoring.coderadar.core.projectadministration.domain.RefreshToken;
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenCommand;
+import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenResponse;
 import io.reflectoring.coderadar.core.projectadministration.service.user.security.PasswordUtil;
 import io.reflectoring.coderadar.core.projectadministration.service.user.security.SecretKeyService;
 import io.reflectoring.coderadar.core.projectadministration.service.user.security.TokenService;
@@ -19,6 +21,7 @@ import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
@@ -51,7 +54,8 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
         .perform(
             post("/user/refresh").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.jsonPath("token").exists());
+        .andExpect(MockMvcResultMatchers.jsonPath("token").exists())
+            .andDo(documentRefresh());
   }
 
   @Test
@@ -107,5 +111,14 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
         .withClaim("username", "radar")
         .withClaim("type", TokenType.ACCESS.toString())
         .sign(Algorithm.HMAC256(secret));
+  }
+
+  private ResultHandler documentRefresh() {
+    ConstrainedFields fields = fields(RefreshTokenCommand.class);
+    return document(
+            "user/refresh",
+            requestFields(
+                    fields.withPath("accessToken").description("The expired access token"),
+                    fields.withPath("refreshToken").description("The valid refresh token")));
   }
 }
