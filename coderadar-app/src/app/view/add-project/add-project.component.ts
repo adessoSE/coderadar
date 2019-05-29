@@ -4,11 +4,12 @@ import {ProjectService} from '../../service/project.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR} from 'http-status-codes';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-add-project',
   templateUrl: './add-project.component.html',
-  styleUrls: ['./add-project.component.css']
+  styleUrls: ['./add-project.component.scss']
 })
 export class AddProjectComponent {
 
@@ -18,10 +19,12 @@ export class AddProjectComponent {
   projectExists = false;
   nameEmpty = false;
 
-  constructor(private router: Router, private userService: UserService, private projectService: ProjectService) {
+  constructor(private router: Router, private userService: UserService, private projectService: ProjectService,
+              private titleService: Title) {
     this.project = new Project();
     this.project.name = '';
     this.project.vcsUrl = '';
+    titleService.setTitle('Coderadar - Add project');
   }
 
   /**
@@ -41,21 +44,21 @@ export class AddProjectComponent {
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) { // If access is denied
-            this.userService.refresh()
-              .then(() => this.submitForm());
+          this.userService.refresh()
+            .then(() => this.submitForm());
         } else if (error.status && error.status === BAD_REQUEST) {   // If there is a field error
-            if (error.error && error.error.errorMessage === 'Validation Error') {
-              error.error.fieldErrors.forEach(field => {  // Check which field
-                if (field.field === 'vcsUrl') {
-                  this.incorrectURL = true;
-                }
-              });
-            }
+          if (error.error && error.error.errorMessage === 'Validation Error') {
+            error.error.fieldErrors.forEach(field => {  // Check which field
+              if (field.field === 'vcsUrl') {
+                this.incorrectURL = true;
+              }
+            });
+          }
         } else if (error.status === INTERNAL_SERVER_ERROR &&
-            error.error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
-              this.projectExists = true;
+          error.error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
+          this.projectExists = true;
         }
-    });
+      });
   }
 
   /**

@@ -1,4 +1,4 @@
-import { Commit } from './commit';
+import {Commit} from './commit';
 
 describe('Commit', () => {
   it('should create an instance', () => {

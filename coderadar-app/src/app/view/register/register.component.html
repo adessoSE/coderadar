@@ -1,4 +1,4 @@
-<div fxLayoutAlign="center center" class="login-card-form">
+<div class="login-card-form" fxLayoutAlign="center center">
   <form (ngSubmit)="submitForm()">
     <mat-card>
 
@@ -13,23 +13,27 @@
 
         <!--Form fields-->
         <mat-form-field>
-          <input maxlength="32" type="text" matInput placeholder="Username"  name="username" [(ngModel)]="username" required>
+          <input [(ngModel)]="username" matInput maxlength="32" name="username" placeholder="Username" required
+                 type="text">
         </mat-form-field>
         <mat-form-field>
-          <input type="password" matInput placeholder="Password" name="password" [(ngModel)]="password" required>
+          <input [(ngModel)]="password" matInput name="password" placeholder="Password" required type="password">
         </mat-form-field>
         <mat-form-field>
-          <input type="password" matInput placeholder="Confirm password" name="confirmPassword" [(ngModel)]="confirmPassword" required>
+          <input [(ngModel)]="confirmPassword" matInput name="confirmPassword" placeholder="Confirm password"
+                 required type="password">
         </mat-form-field>
 
         <!--Possible errors-->
         <mat-error *ngIf="invalidUser">The chosen username is already in use!</mat-error>
-        <mat-error *ngIf="invalidPassword">Password must be at least <br>8 symbols long and contain a character and a digit!</mat-error>
+        <mat-error *ngIf="invalidPassword">Password must be at least <br>8 symbols long and contain a character and a
+          digit!
+        </mat-error>
         <mat-error *ngIf="passwordsDoNotMatch">Passwords do not match!</mat-error>
 
-        <div id="cardButtons" align="center">
-          <button mat-button type="button" routerLink="/login">Have an account? Log in</button>
-          <button mat-raised-button type="submit"  color="primary">Sign up</button>
+        <div align="center" id="cardButtons">
+          <button mat-button routerLink="/login" type="button">Have an account? Log in</button>
+          <button color="primary" mat-raised-button type="submit">Sign up</button>
         </div>
 
       </mat-card-content>
