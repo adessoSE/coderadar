@@ -1,10 +1,11 @@
-#canvas {
+[id='3canvas'] {
   position: absolute;
   z-index: -1;
 }
 
 tr {
   vertical-align: top;
+  white-space: nowrap;
 }
 
 .root-file {
@@ -14,14 +15,17 @@ tr {
 
 .list {
   padding: 0 0 0 5px;
-  margin: 0;
   text-align: center;
-  width: -webkit-fill-available;
-  width: -moz-available;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin: 0 auto;
 }
 
 .list__root {
   padding: 0;
+  width: -webkit-fill-available;
+  width: -moz-available;
+  width: available;
 }
 
 .package {
@@ -49,12 +53,6 @@ tr {
   color: black;
   display: inline-block;
   margin-right: 6px;
-}
-
-.package-down::before {
-  -ms-transform: rotate(90deg); /* IE 9 */
-  -webkit-transform: rotate(90deg); /* Safari */
-  transform: rotate(90deg);
 }
 
 .class {
@@ -89,12 +87,6 @@ tr {
   color: red;
 }
 
-.class-down--dependency::before {
-  -ms-transform: rotate(90deg); /* IE 9 */
-  -webkit-transform: rotate(90deg); /* Safari */
-  transform: rotate(90deg);
-}
-
 .package, .class, .class--dependency {
   padding: 5px 5px 5px 15px;
   display: inline-block;
@@ -113,16 +105,16 @@ tr {
   cursor: pointer;
 }
 
-.span-margin {
-  margin-left: 22px;
-}
-
 .header-background {
   height: 140px;
   position: absolute;
   top: 0;
   background-color: #3F51B5;
   z-index: -1;
+}
+
+.filename-span {
+  width: min-content;
 }
 
 @font-face {

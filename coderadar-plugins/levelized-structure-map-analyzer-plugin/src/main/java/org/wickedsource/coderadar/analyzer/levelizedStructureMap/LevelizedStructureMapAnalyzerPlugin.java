@@ -1,4 +1,4 @@
-package org.wickedsourc.coderadar.analyzer.levelizedStructureMap;
+package org.wickedsource.coderadar.analyzer.levelizedStructureMap;
 
 import org.wickedsource.coderadar.analyzer.api.AnalyzerException;
 import org.wickedsource.coderadar.analyzer.api.EntityMetric;

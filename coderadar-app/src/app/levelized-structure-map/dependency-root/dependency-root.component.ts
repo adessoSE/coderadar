@@ -9,7 +9,7 @@ import { afterLoad } from '../../../assets/js/dependency-tree';
   encapsulation: ViewEncapsulation.None
 })
 export class DependencyRootComponent implements AfterViewInit {
-  @ViewChild('input') input: ElementRef;
+  @ViewChild('3input') input: ElementRef;
   node: Node;
 
   constructor(dependencyTreeProvider: DependencyTreeProvider) {

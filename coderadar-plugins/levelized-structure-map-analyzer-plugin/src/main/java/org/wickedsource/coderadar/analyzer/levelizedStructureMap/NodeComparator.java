@@ -1,4 +1,4 @@
-package org.wickedsourc.coderadar.analyzer.levelizedStructureMap;
+package org.wickedsource.coderadar.analyzer.levelizedStructureMap;
 
 import java.util.Comparator;
 

@@ -1,3 +1,5 @@
+import html2canvas from 'html2canvas';
+
 let jsonData;
 let ctx;
 let htmlBuffer = [];
@@ -6,14 +8,14 @@ let checkUp;
 let headerBackground;
 
 export function afterLoad() {
-  let data = JSON.parse((document.getElementById('input') as HTMLInputElement).value);
+  let data = JSON.parse((document.getElementById('3input') as HTMLInputElement).value);
   jsonData = data;
   buildRoot(data);
-  document.getElementById('dependencyTree').innerHTML = htmlBuffer.join('');
-  checkUp = (document.getElementById('showUpward') as HTMLInputElement).checked;
-  checkDown = (document.getElementById('showDownward') as HTMLInputElement).checked;
-  ctx = (document.getElementById('canvas') as HTMLCanvasElement).getContext('2d');
-  headerBackground = (document.getElementById('headerBackground') as HTMLElement);
+  document.getElementById('3dependencyTree').innerHTML = htmlBuffer.join('');
+  checkUp = (document.getElementById('3showUpward') as HTMLInputElement).checked;
+  checkDown = (document.getElementById('3showDownward') as HTMLInputElement).checked;
+  ctx = (document.getElementById('3canvas') as HTMLCanvasElement).getContext('2d');
+  headerBackground = (document.getElementById('3headerBackground') as HTMLElement);
 
   let toggler = document.getElementsByClassName('clickable');
   for (let i = 0; i < toggler.length; i++) {
@@ -23,20 +25,53 @@ export function afterLoad() {
       loadDependencies(data);
     });
   }
-  document.getElementById('showUpward').addEventListener('change', () => {
-    checkUp = (document.getElementById('showUpward') as HTMLInputElement).checked;
+  for (let i = 0; i < toggler.length; i++) {
+    let element = toggler[i] as HTMLElement;
+    while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
+      element.style.display = 'inline';
+      if (element.offsetWidth > (element.nextSibling as HTMLElement).offsetWidth) {
+        element.style.display = 'inline-grid';
+      } else {
+        element.style.display = 'inline';
+      }
+      element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+    }
+  }
+  document.getElementById('3showUpward').addEventListener('change', () => {
+    checkUp = (document.getElementById('3showUpward') as HTMLInputElement).checked;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     loadDependencies(data);
   });
-  document.getElementById('showDownward').addEventListener('change', () => {
-    checkDown = (document.getElementById('showDownward') as HTMLInputElement).checked;
+  document.getElementById('3showDownward').addEventListener('change', () => {
+    checkDown = (document.getElementById('3showDownward') as HTMLInputElement).checked;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    loadDependencies(data);
+  });
+  document.getElementById('3screenshot').addEventListener('click', () => {
+    html2canvas(document.getElementById("3canvasContainer"), {
+      width: document.getElementById('3list__root').offsetWidth,
+      height: document.getElementById('3list__root').offsetHeight
+    }).then(canvas => {
+      let link = document.createElement("a");
+      link.href = canvas.toDataURL('image/jpg');
+      link.setAttribute('href', canvas.toDataURL('image/jpg'));
+      link.setAttribute('download', 'dependencyStructure.jpg');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
+    ctx.canvas.width = document.getElementById('3list__root').offsetWidth;
+    headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
     loadDependencies(data);
   });
 
-  ctx.canvas.height = document.getElementById('list__root').offsetHeight;
-  ctx.canvas.width = document.getElementById('list__root').offsetWidth;
-  headerBackground.style.width = document.getElementById('list__root').offsetWidth + 'px';
+  ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
+  ctx.canvas.width = document.getElementById('3list__root').offsetWidth;
+  headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
   loadDependencies(data);
 }
 
@@ -52,12 +87,12 @@ function loadDependencies(node) {
 }
 
 function buildRoot(currentNode) {
-  htmlBuffer.push(`<table id="list__root" class="list list__root active">`);
+  htmlBuffer.push(`<table id="3list__root" class="list list__root active">`);
   htmlBuffer.push(`<tr><td class="package package__base">` +
-    `<span id="${currentNode.packageName}" ${currentNode.children.length > 0 ? 'class="clickable"' : ''}>${currentNode.filename}</span>`);
+    `<span id="${currentNode.packageName}" class="filename-span${currentNode.children.length > 0 && currentNode.packageName !== '' ? ' clickable' : ''}">${currentNode.filename}</span>`);
 
   if (currentNode.children.length > 0) {
-    htmlBuffer.push(`<table class="list nested">`);
+    htmlBuffer.push(`<table class="list${currentNode.packageName !== '' ? ' nested' : ''}">`);
     htmlBuffer.push(buildTree(currentNode));
     htmlBuffer.push('</table>');
   }
@@ -82,25 +117,22 @@ function buildTree(currentNode) {
     for (let i = 0; i < child.filename.length; i++) {
       let c = child.filename.charAt(i);
       if (i !== 0 && c.toUpperCase() === c) {
-        fileName += '<br><span class="span-margin">';
+        fileName += '<wbr>';
       }
       fileName += c;
-      if (i !== 0 && c.toUpperCase() === c) {
-        fileName += '</span>';
-      }
     }
     if (layer === child.layer) {
       // add in same row as child
       htmlBuffer.push(`<td class="${classString}">` +
-        `<span id="${child.packageName}" ${child.children.length > 0 ? 'class="clickable"' : ''}>${fileName}</span>`);
+        `<span id="${child.packageName}" class="filename-span${child.children.length > 0 && child.packageName !== '' ? ' clickable' : ''}">${fileName}</span>`);
     } else {
       // create new row
       htmlBuffer.push(`</tr><tr><td class="${classString}">` +
-        `<span id="${child.packageName}" ${child.children.length > 0 ? 'class="clickable"' : ''}>${fileName}</span>`);
+        `<span id="${child.packageName}" class="filename-span${child.children.length > 0 && child.packageName !== '' ? ' clickable' : ''}">${fileName}</span>`);
     }
     layer = child.layer;
     if (child.children.length > 0) {
-      htmlBuffer.push(`<table class="list nested">`);
+      htmlBuffer.push(`<table class="list${child.packageName !== '' ? ' nested' : ''}">`);
       htmlBuffer.push(buildTree(child));
       htmlBuffer.push('</table>');
     }
@@ -117,6 +149,16 @@ function toggle(currentNode) {
     } else {
       currentNode.nextSibling.classList.add('active');
     }
+    let element = currentNode as HTMLElement;
+    while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
+      element.style.display = 'inline';
+      if (element.offsetWidth > (element.nextSibling as HTMLElement).offsetWidth) {
+        element.style.display = 'inline-grid';
+      } else {
+        element.style.display = 'inline';
+      }
+      element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+    }
   } else if (currentNode.nextSibling.classList.contains('active')) {
     collapseChildren(currentNode);
     currentNode.nextSibling.classList.add('nested');
@@ -125,11 +167,21 @@ function toggle(currentNode) {
     } else {
       currentNode.nextSibling.classList.remove('active');
     }
+    let element = currentNode as HTMLElement;
+    while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
+      element.style.display = 'inline';
+      if (element.offsetWidth < (element.nextSibling as HTMLElement).offsetWidth) {
+        element.style.display = 'inline';
+      } else {
+        element.style.display = 'inline-grid';
+      }
+      element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+    }
   }
   // set height of canvas to the height of dependencyTree after toggle
-  ctx.canvas.height = document.getElementById('list__root').offsetHeight;
-  ctx.canvas.width = document.getElementById('list__root').offsetWidth;
-  headerBackground.style.width = document.getElementById('list__root').offsetWidth + 'px';
+  ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
+  ctx.canvas.width = document.getElementById('3list__root').offsetWidth;
+  headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
 }
 
 function listDependencies(currentNode, ctx) {
@@ -138,9 +190,9 @@ function listDependencies(currentNode, ctx) {
   if (currentNode.dependencies.length > 0) {
     currentNode.dependencies.forEach(dependency => {
       // find last visible element for dependency as end
-      const end = findLastHTMLElement(dependency).parentNode;
+      const end = findLastHTMLElement(dependency).parentNode as HTMLElement;
       // find last visible element for currentNode as start
-      const start = findLastHTMLElement(currentNode).parentNode;
+      const start = findLastHTMLElement(currentNode).parentNode as HTMLElement;
 
       let startx = 0, starty = 0, endx = 0, endy = 0;
       // calculate offsets across all parents for start and end
@@ -148,13 +200,13 @@ function listDependencies(currentNode, ctx) {
       do {
         startx += tmp.offsetLeft;
         starty += tmp.offsetTop;
-        tmp = tmp.offsetParent;
+        tmp = tmp.offsetParent as HTMLElement;
       } while (!tmp.classList.contains('list__root'));
       tmp = end;
       do {
         endx += tmp.offsetLeft;
         endy += tmp.offsetTop;
-        tmp = tmp.offsetParent;
+        tmp = tmp.offsetParent as HTMLElement;
       } while (!tmp.classList.contains('list__root'));
 
       //ignore all arrows with same start and end node
@@ -174,15 +226,15 @@ function listDependencies(currentNode, ctx) {
 
 function findLastHTMLElement(node) {
   let packageName = node.packageName;
-  let element;
-  while (element === undefined) {
-    if (!document.getElementById(packageName) || document.getElementById(packageName).offsetParent === null) {
-      packageName = packageName.substring(0, packageName.lastIndexOf('.'));
-    } else {
-      element = document.getElementById(packageName);
-    }
+  // let element;
+  // set element = findById(packageName)
+  // while element not visible
+  //   element = element.parent
+  let element = document.getElementById(packageName);
+  while (element.offsetParent === null) {
+    element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
   }
-  return element;
+  return element as HTMLElement;
 }
 
 function canvasArrow(context, fromx, fromy, tox, toy, color) {
@@ -199,17 +251,17 @@ function canvasArrow(context, fromx, fromy, tox, toy, color) {
   // calculate z with (zx, zy)
   let zx, zy;
   if (fromx <= tox && fromy <= toy) {
-    zx = Math.max(fromx, tox)-x;
+    zx = Math.max(fromx, tox) - x;
     zy = Math.max(fromy, toy);
   } else if (fromx <= tox && fromy > toy) {
     zx = Math.max(fromx, tox);
-    zy = Math.min(fromy, toy)+y;
+    zy = Math.min(fromy, toy) + y;
   } else if (fromx > tox && fromy <= toy) {
-    zx = Math.min(fromx, tox)+x;
+    zx = Math.min(fromx, tox) + x;
     zy = Math.max(fromy, toy);
   } else if (fromx > tox && fromy > toy) {
     zx = Math.min(fromx, tox);
-    zy = Math.min(fromy, toy)+y;
+    zy = Math.min(fromy, toy) + y;
   }
 
   // draw quadratic curve from X over Z to Y

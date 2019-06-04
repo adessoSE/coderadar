@@ -1,12 +1,13 @@
 <app-header id="header" [title]="'Structure Map'"></app-header>
-<div class="header-background" id="headerBackground"></div>
+<div class="header-background" id="3headerBackground"></div>
 
-<label for="showUpward">Show all upward Dependencies: </label>
-<input type="checkbox" #showUpward id="showUpward" checked>
-<label for="showDownward">Show all downward Dependencies: </label>
-<input type="checkbox" #showDownward id="showDownward" checked>
-<div id="canvasContainer">
-  <canvas id="canvas"></canvas>
-  <div id="dependencyTree"></div>
-  <input type="hidden" #input id="input">
+<label for="3showUpward">Show all upward Dependencies: </label>
+<input type="checkbox" #3showUpward id="3showUpward" checked>
+<label for="3showDownward">Show all downward Dependencies: </label>
+<input type="checkbox" #3showDownward id="3showDownward" checked>
+<button mat-button #3screenshot id="3screenshot">Export Image</button>
+<div id="3canvasContainer">
+  <canvas id="3canvas" class="canvas"></canvas>
+  <div id="3dependencyTree"></div>
+  <input type="hidden" #3input id="3input">
 </div>
