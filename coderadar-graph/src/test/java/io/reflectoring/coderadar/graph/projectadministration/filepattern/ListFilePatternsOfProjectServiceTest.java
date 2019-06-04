@@ -1,15 +1,14 @@
 package io.reflectoring.coderadar.graph.projectadministration.filepattern;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.ListFilePatternsOfProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.service.ListFilePatternsOfProjectService;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.mockito.Mockito.mock;
 
 @DisplayName("List file patterns of project")
 class ListFilePatternsOfProjectServiceTest {

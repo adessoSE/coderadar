@@ -1,11 +1,10 @@
 package io.reflectoring.coderadar.core.projectadministration.port.driver.user;
 
 import com.google.common.base.Joiner;
-import org.passay.*;
-
+import java.util.Arrays;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.Arrays;
+import org.passay.*;
 
 /** Validator for user passwords. */
 public class CoderadarPasswordValidator implements ConstraintValidator<ValidPassword, String> {

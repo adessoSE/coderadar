@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserUseCase;
@@ -9,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import static org.mockito.Mockito.mock;
 
 class LoginUserControllerTest {
 

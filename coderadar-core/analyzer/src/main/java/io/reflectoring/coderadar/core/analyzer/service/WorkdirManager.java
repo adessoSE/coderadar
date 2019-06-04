@@ -4,11 +4,10 @@ import io.reflectoring.coderadar.core.projectadministration.CoderadarConfigurati
 import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.nio.file.Path;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /** Centralizes the access to local working directories needed for some tasks. */
 @Service

@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.core.vcs.port.driven;
 
-import org.eclipse.jgit.api.Git;
-
 import java.io.File;
+import org.eclipse.jgit.api.Git;
 
 public interface CloneRepositoryPort {
   Git cloneRepository(String remoteUrl, File localDir);

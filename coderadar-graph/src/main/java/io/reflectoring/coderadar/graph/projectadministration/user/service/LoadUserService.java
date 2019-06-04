@@ -3,10 +3,9 @@ package io.reflectoring.coderadar.graph.projectadministration.user.service;
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.LoadUserRepository;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service("LoadUserServiceNeo4j")
 public class LoadUserService implements LoadUserPort {

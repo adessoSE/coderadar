@@ -5,10 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.restdocs.hypermedia.Link;
-
 import java.io.IOException;
 import java.util.List;
+import org.springframework.restdocs.hypermedia.Link;
 
 /** Collection of utility methods to work with JSON strings. */
 public class JsonHelper {

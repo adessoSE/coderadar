@@ -1,17 +1,16 @@
 package io.reflectoring.coderadar.core.projectadministration.filepattern;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.filepattern.GetFilePatternPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.filepattern.UpdateFilePatternPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.update.UpdateFilePatternCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.filepattern.UpdateFilePatternService;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.Optional;
-
-import static org.mockito.Mockito.mock;
 
 class UpdateFilePatternServiceTest {
   private GetFilePatternPort getFilePatternPort = mock(GetFilePatternPort.class);

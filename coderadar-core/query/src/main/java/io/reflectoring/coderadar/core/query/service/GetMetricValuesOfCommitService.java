@@ -4,11 +4,10 @@ import io.reflectoring.coderadar.core.analyzer.domain.MetricValueDTO;
 import io.reflectoring.coderadar.core.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.core.query.port.driven.GetMetricValuesOfCommitPort;
 import io.reflectoring.coderadar.core.query.port.driver.GetMetricValuesOfCommitUseCase;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service("GetMetricValuesOfCommitService")
 public class GetMetricValuesOfCommitService implements GetMetricValuesOfCommitUseCase {

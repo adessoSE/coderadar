@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.integration.analyzerconfig;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
@@ -11,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate {
 

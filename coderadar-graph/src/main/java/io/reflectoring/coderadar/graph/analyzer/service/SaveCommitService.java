@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph.analyzer.service;
 
-import io.reflectoring.coderadar.core.analyzer.port.driven.SaveCommitPort;
+import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.core.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.graph.analyzer.repository.SaveCommitRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -7,12 +7,11 @@ import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundExcep
 import io.reflectoring.coderadar.core.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service("StartAnalyzingService")
 public class StartAnalyzingService implements StartAnalyzingUseCase {
@@ -31,7 +30,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   }
 
   @Override
-  public Long start(StartAnalyzingCommand command) {
+  public void start(StartAnalyzingCommand command) {
     Optional<Project> project = getProjectPort.get(command.getProjectId());
     if (!project.isPresent()) {
       throw new ProjectNotFoundException(command.getProjectId());
@@ -39,8 +38,9 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
 
     List<Commit> commitsToBeAnalyzed = project.get().getCommits();
     for (Commit commit : commitsToBeAnalyzed) {
-      analyzeCommitService.analyzeCommit(commit, project.get());
+      if (!commit.isAnalyzed()) {
+        analyzeCommitService.analyzeCommit(commit);
+      }
     }
-    return startAnalyzingPort.start(command);
   }
 }

@@ -22,6 +22,7 @@ public class CloneRepositoryService implements CloneRepositoryUseCase {
 
   @Override
   public Git cloneRepository(CloneRepositoryCommand command) {
+    cloneRepositoryPort.cloneRepository(command.getRemoteUrl(), command.getLocalDir());
     try {
       // TODO: support cloning with credentials for private repositories
       // TODO: support progress monitoring
@@ -31,7 +32,6 @@ public class CloneRepositoryService implements CloneRepositoryUseCase {
               .setDirectory(command.getLocalDir())
               .call();
       git.getRepository().close();
-      cloneRepositoryPort.cloneRepository(command.getRemoteUrl(), command.getLocalDir());
       return git;
     } catch (GitAPIException e) {
       throw new RuntimeException(e);

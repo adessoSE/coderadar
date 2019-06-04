@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.IdResponse;
+import java.net.MalformedURLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.MalformedURLException;
 
 @RestController
 @Transactional

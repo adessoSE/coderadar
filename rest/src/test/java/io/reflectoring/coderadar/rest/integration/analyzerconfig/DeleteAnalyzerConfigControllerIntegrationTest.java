@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.integration.analyzerconfig;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
@@ -9,8 +11,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate {
 

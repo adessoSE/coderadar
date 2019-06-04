@@ -1,16 +1,15 @@
 package io.reflectoring.coderadar.core.projectadministration.user;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.load.LoadUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.service.user.load.LoadUserService;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.Optional;
-
-import static org.mockito.Mockito.mock;
 
 class LoadUserServiceTest {
   private LoadUserPort loadUserPort = mock(LoadUserPort.class);

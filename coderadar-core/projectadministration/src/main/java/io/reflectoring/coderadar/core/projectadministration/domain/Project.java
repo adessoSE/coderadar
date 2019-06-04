@@ -1,13 +1,12 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 /** A coderadar project that defines the source of files that are to be analyzed. */
 @NodeEntity

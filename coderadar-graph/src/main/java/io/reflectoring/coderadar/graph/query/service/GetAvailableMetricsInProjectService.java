@@ -5,11 +5,10 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.query.port.driven.GetAvailableMetricsInProjectPort;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetAvailableMetricsInProjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service("GetAvailableMetricsInProjectServiceNeo4j")
 public class GetAvailableMetricsInProjectService implements GetAvailableMetricsInProjectPort {

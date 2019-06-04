@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.core.projectadministration.user;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.RefreshTokenPort;
@@ -7,14 +9,11 @@ import io.reflectoring.coderadar.core.projectadministration.port.driver.user.log
 import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserResponse;
 import io.reflectoring.coderadar.core.projectadministration.service.user.login.LoginUserService;
 import io.reflectoring.coderadar.core.projectadministration.service.user.security.TokenService;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.authentication.AuthenticationManager;
-
-import java.util.Optional;
-
-import static org.mockito.Mockito.mock;
 
 class LoginUserServiceTest {
   private RefreshTokenPort refreshTokenPort = mock(RefreshTokenPort.class);

@@ -1,5 +1,9 @@
 package io.reflectoring.coderadar.graph.projectadministration.module;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.DeleteModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.service.DeleteModuleService;
@@ -7,10 +11,6 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
 
 @DisplayName("Delete module")
 class DeleteModuleServiceTest {

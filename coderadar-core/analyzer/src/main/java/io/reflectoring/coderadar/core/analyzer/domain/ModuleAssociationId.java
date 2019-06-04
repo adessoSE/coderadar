@@ -1,9 +1,8 @@
 package io.reflectoring.coderadar.core.analyzer.domain;
 
+import java.io.Serializable;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
-
-import java.io.Serializable;
 
 @Data
 @NodeEntity

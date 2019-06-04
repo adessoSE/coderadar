@@ -1,16 +1,15 @@
 package io.reflectoring.coderadar.graph.projectadministration.project;
 
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ListProjectsRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.service.ListProjectsService;
+import java.util.LinkedList;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.LinkedList;
-
-import static org.mockito.Mockito.*;
 
 @DisplayName("List projects")
 class ListProjectsServiceTest {

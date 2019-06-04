@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.core.analyzer.domain;
+package io.reflectoring.coderadar.core.projectadministration.domain;
 
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;

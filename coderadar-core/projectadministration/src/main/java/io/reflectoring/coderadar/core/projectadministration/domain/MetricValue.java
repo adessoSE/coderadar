@@ -17,4 +17,6 @@ public class MetricValue {
   @StartNode private File file;
 
   @EndNode private Metric metric;
+
+  private Long value;
 }

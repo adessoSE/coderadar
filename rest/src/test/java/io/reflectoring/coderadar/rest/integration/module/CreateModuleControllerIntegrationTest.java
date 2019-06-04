@@ -1,5 +1,8 @@
 package io.reflectoring.coderadar.rest.integration.module;
 
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.create.CreateModuleCommand;
@@ -12,9 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
 

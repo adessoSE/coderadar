@@ -1,9 +1,8 @@
 package io.reflectoring.coderadar.core.vcs.port.driver.walk.fetchCommit;
 
+import java.net.URL;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.net.URL;
 
 @Data
 @AllArgsConstructor

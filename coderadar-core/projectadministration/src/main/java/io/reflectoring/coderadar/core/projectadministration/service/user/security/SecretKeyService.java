@@ -1,11 +1,10 @@
 package io.reflectoring.coderadar.core.projectadministration.service.user.security;
 
-import org.springframework.stereotype.Service;
-
+import java.security.NoSuchAlgorithmException;
 import javax.annotation.PostConstruct;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.NoSuchAlgorithmException;
+import org.springframework.stereotype.Service;
 
 /**
  * Service for generation and holding a secret key. The generated key is a AES key of the length 256

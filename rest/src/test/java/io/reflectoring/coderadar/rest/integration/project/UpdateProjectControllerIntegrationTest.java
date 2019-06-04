@@ -1,21 +1,20 @@
 package io.reflectoring.coderadar.rest.integration.project;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import java.io.File;
+import java.util.Date;
+import java.util.UUID;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.io.File;
-import java.util.Date;
-import java.util.UUID;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
 

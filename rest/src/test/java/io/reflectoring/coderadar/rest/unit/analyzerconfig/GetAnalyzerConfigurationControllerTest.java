@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.analyzerconfig;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationUseCase;
 import io.reflectoring.coderadar.rest.analyzerconfig.GetAnalyzerConfigurationController;
@@ -8,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import static org.mockito.Mockito.mock;
 
 class GetAnalyzerConfigurationControllerTest {
 

@@ -1,23 +1,22 @@
 package io.reflectoring.coderadar.graph.query;
 
-import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
-import io.reflectoring.coderadar.graph.query.repository.GetAvailableMetricsInProjectRepository;
-import io.reflectoring.coderadar.graph.query.service.GetAvailableMetricsInProjectService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.core.projectadministration.domain.Project;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
+import io.reflectoring.coderadar.graph.query.repository.GetAvailableMetricsInProjectRepository;
+import io.reflectoring.coderadar.graph.query.service.GetAvailableMetricsInProjectService;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 @DisplayName("Get available metrics in project")
 class GetAvailableMetricsInProjectServiceTest {

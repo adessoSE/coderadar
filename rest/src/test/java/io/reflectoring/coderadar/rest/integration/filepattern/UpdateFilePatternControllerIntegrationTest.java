@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.integration.filepattern;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
@@ -12,8 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate {
 

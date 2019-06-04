@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.core.analyzer.port.driven;
+package io.reflectoring.coderadar.core.projectadministration.port.driven.analyzer;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.Commit;
 

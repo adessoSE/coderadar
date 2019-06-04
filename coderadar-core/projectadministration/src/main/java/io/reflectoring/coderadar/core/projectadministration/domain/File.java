@@ -1,10 +1,9 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
+import java.util.List;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-
-import java.util.List;
 
 /** Represents a file in a VCS repository. */
 @NodeEntity
@@ -14,4 +13,6 @@ public class File {
   private String path;
 
   @Relationship private List<MetricValue> metricValues;
+
+  @Relationship(type = "HAS_RENAMED") private File hasRenamed;
 }

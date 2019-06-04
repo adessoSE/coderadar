@@ -3,16 +3,15 @@ package io.reflectoring.coderadar.core.projectadministration.service.user.securi
 import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.core.projectadministration.service.CoderadarUserDetails;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CoderadarUserDetailService implements UserDetailsService {

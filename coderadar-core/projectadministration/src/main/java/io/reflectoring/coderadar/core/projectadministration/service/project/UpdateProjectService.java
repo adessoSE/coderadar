@@ -9,12 +9,11 @@ import io.reflectoring.coderadar.core.projectadministration.port.driven.project.
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import io.reflectoring.coderadar.core.vcs.port.driver.UpdateRepositoryUseCase;
+import java.io.File;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.util.Optional;
 
 @Service("UpdateProjectService")
 public class UpdateProjectService implements UpdateProjectUseCase {

@@ -1,21 +1,20 @@
 package io.reflectoring.coderadar.rest.integration.analyzerconfig;
 
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
+import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
+import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.Arrays;
-
-import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
-import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 class ListAnalyzerConfigsFromProjectControllerIntegrationTest extends ControllerTestTemplate {
 

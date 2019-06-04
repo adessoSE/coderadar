@@ -1,16 +1,15 @@
 package io.reflectoring.coderadar.core.projectadministration.module;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.GetModulePort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.UpdateModulePort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleCommand;
 import io.reflectoring.coderadar.core.projectadministration.service.module.UpdateModuleService;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.util.Optional;
-
-import static org.mockito.Mockito.mock;
 
 class UpdateModuleServiceTest {
   private GetModulePort getModulePort = mock(GetModulePort.class);

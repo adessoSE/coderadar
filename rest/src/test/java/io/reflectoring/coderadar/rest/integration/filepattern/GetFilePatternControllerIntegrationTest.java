@@ -1,5 +1,9 @@
 package io.reflectoring.coderadar.rest.integration.filepattern;
 
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
+import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
@@ -12,10 +16,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
-import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 class GetFilePatternControllerIntegrationTest extends ControllerTestTemplate {
 

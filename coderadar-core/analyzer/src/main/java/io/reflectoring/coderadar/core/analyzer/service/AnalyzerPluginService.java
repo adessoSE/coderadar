@@ -2,20 +2,19 @@ package io.reflectoring.coderadar.core.analyzer.service;
 
 import io.reflectoring.coderadar.plugin.api.ConfigurableAnalyzerPlugin;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
-import org.reflections.Reflections;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
-@Service("AnalyzerService")
-public class AnalyzerService {
-  private Logger logger = LoggerFactory.getLogger(AnalyzerService.class);
+@Service("AnalyzerPluginService")
+public class AnalyzerPluginService {
+  private Logger logger = LoggerFactory.getLogger(AnalyzerPluginService.class);
 
   private Map<String, Class<? extends SourceCodeFileAnalyzerPlugin>> sourceCodeFileAnalyzerPlugins =
       new HashMap<>();
@@ -25,7 +24,7 @@ public class AnalyzerService {
    * AnalyzerPluginRegistry scans the whole classpath for implementations of the
    * SourceCodeFileAnalyzer interface!
    */
-  public AnalyzerService() {
+  public AnalyzerPluginService() {
     initRegistry("io.reflectoring.coderadar");
   }
 
@@ -35,7 +34,7 @@ public class AnalyzerService {
    *
    * @param packageName the package to scan for analyzer plugins.
    */
-  public AnalyzerService(String packageName) {
+  public AnalyzerPluginService(String packageName) {
     initRegistry(packageName);
   }
 
