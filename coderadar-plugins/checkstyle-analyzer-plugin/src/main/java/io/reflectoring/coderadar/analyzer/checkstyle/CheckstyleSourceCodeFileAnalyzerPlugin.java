@@ -6,7 +6,7 @@ import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import io.reflectoring.coderadar.plugin.api.*;
 import java.io.*;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,12 +44,7 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin
 
   @Override
   public AnalyzerFileFilter getFilter() {
-    return new AnalyzerFileFilter() {
-      @Override
-      public boolean acceptFilename(String filename) {
-        return filename.endsWith(".java");
-      }
-    };
+    return filename -> filename.endsWith(".java");
   }
 
   private Configuration createDefaultConfiguration() throws CheckstyleException {
@@ -62,7 +57,7 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin
     try {
       fileToAnalyze = createTempFile(fileContent);
       auditListener.reset();
-      checker.process(Arrays.asList(fileToAnalyze));
+      checker.process(Collections.singletonList(fileToAnalyze));
       return auditListener.getMetrics();
     } catch (CheckstyleException | IOException e) {
       throw new AnalyzerException(e);
