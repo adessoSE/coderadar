@@ -12,7 +12,8 @@ public class ServiceLoaderTest {
   public void analyzerIsRegisteredWithServiceLoader() {
     ServiceLoader<SourceCodeFileAnalyzerPlugin> loader =
         ServiceLoader.load(
-            SourceCodeFileAnalyzerPlugin.class, CheckstyleSourceCodeFileAnalyzerPlugin.class.getClassLoader());
+            SourceCodeFileAnalyzerPlugin.class,
+            CheckstyleSourceCodeFileAnalyzerPlugin.class.getClassLoader());
     Iterator<SourceCodeFileAnalyzerPlugin> plugins = loader.iterator();
     SourceCodeFileAnalyzerPlugin plugin = plugins.next();
     Assertions.assertTrue(plugin instanceof CheckstyleSourceCodeFileAnalyzerPlugin);
