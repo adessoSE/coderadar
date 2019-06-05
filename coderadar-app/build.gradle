@@ -85,8 +85,6 @@ dependencies {
     compile "io.fabric8:gitective-core:0.9.10"
     compile "org.apache.commons:commons-lang3:3.4"
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8"
-    compile "io.dropwizard:dropwizard-metrics:1.0.6"
-    compile group: 'io.dropwizard.metrics', name: 'metrics-annotation', version: '3.2.1'
     compile "io.prometheus:simpleclient:0.6.0"
     compile "io.micrometer:micrometer-registry-prometheus:1.1.3"
     

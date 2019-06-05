@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.graph.query;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.core.analyzer.domain.MetricValueDTO;
+import io.reflectoring.coderadar.core.projectadministration.domain.analyzer.MetricValueDTO;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
 import io.reflectoring.coderadar.graph.query.service.GetMetricValuesOfCommitService;
 import java.util.List;

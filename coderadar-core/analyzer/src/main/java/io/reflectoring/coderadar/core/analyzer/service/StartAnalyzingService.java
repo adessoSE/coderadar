@@ -18,24 +18,27 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final StartAnalyzingPort startAnalyzingPort;
   private final GetProjectPort getProjectPort;
   private final AnalyzeCommitService analyzeCommitService;
+  private final CommitMetadataScanner commitMetadataScanner;
 
   @Autowired
   public StartAnalyzingService(
       @Qualifier("StartAnalyzingServiceNeo4j") StartAnalyzingPort startAnalyzingPort,
       GetProjectPort getProjectPort,
-      AnalyzeCommitService analyzeCommitService) {
+      AnalyzeCommitService analyzeCommitService,
+      CommitMetadataScanner commitMetadataScanner) {
     this.startAnalyzingPort = startAnalyzingPort;
     this.getProjectPort = getProjectPort;
     this.analyzeCommitService = analyzeCommitService;
+    this.commitMetadataScanner = commitMetadataScanner;
   }
 
   @Override
-  public void start(StartAnalyzingCommand command) {
-    Optional<Project> project = getProjectPort.get(command.getProjectId());
+  public void start(StartAnalyzingCommand command, Long projectId) {
+    Optional<Project> project = getProjectPort.get(projectId);
     if (!project.isPresent()) {
-      throw new ProjectNotFoundException(command.getProjectId());
+      throw new ProjectNotFoundException(projectId);
     }
-
+    commitMetadataScanner.scan(project.get());
     List<Commit> commitsToBeAnalyzed = project.get().getCommits();
     for (Commit commit : commitsToBeAnalyzed) {
       if (!commit.isAnalyzed()) {

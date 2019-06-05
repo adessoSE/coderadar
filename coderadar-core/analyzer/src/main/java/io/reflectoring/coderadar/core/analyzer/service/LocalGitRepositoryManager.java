@@ -14,22 +14,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class LocalGitRepositoryManager {
 
-  private UpdateRepositoryService updateRepositoryService;
+  private final UpdateRepositoryService updateRepositoryService;
 
-  private CloneRepositoryService cloneRepositoryService;
+  private final CloneRepositoryService cloneRepositoryService;
 
-  private CheckRepositoryService checkRepositoryService;
+  private final CheckRepositoryService checkRepositoryService;
 
-  private WorkdirManager workdirManager;
+  private final WorkdirManager workdirManager;
 
   @Autowired
   public LocalGitRepositoryManager(
       UpdateRepositoryService updateRepositoryService,
       CloneRepositoryService cloneRepositoryService,
-      CheckRepositoryService checkRepositoryService) {
+      CheckRepositoryService checkRepositoryService,
+      WorkdirManager workdirManager) {
     this.updateRepositoryService = updateRepositoryService;
     this.cloneRepositoryService = cloneRepositoryService;
     this.checkRepositoryService = checkRepositoryService;
+    this.workdirManager = workdirManager;
   }
 
   public Git getLocalGitRepository(long projectId) {

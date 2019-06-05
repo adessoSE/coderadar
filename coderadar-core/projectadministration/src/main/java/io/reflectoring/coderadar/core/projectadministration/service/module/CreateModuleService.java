@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.project.GetProjectPort;
+import io.reflectoring.coderadar.core.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.core.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import java.util.Optional;
@@ -15,13 +16,17 @@ import org.springframework.stereotype.Service;
 @Service("CreateModuleService")
 public class CreateModuleService implements CreateModuleUseCase {
   private final GetProjectPort getProjectPort;
+  private final UpdateProjectPort updateProjectPort;
+
   private final CreateModulePort createModulePort;
 
   @Autowired
   public CreateModuleService(
       @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort,
+      UpdateProjectPort updateProjectPort,
       @Qualifier("CreateModuleServiceNeo4j") CreateModulePort createModulePort) {
     this.getProjectPort = getProjectPort;
+    this.updateProjectPort = updateProjectPort;
     this.createModulePort = createModulePort;
   }
 
@@ -34,6 +39,8 @@ public class CreateModuleService implements CreateModuleUseCase {
 
     if (project.isPresent()) {
       module.setProject(project.get());
+      project.get().getModules().add(module);
+      updateProjectPort.update(project.get());
     } else {
       throw new ProjectNotFoundException(projectId);
     }

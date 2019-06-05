@@ -7,7 +7,13 @@ import org.springframework.stereotype.Service;
 
 @Service("ListAnalyzerService")
 public class ListAnalyzerService implements ListAnalyzerUseCase {
-  @Autowired private AnalyzerPluginService analyzerPluginService;
+
+  private AnalyzerPluginService analyzerPluginService;
+
+  @Autowired
+  public ListAnalyzerService(AnalyzerPluginService analyzerPluginService) {
+    this.analyzerPluginService = analyzerPluginService;
+  }
 
   @Override
   public List<String> listAvailableAnalyzers() {

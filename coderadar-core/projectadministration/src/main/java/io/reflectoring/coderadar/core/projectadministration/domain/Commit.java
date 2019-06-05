@@ -20,9 +20,11 @@ public class Commit {
   private Integer sequenceNumber;
   private String firstParent;
 
-  @Relationship(direction = Relationship.INCOMING) private Project project;
+  @Relationship(direction = Relationship.INCOMING, type = "HAS")
+  private Project project;
 
-  @Relationship private List<CommitToFileAssociation> touchedFiles;
+  @Relationship(value = "HAS_CHANGED")
+  private List<CommitToFileAssociation> touchedFiles;
 
   public void setComment(String comment) {
     if (comment.length() > 255) {

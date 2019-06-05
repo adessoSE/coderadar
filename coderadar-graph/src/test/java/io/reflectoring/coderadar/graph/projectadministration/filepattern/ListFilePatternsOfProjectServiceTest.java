@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("List file patterns of project")
 class ListFilePatternsOfProjectServiceTest {
+
   private ListFilePatternsOfProjectRepository listFilePatternsOfProjectRepository =
       mock(ListFilePatternsOfProjectRepository.class);
 

@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.rest.query;
 
+import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.core.query.port.driver.GetAvailableMetricsInProjectUseCase;
-import java.util.List;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,12 @@ public class GetAvailableMetricsInProjectController {
   }
 
   @GetMapping(path = "/projects/{projectId}/metrics")
-  public ResponseEntity<List<String>> getMetrics(@PathVariable("projectId") Long projectId) {
-    return new ResponseEntity<>(getAvailableMetricsInProjectUseCase.get(projectId), HttpStatus.OK);
+  public ResponseEntity getMetrics(@PathVariable("projectId") Long projectId) {
+    try {
+      return new ResponseEntity<>(
+          getAvailableMetricsInProjectUseCase.get(projectId), HttpStatus.OK);
+    } catch (ProjectNotFoundException e) {
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
+    }
   }
 }

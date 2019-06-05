@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.core.query.service;
 
-import io.reflectoring.coderadar.core.analyzer.domain.MetricValueDTO;
 import io.reflectoring.coderadar.core.projectadministration.domain.Commit;
+import io.reflectoring.coderadar.core.projectadministration.domain.analyzer.MetricValueDTO;
 import io.reflectoring.coderadar.core.query.port.driven.GetMetricValuesOfCommitPort;
 import io.reflectoring.coderadar.core.query.port.driver.GetMetricValuesOfCommitUseCase;
 import java.util.List;

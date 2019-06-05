@@ -1,17 +1,20 @@
 package io.reflectoring.coderadar.core.projectadministration.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
 /** A coderadar project that defines the source of files that are to be analyzed. */
 @NodeEntity
 @Data
-@EqualsAndHashCode(exclude = {"filePatterns", "modules", "analyzerConfigurations"})
+@EqualsAndHashCode(exclude = {"commits", "filePatterns", "modules", "analyzerConfigurations"})
+@ToString(exclude = {"commits", "filePatterns", "modules", "analyzerConfigurations"})
 public class Project {
   private Long id;
   private String name;
@@ -32,11 +35,11 @@ public class Project {
   private List<FilePattern> filePatterns;
 
   @Relationship(type = "HAS")
-  private List<AnalyzerConfiguration> analyzerConfigurations;
+  private List<AnalyzerConfiguration> analyzerConfigurations = new ArrayList<>();
 
   @Relationship(type = "HAS")
   private AnalyzingJob analyzingJob;
 
   @Relationship(type = "HAS")
-  private List<Commit> commits;
+  private List<Commit> commits = new ArrayList<>();
 }

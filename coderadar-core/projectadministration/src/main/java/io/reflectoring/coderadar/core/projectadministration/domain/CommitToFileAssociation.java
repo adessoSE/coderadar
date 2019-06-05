@@ -19,6 +19,8 @@ public class CommitToFileAssociation {
   private Long id;
   private ChangeType changeType;
 
+  private String oldPath;
+
   @StartNode private Commit commit;
 
   @EndNode private File file;

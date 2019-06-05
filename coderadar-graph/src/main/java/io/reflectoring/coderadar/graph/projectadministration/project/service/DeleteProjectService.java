@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 @Service("DeleteProjectServiceNeo4j")
 public class DeleteProjectService implements DeleteProjectPort {
   private final DeleteProjectRepository deleteProjectRepository;
+  // TODO Delete everything associated as well
 
   @Autowired
   public DeleteProjectService(DeleteProjectRepository deleteProjectRepository) {

@@ -29,9 +29,14 @@ public class GetCommitsInProjectService implements GetCommitsInProjectPort {
     Optional<Project> persistedProject = getProjectRepository.findById(projectId);
 
     if (persistedProject.isPresent()) {
-      return null;
+      return getCommitsInProjectRepository.findByProjectId(projectId);
     } else {
       throw new ProjectNotFoundException(projectId);
     }
+  }
+
+  @Override
+  public Commit findTop1ByProjectIdOrderBySequenceNumberDesc(Long id) {
+    return getCommitsInProjectRepository.findTop1ByProjectIdOrderBySequenceNumberDesc(id);
   }
 }

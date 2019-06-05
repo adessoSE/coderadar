@@ -1,11 +1,15 @@
 package io.reflectoring.coderadar.core.analyzer.port.driver;
 
 import java.util.Date;
-import lombok.Value;
+import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class StartAnalyzingCommand {
-  private Long projectId;
   private Date from;
-  private Boolean rescan;
+  @NotNull private Boolean rescan;
 }

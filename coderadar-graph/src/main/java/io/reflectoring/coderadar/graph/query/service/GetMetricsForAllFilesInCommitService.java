@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph.query.service;
 
-import io.reflectoring.coderadar.core.analyzer.domain.GroupedMetricValueDTO;
+import io.reflectoring.coderadar.core.projectadministration.domain.analyzer.GroupedMetricValueDTO;
 import io.reflectoring.coderadar.core.query.port.driven.GetMetricsForAllFilesInCommitPort;
 import io.reflectoring.coderadar.core.query.port.driver.GetMetricsForAllFilesInCommitCommand;
 import java.util.LinkedList;

@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.core.analyzer.service;
 
-import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.core.analyzer.port.driver.AnalyzeCommitUseCase;
 import io.reflectoring.coderadar.core.projectadministration.domain.*;
+import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzer.SaveMetricPort;
 import io.reflectoring.coderadar.core.vcs.port.driver.walk.findCommit.FindGitCommitCommand;
 import io.reflectoring.coderadar.core.vcs.service.FindCommitService;
@@ -34,11 +34,12 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
 
   @Autowired
   public AnalyzeCommitService(
-          AnalyzerPluginService analyzerPluginService,
-          FindCommitService findCommitService,
-          AnalyzeFileService analyzeFileService,
-          SaveCommitPort saveCommitPort,
-          SaveMetricPort saveMetricPort, LocalGitRepositoryManager gitRepoManager) {
+      AnalyzerPluginService analyzerPluginService,
+      FindCommitService findCommitService,
+      AnalyzeFileService analyzeFileService,
+      SaveCommitPort saveCommitPort,
+      SaveMetricPort saveMetricPort,
+      LocalGitRepositoryManager gitRepoManager) {
     this.analyzerPluginService = analyzerPluginService;
     this.findCommitService = findCommitService;
     this.analyzeFileService = analyzeFileService;
@@ -92,9 +93,11 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
 
   private void storeMetrics(File file, FileMetrics fileMetrics) {
     for (Metric metric : fileMetrics.getMetrics()) {
-      List<io.reflectoring.coderadar.core.projectadministration.domain.Finding> findings = new ArrayList<>();
+      List<io.reflectoring.coderadar.core.projectadministration.domain.Finding> findings =
+          new ArrayList<>();
       for (Finding finding : fileMetrics.getFindings(metric)) {
-        io.reflectoring.coderadar.core.projectadministration.domain.Finding entity = new io.reflectoring.coderadar.core.projectadministration.domain.Finding();
+        io.reflectoring.coderadar.core.projectadministration.domain.Finding entity =
+            new io.reflectoring.coderadar.core.projectadministration.domain.Finding();
 
         entity.setLineStart(finding.getLineStart());
         entity.setLineEnd(finding.getLineEnd());
@@ -103,10 +106,13 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
 
         findings.add(entity);
       }
-      MetricValue metricValue = new MetricValue(null, file, new
-              io.reflectoring.coderadar.core.
-                      projectadministration.domain.
-                      Metric(null, metric.getId(), findings), fileMetrics.getMetricCount(metric));
+      MetricValue metricValue =
+          new MetricValue(
+              null,
+              file,
+              new io.reflectoring.coderadar.core.projectadministration.domain.Metric(
+                  null, metric.getId(), findings),
+              fileMetrics.getMetricCount(metric));
 
       saveMetricPort.saveMetricValue(metricValue);
     }

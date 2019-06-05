@@ -14,7 +14,7 @@ public class AnalyzerConfiguration {
   private String analyzerName;
   private Boolean enabled;
 
-  @Relationship(direction = INCOMING)
+  @Relationship(direction = INCOMING, type = "HAS")
   private Project project;
 
   @Relationship("CONTENT_FROM")

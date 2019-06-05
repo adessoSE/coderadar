@@ -5,4 +5,6 @@ import java.util.List;
 
 public interface GetCommitsInProjectPort {
   List<Commit> get(Long projectId);
+
+  Commit findTop1ByProjectIdOrderBySequenceNumberDesc(Long id);
 }

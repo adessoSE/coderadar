@@ -30,6 +30,7 @@ public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {
       getCommitResponse.setAuthor(commit.getAuthor());
       getCommitResponse.setTimestamp(commit.getTimestamp().toString());
       getCommitResponse.setAnalyzed(commit.isAnalyzed());
+      response.add(getCommitResponse);
     }
     return response;
   }

@@ -16,6 +16,6 @@ public class Module {
   private Long id;
   private String path;
 
-  @Relationship(direction = INCOMING)
+  @Relationship(direction = INCOMING, type = "HAS")
   private Project project;
 }

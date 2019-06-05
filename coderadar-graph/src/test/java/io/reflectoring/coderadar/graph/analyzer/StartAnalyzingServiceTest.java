@@ -35,7 +35,7 @@ class StartAnalyzingServiceTest {
   void shouldThrowExceptionWhenAProjectWithThePassingIdDoesntExists() {
     Assertions.assertThrows(
         ProjectNotFoundException.class,
-        () -> startAnalyzingService.start(new StartAnalyzingCommand(1L, new Date(), true)));
+        () -> startAnalyzingService.start(new StartAnalyzingCommand(new Date(), true), 1L));
   }
 
   @Test
@@ -53,8 +53,8 @@ class StartAnalyzingServiceTest {
     when(startAnalyzingRepository.save(any(AnalyzingJob.class))).thenReturn(mockItem);
     when(getProjectRepository.findById(anyLong())).thenReturn(java.util.Optional.of(mockProject));
 
-    StartAnalyzingCommand item = new StartAnalyzingCommand(1L, mockDate, true);
-    Long idFromItem = startAnalyzingService.start(item);
+    StartAnalyzingCommand item = new StartAnalyzingCommand(mockDate, true);
+    Long idFromItem = startAnalyzingService.start(item, 1L);
 
     verify(getProjectRepository, times(1)).findById(1L);
     verify(startAnalyzingRepository, times(1)).save(any(AnalyzingJob.class));

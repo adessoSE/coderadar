@@ -41,7 +41,7 @@ class GetAvailableMetricsInProjectServiceTest {
     assertThat(thrown)
         .isInstanceOf(ProjectNotFoundException.class)
         .hasNoCause()
-        .hasMessage("A project with the ID '1' doesn't exists.");
+        .hasMessage("Project with id 1 not found.");
   }
 
   @Test

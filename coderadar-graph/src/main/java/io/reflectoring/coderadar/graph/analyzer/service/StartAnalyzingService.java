@@ -25,19 +25,19 @@ public class StartAnalyzingService implements StartAnalyzingPort {
   }
 
   @Override
-  public Long start(StartAnalyzingCommand command) {
+  public Long start(StartAnalyzingCommand command, Long projectId) {
     AnalyzingJob analyzingJob = new AnalyzingJob();
     analyzingJob.setRescan(command.getRescan());
     analyzingJob.setFrom(command.getFrom());
     analyzingJob.setActive(true);
 
-    Optional<Project> persistedProject = getProjectRepository.findById(command.getProjectId());
+    Optional<Project> persistedProject = getProjectRepository.findById(projectId);
 
     if (persistedProject.isPresent()) {
       analyzingJob.setProject(persistedProject.get());
       return startAnalyzingRepository.save(analyzingJob).getId();
     } else {
-      throw new ProjectNotFoundException("Can't analyze a non-existing project.");
+      throw new ProjectNotFoundException(projectId);
     }
   }
 }

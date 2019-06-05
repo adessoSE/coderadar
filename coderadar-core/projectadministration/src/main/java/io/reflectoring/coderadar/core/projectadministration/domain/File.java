@@ -14,5 +14,6 @@ public class File {
 
   @Relationship private List<MetricValue> metricValues;
 
-  @Relationship(type = "HAS_RENAMED") private File hasRenamed;
+  @Relationship(type = "HAS_RENAMED")
+  private File hasRenamed;
 }

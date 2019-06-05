@@ -15,6 +15,6 @@ public class AnalyzingJob {
   private boolean active;
   private boolean rescan;
 
-  @Relationship(direction = INCOMING)
+  @Relationship(direction = INCOMING, type = "HAS")
   private Project project;
 }

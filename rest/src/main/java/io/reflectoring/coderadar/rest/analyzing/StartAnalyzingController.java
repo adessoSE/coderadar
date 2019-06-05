@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -19,7 +20,9 @@ public class StartAnalyzingController {
 
   @PostMapping(path = "projects/{projectId}/analyze")
   public void startAnalyze(
-      @PathVariable("projectId") Long projectId, @Validated StartAnalyzingCommand command) {
-    startAnalyzingUseCase.start(command);
+      @PathVariable("projectId") Long projectId,
+      @Validated @RequestBody StartAnalyzingCommand command) {
+
+    startAnalyzingUseCase.start(command, projectId);
   }
 }

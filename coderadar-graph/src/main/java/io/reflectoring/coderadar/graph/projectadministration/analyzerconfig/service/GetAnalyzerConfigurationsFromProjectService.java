@@ -23,6 +23,7 @@ public class GetAnalyzerConfigurationsFromProjectService
       GetProjectRepository getProjectRepository,
       GetAnalyzerConfigurationsFromProjectRepository
           getAnalyzerConfigurationsFromProjectRepository) {
+
     this.getProjectRepository = getProjectRepository;
     this.getAnalyzerConfigurationsFromProjectRepository =
         getAnalyzerConfigurationsFromProjectRepository;
