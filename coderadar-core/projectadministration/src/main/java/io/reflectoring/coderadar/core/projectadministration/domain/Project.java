@@ -32,7 +32,7 @@ public class Project {
   private List<Module> modules = new LinkedList<>();
 
   @Relationship(type = "HAS")
-  private List<FilePattern> filePatterns;
+  private List<FilePattern> filePatterns = new ArrayList<>();
 
   @Relationship(type = "HAS")
   private List<AnalyzerConfiguration> analyzerConfigurations = new ArrayList<>();

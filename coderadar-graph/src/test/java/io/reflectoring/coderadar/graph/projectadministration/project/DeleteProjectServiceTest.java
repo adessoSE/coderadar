@@ -3,8 +3,13 @@ package io.reflectoring.coderadar.graph.projectadministration.project;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.core.projectadministration.domain.Project;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.DeleteAnalyzerConfigurationRepository;
+import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.DeleteFilePatternRepository;
+import io.reflectoring.coderadar.graph.projectadministration.module.repository.DeleteModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.DeleteProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.service.DeleteProjectService;
+import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,11 +17,19 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Delete project")
 class DeleteProjectServiceTest {
   private DeleteProjectRepository deleteProjectRepository = mock(DeleteProjectRepository.class);
+  private DeleteModuleRepository deleteModuleRepository = mock(DeleteModuleRepository.class);
+  private DeleteFilePatternRepository deleteFilePatternRepository =
+      mock(DeleteFilePatternRepository.class);
+  private DeleteAnalyzerConfigurationRepository deleteAnalyzerConfigurationRepository =
+      mock(DeleteAnalyzerConfigurationRepository.class);
+  private GetCommitsInProjectRepository getCommitsInProjectRepository =
+      mock(GetCommitsInProjectRepository.class);
 
   private DeleteProjectService deleteProjectService;
 
   @BeforeEach
   void setUp() {
+    when(deleteProjectRepository.findById(anyLong())).thenReturn(Optional.of(new Project()));
     deleteProjectService =
         new DeleteProjectService(
             deleteProjectRepository,
