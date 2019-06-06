@@ -47,7 +47,9 @@ class GetAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate 
                       GetAnalyzerConfigurationResponse.class);
               Assertions.assertEquals("analyzer", response.getAnalyzerName());
               Assertions.assertTrue(response.getEnabled());
-            });
+            })
+            .andDo(document("analyzerConfiguration/getSingle"));
+
   }
 
   @Test
@@ -57,6 +59,8 @@ class GetAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate 
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
-                .value("AnalyzerConfiguration with id 2 not found."));
+                .value("AnalyzerConfiguration with id 2 not found."))
+            .andDo(document("analyzerConfiguration/update"));
+
   }
 }

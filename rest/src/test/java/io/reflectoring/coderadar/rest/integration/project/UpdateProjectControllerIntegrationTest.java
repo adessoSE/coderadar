@@ -54,7 +54,8 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
               Assertions.assertEquals("password", project.getVcsPassword());
               Assertions.assertEquals("http://valid.url", project.getVcsUrl());
               Assertions.assertTrue(project.isVcsOnline());
-            });
+            })
+            .andDo(document("projects/update"));
   }
 
   @Test

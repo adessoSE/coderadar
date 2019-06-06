@@ -59,7 +59,8 @@ class ListAnalyzerConfigsFromProjectControllerIntegrationTest extends Controller
                       result.getResponse().getContentAsString(),
                       GetAnalyzerConfigurationResponse[].class);
               Assertions.assertEquals(2, configurationResponses.length);
-            });
+            })
+            .andDo(document("analyzerConfiguration/get"));
   }
 
   @Test

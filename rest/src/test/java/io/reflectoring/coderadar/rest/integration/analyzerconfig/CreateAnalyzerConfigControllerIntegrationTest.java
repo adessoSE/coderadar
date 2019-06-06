@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.integration.analyzerconfig;
 
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
@@ -28,6 +29,8 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
 
+      ConstrainedFields<CreateAnalyzerConfigurationCommand> fields = fields(CreateAnalyzerConfigurationCommand.class);
+
     CreateAnalyzerConfigurationCommand command =
         new CreateAnalyzerConfigurationCommand("analyzer", true);
     mvc()
@@ -45,7 +48,20 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
                   createAnalyzerConfigurationRepository.findById(id).get();
               Assertions.assertEquals("analyzer", analyzerConfiguration.getAnalyzerName());
               Assertions.assertTrue(analyzerConfiguration.getEnabled());
-            });
+            })
+            .andDo(
+                    document(
+                            "analyzerConfiguration/post",
+                            requestFields(
+                                    fields
+                                            .withPath("analyzerName")
+                                            .description(
+                                                    "Name of the analyzer plugin to which the AnalyzerConfiguration is applied. This should always be the fully qualified class name of the class that implements the plugin interface."),
+                                    fields
+                                            .withPath("enabled")
+                                            .description(
+                                                    "Set to TRUE if you want the analyzer plugin to be enabled and to FALSE if not. You have to specify each analyzer plugin you want to have enabled. If a project does not have a configuration for a certain plugin, that plugin is NOT enabled by default."))));
+
   }
 
   @Test

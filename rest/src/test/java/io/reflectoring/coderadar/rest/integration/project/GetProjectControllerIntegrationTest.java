@@ -40,7 +40,8 @@ class GetProjectControllerIntegrationTest extends ControllerTestTemplate {
               GetProjectResponse response =
                   fromJson(result.getResponse().getContentAsString(), GetProjectResponse.class);
               Assertions.assertEquals("project", response.getName());
-            });
+            })
+            .andDo(document("projects/get"));
   }
 
   @Test

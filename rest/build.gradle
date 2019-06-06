@@ -1,4 +1,12 @@
+import java.text.SimpleDateFormat
+
 apply plugin: "com.diffplug.gradle.spotless"
+apply plugin: "org.asciidoctor.convert"
+apply plugin: "org.ajoberstar.git-publish"
+
+ext {
+    snippetsDir = file("build/generated-snippets")
+}
 
 dependencies {
     testCompile 'org.neo4j:neo4j:3.1.9'
@@ -15,8 +23,41 @@ dependencies {
     testCompile "org.springframework.restdocs:spring-restdocs-core:${version_spring_restdocs}"
 }
 
-spotless {
-    java {
-        googleJavaFormat()
+asciidoctor {
+    attributes "snippets": snippetsDir,
+            "version": version,
+            "date": new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
+            "stylesheet": "themes/riak.css"
+    inputs.dir snippetsDir
+    dependsOn test
+    sourceDir "src/main/asciidoc"
+    outputDir "build/docs"
+}
+
+gitPublish {
+    repoUri = "https://github.com/reflectoring/coderadar.git"
+    branch = "gh-pages"
+    contents {
+        from "build/pages"
+        into "current/docs"
+    }
+    commitMessage = "automatically updated docs"
+}
+
+task preparePages() {
+    doLast {
+        copy {
+            from "build/docs/html5"
+            into "build/pages"
+        }
     }
 }
+
+jar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}/html5") {
+        into "static/docs"
+    }
+}
+
+preparePages.dependsOn asciidoctor

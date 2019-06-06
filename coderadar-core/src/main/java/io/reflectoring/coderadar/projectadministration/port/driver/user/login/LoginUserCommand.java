@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.projectadministration.port.driver.user.login;
 
-import io.reflectoring.coderadar.projectadministration.port.driver.user.ValidPassword;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +14,6 @@ public class LoginUserCommand {
 
   @NotBlank
   @Length(min = 8, max = 64)
-  @ValidPassword
+  // @ValidPassword
   private String password;
 }

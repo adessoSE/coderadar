@@ -28,7 +28,8 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
         .andDo(
             result -> {
               Assertions.assertFalse(createProjectRepository.findById(id).isPresent());
-            });
+            })
+            .andDo(document("projects/delete"));
   }
 
   @Test

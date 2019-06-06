@@ -36,7 +36,8 @@ class DeleteModuleControllerIntegrationTest extends ControllerTestTemplate {
         .perform(delete("/projects/" + testProject.getId() + "/modules/" + module.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(result -> Assertions.assertFalse(createModuleRepository.findById(id).isPresent()));
+        .andDo(result -> Assertions.assertFalse(createModuleRepository.findById(id).isPresent()))
+            .andDo(document("modules/delete"));
   }
 
   @Test

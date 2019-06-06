@@ -43,7 +43,9 @@ class GetModuleControllerIntegrationTest extends ControllerTestTemplate {
               GetModuleResponse response =
                   fromJson(result.getResponse().getContentAsString(), GetModuleResponse.class);
               Assertions.assertEquals("test-module", response.getPath());
-            });
+            })
+            .andDo(document("modules/get"));
+
   }
 
   @Test

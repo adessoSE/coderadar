@@ -39,13 +39,14 @@ public class LoginUserService implements LoginUserUseCase {
 
   @Override
   public LoginUserResponse login(LoginUserCommand command) {
-    Authentication authentication =
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(command.getUsername(), command.getPassword()));
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-
     Optional<User> user = loadUserPort.loadUserByUsername(command.getUsername());
     if (user.isPresent()) {
+      Authentication authentication =
+          authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(
+                  command.getUsername(), command.getPassword()));
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+
       String accessToken =
           tokenService.generateAccessToken(user.get().getId(), user.get().getUsername());
       String refreshToken =

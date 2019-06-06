@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.integration.user;
 
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RefreshTokenRepository;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
@@ -45,7 +47,8 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
             post("/user/password/change")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk());
+        .andExpect(MockMvcResultMatchers.status().isOk())
+            .andDo(documentPasswordChange());
 
     Assertions.assertTrue(
         new BCryptPasswordEncoder()
@@ -80,5 +83,16 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
             .matches(
                 "password1",
                 registerUserRepository.findById(testUser.getId()).get().getPassword()));
+  }
+
+  private ResultHandler documentPasswordChange() {
+    ConstrainedFields fields = fields(ChangePasswordCommand.class);
+    return document(
+            "user/password/change",
+            requestFields(
+                    fields.withPath("refreshToken").description("the current refresh token of the user"),
+                    fields
+                            .withCustomPath("newPassword")
+                            .description("The password of the user as plaintext")));
   }
 }

@@ -56,6 +56,7 @@ class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
               GetProjectResponse[] responses =
                   fromJson(result.getResponse().getContentAsString(), GetProjectResponse[].class);
               Assertions.assertEquals(2, responses.length);
-            });
+            })
+            .andDo(document("projects/list"));
   }
 }

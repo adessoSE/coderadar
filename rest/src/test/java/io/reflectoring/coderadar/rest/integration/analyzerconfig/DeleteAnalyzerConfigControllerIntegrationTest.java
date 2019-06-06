@@ -50,6 +50,8 @@ class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
-                .value("AnalyzerConfiguration with id 2 not found."));
+                .value("AnalyzerConfiguration with id 2 not found."))
+            .andDo(document("analyzerConfiguration/delete"));
+
   }
 }

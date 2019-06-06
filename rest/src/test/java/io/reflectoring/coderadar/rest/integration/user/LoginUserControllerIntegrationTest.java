@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.integration.user;
 
 import static org.hamcrest.Matchers.any;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
@@ -11,6 +12,8 @@ import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
@@ -30,12 +33,13 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
             post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("accessToken").value(any(String.class)))
-        .andExpect(MockMvcResultMatchers.jsonPath("refreshToken").value(any(String.class)));
+        .andExpect(MockMvcResultMatchers.jsonPath("refreshToken").value(any(String.class)))
+            .andDo(documentLogin());
   }
 
   @Test
   void loginUserReturnsErrorWhenRequestIsInvalid() throws Exception {
-    LoginUserCommand command = new LoginUserCommand("username", "password");
+    LoginUserCommand command = new LoginUserCommand("username", "pass");
     mvc()
         .perform(
             post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
@@ -48,7 +52,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(
             post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 
   @Test
@@ -65,5 +69,14 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
             post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.jsonPath("errorMessage").value("Bad credentials"))
         .andExpect(MockMvcResultMatchers.status().isForbidden());
+  }
+
+  private ResultHandler documentLogin() {
+    ConstrainedFields fields = fields(LoginUserCommand.class);
+    return document(
+            "user/auth",
+            requestFields(
+                    fields.withPath("username").description("The name of the user to be logged in."),
+                    fields.withPath("password").description("The password of the user as plaintext")));
   }
 }
