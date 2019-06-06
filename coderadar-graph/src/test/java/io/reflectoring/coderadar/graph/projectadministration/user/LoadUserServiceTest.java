@@ -3,9 +3,9 @@ package io.reflectoring.coderadar.graph.projectadministration.user;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.User;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.LoadUserRepository;
 import io.reflectoring.coderadar.graph.projectadministration.user.service.LoadUserService;
+import io.reflectoring.coderadar.projectadministration.domain.User;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

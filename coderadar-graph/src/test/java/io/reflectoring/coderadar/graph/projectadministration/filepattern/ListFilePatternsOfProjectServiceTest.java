@@ -2,9 +2,9 @@ package io.reflectoring.coderadar.graph.projectadministration.filepattern;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.ListFilePatternsOfProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.service.ListFilePatternsOfProjectService;
+import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

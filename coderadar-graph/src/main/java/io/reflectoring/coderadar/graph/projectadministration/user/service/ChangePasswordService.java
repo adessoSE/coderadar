@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.user.service;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.User;
-import io.reflectoring.coderadar.core.projectadministration.port.driven.user.ChangePasswordPort;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.ChangePasswordRepository;
+import io.reflectoring.coderadar.projectadministration.domain.User;
+import io.reflectoring.coderadar.projectadministration.port.driven.user.ChangePasswordPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

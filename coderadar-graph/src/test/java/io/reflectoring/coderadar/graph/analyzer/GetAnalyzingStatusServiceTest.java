@@ -3,8 +3,8 @@ package io.reflectoring.coderadar.graph.analyzer;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import io.reflectoring.coderadar.core.analyzer.AnalyzingJobNotStartedException;
-import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzingJob;
+import io.reflectoring.coderadar.analyzer.AnalyzingJobNotStartedException;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzingJob;
 import io.reflectoring.coderadar.graph.analyzer.repository.GetAnalyzingStatusRepository;
 import io.reflectoring.coderadar.graph.analyzer.service.GetAnalyzingStatusService;
 import java.util.Optional;

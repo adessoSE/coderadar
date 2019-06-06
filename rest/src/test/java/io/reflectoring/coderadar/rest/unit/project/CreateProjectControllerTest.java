@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.rest.unit.project;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectUseCase;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.project.CreateProjectController;
 import java.net.MalformedURLException;

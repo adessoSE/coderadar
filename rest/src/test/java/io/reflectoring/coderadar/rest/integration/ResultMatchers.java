@@ -5,7 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.fail;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.reflectoring.coderadar.core.query.domain.ErrorDTO;
+import io.reflectoring.coderadar.query.domain.ErrorDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.web.servlet.ResultMatcher;

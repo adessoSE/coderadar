@@ -7,11 +7,8 @@ dependencies {
 
     compile project(":coderadar-plugins:loc-analyzer-plugin")
     compile project(":coderadar-plugins:checkstyle-analyzer-plugin")
-    compile project(":coderadar-core:projectadministration")
-    compile project(":coderadar-core:query")
-    compile project(":coderadar-core:analyzer")
     compile project(":coderadar-graph")
-    compile project(":coderadar-core:vcs")
+    compile project(":coderadar-core")
 
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.4.RELEASE'
     testCompile "org.springframework.restdocs:spring-restdocs-mockmvc:${version_spring_restdocs}"

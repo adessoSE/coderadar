@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.core.projectadministration.RefreshTokenNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.password.ChangePasswordCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.password.ChangePasswordUseCase;
+import io.reflectoring.coderadar.projectadministration.RefreshTokenNotFoundException;
+import io.reflectoring.coderadar.projectadministration.port.driver.user.password.ChangePasswordCommand;
+import io.reflectoring.coderadar.projectadministration.port.driver.user.password.ChangePasswordUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

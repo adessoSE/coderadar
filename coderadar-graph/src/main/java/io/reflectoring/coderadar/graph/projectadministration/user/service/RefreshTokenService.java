@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.graph.projectadministration.user.service;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.RefreshToken;
-import io.reflectoring.coderadar.core.projectadministration.domain.User;
-import io.reflectoring.coderadar.core.projectadministration.port.driven.user.RefreshTokenPort;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RefreshTokenRepository;
+import io.reflectoring.coderadar.projectadministration.domain.RefreshToken;
+import io.reflectoring.coderadar.projectadministration.domain.User;
+import io.reflectoring.coderadar.projectadministration.port.driven.user.RefreshTokenPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

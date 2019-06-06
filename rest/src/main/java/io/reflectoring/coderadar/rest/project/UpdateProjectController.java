@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.rest.project;
 
-import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.ProjectStillExistsException;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectUseCase;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.projectadministration.ProjectStillExistsException;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import java.net.MalformedURLException;
 import org.springframework.beans.factory.annotation.Autowired;

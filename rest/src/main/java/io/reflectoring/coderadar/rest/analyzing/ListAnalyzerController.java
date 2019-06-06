@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.analyzing;
 
-import io.reflectoring.coderadar.core.analyzer.port.driver.ListAnalyzerUseCase;
+import io.reflectoring.coderadar.analyzer.port.driver.ListAnalyzerUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

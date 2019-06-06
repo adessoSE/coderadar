@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.analyzing;
 
-import io.reflectoring.coderadar.core.analyzer.port.driver.StartAnalyzingCommand;
-import io.reflectoring.coderadar.core.analyzer.port.driver.StartAnalyzingUseCase;
-import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
+import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

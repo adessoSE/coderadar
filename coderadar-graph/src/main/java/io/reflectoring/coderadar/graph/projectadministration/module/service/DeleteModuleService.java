@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.graph.projectadministration.module.service;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.Module;
-import io.reflectoring.coderadar.core.projectadministration.port.driven.module.DeleteModulePort;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.DeleteModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.DeleteProjectRepository;
+import io.reflectoring.coderadar.projectadministration.domain.Module;
+import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,12 +1,12 @@
 package io.reflectoring.coderadar.graph.analyzer.service;
 
-import io.reflectoring.coderadar.core.analyzer.port.driven.StartAnalyzingPort;
-import io.reflectoring.coderadar.core.analyzer.port.driver.StartAnalyzingCommand;
-import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzingJob;
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzingJob;
+import io.reflectoring.coderadar.analyzer.port.driven.StartAnalyzingPort;
+import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.graph.analyzer.repository.StartAnalyzingRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.projectadministration.domain.Project;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

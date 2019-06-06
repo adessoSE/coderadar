@@ -3,9 +3,9 @@ package io.reflectoring.coderadar.graph.projectadministration.module;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.Module;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.GetModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.service.GetModuleService;
+import io.reflectoring.coderadar.projectadministration.domain.Module;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

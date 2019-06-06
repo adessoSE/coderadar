@@ -2,9 +2,9 @@ package io.reflectoring.coderadar.rest.unit.user;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserResponse;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserUseCase;
+import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserCommand;
+import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserResponse;
+import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserUseCase;
 import io.reflectoring.coderadar.rest.user.LoginUserController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

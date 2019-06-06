@@ -2,10 +2,10 @@ package io.reflectoring.coderadar.graph.query;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.analyzer.GroupedMetricValueDTO;
-import io.reflectoring.coderadar.core.query.port.driver.GetMetricsForAllFilesInCommitCommand;
+import io.reflectoring.coderadar.analyzer.domain.GroupedMetricValueDTO;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricsForAllFilesInCommitRepository;
 import io.reflectoring.coderadar.graph.query.service.GetMetricsForAllFilesInCommitService;
+import io.reflectoring.coderadar.query.port.driver.GetMetricsForAllFilesInCommitCommand;
 import java.util.LinkedList;
 import java.util.List;
 import org.assertj.core.api.Assertions;

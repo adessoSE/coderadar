@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph.analyzer.repository;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzingJob;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzingJob;
 import java.util.Optional;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;

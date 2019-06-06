@@ -2,11 +2,11 @@ package io.reflectoring.coderadar.graph.query;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.core.query.domain.Interval;
-import io.reflectoring.coderadar.core.query.domain.Series;
-import io.reflectoring.coderadar.core.query.port.driver.GetHistoryOfMetricCommand;
 import io.reflectoring.coderadar.graph.query.repository.GetHistoryOfMetricRepository;
 import io.reflectoring.coderadar.graph.query.service.GetHistoryOfMetricService;
+import io.reflectoring.coderadar.query.domain.Interval;
+import io.reflectoring.coderadar.query.domain.Series;
+import io.reflectoring.coderadar.query.port.driver.GetHistoryOfMetricCommand;
 import java.util.Date;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

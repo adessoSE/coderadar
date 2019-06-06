@@ -7,10 +7,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GetAvailableMetricsInProjectRepository extends Neo4jRepository {
-  // TODO: Add query to find a available metrics in specific project.
+  // TODO: Probably doesn't work because metricValues is a relationship and not an attribute
   @Query(
-    value =
-        "MATCH (c:Commit) WHERE ID(c.Project) = {projectId} RETURN c.touchedFiles.file.metricValues"
-  )
+      "MATCH (p:Project)-[:HAS]->(c:Commit)-[:HAS_CHANGED]->(a:CommitToFileAssociation) WHERE ID(p) = {0} RETURN a.file.metricValues")
   List<String> getAvailableMetricsInProject(long projectId);
 }

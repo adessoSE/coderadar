@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.graph.query.service;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.analyzer.MetricValueDTO;
-import io.reflectoring.coderadar.core.query.port.driven.GetMetricValuesOfCommitPort;
+import io.reflectoring.coderadar.analyzer.domain.MetricValueDTO;
+import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfCommitPort;
 import java.util.LinkedList;
 import java.util.List;
 import org.springframework.stereotype.Service;

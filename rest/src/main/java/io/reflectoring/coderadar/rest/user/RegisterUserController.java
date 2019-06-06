@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.core.projectadministration.UsernameAlreadyInUseException;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.register.RegisterUserCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.register.RegisterUserUseCase;
+import io.reflectoring.coderadar.projectadministration.UsernameAlreadyInUseException;
+import io.reflectoring.coderadar.projectadministration.port.driver.user.register.RegisterUserCommand;
+import io.reflectoring.coderadar.projectadministration.port.driver.user.register.RegisterUserUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.IdResponse;
 import org.springframework.beans.factory.annotation.Autowired;

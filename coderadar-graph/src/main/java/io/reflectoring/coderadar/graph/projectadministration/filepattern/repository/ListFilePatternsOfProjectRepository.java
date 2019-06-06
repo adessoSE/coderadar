@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.filepattern.repository;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
+import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;

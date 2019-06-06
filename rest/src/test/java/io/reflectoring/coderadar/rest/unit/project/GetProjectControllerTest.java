@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.rest.unit.project;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectUseCase;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectUseCase;
 import io.reflectoring.coderadar.rest.project.GetProjectController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

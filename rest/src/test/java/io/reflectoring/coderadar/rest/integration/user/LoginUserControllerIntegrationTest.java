@@ -3,10 +3,10 @@ package io.reflectoring.coderadar.rest.integration.user;
 import static org.hamcrest.Matchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.User;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserCommand;
-import io.reflectoring.coderadar.core.projectadministration.service.user.security.PasswordUtil;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
+import io.reflectoring.coderadar.projectadministration.domain.User;
+import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserCommand;
+import io.reflectoring.coderadar.projectadministration.service.user.security.PasswordUtil;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

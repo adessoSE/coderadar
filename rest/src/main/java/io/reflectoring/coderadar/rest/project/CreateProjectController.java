@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.project;
 
-import io.reflectoring.coderadar.core.projectadministration.ProjectStillExistsException;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectUseCase;
+import io.reflectoring.coderadar.projectadministration.ProjectStillExistsException;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.IdResponse;
 import java.net.MalformedURLException;

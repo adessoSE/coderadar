@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service;
 
-import io.reflectoring.coderadar.core.projectadministration.AnalyzerConfigurationNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
-import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.GetAnalyzerConfigurationsFromProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.UpdateAnalyzerConfigurationRepository;
+import io.reflectoring.coderadar.projectadministration.AnalyzerConfigurationNotFoundException;
+import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
+import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.analyzer.service;
 
-import io.reflectoring.coderadar.core.analyzer.AnalyzingJobNotStartedException;
-import io.reflectoring.coderadar.core.analyzer.port.driven.GetAnalyzingStatusPort;
-import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzingJob;
+import io.reflectoring.coderadar.analyzer.AnalyzingJobNotStartedException;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzingJob;
+import io.reflectoring.coderadar.analyzer.port.driven.GetAnalyzingStatusPort;
 import io.reflectoring.coderadar.graph.analyzer.repository.GetAnalyzingStatusRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;

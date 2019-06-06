@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.filepattern.service;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
-import io.reflectoring.coderadar.core.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.ListFilePatternsOfProjectRepository;
+import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
+import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

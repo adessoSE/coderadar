@@ -37,7 +37,7 @@ public class Neo4jConfiguration {
   public SessionFactory sessionFactory(org.neo4j.ogm.config.Configuration configuration) {
     return new SessionFactory(
         configuration,
-        "io.reflectoring.coderadar.core.projectadministration.domain",
-        "io.reflectoring.coderadar.core.analyzer.domain");
+        "io.reflectoring.coderadar.projectadministration.domain",
+        "io.reflectoring.coderadar.analyzer.domain");
   }
 }

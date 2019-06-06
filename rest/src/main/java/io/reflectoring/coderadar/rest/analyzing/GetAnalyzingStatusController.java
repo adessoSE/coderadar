@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.analyzing;
 
-import io.reflectoring.coderadar.core.analyzer.port.driver.GetAnalyzingStatusUseCase;
+import io.reflectoring.coderadar.analyzer.port.driver.GetAnalyzingStatusUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 

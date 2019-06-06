@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.project;
 
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.ListProjectsUseCase;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.get.ListProjectsUseCase;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

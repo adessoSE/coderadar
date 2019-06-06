@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.rest.unit.module;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.GetModuleResponse;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.rest.module.ListModulesOfProjectController;
 import java.util.ArrayList;
 import java.util.List;

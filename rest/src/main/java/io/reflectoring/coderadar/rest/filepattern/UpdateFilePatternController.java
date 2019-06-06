@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.filepattern;
 
-import io.reflectoring.coderadar.core.projectadministration.FilePatternNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.update.UpdateFilePatternCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.update.UpdateFilePatternUseCase;
+import io.reflectoring.coderadar.projectadministration.FilePatternNotFoundException;
+import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.update.UpdateFilePatternCommand;
+import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.update.UpdateFilePatternUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

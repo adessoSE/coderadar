@@ -1,11 +1,11 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.core.projectadministration.AccessTokenNotExpiredException;
-import io.reflectoring.coderadar.core.projectadministration.RefreshTokenNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.UserNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenResponse;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenUseCase;
+import io.reflectoring.coderadar.projectadministration.AccessTokenNotExpiredException;
+import io.reflectoring.coderadar.projectadministration.RefreshTokenNotFoundException;
+import io.reflectoring.coderadar.projectadministration.UserNotFoundException;
+import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.RefreshTokenCommand;
+import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.RefreshTokenResponse;
+import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.RefreshTokenUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

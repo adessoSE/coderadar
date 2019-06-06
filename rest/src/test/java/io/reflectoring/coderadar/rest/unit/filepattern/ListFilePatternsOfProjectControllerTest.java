@@ -2,9 +2,9 @@ package io.reflectoring.coderadar.rest.unit.filepattern;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
+import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
+import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
+import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
 import io.reflectoring.coderadar.rest.filepattern.ListFilePatternsOfProjectController;
 import java.util.ArrayList;
 import java.util.List;

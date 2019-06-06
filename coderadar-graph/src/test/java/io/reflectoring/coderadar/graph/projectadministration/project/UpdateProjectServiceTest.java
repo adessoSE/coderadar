@@ -2,11 +2,11 @@ package io.reflectoring.coderadar.graph.projectadministration.project;
 
 import static org.mockito.Mockito.*;
 
-import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.UpdateProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.service.UpdateProjectService;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.projectadministration.domain.Project;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

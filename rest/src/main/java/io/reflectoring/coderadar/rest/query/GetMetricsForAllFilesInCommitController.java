@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.query;
 
-import io.reflectoring.coderadar.core.query.port.driver.GetMetricsForAllFilesInCommitUseCase;
+import io.reflectoring.coderadar.query.port.driver.GetMetricsForAllFilesInCommitUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 

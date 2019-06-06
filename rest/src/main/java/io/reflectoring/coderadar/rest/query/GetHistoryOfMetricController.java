@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.query;
 
-import io.reflectoring.coderadar.core.query.domain.Series;
-import io.reflectoring.coderadar.core.query.port.driver.GetHistoryOfMetricCommand;
-import io.reflectoring.coderadar.core.query.port.driver.GetHistoryOfMetricUseCase;
+import io.reflectoring.coderadar.query.domain.Series;
+import io.reflectoring.coderadar.query.port.driver.GetHistoryOfMetricCommand;
+import io.reflectoring.coderadar.query.port.driver.GetHistoryOfMetricUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

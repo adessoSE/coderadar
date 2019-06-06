@@ -90,11 +90,8 @@ dependencies {
     
     compile project(":coderadar-plugins:loc-analyzer-plugin")
     compile project(":coderadar-plugins:checkstyle-analyzer-plugin")
-    compile project(":coderadar-core:projectadministration")
-    compile project(":coderadar-core:query")
-    compile project(":coderadar-core:analyzer")
     compile project(":coderadar-graph")
-    compile project(":coderadar-core:vcs")
+    compile project(":coderadar-core")
     compile project(":rest")
 
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${version_spring_boot}"

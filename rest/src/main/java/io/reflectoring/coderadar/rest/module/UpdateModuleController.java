@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.module;
 
-import io.reflectoring.coderadar.core.projectadministration.ModuleNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.update.UpdateModuleUseCase;
+import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.update.UpdateModuleCommand;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.update.UpdateModuleUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

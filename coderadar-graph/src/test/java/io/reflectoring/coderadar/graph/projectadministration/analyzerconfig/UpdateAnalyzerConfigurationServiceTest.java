@@ -3,11 +3,11 @@ package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import io.reflectoring.coderadar.core.projectadministration.AnalyzerConfigurationNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.GetAnalyzerConfigurationsFromProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.UpdateAnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.UpdateAnalyzerConfigurationService;
+import io.reflectoring.coderadar.projectadministration.AnalyzerConfigurationNotFoundException;
+import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

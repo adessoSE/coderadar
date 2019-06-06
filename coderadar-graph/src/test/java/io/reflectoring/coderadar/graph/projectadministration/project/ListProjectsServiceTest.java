@@ -2,9 +2,9 @@ package io.reflectoring.coderadar.graph.projectadministration.project;
 
 import static org.mockito.Mockito.*;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ListProjectsRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.service.ListProjectsService;
+import io.reflectoring.coderadar.projectadministration.domain.Project;
 import java.util.LinkedList;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,0 +1,29 @@
+apply plugin: "com.diffplug.gradle.spotless"
+
+dependencies {
+    compile project(':coderadar-plugin-api')
+    
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-neo4j', version: '2.1.4.RELEASE'
+    compile group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.0.16.Final'
+    compile group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+    compile "org.passay:passay:1.2.0"
+    compile "com.auth0:java-jwt:3.1.0"
+    compile "joda-time:joda-time:2.9.7"
+    compile "org.springframework.boot:spring-boot-starter-web:${version_spring_boot}"
+    compile "org.springframework.boot:spring-boot-starter-security:${version_spring_boot}"
+    compile "io.dropwizard:dropwizard-metrics:1.0.6"
+    compile group: 'io.dropwizard.metrics', name: 'metrics-annotation', version: '3.2.1'
+    compile "io.micrometer:micrometer-registry-prometheus:1.1.3"
+    compile "org.eclipse.jgit:org.eclipse.jgit:4.6.0.201612231935-r"
+    compile "io.fabric8:gitective-core:0.9.10"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8"
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
+
+    testCompile "org.springframework.boot:spring-boot-starter-test:${version_spring_boot}"
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}

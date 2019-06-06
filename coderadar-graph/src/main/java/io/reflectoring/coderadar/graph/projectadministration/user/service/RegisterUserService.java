@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.user.service;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.User;
-import io.reflectoring.coderadar.core.projectadministration.port.driven.user.RegisterUserPort;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
+import io.reflectoring.coderadar.projectadministration.domain.User;
+import io.reflectoring.coderadar.projectadministration.port.driven.user.RegisterUserPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

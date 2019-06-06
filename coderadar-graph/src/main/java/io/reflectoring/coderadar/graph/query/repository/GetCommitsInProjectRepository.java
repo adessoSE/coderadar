@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph.query.repository;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.Commit;
+import io.reflectoring.coderadar.analyzer.domain.Commit;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;

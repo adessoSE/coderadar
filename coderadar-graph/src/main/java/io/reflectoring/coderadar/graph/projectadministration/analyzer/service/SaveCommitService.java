@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.analyzer.service;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.core.projectadministration.port.driven.analyzer.SaveCommitPort;
+import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.graph.projectadministration.analyzer.repository.SaveCommitRepository;
+import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
