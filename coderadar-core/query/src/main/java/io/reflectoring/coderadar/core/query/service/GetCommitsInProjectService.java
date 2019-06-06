@@ -28,6 +28,7 @@ public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {
       GetCommitResponse getCommitResponse = new GetCommitResponse();
       getCommitResponse.setName(commit.getName());
       getCommitResponse.setAuthor(commit.getAuthor());
+      getCommitResponse.setComment(commit.getComment());
       getCommitResponse.setTimestamp(commit.getTimestamp().toString());
       getCommitResponse.setAnalyzed(commit.isAnalyzed());
       response.add(getCommitResponse);

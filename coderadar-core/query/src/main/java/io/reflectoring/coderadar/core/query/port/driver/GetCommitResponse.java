@@ -6,6 +6,7 @@ import lombok.Data;
 public class GetCommitResponse {
   private String name;
   private String author;
+  private String comment;
   private String timestamp;
   private Boolean analyzed;
 }
