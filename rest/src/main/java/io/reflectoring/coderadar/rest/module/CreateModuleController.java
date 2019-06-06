@@ -31,7 +31,7 @@ public class CreateModuleController {
       return new ResponseEntity<>(
           new IdResponse(createModuleUseCase.createModule(command, projectId)), HttpStatus.CREATED);
     } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

@@ -27,7 +27,7 @@ public class DeleteModuleController {
       deleteModuleUseCase.delete(moduleId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (ModuleNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

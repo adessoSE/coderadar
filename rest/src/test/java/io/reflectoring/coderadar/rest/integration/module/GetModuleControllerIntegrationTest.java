@@ -50,7 +50,7 @@ class GetModuleControllerIntegrationTest extends ControllerTestTemplate {
   void getModuleReturnsErrorWhenModuleNotFound() throws Exception {
     mvc()
         .perform(get("/projects/0/modules/0"))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Module with id 0 not found."));
   }

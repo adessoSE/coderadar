@@ -26,7 +26,7 @@ public class ListFilePatternsOfProjectController {
       return new ResponseEntity<>(
           listFilePatternsOfProjectUseCase.listFilePatterns(projectId), HttpStatus.OK);
     } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

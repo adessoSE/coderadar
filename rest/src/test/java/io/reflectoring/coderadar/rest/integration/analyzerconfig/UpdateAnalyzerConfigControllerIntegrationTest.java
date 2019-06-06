@@ -59,7 +59,7 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             post("/projects/0/analyzers/2")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("AnalyzerConfiguration with id 2 not found."));

@@ -24,7 +24,7 @@ public class GetFilePatternController {
     try {
       return new ResponseEntity<>(getFilePatternUseCase.get(filePatternId), HttpStatus.OK);
     } catch (FilePatternNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

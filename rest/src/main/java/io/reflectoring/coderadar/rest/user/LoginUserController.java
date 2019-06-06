@@ -27,7 +27,7 @@ public class LoginUserController {
     try {
       return new ResponseEntity<>(loginUserUseCase.login(command), HttpStatus.OK);
     } catch (UserNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     } catch (AuthenticationException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.FORBIDDEN);
     }

@@ -61,7 +61,7 @@ class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
             post("/projects/0/filePatterns/2")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("FilePattern with id 2 not found."));

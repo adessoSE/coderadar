@@ -27,7 +27,7 @@ public class DeleteFilePatternController {
       deleteFilePatternFromProjectUseCase.delete(filePatternId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (FilePatternNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

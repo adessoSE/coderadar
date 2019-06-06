@@ -24,7 +24,7 @@ public class LoadUserController {
     try {
       return new ResponseEntity<>(loadUserUseCase.loadUser(userId), HttpStatus.OK);
     } catch (UserNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

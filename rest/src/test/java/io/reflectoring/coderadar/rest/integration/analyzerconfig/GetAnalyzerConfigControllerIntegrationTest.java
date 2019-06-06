@@ -54,7 +54,7 @@ class GetAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate 
   void getAnalyzerConfigurationReturnsErrorWhenNotFound() throws Exception {
     mvc()
         .perform(get("/projects/0/analyzers/2"))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("AnalyzerConfiguration with id 2 not found."));

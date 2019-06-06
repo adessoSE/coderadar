@@ -57,7 +57,7 @@ class GetFilePatternControllerIntegrationTest extends ControllerTestTemplate {
   void getFilePatternReturnsErrorWhenNotFound() throws Exception {
     mvc()
         .perform(get("/projects/0/filePatterns/2"))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("FilePattern with id 2 not found."));

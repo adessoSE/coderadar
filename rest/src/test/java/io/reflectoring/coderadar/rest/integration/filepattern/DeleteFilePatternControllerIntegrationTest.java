@@ -45,7 +45,7 @@ class DeleteFilePatternControllerIntegrationTest extends ControllerTestTemplate 
   void deleteFilePatternReturnsErrorWhenNotFound() throws Exception {
     mvc()
         .perform(delete("/projects/0/filePatterns/2"))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("FilePattern with id 2 not found."));

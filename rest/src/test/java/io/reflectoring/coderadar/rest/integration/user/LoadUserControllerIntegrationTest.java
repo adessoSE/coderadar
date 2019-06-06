@@ -43,7 +43,7 @@ class LoadUserControllerIntegrationTest extends ControllerTestTemplate {
   void loadUserWithIdOneReturnsErrorWhenUserNotFound() throws Exception {
     mvc()
         .perform(get("/user/1"))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("User with id 1 not found."));
   }

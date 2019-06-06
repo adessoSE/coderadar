@@ -34,8 +34,10 @@ public class UpdateProjectController {
     try {
       updateProjectUseCase.update(command, projectId);
       return new ResponseEntity<>(HttpStatus.OK);
-    } catch (ProjectStillExistsException | ProjectNotFoundException e) {
+    } catch (ProjectStillExistsException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+    } catch (ProjectNotFoundException e) {
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

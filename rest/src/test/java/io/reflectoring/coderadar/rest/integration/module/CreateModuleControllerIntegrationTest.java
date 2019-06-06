@@ -53,7 +53,7 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
             post("/projects/1/modules")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }

@@ -24,7 +24,7 @@ public class GetProjectController {
     try {
       return new ResponseEntity<>(getProjectUseCase.get(projectId), HttpStatus.OK);
     } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

@@ -56,7 +56,7 @@ class UpdateModuleControllerIntegrationTest extends ControllerTestTemplate {
             post("/projects/0/modules/2")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Module with id 2 not found."));
   }

@@ -25,7 +25,7 @@ public class ListModulesOfProjectController {
       return new ResponseEntity<>(
           listModulesOfProjectUseCase.listModules(projectId), HttpStatus.OK);
     } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

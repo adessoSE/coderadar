@@ -1,0 +1,24 @@
+# Copy this file into a file named "local.application.properties", edit the properties for your
+# local environment and then call "gradlew bootrun"' to start up the application.
+
+coderadar.master=true
+coderadar.slave=true
+coderadar.scanIntervalInSeconds=30
+coderadar.workdir=coderadar-workdir
+coderadar.dateLocale=de_DE
+coderadar.authentication.accessToken.durationInMinutes=15
+coderadar.authentication.refreshToken.durationInMinutes=86400
+coderadar.authentication.enabled=false
+coderadar.cors.enabled=true
+
+logging.level.org.wickedsource.coderadar=DEBUG
+logging.level.org.wickedsource.coderadar.job.JobLogger=INFO
+logging.level.org.hibernate.SQL=ERROR
+logging.level.org.hibernate.type=ERROR
+logging.level.org.reflections=ERROR
+logging.file=coderadar.log
+
+spring.data.neo4j.username=neo4j
+spring.data.neo4j.password=neo3j
+
+spring.main.allow-bean-definition-overriding=true

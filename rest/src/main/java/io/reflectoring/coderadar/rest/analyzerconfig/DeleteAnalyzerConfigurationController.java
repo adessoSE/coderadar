@@ -26,7 +26,7 @@ public class DeleteAnalyzerConfigurationController {
       deleteAnalyzerConfigurationUseCase.deleteAnalyzerConfiguration(analyzerConfigurationId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (AnalyzerConfigurationNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

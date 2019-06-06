@@ -31,7 +31,7 @@ public class UpdateAnalyzerConfigurationController {
       updateAnalyzerConfigurationUseCase.update(command, analyzerConfigurationId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (AnalyzerConfigurationNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }
