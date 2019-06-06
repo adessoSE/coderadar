@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.task.TaskExecutor;
 
 class CreateProjectServiceTest {
 
@@ -25,6 +26,7 @@ class CreateProjectServiceTest {
   private CloneRepositoryUseCase cloneRepositoryUseCase = mock(CloneRepositoryUseCase.class);
   private CoderadarConfigurationProperties coderadarConfigurationProperties =
       mock(CoderadarConfigurationProperties.class);
+  private TaskExecutor taskExecutor = mock(TaskExecutor.class);
 
   @Test
   void returnsNewProjectId() {
@@ -33,7 +35,8 @@ class CreateProjectServiceTest {
             createProjectPort,
             getProjectPort,
             cloneRepositoryUseCase,
-            coderadarConfigurationProperties);
+            coderadarConfigurationProperties,
+            taskExecutor);
 
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());
@@ -65,7 +68,8 @@ class CreateProjectServiceTest {
             createProjectPort,
             getProjectPort,
             cloneRepositoryUseCase,
-            coderadarConfigurationProperties);
+            coderadarConfigurationProperties,
+            taskExecutor);
 
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());

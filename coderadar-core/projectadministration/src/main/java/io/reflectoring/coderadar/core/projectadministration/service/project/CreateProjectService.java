@@ -14,6 +14,7 @@ import java.util.UUID;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 @Service("CreateProjectService")
@@ -27,16 +28,20 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
+  private final TaskExecutor taskExecutor;
+
   @Autowired
   public CreateProjectService(
       @Qualifier("CreateProjectServiceNeo4j") CreateProjectPort createProjectPort,
       GetProjectPort getProjectPort,
       CloneRepositoryUseCase cloneRepositoryUseCase,
-      CoderadarConfigurationProperties coderadarConfigurationProperties) {
+      CoderadarConfigurationProperties coderadarConfigurationProperties,
+      TaskExecutor taskExecutor) {
     this.createProjectPort = createProjectPort;
     this.getProjectPort = getProjectPort;
     this.cloneRepositoryUseCase = cloneRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
+    this.taskExecutor = taskExecutor;
   }
 
   @Override
@@ -60,17 +65,14 @@ public class CreateProjectService implements CreateProjectUseCase {
             new File(
                 coderadarConfigurationProperties.getWorkdir() + "/" + project.getWorkdirName()));
 
-    // TODO: Task Execution
-    new Thread(
-            () -> {
-              try {
-                cloneRepositoryUseCase.cloneRepository(cloneRepositoryCommand);
-              } catch (JGitInternalException e) {
-                e.printStackTrace();
-              }
-            })
-        .start();
-
+    taskExecutor.execute(
+        () -> {
+          try {
+            cloneRepositoryUseCase.cloneRepository(cloneRepositoryCommand);
+          } catch (JGitInternalException e) {
+            e.printStackTrace();
+          }
+        });
     return createProjectPort.createProject(project);
   }
 }

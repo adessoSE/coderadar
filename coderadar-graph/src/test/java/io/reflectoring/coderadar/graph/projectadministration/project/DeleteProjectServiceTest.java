@@ -17,7 +17,13 @@ class DeleteProjectServiceTest {
 
   @BeforeEach
   void setUp() {
-    deleteProjectService = new DeleteProjectService(deleteProjectRepository);
+    deleteProjectService =
+        new DeleteProjectService(
+            deleteProjectRepository,
+            deleteModuleRepository,
+            deleteFilePatternRepository,
+            deleteAnalyzerConfigurationRepository,
+            getCommitsInProjectRepository);
   }
 
   @Test
