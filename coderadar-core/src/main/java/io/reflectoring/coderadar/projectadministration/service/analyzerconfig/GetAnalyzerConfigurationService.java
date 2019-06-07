@@ -7,17 +7,15 @@ import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfi
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationUseCase;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("GetAnalyzerConfigurationService")
+@Service
 public class GetAnalyzerConfigurationService implements GetAnalyzerConfigurationUseCase {
 
   private final GetAnalyzerConfigurationPort port;
 
   @Autowired
-  public GetAnalyzerConfigurationService(
-      @Qualifier("GetAnalyzerConfigurationServiceNeo4j") GetAnalyzerConfigurationPort port) {
+  public GetAnalyzerConfigurationService(GetAnalyzerConfigurationPort port) {
     this.port = port;
   }
 

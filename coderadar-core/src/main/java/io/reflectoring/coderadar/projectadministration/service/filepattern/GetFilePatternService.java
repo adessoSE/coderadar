@@ -7,16 +7,14 @@ import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.g
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternUseCase;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("GetFilePatternService")
+@Service
 public class GetFilePatternService implements GetFilePatternUseCase {
   private final GetFilePatternPort getFilePatternPort;
 
   @Autowired
-  public GetFilePatternService(
-      @Qualifier("GetFilePatternServiceNeo4j") GetFilePatternPort getFilePatternPort) {
+  public GetFilePatternService(GetFilePatternPort getFilePatternPort) {
     this.getFilePatternPort = getFilePatternPort;
   }
 

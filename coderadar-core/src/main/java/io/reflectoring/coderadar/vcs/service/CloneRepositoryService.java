@@ -6,17 +6,15 @@ import io.reflectoring.coderadar.vcs.port.driver.CloneRepositoryUseCase;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("CloneRepositoryService")
+@Service
 public class CloneRepositoryService implements CloneRepositoryUseCase {
 
   private final CloneRepositoryPort cloneRepositoryPort;
 
   @Autowired
-  public CloneRepositoryService(
-      @Qualifier("CloneRepositoryServiceNeo4j") CloneRepositoryPort cloneRepositoryPort) {
+  public CloneRepositoryService(CloneRepositoryPort cloneRepositoryPort) {
     this.cloneRepositoryPort = cloneRepositoryPort;
   }
 

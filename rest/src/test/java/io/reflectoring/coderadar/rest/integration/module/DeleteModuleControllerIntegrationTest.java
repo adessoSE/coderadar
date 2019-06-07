@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.rest.integration.module;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
@@ -11,6 +9,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 class DeleteModuleControllerIntegrationTest extends ControllerTestTemplate {
 

@@ -7,7 +7,7 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.springframework.stereotype.Service;
 
-@Service("FindCommitService")
+@Service
 public class FindCommitService implements FindGitCommitUseCase {
 
   /**

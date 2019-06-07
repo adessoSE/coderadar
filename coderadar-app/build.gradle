@@ -1,7 +1,5 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
-import java.text.SimpleDateFormat
-
 apply plugin: "org.springframework.boot"
 apply plugin: "com.diffplug.gradle.spotless"
 apply plugin: "com.jfrog.bintray"

@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.GetAnalyzerConfigurationsFromProjectRepository;
-import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.GetAnalyzerConfigurationsFromProjectService;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.GetAnalyzerConfigurationsFromProjectAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
@@ -22,12 +22,12 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
 
   private GetProjectRepository getProjectRepository = mock(GetProjectRepository.class);
 
-  private GetAnalyzerConfigurationsFromProjectService getAnalyzerConfigurationsFromProjectService;
+  private GetAnalyzerConfigurationsFromProjectAdapter getAnalyzerConfigurationsFromProjectAdapter;
 
   @BeforeEach
   void setUp() {
-    getAnalyzerConfigurationsFromProjectService =
-        new GetAnalyzerConfigurationsFromProjectService(
+    getAnalyzerConfigurationsFromProjectAdapter =
+        new GetAnalyzerConfigurationsFromProjectAdapter(
             getProjectRepository, getAnalyzerConfigurationsFromProjectRepository);
   }
 
@@ -35,7 +35,7 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
   @DisplayName("Should throw exception when a project with the passing ID doesn't exists")
   void shouldThrowExceptionWhenAProjectWithThePassingIdDoesntExists() {
     org.junit.jupiter.api.Assertions.assertThrows(
-        ProjectNotFoundException.class, () -> getAnalyzerConfigurationsFromProjectService.get(1L));
+        ProjectNotFoundException.class, () -> getAnalyzerConfigurationsFromProjectAdapter.get(1L));
   }
 
   @Test
@@ -47,7 +47,7 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
         .thenReturn(new LinkedList<>());
 
     Iterable<AnalyzerConfiguration> configurations =
-        getAnalyzerConfigurationsFromProjectService.get(1L);
+        getAnalyzerConfigurationsFromProjectAdapter.get(1L);
     verify(getAnalyzerConfigurationsFromProjectRepository, times(1)).findByProject_Id(1L);
     Assertions.assertThat(configurations).hasSize(0);
   }
@@ -64,7 +64,7 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
         .thenReturn(mockedAnalyzerConfigurations);
 
     Iterable<AnalyzerConfiguration> configurations =
-        getAnalyzerConfigurationsFromProjectService.get(1L);
+        getAnalyzerConfigurationsFromProjectAdapter.get(1L);
     verify(getAnalyzerConfigurationsFromProjectRepository, times(1)).findByProject_Id(1L);
     Assertions.assertThat(configurations).hasSize(1);
   }
@@ -82,7 +82,7 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
         .thenReturn(mockedAnalyzerConfigurations);
 
     Iterable<AnalyzerConfiguration> configurations =
-        getAnalyzerConfigurationsFromProjectService.get(1L);
+        getAnalyzerConfigurationsFromProjectAdapter.get(1L);
     verify(getAnalyzerConfigurationsFromProjectRepository, times(1)).findByProject_Id(1L);
     Assertions.assertThat(configurations).hasSize(2);
   }

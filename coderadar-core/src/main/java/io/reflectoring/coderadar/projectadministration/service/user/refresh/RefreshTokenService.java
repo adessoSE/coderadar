@@ -12,11 +12,10 @@ import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.
 import io.reflectoring.coderadar.projectadministration.service.user.security.TokenService;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-@Service("RefreshTokenService")
+@Service
 public class RefreshTokenService implements RefreshTokenUseCase {
 
   private final LoadUserPort loadUserPort;
@@ -27,9 +26,7 @@ public class RefreshTokenService implements RefreshTokenUseCase {
 
   @Autowired
   public RefreshTokenService(
-      LoadUserPort loadUserPort,
-      @Qualifier("RefreshTokenServiceNeo4j") RefreshTokenPort refreshTokenPort,
-      TokenService tokenService) {
+      LoadUserPort loadUserPort, RefreshTokenPort refreshTokenPort, TokenService tokenService) {
     this.loadUserPort = loadUserPort;
     this.refreshTokenPort = refreshTokenPort;
     this.tokenService = tokenService;

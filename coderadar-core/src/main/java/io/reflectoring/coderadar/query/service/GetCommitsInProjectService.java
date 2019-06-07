@@ -7,17 +7,14 @@ import io.reflectoring.coderadar.query.port.driver.GetCommitsInProjectUseCase;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("GetCommitsInProjectService")
+@Service
 public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {
   private final GetCommitsInProjectPort getCommitsInProjectPort;
 
   @Autowired
-  public GetCommitsInProjectService(
-      @Qualifier("GetCommitsInProjectServiceNeo4j")
-          GetCommitsInProjectPort getCommitsInProjectPort) {
+  public GetCommitsInProjectService(GetCommitsInProjectPort getCommitsInProjectPort) {
     this.getCommitsInProjectPort = getCommitsInProjectPort;
   }
 

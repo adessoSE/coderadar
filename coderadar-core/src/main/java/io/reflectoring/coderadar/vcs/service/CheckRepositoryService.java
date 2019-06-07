@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-@Service("CheckRepositoryService")
+@Service
 public class CheckRepositoryService implements CheckRepositoryUseCase {
 
   private Logger logger = LoggerFactory.getLogger(CheckRepositoryService.class);

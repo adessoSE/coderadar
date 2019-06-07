@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service("AnalyzeCommitService")
+@Service
 public class AnalyzeCommitService implements AnalyzeCommitUseCase {
 
   private Logger logger = LoggerFactory.getLogger(AnalyzeCommitService.class);

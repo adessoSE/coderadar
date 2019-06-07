@@ -8,17 +8,15 @@ import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("ResetRepositoryService")
+@Service
 public class ResetRepositoryService implements ResetRepositoryUseCase {
 
   private final ResetRepositoryPort resetRepositoryPort;
 
   @Autowired
-  public ResetRepositoryService(
-      @Qualifier("ResetRepositoryServiceNeo4j") ResetRepositoryPort resetRepositoryPort) {
+  public ResetRepositoryService(ResetRepositoryPort resetRepositoryPort) {
     this.resetRepositoryPort = resetRepositoryPort;
   }
 

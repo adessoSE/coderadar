@@ -6,15 +6,14 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectUseCase;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("GetProjectService")
+@Service
 public class GetProjectService implements GetProjectUseCase {
 
   private final GetProjectPort port;
 
-  public GetProjectService(@Qualifier("GetProjectServiceNeo4j") GetProjectPort port) {
+  public GetProjectService(GetProjectPort port) {
     this.port = port;
   }
 

@@ -1,8 +1,5 @@
 package io.reflectoring.coderadar.rest.integration.user;
 
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RefreshTokenRepository;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
 import io.reflectoring.coderadar.projectadministration.domain.RefreshToken;
@@ -18,6 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
 

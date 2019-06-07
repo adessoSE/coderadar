@@ -14,7 +14,7 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.springframework.stereotype.Service;
 
-@Service("WalkCommitsService")
+@Service
 public class WalkCommitsService implements WalkCommitsUseCase {
 
   private List<CommitWalkerFilter> filters = new ArrayList<>();

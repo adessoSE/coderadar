@@ -12,10 +12,9 @@ import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
 import java.io.File;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("UpdateProjectService")
+@Service
 public class UpdateProjectService implements UpdateProjectUseCase {
 
   private final GetProjectPort getProjectPort;
@@ -26,8 +25,8 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
   @Autowired
   public UpdateProjectService(
-      @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort,
-      @Qualifier("UpdateProjectServiceNeo4j") UpdateProjectPort updateProjectPort,
+      GetProjectPort getProjectPort,
+      UpdateProjectPort updateProjectPort,
       UpdateRepositoryUseCase updateRepositoryUseCase,
       CoderadarConfigurationProperties coderadarConfigurationProperties) {
     this.getProjectPort = getProjectPort;

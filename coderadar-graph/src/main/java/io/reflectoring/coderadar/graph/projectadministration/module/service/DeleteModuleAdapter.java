@@ -1,0 +1,32 @@
+package io.reflectoring.coderadar.graph.projectadministration.module.service;
+
+import io.reflectoring.coderadar.graph.projectadministration.module.repository.DeleteModuleRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.DeleteProjectRepository;
+import io.reflectoring.coderadar.projectadministration.domain.Module;
+import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class DeleteModuleAdapter implements DeleteModulePort {
+  private final DeleteModuleRepository deleteModuleRepository;
+  private final DeleteProjectRepository deleteProjectRepository;
+
+  @Autowired
+  public DeleteModuleAdapter(
+      DeleteModuleRepository deleteModuleRepository,
+      DeleteProjectRepository deleteProjectRepository) {
+    this.deleteModuleRepository = deleteModuleRepository;
+    this.deleteProjectRepository = deleteProjectRepository;
+  }
+
+  @Override
+  public void delete(Long id) {
+    deleteModuleRepository.deleteById(id);
+  }
+
+  @Override
+  public void delete(Module module) {
+    deleteModuleRepository.delete(module);
+  }
+}

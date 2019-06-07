@@ -5,19 +5,16 @@ import io.reflectoring.coderadar.projectadministration.port.driven.module.Delete
 import io.reflectoring.coderadar.projectadministration.port.driven.module.GetModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.delete.DeleteModuleUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("DeleteModuleService")
+@Service
 public class DeleteModuleService implements DeleteModuleUseCase {
 
   private final DeleteModulePort deleteModulePort;
   private final GetModulePort getModulePort;
 
   @Autowired
-  public DeleteModuleService(
-      @Qualifier("DeleteModuleServiceNeo4j") DeleteModulePort deleteModulePort,
-      @Qualifier("GetModuleServiceNeo4j") GetModulePort getModulePort) {
+  public DeleteModuleService(DeleteModulePort deleteModulePort, GetModulePort getModulePort) {
     this.deleteModulePort = deleteModulePort;
     this.getModulePort = getModulePort;
   }

@@ -10,10 +10,9 @@ import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfi
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationUseCase;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("CreateAnalyzerConfigurationService")
+@Service
 public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigurationUseCase {
 
   private final CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort;
@@ -22,10 +21,9 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
 
   @Autowired
   public CreateAnalyzerConfigurationService(
-      @Qualifier("CreateAnalyzerConfigurationServiceNeo4j")
-          CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort,
-      @Qualifier("UpdateProjectServiceNeo4j") UpdateProjectPort updateProjectPort,
-      @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort) {
+      CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort,
+      UpdateProjectPort updateProjectPort,
+      GetProjectPort getProjectPort) {
 
     this.createAnalyzerConfigurationPort = createAnalyzerConfigurationPort;
     this.updateProjectPort = updateProjectPort;

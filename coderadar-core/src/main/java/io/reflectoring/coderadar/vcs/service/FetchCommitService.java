@@ -6,7 +6,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.stereotype.Service;
 
-@Service("FetchCommitService")
+@Service
 public class FetchCommitService implements FetchCommitUseCase {
 
   @Override

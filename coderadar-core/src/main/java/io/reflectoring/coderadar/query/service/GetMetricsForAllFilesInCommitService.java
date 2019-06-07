@@ -6,17 +6,15 @@ import io.reflectoring.coderadar.query.port.driver.GetMetricsForAllFilesInCommit
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForAllFilesInCommitUseCase;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("GetMetricsForAllFilesInCommitService")
+@Service
 public class GetMetricsForAllFilesInCommitService implements GetMetricsForAllFilesInCommitUseCase {
   private final GetMetricsForAllFilesInCommitPort getMetricsForAllFilesInCommitPort;
 
   @Autowired
   public GetMetricsForAllFilesInCommitService(
-      @Qualifier("GetMetricsForAllFilesInCommitServiceNeo4j")
-          GetMetricsForAllFilesInCommitPort getMetricsForAllFilesInCommitPort) {
+      GetMetricsForAllFilesInCommitPort getMetricsForAllFilesInCommitPort) {
     this.getMetricsForAllFilesInCommitPort = getMetricsForAllFilesInCommitPort;
   }
 

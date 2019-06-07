@@ -9,10 +9,9 @@ import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfi
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("ListAnalyzerConfigurationsFromProjectService")
+@Service
 public class ListAnalyzerConfigurationsFromProjectService
     implements GetAnalyzerConfigurationsFromProjectUseCase {
   private final GetAnalyzerConfigurationsFromProjectPort port;
@@ -20,9 +19,7 @@ public class ListAnalyzerConfigurationsFromProjectService
 
   @Autowired
   public ListAnalyzerConfigurationsFromProjectService(
-      @Qualifier("GetAnalyzerConfigurationsFromProjectServiceNeo4j")
-          GetAnalyzerConfigurationsFromProjectPort port,
-      @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort) {
+      GetAnalyzerConfigurationsFromProjectPort port, GetProjectPort getProjectPort) {
     this.port = port;
     this.getProjectPort = getProjectPort;
   }

@@ -8,19 +8,16 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.update
 import io.reflectoring.coderadar.projectadministration.port.driver.module.update.UpdateModuleUseCase;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("UpdateModuleService")
+@Service
 public class UpdateModuleService implements UpdateModuleUseCase {
 
   private final GetModulePort getModulePort;
   private final UpdateModulePort updateModulePort;
 
   @Autowired
-  public UpdateModuleService(
-      @Qualifier("GetModuleServiceNeo4j") GetModulePort getModulePort,
-      @Qualifier("UpdateModuleServiceNeo4j") UpdateModulePort updateModulePort) {
+  public UpdateModuleService(GetModulePort getModulePort, UpdateModulePort updateModulePort) {
     this.getModulePort = getModulePort;
     this.updateModulePort = updateModulePort;
   }

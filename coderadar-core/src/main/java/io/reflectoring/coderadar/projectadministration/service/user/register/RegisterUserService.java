@@ -8,19 +8,16 @@ import io.reflectoring.coderadar.projectadministration.port.driver.user.register
 import io.reflectoring.coderadar.projectadministration.port.driver.user.register.RegisterUserUseCase;
 import io.reflectoring.coderadar.projectadministration.service.user.security.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("RegisterUserService")
+@Service
 public class RegisterUserService implements RegisterUserUseCase {
 
   private final RegisterUserPort port;
   private final LoadUserPort loadUserPort;
 
   @Autowired
-  public RegisterUserService(
-      @Qualifier("RegisterUserServiceNeo4j") RegisterUserPort port,
-      @Qualifier("LoadUserServiceNeo4j") LoadUserPort loadUserPort) {
+  public RegisterUserService(RegisterUserPort port, LoadUserPort loadUserPort) {
     this.port = port;
     this.loadUserPort = loadUserPort;
   }

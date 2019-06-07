@@ -5,10 +5,9 @@ import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfi
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.delete.DeleteAnalyzerConfigurationUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("DeleteAnalyzerConfigurationService")
+@Service
 public class DeleteAnalyzerConfigurationService implements DeleteAnalyzerConfigurationUseCase {
 
   private final DeleteAnalyzerConfigurationPort port;
@@ -16,9 +15,8 @@ public class DeleteAnalyzerConfigurationService implements DeleteAnalyzerConfigu
 
   @Autowired
   public DeleteAnalyzerConfigurationService(
-      @Qualifier("DeleteAnalyzerConfigurationServiceNeo4j") DeleteAnalyzerConfigurationPort port,
-      @Qualifier("GetAnalyzerConfigurationServiceNeo4j")
-          GetAnalyzerConfigurationPort getAnalyzerConfigurationPort) {
+      DeleteAnalyzerConfigurationPort port,
+      GetAnalyzerConfigurationPort getAnalyzerConfigurationPort) {
     this.port = port;
     this.getAnalyzerConfigurationPort = getAnalyzerConfigurationPort;
   }

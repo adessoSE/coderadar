@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.projectadministration.port.driver.user.register.RegisterUserCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.register.RegisterUserUseCase;
 import io.reflectoring.coderadar.rest.IdResponse;
@@ -11,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import static org.mockito.Mockito.mock;
 
 class RegisterUserControllerTest {
 

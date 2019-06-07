@@ -10,11 +10,10 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
-@Service("StartAnalyzingService")
+@Service
 public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final StartAnalyzingPort startAnalyzingPort;
   private final GetProjectPort getProjectPort;
@@ -24,7 +23,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
 
   @Autowired
   public StartAnalyzingService(
-      @Qualifier("StartAnalyzingServiceNeo4j") StartAnalyzingPort startAnalyzingPort,
+      StartAnalyzingPort startAnalyzingPort,
       GetProjectPort getProjectPort,
       AnalyzeCommitService analyzeCommitService,
       CommitMetadataScanner commitMetadataScanner,

@@ -12,10 +12,9 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("UpdateRepositoryService")
+@Service
 public class UpdateRepositoryService implements UpdateRepositoryUseCase {
 
   public final UpdateRepositoryPort updateRepositoryPort;
@@ -24,8 +23,7 @@ public class UpdateRepositoryService implements UpdateRepositoryUseCase {
 
   @Autowired
   public UpdateRepositoryService(
-      @Qualifier("UpdateRepositoryServiceNeo4j") UpdateRepositoryPort updateRepositoryPort,
-      ResetRepositoryUseCase resetter) {
+      UpdateRepositoryPort updateRepositoryPort, ResetRepositoryUseCase resetter) {
     this.resetter = resetter;
     this.updateRepositoryPort = updateRepositoryPort;
   }

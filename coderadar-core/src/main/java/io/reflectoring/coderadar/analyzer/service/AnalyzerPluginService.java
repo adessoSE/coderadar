@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-@Service("AnalyzerPluginService")
+@Service
 public class AnalyzerPluginService {
   private Logger logger = LoggerFactory.getLogger(AnalyzerPluginService.class);
 

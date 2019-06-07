@@ -5,10 +5,9 @@ import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.D
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.delete.DeleteFilePatternFromProjectUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("DeleteFilePatternService")
+@Service
 public class DeleteFilePatternService implements DeleteFilePatternFromProjectUseCase {
 
   private final DeleteFilePatternPort deleteFilePatternPort;
@@ -16,8 +15,7 @@ public class DeleteFilePatternService implements DeleteFilePatternFromProjectUse
 
   @Autowired
   public DeleteFilePatternService(
-      @Qualifier("DeleteFilePatternServiceNeo4j") DeleteFilePatternPort deleteFilePatternPort,
-      GetFilePatternPort getFilePatternPort) {
+      DeleteFilePatternPort deleteFilePatternPort, GetFilePatternPort getFilePatternPort) {
     this.deleteFilePatternPort = deleteFilePatternPort;
     this.getFilePatternPort = getFilePatternPort;
   }

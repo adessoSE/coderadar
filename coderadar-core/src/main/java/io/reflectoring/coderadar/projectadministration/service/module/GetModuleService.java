@@ -7,15 +7,14 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.get.Ge
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleUseCase;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("GetModuleService")
+@Service
 public class GetModuleService implements GetModuleUseCase {
   private final GetModulePort getModulePort;
 
   @Autowired
-  public GetModuleService(@Qualifier("GetModuleServiceNeo4j") GetModulePort getModulePort) {
+  public GetModuleService(GetModulePort getModulePort) {
     this.getModulePort = getModulePort;
   }
 

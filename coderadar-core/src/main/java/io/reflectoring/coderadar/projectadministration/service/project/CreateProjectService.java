@@ -13,11 +13,10 @@ import java.io.File;
 import java.util.UUID;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
-@Service("CreateProjectService")
+@Service
 public class CreateProjectService implements CreateProjectUseCase {
 
   private final CreateProjectPort createProjectPort;
@@ -32,7 +31,7 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   @Autowired
   public CreateProjectService(
-      @Qualifier("CreateProjectServiceNeo4j") CreateProjectPort createProjectPort,
+      CreateProjectPort createProjectPort,
       GetProjectPort getProjectPort,
       CloneRepositoryUseCase cloneRepositoryUseCase,
       CoderadarConfigurationProperties coderadarConfigurationProperties,

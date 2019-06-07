@@ -8,10 +8,9 @@ import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.u
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.update.UpdateFilePatternUseCase;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("UpdateFilePatternService")
+@Service
 public class UpdateFilePatternService implements UpdateFilePatternUseCase {
 
   private final GetFilePatternPort getFilePatternPort;
@@ -19,8 +18,7 @@ public class UpdateFilePatternService implements UpdateFilePatternUseCase {
 
   @Autowired
   public UpdateFilePatternService(
-      @Qualifier("GetFilePatternServiceNeo4j") GetFilePatternPort getFilePatternPort,
-      @Qualifier("UpdateFilePatternServiceNeo4j") UpdateFilePatternPort updateFilePatternPort) {
+      GetFilePatternPort getFilePatternPort, UpdateFilePatternPort updateFilePatternPort) {
     this.getFilePatternPort = getFilePatternPort;
     this.updateFilePatternPort = updateFilePatternPort;
   }

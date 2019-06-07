@@ -4,17 +4,15 @@ import io.reflectoring.coderadar.query.port.driven.GetAvailableMetricsInProjectP
 import io.reflectoring.coderadar.query.port.driver.GetAvailableMetricsInProjectUseCase;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("GetAvailableMetricsInProjectService")
+@Service
 public class GetAvailableMetricsInProjectService implements GetAvailableMetricsInProjectUseCase {
   private final GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort;
 
   @Autowired
   public GetAvailableMetricsInProjectService(
-      @Qualifier("GetAvailableMetricsInProjectServiceNeo4j")
-          GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort) {
+      GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort) {
     this.getAvailableMetricsInProjectPort = getAvailableMetricsInProjectPort;
   }
 

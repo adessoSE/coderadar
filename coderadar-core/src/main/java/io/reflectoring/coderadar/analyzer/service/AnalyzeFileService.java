@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /** Combines multiple FileAnalyzerPlugins to calculate metrics for a single file. */
-@Service("AnalyzeFileService")
+@Service
 public class AnalyzeFileService {
 
   private Logger logger = LoggerFactory.getLogger(AnalyzeFileService.class);

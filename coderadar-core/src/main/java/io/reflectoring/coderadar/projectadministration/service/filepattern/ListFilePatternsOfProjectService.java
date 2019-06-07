@@ -9,10 +9,9 @@ import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.g
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-@Service("ListFilePatternsOfProjectService")
+@Service
 public class ListFilePatternsOfProjectService implements ListFilePatternsOfProjectUseCase {
 
   private final ListFilePatternsOfProjectPort port;
@@ -20,8 +19,7 @@ public class ListFilePatternsOfProjectService implements ListFilePatternsOfProje
 
   @Autowired
   public ListFilePatternsOfProjectService(
-      @Qualifier("ListFilePatternsOfProjectServiceNeo4j") ListFilePatternsOfProjectPort port,
-      @Qualifier("GetProjectServiceNeo4j") GetProjectPort getProjectPort) {
+      ListFilePatternsOfProjectPort port, GetProjectPort getProjectPort) {
     this.port = port;
     this.getProjectPort = getProjectPort;
   }
