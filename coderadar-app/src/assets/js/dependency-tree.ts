@@ -12,8 +12,8 @@ export function afterLoad() {
   let data = JSON.parse((document.getElementById('3input') as HTMLInputElement).value);
   buildRoot(data);
   document.getElementById('3dependencyTree').innerHTML = htmlBuffer.join('');
-  checkUp = (document.getElementById('3showUpward') as HTMLInputElement).checked;
-  checkDown = (document.getElementById('3showDownward') as HTMLInputElement).checked;
+  checkUp = (document.getElementById('3showUpward') as HTMLInputElement).getAttribute('checked') == 'checked';
+  checkDown = (document.getElementById('3showDownward') as HTMLInputElement).getAttribute('checked') == 'checked';
   ctx = (document.getElementById('3canvas') as HTMLCanvasElement).getContext('2d');
   headerBackground = (document.getElementById('3headerBackground') as HTMLElement);
 
@@ -54,14 +54,14 @@ export function afterLoad() {
     }
   }
   // show upward listener
-  document.getElementById('3showUpward').addEventListener('change', () => {
-    checkUp = (document.getElementById('3showUpward') as HTMLInputElement).checked;
+  document.getElementById('3showUpward').addEventListener('click', () => {
+    checkUp = !checkUp;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     loadDependencies(data);
   });
   // show upward listener
-  document.getElementById('3showDownward').addEventListener('change', () => {
-    checkDown = (document.getElementById('3showDownward') as HTMLInputElement).checked;
+  document.getElementById('3showDownward').addEventListener('click', () => {
+    checkDown = !checkDown;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     loadDependencies(data);
   });

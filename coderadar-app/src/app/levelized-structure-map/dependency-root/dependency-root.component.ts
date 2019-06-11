@@ -1,4 +1,5 @@
 import {AfterViewInit, Component, ElementRef, ViewChild, ViewEncapsulation} from '@angular/core';
+import {FormsModule} from "@angular/forms";
 import {DependencyTreeProvider} from '../DependencyTreeProvider';
 import { afterLoad } from '../../../assets/js/dependency-tree';
 
