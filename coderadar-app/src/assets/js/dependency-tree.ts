@@ -248,9 +248,9 @@ function listDependencies(currentNode) {
       // different values for chrome and firefox
       // (ref: https://stackoverflow.com/questions/1472842/firefox-and-chrome-give-different-values-for-offsettop).
       let startx = $(start).offset().left + start.offsetWidth / 2;
-      let starty = $(start).offset().top + start.offsetHeight - ctx.canvas.getBoundingClientRect().top;
+      let starty = $(start).offset().top + start.offsetHeight - $(ctx.canvas).offset().top;
       let endx = $(end).offset().left + end.offsetWidth / 2;
-      let endy = $(end).offset().top - ctx.canvas.getBoundingClientRect().top;
+      let endy = $(end).offset().top - $(ctx.canvas).offset().top;
 
       //ignore all arrows with same start and end node
       if (start != end) {
