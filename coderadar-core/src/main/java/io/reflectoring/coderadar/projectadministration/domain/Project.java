@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+
+import io.reflectoring.coderadar.analyzer.domain.File;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -15,8 +17,8 @@ import org.neo4j.ogm.annotation.Relationship;
 /** A coderadar project that defines the source of files that are to be analyzed. */
 @NodeEntity
 @Data
-@EqualsAndHashCode(exclude = {"commits", "filePatterns", "modules", "analyzerConfigurations"})
-@ToString(exclude = {"commits", "filePatterns", "modules", "analyzerConfigurations"})
+@EqualsAndHashCode(exclude = {"files", "filePatterns", "modules", "analyzerConfigurations"})
+@ToString(exclude = {"files", "filePatterns", "modules", "analyzerConfigurations"})
 public class Project {
   private Long id;
   private String name;
@@ -30,18 +32,18 @@ public class Project {
 
   // The graph starts from a project and goes only in one direction.
   // https://en.wikipedia.org/wiki/Directed_acyclic_graph
-  @Relationship(type = "HAS")
+  @Relationship(type = "CONTAINS")
   private List<Module> modules = new LinkedList<>();
 
-  @Relationship(type = "HAS")
-  private List<FilePattern> filePatterns = new ArrayList<>();
+  @Relationship(type = "CONTAINS")
+  private List<File> files = new LinkedList<>();
 
   @Relationship(type = "HAS")
-  private List<AnalyzerConfiguration> analyzerConfigurations = new ArrayList<>();
+  private List<FilePattern> filePatterns = new LinkedList<>();
+
+  @Relationship(type = "HAS")
+  private List<AnalyzerConfiguration> analyzerConfigurations = new LinkedList<>();
 
   @Relationship(type = "HAS")
   private AnalyzingJob analyzingJob;
-
-  @Relationship(type = "HAS")
-  private List<Commit> commits = new ArrayList<>();
 }

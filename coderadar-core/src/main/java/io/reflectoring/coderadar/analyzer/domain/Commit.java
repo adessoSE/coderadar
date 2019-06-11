@@ -1,11 +1,14 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
+import io.reflectoring.coderadar.plugin.api.Metric;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.typeconversion.NumberString;
 
 /** Metadata about a commit to a Git repository. */
 @NodeEntity
@@ -19,13 +22,15 @@ public class Commit {
   private boolean merged = false;
   private boolean analyzed = false;
   private Integer sequenceNumber;
-  private String firstParent;
 
-  @Relationship(direction = Relationship.INCOMING, type = "HAS")
-  private Project project;
+  @Relationship(type = "IS_CHILD_OF")
+  private List<Commit> parents = new LinkedList<>();
 
-  @Relationship(value = "HAS_CHANGED")
-  private List<CommitToFileAssociation> touchedFiles;
+  @Relationship(direction = Relationship.INCOMING, type = "CHANGED_IN")
+  private List<FileToCommitRelationship> touchedFiles = new LinkedList<>();
+
+  @Relationship(direction = Relationship.INCOMING, type = "VALID_FOR")
+  private List<MetricValue> metricValues = new LinkedList<>();
 
   public void setComment(String comment) {
     if (comment.length() > 255) {

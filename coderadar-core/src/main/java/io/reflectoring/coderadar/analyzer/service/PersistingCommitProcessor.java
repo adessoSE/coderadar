@@ -39,13 +39,11 @@ class PersistingCommitProcessor implements ProcessCommitUseCase {
     commit.setName(gitCommit.getName());
     commit.setAuthor(gitCommit.getAuthorIdent().getName());
     commit.setComment(gitCommit.getShortMessage());
-    commit.setProject(project);
     commit.setTimestamp(new Date(gitCommit.getCommitTime() * 1000L));
     commit.setSequenceNumber(commitWithSequenceNumber.getSequenceNumber());
-    if (gitCommit.getParentCount() > 0) {
-      commit.setFirstParent(gitCommit.getParent(0).getName());
-    }
-    project.getCommits().add(commit);
+    /* TODO: Get a commit hash?? from the vcs ports
+    commit.setParents(gitCommit.getParents());
+    */
     saveCommitPort.saveCommit(commit);
     updatedCommits++;
     // commitsMeter.mark();

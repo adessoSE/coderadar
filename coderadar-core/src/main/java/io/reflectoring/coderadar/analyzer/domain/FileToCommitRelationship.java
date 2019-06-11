@@ -12,16 +12,17 @@ import org.neo4j.ogm.annotation.StartNode;
  * the Commit and to all files that have been left untouched by it, so that one can easily access
  * the full set of files at the time of the Commit.
  */
-@RelationshipEntity("TOUCHES")
+@RelationshipEntity("CHANGED_IN")
 @NoArgsConstructor
 @Data
-public class CommitToFileAssociation {
+public class FileToCommitRelationship {
   private Long id;
+
   private ChangeType changeType;
 
   private String oldPath;
 
-  @StartNode private Commit commit;
+  @StartNode private File file;
 
-  @EndNode private File file;
+  @EndNode private Commit commit;
 }

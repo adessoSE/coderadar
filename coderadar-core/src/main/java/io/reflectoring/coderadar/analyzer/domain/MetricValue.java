@@ -3,20 +3,23 @@ package io.reflectoring.coderadar.analyzer.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.neo4j.ogm.annotation.EndNode;
-import org.neo4j.ogm.annotation.RelationshipEntity;
-import org.neo4j.ogm.annotation.StartNode;
+import org.neo4j.ogm.annotation.*;
 
-@RelationshipEntity("HAS_VALUE")
+import java.util.LinkedList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@NodeEntity
 public class MetricValue {
   private Long id;
-
-  @StartNode private File file;
-
-  @EndNode private Metric metric;
-
+  private String name;
   private Long value;
+
+  @Relationship(type = "VALID_FOR")
+  private Commit commit;
+
+  @Relationship(type = "LOCATED_IN")
+  private List<Finding> findings = new LinkedList<>();
 }

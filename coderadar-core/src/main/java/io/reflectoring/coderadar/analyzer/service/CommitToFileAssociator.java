@@ -106,7 +106,7 @@ public class CommitToFileAssociator {
   }
 
   private void associateFile(Commit commit, File file, ChangeType changeType) {
-    CommitToFileAssociation association = new CommitToFileAssociation(commit, file, changeType);
+    FileToCommitRelationship association = new FileToCommitRelationship(commit, file, changeType);
     commit.getFiles().add(association);
     saveCommitToFileAssociation(association);
   }
@@ -130,7 +130,7 @@ public class CommitToFileAssociator {
     return fileRepository.save(newFile);
   }
 
-  private void saveCommitToFileAssociation(CommitToFileAssociation association) {
+  private void saveCommitToFileAssociation(FileToCommitRelationship association) {
     eventPublisher.publishEvent(new CommitToFileAssociatedEvent(association));
     commitToFileAssociationRepository.save(association);
   }

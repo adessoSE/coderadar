@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
+import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
@@ -12,8 +13,9 @@ public class File {
   private Long id;
   private String path;
 
-  @Relationship private List<MetricValue> metricValues;
+  @Relationship(type = "MEASURED_BY")
+  private List<MetricValue> metricValues = new LinkedList<>();
 
-  @Relationship(type = "HAS_RENAMED")
-  private File hasRenamed;
+  @Relationship
+  private List<FileToCommitRelationship> commits = new LinkedList<>();
 }

@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.analyzer.service;
 import io.reflectoring.coderadar.analyzer.domain.*;
 import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
 import io.reflectoring.coderadar.plugin.api.FileMetrics;
+import io.reflectoring.coderadar.plugin.api.Metric;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
@@ -50,23 +51,23 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
   }
 
   @Override
-  public void analyzeCommit(Commit commit) {
-    List<SourceCodeFileAnalyzerPlugin> analyzers = getAnalyzersForProject(commit.getProject());
+  public void analyzeCommit(Commit commit, Project project) {
+    List<SourceCodeFileAnalyzerPlugin> analyzers = getAnalyzersForProject(project);
 
     if (analyzers.isEmpty()) {
       logger.warn(
           "skipping analysis of commit {} since there are no analyzers configured for project {}!",
           commit.getName(),
-          commit.getProject().getName());
+              project.getName());
       return;
     }
 
     int analyzedFiles = 0;
-    Git gitClient = gitRepoManager.getLocalGitRepository(commit.getProject().getId());
-    for (CommitToFileAssociation commitToFileAssociation : commit.getTouchedFiles()) {
-      String filePath = commitToFileAssociation.getFile().getPath();
+    Git gitClient = gitRepoManager.getLocalGitRepository(project.getId());
+    for (FileToCommitRelationship fileToCommitRelationship : commit.getTouchedFiles()) {
+      String filePath = fileToCommitRelationship.getFile().getPath();
       FileMetrics fileMetrics = analyzeFile(gitClient, commit, filePath, analyzers);
-      storeMetrics(commitToFileAssociation.getFile(), fileMetrics);
+      storeMetrics(fileToCommitRelationship.getFile(), fileMetrics, commit);
       commit.setAnalyzed(true);
       saveCommitPort.saveCommit(commit);
     }
@@ -92,8 +93,8 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
     return analyzers;
   }
 
-  private void storeMetrics(File file, FileMetrics fileMetrics) {
-    for (io.reflectoring.coderadar.plugin.api.Metric metric : fileMetrics.getMetrics()) {
+  private void storeMetrics(File file, FileMetrics fileMetrics, Commit commit) {
+    for (Metric metric : fileMetrics.getMetrics()) {
       List<Finding> findings = new ArrayList<>();
       for (io.reflectoring.coderadar.plugin.api.Finding finding : fileMetrics.getFindings(metric)) {
         Finding entity = new Finding();
@@ -106,11 +107,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
         findings.add(entity);
       }
       MetricValue metricValue =
-          new MetricValue(
-              null,
-              file,
-              new io.reflectoring.coderadar.analyzer.domain.Metric(null, metric.getId(), findings),
-              fileMetrics.getMetricCount(metric));
+          new MetricValue(null, metric.getId(), fileMetrics.getMetricCount(metric), commit, findings);
 
       saveMetricPort.saveMetricValue(metricValue);
     }
