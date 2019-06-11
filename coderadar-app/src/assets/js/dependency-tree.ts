@@ -1,15 +1,14 @@
 import html2canvas from 'html2canvas';
 
-let jsonData;
 let ctx;
 let htmlBuffer = [];
 let checkDown;
 let checkUp;
 let headerBackground;
+let activeDependency;
 
 export function afterLoad() {
   let data = JSON.parse((document.getElementById('3input') as HTMLInputElement).value);
-  jsonData = data;
   buildRoot(data);
   document.getElementById('3dependencyTree').innerHTML = htmlBuffer.join('');
   checkUp = (document.getElementById('3showUpward') as HTMLInputElement).checked;
@@ -17,11 +16,25 @@ export function afterLoad() {
   ctx = (document.getElementById('3canvas') as HTMLCanvasElement).getContext('2d');
   headerBackground = (document.getElementById('3headerBackground') as HTMLElement);
 
-  // add toggle function
+  // add toggle function (click and dblclick)
   let toggler = document.getElementsByClassName('clickable');
   for (let i = 0; i < toggler.length; i++) {
-    toggler[i].addEventListener('click', () => {
+    toggler[i].addEventListener('dblclick', () => {
       toggle(toggler[i]);
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      loadDependencies(data);
+    });
+    toggler[i].addEventListener('click', () => {
+      // set toggler[i] to active dependency
+      if (activeDependency === toggler[i]) {
+        activeDependency = undefined;
+        document.getElementById('3activeDependency').textContent = 'No active dependency chosen.';
+      } else {
+        activeDependency = toggler[i];
+        // @ts-ignore
+        document.getElementById('3activeDependency').textContent = toggler[i].textContent;
+      }
+      // clear and draw arrows for active dependency
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       loadDependencies(data);
     });
@@ -83,7 +96,7 @@ export function afterLoad() {
 
 function loadDependencies(node) {
   if (node.dependencies.length > 0 && node.children.length === 0) {
-    listDependencies(node, ctx);
+    listDependencies(node);
   }
   if (node.children.length > 0) {
     for (let child of node.children) {
@@ -190,15 +203,44 @@ function toggle(currentNode) {
   headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
 }
 
-function listDependencies(currentNode, ctx) {
+function listDependencies(currentNode) {
   ctx.lineWidth = 1;
   // draw arrows to my dependencies and call this function for my dependencies
   if (currentNode.dependencies.length > 0) {
     currentNode.dependencies.forEach(dependency => {
       // find last visible element for dependency as end
-      const end = findLastHTMLElement(dependency).parentNode as HTMLElement;
+      let end = findLastHTMLElement(dependency) as HTMLElement;
       // find last visible element for currentNode as start
-      const start = findLastHTMLElement(currentNode).parentNode as HTMLElement;
+      let start = findLastHTMLElement(currentNode) as HTMLElement;
+
+      if (activeDependency !== undefined) {
+        let draw = false;
+        // activeDependency is set and neither start or end
+        let tmp = start;
+        while (!tmp.classList.contains('list__root')) {
+          if (tmp === activeDependency) {
+            draw = true;
+            break;
+          }
+          tmp = tmp.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+        }
+        if (!draw) {
+          tmp = end;
+          while (!tmp.classList.contains('list__root')) {
+            if (tmp === activeDependency) {
+              draw = true;
+              break;
+            }
+            tmp = tmp.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+          }
+        }
+        if (!draw) {
+          return;
+        }
+      }
+
+      start = start.parentNode as HTMLElement;
+      end = end.parentNode as HTMLElement;
 
       let startx = 0, starty = 0, endx = 0, endy = 0;
       // calculate offsets across all parents for start and end
