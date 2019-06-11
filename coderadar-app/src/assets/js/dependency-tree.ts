@@ -1,4 +1,5 @@
 import html2canvas from 'html2canvas';
+import * as $ from 'jquery';
 
 let ctx;
 let htmlBuffer = [];
@@ -213,6 +214,7 @@ function listDependencies(currentNode) {
       // find last visible element for currentNode as start
       let start = findLastHTMLElement(currentNode) as HTMLElement;
 
+      // if activeDependency is set, draw only activeDependency related dependencies
       if (activeDependency !== undefined) {
         let draw = false;
         // activeDependency is set and neither start or end
@@ -242,32 +244,23 @@ function listDependencies(currentNode) {
       start = start.parentNode as HTMLElement;
       end = end.parentNode as HTMLElement;
 
-      let startx = 0, starty = 0, endx = 0, endy = 0;
-      // calculate offsets across all parents for start and end
-      let tmp = start;
-      do {
-        startx += tmp.offsetLeft;
-        starty += tmp.offsetTop;
-        tmp = tmp.offsetParent as HTMLElement;
-      } while (!tmp.classList.contains('list__root'));
-      tmp = end;
-      do {
-        endx += tmp.offsetLeft;
-        endy += tmp.offsetTop;
-        tmp = tmp.offsetParent as HTMLElement;
-      } while (!tmp.classList.contains('list__root'));
+      // use jquery for position calculation because plain js position calculation working with offsets returns
+      // different values for chrome and firefox
+      // (ref: https://stackoverflow.com/questions/1472842/firefox-and-chrome-give-different-values-for-offsettop).
+      let startx = $(start).offset().left + start.offsetWidth / 2;
+      let starty = $(start).offset().top + start.offsetHeight - ctx.canvas.getBoundingClientRect().top;
+      let endx = $(end).offset().left + end.offsetWidth / 2;
+      let endy = $(end).offset().top - ctx.canvas.getBoundingClientRect().top;
 
       //ignore all arrows with same start and end node
       if (start != end) {
         // check if downward dependencies should be shown
         if (checkDown && starty < endy) {
-          // canvasArrow(ctx, startx + 13, starty + 13, endx + end.offsetWidth, endy + end.offsetHeight / 2, "black");
-          canvasArrow(ctx, startx + start.offsetWidth / 2, starty + start.offsetHeight, endx + end.offsetWidth / 2, endy, "black");
+          canvasArrow(ctx, startx, starty, endx, endy, "black");
         }
         // check if upward Dependencies should be shown
         if (checkUp && starty > endy) {
-          // canvasArrow(ctx, startx + 13, starty + 13, endx + end.offsetWidth, endy + end.offsetHeight / 2, "red");
-          canvasArrow(ctx, startx + start.offsetWidth / 2, starty + start.offsetHeight, endx + end.offsetWidth / 2, endy, "red");
+          canvasArrow(ctx, startx, starty, endx, endy, "red");
         }
       }
     });
