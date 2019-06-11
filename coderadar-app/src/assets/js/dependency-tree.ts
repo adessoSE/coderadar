@@ -17,6 +17,7 @@ export function afterLoad() {
   ctx = (document.getElementById('3canvas') as HTMLCanvasElement).getContext('2d');
   headerBackground = (document.getElementById('3headerBackground') as HTMLElement);
 
+  // add toggle function
   let toggler = document.getElementsByClassName('clickable');
   for (let i = 0; i < toggler.length; i++) {
     toggler[i].addEventListener('click', () => {
@@ -25,6 +26,7 @@ export function afterLoad() {
       loadDependencies(data);
     });
   }
+  // collapse and extend elements
   for (let i = 0; i < toggler.length; i++) {
     let element = toggler[i] as HTMLElement;
     while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
@@ -37,16 +39,19 @@ export function afterLoad() {
       element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
     }
   }
+  // show upward listener
   document.getElementById('3showUpward').addEventListener('change', () => {
     checkUp = (document.getElementById('3showUpward') as HTMLInputElement).checked;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     loadDependencies(data);
   });
+  // show upward listener
   document.getElementById('3showDownward').addEventListener('change', () => {
     checkDown = (document.getElementById('3showDownward') as HTMLInputElement).checked;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     loadDependencies(data);
   });
+  // screenshot listener
   document.getElementById('3screenshot').addEventListener('click', () => {
     html2canvas(document.getElementById("3canvasContainer"), {
       width: document.getElementById('3list__root').offsetWidth,
@@ -61,7 +66,7 @@ export function afterLoad() {
       document.body.removeChild(link);
     });
   });
-
+  // resize listener
   window.addEventListener('resize', () => {
     ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
     ctx.canvas.width = document.getElementById('3list__root').offsetWidth;
@@ -69,6 +74,7 @@ export function afterLoad() {
     loadDependencies(data);
   });
 
+  // set canvas format and draw dependencies
   ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
   ctx.canvas.width = document.getElementById('3list__root').offsetWidth;
   headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
@@ -213,11 +219,13 @@ function listDependencies(currentNode, ctx) {
       if (start != end) {
         // check if downward dependencies should be shown
         if (checkDown && starty < endy) {
-          canvasArrow(ctx, startx + 13, starty + 13, endx + end.offsetWidth, endy + end.offsetHeight / 2, "black");
+          // canvasArrow(ctx, startx + 13, starty + 13, endx + end.offsetWidth, endy + end.offsetHeight / 2, "black");
+          canvasArrow(ctx, startx + start.offsetWidth / 2, starty + start.offsetHeight, endx + end.offsetWidth / 2, endy, "black");
         }
         // check if upward Dependencies should be shown
         if (checkUp && starty > endy) {
-          canvasArrow(ctx, startx + 13, starty + 13, endx + end.offsetWidth, endy + end.offsetHeight / 2, "red");
+          // canvasArrow(ctx, startx + 13, starty + 13, endx + end.offsetWidth, endy + end.offsetHeight / 2, "red");
+          canvasArrow(ctx, startx + start.offsetWidth / 2, starty + start.offsetHeight, endx + end.offsetWidth / 2, endy, "red");
         }
       }
     });
