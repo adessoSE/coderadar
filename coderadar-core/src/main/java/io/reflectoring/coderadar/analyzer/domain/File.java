@@ -16,6 +16,5 @@ public class File {
   @Relationship(type = "MEASURED_BY")
   private List<MetricValue> metricValues = new LinkedList<>();
 
-  @Relationship
-  private List<FileToCommitRelationship> commits = new LinkedList<>();
+  @Relationship private List<FileToCommitRelationship> commits = new LinkedList<>();
 }

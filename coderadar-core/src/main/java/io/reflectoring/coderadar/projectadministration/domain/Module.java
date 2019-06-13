@@ -1,12 +1,11 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
 import io.reflectoring.coderadar.analyzer.domain.File;
+import java.util.LinkedList;
+import java.util.List;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * The codebase may be organized into modules, each module starting at a certain path. All files

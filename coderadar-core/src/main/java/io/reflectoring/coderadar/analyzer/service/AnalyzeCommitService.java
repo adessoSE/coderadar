@@ -58,7 +58,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
       logger.warn(
           "skipping analysis of commit {} since there are no analyzers configured for project {}!",
           commit.getName(),
-              project.getName());
+          project.getName());
       return;
     }
 
@@ -107,7 +107,8 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
         findings.add(entity);
       }
       MetricValue metricValue =
-          new MetricValue(null, metric.getId(), fileMetrics.getMetricCount(metric), commit, findings);
+          new MetricValue(
+              null, metric.getId(), fileMetrics.getMetricCount(metric), commit, findings);
 
       saveMetricPort.saveMetricValue(metricValue);
     }

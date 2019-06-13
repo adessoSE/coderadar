@@ -13,8 +13,7 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
   private final DeleteProjectRepository deleteProjectRepository;
 
   @Autowired
-  public DeleteProjectAdapter(
-      DeleteProjectRepository deleteProjectRepository) {
+  public DeleteProjectAdapter(DeleteProjectRepository deleteProjectRepository) {
     this.deleteProjectRepository = deleteProjectRepository;
   }
 
@@ -26,7 +25,9 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
 
   @Override
   public void delete(Project project) {
-    deleteProjectRepository.findById(project.getId()).orElseThrow(() -> new ProjectNotFoundException(project.getId()));
+    deleteProjectRepository
+        .findById(project.getId())
+        .orElseThrow(() -> new ProjectNotFoundException(project.getId()));
     deleteProjectRepository.deleteProjectCascade(project.getId());
   }
 }

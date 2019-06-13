@@ -7,10 +7,9 @@ import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
+import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.List;
 import java.util.Optional;
-
-import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
@@ -27,11 +26,12 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
 
   @Autowired
   public StartAnalyzingService(
-          StartAnalyzingPort startAnalyzingPort,
-          GetProjectPort getProjectPort,
-          AnalyzeCommitService analyzeCommitService,
-          CommitMetadataScanner commitMetadataScanner,
-          TaskExecutor taskExecutor, GetCommitsInProjectPort getCommitsInProjectPort) {
+      StartAnalyzingPort startAnalyzingPort,
+      GetProjectPort getProjectPort,
+      AnalyzeCommitService analyzeCommitService,
+      CommitMetadataScanner commitMetadataScanner,
+      TaskExecutor taskExecutor,
+      GetCommitsInProjectPort getCommitsInProjectPort) {
     this.startAnalyzingPort = startAnalyzingPort;
     this.getProjectPort = getProjectPort;
     this.analyzeCommitService = analyzeCommitService;

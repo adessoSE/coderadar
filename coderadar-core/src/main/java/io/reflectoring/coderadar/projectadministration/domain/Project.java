@@ -1,16 +1,15 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzingJob;
-import io.reflectoring.coderadar.analyzer.domain.Commit;
-import java.util.ArrayList;
+import io.reflectoring.coderadar.analyzer.domain.File;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-
-import io.reflectoring.coderadar.analyzer.domain.File;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.neo4j.ogm.annotation.GeneratedValue;
+import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -20,7 +19,7 @@ import org.neo4j.ogm.annotation.Relationship;
 @EqualsAndHashCode(exclude = {"files", "filePatterns", "modules", "analyzerConfigurations"})
 @ToString(exclude = {"files", "filePatterns", "modules", "analyzerConfigurations"})
 public class Project {
-  private Long id;
+  @Id @GeneratedValue private Long id;
   private String name;
   private String workdirName;
   private String vcsUrl;
