@@ -6,3 +6,5 @@ include 'coderadar-core'
 include 'coderadar-app'
 include 'rest'
 include 'coderadar-graph'
+include 'coderadar-vcs'
+

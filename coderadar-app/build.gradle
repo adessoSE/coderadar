@@ -64,6 +64,7 @@ dependencies {
     compile project(":coderadar-plugins:loc-analyzer-plugin")
     compile project(":coderadar-plugins:checkstyle-analyzer-plugin")
     compile project(":coderadar-graph")
+    compile project(":coderadar-vcs")
     compile project(":coderadar-core")
     compile project(":rest")
 

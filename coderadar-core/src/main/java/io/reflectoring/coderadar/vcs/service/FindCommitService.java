@@ -1,36 +1,24 @@
 package io.reflectoring.coderadar.vcs.service;
 
-import io.reflectoring.coderadar.vcs.port.driver.walk.findCommit.FindGitCommitCommand;
-import io.reflectoring.coderadar.vcs.port.driver.walk.findCommit.FindGitCommitUseCase;
-import org.eclipse.jgit.errors.MissingObjectException;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.revwalk.RevCommit;
+import io.reflectoring.coderadar.vcs.domain.VcsCommit;
+import io.reflectoring.coderadar.vcs.port.driven.FindCommitPort;
+import io.reflectoring.coderadar.vcs.port.driver.FindCommitUseCase;
+import java.nio.file.Path;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FindCommitService implements FindGitCommitUseCase {
+public class FindCommitService implements FindCommitUseCase {
 
-  /**
-   * Returns the commit with the given name from the given repository. Returns null, if the commit
-   * does not exist.
-   *
-   * @param command The command containing the needed data.
-   * @return object representing the commit in question or null if it was not found.
-   */
+  private final FindCommitPort findCommitPort;
+
+  @Autowired
+  public FindCommitService(FindCommitPort findCommitPort) {
+    this.findCommitPort = findCommitPort;
+  }
+
   @Override
-  public RevCommit findCommit(FindGitCommitCommand command) {
-    try {
-      ObjectId commitId = command.getGitClient().getRepository().resolve(command.getCommitName());
-      Iterable<RevCommit> commits = command.getGitClient().log().add(commitId).call();
-      return commits.iterator().next();
-    } catch (MissingObjectException e) {
-      return null;
-    } catch (Exception e) {
-      throw new IllegalStateException(
-          String.format(
-              "error accessing git repository at %s",
-              command.getGitClient().getRepository().getDirectory().getAbsolutePath()),
-          e);
-    }
+  public VcsCommit findCommit(Path repositoryRoot, String name) {
+    return findCommitPort.findCommit(repositoryRoot, name);
   }
 }

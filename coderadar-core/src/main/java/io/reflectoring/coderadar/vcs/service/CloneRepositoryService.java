@@ -1,10 +1,9 @@
 package io.reflectoring.coderadar.vcs.service;
 
+import io.reflectoring.coderadar.vcs.UnableToCloneRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.CloneRepositoryPort;
-import io.reflectoring.coderadar.vcs.port.driver.CloneRepositoryCommand;
-import io.reflectoring.coderadar.vcs.port.driver.CloneRepositoryUseCase;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
+import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
+import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,20 +18,8 @@ public class CloneRepositoryService implements CloneRepositoryUseCase {
   }
 
   @Override
-  public Git cloneRepository(CloneRepositoryCommand command) {
+  public void cloneRepository(CloneRepositoryCommand command)
+      throws UnableToCloneRepositoryException {
     cloneRepositoryPort.cloneRepository(command.getRemoteUrl(), command.getLocalDir());
-    try {
-      // TODO: support cloning with credentials for private repositories
-      // TODO: support progress monitoring
-      Git git =
-          Git.cloneRepository()
-              .setURI(command.getRemoteUrl())
-              .setDirectory(command.getLocalDir())
-              .call();
-      git.getRepository().close();
-      return git;
-    } catch (GitAPIException e) {
-      throw new RuntimeException(e);
-    }
   }
 }

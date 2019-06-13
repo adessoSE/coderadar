@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
+import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
 import java.io.File;
 import java.util.Optional;
@@ -54,15 +55,18 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
       new Thread(
               () -> {
-                updateRepositoryUseCase.updateRepository(
-                    new File(
-                            coderadarConfigurationProperties.getWorkdir()
-                                + "/"
-                                + updatedProject.getWorkdirName())
-                        .toPath());
+                try {
+                  updateRepositoryUseCase.updateRepository(
+                      new File(
+                              coderadarConfigurationProperties.getWorkdir()
+                                  + "/"
+                                  + updatedProject.getWorkdirName())
+                          .toPath());
+                } catch (UnableToUpdateRepositoryException e) {
+                  e.printStackTrace();
+                }
               })
           .start();
-
       updateProjectPort.update(updatedProject);
     } else {
       throw new ProjectNotFoundException(projectId);

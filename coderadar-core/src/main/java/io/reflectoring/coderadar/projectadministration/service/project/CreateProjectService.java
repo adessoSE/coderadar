@@ -7,11 +7,11 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.Creat
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
-import io.reflectoring.coderadar.vcs.port.driver.CloneRepositoryCommand;
-import io.reflectoring.coderadar.vcs.port.driver.CloneRepositoryUseCase;
+import io.reflectoring.coderadar.vcs.UnableToCloneRepositoryException;
+import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
+import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
 import java.io.File;
 import java.util.UUID;
-import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
@@ -62,13 +62,15 @@ public class CreateProjectService implements CreateProjectUseCase {
         new CloneRepositoryCommand(
             command.getVcsUrl(),
             new File(
-                coderadarConfigurationProperties.getWorkdir() + "/" + project.getWorkdirName()));
+                coderadarConfigurationProperties.getWorkdir()
+                    + "/projects/"
+                    + project.getWorkdirName()));
 
     taskExecutor.execute(
         () -> {
           try {
             cloneRepositoryUseCase.cloneRepository(cloneRepositoryCommand);
-          } catch (JGitInternalException e) {
+          } catch (UnableToCloneRepositoryException e) {
             e.printStackTrace();
           }
         });

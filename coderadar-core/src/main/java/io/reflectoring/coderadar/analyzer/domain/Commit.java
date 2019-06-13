@@ -1,14 +1,11 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
-import io.reflectoring.coderadar.plugin.api.Metric;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-import org.neo4j.ogm.annotation.typeconversion.NumberString;
 
 /** Metadata about a commit to a Git repository. */
 @NodeEntity

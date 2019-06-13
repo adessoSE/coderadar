@@ -1,26 +1,13 @@
 package io.reflectoring.coderadar.analyzer.service;
 
-import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
-import io.reflectoring.coderadar.vcs.domain.RevCommitWithSequenceNumber;
-import io.reflectoring.coderadar.vcs.port.driver.ProcessCommitUseCase;
-import io.reflectoring.coderadar.vcs.service.ChangeTypeMapper;
-import io.reflectoring.coderadar.vcs.service.MetricsProcessor;
-import java.io.IOException;
-import java.util.List;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.diff.DiffEntry;
-import org.eclipse.jgit.diff.DiffFormatter;
-import org.eclipse.jgit.diff.RawTextComparator;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.util.io.DisabledOutputStream;
-import org.gitective.core.BlobUtils;
-import org.gitective.core.CommitUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.reflectoring.coderadar.vcs.domain.CommitProcessor;
+import io.reflectoring.coderadar.vcs.domain.VcsCommit;
 
-public class AnalyzingCommitProcessor implements ProcessCommitUseCase {
+public class AnalyzingCommitProcessor implements CommitProcessor {
+  @Override
+  public void processCommit(VcsCommit commit) {}
 
+  /*
   private Logger logger = LoggerFactory.getLogger(AnalyzingCommitProcessor.class);
 
   // private FileAnalyzer fileAnalyzer = new FileAnalyzer();
@@ -38,19 +25,17 @@ public class AnalyzingCommitProcessor implements ProcessCommitUseCase {
   }
 
   @Override
-  public void processCommit(Git gitClient, RevCommitWithSequenceNumber commitWithSequenceNumber) {
-    RevCommit commit = commitWithSequenceNumber.getCommit();
+  public void processCommit(VcsCommit commit) {
     try {
       walkFilesInCommit(gitClient, commit, analyzers, metricsProcessor);
     } catch (IOException e) {
       throw new IllegalStateException(
-          String.format("error while processing GIT commit %s", commit.name()));
+          String.format("error while processing GIT commit %s", commit.getName()));
     }
   }
 
   private void walkFilesInCommit(
-      Git gitClient,
-      RevCommit commit,
+      VcsCommit commit,
       List<SourceCodeFileAnalyzerPlugin> analyzers,
       MetricsProcessor metricsProcessor)
       throws IOException {
@@ -74,11 +59,13 @@ public class AnalyzingCommitProcessor implements ProcessCommitUseCase {
           BlobUtils.getRawContent(gitClient.getRepository(), commit.getId(), filePath);
       // TODO: FileAnalyzer needed
       // FileMetrics metrics = fileAnalyzer.analyzeFile(analyzers, filePath, fileContent);
-      /*FileMetricsWithChangeType metricsWithChangeType =
-          new FileMetricsWithChangeType(
-              metrics, changeTypeMapper.jgitToCoderadar(diff.getChangeType()));
-      metricsProcessor.processMetrics(metricsWithChangeType, gitClient, commit.getId(), filePath);*/
+      */
+  /*FileMetricsWithChangeType metricsWithChangeType =
+      new FileMetricsWithChangeType(
+          metrics, changeTypeMapper.jgitToCoderadar(diff.getChangeType()));
+  metricsProcessor.processMetrics(metricsWithChangeType, gitClient, commit.getId(), filePath);*/
+  /*
     }
     metricsProcessor.onCommitFinished(gitClient, commit.getId());
-  }
+  }*/
 }

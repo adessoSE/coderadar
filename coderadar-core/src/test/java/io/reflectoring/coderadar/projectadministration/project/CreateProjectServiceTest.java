@@ -11,7 +11,7 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.Creat
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService;
-import io.reflectoring.coderadar.vcs.port.driver.CloneRepositoryUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
 import java.io.File;
 import java.util.Date;
 import java.util.Optional;

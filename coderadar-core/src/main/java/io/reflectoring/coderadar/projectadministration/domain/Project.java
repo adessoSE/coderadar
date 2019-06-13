@@ -1,13 +1,10 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzingJob;
-import io.reflectoring.coderadar.analyzer.domain.Commit;
-import java.util.ArrayList;
+import io.reflectoring.coderadar.analyzer.domain.File;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-
-import io.reflectoring.coderadar.analyzer.domain.File;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

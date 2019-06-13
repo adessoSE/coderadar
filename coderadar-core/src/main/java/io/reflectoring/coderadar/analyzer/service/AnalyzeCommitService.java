@@ -9,14 +9,10 @@ import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfigurat
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
-import io.reflectoring.coderadar.vcs.port.driver.walk.findCommit.FindGitCommitCommand;
-import io.reflectoring.coderadar.vcs.service.FindCommitService;
-import io.reflectoring.coderadar.vcs.service.LocalGitRepositoryManager;
+import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
+import io.reflectoring.coderadar.vcs.port.driver.GetCommitRawContentUseCase;
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.gitective.core.BlobUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,57 +24,53 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
   private Logger logger = LoggerFactory.getLogger(AnalyzeCommitService.class);
 
   private final AnalyzerPluginService analyzerPluginService;
-  private final FindCommitService findCommitService;
   private final AnalyzeFileService analyzeFileService;
   private final SaveCommitPort saveCommitPort;
   private final SaveMetricPort saveMetricPort;
-  private LocalGitRepositoryManager gitRepoManager;
+  private GetCommitRawContentUseCase getCommitRawContentUseCase;
 
   @Autowired
   public AnalyzeCommitService(
       AnalyzerPluginService analyzerPluginService,
-      FindCommitService findCommitService,
       AnalyzeFileService analyzeFileService,
       SaveCommitPort saveCommitPort,
       SaveMetricPort saveMetricPort,
-      LocalGitRepositoryManager gitRepoManager) {
+      GetCommitRawContentUseCase getCommitRawContentUseCase) {
     this.analyzerPluginService = analyzerPluginService;
-    this.findCommitService = findCommitService;
     this.analyzeFileService = analyzeFileService;
     this.saveCommitPort = saveCommitPort;
     this.saveMetricPort = saveMetricPort;
-    this.gitRepoManager = gitRepoManager;
+    this.getCommitRawContentUseCase = getCommitRawContentUseCase;
   }
 
   @Override
   public void analyzeCommit(Commit commit, Project project) {
     List<SourceCodeFileAnalyzerPlugin> analyzers = getAnalyzersForProject(project);
-
     if (analyzers.isEmpty()) {
       logger.warn(
           "skipping analysis of commit {} since there are no analyzers configured for project {}!",
           commit.getName(),
-              project.getName());
-      return;
-    }
-
-    int analyzedFiles = 0;
-    Git gitClient = gitRepoManager.getLocalGitRepository(project.getId());
-    for (FileToCommitRelationship fileToCommitRelationship : commit.getTouchedFiles()) {
-      String filePath = fileToCommitRelationship.getFile().getPath();
-      FileMetrics fileMetrics = analyzeFile(gitClient, commit, filePath, analyzers);
-      storeMetrics(fileToCommitRelationship.getFile(), fileMetrics, commit);
-      commit.setAnalyzed(true);
-      saveCommitPort.saveCommit(commit);
+          project.getName());
+    } else {
+      int analyzedFiles = 0;
+      for (FileToCommitRelationship fileToCommitRelationship : commit.getTouchedFiles()) {
+        String filePath = fileToCommitRelationship.getFile().getPath();
+        FileMetrics fileMetrics = analyzeFile(commit, filePath, analyzers);
+        storeMetrics(fileToCommitRelationship.getFile(), fileMetrics, commit);
+        commit.setAnalyzed(true);
+        saveCommitPort.saveCommit(commit);
+      }
     }
   }
 
   private FileMetrics analyzeFile(
-      Git gitClient, Commit commit, String filepath, List<SourceCodeFileAnalyzerPlugin> analyzers) {
-    FindGitCommitCommand command = new FindGitCommitCommand(gitClient, commit.getName());
-    RevCommit gitCommit = findCommitService.findCommit(command);
-    byte[] fileContent =
-        BlobUtils.getRawContent(gitClient.getRepository(), gitCommit.getId(), filepath);
+      Commit commit, String filepath, List<SourceCodeFileAnalyzerPlugin> analyzers) {
+    byte[] fileContent = new byte[0];
+    try {
+      fileContent = getCommitRawContentUseCase.getCommitContent(filepath, commit.getName());
+    } catch (UnableToGetCommitContentException e) {
+      e.printStackTrace();
+    }
     return analyzeFileService.analyzeFile(analyzers, filepath, fileContent);
   }
 
@@ -107,8 +99,8 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
         findings.add(entity);
       }
       MetricValue metricValue =
-          new MetricValue(null, metric.getId(), fileMetrics.getMetricCount(metric), commit, findings);
-
+          new MetricValue(
+              null, metric.getId(), fileMetrics.getMetricCount(metric), commit, findings);
       saveMetricPort.saveMetricValue(metricValue);
     }
   }
