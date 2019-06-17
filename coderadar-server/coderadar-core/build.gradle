@@ -98,6 +98,9 @@ dependencies {
     compile group: 'io.dropwizard.metrics', name: 'metrics-annotation', version: '3.2.1'
     compile "io.prometheus:simpleclient:0.6.0"
     compile "io.micrometer:micrometer-registry-prometheus:1.1.3"
+    //    _____________________
+    compile project(':coderadar-plugins:levelized-structure-map-analyzer-plugin')
+    //    _____________________
     compile project(":coderadar-plugins:loc-analyzer-plugin")
     compile project(":coderadar-plugins:checkstyle-analyzer-plugin")
     compile project(":coderadar-server:coderadar-database")

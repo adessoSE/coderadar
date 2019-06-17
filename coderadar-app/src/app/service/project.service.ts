@@ -227,6 +227,6 @@ export class ProjectService {
    * @param commitName The name (hash) of the commit.
    */
   public getDependencyTree(projectId: number, commitName: string) {
-    return this.httpClient.get(this.apiURL + 'projects/' + projectId + '/strucutreMap/' + commitName, {observe: 'response'}).toPromise();
+    return this.httpClient.get(this.apiURL + 'analyzers/' + projectId + '/strucutreMap/' + commitName, {observe: 'response'}).toPromise();
   }
 }

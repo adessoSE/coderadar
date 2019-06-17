@@ -2,6 +2,8 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulati
 import { afterLoad } from '../../../assets/js/dependency-tree';
 import {ActivatedRoute, Router} from "@angular/router";
 import {ProjectService} from "../../service/project.service";
+import {FORBIDDEN} from "http-status-codes";
+import {UserService} from "../../service/user.service";
 
 @Component({
   selector: 'app-tree-root',
@@ -9,25 +11,32 @@ import {ProjectService} from "../../service/project.service";
   styleUrls: ['./dependency-root.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class DependencyRootComponent implements AfterViewInit, OnInit {
-  @ViewChild('3input') input: ElementRef;
+export class DependencyRootComponent implements AfterViewInit {
   node: any;
   projectId: number;
   commitName: any;
 
-  constructor(private router: Router, private projectService: ProjectService, private route: ActivatedRoute) {
-    this.node = projectService.getDependencyTree(this.projectId, this.commitName);
+  constructor(private router: Router, private userService: UserService,
+              private projectService: ProjectService, private route: ActivatedRoute) {
   }
 
-  ngOnInit():void {
-    this.route.params.subscribe(params => {
-      this.projectId = params.projectId;
-      this.commitName = params.commitName;
-    });
+  getData(): void {
+    this.projectService.getDependencyTree(this.projectId, this.commitName).then(response => {
+      this.node = response.body;
+      afterLoad(this.node);
+    })
+      .catch(e => {
+        if (e.status && e.status === FORBIDDEN) {
+          this.userService.refresh().then( (() => this.getData()));
+        }
+      });
   }
 
   ngAfterViewInit(): void {
-    this.input.nativeElement.value = JSON.stringify(this.node);
-    afterLoad(this.node);
+    this.route.params.subscribe(params => {
+      this.projectId = params.projectId;
+      this.commitName = params.commitName;
+      this.getData();
+    });
   }
 }

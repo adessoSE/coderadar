@@ -9,6 +9,8 @@ let headerBackground;
 let activeDependency;
 
 export function afterLoad(node) {
+  htmlBuffer = [];
+  console.log(node);
   buildRoot(node);
   document.getElementById('3dependencyTree').innerHTML = htmlBuffer.join('');
   checkUp = (document.getElementById('3showUpward') as HTMLInputElement).getAttribute('checked') == 'checked';
