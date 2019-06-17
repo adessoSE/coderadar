@@ -219,4 +219,14 @@ export class ProjectService {
   public getAvailableMetrics(id: number): Promise<HttpResponse<any>> {
     return this.httpClient.get(this.apiURL + 'projects/' + id + '/metrics', {observe: 'response'}).toPromise();
   }
+
+  /**
+   * Get the dependencyTree for to build a levelized structure map for a specific commit.
+   * Sends a GET request to /projects/{projectId}/strucutreMap/{commitName}
+   * @param projectId The project id.
+   * @param commitName The name (hash) of the commit.
+   */
+  public getDependencyTree(projectId: number, commitName: string) {
+    return this.httpClient.get(this.apiURL + 'projects/' + projectId + '/strucutreMap/' + commitName, {observe: 'response'}).toPromise();
+  }
 }

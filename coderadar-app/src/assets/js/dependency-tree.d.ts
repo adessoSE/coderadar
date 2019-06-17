@@ -1,1 +1,1 @@
-export declare function afterLoad();
+export declare function afterLoad(node);

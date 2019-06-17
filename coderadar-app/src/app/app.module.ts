@@ -45,13 +45,9 @@ const appRoutes: Routes = [
   { path: 'project-edit/:id', component: EditProjectComponent },
   { path: 'project/:id', component: ProjectDashboardComponent },
   { path: 'project/:id/:name', component: ViewCommitComponent },
-  { path: 'structure-map/:id/:name', component: DependencyRootComponent },
+  { path: 'structure-map/:projectId/:commitName', component: DependencyRootComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
-
-export function dependencyTreeProviderFactory(provider: DependencyTreeProvider) {
-  return () => provider.load();
-}
 
 @NgModule({
   declarations: [
@@ -97,9 +93,7 @@ export function dependencyTreeProviderFactory(provider: DependencyTreeProvider) 
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
-    },
-    DependencyTreeProvider,
-    {provide: APP_INITIALIZER, useFactory: dependencyTreeProviderFactory, deps: [DependencyTreeProvider], multi: true}
+    }
   ],
   bootstrap: [AppComponent]
 })

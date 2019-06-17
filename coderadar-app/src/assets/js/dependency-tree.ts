@@ -8,9 +8,8 @@ let checkUp;
 let headerBackground;
 let activeDependency;
 
-export function afterLoad() {
-  let data = JSON.parse((document.getElementById('3input') as HTMLInputElement).value);
-  buildRoot(data);
+export function afterLoad(node) {
+  buildRoot(node);
   document.getElementById('3dependencyTree').innerHTML = htmlBuffer.join('');
   checkUp = (document.getElementById('3showUpward') as HTMLInputElement).getAttribute('checked') == 'checked';
   checkDown = (document.getElementById('3showDownward') as HTMLInputElement).getAttribute('checked') == 'checked';
@@ -23,7 +22,7 @@ export function afterLoad() {
     toggler[i].addEventListener('dblclick', () => {
       toggle(toggler[i]);
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-      loadDependencies(data);
+      loadDependencies(node);
     });
     toggler[i].addEventListener('click', () => {
       // set toggler[i] to active dependency
@@ -37,7 +36,7 @@ export function afterLoad() {
       }
       // clear and draw arrows for active dependency
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-      loadDependencies(data);
+      loadDependencies(node);
     });
   }
   // collapse and extend elements
@@ -57,13 +56,13 @@ export function afterLoad() {
   document.getElementById('3showUpward').addEventListener('click', () => {
     checkUp = !checkUp;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    loadDependencies(data);
+    loadDependencies(node);
   });
   // show upward listener
   document.getElementById('3showDownward').addEventListener('click', () => {
     checkDown = !checkDown;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    loadDependencies(data);
+    loadDependencies(node);
   });
   // screenshot listener
   document.getElementById('3screenshot').addEventListener('click', () => {
@@ -85,14 +84,14 @@ export function afterLoad() {
     ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
     ctx.canvas.width = document.getElementById('3list__root').offsetWidth;
     headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
-    loadDependencies(data);
+    loadDependencies(node);
   });
 
   // set canvas format and draw dependencies
   ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
   ctx.canvas.width = document.getElementById('3list__root').offsetWidth;
   headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
-  loadDependencies(data);
+  loadDependencies(node);
 }
 
 function loadDependencies(node) {
