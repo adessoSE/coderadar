@@ -18,7 +18,7 @@ public class SaveCommitAdapter implements SaveCommitPort {
 
   @Override
   public void saveCommit(Commit commit) {
-    saveCommitRepository.save(commit);
+    saveCommitRepository.save(commit, 1);
   }
 
   @Override

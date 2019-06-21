@@ -9,6 +9,7 @@ import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfigurat
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driver.GetCommitRawContentUseCase;
 import java.util.ArrayList;
@@ -27,7 +28,8 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
   private final AnalyzeFileService analyzeFileService;
   private final SaveCommitPort saveCommitPort;
   private final SaveMetricPort saveMetricPort;
-  private GetCommitRawContentUseCase getCommitRawContentUseCase;
+  private final GetCommitRawContentUseCase getCommitRawContentUseCase;
+  private final UpdateProjectPort updateProjectPort;
 
   @Autowired
   public AnalyzeCommitService(
@@ -35,12 +37,14 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
       AnalyzeFileService analyzeFileService,
       SaveCommitPort saveCommitPort,
       SaveMetricPort saveMetricPort,
-      GetCommitRawContentUseCase getCommitRawContentUseCase) {
+      GetCommitRawContentUseCase getCommitRawContentUseCase,
+      UpdateProjectPort updateProjectPort) {
     this.analyzerPluginService = analyzerPluginService;
     this.analyzeFileService = analyzeFileService;
     this.saveCommitPort = saveCommitPort;
     this.saveMetricPort = saveMetricPort;
     this.getCommitRawContentUseCase = getCommitRawContentUseCase;
+    this.updateProjectPort = updateProjectPort;
   }
 
   @Override
@@ -55,11 +59,13 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
       int analyzedFiles = 0;
       for (FileToCommitRelationship fileToCommitRelationship : commit.getTouchedFiles()) {
         String filePath = fileToCommitRelationship.getFile().getPath();
+        project.getFiles().add(fileToCommitRelationship.getFile());
         FileMetrics fileMetrics = analyzeFile(commit, filePath, analyzers);
         storeMetrics(fileToCommitRelationship.getFile(), fileMetrics, commit);
         commit.setAnalyzed(true);
         saveCommitPort.saveCommit(commit);
       }
+      updateProjectPort.update(project);
     }
   }
 

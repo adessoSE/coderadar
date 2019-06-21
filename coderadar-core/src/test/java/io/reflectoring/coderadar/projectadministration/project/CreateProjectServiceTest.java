@@ -7,10 +7,14 @@ import static org.mockito.Mockito.when;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.projectadministration.ProjectStillExistsException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.CreateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService;
+import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
+import io.reflectoring.coderadar.vcs.port.driver.ProcessRepositoryUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.SaveProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
 import java.io.File;
 import java.util.Date;
@@ -28,6 +32,7 @@ class CreateProjectServiceTest {
       mock(CoderadarConfigurationProperties.class);
   private TaskExecutor taskExecutor = mock(TaskExecutor.class);
 
+  private SaveProjectCommitsUseCase saveProjectCommitsUseCase = mock(SaveProjectCommitsUseCase.class);
   @Test
   void returnsNewProjectId() {
     CreateProjectService testSubject =
@@ -36,7 +41,9 @@ class CreateProjectServiceTest {
             getProjectPort,
             cloneRepositoryUseCase,
             coderadarConfigurationProperties,
-            taskExecutor);
+            taskExecutor,
+                saveProjectCommitsUseCase
+            );
 
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());
@@ -69,7 +76,9 @@ class CreateProjectServiceTest {
             getProjectPort,
             cloneRepositoryUseCase,
             coderadarConfigurationProperties,
-            taskExecutor);
+            taskExecutor,
+            saveProjectCommitsUseCase
+            );
 
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());

@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Commit {
   private Integer sequenceNumber;
 
   @Relationship(type = "IS_CHILD_OF")
-  private List<Commit> parents = new LinkedList<>();
+  private List<Commit> parents = new ArrayList<>();
 
   @Relationship(direction = Relationship.INCOMING, type = "CHANGED_IN")
   private List<FileToCommitRelationship> touchedFiles = new LinkedList<>();

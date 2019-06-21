@@ -4,12 +4,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CommitToFileAssociator {
-  /*
-  private Logger logger = LoggerFactory.getLogger(CommitToFileAssociator.class);
+  /*  private Logger logger = LoggerFactory.getLogger(CommitToFileAssociator.class);
 
   private GitLogEntryRepository gitLogEntryRepository;
 
-  private FileRepository fileRepository;
+  private SaveFilePort saveFilePort;
 
   private SaveCommitPort saveCommitPort;
 
@@ -24,13 +23,13 @@ public class CommitToFileAssociator {
   @Autowired
   public CommitToFileAssociator(
       GitLogEntryRepository gitLogEntryRepository,
-      FileRepository fileRepository,
+      SaveFilePort saveFilePort,
       SaveCommitPort saveCommitPort,
       CommitToFileAssociationRepository commitToFileAssociationRepository,
       ApplicationEventPublisher eventPublisher,
       MetricRegistry metricRegistry) {
     this.gitLogEntryRepository = gitLogEntryRepository;
-    this.fileRepository = fileRepository;
+    this.saveFilePort = saveFilePort;
     this.saveCommitPort = saveCommitPort;
     this.commitToFileAssociationRepository = commitToFileAssociationRepository;
     this.eventPublisher = eventPublisher;
@@ -39,15 +38,14 @@ public class CommitToFileAssociator {
   }
 
   */
-  /**
+  /*  *
    * Goes through the git log of all files of the given commit and creates {@link File} entities for
    * each. If a {@link File} for the file is already present, the file in the commit is associated
    * with the present to file so that RENAMED files can be traced to their new filename in the
    * database. Each {@link File} entity will then be associated with the {@link Commit} entity in
    * order to build a searchable database.
    *
-   * @param commit the commit whose files to associate
-   */
+   * @param commit the commit whose files to associate*/
   /*
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void associateFilesOfCommit(Commit commit) {
@@ -112,22 +110,22 @@ public class CommitToFileAssociator {
   }
 
   private File loadExistingFile(Commit commit, String filepath) {
-    return fileRepository.findInCommit(
+    return saveFilePort.findInCommit(
         filepath, commit.getFirstParent(), commit.getProject().getId());
   }
 
   private File createNewFile(String filepath) {
     File newFile = new File();
-    newFile.setIdentity(new FileIdentity());
-    newFile.setFilepath(filepath);
-    return fileRepository.save(newFile);
+    newFile.setPath(filepath);
+    saveFilePort.save(newFile);
+    return newFile;
   }
 
   private File createNewFileWithSameIdentity(File file, String filepath) {
     File newFile = new File();
-    newFile.setIdentity(file.getIdentity());
-    newFile.setFilepath(filepath);
-    return fileRepository.save(newFile);
+    newFile.setPath(filepath);
+    saveFilePort.save(newFile);
+    return newFile;
   }
 
   private void saveCommitToFileAssociation(FileToCommitRelationship association) {

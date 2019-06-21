@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
 import io.reflectoring.coderadar.vcs.Counter;
+import io.reflectoring.coderadar.vcs.RevCommitMapper;
 import io.reflectoring.coderadar.vcs.UnableToProcessRepositoryException;
 import io.reflectoring.coderadar.vcs.domain.CommitFilter;
 import io.reflectoring.coderadar.vcs.domain.CommitProcessor;
@@ -53,15 +54,13 @@ public class ProcessRepositoryAdapter implements ProcessRepositoryPort {
             .call()
             .forEach(
                 revCommit -> {
-                  VcsCommit vcsCommit =
-                      new VcsCommit(
-                          revCommit.getCommitTime(),
-                          revCommit.getName(),
-                          revCommit.getAuthorIdent().getName(),
-                          revCommit.getShortMessage(),
-                          currentSequenceNumber.getValue());
+                  VcsCommit vcsCommit = RevCommitMapper.map(revCommit);
                   if (shouldBeProcessed(vcsCommit, filters)) {
-                    processor.processCommit(vcsCommit);
+                    try {
+                      processor.processCommit(vcsCommit);
+                    } catch (IOException e) {
+                      e.printStackTrace();
+                    }
                   }
                   currentSequenceNumber.decrement();
                 });

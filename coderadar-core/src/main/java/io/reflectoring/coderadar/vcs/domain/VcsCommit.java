@@ -10,9 +10,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class VcsCommit {
-  private int commitTime;
-  private String name;
-  private String author;
-  private String message;
-  private final int sequenceNumber;
+  protected int commitTime;
+  protected String name;
+  protected String author;
+  protected String message;
+  protected final int sequenceNumber;
 }
