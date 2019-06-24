@@ -354,6 +354,10 @@ function collapseChildren(currentNode) {
   if (currentNode.nextSibling) {
     let toCollapse = currentNode.nextSibling.getElementsByClassName('clickable');
     for (let i = 0; i < toCollapse.length; i++) {
+      if (toCollapse[i] === activeDependency) {
+        activeDependency = undefined;
+        document.getElementById('3activeDependency').textContent = 'No active dependency chosen.';
+      }
       if (toCollapse[i].nextSibling) {
         toCollapse[i].nextSibling.classList.add('nested');
         toCollapse[i].nextSibling.classList.remove('active');
