@@ -34,7 +34,6 @@ $.fn.single_double_click = function(single_click_callback, double_click_callback
 
 export function afterLoad(node) {
   htmlBuffer = [];
-  console.log(node);
   buildRoot(node);
   document.getElementById('3dependencyTree').innerHTML = htmlBuffer.join('');
   checkUp = (document.getElementById('3showUpward') as HTMLInputElement).getAttribute('checked') == 'checked';
@@ -59,45 +58,26 @@ export function afterLoad(node) {
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       loadDependencies(node);
     }, () => {
-      toggle(toggler[i]);
-      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-      loadDependencies(node);
-    });
-
-
-
-
-    /*toggler[i].addEventListener('dblclick', () => {
-      toggle(toggler[i]);
-      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-      loadDependencies(node);
-    });
-    toggler[i].addEventListener('click', () => {
-      // set toggler[i] to active dependency
-      if (activeDependency === toggler[i]) {
-        activeDependency = undefined;
-        document.getElementById('3activeDependency').textContent = 'No active dependency chosen.';
-      } else {
-        activeDependency = toggler[i];
-        // @ts-ignore
-        document.getElementById('3activeDependency').textContent = toggler[i].textContent;
+      if (toggler[i].nextSibling != null) {
+        toggle(toggler[i]);
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        loadDependencies(node);
       }
-      // clear and draw arrows for active dependency
-      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-      loadDependencies(node);
-    });*/
+    });
   }
   // collapse and extend elements
   for (let i = 0; i < toggler.length; i++) {
-    let element = toggler[i] as HTMLElement;
-    while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
-      element.style.display = 'inline';
-      if (element.offsetWidth > (element.nextSibling as HTMLElement).offsetWidth) {
-        element.style.display = 'inline-grid';
-      } else {
+    if (toggler[i].nextSibling != null) {
+      let element = toggler[i] as HTMLElement;
+      while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
         element.style.display = 'inline';
+        if (element.offsetWidth > (element.nextSibling as HTMLElement).offsetWidth) {
+          element.style.display = 'inline-grid';
+        } else {
+          element.style.display = 'inline';
+        }
+        element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
       }
-      element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
     }
   }
   // show upward listener
@@ -191,11 +171,11 @@ function buildTree(currentNode) {
     if (layer === child.layer) {
       // add in same row as child
       htmlBuffer.push(`<td class="${classString}">` +
-        `<span id="${child.packageName}" class="filename-span${child.children.length > 0 && child.packageName !== '' ? ' clickable' : ''}">${fileName}</span>`);
+        `<span id="${child.packageName}" class="filename-span${(child.children.length > 0 || child.dependencies.length > 0) && child.packageName !== '' ? ' clickable' : ''}">${fileName}</span>`);
     } else {
       // create new row
       htmlBuffer.push(`</tr><tr><td class="${classString}">` +
-        `<span id="${child.packageName}" class="filename-span${child.children.length > 0 && child.packageName !== '' ? ' clickable' : ''}">${fileName}</span>`);
+        `<span id="${child.packageName}" class="filename-span${(child.children.length > 0 || child.dependencies.length > 0) && child.packageName !== '' ? ' clickable' : ''}">${fileName}</span>`);
     }
     layer = child.layer;
     if (child.children.length > 0) {
