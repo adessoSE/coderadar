@@ -148,7 +148,7 @@ public class Node {
      * @return if this has a dependency on the given Node-object.
      */
     public boolean hasDependencyOn(Node node) {
-        return countDependenciesOn(node) == 0;
+        return countDependenciesOn(node) != 0;
     }
 
     /**

@@ -8,6 +8,30 @@ let checkUp;
 let headerBackground;
 let activeDependency;
 
+$.fn.single_double_click = function(single_click_callback, double_click_callback, timeout) {
+  return this.each(() => {
+    let clicks = 0, self = this;
+    // if a click occurs
+    $(this).click(event => {
+      // raise click counter
+      clicks++;
+      // if this is the first click, start a timer with @timeout millis
+      if (clicks == 1) {
+        setTimeout(function(){
+          // on timer's timeout check if a second click has occurred.
+          if(clicks == 1) {
+            single_click_callback.call(self, event);
+          } else {
+            double_click_callback.call(self, event);
+          }
+          // reset click counter
+          clicks = 0;
+        }, timeout || 300);
+      }
+    });
+  });
+};
+
 export function afterLoad(node) {
   htmlBuffer = [];
   console.log(node);
@@ -21,7 +45,29 @@ export function afterLoad(node) {
   // add toggle function (click and dblclick)
   let toggler = document.getElementsByClassName('clickable');
   for (let i = 0; i < toggler.length; i++) {
-    toggler[i].addEventListener('dblclick', () => {
+    $(toggler[i]).single_double_click(() => {
+      // set toggler[i] to active dependency
+      if (activeDependency === toggler[i]) {
+        activeDependency = undefined;
+        document.getElementById('3activeDependency').textContent = 'No active dependency chosen.';
+      } else {
+        activeDependency = toggler[i];
+        // @ts-ignore
+        document.getElementById('3activeDependency').textContent = toggler[i].textContent;
+      }
+      // clear and draw arrows for active dependency
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      loadDependencies(node);
+    }, () => {
+      toggle(toggler[i]);
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      loadDependencies(node);
+    });
+
+
+
+
+    /*toggler[i].addEventListener('dblclick', () => {
       toggle(toggler[i]);
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       loadDependencies(node);
@@ -39,7 +85,7 @@ export function afterLoad(node) {
       // clear and draw arrows for active dependency
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       loadDependencies(node);
-    });
+    });*/
   }
   // collapse and extend elements
   for (let i = 0; i < toggler.length; i++) {
