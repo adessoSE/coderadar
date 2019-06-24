@@ -4,30 +4,28 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
 import {BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND} from 'http-status-codes';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-edit-project',
   templateUrl: './edit-project.component.html',
-  styleUrls: ['./edit-project.component.css']
+  styleUrls: ['./edit-project.component.scss']
 })
 export class EditProjectComponent implements OnInit {
 
-  private projectId: number;
-
   projectName: string;
-
-  // I need all project at the moment,
   // because coderadar does not check if the project name exists already
   projects: Project[] = [];
 
+  // I need all project at the moment,
   project: Project;
-
   // Error fields
   incorrectURL = false;
   projectExists = false;
   nameEmpty = false;
+  projectId: number;
 
-  constructor(private router: Router, private userService: UserService,
+  constructor(private router: Router, private userService: UserService,  private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute) {
     this.project = new Project();
     this.projectName = '';
@@ -43,26 +41,6 @@ export class EditProjectComponent implements OnInit {
   }
 
   /**
-   * Gets the project from the service and saves it this.project.
-   * If access is denied (403) sends the refresh token and tries to submit again.
-   * If the project does not exists (404) redirects to the dashboard.
-   */
-  private getProject(): void {
-    this.projectService.getProject(this.projectId)
-      .then(response => {
-        this.project = new Project(response.body);
-        this.projectName = this.project.name;
-      })
-      .catch(error => {
-        if (error.status && error.status === FORBIDDEN) {
-            this.userService.refresh().then(() => this.getProject());
-        } else if (error.status && error.status === NOT_FOUND) {
-          this.router.navigate(['/dashboard']);
-        }
-      });
-  }
-
-  /**
    * Called when the form is submitted.
    * Does input validation and calls ProjectService.editProject().
    * Handles errors from the server.
@@ -75,7 +53,7 @@ export class EditProjectComponent implements OnInit {
         .catch(error => {
           console.log(error);
           if (error.status && error.status === FORBIDDEN) {
-              this.userService.refresh().then(() => this.submitForm());
+            this.userService.refresh().then(() => this.submitForm());
           } else if (error.status && error.status === BAD_REQUEST) {
             if (error.error && error.error.errorMessage === 'Validation Error') {
               error.error.fieldErrors.forEach(field => {
@@ -88,8 +66,29 @@ export class EditProjectComponent implements OnInit {
             error.error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
             this.projectExists = true;
           }
-      });
+        });
     }
+  }
+
+  /**
+   * Gets the project from the service and saves it this.project.
+   * If access is denied (403) sends the refresh token and tries to submit again.
+   * If the project does not exists (404) redirects to the dashboard.
+   */
+  private getProject(): void {
+    this.projectService.getProject(this.projectId)
+      .then(response => {
+        this.project = new Project(response.body);
+        this.projectName = this.project.name;
+        this.titleService.setTitle('Coderadar - Edit ' + this.projectName);
+      })
+      .catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh().then(() => this.getProject());
+        } else if (error.status && error.status === NOT_FOUND) {
+          this.router.navigate(['/dashboard']);
+        }
+      });
   }
 
   /**

@@ -1,20 +1,43 @@
-<app-header [title]="'Project dashboard'"></app-header>
+<app-header [title]="[{location: '/dashboard', name: 'Dashboard'}, {location: '/project/' + project.id, name: appComponent.trimProjectName(project.name)}]"></app-header>
 
 <main class="card-list">
-  <p>{{getTitleText()}}</p>
-  <mat-grid-list cols="4" rowHeight="130px">
-    <mat-grid-tile *ngFor="let commit of commits" [colspan]="2" [rowspan]="1">
-      <mat-card class="dashboard-card">
+  <p>{{getTitleText()}}
+    <br>
+    <mat-label style="font-size: 12pt">Analyzed {{commitsAnalyzed}}/{{commits.length}} commits</mat-label>
+  </p>
+  <mat-grid-list cols="1" rowHeight="130px">
+    <mat-grid-tile *ngFor="let commit of commits.slice(pageEvent.pageIndex*pageEvent.pageSize, (pageEvent.pageIndex*pageEvent.pageSize) + pageEvent.pageSize)"
+                     [colspan]="1" [rowspan]="1">
+      <mat-card [ngClass]=
+                  "{'dashboard-card-deselected' : commit !== selectedCommit1 && commit !== selectedCommit2
+                    && (prevSelectedCommit1 === commit || prevSelectedCommit2 === commit),
+                  'dashboard-card-selected' : commit === selectedCommit1 || commit === selectedCommit2}"
+                class="dashboard-card" (click)="selectCard(commit)">
         <mat-card-content class="mat-card-content">
           <a mat-button routerLink="/project/{{project.id}}/{{commit.name}}"><b>{{commit.name}}</b></a>
           <a mat-button routerLink="/structure-map/{{project.id}}/{{commit.name}}">..</a><br>
-          <mat-label>Author: {{commit.author}}</mat-label><br>
-          <mat-label>Date: {{timestampToDate(commit.timestamp)}}</mat-label><br>
+          <mat-label>Author: {{commit.author}}</mat-label>
+          <br>
+          <mat-label>Date: {{timestampToDate(commit.timestamp)}}</mat-label>
+          <br>
           <mat-label>Analyzed: {{booleanToString(commit.analyzed)}}</mat-label>
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>
+
+    <a *ngIf="selectedCommit1 !== null && selectedCommit2 != null && selectedCommit1.analyzed && selectedCommit2.analyzed"
+       class="compare-button" color="accent" mat-fab routerLink="/city/{{project.id}}">
+      <div>
+        <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">library_books</mat-icon>
+      </div>
+    </a>
   </mat-grid-list>
 </main>
+
+<mat-paginator [showFirstLastButtons]="true" class="paginator" [length]="commits.length"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="pageSizeOptions"
+               (page)="pageEvent = $event">
+</mat-paginator>
 
 <app-footer></app-footer>

@@ -4,14 +4,16 @@ import {UserService} from '../../service/user.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css'],
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
 
-  @Input()
-  title: string;
 
-  constructor(private userService: UserService) { }
+  @Input()
+  title: any[];
+
+  constructor(private userService: UserService) {
+  }
 
   ngOnInit() {
   }

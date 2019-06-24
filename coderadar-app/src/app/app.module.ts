@@ -17,8 +17,8 @@ import {EditProjectComponent} from './view/edit-project/edit-project.component';
 import {HeaderComponent} from './view/header/header.component';
 import {FooterComponent} from './view/footer/footer.component';
 import {UserSettingsComponent} from './view/user-settings/user-settings.component';
-import { ProjectDashboardComponent } from './view/project-dashboard/project-dashboard.component';
-import { ViewCommitComponent } from './view/view-commit/view-commit.component';
+import {ProjectDashboardComponent} from './view/project-dashboard/project-dashboard.component';
+import {ViewCommitComponent} from './view/view-commit/view-commit.component';
 import {
   MatButtonModule,
   MatCardModule,
@@ -28,24 +28,39 @@ import {
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatMenuModule,
+  MatMenuModule, MatPaginatorModule,
   MatSidenavModule,
   MatToolbarModule,
 } from '@angular/material';
+import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
+import {VisualizationModule} from './city-map/visualization/visualization.module';
+import {getReducers, REDUCER_TOKEN} from './city-map/shared/reducers';
+import {StoreModule} from '@ngrx/store';
+import {EffectsModule} from '@ngrx/effects';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {AppEffects} from './city-map/shared/effects';
+import {FocusService} from './city-map/service/focus.service';
+import {TooltipService} from './city-map/service/tooltip.service';
+import {ComparisonPanelService} from './city-map/service/comparison-panel.service';
+import {environment} from '../environments/environment';
+import {CityViewComponent} from './view/city-view/city-view.component';
+import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {DependencyRootComponent} from "./levelized-structure-map/dependency-root/dependency-root.component";
 
 const appRoutes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'dashboard', component: MainDashboardComponent },
-  { path: 'user-settings', component: UserSettingsComponent },
-  { path: 'add-project', component: AddProjectComponent },
-  { path: 'project-configure/:id', component: ConfigureProjectComponent },
-  { path: 'project-edit/:id', component: EditProjectComponent },
-  { path: 'project/:id', component: ProjectDashboardComponent },
-  { path: 'project/:id/:name', component: ViewCommitComponent },
+  {path: 'login', component: LoginComponent},
+  {path: 'register', component: RegisterComponent},
+  {path: 'dashboard', component: MainDashboardComponent},
+  {path: 'user-settings', component: UserSettingsComponent},
+  {path: 'add-project', component: AddProjectComponent},
+  {path: 'project-configure/:id', component: ConfigureProjectComponent},
+  {path: 'city/:id', component: CityViewComponent},
+  {path: 'project-edit/:id', component: EditProjectComponent},
+  {path: 'project/:id', component: ProjectDashboardComponent},
+  {path: 'project/:id/:name', component: ViewCommitComponent},
   { path: 'structure-map/:projectId/:commitName', component: DependencyRootComponent },
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full'}
+  {path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
 
 @NgModule({
@@ -62,6 +77,8 @@ const appRoutes: Routes = [
     UserSettingsComponent,
     ProjectDashboardComponent,
     ViewCommitComponent,
+    CityViewComponent,
+    CityViewHeaderComponent,
     DependencyRootComponent
   ],
   imports: [
@@ -71,6 +88,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     BrowserAnimationsModule,
     BrowserModule,
+    FontAwesomeModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
     MatFormFieldModule,
@@ -82,18 +100,35 @@ const appRoutes: Routes = [
     MatMenuModule,
     MatListModule,
     MatIconModule,
+    RouterModule,
     LayoutModule,
     MatToolbarModule,
     MatSidenavModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    ControlPanelModule,
+    VisualizationModule,
+    StoreModule.forRoot(REDUCER_TOKEN),
+    EffectsModule.forRoot([AppEffects]),
+    environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 50}),
+    MatPaginatorModule
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true,
-    }
-  ],
+      multi: true
+    },
+    FocusService,
+    TooltipService,
+    ComparisonPanelService,
+    {
+      provide: REDUCER_TOKEN,
+      useFactory: getReducers,
+    }],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Project} from '../model/project';
 import {Router} from '@angular/router';
 import {UserService} from './user.service';
@@ -8,15 +8,18 @@ import {AnalyzerConfiguration} from '../model/analyzer-configuration';
 import {Commit} from '../model/commit';
 import {Module} from '../model/module';
 import {AppComponent} from '../app.component';
+import {IMetricMapping} from '../city-map/interfaces/IMetricMapping';
+import {INode} from '../city-map/interfaces/INode';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
 
-  constructor(private userService: UserService, private router: Router, private httpClient: HttpClient) { }
-
   private apiURL = AppComponent.getApiUrl();
+
+  constructor(private userService: UserService, private router: Router, private httpClient: HttpClient) {
+  }
 
   /**
    * Gets all the projects from the server.
@@ -32,7 +35,7 @@ export class ProjectService {
    * @param id The id of the project.
    */
   public getProject(id: number): Promise<HttpResponse<any>> {
-    return this.httpClient.get<any>(this.apiURL + 'projects/' + id , {observe: 'response'}).toPromise();
+    return this.httpClient.get<any>(this.apiURL + 'projects/' + id, {observe: 'response'}).toPromise();
   }
 
   /**
@@ -98,8 +101,8 @@ export class ProjectService {
    * @param module The name (path) of the module.
    */
   public addProjectModule(id: number, module: Module): Promise<HttpResponse<any>> {
-      return this.httpClient.post(this.apiURL + 'projects/' + id + '/modules', {modulePath: module.modulePath},
-        {observe: 'response'}).toPromise();
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/modules', {modulePath: module.modulePath},
+      {observe: 'response'}).toPromise();
   }
 
   /**
@@ -218,6 +221,25 @@ export class ProjectService {
    */
   public getAvailableMetrics(id: number): Promise<HttpResponse<any>> {
     return this.httpClient.get(this.apiURL + 'projects/' + id + '/metrics', {observe: 'response'}).toPromise();
+  }
+
+  /**
+   * Returnsthe delta three of a project given two commits and a metric mapping
+   * @param firstCommit The first commit
+   * @param secondCommit The second commit
+   * @param metricMapping The metric mapping
+   * @param projectId The project id.
+   */
+  public getDeltaTree(firstCommit: Commit, secondCommit: Commit, metricMapping: IMetricMapping, projectId: number):
+    Promise<HttpResponse<INode>> {
+    const body = {
+      commit1: firstCommit.name,
+      commit2: secondCommit.name,
+      metrics: [metricMapping.heightMetricName, metricMapping.groundAreaMetricName, metricMapping.colorMetricName]
+    };
+
+    return this.httpClient.post<INode>(this.apiURL + 'projects/' + projectId + '/metricvalues/deltaTree', body,
+      {observe: 'response'}).toPromise();
   }
 
   /**
