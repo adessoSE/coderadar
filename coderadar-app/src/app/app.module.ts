@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AppComponent} from './app.component';
 import {LoginComponent} from './view/login/login.component';
@@ -33,7 +33,6 @@ import {
   MatToolbarModule,
 } from '@angular/material';
 import {DependencyRootComponent} from "./levelized-structure-map/dependency-root/dependency-root.component";
-import {DependencyTreeProvider} from "./levelized-structure-map/DependencyTreeProvider";
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
