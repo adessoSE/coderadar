@@ -14,10 +14,6 @@ public class NodeComparator implements Comparator<Node> {
      *   o1 is lower than o2
      * else if o2 has more dependencies on o1 than o1 on o2
      *   o2 is lower than o1
-     * else if o1 has more dependencies than o2
-     *   o1 is lower than o2
-     * else if o2 has more dependencies than o1
-     *   o2 is lower than o1
      * else if o1 is a directory and o2 is not
      *   o1 is lower than o2
      * else if o2 is a directory and o1 is not
@@ -32,10 +28,6 @@ public class NodeComparator implements Comparator<Node> {
         } else if (o1.countDependenciesOn(o2) > o2.countDependenciesOn(o1)) {
             return -1;
         } else if (o1.countDependenciesOn(o2) < o2.countDependenciesOn(o1)) {
-            return 1;
-        } else if (o1.getDependencies().size() > o2.getDependencies().size()) {
-            return -1;
-        } else if (o1.getDependencies().size() < o2.getDependencies().size()) {
             return 1;
         } else if (o1.hasChildren() && !o2.hasChildren()) {
             return -1;

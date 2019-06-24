@@ -369,10 +369,6 @@ public class DependencyTree {
      *   o1 is before o2
      * else if o2 has more dependencies on o1 than o1 on o2
      *   o2 is before o1
-     * else if o1 has more dependencies than o2
-     *   o1 is before o2
-     * else if o2 has more dependencies than o1
-     *   o2 is before o1
      * else if o1 is a directory and o2 is not
      *   o1 is before o2
      * else if o2 is a directory and o1 is not
@@ -402,14 +398,15 @@ public class DependencyTree {
             // for every child in the current layer check
             for (int j = 0; j < i; j++) {
                 if (node.getChildren().get(j).getLayer() == layer) {
-                    // if a child in the current layer has a dependency on the child[i] and child[i] has no dependency on it
-                    // or a child in the current row has more dependencies on the child[i] than the child[i] has on it
+                    // if any child before this has a dependency on this
+                    // or any child before has more dependencies on this than this has on any child before
+                    //   raise layer, break
                     if (node.getChildren().get(j).hasDependencyOn(node.getChildren().get(i)) && !node.getChildren().get(i).hasDependencyOn(node.getChildren().get(j))) {
-                        // raise row
                         layer++;
+                        break;
                     } else if (node.getChildren().get(j).countDependenciesOn(node.getChildren().get(i)) > node.getChildren().get(i).countDependenciesOn(node.getChildren().get(j))) {
-                        // raise layer
                         layer++;
+                        break;
                     }
                 }
             }

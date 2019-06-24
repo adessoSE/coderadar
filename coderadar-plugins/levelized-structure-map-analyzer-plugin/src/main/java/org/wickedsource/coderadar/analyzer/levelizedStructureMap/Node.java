@@ -117,21 +117,17 @@ public class Node {
      * @return amount of dependencies @this has on a given Node-object.
      */
     public int countDependenciesOn(Node node) {
-        // create list which contains all dependencies and sub dependencies on @node
         int counter = 0;
-        // if @this is not already in that list
         for (Node dependency : dependencies) {
-            // add this to the dependency list
-            // check if @this has a dependency on @node
-            // if @this is a file and @node is a file or @this is a folder and @node is a file
-            //   dependency.equals
-            // else if @this is a file and @node is a folder or @this is a folder and @node is a folder
-            //   dependency.contains(@node.packageName)
-            if (!this.hasChildren() && !node.hasChildren() || this.hasChildren() && !node.hasChildren()) {
+            // if @node represents a file
+            // else if @node represents a folder
+            if (!node.hasChildren()) {
+                // if the if @node is found, raise the counter
                 if (dependency.equals(node)) {
                     counter++;
                 }
-            } else if (!this.hasChildren() && node.hasChildren() || this.hasChildren() && node.hasChildren()) {
+            } else {
+                // if @dependency is in the folder @node
                 if (dependency.getPackageName().contains(node.getPackageName().equals("") ? node.getFilename() : node.getPackageName()) ||
                         dependency.getPath().contains((node.getPackageName().equals("") ? node.getFilename() : node.getPackageName()).replaceAll("\\.", "/"))) {
                     counter++;
@@ -148,7 +144,19 @@ public class Node {
      * @return if this has a dependency on the given Node-object.
      */
     public boolean hasDependencyOn(Node node) {
-        return countDependenciesOn(node) != 0;
+        for (Node dependency : dependencies) {
+            if (!this.hasChildren() && !node.hasChildren() || this.hasChildren() && !node.hasChildren()) {
+                if (dependency.equals(node)) {
+                    return true;
+                }
+            } else if (!this.hasChildren() && node.hasChildren() || this.hasChildren() && node.hasChildren()) {
+                if (dependency.getPackageName().contains(node.getPackageName().equals("") ? node.getFilename() : node.getPackageName()) ||
+                        dependency.getPath().contains((node.getPackageName().equals("") ? node.getFilename() : node.getPackageName()).replaceAll("\\.", "/"))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -168,9 +176,7 @@ public class Node {
         if (obj instanceof Node) {
             return this.filename.equals(((Node) obj).getFilename()) &&
                     this.packageName.equals(((Node) obj).getPackageName()) &&
-                    this.path.equals(((Node) obj).path) &&
-                    this.children.equals(((Node) obj).getChildren()) &&
-                    this.dependencies.equals(((Node) obj).getDependencies());
+                    this.path.equals(((Node) obj).path);
         }
         return false;
     }
