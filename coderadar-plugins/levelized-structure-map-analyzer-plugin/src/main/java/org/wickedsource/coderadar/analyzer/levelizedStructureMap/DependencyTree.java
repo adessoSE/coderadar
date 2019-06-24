@@ -1,17 +1,22 @@
 package org.wickedsource.coderadar.analyzer.levelizedStructureMap;
 
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.TreeRevFilter;
+import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.gitective.core.BlobUtils;
 import org.springframework.core.type.filter.RegexPatternTypeFilter;
 
 import javax.validation.constraints.Null;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -413,5 +418,42 @@ public class DependencyTree {
             node.getChildren().get(i).setLayer(layer);
             setLayer(node.getChildren().get(i));
         }
+    }
+
+    public CompareNode createMergeTree(Node baseVersion) {
+        CompareNode compareNode = new CompareNode(new ArrayList<>(), baseVersion.getPath(), baseVersion.getFilename(), baseVersion.getPackageName(), ChangeType.UNCHANGED);
+        for (Node child : baseVersion.getChildren()) {
+            compareNode.getCompareChildren().add(createMergeTree(child));
+        }
+        for (Node dependency : baseVersion.getDependencies()) {
+            compareNode.getCompareDependencies().add(new CompareNode(new ArrayList<>(), dependency.getPath(), dependency.getFilename(), dependency.getPackageName(), ChangeType.UNCHANGED));
+        }
+        return compareNode;
+    }
+
+    public void addToMergeTree(CompareNode compareNode, String secondCommit) {
+        try {
+            RevCommit baseCommit = repository.parseCommit(commitName);
+            RevCommit alteredCommit = repository.parseCommit(ObjectId.fromString(secondCommit));
+
+            ObjectReader reader = repository.newObjectReader();
+            CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
+            ObjectId baseTree = baseCommit.getTree(); // equals newCommit.getTree()
+            oldTreeIter.reset(reader, baseTree);
+            CanonicalTreeParser newTreeIter = new CanonicalTreeParser();
+            ObjectId alteredTree = alteredCommit.getTree(); // equals oldCommit.getTree()
+            newTreeIter.reset(reader, alteredTree);
+
+            DiffFormatter df = new DiffFormatter(new ByteArrayOutputStream());
+            df.setRepository(repository);
+            List<DiffEntry> entries = df.scan(oldTreeIter, newTreeIter);
+
+            for (DiffEntry entry : entries) {
+                System.out.println(entry);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
