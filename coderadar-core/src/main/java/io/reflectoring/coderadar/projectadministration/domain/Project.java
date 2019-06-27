@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
-import lombok.Data;
-
 import java.util.Date;
+import lombok.Data;
 
 /** A coderadar project that defines the source of files that are to be analyzed. */
 @Data

@@ -4,14 +4,12 @@ import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.SaveCommitRepository;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class SaveCommitAdapter implements SaveCommitPort {
@@ -24,7 +22,7 @@ public class SaveCommitAdapter implements SaveCommitPort {
 
   @Override
   public void saveCommit(Commit commit) {
-    //TODO
+    // TODO
   }
 
   @Override
@@ -32,7 +30,7 @@ public class SaveCommitAdapter implements SaveCommitPort {
     if (!commits.isEmpty()) {
       commits.sort(Comparator.comparing(Commit::getTimestamp));
       CommitEntity commitEntity = new CommitEntity();
-      Commit newestCommit = commits.get(commits.size()-1);
+      Commit newestCommit = commits.get(commits.size() - 1);
       commitEntity.setAnalyzed(newestCommit.isAnalyzed());
       commitEntity.setAuthor(newestCommit.getAuthor());
       commitEntity.setComment(newestCommit.getComment());
@@ -45,7 +43,8 @@ public class SaveCommitAdapter implements SaveCommitPort {
     }
   }
 
-  private List<CommitEntity> findAndSaveParents(Commit commit, HashMap<String, CommitEntity> walkedCommits) {
+  private List<CommitEntity> findAndSaveParents(
+      Commit commit, HashMap<String, CommitEntity> walkedCommits) {
 
     List<CommitEntity> parents = new ArrayList<>();
 
@@ -67,11 +66,7 @@ public class SaveCommitAdapter implements SaveCommitPort {
     }
     parents.forEach(
         commit1 -> {
-          commit1.getParents().forEach(
-                  commit2 ->
-                      commit2
-                          .getParents()
-                          .clear());
+          commit1.getParents().forEach(commit2 -> commit2.getParents().clear());
           // Clear the parents of each parent commit and save it. This
           // keeps Neo4j happy.
         });

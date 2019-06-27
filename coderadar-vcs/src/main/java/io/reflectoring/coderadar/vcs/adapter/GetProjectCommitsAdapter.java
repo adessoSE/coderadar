@@ -105,10 +105,11 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
         parents.add(commitWithParents);
       } else {
         RevCommit commitWithMetadata = revWalk.parseCommit(rc.getId());
-        if (endDate == null || !Instant.ofEpochSecond(rc.getCommitTime())
-            .atZone(ZoneId.systemDefault())
-            .toLocalDate()
-            .isBefore(endDate)) {
+        if (endDate == null
+            || !Instant.ofEpochSecond(rc.getCommitTime())
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+                .isBefore(endDate)) {
           continue;
         }
         commitWithParents = new Commit();

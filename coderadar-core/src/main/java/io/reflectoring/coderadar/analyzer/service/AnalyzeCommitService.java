@@ -11,13 +11,12 @@ import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.Save
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driver.GetCommitRawContentUseCase;
+import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AnalyzeCommitService implements AnalyzeCommitUseCase {
@@ -108,6 +107,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
       MetricValue metricValue =
           new MetricValue(
               null, metric.getId(), fileMetrics.getMetricCount(metric), commit, findings);
+
       saveMetricPort.saveMetricValue(metricValue);
     }
   }
