@@ -1,14 +1,10 @@
 package io.reflectoring.coderadar.rest.integration.module;
 
-import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
-import io.reflectoring.coderadar.core.projectadministration.domain.Module;
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.create.CreateModuleCommand;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -25,7 +25,7 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void createModuleSuccessfully() throws Exception {
     // Set up
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
 
@@ -43,7 +43,7 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
             result -> {
               Long id =
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
-              Module module = createModuleRepository.findById(id).get();
+              ModuleEntity module = createModuleRepository.findById(id).get();
               Assertions.assertEquals("module-path", module.getPath());
             })
             .andDo(
@@ -64,7 +64,7 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
             post("/projects/1/modules")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }

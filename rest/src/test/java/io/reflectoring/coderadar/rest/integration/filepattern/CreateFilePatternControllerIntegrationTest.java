@@ -1,19 +1,19 @@
 package io.reflectoring.coderadar.rest.integration.filepattern;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
-import io.reflectoring.coderadar.core.projectadministration.domain.FilePattern;
-import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType;
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
+import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
+import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -22,7 +22,7 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
 
   @Test
   void createFilePatternSuccessfully() throws Exception {
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
 
@@ -36,7 +36,7 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
         .andExpect(MockMvcResultMatchers.status().isCreated())
         .andDo(
             result -> {
-              FilePattern filePattern = createFilePatternRepository.findAll().iterator().next();
+              FilePatternEntity filePattern = createFilePatternRepository.findAll().iterator().next();
               Assertions.assertEquals("**/*.java", filePattern.getPattern());
               Assertions.assertEquals(InclusionType.INCLUDE, filePattern.getInclusionType());
             });
@@ -51,7 +51,7 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
             post("/projects/1/filePatterns")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }

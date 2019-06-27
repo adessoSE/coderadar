@@ -1,19 +1,20 @@
 package io.reflectoring.coderadar.rest.integration.project;
 
-import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
-import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.get.GetProjectResponse;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Date;
+
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
+import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -23,7 +24,7 @@ class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
   public void setUp() {
     createProjectRepository.deleteAll();
 
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsEnd(new Date());
@@ -32,7 +33,7 @@ class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
     testProject.setVcsPassword("testPassword");
     testProject.setVcsUsername("testUser");
 
-    Project testProject2 = new Project();
+    ProjectEntity testProject2 = new ProjectEntity();
     testProject2.setVcsUrl("https://valid.url");
     testProject2.setName("project");
     testProject2.setVcsEnd(new Date());

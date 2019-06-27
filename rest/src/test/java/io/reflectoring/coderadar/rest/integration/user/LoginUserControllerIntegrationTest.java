@@ -1,20 +1,19 @@
 package io.reflectoring.coderadar.rest.integration.user;
 
-import static org.hamcrest.Matchers.any;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
-import io.reflectoring.coderadar.core.projectadministration.domain.User;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.login.LoginUserCommand;
-import io.reflectoring.coderadar.core.projectadministration.service.user.security.PasswordUtil;
+import io.reflectoring.coderadar.graph.projectadministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
+import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserCommand;
+import io.reflectoring.coderadar.projectadministration.service.user.security.PasswordUtil;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.hamcrest.Matchers.any;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private RegisterUserRepository registerUserRepository;
@@ -22,7 +21,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void loginUserSuccessfully() throws Exception {
     registerUserRepository.deleteAll();
-    User testUser = new User();
+    UserEntity testUser = new UserEntity();
     testUser.setUsername("username");
     testUser.setPassword(PasswordUtil.hash("password1"));
     registerUserRepository.save(testUser);
@@ -52,12 +51,12 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(
             post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 
   @Test
   void loginUserReturnsErrorWhenPasswordIsWrong() throws Exception {
-    User testUser = new User();
+    UserEntity testUser = new UserEntity();
     testUser.setUsername("username2");
     testUser.setPassword(PasswordUtil.hash("password1"));
     registerUserRepository.save(testUser);

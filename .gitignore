@@ -4,8 +4,8 @@
 
 ### coderadar ###
 
-coderadar-server/local.application.properties
-coderadar-server/coderadar-core/coderadar-workdir/
+coderadar-app/local.application.properties
+coderadar-app/coderadar-workdir/
 
 ### Eclipse ###
 

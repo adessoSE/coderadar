@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.module;
 
-import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.create.CreateModuleCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.create.CreateModuleUseCase;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.IdResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class CreateModuleController {
       return new ResponseEntity<>(
           new IdResponse(createModuleUseCase.createModule(command, projectId)), HttpStatus.CREATED);
     } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

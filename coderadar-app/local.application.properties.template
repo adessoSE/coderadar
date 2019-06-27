@@ -8,7 +8,8 @@ coderadar.workdir=coderadar-workdir
 coderadar.dateLocale=de_DE
 coderadar.authentication.accessToken.durationInMinutes=15
 coderadar.authentication.refreshToken.durationInMinutes=86400
-coderadar.authentication.enabled=true
+coderadar.authentication.enabled=false
+coderadar.cors.enabled=true
 
 logging.level.org.wickedsource.coderadar=DEBUG
 logging.level.org.wickedsource.coderadar.job.JobLogger=INFO
@@ -17,10 +18,7 @@ logging.level.org.hibernate.type=ERROR
 logging.level.org.reflections=ERROR
 logging.file=coderadar.log
 
-spring.jpa.hibernate.ddl-auto=validate
+spring.data.neo4j.username=neo4j
+spring.data.neo4j.password=neo3j
 
-spring.datasource.url=jdbc:postgresql://localhost:5432/coderadar
-spring.datasource.username=coderadar
-spring.datasource.password=coderadar
-spring.datasource.driver-class-name=org.postgresql.Driver
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.main.allow-bean-definition-overriding=true

@@ -1,20 +1,21 @@
 package io.reflectoring.coderadar.rest.integration.project;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.update.UpdateProjectCommand;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.io.File;
-import java.util.Date;
-import java.util.UUID;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.io.File;
+import java.util.Date;
+import java.util.UUID;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -23,7 +24,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void updateProjectWithId() throws Exception {
     // Set up
-    Project testProject = new Project();
+      ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsEnd(new Date());
@@ -47,8 +48,8 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(
             result -> {
-              FileUtils.deleteDirectory(new File("coderadar-workdir"));
-              Project project = createProjectRepository.findById(id).get();
+              FileUtils.deleteDirectory(new File("coderadar-workdir/projects"));
+                ProjectEntity project = createProjectRepository.findById(id).get();
               Assertions.assertEquals("name", project.getName());
               Assertions.assertEquals("username", project.getVcsUsername());
               Assertions.assertEquals("password", project.getVcsPassword());
@@ -66,7 +67,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(
             post("/projects/1").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }

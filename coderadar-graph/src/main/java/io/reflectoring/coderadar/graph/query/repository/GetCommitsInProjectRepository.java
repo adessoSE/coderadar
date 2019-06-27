@@ -1,8 +1,21 @@
 package io.reflectoring.coderadar.graph.query.repository;
 
-import io.reflectoring.coderadar.core.analyzer.domain.Commit;
+import io.reflectoring.coderadar.analyzer.domain.Commit;
+import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface GetCommitsInProjectRepository extends Neo4jRepository<Commit, Long> {}
+public interface GetCommitsInProjectRepository extends Neo4jRepository<Commit, Long> {
+
+  @Query("MATCH (p:Project)-[:HAS]->(c:Commit) WHERE ID(p) = {0} RETURN c")
+  List<Commit> findByProjectId(Long projectId);
+
+  @Query(
+    value =
+        "MATCH (p:Project)-[:HAS]->(c:Commit) WHERE ID(p) = {0} RETURN c ORDER BY c.sequenceNumber DESC LIMIT 1"
+  )
+  Commit findTop1ByProjectIdOrderBySequenceNumberDesc(Long id);
+}

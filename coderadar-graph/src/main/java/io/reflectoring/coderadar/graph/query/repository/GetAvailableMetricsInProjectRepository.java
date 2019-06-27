@@ -1,14 +1,15 @@
 package io.reflectoring.coderadar.graph.query.repository;
 
-import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface GetAvailableMetricsInProjectRepository extends Neo4jRepository {
-  // TODO: Add query to find a available metrics in specific project.
-  @Query(value = "MATCH (p:Project) WHERE ID(p) = {projectId}")
-  List<String> getAvailableMetricsInProject(@Param("projectId") long projectId);
+  // TODO: Probably doesn't work because metricValues is a relationship and not an attribute
+  @Query(
+      "MATCH (p:Project)-[:HAS]->(c:Commit)-[:HAS_CHANGED]->(a:FileToCommitRelationship) WHERE ID(p) = {0} RETURN a.file.metricValues")
+  List<String> getAvailableMetricsInProject(long projectId);
 }

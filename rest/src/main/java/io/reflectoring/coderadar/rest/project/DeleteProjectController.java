@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.project;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.reflectoring.coderadar.core.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.delete.DeleteProjectUseCase;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.delete.DeleteProjectUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class DeleteProjectController {
       deleteProjectUseCase.delete(projectId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

@@ -1,23 +1,18 @@
 package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository;
 
-import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
-import java.util.ArrayList;
-import java.util.List;
+import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConfigurationEntity;
+import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface GetAnalyzerConfigurationsFromProjectRepository
-    extends Neo4jRepository<AnalyzerConfiguration, Long> {
+    extends Neo4jRepository<AnalyzerConfigurationEntity, Long> {
 
-  default List<AnalyzerConfiguration> findByProject_Id(Long projectId) {
-    List<AnalyzerConfiguration> result = new ArrayList<>();
-    Iterable<AnalyzerConfiguration> analyzerConfigurations = findAll();
-    for (AnalyzerConfiguration analyzerConfiguration : analyzerConfigurations) {
-      if (analyzerConfiguration.getProject().getId().equals(projectId)) {
-        result.add(analyzerConfiguration);
-      }
-    }
-    return result;
-  }
+  @Query(
+      "MATCH (p:ProjectEntity)-[:HAS]->(c:AnalyzerConfigurationEntity) WHERE ID(p) = {projectId} RETURN c")
+  List<AnalyzerConfigurationEntity> findByProjectId(@Param("projectId") Long projectId);
 }

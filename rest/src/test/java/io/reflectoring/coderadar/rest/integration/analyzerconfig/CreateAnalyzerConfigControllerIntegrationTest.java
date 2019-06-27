@@ -1,16 +1,10 @@
 package io.reflectoring.coderadar.rest.integration.analyzerconfig;
 
-import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
-import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
-import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
+import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConfigurationEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -19,6 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
+import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private CreateProjectRepository createProjectRepository;
@@ -26,7 +25,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
 
   @Test
   void createAnalyzerConfigurationSuccessfully() throws Exception {
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
 
@@ -45,7 +44,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             result -> {
               Long id =
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
-              AnalyzerConfiguration analyzerConfiguration =
+              AnalyzerConfigurationEntity analyzerConfiguration =
                   createAnalyzerConfigurationRepository.findById(id).get();
               Assertions.assertEquals("analyzer", analyzerConfiguration.getAnalyzerName());
               Assertions.assertTrue(analyzerConfiguration.getEnabled());
@@ -74,7 +73,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             post("/projects/1/analyzers")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }

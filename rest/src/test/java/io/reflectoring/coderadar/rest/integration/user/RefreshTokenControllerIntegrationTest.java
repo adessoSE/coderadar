@@ -1,28 +1,28 @@
 package io.reflectoring.coderadar.rest.integration.user;
 
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import io.reflectoring.coderadar.core.projectadministration.domain.RefreshToken;
-import io.reflectoring.coderadar.core.projectadministration.domain.User;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.user.refresh.RefreshTokenResponse;
-import io.reflectoring.coderadar.core.projectadministration.service.user.security.PasswordUtil;
-import io.reflectoring.coderadar.core.projectadministration.service.user.security.SecretKeyService;
-import io.reflectoring.coderadar.core.projectadministration.service.user.security.TokenService;
-import io.reflectoring.coderadar.core.projectadministration.service.user.security.TokenType;
+import io.reflectoring.coderadar.graph.projectadministration.domain.RefreshTokenEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RefreshTokenRepository;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
+import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.RefreshTokenCommand;
+import io.reflectoring.coderadar.projectadministration.service.user.security.PasswordUtil;
+import io.reflectoring.coderadar.projectadministration.service.user.security.SecretKeyService;
+import io.reflectoring.coderadar.projectadministration.service.user.security.TokenService;
+import io.reflectoring.coderadar.projectadministration.service.user.security.TokenType;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.util.Date;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Date;
+
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -36,12 +36,12 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void refreshTokenSuccessfully() throws Exception {
-    User testUser = new User();
+    UserEntity testUser = new UserEntity();
     testUser.setUsername("radar");
     testUser.setPassword(PasswordUtil.hash("Password12!"));
     testUser = registerUserRepository.save(testUser);
 
-    RefreshToken userRefreshToken = new RefreshToken();
+    RefreshTokenEntity userRefreshToken = new RefreshTokenEntity();
     userRefreshToken.setToken(
         tokenService.generateRefreshToken(testUser.getId(), testUser.getUsername()));
     userRefreshToken.setUser(testUser);
@@ -60,10 +60,10 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void refreshTokenReturnsErrorOnInvalidToken() throws Exception {
-    User testUser = new User();
+    UserEntity testUser = new UserEntity();
     testUser.setUsername("radar");
     testUser.setPassword(PasswordUtil.hash("Password12!"));
-    testUser = registerUserRepository.save(testUser);
+    registerUserRepository.save(testUser);
 
     RefreshTokenCommand command =
         new RefreshTokenCommand(createExpiredAccessToken(), "iqupiugapsfw");
@@ -76,12 +76,12 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void refreshTokenReturnsErrorOnNonExpiredAccessToken() throws Exception {
-    User testUser = new User();
+    UserEntity testUser = new UserEntity();
     testUser.setUsername("radar");
     testUser.setPassword(PasswordUtil.hash("Password12!"));
     testUser = registerUserRepository.save(testUser);
 
-    RefreshToken userRefreshToken = new RefreshToken();
+    RefreshTokenEntity userRefreshToken = new RefreshTokenEntity();
     userRefreshToken.setToken(
         tokenService.generateRefreshToken(testUser.getId(), testUser.getUsername()));
     userRefreshToken.setUser(testUser);

@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.analyzerconfig;
 
-import io.reflectoring.coderadar.core.projectadministration.AnalyzerConfigurationNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
+import io.reflectoring.coderadar.projectadministration.AnalyzerConfigurationNotFoundException;
+import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
+import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class UpdateAnalyzerConfigurationController {
       updateAnalyzerConfigurationUseCase.update(command, analyzerConfigurationId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (AnalyzerConfigurationNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

@@ -1,19 +1,19 @@
 package io.reflectoring.coderadar.rest.integration.module;
 
-import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
-import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
-import io.reflectoring.coderadar.core.projectadministration.domain.Module;
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.GetModuleResponse;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
+import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 class GetModuleControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -24,11 +24,11 @@ class GetModuleControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void getModuleWithId() throws Exception {
     // Set up
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
 
-    Module module = new Module();
+    ModuleEntity module = new ModuleEntity();
     module.setPath("test-module");
     module.setProject(testProject);
     module = createModuleRepository.save(module);
@@ -52,7 +52,7 @@ class GetModuleControllerIntegrationTest extends ControllerTestTemplate {
   void getModuleReturnsErrorWhenModuleNotFound() throws Exception {
     mvc()
         .perform(get("/projects/0/modules/0"))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Module with id 0 not found."));
   }

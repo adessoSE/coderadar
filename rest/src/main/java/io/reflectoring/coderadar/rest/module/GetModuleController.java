@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.module;
 
-import io.reflectoring.coderadar.core.projectadministration.ModuleNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.GetModuleUseCase;
+import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ public class GetModuleController {
     try {
       return new ResponseEntity<>(getModuleUseCase.get(moduleId), HttpStatus.OK);
     } catch (ModuleNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

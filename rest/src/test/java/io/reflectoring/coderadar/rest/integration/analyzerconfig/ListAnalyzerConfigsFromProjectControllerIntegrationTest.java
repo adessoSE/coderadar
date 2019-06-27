@@ -1,20 +1,21 @@
 package io.reflectoring.coderadar.rest.integration.analyzerconfig;
 
-import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
-import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
-import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
+import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConfigurationEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Arrays;
+
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
+import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 class ListAnalyzerConfigsFromProjectControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -25,18 +26,18 @@ class ListAnalyzerConfigsFromProjectControllerIntegrationTest extends Controller
   @Test
   void listAnalyzerConfigurationsFromProject() throws Exception {
     // Set up
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
 
-    AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
+    AnalyzerConfigurationEntity analyzerConfiguration = new AnalyzerConfigurationEntity();
     analyzerConfiguration.setProject(testProject);
     analyzerConfiguration.setAnalyzerName("analyzer");
     analyzerConfiguration.setEnabled(true);
 
     createAnalyzerConfigurationRepository.save(analyzerConfiguration);
 
-    AnalyzerConfiguration analyzerConfiguration2 = new AnalyzerConfiguration();
+    AnalyzerConfigurationEntity analyzerConfiguration2 = new AnalyzerConfigurationEntity();
     analyzerConfiguration2.setProject(testProject);
     analyzerConfiguration2.setAnalyzerName("analyzer2");
     analyzerConfiguration2.setEnabled(false);
@@ -67,7 +68,7 @@ class ListAnalyzerConfigsFromProjectControllerIntegrationTest extends Controller
   void listAnalyzerConfigurationsReturnsErrorWhenProjectNotFound() throws Exception {
     mvc()
         .perform(get("/projects/1/analyzers"))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }

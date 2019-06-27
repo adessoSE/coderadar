@@ -1,20 +1,21 @@
 package io.reflectoring.coderadar.rest.integration.module;
 
-import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
-import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
-import io.reflectoring.coderadar.core.projectadministration.domain.Module;
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.module.get.GetModuleResponse;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Arrays;
+
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
+import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -25,16 +26,16 @@ class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTempla
   @Test
   void listAllModulesOfProjectWithId() throws Exception {
     // Set up
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
 
-    Module module = new Module();
+    ModuleEntity module = new ModuleEntity();
     module.setPath("test-module");
     module.setProject(testProject);
     createModuleRepository.save(module);
 
-    Module module2 = new Module();
+    ModuleEntity module2 = new ModuleEntity();
     module2.setPath("test-module");
     module2.setProject(testProject);
     createModuleRepository.save(module2);
@@ -61,7 +62,7 @@ class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTempla
   void listAllModulesOfProjectReturnsErrorWhenProjectNotFound() throws Exception {
     mvc()
         .perform(get("/projects/1/modules"))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }

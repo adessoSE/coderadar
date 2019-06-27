@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.filepattern;
 
-import io.reflectoring.coderadar.core.projectadministration.FilePatternNotFoundException;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.delete.DeleteFilePatternFromProjectUseCase;
+import io.reflectoring.coderadar.projectadministration.FilePatternNotFoundException;
+import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.delete.DeleteFilePatternFromProjectUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class DeleteFilePatternController {
       deleteFilePatternFromProjectUseCase.delete(filePatternId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (FilePatternNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     }
   }
 }

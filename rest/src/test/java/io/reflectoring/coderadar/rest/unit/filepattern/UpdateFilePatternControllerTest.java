@@ -1,16 +1,16 @@
 package io.reflectoring.coderadar.rest.unit.filepattern;
 
-import static org.mockito.Mockito.mock;
-
-import io.reflectoring.coderadar.core.projectadministration.domain.InclusionType;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.update.UpdateFilePatternCommand;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.filepattern.update.UpdateFilePatternUseCase;
+import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
+import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.update.UpdateFilePatternCommand;
+import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.update.UpdateFilePatternUseCase;
 import io.reflectoring.coderadar.rest.filepattern.UpdateFilePatternController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import static org.mockito.Mockito.mock;
 
 class UpdateFilePatternControllerTest {
 

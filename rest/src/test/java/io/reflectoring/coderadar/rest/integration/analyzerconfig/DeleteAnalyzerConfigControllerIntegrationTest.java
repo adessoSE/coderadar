@@ -1,16 +1,16 @@
 package io.reflectoring.coderadar.rest.integration.analyzerconfig;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-
-import io.reflectoring.coderadar.core.projectadministration.domain.AnalyzerConfiguration;
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
+import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConfigurationEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -20,11 +20,11 @@ class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
 
   @Test
   void deleteAnalyzerConfigurationWithId() throws Exception {
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
 
-    AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
+    AnalyzerConfigurationEntity analyzerConfiguration = new AnalyzerConfigurationEntity();
     analyzerConfiguration.setProject(testProject);
     analyzerConfiguration.setAnalyzerName("analyzer");
 
@@ -47,7 +47,7 @@ class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
   void deleteAnalyzerConfigurationReturnsErrorWhenAnalyzerNotFound() throws Exception {
     mvc()
         .perform(delete("/projects/0/analyzers/2"))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("AnalyzerConfiguration with id 2 not found."))

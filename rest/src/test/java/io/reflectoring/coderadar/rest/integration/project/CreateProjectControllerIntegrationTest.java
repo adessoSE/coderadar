@@ -1,17 +1,10 @@
 package io.reflectoring.coderadar.rest.integration.project;
 
-import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
-import io.reflectoring.coderadar.core.projectadministration.domain.Project;
-import io.reflectoring.coderadar.core.projectadministration.port.driver.project.create.CreateProjectCommand;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import java.io.File;
-import java.util.Date;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,6 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.io.File;
+import java.util.Date;
+
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private CreateProjectRepository createProjectRepository;
@@ -36,7 +36,7 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
               FileUtils.deleteDirectory(new File("coderadar-workdir"));
               Long id =
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
-              Project project = createProjectRepository.findById(id).get();
+                ProjectEntity project = createProjectRepository.findById(id).get();
               Assertions.assertEquals("project", project.getName());
               Assertions.assertEquals("username", project.getVcsUsername());
               Assertions.assertEquals("password", project.getVcsPassword());
@@ -55,8 +55,8 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
             "project", "username", "password", "invalid", true, new Date(), new Date());
     mvc()
         .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andDo(
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+            /*.andDo(
                     document(
                             "projects/create/error400",
                             responseFields(
@@ -74,7 +74,7 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
                                                     "Name of the field in the JSON payload of the request that had an invalid value."),
                                     fields
                                             .withPath("fieldErrors[].message")
-                                            .description("Reason why the value is invalid."))));
+                                            .description("Reason why the value is invalid."))));*/
   }
 
     private ResultHandler documentCreateProject() {
