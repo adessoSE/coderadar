@@ -2,10 +2,9 @@ package io.reflectoring.coderadar.vcs.service;
 
 import io.reflectoring.coderadar.vcs.port.driven.CheckRepositoryPort;
 import io.reflectoring.coderadar.vcs.port.driver.CheckRepositoryUseCase;
+import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.nio.file.Path;
 
 @Service
 public class CheckRepositoryService implements CheckRepositoryUseCase {

@@ -7,6 +7,12 @@ import io.reflectoring.coderadar.vcs.domain.CommitFilter;
 import io.reflectoring.coderadar.vcs.domain.CommitProcessor;
 import io.reflectoring.coderadar.vcs.domain.VcsCommit;
 import io.reflectoring.coderadar.vcs.port.driven.ProcessRepositoryPort;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collection;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
@@ -16,13 +22,6 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collection;
 
 @Service
 public class ProcessRepositoryAdapter implements ProcessRepositoryPort {

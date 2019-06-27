@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.query.domain;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-
 import java.util.HashMap;
 import java.util.Map;
 

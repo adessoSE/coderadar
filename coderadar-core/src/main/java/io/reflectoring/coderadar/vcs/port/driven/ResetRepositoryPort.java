@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.vcs.port.driven;
 
 import io.reflectoring.coderadar.vcs.UnableToResetRepositoryException;
-
 import java.nio.file.Path;
 
 public interface ResetRepositoryPort {

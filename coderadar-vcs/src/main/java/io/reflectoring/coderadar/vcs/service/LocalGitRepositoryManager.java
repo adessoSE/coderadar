@@ -3,13 +3,12 @@ package io.reflectoring.coderadar.vcs.service;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.vcs.adapter.UpdateRepositoryAdapter;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
+import java.io.IOException;
+import java.nio.file.Path;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.nio.file.Path;
 
 @Service
 public class LocalGitRepositoryManager {

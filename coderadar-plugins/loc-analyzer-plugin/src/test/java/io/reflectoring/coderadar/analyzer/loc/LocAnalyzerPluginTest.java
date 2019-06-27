@@ -2,11 +2,10 @@ package io.reflectoring.coderadar.analyzer.loc;
 
 import io.reflectoring.coderadar.plugin.api.FileMetrics;
 import io.reflectoring.coderadar.plugin.api.Metric;
+import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.io.InputStream;
 
 public class LocAnalyzerPluginTest {
 

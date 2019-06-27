@@ -1,5 +1,9 @@
 package io.reflectoring.coderadar.projectadministration.user;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.RegisterUserPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.register.RegisterUserCommand;
@@ -7,10 +11,6 @@ import io.reflectoring.coderadar.projectadministration.service.user.register.Reg
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 
 class RegisterUserServiceTest {
   private RegisterUserPort registerUserPort = mock(RegisterUserPort.class);

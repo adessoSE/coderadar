@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.user;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.load.LoadUserResponse;
@@ -7,8 +9,6 @@ import io.reflectoring.coderadar.projectadministration.service.user.load.LoadUse
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import static org.mockito.Mockito.mock;
 
 class LoadUserServiceTest {
   private LoadUserPort loadUserPort = mock(LoadUserPort.class);

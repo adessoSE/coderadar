@@ -7,11 +7,10 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import java.util.Date;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 /** Service for generation and verification of authentication tokens. */
 @Service

@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.query.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

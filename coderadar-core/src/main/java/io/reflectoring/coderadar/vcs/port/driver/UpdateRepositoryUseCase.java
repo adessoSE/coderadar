@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.vcs.port.driver;
 
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
-
 import java.nio.file.Path;
 
 public interface UpdateRepositoryUseCase {

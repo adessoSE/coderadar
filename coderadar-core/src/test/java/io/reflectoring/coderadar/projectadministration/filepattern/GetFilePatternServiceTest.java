@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.filepattern;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
@@ -8,8 +10,6 @@ import io.reflectoring.coderadar.projectadministration.service.filepattern.GetFi
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import static org.mockito.Mockito.mock;
 
 class GetFilePatternServiceTest {
   private GetFilePatternPort port = mock(GetFilePatternPort.class);

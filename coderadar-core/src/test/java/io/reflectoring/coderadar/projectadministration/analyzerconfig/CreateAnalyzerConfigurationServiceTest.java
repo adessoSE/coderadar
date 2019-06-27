@@ -1,5 +1,9 @@
 package io.reflectoring.coderadar.projectadministration.analyzerconfig;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
@@ -9,10 +13,6 @@ import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.Cr
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
 
 class CreateAnalyzerConfigurationServiceTest {
   private CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort =

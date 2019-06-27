@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.analyzer.loc;
 
 import io.reflectoring.coderadar.analyzer.loc.profiles.LocProfile;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

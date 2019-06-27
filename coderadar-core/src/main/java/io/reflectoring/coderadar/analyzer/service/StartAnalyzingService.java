@@ -10,11 +10,10 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.vcs.port.driver.FindCommitUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.ProcessRepositoryUseCase;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class StartAnalyzingService implements StartAnalyzingUseCase {

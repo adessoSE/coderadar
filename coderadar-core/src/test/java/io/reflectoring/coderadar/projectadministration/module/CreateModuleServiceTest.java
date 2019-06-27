@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.module;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
@@ -9,8 +11,6 @@ import io.reflectoring.coderadar.projectadministration.service.module.CreateModu
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import static org.mockito.Mockito.mock;
 
 class CreateModuleServiceTest {
   private CreateModulePort createModulePort = mock(CreateModulePort.class);

@@ -1,11 +1,10 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
-import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import lombok.Data;
 
 /** Metadata about a commit to a Git repository. */
 @Data

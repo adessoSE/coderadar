@@ -1,13 +1,12 @@
 package io.reflectoring.coderadar.graph.analyzer.domain;
 
+import java.util.LinkedList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @Data
 @AllArgsConstructor

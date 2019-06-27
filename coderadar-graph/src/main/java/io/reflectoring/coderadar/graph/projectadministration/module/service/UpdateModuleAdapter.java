@@ -7,10 +7,9 @@ import io.reflectoring.coderadar.graph.projectadministration.project.ProjectMapp
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.UpdateModulePort;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class UpdateModuleAdapter implements UpdateModulePort {

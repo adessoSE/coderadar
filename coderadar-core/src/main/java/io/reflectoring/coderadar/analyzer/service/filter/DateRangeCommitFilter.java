@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.analyzer.service.filter;
 
 import io.reflectoring.coderadar.vcs.domain.CommitFilter;
 import io.reflectoring.coderadar.vcs.domain.VcsCommit;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
