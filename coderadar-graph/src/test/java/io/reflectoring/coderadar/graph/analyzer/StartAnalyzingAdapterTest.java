@@ -1,20 +1,21 @@
 package io.reflectoring.coderadar.graph.analyzer;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
-
-import io.reflectoring.coderadar.analyzer.domain.AnalyzingJob;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
+import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.StartAnalyzingRepository;
 import io.reflectoring.coderadar.graph.analyzer.service.StartAnalyzingAdapter;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
-import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Date;
+
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 @DisplayName("Start analyzing")
 class StartAnalyzingAdapterTest {
@@ -42,22 +43,22 @@ class StartAnalyzingAdapterTest {
   @DisplayName("Should return ID when saving an analyzing job")
   void shouldReturnIdWhenSavingAnAnalyzingJob() {
     Date mockDate = new Date();
-    Project mockProject = new Project();
+    ProjectEntity mockProject = new ProjectEntity();
     mockProject.setId(1L);
-    AnalyzingJob mockItem = new AnalyzingJob();
+    AnalyzingJobEntity mockItem = new AnalyzingJobEntity();
     mockItem.setId(10L);
     mockItem.setActive(true);
     mockItem.setProject(mockProject);
     mockItem.setRescan(true);
     mockItem.setFrom(mockDate);
-    when(startAnalyzingRepository.save(any(AnalyzingJob.class))).thenReturn(mockItem);
+    when(startAnalyzingRepository.save(any(AnalyzingJobEntity.class))).thenReturn(mockItem);
     when(getProjectRepository.findById(anyLong())).thenReturn(java.util.Optional.of(mockProject));
 
     StartAnalyzingCommand item = new StartAnalyzingCommand(mockDate, true);
     Long idFromItem = startAnalyzingAdapter.start(item, 1L);
 
     verify(getProjectRepository, times(1)).findById(1L);
-    verify(startAnalyzingRepository, times(1)).save(any(AnalyzingJob.class));
+    verify(startAnalyzingRepository, times(1)).save(any(AnalyzingJobEntity.class));
     verifyNoMoreInteractions(getProjectRepository);
     verifyNoMoreInteractions(startAnalyzingRepository);
     org.assertj.core.api.Assertions.assertThat(idFromItem).isEqualTo(10L);

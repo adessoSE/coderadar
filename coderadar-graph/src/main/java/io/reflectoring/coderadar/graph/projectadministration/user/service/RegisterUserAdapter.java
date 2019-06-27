@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.user.service;
 
+import io.reflectoring.coderadar.graph.projectadministration.user.UserMapper;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
 import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.RegisterUserPort;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class RegisterUserAdapter implements RegisterUserPort {
 
   private RegisterUserRepository registerUserRepository;
+  private final UserMapper userMapper = new UserMapper();
 
   @Autowired
   public RegisterUserAdapter(RegisterUserRepository registerUserRepository) {
@@ -18,6 +20,6 @@ public class RegisterUserAdapter implements RegisterUserPort {
 
   @Override
   public Long register(User user) {
-    return registerUserRepository.save(user).getId();
+    return registerUserRepository.save(userMapper.mapDomainObject(user)).getId();
   }
 }

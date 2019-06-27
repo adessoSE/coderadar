@@ -10,7 +10,6 @@ import io.reflectoring.coderadar.projectadministration.port.driven.user.RefreshT
 import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.RefreshTokenCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.RefreshTokenUseCase;
 import io.reflectoring.coderadar.projectadministration.service.user.security.TokenService;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -73,9 +72,6 @@ public class RefreshTokenService implements RefreshTokenUseCase {
       throw new RefreshTokenNotFoundException();
     }
     User user = getUser(refreshToken);
-    if (user == null) {
-      throw new UserNotFoundException(user.getUsername());
-    }
     tokenService.verify(refreshToken);
     return user;
   }
@@ -87,13 +83,8 @@ public class RefreshTokenService implements RefreshTokenUseCase {
    * @param refreshToken refresh token
    * @return User according to the refresh token
    */
-  public User getUser(String refreshToken) {
+  public User getUser(String refreshToken) throws UserNotFoundException {
     String username = tokenService.getUsername(refreshToken);
-    Optional<User> user = loadUserPort.loadUserByUsername(username);
-    if (user.isPresent()) {
-      return user.get();
-    } else {
-      throw new UserNotFoundException(username);
-    }
+    return loadUserPort.loadUserByUsername(username);
   }
 }

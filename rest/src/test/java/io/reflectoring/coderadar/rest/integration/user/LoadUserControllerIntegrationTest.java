@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.integration.user;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
-import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.load.LoadUserResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -19,7 +19,7 @@ class LoadUserControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void loadUserWithId() throws Exception {
-    User testUser = new User();
+    UserEntity testUser = new UserEntity();
     testUser.setUsername("username2");
     testUser.setPassword("password1");
     testUser = registerUserRepository.save(testUser);

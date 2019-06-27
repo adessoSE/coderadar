@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.integration.user;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
-import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserCommand;
 import io.reflectoring.coderadar.projectadministration.service.user.security.PasswordUtil;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
@@ -21,7 +21,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void loginUserSuccessfully() throws Exception {
     registerUserRepository.deleteAll();
-    User testUser = new User();
+    UserEntity testUser = new UserEntity();
     testUser.setUsername("username");
     testUser.setPassword(PasswordUtil.hash("password1"));
     registerUserRepository.save(testUser);
@@ -56,7 +56,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void loginUserReturnsErrorWhenPasswordIsWrong() throws Exception {
-    User testUser = new User();
+    UserEntity testUser = new UserEntity();
     testUser.setUsername("username2");
     testUser.setPassword(PasswordUtil.hash("password1"));
     registerUserRepository.save(testUser);

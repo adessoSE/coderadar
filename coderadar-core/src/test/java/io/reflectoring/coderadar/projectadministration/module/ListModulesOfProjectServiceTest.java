@@ -1,20 +1,20 @@
 package io.reflectoring.coderadar.projectadministration.module;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.ListModulesOfProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.projectadministration.service.module.ListModulesOfProjectService;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 
 class ListModulesOfProjectServiceTest {
   private ListModulesOfProjectPort port = mock(ListModulesOfProjectPort.class);
@@ -22,9 +22,9 @@ class ListModulesOfProjectServiceTest {
 
   @Test
   void returnsTwoModulesFromProject() {
-    ListModulesOfProjectService testSubject = new ListModulesOfProjectService(port, getProjectPort);
+    ListModulesOfProjectService testSubject = new ListModulesOfProjectService(port);
 
-    Mockito.when(getProjectPort.get(anyLong())).thenReturn(Optional.of(new Project()));
+    Mockito.when(getProjectPort.get(anyLong())).thenReturn(new Project());
 
     Project project = new Project();
     project.setId(1L);
@@ -33,11 +33,9 @@ class ListModulesOfProjectServiceTest {
     Module module1 = new Module();
     module1.setId(1L);
     module1.setPath("module-path-one");
-    module1.setProject(project);
     Module module2 = new Module();
     module2.setId(2L);
     module2.setPath("module-path-two");
-    module2.setProject(project);
 
     modules.add(module1);
     modules.add(module2);

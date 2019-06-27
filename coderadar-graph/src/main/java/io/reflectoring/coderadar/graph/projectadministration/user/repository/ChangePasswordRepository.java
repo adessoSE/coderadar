@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.user.repository;
 
-import io.reflectoring.coderadar.projectadministration.domain.User;
+import io.reflectoring.coderadar.graph.projectadministration.domain.UserEntity;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ChangePasswordRepository extends Neo4jRepository<User, Long> {}
+public interface ChangePasswordRepository extends Neo4jRepository<UserEntity, Long> {}

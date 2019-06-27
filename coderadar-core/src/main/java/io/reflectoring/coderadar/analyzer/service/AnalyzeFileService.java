@@ -3,10 +3,11 @@ package io.reflectoring.coderadar.analyzer.service;
 import io.reflectoring.coderadar.plugin.api.AnalyzerFileFilter;
 import io.reflectoring.coderadar.plugin.api.FileMetrics;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /** Combines multiple FileAnalyzerPlugins to calculate metrics for a single file. */
 @Service

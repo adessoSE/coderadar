@@ -1,15 +1,17 @@
 package io.reflectoring.coderadar.graph.projectadministration.project;
 
-import static org.mockito.Mockito.*;
-
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ListProjectsRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.service.ListProjectsAdapter;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-import java.util.LinkedList;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.LinkedList;
+
+import static org.mockito.Mockito.*;
 
 @DisplayName("List projects")
 class ListProjectsAdapterTest {
@@ -35,8 +37,8 @@ class ListProjectsAdapterTest {
   @Test
   @DisplayName("Should return list with size of one when one project exists")
   void shouldReturnListWithSizeOfOneWhenOneProjectExists() {
-    LinkedList<Project> mockedItem = new LinkedList<>();
-    mockedItem.add(new Project());
+    LinkedList<ProjectEntity> mockedItem = new LinkedList<>();
+    mockedItem.add(new ProjectEntity());
     when(listProjectsRepository.findAll()).thenReturn(mockedItem);
 
     Iterable<Project> projects = listProjectsAdapter.getProjects();
@@ -47,9 +49,9 @@ class ListProjectsAdapterTest {
   @Test
   @DisplayName("Should return list with size of two when two projects exist")
   void shouldReturnListWithSizeOfTwoWhenTwoProjectsExist() {
-    LinkedList<Project> mockedItem = new LinkedList<>();
-    mockedItem.add(new Project());
-    mockedItem.add(new Project());
+    LinkedList<ProjectEntity> mockedItem = new LinkedList<>();
+    mockedItem.add(new ProjectEntity());
+    mockedItem.add(new ProjectEntity());
     when(listProjectsRepository.findAll()).thenReturn(mockedItem);
 
     Iterable<Project> projects = listProjectsAdapter.getProjects();

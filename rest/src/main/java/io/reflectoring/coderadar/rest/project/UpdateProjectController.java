@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.project;
 
+import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.ProjectStillExistsException;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
@@ -35,7 +35,7 @@ public class UpdateProjectController {
     try {
       updateProjectUseCase.update(command, projectId);
       return new ResponseEntity<>(HttpStatus.OK);
-    } catch (ProjectStillExistsException e) {
+    } catch (ProjectAlreadyExistsException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     } catch (ProjectNotFoundException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);

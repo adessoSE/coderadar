@@ -1,10 +1,12 @@
 package io.reflectoring.coderadar.projectadministration.port.driven.user;
 
+import io.reflectoring.coderadar.projectadministration.UserNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.User;
-import java.util.Optional;
 
 public interface LoadUserPort {
-  Optional<User> loadUser(Long id);
+  User loadUser(Long id) throws UserNotFoundException;
 
-  Optional<User> loadUserByUsername(String username);
+  User loadUserByUsername(String username) throws UserNotFoundException;
+
+  boolean existsByUsername(String username);
 }

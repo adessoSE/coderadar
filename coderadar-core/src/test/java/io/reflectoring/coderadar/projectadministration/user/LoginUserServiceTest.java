@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.projectadministration.user;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.RefreshTokenPort;
@@ -9,11 +7,12 @@ import io.reflectoring.coderadar.projectadministration.port.driver.user.login.Lo
 import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserResponse;
 import io.reflectoring.coderadar.projectadministration.service.user.login.LoginUserService;
 import io.reflectoring.coderadar.projectadministration.service.user.security.TokenService;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.security.authentication.AuthenticationManager;
+
+import static org.mockito.Mockito.mock;
 
 class LoginUserServiceTest {
   private RefreshTokenPort refreshTokenPort = mock(RefreshTokenPort.class);
@@ -35,7 +34,7 @@ class LoginUserServiceTest {
     Mockito.when(tokenService.generateRefreshToken(user.getId(), user.getUsername()))
         .thenReturn("ift021789f21897f2187fg");
 
-    Mockito.when(loadUserPort.loadUserByUsername(user.getUsername())).thenReturn(Optional.of(user));
+    Mockito.when(loadUserPort.loadUserByUsername(user.getUsername())).thenReturn(user);
 
     LoginUserCommand command = new LoginUserCommand("username", "password");
     LoginUserResponse response = testSubject.login(command);

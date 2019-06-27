@@ -1,8 +1,5 @@
 package io.reflectoring.coderadar.projectadministration.filepattern;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
@@ -10,12 +7,15 @@ import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.L
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.ListFilePatternsOfProjectService;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 
 class ListFilePatternsOfProjectServiceTest {
   private ListFilePatternsOfProjectPort port = mock(ListFilePatternsOfProjectPort.class);
@@ -26,7 +26,7 @@ class ListFilePatternsOfProjectServiceTest {
     ListFilePatternsOfProjectService testSubject =
         new ListFilePatternsOfProjectService(port, getProjectPort);
 
-    Mockito.when(getProjectPort.get(anyLong())).thenReturn(Optional.of(new Project()));
+    Mockito.when(getProjectPort.get(anyLong())).thenReturn(new Project());
 
     List<FilePattern> filePatterns = new ArrayList<>();
     FilePattern filePattern1 = new FilePattern();

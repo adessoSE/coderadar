@@ -1,15 +1,14 @@
 package io.reflectoring.coderadar.projectadministration.module;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.GetModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.projectadministration.service.module.GetModuleService;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import static org.mockito.Mockito.mock;
 
 class GetModuleServiceTest {
   private GetModulePort getModulePort = mock(GetModulePort.class);
@@ -21,7 +20,7 @@ class GetModuleServiceTest {
     Module module = new Module();
     module.setId(1L);
     module.setPath("module-path");
-    Mockito.when(getModulePort.get(1L)).thenReturn(Optional.of(module));
+    Mockito.when(getModulePort.get(1L)).thenReturn(module);
 
     GetModuleResponse response = testSubject.get(1L);
 

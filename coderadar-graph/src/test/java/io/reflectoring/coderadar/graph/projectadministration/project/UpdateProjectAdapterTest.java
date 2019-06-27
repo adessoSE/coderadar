@@ -1,17 +1,19 @@
 package io.reflectoring.coderadar.graph.projectadministration.project;
 
-import static org.mockito.Mockito.*;
-
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.UpdateProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.service.UpdateProjectAdapter;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+import static org.mockito.Mockito.*;
 
 @DisplayName("Update project")
 class UpdateProjectAdapterTest {
@@ -36,15 +38,15 @@ class UpdateProjectAdapterTest {
   @Test
   @DisplayName("Should update project when a project with the passing ID exists")
   void shouldUpdateProjectWhenAProjectWithThePassingIdExists() {
-    Project mockedOldItem = new Project();
+    ProjectEntity mockedOldItem = new ProjectEntity();
     mockedOldItem.setId(1L);
     mockedOldItem.setName("Mustermann");
     when(getProjectRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedOldItem));
 
-    Project mockedItem = new Project();
+    ProjectEntity mockedItem = new ProjectEntity();
     mockedItem.setId(1L);
     mockedItem.setName("Musterfrau");
-    when(updateProjectRepository.save(any(Project.class))).thenReturn(mockedItem);
+    when(updateProjectRepository.save(any(ProjectEntity.class))).thenReturn(mockedItem);
 
     Project project = new Project();
     project.setId(1L);

@@ -1,15 +1,15 @@
 package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service;
 
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.AnalyzerConfigurationMapper;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.GetAnalyzerConfigurationsFromProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationsFromProjectPort;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 
 @Service
 public class GetAnalyzerConfigurationsFromProjectAdapter
@@ -17,6 +17,8 @@ public class GetAnalyzerConfigurationsFromProjectAdapter
   private final GetProjectRepository getProjectRepository;
   private final GetAnalyzerConfigurationsFromProjectRepository
       getAnalyzerConfigurationsFromProjectRepository;
+  private final AnalyzerConfigurationMapper analyzerConfigurationMapper =
+      new AnalyzerConfigurationMapper();
 
   @Autowired
   public GetAnalyzerConfigurationsFromProjectAdapter(
@@ -30,13 +32,11 @@ public class GetAnalyzerConfigurationsFromProjectAdapter
   }
 
   @Override
-  public List<AnalyzerConfiguration> get(Long id) {
-    Optional<Project> persistedProject = getProjectRepository.findById(id);
-    if (persistedProject.isPresent()) {
-      return getAnalyzerConfigurationsFromProjectRepository.findByProject_Id(id);
-    } else {
-      throw new ProjectNotFoundException(
-          "No analyzer configurations can be listed from a non-existing project.");
-    }
+  public Collection<AnalyzerConfiguration> get(Long projectId) throws ProjectNotFoundException {
+    getProjectRepository
+        .findById(projectId)
+        .orElseThrow(() -> new ProjectNotFoundException(projectId));
+    return analyzerConfigurationMapper.mapNodeEntities(
+        getAnalyzerConfigurationsFromProjectRepository.findByProjectId(projectId));
   }
 }

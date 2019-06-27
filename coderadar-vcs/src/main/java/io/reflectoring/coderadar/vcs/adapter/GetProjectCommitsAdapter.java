@@ -2,14 +2,14 @@ package io.reflectoring.coderadar.vcs.adapter;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.query.domain.DateRange;
-import io.reflectoring.coderadar.vcs.port.driven.SaveProjectCommitsPort;
+import io.reflectoring.coderadar.vcs.port.driven.GetProjectCommitsPort;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,22 +26,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SaveProjectCommitsAdapter implements SaveProjectCommitsPort {
+public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
 
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
-  private final SaveCommitPort saveCommitPort;
-
   @Autowired
-  public SaveProjectCommitsAdapter(
-      CoderadarConfigurationProperties coderadarConfigurationProperties,
-      ProcessRepositoryAdapter processRepositoryAdapter,
-      SaveCommitPort saveCommitPort) {
+  public GetProjectCommitsAdapter(
+      CoderadarConfigurationProperties coderadarConfigurationProperties) {
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-    this.saveCommitPort = saveCommitPort;
   }
 
-  public void saveCommits(Path repositoryRoot, DateRange range) {
+  public List<Commit> getCommits(Path repositoryRoot, DateRange range) {
     Git git;
     try {
       Repository repository;
@@ -56,11 +51,13 @@ public class SaveProjectCommitsAdapter implements SaveProjectCommitsPort {
               .build();
       git = new Git(repository);
 
+      HashMap<ObjectId, Commit> map = new HashMap<>();
       AtomicReference<Boolean> done = new AtomicReference<>(false);
       git.log()
           .call()
           .forEach(
               rc -> {
+                // Find the first commit in the given date range and build the tree from it.
                 if (!done.get() && isInDateRange(range, rc)) {
                   final RevWalk revWalk = new RevWalk(git.getRepository());
 
@@ -68,26 +65,35 @@ public class SaveProjectCommitsAdapter implements SaveProjectCommitsPort {
                   commit.setName(rc.getName());
                   commit.setAuthor(rc.getAuthorIdent().getName());
                   commit.setComment(rc.getShortMessage());
-                  commit.setTimestamp(new Date(rc.getCommitTime()));
+                  commit.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
                   try {
-                    commit.setParents(getParents(revWalk, rc, new HashMap<>(), range));
+                    commit.setParents(getParents(revWalk, rc, map, range.getEndDate()));
                   } catch (IOException e) {
                     e.printStackTrace();
                   }
-                  commit.getParents().forEach(commit1 -> commit1.getParents().clear());
-                  saveCommitPort.saveCommit(commit);
-
                   done.set(true);
                 }
               });
+      return new ArrayList<>(map.values());
     } catch (Exception e) {
       throw new IllegalStateException(
           String.format("Error accessing git repository at %s", repositoryRoot), e);
     }
   }
 
+  /**
+   * Recursively walks through all the parents of a commit and builds the commit tree.
+   *
+   * @param revWalk RevWalk Object we use to efficiently get the parent commits of a any commit.
+   * @param commit The start commit. This should be the newest commit.
+   * @param walkedCommits A Map storing the commits we have walked so far, this prevents us from
+   *     walking the same commits more than once.
+   * @param endDate The date past which no parents are checked.
+   * @return A List of parents for the commit.
+   * @throws IOException Thrown if for any reason a parent commit cannot be properly parsed.
+   */
   private List<Commit> getParents(
-      RevWalk revWalk, RevCommit commit, HashMap<ObjectId, Commit> walkedCommits, DateRange range)
+      RevWalk revWalk, RevCommit commit, HashMap<ObjectId, Commit> walkedCommits, LocalDate endDate)
       throws IOException {
 
     List<Commit> parents = new ArrayList<>();
@@ -99,27 +105,31 @@ public class SaveProjectCommitsAdapter implements SaveProjectCommitsPort {
         parents.add(commitWithParents);
       } else {
         RevCommit commitWithMetadata = revWalk.parseCommit(rc.getId());
-        if (!isInDateRange(range, commitWithMetadata)) {
+        if (endDate == null || !Instant.ofEpochSecond(rc.getCommitTime())
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+            .isBefore(endDate)) {
           continue;
         }
         commitWithParents = new Commit();
         commitWithParents.setName(commitWithMetadata.getName());
         commitWithParents.setAuthor(commitWithMetadata.getAuthorIdent().getName());
         commitWithParents.setComment(commitWithMetadata.getShortMessage());
-        commitWithParents.setTimestamp(new Date(commitWithMetadata.getCommitTime()));
+        commitWithParents.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
         walkedCommits.put(rc.getId(), commitWithParents);
-        commitWithParents.setParents(getParents(revWalk, commitWithMetadata, walkedCommits, range));
+        commitWithParents.setParents(
+            getParents(revWalk, commitWithMetadata, walkedCommits, endDate));
         parents.add(commitWithParents);
       }
     }
-    parents.forEach(
-        commit1 -> {
-          commit1.getParents().forEach(commit2 -> commit2.getParents().clear());
-          saveCommitPort.saveCommit(commit1);
-        });
     return parents;
   }
 
+  /**
+   * @param range Date range to test for
+   * @param rc RevCommit to check
+   * @return True if the commit was made within the date range, false otherwise.
+   */
   private boolean isInDateRange(DateRange range, RevCommit rc) {
     return Instant.ofEpochSecond(rc.getCommitTime())
             .atZone(ZoneId.systemDefault())

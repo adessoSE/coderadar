@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.DeleteModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.service.DeleteModuleAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.DeleteProjectRepository;
@@ -21,21 +22,27 @@ class DeleteModuleAdapterTest {
 
   @BeforeEach
   void setUp() {
-    deleteModuleAdapter = new DeleteModuleAdapter(deleteModuleRepository, deleteProjectRepository);
+    deleteModuleAdapter = new DeleteModuleAdapter(deleteModuleRepository);
   }
 
   @Test
   @DisplayName("Should delete module when passing a valid module entity")
-  void shouldDleteModuleWhenPassingAValidModuleEntity() {
-    doNothing().when(deleteModuleRepository).delete(isA(Module.class));
-    deleteModuleAdapter.delete(new Module());
-    verify(deleteModuleRepository, times(1)).delete(any(Module.class));
+  void shouldDeleteModuleWhenPassingAValidModuleEntity() {
+    doNothing().when(deleteModuleRepository).delete(isA(ModuleEntity.class));
+    when(deleteModuleRepository.findById(anyLong()))
+        .thenReturn(java.util.Optional.of(new ModuleEntity()));
+    Module module = new Module();
+    module.setId(1L);
+    deleteModuleAdapter.delete(module);
+    verify(deleteModuleRepository, times(1)).deleteById(1L);
   }
 
   @Test
   @DisplayName("Should delete module when passing a valid module id")
   void shouldDeleteModuleWhenPassingAValidModuleId() {
     doNothing().when(deleteModuleRepository).deleteById(isA(Long.class));
+    when(deleteModuleRepository.findById(anyLong()))
+        .thenReturn(java.util.Optional.of(new ModuleEntity()));
     deleteModuleAdapter.delete(1L);
     verify(deleteModuleRepository, times(1)).deleteById(any(Long.class));
   }

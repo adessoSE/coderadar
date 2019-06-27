@@ -1,6 +1,11 @@
 package io.reflectoring.coderadar.graph.projectadministration.user.service;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.RefreshTokenEntity;
+import io.reflectoring.coderadar.graph.projectadministration.user.RefreshTokenMapper;
+import io.reflectoring.coderadar.graph.projectadministration.user.repository.LoadUserRepository;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RefreshTokenRepository;
+import io.reflectoring.coderadar.projectadministration.RefreshTokenNotFoundException;
+import io.reflectoring.coderadar.projectadministration.UserNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.RefreshToken;
 import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.RefreshTokenPort;
@@ -12,32 +17,44 @@ import org.springframework.transaction.annotation.Transactional;
 public class RefreshTokenAdapter implements RefreshTokenPort {
 
   private final RefreshTokenRepository refreshTokenRepository;
+  private final RefreshTokenMapper refreshTokenMapper = new RefreshTokenMapper();
+  private final LoadUserRepository loadUserRepository;
 
   @Autowired
-  public RefreshTokenAdapter(RefreshTokenRepository refreshTokenRepository) {
+  public RefreshTokenAdapter(
+      RefreshTokenRepository refreshTokenRepository, LoadUserRepository loadUserRepository) {
     this.refreshTokenRepository = refreshTokenRepository;
+    this.loadUserRepository = loadUserRepository;
   }
 
   @Override
-  public RefreshToken findByToken(String refreshToken) {
-    return refreshTokenRepository.findByToken(refreshToken);
+  public RefreshToken findByToken(String refreshToken) throws RefreshTokenNotFoundException {
+    RefreshTokenEntity refreshTokenEntity = refreshTokenRepository.findByToken(refreshToken);
+    if (refreshTokenEntity != null) {
+      return refreshTokenMapper.mapNodeEntity(refreshTokenEntity);
+    } else {
+      throw new RefreshTokenNotFoundException();
+    }
   }
 
   @Override
   @Transactional
   public void deleteByUser(User user) {
-    refreshTokenRepository.deleteByUser(user);
+    refreshTokenRepository.deleteByUser(
+        loadUserRepository
+            .findById(user.getId())
+            .orElseThrow(() -> new UserNotFoundException(user.getId())));
   }
 
   @Override
   public void updateRefreshToken(String oldToken, String newToken) {
-    RefreshToken refreshToken = findByToken(oldToken);
+    RefreshTokenEntity refreshToken = refreshTokenRepository.findByToken(oldToken);
     refreshToken.setToken(newToken);
     refreshTokenRepository.save(refreshToken);
   }
 
   @Override
-  public void saveToken(RefreshToken refreshTokenEntity) {
-    refreshTokenRepository.save(refreshTokenEntity);
+  public void saveToken(RefreshToken refreshToken) {
+    refreshTokenRepository.save(refreshTokenMapper.mapDomainObject(refreshToken));
   }
 }

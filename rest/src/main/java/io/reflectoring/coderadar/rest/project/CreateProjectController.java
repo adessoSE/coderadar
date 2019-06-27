@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.project;
 
-import io.reflectoring.coderadar.projectadministration.ProjectStillExistsException;
+import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
@@ -32,7 +32,7 @@ public class CreateProjectController {
     try {
       return new ResponseEntity<>(
           new IdResponse(createProjectUseCase.createProject(command)), HttpStatus.CREATED);
-    } catch (ProjectStillExistsException e) {
+    } catch (ProjectAlreadyExistsException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
   }

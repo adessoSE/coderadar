@@ -1,14 +1,15 @@
 package io.reflectoring.coderadar.graph.projectadministration.module.repository;
 
-import io.reflectoring.coderadar.projectadministration.domain.Module;
-import java.util.List;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface ListModulesOfProjectRepository extends Neo4jRepository<Module, Long> {
+import java.util.List;
 
-  @Query("MATCH (p:Project)-[:CONTAINS]->(m:Module) WHERE ID(p) = {0} RETURN m")
-  List<Module> findByProjectId(Long projectId);
+@Repository
+public interface ListModulesOfProjectRepository extends Neo4jRepository<ModuleEntity, Long> {
+
+  @Query("MATCH (p:ProjectEntity)-[:CONTAINS]->(m:ModuleEntity) WHERE ID(p) = {0} RETURN m")
+  List<ModuleEntity> findByProjectId(Long projectId);
 }

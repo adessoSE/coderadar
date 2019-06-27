@@ -1,14 +1,15 @@
 package io.reflectoring.coderadar.graph.query;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.analyzer.domain.MetricValueDTO;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
 import io.reflectoring.coderadar.graph.query.service.GetMetricValuesOfCommitAdapter;
-import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.mockito.Mockito.mock;
 
 @DisplayName("Get metric values of commit")
 class GetMetricValuesOfCommitAdapterTest {

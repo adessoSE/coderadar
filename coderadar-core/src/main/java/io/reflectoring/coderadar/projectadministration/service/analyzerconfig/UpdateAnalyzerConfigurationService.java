@@ -6,7 +6,6 @@ import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfi
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +26,10 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
   @Override
   public void update(UpdateAnalyzerConfigurationCommand command, Long analyzerId)
       throws AnalyzerConfigurationNotFoundException {
-    Optional<AnalyzerConfiguration> analyzerConfiguration =
+    AnalyzerConfiguration analyzerConfiguration =
         getAnalyzerConfigurationPort.getAnalyzerConfiguration(analyzerId);
-    if (analyzerConfiguration.isPresent()) {
-      AnalyzerConfiguration newAnalyzerConfiguration = analyzerConfiguration.get();
-      newAnalyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
-      newAnalyzerConfiguration.setEnabled(command.getEnabled());
-      updateAnalyzerConfigurationPort.update(newAnalyzerConfiguration);
-    } else {
-      throw new AnalyzerConfigurationNotFoundException(analyzerId);
-    }
+    analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
+    analyzerConfiguration.setEnabled(command.getEnabled());
+    updateAnalyzerConfigurationPort.update(analyzerConfiguration);
   }
 }

@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.rest.integration.module;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
-import io.reflectoring.coderadar.projectadministration.domain.Module;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -26,16 +26,16 @@ class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTempla
   @Test
   void listAllModulesOfProjectWithId() throws Exception {
     // Set up
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
 
-    Module module = new Module();
+    ModuleEntity module = new ModuleEntity();
     module.setPath("test-module");
     module.setProject(testProject);
     createModuleRepository.save(module);
 
-    Module module2 = new Module();
+    ModuleEntity module2 = new ModuleEntity();
     module2.setPath("test-module");
     module2.setProject(testProject);
     createModuleRepository.save(module2);

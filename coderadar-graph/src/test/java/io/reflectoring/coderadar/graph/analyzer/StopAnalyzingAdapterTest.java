@@ -1,24 +1,25 @@
 package io.reflectoring.coderadar.graph.analyzer;
 
-import static org.mockito.Mockito.*;
-
 import io.reflectoring.coderadar.analyzer.AnalyzingJobNotStartedException;
-import io.reflectoring.coderadar.analyzer.domain.AnalyzingJob;
+import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.GetAnalyzingStatusRepository;
-import io.reflectoring.coderadar.graph.analyzer.repository.StopAnalyzingRepository;
+import io.reflectoring.coderadar.graph.analyzer.repository.StartAnalyzingRepository;
 import io.reflectoring.coderadar.graph.analyzer.service.StopAnalyzingAdapter;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
+import static org.mockito.Mockito.*;
+
 @DisplayName("Stop analyzing")
 class StopAnalyzingAdapterTest {
-  private StopAnalyzingRepository stopAnalyzingRepository = mock(StopAnalyzingRepository.class);
+  private StartAnalyzingRepository stopAnalyzingRepository = mock(StartAnalyzingRepository.class);
 
   private GetProjectRepository getProjectRepository = mock(GetProjectRepository.class);
 
@@ -43,13 +44,13 @@ class StopAnalyzingAdapterTest {
   @Test
   @DisplayName("Should throw exception when no active analyzing job exists")
   void shouldThrowExceptionWhenNoActiveAnalzingJobExists() {
-    Project mockProject = new Project();
+    ProjectEntity mockProject = new ProjectEntity();
     mockProject.setId(1L);
-    AnalyzingJob mockItem = new AnalyzingJob();
+    AnalyzingJobEntity mockItem = new AnalyzingJobEntity();
     mockItem.setId(10L);
     mockItem.setActive(false);
     when(getProjectRepository.findById(1L)).thenReturn(Optional.of(mockProject));
-    when(getAnalyzingStatusRepository.findByProject_Id(1L)).thenReturn(Optional.of(mockItem));
+    when(getAnalyzingStatusRepository.findByProjectId(1L)).thenReturn(Optional.of(mockItem));
 
     Assertions.assertThrows(
         AnalyzingJobNotStartedException.class, () -> stopAnalyzingAdapter.stop(1L));
@@ -58,13 +59,13 @@ class StopAnalyzingAdapterTest {
   @Test
   @DisplayName("Should stop analyzing job when a active analzing job exists")
   void withActiveAnalyzingJobShouldStopAnalyzingJob() {
-    Project mockProject = new Project();
+    ProjectEntity mockProject = new ProjectEntity();
     mockProject.setId(1L);
-    AnalyzingJob mockItem = new AnalyzingJob();
+    AnalyzingJobEntity mockItem = new AnalyzingJobEntity();
     mockItem.setId(10L);
     mockItem.setActive(true);
     when(getProjectRepository.findById(1L)).thenReturn(Optional.of(mockProject));
-    when(getAnalyzingStatusRepository.findByProject_Id(1L)).thenReturn(Optional.of(mockItem));
+    when(getAnalyzingStatusRepository.findByProjectId(1L)).thenReturn(Optional.of(mockItem));
 
     stopAnalyzingAdapter.stop(1L);
     verify(stopAnalyzingRepository, times(1)).save(mockItem);

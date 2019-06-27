@@ -3,10 +3,10 @@ package io.reflectoring.coderadar.graph.analyzer;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import io.reflectoring.coderadar.analyzer.AnalyzingJobNotStartedException;
-import io.reflectoring.coderadar.analyzer.domain.AnalyzingJob;
+import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.GetAnalyzingStatusRepository;
 import io.reflectoring.coderadar.graph.analyzer.service.GetAnalyzingStatusAdapter;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,23 +27,23 @@ class GetAnalyzingStatusAdapterTest {
 
   @Test
   @DisplayName("Should throw exception when a analyzing job hasn't been started")
-  void shouldThrowExceptionWhenAAnalyzingJobHasntBeenStarted() {
+  void shouldThrowExceptionWhenAnalyzingJobHasntBeenStarted() {
     Assertions.assertThrows(
-        AnalyzingJobNotStartedException.class, () -> getanalyzingStatusAdapter.get(1L));
+        ProjectNotFoundException.class, () -> getanalyzingStatusAdapter.get(1L));
   }
 
   @Test
   @DisplayName("Should return true when a analyzing job exists in the project with the passing ID")
   void shouldReturnTrueWhenAAnalyzingJobExistsInTheProjectWithThePassingId() {
-    AnalyzingJob mockedItem = new AnalyzingJob();
+    AnalyzingJobEntity mockedItem = new AnalyzingJobEntity();
     mockedItem.setId(1L);
     mockedItem.setActive(true);
-    when(getAnalyzingStatusRepository.findByProject_Id(any(Long.class)))
+    when(getAnalyzingStatusRepository.findByProjectId(any(Long.class)))
         .thenReturn(Optional.of(mockedItem));
 
     boolean active = getanalyzingStatusAdapter.get(1L);
 
-    verify(getAnalyzingStatusRepository, times(1)).findByProject_Id(1L);
+    verify(getAnalyzingStatusRepository, times(1)).findByProjectId(1L);
     verifyNoMoreInteractions(getAnalyzingStatusRepository);
     Assertions.assertTrue(active);
   }
@@ -52,15 +52,15 @@ class GetAnalyzingStatusAdapterTest {
   @DisplayName(
       "Should return false when a analyzing job doesn't exists in the project with the passing ID")
   void shouldReturnFalseWhenAAnalyzingJobDoesntExistsInTheProjectWithThePassingId() {
-    AnalyzingJob mockedItem = new AnalyzingJob();
+    AnalyzingJobEntity mockedItem = new AnalyzingJobEntity();
     mockedItem.setId(1L);
     mockedItem.setActive(false);
-    when(getAnalyzingStatusRepository.findByProject_Id(any(Long.class)))
+    when(getAnalyzingStatusRepository.findByProjectId(any(Long.class)))
         .thenReturn(Optional.of(mockedItem));
 
     boolean active = getanalyzingStatusAdapter.get(1L);
 
-    verify(getAnalyzingStatusRepository, times(1)).findByProject_Id(1L);
+    verify(getAnalyzingStatusRepository, times(1)).findByProjectId(1L);
     verifyNoMoreInteractions(getAnalyzingStatusRepository);
     Assertions.assertFalse(active);
   }

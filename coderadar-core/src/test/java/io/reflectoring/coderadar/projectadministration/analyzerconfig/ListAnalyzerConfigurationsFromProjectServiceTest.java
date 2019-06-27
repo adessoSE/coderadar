@@ -1,20 +1,20 @@
 package io.reflectoring.coderadar.projectadministration.analyzerconfig;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationsFromProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.ListAnalyzerConfigurationsFromProjectService;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 
 class ListAnalyzerConfigurationsFromProjectServiceTest {
   private GetAnalyzerConfigurationsFromProjectPort port =
@@ -24,9 +24,9 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
   @Test
   void returnsTwoAnalyzerConfigurationsFromProject() {
     ListAnalyzerConfigurationsFromProjectService testSubject =
-        new ListAnalyzerConfigurationsFromProjectService(port, getProjectPort);
+        new ListAnalyzerConfigurationsFromProjectService(port);
 
-    Mockito.when(getProjectPort.get(anyLong())).thenReturn(Optional.of(new Project()));
+    Mockito.when(getProjectPort.get(anyLong())).thenReturn(new Project());
 
     AnalyzerConfiguration analyzerConfiguration1 = new AnalyzerConfiguration();
     analyzerConfiguration1.setId(1L);

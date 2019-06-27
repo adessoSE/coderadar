@@ -5,19 +5,19 @@ import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
 import io.reflectoring.coderadar.plugin.api.FileMetrics;
 import io.reflectoring.coderadar.plugin.api.Metric;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
-import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driver.GetCommitRawContentUseCase;
-import java.util.ArrayList;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AnalyzeCommitService implements AnalyzeCommitUseCase {
@@ -59,7 +59,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
       int analyzedFiles = 0;
       for (FileToCommitRelationship fileToCommitRelationship : commit.getTouchedFiles()) {
         String filePath = fileToCommitRelationship.getFile().getPath();
-        project.getFiles().add(fileToCommitRelationship.getFile());
+        // project.getFiles().add(fileToCommitRelationship.getFile());
         FileMetrics fileMetrics = analyzeFile(commit, filePath, analyzers);
         storeMetrics(fileToCommitRelationship.getFile(), fileMetrics, commit);
         commit.setAnalyzed(true);
@@ -83,10 +83,11 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
   private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Project project) {
     List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>();
 
-    List<AnalyzerConfiguration> configs = project.getAnalyzerConfigurations();
+    // TODO: USE CASE + PORT
+    /*    List<AnalyzerConfiguration> configs = project.getAnalyzerConfigurations();
     for (AnalyzerConfiguration config : configs) {
       analyzers.add(analyzerPluginService.createAnalyzer(config.getAnalyzerName()));
-    }
+    }*/
 
     return analyzers;
   }

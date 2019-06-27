@@ -6,7 +6,6 @@ import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.G
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.UpdateFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.update.UpdateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.update.UpdateFilePatternUseCase;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,13 +25,9 @@ public class UpdateFilePatternService implements UpdateFilePatternUseCase {
   @Override
   public void updateFilePattern(UpdateFilePatternCommand command, Long filePatternId)
       throws FilePatternNotFoundException {
-    Optional<FilePattern> filePattern = getFilePatternPort.get(filePatternId);
-    if (filePattern.isPresent()) {
-      filePattern.get().setPattern(command.getPattern());
-      filePattern.get().setInclusionType(command.getInclusionType());
-      updateFilePatternPort.updateFilePattern(filePattern.get());
-    } else {
-      throw new FilePatternNotFoundException(filePatternId);
-    }
+    FilePattern filePattern = getFilePatternPort.get(filePatternId);
+    filePattern.setPattern(command.getPattern());
+    filePattern.setInclusionType(command.getInclusionType());
+    updateFilePatternPort.updateFilePattern(filePattern);
   }
 }

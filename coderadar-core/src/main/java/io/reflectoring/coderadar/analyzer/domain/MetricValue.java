@@ -1,25 +1,21 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
-import java.util.LinkedList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@NodeEntity
 public class MetricValue {
   private Long id;
   private String name;
   private Long value;
 
-  @Relationship(type = "VALID_FOR")
   private Commit commit;
 
-  @Relationship(type = "LOCATED_IN")
   private List<Finding> findings = new LinkedList<>();
 }

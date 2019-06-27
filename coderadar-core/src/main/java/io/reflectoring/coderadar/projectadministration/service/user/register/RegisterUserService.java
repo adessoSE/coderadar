@@ -24,7 +24,7 @@ public class RegisterUserService implements RegisterUserUseCase {
 
   @Override
   public Long register(RegisterUserCommand command) throws UsernameAlreadyInUseException {
-    if (loadUserPort.loadUserByUsername(command.getUsername()).isPresent()) {
+    if (loadUserPort.existsByUsername(command.getUsername())) {
       throw new UsernameAlreadyInUseException(command.getUsername());
     }
     User user = new User();

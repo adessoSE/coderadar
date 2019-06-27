@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.projectadministration.project;
 import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.projectadministration.ProjectStillExistsException;
+import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
@@ -11,7 +11,6 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.updat
 import io.reflectoring.coderadar.projectadministration.service.project.UpdateProjectService;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
 import java.util.Date;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -46,7 +45,7 @@ class UpdateProjectServiceTest {
     project.setId(1L);
     project.setName("new project name");
 
-    Mockito.when(getProjectPort.get(1L)).thenReturn(Optional.of(project));
+    Mockito.when(getProjectPort.get(1L)).thenReturn(project);
 
     testSubject.update(command, 1L);
 
@@ -76,11 +75,10 @@ class UpdateProjectServiceTest {
     project.setId(1L);
     project.setName("new project name");
 
-    Mockito.when(getProjectPort.get(1L)).thenReturn(Optional.of(project));
-    Mockito.when(getProjectPort.get(project.getName())).thenReturn(Optional.of(new Project()));
+    Mockito.when(getProjectPort.existsByName(project.getName())).thenReturn(Boolean.TRUE);
 
     Assertions.assertThrows(
-        ProjectStillExistsException.class,
+        ProjectAlreadyExistsException.class,
         () -> {
           testSubject.update(command, 1L);
         });

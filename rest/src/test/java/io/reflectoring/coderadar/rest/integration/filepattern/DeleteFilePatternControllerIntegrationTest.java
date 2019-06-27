@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar.rest.integration.filepattern;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,11 +22,11 @@ class DeleteFilePatternControllerIntegrationTest extends ControllerTestTemplate 
   @Test
   void deleteFilePatternWithId() throws Exception {
     // Set up
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
 
-    FilePattern filePattern = new FilePattern();
+    FilePatternEntity filePattern = new FilePatternEntity();
     filePattern.setInclusionType(InclusionType.INCLUDE);
     filePattern.setPattern("**/*.java");
     filePattern.setProject(testProject);

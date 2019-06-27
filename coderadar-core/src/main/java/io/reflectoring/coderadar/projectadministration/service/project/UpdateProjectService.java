@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.service.project;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.ProjectStillExistsException;
+import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
@@ -10,10 +9,10 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.updat
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
-import java.io.File;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
 
 @Service
 public class UpdateProjectService implements UpdateProjectUseCase {
@@ -38,38 +37,33 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
   @Override
   public void update(UpdateProjectCommand command, Long projectId) {
-    Optional<Project> project = getProjectPort.get(projectId);
+    Project project = getProjectPort.get(projectId);
 
-    if (project.isPresent()) {
-      if (getProjectPort.get(command.getName()).isPresent()) {
-        throw new ProjectStillExistsException(command.getName());
-      }
-      Project updatedProject = project.get();
-      updatedProject.setName(command.getName());
-      updatedProject.setVcsUrl(command.getVcsUrl());
-      updatedProject.setVcsUsername(command.getVcsUsername());
-      updatedProject.setVcsPassword(command.getVcsPassword());
-      updatedProject.setVcsOnline(command.getVcsOnline());
-      updatedProject.setVcsStart(command.getStartDate());
-      updatedProject.setVcsEnd(command.getEndDate());
-
-      new Thread(
-              () -> {
-                try {
-                  updateRepositoryUseCase.updateRepository(
-                      new File(
-                              coderadarConfigurationProperties.getWorkdir()
-                                  + "/"
-                                  + updatedProject.getWorkdirName())
-                          .toPath());
-                } catch (UnableToUpdateRepositoryException e) {
-                  e.printStackTrace();
-                }
-              })
-          .start();
-      updateProjectPort.update(updatedProject);
-    } else {
-      throw new ProjectNotFoundException(projectId);
+    if (getProjectPort.existsByName(command.getName())) {
+      throw new ProjectAlreadyExistsException(command.getName());
     }
+    project.setName(command.getName());
+    project.setVcsUrl(command.getVcsUrl());
+    project.setVcsUsername(command.getVcsUsername());
+    project.setVcsPassword(command.getVcsPassword());
+    project.setVcsOnline(command.getVcsOnline());
+    project.setVcsStart(command.getStartDate());
+    project.setVcsEnd(command.getEndDate());
+
+    new Thread(
+            () -> {
+              try {
+                updateRepositoryUseCase.updateRepository(
+                    new File(
+                            coderadarConfigurationProperties.getWorkdir()
+                                + "/"
+                                + project.getWorkdirName())
+                        .toPath());
+              } catch (UnableToUpdateRepositoryException e) {
+                e.printStackTrace();
+              }
+            })
+        .start();
+    updateProjectPort.update(project);
   }
 }

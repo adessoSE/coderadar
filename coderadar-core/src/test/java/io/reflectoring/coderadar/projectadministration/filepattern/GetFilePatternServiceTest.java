@@ -1,16 +1,15 @@
 package io.reflectoring.coderadar.projectadministration.filepattern;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.GetFilePatternService;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import static org.mockito.Mockito.mock;
 
 class GetFilePatternServiceTest {
   private GetFilePatternPort port = mock(GetFilePatternPort.class);
@@ -24,7 +23,7 @@ class GetFilePatternServiceTest {
     filePattern.setPattern("**/*.java");
     filePattern.setInclusionType(InclusionType.INCLUDE);
 
-    Mockito.when(port.get(1L)).thenReturn(Optional.of(filePattern));
+    Mockito.when(port.get(1L)).thenReturn(filePattern);
 
     GetFilePatternResponse response = testSubject.get(1L);
 

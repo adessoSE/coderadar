@@ -96,7 +96,7 @@ bootRun {
             [
                     // debugging
                     "-Xdebug",
-                    "-Xss4096k",
+                    "-Xss10144k",
                     "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
             ]
     doFirst {

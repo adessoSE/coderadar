@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.rest.integration.user;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.RefreshTokenEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RefreshTokenRepository;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
-import io.reflectoring.coderadar.projectadministration.domain.RefreshToken;
-import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.password.ChangePasswordCommand;
 import io.reflectoring.coderadar.projectadministration.service.user.security.PasswordUtil;
 import io.reflectoring.coderadar.projectadministration.service.user.security.TokenService;
@@ -29,12 +29,12 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void ChangePasswordSuccessfully() throws Exception {
-    User testUser = new User();
+    UserEntity testUser = new UserEntity();
     testUser.setUsername("username");
     testUser.setPassword(PasswordUtil.hash("password1"));
     testUser = registerUserRepository.save(testUser);
 
-    RefreshToken refreshToken = new RefreshToken();
+    RefreshTokenEntity refreshToken = new RefreshTokenEntity();
     refreshToken.setToken(
         tokenService.generateRefreshToken(testUser.getId(), testUser.getUsername()));
     refreshToken.setUser(testUser);
@@ -59,14 +59,13 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void ChangePasswordReturnsErrorWhenTokenInvalid() throws Exception {
-    User testUser = new User();
+    UserEntity testUser = new UserEntity();
     testUser.setUsername("username");
     testUser.setPassword(PasswordUtil.hash("password1"));
     testUser = registerUserRepository.save(testUser);
 
-    RefreshToken refreshToken = new RefreshToken();
-    refreshToken.setToken(
-        tokenService.generateRefreshToken(testUser.getId(), testUser.getUsername()));
+    RefreshTokenEntity refreshToken = new RefreshTokenEntity();
+    refreshToken.setToken(tokenService.generateRefreshToken(testUser.getId(), testUser.getUsername()));
     refreshToken.setUser(testUser);
     refreshTokenRepository.save(refreshToken);
 

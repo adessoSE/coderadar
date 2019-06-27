@@ -1,10 +1,11 @@
 package io.reflectoring.coderadar.graph.query.repository;
 
 import io.reflectoring.coderadar.analyzer.domain.Commit;
-import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface GetCommitsInProjectRepository extends Neo4jRepository<Commit, Long> {

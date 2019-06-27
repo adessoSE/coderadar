@@ -1,11 +1,12 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
 import io.reflectoring.coderadar.vcs.port.driven.CheckRepositoryPort;
-import java.io.IOException;
-import java.nio.file.Path;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.nio.file.Path;
 
 @Service
 public class CheckRepositoryAdapter implements CheckRepositoryPort {

@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.integration.project;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +24,7 @@ class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
   public void setUp() {
     createProjectRepository.deleteAll();
 
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsEnd(new Date());
@@ -33,7 +33,7 @@ class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
     testProject.setVcsPassword("testPassword");
     testProject.setVcsUsername("testUser");
 
-    Project testProject2 = new Project();
+    ProjectEntity testProject2 = new ProjectEntity();
     testProject2.setVcsUrl("https://valid.url");
     testProject2.setName("project");
     testProject2.setVcsEnd(new Date());

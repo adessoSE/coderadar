@@ -1,16 +1,16 @@
 package io.reflectoring.coderadar.projectadministration.project;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.projectadministration.service.project.GetProjectService;
-import java.util.Date;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import java.util.Date;
+
+import static org.mockito.Mockito.mock;
 
 class GetProjectServiceTest {
 
@@ -31,7 +31,7 @@ class GetProjectServiceTest {
     project.setVcsStart(new Date());
     project.setVcsEnd(new Date());
 
-    Mockito.when(getProjectPort.get(1L)).thenReturn(Optional.of(project));
+    Mockito.when(getProjectPort.get(1L)).thenReturn(project);
 
     GetProjectResponse response = testSubject.get(1L);
 

@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar.rest.integration.filepattern;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.update.UpdateFilePatternCommand;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -24,11 +24,11 @@ class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
   @Test
   void updateFilePatternWithId() throws Exception {
     // Set up
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
 
-    FilePattern filePattern = new FilePattern();
+    FilePatternEntity filePattern = new FilePatternEntity();
     filePattern.setInclusionType(InclusionType.INCLUDE);
     filePattern.setPattern("**/*.java");
     filePattern.setProject(testProject);
@@ -46,7 +46,7 @@ class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(
             result -> {
-              FilePattern configuration = createFilePatternRepository.findById(id).get();
+              FilePatternEntity configuration = createFilePatternRepository.findById(id).get();
               Assertions.assertEquals("**/*.xml", configuration.getPattern());
               Assertions.assertEquals(InclusionType.EXCLUDE, configuration.getInclusionType());
             });

@@ -2,10 +2,10 @@ package io.reflectoring.coderadar.rest.integration.user;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import io.reflectoring.coderadar.graph.projectadministration.domain.RefreshTokenEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RefreshTokenRepository;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
-import io.reflectoring.coderadar.projectadministration.domain.RefreshToken;
-import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.RefreshTokenCommand;
 import io.reflectoring.coderadar.projectadministration.service.user.security.PasswordUtil;
 import io.reflectoring.coderadar.projectadministration.service.user.security.SecretKeyService;
@@ -36,12 +36,12 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void refreshTokenSuccessfully() throws Exception {
-    User testUser = new User();
+    UserEntity testUser = new UserEntity();
     testUser.setUsername("radar");
     testUser.setPassword(PasswordUtil.hash("Password12!"));
     testUser = registerUserRepository.save(testUser);
 
-    RefreshToken userRefreshToken = new RefreshToken();
+    RefreshTokenEntity userRefreshToken = new RefreshTokenEntity();
     userRefreshToken.setToken(
         tokenService.generateRefreshToken(testUser.getId(), testUser.getUsername()));
     userRefreshToken.setUser(testUser);
@@ -60,10 +60,10 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void refreshTokenReturnsErrorOnInvalidToken() throws Exception {
-    User testUser = new User();
+    UserEntity testUser = new UserEntity();
     testUser.setUsername("radar");
     testUser.setPassword(PasswordUtil.hash("Password12!"));
-    testUser = registerUserRepository.save(testUser);
+    registerUserRepository.save(testUser);
 
     RefreshTokenCommand command =
         new RefreshTokenCommand(createExpiredAccessToken(), "iqupiugapsfw");
@@ -76,12 +76,12 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void refreshTokenReturnsErrorOnNonExpiredAccessToken() throws Exception {
-    User testUser = new User();
+    UserEntity testUser = new UserEntity();
     testUser.setUsername("radar");
     testUser.setPassword(PasswordUtil.hash("Password12!"));
     testUser = registerUserRepository.save(testUser);
 
-    RefreshToken userRefreshToken = new RefreshToken();
+    RefreshTokenEntity userRefreshToken = new RefreshTokenEntity();
     userRefreshToken.setToken(
         tokenService.generateRefreshToken(testUser.getId(), testUser.getUsername()));
     userRefreshToken.setUser(testUser);

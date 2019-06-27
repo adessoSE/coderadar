@@ -1,11 +1,10 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
-import java.io.Serializable;
 import lombok.Data;
-import org.neo4j.ogm.annotation.NodeEntity;
+
+import java.io.Serializable;
 
 @Data
-@NodeEntity
 public class ModuleAssociationId implements Serializable {
 
   private Long commitId;

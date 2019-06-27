@@ -16,6 +16,6 @@ public class SaveFileAdapter implements SaveFilePort {
 
   @Override
   public void save(File file) {
-    this.fileRepository.save(file);
+    // this.fileRepository.save(file);
   }
 }

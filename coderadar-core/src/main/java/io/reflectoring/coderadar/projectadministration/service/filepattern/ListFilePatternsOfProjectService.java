@@ -6,10 +6,11 @@ import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.L
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ListFilePatternsOfProjectService implements ListFilePatternsOfProjectUseCase {
@@ -27,16 +28,12 @@ public class ListFilePatternsOfProjectService implements ListFilePatternsOfProje
   @Override
   public List<GetFilePatternResponse> listFilePatterns(Long projectId)
       throws ProjectNotFoundException {
-    if (getProjectPort.get(projectId).isPresent()) {
-      List<GetFilePatternResponse> patterns = new ArrayList<>();
-      for (FilePattern filePattern : port.listFilePatterns(projectId)) {
-        patterns.add(
-            new GetFilePatternResponse(
-                filePattern.getId(), filePattern.getPattern(), filePattern.getInclusionType()));
-      }
-      return patterns;
-    } else {
-      throw new ProjectNotFoundException(projectId);
+    List<GetFilePatternResponse> patterns = new ArrayList<>();
+    for (FilePattern filePattern : port.listFilePatterns(projectId)) {
+      patterns.add(
+          new GetFilePatternResponse(
+              filePattern.getId(), filePattern.getPattern(), filePattern.getInclusionType()));
     }
+    return patterns;
   }
 }

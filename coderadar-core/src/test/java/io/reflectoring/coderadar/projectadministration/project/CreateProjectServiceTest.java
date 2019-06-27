@@ -5,20 +5,17 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.projectadministration.ProjectStillExistsException;
+import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.CreateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService;
-import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
-import io.reflectoring.coderadar.vcs.port.driver.ProcessRepositoryUseCase;
-import io.reflectoring.coderadar.vcs.port.driver.SaveProjectCommitsUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
 import java.io.File;
 import java.util.Date;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.task.TaskExecutor;
@@ -32,7 +29,9 @@ class CreateProjectServiceTest {
       mock(CoderadarConfigurationProperties.class);
   private TaskExecutor taskExecutor = mock(TaskExecutor.class);
 
-  private SaveProjectCommitsUseCase saveProjectCommitsUseCase = mock(SaveProjectCommitsUseCase.class);
+  private GetProjectCommitsUseCase getProjectCommitsUseCase = mock(GetProjectCommitsUseCase.class);
+  private SaveCommitPort saveCommitPort = mock(SaveCommitPort.class);
+
   @Test
   void returnsNewProjectId() {
     CreateProjectService testSubject =
@@ -42,8 +41,8 @@ class CreateProjectServiceTest {
             cloneRepositoryUseCase,
             coderadarConfigurationProperties,
             taskExecutor,
-                saveProjectCommitsUseCase
-            );
+            getProjectCommitsUseCase,
+            saveCommitPort);
 
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());
@@ -61,7 +60,7 @@ class CreateProjectServiceTest {
     project.setVcsEnd(new Date());
 
     when(createProjectPort.createProject(any())).thenReturn(1L);
-    when(getProjectPort.get(project.getName())).thenReturn(Optional.empty());
+    when(getProjectPort.existsByName(project.getName())).thenReturn(Boolean.FALSE);
 
     Long projectId = testSubject.createProject(command);
 
@@ -69,7 +68,7 @@ class CreateProjectServiceTest {
   }
 
   @Test
-  void returnsErrorWhenProjectWithNameStillExists() {
+  void returnsErrorWhenProjectWithNameAlreadyExists() {
     CreateProjectService testSubject =
         new CreateProjectService(
             createProjectPort,
@@ -77,8 +76,8 @@ class CreateProjectServiceTest {
             cloneRepositoryUseCase,
             coderadarConfigurationProperties,
             taskExecutor,
-            saveProjectCommitsUseCase
-            );
+            getProjectCommitsUseCase,
+            saveCommitPort);
 
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());
@@ -95,11 +94,10 @@ class CreateProjectServiceTest {
     project.setVcsStart(new Date());
     project.setVcsEnd(new Date());
 
-    when(createProjectPort.createProject(any())).thenReturn(1L);
-    when(getProjectPort.get(project.getName())).thenReturn(Optional.of(new Project()));
+    when(getProjectPort.existsByName(project.getName())).thenReturn(Boolean.TRUE);
 
     Assertions.assertThrows(
-        ProjectStillExistsException.class,
+        ProjectAlreadyExistsException.class,
         () -> {
           testSubject.createProject(command);
         });

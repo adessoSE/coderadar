@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.GetFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.service.GetFilePatternAdapter;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
@@ -22,8 +23,9 @@ public class GetFilePatternAdapterTest {
     GetFilePatternAdapter getFilePatternAdapter =
         new GetFilePatternAdapter(getFilePatternRepository);
 
-    when(getFilePatternRepository.findById(anyLong())).thenReturn(Optional.of(new FilePattern()));
-    Optional<FilePattern> returnedFilePattern = getFilePatternAdapter.get(1L);
-    Assertions.assertTrue(returnedFilePattern.isPresent());
+    when(getFilePatternRepository.findById(anyLong()))
+        .thenReturn(Optional.of(new FilePatternEntity()));
+    FilePattern returnedFilePattern = getFilePatternAdapter.get(1L);
+    Assertions.assertNotNull(returnedFilePattern);
   }
 }

@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar.rest.integration.filepattern;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -22,7 +22,7 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
 
   @Test
   void createFilePatternSuccessfully() throws Exception {
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
 
@@ -36,7 +36,7 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
         .andExpect(MockMvcResultMatchers.status().isCreated())
         .andDo(
             result -> {
-              FilePattern filePattern = createFilePatternRepository.findAll().iterator().next();
+              FilePatternEntity filePattern = createFilePatternRepository.findAll().iterator().next();
               Assertions.assertEquals("**/*.java", filePattern.getPattern());
               Assertions.assertEquals(InclusionType.INCLUDE, filePattern.getInclusionType());
             });

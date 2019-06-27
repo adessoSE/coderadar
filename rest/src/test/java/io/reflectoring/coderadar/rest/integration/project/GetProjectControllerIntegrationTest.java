@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.integration.project;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -22,7 +22,7 @@ class GetProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void getProjectWithId() throws Exception {
 
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsEnd(new Date());

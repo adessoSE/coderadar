@@ -1,16 +1,17 @@
 package io.reflectoring.coderadar.graph.query;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.analyzer.domain.GroupedMetricValueDTO;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricsForAllFilesInCommitRepository;
 import io.reflectoring.coderadar.graph.query.service.GetMetricsForAllFilesInCommitAdapter;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForAllFilesInCommitCommand;
-import java.util.LinkedList;
-import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.mockito.Mockito.mock;
 
 @DisplayName("Get metrics for all files in commit")
 class GetMetricsForAllFilesInCommitAdapterTest {

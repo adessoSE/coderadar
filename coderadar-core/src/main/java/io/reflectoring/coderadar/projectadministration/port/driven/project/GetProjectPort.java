@@ -1,10 +1,12 @@
 package io.reflectoring.coderadar.projectadministration.port.driven.project;
 
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-import java.util.Optional;
 
 public interface GetProjectPort {
-  Optional<Project> get(Long id);
+  Project get(Long id) throws ProjectNotFoundException;
 
-  Optional<Project> get(String name);
+  Project get(String name) throws ProjectNotFoundException;
+
+  boolean existsByName(String name);
 }

@@ -2,15 +2,15 @@ package io.reflectoring.coderadar.projectadministration.service.user.security;
 
 import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.LoadUserPort;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
 
 @Service
 public class CoderadarUserDetailService implements UserDetailsService {
@@ -24,14 +24,11 @@ public class CoderadarUserDetailService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    Optional<User> user = loadUserPort.loadUserByUsername(username);
-    if (!user.isPresent()) {
-      throw new UsernameNotFoundException(username);
-    }
+    User user = loadUserPort.loadUserByUsername(username);
     // TODO add authorities to user
     List<SimpleGrantedAuthority> authorities =
         Collections.singletonList(new SimpleGrantedAuthority("USER"));
     return new CoderadarUserDetails(
-        user.get().getUsername(), user.get().getPassword(), authorities, true, true, true, true);
+        user.getUsername(), user.getPassword(), authorities, true, true, true, true);
   }
 }

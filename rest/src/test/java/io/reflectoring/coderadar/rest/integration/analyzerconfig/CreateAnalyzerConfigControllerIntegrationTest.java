@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.rest.integration.analyzerconfig;
 
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
+import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConfigurationEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
-import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
@@ -25,7 +25,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
 
   @Test
   void createAnalyzerConfigurationSuccessfully() throws Exception {
-    Project testProject = new Project();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
 
@@ -44,7 +44,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             result -> {
               Long id =
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
-              AnalyzerConfiguration analyzerConfiguration =
+              AnalyzerConfigurationEntity analyzerConfiguration =
                   createAnalyzerConfigurationRepository.findById(id).get();
               Assertions.assertEquals("analyzer", analyzerConfiguration.getAnalyzerName());
               Assertions.assertTrue(analyzerConfiguration.getEnabled());

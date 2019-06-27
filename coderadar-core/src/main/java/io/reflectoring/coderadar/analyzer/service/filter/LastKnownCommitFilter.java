@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.analyzer.service.filter;
 import io.reflectoring.coderadar.vcs.domain.CommitFilter;
 import io.reflectoring.coderadar.vcs.domain.VcsCommit;
 import io.reflectoring.coderadar.vcs.port.driver.FindCommitUseCase;
+
 import java.nio.file.Path;
 
 /** A filter that walks only those commits that are newer than a specified commit. */

@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.integration.project;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.apache.commons.io.FileUtils;
@@ -24,7 +24,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void updateProjectWithId() throws Exception {
     // Set up
-    Project testProject = new Project();
+      ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsEnd(new Date());
@@ -49,7 +49,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
         .andDo(
             result -> {
               FileUtils.deleteDirectory(new File("coderadar-workdir/projects"));
-              Project project = createProjectRepository.findById(id).get();
+                ProjectEntity project = createProjectRepository.findById(id).get();
               Assertions.assertEquals("name", project.getName());
               Assertions.assertEquals("username", project.getVcsUsername());
               Assertions.assertEquals("password", project.getVcsPassword());

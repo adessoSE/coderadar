@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.project.service;
 
+import io.reflectoring.coderadar.graph.projectadministration.project.ProjectMapper;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.CreateProjectPort;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 public class CreateProjectAdapter implements CreateProjectPort {
   private final CreateProjectRepository createProjectRepository;
 
+  private final ProjectMapper projectMapper = new ProjectMapper();
+
   @Autowired
   public CreateProjectAdapter(CreateProjectRepository createProjectRepository) {
     this.createProjectRepository = createProjectRepository;
@@ -17,6 +20,6 @@ public class CreateProjectAdapter implements CreateProjectPort {
 
   @Override
   public Long createProject(Project project) {
-    return createProjectRepository.save(project).getId();
+    return createProjectRepository.save(projectMapper.mapDomainObject(project)).getId();
   }
 }
