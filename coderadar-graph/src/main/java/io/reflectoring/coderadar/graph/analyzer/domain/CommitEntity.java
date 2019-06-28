@@ -28,6 +28,7 @@ public class CommitEntity {
   private List<CommitEntity> parents = new ArrayList<>();
 
   @Relationship(direction = Relationship.INCOMING, type = "CHANGED_IN")
+  @EqualsAndHashCode.Exclude
   private List<FileToCommitRelationshipEntity> touchedFiles = new LinkedList<>();
 
   @Relationship(direction = Relationship.INCOMING, type = "VALID_FOR")

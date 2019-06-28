@@ -1,7 +1,11 @@
 package io.reflectoring.coderadar.graph.analyzer.service;
 
 import io.reflectoring.coderadar.analyzer.domain.Commit;
+import io.reflectoring.coderadar.analyzer.domain.File;
+import io.reflectoring.coderadar.analyzer.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
+import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
+import io.reflectoring.coderadar.graph.analyzer.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.SaveCommitRepository;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import java.util.ArrayList;
@@ -37,14 +41,14 @@ public class SaveCommitAdapter implements SaveCommitPort {
       commitEntity.setMerged(newestCommit.isMerged());
       commitEntity.setName(newestCommit.getName());
       commitEntity.setTimestamp(newestCommit.getTimestamp());
-      commitEntity.setParents(findAndSaveParents(newestCommit, new HashMap<>()));
+      commitEntity.setParents(findAndSaveParents(newestCommit, new HashMap<>(), new HashMap<>()));
       commitEntity.getParents().forEach(commitEntity1 -> commitEntity1.getParents().clear());
       saveCommitRepository.save(commitEntity, 1);
     }
   }
 
   private List<CommitEntity> findAndSaveParents(
-      Commit commit, HashMap<String, CommitEntity> walkedCommits) {
+      Commit commit, HashMap<String, CommitEntity> walkedCommits, HashMap<String, FileEntity> walkedFiles) {
 
     List<CommitEntity> parents = new ArrayList<>();
 
@@ -59,8 +63,9 @@ public class SaveCommitAdapter implements SaveCommitPort {
         commitEntity.setAuthor(c.getAuthor());
         commitEntity.setComment(c.getComment());
         commitEntity.setTimestamp(c.getTimestamp());
+        commitEntity.setTouchedFiles(getFiles(c.getTouchedFiles(), commitEntity, walkedFiles));
         walkedCommits.put(c.getName(), commitEntity);
-        commitEntity.setParents(findAndSaveParents(c, walkedCommits));
+        commitEntity.setParents(findAndSaveParents(c, walkedCommits, walkedFiles));
         parents.add(commitEntity);
       }
     }
@@ -72,5 +77,31 @@ public class SaveCommitAdapter implements SaveCommitPort {
         });
     saveCommitRepository.save(parents, 1);
     return parents;
+  }
+
+  private List<FileToCommitRelationshipEntity> getFiles(List<FileToCommitRelationship> relationships,
+                                                        CommitEntity entity,
+                                                        HashMap<String, FileEntity> walkedFiles){
+      List<FileToCommitRelationshipEntity> fileToCommitRelationshipEntities = new ArrayList<>();
+
+    for(FileToCommitRelationship fileToCommitRelationship : relationships){
+      FileToCommitRelationshipEntity fileToCommitRelationshipEntity = new FileToCommitRelationshipEntity();
+      fileToCommitRelationshipEntity.setCommit(entity);
+      fileToCommitRelationshipEntity.setChangeType(fileToCommitRelationship.getChangeType());
+      fileToCommitRelationshipEntity.setOldPath(fileToCommitRelationship.getOldPath());
+
+      FileEntity fileEntity = walkedFiles.get(fileToCommitRelationship.getFile().getPath());
+      if(fileEntity == null){
+        fileEntity = new FileEntity();
+        fileEntity.setPath(fileToCommitRelationship.getFile().getPath());
+        walkedFiles.put(fileEntity.getPath(), fileEntity);
+      }
+      fileEntity.getCommits().add(fileToCommitRelationshipEntity);
+
+      fileToCommitRelationshipEntity.setFile(fileEntity);
+
+      fileToCommitRelationshipEntities.add(fileToCommitRelationshipEntity);
+    }
+    return fileToCommitRelationshipEntities;
   }
 }

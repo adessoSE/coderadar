@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
+import lombok.ToString;
 
 /** Metadata about a commit to a Git repository. */
 @Data
+@ToString(exclude = "touchedFiles")
 public class Commit {
   private Long id;
   private String name;
