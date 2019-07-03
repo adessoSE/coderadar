@@ -91,6 +91,7 @@ public class CreateProjectService implements CreateProjectUseCase {
     }
     DateRange dateRange = new DateRange(projectStart, projectEnd);
 
+    Long projectId = createProjectPort.createProject(project);
     CloneRepositoryCommand cloneRepositoryCommand =
         new CloneRepositoryCommand(
             command.getVcsUrl(),
@@ -102,12 +103,13 @@ public class CreateProjectService implements CreateProjectUseCase {
         () -> {
           try {
             cloneRepositoryUseCase.cloneRepository(cloneRepositoryCommand);
-            List<Commit> commitList = getProjectCommitsUseCase.getCommits(Paths.get(project.getWorkdirName()), dateRange);
-            saveCommitPort.saveCommits(commitList);
+            List<Commit> commitList =
+                getProjectCommitsUseCase.getCommits(Paths.get(project.getWorkdirName()), dateRange);
+            saveCommitPort.saveCommits(commitList, projectId);
           } catch (UnableToCloneRepositoryException e) {
             e.printStackTrace();
           }
         });
-    return createProjectPort.createProject(project);
+    return projectId;
   }
 }

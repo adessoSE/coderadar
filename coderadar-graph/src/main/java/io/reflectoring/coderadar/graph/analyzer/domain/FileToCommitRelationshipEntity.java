@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.graph.analyzer.domain;
 
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.neo4j.ogm.annotation.EndNode;
 import org.neo4j.ogm.annotation.RelationshipEntity;

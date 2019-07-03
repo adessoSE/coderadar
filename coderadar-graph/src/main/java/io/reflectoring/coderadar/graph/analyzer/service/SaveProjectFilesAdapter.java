@@ -6,16 +6,14 @@ import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SaveFileAdapter implements SaveFilePort {
+public class SaveProjectFilesAdapter implements SaveFilePort {
 
   private final FileRepository fileRepository;
 
-  public SaveFileAdapter(FileRepository fileRepository) {
+  public SaveProjectFilesAdapter(FileRepository fileRepository) {
     this.fileRepository = fileRepository;
   }
 
   @Override
-  public void save(File file) {
-    // this.fileRepository.save(file);
-  }
+  public void save(File file) {}
 }

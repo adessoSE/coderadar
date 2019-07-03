@@ -6,5 +6,5 @@ import java.util.List;
 public interface SaveCommitPort {
   void saveCommit(Commit commit);
 
-  void saveCommits(List<Commit> commits);
+  void saveCommits(List<Commit> commits, Long id);
 }
