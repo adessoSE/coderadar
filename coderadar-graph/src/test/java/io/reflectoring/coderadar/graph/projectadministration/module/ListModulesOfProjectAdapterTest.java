@@ -42,10 +42,10 @@ class ListModulesOfProjectAdapterTest {
   void shouldReturnEmptyListWhenNoModulesInTheProjectExist() {
     ProjectEntity mockedProject = new ProjectEntity();
     when(getProjectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
-    when(listModulesOfProjectRepository.findByProjectId(1L)).thenReturn(new LinkedList<>());
+    when(listModulesOfProjectRepository.findModulesInProject(1L)).thenReturn(new LinkedList<>());
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);
-    verify(listModulesOfProjectRepository, times(1)).findByProjectId(1L);
+    verify(listModulesOfProjectRepository, times(1)).findModulesInProject(1L);
     Assertions.assertThat(modules).hasSize(0);
   }
 
@@ -56,10 +56,10 @@ class ListModulesOfProjectAdapterTest {
     mockedItem.add(new ModuleEntity());
     ProjectEntity mockedProject = new ProjectEntity();
     when(getProjectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
-    when(listModulesOfProjectRepository.findByProjectId(1L)).thenReturn(mockedItem);
+    when(listModulesOfProjectRepository.findModulesInProject(1L)).thenReturn(mockedItem);
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);
-    verify(listModulesOfProjectRepository, times(1)).findByProjectId(1L);
+    verify(listModulesOfProjectRepository, times(1)).findModulesInProject(1L);
     Assertions.assertThat(modules).hasSize(1);
   }
 
@@ -71,10 +71,10 @@ class ListModulesOfProjectAdapterTest {
     mockedItem.add(new ModuleEntity());
     ProjectEntity mockedProject = new ProjectEntity();
     when(getProjectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
-    when(listModulesOfProjectRepository.findByProjectId(1L)).thenReturn(mockedItem);
+    when(listModulesOfProjectRepository.findModulesInProject(1L)).thenReturn(mockedItem);
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);
-    verify(listModulesOfProjectRepository, times(1)).findByProjectId(1L);
+    verify(listModulesOfProjectRepository, times(1)).findModulesInProject(1L);
     Assertions.assertThat(modules).hasSize(2);
   }
 }

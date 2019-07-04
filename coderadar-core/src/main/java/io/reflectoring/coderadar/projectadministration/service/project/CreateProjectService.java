@@ -103,7 +103,8 @@ public class CreateProjectService implements CreateProjectUseCase {
         () -> {
           try {
             cloneRepositoryUseCase.cloneRepository(cloneRepositoryCommand);
-            List<Commit> commitList = getProjectCommitsUseCase.getCommits(Paths.get(project.getWorkdirName()), dateRange);
+            List<Commit> commitList =
+                getProjectCommitsUseCase.getCommits(Paths.get(project.getWorkdirName()), dateRange);
             saveCommitPort.saveCommits(commitList, projectId);
           } catch (UnableToCloneRepositoryException e) {
             e.printStackTrace();

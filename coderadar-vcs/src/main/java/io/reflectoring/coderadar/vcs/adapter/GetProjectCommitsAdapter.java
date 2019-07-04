@@ -46,10 +46,10 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
   }
 
   /**
-   *
    * @param repositoryRoot The root path of the local repository.
    * @param range The date range in which to collect commits
-   * @return A list of fully initialized Commit objects (containing files and fileToCommit relationships).
+   * @return A list of fully initialized Commit objects (containing files and fileToCommit
+   *     relationships).
    */
   public List<Commit> getCommits(Path repositoryRoot, DateRange range) {
     Git git;
@@ -100,13 +100,16 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
   }
 
   /**
-   *
    * @param git The git API object .
    * @param firstCommit The firstCommit of the repository.
    * @param files A HashMap containing files already created for the project.
-   * @throws IOException  Thrown if the commit tree cannot be walked.
+   * @throws IOException Thrown if the commit tree cannot be walked.
    */
-  private void setFirstCommitFiles(Git git, Commit firstCommit, HashMap<String, io.reflectoring.coderadar.analyzer.domain.File> files) throws IOException {
+  private void setFirstCommitFiles(
+      Git git,
+      Commit firstCommit,
+      HashMap<String, io.reflectoring.coderadar.analyzer.domain.File> files)
+      throws IOException {
     RevCommit gitCommit = findCommit(git, firstCommit.getName());
     try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
       assert gitCommit != null;
@@ -135,7 +138,6 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
   }
 
   /**
-   *
    * @param git The git API object .
    * @param commits A list of commits.
    * @throws IOException Thrown if a commit cannot be processed.
@@ -185,7 +187,6 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
   }
 
   /**
-   *
    * @param gitClient The git API object.
    * @param commitName The name (hash) of the commit to look for.
    * @return A fully initialized RevCommit object

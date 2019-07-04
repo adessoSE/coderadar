@@ -11,9 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Collections;
 
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
