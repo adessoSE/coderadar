@@ -28,9 +28,12 @@ class CreateModuleAdapterTest {
     ProjectEntity mockedProject = new ProjectEntity();
     ModuleEntity mockedItem = new ModuleEntity();
     mockedItem.setId(1L);
+    mockedItem.setPath("src/");
     mockedItem.setProject(mockedProject);
     Module newItem = new Module();
+    newItem.setPath("src/");
     when(createModuleRepository.save(any(ModuleEntity.class))).thenReturn(mockedItem);
+    when(createModuleRepository.findById(anyLong())).thenReturn(java.util.Optional.of(mockedItem));
 
     when(getProjectRepository.findById(anyLong()))
         .thenReturn(java.util.Optional.of(new ProjectEntity()));

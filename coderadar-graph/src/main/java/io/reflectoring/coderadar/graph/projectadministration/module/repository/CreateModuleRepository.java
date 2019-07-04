@@ -14,4 +14,10 @@ public interface CreateModuleRepository extends Neo4jRepository<ModuleEntity, Lo
 
     @Query("MATCH (p:ModuleEntity)-[r:CONTAINS]->(f:FileEntity) WHERE ID(p) = {moduleId} AND ID(f) = {fileId} DELETE r")
     void detachFileFromModule(@Param("moduleId") Long moduleId, @Param("fileId") Long fileId);
+
+    @Query("MATCH (p:ProjectEntity)-[r:CONTAINS]->(m:ModuleEntity) WHERE ID(p) = {projectId} AND ID(m) = {moduleId} DELETE r")
+    void detachModuleFromProject(@Param("projectId") Long projectId, @Param("moduleId") Long moduleId);
+
+    @Query("MATCH (m1:ModuleEntity)-[r:CONTAINS]->(m2:ModuleEntity) WHERE ID(m1) = {moduleId1} AND ID(m2) = {moduleId2} DELETE r")
+    void detachModuleFromModule(@Param("moduleId1") Long moduleId1, @Param("moduleId2") Long moduleId2);
 }

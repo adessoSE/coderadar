@@ -11,6 +11,7 @@ import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,37 +41,105 @@ public class CreateModuleAdapter implements CreateModulePort {
             .findById(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
-    projectEntity.getModules().sort(Comparator.comparingLong(o -> o.getPath().length()));
-    Collections.reverse(projectEntity.getModules()); //TODO: CHECK SORTING
-    // TODO: CHECK REVERSE DIRECTION
+    if(!moduleEntity.getPath().endsWith("/")){
+      moduleEntity.setPath(moduleEntity.getPath().concat("/"));
+    }
+
+    Long id = processExistingModules(projectEntity, moduleEntity);
+    if(id != null){
+      return id;
+    } else {
+      moduleEntity.setProject(projectEntity);
+      for(FileEntity fileEntity : projectEntity.getFiles()){
+        if(fileEntity.getPath().startsWith(moduleEntity.getPath())) {
+          moduleEntity.getFiles().add(fileEntity);
+          createModuleRepository.detachFileFromProject(projectEntity.getId(), fileEntity.getId());
+        }
+      }
+      projectEntity.getFiles().removeAll(moduleEntity.getFiles());
+
+      long moduleEntityId;
+      ModuleEntity childModule = findModuleSomething(projectEntity.getModules(), moduleEntity.getPath());
+      if(childModule != null){
+        childModule.setParentModule(moduleEntity);
+        childModule.setProject(null);
+        moduleEntity.getChildModules().add(childModule);
+        createModuleRepository.save(childModule);
+        projectEntity.getModules().add(moduleEntity);
+        projectEntity.getModules().remove(childModule);
+        getProjectRepository.save(projectEntity);
+        moduleEntityId =  createModuleRepository.save(moduleEntity).getId();
+        createModuleRepository.detachModuleFromProject(projectEntity.getId(), childModule.getId());
+      } else {
+        projectEntity.getModules().add(moduleEntity);
+        getProjectRepository.save(projectEntity);
+        moduleEntityId = createModuleRepository.save(moduleEntity).getId();
+      }
+      return moduleEntityId;
+
+    }
+  }
+
+  private ModuleEntity findModuleSomething(List<ModuleEntity> modules, String path){
+    for(ModuleEntity m : modules){
+      if(m.getPath().startsWith(path)){
+        return createModuleRepository.findById(m.getId()).orElseThrow(()-> new ModuleNotFoundException(m.getId()));
+      }
+    }
+    return null;
+  }
+
+  private Long processExistingModules(ProjectEntity projectEntity, ModuleEntity moduleEntity) {
     for(ModuleEntity m : projectEntity.getModules()){
-      if(moduleEntity.getPath().startsWith(m.getPath())){
-        ModuleEntity moduleWithFiles = createModuleRepository.findById(m.getId()).orElseThrow(()-> new ModuleNotFoundException(m.getId()));
-        for(FileEntity fileEntity : moduleWithFiles.getFiles()){
-          if(fileEntity.getPath().startsWith(moduleEntity.getPath())) {
+      ModuleEntity foundModule = findModule(m, moduleEntity.getPath());
+      if (foundModule != null) {
+        for (FileEntity fileEntity : foundModule.getFiles()) {
+          if (fileEntity.getPath().startsWith(moduleEntity.getPath())) {
             moduleEntity.getFiles().add(fileEntity);
-            createModuleRepository.detachFileFromModule(moduleWithFiles.getId(), fileEntity.getId());
+            createModuleRepository.detachFileFromModule(foundModule.getId(), fileEntity.getId());
           }
         }
-        moduleWithFiles.getFiles().removeAll(moduleEntity.getFiles());
-        moduleWithFiles.getChildModules().add(moduleEntity);
-        moduleEntity.setParentModule(moduleWithFiles);
-        createModuleRepository.save(moduleWithFiles);
-        return createModuleRepository.save(moduleEntity).getId();
+        foundModule.getFiles().removeAll(moduleEntity.getFiles());
+
+        long moduleEntityId;
+        ModuleEntity childModule = findModuleSomething(foundModule.getChildModules(), moduleEntity.getPath());
+        if(childModule != null){
+          childModule.setParentModule(moduleEntity);
+          moduleEntity.getChildModules().add(childModule);
+          createModuleRepository.save(childModule);
+          foundModule.getChildModules().add(moduleEntity);
+          foundModule.getChildModules().remove(childModule);
+          createModuleRepository.save(foundModule);
+          moduleEntityId =  createModuleRepository.save(moduleEntity).getId();
+          createModuleRepository.detachModuleFromModule(foundModule.getId(), childModule.getId());
+        } else {
+          foundModule.getChildModules().add(moduleEntity);
+          createModuleRepository.save(foundModule);
+          moduleEntityId = createModuleRepository.save(moduleEntity).getId();
+        }
+        return moduleEntityId;
       }
     }
+    return null;
+  }
 
-    moduleEntity.setProject(projectEntity);
-    for(FileEntity fileEntity : projectEntity.getFiles()){
-      if(fileEntity.getPath().startsWith(moduleEntity.getPath())) {
-        moduleEntity.getFiles().add(fileEntity);
-        createModuleRepository.detachFileFromProject(projectEntity.getId(), fileEntity.getId());
+  private ModuleEntity findModule(ModuleEntity entity, String path){
+    long id = entity.getId();
+    entity = createModuleRepository.findById(id).orElseThrow(()-> new ModuleNotFoundException(id));
+    if(path.startsWith(entity.getPath())){
+      if(entity.getChildModules().isEmpty()){
+        return entity;
+      }else{
+        for(ModuleEntity m : entity.getChildModules()){
+          ModuleEntity result = findModule(m, path);
+          if(result != null){
+            return result;
+          }
+        }
+        return entity;
       }
+    } else {
+      return null;
     }
-    projectEntity.getFiles().removeAll(moduleEntity.getFiles());
-    projectEntity.getModules().add(moduleEntity);
-    getProjectRepository.save(projectEntity);
-
-    return createModuleRepository.save(moduleEntity).getId();
   }
 }

@@ -44,7 +44,7 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
               Long id =
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
               ModuleEntity module = createModuleRepository.findById(id).get();
-              Assertions.assertEquals("module-path", module.getPath());
+              Assertions.assertEquals("module-path/", module.getPath());
             })
             .andDo(
                     document(

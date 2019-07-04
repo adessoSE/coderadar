@@ -11,7 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.integration.ResultMatchers.containsResource;
@@ -31,16 +33,30 @@ class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTempla
     testProject = createProjectRepository.save(testProject);
 
     ModuleEntity module = new ModuleEntity();
-    module.setPath("test-module");
+    module.setPath("test-module/");
     module.setProject(testProject);
-    createModuleRepository.save(module);
+    module = createModuleRepository.save(module);
 
     ModuleEntity module2 = new ModuleEntity();
-    module2.setPath("test-module");
-    module2.setProject(testProject);
-    createModuleRepository.save(module2);
+    module2.setPath("test-module/src");
+    module2.setParentModule(module);
+    module2 = createModuleRepository.save(module2);
+    module.getChildModules().add(module2);
+    module = createModuleRepository.save(module);
 
-    testProject.setModules(Arrays.asList(module, module2));
+    ModuleEntity module3 = new ModuleEntity();
+    module3.setPath("test-module2");
+    module3.setProject(testProject);
+    module3 = createModuleRepository.save(module3);
+
+    ModuleEntity module4 = new ModuleEntity();
+    module4.setPath("test-module/src/asd");
+    module4.setParentModule(module2);
+    module4 = createModuleRepository.save(module4);
+    module2.getChildModules().add(module4);
+    module2 = createModuleRepository.save(module2);
+
+    testProject.setModules(Arrays.asList(module, module3));
     testProject = createProjectRepository.save(testProject);
 
     // Test
@@ -53,7 +69,7 @@ class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTempla
             result -> {
               GetModuleResponse[] moduleResponses =
                   fromJson(result.getResponse().getContentAsString(), GetModuleResponse[].class);
-              Assertions.assertEquals(2, moduleResponses.length);
+              Assertions.assertEquals(4, moduleResponses.length);
             })
             .andDo(document("modules/list"));
   }
