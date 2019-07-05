@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.file.InvalidPathException;
+
 @RestController
 public class CreateModuleController {
   private final CreateModuleUseCase createModuleUseCase;
@@ -32,6 +34,8 @@ public class CreateModuleController {
           new IdResponse(createModuleUseCase.createModule(command, projectId)), HttpStatus.CREATED);
     } catch (ProjectNotFoundException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
+    } catch (InvalidPathException e) {
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
   }
 }

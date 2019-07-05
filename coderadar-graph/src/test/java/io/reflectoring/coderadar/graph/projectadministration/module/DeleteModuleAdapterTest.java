@@ -22,7 +22,7 @@ class DeleteModuleAdapterTest {
 
   @BeforeEach
   void setUp() {
-    deleteModuleAdapter = new DeleteModuleAdapter(deleteModuleRepository);
+    deleteModuleAdapter = new DeleteModuleAdapter(deleteModuleRepository, createProjectRepository);
   }
 
   @Test
