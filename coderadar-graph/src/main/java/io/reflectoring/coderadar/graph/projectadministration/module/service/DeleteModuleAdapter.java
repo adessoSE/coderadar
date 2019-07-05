@@ -16,7 +16,9 @@ public class DeleteModuleAdapter implements DeleteModulePort {
   private final CreateProjectRepository createProjectRepository;
 
   @Autowired
-  public DeleteModuleAdapter(DeleteModuleRepository deleteModuleRepository, CreateProjectRepository createProjectRepository) {
+  public DeleteModuleAdapter(
+      DeleteModuleRepository deleteModuleRepository,
+      CreateProjectRepository createProjectRepository) {
     this.deleteModuleRepository = deleteModuleRepository;
     this.createProjectRepository = createProjectRepository;
   }
@@ -26,30 +28,35 @@ public class DeleteModuleAdapter implements DeleteModulePort {
     delete(deleteModuleRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException(id)));
   }
 
-
   @Override
   public void delete(Module module) throws ModuleNotFoundException {
-    delete(deleteModuleRepository.findById(module.getId()).orElseThrow(() -> new ModuleNotFoundException(module.getId())));
+    delete(
+        deleteModuleRepository
+            .findById(module.getId())
+            .orElseThrow(() -> new ModuleNotFoundException(module.getId())));
   }
 
   /**
-   * Delete a ModuleEntity and adjusts all the relationships it had between the project, other modules and files.
+   * Delete a ModuleEntity and adjusts all the relationships it had between the project, other
+   * modules and files.
+   *
    * @param moduleEntity The entity to delete
    */
-  private void delete(ModuleEntity moduleEntity){
+  private void delete(ModuleEntity moduleEntity) {
     // If the module is a child of a project,
     // add all of its files and child modules to the parent project
     // and delete it
-    if(moduleEntity.getParentModule() == null) {
+    if (moduleEntity.getParentModule() == null) {
       for (ModuleEntity child : moduleEntity.getChildModules()) {
         moduleEntity.getProject().getModules().add(child);
         deleteModuleRepository.detachModuleFromModule(moduleEntity.getId(), child.getId());
       }
-      for(FileEntity fileEntity : moduleEntity.getFiles()){
+      for (FileEntity fileEntity : moduleEntity.getFiles()) {
         moduleEntity.getProject().getFiles().add(fileEntity);
       }
       createProjectRepository.save(moduleEntity.getProject());
-      deleteModuleRepository.detachModuleFromProject(moduleEntity.getProject().getId(), moduleEntity.getId());
+      deleteModuleRepository.detachModuleFromProject(
+          moduleEntity.getProject().getId(), moduleEntity.getId());
     } else {
 
       // If the module is a child of another module,
@@ -59,11 +66,12 @@ public class DeleteModuleAdapter implements DeleteModulePort {
         moduleEntity.getParentModule().getChildModules().add(child);
         deleteModuleRepository.detachModuleFromModule(moduleEntity.getId(), child.getId());
       }
-      for(FileEntity fileEntity : moduleEntity.getFiles()){
+      for (FileEntity fileEntity : moduleEntity.getFiles()) {
         moduleEntity.getParentModule().getFiles().add(fileEntity);
       }
       deleteModuleRepository.save(moduleEntity.getParentModule());
-      deleteModuleRepository.detachModuleFromModule(moduleEntity.getParentModule().getId(), moduleEntity.getId());
+      deleteModuleRepository.detachModuleFromModule(
+          moduleEntity.getParentModule().getId(), moduleEntity.getId());
     }
     deleteModuleRepository.deleteById(moduleEntity.getId());
   }
