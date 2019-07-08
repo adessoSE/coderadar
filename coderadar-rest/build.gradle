@@ -1,5 +1,3 @@
-import java.text.SimpleDateFormat
-
 apply plugin: "com.diffplug.gradle.spotless"
 apply plugin: "org.asciidoctor.convert"
 apply plugin: "org.ajoberstar.git-publish"
@@ -24,7 +22,7 @@ dependencies {
     testCompile "org.springframework.restdocs:spring-restdocs-core:${version_spring_restdocs}"
 }
 
-asciidoctor {
+/*asciidoctor {
     attributes "snippets": snippetsDir,
             "version": version,
             "date": new SimpleDateFormat("yyyy-MM-dd").format(new Date()),
@@ -33,7 +31,7 @@ asciidoctor {
     dependsOn test
     sourceDir "src/main/asciidoc"
     outputDir "build/docs"
-}
+}*/
 
 gitPublish {
     repoUri = "https://github.com/reflectoring/coderadar.git"

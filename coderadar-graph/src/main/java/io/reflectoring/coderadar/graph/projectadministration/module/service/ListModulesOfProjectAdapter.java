@@ -31,7 +31,7 @@ public class ListModulesOfProjectAdapter implements ListModulesOfProjectPort {
     Optional<ProjectEntity> project = getProjectRepository.findById(projectId);
     if (project.isPresent()) {
       return moduleMapper.mapNodeEntities(
-          listModulesOfProjectRepository.findByProjectId(projectId));
+          listModulesOfProjectRepository.findModulesInProject(projectId));
     } else {
       throw new ProjectNotFoundException(projectId);
     }

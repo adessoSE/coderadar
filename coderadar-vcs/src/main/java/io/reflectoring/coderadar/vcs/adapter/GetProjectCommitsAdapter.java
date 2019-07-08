@@ -2,7 +2,10 @@ package io.reflectoring.coderadar.vcs.adapter;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.domain.Commit;
+import io.reflectoring.coderadar.analyzer.domain.FileToCommitRelationship;
+import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.query.domain.DateRange;
+import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
 import io.reflectoring.coderadar.vcs.port.driven.GetProjectCommitsPort;
 import java.io.File;
 import java.io.IOException;
@@ -17,11 +20,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.diff.DiffFormatter;
+import org.eclipse.jgit.diff.RawTextComparator;
+import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +45,12 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
   }
 
+  /**
+   * @param repositoryRoot The root path of the local repository.
+   * @param range The date range in which to collect commits
+   * @return A list of fully initialized Commit objects (containing files and fileToCommit
+   *     relationships).
+   */
   public List<Commit> getCommits(Path repositoryRoot, DateRange range) {
     Git git;
     try {
@@ -67,17 +82,128 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
                   commit.setComment(rc.getShortMessage());
                   commit.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
                   try {
-                    commit.setParents(getParents(revWalk, rc, map, range.getEndDate()));
+                    commit.setParents(getParents(revWalk, rc, map, range.getStartDate()));
                   } catch (IOException e) {
                     e.printStackTrace();
                   }
+                  map.put(rc, commit);
                   done.set(true);
                 }
               });
-      return new ArrayList<>(map.values());
+      List<Commit> result = new ArrayList<>(map.values());
+      setCommitsFiles(git, result);
+      return result;
     } catch (Exception e) {
       throw new IllegalStateException(
           String.format("Error accessing git repository at %s", repositoryRoot), e);
+    }
+  }
+
+  /**
+   * @param git The git API object .
+   * @param firstCommit The firstCommit of the repository.
+   * @param files A HashMap containing files already created for the project.
+   * @throws IOException Thrown if the commit tree cannot be walked.
+   */
+  private void setFirstCommitFiles(
+      Git git,
+      Commit firstCommit,
+      HashMap<String, io.reflectoring.coderadar.analyzer.domain.File> files)
+      throws IOException {
+    RevCommit gitCommit = findCommit(git, firstCommit.getName());
+    try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
+      assert gitCommit != null;
+      treeWalk.addTree(gitCommit.getTree());
+      treeWalk.setRecursive(true);
+      while (treeWalk.next()) {
+
+        io.reflectoring.coderadar.analyzer.domain.File file = files.get(treeWalk.getPathString());
+
+        if (file == null) {
+          file = new io.reflectoring.coderadar.analyzer.domain.File();
+        }
+        FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
+
+        fileToCommitRelationship.setOldPath("/dev/null");
+        fileToCommitRelationship.setChangeType(ChangeType.ADD);
+        fileToCommitRelationship.setCommit(firstCommit);
+        fileToCommitRelationship.setFile(file);
+        file.setPath(treeWalk.getPathString());
+
+        file.getCommits().add(fileToCommitRelationship);
+        firstCommit.getTouchedFiles().add(fileToCommitRelationship);
+        files.put(file.getPath(), file);
+      }
+    }
+  }
+
+  /**
+   * @param git The git API object .
+   * @param commits A list of commits.
+   * @throws IOException Thrown if a commit cannot be processed.
+   */
+  private void setCommitsFiles(Git git, List<Commit> commits) throws IOException {
+    commits.sort((o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()));
+    HashMap<String, io.reflectoring.coderadar.analyzer.domain.File> files = new HashMap<>();
+    DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
+    diffFormatter.setRepository(git.getRepository());
+    diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
+    diffFormatter.setDetectRenames(true);
+    for (Commit commit : commits) {
+      RevCommit gitCommit = findCommit(git, commit.getName());
+
+      assert gitCommit != null;
+      if (gitCommit.getParentCount() > 0) {
+        RevCommit parent = gitCommit.getParent(0);
+        List<DiffEntry> diffs = diffFormatter.scan(parent, gitCommit);
+        for (DiffEntry diff : diffs) {
+          ChangeType changeType = ChangeTypeMapper.jgitToCoderadar(diff.getChangeType());
+          if (changeType != ChangeType.UNCHANGED) {
+            io.reflectoring.coderadar.analyzer.domain.File file = files.get(diff.getNewPath());
+            if (file == null) {
+              file = new io.reflectoring.coderadar.analyzer.domain.File();
+            }
+            FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
+
+            fileToCommitRelationship.setOldPath(diff.getOldPath());
+            fileToCommitRelationship.setChangeType(changeType);
+            fileToCommitRelationship.setCommit(commit);
+            fileToCommitRelationship.setFile(file);
+
+            if (changeType == ChangeType.DELETE) {
+              file.setPath(diff.getOldPath());
+            } else {
+              file.setPath(diff.getNewPath());
+            }
+
+            file.getCommits().add(fileToCommitRelationship);
+            commit.getTouchedFiles().add(fileToCommitRelationship);
+            files.put(file.getPath(), file);
+          }
+        }
+      }
+    }
+    setFirstCommitFiles(git, commits.get(commits.size() - 1), files);
+  }
+
+  /**
+   * @param gitClient The git API object.
+   * @param commitName The name (hash) of the commit to look for.
+   * @return A fully initialized RevCommit object
+   */
+  private RevCommit findCommit(Git gitClient, String commitName) {
+    try {
+      ObjectId commitId = gitClient.getRepository().resolve(commitName);
+      Iterable<RevCommit> commits = gitClient.log().add(commitId).call();
+      return commits.iterator().next();
+    } catch (MissingObjectException e) {
+      return null;
+    } catch (Exception e) {
+      throw new IllegalStateException(
+          String.format(
+              "Error accessing git repository at %s",
+              gitClient.getRepository().getDirectory().getAbsolutePath()),
+          e);
     }
   }
 
@@ -88,12 +214,15 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
    * @param commit The start commit. This should be the newest commit.
    * @param walkedCommits A Map storing the commits we have walked so far, this prevents us from
    *     walking the same commits more than once.
-   * @param endDate The date past which no parents are checked.
+   * @param startDate The date past which no parents are checked.
    * @return A List of parents for the commit.
    * @throws IOException Thrown if for any reason a parent commit cannot be properly parsed.
    */
   private List<Commit> getParents(
-      RevWalk revWalk, RevCommit commit, HashMap<ObjectId, Commit> walkedCommits, LocalDate endDate)
+      RevWalk revWalk,
+      RevCommit commit,
+      HashMap<ObjectId, Commit> walkedCommits,
+      LocalDate startDate)
       throws IOException {
 
     List<Commit> parents = new ArrayList<>();
@@ -105,11 +234,11 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
         parents.add(commitWithParents);
       } else {
         RevCommit commitWithMetadata = revWalk.parseCommit(rc.getId());
-        if (endDate == null
+        if (startDate == null
             || !Instant.ofEpochSecond(rc.getCommitTime())
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate()
-                .isBefore(endDate)) {
+                .isAfter(startDate)) {
           continue;
         }
         commitWithParents = new Commit();
@@ -119,7 +248,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
         commitWithParents.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
         walkedCommits.put(rc.getId(), commitWithParents);
         commitWithParents.setParents(
-            getParents(revWalk, commitWithMetadata, walkedCommits, endDate));
+            getParents(revWalk, commitWithMetadata, walkedCommits, startDate));
         parents.add(commitWithParents);
       }
     }

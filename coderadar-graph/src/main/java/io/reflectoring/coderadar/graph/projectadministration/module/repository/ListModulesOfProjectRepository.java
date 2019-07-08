@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ListModulesOfProjectRepository extends Neo4jRepository<ModuleEntity, Long> {
 
-  @Query("MATCH (p:ProjectEntity)-[:CONTAINS]->(m:ModuleEntity) WHERE ID(p) = {0} RETURN m")
-  List<ModuleEntity> findByProjectId(Long projectId);
+  @Query("MATCH (p:ProjectEntity)-[:CONTAINS*1..]->(m:ModuleEntity) WHERE ID(p) = {0} RETURN m")
+  List<ModuleEntity> findModulesInProject(Long projectId);
 }
