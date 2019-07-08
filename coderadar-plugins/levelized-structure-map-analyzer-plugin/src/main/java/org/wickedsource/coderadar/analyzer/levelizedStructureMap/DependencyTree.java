@@ -8,23 +8,16 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.revwalk.TreeRevFilter;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
-import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.gitective.core.BlobUtils;
-import org.springframework.core.type.filter.RegexPatternTypeFilter;
 
-import javax.validation.constraints.Null;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.UncheckedIOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class DependencyTree {
 
@@ -69,7 +62,7 @@ public class DependencyTree {
                 //   single line comments
                 //   multi line comments
                 //   strings
-                for (String qualifiedDependency : getClassQualifierDependencies(child)) {
+                for (String qualifiedDependency : getClassQualifiedDependencies(child)) {
                     // add .java to find the file
                     String dependencyString = qualifiedDependency.replace(".", "/") + ".java";
                     addDependenciesFromDependencyString(dependencyString, child);
@@ -103,7 +96,7 @@ public class DependencyTree {
      * @param node Node to analyze
      * @return List of package and file names the current node has dependencies on
      */
-    private List<String> getClassQualifierDependencies(Node node) {
+    private List<String> getClassQualifiedDependencies(Node node) {
         if (!node.hasChildren() && node.getFilename().endsWith(".java")) {
             List<String> imports = new ArrayList<>();
             String[] lines = clearFileContent(new String(BlobUtils.getRawContent(repository, commitName, node.getPath()))).split("\n");
@@ -133,6 +126,7 @@ public class DependencyTree {
         return Collections.EMPTY_LIST;
     }
 
+    // TODO in eigene Klasse packen, übergabe per String, byte[], ..; returns List<String> imports oder über Datentyp Import, getFullyQualified auch; UnitTests separat für die Klasse
     /**
      * Analyze the file of a given Node object for import and wildcard import dependencies. helper method for setDependencies(Node node)
      *
@@ -262,7 +256,7 @@ public class DependencyTree {
             // create git walk though the tree with depth = 1
             while (treeWalk.next()) {
                 // filter out 'forbidden' directories like output directories or node_modules
-                Matcher forbiddenDirs = cache.getPattern("(^\\.|build|out|classes|node_modules)").matcher(treeWalk.getNameString());
+                Matcher forbiddenDirs = cache.getPattern("(^\\.|build|out|classes|node_modules|test)").matcher(treeWalk.getNameString());
                 if (!treeWalk.isSubtree() && !treeWalk.getPathString().endsWith(".java") || forbiddenDirs.find()) {
                     continue;
                 }
@@ -284,7 +278,7 @@ public class DependencyTree {
             }
             baseroot = root;
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -304,6 +298,8 @@ public class DependencyTree {
             pathString += "/main/java/" + basepackage;
         }
         List<Node> children;
+
+        // TODO replace with if
         try {
             // create tree and if necessary skip packages
             children = createTree(tree, pathString);
@@ -359,6 +355,8 @@ public class DependencyTree {
             }
             return children;
         } catch (IOException e) {
+
+            // TODO exception weiter werfen?
             e.printStackTrace();
             return Collections.emptyList();
         }
@@ -393,40 +391,40 @@ public class DependencyTree {
     }
 
     /**
-     * Set the display layer of a given Node object's children and their children recursively
+     * Set the display level of a given Node object's children and their children recursively
      *
-     * @param node Node object which children's display layer is set
+     * @param node Node object which children's display level is set
      */
-    public void setLayer(Node node) {
-        int layer = 0;
+    public void setLevel(Node node) {
+        int level = 0;
         for (int i = 0; i < node.getChildren().size(); i++) {
             // for every child in the current layer check
             for (int j = 0; j < i; j++) {
-                if (node.getChildren().get(j).getLayer() == layer) {
+                if (node.getChildren().get(j).getLevel() == level) {
                     // if any child before this has a dependency on this
                     // or any child before has more dependencies on this than this has on any child before
                     //   raise layer, break
                     if (node.getChildren().get(j).hasDependencyOn(node.getChildren().get(i)) && !node.getChildren().get(i).hasDependencyOn(node.getChildren().get(j))) {
-                        layer++;
+                        level++;
                         break;
                     } else if (node.getChildren().get(j).countDependenciesOn(node.getChildren().get(i)) > node.getChildren().get(i).countDependenciesOn(node.getChildren().get(j))) {
-                        layer++;
+                        level++;
                         break;
                     }
                 }
             }
-            node.getChildren().get(i).setLayer(layer);
-            setLayer(node.getChildren().get(i));
+            node.getChildren().get(i).setLevel(level);
+            setLevel(node.getChildren().get(i));
         }
     }
 
     public CompareNode createMergeTree(Node baseVersion) {
-        CompareNode compareNode = new CompareNode(new ArrayList<>(), baseVersion.getPath(), baseVersion.getFilename(), baseVersion.getPackageName(), ChangeType.UNCHANGED);
+        CompareNode compareNode = new CompareNode(new ArrayList<>(), baseVersion.getPath(), baseVersion.getFilename(), baseVersion.getPackageName(), null);
         for (Node child : baseVersion.getChildren()) {
             compareNode.getCompareChildren().add(createMergeTree(child));
         }
         for (Node dependency : baseVersion.getDependencies()) {
-            compareNode.getCompareDependencies().add(new CompareNode(new ArrayList<>(), dependency.getPath(), dependency.getFilename(), dependency.getPackageName(), ChangeType.UNCHANGED));
+            compareNode.getCompareDependencies().add(new CompareNode(new ArrayList<>(), dependency.getPath(), dependency.getFilename(), dependency.getPackageName(), null));
         }
         return compareNode;
     }
@@ -436,24 +434,176 @@ public class DependencyTree {
             RevCommit baseCommit = repository.parseCommit(commitName);
             RevCommit alteredCommit = repository.parseCommit(ObjectId.fromString(secondCommit));
 
+            List<DiffEntry> entries = getDiffs(baseCommit, alteredCommit);
+            Pattern pattern = cache.getPattern("(build|out|classes|node_modules|src/test)");
+
+            for (DiffEntry entry : entries) {
+                // filter for forbidden dirs (output dirs, test dirs, ..)
+                Matcher forbiddenDirs = pattern.matcher(!entry.getNewPath().equals("/dev/null") ? entry.getNewPath() : entry.getOldPath());
+                if (!(!entry.getNewPath().equals("/dev/null") ? entry.getNewPath() : entry.getOldPath()).endsWith(".java") || forbiddenDirs.find()) {
+                    continue;
+                }
+
+                // check diff type
+                if (entry.getChangeType().equals(DiffEntry.ChangeType.ADD)) {
+                    // add new file with name and path to compareTree
+                    compareNode.createNodeByPath(entry.getNewPath(), DiffEntry.ChangeType.ADD, basepackage);
+                    // set dependencies in every dependent node
+//                    setDependenciesForCompareNode(compareNode, entry.getNewPath());
+                } else if (entry.getChangeType().equals(DiffEntry.ChangeType.MODIFY)) {
+                    // processing dependencies in dependent nodes is done when they are processed, because either those files also should have changed
+                    // or they aren't changed and so they don't have this dependency any more.
+                    if (entry.getOldPath().equals(entry.getNewPath())) {
+                        // if there are only changes in the file analyze file for dependencies
+//                        setDependenciesForCompareNode(compareNode, entry.getNewPath());
+                    } else {
+                        // if the file has been moved
+                        compareNode.createNodeByPath(entry.getNewPath(), DiffEntry.ChangeType.ADD, basepackage);
+                        compareNode.getNodeByPath(entry.getOldPath()).setChanged(DiffEntry.ChangeType.DELETE);
+                    }
+                } else if (entry.getChangeType().equals(DiffEntry.ChangeType.DELETE)) {
+                    // processing dependencies in dependent nodes is done when they are processed, because either those files also should have changed
+                    // or they aren't changed and so they don't have this dependency any more.
+
+                    // check if the node exists
+                    if (compareNode.getNodeByPath(entry.getOldPath()) != null) {
+                        compareNode.getNodeByPath(entry.getOldPath()).setChanged(DiffEntry.ChangeType.DELETE);
+                    } else {
+                        // if the node does not exist, create it and set it to deleted
+                        compareNode.createNodeByPath(entry.getOldPath(), DiffEntry.ChangeType.DELETE, basepackage);
+                    }
+                } else if (entry.getChangeType().equals(DiffEntry.ChangeType.RENAME)) {
+                    // processing dependencies in dependent nodes is done when they are processed, because either those files also should have changed
+                    // or they aren't changed and so they don't have this dependency any more.
+                    String oldFilename = entry.getOldPath().substring(entry.getOldPath().lastIndexOf("/") + 1);
+                    String newFilename = entry.getNewPath().substring(entry.getNewPath().lastIndexOf("/") + 1);
+                    // differentiate between file rename and file relocate
+                    if (!oldFilename.equals(newFilename)) {
+                        CompareNode tmp = compareNode.getNodeByPath(entry.getOldPath().substring(0, entry.getOldPath().lastIndexOf("/")));
+                        tmp.getChildByName(oldFilename).setFilename(newFilename);
+                    } else {
+                        compareNode.createNodeByPath(entry.getNewPath(), DiffEntry.ChangeType.ADD, basepackage);
+                        compareNode.getNodeByPath(entry.getOldPath()).setChanged(DiffEntry.ChangeType.DELETE);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public void setDependenciesForCompareNode(CompareNode node, String secondCommit) {
+        try {
+            RevCommit baseCommit = repository.parseCommit(commitName);
+            RevCommit alteredCommit = repository.parseCommit(ObjectId.fromString(secondCommit));
+
+            List<DiffEntry> entries = getDiffs(baseCommit, alteredCommit);
+            Pattern pattern = cache.getPattern("(build|out|classes|node_modules|src/test)");
+
+
+            for (DiffEntry entry : entries) {
+                /*if (!entry.getChangeType().equals(DiffEntry.ChangeType.ADD) || !entry.getChangeType().equals(DiffEntry.ChangeType.MODIFY)) {
+                    continue;
+                }*/
+                // filter for forbidden dirs (output dirs, test dirs, ..)
+                String newPath = !entry.getNewPath().equals("/dev/null") ? entry.getNewPath() : entry.getOldPath();
+                Matcher forbiddenDirs = pattern.matcher(newPath);
+                if (!newPath.endsWith(".java") || forbiddenDirs.find()) {
+                    continue;
+                }
+
+                String[] path = newPath.split("/");
+                CompareNode tmp = node.getNodeByPath(newPath);
+                System.out.println("call setCompareDependencies: " + node.getFilename() + ", " + newPath);
+                if (tmp == null) {
+                    continue;
+                }
+
+                // iterate over every part of the new path
+                for (String dependency : getDependenciesFromFile(tmp)) {
+                    System.out.println("dependency for " + node.getFilename() + ": " + dependency);
+                    String dependencyString = dependency.replace(".", "/");
+                    if (!dependency.matches("[a-zA-Z.]*\\*")) {
+                        dependencyString += ".java";
+                    }
+                    processCompareDependenciesFromDependencyString(dependencyString, tmp);
+                }
+                for (String qualifiedDependency : getClassQualifiedDependencies(tmp)) {
+                    String dependencyString = qualifiedDependency.replace(".", "/") + ".java";
+                    processCompareDependenciesFromDependencyString(dependencyString, tmp);
+                }
+                if (!tmp.getCompareDependencies().isEmpty()) {
+                    for (int i = path.length - 1; i >= 0; i--) {
+                        // update dependencies going up the file tree
+                        CompareNode dependencyTmp = node.getNodeByPath(newPath.substring(0, newPath.indexOf("/", i)));
+                        List<CompareNode> dependencies = new ArrayList<>();
+                        dependencyTmp.getCompareChildren().stream().map(CompareNode::getCompareDependencies).forEach(dependencies::addAll);
+                        dependencyTmp.setCompareDependencies(dependencies);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    private void processCompareDependenciesFromDependencyString(String dependencyString, CompareNode child) {
+        String[] pathParts = dependencyString.substring(dependencyString.lastIndexOf(basepackage) + basepackage.length() + 1).split("/");
+
+        // iterate through all children til the package and filename matches the dependencyString
+        List<Node> foundDependencies = findPackageNameInModules(pathParts, baseroot);
+        foundDependencies.stream().filter(wildcardDependency -> !child.getCompareDependencies().contains(wildcardDependency))
+                .forEach(wildcardDependency -> child.getDependencies().add(new CompareNode(
+                        new ArrayList<>(), wildcardDependency.getPath(), wildcardDependency.getFilename(), wildcardDependency.getPackageName(), DiffEntry.ChangeType.ADD)
+                ));
+        child.getCompareDependencies().stream().filter(dependency -> !foundDependencies.contains(dependency))
+                .forEach(dependency -> dependency.setChanged(DiffEntry.ChangeType.DELETE));
+    }
+
+    public void setCompareLayer(CompareNode node) {
+        int layer = 0;
+        for (int i = 0; i < node.getCompareChildren().size(); i++) {
+            // for every child in the current layer check
+            for (int j = 0; j < i; j++) {
+                if (node.getCompareChildren().get(j).getLevel() == layer) {
+                    // if any child before this has a dependency on this
+                    // or any child before has more dependencies on this than this has on any child before
+                    //   raise layer, break
+                    if (node.getCompareChildren().get(j).hasCompareDependencyOn(node.getCompareChildren().get(i)) && !node.getCompareChildren().get(i).hasCompareDependencyOn(node.getCompareChildren().get(j))) {
+                        layer++;
+                        break;
+                    } else if (node.getCompareChildren().get(j).countCompareDependenciesOn(node.getCompareChildren().get(i)) > node.getCompareChildren().get(i).countCompareDependenciesOn(node.getCompareChildren().get(j))) {
+                        layer++;
+                        break;
+                    }
+                }
+            }
+            node.getCompareChildren().get(i).setLevel(layer);
+            setCompareLayer(node.getCompareChildren().get(i));
+        }
+    }
+
+    private List<DiffEntry> getDiffs(RevCommit commit1, RevCommit commit2) {
+        try {
+            if (commit1.getCommitTime() > commit2.getCommitTime()) {
+                RevCommit tmp = commit1;
+                commit1 = commit2;
+                commit2 = tmp;
+            }
+
             ObjectReader reader = repository.newObjectReader();
             CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
-            ObjectId baseTree = baseCommit.getTree(); // equals newCommit.getTree()
+            ObjectId baseTree = commit1.getTree();
             oldTreeIter.reset(reader, baseTree);
             CanonicalTreeParser newTreeIter = new CanonicalTreeParser();
-            ObjectId alteredTree = alteredCommit.getTree(); // equals oldCommit.getTree()
+            ObjectId alteredTree = commit2.getTree();
             newTreeIter.reset(reader, alteredTree);
 
             DiffFormatter df = new DiffFormatter(new ByteArrayOutputStream());
             df.setRepository(repository);
-            List<DiffEntry> entries = df.scan(oldTreeIter, newTreeIter);
-
-            for (DiffEntry entry : entries) {
-                System.out.println(entry);
-            }
+            return df.scan(oldTreeIter, newTreeIter);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new UncheckedIOException(e);
         }
-
     }
 }

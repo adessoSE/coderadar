@@ -47,6 +47,7 @@ import {CityViewComponent} from './view/city-view/city-view.component';
 import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {DependencyRootComponent} from "./levelized-structure-map/dependency-root/dependency-root.component";
+import { DependencyCompareComponent } from './levelized-structure-map/dependency-compare/dependency-compare.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -59,7 +60,9 @@ const appRoutes: Routes = [
   {path: 'project-edit/:id', component: EditProjectComponent},
   {path: 'project/:id', component: ProjectDashboardComponent},
   {path: 'project/:id/:name', component: ViewCommitComponent},
-  { path: 'structure-map/:projectId/:commitName', component: DependencyRootComponent },
+  {path: 'structure-map/:projectId/:commitName', component: DependencyRootComponent},
+  {path: 'structure-map/:projectId/:commitName1/:commitName2', component: DependencyCompareComponent},
+
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
 
@@ -79,7 +82,8 @@ const appRoutes: Routes = [
     ViewCommitComponent,
     CityViewComponent,
     CityViewHeaderComponent,
-    DependencyRootComponent
+    DependencyRootComponent,
+    DependencyCompareComponent
   ],
   imports: [
     BrowserModule,

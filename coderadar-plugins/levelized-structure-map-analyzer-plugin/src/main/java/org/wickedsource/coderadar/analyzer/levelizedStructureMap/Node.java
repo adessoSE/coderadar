@@ -9,7 +9,7 @@ public class Node {
     private String packageName;
     private List<Node> children;
     private List<Node> dependencies;
-    private int layer;
+    private int level;
 
     public Node(List<Node> children, String path, String filename, String packageName) {
         this.children = children;
@@ -17,7 +17,7 @@ public class Node {
         this.filename = filename;
         this.packageName = packageName;
         dependencies = new ArrayList<>();
-        this.layer = -1;
+        this.level = -1;
     }
 
     /**
@@ -28,7 +28,7 @@ public class Node {
         this.filename = node.getFilename();
         this.path = node.getPath();
         this.packageName = node.packageName;
-        this.layer = node.getLayer();
+        this.level = node.getLevel();
         this.children = new ArrayList<>();
         this.dependencies = new ArrayList<>();
     }
@@ -83,12 +83,12 @@ public class Node {
         return !dependencies.isEmpty();
     }
 
-    public int getLayer() {
-        return layer;
+    public int getLevel() {
+        return level;
     }
 
-    public void setLayer(int layer) {
-        this.layer = layer;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     // Getter & Setter end
@@ -100,14 +100,7 @@ public class Node {
      * @return found Node-object. Returns null if no Node-object found.
      */
     public Node getChildByName(String name) {
-        if (hasChildren()) {
-            for (Node child : children) {
-                if (child.getFilename().equals(name)) {
-                    return child;
-                }
-            }
-        }
-        return null;
+        return hasChildren() ? children.stream().filter(child -> child.getFilename().equals(name)).findFirst().orElse(null) : null;
     }
 
     /**

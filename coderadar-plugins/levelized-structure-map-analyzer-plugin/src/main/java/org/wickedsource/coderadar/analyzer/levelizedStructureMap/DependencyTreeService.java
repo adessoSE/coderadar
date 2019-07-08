@@ -12,13 +12,14 @@ public class DependencyTreeService {
         DependencyTree dependencyTree = new DependencyTree(basepackage, commitName, repository);
 
         Node baseRoot = new Node(new LinkedList<>(), repository.getWorkTree().getParentFile().getPath(), repoName, "");
+
+        // TODO move to constructor or factory method
         dependencyTree.createTreeRoot(baseRoot);
 
         dependencyTree.setDependencies(baseRoot);
         baseRoot.setDependencies(new LinkedList<>());
         dependencyTree.sortTree(baseRoot);
-        dependencyTree.setLayer(baseRoot);
-
+        dependencyTree.setLevel(baseRoot);
         return baseRoot;
     }
 
@@ -26,8 +27,12 @@ public class DependencyTreeService {
         DependencyTree dependencyTree = new DependencyTree(basepackage, commitName, repository);
         Node baseVersion = getDependencyTree(repository, commitName, basepackage, repoName);
         CompareNode compareNode = dependencyTree.createMergeTree(baseVersion);
-
         dependencyTree.addToMergeTree(compareNode, secondCommit);
+        dependencyTree.setDependenciesForCompareNode(compareNode, secondCommit);
+
+        dependencyTree.setCompareLayer(compareNode);
+
+//        System.out.println(compareNode);
 
         return compareNode;
     }

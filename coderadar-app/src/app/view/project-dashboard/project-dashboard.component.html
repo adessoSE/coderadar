@@ -31,6 +31,13 @@
         <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">library_books</mat-icon>
       </div>
     </a>
+
+    <a *ngIf="selectedCommit1 !== null && selectedCommit2 != null"
+       class="compare-button-2" color="accent" mat-fab routerLink="/structure-map/{{project.id}}/{{selectedCommit1.name}}/{{selectedCommit2.name}}">
+      <div>
+        <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">library_books</mat-icon>
+      </div>
+    </a>
   </mat-grid-list>
 </main>
 

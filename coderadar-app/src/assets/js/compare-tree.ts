@@ -1,6 +1,6 @@
-import html2canvas from 'html2canvas';
 import * as $ from 'jquery';
-import {canvasArrow, toggle, findLastHTMLElement} from "./tree-functions";
+import {canvasArrow, findLastHTMLElement, toggle} from "./tree-functions";
+import html2canvas from "html2canvas";
 
 let ctx;
 let htmlBuffer = [];
@@ -33,7 +33,9 @@ $.fn.single_double_click = function(single_click_callback, double_click_callback
   });
 };
 
-export function afterLoad(node) {
+// TODO move action listener
+export function afterCompareLoad(node) {
+  console.log(node);
   htmlBuffer = [];
   buildRoot(node);
   document.getElementById('3dependencyTree').innerHTML = htmlBuffer.join('');
@@ -93,6 +95,9 @@ export function afterLoad(node) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     loadDependencies(node);
   });
+
+  // ggf. ergänzen durch show added, show deleted, ..
+
   // screenshot listener
   document.getElementById('3screenshot').addEventListener('click', () => {
     html2canvas(document.getElementById("3canvasContainer"), {
@@ -116,7 +121,7 @@ export function afterLoad(node) {
     loadDependencies(node);
   });
 
-  // set canvas format and draw dependencies
+  // set canvas format and draw compareDependencies
   ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
   ctx.canvas.width = document.getElementById('3list__root').offsetWidth;
   headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
@@ -124,24 +129,31 @@ export function afterLoad(node) {
 }
 
 function loadDependencies(node) {
-  if (node.dependencies.length > 0 && node.children.length === 0) {
+  if (node.compareDependencies.length > 0 && node.compareChildren.length === 0) {
     listDependencies(node);
   }
-  if (node.children.length > 0) {
-    for (let child of node.children) {
+  if (node.compareChildren.length > 0) {
+    for (let child of node.compareChildren) {
       loadDependencies(child);
     }
   }
 }
 
+// TODO in eigene Klasse packen
 function buildRoot(currentNode) {
   htmlBuffer.push(`<table id="3list__root" class="list list__root active">`);
-  htmlBuffer.push(`<tr><td class="package package__base">` +
-    `<span id="${currentNode.packageName}" class="filename-span${currentNode.children.length > 0 && currentNode.packageName !== '' ? ' clickable' : ''}">${currentNode.filename}</span>`);
 
-  if (currentNode.children.length > 0) {
-    htmlBuffer.push(`<table class="list${currentNode.packageName !== '' ? ' nested' : ''}">`);
-    htmlBuffer.push(buildTree(currentNode));
+  let recursion = buildTree(currentNode) as string;
+  htmlBuffer.push(`<tr><td class="package package__base">` +
+    `<span id="${currentNode.packageName}" class="filename-span`+
+    `${currentNode.compareChildren.length > 0 && currentNode.packageName !== '' ? ' clickable' : ''}` +
+    `">${currentNode.filename}</span>`);
+
+  if (currentNode.compareChildren.length > 0) {
+    htmlBuffer.push(`<table class="list${currentNode.packageName !== '' ? ' nested' : ''}` +
+      `${recursion.indexOf('-child-added') !== -1 ? ' -child-added' : ''}` +
+      `${recursion.indexOf('-child-removed') !== -1 ? ' -child-removed' : ''}">`);
+    htmlBuffer.push(recursion);
     htmlBuffer.push('</table>');
   }
   htmlBuffer.push(`</td></tr></table>`);
@@ -149,16 +161,25 @@ function buildRoot(currentNode) {
 
 function buildTree(currentNode) {
   let level = -1;
-  htmlBuffer.push('<tr style="display: none">');
-  for (const child of currentNode.children) {
-    let classString;
-    if (child.children.length > 0) {
+  let localBuffer = [];
+  localBuffer.push('<tr style="display: none">');
+  for (const child of currentNode.compareChildren) {
+    let classString, childAdded, childRemoved;
+    if (child.compareChildren.length > 0) {
       classString = 'package';
-    } else if (child.dependencies.length > 0) {
-      classString = 'class--dependency';
-    } else if (child.children.length === 0 && child.dependencies.length === 0) {
+    } else if (child.compareChildren.length === 0 && child.compareDependencies.length === 0) {
       classString = 'class';
     }
+    if (child.changed === 'ADD') {
+      classString += ' added';
+      childAdded = true;
+    } else if (child.changed === 'DELETE') {
+      classString += ' removed';
+      childRemoved = true;
+    }
+    let recursion = buildTree(child);
+    classString += (recursion.indexOf('-child-added') !== -1 || childAdded ? ' -child-added' : '');
+    classString += (recursion.indexOf('-child-removed') !== -1 || childRemoved ? ' -child-removed' : '');
 
     // add line break to long filenames before an uppercase letter except the first letter
     let fileName = '';
@@ -171,35 +192,40 @@ function buildTree(currentNode) {
     }
     if (level === child.level) {
       // add in same row as child
-      htmlBuffer.push(`<td class="${classString}">` +
-        `<span id="${child.packageName}" class="filename-span${(child.children.length > 0 || child.dependencies.length > 0) && child.packageName !== '' ? ' clickable' : ''}">${fileName}</span>`);
+      localBuffer.push(`<td class="${classString}">` +
+        `<span id="${child.packageName}" class="filename-span` +
+        `${(child.compareChildren.length > 0 || child.compareDependencies.length > 0) && child.packageName !== '' ? ' clickable' : ''}` +
+        `">${fileName}</span>`);
     } else {
       // create new row
-      htmlBuffer.push(`</tr><tr><td class="${classString}">` +
-        `<span id="${child.packageName}" class="filename-span${(child.children.length > 0 || child.dependencies.length > 0) && child.packageName !== '' ? ' clickable' : ''}">${fileName}</span>`);
+      localBuffer.push(`</tr><tr><td class="${classString}">` +
+        `<span id="${child.packageName}" class="filename-span` +
+        `${(child.compareChildren.length > 0 || child.compareDependencies.length > 0) && child.packageName !== '' ? ' clickable' : ''}` +
+        `">${fileName}</span>`);
     }
     level = child.level;
-    if (child.children.length > 0) {
-      htmlBuffer.push(`<table class="list${child.packageName !== '' ? ' nested' : ''}">`);
-      htmlBuffer.push(buildTree(child));
-      htmlBuffer.push('</table>');
+    if (child.compareChildren.length > 0) {
+      localBuffer.push(`<table class="list${child.packageName !== '' ? ' nested' : ''}">`);
+      localBuffer.push(recursion);
+      localBuffer.push('</table>');
     }
-    htmlBuffer.push('</td>')
+    localBuffer.push('</td>')
   }
-  htmlBuffer.push(`</tr>`);
+  localBuffer.push(`</tr>`);
+  return localBuffer.join('');
 }
 
 function listDependencies(currentNode) {
   ctx.lineWidth = 1;
-  // draw arrows to my dependencies and call this function for my dependencies
-  if (currentNode.dependencies.length > 0) {
-    currentNode.dependencies.forEach(dependency => {
+  // draw arrows to my compareDependencies and call this function for my compareDependencies
+  if (currentNode.compareDependencies.length > 0) {
+    currentNode.compareDependencies.forEach(dependency => {
       // find last visible element for dependency as end
       let end = findLastHTMLElement(dependency) as HTMLElement;
       // find last visible element for currentNode as start
       let start = findLastHTMLElement(currentNode) as HTMLElement;
 
-      // if activeDependency is set, draw only activeDependency related dependencies
+      // if activeDependency is set, draw only activeDependency related compareDependencies
       if (activeDependency !== undefined) {
         let draw = false;
         // activeDependency is set and neither start or end
@@ -239,7 +265,7 @@ function listDependencies(currentNode) {
 
       //ignore all arrows with same start and end node
       if (start != end) {
-        // check if downward dependencies should be shown
+        // check if downward compareDependencies should be shown
         if (checkDown && starty < endy) {
           canvasArrow(ctx, startx, starty, endx, endy, "black");
         }
