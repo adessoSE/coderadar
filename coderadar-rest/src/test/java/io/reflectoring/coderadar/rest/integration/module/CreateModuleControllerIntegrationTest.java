@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.integration.module;
 
+import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
@@ -26,7 +27,10 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
   void createModuleSuccessfully() throws Exception {
     // Set up
     ProjectEntity testProject = new ProjectEntity();
+    FileEntity fileEntity = new FileEntity();
+    fileEntity.setPath("module-path/Main.java");
     testProject.setVcsUrl("https://valid.url");
+    testProject.getFiles().add(fileEntity);
     testProject = createProjectRepository.save(testProject);
 
     ConstrainedFields fields = fields(CreateModuleCommand.class);

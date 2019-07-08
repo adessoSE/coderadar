@@ -26,4 +26,5 @@ public interface CreateModuleRepository extends Neo4jRepository<ModuleEntity, Lo
       "MATCH (m1:ModuleEntity)-[r:CONTAINS]->(m2:ModuleEntity) WHERE ID(m1) = {moduleId1} AND ID(m2) = {moduleId2} DELETE r")
   void detachModuleFromModule(
       @Param("moduleId1") Long moduleId1, @Param("moduleId2") Long moduleId2);
+
 }

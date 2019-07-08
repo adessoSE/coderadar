@@ -5,29 +5,37 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.ModuleMapper;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
+import io.reflectoring.coderadar.graph.projectadministration.module.repository.ListModulesOfProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
-import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
+import io.reflectoring.coderadar.projectadministration.ModulePathDoesNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CreateModuleAdapter implements CreateModulePort {
   private final CreateModuleRepository createModuleRepository;
   private final GetProjectRepository getProjectRepository;
-
+  private final ListModulesOfProjectRepository listModulesOfProjectRepository;
+  private final TaskExecutor taskExecutor;
   private final ModuleMapper moduleMapper = new ModuleMapper();
 
   @Autowired
   public CreateModuleAdapter(
-      CreateModuleRepository createModuleRepository, GetProjectRepository getProjectRepository) {
+          CreateModuleRepository createModuleRepository, GetProjectRepository getProjectRepository, ListModulesOfProjectRepository listModulesOfProjectRepository, TaskExecutor taskExecutor) {
     this.createModuleRepository = createModuleRepository;
     this.getProjectRepository = getProjectRepository;
+    this.listModulesOfProjectRepository = listModulesOfProjectRepository;
+    this.taskExecutor = taskExecutor;
   }
 
   /**
@@ -39,35 +47,47 @@ public class CreateModuleAdapter implements CreateModulePort {
    * @throws ProjectNotFoundException Thrown if a project with projectId is not found.
    */
   @Override
-  public Long createModule(Module module, Long projectId) throws ProjectNotFoundException {
+  public Long createModule(Module module, Long projectId) throws ProjectNotFoundException, ModuleAlreadyExistsException, ModulePathDoesNotExistsException {
     ModuleEntity moduleEntity = moduleMapper.mapDomainObject(module);
     ProjectEntity projectEntity =
         getProjectRepository
             .findById(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
-    normalizeModulePath(moduleEntity);
-    Long id = processExistingModules(projectEntity, moduleEntity);
-    if (id != null) {
-      return id;
-    } else {
-      id = attachModuleToProject(projectEntity, moduleEntity);
-      return id;
-    }
+    checkPathIsValid(moduleEntity, projectEntity);
+    Long moduleId = createModuleRepository.save(moduleEntity).getId();
+
+    taskExecutor.execute(() -> {
+      if (!processExistingModules(projectEntity, moduleEntity)) {
+        attachModuleToProject(projectEntity, moduleEntity);
+      }
+    });
+
+    return moduleId;
   }
 
   /**
    * Checks for errors in the path and adds/removes backslashes where necessary
    *
    * @param moduleEntity The entity to perform checks on.
+   * @param projectEntity The project to check the paths of
    */
-  private void normalizeModulePath(ModuleEntity moduleEntity) {
-    Paths.get(moduleEntity.getPath());
+  private void checkPathIsValid(ModuleEntity moduleEntity, ProjectEntity projectEntity) throws ModuleAlreadyExistsException,
+          ModulePathDoesNotExistsException {
+
+    //Check for a slash at the start and end of the path.
     if (!moduleEntity.getPath().endsWith("/")) {
       moduleEntity.setPath(moduleEntity.getPath().concat("/"));
     }
     if (moduleEntity.getPath().startsWith("/")) {
       moduleEntity.setPath(moduleEntity.getPath().substring(1));
+    }
+
+    //Check if a module with the same path already exists.
+    for(ModuleEntity entity : listModulesOfProjectRepository.findModulesInProject(projectEntity.getId())){
+      if(entity.getPath().equals(moduleEntity.getPath())){
+        throw new ModuleAlreadyExistsException(moduleEntity.getPath());
+      }
     }
   }
 
@@ -78,7 +98,7 @@ public class CreateModuleAdapter implements CreateModulePort {
    * @param moduleEntity The module to attach.
    * @return The id of the new module.
    */
-  private Long attachModuleToProject(ProjectEntity projectEntity, ModuleEntity moduleEntity) {
+  private boolean attachModuleToProject(ProjectEntity projectEntity, ModuleEntity moduleEntity) {
 
     // Move all files contained in the module path from the project to the module.
     moduleEntity.setProject(projectEntity);
@@ -91,7 +111,6 @@ public class CreateModuleAdapter implements CreateModulePort {
     projectEntity.getFiles().removeAll(moduleEntity.getFiles());
 
     // Check to see if the module could a have child
-    Long moduleEntityId;
     List<ModuleEntity> childModules =
         findChildModules(projectEntity.getModules(), moduleEntity.getPath());
     if (!childModules.isEmpty()) {
@@ -104,16 +123,16 @@ public class CreateModuleAdapter implements CreateModulePort {
         projectEntity.getModules().remove(childModule);
         getProjectRepository.save(projectEntity);
       }
-      moduleEntityId = createModuleRepository.save(moduleEntity).getId();
+      createModuleRepository.save(moduleEntity);
       for (ModuleEntity childModule : childModules) {
         createModuleRepository.detachModuleFromProject(projectEntity.getId(), childModule.getId());
       }
     } else {
       projectEntity.getModules().add(moduleEntity);
       getProjectRepository.save(projectEntity);
-      moduleEntityId = createModuleRepository.save(moduleEntity).getId();
+      createModuleRepository.save(moduleEntity);
     }
-    return moduleEntityId;
+    return true;
   }
 
   /**
@@ -123,7 +142,7 @@ public class CreateModuleAdapter implements CreateModulePort {
    * @param moduleEntity The new module entity.
    * @return The id of the new module entity.
    */
-  private Long processExistingModules(ProjectEntity projectEntity, ModuleEntity moduleEntity) {
+  private boolean processExistingModules(ProjectEntity projectEntity, ModuleEntity moduleEntity) {
     // Move all files contained in the module path from the parent to the new module.
     for (ModuleEntity m : projectEntity.getModules()) {
       ModuleEntity foundModule = findModule(m, moduleEntity.getPath());
@@ -137,7 +156,6 @@ public class CreateModuleAdapter implements CreateModulePort {
         foundModule.getFiles().removeAll(moduleEntity.getFiles());
 
         // Check to see if the module could a have child
-        Long moduleEntityId;
         List<ModuleEntity> childModules =
             findChildModules(foundModule.getChildModules(), moduleEntity.getPath());
         if (!childModules.isEmpty()) {
@@ -149,19 +167,19 @@ public class CreateModuleAdapter implements CreateModulePort {
             createModuleRepository.save(foundModule);
             createModuleRepository.save(childModule);
           }
-          moduleEntityId = createModuleRepository.save(moduleEntity).getId();
+          createModuleRepository.save(moduleEntity);
           for (ModuleEntity childModule : childModules) {
             createModuleRepository.detachModuleFromModule(foundModule.getId(), childModule.getId());
           }
         } else {
           foundModule.getChildModules().add(moduleEntity);
           createModuleRepository.save(foundModule);
-          moduleEntityId = createModuleRepository.save(moduleEntity).getId();
+          createModuleRepository.save(moduleEntity);
         }
-        return moduleEntityId;
+        return true;
       }
     }
-    return null;
+    return false;
   }
 
   /**
