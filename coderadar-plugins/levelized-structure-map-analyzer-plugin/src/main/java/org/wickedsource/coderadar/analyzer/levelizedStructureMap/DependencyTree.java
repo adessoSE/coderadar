@@ -80,7 +80,7 @@ public class DependencyTree {
      */
     private void addDependenciesFromDependencyString(String dependencyString, Node child) {
         // remove the basepackage name from dependency to find file(s) in same package and split it into lines
-        String[] pathParts = dependencyString.substring(dependencyString.lastIndexOf(basepackage) + basepackage.length() + 1).split("/");
+        String[] pathParts = dependencyString.split("/");
 
         // iterate through all children til the package and filename matches the dependencyString
         List<Node> foundDependencies = findPackageNameInModules(pathParts, baseroot);
@@ -263,7 +263,7 @@ public class DependencyTree {
                 // check if file is directory
                 if (treeWalk.isSubtree()) {
                     // get children depending on the current path
-                    List<Node> children = getChildren(treeWalk, tree);
+                    List<Node> children = createTree(tree, treeWalk.getPathString());
 
                     String packageName = "";
                     if (treeWalk.getPathString().contains(basepackage)) {
@@ -283,34 +283,6 @@ public class DependencyTree {
     }
 
     /**
-     * Get the children for a specific directory. Directories /src/main/java/{basepackage} are skipped.
-     *
-     * @param treeWalk
-     * @param tree
-     * @return the children.
-     */
-    private List<Node> getChildren(TreeWalk treeWalk, RevTree tree) {
-        // set the pathString to the current path
-        String pathString = treeWalk.getPathString();
-        // if the current filename is src
-        if (treeWalk.getNameString().equals("src")) {
-            // skip it and use the next directory after /src/main/java/{basepackage}
-            pathString += "/main/java/" + basepackage;
-        }
-        List<Node> children;
-
-        // TODO replace with if
-        try {
-            // create tree and if necessary skip packages
-            children = createTree(tree, pathString);
-        } catch (NullPointerException e) {
-            // if the package skipped to does not exist, use the current package even if it is named src
-            children = createTree(tree, treeWalk.getPathString());
-        }
-        return children;
-    }
-
-    /**
      * Reads the actual children from treeWalk.
      *
      * @param tree
@@ -327,24 +299,22 @@ public class DependencyTree {
             treeWalk.enterSubtree();
             while (treeWalk.next()) {
                 // filter out 'forbidden' directories like output directories or node_modules
-                Matcher forbiddenDirs = cache.getPattern("(^\\.|build|out|classes|node_modules)").matcher(treeWalk.getNameString());
+                Matcher forbiddenDirs = cache.getPattern("(^\\.|build|test|out|classes|node_modules)").matcher(treeWalk.getNameString());
                 if (!treeWalk.isSubtree() && !treeWalk.getPathString().endsWith(".java") || forbiddenDirs.find()) {
                     continue;
                 }
 
                 String packageName = "";
-                if (treeWalk.getPathString().contains(basepackage)) {
-                    packageName = treeWalk.getPathString().substring(treeWalk.getPathString().indexOf(basepackage)).replace("/", ".");
+                if (treeWalk.getPathString().contains("java/")) {
+                    packageName = treeWalk.getPathString().substring(treeWalk.getPathString().indexOf("java/") + 5).replace("/", ".");
                 }
 
                 // if the current part is a subtree
                 if (treeWalk.isSubtree()) {
                     // get children depending on the current path
-                    List<Node> grandchildren = getChildren(treeWalk, tree);
+                    List<Node> grandchildren = createTree(tree, treeWalk.getPathString());
                     // skip src node if there is one
-                    if (treeWalk.getNameString().equals("src")) {
-                        return grandchildren;
-                    } else if (!grandchildren.isEmpty()) {
+                    if (!grandchildren.isEmpty()) {
                         // if children are not empty, create a node containing these children, else ignore this subtree
                         children.add(new Node(grandchildren, treeWalk.getPathString(), treeWalk.getNameString(), packageName));
                     }
@@ -355,10 +325,7 @@ public class DependencyTree {
             }
             return children;
         } catch (IOException e) {
-
-            // TODO exception weiter werfen?
-            e.printStackTrace();
-            return Collections.emptyList();
+            throw new UncheckedIOException(e);
         }
     }
 

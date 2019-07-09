@@ -1,6 +1,6 @@
 import html2canvas from 'html2canvas';
 import * as $ from 'jquery';
-import {canvasArrow, toggle, findLastHTMLElement} from "./tree-functions";
+import {canvasArrow, toggle, findLastHTMLElement, iterateTree, expand} from "./tree-functions";
 
 let ctx;
 let htmlBuffer = [];
@@ -69,16 +69,7 @@ export function afterLoad(node) {
   // collapse and extend elements
   for (let i = 0; i < toggler.length; i++) {
     if (toggler[i].nextSibling != null) {
-      let element = toggler[i] as HTMLElement;
-      while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
-        element.style.display = 'inline';
-        if (element.offsetWidth > (element.nextSibling as HTMLElement).offsetWidth) {
-          element.style.display = 'inline-grid';
-        } else {
-          element.style.display = 'inline';
-        }
-        element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
-      }
+      expand(toggler[i] as HTMLElement);
     }
   }
   // show upward listener
@@ -139,18 +130,23 @@ function buildRoot(currentNode) {
   htmlBuffer.push(`<tr><td class="package package__base">` +
     `<span id="${currentNode.packageName}" class="filename-span${currentNode.children.length > 0 && currentNode.packageName !== '' ? ' clickable' : ''}">${currentNode.filename}</span>`);
 
-  if (currentNode.children.length > 0) {
+
+  if (currentNode.children.length === 1) {
+    htmlBuffer.push(buildTree(currentNode, true));
+  } else if (currentNode.children.length > 1) {
     htmlBuffer.push(`<table class="list${currentNode.packageName !== '' ? ' nested' : ''}">`);
-    htmlBuffer.push(buildTree(currentNode));
+    htmlBuffer.push(buildTree(currentNode, false));
     htmlBuffer.push('</table>');
   }
   htmlBuffer.push(`</td></tr></table>`);
 }
 
-function buildTree(currentNode) {
+function buildTree(currentNode, span) {
   let level = -1;
-  htmlBuffer.push('<tr style="display: none">');
+  // if currentNode has more than one children, open a hidden tr for displaying child's level
+  htmlBuffer.push(currentNode.children.length <= 1 ? '' : '<tr style="display: none">');
   for (const child of currentNode.children) {
+    // decide whether child is a package, a class or a class with dependencies
     let classString;
     if (child.children.length > 0) {
       classString = 'package';
@@ -160,33 +156,34 @@ function buildTree(currentNode) {
       classString = 'class';
     }
 
-    // add line break to long filenames before an uppercase letter except the first letter
-    let fileName = '';
-    for (let i = 0; i < child.filename.length; i++) {
-      let c = child.filename.charAt(i);
-      if (i !== 0 && c.toUpperCase() === c) {
-        fileName += '<wbr>';
-      }
-      fileName += c;
-    }
-    if (level === child.level) {
-      // add in same row as child
-      htmlBuffer.push(`<td class="${classString}">` +
-        `<span id="${child.packageName}" class="filename-span${(child.children.length > 0 || child.dependencies.length > 0) && child.packageName !== '' ? ' clickable' : ''}">${fileName}</span>`);
+    if (span) {
+      htmlBuffer.push(`<span id="${child.packageName}" class="filename-span` +
+        `${(child.children.length > 1 || child.dependencies.length > 0) && child.packageName !== '' ? ' clickable' : ''}">` +
+        `${'/' + child.filename}</span>`);
+
+      addTable(child);
     } else {
-      // create new row
-      htmlBuffer.push(`</tr><tr><td class="${classString}">` +
-        `<span id="${child.packageName}" class="filename-span${(child.children.length > 0 || child.dependencies.length > 0) && child.packageName !== '' ? ' clickable' : ''}">${fileName}</span>`);
+      htmlBuffer.push(level !== child.level ? '</tr><tr>' : '');
+      htmlBuffer.push(`<td class="${classString}"><span id="${child.packageName}" class="filename-span` +
+        `${(child.children.length > 1 || child.dependencies.length > 0) && child.packageName !== '' ? ' clickable' : ''}">` +
+        `${child.filename}</span>`
+      );
+      level = child.level;
+      addTable(child);
+      htmlBuffer.push('</td>');
     }
-    level = child.level;
-    if (child.children.length > 0) {
-      htmlBuffer.push(`<table class="list${child.packageName !== '' ? ' nested' : ''}">`);
-      htmlBuffer.push(buildTree(child));
-      htmlBuffer.push('</table>');
-    }
-    htmlBuffer.push('</td>')
   }
-  htmlBuffer.push(`</tr>`);
+  htmlBuffer.push(currentNode.children.length <= 1? '' : '</tr>');
+}
+
+function addTable(child) {
+  if (child.children.length > 1) {
+    htmlBuffer.push(`<table class="list${child.packageName !== '' ? ' nested' : ''}">`);
+    htmlBuffer.push(buildTree(child, child.children.length === 1));
+    htmlBuffer.push('</table>');
+  } else {
+    htmlBuffer.push(buildTree(child, child.children.length === 1));
+  }
 }
 
 function listDependencies(currentNode) {
@@ -203,23 +200,9 @@ function listDependencies(currentNode) {
       if (activeDependency !== undefined) {
         let draw = false;
         // activeDependency is set and neither start or end
-        let tmp = start;
-        while (!tmp.classList.contains('list__root')) {
-          if (tmp === activeDependency) {
-            draw = true;
-            break;
-          }
-          tmp = tmp.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
-        }
+        checkOnActiveDependency(start);
         if (!draw) {
-          tmp = end;
-          while (!tmp.classList.contains('list__root')) {
-            if (tmp === activeDependency) {
-              draw = true;
-              break;
-            }
-            tmp = tmp.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
-          }
+          checkOnActiveDependency(end);
         }
         if (!draw) {
           return;
@@ -250,4 +233,14 @@ function listDependencies(currentNode) {
       }
     });
   }
+}
+
+function checkOnActiveDependency(tmp) {
+  while (!tmp.classList.contains('list__root')) {
+    if (tmp === activeDependency) {
+      return  true;
+    }
+    tmp = iterateTree(tmp);
+  }
+  return false;
 }

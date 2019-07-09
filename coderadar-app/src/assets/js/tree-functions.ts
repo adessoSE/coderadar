@@ -6,16 +6,7 @@ export function toggle(currentNode, activeDependency, ctx, headerBackground) {
     } else {
       currentNode.nextSibling.classList.add('active');
     }
-    let element = currentNode as HTMLElement;
-    while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
-      element.style.display = 'inline';
-      if (element.offsetWidth > (element.nextSibling as HTMLElement).offsetWidth) {
-        element.style.display = 'inline-grid';
-      } else {
-        element.style.display = 'inline';
-      }
-      element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
-    }
+    expand(currentNode as HTMLElement)
   } else if (currentNode.nextSibling.classList.contains('active')) {
     collapseChildren(currentNode, activeDependency);
     currentNode.nextSibling.classList.add('nested');
@@ -24,21 +15,38 @@ export function toggle(currentNode, activeDependency, ctx, headerBackground) {
     } else {
       currentNode.nextSibling.classList.remove('active');
     }
-    let element = currentNode as HTMLElement;
-    while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
-      element.style.display = 'inline';
-      if (element.offsetWidth < (element.nextSibling as HTMLElement).offsetWidth) {
-        element.style.display = 'inline';
-      } else {
-        element.style.display = 'inline-grid';
-      }
-      element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
-    }
+    collapse(currentNode as HTMLElement)
   }
   // set height of canvas to the height of dependencyTree after toggle
   ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
   ctx.canvas.width = document.getElementById('3list__root').offsetWidth;
   headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
+}
+
+export function collapse(element) {
+  while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
+    (element.parentNode as HTMLElement).style.display = 'inline-block';
+    console.log(element);
+    if (element.offsetWidth < (element.nextSibling as HTMLElement).offsetWidth) {
+      (element.parentNode as HTMLElement).style.display = 'inline-block';
+    } else {
+      (element.parentNode as HTMLElement).style.display = 'inline-grid';
+    }
+    element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+  }
+}
+
+export function expand(element) {
+  while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
+    (element.parentNode as HTMLElement).style.display = 'inline-block';
+    console.log(element);
+    if (element.offsetWidth > (element.nextSibling as HTMLElement).offsetWidth) {
+      (element.parentNode as HTMLElement).style.display = 'inline-grid';
+    } else {
+      (element.parentNode as HTMLElement).style.display = 'inline-block';
+    }
+    element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+  }
 }
 
 export function canvasArrow(context, fromx, fromy, tox, toy, color) {
@@ -107,8 +115,21 @@ export function findLastHTMLElement(node) {
   // while element not visible
   //   element = element.parent
   let element = document.getElementById(packageName);
+
   while (element.offsetParent === null) {
-    element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+    element = iterateTree(element)
   }
   return element as HTMLElement;
+}
+
+export function iterateTree(tmp) {
+  if (tmp.parentNode.firstChild !== tmp) {
+    return tmp.parentNode.children[Array.from(tmp.parentNode.children).indexOf(tmp) - 1] as HTMLElement;
+  }
+  if (tmp.parentNode.parentNode.parentNode.parentNode.parentNode.children.length > 2) {
+    tmp = tmp.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement;
+    return  tmp.children[tmp.children.length - 2] as HTMLElement;
+  } else {
+    return  tmp.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+  }
 }
