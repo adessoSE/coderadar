@@ -12,26 +12,33 @@ import io.reflectoring.coderadar.graph.projectadministration.module.repository.L
 import io.reflectoring.coderadar.graph.projectadministration.module.service.CreateModuleAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
-import io.reflectoring.coderadar.projectadministration.ModulePathDoesNotExistsException;
+import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
+import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 
 @DisplayName("Create module")
 class CreateModuleAdapterTest {
   private CreateModuleRepository createModuleRepository = mock(CreateModuleRepository.class);
   private GetProjectRepository getProjectRepository = mock(GetProjectRepository.class);
-  private ListModulesOfProjectRepository listModulesOfProjectRepository = mock(ListModulesOfProjectRepository.class);
+  private ListModulesOfProjectRepository listModulesOfProjectRepository =
+      mock(ListModulesOfProjectRepository.class);
   private final TaskExecutor taskExecutor = mock(TaskExecutor.class);
 
   @Test
   @DisplayName("Should return ID when saving a module")
-  void shouldReturnIdWhenSavingAModule() throws ModulePathDoesNotExistsException, ModuleAlreadyExistsException {
+  void shouldReturnIdWhenSavingAModule()
+      throws ModulePathInvalidException, ModuleAlreadyExistsException,
+          ProjectIsBeingProcessedException {
     CreateModuleAdapter createModuleAdapter =
-        new CreateModuleAdapter(createModuleRepository, getProjectRepository, listModulesOfProjectRepository, taskExecutor);
+        new CreateModuleAdapter(
+            createModuleRepository,
+            getProjectRepository,
+            listModulesOfProjectRepository,
+            taskExecutor);
 
     ProjectEntity mockedProject = new ProjectEntity();
     FileEntity mockedFile = new FileEntity();
@@ -46,8 +53,7 @@ class CreateModuleAdapterTest {
     when(createModuleRepository.save(any(ModuleEntity.class))).thenReturn(mockedItem);
     when(createModuleRepository.findById(anyLong())).thenReturn(java.util.Optional.of(mockedItem));
 
-    when(getProjectRepository.findById(anyLong()))
-        .thenReturn(java.util.Optional.of(mockedProject));
+    when(getProjectRepository.findById(anyLong())).thenReturn(java.util.Optional.of(mockedProject));
     Long returnedId = createModuleAdapter.createModule(newItem, 1L);
 
     verify(createModuleRepository, times(1)).save(any());

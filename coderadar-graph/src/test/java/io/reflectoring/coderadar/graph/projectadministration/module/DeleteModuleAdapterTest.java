@@ -29,7 +29,9 @@ class DeleteModuleAdapterTest {
     moduleEntity = new ModuleEntity();
     moduleEntity.setId(1L);
     moduleEntity.setProject(projectEntity);
-    deleteModuleAdapter = new DeleteModuleAdapter(deleteModuleRepository, createProjectRepository);
+    deleteModuleAdapter =
+        new DeleteModuleAdapter(
+            deleteModuleRepository, createProjectRepository, getProjectRepository, taskExecutor);
   }
 
   @Test
