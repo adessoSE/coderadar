@@ -4,5 +4,6 @@ import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 
 public interface DeleteModuleUseCase {
-  void delete(Long id, Long projectId) throws ModuleNotFoundException, ProjectIsBeingProcessedException;
+  void delete(Long id, Long projectId)
+      throws ModuleNotFoundException, ProjectIsBeingProcessedException;
 }

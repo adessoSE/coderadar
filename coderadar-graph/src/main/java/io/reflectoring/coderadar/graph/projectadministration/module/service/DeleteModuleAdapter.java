@@ -19,18 +19,15 @@ import org.springframework.stereotype.Service;
 public class DeleteModuleAdapter implements DeleteModulePort {
   private final DeleteModuleRepository deleteModuleRepository;
   private final CreateProjectRepository createProjectRepository;
-  private final GetProjectRepository getProjectRepository;
   private final TaskExecutor taskExecutor;
 
   @Autowired
   public DeleteModuleAdapter(
       DeleteModuleRepository deleteModuleRepository,
       CreateProjectRepository createProjectRepository,
-      GetProjectRepository getProjectRepository,
       TaskExecutor taskExecutor) {
     this.deleteModuleRepository = deleteModuleRepository;
     this.createProjectRepository = createProjectRepository;
-    this.getProjectRepository = getProjectRepository;
     this.taskExecutor = taskExecutor;
   }
 
@@ -42,19 +39,18 @@ public class DeleteModuleAdapter implements DeleteModulePort {
       throw new ProjectIsBeingProcessedException(projectEntity.getId());
     }
 
-    ModuleEntity moduleEntity =   deleteModuleRepository
-            .findById(id)
-            .orElseThrow(() -> new ModuleNotFoundException(id));
+    ModuleEntity moduleEntity =
+        deleteModuleRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException(id));
 
     projectEntity.setBeingProcessed(true);
-    getProjectRepository.save(projectEntity);
+    createProjectRepository.save(projectEntity);
 
     taskExecutor.execute(
         () -> {
           delete(moduleEntity);
 
           projectEntity.setBeingProcessed(false);
-          getProjectRepository.save(projectEntity);
+          createProjectRepository.save(projectEntity);
         });
   }
 
@@ -66,23 +62,24 @@ public class DeleteModuleAdapter implements DeleteModulePort {
       throw new ProjectIsBeingProcessedException(projectEntity.getId());
     }
 
-    ModuleEntity moduleEntity =   deleteModuleRepository
+    ModuleEntity moduleEntity =
+        deleteModuleRepository
             .findById(module.getId())
             .orElseThrow(() -> new ModuleNotFoundException(module.getId()));
 
     projectEntity.setBeingProcessed(true);
-    getProjectRepository.save(projectEntity);
+    createProjectRepository.save(projectEntity);
 
     taskExecutor.execute(
         () -> {
           delete(moduleEntity);
           projectEntity.setBeingProcessed(false);
-          getProjectRepository.save(projectEntity);
+          createProjectRepository.save(projectEntity);
         });
   }
 
   private ProjectEntity getProject(Long projectId) {
-    return getProjectRepository
+    return createProjectRepository
         .findById(projectId)
         .orElseThrow(() -> new ProjectNotFoundException(projectId));
   }

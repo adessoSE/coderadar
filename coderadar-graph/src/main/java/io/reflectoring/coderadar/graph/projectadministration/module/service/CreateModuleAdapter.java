@@ -80,7 +80,6 @@ public class CreateModuleAdapter implements CreateModulePort {
           projectEntity.setBeingProcessed(false);
           getProjectRepository.save(projectEntity);
         });
-
     return moduleId;
   }
 

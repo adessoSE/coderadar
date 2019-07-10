@@ -18,7 +18,8 @@ public class DeleteModuleService implements DeleteModuleUseCase {
   }
 
   @Override
-  public void delete(Long id, Long projectId) throws ModuleNotFoundException, ProjectIsBeingProcessedException {
+  public void delete(Long id, Long projectId)
+      throws ModuleNotFoundException, ProjectIsBeingProcessedException {
     deleteModulePort.delete(id, projectId);
   }
 }
