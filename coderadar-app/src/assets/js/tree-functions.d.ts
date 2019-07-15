@@ -9,3 +9,5 @@ export declare function iterateTree(tmp);
 export declare function expand(element);
 
 export declare function collapse(element);
+
+export declare function checkOnActiveDependency(tmp, activeDependency);

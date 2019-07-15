@@ -105,26 +105,14 @@ public class CompareNode extends Node {
             // if the Node-object already exists, iterate over it
             if (tmp.getChildByName(s) != null) {
                 tmp = tmp.getChildByName(s);
-            } else if (s.equals("src") && nodePath.contains("src/main/java/" + basepackage)) {
-                // skip src/main/java/{basepackage}
-                i += StringUtils.countOccurrencesOf(("src/main/java/" + basepackage), "/");
             } else {
                 // if it does not exist, create a new Node-object and add it to tmp's children
                 String packageName = "";
-                // build path with skipped files
-                StringBuilder stringBuilder = new StringBuilder();
-                for (int j = 0; j <= i; j++) {
-                    stringBuilder.append(path[j] + "/");
-                }
-                stringBuilder.deleteCharAt(stringBuilder.lastIndexOf("/"));
-                // set packageName
-                if (stringBuilder.toString().contains("/src/main/java") && stringBuilder.toString().endsWith(basepackage + "/" + s)) {
-                    packageName = basepackage.replace("/", ".") + "." + s;
-                } else if (stringBuilder.toString().contains("/src/main/java")) {
-                    packageName = tmp.getPackageName() + "." + s;
+                if ((tmp.getPath() + "/" + s).contains("java/")) {
+                    packageName = (tmp.getPath() + "/" + s).substring(nodePath.indexOf("java/") + 5).replace("/", ".");
                 }
                 // create new Node
-                CompareNode node = new CompareNode(new ArrayList<>(), stringBuilder.toString(), s, packageName, changed);
+                CompareNode node = new CompareNode(new ArrayList<>(), tmp.getPath() + "/" + s, s, packageName, changed);
                 tmp.getCompareChildren().add(node);
                 tmp = node;
             }
@@ -137,42 +125,13 @@ public class CompareNode extends Node {
         String[] path = nodePath.split("/");
         CompareNode tmp = this;
         // iterate over every part of the new path
-        for (int i = 0; i < path.length; i++) {
-            String s = path[i];
+        for (String s : path) {
             // if the Node-object already exists, iterate over it
             if (tmp.getChildByName(s) != null) {
                 tmp = tmp.getChildByName(s);
             } else {
                 return null;
             }
-        }
-        return tmp;
-    }
-
-    public CompareNode getNodeByPath(String nodePath, String basepackage) {
-        String[] path = nodePath.split("/");
-        CompareNode tmp = this;
-        if (nodePath.equals("coderadar-server/src/main/java/org/wickedsource/coderadar/vcs/git/walk/RevCommitWithSequenceNumber.java")) {
-            System.out.println(tmp.getFilename());
-        }
-        // iterate over every part of the new path
-        for (int i = 0; i < path.length; i++) {
-            String s = path[i];
-            if (nodePath.equals("coderadar-server/src/main/java/org/wickedsource/coderadar/vcs/git/walk/RevCommitWithSequenceNumber.java")) {
-                System.out.println(s + ", "  + (tmp.getChildByName(s) != null ? tmp.getChildByName(s).getFilename() : "null"));
-            }
-            // if the Node-object already exists, iterate over it
-            if (tmp.getChildByName(s) != null) {
-                tmp = tmp.getChildByName(s);
-            } else if (s.equals("src") && nodePath.contains("src/main/java/" + basepackage)) {
-                // skip src/main/java/{basepackage}
-                i += StringUtils.countOccurrencesOf(("src/main/java/" + basepackage), "/");
-            } else {
-                return null;
-            }
-        }
-        if (nodePath.equals("coderadar-server/src/main/java/org/wickedsource/coderadar/vcs/git/walk/RevCommitWithSequenceNumber.java")) {
-            System.out.println((tmp != null ? tmp.getFilename() : "null"));
         }
         return tmp;
     }

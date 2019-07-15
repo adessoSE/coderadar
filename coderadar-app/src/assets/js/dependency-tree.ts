@@ -1,6 +1,6 @@
 import html2canvas from 'html2canvas';
 import * as $ from 'jquery';
-import {canvasArrow, toggle, findLastHTMLElement, iterateTree, expand} from "./tree-functions";
+import {canvasArrow, toggle, findLastHTMLElement, iterateTree, expand, checkOnActiveDependency} from "./tree-functions";
 
 let ctx;
 let htmlBuffer = [];
@@ -65,9 +65,7 @@ export function afterLoad(node) {
         loadDependencies(node);
       }
     });
-  }
-  // collapse and extend elements
-  for (let i = 0; i < toggler.length; i++) {
+    // collapse and extend elements
     if (toggler[i].nextSibling != null) {
       expand(toggler[i] as HTMLElement);
     }
@@ -129,7 +127,6 @@ function buildRoot(currentNode) {
   htmlBuffer.push(`<table id="3list__root" class="list list__root active">`);
   htmlBuffer.push(`<tr><td class="package package__base">` +
     `<span id="${currentNode.packageName}" class="filename-span${currentNode.children.length > 0 && currentNode.packageName !== '' ? ' clickable' : ''}">${currentNode.filename}</span>`);
-
 
   if (currentNode.children.length === 1) {
     htmlBuffer.push(buildTree(currentNode, true));
@@ -200,9 +197,9 @@ function listDependencies(currentNode) {
       if (activeDependency !== undefined) {
         let draw = false;
         // activeDependency is set and neither start or end
-        checkOnActiveDependency(start);
+        checkOnActiveDependency(start, activeDependency);
         if (!draw) {
-          checkOnActiveDependency(end);
+          checkOnActiveDependency(end, activeDependency);
         }
         if (!draw) {
           return;
@@ -235,12 +232,4 @@ function listDependencies(currentNode) {
   }
 }
 
-function checkOnActiveDependency(tmp) {
-  while (!tmp.classList.contains('list__root')) {
-    if (tmp === activeDependency) {
-      return  true;
-    }
-    tmp = iterateTree(tmp);
-  }
-  return false;
-}
+

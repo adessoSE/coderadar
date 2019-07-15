@@ -142,6 +142,10 @@ public class JavaDependencyAnalyzer {
      */
     private List<String> getClassQualifiedDependencies(Node node, Repository repository, ObjectId commitName, String basepackage_dot) {
         if (!node.hasChildren() && node.getFilename().endsWith(".java")) {
+            byte[] bytes = BlobUtils.getRawContent(repository, commitName, node.getPath());
+            if (bytes == null) {
+                return Collections.emptyList();
+            }
             List<String> imports = new ArrayList<>();
             String[] lines = clearFileContent(new String(BlobUtils.getRawContent(repository, commitName, node.getPath()))).split("\n");
             for (String content : lines) {
@@ -178,8 +182,12 @@ public class JavaDependencyAnalyzer {
      */
     private List<String> getDependenciesFromFile(Node node, Repository repository, ObjectId commitName, String basepackage_dot) {
         if (!node.hasChildren() && node.getFilename().endsWith(".java")) {
+            byte[] bytes = BlobUtils.getRawContent(repository, commitName, node.getPath());
+            if (bytes == null) {
+                return Collections.emptyList();
+            }
             List<String> imports = new ArrayList<>();
-            String[] lines = clearFileContent(new String(BlobUtils.getRawContent(repository, commitName, node.getPath()))).split("\n");
+            String[] lines = clearFileContent(new String(bytes)).split("\n");
             for (String content : lines) {
                 // found the end of the area where import statements are valid
                 //   if the line does not begin with a single or multi line comment
@@ -188,7 +196,7 @@ public class JavaDependencyAnalyzer {
                 //   if the line is not the package declaration
                 Matcher classMatcher = cache.getPattern("^(?!(\\s*import|\\s*$|\\s*//|\\s*/\\*|\\s*\\*|\\s*package))").matcher(content);
                 if (classMatcher.find()) {
-                    break;
+                    continue;
                 }
                 // find all regions with an import statement
                 Matcher importMatcher = cache.getPattern("^(?!(\\s*//|\\s*/\\*|\\s*\\*|.*\"))import (([A-Za-z_$][A-Za-z_$0-9]*)\\.)+(([A-Za-z_$][A-Za-z_$0-9]*)|\\*);").matcher(content);
@@ -209,7 +217,7 @@ public class JavaDependencyAnalyzer {
             }
             return imports;
         }
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     /**
@@ -239,14 +247,12 @@ public class JavaDependencyAnalyzer {
 
             String[] path = newPath.split("/");
             CompareNode tmp = node.getNodeByPath(newPath);
-            System.out.println("call setCompareDependencies: " + node.getFilename() + ", " + newPath);
             if (tmp == null) {
                 continue;
             }
 
             // iterate over every part of the new path
             for (String dependency : getDependenciesFromFile(tmp, repository, secondCommit, basepackage_dot)) {
-                System.out.println("dependency for " + node.getFilename() + ": " + dependency);
                 String dependencyString = dependency.replace(".", "/");
                 if (!dependency.matches("[a-zA-Z.]*\\*")) {
                     dependencyString += ".java";

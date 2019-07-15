@@ -53,8 +53,9 @@ public class DependencyTree {
     public CompareNode getCompareTree(String basepackage, String commitName, Repository repository, Node baseRoot, String secondCommit) {
         this.basepackage = basepackage;
         this.repository = repository;
-        this.baseroot = baseroot;
+        this.baseroot = baseRoot;
         this.commitName = ObjectId.fromString(commitName);
+        this.basepackage_dot = basepackage.replace("/", ".");
         cache = new RegexPatternCache();
         CompareNode compareNode = createMergeTree(baseRoot);
 

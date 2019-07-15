@@ -26,7 +26,6 @@ export function toggle(currentNode, activeDependency, ctx, headerBackground) {
 export function collapse(element) {
   while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
     (element.parentNode as HTMLElement).style.display = 'inline-block';
-    console.log(element);
     if (element.offsetWidth < (element.nextSibling as HTMLElement).offsetWidth) {
       (element.parentNode as HTMLElement).style.display = 'inline-block';
     } else {
@@ -39,7 +38,6 @@ export function collapse(element) {
 export function expand(element) {
   while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
     (element.parentNode as HTMLElement).style.display = 'inline-block';
-    console.log(element);
     if (element.offsetWidth > (element.nextSibling as HTMLElement).offsetWidth) {
       (element.parentNode as HTMLElement).style.display = 'inline-grid';
     } else {
@@ -128,8 +126,18 @@ export function iterateTree(tmp) {
   }
   if (tmp.parentNode.parentNode.parentNode.parentNode.parentNode.children.length > 2) {
     tmp = tmp.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement;
-    return  tmp.children[tmp.children.length - 2] as HTMLElement;
+    return tmp.children[tmp.children.length - 2] as HTMLElement;
   } else {
-    return  tmp.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+    return tmp.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
   }
+}
+
+export function checkOnActiveDependency(tmp, activeDependency) {
+  while (!tmp.classList.contains('list__root')) {
+    if (tmp === activeDependency) {
+      return true;
+    }
+    tmp = iterateTree(tmp);
+  }
+  return false;
 }
