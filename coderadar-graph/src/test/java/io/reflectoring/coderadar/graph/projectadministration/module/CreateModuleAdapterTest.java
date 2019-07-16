@@ -38,7 +38,8 @@ class CreateModuleAdapterTest {
             createModuleRepository,
             getProjectRepository,
             listModulesOfProjectRepository,
-            taskExecutor);
+            taskExecutor,
+            projectStatusAdapter);
 
     ProjectEntity mockedProject = new ProjectEntity();
     FileEntity mockedFile = new FileEntity();

@@ -30,7 +30,7 @@ public class DeleteModuleController {
     } catch (ModuleNotFoundException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     } catch (ProjectIsBeingProcessedException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.valueOf(422));
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     }
   }
 }

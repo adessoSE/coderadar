@@ -29,7 +29,9 @@ class UpdateProjectServiceTest {
             getProjectPort,
             updateProjectPort,
             updateRepositoryUseCase,
-            coderadarConfigurationProperties);
+            coderadarConfigurationProperties,
+            taskExecutor,
+            projectStatusPort);
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(
@@ -59,7 +61,9 @@ class UpdateProjectServiceTest {
             getProjectPort,
             updateProjectPort,
             updateRepositoryUseCase,
-            coderadarConfigurationProperties);
+            coderadarConfigurationProperties,
+            taskExecutor,
+            projectStatusPort);
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(

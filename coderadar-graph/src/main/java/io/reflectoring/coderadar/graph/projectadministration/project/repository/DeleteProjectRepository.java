@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DeleteProjectRepository extends Neo4jRepository<ProjectEntity, Long> {
-  @Query("MATCH (p:ProjectEntity), (p)-[*0..]->(c) WHERE ID(p) = {projectId} DETACH DELETE p, c")
+  @Query("MATCH (p:ProjectEntity), (p)-[*0..2]->(c) WHERE ID(p) = {projectId} DETACH DELETE p, c")
   void deleteProjectCascade(@Param("projectId") Long projectId);
 }

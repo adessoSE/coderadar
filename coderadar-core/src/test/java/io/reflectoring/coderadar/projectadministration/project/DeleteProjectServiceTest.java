@@ -16,7 +16,8 @@ class DeleteProjectServiceTest {
 
   @Test
   void deleteProjectWithIdOne() {
-    DeleteProjectService testSubject = new DeleteProjectService(deleteProjectPort);
+    DeleteProjectService testSubject =
+        new DeleteProjectService(deleteProjectPort, projectStatusPort, taskExecutor);
 
     Mockito.when(getProjectPort.get(anyLong())).thenReturn(new Project());
 

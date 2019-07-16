@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.project;
 
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
+import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
@@ -39,6 +40,8 @@ public class UpdateProjectController {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     } catch (ProjectNotFoundException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
+    } catch (ProjectIsBeingProcessedException e) {
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     }
   }
 }

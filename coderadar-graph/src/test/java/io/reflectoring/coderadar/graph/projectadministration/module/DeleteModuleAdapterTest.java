@@ -33,14 +33,15 @@ class DeleteModuleAdapterTest {
     moduleEntity.setId(1L);
     moduleEntity.setProject(projectEntity);
     deleteModuleAdapter =
-        new DeleteModuleAdapter(
-            deleteModuleRepository, createProjectRepository, taskExecutor);
+        new DeleteModuleAdapter(deleteModuleRepository, createProjectRepository, taskExecutor);
   }
 
   @Test
   @DisplayName("Should delete module when passing a valid module entity")
   void shouldDeleteModuleWhenPassingAValidModuleEntity() throws ProjectIsBeingProcessedException {
     doNothing().when(deleteModuleRepository).delete(isA(ModuleEntity.class));
+    when(deleteModuleRepository.findById(anyLong()))
+        .thenReturn(java.util.Optional.of(moduleEntity));
     when(deleteModuleRepository.findById(anyLong()))
         .thenReturn(java.util.Optional.of(moduleEntity));
     Module module = new Module();

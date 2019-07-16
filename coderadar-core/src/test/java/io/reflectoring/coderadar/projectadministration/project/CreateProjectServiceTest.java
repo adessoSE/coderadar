@@ -42,7 +42,8 @@ class CreateProjectServiceTest {
             coderadarConfigurationProperties,
             taskExecutor,
             getProjectCommitsUseCase,
-            saveCommitPort);
+            saveCommitPort,
+            checkProjectStatusPort);
 
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());
@@ -77,7 +78,8 @@ class CreateProjectServiceTest {
             coderadarConfigurationProperties,
             taskExecutor,
             getProjectCommitsUseCase,
-            saveCommitPort);
+            saveCommitPort,
+            checkProjectStatusPort);
 
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());

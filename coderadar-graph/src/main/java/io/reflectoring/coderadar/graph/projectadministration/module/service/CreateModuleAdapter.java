@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.graph.projectadministration.module.ModuleMapper
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ListModulesOfProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.service.ProjectStatusAdapter;
 import io.reflectoring.coderadar.projectadministration.*;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
@@ -23,17 +24,20 @@ public class CreateModuleAdapter implements CreateModulePort {
   private final ListModulesOfProjectRepository listModulesOfProjectRepository;
   private final TaskExecutor taskExecutor;
   private final ModuleMapper moduleMapper = new ModuleMapper();
+  private final ProjectStatusAdapter projectStatusAdapter;
 
   @Autowired
   public CreateModuleAdapter(
       CreateModuleRepository createModuleRepository,
       GetProjectRepository getProjectRepository,
       ListModulesOfProjectRepository listModulesOfProjectRepository,
-      TaskExecutor taskExecutor) {
+      TaskExecutor taskExecutor,
+      ProjectStatusAdapter projectStatusAdapter) {
     this.createModuleRepository = createModuleRepository;
     this.getProjectRepository = getProjectRepository;
     this.listModulesOfProjectRepository = listModulesOfProjectRepository;
     this.taskExecutor = taskExecutor;
+    this.projectStatusAdapter = projectStatusAdapter;
   }
 
   /**
@@ -58,13 +62,12 @@ public class CreateModuleAdapter implements CreateModulePort {
             .findById(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
-    if (projectEntity.isBeingProcessed()) {
-      throw new ProjectIsBeingProcessedException(projectEntity.getId());
+    if (projectStatusAdapter.isBeingProcessed(projectId)) {
+      throw new ProjectIsBeingProcessedException(projectId);
     }
 
     checkPathIsValid(moduleEntity, projectEntity);
-    projectEntity.setBeingProcessed(true);
-    getProjectRepository.save(projectEntity);
+    projectStatusAdapter.setBeingProcessed(projectId, true);
 
     Long moduleId = createModuleRepository.save(moduleEntity).getId();
 
@@ -77,8 +80,7 @@ public class CreateModuleAdapter implements CreateModulePort {
           } else {
             attachModuleToProject(projectEntity, moduleEntity);
           }
-          projectEntity.setBeingProcessed(false);
-          getProjectRepository.save(projectEntity);
+          projectStatusAdapter.setBeingProcessed(projectId, false);
         });
     return moduleId;
   }

@@ -20,7 +20,9 @@ class CreateModuleServiceTest {
   private GetProjectPort getProjectPort = mock(GetProjectPort.class);
 
   @Test
-  void returnsNewModuleId() throws ModulePathInvalidException, ModuleAlreadyExistsException, ProjectIsBeingProcessedException {
+  void returnsNewModuleId()
+      throws ModulePathInvalidException, ModuleAlreadyExistsException,
+          ProjectIsBeingProcessedException {
     CreateModuleService testSubject = new CreateModuleService(createModulePort);
 
     Project project = new Project();

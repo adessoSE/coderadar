@@ -5,77 +5,42 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.DeleteModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
-import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DeleteModuleAdapter implements DeleteModulePort {
   private final DeleteModuleRepository deleteModuleRepository;
   private final CreateProjectRepository createProjectRepository;
-  private final TaskExecutor taskExecutor;
 
   @Autowired
   public DeleteModuleAdapter(
       DeleteModuleRepository deleteModuleRepository,
-      CreateProjectRepository createProjectRepository,
-      TaskExecutor taskExecutor) {
+      CreateProjectRepository createProjectRepository) {
     this.deleteModuleRepository = deleteModuleRepository;
     this.createProjectRepository = createProjectRepository;
-    this.taskExecutor = taskExecutor;
   }
 
   @Override
-  public void delete(Long id, Long projectId)
-      throws ModuleNotFoundException, ProjectIsBeingProcessedException {
-    ProjectEntity projectEntity = getProject(projectId);
-    if (projectEntity.isBeingProcessed()) {
-      throw new ProjectIsBeingProcessedException(projectEntity.getId());
-    }
-
+  public void delete(Long id, Long projectId) throws ModuleNotFoundException {
     ModuleEntity moduleEntity =
         deleteModuleRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException(id));
 
-    projectEntity.setBeingProcessed(true);
-    createProjectRepository.save(projectEntity);
-
-    taskExecutor.execute(
-        () -> {
-          delete(moduleEntity);
-
-          projectEntity.setBeingProcessed(false);
-          createProjectRepository.save(projectEntity);
-        });
+    delete(moduleEntity);
   }
 
   @Override
-  public void delete(Module module, Long projectId)
-      throws ModuleNotFoundException, ProjectIsBeingProcessedException {
-    ProjectEntity projectEntity = getProject(projectId);
-    if (projectEntity.isBeingProcessed()) {
-      throw new ProjectIsBeingProcessedException(projectEntity.getId());
-    }
+  public void delete(Module module, Long projectId) throws ModuleNotFoundException {
 
     ModuleEntity moduleEntity =
         deleteModuleRepository
             .findById(module.getId())
             .orElseThrow(() -> new ModuleNotFoundException(module.getId()));
-
-    projectEntity.setBeingProcessed(true);
-    createProjectRepository.save(projectEntity);
-
-    taskExecutor.execute(
-        () -> {
-          delete(moduleEntity);
-          projectEntity.setBeingProcessed(false);
-          createProjectRepository.save(projectEntity);
-        });
+    delete(moduleEntity);
   }
 
   private ProjectEntity getProject(Long projectId) {
