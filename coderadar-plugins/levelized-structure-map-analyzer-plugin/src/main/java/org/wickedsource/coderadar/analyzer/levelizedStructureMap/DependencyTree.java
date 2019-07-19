@@ -68,7 +68,7 @@ public class DependencyTree {
             RevCommit alteredCommit = repository.parseCommit(ObjectId.fromString(secondCommit));
 
             javaDependencyAnalyzer.setDependenciesForCompareNode(compareNode, ObjectId.fromString(secondCommit), getDiffs(baseCommit, alteredCommit), repository, basepackage_dot);
-
+            sortCompareTree(compareNode);
             setCompareLayer(compareNode);
             return compareNode;
         } catch (IOException e) {
@@ -318,6 +318,34 @@ public class DependencyTree {
             return df.scan(oldTreeIter, newTreeIter);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
+        }
+    }
+
+    /**
+     * Sort the children of a given Node object and their children recursively:
+     * if o1 has a dependency on o2 and o2 does not have an dependency on o1
+     *   o1 is before o2
+     * else if o2 has a dependency on o1 and o1 does not have an dependency on o2
+     *   o2 is before o1
+     * else if o1 has more dependencies on o2 than o2 on o1
+     *   o1 is before o2
+     * else if o2 has more dependencies on o1 than o1 on o2
+     *   o2 is before o1
+     * else if o1 is a directory and o2 is not
+     *   o1 is before o2
+     * else if o2 is a directory and o1 is not
+     *   o2 is before o1
+     * else compare o1 and o2 lexically
+     *
+     * @param node Node object which's children are to sort.
+     */
+    private void sortCompareTree(CompareNode node) {
+        if (node.hasChildren()) {
+            CompareNodeComparator nodeComparator = new CompareNodeComparator();
+            for (CompareNode child : node.getCompareChildren()) {
+                sortCompareTree(child);
+            }
+            node.getCompareChildren().sort(nodeComparator);
         }
     }
 

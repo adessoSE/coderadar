@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class JavaDependencyAnalyzer {
 
@@ -153,13 +154,13 @@ public class JavaDependencyAnalyzer {
                 //   if pattern is not in a single or multi line comment
                 //   if pattern is not in a string
                 //   if pattern is not in an import or the package name
-                Matcher importMatcher = cache.getPattern("^(?!(.*\\simport|.*\\spackage|\\s*//|\\s*/\\*|\\s*\\*|.*\")).*(([A-Za-z_$][A-Za-z_$0-9]*)\\.)+([A-Za-z_$][A-Za-z_$0-9]*)(?!\\($)").matcher(content);
+                Matcher importMatcher = cache.getPattern("^(?!(.*import\\s|.*package\\s|\\s*//|\\s*/\\*|\\s*\\*|.*\")).*(([A-Za-z_$][A-Za-z_$0-9]*)\\.)+([A-Za-z_$][A-Za-z_$0-9]*)(?!\\($)").matcher(content);
                 if (importMatcher.lookingAt()) {
                     String dependency = importMatcher.group();
                     // if it is an import from the current project
                     if (dependency.contains(basepackage_dot)) {
                         // extract packageName.fileName from matched region
-                        Matcher dependencyMatcher = Pattern.compile("([a-zA-Z]+\\.)+[a-zA-Z]+").matcher(dependency);
+                        Matcher dependencyMatcher = cache.getPattern("([a-zA-Z]+\\.)+[a-zA-Z]+").matcher(dependency);
                         if (dependencyMatcher.find()) {
                             String foundDependency = dependencyMatcher.group();
                             if (!imports.contains(foundDependency)) {
@@ -235,9 +236,6 @@ public class JavaDependencyAnalyzer {
     public void setDependenciesForCompareNode(CompareNode node, ObjectId secondCommit, List<DiffEntry> entries, Repository repository, String basepackage_dot) {
         Pattern pattern = cache.getPattern("(build|out|classes|node_modules|src/test)");
         for (DiffEntry entry : entries) {
-            /*if (!entry.getChangeType().equals(DiffEntry.ChangeType.ADD) || !entry.getChangeType().equals(DiffEntry.ChangeType.MODIFY)) {
-                continue;
-            }*/
             // filter for forbidden dirs (output dirs, test dirs, ..)
             String newPath = !entry.getNewPath().equals("/dev/null") ? entry.getNewPath() : entry.getOldPath();
             Matcher forbiddenDirs = pattern.matcher(newPath);
@@ -250,45 +248,139 @@ public class JavaDependencyAnalyzer {
             if (tmp == null) {
                 continue;
             }
-
             // iterate over every part of the new path
+            List<CompareNode> dependencies = new ArrayList<>();
             for (String dependency : getDependenciesFromFile(tmp, repository, secondCommit, basepackage_dot)) {
                 String dependencyString = dependency.replace(".", "/");
                 if (!dependency.matches("[a-zA-Z.]*\\*")) {
                     dependencyString += ".java";
                 }
-                processCompareDependenciesFromDependencyString(dependencyString, tmp, node);
+                dependencies.addAll(findComparePackage(dependencyString, node, tmp));
             }
             for (String qualifiedDependency : getClassQualifiedDependencies(tmp, repository, secondCommit, basepackage_dot)) {
-                String dependencyString = qualifiedDependency.replace(".", "/") + ".java";
-                processCompareDependenciesFromDependencyString(dependencyString, tmp, node);
+                dependencies.addAll(findComparePackage(qualifiedDependency.replace(".", "/") + ".java", node, tmp));
             }
+            processCompareDependencies(dependencies, tmp);
             if (!tmp.getCompareDependencies().isEmpty()) {
-                for (int i = path.length - 1; i >= 0; i--) {
+                for (int i = path.length - 1; i > 0; i--) {
                     // update dependencies going up the file tree
-                    CompareNode dependencyTmp = node.getNodeByPath(newPath.substring(0, newPath.indexOf("/", i)));
-                    List<CompareNode> dependencies = new ArrayList<>();
-                    dependencyTmp.getCompareChildren().stream().map(CompareNode::getCompareDependencies).forEach(dependencies::addAll);
-                    dependencyTmp.setCompareDependencies(dependencies);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int j = 0; j < i; j++) {
+                        stringBuilder.append(path[j]).append("/");
+                    }
+                    if (stringBuilder.length() > 0) {
+                        stringBuilder.deleteCharAt(stringBuilder.lastIndexOf("/"));
+                    }
+                    CompareNode dependencyTmp = node.getNodeByPath(stringBuilder.toString());
+                    List<CompareNode> dependenciesTmp = new ArrayList<>();
+                    dependencyTmp.getCompareChildren().stream().map(CompareNode::getCompareDependencies).forEach(dependenciesTmp::addAll);
+                    dependencyTmp.setCompareDependencies(dependenciesTmp);
                 }
             }
         }
     }
 
-    private void processCompareDependenciesFromDependencyString(String dependencyString, CompareNode child, CompareNode baseroot) {
-        String[] pathParts = dependencyString.split("/");
+    private void processCompareDependencies(List<CompareNode> dependencies, CompareNode child) {
+        System.out.println(child.getFilename());
+        System.out.println(dependencies.stream().map(dependency -> dependency.getFilename() + ", " + dependency.getChanged()).collect(Collectors.joining(" | ")));
+        System.out.println(child.getCompareDependencies().stream().map(dependency -> dependency.getFilename() + ", " + dependency.getChanged()).collect(Collectors.joining(" | ")));
+        System.out.println("______________");
 
-        // iterate through all children til the package and filename matches the dependencyString
-        List<Node> foundDependencies = findPackageNameInModules(pathParts, baseroot);
-        foundDependencies.stream().filter(wildcardDependency -> !child.getCompareDependencies().contains(wildcardDependency))
-                .forEach(wildcardDependency -> child.getDependencies().add(new CompareNode(
-                        new ArrayList<>(), wildcardDependency.getPath(), wildcardDependency.getFilename(), wildcardDependency.getPackageName(), DiffEntry.ChangeType.ADD)
+        // if the foundDependencies are not in the child's dependencies, add them and set their change type to
+        //   delete if the child is deleted
+        //   add otherwise
+        dependencies.stream().filter(dependency -> !child.getCompareDependencies().contains(dependency))
+                .forEach(dependency -> child.getCompareDependencies().add(new CompareNode(
+                        new ArrayList<>(), dependency.getPath(), dependency.getFilename(), dependency.getPackageName(),
+                        (DiffEntry.ChangeType.DELETE.equals(child.getChanged()) || DiffEntry.ChangeType.DELETE.equals(dependency.getChanged()) ? DiffEntry.ChangeType.DELETE : DiffEntry.ChangeType.ADD))
                 ));
-        child.getCompareDependencies().stream().filter(dependency -> !foundDependencies.contains(dependency))
-                .forEach(dependency -> dependency.setChanged(DiffEntry.ChangeType.DELETE));
+
+        // if the child's dependencies are not in the foundDependencies, set the change type of the dependency to delete
+//        child.getCompareDependencies().stream().filter(dependency -> !dependencies.contains(dependency))
+//                .forEach(dependency -> dependency.setChanged(DiffEntry.ChangeType.DELETE));
     }
 
+    /**
+     * Find package structure with @packageName in module structure working without a packageName.
+     * This method is used for CompareNode-objects because they iterate over compareChildren instead of children.
+     *
+     * @param packageName packageName to find.
+     * @param root CompareNode-object to begin search from.
+     * @return CompareNode-objects which are found in the package.
+     */
+    private List<CompareNode> findPackageNameInCompareModules(String[] packageName, CompareNode root) {
+        List<CompareNode> nodes = new ArrayList<>();
+        // if root is a module
+        if (root.getPackageName().equals("")) {
+            // go through every child of root
+            for (CompareNode child : root.getCompareChildren()) {
+                // if the child is a package
+                if (!child.getPackageName().equals("")) {
+                    // if first part of packageName fits child.filename, else skip
+                    if (child.getFilename().equals(packageName[0])) {
+                        // add goThroughPackageTree(packageName, child) to nodes
+                        nodes.addAll(gotThroughComparePackageTree(packageName, child));
+                    }
+                } else {
+                    // else if the child is a module, add recursive to nodes
+                    nodes.addAll(findPackageNameInCompareModules(packageName, child));
+                }
+            }
+        } else {
+            // else if root is package, add goThroughPackageTree(packageName, root) to nodes
+            nodes.addAll(gotThroughComparePackageTree(packageName, root));
+        }
+        return nodes;
+    }
 
+    /**
+     * Go through the package structure to find the the a given CompareNode-objects.
+     * This method is used for CompareNode-objects because they iterate over compareChildren instead of children.
+     *
+     * @param packageName packageName of CompareNode-Object
+     * @param root CompareNode-object to search from.
+     * @return Found CompareNode-objects.
+     */
+    private List<CompareNode> gotThroughComparePackageTree(String[] packageName, CompareNode root) {
+        CompareNode currentNode = root;
+        for (int i = 1; i < packageName.length; i++) {
+            if (currentNode != null) {
+                if (currentNode.hasChildren()) {
+                    // if dependencyString contains a wildcard add all children as dependencies and stop here
+                    if (packageName[i].equals("*")) {
+                        return currentNode.getCompareChildren();
+                    } else {
+                        if (currentNode.getChildByName(packageName[i]) != null) {
+                            currentNode = currentNode.getChildByName(packageName[i]);
+                        } else {
+                            return Collections.emptyList();
+                        }
+                    }
+                }
+            }
+        }
+        return Collections.singletonList(currentNode);
+    }
 
+    private List<CompareNode> findComparePackage(String packageName, CompareNode root, CompareNode currentNode) {
+        // try to find depdencency in current module
+        //   combine currentNode.path and packageName dependency's path to dependencyPath
+        //   root.getNodeByPath(dependencyPath)
+        // if it is not in the current module findPackageNameInCompareModules
+        String[] packageNameParts = currentNode.getPackageName().split("\\.");
+        StringBuilder packageNameRefactored = new StringBuilder();
+        for (int i = 0; i < packageNameParts.length - 1; i++) {
+            packageNameRefactored.append(packageNameParts[i]).append("/");
+        }
+        packageNameRefactored.deleteCharAt(packageNameRefactored.lastIndexOf("/"));
+        String pathPart = currentNode.getPath().substring(0, currentNode.getPath().indexOf(packageNameRefactored.toString()));
+        String localPckageName = (packageName.endsWith("/*") ? packageName.substring(0, packageName.length() - 2) : packageName);
+        CompareNode dependency = root.getNodeByPath(pathPart + localPckageName);
+        if (dependency != null) {
+            return Collections.singletonList(dependency);
+        } else {
+            return findPackageNameInCompareModules(packageName.split("/"), root);
+        }
+    }
 
 }

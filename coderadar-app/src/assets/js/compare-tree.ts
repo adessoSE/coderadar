@@ -6,6 +6,7 @@ let ctx;
 let htmlBuffer = [];
 let checkDown;
 let checkUp;
+let checkChanged;
 let headerBackground;
 let activeDependency;
 
@@ -40,6 +41,7 @@ export function afterCompareLoad(node) {
   document.getElementById('3dependencyTree').innerHTML = htmlBuffer.join('');
   checkUp = (document.getElementById('3showUpward') as HTMLInputElement).getAttribute('checked') == 'checked';
   checkDown = (document.getElementById('3showDownward') as HTMLInputElement).getAttribute('checked') == 'checked';
+  checkChanged = (document.getElementById('3showChanged') as HTMLInputElement).getAttribute('checked') == 'checked';
   ctx = (document.getElementById('3canvas') as HTMLCanvasElement).getContext('2d');
   headerBackground = (document.getElementById('3headerBackground') as HTMLElement);
 
@@ -80,6 +82,12 @@ export function afterCompareLoad(node) {
   // show upward listener
   document.getElementById('3showDownward').addEventListener('click', () => {
     checkDown = !checkDown;
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    loadDependencies(node);
+  });
+  // show changed listener
+  document.getElementById('3showChanged').addEventListener('click', () => {
+    checkChanged = !checkChanged;
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     loadDependencies(node);
   });
@@ -131,7 +139,7 @@ function loadDependencies(node) {
 function buildRoot(currentNode) {
   htmlBuffer.push(`<table id="3list__root" class="list list__root active">`);
   htmlBuffer.push(`<tr><td class="package package__base">` +
-    `<span id="${currentNode.packageName}" class="filename-span`+
+    `<span id="${currentNode.path}" class="filename-span`+
     `${currentNode.compareChildren.length > 0 && currentNode.packageName !== '' ? ' clickable' : ''}` +
     `">${currentNode.filename}</span>`);
 
@@ -161,14 +169,14 @@ function buildTree(currentNode, span) {
     }
 
     if (span) {
-      htmlBuffer.push(`<span id="${child.packageName}" class="filename-span` +
+      htmlBuffer.push(`<span id="${child.path}" class="filename-span` +
         `${(child.compareChildren.length > 1 || child.compareDependencies.length > 0) && child.packageName !== '' ? ' clickable' : ''}">` +
         `${'/' + child.filename}</span>`);
 
       addTable(child);
     } else {
       htmlBuffer.push(level !== child.level ? '</tr><tr>' : '');
-      htmlBuffer.push(`<td class="${classString}"><span id="${child.packageName}" class="filename-span` +
+      htmlBuffer.push(`<td class="${classString}"><span id="${child.path}" class="filename-span` +
         `${(child.compareChildren.length > 1 || child.compareDependencies.length > 0) && child.packageName !== '' ? ' clickable' : ''}">` +
         `${child.filename}</span>`
       );
@@ -182,15 +190,7 @@ function buildTree(currentNode, span) {
 
 function addTable(child) {
   if (child.compareChildren.length > 1) {
-    let changedString = '';
-    for (let grandchild of child.compareChildren) {
-      if (grandchild.changed === 'ADD' || grandchild.changed === 'DELETE') {
-        changedString = ' -child-changed';
-        break;
-      }
-    }
-    htmlBuffer.push(`<table class="list${child.packageName !== '' ? ' nested' : ''}` +
-      `${changedString.length !== 0 ? ' ' + changedString : ''}">`);
+    htmlBuffer.push(`<table class="list${child.packageName !== '' ? ' nested' : ''}">`);
     htmlBuffer.push(buildTree(child, child.compareChildren.length === 1));
     htmlBuffer.push('</table>');
   } else {
@@ -204,6 +204,7 @@ function listDependencies(currentNode) {
   if (currentNode.compareDependencies.length > 0) {
     currentNode.compareDependencies.forEach(dependency => {
       // find last visible element for dependency as end
+
       let end = findLastHTMLElement(dependency) as HTMLElement;
       // find last visible element for currentNode as start
       let start = findLastHTMLElement(currentNode) as HTMLElement;
@@ -248,14 +249,38 @@ function listDependencies(currentNode) {
 
       //ignore all arrows with same start and end node
       if (start != end) {
-        // check if downward compareDependencies should be shown
-        if (checkDown && starty < endy) {
-          canvasArrow(ctx, startx, starty, endx, endy, "black");
+        console.log(`${currentNode.filename} -> ${dependency.filename}: ${dependency.changed}; ${checkChanged}`);
+        if (dependency.changed === 'ADD') {
+          // check if downward compareDependencies should be shown
+          if (checkDown && starty < endy) {
+            canvasArrow(ctx, startx, starty, endx, endy, "lime");
+          }
+          // check if upward Dependencies should be shown
+          if (checkUp && starty > endy) {
+            canvasArrow(ctx, startx, starty, endx, endy, "lime");
+          }
+        } else if (dependency.changed === 'DELETE') {
+          console.log('show deleted dependency');
+          // check if downward compareDependencies should be shown
+          if (checkDown && starty < endy) {
+            canvasArrow(ctx, startx, starty, endx, endy, "red");
+          }
+          // check if upward Dependencies should be shown
+          if (checkUp && starty > endy) {
+            canvasArrow(ctx, startx, starty, endx, endy, "red");
+          }
+        } else if (!checkChanged && dependency.changed === null) {
+          // check if downward compareDependencies should be shown
+          if (checkDown && starty < endy) {
+            canvasArrow(ctx, startx, starty, endx, endy, "black");
+          }
+          // check if upward Dependencies should be shown
+          if (checkUp && starty > endy) {
+            canvasArrow(ctx, startx, starty, endx, endy, "black");
+          }
         }
-        // check if upward Dependencies should be shown
-        if (checkUp && starty > endy) {
-          canvasArrow(ctx, startx, starty, endx, endy, "red");
-        }
+
+
       }
     });
   }

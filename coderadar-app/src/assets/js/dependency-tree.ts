@@ -126,7 +126,7 @@ function loadDependencies(node) {
 function buildRoot(currentNode) {
   htmlBuffer.push(`<table id="3list__root" class="list list__root active">`);
   htmlBuffer.push(`<tr><td class="package package__base">` +
-    `<span id="${currentNode.packageName}" class="filename-span${currentNode.children.length > 0 && currentNode.packageName !== '' ? ' clickable' : ''}">${currentNode.filename}</span>`);
+    `<span id="${currentNode.path}" class="filename-span${currentNode.children.length > 0 && currentNode.packageName !== '' ? ' clickable' : ''}">${currentNode.filename}</span>`);
 
   if (currentNode.children.length === 1) {
     htmlBuffer.push(buildTree(currentNode, true));
@@ -154,14 +154,14 @@ function buildTree(currentNode, span) {
     }
 
     if (span) {
-      htmlBuffer.push(`<span id="${child.packageName}" class="filename-span` +
+      htmlBuffer.push(`<span id="${child.path}" class="filename-span` +
         `${(child.children.length > 1 || child.dependencies.length > 0) && child.packageName !== '' ? ' clickable' : ''}">` +
         `${'/' + child.filename}</span>`);
 
       addTable(child);
     } else {
       htmlBuffer.push(level !== child.level ? '</tr><tr>' : '');
-      htmlBuffer.push(`<td class="${classString}"><span id="${child.packageName}" class="filename-span` +
+      htmlBuffer.push(`<td class="${classString}"><span id="${child.path}" class="filename-span` +
         `${(child.children.length > 1 || child.dependencies.length > 0) && child.packageName !== '' ? ' clickable' : ''}">` +
         `${child.filename}</span>`
       );

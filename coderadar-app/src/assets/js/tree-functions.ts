@@ -107,13 +107,11 @@ function collapseChildren(currentNode, activeDependency) {
 }
 
 export function findLastHTMLElement(node) {
-  let packageName = node.packageName;
   // let element;
   // set element = findById(packageName)
   // while element not visible
   //   element = element.parent
-  let element = document.getElementById(packageName);
-
+  let element = document.getElementById(node.path);
   while (element.offsetParent === null) {
     element = iterateTree(element)
   }

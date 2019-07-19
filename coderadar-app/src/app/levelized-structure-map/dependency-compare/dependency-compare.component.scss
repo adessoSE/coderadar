@@ -84,7 +84,6 @@ tr {
   content: "\e901";
   display: inline-block;
   margin-right: 6px;
-  color: red;
 }
 
 .package, .class, .class--dependency {
@@ -123,14 +122,6 @@ tr {
 
 .margin-left {
   margin-left: 10px;
-}
-
-.-child-added::before {
-  color: #00ff00 !important;
-}
-
-.-child-removed::before {
-  color: #ff0000 !important;
 }
 
 .added {
