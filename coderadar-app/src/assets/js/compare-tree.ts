@@ -210,25 +210,10 @@ function listDependencies(currentNode) {
 
       // if activeDependency is set, draw only activeDependency related compareDependencies
       if (activeDependency !== undefined) {
-        let draw = false;
         // activeDependency is set and neither start or end
-        let tmp = start;
-        while (!tmp.classList.contains('list__root')) {
-          if (tmp === activeDependency) {
-            draw = true;
-            break;
-          }
-          tmp = tmp.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
-        }
+        let draw = checkOnActiveDependency(start, activeDependency);
         if (!draw) {
-          tmp = end;
-          while (!tmp.classList.contains('list__root')) {
-            if (tmp === activeDependency) {
-              draw = true;
-              break;
-            }
-            tmp = tmp.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
-          }
+          draw = checkOnActiveDependency(end, activeDependency);
         }
         if (!draw) {
           return;

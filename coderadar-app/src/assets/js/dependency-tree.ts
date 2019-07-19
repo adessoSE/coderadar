@@ -189,11 +189,10 @@ function listDependencies(currentNode) {
 
       // if activeDependency is set, draw only activeDependency related dependencies
       if (activeDependency !== undefined) {
-        let draw = false;
         // activeDependency is set and neither start or end
-        checkOnActiveDependency(start, activeDependency);
+        let draw = checkOnActiveDependency(start, activeDependency);
         if (!draw) {
-          checkOnActiveDependency(end, activeDependency);
+          draw = checkOnActiveDependency(end, activeDependency);
         }
         if (!draw) {
           return;
