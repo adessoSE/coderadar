@@ -1,6 +1,6 @@
 import html2canvas from 'html2canvas';
 import * as $ from 'jquery';
-import {canvasArrow, toggle, findLastHTMLElement, iterateTree, expand, checkOnActiveDependency} from "./tree-functions";
+import {canvasArrow, toggle, findLastHTMLElement, expand, checkOnActiveDependency} from "./tree-functions";
 
 let ctx;
 let htmlBuffer = [];
@@ -128,13 +128,7 @@ function buildRoot(currentNode) {
   htmlBuffer.push(`<tr><td class="package package__base">` +
     `<span id="${currentNode.path}" class="filename-span${currentNode.children.length > 0 && currentNode.packageName !== '' ? ' clickable' : ''}">${currentNode.filename}</span>`);
 
-  if (currentNode.children.length === 1) {
-    htmlBuffer.push(buildTree(currentNode, true));
-  } else if (currentNode.children.length > 1) {
-    htmlBuffer.push(`<table class="list${currentNode.packageName !== '' ? ' nested' : ''}">`);
-    htmlBuffer.push(buildTree(currentNode, false));
-    htmlBuffer.push('</table>');
-  }
+  addTable(currentNode);
   htmlBuffer.push(`</td></tr></table>`);
 }
 

@@ -185,7 +185,7 @@ function buildTree(currentNode, span) {
       htmlBuffer.push('</td>');
     }
   }
-  htmlBuffer.push(currentNode.children.length <= 1? '' : '</tr>');
+  htmlBuffer.push(currentNode.compareChildren.length <= 1? '' : '</tr>');
 }
 
 function addTable(child) {
@@ -204,7 +204,6 @@ function listDependencies(currentNode) {
   if (currentNode.compareDependencies.length > 0) {
     currentNode.compareDependencies.forEach(dependency => {
       // find last visible element for dependency as end
-
       let end = findLastHTMLElement(dependency) as HTMLElement;
       // find last visible element for currentNode as start
       let start = findLastHTMLElement(currentNode) as HTMLElement;
@@ -249,7 +248,6 @@ function listDependencies(currentNode) {
 
       //ignore all arrows with same start and end node
       if (start != end) {
-        console.log(`${currentNode.filename} -> ${dependency.filename}: ${dependency.changed}; ${checkChanged}`);
         if (dependency.changed === 'ADD') {
           // check if downward compareDependencies should be shown
           if (checkDown && starty < endy) {
@@ -260,7 +258,6 @@ function listDependencies(currentNode) {
             canvasArrow(ctx, startx, starty, endx, endy, "lime");
           }
         } else if (dependency.changed === 'DELETE') {
-          console.log('show deleted dependency');
           // check if downward compareDependencies should be shown
           if (checkDown && starty < endy) {
             canvasArrow(ctx, startx, starty, endx, endy, "red");
@@ -279,8 +276,6 @@ function listDependencies(currentNode) {
             canvasArrow(ctx, startx, starty, endx, endy, "black");
           }
         }
-
-
       }
     });
   }

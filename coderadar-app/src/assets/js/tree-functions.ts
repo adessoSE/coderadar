@@ -23,7 +23,7 @@ export function toggle(currentNode, activeDependency, ctx, headerBackground) {
   headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
 }
 
-export function collapse(element) {
+export function expand(element) {
   while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
     (element.parentNode as HTMLElement).style.display = 'inline-block';
     if (element.offsetWidth < (element.nextSibling as HTMLElement).offsetWidth) {
@@ -31,11 +31,11 @@ export function collapse(element) {
     } else {
       (element.parentNode as HTMLElement).style.display = 'inline-grid';
     }
-    element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+    element = iterateTreeSkipInline(element);
   }
 }
 
-export function expand(element) {
+export function collapse(element) {
   while ((element.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement).id !== '3dependencyTree') {
     (element.parentNode as HTMLElement).style.display = 'inline-block';
     if (element.offsetWidth > (element.nextSibling as HTMLElement).offsetWidth) {
@@ -43,7 +43,7 @@ export function expand(element) {
     } else {
       (element.parentNode as HTMLElement).style.display = 'inline-block';
     }
-    element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+    element = iterateTreeSkipInline(element);
   }
 }
 
@@ -122,6 +122,15 @@ export function iterateTree(tmp) {
   if (tmp.parentNode.firstChild !== tmp) {
     return tmp.parentNode.children[Array.from(tmp.parentNode.children).indexOf(tmp) - 1] as HTMLElement;
   }
+  if (tmp.parentNode.parentNode.parentNode.parentNode.parentNode.children.length > 2) {
+    tmp = tmp.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement;
+    return tmp.children[tmp.children.length - 2] as HTMLElement;
+  } else {
+    return tmp.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+  }
+}
+
+export function iterateTreeSkipInline(tmp) {
   if (tmp.parentNode.parentNode.parentNode.parentNode.parentNode.children.length > 2) {
     tmp = tmp.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement;
     return tmp.children[tmp.children.length - 2] as HTMLElement;
