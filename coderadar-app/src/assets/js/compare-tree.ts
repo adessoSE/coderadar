@@ -118,10 +118,12 @@ export function afterCompareLoad(node) {
   });
 
   // set canvas format and draw compareDependencies
-  ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
-  ctx.canvas.width = document.getElementById('3list__root').offsetWidth;
-  headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
-  loadDependencies(node);
+  window.setTimeout(() => {
+    ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
+    ctx.canvas.width = document.getElementById('3list__root').offsetWidth;
+    headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
+    loadDependencies(node);
+  }, 20);
 }
 
 function loadDependencies(node) {
