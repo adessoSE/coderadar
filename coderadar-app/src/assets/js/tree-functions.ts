@@ -47,12 +47,20 @@ export function collapse(element) {
   }
 }
 
-export function canvasArrow(context, fromx, fromy, tox, toy, color) {
+export function canvasArrow(context, fromx, fromy, tox, toy, color, width?, dashed?) {
+  if (width === undefined) {
+    width = 1;
+  }
+  if (dashed === undefined) {
+    dashed = true;
+  }
+
+  context.lineWidth = width;
   const headlen = 10;
 
   // draw curved line
   context.beginPath();
-  context.setLineDash([10]);
+  context.setLineDash((dashed ? [10] : [0]));
   context.moveTo(fromx, fromy);
   context.strokeStyle = color;
   // span right triangle with X, Y and Z with X = (fromx, fromy) and Y = (tox, toy) and Z as the point at the right angle

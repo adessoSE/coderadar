@@ -199,7 +199,7 @@ function addTable(child) {
 }
 
 function listDependencies(currentNode) {
-  ctx.lineWidth = 1;
+  // ctx.lineWidth = 1;
   // draw arrows to my compareDependencies and call this function for my compareDependencies
   if (currentNode.compareDependencies.length > 0) {
     currentNode.compareDependencies.forEach(dependency => {
@@ -236,29 +236,35 @@ function listDependencies(currentNode) {
         if (dependency.changed === 'ADD') {
           // check if downward compareDependencies should be shown
           if (checkDown && starty < endy) {
-            canvasArrow(ctx, startx, starty, endx, endy, "lime");
+            canvasArrow(ctx, startx, starty, endx, endy, "blue", 1, false);
           }
           // check if upward Dependencies should be shown
           if (checkUp && starty > endy) {
-            canvasArrow(ctx, startx, starty, endx, endy, "lime");
+            starty -= start.offsetHeight;
+            endy += end.offsetHeight;
+            canvasArrow(ctx, startx, starty, endx, endy, "blue", 3, true);
           }
         } else if (dependency.changed === 'DELETE') {
           // check if downward compareDependencies should be shown
           if (checkDown && starty < endy) {
-            canvasArrow(ctx, startx, starty, endx, endy, "red");
+            canvasArrow(ctx, startx, starty, endx, endy, "red", 1, false);
           }
           // check if upward Dependencies should be shown
           if (checkUp && starty > endy) {
-            canvasArrow(ctx, startx, starty, endx, endy, "red");
+            starty -= start.offsetHeight;
+            endy += end.offsetHeight;
+            canvasArrow(ctx, startx, starty, endx, endy, "red", 3, true);
           }
         } else if (!checkChanged && dependency.changed === null) {
           // check if downward compareDependencies should be shown
           if (checkDown && starty < endy) {
-            canvasArrow(ctx, startx, starty, endx, endy, "black");
+            canvasArrow(ctx, startx, starty, endx, endy, "black", 1, false);
           }
           // check if upward Dependencies should be shown
           if (checkUp && starty > endy) {
-            canvasArrow(ctx, startx, starty, endx, endy, "black");
+            starty -= start.offsetHeight;
+            endy += end.offsetHeight;
+            canvasArrow(ctx, startx, starty, endx, endy, "black", 3, true);
           }
         }
       }

@@ -178,7 +178,7 @@ function addTable(child) {
 }
 
 function listDependencies(currentNode) {
-  ctx.lineWidth = 1;
+  // ctx.lineWidth = 1;
   // draw arrows to my dependencies and call this function for my dependencies
   if (currentNode.dependencies.length > 0) {
     currentNode.dependencies.forEach(dependency => {
@@ -214,11 +214,13 @@ function listDependencies(currentNode) {
       if (start != end) {
         // check if downward dependencies should be shown
         if (checkDown && starty < endy) {
-          canvasArrow(ctx, startx, starty, endx, endy, "black");
+          canvasArrow(ctx, startx, starty, endx, endy, "black", 1, false);
         }
         // check if upward Dependencies should be shown
         if (checkUp && starty > endy) {
-          canvasArrow(ctx, startx, starty, endx, endy, "red");
+          starty -= start.offsetHeight;
+          endy += end.offsetHeight;
+          canvasArrow(ctx, startx, starty, endx, endy, "black", 3, true);
         }
       }
     });
