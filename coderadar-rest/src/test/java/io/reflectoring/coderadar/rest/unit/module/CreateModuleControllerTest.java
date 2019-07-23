@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.module;
 
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
-import io.reflectoring.coderadar.projectadministration.ModulePathDoesNotExistsException;
+import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import io.reflectoring.coderadar.rest.IdResponse;
@@ -19,7 +19,7 @@ class CreateModuleControllerTest {
   private CreateModuleUseCase createModuleUseCase = mock(CreateModuleUseCase.class);
 
   @Test
-  void createModuleSuccessfully() throws ModuleAlreadyExistsException, ModulePathDoesNotExistsException {
+  void createModuleSuccessfully() throws ModuleAlreadyExistsException, ModulePathInvalidException {
     CreateModuleController testSubject = new CreateModuleController(createModuleUseCase);
 
     CreateModuleCommand command = new CreateModuleCommand("module-path-test");

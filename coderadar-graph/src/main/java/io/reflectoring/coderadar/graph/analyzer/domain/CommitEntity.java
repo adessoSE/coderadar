@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -13,6 +14,7 @@ import org.neo4j.ogm.annotation.Relationship;
 @NodeEntity
 @Data
 @EqualsAndHashCode
+@ToString
 public class CommitEntity {
   private Long id;
   private String name;
@@ -29,6 +31,7 @@ public class CommitEntity {
 
   @Relationship(direction = Relationship.INCOMING, type = "CHANGED_IN")
   @EqualsAndHashCode.Exclude
+  @ToString.Exclude
   private List<FileToCommitRelationshipEntity> touchedFiles = new LinkedList<>();
 
   @Relationship(direction = Relationship.INCOMING, type = "VALID_FOR")

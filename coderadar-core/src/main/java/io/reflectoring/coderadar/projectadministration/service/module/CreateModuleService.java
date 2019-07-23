@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.projectadministration.service.module;
 
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
-import io.reflectoring.coderadar.projectadministration.ModulePathDoesNotExistsException;
+import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
+import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
@@ -22,7 +23,8 @@ public class CreateModuleService implements CreateModuleUseCase {
 
   @Override
   public Long createModule(CreateModuleCommand command, Long projectId)
-          throws ProjectNotFoundException, ModulePathDoesNotExistsException, ModuleAlreadyExistsException {
+      throws ProjectNotFoundException, ModulePathInvalidException, ModuleAlreadyExistsException,
+          ProjectIsBeingProcessedException {
     Module module = new Module();
     module.setPath(command.getPath());
     return createModulePort.createModule(module, projectId);

@@ -62,7 +62,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
         FileMetrics fileMetrics = analyzeFile(commit, filePath, analyzers);
         storeMetrics(fileToCommitRelationship.getFile(), fileMetrics, commit);
         commit.setAnalyzed(true);
-        saveCommitPort.saveCommit(commit);
+        //        saveCommitPort.saveCommit(commit);
       }
       updateProjectPort.update(project);
     }

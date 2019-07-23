@@ -2,9 +2,11 @@ package io.reflectoring.coderadar.graph.projectadministration.module.service;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.DeleteModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +26,27 @@ public class DeleteModuleAdapter implements DeleteModulePort {
   }
 
   @Override
-  public void delete(Long id) throws ModuleNotFoundException {
-    delete(deleteModuleRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException(id)));
+  public void delete(Long id, Long projectId) throws ModuleNotFoundException {
+    ModuleEntity moduleEntity =
+        deleteModuleRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException(id));
+
+    delete(moduleEntity);
   }
 
   @Override
-  public void delete(Module module) throws ModuleNotFoundException {
-    delete(
+  public void delete(Module module, Long projectId) throws ModuleNotFoundException {
+
+    ModuleEntity moduleEntity =
         deleteModuleRepository
             .findById(module.getId())
-            .orElseThrow(() -> new ModuleNotFoundException(module.getId())));
+            .orElseThrow(() -> new ModuleNotFoundException(module.getId()));
+    delete(moduleEntity);
+  }
+
+  private ProjectEntity getProject(Long projectId) {
+    return createProjectRepository
+        .findById(projectId)
+        .orElseThrow(() -> new ProjectNotFoundException(projectId));
   }
 
   /**

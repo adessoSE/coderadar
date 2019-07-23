@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.projectadministration.module;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 
+import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.GetModulePort;
@@ -15,12 +16,13 @@ class DeleteModuleServiceTest {
   private GetModulePort getModulePort = mock(GetModulePort.class);
 
   @Test
-  void deleteModuleWithIdOne() {
-    DeleteModuleService testSubject = new DeleteModuleService(deleteModulePort);
+  void deleteModuleWithIdOne() throws ProjectIsBeingProcessedException {
+    DeleteModuleService testSubject =
+        new DeleteModuleService(deleteModulePort, projectStatusPort, taskExecutor);
 
     Mockito.when(getModulePort.get(anyLong())).thenReturn(new Module());
-    testSubject.delete(1L);
+    testSubject.delete(1L, 2L);
 
-    Mockito.verify(deleteModulePort, Mockito.times(1)).delete(1L);
+    Mockito.verify(deleteModulePort, Mockito.times(1)).delete(1L, 2L);
   }
 }

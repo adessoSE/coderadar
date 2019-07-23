@@ -20,7 +20,7 @@ class DeleteProjectAdapterTest {
   @BeforeEach
   void setUp() {
     when(deleteProjectRepository.findById(anyLong())).thenReturn(Optional.of(new ProjectEntity()));
-    deleteProjectAdapter = new DeleteProjectAdapter(deleteProjectRepository);
+    deleteProjectAdapter = new DeleteProjectAdapter(deleteProjectRepository, coderadarConfigurationProperties, getCommitsInProjectRepository, deleteCommitsRepository);
   }
 
   @Test

@@ -3,7 +3,8 @@ package io.reflectoring.coderadar.projectadministration.module;
 import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
-import io.reflectoring.coderadar.projectadministration.ModulePathDoesNotExistsException;
+import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
+import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
@@ -19,7 +20,9 @@ class CreateModuleServiceTest {
   private GetProjectPort getProjectPort = mock(GetProjectPort.class);
 
   @Test
-  void returnsNewModuleId() throws ModulePathDoesNotExistsException, ModuleAlreadyExistsException {
+  void returnsNewModuleId()
+      throws ModulePathInvalidException, ModuleAlreadyExistsException,
+          ProjectIsBeingProcessedException {
     CreateModuleService testSubject = new CreateModuleService(createModulePort);
 
     Project project = new Project();

@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.CreateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.query.domain.DateRange;
@@ -42,6 +43,8 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   private final SaveCommitPort saveCommitPort;
 
+  private final ProjectStatusPort projectStatusPort;
+
   @Autowired
   public CreateProjectService(
       CreateProjectPort createProjectPort,
@@ -50,7 +53,8 @@ public class CreateProjectService implements CreateProjectUseCase {
       CoderadarConfigurationProperties coderadarConfigurationProperties,
       TaskExecutor taskExecutor,
       GetProjectCommitsUseCase getProjectCommitsUseCase,
-      SaveCommitPort saveCommitPort) {
+      SaveCommitPort saveCommitPort,
+      ProjectStatusPort projectStatusPort) {
     this.createProjectPort = createProjectPort;
     this.getProjectPort = getProjectPort;
     this.cloneRepositoryUseCase = cloneRepositoryUseCase;
@@ -58,6 +62,7 @@ public class CreateProjectService implements CreateProjectUseCase {
     this.taskExecutor = taskExecutor;
     this.getProjectCommitsUseCase = getProjectCommitsUseCase;
     this.saveCommitPort = saveCommitPort;
+    this.projectStatusPort = projectStatusPort;
   }
 
   @Override
@@ -92,6 +97,7 @@ public class CreateProjectService implements CreateProjectUseCase {
     DateRange dateRange = new DateRange(projectStart, projectEnd);
 
     Long projectId = createProjectPort.createProject(project);
+    projectStatusPort.setBeingProcessed(projectId, true);
     CloneRepositoryCommand cloneRepositoryCommand =
         new CloneRepositoryCommand(
             command.getVcsUrl(),
@@ -106,6 +112,7 @@ public class CreateProjectService implements CreateProjectUseCase {
             List<Commit> commitList =
                 getProjectCommitsUseCase.getCommits(Paths.get(project.getWorkdirName()), dateRange);
             saveCommitPort.saveCommits(commitList, projectId);
+            projectStatusPort.setBeingProcessed(projectId, false);
           } catch (UnableToCloneRepositoryException e) {
             e.printStackTrace();
           }

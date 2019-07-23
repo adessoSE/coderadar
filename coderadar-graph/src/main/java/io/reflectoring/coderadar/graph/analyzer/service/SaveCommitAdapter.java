@@ -30,11 +30,6 @@ public class SaveCommitAdapter implements SaveCommitPort {
   }
 
   @Override
-  public void saveCommit(Commit commit) {
-    // TODO
-  }
-
-  @Override
   public void saveCommits(List<Commit> commits, Long projectId) {
     if (!commits.isEmpty()) {
 
@@ -54,20 +49,20 @@ public class SaveCommitAdapter implements SaveCommitPort {
       commitEntity.setName(newestCommit.getName());
       commitEntity.setTimestamp(newestCommit.getTimestamp());
       commitEntity.setTouchedFiles(
-          getFiles(newestCommit.getTouchedFiles(), commitEntity, walkedFiles, projectEntity));
-      commitEntity.setParents(
-          findAndSaveParents(newestCommit, new HashMap<>(), walkedFiles, projectEntity));
+          getFiles(newestCommit.getTouchedFiles(), commitEntity, walkedFiles));
+      commitEntity.setParents(findAndSaveParents(newestCommit, new HashMap<>(), walkedFiles));
       commitEntity.getParents().forEach(commitEntity1 -> commitEntity1.getParents().clear());
+      projectEntity.getFiles().addAll(walkedFiles.values());
+
       saveCommitRepository.save(commitEntity, 1);
-      getProjectRepository.save(projectEntity);
+      getProjectRepository.save(projectEntity, 1);
     }
   }
 
   private List<CommitEntity> findAndSaveParents(
       Commit commit,
       HashMap<String, CommitEntity> walkedCommits,
-      HashMap<String, FileEntity> walkedFiles,
-      ProjectEntity projectEntity) {
+      HashMap<String, FileEntity> walkedFiles) {
 
     List<CommitEntity> parents = new ArrayList<>();
 
@@ -82,10 +77,9 @@ public class SaveCommitAdapter implements SaveCommitPort {
         commitEntity.setAuthor(c.getAuthor());
         commitEntity.setComment(c.getComment());
         commitEntity.setTimestamp(c.getTimestamp());
-        commitEntity.setTouchedFiles(
-            getFiles(c.getTouchedFiles(), commitEntity, walkedFiles, projectEntity));
+        commitEntity.setTouchedFiles(getFiles(c.getTouchedFiles(), commitEntity, walkedFiles));
         walkedCommits.put(c.getName(), commitEntity);
-        commitEntity.setParents(findAndSaveParents(c, walkedCommits, walkedFiles, projectEntity));
+        commitEntity.setParents(findAndSaveParents(c, walkedCommits, walkedFiles));
         parents.add(commitEntity);
       }
     }
@@ -93,7 +87,10 @@ public class SaveCommitAdapter implements SaveCommitPort {
     // Clear the parents of each parent commit and save it. This
     // keeps Neo4j happy.
     parents.forEach(
-        commit1 -> commit1.getParents().forEach(commit2 -> commit2.getParents().clear()));
+        commit1 -> {
+          commit1.getTouchedFiles().forEach(file -> file.getFile().getCommits().clear());
+          commit1.getParents().forEach(commit2 -> commit2.getParents().clear());
+        });
 
     saveCommitRepository.save(parents, 1);
     return parents;
@@ -102,8 +99,7 @@ public class SaveCommitAdapter implements SaveCommitPort {
   private List<FileToCommitRelationshipEntity> getFiles(
       List<FileToCommitRelationship> relationships,
       CommitEntity entity,
-      HashMap<String, FileEntity> walkedFiles,
-      ProjectEntity project) {
+      HashMap<String, FileEntity> walkedFiles) {
     List<FileToCommitRelationshipEntity> fileToCommitRelationshipEntities = new ArrayList<>();
 
     for (FileToCommitRelationship fileToCommitRelationship : relationships) {
@@ -118,7 +114,6 @@ public class SaveCommitAdapter implements SaveCommitPort {
         fileEntity = new FileEntity();
         fileEntity.setPath(fileToCommitRelationship.getFile().getPath());
         walkedFiles.put(fileEntity.getPath(), fileEntity);
-        project.getFiles().add(fileEntity);
       }
       fileEntity.getCommits().add(fileToCommitRelationshipEntity);
       fileToCommitRelationshipEntity.setFile(fileEntity);

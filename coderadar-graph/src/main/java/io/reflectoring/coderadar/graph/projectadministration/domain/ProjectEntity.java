@@ -27,6 +27,8 @@ public class ProjectEntity {
   private Date vcsStart;
   private Date vcsEnd;
 
+  private boolean isBeingProcessed;
+
   // The graph starts from a project and goes only in one direction.
   // https://en.wikipedia.org/wiki/Directed_acyclic_graph
   @Relationship(type = "CONTAINS")
