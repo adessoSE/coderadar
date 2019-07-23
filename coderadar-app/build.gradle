@@ -97,7 +97,7 @@ bootRun {
                     // debugging
                     "-Xdebug",
                     "-Xss8144k",
-                   "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
+                  "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
             ]
     doFirst {
         // Loading the local application properties from file.

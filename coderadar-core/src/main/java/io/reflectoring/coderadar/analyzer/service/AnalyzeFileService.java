@@ -36,7 +36,9 @@ public class AnalyzeFileService {
       }
       if (acceptFile(analyzerPlugin.getFilter(), filePath)) {
         try {
-          fileMetrics.add(analyzerPlugin.analyzeFile(filePath, fileContent));
+          if(fileContent != null && fileContent.length > 0){
+            fileMetrics.add(analyzerPlugin.analyzeFile(filePath, fileContent));
+          }
         } catch (Exception e) {
           // catching all exceptions since the plugin is potentially evil
           logger.warn(

@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
   @Override
-  public byte[] getCommitContent(String filepath, String name)
+  public byte[] getCommitContent(String projectRoot, String filepath, String name)
       throws UnableToGetCommitContentException {
     try {
-      Git git = Git.open(new File(filepath)); // TODO: Filepath is not the repository root!!
+      Git git = Git.open(new File(projectRoot));
       ObjectId commitId = git.getRepository().resolve(name);
       git.close();
       return BlobUtils.getRawContent(git.getRepository(), commitId, filepath);

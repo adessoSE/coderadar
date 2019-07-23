@@ -11,5 +11,5 @@ public interface GetRawCommitContentPort {
    * @param name The name of the commit
    * @return The raw commit data.
    */
-  byte[] getCommitContent(String filepath, String name) throws UnableToGetCommitContentException;
+  byte[] getCommitContent(String projectRoot, String filepath, String name) throws UnableToGetCommitContentException;
 }

@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.graph.analyzer.domain.FileToCommitRelationshipE
 import io.reflectoring.coderadar.graph.analyzer.repository.SaveCommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
+import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import java.util.ArrayList;
@@ -57,6 +58,18 @@ public class SaveCommitAdapter implements SaveCommitPort {
       saveCommitRepository.save(commitEntity, 1);
       getProjectRepository.save(projectEntity, 1);
     }
+  }
+
+  @Override
+  public void saveCommit(Commit commit) {
+    CommitEntity commitEntity = saveCommitRepository.findById(commit.getId()).orElseThrow(() -> new CommitNotFoundException(commit.getId()));
+    commitEntity.setName(commit.getName());
+    commitEntity.setMerged(commit.isMerged());
+    commitEntity.setTimestamp(commit.getTimestamp());
+    commitEntity.setAuthor(commit.getAuthor());
+    commitEntity.setComment(commit.getComment());
+    commitEntity.setAnalyzed(commit.isAnalyzed());
+    saveCommitRepository.save(commitEntity);
   }
 
   private List<CommitEntity> findAndSaveParents(

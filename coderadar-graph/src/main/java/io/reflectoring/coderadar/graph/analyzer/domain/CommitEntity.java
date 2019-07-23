@@ -35,6 +35,7 @@ public class CommitEntity {
   private List<FileToCommitRelationshipEntity> touchedFiles = new LinkedList<>();
 
   @Relationship(direction = Relationship.INCOMING, type = "VALID_FOR")
+  @EqualsAndHashCode.Exclude
   private List<MetricValueEntity> metricValues = new LinkedList<>();
 
   public void setComment(String comment) {

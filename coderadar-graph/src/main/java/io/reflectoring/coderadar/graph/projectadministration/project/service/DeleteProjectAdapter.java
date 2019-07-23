@@ -38,13 +38,15 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
     ProjectEntity projectEntity =
         deleteProjectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
     try {
-      FileUtils.deleteDirectory(new File(coderadarConfigurationProperties.getWorkdir() + "/projects/" + projectEntity.getWorkdirName()));
       List<CommitEntity> commitEntities =  getCommitsInProjectRepository.findByProjectId(id);
-      if(!commitEntities.isEmpty()){ //TODO: FIX
-        deleteCommitsRepository.deleteCommitTree(commitEntities.get(0).getId());
-      }
+      commitEntities.forEach(deleteCommitsRepository::delete);
       deleteProjectRepository.deleteProjectCascade(id);
-    } catch (IllegalArgumentException | IOException e) {
+      try {
+        FileUtils.deleteDirectory(new File(coderadarConfigurationProperties.getWorkdir() + "/projects/" + projectEntity.getWorkdirName()));
+      } catch (IOException e){
+        e.printStackTrace();
+      }
+    } catch (IllegalArgumentException e) {
       throw new UnableToDeleteProjectException(id);
     }
   }

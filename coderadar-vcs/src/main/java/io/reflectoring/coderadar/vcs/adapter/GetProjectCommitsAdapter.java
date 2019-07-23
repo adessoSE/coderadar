@@ -261,13 +261,10 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
    * @return True if the commit was made within the date range, false otherwise.
    */
   private boolean isInDateRange(DateRange range, RevCommit rc) {
-    return Instant.ofEpochSecond(rc.getCommitTime())
+    LocalDate commitTime = Instant.ofEpochSecond(rc.getCommitTime())
             .atZone(ZoneId.systemDefault())
-            .toLocalDate()
-            .isBefore(range.getEndDate())
-        && Instant.ofEpochSecond(rc.getCommitTime())
-            .atZone(ZoneId.systemDefault())
-            .toLocalDate()
-            .isAfter(range.getStartDate());
+            .toLocalDate();
+    return (commitTime.isBefore(range.getEndDate()) || commitTime.isEqual(range.getEndDate()))
+        && (commitTime.isAfter(range.getStartDate()) || commitTime.isEqual(range.getStartDate()));
   }
 }

@@ -16,8 +16,8 @@ public class GetRawCommitContentService implements GetCommitRawContentUseCase {
   }
 
   @Override
-  public byte[] getCommitContent(String filepath, String name)
+  public byte[] getCommitContent(String projectRoot, String filepath, String name)
       throws UnableToGetCommitContentException {
-    return getRawCommitContentPort.getCommitContent(filepath, name);
+    return getRawCommitContentPort.getCommitContent(projectRoot, filepath, name);
   }
 }
