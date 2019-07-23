@@ -3,8 +3,9 @@ install: true
 sudo: true
 addons:
   apt:
-    packages:
-      - oracle-java8-installer
+    update: true
+jdk:
+  - openjdk8
 
 stages:
 
