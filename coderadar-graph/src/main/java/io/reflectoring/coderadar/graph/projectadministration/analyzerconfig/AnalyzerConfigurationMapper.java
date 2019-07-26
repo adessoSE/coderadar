@@ -35,8 +35,8 @@ public class AnalyzerConfigurationMapper
     return analyzerConfiguration;
   }
 
-  public AnalyzerConfigurationFile mapConfigurationFileEntity(
-      AnalyzerConfigurationFileEntity entity) {
+  private AnalyzerConfigurationFile mapConfigurationFileEntity(
+          AnalyzerConfigurationFileEntity entity) {
     AnalyzerConfigurationFile configurationFile = new AnalyzerConfigurationFile();
     configurationFile.setContentType(entity.getContentType());
     configurationFile.setFileData(entity.getFileData());

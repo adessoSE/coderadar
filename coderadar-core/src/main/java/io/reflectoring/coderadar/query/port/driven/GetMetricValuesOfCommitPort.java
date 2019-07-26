@@ -1,8 +1,9 @@
 package io.reflectoring.coderadar.query.port.driven;
 
-import io.reflectoring.coderadar.analyzer.domain.MetricValueDTO;
+import io.reflectoring.coderadar.analyzer.domain.MetricValue;
+
 import java.util.List;
 
 public interface GetMetricValuesOfCommitPort {
-  List<MetricValueDTO> get(String commitHash);
+  List<MetricValue> get(String commitHash);
 }

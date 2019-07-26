@@ -1,8 +1,10 @@
 package io.reflectoring.coderadar.vcs.domain;
 
+import io.reflectoring.coderadar.analyzer.domain.Commit;
+
 import java.io.IOException;
 
 @FunctionalInterface
 public interface CommitProcessor {
-  void processCommit(VcsCommit commit) throws IOException;
+  void processCommit(Commit commit) throws IOException;
 }

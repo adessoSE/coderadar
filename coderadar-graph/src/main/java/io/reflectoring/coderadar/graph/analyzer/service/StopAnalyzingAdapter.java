@@ -30,7 +30,6 @@ public class StopAnalyzingAdapter implements StopAnalyzingPort {
 
   @Override
   public void stop(Long projectId) {
-    ProjectEntity persistedProject =
         getProjectRepository
             .findById(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));

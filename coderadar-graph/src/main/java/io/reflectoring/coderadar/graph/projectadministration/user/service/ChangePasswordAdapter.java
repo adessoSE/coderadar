@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChangePasswordAdapter implements ChangePasswordPort {
 
+
   private final ChangePasswordRepository changePasswordRepository;
 
   @Autowired

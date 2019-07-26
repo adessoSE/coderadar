@@ -2,32 +2,27 @@ package io.reflectoring.coderadar.analyzer.service;
 
 import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
-import io.reflectoring.coderadar.analyzer.port.driven.StartAnalyzingPort;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationsFromProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
-import io.reflectoring.coderadar.vcs.port.driver.FindCommitUseCase;
-import io.reflectoring.coderadar.vcs.port.driver.ProcessRepositoryUseCase;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class StartAnalyzingService implements StartAnalyzingUseCase {
@@ -35,7 +30,6 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final AnalyzeCommitService analyzeCommitService;
   private final TaskExecutor taskExecutor;
   private final AnalyzerPluginService analyzerPluginService;
-  private final ProcessRepositoryUseCase processRepositoryUseCase;
   private final GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort;
   private final ListFilePatternsOfProjectPort listFilePatternsOfProjectPort;
   private final GetCommitsInProjectPort getCommitsInProjectPort;
@@ -49,7 +43,6 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           AnalyzeCommitService analyzeCommitService,
           TaskExecutor taskExecutor,
           AnalyzerPluginService analyzerPluginService,
-          ProcessRepositoryUseCase processRepositoryUseCase,
           GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort,
           ListFilePatternsOfProjectPort listFilePatternsOfProjectPort,
           GetCommitsInProjectPort getCommitsInProjectPort,
@@ -58,7 +51,6 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     this.analyzeCommitService = analyzeCommitService;
     this.taskExecutor = taskExecutor;
     this.analyzerPluginService = analyzerPluginService;
-    this.processRepositoryUseCase = processRepositoryUseCase;
     this.getAnalyzerConfigurationsFromProjectPort = getAnalyzerConfigurationsFromProjectPort;
     this.listFilePatternsOfProjectPort = listFilePatternsOfProjectPort;
     this.getCommitsInProjectPort = getCommitsInProjectPort;

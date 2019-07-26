@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.analyzer.service.filter;
 
+import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.vcs.domain.CommitFilter;
-import io.reflectoring.coderadar.vcs.domain.VcsCommit;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -29,9 +30,9 @@ public class DateRangeCommitFilter implements CommitFilter {
   }
 
   @Override
-  public boolean shouldBeProcessed(VcsCommit commit) {
+  public boolean shouldBeProcessed(Commit commit) {
     LocalDate commitDate =
-        Instant.ofEpochSecond(commit.getCommitTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        Instant.ofEpochSecond(commit.getTimestamp().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
     if (this.startDate != null && commitDate.isBefore(this.startDate)) {
       return false;
     }

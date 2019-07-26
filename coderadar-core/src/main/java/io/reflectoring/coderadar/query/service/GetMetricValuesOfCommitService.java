@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.query.service;
 
 import io.reflectoring.coderadar.analyzer.domain.Commit;
-import io.reflectoring.coderadar.analyzer.domain.MetricValueDTO;
+import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfCommitPort;
 import io.reflectoring.coderadar.query.port.driver.GetMetricValuesOfCommitUseCase;
 import java.util.List;
@@ -18,12 +18,12 @@ public class GetMetricValuesOfCommitService implements GetMetricValuesOfCommitUs
   }
 
   @Override
-  public List<MetricValueDTO> get(Commit commit) {
+  public List<MetricValue> get(Commit commit) {
     return getMetricValuesOfCommitPort.get(commit.getName());
   }
 
   @Override
-  public List<MetricValueDTO> get(String commitHash) {
+  public List<MetricValue> get(String commitHash) {
     return getMetricValuesOfCommitPort.get(commitHash);
   }
 }
