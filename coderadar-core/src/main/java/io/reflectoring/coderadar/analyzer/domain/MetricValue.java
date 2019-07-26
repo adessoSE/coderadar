@@ -17,4 +17,6 @@ public class MetricValue {
   private Commit commit;
 
   private List<Finding> findings = new LinkedList<>();
+
+  private String filepath;
 }

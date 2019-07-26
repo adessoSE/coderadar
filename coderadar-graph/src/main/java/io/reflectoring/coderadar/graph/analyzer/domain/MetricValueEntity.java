@@ -25,4 +25,7 @@ public class MetricValueEntity {
   @Relationship(type = "LOCATED_IN")
   @EqualsAndHashCode.Exclude
   private List<FindingEntity> findings = new LinkedList<>();
+
+  @Relationship(type = "MEASURED_BY", direction = Relationship.INCOMING)
+  private FileEntity file;
 }

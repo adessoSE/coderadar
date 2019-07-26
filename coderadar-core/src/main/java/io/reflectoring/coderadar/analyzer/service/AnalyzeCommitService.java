@@ -1,61 +1,47 @@
 package io.reflectoring.coderadar.analyzer.service;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.analyzer.domain.*;
+import io.reflectoring.coderadar.analyzer.domain.Commit;
+import io.reflectoring.coderadar.analyzer.domain.FileToCommitRelationship;
+import io.reflectoring.coderadar.analyzer.domain.Finding;
+import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
 import io.reflectoring.coderadar.plugin.api.FileMetrics;
 import io.reflectoring.coderadar.plugin.api.Metric;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
-import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationsFromProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
+import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driver.GetCommitRawContentUseCase;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AnalyzeCommitService implements AnalyzeCommitUseCase {
 
   private Logger logger = LoggerFactory.getLogger(AnalyzeCommitService.class);
 
-  private final AnalyzerPluginService analyzerPluginService;
   private final AnalyzeFileService analyzeFileService;
-  private final SaveCommitPort saveCommitPort;
-  private final SaveMetricPort saveMetricPort;
   private final GetCommitRawContentUseCase getCommitRawContentUseCase;
-  private final UpdateProjectPort updateProjectPort;
-  private final GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
   @Autowired
   public AnalyzeCommitService(
-          AnalyzerPluginService analyzerPluginService,
           AnalyzeFileService analyzeFileService,
-          SaveCommitPort saveCommitPort,
-          SaveMetricPort saveMetricPort,
           GetCommitRawContentUseCase getCommitRawContentUseCase,
-          UpdateProjectPort updateProjectPort, GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort, CoderadarConfigurationProperties coderadarConfigurationProperties) {
-    this.analyzerPluginService = analyzerPluginService;
+          CoderadarConfigurationProperties coderadarConfigurationProperties) {
     this.analyzeFileService = analyzeFileService;
-    this.saveCommitPort = saveCommitPort;
-    this.saveMetricPort = saveMetricPort;
     this.getCommitRawContentUseCase = getCommitRawContentUseCase;
-    this.updateProjectPort = updateProjectPort;
-    this.getAnalyzerConfigurationsFromProjectPort = getAnalyzerConfigurationsFromProjectPort;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
   }
 
   @Override
-  public List<MetricValue> analyzeCommit(Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers) {
+  public List<MetricValue> analyzeCommit(Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers, FilePatternMatcher filePatterns) {
     List<MetricValue> metricValues = new ArrayList<>();
     if (analyzers.isEmpty()) {
       logger.warn(
@@ -65,12 +51,13 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
     } else {
       for (FileToCommitRelationship fileToCommitRelationship : commit.getTouchedFiles()) {
         String filePath = fileToCommitRelationship.getFile().getPath();
-        FileMetrics fileMetrics = analyzeFile(commit, filePath, analyzers, project);
-        commit.setAnalyzed(true);
-        metricValues.addAll(getMetrics(fileMetrics, commit));
+        if(filePatterns.matches(filePath)) {
+          FileMetrics fileMetrics = analyzeFile(commit, filePath, analyzers, project);
+          metricValues.addAll(getMetrics(fileMetrics, commit, filePath));
+        }
       }
+      commit.setAnalyzed(true);
     }
-    logger.info(String.format("Analyzed commit %s %s", commit.getComment(), commit.getName()));
     return metricValues;
   }
 
@@ -78,7 +65,6 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
           Commit commit, String filepath, List<SourceCodeFileAnalyzerPlugin> analyzers, Project project) {
     byte[] fileContent = new byte[0];
     try {
-
       fileContent = getCommitRawContentUseCase.getCommitContent(coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName(),filepath, commit.getName());
     } catch (UnableToGetCommitContentException e) {
       e.printStackTrace();
@@ -87,8 +73,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
   }
 
 
-
-  private List<MetricValue> getMetrics(FileMetrics fileMetrics, Commit commit) {
+  private List<MetricValue> getMetrics(FileMetrics fileMetrics, Commit commit, String filepath) {
     List<MetricValue> metricValues = new ArrayList<>();
     for (Metric metric : fileMetrics.getMetrics()) {
       List<Finding> findings = new ArrayList<>();
@@ -104,7 +89,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
       }
       MetricValue metricValue =
           new MetricValue(
-              null, metric.getId(), fileMetrics.getMetricCount(metric), commit, findings);
+              null, metric.getId(), fileMetrics.getMetricCount(metric), commit, findings, filepath);
 
       metricValues.add(metricValue);
     }
