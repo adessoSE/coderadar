@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class AnalyzingJob {
   private Long id;
-  private Date from; // TODO: Maybe use date converter.
+  private Date from;
   private boolean active;
   private boolean rescan;
 

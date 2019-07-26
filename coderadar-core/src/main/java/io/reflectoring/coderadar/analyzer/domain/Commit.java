@@ -13,7 +13,7 @@ import lombok.ToString;
 public class Commit {
   private Long id;
   private String name;
-  private Date timestamp; // TODO: A date converter should be used here.
+  private Date timestamp;
   private String comment;
   private String author;
   private boolean merged = false;
