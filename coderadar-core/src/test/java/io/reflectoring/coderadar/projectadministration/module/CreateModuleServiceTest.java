@@ -23,7 +23,7 @@ class CreateModuleServiceTest {
   void returnsNewModuleId()
       throws ModulePathInvalidException, ModuleAlreadyExistsException,
           ProjectIsBeingProcessedException {
-    CreateModuleService testSubject = new CreateModuleService(createModulePort);
+    CreateModuleService testSubject = new CreateModuleService(createModulePort, saveModulePort, processProjectService);
 
     Project project = new Project();
     project.setId(2L);

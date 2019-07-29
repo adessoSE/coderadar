@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.project;
 
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
+import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
@@ -34,6 +35,8 @@ public class CreateProjectController {
           new IdResponse(createProjectUseCase.createProject(command)), HttpStatus.CREATED);
     } catch (ProjectAlreadyExistsException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+    } catch (ProjectIsBeingProcessedException e) {
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     }
   }
 }

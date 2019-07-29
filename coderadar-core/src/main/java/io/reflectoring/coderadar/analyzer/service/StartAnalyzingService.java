@@ -5,13 +5,16 @@ import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
+import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationsFromProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
+import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import org.slf4j.Logger;
@@ -28,12 +31,13 @@ import java.util.List;
 public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final GetProjectPort getProjectPort;
   private final AnalyzeCommitService analyzeCommitService;
-  private final TaskExecutor taskExecutor;
   private final AnalyzerPluginService analyzerPluginService;
   private final GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort;
   private final ListFilePatternsOfProjectPort listFilePatternsOfProjectPort;
   private final GetCommitsInProjectPort getCommitsInProjectPort;
   private final SaveMetricPort saveMetricPort;
+  private final SaveCommitPort saveCommitPort;
+  private final ProcessProjectService processProjectService;
 
   private final Logger logger = LoggerFactory.getLogger(StartAnalyzingService.class);
 
@@ -41,47 +45,47 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   public StartAnalyzingService(
           GetProjectPort getProjectPort,
           AnalyzeCommitService analyzeCommitService,
-          TaskExecutor taskExecutor,
           AnalyzerPluginService analyzerPluginService,
           GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort,
           ListFilePatternsOfProjectPort listFilePatternsOfProjectPort,
           GetCommitsInProjectPort getCommitsInProjectPort,
-          SaveMetricPort saveMetricPort) {
+          SaveMetricPort saveMetricPort, SaveCommitPort saveCommitPort,
+          ProcessProjectService processProjectService) {
     this.getProjectPort = getProjectPort;
     this.analyzeCommitService = analyzeCommitService;
-    this.taskExecutor = taskExecutor;
     this.analyzerPluginService = analyzerPluginService;
     this.getAnalyzerConfigurationsFromProjectPort = getAnalyzerConfigurationsFromProjectPort;
     this.listFilePatternsOfProjectPort = listFilePatternsOfProjectPort;
     this.getCommitsInProjectPort = getCommitsInProjectPort;
     this.saveMetricPort = saveMetricPort;
+    this.saveCommitPort = saveCommitPort;
+    this.processProjectService = processProjectService;
   }
 
   @Override
-  public void start(StartAnalyzingCommand command, Long projectId) {
-    Project project = getProjectPort.get(projectId);
-    taskExecutor.execute(
-        () -> {
-          List<Commit> commitsToBeAnalyzed = getCommitsInProjectPort.get(projectId);
-          List<MetricValue> metricValues = new ArrayList<>();
-          List<FilePattern> filePatterns = listFilePatternsOfProjectPort.listFilePatterns(projectId);
-          List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins = getAnalyzersForProject(project);
-
-          Long counter = 0L;
-          for (Commit commit : commitsToBeAnalyzed) {
+  public void start(StartAnalyzingCommand command, Long projectId) throws ProjectIsBeingProcessedException {
+    processProjectService.executeTask(() -> {
+        Project project = getProjectPort.get(projectId);
+        List<Commit> commitsToBeAnalyzed = getCommitsInProjectPort.get(projectId);
+        List<MetricValue> metricValues = new ArrayList<>();
+        List<FilePattern> filePatterns = listFilePatternsOfProjectPort.listFilePatterns(projectId);
+        List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins = getAnalyzersForProject(project);
+        FilePatternMatcher filePatternMatcher = new FilePatternMatcher(filePatterns);
+        Long counter = 0L;
+        for (Commit commit : commitsToBeAnalyzed) {
             if (!commit.isAnalyzed()) {
-              metricValues.addAll(analyzeCommitService.analyzeCommit(commit, project, sourceCodeFileAnalyzerPlugins, new FilePatternMatcher(filePatterns)));
-              ++counter;
-              logger.info(String.format("Analyzed commit: %s %s, total analyzed: %d", commit.getComment(), commit.getName(), counter));
+                metricValues.addAll(analyzeCommitService.analyzeCommit(commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher));
+                ++counter;
+                logger.info(String.format("Analyzed commit: %s %s, total analyzed: %d", commit.getComment(), commit.getName(), counter));
             }
-          }
-          saveMetricPort.saveMetricValues(metricValues);
-        });
+        }
+        saveMetricPort.saveMetricValues(metricValues);
+        commitsToBeAnalyzed.forEach(saveCommitPort::saveCommit);
+    }, projectId);
   }
 
   private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Project project) {
     List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>();
-
     Collection<AnalyzerConfiguration> configs = getAnalyzerConfigurationsFromProjectPort.get(project.getId());
     for (AnalyzerConfiguration config : configs) {
       analyzers.add(analyzerPluginService.createAnalyzer(config.getAnalyzerName()));

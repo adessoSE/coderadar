@@ -3,41 +3,32 @@ package io.reflectoring.coderadar.projectadministration.service.module;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
-import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.module.GetModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.delete.DeleteModuleUseCase;
+import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DeleteModuleService implements DeleteModuleUseCase {
 
   private final DeleteModulePort deleteModulePort;
-  private final ProjectStatusPort projectStatusPort;
-  private final TaskExecutor taskExecutor;
+  private final ProcessProjectService processProjectService;
+  private final GetModulePort getModulePort;
 
   @Autowired
   public DeleteModuleService(
-      DeleteModulePort deleteModulePort,
-      ProjectStatusPort projectStatusPort,
-      TaskExecutor taskExecutor) {
+          DeleteModulePort deleteModulePort,
+          ProcessProjectService processProjectService, GetModulePort getModulePort) {
     this.deleteModulePort = deleteModulePort;
-    this.projectStatusPort = projectStatusPort;
-    this.taskExecutor = taskExecutor;
+    this.processProjectService = processProjectService;
+    this.getModulePort = getModulePort;
   }
 
   @Override
   public void delete(Long id, Long projectId)
       throws ModuleNotFoundException, ProjectIsBeingProcessedException {
-    if (projectStatusPort.isBeingProcessed(projectId)) {
-      throw new ProjectIsBeingProcessedException(projectId);
-    } else {
-      projectStatusPort.setBeingProcessed(projectId, true);
-      taskExecutor.execute(
-          () -> {
-            deleteModulePort.delete(id, projectId);
-            projectStatusPort.setBeingProcessed(projectId, false);
-          });
-    }
+    getModulePort.get(id);
+    processProjectService.executeTask(() -> deleteModulePort.delete(id, projectId), projectId);
   }
 }

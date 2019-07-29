@@ -18,7 +18,7 @@ class DeleteModuleServiceTest {
   @Test
   void deleteModuleWithIdOne() throws ProjectIsBeingProcessedException {
     DeleteModuleService testSubject =
-        new DeleteModuleService(deleteModulePort, projectStatusPort, taskExecutor);
+        new DeleteModuleService(deleteModulePort, projectStatusPort, taskExecutor, processProjectService);
 
     Mockito.when(getModulePort.get(anyLong())).thenReturn(new Module());
     testSubject.delete(1L, 2L);

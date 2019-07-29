@@ -73,7 +73,7 @@ public class SaveCommitAdapter implements SaveCommitPort {
     commitEntity.setAuthor(commit.getAuthor());
     commitEntity.setComment(commit.getComment());
     commitEntity.setAnalyzed(commit.isAnalyzed());
-    saveCommitRepository.save(commitEntity);
+    saveCommitRepository.save(commitEntity, 0);
   }
 
   private List<CommitEntity> findAndSaveParents(
