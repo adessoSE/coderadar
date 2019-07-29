@@ -11,6 +11,9 @@ public class Node {
     private List<Node> dependencies;
     private int level;
 
+    public Node() {
+    }
+
     public Node(List<Node> children, String path, String filename, String packageName) {
         this.children = children;
         this.path = path;
@@ -181,9 +184,9 @@ public class Node {
      */
     @Override
     public String toString() {
-        if (!this.hasChildren()) {
+        /*if (!this.hasChildren()) {
             throw new IllegalArgumentException("folder is not a Directory");
-        }
+        }*/
         int indent = 0;
         StringBuilder sb = new StringBuilder();
         printDirectoryTree(this, indent, sb);

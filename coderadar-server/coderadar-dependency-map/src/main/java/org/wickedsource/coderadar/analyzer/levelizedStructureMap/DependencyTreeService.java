@@ -3,13 +3,14 @@ package org.wickedsource.coderadar.analyzer.levelizedStructureMap;
 import org.eclipse.jgit.lib.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 @Service
 public class DependencyTreeService {
 
     public Node getDependencyTree(Repository repository, String commitName, String basepackage, String repoName) {
-        Node baseRoot = new Node(new LinkedList<>(), repository.getWorkTree().getParentFile().getPath(), repoName, "");
+        Node baseRoot = new Node(new ArrayList<>(), repository.getWorkTree().getParentFile().getPath(), repoName, "");
         return DependencyTree.getTree().getDependencyTree(basepackage, commitName, repository, baseRoot);
     }
 

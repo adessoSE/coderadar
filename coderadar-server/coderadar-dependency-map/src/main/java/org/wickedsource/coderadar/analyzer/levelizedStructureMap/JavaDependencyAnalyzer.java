@@ -281,11 +281,6 @@ public class JavaDependencyAnalyzer {
     }
 
     private void processCompareDependencies(List<CompareNode> dependencies, CompareNode child) {
-        System.out.println(child.getFilename());
-        System.out.println(dependencies.stream().map(dependency -> dependency.getFilename() + ", " + dependency.getChanged()).collect(Collectors.joining(" | ")));
-        System.out.println(child.getCompareDependencies().stream().map(dependency -> dependency.getFilename() + ", " + dependency.getChanged()).collect(Collectors.joining(" | ")));
-        System.out.println("______________");
-
         // if the foundDependencies are not in the child's dependencies, add them and set their change type to
         //   delete if the child is deleted
         //   add otherwise

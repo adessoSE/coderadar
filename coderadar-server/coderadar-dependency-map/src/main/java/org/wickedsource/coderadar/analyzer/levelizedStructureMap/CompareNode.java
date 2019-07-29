@@ -13,6 +13,10 @@ public class CompareNode extends Node {
     private List<CompareNode> compareChildren;
     private List<CompareNode> compareDependencies;
 
+    public CompareNode() {
+
+    }
+
     public CompareNode(List<Node> children, String path, String filename, String packageName, DiffEntry.ChangeType changed) {
         super(children, path, filename, packageName);
         this.changed = changed;
