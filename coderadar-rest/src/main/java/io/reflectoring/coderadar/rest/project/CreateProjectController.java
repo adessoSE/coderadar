@@ -29,14 +29,12 @@ public class CreateProjectController {
 
   @PostMapping(produces = "application/json", path = "/projects")
   public ResponseEntity createProject(@RequestBody @Validated CreateProjectCommand command)
-      throws MalformedURLException {
+          throws MalformedURLException, ProjectIsBeingProcessedException {
     try {
       return new ResponseEntity<>(
           new IdResponse(createProjectUseCase.createProject(command)), HttpStatus.CREATED);
     } catch (ProjectAlreadyExistsException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
-    } catch (ProjectIsBeingProcessedException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     }
   }
 }

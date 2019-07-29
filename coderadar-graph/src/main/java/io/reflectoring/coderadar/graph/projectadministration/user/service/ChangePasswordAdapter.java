@@ -5,9 +5,10 @@ import io.reflectoring.coderadar.graph.projectadministration.user.repository.Cha
 import io.reflectoring.coderadar.projectadministration.UserNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.ChangePasswordPort;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class ChangePasswordAdapter implements ChangePasswordPort {

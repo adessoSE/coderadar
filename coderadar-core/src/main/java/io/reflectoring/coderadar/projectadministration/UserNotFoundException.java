@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.projectadministration;
 
-public class UserNotFoundException extends RuntimeException {
+public class UserNotFoundException extends EntityNotFoundException {
   public UserNotFoundException(Long id) {
     super("User with id " + id + " not found.");
   }

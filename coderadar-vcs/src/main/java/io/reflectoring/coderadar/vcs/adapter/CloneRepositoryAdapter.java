@@ -2,10 +2,11 @@ package io.reflectoring.coderadar.vcs.adapter;
 
 import io.reflectoring.coderadar.vcs.UnableToCloneRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.CloneRepositoryPort;
-import java.io.File;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
 
 @Service
 public class CloneRepositoryAdapter implements CloneRepositoryPort {

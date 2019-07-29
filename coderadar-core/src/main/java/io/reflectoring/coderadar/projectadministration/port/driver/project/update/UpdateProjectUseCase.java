@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.projectadministration.port.driver.project.upda
 
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+
 import java.net.MalformedURLException;
 
 public interface UpdateProjectUseCase {

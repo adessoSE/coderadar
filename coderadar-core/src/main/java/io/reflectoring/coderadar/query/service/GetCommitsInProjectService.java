@@ -4,10 +4,11 @@ import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.query.port.driver.GetCommitResponse;
 import io.reflectoring.coderadar.query.port.driver.GetCommitsInProjectUseCase;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {

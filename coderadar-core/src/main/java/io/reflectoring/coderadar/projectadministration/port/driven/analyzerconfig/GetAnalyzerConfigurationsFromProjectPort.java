@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.projectadministration.port.driven.analyzerconf
 
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
+
 import java.util.Collection;
 
 public interface GetAnalyzerConfigurationsFromProjectPort {

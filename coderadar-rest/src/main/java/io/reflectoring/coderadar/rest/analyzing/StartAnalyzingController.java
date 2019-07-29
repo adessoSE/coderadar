@@ -3,8 +3,6 @@ package io.reflectoring.coderadar.rest.analyzing;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +24,8 @@ public class StartAnalyzingController {
   @PostMapping(path = "projects/{projectId}/analyze")
   public ResponseEntity startAnalyze(
       @PathVariable("projectId") Long projectId,
-      @Validated @RequestBody StartAnalyzingCommand command) {
-    try {
-      startAnalyzingUseCase.start(command, projectId);
-      return new ResponseEntity<>(HttpStatus.OK);
-    } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
-    } catch (ProjectIsBeingProcessedException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
-    }
+      @Validated @RequestBody StartAnalyzingCommand command) throws ProjectIsBeingProcessedException {
+    startAnalyzingUseCase.start(command, projectId);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }

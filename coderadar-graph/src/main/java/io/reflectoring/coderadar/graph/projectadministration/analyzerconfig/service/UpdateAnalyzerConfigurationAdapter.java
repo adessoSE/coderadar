@@ -7,9 +7,10 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConf
 import io.reflectoring.coderadar.projectadministration.AnalyzerConfigurationNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UpdateAnalyzerConfigurationAdapter implements UpdateAnalyzerConfigurationPort {

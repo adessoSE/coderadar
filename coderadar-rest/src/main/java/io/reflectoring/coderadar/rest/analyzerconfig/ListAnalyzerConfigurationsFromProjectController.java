@@ -1,9 +1,7 @@
 package io.reflectoring.coderadar.rest.analyzerconfig;
 
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationsFromProjectUseCase;
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +24,8 @@ public class ListAnalyzerConfigurationsFromProjectController {
 
   @GetMapping(path = "/projects/{projectId}/analyzers")
   public ResponseEntity getAnalyzerConfigurationsFromProject(@PathVariable Long projectId) {
-    try {
       List<GetAnalyzerConfigurationResponse> analyzerConfigurations =
           getAnalyzerConfigurationsFromProjectUseCase.get(projectId);
       return new ResponseEntity<>(analyzerConfigurations, HttpStatus.OK);
-    } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
-    }
   }
 }

@@ -3,9 +3,10 @@ package io.reflectoring.coderadar.vcs.service;
 import io.reflectoring.coderadar.vcs.UnableToResetRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.ResetRepositoryPort;
 import io.reflectoring.coderadar.vcs.port.driver.ResetRepositoryUseCase;
-import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.nio.file.Path;
 
 @Service
 public class ResetRepositoryService implements ResetRepositoryUseCase {

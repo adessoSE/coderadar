@@ -1,12 +1,13 @@
 package io.reflectoring.coderadar.query.domain;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * Objects of this class provide parameters to query for quality profile ratings aggregated per

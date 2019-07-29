@@ -2,12 +2,13 @@ package io.reflectoring.coderadar.vcs.adapter;
 
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
-import java.io.File;
-import java.io.IOException;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.ObjectId;
 import org.gitective.core.BlobUtils;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.IOException;
 
 @Service
 public class GetRawCommitContentAdapter implements GetRawCommitContentPort {

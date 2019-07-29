@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.projectadministration.UserNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
@@ -26,8 +25,6 @@ public class LoginUserController {
   public ResponseEntity login(@RequestBody @Validated LoginUserCommand command) {
     try {
       return new ResponseEntity<>(loginUserUseCase.login(command), HttpStatus.OK);
-    } catch (UserNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
     } catch (AuthenticationException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.FORBIDDEN);
     }

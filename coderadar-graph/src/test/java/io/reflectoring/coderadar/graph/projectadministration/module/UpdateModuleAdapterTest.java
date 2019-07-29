@@ -1,19 +1,20 @@
 package io.reflectoring.coderadar.graph.projectadministration.module;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.GetModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.UpdateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.service.UpdateModuleAdapter;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @DisplayName("Update module")
 class UpdateModuleAdapterTest {

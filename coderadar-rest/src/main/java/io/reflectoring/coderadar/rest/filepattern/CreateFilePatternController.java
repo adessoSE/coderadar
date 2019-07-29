@@ -1,9 +1,7 @@
 package io.reflectoring.coderadar.rest.filepattern;
 
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternUseCase;
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.IdResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,12 +25,8 @@ public class CreateFilePatternController {
   public ResponseEntity createFilePattern(
       @RequestBody @Validated CreateFilePatternCommand command,
       @PathVariable(name = "projectId") Long projectId) {
-    try {
       return new ResponseEntity<>(
           new IdResponse(createFilePatternUseCase.createFilePattern(command, projectId)),
           HttpStatus.CREATED);
-    } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
-    }
   }
 }

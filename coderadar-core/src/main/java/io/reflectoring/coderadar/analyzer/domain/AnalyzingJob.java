@@ -1,8 +1,9 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-import java.util.Date;
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class AnalyzingJob {

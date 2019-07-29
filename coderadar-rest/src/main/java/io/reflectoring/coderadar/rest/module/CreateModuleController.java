@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.rest.module;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
@@ -29,13 +28,11 @@ public class CreateModuleController {
   @PostMapping(path = "/projects/{projectId}/modules")
   public ResponseEntity createModule(
       @RequestBody @Validated CreateModuleCommand command,
-      @PathVariable(name = "projectId") Long projectId) {
+      @PathVariable(name = "projectId") Long projectId) throws ProjectIsBeingProcessedException {
     try {
       return new ResponseEntity<>(
           new IdResponse(createModuleUseCase.createModule(command, projectId)), HttpStatus.CREATED);
-    } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
-    }  catch (ModulePathInvalidException | ProjectIsBeingProcessedException e) {
+    } catch (ModulePathInvalidException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     } catch (ModuleAlreadyExistsException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.CONFLICT);
