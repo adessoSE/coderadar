@@ -1,5 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.module;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
@@ -12,14 +15,9 @@ import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsExcept
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.task.TaskExecutor;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @DisplayName("Create module")
 class CreateModuleAdapterTest {
@@ -36,9 +34,7 @@ class CreateModuleAdapterTest {
       throws ModulePathInvalidException, ModuleAlreadyExistsException,
           ProjectIsBeingProcessedException {
     CreateModuleAdapter createModuleAdapter =
-        new CreateModuleAdapter(
-            createModuleRepository,
-            getProjectRepository);
+        new CreateModuleAdapter(createModuleRepository, getProjectRepository);
 
     ProjectEntity mockedProject = new ProjectEntity();
     FileEntity mockedFile = new FileEntity();
@@ -57,7 +53,7 @@ class CreateModuleAdapterTest {
     when(getProjectRepository.findById(anyLong())).thenReturn(java.util.Optional.of(mockedProject));
     createModuleAdapter.createModule(newItem.getId(), 1L);
 
-    //verify(createModuleRepository, times(1)).save(any());
+    // verify(createModuleRepository, times(1)).save(any());
 
   }
 }

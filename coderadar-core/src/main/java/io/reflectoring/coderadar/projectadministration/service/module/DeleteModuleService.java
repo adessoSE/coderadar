@@ -4,7 +4,6 @@ import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.GetModulePort;
-
 import io.reflectoring.coderadar.projectadministration.port.driver.module.delete.DeleteModuleUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +18,9 @@ public class DeleteModuleService implements DeleteModuleUseCase {
 
   @Autowired
   public DeleteModuleService(
-          DeleteModulePort deleteModulePort,
-          ProcessProjectService processProjectService, GetModulePort getModulePort) {
+      DeleteModulePort deleteModulePort,
+      ProcessProjectService processProjectService,
+      GetModulePort getModulePort) {
     this.deleteModulePort = deleteModulePort;
     this.processProjectService = processProjectService;
     this.getModulePort = getModulePort;

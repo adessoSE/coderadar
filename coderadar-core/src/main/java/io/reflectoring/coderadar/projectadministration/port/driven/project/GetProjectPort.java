@@ -10,5 +10,5 @@ public interface GetProjectPort {
 
   boolean existsByName(String name);
 
-    boolean existsById(Long projectId);
+  boolean existsById(Long projectId);
 }

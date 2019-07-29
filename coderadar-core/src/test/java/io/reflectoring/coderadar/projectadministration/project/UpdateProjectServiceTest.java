@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.project;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
@@ -9,14 +11,11 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.Updat
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.project.UpdateProjectService;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
+import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.core.task.TaskExecutor;
-
-import java.util.Date;
-
-import static org.mockito.Mockito.mock;
 
 class UpdateProjectServiceTest {
   private GetProjectPort getProjectPort = mock(GetProjectPort.class);
@@ -55,7 +54,6 @@ class UpdateProjectServiceTest {
     Mockito.when(getProjectPort.existsByName(project.getName())).thenReturn(Boolean.TRUE);
 
     Assertions.assertThrows(
-        ProjectAlreadyExistsException.class,
-        () -> testSubject.update(command, 1L));
+        ProjectAlreadyExistsException.class, () -> testSubject.update(command, 1L));
   }
 }

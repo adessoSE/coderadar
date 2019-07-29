@@ -13,16 +13,12 @@ import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driver.GetCommitRawContentUseCase;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AnalyzeCommitService implements AnalyzeCommitUseCase {
@@ -35,16 +31,20 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
 
   @Autowired
   public AnalyzeCommitService(
-          AnalyzeFileService analyzeFileService,
-          GetCommitRawContentUseCase getCommitRawContentUseCase,
-          CoderadarConfigurationProperties coderadarConfigurationProperties) {
+      AnalyzeFileService analyzeFileService,
+      GetCommitRawContentUseCase getCommitRawContentUseCase,
+      CoderadarConfigurationProperties coderadarConfigurationProperties) {
     this.analyzeFileService = analyzeFileService;
     this.getCommitRawContentUseCase = getCommitRawContentUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
   }
 
   @Override
-  public List<MetricValue> analyzeCommit(Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers, FilePatternMatcher filePatterns) {
+  public List<MetricValue> analyzeCommit(
+      Commit commit,
+      Project project,
+      List<SourceCodeFileAnalyzerPlugin> analyzers,
+      FilePatternMatcher filePatterns) {
     List<MetricValue> metricValues = new ArrayList<>();
     if (analyzers.isEmpty()) {
       logger.warn(
@@ -54,7 +54,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
     } else {
       for (FileToCommitRelationship fileToCommitRelationship : commit.getTouchedFiles()) {
         String filePath = fileToCommitRelationship.getFile().getPath();
-        if(filePatterns.matches(filePath)) {
+        if (filePatterns.matches(filePath)) {
           FileMetrics fileMetrics = analyzeFile(commit, filePath, analyzers, project);
           metricValues.addAll(getMetrics(fileMetrics, commit, filePath));
         }
@@ -71,7 +71,13 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
       Project project) {
     byte[] fileContent = new byte[0];
     try {
-      fileContent = getCommitRawContentUseCase.getCommitContent(coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName(),filepath, commit.getName());
+      fileContent =
+          getCommitRawContentUseCase.getCommitContent(
+              coderadarConfigurationProperties.getWorkdir()
+                  + "/projects/"
+                  + project.getWorkdirName(),
+              filepath,
+              commit.getName());
     } catch (UnableToGetCommitContentException e) {
       e.printStackTrace();
     }

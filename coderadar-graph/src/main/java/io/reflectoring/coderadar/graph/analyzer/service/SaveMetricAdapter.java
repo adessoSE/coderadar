@@ -26,7 +26,10 @@ public class SaveMetricAdapter implements SaveMetricPort {
   private final FileRepository fileRepository;
 
   @Autowired
-  public SaveMetricAdapter(SaveMetricRepository saveMetricRepository, GetCommitsInProjectRepository getCommitsInProjectRepository, FileRepository fileRepository) {
+  public SaveMetricAdapter(
+      SaveMetricRepository saveMetricRepository,
+      GetCommitsInProjectRepository getCommitsInProjectRepository,
+      FileRepository fileRepository) {
     this.saveMetricRepository = saveMetricRepository;
     this.getCommitsInProjectRepository = getCommitsInProjectRepository;
     this.fileRepository = fileRepository;
@@ -37,9 +40,12 @@ public class SaveMetricAdapter implements SaveMetricPort {
     CommitEntity commitEntity = new CommitEntity();
     List<MetricValueEntity> metricValueEntities = new ArrayList<>();
     HashMap<String, FileEntity> visitedFiles = new HashMap<>();
-    for(MetricValue metricValue : metricValues){
-      if(!metricValue.getCommit().getId().equals(commitEntity.getId())){
-        commitEntity = getCommitsInProjectRepository.findById(metricValue.getCommit().getId(), 0).orElseThrow(() -> new CommitNotFoundException(metricValue.getCommit().getId()));
+    for (MetricValue metricValue : metricValues) {
+      if (!metricValue.getCommit().getId().equals(commitEntity.getId())) {
+        commitEntity =
+            getCommitsInProjectRepository
+                .findById(metricValue.getCommit().getId(), 0)
+                .orElseThrow(() -> new CommitNotFoundException(metricValue.getCommit().getId()));
         commitEntity.setAnalyzed(true);
       }
 
@@ -47,7 +53,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
       metricValueEntity.setCommit(commitEntity);
 
       FileEntity fileEntity = visitedFiles.get(metricValue.getFilepath());
-      if(fileEntity == null) {
+      if (fileEntity == null) {
         fileEntity = fileRepository.findByPath(metricValue.getFilepath(), 0);
         visitedFiles.put(metricValue.getFilepath(), fileEntity);
       }

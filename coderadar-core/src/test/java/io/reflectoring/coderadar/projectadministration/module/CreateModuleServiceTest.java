@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.module;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
@@ -15,8 +17,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.mockito.Mockito.mock;
-
 class CreateModuleServiceTest {
   private CreateModulePort createModulePort = mock(CreateModulePort.class);
   private GetProjectPort getProjectPort = mock(GetProjectPort.class);
@@ -27,7 +27,8 @@ class CreateModuleServiceTest {
   void returnsNewModuleId()
       throws ModulePathInvalidException, ModuleAlreadyExistsException,
           ProjectIsBeingProcessedException {
-    CreateModuleService testSubject = new CreateModuleService(createModulePort, saveModulePort, processProjectService);
+    CreateModuleService testSubject =
+        new CreateModuleService(createModulePort, saveModulePort, processProjectService);
 
     Project project = new Project();
     project.setId(2L);
