@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class JavaDependencyAnalyzer {
 
@@ -33,7 +32,7 @@ public class JavaDependencyAnalyzer {
                 setDependencies(child, baseroot, repository, commitName, basepackage_dot);
             } else {
                 // get all dependencies from imports including wildcard imports
-                for (String dependency : getDependenciesFromFile(child, repository, commitName, basepackage_dot)) {
+                for (String dependency : getDependenciesFromFile(!child.hasChildren() && child.getFilename().endsWith(".java"), child.getPath(), repository, commitName, basepackage_dot)) {
                     String dependencyString = dependency.replace(".", "/");
                     // if import is not a wildcard import add .java to it to find the file
                     if (!dependency.matches("[a-zA-Z.]*\\*")) {
@@ -47,7 +46,7 @@ public class JavaDependencyAnalyzer {
                 //   single line comments
                 //   multi line comments
                 //   strings
-                for (String qualifiedDependency : getClassQualifiedDependencies(child, repository, commitName, basepackage_dot)) {
+                for (String qualifiedDependency : getClassQualifiedDependencies(!child.hasChildren() && child.getFilename().endsWith(".java"), child.getPath(), repository, commitName, basepackage_dot)) {
                     // add .java to find the file
                     String dependencyString = qualifiedDependency.replace(".", "/") + ".java";
                     addDependenciesFromDependencyString(dependencyString, child, baseroot);
@@ -138,17 +137,17 @@ public class JavaDependencyAnalyzer {
     /**
      * Analyze the file of a given Node object for fully qualified class name usage dependencies. helper method for setDependencies(Node node)
      *
-     * @param node Node to analyze
+     * @param path Node's path to analyze
      * @return List of package and file names the current node has dependencies on
      */
-    private List<String> getClassQualifiedDependencies(Node node, Repository repository, ObjectId commitName, String basepackage_dot) {
-        if (!node.hasChildren() && node.getFilename().endsWith(".java")) {
-            byte[] bytes = BlobUtils.getRawContent(repository, commitName, node.getPath());
+    private List<String> getClassQualifiedDependencies(boolean condittion, String path, Repository repository, ObjectId commitName, String basepackage_dot) {
+        if (condittion) {
+            byte[] bytes = BlobUtils.getRawContent(repository, commitName, path);
             if (bytes == null) {
                 return Collections.emptyList();
             }
             List<String> imports = new ArrayList<>();
-            String[] lines = clearFileContent(new String(BlobUtils.getRawContent(repository, commitName, node.getPath()))).split("\n");
+            String[] lines = clearFileContent(new String(BlobUtils.getRawContent(repository, commitName, path))).split("\n");
             for (String content : lines) {
                 // dependency found if string.string.... pattern is matched and
                 //   if pattern is not in a single or multi line comment
@@ -178,12 +177,12 @@ public class JavaDependencyAnalyzer {
     /**
      * Analyze the file of a given Node object for import and wildcard import dependencies. helper method for setDependencies(Node node)
      *
-     * @param node Node to analyze
+     * @param path Node's path to analyze
      * @return List of package and file names the current node has dependencies on
      */
-    private List<String> getDependenciesFromFile(Node node, Repository repository, ObjectId commitName, String basepackage_dot) {
-        if (!node.hasChildren() && node.getFilename().endsWith(".java")) {
-            byte[] bytes = BlobUtils.getRawContent(repository, commitName, node.getPath());
+    private List<String> getDependenciesFromFile(boolean condition, String path, Repository repository, ObjectId commitName, String basepackage_dot) {
+        if (condition) {
+            byte[] bytes = BlobUtils.getRawContent(repository, commitName, path);
             if (bytes == null) {
                 return Collections.emptyList();
             }
@@ -250,18 +249,18 @@ public class JavaDependencyAnalyzer {
             }
             // iterate over every part of the new path
             List<CompareNode> dependencies = new ArrayList<>();
-            for (String dependency : getDependenciesFromFile(tmp, repository, secondCommit, basepackage_dot)) {
+            for (String dependency : getDependenciesFromFile(!tmp.hasChildren() && tmp.getFilename().endsWith(".java"), tmp.getPath(), repository, secondCommit, basepackage_dot)) {
                 String dependencyString = dependency.replace(".", "/");
                 if (!dependency.matches("[a-zA-Z.]*\\*")) {
                     dependencyString += ".java";
                 }
                 dependencies.addAll(findComparePackage(dependencyString, node, tmp));
             }
-            for (String qualifiedDependency : getClassQualifiedDependencies(tmp, repository, secondCommit, basepackage_dot)) {
+            for (String qualifiedDependency : getClassQualifiedDependencies(!tmp.hasChildren() && tmp.getFilename().endsWith(".java"), tmp.getPath(), repository, secondCommit, basepackage_dot)) {
                 dependencies.addAll(findComparePackage(qualifiedDependency.replace(".", "/") + ".java", node, tmp));
             }
             processCompareDependencies(dependencies, tmp);
-            if (!tmp.getCompareDependencies().isEmpty()) {
+            if (!tmp.getDependencies().isEmpty()) {
                 for (int i = path.length - 1; i > 0; i--) {
                     // update dependencies going up the file tree
                     StringBuilder stringBuilder = new StringBuilder();
@@ -273,8 +272,8 @@ public class JavaDependencyAnalyzer {
                     }
                     CompareNode dependencyTmp = node.getNodeByPath(stringBuilder.toString());
                     List<CompareNode> dependenciesTmp = new ArrayList<>();
-                    dependencyTmp.getCompareChildren().stream().map(CompareNode::getCompareDependencies).forEach(dependenciesTmp::addAll);
-                    dependencyTmp.setCompareDependencies(dependenciesTmp);
+                    dependencyTmp.getChildren().stream().map(CompareNode::getDependencies).forEach(dependenciesTmp::addAll);
+                    dependencyTmp.setDependencies(dependenciesTmp);
                 }
             }
         }
@@ -284,15 +283,11 @@ public class JavaDependencyAnalyzer {
         // if the foundDependencies are not in the child's dependencies, add them and set their change type to
         //   delete if the child is deleted
         //   add otherwise
-        dependencies.stream().filter(dependency -> !child.getCompareDependencies().contains(dependency))
-                .forEach(dependency -> child.getCompareDependencies().add(new CompareNode(
+        dependencies.stream().filter(dependency -> !child.getDependencies().contains(dependency))
+                .forEach(dependency -> child.getDependencies().add(new CompareNode(
                         new ArrayList<>(), dependency.getPath(), dependency.getFilename(), dependency.getPackageName(),
                         (DiffEntry.ChangeType.DELETE.equals(child.getChanged()) || DiffEntry.ChangeType.DELETE.equals(dependency.getChanged()) ? DiffEntry.ChangeType.DELETE : DiffEntry.ChangeType.ADD))
                 ));
-
-        // if the child's dependencies are not in the foundDependencies, set the change type of the dependency to delete
-//        child.getCompareDependencies().stream().filter(dependency -> !dependencies.contains(dependency))
-//                .forEach(dependency -> dependency.setChanged(DiffEntry.ChangeType.DELETE));
     }
 
     /**
@@ -308,7 +303,7 @@ public class JavaDependencyAnalyzer {
         // if root is a module
         if (root.getPackageName().equals("")) {
             // go through every child of root
-            for (CompareNode child : root.getCompareChildren()) {
+            for (CompareNode child : root.getChildren()) {
                 // if the child is a package
                 if (!child.getPackageName().equals("")) {
                     // if first part of packageName fits child.filename, else skip
@@ -343,7 +338,7 @@ public class JavaDependencyAnalyzer {
                 if (currentNode.hasChildren()) {
                     // if dependencyString contains a wildcard add all children as dependencies and stop here
                     if (packageName[i].equals("*")) {
-                        return currentNode.getCompareChildren();
+                        return currentNode.getChildren();
                     } else {
                         if (currentNode.getChildByName(packageName[i]) != null) {
                             currentNode = currentNode.getChildByName(packageName[i]);

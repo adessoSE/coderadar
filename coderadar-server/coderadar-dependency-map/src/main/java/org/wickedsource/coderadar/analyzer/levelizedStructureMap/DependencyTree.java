@@ -2,8 +2,6 @@ package org.wickedsource.coderadar.analyzer.levelizedStructureMap;
 
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
-import org.eclipse.jgit.errors.IncorrectObjectTypeException;
-import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Repository;
@@ -12,7 +10,6 @@ import org.eclipse.jgit.revwalk.RevTree;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
-import org.gitective.core.BlobUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -225,10 +222,10 @@ public class DependencyTree {
     private CompareNode createMergeTree(Node baseVersion) {
         CompareNode compareNode = new CompareNode(new ArrayList<>(), baseVersion.getPath(), baseVersion.getFilename(), baseVersion.getPackageName(), null);
         for (Node child : baseVersion.getChildren()) {
-            compareNode.getCompareChildren().add(createMergeTree(child));
+            compareNode.getChildren().add(createMergeTree(child));
         }
         for (Node dependency : baseVersion.getDependencies()) {
-            compareNode.getCompareDependencies().add(new CompareNode(new ArrayList<>(), dependency.getPath(), dependency.getFilename(), dependency.getPackageName(), null));
+            compareNode.getDependencies().add(new CompareNode(new ArrayList<>(), dependency.getPath(), dependency.getFilename(), dependency.getPackageName(), null));
         }
         return compareNode;
     }
@@ -341,33 +338,33 @@ public class DependencyTree {
     private void sortCompareTree(CompareNode node) {
         if (node.hasChildren()) {
             CompareNodeComparator nodeComparator = new CompareNodeComparator();
-            for (CompareNode child : node.getCompareChildren()) {
+            for (CompareNode child : node.getChildren()) {
                 sortCompareTree(child);
             }
-            node.getCompareChildren().sort(nodeComparator);
+            node.getChildren().sort(nodeComparator);
         }
     }
 
     private void setCompareLayer(CompareNode node) {
         int layer = 0;
-        for (int i = 0; i < node.getCompareChildren().size(); i++) {
+        for (int i = 0; i < node.getChildren().size(); i++) {
             // for every child in the current layer check
             for (int j = 0; j < i; j++) {
-                if (node.getCompareChildren().get(j).getLevel() == layer) {
+                if (node.getChildren().get(j).getLevel() == layer) {
                     // if any child before this has a dependency on this
                     // or any child before has more dependencies on this than this has on any child before
                     //   raise layer, break
-                    if (node.getCompareChildren().get(j).hasCompareDependencyOn(node.getCompareChildren().get(i)) && !node.getCompareChildren().get(i).hasCompareDependencyOn(node.getCompareChildren().get(j))) {
+                    if (node.getChildren().get(j).hasCompareDependencyOn(node.getChildren().get(i)) && !node.getChildren().get(i).hasCompareDependencyOn(node.getChildren().get(j))) {
                         layer++;
                         break;
-                    } else if (node.getCompareChildren().get(j).countCompareDependenciesOn(node.getCompareChildren().get(i)) > node.getCompareChildren().get(i).countCompareDependenciesOn(node.getCompareChildren().get(j))) {
+                    } else if (node.getChildren().get(j).countCompareDependenciesOn(node.getChildren().get(i)) > node.getChildren().get(i).countCompareDependenciesOn(node.getChildren().get(j))) {
                         layer++;
                         break;
                     }
                 }
             }
-            node.getCompareChildren().get(i).setLevel(layer);
-            setCompareLayer(node.getCompareChildren().get(i));
+            node.getChildren().get(i).setLevel(layer);
+            setCompareLayer(node.getChildren().get(i));
         }
     }
 }

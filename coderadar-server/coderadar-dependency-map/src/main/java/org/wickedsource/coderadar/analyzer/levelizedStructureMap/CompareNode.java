@@ -1,27 +1,31 @@
 package org.wickedsource.coderadar.analyzer.levelizedStructureMap;
 
 import org.eclipse.jgit.diff.DiffEntry;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class CompareNode extends Node {
+public class CompareNode {
     private DiffEntry.ChangeType changed;
 
-    private List<CompareNode> compareChildren;
-    private List<CompareNode> compareDependencies;
+    private List<CompareNode> children;
+    private List<CompareNode> dependencies;
+    private String path;
+    private String filename;
+    private String packageName;
+    private int level;
 
     public CompareNode() {
 
     }
 
-    public CompareNode(List<Node> children, String path, String filename, String packageName, DiffEntry.ChangeType changed) {
-        super(children, path, filename, packageName);
+    public CompareNode(ArrayList<CompareNode> children, String path, String filename, String packageName, DiffEntry.ChangeType changed) {
         this.changed = changed;
-        compareChildren = new ArrayList<>();
-        compareDependencies = new ArrayList<>();
+        this.path = path;
+        this.filename = filename;
+        this.packageName = packageName;
+        this.children = children;
+        dependencies = new ArrayList<>();
     }
 
     // Getter & Setter start
@@ -34,37 +38,67 @@ public class CompareNode extends Node {
         this.changed = changed;
     }
 
-    public List<CompareNode> getCompareChildren() {
-        return compareChildren;
+    public List<CompareNode> getChildren() {
+        return children;
     }
 
-    public void setCompareChildren(List<CompareNode> compareChildren) {
-        this.compareChildren = compareChildren;
+    public void setChildren(List<CompareNode> children) {
+        this.children = children;
     }
 
-    public List<CompareNode> getCompareDependencies() {
-        return compareDependencies;
+    public List<CompareNode> getDependencies() {
+        return dependencies;
     }
 
-    public void setCompareDependencies(List<CompareNode> compareDependencies) {
-        this.compareDependencies = compareDependencies;
+    public void setDependencies(List<CompareNode> dependencies) {
+        this.dependencies = dependencies;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     // Getter & Setter end
 
-    @Override
     public CompareNode getChildByName(String name) {
-        return compareChildren.stream().filter(child -> child.getFilename().equals(name)).findFirst().orElse(null);
+        return children.stream().filter(child -> child.getFilename().equals(name)).findFirst().orElse(null);
     }
 
-    @Override
     public boolean hasChildren() {
-        return !compareChildren.isEmpty();
+        return !children.isEmpty();
     }
 
     public int countCompareDependenciesOn(CompareNode node) {
         int counter = 0;
-        for (Node dependency : compareDependencies) {
+        for (CompareNode dependency : dependencies) {
             // if @node represents a file
             // else if @node represents a folder
             if (!node.hasChildren()) {
@@ -84,7 +118,7 @@ public class CompareNode extends Node {
     }
 
     public boolean hasCompareDependencyOn(CompareNode node) {
-        for (Node dependency : compareDependencies) {
+        for (CompareNode dependency : dependencies) {
             if (!this.hasChildren() && !node.hasChildren() || this.hasChildren() && !node.hasChildren()) {
                 if (dependency.equals(node)) {
                     return true;
@@ -117,7 +151,7 @@ public class CompareNode extends Node {
                 }
                 // create new Node
                 CompareNode node = new CompareNode(new ArrayList<>(), tmp.getPath() + "/" + s, s, packageName, changed);
-                tmp.getCompareChildren().add(node);
+                tmp.getChildren().add(node);
                 tmp = node;
             }
             i++;
@@ -172,7 +206,7 @@ public class CompareNode extends Node {
         sb.append(node.getChanged());
         sb.append("/");
         sb.append("\n");
-        for (CompareNode child : node.getCompareChildren()) {
+        for (CompareNode child : node.getChildren()) {
             if (child.hasChildren()) {
                 printDirectoryTree(child, indent + 1, sb);
             } else {
@@ -184,7 +218,7 @@ public class CompareNode extends Node {
     /**
      * Helper method for toString()
      */
-    private void printFile(Node node, int indent, StringBuilder sb) {
+    private void printFile(CompareNode node, int indent, StringBuilder sb) {
         sb.append(getIndentString(indent));
         sb.append("+--");
         sb.append(node.getFilename());
