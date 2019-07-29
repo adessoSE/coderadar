@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.unit.module;
 
+import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.delete.DeleteModuleUseCase;
 import io.reflectoring.coderadar.rest.module.DeleteModuleController;
 import org.junit.jupiter.api.Assertions;
@@ -15,12 +16,12 @@ class DeleteModuleControllerTest {
   private DeleteModuleUseCase deleteModuleUseCase = mock(DeleteModuleUseCase.class);
 
   @Test
-  void deleteModuleWithIdOne() {
+  void deleteModuleWithIdOne() throws ProjectIsBeingProcessedException {
     DeleteModuleController testSubject = new DeleteModuleController(deleteModuleUseCase);
 
-    ResponseEntity<String> responseEntity = testSubject.deleteModule(1L);
+    ResponseEntity<String> responseEntity = testSubject.deleteModule(1L, 2L);
 
-    Mockito.verify(deleteModuleUseCase, Mockito.times(1)).delete(1L);
+    Mockito.verify(deleteModuleUseCase, Mockito.times(1)).delete(1L, 2L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
   }

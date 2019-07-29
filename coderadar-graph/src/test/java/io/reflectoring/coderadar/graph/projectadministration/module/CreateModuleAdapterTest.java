@@ -11,6 +11,7 @@ import io.reflectoring.coderadar.graph.projectadministration.module.repository.C
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ListModulesOfProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.service.CreateModuleAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.service.ProjectStatusAdapter;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
@@ -27,6 +28,7 @@ class CreateModuleAdapterTest {
   private ListModulesOfProjectRepository listModulesOfProjectRepository =
       mock(ListModulesOfProjectRepository.class);
   private final TaskExecutor taskExecutor = mock(TaskExecutor.class);
+  private ProjectStatusAdapter projectStatusAdapter = mock(ProjectStatusAdapter.class);
 
   @Test
   @DisplayName("Should return ID when saving a module")

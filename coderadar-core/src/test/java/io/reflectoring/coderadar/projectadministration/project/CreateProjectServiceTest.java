@@ -10,6 +10,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.CreateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
@@ -28,6 +29,7 @@ class CreateProjectServiceTest {
   private CoderadarConfigurationProperties coderadarConfigurationProperties =
       mock(CoderadarConfigurationProperties.class);
   private TaskExecutor taskExecutor = mock(TaskExecutor.class);
+  private ProjectStatusPort projectStatusPort = mock(ProjectStatusPort.class);
 
   private GetProjectCommitsUseCase getProjectCommitsUseCase = mock(GetProjectCommitsUseCase.class);
   private SaveCommitPort saveCommitPort = mock(SaveCommitPort.class);
@@ -43,7 +45,7 @@ class CreateProjectServiceTest {
             taskExecutor,
             getProjectCommitsUseCase,
             saveCommitPort,
-            checkProjectStatusPort);
+            projectStatusPort);
 
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());
@@ -79,7 +81,7 @@ class CreateProjectServiceTest {
             taskExecutor,
             getProjectCommitsUseCase,
             saveCommitPort,
-            checkProjectStatusPort);
+            projectStatusPort);
 
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());

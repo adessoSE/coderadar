@@ -37,7 +37,7 @@ public class DeleteProjectService implements DeleteProjectUseCase {
           () -> {
             try {
               deleteProjectPort.delete(id);
-            } catch (UnableToDeleteProjectException e){
+            } catch (UnableToDeleteProjectException e) {
               projectStatusPort.setBeingProcessed(id, false);
             }
           });

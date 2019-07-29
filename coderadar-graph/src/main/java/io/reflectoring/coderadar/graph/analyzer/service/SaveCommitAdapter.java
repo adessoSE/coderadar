@@ -62,7 +62,10 @@ public class SaveCommitAdapter implements SaveCommitPort {
 
   @Override
   public void saveCommit(Commit commit) {
-    CommitEntity commitEntity = saveCommitRepository.findById(commit.getId()).orElseThrow(() -> new CommitNotFoundException(commit.getId()));
+    CommitEntity commitEntity =
+        saveCommitRepository
+            .findById(commit.getId())
+            .orElseThrow(() -> new CommitNotFoundException(commit.getId()));
     commitEntity.setName(commit.getName());
     commitEntity.setMerged(commit.isMerged());
     commitEntity.setTimestamp(commit.getTimestamp());

@@ -36,7 +36,7 @@ public class AnalyzeFileService {
       }
       if (acceptFile(analyzerPlugin.getFilter(), filePath)) {
         try {
-          if(fileContent != null && fileContent.length > 0){
+          if (fileContent != null && fileContent.length > 0) {
             fileMetrics.add(analyzerPlugin.analyzeFile(filePath, fileContent));
           }
         } catch (Exception e) {

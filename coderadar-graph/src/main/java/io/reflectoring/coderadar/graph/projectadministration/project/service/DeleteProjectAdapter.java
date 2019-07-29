@@ -9,13 +9,12 @@ import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepos
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.UnableToDeleteProjectException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.DeleteProjectPort;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class DeleteProjectAdapter implements DeleteProjectPort {
@@ -26,7 +25,11 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
   private final DeleteCommitsRepository deleteCommitsRepository;
 
   @Autowired
-  public DeleteProjectAdapter(DeleteProjectRepository deleteProjectRepository, CoderadarConfigurationProperties coderadarConfigurationProperties, GetCommitsInProjectRepository getCommitsInProjectRepository, DeleteCommitsRepository deleteCommitsRepository) {
+  public DeleteProjectAdapter(
+      DeleteProjectRepository deleteProjectRepository,
+      CoderadarConfigurationProperties coderadarConfigurationProperties,
+      GetCommitsInProjectRepository getCommitsInProjectRepository,
+      DeleteCommitsRepository deleteCommitsRepository) {
     this.deleteProjectRepository = deleteProjectRepository;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.getCommitsInProjectRepository = getCommitsInProjectRepository;
@@ -38,12 +41,16 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
     ProjectEntity projectEntity =
         deleteProjectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
     try {
-      List<CommitEntity> commitEntities =  getCommitsInProjectRepository.findByProjectId(id);
+      List<CommitEntity> commitEntities = getCommitsInProjectRepository.findByProjectId(id);
       commitEntities.forEach(deleteCommitsRepository::delete);
       deleteProjectRepository.deleteProjectCascade(id);
       try {
-        FileUtils.deleteDirectory(new File(coderadarConfigurationProperties.getWorkdir() + "/projects/" + projectEntity.getWorkdirName()));
-      } catch (IOException e){
+        FileUtils.deleteDirectory(
+            new File(
+                coderadarConfigurationProperties.getWorkdir()
+                    + "/projects/"
+                    + projectEntity.getWorkdirName()));
+      } catch (IOException e) {
         e.printStackTrace();
       }
     } catch (IllegalArgumentException e) {

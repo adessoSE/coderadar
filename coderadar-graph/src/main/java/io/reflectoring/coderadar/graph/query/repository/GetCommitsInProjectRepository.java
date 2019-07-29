@@ -11,8 +11,8 @@ import org.springframework.stereotype.Repository;
 public interface GetCommitsInProjectRepository extends Neo4jRepository<CommitEntity, Long> {
 
   @Query(
-          "MATCH (p:ProjectEntity)-[:CONTAINS]->(f:FileEntity)-[:CHANGED_IN]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c "
-                  + "UNION MATCH (p:ProjectEntity)-[:CONTAINS]->(m:ModuleEntity)-[:CONTAINS]->(f:FileEntity)-[:CHANGED_IN]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c")
+      "MATCH (p:ProjectEntity)-[:CONTAINS]->(f:FileEntity)-[:CHANGED_IN]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c "
+          + "UNION MATCH (p:ProjectEntity)-[:CONTAINS]->(m:ModuleEntity)-[:CONTAINS]->(f:FileEntity)-[:CHANGED_IN]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c")
   List<CommitEntity> findByProjectId(Long projectId);
 
   @Query(

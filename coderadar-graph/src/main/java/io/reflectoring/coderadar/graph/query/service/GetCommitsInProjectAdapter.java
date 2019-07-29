@@ -4,7 +4,6 @@ import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.analyzer.domain.File;
 import io.reflectoring.coderadar.analyzer.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
-import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
@@ -40,7 +39,10 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
       List<Commit> commits = new ArrayList<>();
       List<CommitEntity> commitEntities = getCommitsInProjectRepository.findByProjectId(projectId);
       for (CommitEntity commitEntity1 : commitEntities) {
-        CommitEntity commitEntity = getCommitsInProjectRepository.findById(commitEntity1.getId()).orElseThrow(() -> new CommitNotFoundException(commitEntity1.getId()));
+        CommitEntity commitEntity =
+            getCommitsInProjectRepository
+                .findById(commitEntity1.getId())
+                .orElseThrow(() -> new CommitNotFoundException(commitEntity1.getId()));
 
         Commit commit = new Commit();
         commit.setId(commitEntity.getId());
@@ -50,7 +52,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
         commit.setComment(commitEntity.getComment());
         commit.setMerged(commitEntity.isMerged());
         commit.setAnalyzed(commitEntity.isAnalyzed());
-        commit.setParents(findAndSaveParents(commitEntity, new HashMap<>(),new HashMap<>()));
+        commit.setParents(findAndSaveParents(commitEntity, new HashMap<>(), new HashMap<>()));
         commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), commit, new HashMap<>()));
         commits.add(commit);
       }
@@ -61,11 +63,10 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     }
   }
 
-
   private List<Commit> findAndSaveParents(
-          CommitEntity commitEntity,
-          HashMap<String, Commit> walkedCommits,
-          HashMap<String, File> walkedFiles) {
+      CommitEntity commitEntity,
+      HashMap<String, Commit> walkedCommits,
+      HashMap<String, File> walkedFiles) {
 
     List<Commit> parents = new ArrayList<>();
 
@@ -91,14 +92,13 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   }
 
   private List<FileToCommitRelationship> getFiles(
-          List<FileToCommitRelationshipEntity> relationships,
-          Commit entity,
-          HashMap<String, File> walkedFiles) {
+      List<FileToCommitRelationshipEntity> relationships,
+      Commit entity,
+      HashMap<String, File> walkedFiles) {
     List<FileToCommitRelationship> fileToCommitRelationships = new ArrayList<>();
 
     for (FileToCommitRelationshipEntity fileToCommitRelationshipEntity : relationships) {
-      FileToCommitRelationship fileToCommitRelationship =
-              new FileToCommitRelationship();
+      FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
       fileToCommitRelationship.setId(fileToCommitRelationshipEntity.getId());
       fileToCommitRelationship.setCommit(entity);
       fileToCommitRelationship.setChangeType(fileToCommitRelationshipEntity.getChangeType());

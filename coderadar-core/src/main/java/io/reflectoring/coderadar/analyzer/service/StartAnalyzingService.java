@@ -15,7 +15,6 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.vcs.port.driver.FindCommitUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.ProcessRepositoryUseCase;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -42,14 +41,17 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
 
   @Autowired
   public StartAnalyzingService(
-          StartAnalyzingPort startAnalyzingPort,
-          GetProjectPort getProjectPort,
-          AnalyzeCommitService analyzeCommitService,
-          TaskExecutor taskExecutor,
-          SaveCommitPort saveCommitPort,
-          AnalyzerPluginService analyzerPluginService, ProcessRepositoryUseCase processRepositoryUseCase,
-          GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort, GetCommitsInProjectPort getCommitsInProjectPort,
-          FindCommitUseCase findCommitUseCase, SaveMetricPort saveMetricPort) {
+      StartAnalyzingPort startAnalyzingPort,
+      GetProjectPort getProjectPort,
+      AnalyzeCommitService analyzeCommitService,
+      TaskExecutor taskExecutor,
+      SaveCommitPort saveCommitPort,
+      AnalyzerPluginService analyzerPluginService,
+      ProcessRepositoryUseCase processRepositoryUseCase,
+      GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort,
+      GetCommitsInProjectPort getCommitsInProjectPort,
+      FindCommitUseCase findCommitUseCase,
+      SaveMetricPort saveMetricPort) {
     this.startAnalyzingPort = startAnalyzingPort;
     this.getProjectPort = getProjectPort;
     this.analyzeCommitService = analyzeCommitService;
@@ -70,10 +72,13 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
         () -> {
           List<Commit> commitsToBeAnalyzed = getCommitsInProjectPort.get(projectId);
           List<MetricValue> metricValues = new ArrayList<>();
-          List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins = getAnalyzersForProject(project);
+          List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
+              getAnalyzersForProject(project);
           for (Commit commit : commitsToBeAnalyzed) {
             if (!commit.isAnalyzed()) {
-              metricValues.addAll(analyzeCommitService.analyzeCommit(commit, project, sourceCodeFileAnalyzerPlugins));
+              metricValues.addAll(
+                  analyzeCommitService.analyzeCommit(
+                      commit, project, sourceCodeFileAnalyzerPlugins));
             }
           }
           saveMetricPort.saveMetricValues(metricValues);
@@ -83,7 +88,8 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Project project) {
     List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>();
 
-    Collection<AnalyzerConfiguration> configs = getAnalyzerConfigurationsFromProjectPort.get(project.getId());
+    Collection<AnalyzerConfiguration> configs =
+        getAnalyzerConfigurationsFromProjectPort.get(project.getId());
     for (AnalyzerConfiguration config : configs) {
       analyzers.add(analyzerPluginService.createAnalyzer(config.getAnalyzerName()));
     }

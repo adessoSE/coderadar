@@ -4,9 +4,9 @@ import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-
 import java.util.List;
 
 public interface AnalyzeCommitUseCase {
-  List<MetricValue> analyzeCommit(Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers);
+  List<MetricValue> analyzeCommit(
+      Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers);
 }
