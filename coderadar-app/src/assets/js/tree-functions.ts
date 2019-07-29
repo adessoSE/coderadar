@@ -1,3 +1,6 @@
+import html2canvas from 'html2canvas';
+import * as $ from 'jquery';
+
 export function toggle(currentNode, activeDependency, ctx, headerBackground) {
   if (currentNode.nextSibling.classList.contains('nested')) {
     currentNode.nextSibling.classList.remove('nested');
@@ -6,7 +9,7 @@ export function toggle(currentNode, activeDependency, ctx, headerBackground) {
     } else {
       currentNode.nextSibling.classList.add('active');
     }
-    expand(currentNode as HTMLElement)
+    expand(currentNode as HTMLElement);
   } else if (currentNode.nextSibling.classList.contains('active')) {
     collapseChildren(currentNode, activeDependency);
     currentNode.nextSibling.classList.add('nested');
@@ -15,7 +18,7 @@ export function toggle(currentNode, activeDependency, ctx, headerBackground) {
     } else {
       currentNode.nextSibling.classList.remove('active');
     }
-    collapse(currentNode as HTMLElement)
+    collapse(currentNode as HTMLElement);
   }
   // set height of canvas to the height of dependencyTree after toggle
   ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
@@ -65,9 +68,11 @@ export function canvasArrow(context, fromx, fromy, tox, toy, color, width?, dash
   context.strokeStyle = color;
   // span right triangle with X, Y and Z with X = (fromx, fromy) and Y = (tox, toy) and Z as the point at the right angle
   // calculate all sides x, y as the sides leading to the right angle
-  let x = Math.abs(fromx - tox), y = Math.abs(fromy - toy);
+  const x = Math.abs(fromx - tox);
+  const y = Math.abs(fromy - toy);
   // calculate z with (zx, zy)
-  let zx, zy;
+  let zx;
+  let zy;
   if (fromx <= tox && fromy <= toy) {
     zx = Math.max(fromx, tox) - x;
     zy = Math.max(fromy, toy);
@@ -87,7 +92,7 @@ export function canvasArrow(context, fromx, fromy, tox, toy, color, width?, dash
   context.stroke();
 
   // calculate angle for arrow head in relation to line
-  let angle = Math.atan2(toy - zy, tox - zx);
+  const angle = Math.atan2(toy - zy, tox - zx);
   // draw arrow head
   context.beginPath();
   context.moveTo(tox, toy);
@@ -100,7 +105,7 @@ export function canvasArrow(context, fromx, fromy, tox, toy, color, width?, dash
 
 function collapseChildren(currentNode, activeDependency) {
   if (currentNode.nextSibling) {
-    let toCollapse = currentNode.nextSibling.getElementsByClassName('clickable');
+    const toCollapse = currentNode.nextSibling.getElementsByClassName('clickable');
     for (let i = 0; i < toCollapse.length; i++) {
       if (toCollapse[i] === activeDependency) {
         activeDependency = undefined;
@@ -121,7 +126,7 @@ export function findLastHTMLElement(node) {
   //   element = element.parent
   let element = document.getElementById(node.path);
   while (element.offsetParent === null) {
-    element = iterateTree(element)
+    element = iterateTree(element);
   }
   return element as HTMLElement;
 }
@@ -130,12 +135,7 @@ export function iterateTree(tmp) {
   if (tmp.parentNode.firstChild !== tmp) {
     return tmp.parentNode.children[Array.from(tmp.parentNode.children).indexOf(tmp) - 1] as HTMLElement;
   }
-  if (tmp.parentNode.parentNode.parentNode.parentNode.parentNode.children.length > 2) {
-    tmp = tmp.parentNode.parentNode.parentNode.parentNode.parentNode as HTMLElement;
-    return tmp.children[tmp.children.length - 2] as HTMLElement;
-  } else {
-    return tmp.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
-  }
+  return iterateTreeSkipInline(tmp);
 }
 
 export function iterateTreeSkipInline(tmp) {
@@ -155,4 +155,47 @@ export function checkOnActiveDependency(tmp, activeDependency) {
     tmp = iterateTree(tmp);
   }
   return false;
+}
+
+export function screenshotListener(element) {
+  document.getElementById(element).addEventListener('click', () => {
+    html2canvas(document.getElementById('3canvasContainer'), {
+      width: document.getElementById('3list__root').offsetWidth,
+      height: document.getElementById('3list__root').offsetHeight
+    }).then(canvas => {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/jpg');
+      link.setAttribute('href', canvas.toDataURL('image/jpg'));
+      link.setAttribute('download', 'dependencyStructure.jpg');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  });
+}
+
+export function checkHandler(check, ctx, loadDependencies, node) {
+  check = !check;
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  loadDependencies(node);
+  return check;
+}
+
+export function resizeHandler(ctx, headerBackground, loadDependencies, node) {
+  window.addEventListener('click', () => {
+    draw(ctx, headerBackground, loadDependencies, node);
+  });
+}
+
+export function timeoutDraw(ctx, headerBackground, loadDependencies, node) {
+  window.setTimeout(() => {
+    draw(ctx, headerBackground, loadDependencies, node);
+  }, 20);
+}
+
+function draw(ctx, headerBackground, loadDependencies, node) {
+  ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
+  ctx.canvas.width = document.getElementById('3list__root').offsetWidth;
+  headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
+  loadDependencies(node);
 }

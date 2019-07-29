@@ -1,6 +1,12 @@
-import html2canvas from 'html2canvas';
 import * as $ from 'jquery';
-import {canvasArrow, toggle, findLastHTMLElement, expand, checkOnActiveDependency} from "./tree-functions";
+import {
+  canvasArrow,
+  toggle,
+  findLastHTMLElement,
+  expand,
+  checkOnActiveDependency,
+  checkHandler, screenshotListener, resizeHandler, timeoutDraw
+} from './tree-functions';
 
 let ctx;
 let htmlBuffer = [];
@@ -9,21 +15,22 @@ let checkUp;
 let headerBackground;
 let activeDependency;
 
-$.fn.single_double_click = function(single_click_callback, double_click_callback, timeout) {
+$.fn.single_double_click = function(singleClickCallback, doubleClickCallback, timeout?) {
   return this.each(() => {
-    let clicks = 0, self = this;
+    let clicks = 0;
+    const self = this;
     // if a click occurs
     $(this).click(event => {
       // raise click counter
       clicks++;
       // if this is the first click, start a timer with @timeout millis
-      if (clicks == 1) {
-        setTimeout(function(){
+      if (clicks === 1) {
+        setTimeout(() => {
           // on timer's timeout check if a second click has occurred.
-          if(clicks == 1) {
-            single_click_callback.call(self, event);
+          if (clicks === 1) {
+            singleClickCallback.call(self, event);
           } else {
-            double_click_callback.call(self, event);
+            doubleClickCallback.call(self, event);
           }
           // reset click counter
           clicks = 0;
@@ -37,81 +44,54 @@ export function afterLoad(node) {
   htmlBuffer = [];
   buildRoot(node);
   document.getElementById('3dependencyTree').innerHTML = htmlBuffer.join('');
-  checkUp = (document.getElementById('3showUpward') as HTMLInputElement).getAttribute('checked') == 'checked';
-  checkDown = (document.getElementById('3showDownward') as HTMLInputElement).getAttribute('checked') == 'checked';
+  checkUp = (document.getElementById('3showUpward') as HTMLInputElement).getAttribute('checked') === 'checked';
+  checkDown = (document.getElementById('3showDownward') as HTMLInputElement).getAttribute('checked') === 'checked';
   ctx = (document.getElementById('3canvas') as HTMLCanvasElement).getContext('2d');
   headerBackground = (document.getElementById('3headerBackground') as HTMLElement);
 
   // add toggle function (click and dblclick)
-  let toggler = document.getElementsByClassName('clickable');
-  for (let i = 0; i < toggler.length; i++) {
-    $(toggler[i]).single_double_click(() => {
-      // set toggler[i] to active dependency
-      if (activeDependency === toggler[i]) {
+  const togglers = Array.from(document.getElementsByClassName('clickable'));
+  for (const toggler of togglers) {
+    $(toggler).single_double_click(() => {
+      // set toggler to active dependency
+      if (activeDependency === toggler) {
         activeDependency = undefined;
         document.getElementById('3activeDependency').textContent = 'No active dependency chosen.';
       } else {
-        activeDependency = toggler[i];
+        activeDependency = toggler;
         // @ts-ignore
-        document.getElementById('3activeDependency').textContent = toggler[i].textContent;
+        document.getElementById('3activeDependency').textContent = toggler.textContent;
       }
       // clear and draw arrows for active dependency
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       loadDependencies(node);
     }, () => {
-      if (toggler[i].nextSibling != null) {
-        toggle(toggler[i], activeDependency, ctx, headerBackground);
+      if (toggler.nextSibling != null) {
+        toggle(toggler, activeDependency, ctx, headerBackground);
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         loadDependencies(node);
       }
     });
     // collapse and extend elements
-    if (toggler[i].nextSibling != null) {
-      expand(toggler[i] as HTMLElement);
+    if (toggler.nextSibling != null) {
+      expand(toggler as HTMLElement);
     }
   }
+
   // show upward listener
   document.getElementById('3showUpward').addEventListener('click', () => {
-    checkUp = !checkUp;
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    loadDependencies(node);
+    checkUp = checkHandler(checkUp, ctx, loadDependencies, node);
   });
   // show upward listener
   document.getElementById('3showDownward').addEventListener('click', () => {
-    checkDown = !checkDown;
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    loadDependencies(node);
+    checkDown = checkHandler(checkDown, ctx, loadDependencies, node);
   });
   // screenshot listener
-  document.getElementById('3screenshot').addEventListener('click', () => {
-    html2canvas(document.getElementById("3canvasContainer"), {
-      width: document.getElementById('3list__root').offsetWidth,
-      height: document.getElementById('3list__root').offsetHeight
-    }).then(canvas => {
-      let link = document.createElement("a");
-      link.href = canvas.toDataURL('image/jpg');
-      link.setAttribute('href', canvas.toDataURL('image/jpg'));
-      link.setAttribute('download', 'dependencyStructure.jpg');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
-  });
+  screenshotListener('3screenshot');
   // resize listener
-  window.addEventListener('resize', () => {
-    ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
-    ctx.canvas.width = document.getElementById('3list__root').offsetWidth;
-    headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
-    loadDependencies(node);
-  });
-
+  resizeHandler(ctx, headerBackground, loadDependencies, node);
   // set canvas format and draw dependencies
-  window.setTimeout(() => {
-    ctx.canvas.height = document.getElementById('3list__root').offsetHeight;
-    ctx.canvas.width = document.getElementById('3list__root').offsetWidth;
-    headerBackground.style.width = document.getElementById('3list__root').offsetWidth + 'px';
-    loadDependencies(node);
-  }, 20);
+  timeoutDraw(ctx, headerBackground, loadDependencies, node);
 }
 
 function loadDependencies(node) {
@@ -119,7 +99,7 @@ function loadDependencies(node) {
     listDependencies(node);
   }
   if (node.children.length > 0) {
-    for (let child of node.children) {
+    for (const child of node.children) {
       loadDependencies(child);
     }
   }
@@ -127,9 +107,9 @@ function loadDependencies(node) {
 
 function buildRoot(currentNode) {
   htmlBuffer.push(`<table id="3list__root" class="list list__root active">`);
-  htmlBuffer.push(`<tr><td class="package package__base">` +
-    `<span id="${currentNode.path}" class="filename-span${currentNode.children.length > 0 && currentNode.packageName !== '' ? ' clickable' : ''}">${currentNode.filename}</span>`);
-
+  htmlBuffer.push(`<tr><td class="package package__base"><span id="${currentNode.path}" ` +
+    `class="filename-span${currentNode.children.length > 0 && currentNode.packageName !== '' ? ' clickable' : ''}">` +
+    `${currentNode.filename}</span>`);
   addTable(currentNode);
   htmlBuffer.push(`</td></tr></table>`);
 }
@@ -166,7 +146,7 @@ function buildTree(currentNode, span) {
       htmlBuffer.push('</td>');
     }
   }
-  htmlBuffer.push(currentNode.children.length <= 1? '' : '</tr>');
+  htmlBuffer.push(currentNode.children.length <= 1 ? '' : '</tr>');
 }
 
 function addTable(child) {
@@ -207,22 +187,22 @@ function listDependencies(currentNode) {
       // use jquery for position calculation because plain js position calculation working with offsets returns
       // different values for chrome and firefox
       // (ref: https://stackoverflow.com/questions/1472842/firefox-and-chrome-give-different-values-for-offsettop).
-      let startx = $(start).offset().left + start.offsetWidth / 2;
+      const startx = $(start).offset().left + start.offsetWidth / 2;
       let starty = $(start).offset().top + start.offsetHeight - $(ctx.canvas).offset().top;
-      let endx = $(end).offset().left + end.offsetWidth / 2;
+      const endx = $(end).offset().left + end.offsetWidth / 2;
       let endy = $(end).offset().top - $(ctx.canvas).offset().top;
 
-      //ignore all arrows with same start and end node
-      if (start != end) {
+      // ignore all arrows with same start and end node
+      if (start !== end) {
         // check if downward dependencies should be shown
         if (checkDown && starty < endy) {
-          canvasArrow(ctx, startx, starty, endx, endy, "black", 1, false);
+          canvasArrow(ctx, startx, starty, endx, endy, 'black', 1, false);
         }
         // check if upward Dependencies should be shown
         if (checkUp && starty > endy) {
           starty -= start.offsetHeight;
           endy += end.offsetHeight;
-          canvasArrow(ctx, startx, starty, endx, endy, "black", 3, true);
+          canvasArrow(ctx, startx, starty, endx, endy, 'black', 3, true);
         }
       }
     });

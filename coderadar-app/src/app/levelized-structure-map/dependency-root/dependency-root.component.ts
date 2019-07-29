@@ -1,9 +1,9 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { afterLoad } from '../../../assets/js/dependency-tree';
-import {ActivatedRoute, Router} from "@angular/router";
-import {ProjectService} from "../../service/project.service";
-import {FORBIDDEN} from "http-status-codes";
-import {UserService} from "../../service/user.service";
+import {ActivatedRoute, Router} from '@angular/router';
+import {ProjectService} from '../../service/project.service';
+import {FORBIDDEN} from 'http-status-codes';
+import {UserService} from '../../service/user.service';
 
 @Component({
   selector: 'app-tree-root',

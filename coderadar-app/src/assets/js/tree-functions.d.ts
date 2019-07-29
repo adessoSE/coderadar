@@ -11,3 +11,9 @@ export declare function expand(element);
 export declare function collapse(element);
 
 export declare function checkOnActiveDependency(tmp, activeDependency);
+
+export declare function screenshotListener(element);
+
+export declare function checkHandler(check, ctx, loadDependencies, node);
+
+export declare function resizeHandler(ctx, headerBackground, loadDependencies, node);
