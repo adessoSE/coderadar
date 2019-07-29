@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CompareNode {
-    private DiffEntry.ChangeType changed;
 
+    private DiffEntry.ChangeType changed;
     private List<CompareNode> children;
     private List<CompareNode> dependencies;
     private String path;

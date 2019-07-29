@@ -26,4 +26,15 @@ public class ProjectResourceFactory {
     project.setEndDate(LocalDate.of(2016, 12, 31));
     return project;
   }
+
+  public ProjectResource validLocalProject() {
+    ProjectResource project = new ProjectResource();
+    project.setVcsUser("user");
+    project.setVcsPassword("pass");
+    project.setVcsUrl("https://github.com/jo2/testSrc.git");
+    project.setName("testSrc");
+    project.setStartDate(LocalDate.of(2016, 1, 1));
+    project.setEndDate(LocalDate.of(2016, 12, 31));
+    return project;
+  }
 }

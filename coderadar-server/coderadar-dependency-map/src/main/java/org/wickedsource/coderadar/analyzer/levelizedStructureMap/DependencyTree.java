@@ -39,7 +39,6 @@ public class DependencyTree {
 
         JavaDependencyAnalyzer javaDependencyAnalyzer = new JavaDependencyAnalyzer();
         createTreeRoot(baseRoot);
-        System.out.println(baseRoot.getChildren().size());
         javaDependencyAnalyzer.setDependencies(baseRoot, baseRoot, repository, ObjectId.fromString(commitName), basepackage_dot);
         baseRoot.setDependencies(new LinkedList<>());
         sortTree(baseRoot);
@@ -90,9 +89,8 @@ public class DependencyTree {
             // create git walk though the tree with depth = 1
             while (treeWalk.next()) {
                 // filter out 'forbidden' directories like output directories or node_modules
-                Matcher forbiddenDirs = cache.getPattern("(^\\.|build|out|classes|node_modules|src/test)").matcher(treeWalk.getNameString());
+                Matcher forbiddenDirs = cache.getPattern("(^\\.|build|out|classes|node_modules|test)").matcher(treeWalk.getNameString());
                 if (!treeWalk.isSubtree() && !treeWalk.getPathString().endsWith(".java") || forbiddenDirs.find()) {
-                    System.out.println("matcher found");
                     continue;
                 }
                 // check if file is directory
@@ -133,7 +131,7 @@ public class DependencyTree {
             treeWalk.enterSubtree();
             while (treeWalk.next()) {
                 // filter out 'forbidden' directories like output directories or node_modules
-                Matcher forbiddenDirs = cache.getPattern("(^\\.|build|src/test|out|classes|node_modules)").matcher(treeWalk.getNameString());
+                Matcher forbiddenDirs = cache.getPattern("(^\\.|build|test|out|classes|node_modules)").matcher(treeWalk.getNameString());
                 if (!treeWalk.isSubtree() && !treeWalk.getPathString().endsWith(".java") || forbiddenDirs.find()) {
                     continue;
                 }
@@ -236,7 +234,7 @@ public class DependencyTree {
             RevCommit alteredCommit = repository.parseCommit(ObjectId.fromString(secondCommit));
 
             List<DiffEntry> entries = getDiffs(baseCommit, alteredCommit);
-            Pattern pattern = cache.getPattern("(build|out|classes|node_modules|src/test)");
+            Pattern pattern = cache.getPattern("(build|out|classes|node_modules|test)");
 
             for (DiffEntry entry : entries) {
                 // filter for forbidden dirs (output dirs, test dirs, ..)
@@ -244,7 +242,6 @@ public class DependencyTree {
                 if (!(!entry.getNewPath().equals("/dev/null") ? entry.getNewPath() : entry.getOldPath()).endsWith(".java") || forbiddenDirs.find()) {
                     continue;
                 }
-
                 // check diff type
                 if (entry.getChangeType().equals(DiffEntry.ChangeType.ADD)) {
                     // add new file with name and path to compareTree

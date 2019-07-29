@@ -758,9 +758,51 @@ include::{snippets}/metrics/deltaTree/http-request.adoc[]
 
 include::{snippets}/metrics/deltaTree/http-response.adoc[]
 
+=== Dependency Trees
 
+==== Show all dependencies in a Single Commit
+coderadar can analyze a given Java project on its dependencies on its components. This endpoint provides a tree
+structure containing nodes. These nodes represent the file structure of the project. Also for every node the
+dependencies of this node are listed. Dependencies are analyzed by a the projects base package. For example in coderadar
+it is `org.wickedsource.coderadar`.
 
+===== Response Structure
 
+include::{snippets}/analyzer/dependencyTree/response-fields.adoc[]
 
+===== Example Request
 
+include::{snippets}/analyzer/dependencyTree/http-request.adoc[]
+
+===== Example Response
+
+[NOTE]
+=====
+The response can be rather large depending on the size of you project. The example Response below is limited to the
+first 50 lines.
+=====
+include::{snippets}/analyzer/dependencyTree/http-response.adoc[]
+
+==== Compare the dependencies in in two Commits
+coderadar can compare two commits of a project using the changes in the file structure and the projects dependencies.
+This endpoint provides a tree structure containing nodes. These nodes represent the file structure of the project and
+it changes. Also for every node the dependencies and their changes of this node are listed. Dependencies are analyzed
+by a the projects base package. For example in coderadar it is `org.wickedsource.coderadar`.
+
+===== Response Structure
+
+include::{snippets}/analyzer/compareTree/response-fields.adoc[]
+
+===== Example Request
+
+include::{snippets}/analyzer/compareTree/http-request.adoc[]
+
+===== Example Response
+
+[NOTE]
+=====
+The response can be rather large depending on the size of you project. The example Response below is limited to the
+first 50 lines.
+=====
+include::{snippets}/analyzer/compareTree/http-response.adoc[]
 

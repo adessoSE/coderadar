@@ -233,7 +233,7 @@ public class JavaDependencyAnalyzer {
 
 
     public void setDependenciesForCompareNode(CompareNode node, ObjectId secondCommit, List<DiffEntry> entries, Repository repository, String basepackage_dot) {
-        Pattern pattern = cache.getPattern("(build|out|classes|node_modules|src/test)");
+        Pattern pattern = cache.getPattern("(build|out|classes|node_modules|test)");
         for (DiffEntry entry : entries) {
             // filter for forbidden dirs (output dirs, test dirs, ..)
             String newPath = !entry.getNewPath().equals("/dev/null") ? entry.getNewPath() : entry.getOldPath();
