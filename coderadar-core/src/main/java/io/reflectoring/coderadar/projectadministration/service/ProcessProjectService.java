@@ -32,8 +32,8 @@ public class ProcessProjectService {
           () -> {
             try {
               runnable.run();
-            } finally {
-              if (getProjectPort.existsById(projectId)) {
+            } finally { //No matter what happens, reset the flag
+              if (getProjectPort.existsById(projectId)) { // check if the project still exists, this prevents exceptions if the project was deleted.
                 projectStatusPort.setBeingProcessed(projectId, false);
               }
             }
