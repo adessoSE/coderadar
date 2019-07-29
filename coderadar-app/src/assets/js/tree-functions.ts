@@ -33,28 +33,39 @@ export function canvasArrow(context, fromx, fromy, tox, toy, color, width?, dash
   const x = Math.abs(fromx - tox);
   const y = Math.abs(fromy - toy);
   // calculate z with (zx, zy)
-  let zx;
-  let zy;
-  if (fromx <= tox && fromy <= toy) {
-    zx = Math.max(fromx, tox) - x;
-    zy = Math.max(fromy, toy);
-  } else if (fromx <= tox && fromy > toy) {
-    zx = Math.max(fromx, tox);
-    zy = Math.min(fromy, toy) + y;
-  } else if (fromx > tox && fromy <= toy) {
-    zx = Math.min(fromx, tox) + x;
-    zy = Math.max(fromy, toy);
-  } else if (fromx > tox && fromy > toy) {
-    zx = Math.min(fromx, tox);
-    zy = Math.min(fromy, toy) + y;
+  let angle;
+  // tslint:disable-next-line:radix
+  if (parseInt(fromx) === parseInt(tox)) {
+    // draw line from X to Y
+    context.lineTo(tox, toy);
+    context.stroke();
+    // calculate angle for arrow head in relation to line
+    angle = Math.atan2(toy - fromy, tox - fromx);
+  } else {
+    let zx;
+    let zy;
+
+    if (fromx <= tox && fromy <= toy) {
+      zx = Math.max(fromx, tox) - x;
+      zy = Math.max(fromy, toy);
+    } else if (fromx <= tox && fromy > toy) {
+      zx = Math.max(fromx, tox);
+      zy = Math.min(fromy, toy) + y;
+    } else if (fromx > tox && fromy <= toy) {
+      zx = Math.min(fromx, tox) + x;
+      zy = Math.max(fromy, toy);
+    } else if (fromx > tox && fromy > toy) {
+      zx = Math.min(fromx, tox);
+      zy = Math.min(fromy, toy) + y;
+    }
+
+    // draw quadratic curve from X over Z to Y
+    context.quadraticCurveTo(zx, zy, tox, toy);
+    context.stroke();
+    // calculate angle for arrow head in relation to line
+    angle = Math.atan2(toy - zy, tox - zx);
   }
 
-  // draw quadratic curve from X over Z to Y
-  context.quadraticCurveTo(zx, zy, tox, toy);
-  context.stroke();
-
-  // calculate angle for arrow head in relation to line
-  const angle = Math.atan2(toy - zy, tox - zx);
   // draw arrow head
   context.beginPath();
   context.moveTo(tox, toy);
@@ -235,11 +246,11 @@ function listDependencies(currentNode, activeDependency, checkUp, checkDown, ctx
       // if activeDependency is set, draw only activeDependency related dependencies
       if (activeDependency !== undefined) {
         // activeDependency is set and neither start or end
-        let draw = checkOnActiveDependency(start, activeDependency);
-        if (!draw) {
-          draw = checkOnActiveDependency(end, activeDependency);
+        let toDraw = checkOnActiveDependency(start, activeDependency);
+        if (!toDraw) {
+          toDraw = checkOnActiveDependency(end, activeDependency);
         }
-        if (!draw) {
+        if (!toDraw) {
           return;
         }
       }
