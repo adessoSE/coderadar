@@ -35,7 +35,7 @@ export function canvasArrow(context, fromx, fromy, tox, toy, color, width?, dash
   // calculate z with (zx, zy)
   let angle;
   // tslint:disable-next-line:radix
-  if (parseInt(fromx) === parseInt(tox)) {
+  if (Math.abs(parseInt(fromx) - parseInt(tox)) < 10) {
     // draw line from X to Y
     context.lineTo(tox, toy);
     context.stroke();
