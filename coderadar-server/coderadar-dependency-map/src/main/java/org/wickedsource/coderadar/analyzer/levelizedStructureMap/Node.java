@@ -7,9 +7,9 @@ public class Node {
     private String filename;
     private String path;
     private String packageName;
+    private int level;
     private List<Node> children;
     private List<Node> dependencies;
-    private int level;
 
     public Node() {
     }

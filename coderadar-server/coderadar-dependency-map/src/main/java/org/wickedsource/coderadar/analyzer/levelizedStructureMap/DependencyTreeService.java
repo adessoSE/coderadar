@@ -10,7 +10,7 @@ import java.util.LinkedList;
 public class DependencyTreeService {
 
     public Node getDependencyTree(Repository repository, String commitName, String basepackage, String repoName) {
-        Node baseRoot = new Node(new ArrayList<>(), repository.getWorkTree().getParentFile().getPath(), repoName, "");
+        Node baseRoot = new Node(new ArrayList<>(), "", repoName, "");
         return DependencyTree.getTree().getDependencyTree(basepackage, commitName, repository, baseRoot);
     }
 

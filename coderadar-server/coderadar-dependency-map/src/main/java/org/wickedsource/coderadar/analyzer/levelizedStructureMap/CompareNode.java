@@ -7,13 +7,13 @@ import java.util.List;
 
 public class CompareNode {
 
+    private String filename;
+    private String path;
+    private String packageName;
+    private int level;
     private DiffEntry.ChangeType changed;
     private List<CompareNode> children;
     private List<CompareNode> dependencies;
-    private String path;
-    private String filename;
-    private String packageName;
-    private int level;
 
     public CompareNode() {
 
