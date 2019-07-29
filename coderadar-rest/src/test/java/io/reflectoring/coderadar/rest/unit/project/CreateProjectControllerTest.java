@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.unit.project;
 
+import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.rest.IdResponse;
@@ -20,7 +21,7 @@ class CreateProjectControllerTest {
   private CreateProjectUseCase createProjectUseCase = mock(CreateProjectUseCase.class);
 
   @Test
-  void createNewProjectSuccessfully() throws MalformedURLException {
+  void createNewProjectSuccessfully() throws MalformedURLException, ProjectIsBeingProcessedException {
     CreateProjectController testSubject = new CreateProjectController(createProjectUseCase);
 
     CreateProjectCommand command =

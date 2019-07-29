@@ -36,7 +36,6 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
     testProject = createProjectRepository.save(testProject);
     final Long id = testProject.getId();
 
-    // Test
     UpdateProjectCommand command =
         new UpdateProjectCommand(
             "name", "username", "password", "http://valid.url", true, new Date(), new Date());
@@ -48,7 +47,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(
             result -> {
-              FileUtils.deleteDirectory(new File("coderadar-workdir/projects"));
+              //FileUtils.deleteDirectory(new File("coderadar-workdir/projects"));
                 ProjectEntity project = createProjectRepository.findById(id).get();
               Assertions.assertEquals("name", project.getName());
               Assertions.assertEquals("username", project.getVcsUsername());

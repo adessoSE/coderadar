@@ -9,4 +9,6 @@ public interface GetProjectPort {
   Project get(String name) throws ProjectNotFoundException;
 
   boolean existsByName(String name);
+
+    boolean existsById(Long projectId);
 }

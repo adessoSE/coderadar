@@ -30,7 +30,7 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
     final Long id = testProject.getId();
 
     mvc()
-        .perform(delete("/projects/" + testProject.getId()))
+        .perform(delete("/projects/" + id))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(
             result -> Assertions.assertFalse(createProjectRepository.findById(id).isPresent()))

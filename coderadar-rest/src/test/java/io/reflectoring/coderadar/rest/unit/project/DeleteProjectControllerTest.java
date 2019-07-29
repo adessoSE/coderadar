@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.project;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.delete.DeleteProjectUseCase;
 import io.reflectoring.coderadar.rest.project.DeleteProjectController;
 import org.junit.jupiter.api.Assertions;
@@ -16,7 +17,7 @@ class DeleteProjectControllerTest {
   private DeleteProjectUseCase deleteProjectUseCase = mock(DeleteProjectUseCase.class);
 
   @Test
-  void deleteProjectWithIdOne() throws JsonProcessingException {
+  void deleteProjectWithIdOne() throws JsonProcessingException, ProjectIsBeingProcessedException {
     DeleteProjectController testSubject = new DeleteProjectController(deleteProjectUseCase);
 
     ResponseEntity<String> responseEntity = testSubject.deleteProject(1L);

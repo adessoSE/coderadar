@@ -10,7 +10,6 @@ import io.reflectoring.coderadar.projectadministration.domain.Module;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.task.TaskExecutor;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
@@ -20,7 +19,6 @@ import static org.mockito.Mockito.*;
 class DeleteModuleAdapterTest {
   private DeleteModuleRepository deleteModuleRepository = mock(DeleteModuleRepository.class);
   private CreateProjectRepository createProjectRepository = mock(CreateProjectRepository.class);
-  private TaskExecutor taskExecutor = mock(TaskExecutor.class);
 
   private DeleteModuleAdapter deleteModuleAdapter;
   private ModuleEntity moduleEntity;
@@ -32,8 +30,7 @@ class DeleteModuleAdapterTest {
     moduleEntity = new ModuleEntity();
     moduleEntity.setId(1L);
     moduleEntity.setProject(projectEntity);
-    deleteModuleAdapter =
-        new DeleteModuleAdapter(deleteModuleRepository, createProjectRepository, taskExecutor);
+    deleteModuleAdapter = new DeleteModuleAdapter(deleteModuleRepository, createProjectRepository);
   }
 
   @Test

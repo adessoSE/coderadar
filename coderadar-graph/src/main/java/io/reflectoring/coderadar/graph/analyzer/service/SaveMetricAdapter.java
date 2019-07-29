@@ -11,12 +11,11 @@ import io.reflectoring.coderadar.graph.analyzer.repository.SaveMetricRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class SaveMetricAdapter implements SaveMetricPort {
@@ -64,7 +63,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
 
   private List<FindingEntity> mapFindingsToEntities(List<Finding> findings) {
     List<FindingEntity> result = new ArrayList<>();
-    for(Finding finding : findings){
+    for (Finding finding : findings) {
       FindingEntity findingEntity = new FindingEntity();
       findingEntity.setCharEnd(finding.getCharEnd());
       findingEntity.setCharStart(finding.getCharStart());

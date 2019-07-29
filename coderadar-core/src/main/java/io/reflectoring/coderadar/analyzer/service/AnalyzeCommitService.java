@@ -13,6 +13,9 @@ import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driver.GetCommitRawContentUseCase;
+
+import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +65,10 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
   }
 
   private FileMetrics analyzeFile(
-          Commit commit, String filepath, List<SourceCodeFileAnalyzerPlugin> analyzers, Project project) {
+      Commit commit,
+      String filepath,
+      List<SourceCodeFileAnalyzerPlugin> analyzers,
+      Project project) {
     byte[] fileContent = new byte[0];
     try {
       fileContent = getCommitRawContentUseCase.getCommitContent(coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName(),filepath, commit.getName());
@@ -71,7 +77,6 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
     }
     return analyzeFileService.analyzeFile(analyzers, filepath, fileContent);
   }
-
 
   private List<MetricValue> getMetrics(FileMetrics fileMetrics, Commit commit, String filepath) {
     List<MetricValue> metricValues = new ArrayList<>();

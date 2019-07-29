@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.service;
 
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
@@ -10,11 +11,12 @@ public class ProcessProjectService {
 
     private final TaskExecutor taskExecutor;
     private final ProjectStatusPort projectStatusPort;
+    private final GetProjectPort getProjectPort;
 
-
-    public ProcessProjectService(TaskExecutor taskExecutor, ProjectStatusPort projectStatusPort) {
+    public ProcessProjectService(TaskExecutor taskExecutor, ProjectStatusPort projectStatusPort, GetProjectPort getProjectPort) {
         this.taskExecutor = taskExecutor;
         this.projectStatusPort = projectStatusPort;
+        this.getProjectPort = getProjectPort;
     }
 
     public void executeTask(Runnable runnable, Long projectId) throws ProjectIsBeingProcessedException {
@@ -26,7 +28,9 @@ public class ProcessProjectService {
                 try {
                     runnable.run();
                 } finally {
-                    projectStatusPort.setBeingProcessed(projectId, false);
+                    if(getProjectPort.existsById(projectId)) {
+                        projectStatusPort.setBeingProcessed(projectId, false);
+                    }
                 }
             };
             taskExecutor.execute(task);

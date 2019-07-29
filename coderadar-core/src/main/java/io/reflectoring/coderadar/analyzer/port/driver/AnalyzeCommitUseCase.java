@@ -10,4 +10,5 @@ import java.util.List;
 
 public interface AnalyzeCommitUseCase {
   List<MetricValue> analyzeCommit(Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers, FilePatternMatcher filePatterns);
+
 }

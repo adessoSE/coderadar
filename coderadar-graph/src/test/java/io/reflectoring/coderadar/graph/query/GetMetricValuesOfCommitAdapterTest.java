@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph.query;
 
-import io.reflectoring.coderadar.analyzer.domain.MetricValueDTO;
+import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
 import io.reflectoring.coderadar.graph.query.service.GetMetricValuesOfCommitAdapter;
 import org.assertj.core.api.Assertions;
@@ -22,7 +22,7 @@ class GetMetricValuesOfCommitAdapterTest {
   void shouldReturnListWhenPassingAValidArgument() {
     getMetricValuesOfCommitAdapter = new GetMetricValuesOfCommitAdapter();
 
-    List<MetricValueDTO> returnedList = getMetricValuesOfCommitAdapter.get("1A");
+    List<MetricValue> returnedList = getMetricValuesOfCommitAdapter.get("1A");
     Assertions.assertThat(returnedList).isNotNull();
   }
 }

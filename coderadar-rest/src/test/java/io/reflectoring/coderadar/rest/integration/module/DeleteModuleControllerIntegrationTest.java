@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -35,13 +36,16 @@ class DeleteModuleControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(delete("/projects/" + testProject.getId() + "/modules/" + module.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(result -> Assertions.assertFalse(createModuleRepository.findById(id).isPresent()))
             .andDo(document("modules/delete"));
   }
 
   @Test
   void deleteModuleReturnsErrorWhenModuleNotFound() throws Exception {
+    ProjectEntity testProject = new ProjectEntity();
+    testProject.setId(0L);
+    createProjectRepository.save(testProject);
+
     mvc()
         .perform(delete("/projects/0/modules/0"))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
