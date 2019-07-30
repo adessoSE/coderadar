@@ -155,6 +155,21 @@ public class Node {
         return false;
     }
 
+    public Node getNodeByPath(String nodePath) {
+        String[] path = nodePath.split("/");
+        Node tmp = this;
+        // iterate over every part of the new path
+        for (String s : path) {
+            // if the Node-object already exists, iterate over it
+            if (tmp.getChildByName(s) != null) {
+                tmp = tmp.getChildByName(s);
+            } else {
+                return null;
+            }
+        }
+        return tmp;
+    }
+
     /**
      * equals-method. Two Node-objects are equal if
      *   obj is a Node-object and

@@ -245,7 +245,7 @@ public class DependencyTree {
                 // check diff type
                 if (entry.getChangeType().equals(DiffEntry.ChangeType.ADD)) {
                     // add new file with name and path to compareTree
-                    compareNode.createNodeByPath(entry.getNewPath(), DiffEntry.ChangeType.ADD, basepackage);
+                    compareNode.createNodeByPath(entry.getNewPath(), DiffEntry.ChangeType.ADD);
                     // set dependencies in every dependent node
 //                    setDependenciesForCompareNode(compareNode, entry.getNewPath());
                 } else if (entry.getChangeType().equals(DiffEntry.ChangeType.MODIFY)) {
@@ -256,7 +256,7 @@ public class DependencyTree {
 //                        setDependenciesForCompareNode(compareNode, entry.getNewPath());
                     } else {
                         // if the file has been moved
-                        compareNode.createNodeByPath(entry.getNewPath(), DiffEntry.ChangeType.ADD, basepackage);
+                        compareNode.createNodeByPath(entry.getNewPath(), DiffEntry.ChangeType.ADD);
                         compareNode.getNodeByPath(entry.getOldPath()).setChanged(DiffEntry.ChangeType.DELETE);
                     }
                 } else if (entry.getChangeType().equals(DiffEntry.ChangeType.DELETE)) {
@@ -268,7 +268,7 @@ public class DependencyTree {
                         compareNode.getNodeByPath(entry.getOldPath()).setChanged(DiffEntry.ChangeType.DELETE);
                     } else {
                         // if the node does not exist, create it and set it to deleted
-                        compareNode.createNodeByPath(entry.getOldPath(), DiffEntry.ChangeType.DELETE, basepackage);
+                        compareNode.createNodeByPath(entry.getOldPath(), DiffEntry.ChangeType.DELETE);
                     }
                 } else if (entry.getChangeType().equals(DiffEntry.ChangeType.RENAME)) {
                     // processing dependencies in dependent nodes is done when they are processed, because either those files also should have changed
@@ -280,7 +280,7 @@ public class DependencyTree {
                         CompareNode tmp = compareNode.getNodeByPath(entry.getOldPath().substring(0, entry.getOldPath().lastIndexOf("/")));
                         tmp.getChildByName(oldFilename).setFilename(newFilename);
                     } else {
-                        compareNode.createNodeByPath(entry.getNewPath(), DiffEntry.ChangeType.ADD, basepackage);
+                        compareNode.createNodeByPath(entry.getNewPath(), DiffEntry.ChangeType.ADD);
                         compareNode.getNodeByPath(entry.getOldPath()).setChanged(DiffEntry.ChangeType.DELETE);
                     }
                 }

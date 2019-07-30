@@ -6,11 +6,12 @@ import org.eclipse.jgit.lib.Repository;
 import org.gitective.core.BlobUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class JavaDependencyAnalyzer {
 
@@ -82,7 +83,7 @@ public class JavaDependencyAnalyzer {
      * @return Node-objects which are found in the package.
      */
     private List<Node> findPackageNameInModules(String[] packageName, Node root) {
-        List<Node> nodes = new LinkedList<>();
+        List<Node> nodes = new ArrayList<>();
         // if root is a module
         if (root.getPackageName().equals("")) {
             // go through every child of root

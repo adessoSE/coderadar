@@ -133,7 +133,7 @@ public class CompareNode {
         return false;
     }
 
-    public CompareNode createNodeByPath(String nodePath, DiffEntry.ChangeType changed, String basepackage) {
+    public CompareNode createNodeByPath(String nodePath, DiffEntry.ChangeType changed) {
         String[] path = nodePath.split("/");
         CompareNode tmp = this;
         // iterate over every part of the new path
