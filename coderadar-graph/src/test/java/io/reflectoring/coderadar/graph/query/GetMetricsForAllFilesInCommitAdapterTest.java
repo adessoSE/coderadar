@@ -16,7 +16,7 @@ class GetMetricsForAllFilesInCommitAdapterTest {
   @Test
   @DisplayName("Should return list of GroupedMetricValueDTO when passing a valid argument")
   void shouldReturnListOfGroupedMetricValueDTOWhenPassingAValidArgument() {
-    getMetricsForAllFilesInCommitAdapter = new GetMetricsForAllFilesInCommitAdapter();
+    getMetricsForAllFilesInCommitAdapter = new GetMetricsForAllFilesInCommitAdapter(getMetricValuesOfCommitRepository, getProjectRepository, listModulesOfProjectRepository, createModuleRepository);
 
     /*    GetMetricsForAllFilesInCommitCommand command =
         new GetMetricsForAllFilesInCommitCommand("1A", new LinkedList<>());

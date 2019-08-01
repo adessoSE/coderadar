@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.query.port.driver;
 
+import io.reflectoring.coderadar.query.port.driven.MetricTree;
+
 public interface GetMetricsForAllFilesInCommitUseCase {
-  //TODO: Implement List<Object> get(GetMetricsForAllFilesInCommitCommand command);
+  MetricTree get(GetMetricsForCommitCommand command,  Long projectId);
 }
