@@ -10,10 +10,11 @@ import java.util.List;
 @Repository
 public interface GetCommitsInProjectRepository extends Neo4jRepository<CommitEntity, Long> {
 
-  @Query("MATCH (p1:ProjectEntity)-[:CONTAINS*]-(f1:FileEntity)-[:CHANGED_IN]->(c1:CommitEntity)-[:IS_CHILD_OF*0..2]-(c2:CommitEntity) " +
-          "WHERE ID(p1) = {0} " +
-          "UNWIND [c1, c2] AS c " +
-          "RETURN DISTINCT c " +
-          "ORDER BY c.timestamp DESC")
+  @Query(
+      "MATCH (p1:ProjectEntity)-[:CONTAINS*]-(f1:FileEntity)-[:CHANGED_IN]->(c1:CommitEntity)-[:IS_CHILD_OF*0..2]-(c2:CommitEntity) "
+          + "WHERE ID(p1) = {0} "
+          + "UNWIND [c1, c2] AS c "
+          + "RETURN DISTINCT c "
+          + "ORDER BY c.timestamp DESC")
   List<CommitEntity> findByProjectId(Long projectId);
 }

@@ -5,5 +5,5 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 
 public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
 
-    FileEntity findByPath(String path, int depth);
+  FileEntity findByPath(String path, int depth);
 }

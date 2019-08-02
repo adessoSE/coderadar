@@ -12,8 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MetricTreeQueryResult {
-    private String name;
-    private MetricsTreeNodeType type;
-    private List<MetricValueForCommitQueryResult> metrics;
-    private List<MetricTreeQueryResult> children;
+  private String name;
+  private MetricsTreeNodeType type;
+  private List<MetricValueForCommitQueryResult> metrics;
+  private List<MetricTreeQueryResult> children;
 }

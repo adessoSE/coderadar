@@ -13,7 +13,6 @@ import java.util.Optional;
 @Service
 public class ChangePasswordAdapter implements ChangePasswordPort {
 
-
   private final ChangePasswordRepository changePasswordRepository;
 
   @Autowired

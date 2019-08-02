@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface GetAvailableMetricsInProjectRepository extends Neo4jRepository {
 
-  @Query("MATCH (p1:ProjectEntity)-[:CONTAINS*]-(f1:FileEntity)-[:MEASURED_BY]->(n:MetricValueEntity) WHERE ID(p1) = {0} RETURN DISTINCT n.name")
+  @Query(
+      "MATCH (p1:ProjectEntity)-[:CONTAINS*]-(f1:FileEntity)-[:MEASURED_BY]->(n:MetricValueEntity) WHERE ID(p1) = {0} RETURN DISTINCT n.name")
   List<String> getAvailableMetricsInProject(long projectId);
 }

@@ -44,12 +44,13 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   @Autowired
   public CreateProjectService(
-          CreateProjectPort createProjectPort,
-          GetProjectPort getProjectPort,
-          CloneRepositoryUseCase cloneRepositoryUseCase,
-          CoderadarConfigurationProperties coderadarConfigurationProperties,
-          ProcessProjectService processProjectService, GetProjectCommitsUseCase getProjectCommitsUseCase,
-          SaveCommitPort saveCommitPort) {
+      CreateProjectPort createProjectPort,
+      GetProjectPort getProjectPort,
+      CloneRepositoryUseCase cloneRepositoryUseCase,
+      CoderadarConfigurationProperties coderadarConfigurationProperties,
+      ProcessProjectService processProjectService,
+      GetProjectCommitsUseCase getProjectCommitsUseCase,
+      SaveCommitPort saveCommitPort) {
     this.createProjectPort = createProjectPort;
     this.getProjectPort = getProjectPort;
     this.cloneRepositoryUseCase = cloneRepositoryUseCase;
@@ -68,25 +69,27 @@ public class CreateProjectService implements CreateProjectUseCase {
     processProjectService.executeTask(
         () -> {
           CloneRepositoryCommand cloneRepositoryCommand =
-                  new CloneRepositoryCommand(
-                          command.getVcsUrl(),
-                          new File(
-                                  coderadarConfigurationProperties.getWorkdir()
-                                          + "/projects/"
-                                          + project.getWorkdirName()));
+              new CloneRepositoryCommand(
+                  command.getVcsUrl(),
+                  new File(
+                      coderadarConfigurationProperties.getWorkdir()
+                          + "/projects/"
+                          + project.getWorkdirName()));
           try {
             cloneRepositoryUseCase.cloneRepository(cloneRepositoryCommand);
-            saveCommitPort.saveCommits(getProjectCommitsUseCase.getCommits(Paths.get(project.getWorkdirName()), getProjectDateRange(project)), project.getId());
+            saveCommitPort.saveCommits(
+                getProjectCommitsUseCase.getCommits(
+                    Paths.get(project.getWorkdirName()), getProjectDateRange(project)),
+                project.getId());
           } catch (UnableToCloneRepositoryException e) {
             e.printStackTrace();
           }
-        }, project.getId());
+        },
+        project.getId());
     return project.getId();
   }
 
-
   /**
-   *
    * @param project The project to get the DateRange for.
    * @return A valid DateRange object from the project dates.
    */
@@ -108,7 +111,7 @@ public class CreateProjectService implements CreateProjectUseCase {
     return new DateRange(projectStart, projectEnd);
   }
 
-  private Project saveProject(CreateProjectCommand command){
+  private Project saveProject(CreateProjectCommand command) {
     Project project = new Project();
     project.setName(command.getName());
     project.setWorkdirName(UUID.randomUUID().toString());

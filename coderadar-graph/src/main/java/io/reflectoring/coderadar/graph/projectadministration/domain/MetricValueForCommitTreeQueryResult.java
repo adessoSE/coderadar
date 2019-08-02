@@ -15,6 +15,6 @@ import java.util.Map;
 @Data
 @EqualsAndHashCode
 public class MetricValueForCommitTreeQueryResult {
-    private String path;
-    private List<Map<String, Object>> metrics;
+  private String path;
+  private List<Map<String, Object>> metrics;
 }

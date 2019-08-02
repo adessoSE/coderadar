@@ -19,6 +19,7 @@ public class FileEntity {
   @Relationship(type = "MEASURED_BY")
   private List<MetricValueEntity> metricValues = new LinkedList<>();
 
-  @EqualsAndHashCode.Exclude @Relationship(type = "CHANGED_IN")
+  @EqualsAndHashCode.Exclude
+  @Relationship(type = "CHANGED_IN")
   private List<FileToCommitRelationshipEntity> commits = new LinkedList<>();
 }

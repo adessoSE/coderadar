@@ -13,8 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class MetricTree {
-    private String name;
-    private MetricsTreeNodeType type;
-    private List<MetricValueForCommit> metrics = new ArrayList<>();
-    private List<MetricTree> children = new ArrayList<>();
+  private String name;
+  private MetricsTreeNodeType type;
+  private List<MetricValueForCommit> metrics = new ArrayList<>();
+  private List<MetricTree> children = new ArrayList<>();
 }

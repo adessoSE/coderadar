@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedEx
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 
 public interface SaveModulePort {
-    Long saveModule(Module module, Long projectId)
-            throws ModuleAlreadyExistsException, ModulePathInvalidException, ProjectIsBeingProcessedException;
+  Long saveModule(Module module, Long projectId)
+      throws ModuleAlreadyExistsException, ModulePathInvalidException,
+          ProjectIsBeingProcessedException;
 }

@@ -8,18 +8,6 @@ import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
 import io.reflectoring.coderadar.vcs.Counter;
 import io.reflectoring.coderadar.vcs.port.driven.GetProjectCommitsPort;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -36,6 +24,19 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
@@ -89,7 +90,8 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
                   commit.setSequenceNumber(currentSequenceNumber.getValue());
                   currentSequenceNumber.decrement();
                   try {
-                    commit.setParents(getParents(revWalk, rc, map, range.getStartDate(), currentSequenceNumber));
+                    commit.setParents(
+                        getParents(revWalk, rc, map, range.getStartDate(), currentSequenceNumber));
                   } catch (IOException e) {
                     e.printStackTrace();
                   }
@@ -282,9 +284,9 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
     Iterable<RevCommit> iterator = gitClient.log().add(head).call();
     Counter count = new Counter(0);
     iterator.forEach(
-            commit -> {
-              count.increment();
-            });
+        commit -> {
+          count.increment();
+        });
     return count.getValue();
   }
 }

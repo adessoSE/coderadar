@@ -19,13 +19,14 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Service
 public class StartAnalyzingService implements StartAnalyzingUseCase {
@@ -45,15 +46,17 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
 
   @Autowired
   public StartAnalyzingService(
-          GetProjectPort getProjectPort,
-          AnalyzeCommitService analyzeCommitService,
-          AnalyzerPluginService analyzerPluginService,
-          GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort,
-          ListFilePatternsOfProjectPort listFilePatternsOfProjectPort,
-          GetCommitsInProjectPort getCommitsInProjectPort,
-          SaveMetricPort saveMetricPort,
-          SaveCommitPort saveCommitPort,
-          ProcessProjectService processProjectService, StartAnalyzingPort startAnalyzingPort, StopAnalyzingPort stopAnalyzingPort) {
+      GetProjectPort getProjectPort,
+      AnalyzeCommitService analyzeCommitService,
+      AnalyzerPluginService analyzerPluginService,
+      GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort,
+      ListFilePatternsOfProjectPort listFilePatternsOfProjectPort,
+      GetCommitsInProjectPort getCommitsInProjectPort,
+      SaveMetricPort saveMetricPort,
+      SaveCommitPort saveCommitPort,
+      ProcessProjectService processProjectService,
+      StartAnalyzingPort startAnalyzingPort,
+      StopAnalyzingPort stopAnalyzingPort) {
     this.getProjectPort = getProjectPort;
     this.analyzeCommitService = analyzeCommitService;
     this.analyzerPluginService = analyzerPluginService;
@@ -63,8 +66,8 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     this.saveMetricPort = saveMetricPort;
     this.saveCommitPort = saveCommitPort;
     this.processProjectService = processProjectService;
-      this.startAnalyzingPort = startAnalyzingPort;
-      this.stopAnalyzingPort = stopAnalyzingPort;
+    this.startAnalyzingPort = startAnalyzingPort;
+    this.stopAnalyzingPort = stopAnalyzingPort;
   }
 
   @Override
@@ -81,7 +84,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
               getAnalyzersForProject(project);
           FilePatternMatcher filePatternMatcher = new FilePatternMatcher(filePatterns);
 
-            startAnalyzingPort.start(command, projectId);
+          startAnalyzingPort.start(command, projectId);
           Long counter = 0L;
           for (Commit commit : commitsToBeAnalyzed) {
             if (!commit.isAnalyzed()) {
