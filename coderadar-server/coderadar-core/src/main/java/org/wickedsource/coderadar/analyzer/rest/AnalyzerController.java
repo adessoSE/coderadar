@@ -28,7 +28,6 @@ public class AnalyzerController {
 
   private AnalyzerPluginRegistry analyzerRegistry;
   private DependencyTreeService dependencyTreeService;
-  private ProjectVerifier projectVerifier;
   private LocalGitRepositoryManager gitRepositoryManager;
   private final ProjectResourceAssembler projectAssembler;
   private final ProjectRepository projectRepository;
@@ -37,7 +36,6 @@ public class AnalyzerController {
   public AnalyzerController(AnalyzerPluginRegistry analyzerRegistry, DependencyTreeService dependencyTreeService, ProjectVerifier projectVerifier, LocalGitRepositoryManager gitRepositoryManager, ProjectResourceAssembler projectAssembler, ProjectRepository projectRepository) {
     this.analyzerRegistry = analyzerRegistry;
     this.dependencyTreeService = dependencyTreeService;
-    this.projectVerifier = projectVerifier;
     this.gitRepositoryManager = gitRepositoryManager;
     this.projectAssembler = projectAssembler;
     this.projectRepository = projectRepository;
@@ -51,18 +49,17 @@ public class AnalyzerController {
     return new ResponseEntity<>(assembler.toResourceList(analyzerPage), HttpStatus.OK);
   }
 
-  // TODO fix typo
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/{projectId}/structureMap/{commitName}")
   public ResponseEntity<Object> getDependencyTree(@PathVariable("projectId") Long projectId, @PathVariable("commitName") String commitName) {
     Git git = new Git(gitRepositoryManager.getLocalGitRepository(projectId).getRepository());
     ProjectResource resource = projectAssembler.toResource(projectRepository.findById(projectId).get());
-    return ResponseEntity.ok(dependencyTreeService.getDependencyTree(git.getRepository(), commitName, "org/wickedsource/coderadar", resource.getName()));
+    return ResponseEntity.ok(dependencyTreeService.getDependencyTree(git.getRepository(), commitName, resource.getName()));
   }
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/{projectId}/structureMap/{commitName1}/{commitName2}")
   public ResponseEntity<Object> getCompareTree(@PathVariable("projectId") Long projectId, @PathVariable("commitName1") String commitName1, @PathVariable("commitName2") String commitName2) {
     Git git = new Git(gitRepositoryManager.getLocalGitRepository(projectId).getRepository());
     ProjectResource resource = projectAssembler.toResource(projectRepository.findById(projectId).get());
-    return ResponseEntity.ok(dependencyTreeService.getCompareTree(git.getRepository(), commitName1, "org/wickedsource/coderadar", resource.getName(), commitName2));
+    return ResponseEntity.ok(dependencyTreeService.getCompareTree(git.getRepository(), commitName1, resource.getName(), commitName2));
   }
 }

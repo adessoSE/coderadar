@@ -9,13 +9,13 @@ import java.util.LinkedList;
 @Service
 public class DependencyTreeService {
 
-    public Node getDependencyTree(Repository repository, String commitName, String basepackage, String repoName) {
+    public Node getDependencyTree(Repository repository, String commitName, String repoName) {
         Node baseRoot = new Node(new ArrayList<>(), "", repoName, "");
-        return DependencyTree.getTree().getDependencyTree(basepackage, commitName, repository, baseRoot);
+        return DependencyTree.getTree().getDependencyTree(commitName, repository, baseRoot);
     }
 
-    public CompareNode getCompareTree(Repository repository, String commitName, String basepackage, String repoName, String secondCommit) {
-        Node baseVersion = getDependencyTree(repository, commitName, basepackage, repoName);
-        return DependencyTree.getTree().getCompareTree(basepackage, commitName, repository, baseVersion, secondCommit);
+    public CompareNode getCompareTree(Repository repository, String commitName, String repoName, String secondCommit) {
+        Node baseVersion = getDependencyTree(repository, commitName, repoName);
+        return DependencyTree.getTree().getCompareTree(commitName, repository, baseVersion, secondCommit);
     }
 }

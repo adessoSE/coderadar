@@ -19,9 +19,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DependencyTree {
-
-    private String basepackage;
-    private String basepackage_dot;
     private Repository repository;
     private ObjectId commitName;
     private RegexPatternCache cache;
@@ -30,27 +27,23 @@ public class DependencyTree {
         return new DependencyTree();
     }
 
-    public Node getDependencyTree(String basepackage, String commitName, Repository repository, Node baseRoot) {
-        this.basepackage = basepackage;
-        this.basepackage_dot = basepackage.replace("/", ".");
+    public Node getDependencyTree(String commitName, Repository repository, Node baseRoot) {
         cache = new RegexPatternCache();
         this.commitName = ObjectId.fromString(commitName);
         this.repository = repository;
 
         JavaDependencyAnalyzer javaDependencyAnalyzer = new JavaDependencyAnalyzer();
         createTreeRoot(baseRoot);
-        javaDependencyAnalyzer.setDependencies(baseRoot, baseRoot, repository, ObjectId.fromString(commitName), basepackage_dot);
+        javaDependencyAnalyzer.setDependencies(baseRoot, baseRoot, repository, ObjectId.fromString(commitName));
         baseRoot.setDependencies(new LinkedList<>());
         sortTree(baseRoot);
         setLevel(baseRoot);
         return baseRoot;
     }
 
-    public CompareNode getCompareTree(String basepackage, String commitName, Repository repository, Node baseRoot, String secondCommit) {
-        this.basepackage = basepackage;
+    public CompareNode getCompareTree(String commitName, Repository repository, Node baseRoot, String secondCommit) {
         this.repository = repository;
         this.commitName = ObjectId.fromString(commitName);
-        this.basepackage_dot = basepackage.replace("/", ".");
         cache = new RegexPatternCache();
         CompareNode compareNode = createMergeTree(baseRoot);
 
@@ -62,7 +55,7 @@ public class DependencyTree {
             RevCommit baseCommit = repository.parseCommit(this.commitName);
             RevCommit alteredCommit = repository.parseCommit(ObjectId.fromString(secondCommit));
 
-            javaDependencyAnalyzer.setDependenciesForCompareNode(compareNode, ObjectId.fromString(secondCommit), getDiffs(baseCommit, alteredCommit), repository, basepackage_dot);
+            javaDependencyAnalyzer.setDependenciesForCompareNode(compareNode, ObjectId.fromString(secondCommit), getDiffs(baseCommit, alteredCommit), repository);
             sortCompareTree(compareNode);
             setCompareLayer(compareNode);
             return compareNode;
@@ -99,9 +92,9 @@ public class DependencyTree {
                     List<Node> children = createTree(tree, treeWalk.getPathString());
 
                     String packageName = "";
-                    if (treeWalk.getPathString().contains(basepackage)) {
+                    /*if (treeWalk.getPathString().contains(basepackage)) {
                         packageName = treeWalk.getPathString().substring(treeWalk.getPathString().indexOf(basepackage)).replace("/", ".");
-                    }
+                    }*/
 
                     // if children are not empty, create a node containing these children, else ignore this subtree
                     if (!children.isEmpty()) {
@@ -137,9 +130,9 @@ public class DependencyTree {
                 }
 
                 String packageName = "";
-                if (treeWalk.getPathString().contains("java/")) {
+                /*if (treeWalk.getPathString().contains("java/")) {
                     packageName = treeWalk.getPathString().substring(treeWalk.getPathString().indexOf("java/") + 5).replace("/", ".");
-                }
+                }*/
 
                 // if the current part is a subtree
                 if (treeWalk.isSubtree()) {

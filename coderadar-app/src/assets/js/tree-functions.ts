@@ -118,10 +118,6 @@ export function expand(element) {
 }
 
 export function findLastHTMLElement(node) {
-  // let element;
-  // set element = findById(packageName)
-  // while element not visible
-  //   element = element.parent
   let element = document.getElementById(node.path);
   while (element.offsetParent === null) {
     element = iterateTree(element);
