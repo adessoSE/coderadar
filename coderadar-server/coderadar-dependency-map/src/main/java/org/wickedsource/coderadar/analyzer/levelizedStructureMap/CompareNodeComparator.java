@@ -21,13 +21,13 @@ public class CompareNodeComparator implements Comparator<CompareNode> {
      * else compare o1 and o2 lexically
      */
     public int compare(CompareNode o1, CompareNode o2) {
-        if (o1.hasCompareDependencyOn(o2) && !o2.hasCompareDependencyOn(o1)) {
+        if (o1.hasDependencyOn(o2) && !o2.hasDependencyOn(o1)) {
             return -1;
-        } else if (o2.hasCompareDependencyOn(o1) && !o1.hasCompareDependencyOn(o2)) {
+        } else if (o2.hasDependencyOn(o1) && !o1.hasDependencyOn(o2)) {
             return 1;
-        } else if (o1.countCompareDependenciesOn(o2) > o2.countCompareDependenciesOn(o1)) {
+        } else if (o1.countDependenciesOn(o2) > o2.countDependenciesOn(o1)) {
             return -1;
-        } else if (o1.countCompareDependenciesOn(o2) < o2.countCompareDependenciesOn(o1)) {
+        } else if (o1.countDependenciesOn(o2) < o2.countDependenciesOn(o1)) {
             return 1;
         } else if (o1.hasChildren() && !o2.hasChildren()) {
             return -1;

@@ -27,6 +27,18 @@ public class DependencyTree {
         return new DependencyTree();
     }
 
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     *                      NodeTree                           *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /**
+     * Create a dependency tree from a given commit in a git repo beginning with a root Node-object.
+     *
+     * @param commitName commit to analyze.
+     * @param repository repo to analyze.
+     * @param baseRoot root Node-object.
+     * @return root Node-object with its children.
+     */
     public Node getDependencyTree(String commitName, Repository repository, Node baseRoot) {
         cache = new RegexPatternCache();
         this.commitName = ObjectId.fromString(commitName);
@@ -41,31 +53,8 @@ public class DependencyTree {
         return baseRoot;
     }
 
-    public CompareNode getCompareTree(String commitName, Repository repository, Node baseRoot, String secondCommit) {
-        this.repository = repository;
-        this.commitName = ObjectId.fromString(commitName);
-        cache = new RegexPatternCache();
-        CompareNode compareNode = createMergeTree(baseRoot);
-
-        JavaDependencyAnalyzer javaDependencyAnalyzer = new JavaDependencyAnalyzer();
-
-        addToMergeTree(compareNode, secondCommit);
-
-        try {
-            RevCommit baseCommit = repository.parseCommit(this.commitName);
-            RevCommit alteredCommit = repository.parseCommit(ObjectId.fromString(secondCommit));
-
-            javaDependencyAnalyzer.setDependenciesForCompareNode(compareNode, ObjectId.fromString(secondCommit), getDiffs(baseCommit, alteredCommit), repository);
-            sortCompareTree(compareNode);
-            setCompareLayer(compareNode);
-            return compareNode;
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
     /**
-     * Create the DependecyTree based on git files.
+     * Create the dependency tree based on git files.
      *
      * @param root Node-object which acts as root node containing all other nodes.
      */
@@ -110,10 +99,9 @@ public class DependencyTree {
     /**
      * Reads the actual children from treeWalk.
      *
-     * @param tree
-     * @param pathString current path
+     * @param pathString current path.
      * @return Children found for the current path.
-     * @throws NullPointerException if the path can't be found, for example due to skipping /src/main/java/{basepackage}
+     * @throws NullPointerException if the path can't be found.
      */
     private List<Node> createTree(RevTree tree, String pathString) throws NullPointerException {
         List<Node> children = new ArrayList<>();
@@ -155,7 +143,7 @@ public class DependencyTree {
     }
 
     /**
-     * Sort the children of a given Node object and their children recursively:
+     * Sort the children of a given Node-object and their children recursively:
      * if o1 has a dependency on o2 and o2 does not have an dependency on o1
      *   o1 is before o2
      * else if o2 has a dependency on o1 and o1 does not have an dependency on o2
@@ -170,7 +158,7 @@ public class DependencyTree {
      *   o2 is before o1
      * else compare o1 and o2 lexically
      *
-     * @param node Node object which's children are to sort.
+     * @param node Node-object which's children are to sort.
      */
     private void sortTree(Node node) {
         if (node.hasChildren()) {
@@ -183,9 +171,9 @@ public class DependencyTree {
     }
 
     /**
-     * Set the display level of a given Node object's children and their children recursively
+     * Set the display level of a given Node-object's children and their children recursively.
      *
-     * @param node Node object which children's display level is set
+     * @param node Node-object which's level is to be set.
      */
     private void setLevel(Node node) {
         int level = 0;
@@ -210,6 +198,48 @@ public class DependencyTree {
         }
     }
 
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     *                      CompareTree                        *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+    /**
+     * Add the diffs of a second commit to a dependency tree based on a first commit for a given repo
+     *
+     * @param commitName first commit to base the dependency tree on.
+     * @param repository repo to analyze.
+     * @param baseRoot root Node-object.
+     * @param secondCommit second commit to create the diffs.
+     * @return root Node-object with its children.
+     */
+    public CompareNode getCompareTree(String commitName, Repository repository, Node baseRoot, String secondCommit) {
+        this.repository = repository;
+        this.commitName = ObjectId.fromString(commitName);
+        cache = new RegexPatternCache();
+        CompareNode compareNode = createMergeTree(baseRoot);
+
+        JavaDependencyAnalyzer javaDependencyAnalyzer = new JavaDependencyAnalyzer();
+
+        addToMergeTree(compareNode, secondCommit);
+
+        try {
+            RevCommit baseCommit = repository.parseCommit(this.commitName);
+            RevCommit alteredCommit = repository.parseCommit(ObjectId.fromString(secondCommit));
+
+            javaDependencyAnalyzer.setDependenciesForCompareNode(compareNode, ObjectId.fromString(secondCommit), getDiffs(baseCommit, alteredCommit), repository);
+            sortCompareTree(compareNode);
+            setCompareLayer(compareNode);
+            return compareNode;
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    /**
+     * Cast a dependency tree with Node-objects to a dependency tree with CompareNode-objects.
+     *
+     * @param baseVersion dependency tree with Node-objects to start with.
+     * @return casted dependency tree with CompareNode-objects.
+     */
     private CompareNode createMergeTree(Node baseVersion) {
         CompareNode compareNode = new CompareNode(new ArrayList<>(), baseVersion.getPath(), baseVersion.getFilename(), baseVersion.getPackageName(), null);
         for (Node child : baseVersion.getChildren()) {
@@ -221,6 +251,12 @@ public class DependencyTree {
         return compareNode;
     }
 
+    /**
+     * Add the diffs of a second commit to a given dependency tree with CompareNode-objects.
+     *
+     * @param compareNode given dependency tree with CompareNode-objects.
+     * @param secondCommit second commit for creating diffs.
+     */
     private void addToMergeTree(CompareNode compareNode, String secondCommit) {
         try {
             RevCommit baseCommit = repository.parseCommit(commitName);
@@ -239,15 +275,10 @@ public class DependencyTree {
                 if (entry.getChangeType().equals(DiffEntry.ChangeType.ADD)) {
                     // add new file with name and path to compareTree
                     compareNode.createNodeByPath(entry.getNewPath(), DiffEntry.ChangeType.ADD);
-                    // set dependencies in every dependent node
-//                    setDependenciesForCompareNode(compareNode, entry.getNewPath());
                 } else if (entry.getChangeType().equals(DiffEntry.ChangeType.MODIFY)) {
                     // processing dependencies in dependent nodes is done when they are processed, because either those files also should have changed
                     // or they aren't changed and so they don't have this dependency any more.
-                    if (entry.getOldPath().equals(entry.getNewPath())) {
-                        // if there are only changes in the file analyze file for dependencies
-//                        setDependenciesForCompareNode(compareNode, entry.getNewPath());
-                    } else {
+                    if (!entry.getOldPath().equals(entry.getNewPath())) {
                         // if the file has been moved
                         compareNode.createNodeByPath(entry.getNewPath(), DiffEntry.ChangeType.ADD);
                         compareNode.getNodeByPath(entry.getOldPath()).setChanged(DiffEntry.ChangeType.DELETE);
@@ -255,7 +286,6 @@ public class DependencyTree {
                 } else if (entry.getChangeType().equals(DiffEntry.ChangeType.DELETE)) {
                     // processing dependencies in dependent nodes is done when they are processed, because either those files also should have changed
                     // or they aren't changed and so they don't have this dependency any more.
-
                     // check if the node exists
                     if (compareNode.getNodeByPath(entry.getOldPath()) != null) {
                         compareNode.getNodeByPath(entry.getOldPath()).setChanged(DiffEntry.ChangeType.DELETE);
@@ -283,6 +313,13 @@ public class DependencyTree {
         }
     }
 
+    /**
+     * Get a List of all diffs between two commits.
+     *
+     * @param commit1 first commit.
+     * @param commit2 second commit.
+     * @return List with diffs.
+     */
     private List<DiffEntry> getDiffs(RevCommit commit1, RevCommit commit2) {
         try {
             if (commit1.getCommitTime() > commit2.getCommitTime()) {
@@ -323,7 +360,7 @@ public class DependencyTree {
      *   o2 is before o1
      * else compare o1 and o2 lexically
      *
-     * @param node Node object which's children are to sort.
+     * @param node CompareNode-object which's children are to sort.
      */
     private void sortCompareTree(CompareNode node) {
         if (node.hasChildren()) {
@@ -335,6 +372,11 @@ public class DependencyTree {
         }
     }
 
+    /**
+     * Set the display level of a given CompareNode-object's children and their children recursively.
+     *
+     * @param node CompareNode-object which's level is to be set.
+     */
     private void setCompareLayer(CompareNode node) {
         int layer = 0;
         for (int i = 0; i < node.getChildren().size(); i++) {
@@ -344,10 +386,10 @@ public class DependencyTree {
                     // if any child before this has a dependency on this
                     // or any child before has more dependencies on this than this has on any child before
                     //   raise layer, break
-                    if (node.getChildren().get(j).hasCompareDependencyOn(node.getChildren().get(i)) && !node.getChildren().get(i).hasCompareDependencyOn(node.getChildren().get(j))) {
+                    if (node.getChildren().get(j).hasDependencyOn(node.getChildren().get(i)) && !node.getChildren().get(i).hasDependencyOn(node.getChildren().get(j))) {
                         layer++;
                         break;
-                    } else if (node.getChildren().get(j).countCompareDependenciesOn(node.getChildren().get(i)) > node.getChildren().get(i).countCompareDependenciesOn(node.getChildren().get(j))) {
+                    } else if (node.getChildren().get(j).countDependenciesOn(node.getChildren().get(i)) > node.getChildren().get(i).countDependenciesOn(node.getChildren().get(j))) {
                         layer++;
                         break;
                     }

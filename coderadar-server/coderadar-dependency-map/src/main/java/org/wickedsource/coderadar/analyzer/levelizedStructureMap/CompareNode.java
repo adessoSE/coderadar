@@ -96,7 +96,7 @@ public class CompareNode {
         return !children.isEmpty();
     }
 
-    public int countCompareDependenciesOn(CompareNode node) {
+    public int countDependenciesOn(CompareNode node) {
         int counter = 0;
         for (CompareNode dependency : dependencies) {
             // if @node represents a file
@@ -117,7 +117,7 @@ public class CompareNode {
         return counter;
     }
 
-    public boolean hasCompareDependencyOn(CompareNode node) {
+    public boolean hasDependencyOn(CompareNode node) {
         for (CompareNode dependency : dependencies) {
             if (!this.hasChildren() && !node.hasChildren() || this.hasChildren() && !node.hasChildren()) {
                 if (dependency.equals(node)) {
