@@ -36,7 +36,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
   }
 
   @Override
-  public void saveMetricValues(List<MetricValue> metricValues) {
+  public void saveMetricValues(List<MetricValue> metricValues, Long projectId) {
     CommitEntity commitEntity = new CommitEntity();
     List<MetricValueEntity> metricValueEntities = new ArrayList<>();
     HashMap<String, FileEntity> visitedFiles = new HashMap<>();
@@ -54,7 +54,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
 
       FileEntity fileEntity = visitedFiles.get(metricValue.getFilepath());
       if (fileEntity == null) {
-        fileEntity = fileRepository.findByPath(metricValue.getFilepath(), 0);
+        fileEntity = fileRepository.findByPathInProject(metricValue.getFilepath(), projectId);
         visitedFiles.put(metricValue.getFilepath(), fileEntity);
       }
       metricValueEntity.setFile(fileEntity);

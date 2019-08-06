@@ -17,5 +17,6 @@ public interface GetCommitsInProjectRepository extends Neo4jRepository<CommitEnt
           "ORDER BY c.timestamp DESC")
   List<CommitEntity> findByProjectId(Long projectId);
 
-    CommitEntity findByName(String commit);
+  @Query("MATCH (p:ProjectEntity)-[:CONTAINS*]-(:FileEntity)-[:CHANGED_IN]->(c:CommitEntity) WHERE c.name = {0} AND ID(p) = {1} RETURN c")
+  CommitEntity findByNameAndProjectId(String commit, Long projectId);
 }

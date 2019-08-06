@@ -95,7 +95,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
                       commit.getComment(), commit.getName(), counter));
             }
           }
-          saveMetricPort.saveMetricValues(metricValues);
+          saveMetricPort.saveMetricValues(metricValues, projectId);
           commitsToBeAnalyzed.forEach(saveCommitPort::saveCommit);
           stopAnalyzingPort.stop(projectId);
         },

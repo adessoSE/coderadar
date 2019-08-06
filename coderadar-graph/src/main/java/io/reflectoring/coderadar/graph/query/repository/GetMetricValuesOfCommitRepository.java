@@ -11,12 +11,13 @@ import java.util.List;
 @Repository
 public interface GetMetricValuesOfCommitRepository extends Neo4jRepository<CommitEntity, Long> {
 
-    @Query("MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity) " +
-            "WHERE r.changeType = \"RENAME\" AND ID(p) = {0} AND datetime(c.timestamp).epochMillis <= datetime({2}).epochMillis WITH p, collect(r.oldPath) as paths " +
+    @Query("MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-->(c:CommitEntity) " +
+            "WHERE ID(p) = {0} AND datetime(c.timestamp).epochMillis <= datetime({2}).epochMillis WITH p, f " +
+            "OPTIONAL MATCH (f)-[r:CHANGED_IN]->() WHERE r.changeType = \"RENAME\" WITH p, collect(r.oldPath) as paths " +
             "MATCH (p)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity)-[:VALID_FOR]-(m:MetricValueEntity)<-[:MEASURED_BY]-(f) " +
             "WHERE datetime(c.timestamp).epochMillis <= datetime({2}).epochMillis AND  NOT(f.path IN paths) AND m.name in {1} WITH c, f, paths, m ORDER BY c.timestamp DESC " +
             "WITH f.path as path, m.name as name, head(collect(m.value)) as value " +
-            "RETURN DISTINCT name, SUM(value) as value")
+            "RETURN name, SUM(value) as value")
     List<MetricValueForCommitQueryResult> getMetricValuesForCommit(Long projectId, List<String> metricNames, String date);
 
 /*    @Query("")

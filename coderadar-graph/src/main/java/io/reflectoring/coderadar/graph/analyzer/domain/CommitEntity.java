@@ -24,7 +24,6 @@ public class CommitEntity {
   private String author;
   private boolean merged = false;
   private boolean analyzed = false;
-  private Integer sequenceNumber;
 
   @Relationship(type = "IS_CHILD_OF")
   @EqualsAndHashCode.Exclude
