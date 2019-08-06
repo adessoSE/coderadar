@@ -53,7 +53,6 @@ public class SaveCommitAdapter implements SaveCommitPort {
       commitEntity.setComment(newestCommit.getComment());
       commitEntity.setMerged(newestCommit.isMerged());
       commitEntity.setName(newestCommit.getName());
-      commitEntity.setSequenceNumber(newestCommit.getSequenceNumber());
       commitEntity.setTimestamp(newestCommit.getTimestamp());
       getFiles(newestCommit.getTouchedFiles(), commitEntity, walkedFiles);
       commitEntity.setParents(findAndSaveParents(newestCommit, walkedCommits, walkedFiles));
@@ -98,7 +97,6 @@ public class SaveCommitAdapter implements SaveCommitPort {
         commitEntity = new CommitEntity();
         commitEntity.setName(c.getName());
         commitEntity.setAuthor(c.getAuthor());
-        commitEntity.setSequenceNumber(c.getSequenceNumber());
         commitEntity.setComment(c.getComment());
         commitEntity.setTimestamp(c.getTimestamp());
         getFiles(c.getTouchedFiles(), commitEntity, walkedFiles);

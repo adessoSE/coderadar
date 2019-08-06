@@ -9,5 +9,5 @@ import java.util.List;
 public interface GetMetricValuesOfCommitUseCase {
   List<MetricValue> get(Commit commit);
 
-  List<MetricValueForCommit> get(GetMetricsForCommitCommand command);
+  List<MetricValueForCommit> get(GetMetricsForCommitCommand command, Long projectId);
 }

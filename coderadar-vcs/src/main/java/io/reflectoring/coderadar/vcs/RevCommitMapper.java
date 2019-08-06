@@ -13,7 +13,6 @@ public class RevCommitMapper {
     commit.setName(revCommit.getName());
     commit.setAuthor(revCommit.getAuthorIdent().getName());
     commit.setComment(revCommit.getShortMessage());
-    commit.setSequenceNumber(0);
     commit.setTimestamp(new Date(revCommit.getCommitTime()));
     return commit;
   }

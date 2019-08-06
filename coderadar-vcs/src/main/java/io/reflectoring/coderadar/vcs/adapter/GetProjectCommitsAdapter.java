@@ -6,7 +6,6 @@ import io.reflectoring.coderadar.analyzer.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
-import io.reflectoring.coderadar.vcs.Counter;
 import io.reflectoring.coderadar.vcs.port.driven.GetProjectCommitsPort;
 import java.io.File;
 import java.io.IOException;
@@ -71,7 +70,6 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
 
       HashMap<ObjectId, Commit> map = new HashMap<>();
       AtomicReference<Boolean> done = new AtomicReference<>(false);
-      final Counter currentSequenceNumber = new Counter(getCommitCount(git));
 
       git.log()
           .call()
@@ -86,10 +84,8 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
                   commit.setAuthor(rc.getAuthorIdent().getName());
                   commit.setComment(rc.getShortMessage());
                   commit.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
-                  commit.setSequenceNumber(currentSequenceNumber.getValue());
-                  currentSequenceNumber.decrement();
                   try {
-                    commit.setParents(getParents(revWalk, rc, map, range.getStartDate(), currentSequenceNumber));
+                    commit.setParents(getParents(revWalk, rc, map, range.getStartDate()));
                   } catch (IOException e) {
                     e.printStackTrace();
                   }
@@ -229,8 +225,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
       RevWalk revWalk,
       RevCommit commit,
       HashMap<ObjectId, Commit> walkedCommits,
-      LocalDate startDate,
-      Counter counter)
+      LocalDate startDate)
       throws IOException {
 
     List<Commit> parents = new ArrayList<>();
@@ -255,10 +250,8 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
         commitWithParents.setComment(commitWithMetadata.getShortMessage());
         commitWithParents.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
         walkedCommits.put(rc.getId(), commitWithParents);
-        commitWithParents.setSequenceNumber(counter.getValue());
-        counter.decrement();
         commitWithParents.setParents(
-            getParents(revWalk, commitWithMetadata, walkedCommits, startDate, counter));
+            getParents(revWalk, commitWithMetadata, walkedCommits, startDate));
         parents.add(commitWithParents);
       }
     }
@@ -275,16 +268,5 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
         Instant.ofEpochSecond(rc.getCommitTime()).atZone(ZoneId.systemDefault()).toLocalDate();
     return (commitTime.isBefore(range.getEndDate()) || commitTime.isEqual(range.getEndDate()))
         && (commitTime.isAfter(range.getStartDate()) || commitTime.isEqual(range.getStartDate()));
-  }
-
-  private int getCommitCount(Git gitClient) throws IOException, GitAPIException {
-    ObjectId head = gitClient.getRepository().resolve(Constants.HEAD);
-    Iterable<RevCommit> iterator = gitClient.log().add(head).call();
-    Counter count = new Counter(0);
-    iterator.forEach(
-            commit -> {
-              count.increment();
-            });
-    return count.getValue();
   }
 }

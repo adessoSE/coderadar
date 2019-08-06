@@ -1,6 +1,8 @@
 package io.reflectoring.coderadar.graph.query.service;
 
+import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.MetricValueForCommitQueryResult;
+import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfCommitPort;
@@ -9,20 +11,24 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class GetMetricValuesOfCommitAdapter implements GetMetricValuesOfCommitPort {
 
   private final GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository;
 
-  public GetMetricValuesOfCommitAdapter(GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository) {
+  private final GetCommitsInProjectRepository getCommitsInProjectRepository;
+
+  public GetMetricValuesOfCommitAdapter(GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository, GetCommitsInProjectRepository getCommitsInProjectRepository) {
     this.getMetricValuesOfCommitRepository = getMetricValuesOfCommitRepository;
+    this.getCommitsInProjectRepository = getCommitsInProjectRepository;
   }
 
   @Override
-  public List<MetricValueForCommit> get(GetMetricsForCommitCommand command) {
-    List<MetricValueForCommitQueryResult> result = getMetricValuesOfCommitRepository.getMetricValuesForCommit(command.getCommit(), command.getMetrics());
+  public List<MetricValueForCommit> get(GetMetricsForCommitCommand command, Long projectId) {
+    CommitEntity commitEntity = getCommitsInProjectRepository.findByName(command.getCommit());
+    List<MetricValueForCommitQueryResult> result =
+            getMetricValuesOfCommitRepository.getMetricValuesForCommit(projectId, command.getMetrics(), commitEntity.getTimestamp().toInstant().toString());
     List<MetricValueForCommit> values = new ArrayList<>();
     for(MetricValueForCommitQueryResult queryResult : result){
       values.add(new MetricValueForCommit(queryResult.getName(), queryResult.getValue()));

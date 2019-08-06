@@ -19,7 +19,7 @@ class GetMetricValuesOfCommitAdapterTest {
   @Test
   @DisplayName("Should return list when passing a valid argument")
   void shouldReturnListWhenPassingAValidArgument() {
-    getMetricValuesOfCommitAdapter = new GetMetricValuesOfCommitAdapter(getMetricValuesOfCommitRepository);
+    getMetricValuesOfCommitAdapter = new GetMetricValuesOfCommitAdapter(getMetricValuesOfCommitRepository, getCommitsInProjectRepository);
 
     List<MetricValue> returnedList = getMetricValuesOfCommitAdapter.get("1A");
     Assertions.assertThat(returnedList).isNotNull();

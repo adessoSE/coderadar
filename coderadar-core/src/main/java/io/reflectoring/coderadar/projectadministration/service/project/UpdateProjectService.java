@@ -9,6 +9,7 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.Proje
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
+import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,23 +27,20 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
   private final UpdateRepositoryUseCase updateRepositoryUseCase;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
-  private final TaskExecutor taskExecutor;
-  private final ProjectStatusPort projectStatusPort;
+  private final ProcessProjectService processProjectService;
 
   @Autowired
   public UpdateProjectService(
-      GetProjectPort getProjectPort,
-      UpdateProjectPort updateProjectPort,
-      UpdateRepositoryUseCase updateRepositoryUseCase,
-      CoderadarConfigurationProperties coderadarConfigurationProperties,
-      TaskExecutor taskExecutor,
-      ProjectStatusPort projectStatusPort) {
+          GetProjectPort getProjectPort,
+          UpdateProjectPort updateProjectPort,
+          UpdateRepositoryUseCase updateRepositoryUseCase,
+          CoderadarConfigurationProperties coderadarConfigurationProperties,
+          ProcessProjectService processProjectService) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
     this.updateRepositoryUseCase = updateRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-    this.taskExecutor = taskExecutor;
-    this.projectStatusPort = projectStatusPort;
+    this.processProjectService = processProjectService;
   }
 
   @Override
@@ -50,36 +48,34 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       throws ProjectIsBeingProcessedException {
     Project project = getProjectPort.get(projectId);
 
-    if (projectStatusPort.isBeingProcessed(projectId)) {
-      throw new ProjectIsBeingProcessedException(projectId);
-    }
+
     if (getProjectPort.existsByName(command.getName())) {
       throw new ProjectAlreadyExistsException(command.getName());
     }
-    project.setName(command.getName());
-    project.setVcsUrl(command.getVcsUrl());
-    project.setVcsUsername(command.getVcsUsername());
-    project.setVcsPassword(command.getVcsPassword());
-    project.setVcsOnline(command.getVcsOnline());
-    project.setVcsStart(command.getStartDate());
-    project.setVcsEnd(command.getEndDate());
 
-    projectStatusPort.setBeingProcessed(projectId, true);
-    taskExecutor.execute(
-        () -> {
-          try {
-            updateRepositoryUseCase.updateRepository(
+    this.processProjectService.executeTask(() -> {
+      project.setName(command.getName());
+      project.setVcsUrl(command.getVcsUrl());
+      project.setVcsUsername(command.getVcsUsername());
+      project.setVcsPassword(command.getVcsPassword());
+      project.setVcsOnline(command.getVcsOnline());
+
+      if(!project.getVcsStart().equals(command.getStartDate())){
+        if(project.getVcsStart().before(command.getStartDate())){
+
+        }
+        project.setVcsStart(command.getStartDate());
+      }
+      project.setVcsEnd(command.getEndDate());
+      try {
+        updateRepositoryUseCase.updateRepository(
                 new File(
                         coderadarConfigurationProperties.getWorkdir()
-                            + "/"
-                            + project.getWorkdirName())
-                    .toPath());
-          } catch (UnableToUpdateRepositoryException e) {
-            e.printStackTrace();
-            projectStatusPort.setBeingProcessed(projectId, false);
-          }
-          updateProjectPort.update(project);
-          projectStatusPort.setBeingProcessed(projectId, false);
-        });
+                                + "/"
+                                + project.getWorkdirName())
+                        .toPath());
+      } catch (UnableToUpdateRepositoryException ignored){}
+      updateProjectPort.update(project);
+    }, projectId);
   }
 }

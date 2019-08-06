@@ -16,4 +16,6 @@ public interface GetCommitsInProjectRepository extends Neo4jRepository<CommitEnt
           "RETURN DISTINCT c " +
           "ORDER BY c.timestamp DESC")
   List<CommitEntity> findByProjectId(Long projectId);
+
+    CommitEntity findByName(String commit);
 }

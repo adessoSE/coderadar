@@ -37,7 +37,8 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
     @Override
   public MetricTree get(GetMetricsForCommitCommand command, Long projectId) {
         ProjectEntity projectEntity = getProjectRepository.findById(projectId).orElseThrow(() -> new ProjectNotFoundException(projectId));
-      List<MetricValueForCommitTreeQueryResult> result = getMetricValuesOfCommitRepository.getMetricTreeForCommit(command.getCommit(), command.getMetrics());
+        //List<MetricValueForCommitTreeQueryResult> result = getMetricValuesOfCommitRepository.getMetricTreeForCommit(command.getCommit(), command.getMetrics());
+        List<MetricValueForCommitTreeQueryResult> result = new ArrayList<>();
 
       List<ModuleEntity> moduleEntities = listModulesOfProjectRepository.findModulesInProject(projectId);
       moduleEntities.sort(Comparator.comparing(ModuleEntity::getPath));

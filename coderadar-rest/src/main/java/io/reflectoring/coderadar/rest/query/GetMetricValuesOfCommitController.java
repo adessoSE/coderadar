@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,7 @@ public class GetMetricValuesOfCommitController {
   }
 
   @GetMapping(path = "/projects/{projectId}/metricvalues/perCommit")
-  public ResponseEntity getMetricValues(@Validated @RequestBody GetMetricsForCommitCommand command, @PathParam("projectId") Long projectId){
-    return new ResponseEntity<>(getMetricValuesOfCommitUseCase.get(command), HttpStatus.OK);
+  public ResponseEntity getMetricValues(@Validated @RequestBody GetMetricsForCommitCommand command, @PathVariable("projectId") Long projectId){
+    return new ResponseEntity<>(getMetricValuesOfCommitUseCase.get(command, projectId), HttpStatus.OK);
   }
 }

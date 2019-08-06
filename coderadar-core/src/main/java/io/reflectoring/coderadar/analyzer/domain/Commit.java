@@ -19,7 +19,6 @@ public class Commit {
   private String author;
   private boolean merged = false;
   private boolean analyzed = false;
-  private Integer sequenceNumber;
 
   private List<Commit> parents = new ArrayList<>();
 
