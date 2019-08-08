@@ -28,7 +28,6 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
   private final CreateModuleRepository createModuleRepository;
   private final GetCommitsInProjectRepository getCommitsInProjectRepository;
 
-
   public GetMetricsForAllFilesInCommitAdapter(
       GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository,
       GetProjectRepository getProjectRepository,
@@ -44,10 +43,12 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
 
   @Override
   public MetricTree get(GetMetricsForCommitCommand command, Long projectId) {
+
     ProjectEntity projectEntity =
         getProjectRepository
             .findById(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
+
     CommitEntity commitEntity =
         getCommitsInProjectRepository.findByNameAndProjectId(command.getCommit(), projectId);
 
@@ -60,6 +61,15 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
     moduleEntities.sort(Comparator.comparing(ModuleEntity::getPath));
     Collections.reverse(moduleEntities);
 
+    List<MetricTree> moduleChildren = processModules(moduleEntities, result);
+    MetricTree rootModule = processRootModule(result);
+    rootModule.getChildren().addAll(findChildModules(projectEntity.getModules(), moduleChildren));
+    rootModule.setMetrics(aggregateChildMetrics(rootModule.getChildren()));
+    return rootModule;
+  }
+
+  private List<MetricTree> processModules(
+      List<ModuleEntity> moduleEntities, List<MetricValueForCommitTreeQueryResult> result) {
     List<MetricTree> moduleChildren = new ArrayList<>();
     for (ModuleEntity moduleEntity : moduleEntities) {
       MetricTree metricTree = new MetricTree();
@@ -70,6 +80,7 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
       if (result.isEmpty()) {
         break;
       }
+      List<MetricValueForCommitTreeQueryResult> processedFiles = new ArrayList<>();
       for (MetricValueForCommitTreeQueryResult commitTreeQueryResult : result) {
         if (commitTreeQueryResult.getPath().startsWith(moduleEntity.getPath())) {
           MetricTree metricTreeFile = new MetricTree();
@@ -86,34 +97,22 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
                     + metricValueForCommit.getValue());
           }
           metricTree.getChildren().add(metricTreeFile);
+          processedFiles.add(commitTreeQueryResult);
         }
       }
+      result.removeAll(processedFiles);
       for (Map.Entry<String, Long> metric : aggregatedMetrics.entrySet()) {
         metricTree.getMetrics().add(new MetricValueForCommit(metric.getKey(), metric.getValue()));
       }
       moduleChildren.add(metricTree);
     }
-
-    MetricTree rootModule = processRootModule(result);
-    rootModule.getChildren().addAll(findChildModules(projectEntity.getModules(), moduleChildren));
-    List<MetricValueForCommit> aggregatedMetricsForRootModule =
-        aggregateChildMetrics(rootModule.getChildren());
-    for (MetricValueForCommit val : aggregatedMetricsForRootModule) {
-      if (rootModule
-          .getMetrics()
-          .stream()
-          .noneMatch(metric -> metric.getMetricName().equals(val.getMetricName()))) {
-        rootModule.getMetrics().add(new MetricValueForCommit(val.getMetricName(), val.getValue()));
-      }
-    }
-    return rootModule;
+    return moduleChildren;
   }
 
   private MetricTree processRootModule(List<MetricValueForCommitTreeQueryResult> result) {
     MetricTree rootModule = new MetricTree();
     rootModule.setType(MetricsTreeNodeType.MODULE);
     rootModule.setName("root");
-    Map<String, Long> aggregatedMetrics = new HashMap<>();
 
     for (MetricValueForCommitTreeQueryResult value : result) {
       MetricTree metricTreeFile = new MetricTree();
@@ -125,16 +124,8 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
         MetricValueForCommit metricValueForCommit =
             new MetricValueForCommit((String) metric.get("name"), (Long) metric.get("value"));
         metricTreeFile.getMetrics().add(metricValueForCommit);
-        aggregatedMetrics.putIfAbsent(metricValueForCommit.getMetricName(), 0L);
-        aggregatedMetrics.put(
-            metricValueForCommit.getMetricName(),
-            aggregatedMetrics.get(metricValueForCommit.getMetricName())
-                + metricValueForCommit.getValue());
       }
       rootModule.getChildren().add(metricTreeFile);
-    }
-    for (Map.Entry<String, Long> metric : aggregatedMetrics.entrySet()) {
-      rootModule.getMetrics().add(new MetricValueForCommit(metric.getKey(), metric.getValue()));
     }
     return rootModule;
   }
