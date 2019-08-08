@@ -1,9 +1,8 @@
 package io.reflectoring.coderadar.vcs;
 
 import io.reflectoring.coderadar.analyzer.domain.Commit;
-import org.eclipse.jgit.revwalk.RevCommit;
-
 import java.util.Date;
+import org.eclipse.jgit.revwalk.RevCommit;
 
 /** Maps a RevCommit object to a VcsCommit object. */
 public class RevCommitMapper {

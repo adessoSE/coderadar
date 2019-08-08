@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.graph.query;
 import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
-import io.reflectoring.coderadar.graph.query.repository.GetMetricsForAllFilesInCommitRepository;
 import io.reflectoring.coderadar.graph.query.service.GetMetricsForAllFilesInCommitAdapter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,13 @@ class GetMetricsForAllFilesInCommitAdapterTest {
   @Test
   @DisplayName("Should return list of GroupedMetricValueDTO when passing a valid argument")
   void shouldReturnListOfGroupedMetricValueDTOWhenPassingAValidArgument() {
-    getMetricsForAllFilesInCommitAdapter = new GetMetricsForAllFilesInCommitAdapter(getMetricsForAllFilesInCommitRepository, getProjectRepository, listModulesOfProjectRepository, createModuleRepository);
+    getMetricsForAllFilesInCommitAdapter =
+        new GetMetricsForAllFilesInCommitAdapter(
+            getMetricsForAllFilesInCommitRepository,
+            getProjectRepository,
+            listModulesOfProjectRepository,
+            createModuleRepository,
+            getCommitsInProjectRepository);
 
     /*    GetMetricsForAllFilesInCommitCommand command =
         new GetMetricsForAllFilesInCommitCommand("1A", new LinkedList<>());

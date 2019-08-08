@@ -10,12 +10,13 @@ import org.springframework.stereotype.Service;
 public class GetMetricsForAllFilesInCommitService implements GetMetricsForAllFilesInCommitUseCase {
   private final GetMetricsForAllFilesInCommitPort getMetricsForAllFilesInCommitPort;
 
-  public GetMetricsForAllFilesInCommitService(GetMetricsForAllFilesInCommitPort getMetricsForAllFilesInCommitPort) {
+  public GetMetricsForAllFilesInCommitService(
+      GetMetricsForAllFilesInCommitPort getMetricsForAllFilesInCommitPort) {
     this.getMetricsForAllFilesInCommitPort = getMetricsForAllFilesInCommitPort;
   }
 
   @Override
-  public MetricTree get(GetMetricsForCommitCommand command,  Long projectId) {
+  public MetricTree get(GetMetricsForCommitCommand command, Long projectId) {
     return getMetricsForAllFilesInCommitPort.get(command, projectId);
   }
 }

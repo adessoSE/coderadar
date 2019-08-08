@@ -2,21 +2,22 @@ package io.reflectoring.coderadar.graph.projectadministration.domain;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
 /** A coderadar project that defines the source of files that are to be analyzed. */
 @NodeEntity
 @Data
-@EqualsAndHashCode(exclude = {"files", "filePatterns", "modules", "analyzerConfigurations", "analyzingJob"})
-@ToString(exclude = {"files", "filePatterns", "modules", "analyzerConfigurations",  "analyzingJob"})
+@EqualsAndHashCode(
+  exclude = {"files", "filePatterns", "modules", "analyzerConfigurations", "analyzingJob"}
+)
+@ToString(exclude = {"files", "filePatterns", "modules", "analyzerConfigurations", "analyzingJob"})
 public class ProjectEntity {
   private Long id;
   private String name;

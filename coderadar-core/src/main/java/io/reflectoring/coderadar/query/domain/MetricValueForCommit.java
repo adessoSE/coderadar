@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class MetricValueForCommit {
-    private String metricName;
-    private Long value;
+  private String metricName;
+  private Long value;
 }

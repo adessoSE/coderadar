@@ -45,15 +45,17 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
 
   @Autowired
   public StartAnalyzingService(
-          GetProjectPort getProjectPort,
-          AnalyzeCommitService analyzeCommitService,
-          AnalyzerPluginService analyzerPluginService,
-          GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort,
-          ListFilePatternsOfProjectPort listFilePatternsOfProjectPort,
-          GetCommitsInProjectPort getCommitsInProjectPort,
-          SaveMetricPort saveMetricPort,
-          SaveCommitPort saveCommitPort,
-          ProcessProjectService processProjectService, StartAnalyzingPort startAnalyzingPort, StopAnalyzingPort stopAnalyzingPort) {
+      GetProjectPort getProjectPort,
+      AnalyzeCommitService analyzeCommitService,
+      AnalyzerPluginService analyzerPluginService,
+      GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort,
+      ListFilePatternsOfProjectPort listFilePatternsOfProjectPort,
+      GetCommitsInProjectPort getCommitsInProjectPort,
+      SaveMetricPort saveMetricPort,
+      SaveCommitPort saveCommitPort,
+      ProcessProjectService processProjectService,
+      StartAnalyzingPort startAnalyzingPort,
+      StopAnalyzingPort stopAnalyzingPort) {
     this.getProjectPort = getProjectPort;
     this.analyzeCommitService = analyzeCommitService;
     this.analyzerPluginService = analyzerPluginService;
@@ -63,8 +65,8 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     this.saveMetricPort = saveMetricPort;
     this.saveCommitPort = saveCommitPort;
     this.processProjectService = processProjectService;
-      this.startAnalyzingPort = startAnalyzingPort;
-      this.stopAnalyzingPort = stopAnalyzingPort;
+    this.startAnalyzingPort = startAnalyzingPort;
+    this.stopAnalyzingPort = stopAnalyzingPort;
   }
 
   @Override
@@ -81,7 +83,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
               getAnalyzersForProject(project);
           FilePatternMatcher filePatternMatcher = new FilePatternMatcher(filePatterns);
 
-            startAnalyzingPort.start(command, projectId);
+          startAnalyzingPort.start(command, projectId);
           Long counter = 0L;
           for (Commit commit : commitsToBeAnalyzed) {
             if (!commit.isAnalyzed()) {

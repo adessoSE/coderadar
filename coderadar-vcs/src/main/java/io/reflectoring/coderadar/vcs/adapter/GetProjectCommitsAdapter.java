@@ -20,12 +20,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.errors.MissingObjectException;
-import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -152,7 +150,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
     diffFormatter.setRepository(git.getRepository());
     diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
     diffFormatter.setDetectRenames(true);
-    for (int i = 0; i < commits.size()-1; i++) {
+    for (int i = 0; i < commits.size() - 1; i++) {
       RevCommit gitCommit = findCommit(git, commits.get(i).getName());
 
       assert gitCommit != null;
@@ -173,7 +171,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
             fileToCommitRelationship.setCommit(commits.get(i));
             fileToCommitRelationship.setFile(file);
 
-            //TODO: Why do we do this again???? ask Kilian maybe
+            // TODO: Why do we do this again???? ask Kilian maybe
             if (changeType == ChangeType.DELETE) {
               file.setPath(diff.getOldPath());
             } else {
