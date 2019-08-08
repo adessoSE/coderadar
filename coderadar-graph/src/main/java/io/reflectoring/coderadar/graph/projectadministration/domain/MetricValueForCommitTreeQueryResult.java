@@ -15,6 +15,5 @@ import org.springframework.data.neo4j.annotation.QueryResult;
 @EqualsAndHashCode
 public class MetricValueForCommitTreeQueryResult {
   private String path;
-
   private List<Map<String, Object>> metrics;
 }

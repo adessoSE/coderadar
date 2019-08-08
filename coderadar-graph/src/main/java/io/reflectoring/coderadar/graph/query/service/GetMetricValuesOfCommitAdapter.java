@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 public class GetMetricValuesOfCommitAdapter implements GetMetricValuesOfCommitPort {
 
   private final GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository;
-
   private final GetCommitsInProjectRepository getCommitsInProjectRepository;
 
   public GetMetricValuesOfCommitAdapter(

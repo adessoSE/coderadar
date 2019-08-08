@@ -32,7 +32,9 @@ public class DateRangeCommitFilter implements CommitFilter {
   @Override
   public boolean shouldBeProcessed(Commit commit) {
     LocalDate commitDate =
-        Instant.ofEpochSecond(commit.getTimestamp().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+        Instant.ofEpochSecond(commit.getTimestamp().getTime())
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate();
     if (this.startDate != null && commitDate.isBefore(this.startDate)) {
       return false;
     }

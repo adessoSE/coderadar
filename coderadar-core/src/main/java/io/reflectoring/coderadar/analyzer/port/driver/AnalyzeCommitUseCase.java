@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
+
 import java.util.List;
 
 public interface AnalyzeCommitUseCase {

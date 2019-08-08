@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.graph.projectadministration.project;
 
-import static org.mockito.Mockito.*;
-
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.DeleteProjectRepository;
@@ -9,10 +7,13 @@ import io.reflectoring.coderadar.graph.projectadministration.project.service.Del
 import io.reflectoring.coderadar.graph.query.repository.DeleteCommitsRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+import static org.mockito.Mockito.*;
 
 @DisplayName("Delete project")
 class DeleteProjectAdapterTest {

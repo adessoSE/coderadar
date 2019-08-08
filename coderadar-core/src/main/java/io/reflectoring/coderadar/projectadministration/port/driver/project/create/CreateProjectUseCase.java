@@ -5,5 +5,6 @@ import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedEx
 import java.net.MalformedURLException;
 
 public interface CreateProjectUseCase {
-  Long createProject(CreateProjectCommand command) throws MalformedURLException, ProjectIsBeingProcessedException;
+  Long createProject(CreateProjectCommand command)
+      throws MalformedURLException, ProjectIsBeingProcessedException;
 }

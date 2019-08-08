@@ -16,7 +16,7 @@ public class DeleteProjectService implements DeleteProjectUseCase {
 
   @Autowired
   public DeleteProjectService(
-          DeleteProjectPort deleteProjectPort, ProcessProjectService processProjectService) {
+      DeleteProjectPort deleteProjectPort, ProcessProjectService processProjectService) {
     this.deleteProjectPort = deleteProjectPort;
     this.processProjectService = processProjectService;
   }

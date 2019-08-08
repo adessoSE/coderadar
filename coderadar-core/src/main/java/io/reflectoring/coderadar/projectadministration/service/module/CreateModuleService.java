@@ -21,7 +21,10 @@ public class CreateModuleService implements CreateModuleUseCase {
   private final ProcessProjectService processProjectService;
 
   @Autowired
-  public CreateModuleService(CreateModulePort createModulePort, SaveModulePort saveModulePort, ProcessProjectService processProjectService) {
+  public CreateModuleService(
+      CreateModulePort createModulePort,
+      SaveModulePort saveModulePort,
+      ProcessProjectService processProjectService) {
     this.createModulePort = createModulePort;
     this.saveModulePort = saveModulePort;
     this.processProjectService = processProjectService;
@@ -36,7 +39,8 @@ public class CreateModuleService implements CreateModuleUseCase {
     module.setPath(command.getPath());
     Long moduleId = saveModulePort.saveModule(module, projectId);
 
-    processProjectService.executeTask(() -> createModulePort.createModule(moduleId, projectId), projectId);
+    processProjectService.executeTask(
+        () -> createModulePort.createModule(moduleId, projectId), projectId);
     return moduleId;
   }
 }

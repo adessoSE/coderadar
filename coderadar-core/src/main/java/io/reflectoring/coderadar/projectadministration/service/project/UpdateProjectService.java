@@ -59,7 +59,6 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
           if (!project.getVcsStart().equals(command.getStartDate())) {
             if (project.getVcsStart().before(command.getStartDate())) {}
-
             project.setVcsStart(command.getStartDate());
           }
           project.setVcsEnd(command.getEndDate());

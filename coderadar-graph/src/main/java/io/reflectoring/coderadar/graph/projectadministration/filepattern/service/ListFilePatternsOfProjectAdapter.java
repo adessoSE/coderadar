@@ -31,7 +31,8 @@ public class ListFilePatternsOfProjectAdapter implements ListFilePatternsOfProje
     getProjectRepository
         .findById(projectId)
         .orElseThrow(() -> new ProjectNotFoundException(projectId));
-    return new ArrayList<>(filePatternMapper.mapNodeEntities(
-        listFilePatternsOfProjectRepository.findByProjectId(projectId)));
+    return new ArrayList<>(
+        filePatternMapper.mapNodeEntities(
+            listFilePatternsOfProjectRepository.findByProjectId(projectId)));
   }
 }

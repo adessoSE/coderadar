@@ -21,8 +21,7 @@ public class CreateModuleAdapter implements CreateModulePort {
 
   @Autowired
   public CreateModuleAdapter(
-      CreateModuleRepository createModuleRepository,
-      GetProjectRepository getProjectRepository) {
+      CreateModuleRepository createModuleRepository, GetProjectRepository getProjectRepository) {
     this.createModuleRepository = createModuleRepository;
     this.getProjectRepository = getProjectRepository;
   }
@@ -36,13 +35,15 @@ public class CreateModuleAdapter implements CreateModulePort {
    */
   @Override
   public void createModule(Long moduleId, Long projectId) {
-    ModuleEntity moduleEntity = createModuleRepository.findById(moduleId).orElseThrow(() -> new ModuleNotFoundException(moduleId));
+    ModuleEntity moduleEntity =
+        createModuleRepository
+            .findById(moduleId)
+            .orElseThrow(() -> new ModuleNotFoundException(moduleId));
     ProjectEntity projectEntity =
-            getProjectRepository
-                    .findById(projectId)
-                    .orElseThrow(() -> new ProjectNotFoundException(projectId));
-    ModuleEntity foundModule =
-        findParentModuleInProject(projectEntity, moduleEntity.getPath());
+        getProjectRepository
+            .findById(projectId)
+            .orElseThrow(() -> new ProjectNotFoundException(projectId));
+    ModuleEntity foundModule = findParentModuleInProject(projectEntity, moduleEntity.getPath());
     if (foundModule != null) {
       attachModuleToModule(foundModule, moduleEntity);
     } else {
@@ -78,8 +79,6 @@ public class CreateModuleAdapter implements CreateModulePort {
     createModuleRepository.save(parentModule);
     createModuleRepository.save(childModule);
   }
-
-
 
   /**
    * Attaches a module directly to a project.

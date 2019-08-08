@@ -28,6 +28,7 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
   private final CreateModuleRepository createModuleRepository;
   private final GetCommitsInProjectRepository getCommitsInProjectRepository;
 
+
   public GetMetricsForAllFilesInCommitAdapter(
       GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository,
       GetProjectRepository getProjectRepository,
