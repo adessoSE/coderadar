@@ -6,25 +6,7 @@ import io.reflectoring.coderadar.analyzer.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
-import io.reflectoring.coderadar.vcs.Counter;
 import io.reflectoring.coderadar.vcs.port.driven.GetProjectCommitsPort;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.diff.DiffEntry;
-import org.eclipse.jgit.diff.DiffFormatter;
-import org.eclipse.jgit.diff.RawTextComparator;
-import org.eclipse.jgit.errors.MissingObjectException;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.eclipse.jgit.treewalk.TreeWalk;
-import org.eclipse.jgit.util.io.DisabledOutputStream;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -37,6 +19,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.diff.DiffFormatter;
+import org.eclipse.jgit.diff.RawTextComparator;
+import org.eclipse.jgit.errors.MissingObjectException;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.util.io.DisabledOutputStream;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
@@ -72,7 +68,6 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
 
       HashMap<ObjectId, Commit> map = new HashMap<>();
       AtomicReference<Boolean> done = new AtomicReference<>(false);
-      final Counter currentSequenceNumber = new Counter(getCommitCount(git));
 
       git.log()
           .call()
@@ -87,11 +82,8 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
                   commit.setAuthor(rc.getAuthorIdent().getName());
                   commit.setComment(rc.getShortMessage());
                   commit.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
-                  commit.setSequenceNumber(currentSequenceNumber.getValue());
-                  currentSequenceNumber.decrement();
                   try {
-                    commit.setParents(
-                        getParents(revWalk, rc, map, range.getStartDate(), currentSequenceNumber));
+                    commit.setParents(getParents(revWalk, rc, map, range.getStartDate()));
                   } catch (IOException e) {
                     e.printStackTrace();
                   }
@@ -122,8 +114,8 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
     RevCommit gitCommit = findCommit(git, firstCommit.getName());
     try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
       assert gitCommit != null;
-      treeWalk.addTree(gitCommit.getTree());
       treeWalk.setRecursive(true);
+      treeWalk.addTree(gitCommit.getTree());
       while (treeWalk.next()) {
 
         io.reflectoring.coderadar.analyzer.domain.File file = files.get(treeWalk.getPathString());
@@ -158,8 +150,8 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
     diffFormatter.setRepository(git.getRepository());
     diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
     diffFormatter.setDetectRenames(true);
-    for (Commit commit : commits) {
-      RevCommit gitCommit = findCommit(git, commit.getName());
+    for (int i = 0; i < commits.size() - 1; i++) {
+      RevCommit gitCommit = findCommit(git, commits.get(i).getName());
 
       assert gitCommit != null;
       if (gitCommit.getParentCount() > 0) {
@@ -176,9 +168,10 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
 
             fileToCommitRelationship.setOldPath(diff.getOldPath());
             fileToCommitRelationship.setChangeType(changeType);
-            fileToCommitRelationship.setCommit(commit);
+            fileToCommitRelationship.setCommit(commits.get(i));
             fileToCommitRelationship.setFile(file);
 
+            // TODO: Why do we do this again???? ask Kilian maybe
             if (changeType == ChangeType.DELETE) {
               file.setPath(diff.getOldPath());
             } else {
@@ -186,7 +179,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
             }
 
             file.getCommits().add(fileToCommitRelationship);
-            commit.getTouchedFiles().add(fileToCommitRelationship);
+            commits.get(i).getTouchedFiles().add(fileToCommitRelationship);
             files.put(file.getPath(), file);
           }
         }
@@ -231,8 +224,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
       RevWalk revWalk,
       RevCommit commit,
       HashMap<ObjectId, Commit> walkedCommits,
-      LocalDate startDate,
-      Counter counter)
+      LocalDate startDate)
       throws IOException {
 
     List<Commit> parents = new ArrayList<>();
@@ -257,10 +249,8 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
         commitWithParents.setComment(commitWithMetadata.getShortMessage());
         commitWithParents.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
         walkedCommits.put(rc.getId(), commitWithParents);
-        commitWithParents.setSequenceNumber(counter.getValue());
-        counter.decrement();
         commitWithParents.setParents(
-            getParents(revWalk, commitWithMetadata, walkedCommits, startDate, counter));
+            getParents(revWalk, commitWithMetadata, walkedCommits, startDate));
         parents.add(commitWithParents);
       }
     }
@@ -277,16 +267,5 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
         Instant.ofEpochSecond(rc.getCommitTime()).atZone(ZoneId.systemDefault()).toLocalDate();
     return (commitTime.isBefore(range.getEndDate()) || commitTime.isEqual(range.getEndDate()))
         && (commitTime.isAfter(range.getStartDate()) || commitTime.isEqual(range.getStartDate()));
-  }
-
-  private int getCommitCount(Git gitClient) throws IOException, GitAPIException {
-    ObjectId head = gitClient.getRepository().resolve(Constants.HEAD);
-    Iterable<RevCommit> iterator = gitClient.log().add(head).call();
-    Counter count = new Counter(0);
-    iterator.forEach(
-        commit -> {
-          count.increment();
-        });
-    return count.getValue();
   }
 }

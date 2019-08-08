@@ -19,14 +19,13 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 @Service
 public class StartAnalyzingService implements StartAnalyzingUseCase {
@@ -98,7 +97,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
                       commit.getComment(), commit.getName(), counter));
             }
           }
-          saveMetricPort.saveMetricValues(metricValues);
+          saveMetricPort.saveMetricValues(metricValues, projectId);
           commitsToBeAnalyzed.forEach(saveCommitPort::saveCommit);
           stopAnalyzingPort.stop(projectId);
         },

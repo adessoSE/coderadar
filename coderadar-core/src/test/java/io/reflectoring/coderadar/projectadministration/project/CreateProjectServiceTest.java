@@ -1,5 +1,9 @@
 package io.reflectoring.coderadar.projectadministration.project;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
@@ -13,16 +17,11 @@ import io.reflectoring.coderadar.projectadministration.service.ProcessProjectSer
 import io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
+import java.io.File;
+import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.task.TaskExecutor;
-
-import java.io.File;
-import java.util.Date;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class CreateProjectServiceTest {
 

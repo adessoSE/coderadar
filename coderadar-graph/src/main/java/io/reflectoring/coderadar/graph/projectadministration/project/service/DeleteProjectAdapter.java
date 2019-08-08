@@ -9,13 +9,12 @@ import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepos
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.UnableToDeleteProjectException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.DeleteProjectPort;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class DeleteProjectAdapter implements DeleteProjectPort {

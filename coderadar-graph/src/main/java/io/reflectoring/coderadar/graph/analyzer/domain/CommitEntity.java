@@ -1,15 +1,14 @@
 package io.reflectoring.coderadar.graph.analyzer.domain;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 
 /** Metadata about a commit to a Git repository. */
 @NodeEntity
@@ -24,7 +23,6 @@ public class CommitEntity {
   private String author;
   private boolean merged = false;
   private boolean analyzed = false;
-  private Integer sequenceNumber;
 
   @Relationship(type = "IS_CHILD_OF")
   @EqualsAndHashCode.Exclude

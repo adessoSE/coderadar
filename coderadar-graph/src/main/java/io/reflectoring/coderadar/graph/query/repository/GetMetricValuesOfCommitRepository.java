@@ -3,23 +3,35 @@ package io.reflectoring.coderadar.graph.query.repository;
 import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.MetricValueForCommitQueryResult;
 import io.reflectoring.coderadar.graph.projectadministration.domain.MetricValueForCommitTreeQueryResult;
+import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface GetMetricValuesOfCommitRepository extends Neo4jRepository<CommitEntity, Long> {
 
   @Query(
-      "MATCH (n:MetricValueEntity)-[:VALID_FOR*]->(c:CommitEntity) WHERE c.name = {0} AND n.name IN {1} RETURN DISTINCT n.name AS name, SUM(n.value) AS value")
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-->(c:CommitEntity) "
+          + "WITH datetime({2}).epochMillis AS commitTime, f, p, c "
+          + "WHERE ID(p) = {0} AND datetime(c.timestamp).epochMillis <= commitTime WITH p, f, commitTime "
+          + "OPTIONAL MATCH (f)-[r:CHANGED_IN]->() WHERE r.changeType = \"RENAME\" WITH p, collect(r.oldPath) AS paths, commitTime "
+          + "MATCH (p)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity)-[:VALID_FOR]-(m:MetricValueEntity)<-[:MEASURED_BY]-(f) "
+          + "WHERE datetime(c.timestamp).epochMillis <= commitTime AND  NOT(f.path IN paths) AND m.name in {1} WITH c, f, paths, m ORDER BY c.timestamp DESC "
+          + "WITH f.path AS path, m.name AS name, head(collect(m.value)) AS value "
+          + "RETURN name, SUM(value) AS value")
   List<MetricValueForCommitQueryResult> getMetricValuesForCommit(
-      String commitHash, List<String> metricNames);
+      Long projectId, List<String> metricNames, String date);
 
   @Query(
-      "MATCH (f:FileEntity)-[:MEASURED_BY]->(m:MetricValueEntity)-[:VALID_FOR]->(c:CommitEntity) WHERE c.name = {0} "
-          + "AND m.name IN {1} return f.path AS path, collect(m {.name, .value}) AS metrics ORDER BY f.path DESC")
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-->(c:CommitEntity) "
+          + "WITH datetime({2}).epochMillis AS commitTime, f, p, c "
+          + "WHERE ID(p) = {0} AND datetime(c.timestamp).epochMillis <= commitTime WITH p, f, commitTime "
+          + "OPTIONAL MATCH (f)-[r:CHANGED_IN]->() WHERE r.changeType = \"RENAME\" WITH p, collect(r.oldPath) AS paths, commitTime "
+          + "MATCH (p)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity)-[:VALID_FOR]-(m:MetricValueEntity)<-[:MEASURED_BY]-(f) "
+          + "WHERE datetime(c.timestamp).epochMillis <= commitTime AND  NOT(f.path IN paths) AND m.name in {1} WITH c, f, paths, m ORDER BY c.timestamp DESC "
+          + "WITH f.path AS path, m.name AS name, head(collect(m.value)) AS value "
+          + "RETURN path, collect({name: name, value: value}) AS metrics")
   List<MetricValueForCommitTreeQueryResult> getMetricTreeForCommit(
-      String commitHash, List<String> metricNames);
+      Long projectId, List<String> metricNames, String date);
 }

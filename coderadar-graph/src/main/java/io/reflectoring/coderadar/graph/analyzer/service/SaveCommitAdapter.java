@@ -12,13 +12,12 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class SaveCommitAdapter implements SaveCommitPort {
@@ -54,7 +53,6 @@ public class SaveCommitAdapter implements SaveCommitPort {
       commitEntity.setComment(newestCommit.getComment());
       commitEntity.setMerged(newestCommit.isMerged());
       commitEntity.setName(newestCommit.getName());
-      commitEntity.setSequenceNumber(newestCommit.getSequenceNumber());
       commitEntity.setTimestamp(newestCommit.getTimestamp());
       getFiles(newestCommit.getTouchedFiles(), commitEntity, walkedFiles);
       commitEntity.setParents(findAndSaveParents(newestCommit, walkedCommits, walkedFiles));
@@ -99,7 +97,6 @@ public class SaveCommitAdapter implements SaveCommitPort {
         commitEntity = new CommitEntity();
         commitEntity.setName(c.getName());
         commitEntity.setAuthor(c.getAuthor());
-        commitEntity.setSequenceNumber(c.getSequenceNumber());
         commitEntity.setComment(c.getComment());
         commitEntity.setTimestamp(c.getTimestamp());
         getFiles(c.getTouchedFiles(), commitEntity, walkedFiles);

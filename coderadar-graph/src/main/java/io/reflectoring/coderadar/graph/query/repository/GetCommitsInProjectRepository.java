@@ -1,11 +1,10 @@
 package io.reflectoring.coderadar.graph.query.repository;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
+import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface GetCommitsInProjectRepository extends Neo4jRepository<CommitEntity, Long> {
@@ -17,4 +16,8 @@ public interface GetCommitsInProjectRepository extends Neo4jRepository<CommitEnt
           + "RETURN DISTINCT c "
           + "ORDER BY c.timestamp DESC")
   List<CommitEntity> findByProjectId(Long projectId);
+
+  @Query(
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]-(:FileEntity)-[:CHANGED_IN]->(c:CommitEntity) WHERE c.name = {0} AND ID(p) = {1} RETURN c")
+  CommitEntity findByNameAndProjectId(String commit, Long projectId);
 }

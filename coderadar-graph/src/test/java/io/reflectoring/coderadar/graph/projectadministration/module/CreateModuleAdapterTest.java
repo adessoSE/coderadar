@@ -1,5 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.module;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
@@ -15,9 +18,6 @@ import io.reflectoring.coderadar.projectadministration.domain.Module;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.task.TaskExecutor;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @DisplayName("Create module")
 class CreateModuleAdapterTest {

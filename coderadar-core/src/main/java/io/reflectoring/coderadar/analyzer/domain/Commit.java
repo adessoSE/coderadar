@@ -1,12 +1,11 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
-import lombok.Data;
-import lombok.ToString;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import lombok.Data;
+import lombok.ToString;
 
 /** Metadata about a commit to a Git repository. */
 @Data
@@ -19,7 +18,6 @@ public class Commit {
   private String author;
   private boolean merged = false;
   private boolean analyzed = false;
-  private Integer sequenceNumber;
 
   private List<Commit> parents = new ArrayList<>();
 
