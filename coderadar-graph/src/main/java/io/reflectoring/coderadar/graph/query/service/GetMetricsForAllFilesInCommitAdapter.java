@@ -9,6 +9,7 @@ import io.reflectoring.coderadar.graph.projectadministration.module.repository.L
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
+import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
@@ -51,6 +52,9 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
 
     CommitEntity commitEntity =
         getCommitsInProjectRepository.findByNameAndProjectId(command.getCommit(), projectId);
+    if (commitEntity == null) {
+      throw new CommitNotFoundException(command.getCommit());
+    }
 
     List<MetricValueForCommitTreeQueryResult> result =
         getMetricValuesOfCommitRepository.getMetricTreeForCommit(

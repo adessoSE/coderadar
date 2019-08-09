@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.query;
 
 import io.reflectoring.coderadar.query.port.driver.GetMetricValuesOfTwoCommitsUseCase;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForTwoCommitsCommand;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -13,16 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class GetMetricValuesOfTwoCommits {
 
-
     private final GetMetricValuesOfTwoCommitsUseCase getMetricValuesOfTwoCommitsUseCase;
 
     public GetMetricValuesOfTwoCommits(GetMetricValuesOfTwoCommitsUseCase getMetricValuesOfTwoCommitsUseCase) {
         this.getMetricValuesOfTwoCommitsUseCase = getMetricValuesOfTwoCommitsUseCase;
     }
 
-
     @GetMapping(path = "/projects/{projectId}/metricvalues/deltaTree", consumes = "application/json", produces = "application/json")
     public ResponseEntity getMetricValuesForTwoCommits(@Validated @RequestBody GetMetricsForTwoCommitsCommand command, @PathVariable("projectId") Long projectId){
-        return new ResponseEntity<>(getMetricValuesOfTwoCommitsUseCase.get(command, projectId), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(getMetricValuesOfTwoCommitsUseCase.get(command, projectId), HttpStatus.OK);
+        } catch (IllegalArgumentException e){
+            return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+        }
     }
 }
