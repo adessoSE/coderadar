@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.graph.analyzer;
 
-import static org.mockito.Mockito.*;
-
 import io.reflectoring.coderadar.analyzer.AnalyzingJobNotStartedException;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.GetAnalyzingStatusRepository;
@@ -10,11 +8,14 @@ import io.reflectoring.coderadar.graph.analyzer.service.StopAnalyzingAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+import static org.mockito.Mockito.*;
 
 @DisplayName("Stop analyzing")
 class StopAnalyzingAdapterTest {

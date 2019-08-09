@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.project;
 
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
+import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
@@ -28,7 +29,7 @@ public class CreateProjectController {
 
   @PostMapping(produces = "application/json", path = "/projects")
   public ResponseEntity createProject(@RequestBody @Validated CreateProjectCommand command)
-      throws MalformedURLException {
+          throws MalformedURLException, ProjectIsBeingProcessedException {
     try {
       return new ResponseEntity<>(
           new IdResponse(createProjectUseCase.createProject(command)), HttpStatus.CREATED);

@@ -3,9 +3,10 @@ package io.reflectoring.coderadar.vcs.service;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.nio.file.Path;
 
 /** Centralizes the access to local working directories needed for some tasks. */
 @Service

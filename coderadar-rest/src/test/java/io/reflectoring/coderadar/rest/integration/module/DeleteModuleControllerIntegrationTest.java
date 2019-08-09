@@ -35,13 +35,16 @@ class DeleteModuleControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(delete("/projects/" + testProject.getId() + "/modules/" + module.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(result -> Assertions.assertFalse(createModuleRepository.findById(id).isPresent()))
             .andDo(document("modules/delete"));
   }
 
   @Test
   void deleteModuleReturnsErrorWhenModuleNotFound() throws Exception {
+    ProjectEntity testProject = new ProjectEntity();
+    testProject.setId(0L);
+    createProjectRepository.save(testProject);
+
     mvc()
         .perform(delete("/projects/0/modules/0"))
         .andExpect(MockMvcResultMatchers.status().isNotFound())

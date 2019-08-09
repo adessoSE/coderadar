@@ -4,14 +4,12 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntit
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.io.File;
 import java.util.Date;
 import java.util.UUID;
 
@@ -36,7 +34,6 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
     testProject = createProjectRepository.save(testProject);
     final Long id = testProject.getId();
 
-    // Test
     UpdateProjectCommand command =
         new UpdateProjectCommand(
             "name", "username", "password", "http://valid.url", true, new Date(), new Date());
@@ -48,7 +45,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(
             result -> {
-              FileUtils.deleteDirectory(new File("coderadar-workdir/projects"));
+              //FileUtils.deleteDirectory(new File("coderadar-workdir/projects"));
                 ProjectEntity project = createProjectRepository.findById(id).get();
               Assertions.assertEquals("name", project.getName());
               Assertions.assertEquals("username", project.getVcsUsername());

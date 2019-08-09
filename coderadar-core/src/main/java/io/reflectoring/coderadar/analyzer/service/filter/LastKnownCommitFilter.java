@@ -1,14 +1,15 @@
 package io.reflectoring.coderadar.analyzer.service.filter;
 
+import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.vcs.domain.CommitFilter;
-import io.reflectoring.coderadar.vcs.domain.VcsCommit;
 import io.reflectoring.coderadar.vcs.port.driver.FindCommitUseCase;
+
 import java.nio.file.Path;
 
 /** A filter that walks only those commits that are newer than a specified commit. */
 public class LastKnownCommitFilter implements CommitFilter {
 
-  private final VcsCommit lastKnownCommit;
+  private final Commit lastKnownCommit;
 
   /**
    * Constructor.
@@ -31,11 +32,11 @@ public class LastKnownCommitFilter implements CommitFilter {
   }
 
   @Override
-  public boolean shouldBeProcessed(VcsCommit commit) {
+  public boolean shouldBeProcessed(Commit commit) {
     return this.lastKnownCommit == null || isNewerThan(commit, lastKnownCommit);
   }
 
-  private boolean isNewerThan(VcsCommit commit, VcsCommit referenceCommit) {
-    return commit.getCommitTime() > referenceCommit.getCommitTime();
+  private boolean isNewerThan(Commit commit, Commit referenceCommit) {
+    return commit.getTimestamp().after(referenceCommit.getTimestamp());
   }
 }

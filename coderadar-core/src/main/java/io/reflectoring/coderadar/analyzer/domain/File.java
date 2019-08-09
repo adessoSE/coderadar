@@ -1,8 +1,9 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
+import lombok.Data;
+
 import java.util.LinkedList;
 import java.util.List;
-import lombok.Data;
 
 /** Represents a file in a VCS repository. */
 @Data

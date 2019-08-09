@@ -6,6 +6,7 @@
 
 coderadar-app/local.application.properties
 coderadar-app/coderadar-workdir/
+coderadar-rest/coderadar-workdir/
 
 ### Eclipse ###
 

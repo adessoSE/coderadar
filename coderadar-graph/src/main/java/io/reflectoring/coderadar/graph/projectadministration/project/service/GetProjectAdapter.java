@@ -44,4 +44,9 @@ public class GetProjectAdapter implements GetProjectPort {
   public boolean existsByName(String name) {
     return getProjectRepository.findByName(name).isPresent();
   }
+
+  @Override
+  public boolean existsById(Long projectId) {
+    return getProjectRepository.existsById(projectId);
+  }
 }

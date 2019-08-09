@@ -1,12 +1,9 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.vcs.RevCommitMapper;
-import io.reflectoring.coderadar.vcs.domain.VcsCommit;
 import io.reflectoring.coderadar.vcs.port.driven.FindCommitPort;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ObjectId;
@@ -15,6 +12,10 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 public class FindCommitAdapter implements FindCommitPort {
@@ -27,7 +28,7 @@ public class FindCommitAdapter implements FindCommitPort {
   }
 
   @Override
-  public VcsCommit findCommit(Path repositoryRoot, String name) {
+  public Commit findCommit(Path repositoryRoot, String name) {
     Git git;
     try {
       Repository repository;

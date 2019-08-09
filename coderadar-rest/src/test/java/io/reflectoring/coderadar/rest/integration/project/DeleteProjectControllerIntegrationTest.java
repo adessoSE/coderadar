@@ -23,19 +23,17 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   @DirtiesContext
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
-  void deleteProjectWithId() throws Exception {
+  public void deleteProjectWithId() throws Exception {
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject = createProjectRepository.save(testProject);
     final Long id = testProject.getId();
 
     mvc()
-        .perform(delete("/projects/" + testProject.getId()))
+        .perform(delete("/projects/" + id))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(
-            result -> {
-              Assertions.assertFalse(createProjectRepository.findById(id).isPresent());
-            })
+            result -> Assertions.assertFalse(createProjectRepository.findById(id).isPresent()))
             .andDo(document("projects/delete"));
   }
 

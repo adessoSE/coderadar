@@ -14,8 +14,10 @@ import org.neo4j.ogm.annotation.Relationship;
 /** A coderadar project that defines the source of files that are to be analyzed. */
 @NodeEntity
 @Data
-@EqualsAndHashCode(exclude = {"files", "filePatterns", "modules", "analyzerConfigurations"})
-@ToString(exclude = {"files", "filePatterns", "modules", "analyzerConfigurations"})
+@EqualsAndHashCode(
+  exclude = {"files", "filePatterns", "modules", "analyzerConfigurations", "analyzingJob"}
+)
+@ToString(exclude = {"files", "filePatterns", "modules", "analyzerConfigurations", "analyzingJob"})
 public class ProjectEntity {
   private Long id;
   private String name;

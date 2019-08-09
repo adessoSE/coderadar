@@ -8,8 +8,10 @@ import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedEx
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
+import io.reflectoring.coderadar.projectadministration.port.driven.module.SaveModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
+import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.module.CreateModuleService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,12 +20,15 @@ import org.mockito.Mockito;
 class CreateModuleServiceTest {
   private CreateModulePort createModulePort = mock(CreateModulePort.class);
   private GetProjectPort getProjectPort = mock(GetProjectPort.class);
+  private ProcessProjectService processProjectService = mock(ProcessProjectService.class);
+  private SaveModulePort saveModulePort = mock(SaveModulePort.class);
 
   @Test
   void returnsNewModuleId()
       throws ModulePathInvalidException, ModuleAlreadyExistsException,
           ProjectIsBeingProcessedException {
-    CreateModuleService testSubject = new CreateModuleService(createModulePort);
+    CreateModuleService testSubject =
+        new CreateModuleService(createModulePort, saveModulePort, processProjectService);
 
     Project project = new Project();
     project.setId(2L);
@@ -33,7 +38,7 @@ class CreateModuleServiceTest {
 
     Module module = new Module();
     module.setPath("module-path");
-    Mockito.when(createModulePort.createModule(module, 2L)).thenReturn(1L);
+    Mockito.when(saveModulePort.saveModule(module, 2L)).thenReturn(1L);
 
     CreateModuleCommand command = new CreateModuleCommand("module-path");
     Long moduleId = testSubject.createModule(command, project.getId());

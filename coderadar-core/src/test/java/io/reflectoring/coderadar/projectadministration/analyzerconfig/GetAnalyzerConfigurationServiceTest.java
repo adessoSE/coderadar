@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.projectadministration.analyzerconfig;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
@@ -9,6 +7,8 @@ import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.Ge
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import static org.mockito.Mockito.mock;
 
 class GetAnalyzerConfigurationServiceTest {
   private GetAnalyzerConfigurationPort port = mock(GetAnalyzerConfigurationPort.class);

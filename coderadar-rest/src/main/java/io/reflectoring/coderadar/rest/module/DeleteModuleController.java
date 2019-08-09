@@ -1,9 +1,7 @@
 package io.reflectoring.coderadar.rest.module;
 
-import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.delete.DeleteModuleUseCase;
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +21,8 @@ public class DeleteModuleController {
   @DeleteMapping(
     path = "/projects/{projectId}/modules/{moduleId}"
   )
-  public ResponseEntity deleteModule(@PathVariable(name = "moduleId") Long moduleId, @PathVariable(name = "projectId") Long projectId) {
-    try {
-      deleteModuleUseCase.delete(moduleId, projectId);
-      return new ResponseEntity<>(HttpStatus.OK);
-    } catch (ModuleNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
-    } catch (ProjectIsBeingProcessedException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
-    }
+  public ResponseEntity deleteModule(@PathVariable(name = "moduleId") Long moduleId, @PathVariable(name = "projectId") Long projectId) throws ProjectIsBeingProcessedException {
+    deleteModuleUseCase.delete(moduleId, projectId);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 }

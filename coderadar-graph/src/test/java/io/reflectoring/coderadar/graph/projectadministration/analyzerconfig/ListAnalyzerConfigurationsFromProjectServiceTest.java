@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig;
 
-import static org.mockito.Mockito.*;
-
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.GetAnalyzerConfigurationsFromProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.GetAnalyzerConfigurationsFromProjectAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConfigurationEntity;
@@ -9,11 +7,14 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntit
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
-import java.util.LinkedList;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.LinkedList;
+
+import static org.mockito.Mockito.*;
 
 @DisplayName("Get analyzer configurations from project")
 class ListAnalyzerConfigurationsFromProjectServiceTest {

@@ -15,7 +15,7 @@ public class GetAnalyzingStatusService implements GetAnalyzingStatusUseCase {
   }
 
   @Override
-  public boolean get(Long projectId) {
+  public Boolean get(Long projectId) {
     return getAnalyzingStatusPort.get(projectId);
   }
 }

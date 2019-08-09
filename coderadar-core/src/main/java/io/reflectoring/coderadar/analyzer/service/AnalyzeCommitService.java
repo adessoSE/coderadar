@@ -1,14 +1,16 @@
 package io.reflectoring.coderadar.analyzer.service;
 
-import io.reflectoring.coderadar.analyzer.domain.*;
+import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.analyzer.domain.Commit;
+import io.reflectoring.coderadar.analyzer.domain.FileToCommitRelationship;
+import io.reflectoring.coderadar.analyzer.domain.Finding;
+import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
 import io.reflectoring.coderadar.plugin.api.FileMetrics;
 import io.reflectoring.coderadar.plugin.api.Metric;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
+import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driver.GetCommitRawContentUseCase;
 import java.util.ArrayList;
@@ -23,75 +25,67 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
 
   private Logger logger = LoggerFactory.getLogger(AnalyzeCommitService.class);
 
-  private final AnalyzerPluginService analyzerPluginService;
   private final AnalyzeFileService analyzeFileService;
-  private final SaveCommitPort saveCommitPort;
-  private final SaveMetricPort saveMetricPort;
   private final GetCommitRawContentUseCase getCommitRawContentUseCase;
-  private final UpdateProjectPort updateProjectPort;
+  private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
   @Autowired
   public AnalyzeCommitService(
-      AnalyzerPluginService analyzerPluginService,
       AnalyzeFileService analyzeFileService,
-      SaveCommitPort saveCommitPort,
-      SaveMetricPort saveMetricPort,
       GetCommitRawContentUseCase getCommitRawContentUseCase,
-      UpdateProjectPort updateProjectPort) {
-    this.analyzerPluginService = analyzerPluginService;
+      CoderadarConfigurationProperties coderadarConfigurationProperties) {
     this.analyzeFileService = analyzeFileService;
-    this.saveCommitPort = saveCommitPort;
-    this.saveMetricPort = saveMetricPort;
     this.getCommitRawContentUseCase = getCommitRawContentUseCase;
-    this.updateProjectPort = updateProjectPort;
+    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
   }
 
   @Override
-  public void analyzeCommit(Commit commit, Project project) {
-    List<SourceCodeFileAnalyzerPlugin> analyzers = getAnalyzersForProject(project);
+  public List<MetricValue> analyzeCommit(
+      Commit commit,
+      Project project,
+      List<SourceCodeFileAnalyzerPlugin> analyzers,
+      FilePatternMatcher filePatterns) {
+    List<MetricValue> metricValues = new ArrayList<>();
     if (analyzers.isEmpty()) {
       logger.warn(
           "skipping analysis of commit {} since there are no analyzers configured for project {}!",
           commit.getName(),
           project.getName());
     } else {
-      int analyzedFiles = 0;
       for (FileToCommitRelationship fileToCommitRelationship : commit.getTouchedFiles()) {
         String filePath = fileToCommitRelationship.getFile().getPath();
-        // project.getFiles().add(fileToCommitRelationship.getFile());
-        FileMetrics fileMetrics = analyzeFile(commit, filePath, analyzers);
-        storeMetrics(fileToCommitRelationship.getFile(), fileMetrics, commit);
-        commit.setAnalyzed(true);
-        //        saveCommitPort.saveCommit(commit);
+        if (filePatterns.matches(filePath)) {
+          FileMetrics fileMetrics = analyzeFile(commit, filePath, analyzers, project);
+          metricValues.addAll(getMetrics(fileMetrics, commit, filePath));
+        }
       }
-      updateProjectPort.update(project);
+      commit.setAnalyzed(true);
     }
+    return metricValues;
   }
 
   private FileMetrics analyzeFile(
-      Commit commit, String filepath, List<SourceCodeFileAnalyzerPlugin> analyzers) {
+      Commit commit,
+      String filepath,
+      List<SourceCodeFileAnalyzerPlugin> analyzers,
+      Project project) {
     byte[] fileContent = new byte[0];
     try {
-      fileContent = getCommitRawContentUseCase.getCommitContent(filepath, commit.getName());
+      fileContent =
+          getCommitRawContentUseCase.getCommitContent(
+              coderadarConfigurationProperties.getWorkdir()
+                  + "/projects/"
+                  + project.getWorkdirName(),
+              filepath,
+              commit.getName());
     } catch (UnableToGetCommitContentException e) {
       e.printStackTrace();
     }
     return analyzeFileService.analyzeFile(analyzers, filepath, fileContent);
   }
 
-  private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Project project) {
-    List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>();
-
-    // TODO: USE CASE + PORT
-    /*    List<AnalyzerConfiguration> configs = project.getAnalyzerConfigurations();
-    for (AnalyzerConfiguration config : configs) {
-      analyzers.add(analyzerPluginService.createAnalyzer(config.getAnalyzerName()));
-    }*/
-
-    return analyzers;
-  }
-
-  private void storeMetrics(File file, FileMetrics fileMetrics, Commit commit) {
+  private List<MetricValue> getMetrics(FileMetrics fileMetrics, Commit commit, String filepath) {
+    List<MetricValue> metricValues = new ArrayList<>();
     for (Metric metric : fileMetrics.getMetrics()) {
       List<Finding> findings = new ArrayList<>();
       for (io.reflectoring.coderadar.plugin.api.Finding finding : fileMetrics.getFindings(metric)) {
@@ -106,9 +100,10 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
       }
       MetricValue metricValue =
           new MetricValue(
-              null, metric.getId(), fileMetrics.getMetricCount(metric), commit, findings);
+              null, metric.getId(), fileMetrics.getMetricCount(metric), commit, findings, filepath);
 
-      saveMetricPort.saveMetricValue(metricValue);
+      metricValues.add(metricValue);
     }
+    return metricValues;
   }
 }

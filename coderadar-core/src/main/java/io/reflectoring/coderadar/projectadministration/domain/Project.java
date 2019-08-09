@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
-import java.util.Date;
 import lombok.Data;
+
+import java.util.Date;
 
 /** A coderadar project that defines the source of files that are to be analyzed. */
 @Data
@@ -15,4 +16,5 @@ public class Project {
   private boolean vcsOnline;
   private Date vcsStart;
   private Date vcsEnd;
+  private boolean beingProcessed;
 }

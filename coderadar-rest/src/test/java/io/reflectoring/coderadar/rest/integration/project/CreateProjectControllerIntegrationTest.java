@@ -5,7 +5,6 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.io.File;
+import java.net.URL;
 import java.util.Date;
 
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
@@ -25,23 +24,24 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void createProjectSuccessfully() throws Exception {
+      URL testRepoURL =  this.getClass().getClassLoader().getResource("test-repository");
     CreateProjectCommand command =
         new CreateProjectCommand(
-            "project", "username", "password", "https://valid.url", true, new Date(), new Date());
+            "project", "username", "password",testRepoURL.toString(), false, null, null);
     mvc()
         .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
         .andExpect(MockMvcResultMatchers.status().isCreated())
         .andDo(
             result -> {
-              FileUtils.deleteDirectory(new File("coderadar-workdir"));
+              //FileUtils.deleteDirectory(new File("coderadar-workdir"));
               Long id =
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
                 ProjectEntity project = createProjectRepository.findById(id).get();
               Assertions.assertEquals("project", project.getName());
               Assertions.assertEquals("username", project.getVcsUsername());
               Assertions.assertEquals("password", project.getVcsPassword());
-              Assertions.assertEquals("https://valid.url", project.getVcsUrl());
-              Assertions.assertTrue(project.isVcsOnline());
+              Assertions.assertEquals(testRepoURL.toString(), project.getVcsUrl());
+              Assertions.assertFalse(project.isVcsOnline());
             })
             .andDo(documentCreateProject());
   }

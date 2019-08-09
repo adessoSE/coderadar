@@ -68,6 +68,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
 
       HashMap<ObjectId, Commit> map = new HashMap<>();
       AtomicReference<Boolean> done = new AtomicReference<>(false);
+
       git.log()
           .call()
           .forEach(
@@ -113,8 +114,8 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
     RevCommit gitCommit = findCommit(git, firstCommit.getName());
     try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
       assert gitCommit != null;
-      treeWalk.addTree(gitCommit.getTree());
       treeWalk.setRecursive(true);
+      treeWalk.addTree(gitCommit.getTree());
       while (treeWalk.next()) {
 
         io.reflectoring.coderadar.analyzer.domain.File file = files.get(treeWalk.getPathString());
@@ -149,8 +150,8 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
     diffFormatter.setRepository(git.getRepository());
     diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
     diffFormatter.setDetectRenames(true);
-    for (Commit commit : commits) {
-      RevCommit gitCommit = findCommit(git, commit.getName());
+    for (int i = 0; i < commits.size() - 1; i++) {
+      RevCommit gitCommit = findCommit(git, commits.get(i).getName());
 
       assert gitCommit != null;
       if (gitCommit.getParentCount() > 0) {
@@ -167,9 +168,10 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
 
             fileToCommitRelationship.setOldPath(diff.getOldPath());
             fileToCommitRelationship.setChangeType(changeType);
-            fileToCommitRelationship.setCommit(commit);
+            fileToCommitRelationship.setCommit(commits.get(i));
             fileToCommitRelationship.setFile(file);
 
+            // TODO: Why do we do this again???? ask Kilian maybe
             if (changeType == ChangeType.DELETE) {
               file.setPath(diff.getOldPath());
             } else {
@@ -177,7 +179,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
             }
 
             file.getCommits().add(fileToCommitRelationship);
-            commit.getTouchedFiles().add(fileToCommitRelationship);
+            commits.get(i).getTouchedFiles().add(fileToCommitRelationship);
             files.put(file.getPath(), file);
           }
         }
@@ -261,13 +263,9 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
    * @return True if the commit was made within the date range, false otherwise.
    */
   private boolean isInDateRange(DateRange range, RevCommit rc) {
-    return Instant.ofEpochSecond(rc.getCommitTime())
-            .atZone(ZoneId.systemDefault())
-            .toLocalDate()
-            .isBefore(range.getEndDate())
-        && Instant.ofEpochSecond(rc.getCommitTime())
-            .atZone(ZoneId.systemDefault())
-            .toLocalDate()
-            .isAfter(range.getStartDate());
+    LocalDate commitTime =
+        Instant.ofEpochSecond(rc.getCommitTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+    return (commitTime.isBefore(range.getEndDate()) || commitTime.isEqual(range.getEndDate()))
+        && (commitTime.isAfter(range.getStartDate()) || commitTime.isEqual(range.getStartDate()));
   }
 }

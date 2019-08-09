@@ -1,14 +1,14 @@
 package io.reflectoring.coderadar.projectadministration.filepattern;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.DeleteFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.DeleteFilePatternService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 
 class DeleteFilePatternServiceTest {
   private DeleteFilePatternPort port = mock(DeleteFilePatternPort.class);

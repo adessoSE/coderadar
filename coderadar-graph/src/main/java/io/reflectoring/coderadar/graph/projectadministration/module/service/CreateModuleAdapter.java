@@ -3,86 +3,51 @@ package io.reflectoring.coderadar.graph.projectadministration.module.service;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.module.ModuleMapper;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
-import io.reflectoring.coderadar.graph.projectadministration.module.repository.ListModulesOfProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.service.ProjectStatusAdapter;
-import io.reflectoring.coderadar.projectadministration.*;
-import io.reflectoring.coderadar.projectadministration.domain.Module;
+import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CreateModuleAdapter implements CreateModulePort {
   private final CreateModuleRepository createModuleRepository;
   private final GetProjectRepository getProjectRepository;
-  private final ListModulesOfProjectRepository listModulesOfProjectRepository;
-  private final TaskExecutor taskExecutor;
-  private final ModuleMapper moduleMapper = new ModuleMapper();
-  private final ProjectStatusAdapter projectStatusAdapter;
 
   @Autowired
   public CreateModuleAdapter(
-      CreateModuleRepository createModuleRepository,
-      GetProjectRepository getProjectRepository,
-      ListModulesOfProjectRepository listModulesOfProjectRepository,
-      TaskExecutor taskExecutor,
-      ProjectStatusAdapter projectStatusAdapter) {
+      CreateModuleRepository createModuleRepository, GetProjectRepository getProjectRepository) {
     this.createModuleRepository = createModuleRepository;
     this.getProjectRepository = getProjectRepository;
-    this.listModulesOfProjectRepository = listModulesOfProjectRepository;
-    this.taskExecutor = taskExecutor;
-    this.projectStatusAdapter = projectStatusAdapter;
   }
 
   /**
    * Adds a new module to the project.
    *
-   * @param module The module to add.
+   * @param moduleId The module id.
    * @param projectId The project id/
-   * @return The id of the newly created module.
    * @throws ProjectNotFoundException Thrown if a project with projectId is not found.
-   * @throws ModuleAlreadyExistsException Thrown if a module with the same name already exists.
-   * @throws ModulePathInvalidException Thrown if the path is invalid
-   * @throws ProjectIsBeingProcessedException Thrown if the project is being processed at the
-   *     moment.
    */
   @Override
-  public Long createModule(Module module, Long projectId)
-      throws ModuleAlreadyExistsException, ModulePathInvalidException,
-          ProjectIsBeingProcessedException {
-    ModuleEntity moduleEntity = moduleMapper.mapDomainObject(module);
+  public void createModule(Long moduleId, Long projectId) {
+    ModuleEntity moduleEntity =
+        createModuleRepository
+            .findById(moduleId)
+            .orElseThrow(() -> new ModuleNotFoundException(moduleId));
     ProjectEntity projectEntity =
         getProjectRepository
             .findById(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
-
-    if (projectStatusAdapter.isBeingProcessed(projectId)) {
-      throw new ProjectIsBeingProcessedException(projectId);
+    ModuleEntity foundModule = findParentModuleInProject(projectEntity, moduleEntity.getPath());
+    if (foundModule != null) {
+      attachModuleToModule(foundModule, moduleEntity);
+    } else {
+      attachModuleToProject(projectEntity, moduleEntity);
     }
-
-    checkPathIsValid(moduleEntity, projectEntity);
-    projectStatusAdapter.setBeingProcessed(projectId, true);
-
-    Long moduleId = createModuleRepository.save(moduleEntity).getId();
-
-    taskExecutor.execute(
-        () -> {
-          ModuleEntity foundModule =
-              findParentModuleInProject(projectEntity, moduleEntity.getPath());
-          if (foundModule != null) {
-            attachModuleToModule(foundModule, moduleEntity);
-          } else {
-            attachModuleToProject(projectEntity, moduleEntity);
-          }
-          projectStatusAdapter.setBeingProcessed(projectId, false);
-        });
-    return moduleId;
   }
 
   /**
@@ -112,36 +77,6 @@ public class CreateModuleAdapter implements CreateModulePort {
     parentModule.getChildModules().add(childModule);
     createModuleRepository.save(parentModule);
     createModuleRepository.save(childModule);
-  }
-
-  /**
-   * Checks for errors in the path and adds/removes backslashes where necessary
-   *
-   * @param moduleEntity The entity to perform checks on.
-   * @param projectEntity The project to check the paths of
-   */
-  private void checkPathIsValid(ModuleEntity moduleEntity, ProjectEntity projectEntity)
-      throws ModulePathInvalidException, ModuleAlreadyExistsException {
-
-    moduleEntity.setPath(moduleEntity.getPath().trim());
-    if (moduleEntity.getPath().contains("//")) {
-      throw new ModulePathInvalidException(moduleEntity.getPath());
-    }
-    // Check for a slash at the start and end of the path.
-    if (!moduleEntity.getPath().endsWith("/")) {
-      moduleEntity.setPath(moduleEntity.getPath().concat("/"));
-    }
-    if (moduleEntity.getPath().startsWith("/")) {
-      moduleEntity.setPath(moduleEntity.getPath().substring(1));
-    }
-
-    // Check if a module with the same path already exists.
-    for (ModuleEntity entity :
-        listModulesOfProjectRepository.findModulesInProject(projectEntity.getId())) {
-      if (entity.getPath().equals(moduleEntity.getPath())) {
-        throw new ModuleAlreadyExistsException(moduleEntity.getPath());
-      }
-    }
   }
 
   /**

@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.query.port.driver;
 
-import io.reflectoring.coderadar.analyzer.domain.GroupedMetricValueDTO;
-import java.util.List;
+import io.reflectoring.coderadar.query.port.driven.MetricTree;
 
 public interface GetMetricsForAllFilesInCommitUseCase {
-  List<GroupedMetricValueDTO> get(GetMetricsForAllFilesInCommitCommand command);
+  MetricTree get(GetMetricsForCommitCommand command, Long projectId);
 }

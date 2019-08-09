@@ -5,7 +5,6 @@ import io.reflectoring.coderadar.analyzer.port.driven.StopAnalyzingPort;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.GetAnalyzingStatusRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.StartAnalyzingRepository;
-import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import java.util.Optional;
@@ -30,10 +29,9 @@ public class StopAnalyzingAdapter implements StopAnalyzingPort {
 
   @Override
   public void stop(Long projectId) {
-    ProjectEntity persistedProject =
-        getProjectRepository
-            .findById(projectId)
-            .orElseThrow(() -> new ProjectNotFoundException(projectId));
+    getProjectRepository
+        .findById(projectId)
+        .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
     Optional<AnalyzingJobEntity> persistedAnalyzingJob =
         getAnalyzingStatusRepository.findByProjectId(projectId);

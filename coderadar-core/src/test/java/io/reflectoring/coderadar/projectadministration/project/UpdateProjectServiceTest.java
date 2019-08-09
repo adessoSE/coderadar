@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
+import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.project.UpdateProjectService;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
 import java.util.Date;
@@ -21,38 +22,7 @@ class UpdateProjectServiceTest {
   private UpdateRepositoryUseCase updateRepositoryUseCase = mock(UpdateRepositoryUseCase.class);
   private CoderadarConfigurationProperties coderadarConfigurationProperties =
       mock(CoderadarConfigurationProperties.class);
-
-  @Test
-  void updateProjectWithIdOne() {
-    UpdateProjectService testSubject =
-        new UpdateProjectService(
-            getProjectPort,
-            updateProjectPort,
-            updateRepositoryUseCase,
-            coderadarConfigurationProperties,
-            taskExecutor,
-            projectStatusPort);
-
-    UpdateProjectCommand command =
-        new UpdateProjectCommand(
-            "new project name",
-            "username",
-            "password",
-            "http://valid.url",
-            true,
-            new Date(),
-            new Date());
-
-    Project project = new Project();
-    project.setId(1L);
-    project.setName("new project name");
-
-    Mockito.when(getProjectPort.get(1L)).thenReturn(project);
-
-    testSubject.update(command, 1L);
-
-    Mockito.verify(updateProjectPort, Mockito.times(1)).update(project);
-  }
+  private ProcessProjectService processProjectService = mock(ProcessProjectService.class);
 
   @Test
   void updateProjectReturnsErrorWhenProjectWithNameStillExists() {
@@ -62,8 +32,7 @@ class UpdateProjectServiceTest {
             updateProjectPort,
             updateRepositoryUseCase,
             coderadarConfigurationProperties,
-            taskExecutor,
-            projectStatusPort);
+            processProjectService);
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(
@@ -82,9 +51,6 @@ class UpdateProjectServiceTest {
     Mockito.when(getProjectPort.existsByName(project.getName())).thenReturn(Boolean.TRUE);
 
     Assertions.assertThrows(
-        ProjectAlreadyExistsException.class,
-        () -> {
-          testSubject.update(command, 1L);
-        });
+        ProjectAlreadyExistsException.class, () -> testSubject.update(command, 1L));
   }
 }

@@ -6,7 +6,8 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +26,12 @@ public class ListFilePatternsOfProjectAdapter implements ListFilePatternsOfProje
   }
 
   @Override
-  public Collection<FilePattern> listFilePatterns(Long projectId) throws ProjectNotFoundException {
+  public List<FilePattern> listFilePatterns(Long projectId) throws ProjectNotFoundException {
     getProjectRepository
         .findById(projectId)
         .orElseThrow(() -> new ProjectNotFoundException(projectId));
-    return filePatternMapper.mapNodeEntities(
-        listFilePatternsOfProjectRepository.findByProjectId(projectId));
+    return new ArrayList<>(
+        filePatternMapper.mapNodeEntities(
+            listFilePatternsOfProjectRepository.findByProjectId(projectId)));
   }
 }

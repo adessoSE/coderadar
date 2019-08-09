@@ -23,7 +23,6 @@ public class CommitEntity {
   private String author;
   private boolean merged = false;
   private boolean analyzed = false;
-  private Integer sequenceNumber;
 
   @Relationship(type = "IS_CHILD_OF")
   @EqualsAndHashCode.Exclude
@@ -35,6 +34,7 @@ public class CommitEntity {
   private List<FileToCommitRelationshipEntity> touchedFiles = new LinkedList<>();
 
   @Relationship(direction = Relationship.INCOMING, type = "VALID_FOR")
+  @EqualsAndHashCode.Exclude
   private List<MetricValueEntity> metricValues = new LinkedList<>();
 
   public void setComment(String comment) {

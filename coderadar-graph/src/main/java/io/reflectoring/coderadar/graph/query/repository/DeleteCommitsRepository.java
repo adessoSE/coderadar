@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DeleteCommitsRepository extends Neo4jRepository<CommitEntity, Long> {
 
-  @Query("MATCH (c1:CommitEntity), (c1)-[r:IS_CHILD_OF]->(c2) WHERE ID(c1) = {commitId} DETACH DELETE c1, c2")
+  @Query(
+      "MATCH (c1:CommitEntity), (c1)-[r:IS_CHILD_OF]->(c2) WHERE ID(c1) = {commitId} DETACH DELETE c1, c2")
   void deleteCommitTree(@Param("commitId") Long commitId);
 }

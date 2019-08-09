@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.projectadministration;
 
-public class ProjectNotFoundException extends RuntimeException {
+public class ProjectNotFoundException extends EntityNotFoundException {
   public ProjectNotFoundException(Long projectId) {
     super("Project with id " + projectId + " not found.");
   }

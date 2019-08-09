@@ -1,8 +1,6 @@
 package io.reflectoring.coderadar.rest.query;
 
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.query.port.driver.GetCommitsInProjectUseCase;
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +19,6 @@ public class GetCommitsInProjectController {
 
   @GetMapping(path = "/projects/{projectId}/commits")
   public ResponseEntity listCommits(@PathVariable("projectId") Long projectId) {
-    try {
-      return new ResponseEntity<>(getCommitsInProjectUseCase.get(projectId), HttpStatus.OK);
-    } catch (ProjectNotFoundException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
-    }
+    return new ResponseEntity<>(getCommitsInProjectUseCase.get(projectId), HttpStatus.OK);
   }
 }
