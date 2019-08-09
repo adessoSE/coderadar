@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph.query;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ListModulesOfProjectRepository;
