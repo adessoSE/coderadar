@@ -63,6 +63,7 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
             addedFiles,
             removedFiles);
 
+    // Renames are processed here
     for (String addedFile : addedFiles) {
       String oldPath =
           fileRepository.wasRenamedBetweenCommits(
@@ -86,6 +87,19 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
     return deltaTree;
   }
 
+  /**
+   * Create a new delta tree for two commits, given their individual metric tress.
+   *
+   * @param commit1Tree The metric tree of the first commit.
+   * @param commit2Tree The metric tree of the second commit.
+   * @param commit1Time The commit time of the first commit.
+   * @param commit2Time The commit time of the second commit.
+   * @param projectId The project id.
+   * @param addedFiles A list, that must be filled with all files added in the newest commit.
+   * @param removedFiles A list, that must be filled with all files removed in the newest commit.
+   * @return A delta tree, which contains no information about renames. Renames must be processed
+   *     separately using the added and removed files lists.
+   */
   private DeltaTree createDeltaTree(
       MetricTree commit1Tree,
       MetricTree commit2Tree,
@@ -99,18 +113,18 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
     deltaTree.setType(commit2Tree.getType());
     deltaTree.setCommit1Metrics(commit1Tree.getMetrics());
     deltaTree.setCommit2Metrics(commit2Tree.getMetrics());
-
-    for (int tree1Counter = 0, tree2Counter = 0;
-        tree1Counter < commit1Tree.getChildren().size()
-            || tree2Counter < commit2Tree.getChildren().size(); ) {
-      MetricTree metricTree2 = null;
-      MetricTree metricTree1 = null;
-      if (tree1Counter < commit1Tree.getChildren().size()) {
-        metricTree1 = commit1Tree.getChildren().get(tree1Counter);
-      }
-      if (tree2Counter < commit2Tree.getChildren().size()) {
-        metricTree2 = commit2Tree.getChildren().get(tree2Counter);
-      }
+    int tree1Counter = 0;
+    int tree2Counter = 0;
+    while (tree1Counter < commit1Tree.getChildren().size()
+        || tree2Counter < commit2Tree.getChildren().size()) {
+      MetricTree metricTree2 =
+          tree2Counter < commit2Tree.getChildren().size()
+              ? commit2Tree.getChildren().get(tree2Counter)
+              : null;
+      MetricTree metricTree1 =
+          tree1Counter < commit1Tree.getChildren().size()
+              ? commit1Tree.getChildren().get(tree1Counter)
+              : null;
 
       if (metricTree1 != null
           && metricTree2 != null
@@ -178,6 +192,13 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
     return deltaTree;
   }
 
+  /**
+   * Finds a child with the given path in a delta tree.
+   *
+   * @param deltaTree The tree to look in.
+   * @param path The child path to look for.
+   * @return The tree with the given path or null if nothing is found.
+   */
   private DeltaTree findChildInDeltaTree(DeltaTree deltaTree, String path) {
     for (DeltaTree child : deltaTree.getChildren()) {
       if (child.getType().equals(MetricsTreeNodeType.FILE)) {
@@ -194,6 +215,12 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
     return null;
   }
 
+  /**
+   * Removes a child from a delta tree.
+   *
+   * @param deltaTree The tree to remove from.
+   * @param childTree The child to remove.
+   */
   private void removeChildFromDeltaTree(DeltaTree deltaTree, DeltaTree childTree) {
     for (DeltaTree child : deltaTree.getChildren()) {
       if (child.getType().equals(MetricsTreeNodeType.FILE)) {
@@ -208,6 +235,12 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
     }
   }
 
+  /**
+   * Aggregates all of the metrics in the delta tress.
+   *
+   * @param children The trees whose metrics to aggregate
+   * @return A list of aggregated metric values.
+   */
   private List<MetricValueForCommit> aggregateChildMetrics(List<DeltaTree> children) {
     List<MetricValueForCommit> resultList = new ArrayList<>();
     Map<String, Long> aggregatedMetrics = new HashMap<>();
