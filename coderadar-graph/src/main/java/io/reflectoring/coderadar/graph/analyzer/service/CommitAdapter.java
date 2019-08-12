@@ -20,7 +20,6 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-// TODO: JAVADOC
 @Service
 public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   private final SaveCommitRepository saveCommitRepository;
@@ -42,6 +41,12 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
     this.metricRepository = metricRepository;
   }
 
+  /**
+   * This method should be used for the initial creation of Commits when saving a project.
+   * It maps all of the domain objects to entities and saves them in the DB.
+   * @param commits The commit tree to save.
+   * @param projectId The id of the project.
+   */
   @Override
   public void saveCommits(List<Commit> commits, Long projectId) {
     if (!commits.isEmpty()) {
@@ -67,6 +72,11 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
     }
   }
 
+  /**
+   * Update the commits in the project (add or remove commits from the commit tree)
+   * @param commits The new Commit tree
+   * @param projectId The projectId
+   */
   @Override
   public void updateCommits(List<Commit> commits, Long projectId) {
     if (!commits.isEmpty()) {
@@ -75,45 +85,63 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
               .findById(projectId)
               .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
-      List<CommitEntity> commitsInProject =
+      List<CommitEntity> commitsInProject = //First we need all of the commits in the project
           getCommitsInProjectRepository.findByProjectId(projectId);
-      CommitEntity lastCommit = commitsInProject.get(commitsInProject.size()-1);
-      metricRepository.deleteMetricsInCommit(lastCommit.getId());
+
+      CommitEntity lastCommit = commitsInProject.get(commitsInProject.size()-1); //We grab the last one (oldest)
+      metricRepository.deleteMetricsInCommit(lastCommit.getId()); //And delete all of it's metrics, as the files this commit contains are about to change.
+
       Map<String, CommitEntity> walkedCommits = new HashMap<>();
 
+      //Get all of the files in this project and save them in a map so that we can pass it to the getFiles method
       List<FileEntity> filesInProject = fileRepository.findAllinProject(projectId);
       Map<String, FileEntity> walkedFiles = new HashMap<>();
       for (FileEntity f : filesInProject) {
         walkedFiles.putIfAbsent(f.getPath(), f);
       }
 
+      //Get the newest commit from our new commit tree and set all of it's parents and files.
       commits.sort(Comparator.comparing(Commit::getTimestamp));
       Commit newestCommit = commits.get(commits.size() - 1);
       CommitEntity commitEntity = mapCommitBaseData(newestCommit);
       getFiles(newestCommit.getTouchedFiles(), commitEntity, walkedFiles);
       commitEntity.setParents(findAndSaveParents(newestCommit, walkedCommits, walkedFiles));
-      projectEntity.getFiles().addAll(walkedFiles.values());
-
       walkedCommits.putIfAbsent(commitEntity.getName(), commitEntity);
 
+      // See if any of the commits we had before have been deleted and delete their metrics.
       for(CommitEntity commit : commitsInProject){
         Optional<CommitEntity> existingCommit = walkedCommits.values().stream().filter(c -> c.getName().equals(commit.getName())).findAny();
         if(!existingCommit.isPresent()){
           metricRepository.deleteMetricsInCommit(commit.getId());
         }
       }
+
+      //Delete all of the old commit nodes, we don't need these anymore as we'll be saving the newly created tree.
       getCommitsInProjectRepository.deleteAll(commitsInProject);
+
+      //Save the newly created tree
       saveCommitRepository.save(walkedCommits.values(), 1);
       fileRepository.save(walkedFiles.values(), 1);
-      projectEntity.getFiles().clear();
 
+      //Remove the old file nodes from the project (this is how we avoid duplicates) and add the new ones.
+      projectEntity.getFiles().clear();
       projectEntity.getFiles().addAll(walkedFiles.values());
-      fileRepository.removeFilesWithoutCommits(projectEntity.getId());
+
+      // Remove any files that don't have commits attached to them.
+      fileRepository.removeFilesWithoutCommits(projectId);
+
+      //Remove any old metrics, whose commits have been deleted.
       metricRepository.removeMetricsWithoutCommits(projectId);
+
       getProjectRepository.save(projectEntity, 1);
     }
   }
 
+  /**
+   * Maps a Commit object to a CommitEntity object. Does not set files or parents
+   * @param commit The commit to map.
+   * @return A new CommitEntity object.
+   */
   private CommitEntity mapCommitBaseData(Commit commit) {
     CommitEntity commitEntity = new CommitEntity();
     commitEntity.setAnalyzed(commit.isAnalyzed());
@@ -125,6 +153,10 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
     return commitEntity;
   }
 
+  /**
+   * Saves a single commit in the database , this operation can only be used to save/update basic data (no parents/files).
+   * @param commit The commit to save/update.
+   */
   @Override
   public void saveCommit(Commit commit) {
     CommitEntity commitEntity =
@@ -137,6 +169,15 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
     saveCommitRepository.save(commitEntity, 0);
   }
 
+  /**
+   * Recursively finds all parents of a Commit, and returns a new CommitEntity tree.
+   * Also calls getFiles to set the files and relationships.
+   * @param commit The commit whose parents to find.
+   * @param walkedCommits Commits we have already found/created.
+   *                      We need this to prevent creating thousands of duplicate nodes and going into endless recursion
+   * @param walkedFiles Files we have already created/found for the current tree. Same purpose as the walkedCommits.
+   * @return A list of fully initialized parents for the given commit.
+   */
   private List<CommitEntity> findAndSaveParents(
       Commit commit, Map<String, CommitEntity> walkedCommits, Map<String, FileEntity> walkedFiles) {
 
@@ -160,6 +201,12 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
     return parents;
   }
 
+  /**
+   * Sets the files and relationships for a given CommitEntity
+   * @param relationships The relationships that we have to map to DB entities.
+   * @param entity The commitEntity
+   * @param walkedFiles Files we have already walked. We need this to prevent endless recursion when mapping.
+   */
   private void getFiles(
       List<FileToCommitRelationship> relationships,
       CommitEntity entity,
