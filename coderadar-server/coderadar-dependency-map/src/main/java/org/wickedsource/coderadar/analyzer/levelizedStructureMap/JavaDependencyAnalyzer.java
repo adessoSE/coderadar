@@ -469,6 +469,9 @@ public class JavaDependencyAnalyzer {
                         break;
                     }
                 }
+                if (!packageMatcher.find()) {
+                    throw new IllegalArgumentException("No valid java class: " + child.getFilename());
+                }
             }
         }
     }
