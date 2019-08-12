@@ -21,10 +21,14 @@ import io.reflectoring.coderadar.projectadministration.service.filepattern.FileP
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,22 +44,23 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final ProcessProjectService processProjectService;
   private final StartAnalyzingPort startAnalyzingPort;
   private final StopAnalyzingPort stopAnalyzingPort;
+  private final TaskExecutor taskExecutor;
 
   private final Logger logger = LoggerFactory.getLogger(StartAnalyzingService.class);
 
   @Autowired
   public StartAnalyzingService(
-      GetProjectPort getProjectPort,
-      AnalyzeCommitService analyzeCommitService,
-      AnalyzerPluginService analyzerPluginService,
-      GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort,
-      ListFilePatternsOfProjectPort listFilePatternsOfProjectPort,
-      GetCommitsInProjectPort getCommitsInProjectPort,
-      SaveMetricPort saveMetricPort,
-      SaveCommitPort saveCommitPort,
-      ProcessProjectService processProjectService,
-      StartAnalyzingPort startAnalyzingPort,
-      StopAnalyzingPort stopAnalyzingPort) {
+          GetProjectPort getProjectPort,
+          AnalyzeCommitService analyzeCommitService,
+          AnalyzerPluginService analyzerPluginService,
+          GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort,
+          ListFilePatternsOfProjectPort listFilePatternsOfProjectPort,
+          GetCommitsInProjectPort getCommitsInProjectPort,
+          SaveMetricPort saveMetricPort,
+          SaveCommitPort saveCommitPort,
+          ProcessProjectService processProjectService,
+          StartAnalyzingPort startAnalyzingPort,
+          StopAnalyzingPort stopAnalyzingPort, TaskExecutor taskExecutor) {
     this.getProjectPort = getProjectPort;
     this.analyzeCommitService = analyzeCommitService;
     this.analyzerPluginService = analyzerPluginService;
@@ -67,6 +72,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     this.processProjectService = processProjectService;
     this.startAnalyzingPort = startAnalyzingPort;
     this.stopAnalyzingPort = stopAnalyzingPort;
+      this.taskExecutor = taskExecutor;
   }
 
   @Override
@@ -76,7 +82,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
         () -> {
           Project project = getProjectPort.get(projectId);
           List<Commit> commitsToBeAnalyzed = getCommitsInProjectPort.get(projectId);
-          List<MetricValue> metricValues = new ArrayList<>();
+          List<MetricValue> metricValues = Collections.synchronizedList(new ArrayList<>());
           List<FilePattern> filePatterns =
               listFilePatternsOfProjectPort.listFilePatterns(projectId);
           List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
@@ -84,17 +90,19 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           FilePatternMatcher filePatternMatcher = new FilePatternMatcher(filePatterns);
 
           startAnalyzingPort.start(command, projectId);
-          Long counter = 0L;
+          AtomicReference<Long> counter = new AtomicReference<>(0L);
           for (Commit commit : commitsToBeAnalyzed) {
             if (!commit.isAnalyzed()) {
-              metricValues.addAll(
-                  analyzeCommitService.analyzeCommit(
-                      commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher));
-              ++counter;
-              logger.info(
-                  String.format(
-                      "Analyzed commit: %s %s, total analyzed: %d",
-                      commit.getComment(), commit.getName(), counter));
+                taskExecutor.execute(() -> {
+                    metricValues.addAll(
+                            analyzeCommitService.analyzeCommit(
+                                    commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher));
+                    counter.set(counter.get() + 1);
+                    logger.info(
+                            String.format(
+                                    "Analyzed commit: %s %s, total analyzed: %d",
+                                    commit.getComment(), commit.getName(), counter.get()));
+                });
             }
           }
           saveMetricPort.saveMetricValues(metricValues, projectId);
