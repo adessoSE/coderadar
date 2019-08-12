@@ -32,7 +32,9 @@ class UpdateProjectServiceTest {
             updateProjectPort,
             updateRepositoryUseCase,
             coderadarConfigurationProperties,
-            processProjectService);
+            processProjectService,
+            getProjectCommitsUseCase,
+            updateCommitsPort);
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(
@@ -48,7 +50,8 @@ class UpdateProjectServiceTest {
     project.setId(1L);
     project.setName("new project name");
 
-    Mockito.when(getProjectPort.existsByName(project.getName())).thenReturn(Boolean.TRUE);
+    Mockito.when(getProjectPort.existsByName(project.getName(), projectId))
+        .thenReturn(Boolean.TRUE);
 
     Assertions.assertThrows(
         ProjectAlreadyExistsException.class, () -> testSubject.update(command, 1L));

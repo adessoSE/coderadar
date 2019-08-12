@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,5 +14,6 @@ public class File {
 
   private List<MetricValue> metricValues = new LinkedList<>();
 
+  @ToString.Exclude
   private List<FileToCommitRelationship> commits = new LinkedList<>();
 }

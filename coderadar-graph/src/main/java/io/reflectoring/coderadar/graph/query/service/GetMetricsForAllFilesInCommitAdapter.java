@@ -12,10 +12,10 @@ import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitR
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.query.domain.MetricTree;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.domain.MetricsTreeNodeType;
 import io.reflectoring.coderadar.query.port.driven.GetMetricsForAllFilesInCommitPort;
-import io.reflectoring.coderadar.query.port.driven.MetricTree;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
 import java.util.*;
 import org.springframework.stereotype.Service;

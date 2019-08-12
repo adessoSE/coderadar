@@ -9,7 +9,6 @@ import lombok.ToString;
 
 /** Metadata about a commit to a Git repository. */
 @Data
-@ToString(exclude = "touchedFiles")
 public class Commit {
   private Long id;
   private String name;
@@ -19,8 +18,10 @@ public class Commit {
   private boolean merged = false;
   private boolean analyzed = false;
 
+  @ToString.Exclude
   private List<Commit> parents = new ArrayList<>();
 
+  @ToString.Exclude
   private List<FileToCommitRelationship> touchedFiles = new LinkedList<>();
 
   private List<MetricValue> metricValues = new LinkedList<>();

@@ -7,7 +7,7 @@ import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.FindingEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
-import io.reflectoring.coderadar.graph.analyzer.repository.SaveMetricRepository;
+import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
@@ -20,17 +20,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaveMetricAdapter implements SaveMetricPort {
 
-  private SaveMetricRepository saveMetricRepository;
+  private MetricRepository metricRepository;
 
   private GetCommitsInProjectRepository getCommitsInProjectRepository;
   private final FileRepository fileRepository;
 
   @Autowired
   public SaveMetricAdapter(
-      SaveMetricRepository saveMetricRepository,
+      MetricRepository metricRepository,
       GetCommitsInProjectRepository getCommitsInProjectRepository,
       FileRepository fileRepository) {
-    this.saveMetricRepository = saveMetricRepository;
+    this.metricRepository = metricRepository;
     this.getCommitsInProjectRepository = getCommitsInProjectRepository;
     this.fileRepository = fileRepository;
   }
@@ -64,7 +64,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
       metricValueEntity.getCommit().getParents().clear();
       metricValueEntities.add(metricValueEntity);
     }
-    saveMetricRepository.save(metricValueEntities, 1);
+    metricRepository.save(metricValueEntities, 1);
   }
 
   private List<FindingEntity> mapFindingsToEntities(List<Finding> findings) {

@@ -92,7 +92,7 @@ public class CreateProjectService implements CreateProjectUseCase {
    * @param project The project to get the DateRange for.
    * @return A valid DateRange object from the project dates.
    */
-  private DateRange getProjectDateRange(Project project) {
+  static DateRange getProjectDateRange(Project project) {
     LocalDate projectStart;
     LocalDate projectEnd;
 
