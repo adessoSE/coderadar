@@ -65,7 +65,7 @@ class CreateProjectServiceTest {
     project.setVcsEnd(new Date());
 
     when(createProjectPort.createProject(any())).thenReturn(1L);
-    when(getProjectPort.existsByName(project.getName(), projectId)).thenReturn(Boolean.FALSE);
+    when(getProjectPort.existsByName(project.getName())).thenReturn(Boolean.FALSE);
 
     Long projectId = testSubject.createProject(command);
 
@@ -99,7 +99,7 @@ class CreateProjectServiceTest {
     project.setVcsStart(new Date());
     project.setVcsEnd(new Date());
 
-    when(getProjectPort.existsByName(project.getName(), projectId)).thenReturn(Boolean.TRUE);
+    when(getProjectPort.existsByName(project.getName())).thenReturn(Boolean.TRUE);
 
     Assertions.assertThrows(
         ProjectAlreadyExistsException.class,

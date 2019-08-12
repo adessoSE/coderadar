@@ -41,6 +41,7 @@ class StopAnalyzingAdapterTest {
     Assertions.assertThrows(ProjectNotFoundException.class, () -> stopAnalyzingAdapter.stop(1L));
   }
 
+  //TODO: Do we need the whole job thing anymore????
   @Test
   @DisplayName("Should throw exception when no active analyzing job exists")
   void shouldThrowExceptionWhenNoActiveAnalzingJobExists() {
