@@ -2,9 +2,8 @@ package io.reflectoring.coderadar.graph.analyzer.repository;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileToCommitRelationshipEntity;
-import java.util.List;
-
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
+import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 
@@ -37,10 +36,11 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
       String path, String commit1Time, String commit2Time, Long projectId);
 
   @Query(
-          "MATCH (f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity)<-[:VALID_FOR]-(m:MetricValueEntity) WHERE ID(f) = {0} AND c.name = {1}"
-                  + " RETURN m")
+      "MATCH (f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity)<-[:VALID_FOR]-(m:MetricValueEntity) WHERE ID(f) = {0} AND c.name = {1}"
+          + " RETURN m")
   List<MetricValueEntity> findMetricsByFileAndCommitName(Long id, String commitHash);
 
-  @Query("MATCH (p:ProjectEntity)-->(f:FileEntity) WHERE ID(p) = {0} AND size((f)-[:CHANGED_IN]-()) = 0 DETACH DELETE f")
+  @Query(
+      "MATCH (p:ProjectEntity)-->(f:FileEntity) WHERE ID(p) = {0} AND size((f)-[:CHANGED_IN]-()) = 0 DETACH DELETE f")
   void removeFilesWithoutCommits(Long id);
 }

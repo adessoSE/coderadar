@@ -9,15 +9,14 @@ import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepos
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.UnableToDeleteProjectException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.DeleteProjectPort;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 @Service
 public class DeleteProjectAdapter implements DeleteProjectPort {
@@ -58,17 +57,20 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
 
   /**
    * Deletes the working directory of the project.
+   *
    * @param projectEntity The project, whose directory to delete.
    */
   private void deleteWorkdir(ProjectEntity projectEntity) {
     try {
       FileUtils.deleteDirectory(
-              new File(
-                      coderadarConfigurationProperties.getWorkdir()
-                              + "/projects/"
-                              + projectEntity.getWorkdirName()));
+          new File(
+              coderadarConfigurationProperties.getWorkdir()
+                  + "/projects/"
+                  + projectEntity.getWorkdirName()));
     } catch (IOException e) {
-      logger.error(String.format("Could not delete project working directory %s", projectEntity.getWorkdirName()));
+      logger.error(
+          String.format(
+              "Could not delete project working directory %s", projectEntity.getWorkdirName()));
     }
   }
 }

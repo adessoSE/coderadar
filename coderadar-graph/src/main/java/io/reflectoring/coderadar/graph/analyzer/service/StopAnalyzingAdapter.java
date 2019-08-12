@@ -36,6 +36,15 @@ public class StopAnalyzingAdapter implements StopAnalyzingPort {
     Optional<AnalyzingJobEntity> persistedAnalyzingJob =
         getAnalyzingStatusRepository.findByProjectId(projectId);
 
-    persistedAnalyzingJob.ifPresent(getAnalyzingStatusRepository::delete);
+    if (persistedAnalyzingJob.isPresent()) {
+      AnalyzingJobEntity analyzingJob = persistedAnalyzingJob.get();
+
+      if (!analyzingJob.isActive()) {
+        throw new AnalyzingJobNotStartedException("Can't stop a non-running analyzing job.");
+      } else {
+        analyzingJob.setActive(false);
+        stopAnalyzingRepository.save(analyzingJob);
+      }
+    }
   }
 }

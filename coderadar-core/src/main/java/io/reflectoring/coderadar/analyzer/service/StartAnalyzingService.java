@@ -24,12 +24,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.concurrent.FailureCallback;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.SuccessCallback;
 
 @Service
 public class StartAnalyzingService implements StartAnalyzingUseCase {
@@ -44,23 +47,24 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final ProcessProjectService processProjectService;
   private final StartAnalyzingPort startAnalyzingPort;
   private final StopAnalyzingPort stopAnalyzingPort;
-  private final TaskExecutor taskExecutor;
+  private final AsyncListenableTaskExecutor taskExecutor;
 
   private final Logger logger = LoggerFactory.getLogger(StartAnalyzingService.class);
 
   @Autowired
   public StartAnalyzingService(
-          GetProjectPort getProjectPort,
-          AnalyzeCommitService analyzeCommitService,
-          AnalyzerPluginService analyzerPluginService,
-          GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort,
-          ListFilePatternsOfProjectPort listFilePatternsOfProjectPort,
-          GetCommitsInProjectPort getCommitsInProjectPort,
-          SaveMetricPort saveMetricPort,
-          SaveCommitPort saveCommitPort,
-          ProcessProjectService processProjectService,
-          StartAnalyzingPort startAnalyzingPort,
-          StopAnalyzingPort stopAnalyzingPort, TaskExecutor taskExecutor) {
+      GetProjectPort getProjectPort,
+      AnalyzeCommitService analyzeCommitService,
+      AnalyzerPluginService analyzerPluginService,
+      GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort,
+      ListFilePatternsOfProjectPort listFilePatternsOfProjectPort,
+      GetCommitsInProjectPort getCommitsInProjectPort,
+      SaveMetricPort saveMetricPort,
+      SaveCommitPort saveCommitPort,
+      ProcessProjectService processProjectService,
+      StartAnalyzingPort startAnalyzingPort,
+      StopAnalyzingPort stopAnalyzingPort,
+      AsyncListenableTaskExecutor taskExecutor) {
     this.getProjectPort = getProjectPort;
     this.analyzeCommitService = analyzeCommitService;
     this.analyzerPluginService = analyzerPluginService;
@@ -72,17 +76,17 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     this.processProjectService = processProjectService;
     this.startAnalyzingPort = startAnalyzingPort;
     this.stopAnalyzingPort = stopAnalyzingPort;
-      this.taskExecutor = taskExecutor;
+    this.taskExecutor = taskExecutor;
   }
 
   @Override
   public void start(StartAnalyzingCommand command, Long projectId)
       throws ProjectIsBeingProcessedException {
-    processProjectService.executeTask(
+      Project project = getProjectPort.get(projectId);
+      processProjectService.executeTask(
         () -> {
-          Project project = getProjectPort.get(projectId);
-          List<Commit> commitsToBeAnalyzed = getCommitsInProjectPort.get(projectId);
-          List<MetricValue> metricValues = Collections.synchronizedList(new ArrayList<>());
+            List<MetricValue> metricValues = Collections.synchronizedList(new ArrayList<>());
+            List<Commit> commitsToBeAnalyzed = getCommitsInProjectPort.get(projectId);
           List<FilePattern> filePatterns =
               listFilePatternsOfProjectPort.listFilePatterns(projectId);
           List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
@@ -91,25 +95,28 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
 
           startAnalyzingPort.start(command, projectId);
           AtomicReference<Long> counter = new AtomicReference<>(0L);
+            List<ListenableFuture> tasks = new ArrayList<>();
           for (Commit commit : commitsToBeAnalyzed) {
             if (!commit.isAnalyzed()) {
-                taskExecutor.execute(() -> {
+                tasks.add(
+              taskExecutor.submitListenable(
+                  () -> {
                     metricValues.addAll(
-                            analyzeCommitService.analyzeCommit(
-                                    commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher));
+                        analyzeCommitService.analyzeCommit(
+                            commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher));
                     counter.set(counter.get() + 1);
                     logger.info(
-                            String.format(
-                                    "Analyzed commit: %s %s, total analyzed: %d",
-                                    commit.getComment(), commit.getName(), counter.get()));
-                });
+                        String.format(
+                            "Analyzed commit: %s %s, total analyzed: %d",
+                            commit.getComment(), commit.getName(), counter.get()));
+                  }));
             }
           }
-          saveMetricPort.saveMetricValues(metricValues, projectId);
-          commitsToBeAnalyzed.forEach(saveCommitPort::saveCommit);
-          stopAnalyzingPort.stop(projectId);
-        },
-        projectId);
+          tasks.forEach(listenableFuture -> listenableFuture.completable().join());
+            saveMetricPort.saveMetricValues(metricValues, projectId);
+            commitsToBeAnalyzed.forEach(saveCommitPort::saveCommit);
+            stopAnalyzingPort.stop(projectId);
+        }, projectId);
   }
 
   private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Project project) {
@@ -119,7 +126,6 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     for (AnalyzerConfiguration config : configs) {
       analyzers.add(analyzerPluginService.createAnalyzer(config.getAnalyzerName()));
     }
-
     return analyzers;
   }
 }

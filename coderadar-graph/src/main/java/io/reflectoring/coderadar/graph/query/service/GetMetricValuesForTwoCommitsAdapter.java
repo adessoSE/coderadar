@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.graph.query.service;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
+import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.query.domain.Changes;
 import io.reflectoring.coderadar.query.domain.DeltaTree;
 import io.reflectoring.coderadar.query.domain.MetricTree;
@@ -39,11 +40,11 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
             new GetMetricsForCommitCommand(command.getCommit2(), command.getMetrics()), projectId);
     Date commit1Time =
         getCommitsInProjectRepository
-            .findByNameAndProjectId(command.getCommit1(), projectId)
+            .findByNameAndProjectId(command.getCommit1(), projectId).orElseThrow(()->new CommitNotFoundException(command.getCommit1()))
             .getTimestamp();
     Date commit2Time =
         getCommitsInProjectRepository
-            .findByNameAndProjectId(command.getCommit2(), projectId)
+            .findByNameAndProjectId(command.getCommit2(), projectId).orElseThrow(()->new CommitNotFoundException(command.getCommit2()))
             .getTimestamp();
 
     if (commit1Time.after(commit2Time)) {

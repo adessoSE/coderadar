@@ -13,16 +13,11 @@ import io.reflectoring.coderadar.projectadministration.service.ProcessProjectSer
 import io.reflectoring.coderadar.projectadministration.service.project.UpdateProjectService;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
-
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
-
 
 class UpdateProjectServiceTest {
   private GetProjectPort getProjectPort = mock(GetProjectPort.class);
@@ -44,7 +39,7 @@ class UpdateProjectServiceTest {
             coderadarConfigurationProperties,
             processProjectService,
             getProjectCommitsUseCase,
-            updateCommitsPort);
+            updateCommitsPort, projectStatusPort, taskScheduler);
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(
@@ -60,9 +55,9 @@ class UpdateProjectServiceTest {
     project.setId(1L);
     project.setName("new project name");
 
-      Project project2 = new Project();
-      project2.setId(2L);
-      project2.setName("new project name");
+    Project project2 = new Project();
+    project2.setId(2L);
+    project2.setName("new project name");
 
     Mockito.when(getProjectPort.findByName(project.getName()))
         .thenReturn(Collections.singletonList(project2));

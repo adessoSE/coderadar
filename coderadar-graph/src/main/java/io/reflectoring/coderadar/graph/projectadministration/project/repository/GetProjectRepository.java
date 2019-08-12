@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.project.repository;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
