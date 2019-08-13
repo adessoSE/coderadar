@@ -443,6 +443,7 @@ public class JavaDependencyAnalyzer {
         byte[] bytes = BlobUtils.getRawContent(repository, commitName, child.getPath());
         if (bytes != null) {
             String[] lines = new String(bytes).split("\n");
+            boolean found = false;
             for (String content : lines) {
                 // read line with package definition from file
                 Matcher packageMatcher = cache.getPattern("^(\\s*)package(\\s*)(([A-Za-z_$][A-Za-z_$0-9]*)\\.)+([A-Za-z_$][A-Za-z_$0-9]*);").matcher(content);
@@ -455,6 +456,7 @@ public class JavaDependencyAnalyzer {
                         String[] packageName = packageNameString.split("\\.");
                         // set the child's packageName
                         child.setPackageName(packageNameString);
+                        found = true;
                         // set all packageNames of child's parents
                         CompareNode tmp = baseroot.getNodeByPath(child.getPath().substring(0, child.getPath().indexOf(packageName[0]) + packageName[0].length()));
                         // use packageName.length - 2 because the filename and ending are ignored
@@ -469,9 +471,9 @@ public class JavaDependencyAnalyzer {
                         break;
                     }
                 }
-                if (!packageMatcher.find()) {
-                    throw new IllegalArgumentException("No valid java class: " + child.getFilename());
-                }
+            }
+            if (!found) {
+                throw new IllegalArgumentException("No valid java class: " + child.getFilename());
             }
         }
     }

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
+import {AfterViewInit, Component, ViewEncapsulation} from '@angular/core';
 import { afterLoad } from '../../../assets/js/dependency-tree';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProjectService} from '../../service/project.service';
