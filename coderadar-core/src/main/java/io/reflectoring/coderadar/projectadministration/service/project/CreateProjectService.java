@@ -5,17 +5,13 @@ import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsExcep
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.CreateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.UnableToCloneRepositoryException;
-import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
-import io.reflectoring.coderadar.vcs.port.driven.UpdateRepositoryPort;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
@@ -28,7 +24,6 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -48,13 +43,7 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   private final SaveCommitPort saveCommitPort;
 
-  private final UpdateCommitsPort updateCommitsPort;
-
-  private final TaskScheduler taskScheduler;
-
-  private final ProjectStatusPort projectStatusPort;
-
-  private final UpdateRepositoryPort updateRepositoryPort;
+  private final ScanProjectScheduler scanProjectScheduler;
 
   private final Logger logger = LoggerFactory.getLogger(CreateProjectUseCase.class);
 
@@ -67,10 +56,7 @@ public class CreateProjectService implements CreateProjectUseCase {
       ProcessProjectService processProjectService,
       GetProjectCommitsUseCase getProjectCommitsUseCase,
       SaveCommitPort saveCommitPort,
-      UpdateCommitsPort updateCommitsPort,
-      TaskScheduler taskScheduler,
-      ProjectStatusPort projectStatusPort,
-      UpdateRepositoryPort updateRepositoryPort) {
+      ScanProjectScheduler scanProjectScheduler) {
     this.createProjectPort = createProjectPort;
     this.getProjectPort = getProjectPort;
     this.cloneRepositoryUseCase = cloneRepositoryUseCase;
@@ -78,10 +64,7 @@ public class CreateProjectService implements CreateProjectUseCase {
     this.processProjectService = processProjectService;
     this.getProjectCommitsUseCase = getProjectCommitsUseCase;
     this.saveCommitPort = saveCommitPort;
-    this.updateCommitsPort = updateCommitsPort;
-    this.taskScheduler = taskScheduler;
-    this.projectStatusPort = projectStatusPort;
-    this.updateRepositoryPort = updateRepositoryPort;
+    this.scanProjectScheduler = scanProjectScheduler;
   }
 
   @Override
@@ -105,46 +88,13 @@ public class CreateProjectService implements CreateProjectUseCase {
                 getProjectCommitsUseCase.getCommits(
                     Paths.get(project.getWorkdirName()), getProjectDateRange(project)),
                 project.getId());
-            scheduleUpdateTask(project.getId());
+            scanProjectScheduler.scheduleUpdateTask(project);
           } catch (UnableToCloneRepositoryException e) {
             logger.error(String.format("Unable to clone repository: %s", e.getMessage()));
           }
         },
         project.getId());
     return project.getId();
-  }
-
-  /**
-   * Schedules an update task for the project. This will do a pull on the repository and save the
-   * commits in the database.
-   *
-   * @param id Id of the project.
-   */
-  private void scheduleUpdateTask(Long id) {
-    Project project = getProjectPort.get(id);
-    if(project.getVcsEnd() != null){
-      return;
-    }
-    taskScheduler.scheduleAtFixedRate(
-        () -> {
-          if (!projectStatusPort.isBeingProcessed(id)) {
-            try {
-              logger.info(String.format("Scanning project %s for new commits!", project.getName()));
-              updateRepositoryPort.updateRepository(
-                  Paths.get(
-                      coderadarConfigurationProperties.getWorkdir()
-                          + "/projects/"
-                          + project.getWorkdirName()));
-              updateCommitsPort.updateCommits(
-                  getProjectCommitsUseCase.getCommits(
-                      Paths.get(project.getWorkdirName()), getProjectDateRange(project)),
-                  project.getId());
-            } catch (UnableToUpdateRepositoryException e) {
-              logger.error(String.format("Unable to update the project: %s", e.getMessage()));
-            }
-          }
-        },
-        coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000);
   }
 
   /**

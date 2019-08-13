@@ -28,7 +28,9 @@ public class GetMetricValuesOfCommitAdapter implements GetMetricValuesOfCommitPo
   @Override
   public List<MetricValueForCommit> get(GetMetricsForCommitCommand command, Long projectId) {
     CommitEntity commitEntity =
-        getCommitsInProjectRepository.findByNameAndProjectId(command.getCommit(), projectId).orElseThrow(() -> new CommitNotFoundException(command.getCommit()));
+        getCommitsInProjectRepository
+            .findByNameAndProjectId(command.getCommit(), projectId)
+            .orElseThrow(() -> new CommitNotFoundException(command.getCommit()));
     List<MetricValueForCommitQueryResult> result =
         getMetricValuesOfCommitRepository.getMetricValuesForCommit(
             projectId, command.getMetrics(), commitEntity.getTimestamp().toInstant().toString());

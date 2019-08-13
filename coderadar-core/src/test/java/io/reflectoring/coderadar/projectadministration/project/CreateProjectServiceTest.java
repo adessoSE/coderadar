@@ -47,7 +47,8 @@ class CreateProjectServiceTest {
             taskScheduler,
             updateProjectService,
             projectStatusPort,
-            updateRepositoryPort);
+            updateRepositoryPort,
+            scanProjectScheduler);
 
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());
@@ -86,7 +87,8 @@ class CreateProjectServiceTest {
             taskScheduler,
             updateProjectService,
             projectStatusPort,
-            updateRepositoryPort);
+            updateRepositoryPort,
+            scanProjectScheduler);
 
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());

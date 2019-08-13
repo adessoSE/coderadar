@@ -39,7 +39,9 @@ class UpdateProjectServiceTest {
             coderadarConfigurationProperties,
             processProjectService,
             getProjectCommitsUseCase,
-            updateCommitsPort, projectStatusPort, taskScheduler);
+            updateCommitsPort,
+            projectStatusPort,
+            taskScheduler);
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(

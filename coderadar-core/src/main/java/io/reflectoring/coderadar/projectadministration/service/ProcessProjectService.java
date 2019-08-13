@@ -15,7 +15,7 @@ public class ProcessProjectService {
   private final GetProjectPort getProjectPort;
 
   public ProcessProjectService(
-          AsyncListenableTaskExecutor taskExecutor,
+      AsyncListenableTaskExecutor taskExecutor,
       ProjectStatusPort projectStatusPort,
       GetProjectPort getProjectPort) {
     this.taskExecutor = taskExecutor;
