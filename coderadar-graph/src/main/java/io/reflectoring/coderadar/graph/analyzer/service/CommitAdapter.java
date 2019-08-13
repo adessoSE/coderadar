@@ -91,12 +91,16 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       List<CommitEntity> commitsInProject = // First we need all of the commits in the project
           getCommitsInProjectRepository.findByProjectId(projectId);
 
+      commits.sort(Comparator.comparing(Commit::getTimestamp));
+      Commit newLastCommit = commits.get(0);
       CommitEntity lastCommit =
           commitsInProject.get(commitsInProject.size() - 1); // We grab the last one (oldest)
-      metricRepository.deleteMetricsInCommit(
-          lastCommit
-              .getId()); // And delete all of it's metrics, as the files this commit contains are
-      // about to change.
+      if (!lastCommit.getName().equals(newLastCommit.getName())) {
+        metricRepository.deleteMetricsInCommit(
+            lastCommit
+                .getId()); // And delete all of it's metrics, as the files this commit contains are
+        // about to change.
+      }
 
       Map<String, CommitEntity> walkedCommits = new HashMap<>();
 

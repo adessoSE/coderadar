@@ -51,7 +51,9 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
     CommitEntity commitEntity =
-        getCommitsInProjectRepository.findByNameAndProjectId(command.getCommit(), projectId).orElseThrow(() -> new CommitNotFoundException(command.getCommit()));
+        getCommitsInProjectRepository
+            .findByNameAndProjectId(command.getCommit(), projectId)
+            .orElseThrow(() -> new CommitNotFoundException(command.getCommit()));
     if (commitEntity == null) {
       throw new CommitNotFoundException(command.getCommit());
     }

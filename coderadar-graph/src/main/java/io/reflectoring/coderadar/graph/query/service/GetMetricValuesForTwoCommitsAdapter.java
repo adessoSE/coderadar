@@ -40,11 +40,13 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
             new GetMetricsForCommitCommand(command.getCommit2(), command.getMetrics()), projectId);
     Date commit1Time =
         getCommitsInProjectRepository
-            .findByNameAndProjectId(command.getCommit1(), projectId).orElseThrow(()->new CommitNotFoundException(command.getCommit1()))
+            .findByNameAndProjectId(command.getCommit1(), projectId)
+            .orElseThrow(() -> new CommitNotFoundException(command.getCommit1()))
             .getTimestamp();
     Date commit2Time =
         getCommitsInProjectRepository
-            .findByNameAndProjectId(command.getCommit2(), projectId).orElseThrow(()->new CommitNotFoundException(command.getCommit2()))
+            .findByNameAndProjectId(command.getCommit2(), projectId)
+            .orElseThrow(() -> new CommitNotFoundException(command.getCommit2()))
             .getTimestamp();
 
     if (commit1Time.after(commit2Time)) {

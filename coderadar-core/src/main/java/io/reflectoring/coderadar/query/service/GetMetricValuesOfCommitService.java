@@ -19,7 +19,8 @@ public class GetMetricValuesOfCommitService implements GetMetricValuesOfCommitUs
   private final GetProjectPort getProjectPort;
 
   @Autowired
-  public GetMetricValuesOfCommitService(GetMetricValuesOfCommitPort getMetricValuesOfCommitPort, GetProjectPort getProjectPort) {
+  public GetMetricValuesOfCommitService(
+      GetMetricValuesOfCommitPort getMetricValuesOfCommitPort, GetProjectPort getProjectPort) {
     this.getMetricValuesOfCommitPort = getMetricValuesOfCommitPort;
     this.getProjectPort = getProjectPort;
   }
