@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface GetMetricValuesOfCommitRepository extends Neo4jRepository<CommitEntity, Long> {
 
   @Query(
-      "MATCH (p:ProjectEntity)-->(f:FileEntity)-->(c:CommitEntity) "
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-->(c:CommitEntity) "
           + "WITH datetime({2}).epochMillis AS commitTime, f, p, c "
           + "WHERE ID(p) = {0} AND datetime(c.timestamp).epochMillis <= commitTime WITH p, f, commitTime "
           + "OPTIONAL MATCH (f)-[r:CHANGED_IN]->() WHERE r.changeType = \"RENAME\" WITH p, collect(r.oldPath) AS paths, commitTime "
@@ -26,7 +26,7 @@ public interface GetMetricValuesOfCommitRepository extends Neo4jRepository<Commi
       Long projectId, List<String> metricNames, String date);
 
   @Query(
-      "MATCH (p:ProjectEntity)-->(f:FileEntity)-->(c:CommitEntity) "
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-->(c:CommitEntity) "
           + "WITH datetime({2}).epochMillis AS commitTime, f, p, c "
           + "WHERE ID(p) = {0} AND datetime(c.timestamp).epochMillis <= commitTime WITH p, f, commitTime "
           + "OPTIONAL MATCH (f)-[r:CHANGED_IN]->() WHERE r.changeType = \"RENAME\" WITH p, collect(r.oldPath) AS paths, commitTime "

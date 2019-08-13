@@ -2,6 +2,8 @@ package io.reflectoring.coderadar.graph.query.repository;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
@@ -19,5 +21,9 @@ public interface GetCommitsInProjectRepository extends Neo4jRepository<CommitEnt
 
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS*]-(:FileEntity)-[:CHANGED_IN]->(c:CommitEntity) WHERE c.name = {0} AND ID(p) = {1} RETURN c")
-  CommitEntity findByNameAndProjectId(String commit, Long projectId);
+  Optional<CommitEntity> findByNameAndProjectId(String commit, Long projectId);
+
+  @Query(
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]-(:FileEntity)-[:CHANGED_IN]->(c:CommitEntity) WHERE c IN {0} AND ID(p) = {1} DELETE c")
+  void deleteCommits(List<CommitEntity> commitEntities);
 }

@@ -1,14 +1,12 @@
 package io.reflectoring.coderadar.rest.integration;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.reflectoring.coderadar.query.domain.ErrorDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.fail;
 
 /** Collection of ResultMatchers to be used in MockMvc's fluent API. */
 public class ResultMatchers {
@@ -56,33 +54,6 @@ public class ResultMatchers {
             String.format(
                 "expected JSON representation of class %s but found '%s'", typeReference, json),
             e);
-      }
-    };
-  }
-
-  /**
-   * Tests if the response contains an error object with a validation error message for the given
-   * field.
-   *
-   * @param fieldName the name of the field for which a validation error message is expected.
-   * @return ResultMatcher that performs the test described above.
-   */
-  public static ResultMatcher validationErrorForField(String fieldName) {
-    return result -> {
-      String json = result.getResponse().getContentAsString();
-      try {
-        ErrorDTO errors = fromJson(json, ErrorDTO.class);
-        assertThat(errors.getErrorsForField(fieldName).size())
-            .isGreaterThan(0)
-            .as(String.format("expected at least one validation error for field %s", fieldName));
-      } catch (Exception e) {
-        logger.error(
-            String.format(
-                "expected JSON representation of ValidationErrorsDTO but found '%s'", json),
-            e);
-        fail(
-            String.format(
-                "expected JSON representation of ValidationErrorsDTO but found '%s'", json));
       }
     };
   }

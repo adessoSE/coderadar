@@ -3,18 +3,19 @@ package io.reflectoring.coderadar.projectadministration.service;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
-import org.springframework.core.task.TaskExecutor;
+import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.concurrent.ListenableFuture;
 
 @Service
 public class ProcessProjectService {
 
-  private final TaskExecutor taskExecutor;
+  private final AsyncListenableTaskExecutor taskExecutor;
   private final ProjectStatusPort projectStatusPort;
   private final GetProjectPort getProjectPort;
 
   public ProcessProjectService(
-      TaskExecutor taskExecutor,
+          AsyncListenableTaskExecutor taskExecutor,
       ProjectStatusPort projectStatusPort,
       GetProjectPort getProjectPort) {
     this.taskExecutor = taskExecutor;
@@ -22,7 +23,7 @@ public class ProcessProjectService {
     this.getProjectPort = getProjectPort;
   }
 
-  public void executeTask(Runnable runnable, Long projectId)
+  public ListenableFuture<?> executeTask(Runnable runnable, Long projectId)
       throws ProjectIsBeingProcessedException {
     if (projectStatusPort.isBeingProcessed(projectId)) {
       throw new ProjectIsBeingProcessedException(projectId);
@@ -40,7 +41,7 @@ public class ProcessProjectService {
               }
             }
           };
-      taskExecutor.execute(task);
+      return taskExecutor.submitListenable(task);
     }
   }
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class GetHistoryOfMetricAdapter implements GetHistoryOfMetricPort {
 
-  // TODO
+  // TODO: Implement history of metric
   @Override
   public Series get(GetHistoryOfMetricCommand command) {
     return new Series();

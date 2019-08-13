@@ -1,8 +1,5 @@
-package io.reflectoring.coderadar.query.port.driver;
+package io.reflectoring.coderadar.query.domain;
 
-import io.reflectoring.coderadar.query.domain.Changes;
-import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
-import io.reflectoring.coderadar.query.domain.MetricsTreeNodeType;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;

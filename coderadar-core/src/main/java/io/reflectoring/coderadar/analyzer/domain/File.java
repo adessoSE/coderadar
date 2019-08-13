@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
-import lombok.Data;
-
 import java.util.LinkedList;
 import java.util.List;
+import lombok.Data;
+import lombok.ToString;
 
 /** Represents a file in a VCS repository. */
 @Data
@@ -13,5 +13,5 @@ public class File {
 
   private List<MetricValue> metricValues = new LinkedList<>();
 
-  private List<FileToCommitRelationship> commits = new LinkedList<>();
+  @ToString.Exclude private List<FileToCommitRelationship> commits = new LinkedList<>();
 }

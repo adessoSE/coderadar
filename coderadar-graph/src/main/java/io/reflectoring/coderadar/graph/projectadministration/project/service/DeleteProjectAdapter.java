@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
   private final GetCommitsInProjectRepository getCommitsInProjectRepository;
   private final DeleteCommitsRepository deleteCommitsRepository;
+
+  private final Logger logger = LoggerFactory.getLogger(DeleteProjectAdapter.class);
 
   @Autowired
   public DeleteProjectAdapter(
@@ -44,17 +48,29 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
       List<CommitEntity> commitEntities = getCommitsInProjectRepository.findByProjectId(id);
       commitEntities.forEach(deleteCommitsRepository::delete);
       deleteProjectRepository.deleteProjectCascade(id);
-      try {
-        FileUtils.deleteDirectory(
-            new File(
-                coderadarConfigurationProperties.getWorkdir()
-                    + "/projects/"
-                    + projectEntity.getWorkdirName()));
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+      deleteWorkdir(projectEntity);
+
     } catch (IllegalArgumentException e) {
       throw new UnableToDeleteProjectException(id);
+    }
+  }
+
+  /**
+   * Deletes the working directory of the project.
+   *
+   * @param projectEntity The project, whose directory to delete.
+   */
+  private void deleteWorkdir(ProjectEntity projectEntity) {
+    try {
+      FileUtils.deleteDirectory(
+          new File(
+              coderadarConfigurationProperties.getWorkdir()
+                  + "/projects/"
+                  + projectEntity.getWorkdirName()));
+    } catch (IOException e) {
+      logger.error(
+          String.format(
+              "Could not delete project working directory %s", projectEntity.getWorkdirName()));
     }
   }
 }

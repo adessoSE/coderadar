@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.MetricValueForCommitQueryResult;
 import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
+import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfCommitPort;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
@@ -27,7 +28,7 @@ public class GetMetricValuesOfCommitAdapter implements GetMetricValuesOfCommitPo
   @Override
   public List<MetricValueForCommit> get(GetMetricsForCommitCommand command, Long projectId) {
     CommitEntity commitEntity =
-        getCommitsInProjectRepository.findByNameAndProjectId(command.getCommit(), projectId);
+        getCommitsInProjectRepository.findByNameAndProjectId(command.getCommit(), projectId).orElseThrow(() -> new CommitNotFoundException(command.getCommit()));
     List<MetricValueForCommitQueryResult> result =
         getMetricValuesOfCommitRepository.getMetricValuesForCommit(
             projectId, command.getMetrics(), commitEntity.getTimestamp().toInstant().toString());

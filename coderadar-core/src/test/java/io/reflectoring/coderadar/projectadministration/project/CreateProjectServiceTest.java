@@ -11,7 +11,6 @@ import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.CreateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService;
@@ -21,7 +20,6 @@ import java.io.File;
 import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.core.task.TaskExecutor;
 
 class CreateProjectServiceTest {
 
@@ -30,8 +28,6 @@ class CreateProjectServiceTest {
   private CloneRepositoryUseCase cloneRepositoryUseCase = mock(CloneRepositoryUseCase.class);
   private CoderadarConfigurationProperties coderadarConfigurationProperties =
       mock(CoderadarConfigurationProperties.class);
-  private TaskExecutor taskExecutor = mock(TaskExecutor.class);
-  private ProjectStatusPort projectStatusPort = mock(ProjectStatusPort.class);
 
   private GetProjectCommitsUseCase getProjectCommitsUseCase = mock(GetProjectCommitsUseCase.class);
   private SaveCommitPort saveCommitPort = mock(SaveCommitPort.class);
@@ -47,7 +43,11 @@ class CreateProjectServiceTest {
             coderadarConfigurationProperties,
             processProjectService,
             getProjectCommitsUseCase,
-            saveCommitPort);
+            saveCommitPort,
+            taskScheduler,
+            updateProjectService,
+            projectStatusPort,
+            updateRepositoryPort);
 
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());
@@ -82,7 +82,11 @@ class CreateProjectServiceTest {
             coderadarConfigurationProperties,
             processProjectService,
             getProjectCommitsUseCase,
-            saveCommitPort);
+            saveCommitPort,
+            taskScheduler,
+            updateProjectService,
+            projectStatusPort,
+            updateRepositoryPort);
 
     when(coderadarConfigurationProperties.getWorkdir())
         .thenReturn(new File("coderadar-workdir").toPath());
