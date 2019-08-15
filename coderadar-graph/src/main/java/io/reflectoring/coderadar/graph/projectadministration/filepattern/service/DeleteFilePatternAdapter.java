@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.filepattern.service;
 
-import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.DeleteFilePatternRepository;
+import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
 import io.reflectoring.coderadar.projectadministration.FilePatternNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.DeleteFilePatternPort;
@@ -9,26 +9,24 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DeleteFilePatternAdapter implements DeleteFilePatternPort {
-  private DeleteFilePatternRepository deleteFilePatternRepository;
+  private final FilePatternRepository filePatternRepository;
 
   @Autowired
-  public DeleteFilePatternAdapter(DeleteFilePatternRepository deleteFilePatternRepository) {
-    this.deleteFilePatternRepository = deleteFilePatternRepository;
+  public DeleteFilePatternAdapter(FilePatternRepository filePatternRepository) {
+    this.filePatternRepository = filePatternRepository;
   }
 
   @Override
   public void delete(Long id) throws FilePatternNotFoundException {
-    deleteFilePatternRepository
-        .findById(id)
-        .orElseThrow(() -> new FilePatternNotFoundException(id));
-    deleteFilePatternRepository.deleteById(id);
+    filePatternRepository.findById(id).orElseThrow(() -> new FilePatternNotFoundException(id));
+    filePatternRepository.deleteById(id);
   }
 
   @Override
   public void delete(FilePattern filePattern) throws FilePatternNotFoundException {
-    deleteFilePatternRepository
+    filePatternRepository
         .findById(filePattern.getId())
         .orElseThrow(() -> new FilePatternNotFoundException(filePattern.getId()));
-    deleteFilePatternRepository.deleteById(filePattern.getId());
+    filePatternRepository.deleteById(filePattern.getId());
   }
 }

@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.rest.integration.analyzerconfig;
 
-import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -19,34 +19,34 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class ListAnalyzerConfigsFromProjectControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired private CreateProjectRepository createProjectRepository;
+  @Autowired private ProjectRepository projectRepository;
 
-  @Autowired private CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository;
+  @Autowired private AnalyzerConfigurationRepository analyzerConfigurationRepository;
 
   @Test
   void listAnalyzerConfigurationsFromProject() throws Exception {
     // Set up
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
-    testProject = createProjectRepository.save(testProject);
+    testProject = projectRepository.save(testProject);
 
     AnalyzerConfigurationEntity analyzerConfiguration = new AnalyzerConfigurationEntity();
     analyzerConfiguration.setProject(testProject);
     analyzerConfiguration.setAnalyzerName("analyzer");
     analyzerConfiguration.setEnabled(true);
 
-    createAnalyzerConfigurationRepository.save(analyzerConfiguration);
+    analyzerConfigurationRepository.save(analyzerConfiguration);
 
     AnalyzerConfigurationEntity analyzerConfiguration2 = new AnalyzerConfigurationEntity();
     analyzerConfiguration2.setProject(testProject);
     analyzerConfiguration2.setAnalyzerName("analyzer2");
     analyzerConfiguration2.setEnabled(false);
 
-    createAnalyzerConfigurationRepository.save(analyzerConfiguration2);
+    analyzerConfigurationRepository.save(analyzerConfiguration2);
 
     testProject.setAnalyzerConfigurations(
         Arrays.asList(analyzerConfiguration, analyzerConfiguration2));
-    testProject = createProjectRepository.save(testProject);
+    testProject = projectRepository.save(testProject);
 
     // Test
     mvc()

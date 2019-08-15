@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.integration.user;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.UserEntity;
-import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
+import io.reflectoring.coderadar.graph.projectadministration.user.repository.UserRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.load.LoadUserResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -15,14 +15,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class LoadUserControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired private RegisterUserRepository registerUserRepository;
+  @Autowired private UserRepository userRepository;
 
   @Test
   void loadUserWithId() throws Exception {
     UserEntity testUser = new UserEntity();
     testUser.setUsername("username2");
     testUser.setPassword("password1");
-    testUser = registerUserRepository.save(testUser);
+    testUser = userRepository.save(testUser);
 
     final Long userId = testUser.getId();
 

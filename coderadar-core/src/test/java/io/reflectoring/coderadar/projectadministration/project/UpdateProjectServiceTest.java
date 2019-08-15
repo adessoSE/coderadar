@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsExcep
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
@@ -18,6 +19,7 @@ import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.scheduling.TaskScheduler;
 
 class UpdateProjectServiceTest {
   private GetProjectPort getProjectPort = mock(GetProjectPort.class);
@@ -28,6 +30,8 @@ class UpdateProjectServiceTest {
   private ProcessProjectService processProjectService = mock(ProcessProjectService.class);
   private UpdateCommitsPort updateCommitsPort = mock(UpdateCommitsPort.class);
   private GetProjectCommitsUseCase getProjectCommitsUseCase = mock(GetProjectCommitsUseCase.class);
+  private ProjectStatusPort projectStatusPort = mock(ProjectStatusPort.class);
+  private TaskScheduler taskScheduler = mock(TaskScheduler.class);
 
   @Test
   void updateProjectReturnsErrorWhenProjectWithNameAlreadyExists() {

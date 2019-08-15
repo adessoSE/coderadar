@@ -1,29 +1,28 @@
 package io.reflectoring.coderadar.graph.projectadministration.user;
 
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.graph.projectadministration.domain.UserEntity;
-import io.reflectoring.coderadar.graph.projectadministration.user.repository.LoadUserRepository;
+import io.reflectoring.coderadar.graph.projectadministration.user.repository.UserRepository;
 import io.reflectoring.coderadar.graph.projectadministration.user.service.LoadUserAdapter;
 import io.reflectoring.coderadar.projectadministration.domain.User;
+import java.util.Optional;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-
 @DisplayName("Load user")
 public class LoadUserAdapterTest {
-  private LoadUserRepository loadUserRepository = mock(LoadUserRepository.class);
+  private UserRepository userRepository = mock(UserRepository.class);
 
   @Test
   @DisplayName("Should return user when passing valid argument")
   void shouldReturnUserWhenPassingValidArgument() {
-    LoadUserAdapter loadUserAdapter = new LoadUserAdapter(loadUserRepository);
+    LoadUserAdapter loadUserAdapter = new LoadUserAdapter(userRepository);
 
-    Mockito.when(loadUserRepository.findById(anyLong())).thenReturn(Optional.of(new UserEntity()));
+    Mockito.when(userRepository.findById(anyLong())).thenReturn(Optional.of(new UserEntity()));
     User returnedUser = loadUserAdapter.loadUser(1L);
     Assertions.assertThat(returnedUser).isNotNull();
   }

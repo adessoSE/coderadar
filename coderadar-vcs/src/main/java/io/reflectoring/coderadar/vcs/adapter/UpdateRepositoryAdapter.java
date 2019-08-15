@@ -48,7 +48,7 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
             "Error updating local GIT repository at %s. Reason: %s", repositoryRoot, error));
   }
 
-  public Git updateInternal(Path repositoryRoot) throws GitAPIException, IOException {
+  private Git updateInternal(Path repositoryRoot) throws GitAPIException, IOException {
     FileRepositoryBuilder builder = new FileRepositoryBuilder();
     Repository repository = builder.setWorkTree(repositoryRoot.toFile()).build();
     Git git = new Git(repository);

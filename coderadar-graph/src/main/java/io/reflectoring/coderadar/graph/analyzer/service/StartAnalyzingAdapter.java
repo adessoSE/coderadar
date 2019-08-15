@@ -3,26 +3,24 @@ package io.reflectoring.coderadar.graph.analyzer.service;
 import io.reflectoring.coderadar.analyzer.port.driven.StartAnalyzingPort;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
-import io.reflectoring.coderadar.graph.analyzer.repository.StartAnalyzingRepository;
+import io.reflectoring.coderadar.graph.analyzer.repository.AnalyzingJobRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class StartAnalyzingAdapter implements StartAnalyzingPort {
-  private final GetProjectRepository getProjectRepository;
-  private final StartAnalyzingRepository startAnalyzingRepository;
+  private final ProjectRepository projectRepository;
+  private final AnalyzingJobRepository analyzingJobRepository;
 
   @Autowired
   public StartAnalyzingAdapter(
-      GetProjectRepository getProjectRepository,
-      StartAnalyzingRepository startAnalyzingRepository) {
-    this.getProjectRepository = getProjectRepository;
-    this.startAnalyzingRepository = startAnalyzingRepository;
+      ProjectRepository projectRepository, AnalyzingJobRepository analyzingJobRepository) {
+    this.projectRepository = projectRepository;
+    this.analyzingJobRepository = analyzingJobRepository;
   }
 
   @Override
@@ -32,11 +30,11 @@ public class StartAnalyzingAdapter implements StartAnalyzingPort {
     analyzingJob.setFrom(command.getFrom());
     analyzingJob.setActive(true);
 
-    Optional<ProjectEntity> persistedProject = getProjectRepository.findById(projectId);
+    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
 
     if (persistedProject.isPresent()) {
       analyzingJob.setProject(persistedProject.get());
-      return startAnalyzingRepository.save(analyzingJob).getId();
+      return analyzingJobRepository.save(analyzingJob).getId();
     } else {
       throw new ProjectNotFoundException(projectId);
     }

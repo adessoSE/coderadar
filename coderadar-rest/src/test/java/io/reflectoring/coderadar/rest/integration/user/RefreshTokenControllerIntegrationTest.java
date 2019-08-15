@@ -5,7 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import io.reflectoring.coderadar.graph.projectadministration.domain.RefreshTokenEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RefreshTokenRepository;
-import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
+import io.reflectoring.coderadar.graph.projectadministration.user.repository.UserRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.RefreshTokenCommand;
 import io.reflectoring.coderadar.projectadministration.service.user.security.PasswordUtil;
 import io.reflectoring.coderadar.projectadministration.service.user.security.SecretKeyService;
@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired private RegisterUserRepository registerUserRepository;
+  @Autowired private UserRepository userRepository;
 
   @Autowired private RefreshTokenRepository refreshTokenRepository;
 
@@ -39,7 +39,7 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
     UserEntity testUser = new UserEntity();
     testUser.setUsername("radar");
     testUser.setPassword(PasswordUtil.hash("Password12!"));
-    testUser = registerUserRepository.save(testUser);
+    testUser = userRepository.save(testUser);
 
     RefreshTokenEntity userRefreshToken = new RefreshTokenEntity();
     userRefreshToken.setToken(
@@ -63,7 +63,7 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
     UserEntity testUser = new UserEntity();
     testUser.setUsername("radar");
     testUser.setPassword(PasswordUtil.hash("Password12!"));
-    registerUserRepository.save(testUser);
+    userRepository.save(testUser);
 
     RefreshTokenCommand command =
         new RefreshTokenCommand(createExpiredAccessToken(), "iqupiugapsfw");
@@ -79,7 +79,7 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
     UserEntity testUser = new UserEntity();
     testUser.setUsername("radar");
     testUser.setPassword(PasswordUtil.hash("Password12!"));
-    testUser = registerUserRepository.save(testUser);
+    testUser = userRepository.save(testUser);
 
     RefreshTokenEntity userRefreshToken = new RefreshTokenEntity();
     userRefreshToken.setToken(

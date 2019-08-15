@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.rest.integration.filepattern;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
@@ -20,9 +20,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class ListFilePatternsOfProjectControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired private CreateProjectRepository createProjectRepository;
+  @Autowired private ProjectRepository projectRepository;
 
-  @Autowired private CreateFilePatternRepository createFilePatternRepository;
+  @Autowired private FilePatternRepository filePatternRepository;
 
   @Test
   void listAllFilePatternsOfProjectWithId() throws Exception {
@@ -34,16 +34,16 @@ class ListFilePatternsOfProjectControllerIntegrationTest extends ControllerTestT
     filePattern.setInclusionType(InclusionType.INCLUDE);
     filePattern.setPattern("**/*.java");
     filePattern.setProject(testProject);
-    filePattern = createFilePatternRepository.save(filePattern);
+    filePattern = filePatternRepository.save(filePattern);
 
     FilePatternEntity filePattern2 = new FilePatternEntity();
     filePattern2.setInclusionType(InclusionType.EXCLUDE);
     filePattern2.setPattern("**/*.xml");
     filePattern2.setProject(testProject);
-    filePattern2 = createFilePatternRepository.save(filePattern2);
+    filePattern2 = filePatternRepository.save(filePattern2);
 
     testProject.setFilePatterns(Arrays.asList(filePattern, filePattern2));
-    testProject = createProjectRepository.save(testProject);
+    testProject = projectRepository.save(testProject);
 
     // Test
     mvc()

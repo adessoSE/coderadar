@@ -6,12 +6,11 @@ import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
+import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
-import io.reflectoring.coderadar.graph.analyzer.repository.SaveCommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
-import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
@@ -22,23 +21,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
-  private final SaveCommitRepository saveCommitRepository;
-  private final GetProjectRepository getProjectRepository;
+  private final CommitRepository commitRepository;
+  private final ProjectRepository projectRepository;
   private final FileRepository fileRepository;
-  private final GetCommitsInProjectRepository getCommitsInProjectRepository;
   private final MetricRepository metricRepository;
 
   @Autowired
   public CommitAdapter(
-      SaveCommitRepository saveCommitRepository,
-      GetProjectRepository getProjectRepository,
+      CommitRepository commitRepository,
+      ProjectRepository projectRepository,
       FileRepository fileRepository,
-      GetCommitsInProjectRepository getCommitsInProjectRepository,
       MetricRepository metricRepository) {
-    this.saveCommitRepository = saveCommitRepository;
-    this.getProjectRepository = getProjectRepository;
+    this.commitRepository = commitRepository;
+    this.projectRepository = projectRepository;
     this.fileRepository = fileRepository;
-    this.getCommitsInProjectRepository = getCommitsInProjectRepository;
     this.metricRepository = metricRepository;
   }
 
@@ -53,7 +49,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   public void saveCommits(List<Commit> commits, Long projectId) {
     if (!commits.isEmpty()) {
       ProjectEntity projectEntity =
-          getProjectRepository
+          projectRepository
               .findById(projectId)
               .orElseThrow(() -> new ProjectNotFoundException(projectId));
       HashMap<String, FileEntity> walkedFiles = new HashMap<>();
@@ -68,9 +64,9 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
 
       walkedCommits.putIfAbsent(commitEntity.getName(), commitEntity);
 
-      saveCommitRepository.save(walkedCommits.values(), 1);
+      commitRepository.save(walkedCommits.values(), 1);
       fileRepository.save(walkedFiles.values(), 1);
-      getProjectRepository.save(projectEntity, 1);
+      projectRepository.save(projectEntity, 1);
     }
   }
 
@@ -84,12 +80,12 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   public void updateCommits(List<Commit> commits, Long projectId) {
     if (!commits.isEmpty()) {
       ProjectEntity projectEntity =
-          getProjectRepository
+          projectRepository
               .findById(projectId)
               .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
       List<CommitEntity> commitsInProject = // First we need all of the commits in the project
-          getCommitsInProjectRepository.findByProjectId(projectId);
+          commitRepository.findByProjectId(projectId);
 
       commits.sort(Comparator.comparing(Commit::getTimestamp));
       Commit newLastCommit = commits.get(0);
@@ -135,10 +131,10 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
 
       // Delete all of the old commit nodes, we don't need these anymore as we'll be saving the
       // newly created tree.
-      getCommitsInProjectRepository.deleteAll(commitsInProject);
+      commitRepository.deleteAll(commitsInProject);
 
       // Save the newly created tree
-      saveCommitRepository.save(walkedCommits.values(), 1);
+      commitRepository.save(walkedCommits.values(), 1);
       fileRepository.save(walkedFiles.values(), 1);
 
       // Remove the old file nodes from the project (this is how we avoid duplicates) and add the
@@ -152,7 +148,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       // Remove any old metrics, whose commits have been deleted.
       metricRepository.removeMetricsWithoutCommits(projectId);
 
-      getProjectRepository.save(projectEntity, 1);
+      projectRepository.save(projectEntity, 1);
     }
   }
 
@@ -182,13 +178,13 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   @Override
   public void saveCommit(Commit commit) {
     CommitEntity commitEntity =
-        saveCommitRepository
+        commitRepository
             .findById(commit.getId())
             .orElseThrow(() -> new CommitNotFoundException(commit.getId()));
     Long id = commitEntity.getId();
     commitEntity = mapCommitBaseData(commit);
     commitEntity.setId(id);
-    saveCommitRepository.save(commitEntity, 0);
+    commitRepository.save(commitEntity, 0);
   }
 
   /**

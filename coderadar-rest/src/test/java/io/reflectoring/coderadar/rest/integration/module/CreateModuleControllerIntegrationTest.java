@@ -3,8 +3,8 @@ package io.reflectoring.coderadar.rest.integration.module;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
@@ -20,8 +20,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired private CreateProjectRepository createProjectRepository;
-  @Autowired private CreateModuleRepository createModuleRepository;
+  @Autowired private ProjectRepository projectRepository;
+  @Autowired private ModuleRepository moduleRepository;
 
   @Test
   void createModuleSuccessfully() throws Exception {
@@ -31,7 +31,7 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
     fileEntity.setPath("module-path/Main.java");
     testProject.setVcsUrl("https://valid.url");
     testProject.getFiles().add(fileEntity);
-    testProject = createProjectRepository.save(testProject);
+    testProject = projectRepository.save(testProject);
 
     ConstrainedFields fields = fields(CreateModuleCommand.class);
 
@@ -47,7 +47,7 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
             result -> {
               Long id =
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
-              ModuleEntity module = createModuleRepository.findById(id).get();
+              ModuleEntity module = moduleRepository.findById(id).get();
               Assertions.assertEquals("module-path/", module.getPath());
             })
             .andDo(

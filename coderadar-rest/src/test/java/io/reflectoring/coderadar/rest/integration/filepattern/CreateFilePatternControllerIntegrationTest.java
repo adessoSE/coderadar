@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.rest.integration.filepattern;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
@@ -17,14 +17,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired private CreateProjectRepository createProjectRepository;
-  @Autowired private CreateFilePatternRepository createFilePatternRepository;
+  @Autowired private ProjectRepository projectRepository;
+  @Autowired private FilePatternRepository filePatternRepository;
 
   @Test
   void createFilePatternSuccessfully() throws Exception {
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
-    testProject = createProjectRepository.save(testProject);
+    testProject = projectRepository.save(testProject);
 
     CreateFilePatternCommand command =
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
@@ -36,7 +36,7 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
         .andExpect(MockMvcResultMatchers.status().isCreated())
         .andDo(
             result -> {
-              FilePatternEntity filePattern = createFilePatternRepository.findAll().iterator().next();
+              FilePatternEntity filePattern = filePatternRepository.findAll().iterator().next();
               Assertions.assertEquals("**/*.java", filePattern.getPattern());
               Assertions.assertEquals(InclusionType.INCLUDE, filePattern.getInclusionType());
             });

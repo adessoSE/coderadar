@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.rest.integration.analyzerconfig;
 
-import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
@@ -20,14 +20,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired private CreateProjectRepository createProjectRepository;
-  @Autowired private CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository;
+  @Autowired private ProjectRepository projectRepository;
+  @Autowired private AnalyzerConfigurationRepository analyzerConfigurationRepository;
 
   @Test
   void createAnalyzerConfigurationSuccessfully() throws Exception {
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
-    testProject = createProjectRepository.save(testProject);
+    testProject = projectRepository.save(testProject);
 
       ConstrainedFields<CreateAnalyzerConfigurationCommand> fields = fields(CreateAnalyzerConfigurationCommand.class);
 
@@ -45,7 +45,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
               Long id =
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
               AnalyzerConfigurationEntity analyzerConfiguration =
-                  createAnalyzerConfigurationRepository.findById(id).get();
+                      analyzerConfigurationRepository.findById(id).get();
               Assertions.assertEquals("analyzer", analyzerConfiguration.getAnalyzerName());
               Assertions.assertTrue(analyzerConfiguration.getEnabled());
             })

@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.graph.projectadministration.project.service;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.ProjectMapper;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
@@ -14,17 +14,17 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GetProjectAdapter implements GetProjectPort {
-  private final GetProjectRepository getProjectRepository;
+  private final ProjectRepository projectRepository;
   private final ProjectMapper projectMapper = new ProjectMapper();
 
   @Autowired
-  public GetProjectAdapter(GetProjectRepository getProjectRepository) {
-    this.getProjectRepository = getProjectRepository;
+  public GetProjectAdapter(ProjectRepository projectRepository) {
+    this.projectRepository = projectRepository;
   }
 
   @Override
   public Project get(Long id) throws ProjectNotFoundException {
-    Optional<ProjectEntity> projectEntity = getProjectRepository.findById(id);
+    Optional<ProjectEntity> projectEntity = projectRepository.findById(id);
     if (projectEntity.isPresent()) {
       return projectMapper.mapNodeEntity(projectEntity.get());
     } else {
@@ -34,7 +34,7 @@ public class GetProjectAdapter implements GetProjectPort {
 
   @Override
   public Project get(String name) throws ProjectNotFoundException {
-    Optional<ProjectEntity> projectEntity = getProjectRepository.findByName(name);
+    Optional<ProjectEntity> projectEntity = projectRepository.findByName(name);
     if (projectEntity.isPresent()) {
       return projectMapper.mapNodeEntity(projectEntity.get());
     } else {
@@ -44,16 +44,16 @@ public class GetProjectAdapter implements GetProjectPort {
 
   @Override
   public boolean existsByName(String name) {
-    return getProjectRepository.findByName(name).isPresent();
+    return projectRepository.findByName(name).isPresent();
   }
 
   @Override
   public boolean existsById(Long projectId) {
-    return getProjectRepository.existsById(projectId);
+    return projectRepository.existsById(projectId);
   }
 
   @Override
   public List<Project> findByName(String name) {
-    return new ArrayList<>(projectMapper.mapNodeEntities(getProjectRepository.findAllByName(name)));
+    return new ArrayList<>(projectMapper.mapNodeEntities(projectRepository.findAllByName(name)));
   }
 }

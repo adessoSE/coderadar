@@ -14,6 +14,7 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService;
+import io.reflectoring.coderadar.projectadministration.service.project.ScanProjectScheduler;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
 import java.io.File;
@@ -32,6 +33,7 @@ class CreateProjectServiceTest {
   private GetProjectCommitsUseCase getProjectCommitsUseCase = mock(GetProjectCommitsUseCase.class);
   private SaveCommitPort saveCommitPort = mock(SaveCommitPort.class);
   private ProcessProjectService processProjectService = mock(ProcessProjectService.class);
+  private ScanProjectScheduler scanProjectScheduler = mock(ScanProjectScheduler.class);
 
   @Test
   void returnsNewProjectId() throws ProjectIsBeingProcessedException {
@@ -44,10 +46,6 @@ class CreateProjectServiceTest {
             processProjectService,
             getProjectCommitsUseCase,
             saveCommitPort,
-            taskScheduler,
-            updateProjectService,
-            projectStatusPort,
-            updateRepositoryPort,
             scanProjectScheduler);
 
     when(coderadarConfigurationProperties.getWorkdir())
@@ -84,10 +82,6 @@ class CreateProjectServiceTest {
             processProjectService,
             getProjectCommitsUseCase,
             saveCommitPort,
-            taskScheduler,
-            updateProjectService,
-            projectStatusPort,
-            updateRepositoryPort,
             scanProjectScheduler);
 
     when(coderadarConfigurationProperties.getWorkdir())

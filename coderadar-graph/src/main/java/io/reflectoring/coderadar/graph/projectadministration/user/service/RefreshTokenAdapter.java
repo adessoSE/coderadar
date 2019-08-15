@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.graph.projectadministration.user.service;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.RefreshTokenEntity;
 import io.reflectoring.coderadar.graph.projectadministration.user.RefreshTokenMapper;
-import io.reflectoring.coderadar.graph.projectadministration.user.repository.LoadUserRepository;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RefreshTokenRepository;
+import io.reflectoring.coderadar.graph.projectadministration.user.repository.UserRepository;
 import io.reflectoring.coderadar.projectadministration.RefreshTokenNotFoundException;
 import io.reflectoring.coderadar.projectadministration.UserNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.RefreshToken;
@@ -18,13 +18,13 @@ public class RefreshTokenAdapter implements RefreshTokenPort {
 
   private final RefreshTokenRepository refreshTokenRepository;
   private final RefreshTokenMapper refreshTokenMapper = new RefreshTokenMapper();
-  private final LoadUserRepository loadUserRepository;
+  private final UserRepository userRepository;
 
   @Autowired
   public RefreshTokenAdapter(
-      RefreshTokenRepository refreshTokenRepository, LoadUserRepository loadUserRepository) {
+      RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
     this.refreshTokenRepository = refreshTokenRepository;
-    this.loadUserRepository = loadUserRepository;
+    this.userRepository = userRepository;
   }
 
   @Override
@@ -41,7 +41,7 @@ public class RefreshTokenAdapter implements RefreshTokenPort {
   @Transactional
   public void deleteByUser(User user) {
     refreshTokenRepository.deleteByUser(
-        loadUserRepository
+        userRepository
             .findById(user.getId())
             .orElseThrow(() -> new UserNotFoundException(user.getId())));
   }

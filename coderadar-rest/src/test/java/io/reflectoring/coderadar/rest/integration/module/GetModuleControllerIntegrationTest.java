@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.rest.integration.module;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -17,21 +17,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class GetModuleControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired private CreateProjectRepository createProjectRepository;
+  @Autowired private ProjectRepository projectRepository;
 
-  @Autowired private CreateModuleRepository createModuleRepository;
+  @Autowired private ModuleRepository moduleRepository;
 
   @Test
   void getModuleWithId() throws Exception {
     // Set up
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
-    testProject = createProjectRepository.save(testProject);
+    testProject = projectRepository.save(testProject);
 
     ModuleEntity module = new ModuleEntity();
     module.setPath("test-module");
     module.setProject(testProject);
-    module = createModuleRepository.save(module);
+    module = moduleRepository.save(module);
 
     // Test
     mvc()

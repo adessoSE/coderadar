@@ -5,9 +5,9 @@ import io.reflectoring.coderadar.analyzer.domain.File;
 import io.reflectoring.coderadar.analyzer.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileToCommitRelationshipEntity;
+import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
-import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
@@ -20,27 +20,26 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
-  private final GetProjectRepository getProjectRepository;
-  private final GetCommitsInProjectRepository getCommitsInProjectRepository;
+  private final ProjectRepository projectRepository;
+  private final CommitRepository commitRepository;
 
   @Autowired
   public GetCommitsInProjectAdapter(
-      GetProjectRepository getProjectRepository,
-      GetCommitsInProjectRepository getCommitsInProjectRepository) {
-    this.getProjectRepository = getProjectRepository;
-    this.getCommitsInProjectRepository = getCommitsInProjectRepository;
+      ProjectRepository projectRepository, CommitRepository commitRepository) {
+    this.projectRepository = projectRepository;
+    this.commitRepository = commitRepository;
   }
 
   @Override
   public List<Commit> get(Long projectId) {
-    Optional<ProjectEntity> persistedProject = getProjectRepository.findById(projectId);
+    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
 
     if (persistedProject.isPresent()) {
       List<Commit> commits = new ArrayList<>();
-      List<CommitEntity> commitEntities = getCommitsInProjectRepository.findByProjectId(projectId);
+      List<CommitEntity> commitEntities = commitRepository.findByProjectId(projectId);
       for (CommitEntity commitEntity1 : commitEntities) {
         CommitEntity commitEntity =
-            getCommitsInProjectRepository
+            commitRepository
                 .findById(commitEntity1.getId())
                 .orElseThrow(() -> new CommitNotFoundException(commitEntity1.getId()));
 

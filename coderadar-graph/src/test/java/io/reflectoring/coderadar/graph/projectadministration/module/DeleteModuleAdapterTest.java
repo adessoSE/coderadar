@@ -6,9 +6,9 @@ import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.module.repository.DeleteModuleRepository;
+import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.service.DeleteModuleAdapter;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("Delete module")
 class DeleteModuleAdapterTest {
-  private DeleteModuleRepository deleteModuleRepository = mock(DeleteModuleRepository.class);
-  private CreateProjectRepository createProjectRepository = mock(CreateProjectRepository.class);
+  private ModuleRepository moduleRepository = mock(ModuleRepository.class);
+  private ProjectRepository projectRepository = mock(ProjectRepository.class);
 
   private DeleteModuleAdapter deleteModuleAdapter;
   private ModuleEntity moduleEntity;
@@ -30,30 +30,27 @@ class DeleteModuleAdapterTest {
     moduleEntity = new ModuleEntity();
     moduleEntity.setId(1L);
     moduleEntity.setProject(projectEntity);
-    deleteModuleAdapter = new DeleteModuleAdapter(deleteModuleRepository, createProjectRepository);
+    deleteModuleAdapter = new DeleteModuleAdapter(moduleRepository, projectRepository);
   }
 
   @Test
   @DisplayName("Should delete module when passing a valid module entity")
   void shouldDeleteModuleWhenPassingAValidModuleEntity() throws ProjectIsBeingProcessedException {
-    doNothing().when(deleteModuleRepository).delete(isA(ModuleEntity.class));
-    when(deleteModuleRepository.findById(anyLong()))
-        .thenReturn(java.util.Optional.of(moduleEntity));
-    when(deleteModuleRepository.findById(anyLong()))
-        .thenReturn(java.util.Optional.of(moduleEntity));
+    doNothing().when(moduleRepository).delete(isA(ModuleEntity.class));
+    when(moduleRepository.findById(anyLong())).thenReturn(java.util.Optional.of(moduleEntity));
+    when(moduleRepository.findById(anyLong())).thenReturn(java.util.Optional.of(moduleEntity));
     Module module = new Module();
     module.setId(1L);
     deleteModuleAdapter.delete(module, 2L);
-    verify(deleteModuleRepository, times(1)).deleteById(1L);
+    verify(moduleRepository, times(1)).deleteById(1L);
   }
 
   @Test
   @DisplayName("Should delete module when passing a valid module id")
   void shouldDeleteModuleWhenPassingAValidModuleId() throws ProjectIsBeingProcessedException {
-    doNothing().when(deleteModuleRepository).deleteById(isA(Long.class));
-    when(deleteModuleRepository.findById(anyLong()))
-        .thenReturn(java.util.Optional.of(moduleEntity));
+    doNothing().when(moduleRepository).deleteById(isA(Long.class));
+    when(moduleRepository.findById(anyLong())).thenReturn(java.util.Optional.of(moduleEntity));
     deleteModuleAdapter.delete(1L, 2L);
-    verify(deleteModuleRepository, times(1)).deleteById(any(Long.class));
+    verify(moduleRepository, times(1)).deleteById(any(Long.class));
   }
 }

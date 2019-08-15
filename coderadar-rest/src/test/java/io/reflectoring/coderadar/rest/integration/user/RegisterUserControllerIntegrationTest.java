@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.integration.user;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.UserEntity;
-import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
+import io.reflectoring.coderadar.graph.projectadministration.user.repository.UserRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.register.RegisterUserCommand;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired private RegisterUserRepository registerUserRepository;
+  @Autowired private UserRepository userRepository;
 
   @Test
   void registerNewUserSuccessfully() throws Exception {
@@ -56,7 +56,7 @@ class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
     UserEntity testUser = new UserEntity();
     testUser.setUsername("username2");
     testUser.setPassword("password1");
-    registerUserRepository.save(testUser);
+    userRepository.save(testUser);
 
     // Test
     RegisterUserCommand command = new RegisterUserCommand("username2", "password1");

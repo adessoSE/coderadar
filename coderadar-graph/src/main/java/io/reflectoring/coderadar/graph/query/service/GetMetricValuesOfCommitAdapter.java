@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.query.service;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
+import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.MetricValueForCommitQueryResult;
-import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
@@ -16,19 +16,19 @@ import org.springframework.stereotype.Service;
 public class GetMetricValuesOfCommitAdapter implements GetMetricValuesOfCommitPort {
 
   private final GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository;
-  private final GetCommitsInProjectRepository getCommitsInProjectRepository;
+  private final CommitRepository commitRepository;
 
   public GetMetricValuesOfCommitAdapter(
       GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository,
-      GetCommitsInProjectRepository getCommitsInProjectRepository) {
+      CommitRepository commitRepository) {
     this.getMetricValuesOfCommitRepository = getMetricValuesOfCommitRepository;
-    this.getCommitsInProjectRepository = getCommitsInProjectRepository;
+    this.commitRepository = commitRepository;
   }
 
   @Override
   public List<MetricValueForCommit> get(GetMetricsForCommitCommand command, Long projectId) {
     CommitEntity commitEntity =
-        getCommitsInProjectRepository
+        commitRepository
             .findByNameAndProjectId(command.getCommit(), projectId)
             .orElseThrow(() -> new CommitNotFoundException(command.getCommit()));
     List<MetricValueForCommitQueryResult> result =

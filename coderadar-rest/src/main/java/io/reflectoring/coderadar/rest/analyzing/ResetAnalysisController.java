@@ -24,8 +24,8 @@ public class ResetAnalysisController {
         try {
             resetAnalysisUseCase.resetAnalysis(projectId);
         } catch (ProjectNotFoundException e) {
-            return new ResponseEntity(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

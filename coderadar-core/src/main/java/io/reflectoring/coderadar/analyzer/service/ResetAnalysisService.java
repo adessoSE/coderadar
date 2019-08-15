@@ -9,20 +9,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ResetAnalysisService implements ResetAnalysisUseCase {
-    private final ResetAnalysisPort resetAnalysisPort;
-    private final GetProjectPort getProjectPort;
+  private final ResetAnalysisPort resetAnalysisPort;
+  private final GetProjectPort getProjectPort;
 
-    @Autowired
-    public ResetAnalysisService(ResetAnalysisPort resetAnalysisPort, GetProjectPort getProjectPort) {
-        this.resetAnalysisPort = resetAnalysisPort;
-        this.getProjectPort = getProjectPort;
-    }
+  @Autowired
+  public ResetAnalysisService(ResetAnalysisPort resetAnalysisPort, GetProjectPort getProjectPort) {
+    this.resetAnalysisPort = resetAnalysisPort;
+    this.getProjectPort = getProjectPort;
+  }
 
-    @Override
-    public void resetAnalysis(Long projectId) {
-        if (!getProjectPort.existsById(projectId)) {
-            throw new ProjectNotFoundException(projectId);
-        }
-        resetAnalysisPort.resetAnalysis(projectId);
+  @Override
+  public void resetAnalysis(Long projectId) {
+    if (!getProjectPort.existsById(projectId)) {
+      throw new ProjectNotFoundException(projectId);
     }
+    resetAnalysisPort.resetAnalysis(projectId);
+  }
 }

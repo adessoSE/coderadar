@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.rest.integration.filepattern;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.CreateFilePatternRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.update.UpdateFilePatternCommand;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
@@ -17,22 +17,22 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired private CreateProjectRepository createProjectRepository;
+  @Autowired private ProjectRepository projectRepository;
 
-  @Autowired private CreateFilePatternRepository createFilePatternRepository;
+  @Autowired private FilePatternRepository filePatternRepository;
 
   @Test
   void updateFilePatternWithId() throws Exception {
     // Set up
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
-    testProject = createProjectRepository.save(testProject);
+    testProject = projectRepository.save(testProject);
 
     FilePatternEntity filePattern = new FilePatternEntity();
     filePattern.setInclusionType(InclusionType.INCLUDE);
     filePattern.setPattern("**/*.java");
     filePattern.setProject(testProject);
-    filePattern = createFilePatternRepository.save(filePattern);
+    filePattern = filePatternRepository.save(filePattern);
     final Long id = filePattern.getId();
 
     // Test
@@ -46,7 +46,7 @@ class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(
             result -> {
-              FilePatternEntity configuration = createFilePatternRepository.findById(id).get();
+              FilePatternEntity configuration = filePatternRepository.findById(id).get();
               Assertions.assertEquals("**/*.xml", configuration.getPattern());
               Assertions.assertEquals(InclusionType.EXCLUDE, configuration.getInclusionType());
             });

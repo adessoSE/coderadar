@@ -69,14 +69,14 @@ public class ScanProjectScheduler {
    * @param project the project.
    */
   void scheduleUpdateTask(Project project) {
-    if (project.getVcsEnd() != null) {
-      return;
-    }
     taskScheduler.scheduleAtFixedRate(
         () -> {
           if (!projectStatusPort.isBeingProcessed(project.getId())) {
             try {
               Project currentProject = getProjectPort.get(project.getId());
+              if (currentProject.getVcsEnd() != null) {
+                return;
+              }
               logger.info(
                   String.format("Scanning project %s for new commits!", currentProject.getName()));
               updateRepositoryUseCase.updateRepository(
