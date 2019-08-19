@@ -52,7 +52,11 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
       } catch (JWTVerificationException e) {
         // in case of verification error a further filter will take care about authentication error
-        logger.error("Authentication error. Token is not valid", e);
+        if (e.getMessage().startsWith("The Token has expired on")) {
+          logger.error("Authentication error. Token is expired.");
+        } else {
+          logger.error("Authentication error. Token is not valid: ", e);
+        }
       }
     }
     filterChain.doFilter(request, response);
