@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class GetMetricValuesOfTwoCommits {
+public class GetMetricValuesOfTwoCommitsController {
 
     private final GetMetricValuesOfTwoCommitsUseCase getMetricValuesOfTwoCommitsUseCase;
 
-    public GetMetricValuesOfTwoCommits(GetMetricValuesOfTwoCommitsUseCase getMetricValuesOfTwoCommitsUseCase) {
+    public GetMetricValuesOfTwoCommitsController(GetMetricValuesOfTwoCommitsUseCase getMetricValuesOfTwoCommitsUseCase) {
         this.getMetricValuesOfTwoCommitsUseCase = getMetricValuesOfTwoCommitsUseCase;
     }
 

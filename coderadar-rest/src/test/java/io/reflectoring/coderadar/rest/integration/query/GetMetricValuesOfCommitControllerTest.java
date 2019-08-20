@@ -17,10 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -36,7 +33,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
         URL testRepoURL =  this.getClass().getClassLoader().getResource("test-repository");
         CreateProjectCommand command1 =
                 new CreateProjectCommand(
-                        "test-project", "username", "password", testRepoURL.toString(), false, null, null);
+                        "test-project", "username", "password", Objects.requireNonNull(testRepoURL).toString(), false, null, null);
         MvcResult result = mvc().perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1))).andReturn();
 
         projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
