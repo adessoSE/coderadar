@@ -20,7 +20,7 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
   // This test has to be annotated with @DirtiesContext because custom Neo4j queries
   // cause problems when run inside an DB tansaction. Therefore the transaction propagation
   // must be set to NOT_SUPPORTED (no transaction) to "fix" this issue.
-  //@Test
+  @Test
   @DirtiesContext
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
   public void deleteProjectWithId() throws Exception {

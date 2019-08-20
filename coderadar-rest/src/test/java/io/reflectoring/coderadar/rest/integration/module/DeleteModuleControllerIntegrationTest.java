@@ -18,7 +18,7 @@ class DeleteModuleControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private ModuleRepository moduleRepository;
 
-  //@Test
+  @Test
   void deleteModuleWithId() throws Exception {
     // Set up
     ProjectEntity testProject = new ProjectEntity();

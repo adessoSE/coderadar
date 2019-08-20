@@ -20,7 +20,7 @@ public class ResetAnalysisAdapter implements ResetAnalysisPort {
 
   @Override
   public void resetAnalysis(Long projectId) {
-    metricRepository.deleteAllMetricValuesFromProject(projectId);
+    metricRepository.deleteAllMetricValuesAndFindingsFromProject(projectId);
     commitRepository.resetAnalyzedStatus(projectId);
   }
 }

@@ -19,7 +19,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private ProjectRepository projectRepository;
 
-  //@Test
+  @Test
   void updateProjectWithId() throws Exception {
     // Set up
       ProjectEntity testProject = new ProjectEntity();
