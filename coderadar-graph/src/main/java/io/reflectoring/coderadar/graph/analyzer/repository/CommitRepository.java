@@ -9,8 +9,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   @Query(
-      "MATCH (p1:ProjectEntity)-[:CONTAINS*]-(f1:FileEntity)-[:CHANGED_IN]->(c1:CommitEntity)-[:IS_CHILD_OF*0..2]-(c2:CommitEntity) "
-          + "WHERE ID(p1) = {0} UNWIND [c1, c2] AS c WITH DISTINCT c SET c.analyzed = false")
+      "MATCH (p:ProjectEntity)-->(f:FileEntity)-->(c1:CommitEntity)-[:IS_CHILD_OF*0..2]-(c2:CommitEntity) "
+          + "WHERE ID(p) = {0} UNWIND [c1, c2] AS c WITH DISTINCT c SET c.analyzed = false")
   void resetAnalyzedStatus(Long projectId);
 
   @Query(
@@ -18,8 +18,8 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   void deleteCommitTree(@Param("commitId") Long commitId);
 
   @Query(
-      "MATCH (p1:ProjectEntity)-[:CONTAINS*]-(f1:FileEntity)-[:CHANGED_IN]->(c1:CommitEntity)-[:IS_CHILD_OF*0..2]-(c2:CommitEntity) "
-          + "WHERE ID(p1) = {0} "
+      "MATCH (p:ProjectEntity)-->(f:FileEntity)-->(c1:CommitEntity)-[:IS_CHILD_OF*0..2]-(c2:CommitEntity) "
+          + "WHERE ID(p) = {0} "
           + "UNWIND [c1, c2] AS c "
           + "RETURN DISTINCT c "
           + "ORDER BY c.timestamp DESC")

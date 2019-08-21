@@ -1,5 +1,9 @@
 package io.reflectoring.coderadar.rest.integration.project;
 
+import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
+import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
+import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
+import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
@@ -14,6 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -21,6 +26,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private ProjectRepository projectRepository;
+  @Autowired private FileRepository fileRepository;
+  @Autowired private CommitRepository commitRepository;
 
   @Test
   void createProjectSuccessfully() throws Exception {
@@ -42,6 +49,10 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
               Assertions.assertEquals("password", project.getVcsPassword());
               Assertions.assertEquals(testRepoURL.toString(), project.getVcsUrl());
               Assertions.assertFalse(project.isVcsOnline());
+                List<CommitEntity> commits = commitRepository.findByProjectId(id);
+                Assertions.assertEquals(13, commits.size());
+                List<FileEntity> files = fileRepository.findAllinProject(id);
+                Assertions.assertEquals(8, files.size());
             })
             .andDo(documentCreateProject());
   }
