@@ -1,24 +1,28 @@
 package io.reflectoring.coderadar.projectadministration.user;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+
 import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.ChangePasswordPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.RefreshTokenPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.user.RegisterUserPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.password.ChangePasswordCommand;
 import io.reflectoring.coderadar.projectadministration.service.user.password.ChangePasswordService;
 import io.reflectoring.coderadar.projectadministration.service.user.refresh.RefreshTokenService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-
+@ExtendWith(MockitoExtension.class)
 class ChangePasswordServiceTest {
-  private ChangePasswordPort changePasswordPort = mock(ChangePasswordPort.class);
-  private RefreshTokenService refreshTokenService = mock(RefreshTokenService.class);
-  private RegisterUserPort registerUserPort = mock(RegisterUserPort.class);
-  private RefreshTokenPort refreshTokenPort = mock(RefreshTokenPort.class);
+
+  @Mock private ChangePasswordPort changePasswordPort;
+
+  @Mock private RefreshTokenService refreshTokenService;
+
+  @Mock private RefreshTokenPort refreshTokenPort;
 
   @Test
   void changePasswordSuccessfully() {

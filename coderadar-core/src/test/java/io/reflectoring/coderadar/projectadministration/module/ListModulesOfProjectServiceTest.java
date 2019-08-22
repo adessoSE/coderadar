@@ -1,53 +1,61 @@
 package io.reflectoring.coderadar.projectadministration.module;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.ListModulesOfProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.projectadministration.service.module.ListModulesOfProjectService;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-
+@ExtendWith(MockitoExtension.class)
 class ListModulesOfProjectServiceTest {
-  private ListModulesOfProjectPort port = mock(ListModulesOfProjectPort.class);
-  private GetProjectPort getProjectPort = mock(GetProjectPort.class);
+
+  @Mock private ListModulesOfProjectPort listModulesPortMock;
+
+  private ListModulesOfProjectService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject = new ListModulesOfProjectService(listModulesPortMock);
+  }
 
   @Test
   void returnsTwoModulesFromProject() {
-    ListModulesOfProjectService testSubject = new ListModulesOfProjectService(port);
+    // given
+    long projectId = 1234L;
 
-    Mockito.when(getProjectPort.get(anyLong())).thenReturn(new Project());
-
-    Project project = new Project();
-    project.setId(1L);
+    Module module1 = new Module()
+            .setId(1L)
+            .setPath("module-path-one");
+    Module module2 = new Module()
+            .setId(2L)
+            .setPath("module-path-two");
 
     List<Module> modules = new ArrayList<>();
-    Module module1 = new Module();
-    module1.setId(1L);
-    module1.setPath("module-path-one");
-    Module module2 = new Module();
-    module2.setId(2L);
-    module2.setPath("module-path-two");
-
     modules.add(module1);
     modules.add(module2);
 
-    Mockito.when(port.listModules(project.getId())).thenReturn(modules);
+    GetModuleResponse expectedResponse1 = new GetModuleResponse(1L, "module-path-one");
+    GetModuleResponse expectedResponse2 = new GetModuleResponse(2L, "module-path-two");
 
-    List<GetModuleResponse> response = testSubject.listModules(project.getId());
+    when(listModulesPortMock.listModules(projectId)).thenReturn(modules);
 
-    Assertions.assertEquals(modules.size(), response.size());
-    Assertions.assertEquals(module1.getId(), response.get(0).getId());
-    Assertions.assertEquals(module1.getPath(), response.get(0).getPath());
-    Assertions.assertEquals(module2.getId(), response.get(1).getId());
-    Assertions.assertEquals(module2.getPath(), response.get(1).getPath());
+    // when
+    List<GetModuleResponse> actualResponses = testSubject.listModules(projectId);
+
+    // then
+    assertThat(actualResponses).containsExactly(expectedResponse1, expectedResponse2);
   }
 }

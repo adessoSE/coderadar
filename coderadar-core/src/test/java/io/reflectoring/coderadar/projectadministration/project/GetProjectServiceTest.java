@@ -4,17 +4,18 @@ import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.projectadministration.service.project.GetProjectService;
+import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Date;
-
-import static org.mockito.Mockito.mock;
-
+@ExtendWith(MockitoExtension.class)
 class GetProjectServiceTest {
 
-  private GetProjectPort getProjectPort = mock(GetProjectPort.class);
+  @Mock private GetProjectPort getProjectPort;
 
   @Test
   void returnsGetProjectResponseWithIdOne() {

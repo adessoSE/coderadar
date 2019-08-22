@@ -1,28 +1,36 @@
 package io.reflectoring.coderadar.projectadministration.analyzerconfig;
 
-import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
+import static org.mockito.Mockito.verify;
+
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.DeleteAnalyzerConfigurationPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.DeleteAnalyzerConfigurationService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-
+@ExtendWith(MockitoExtension.class)
 class DeleteAnalyzerConfigurationServiceTest {
-  private DeleteAnalyzerConfigurationPort port = mock(DeleteAnalyzerConfigurationPort.class);
-  private GetAnalyzerConfigurationPort getAnalyzerConfigurationPort =
-      mock(GetAnalyzerConfigurationPort.class);
+
+  @Mock private DeleteAnalyzerConfigurationPort deleteConfigurationPortMock;
+
+  private DeleteAnalyzerConfigurationService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject = new DeleteAnalyzerConfigurationService(deleteConfigurationPortMock);
+  }
 
   @Test
-  void deleteAnalyzerConfigurationWithIdOne() {
-    DeleteAnalyzerConfigurationService testSubject = new DeleteAnalyzerConfigurationService(port);
+  void deleteAnalyzerConfigurationDeletesConfigurationWithGivenId() {
+    // given
+    long configurationId = 1L;
 
-    Mockito.when(getAnalyzerConfigurationPort.getAnalyzerConfiguration(anyLong()))
-        .thenReturn(new AnalyzerConfiguration());
-    testSubject.deleteAnalyzerConfiguration(1L);
+    // when
+    testSubject.deleteAnalyzerConfiguration(configurationId);
 
-    Mockito.verify(port, Mockito.times(1)).deleteAnalyzerConfiguration(1L);
+    // then
+    verify(deleteConfigurationPortMock).deleteAnalyzerConfiguration(configurationId);
   }
 }

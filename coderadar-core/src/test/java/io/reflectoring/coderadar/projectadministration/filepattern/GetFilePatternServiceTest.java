@@ -5,30 +5,48 @@ import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.GetFilePatternService;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.mock;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class GetFilePatternServiceTest {
-  private GetFilePatternPort port = mock(GetFilePatternPort.class);
+
+  @Mock private GetFilePatternPort port;
+
+  private GetFilePatternService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject = new GetFilePatternService(port);
+  }
 
   @Test
   void returnsGetFilePatternResponseForFilePattern() {
-    GetFilePatternService testSubject = new GetFilePatternService(port);
+    // given
+    long patternId = 123L;
+    String pattern = "**/*.java";
+    InclusionType inclusionType = InclusionType.EXCLUDE;
 
-    FilePattern filePattern = new FilePattern();
-    filePattern.setId(1L);
-    filePattern.setPattern("**/*.java");
-    filePattern.setInclusionType(InclusionType.INCLUDE);
+    FilePattern filePattern = new FilePattern()
+            .setId(patternId)
+            .setPattern(pattern)
+            .setInclusionType(inclusionType);
 
-    Mockito.when(port.get(1L)).thenReturn(filePattern);
+    GetFilePatternResponse expectedResponse =
+            new GetFilePatternResponse(patternId, pattern, inclusionType);
 
-    GetFilePatternResponse response = testSubject.get(1L);
+    when(port.get(patternId)).thenReturn(filePattern);
 
-    Assertions.assertEquals(filePattern.getId(), response.getId());
-    Assertions.assertEquals(filePattern.getPattern(), response.getPattern());
-    Assertions.assertEquals(filePattern.getInclusionType(), response.getInclusionType());
+    // when
+    GetFilePatternResponse actualResponse = testSubject.get(patternId);
+
+    // then
+    assertThat(actualResponse).isEqualTo(expectedResponse);
   }
 }

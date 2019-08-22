@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.projectadministration.project;
 
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
@@ -10,12 +9,19 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.project.DeleteProjectService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 class DeleteProjectServiceTest {
-  private DeleteProjectPort deleteProjectPort = mock(DeleteProjectPort.class);
-  private GetProjectPort getProjectPort = mock(GetProjectPort.class);
-  private ProcessProjectService processProjectService = mock(ProcessProjectService.class);
+
+  @Mock private DeleteProjectPort deleteProjectPort;
+
+  @Mock private GetProjectPort getProjectPort;
+
+  @Mock private ProcessProjectService processProjectService;
 
   @Test
   void deleteProjectWithIdOne() throws ProjectIsBeingProcessedException {

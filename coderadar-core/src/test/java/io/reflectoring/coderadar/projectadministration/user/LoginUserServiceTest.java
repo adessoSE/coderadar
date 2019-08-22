@@ -9,16 +9,22 @@ import io.reflectoring.coderadar.projectadministration.service.user.login.LoginU
 import io.reflectoring.coderadar.projectadministration.service.user.security.TokenService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 
-import static org.mockito.Mockito.mock;
-
+@ExtendWith(MockitoExtension.class)
 class LoginUserServiceTest {
-  private RefreshTokenPort refreshTokenPort = mock(RefreshTokenPort.class);
-  private LoadUserPort loadUserPort = mock(LoadUserPort.class);
-  private TokenService tokenService = mock(TokenService.class);
-  private AuthenticationManager authenticationManager = mock(AuthenticationManager.class);
+
+  @Mock private RefreshTokenPort refreshTokenPort;
+
+  @Mock private LoadUserPort loadUserPort;
+
+  @Mock private TokenService tokenService;
+
+  @Mock private AuthenticationManager authenticationManager;
 
   @Test
   void loginUserWithUsernameAndPassword() {

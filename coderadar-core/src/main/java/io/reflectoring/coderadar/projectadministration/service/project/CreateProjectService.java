@@ -45,6 +45,8 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   private final ScanProjectScheduler scanProjectScheduler;
 
+  private final WorkdirNameGenerator workdirNameGenerator;
+
   private final Logger logger = LoggerFactory.getLogger(CreateProjectUseCase.class);
 
   @Autowired
@@ -65,6 +67,29 @@ public class CreateProjectService implements CreateProjectUseCase {
     this.getProjectCommitsUseCase = getProjectCommitsUseCase;
     this.saveCommitPort = saveCommitPort;
     this.scanProjectScheduler = scanProjectScheduler;
+
+    this.workdirNameGenerator = new UUIDWorkdirNameGenerator();
+  }
+
+  public CreateProjectService(
+          CreateProjectPort createProjectPort,
+          GetProjectPort getProjectPort,
+          CloneRepositoryUseCase cloneRepositoryUseCase,
+          CoderadarConfigurationProperties coderadarConfigurationProperties,
+          ProcessProjectService processProjectService,
+          GetProjectCommitsUseCase getProjectCommitsUseCase,
+          SaveCommitPort saveCommitPort,
+          ScanProjectScheduler scanProjectScheduler,
+          WorkdirNameGenerator workdirNameGenerator) {
+    this.createProjectPort = createProjectPort;
+    this.getProjectPort = getProjectPort;
+    this.cloneRepositoryUseCase = cloneRepositoryUseCase;
+    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
+    this.processProjectService = processProjectService;
+    this.getProjectCommitsUseCase = getProjectCommitsUseCase;
+    this.saveCommitPort = saveCommitPort;
+    this.scanProjectScheduler = scanProjectScheduler;
+    this.workdirNameGenerator = workdirNameGenerator;
   }
 
   @Override
@@ -120,9 +145,11 @@ public class CreateProjectService implements CreateProjectUseCase {
   }
 
   private Project saveProject(CreateProjectCommand command) {
+    String workdirName = workdirNameGenerator.generate(command.getName());
+
     Project project = new Project();
     project.setName(command.getName());
-    project.setWorkdirName(UUID.randomUUID().toString());
+    project.setWorkdirName(workdirName);
     project.setVcsUrl(command.getVcsUrl());
     project.setVcsUsername(command.getVcsUsername());
     project.setVcsPassword(command.getVcsPassword());
@@ -134,4 +161,41 @@ public class CreateProjectService implements CreateProjectUseCase {
     project.setId(projectId);
     return project;
   }
+
+  /**
+   * Interface used to generate a random working directory name for a newly created
+   * project.
+   *
+   * @see CreateProjectService
+   */
+  public interface WorkdirNameGenerator {
+
+    /**
+     *
+     * @param projectName The name of the project to generate the working directory name for.
+     * @return A working directory name most likely not to collide with existing projects' working directories.
+     * Must be a valid directory name without any spaces or path separators.
+     */
+    String generate(String projectName);
+
+  }
+
+  /**
+   * {@link WorkdirNameGenerator} implementation using {@link UUID}s to generate
+   * working directory names.
+   */
+  public class UUIDWorkdirNameGenerator implements WorkdirNameGenerator {
+
+    /**
+     *
+     * @param projectName The name of the project to generate the working directory name for.
+     * @return The value returned {@link UUID#randomUUID()} as a string.
+     */
+    @Override
+    public String generate(String projectName) {
+      return UUID.randomUUID().toString();
+    }
+
+  }
+
 }

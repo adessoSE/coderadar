@@ -1,20 +1,25 @@
 package io.reflectoring.coderadar.projectadministration.user;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+
 import io.reflectoring.coderadar.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.RegisterUserPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.register.RegisterUserCommand;
 import io.reflectoring.coderadar.projectadministration.service.user.register.RegisterUserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-
+@ExtendWith(MockitoExtension.class)
 class RegisterUserServiceTest {
-  private RegisterUserPort registerUserPort = mock(RegisterUserPort.class);
-  private LoadUserPort loadUserPort = mock(LoadUserPort.class);
+
+  @Mock private RegisterUserPort registerUserPort;
+
+  @Mock private LoadUserPort loadUserPort;
 
   @Test
   void returnsNewUserIdWhenRegister() {

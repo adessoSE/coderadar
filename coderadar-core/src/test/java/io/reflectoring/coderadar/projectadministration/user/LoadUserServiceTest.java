@@ -6,12 +6,15 @@ import io.reflectoring.coderadar.projectadministration.port.driver.user.load.Loa
 import io.reflectoring.coderadar.projectadministration.service.user.load.LoadUserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.mock;
-
+@ExtendWith(MockitoExtension.class)
 class LoadUserServiceTest {
-  private LoadUserPort loadUserPort = mock(LoadUserPort.class);
+
+  @Mock private LoadUserPort loadUserPort;
 
   @Test
   void loadUserWithIdOne() {

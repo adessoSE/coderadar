@@ -5,14 +5,18 @@ import io.reflectoring.coderadar.projectadministration.port.driven.user.RefreshT
 import io.reflectoring.coderadar.projectadministration.service.user.refresh.RefreshTokenService;
 import io.reflectoring.coderadar.projectadministration.service.user.security.TokenService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.mock;
-
+@ExtendWith(MockitoExtension.class)
 class RefreshTokenServiceTest {
 
-  private RefreshTokenPort refreshTokenPort = mock(RefreshTokenPort.class);
-  private TokenService tokenService = mock(TokenService.class);
-  private LoadUserPort loadUserPort = mock(LoadUserPort.class);
+  @Mock private RefreshTokenPort refreshTokenPort;
+
+  @Mock private TokenService tokenService;
+
+  @Mock private LoadUserPort loadUserPort;
 
   private RefreshTokenService testSubject;
 

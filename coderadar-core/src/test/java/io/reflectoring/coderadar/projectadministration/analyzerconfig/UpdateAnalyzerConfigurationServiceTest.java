@@ -1,40 +1,54 @@
 package io.reflectoring.coderadar.projectadministration.analyzerconfig;
 
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.UpdateAnalyzerConfigurationService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.mock;
-
+@ExtendWith(MockitoExtension.class)
 class UpdateAnalyzerConfigurationServiceTest {
-  private UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort =
-      mock(UpdateAnalyzerConfigurationPort.class);
-  private GetAnalyzerConfigurationPort getAnalyzerConfigurationPort =
-      mock(GetAnalyzerConfigurationPort.class);
+
+  @Mock private UpdateAnalyzerConfigurationPort updateConfigurationPortMock;
+
+  @Mock private GetAnalyzerConfigurationPort getConfigurationPortMock;
+
+  private UpdateAnalyzerConfigurationService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject =
+        new UpdateAnalyzerConfigurationService(
+                updateConfigurationPortMock, getConfigurationPortMock);
+  }
 
   @Test
-  void updateAnalyzerConfigurationWithIdOne() {
-    UpdateAnalyzerConfigurationService testSubject =
-        new UpdateAnalyzerConfigurationService(
-            updateAnalyzerConfigurationPort, getAnalyzerConfigurationPort);
+  void updateAnalyzerConfigurationUpdatesNameAndEnabled(@Mock AnalyzerConfiguration existingConfigurationMock) {
+    // given
+    long configurationId = 1L;
+    String newConfigurationName = "new analyzer name";
 
     UpdateAnalyzerConfigurationCommand command =
-        new UpdateAnalyzerConfigurationCommand("new analyzer name", true);
+        new UpdateAnalyzerConfigurationCommand(newConfigurationName, false);
 
-    AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
-    analyzerConfiguration.setId(1L);
-    analyzerConfiguration.setAnalyzerName("new analyzer name");
-    analyzerConfiguration.setEnabled(true);
+    when(getConfigurationPortMock.getAnalyzerConfiguration(configurationId))
+        .thenReturn(existingConfigurationMock);
 
-    Mockito.when(getAnalyzerConfigurationPort.getAnalyzerConfiguration(1L))
-        .thenReturn(analyzerConfiguration);
-
+    // when
     testSubject.update(command, 1L);
 
-    Mockito.verify(updateAnalyzerConfigurationPort, Mockito.times(1)).update(analyzerConfiguration);
+    // then
+    verify(existingConfigurationMock, never()).setId(any());
+    verify(existingConfigurationMock).setAnalyzerName(newConfigurationName);
+    verify(existingConfigurationMock).setEnabled(false);
+
+    verify(updateConfigurationPortMock).update(existingConfigurationMock);
   }
 }

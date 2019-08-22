@@ -1,26 +1,36 @@
 package io.reflectoring.coderadar.projectadministration.filepattern;
 
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
+import static org.mockito.Mockito.verify;
+
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.DeleteFilePatternPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.DeleteFilePatternService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-
+@ExtendWith(MockitoExtension.class)
 class DeleteFilePatternServiceTest {
-  private DeleteFilePatternPort port = mock(DeleteFilePatternPort.class);
-  private GetFilePatternPort getFilePatternPort = mock(GetFilePatternPort.class);
+
+  @Mock private DeleteFilePatternPort port;
+
+  private DeleteFilePatternService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject = new DeleteFilePatternService(port);
+  }
 
   @Test
-  void deleteFilePatternWithIdOne() {
-    DeleteFilePatternService testSubject = new DeleteFilePatternService(port);
+  void deleteFilePatternDeletesPatternWithGivenId() {
+    // given
+    long patternId = 1L;
 
-    Mockito.when(getFilePatternPort.get(anyLong())).thenReturn(new FilePattern());
-    testSubject.delete(1L);
+    // when
+    testSubject.delete(patternId);
 
-    Mockito.verify(port, Mockito.times(1)).delete(1L);
+    // then
+    verify(port).delete(1L);
   }
 }

@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.projectadministration.project;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
@@ -18,20 +16,32 @@ import java.util.Collections;
 import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.scheduling.TaskScheduler;
 
+@ExtendWith(MockitoExtension.class)
 class UpdateProjectServiceTest {
-  private GetProjectPort getProjectPort = mock(GetProjectPort.class);
-  private UpdateProjectPort updateProjectPort = mock(UpdateProjectPort.class);
-  private UpdateRepositoryUseCase updateRepositoryUseCase = mock(UpdateRepositoryUseCase.class);
-  private CoderadarConfigurationProperties coderadarConfigurationProperties =
-      mock(CoderadarConfigurationProperties.class);
-  private ProcessProjectService processProjectService = mock(ProcessProjectService.class);
-  private UpdateCommitsPort updateCommitsPort = mock(UpdateCommitsPort.class);
-  private GetProjectCommitsUseCase getProjectCommitsUseCase = mock(GetProjectCommitsUseCase.class);
-  private ProjectStatusPort projectStatusPort = mock(ProjectStatusPort.class);
-  private TaskScheduler taskScheduler = mock(TaskScheduler.class);
+
+  @Mock private GetProjectPort getProjectPort;
+
+  @Mock private UpdateProjectPort updateProjectPort;
+
+  @Mock private UpdateRepositoryUseCase updateRepositoryUseCase;
+
+  @Mock private CoderadarConfigurationProperties coderadarConfigurationProperties;
+
+  @Mock private ProcessProjectService processProjectService;
+
+  @Mock private GetProjectCommitsUseCase getProjectCommitsUseCase;
+
+  @Mock private UpdateCommitsPort updateCommitsPort;
+
+  @Mock private ProjectStatusPort projectStatusPort;
+
+  @Mock private TaskScheduler taskScheduler;
 
   @Test
   void updateProjectReturnsErrorWhenProjectWithNameAlreadyExists() {
