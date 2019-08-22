@@ -7,56 +7,83 @@ import io.reflectoring.coderadar.projectadministration.service.project.ListProje
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @ExtendWith(MockitoExtension.class)
 class ListProjectsServiceTest {
 
   @Mock
-  private ListProjectsPort port;
+  private ListProjectsPort listProjectsPort;
+
+  private ListProjectsService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject = new ListProjectsService(listProjectsPort);
+  }
 
   @Test
   void returnsTwoProjects() {
-    ListProjectsService testSubject = new ListProjectsService(port);
+    // given
+    Date startDate = new Date();
+    Date endDate = new Date();
 
-    Project project1 = new Project();
-    project1.setId(1L);
-    project1.setName("project 1");
-    project1.setVcsUsername("username1");
-    project1.setVcsPassword("password1");
-    project1.setVcsOnline(true);
-    project1.setVcsStart(new Date());
-    project1.setVcsEnd(new Date());
+    Project project1 = new Project()
+            .setId(1L)
+            .setName("project 1")
+            .setVcsUrl("http://github.com")
+            .setVcsUsername("username1")
+            .setVcsPassword("password1")
+            .setVcsOnline(true)
+            .setVcsStart(startDate)
+            .setVcsEnd(endDate);
 
-    Project project2 = new Project();
-    project2.setId(2L);
-    project2.setName("project 2");
-    project2.setVcsUsername("username2");
-    project2.setVcsPassword("password2");
-    project2.setVcsOnline(true);
-    project2.setVcsStart(new Date());
-    project2.setVcsEnd(new Date());
+    Project project2 = new Project()
+            .setId(2L)
+            .setName("project 2")
+            .setVcsUrl("http://bitbucket.org")
+            .setVcsUsername("username2")
+            .setVcsPassword("password2")
+            .setVcsOnline(false)
+            .setVcsStart(startDate)
+            .setVcsEnd(endDate);
+
     List<Project> projects = new ArrayList<>();
     projects.add(project1);
     projects.add(project2);
 
-    Mockito.when(port.getProjects()).thenReturn(projects);
+    GetProjectResponse expectedResponse1 = new GetProjectResponse()
+            .setId(1L)
+            .setName("project 1")
+            .setVcsUrl("http://github.com")
+            .setVcsUsername("username1")
+            .setVcsPassword("password1")
+            .setVcsOnline(true)
+            .setStart(startDate)
+            .setEnd(endDate);
+    GetProjectResponse expectedResponse2 = new GetProjectResponse()
+            .setId(2L)
+            .setName("project 2")
+            .setVcsUrl("http://bitbucket.org")
+            .setVcsUsername("username2")
+            .setVcsPassword("password2")
+            .setVcsOnline(false)
+            .setStart(startDate)
+            .setEnd(endDate);
 
-    List<GetProjectResponse> response = testSubject.listProjects();
+    Mockito.when(listProjectsPort.getProjects()).thenReturn(projects);
 
-    Assertions.assertEquals(projects.size(), response.size());
-    Assertions.assertEquals(project1.getId(), response.get(0).getId());
-    Assertions.assertEquals(project1.getName(), response.get(0).getName());
-    Assertions.assertEquals(project1.getVcsUsername(), response.get(0).getVcsUsername());
-    Assertions.assertEquals(project1.getVcsPassword(), response.get(0).getVcsPassword());
-    Assertions.assertEquals(project2.getId(), response.get(1).getId());
-    Assertions.assertEquals(project2.getName(), response.get(1).getName());
-    Assertions.assertEquals(project2.getVcsUsername(), response.get(1).getVcsUsername());
-    Assertions.assertEquals(project2.getVcsPassword(), response.get(1).getVcsPassword());
+    // when
+    List<GetProjectResponse> actualResponses = testSubject.listProjects();
+
+    // then
+    assertThat(actualResponses).containsExactly(expectedResponse1, expectedResponse2);
   }
 }

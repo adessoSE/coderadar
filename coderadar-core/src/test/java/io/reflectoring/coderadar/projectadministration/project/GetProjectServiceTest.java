@@ -5,41 +5,66 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.projectadministration.service.project.GetProjectService;
 import java.util.Date;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class GetProjectServiceTest {
 
-  @Mock private GetProjectPort getProjectPort;
+  @Mock private GetProjectPort getProjectPortMock;
+
+  private GetProjectService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject = new GetProjectService(getProjectPortMock);
+  }
 
   @Test
   void returnsGetProjectResponseWithIdOne() {
-    GetProjectService testSubject = new GetProjectService(getProjectPort);
+    // given
+    long projectId = 1L;
+    String projectName = "project name";
+    String workdirName = "workdir-name";
+    String vcsUrl = "http://valid.url";
+    String vcsUsername = "username";
+    String vcsPassword = "password";
+    Date startDate = new Date();
+    Date endDate = new Date();
 
-    Project project = new Project();
-    project.setId(1L);
-    project.setName("project name");
-    project.setWorkdirName("workdir name");
-    project.setVcsUrl("http://valid.url");
-    project.setVcsUsername("username");
-    project.setVcsPassword("password");
-    project.setVcsOnline(true);
-    project.setVcsStart(new Date());
-    project.setVcsEnd(new Date());
+    Project project = new Project()
+            .setId(projectId)
+            .setName(projectName)
+            .setWorkdirName(workdirName)
+            .setVcsUrl(vcsUrl)
+            .setVcsUsername(vcsUsername)
+            .setVcsPassword(vcsPassword)
+            .setVcsOnline(true)
+            .setVcsStart(startDate)
+            .setVcsEnd(endDate);
 
-    Mockito.when(getProjectPort.get(1L)).thenReturn(project);
+    GetProjectResponse expectedResponse = new GetProjectResponse()
+            .setId(projectId)
+            .setName(projectName)
+            .setVcsUrl(vcsUrl)
+            .setVcsUsername(vcsUsername)
+            .setVcsPassword(vcsPassword)
+            .setVcsOnline(true)
+            .setStart(startDate)
+            .setEnd(endDate);
 
-    GetProjectResponse response = testSubject.get(1L);
+    when(getProjectPortMock.get(projectId)).thenReturn(project);
 
-    Assertions.assertEquals(project.getId(), response.getId());
-    Assertions.assertEquals(project.getName(), response.getName());
-    Assertions.assertEquals(project.isVcsOnline(), response.getVcsOnline());
-    Assertions.assertEquals(project.getVcsUsername(), response.getVcsUsername());
-    Assertions.assertEquals(project.getVcsPassword(), response.getVcsPassword());
+    // when
+    GetProjectResponse actualResponse = testSubject.get(1L);
+
+    // then
+    assertThat(actualResponse).isEqualTo(expectedResponse);
   }
 }

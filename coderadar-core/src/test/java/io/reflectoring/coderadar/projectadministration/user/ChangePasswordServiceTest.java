@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.projectadministration.user;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.ChangePasswordPort;
@@ -9,31 +8,44 @@ import io.reflectoring.coderadar.projectadministration.port.driven.user.RefreshT
 import io.reflectoring.coderadar.projectadministration.port.driver.user.password.ChangePasswordCommand;
 import io.reflectoring.coderadar.projectadministration.service.user.password.ChangePasswordService;
 import io.reflectoring.coderadar.projectadministration.service.user.refresh.RefreshTokenService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 class ChangePasswordServiceTest {
 
-  @Mock private ChangePasswordPort changePasswordPort;
+  @Mock private ChangePasswordPort changePasswordPortMock;
 
-  @Mock private RefreshTokenService refreshTokenService;
+  @Mock private RefreshTokenService refreshTokenServiceMock;
 
-  @Mock private RefreshTokenPort refreshTokenPort;
+  @Mock private RefreshTokenPort refreshTokenPortMock;
+
+  private ChangePasswordService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject = new ChangePasswordService(refreshTokenPortMock, refreshTokenServiceMock, changePasswordPortMock);
+  }
 
   @Test
-  void changePasswordSuccessfully() {
-    ChangePasswordService testSubject =
-        new ChangePasswordService(refreshTokenPort, refreshTokenService, changePasswordPort);
+  void changePasswordSuccessfully(@Mock User userToUpdateMock) {
+    // given
+    String refreshToken = "refresh-token";
+    String newPassword = "new-password";
 
-    Mockito.when(refreshTokenService.getUser(anyString())).thenReturn(new User());
+    ChangePasswordCommand command = new ChangePasswordCommand(refreshToken, newPassword);
 
-    ChangePasswordCommand command = new ChangePasswordCommand("refresh token", "new password");
+    when(refreshTokenServiceMock.getUser(refreshToken)).thenReturn(userToUpdateMock);
+
+    // when
     testSubject.changePassword(command);
 
-    Mockito.verify(changePasswordPort, Mockito.times(1)).changePassword(any());
+    // then
+    verify(userToUpdateMock).setPassword(anyString());
+    verify(changePasswordPortMock).changePassword(userToUpdateMock);
+    verify(refreshTokenPortMock).deleteByUser(userToUpdateMock);
   }
 }

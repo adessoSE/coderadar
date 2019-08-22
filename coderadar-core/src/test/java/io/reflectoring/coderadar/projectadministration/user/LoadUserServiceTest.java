@@ -4,30 +4,44 @@ import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.load.LoadUserResponse;
 import io.reflectoring.coderadar.projectadministration.service.user.load.LoadUserService;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class LoadUserServiceTest {
 
-  @Mock private LoadUserPort loadUserPort;
+  @Mock private LoadUserPort loadUserPortMock;
+
+  private LoadUserService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject = new LoadUserService(loadUserPortMock);
+  }
 
   @Test
   void loadUserWithIdOne() {
-    LoadUserService testSubject = new LoadUserService(loadUserPort);
+    // given
+    long userId = 1L;
+    String username = "username";
+    User user = new User()
+            .setId(userId)
+            .setUsername(username);
 
-    User user = new User();
-    user.setId(1L);
-    user.setUsername("username");
+    LoadUserResponse expectedResponse = new LoadUserResponse(userId, username);
 
-    Mockito.when(loadUserPort.loadUser(user.getId())).thenReturn(user);
+    when(loadUserPortMock.loadUser(userId)).thenReturn(user);
 
-    LoadUserResponse response = testSubject.loadUser(1L);
+    // when
+    LoadUserResponse actualResponse = testSubject.loadUser(userId);
 
-    Assertions.assertEquals(user.getUsername(), response.getUsername());
+    // then
+    assertThat(actualResponse).isEqualTo(expectedResponse);
   }
 }
