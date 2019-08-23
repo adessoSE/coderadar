@@ -4,8 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.domain.Commit;
@@ -121,12 +120,12 @@ class CreateProjectServiceTest {
       return expectedProjectId;
     });
 
-    when(processProjectService.executeTask(any(), anyLong())).thenAnswer((Answer<Void>) invocation -> {
+    doAnswer((Answer<Void>) invocation -> {
       Runnable runnable = invocation.getArgument(0);
       runnable.run();
 
       return null;
-    });
+    }).when(processProjectService).executeTask(any(), eq(expectedProjectId));
 
     when(coderadarConfigurationProperties.getWorkdir())
             .thenReturn(new File(globalWorkdirName).toPath());

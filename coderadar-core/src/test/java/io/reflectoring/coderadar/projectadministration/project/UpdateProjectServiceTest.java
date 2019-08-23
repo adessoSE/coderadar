@@ -48,15 +48,15 @@ class UpdateProjectServiceTest {
 
   @Mock private CoderadarConfigurationProperties configurationPropertiesMock;
 
-  @Mock private ProcessProjectService processProjectService;
+  @Mock private ProcessProjectService processProjectServiceMock;
 
-  @Mock private GetProjectCommitsUseCase getProjectCommitsUseCase;
+  @Mock private GetProjectCommitsUseCase getProjectCommitsUseCaseMock;
 
-  @Mock private UpdateCommitsPort updateCommitsPort;
+  @Mock private UpdateCommitsPort updateCommitsPortMock;
 
-  @Mock private ProjectStatusPort projectStatusPort;
+  @Mock private ProjectStatusPort projectStatusPortMock;
 
-  @Mock private TaskScheduler taskScheduler;
+  @Mock private TaskScheduler taskSchedulerMock;
 
   private UpdateProjectService testSubject;
 
@@ -67,11 +67,11 @@ class UpdateProjectServiceTest {
             updateProjectPortMock,
             updateRepositoryUseCaseMock,
             configurationPropertiesMock,
-            processProjectService,
-            getProjectCommitsUseCase,
-            updateCommitsPort,
-            projectStatusPort,
-            taskScheduler);
+            processProjectServiceMock,
+            getProjectCommitsUseCaseMock,
+            updateCommitsPortMock,
+            projectStatusPortMock,
+            taskSchedulerMock);
   }
 
   @Test
@@ -147,16 +147,16 @@ class UpdateProjectServiceTest {
     when(getProjectPortMock.findByName(newProjectName))
             .thenReturn(Collections.emptyList());
 
-    when(processProjectService.executeTask(any(), eq(projectId))).thenAnswer((Answer<Void>) invocation -> {
+    doAnswer((Answer<Void>) invocation -> {
       Runnable runnable = invocation.getArgument(0);
       runnable.run();
 
       return null;
-    });
+    }).when(processProjectServiceMock).executeTask(any(), eq(projectId));
 
     when(configurationPropertiesMock.getWorkdir()).thenReturn(new File(globalWorkdirName).toPath());
 
-    when(getProjectCommitsUseCase.getCommits(Paths.get(projectWorkdirName), expectedDateRange))
+    when(getProjectCommitsUseCaseMock.getCommits(Paths.get(projectWorkdirName), expectedDateRange))
             .thenReturn(Collections.singletonList(commitMock));
 
     // when
@@ -173,6 +173,6 @@ class UpdateProjectServiceTest {
     verify(projectToUpdateMock).setVcsOnline(false);
 
     verify(updateRepositoryUseCaseMock).updateRepository(expectedUpdatedRepositoryPath);
-    verify(updateCommitsPort).updateCommits(Collections.singletonList(commitMock), projectId);
+    verify(updateCommitsPortMock).updateCommits(Collections.singletonList(commitMock), projectId);
   }
 }

@@ -13,8 +13,7 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class DeleteProjectServiceTest {
@@ -35,12 +34,12 @@ class DeleteProjectServiceTest {
     // given
     long projectId = 1L;
 
-    when(processProjectServiceMock.executeTask(any(), anyLong())).thenAnswer((Answer<Void>) invocation -> {
+    doAnswer((Answer<Void>) invocation -> {
       Runnable runnable = invocation.getArgument(0);
       runnable.run();
 
       return null;
-    });
+    }).when(processProjectServiceMock).executeTask(any(), anyLong());
 
     // when
     testSubject.delete(projectId);

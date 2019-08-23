@@ -22,8 +22,7 @@ import org.mockito.stubbing.Answer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CreateModuleServiceTest {
@@ -53,11 +52,13 @@ class CreateModuleServiceTest {
     CreateModuleCommand command = new CreateModuleCommand("module-path");
 
     when(saveModulePortMock.saveModule(expectedModule, projectId)).thenReturn(expectedModuleId);
-    when(processProjectServiceMock.executeTask(any(), anyLong())).thenAnswer((Answer<Void>) invocation -> {
+
+    doAnswer((Answer<Void>) invocation -> {
       Runnable runnable = invocation.getArgument(0);
       runnable.run();
+
       return null;
-    });
+    }).when(processProjectServiceMock).executeTask(any(), eq(projectId));
 
     // when
     Long actualModuleId = testSubject.createModule(command, projectId);

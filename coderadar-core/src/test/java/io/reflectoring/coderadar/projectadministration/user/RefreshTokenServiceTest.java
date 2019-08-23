@@ -32,7 +32,7 @@ class RefreshTokenServiceTest {
   private RefreshTokenService testSubject;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     testSubject = new RefreshTokenService(loadUserPort, refreshTokenPort, tokenService);
   }
 

@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.projectadministration.module;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
@@ -40,12 +40,12 @@ class DeleteModuleServiceTest {
     long moduleId = 1L;
     long projectId = 2L;
 
-    when(processProjectServiceMock.executeTask(any(), anyLong())).thenAnswer((Answer<Void>) invocation -> {
+    doAnswer((Answer<Void>) invocation -> {
       Runnable runnable = invocation.getArgument(0);
       runnable.run();
 
       return null;
-    });
+    }).when(processProjectServiceMock).executeTask(any(), eq(projectId));
 
     // when
     testSubject.delete(moduleId, projectId);
