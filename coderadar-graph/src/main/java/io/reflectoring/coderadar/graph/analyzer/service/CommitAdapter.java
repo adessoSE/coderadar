@@ -57,7 +57,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
 
       commits.sort(Comparator.comparing(Commit::getTimestamp));
       Commit newestCommit = commits.get(commits.size() - 1);
-      CommitEntity commitEntity = mapCommitBaseData(newestCommit);
+      CommitEntity commitEntity = mapCommitBaseData(newestCommit, newestCommit.getId());
       getFiles(newestCommit.getTouchedFiles(), commitEntity, walkedFiles);
       commitEntity.setParents(findAndSaveParents(newestCommit, walkedCommits, walkedFiles));
       projectEntity.getFiles().addAll(walkedFiles.values());
@@ -111,7 +111,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       // Get the newest commit from our new commit tree and set all of it's parents and files.
       commits.sort(Comparator.comparing(Commit::getTimestamp));
       Commit newestCommit = commits.get(commits.size() - 1);
-      CommitEntity commitEntity = mapCommitBaseData(newestCommit);
+      CommitEntity commitEntity = mapCommitBaseData(newestCommit, newestCommit.getId());
       getFiles(newestCommit.getTouchedFiles(), commitEntity, walkedFiles);
       commitEntity.setParents(findAndSaveParents(newestCommit, walkedCommits, walkedFiles));
       walkedCommits.putIfAbsent(commitEntity.getName(), commitEntity);
@@ -158,8 +158,13 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
    * @param commit The commit to map.
    * @return A new CommitEntity object.
    */
-  private CommitEntity mapCommitBaseData(Commit commit) {
-    CommitEntity commitEntity = new CommitEntity();
+  private CommitEntity mapCommitBaseData(Commit commit, Long commitId) {
+    CommitEntity commitEntity;
+    if (commitId == null) {
+      commitEntity = new CommitEntity();
+    } else {
+      commitEntity = commitRepository.findById(commitId).orElseThrow(() -> new CommitNotFoundException(commitId));
+    }
     commitEntity.setAnalyzed(commit.isAnalyzed());
     commitEntity.setAuthor(commit.getAuthor());
     commitEntity.setComment(commit.getComment());
@@ -177,13 +182,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
    */
   @Override
   public void saveCommit(Commit commit) {
-    CommitEntity commitEntity =
-        commitRepository
-            .findById(commit.getId())
-            .orElseThrow(() -> new CommitNotFoundException(commit.getId()));
-    Long id = commitEntity.getId();
-    commitEntity = mapCommitBaseData(commit);
-    commitEntity.setId(id);
+    CommitEntity commitEntity = mapCommitBaseData(commit, commit.getId());
     commitRepository.save(commitEntity, 0);
   }
 

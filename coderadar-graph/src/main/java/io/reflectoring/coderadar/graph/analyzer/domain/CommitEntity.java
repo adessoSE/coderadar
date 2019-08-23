@@ -26,6 +26,7 @@ public class CommitEntity {
 
   @Relationship(type = "IS_CHILD_OF")
   @EqualsAndHashCode.Exclude
+  @ToString.Exclude
   private List<CommitEntity> parents = new ArrayList<>();
 
   @Relationship(direction = Relationship.INCOMING, type = "CHANGED_IN")
@@ -35,6 +36,7 @@ public class CommitEntity {
 
   @Relationship(direction = Relationship.INCOMING, type = "VALID_FOR")
   @EqualsAndHashCode.Exclude
+  @ToString.Exclude
   private List<MetricValueEntity> metricValues = new LinkedList<>();
 
   public void setComment(String comment) {

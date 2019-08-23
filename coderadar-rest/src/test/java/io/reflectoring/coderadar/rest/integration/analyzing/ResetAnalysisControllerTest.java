@@ -16,9 +16,13 @@ import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URL;
 import java.util.Date;
@@ -56,6 +60,8 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
     }
 
     @Test
+    @DirtiesContext
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     void resetAnalyzedFlagAndDeleteMetricValues() throws Exception {
         CreateAnalyzerConfigurationCommand createAnalyzerConfigurationCommand = new CreateAnalyzerConfigurationCommand("io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
         mvc().perform(post("/projects/" + projectId + "/analyzers").content(toJson(createAnalyzerConfigurationCommand)).contentType(MediaType.APPLICATION_JSON));
@@ -63,19 +69,19 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         StartAnalyzingCommand startAnalyzingCommand = new StartAnalyzingCommand(new Date(0L), true);
         mvc().perform(post("/projects/" + projectId + "/analyze").content(toJson(startAnalyzingCommand)).contentType(MediaType.APPLICATION_JSON));
 
-        /*List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
+        List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
         for (CommitEntity commit : commits) {
             Assertions.assertTrue(commit.isAnalyzed());
-        }*/
+        }
         List<MetricValueEntity> metricValues = metricRepository.findByProjectId(projectId);
         Assertions.assertEquals(40, metricValues.size());
 
         mvc().perform(post("/projects/" + projectId + "/analyze/reset"));
 
-        /*List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
+        commits = commitRepository.findByProjectId(projectId);
         for (CommitEntity commit : commits) {
             Assertions.assertFalse(commit.isAnalyzed());
-        }*/
+        }
 
         metricValues = metricRepository.findByProjectId(projectId);
         Assertions.assertEquals(0, metricValues.size());
