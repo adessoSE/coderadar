@@ -1,8 +1,4 @@
-import { Store } from '@ngrx/store';
-import { NguiAutoCompleteModule } from '@ngui/auto-complete';
-import { element } from 'protractor';
 import { HotspotConfigurationComponent } from './../dialogs/hotspot-configuration/hotspot-configuration.component';
-
 import { Observable, Subscription } from 'rxjs';
 import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material/dialog';
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
