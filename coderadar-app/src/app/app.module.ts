@@ -31,6 +31,12 @@ import {
   MatMenuModule, MatPaginatorModule,
   MatSidenavModule,
   MatToolbarModule,
+  MatTableModule,
+  MatSortModule,
+  MatSelectModule,
+  MatDialogModule,
+  MatTabsModule,
+  MatRadioModule,
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
@@ -47,6 +53,7 @@ import {CityViewComponent} from './view/city-view/city-view.component';
 import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
+import { HotspotWidgetComponent } from './dashboard/hotspot-widget/hotspot-widget.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -57,8 +64,8 @@ const appRoutes: Routes = [
   {path: 'project-configure/:id', component: ConfigureProjectComponent},
   {path: 'city/:id', component: CityViewComponent},
   {path: 'project-edit/:id', component: EditProjectComponent},
-  {path: 'project/:id', component: DashboardComponent},
-  {path: 'project/:id/:name', component: ViewCommitComponent},
+  {path: 'project/:id', component: ProjectDashboardComponent},
+  {path: 'project/:id/:name', component: DashboardComponent},
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
 
@@ -78,14 +85,18 @@ const appRoutes: Routes = [
     ViewCommitComponent,
     CityViewComponent,
     CityViewHeaderComponent,
-    DashboardComponent
+    DashboardComponent,
+    HotspotWidgetComponent
   ],
   imports: [
-    BrowserModule,
-    HttpClientModule,
-    FormsModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatTabsModule,
+    MatTableModule,
+    MatSortModule,
+    MatRadioModule,
+    
     RouterModule.forRoot(appRoutes),
-    BrowserAnimationsModule,
     BrowserModule,
     FontAwesomeModule,
     BrowserAnimationsModule,

@@ -1,3 +1,4 @@
+import { IFileNode } from './../dashboard/interfaces/metric';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Project} from '../model/project';
@@ -239,6 +240,25 @@ export class ProjectService {
     };
 
     return this.httpClient.post<INode>(this.apiURL + 'projects/' + projectId + '/metricvalues/deltaTree', body,
+      {observe: 'response'}).toPromise();
+  }
+
+
+
+  /**
+   * Returnsthe delta three of a project given two commits and a metric mapping
+   * @param firstCommit The first commit
+   * @param secondCommit The second commit
+   * @param metricMapping The metric mapping
+   * @param projectId The project id.
+   */
+  public getTree(commitName: string, metricsNames: string[], projectId: number): Promise<HttpResponse<IFileNode>> {
+    const body = {
+      commit: commitName,
+      metrics: metricsNames
+    };
+
+    return this.httpClient.post<IFileNode>(this.apiURL + 'projects/' + projectId + '/metricvalues/tree', body,
       {observe: 'response'}).toPromise();
   }
 }

@@ -1,0 +1,383 @@
+{
+    "total": 600,
+    "types": [
+        {
+            "val": "CODE_SMELL",
+            "count": 478,
+            "countOnNewCode": 12
+        },
+        {
+            "val": "SECURITY_HOTSPOT",
+            "count": 39,
+            "countOnNewCode": 2
+        },
+        {
+            "val": "BUG",
+            "count": 39,
+            "countOnNewCode": 4
+        },
+        {
+            "val": "VULNERABILITY",
+            "count": 10,
+            "countOnNewCode": 1
+        }
+    ],
+    "severties": [
+        {
+            "val": "MAJOR",
+            "count": 230,
+            "countOnNewCode": 12
+        },
+        {
+            "val": "MINOR",
+            "count": 123,
+            "countOnNewCode": 5
+        },
+        {
+            "val": "CRITICAL",
+            "count": 38,
+            "countOnNewCode": 7
+        },
+        {
+            "val": "INFO",
+            "count": 77,
+            "countOnNewCode": 1
+        },
+        {
+            "val": "BLOCKER",
+            "count": 10,
+            "countOnNewCode": 1
+        }
+    ],
+    "issues": [
+        {
+            "key": "AWy56c6pU6FAdNDgJIZJ",
+            "rule": "squid:S1168",
+            "severity": "MAJOR",
+            "component": "src/main/java/org/sonar/python/tree/PyClassDefTreeImpl.java",
+            "project": "org.sonarsource.python:python",
+            "line": 58,
+            "hash": "540c13e9e156b687226421b24f2df178",
+            "textRange": {
+                "startLine": 58,
+                "endLine": 58,
+                "startOffset": 11,
+                "endOffset": 15
+            },
+            "flows": [],
+            "status": "OPEN",
+            "message": "Return an empty collection instead of null.",
+            "effort": "30min",
+            "debt": "30min",
+            "assignee": "benzonico@github",
+            "tags": [
+                "cert"
+            ],
+            "creationDate": "2019-08-22T15:56:55+0200",
+            "updateDate": "2019-08-22T17:19:19+0200",
+            "type": "CODE_SMELL",
+            "organization": "default-organization",
+            "fromHotspot": false
+        },
+        {
+            "key": "AWy56c9nU6FAdNDgJIZZ",
+            "rule": "squid:S00103",
+            "severity": "MINOR",
+            "component": "src/main/java/org/sonar/python/tree/PyExceptClauseTreeImpl.java",
+            "project": "org.sonarsource.python:python",
+            "line": 49,
+            "hash": "75b7eb3983e5ac092840383e1c8946cd",
+            "textRange": {
+                "startLine": 49,
+                "endLine": 49,
+                "startOffset": 0,
+                "endOffset": 198
+            },
+            "flows": [],
+            "status": "OPEN",
+            "message": "Split this 198 characters long line (which is greater than 180 authorized).",
+            "effort": "1min",
+            "debt": "1min",
+            "assignee": "andrea-guarino-sonarsource@github",
+            "tags": [
+                "convention"
+            ],
+            "creationDate": "2019-08-22T15:56:55+0200",
+            "updateDate": "2019-08-22T17:19:19+0200",
+            "type": "CODE_SMELL",
+            "organization": "default-organization",
+            "fromHotspot": false
+        },
+        {
+            "key": "AWy56c85U6FAdNDgJIZW",
+            "rule": "squid:S1134",
+            "severity": "MAJOR",
+            "component": "src/main/java/org/sonar/python/tree/PyExpressionTreeImpl.java",
+            "project": "org.sonarsource.python:python",
+            "line": 26,
+            "hash": "1c5bc71290510864cacec6aa0879ce25",
+            "textRange": {
+                "startLine": 26,
+                "endLine": 26,
+                "startOffset": 0,
+                "endOffset": 109
+            },
+            "flows": [],
+            "status": "OPEN",
+            "message": "Take the required action to fix the issue indicated by this comment.",
+            "assignee": "benzonico@github",
+            "tags": [
+                "cwe"
+            ],
+            "creationDate": "2019-08-22T15:56:55+0200",
+            "updateDate": "2019-08-22T17:19:19+0200",
+            "type": "CODE_SMELL",
+            "organization": "default-organization",
+            "fromHotspot": false
+        },
+        {
+            "key": "AWy56c85U6FAdNDgJIZX",
+            "rule": "squid:S1135",
+            "severity": "INFO",
+            "component": "src/main/java/org/sonar/python/tree/PyExpressionTreeImpl.java",
+            "project": "org.sonarsource.python:python",
+            "line": 39,
+            "hash": "688a61c59d1d0ead4917b77c0211f202",
+            "textRange": {
+                "startLine": 39,
+                "endLine": 39,
+                "startOffset": 0,
+                "endOffset": 19
+            },
+            "flows": [],
+            "status": "OPEN",
+            "message": "Complete the task associated to this TODO comment.",
+            "assignee": "benzonico@github",
+            "tags": [
+                "cwe"
+            ],
+            "creationDate": "2019-08-22T15:56:55+0200",
+            "updateDate": "2019-08-22T17:19:19+0200",
+            "type": "CODE_SMELL",
+            "organization": "default-organization",
+            "fromHotspot": false
+        },
+        {
+            "key": "AWy56c7XU6FAdNDgJIZL",
+            "rule": "common-java:DuplicatedBlocks",
+            "severity": "MAJOR",
+            "component": "src/main/java/org/sonar/python/tree/PyForStatementTreeImpl.java",
+            "project": "org.sonarsource.python:python",
+            "flows": [],
+            "status": "OPEN",
+            "message": "1 duplicated blocks of code must be removed.",
+            "effort": "20min",
+            "debt": "20min",
+            "assignee": "benzonico@github",
+            "tags": [
+                "pitfall"
+            ],
+            "creationDate": "2019-08-22T15:56:55+0200",
+            "updateDate": "2019-08-22T17:19:19+0200",
+            "type": "CODE_SMELL",
+            "organization": "default-organization",
+            "fromHotspot": false
+        },
+        {
+            "key": "AWy56c7XU6FAdNDgJIZM",
+            "rule": "squid:S00103",
+            "severity": "MINOR",
+            "component": "src/main/java/org/sonar/python/tree/PyForStatementTreeImpl.java",
+            "project": "org.sonarsource.python:python",
+            "line": 40,
+            "hash": "3bd1cb0aaef4a863e203595b691b203c",
+            "textRange": {
+                "startLine": 40,
+                "endLine": 40,
+                "startOffset": 0,
+                "endOffset": 206
+            },
+            "flows": [],
+            "status": "OPEN",
+            "message": "Split this 206 characters long line (which is greater than 180 authorized).",
+            "effort": "1min",
+            "debt": "1min",
+            "assignee": "andrea-guarino-sonarsource@github",
+            "tags": [
+                "convention"
+            ],
+            "creationDate": "2019-08-22T15:56:55+0200",
+            "updateDate": "2019-08-22T17:19:19+0200",
+            "type": "CODE_SMELL",
+            "organization": "default-organization",
+            "fromHotspot": false
+        },
+        {
+            "key": "AWy56c5rU6FAdNDgJIZH",
+            "rule": "squid:S1168",
+            "severity": "MAJOR",
+            "component": "src/main/java/org/sonar/python/tree/PyFunctionDefTreeImpl.java",
+            "project": "org.sonarsource.python:python",
+            "line": 49,
+            "hash": "540c13e9e156b687226421b24f2df178",
+            "textRange": {
+                "startLine": 49,
+                "endLine": 49,
+                "startOffset": 11,
+                "endOffset": 15
+            },
+            "flows": [],
+            "status": "OPEN",
+            "message": "Return an empty collection instead of null.",
+            "effort": "30min",
+            "debt": "30min",
+            "assignee": "benzonico@github",
+            "tags": [
+                "cert"
+            ],
+            "creationDate": "2019-08-22T15:56:55+0200",
+            "updateDate": "2019-08-22T17:19:19+0200",
+            "type": "CODE_SMELL",
+            "organization": "default-organization",
+            "fromHotspot": false
+        },
+        {
+            "key": "AWy56c7tU6FAdNDgJIZN",
+            "rule": "squid:S00103",
+            "severity": "MINOR",
+            "component": "src/main/java/org/sonar/python/tree/PyIfStatementTreeImpl.java",
+            "project": "org.sonarsource.python:python",
+            "line": 48,
+            "hash": "3588c9e26ab1288892de37a37d00bb28",
+            "textRange": {
+                "startLine": 48,
+                "endLine": 48,
+                "startOffset": 0,
+                "endOffset": 212
+            },
+            "flows": [],
+            "status": "OPEN",
+            "message": "Split this 212 characters long line (which is greater than 180 authorized).",
+            "effort": "1min",
+            "debt": "1min",
+            "assignee": "andrea-guarino-sonarsource@github",
+            "tags": [
+                "convention"
+            ],
+            "creationDate": "2019-08-22T15:56:55+0200",
+            "updateDate": "2019-08-22T17:19:19+0200",
+            "type": "CODE_SMELL",
+            "organization": "default-organization",
+            "fromHotspot": false
+        },
+        {
+            "key": "AWy56c68U6FAdNDgJIZK",
+            "rule": "squid:S00103",
+            "severity": "MINOR",
+            "component": "src/main/java/org/sonar/python/tree/PyImportFromTreeImpl.java",
+            "project": "org.sonarsource.python:python",
+            "line": 41,
+            "hash": "457897b7ec7387989d531103edba3ef3",
+            "textRange": {
+                "startLine": 41,
+                "endLine": 41,
+                "startOffset": 0,
+                "endOffset": 222
+            },
+            "flows": [],
+            "status": "OPEN",
+            "message": "Split this 222 characters long line (which is greater than 180 authorized).",
+            "effort": "1min",
+            "debt": "1min",
+            "assignee": "andrea-guarino-sonarsource@github",
+            "tags": [
+                "convention"
+            ],
+            "creationDate": "2019-08-22T15:56:55+0200",
+            "updateDate": "2019-08-22T17:19:19+0200",
+            "type": "CODE_SMELL",
+            "organization": "default-organization",
+            "fromHotspot": false
+        },
+        {
+            "key": "AWy56c42U6FAdNDgJIZG",
+            "rule": "squid:S1942",
+            "severity": "MINOR",
+            "component": "src/main/java/org/sonar/python/tree/PyImportNameTreeImpl.java",
+            "project": "org.sonarsource.python:python",
+            "line": 34,
+            "hash": "60d146dcad5e9c64d059763e0c0e3502",
+            "textRange": {
+                "startLine": 34,
+                "endLine": 34,
+                "startOffset": 68,
+                "endOffset": 82
+            },
+            "flows": [],
+            "status": "OPEN",
+            "message": "Replace this fully qualified name with \"List\"",
+            "effort": "2min",
+            "debt": "2min",
+            "assignee": "andrea-guarino-sonarsource@github",
+            "tags": [
+                "confusing",
+                "redundant"
+            ],
+            "creationDate": "2019-08-22T15:56:55+0200",
+            "updateDate": "2019-08-22T17:19:19+0200",
+            "type": "CODE_SMELL",
+            "organization": "default-organization",
+            "fromHotspot": false
+        },
+        {
+            "key": "AWy56c9SU6FAdNDgJIZY",
+            "rule": "squid:S00103",
+            "severity": "MINOR",
+            "component": "src/main/java/org/sonar/python/tree/PyTryStatementTreeImpl.java",
+            "project": "org.sonarsource.python:python",
+            "line": 40,
+            "hash": "402739a80b37b3973aeb11fb8289dd5e",
+            "textRange": {
+                "startLine": 40,
+                "endLine": 40,
+                "startOffset": 0,
+                "endOffset": 209
+            },
+            "flows": [],
+            "status": "OPEN",
+            "message": "Split this 209 characters long line (which is greater than 180 authorized).",
+            "effort": "1min",
+            "debt": "1min",
+            "assignee": "andrea-guarino-sonarsource@github",
+            "tags": [
+                "convention"
+            ],
+            "creationDate": "2019-08-22T15:56:55+0200",
+            "updateDate": "2019-08-22T17:19:19+0200",
+            "type": "CODE_SMELL",
+            "organization": "default-organization",
+            "fromHotspot": false
+        },
+        {
+            "key": "AWy56c6EU6FAdNDgJIZI",
+            "rule": "common-java:DuplicatedBlocks",
+            "severity": "MAJOR",
+            "component": "src/main/java/org/sonar/python/tree/PyWhileStatementTreeImpl.java",
+            "project": "org.sonarsource.python:python",
+            "flows": [],
+            "status": "OPEN",
+            "message": "1 duplicated blocks of code must be removed.",
+            "effort": "20min",
+            "debt": "20min",
+            "assignee": "benzonico@github",
+            "tags": [
+                "pitfall"
+            ],
+            "creationDate": "2019-08-22T15:56:55+0200",
+            "updateDate": "2019-08-22T17:19:19+0200",
+            "type": "CODE_SMELL",
+            "organization": "default-organization",
+            "fromHotspot": false
+        }
+    ]
+}

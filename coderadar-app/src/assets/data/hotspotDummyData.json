@@ -1,0 +1,26 @@
+{
+  "name": "root",
+  "type": "MODULE",
+  "metrics": {
+    "NeedBracesCheck": 26,
+    "RightCurlyCheck": 119
+  },
+  "children": [
+    {
+      "name": "/irgendeine.java",
+      "type": "FILE",
+      "metrics": {
+        "NeedBracesCheck": 3,
+        "RightCurlyCheck": 2
+      }
+    },
+    {
+      "name": "nochne.java",
+      "type": "FILE",
+      "metrics": {
+        "NeedBracesCheck": 55,
+        "RightCurlyCheck": 232
+      }
+    }
+  ]
+}
