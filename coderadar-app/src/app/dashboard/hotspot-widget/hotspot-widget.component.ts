@@ -14,6 +14,7 @@ import { IFileNode } from '../interfaces/metric';
 
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material';
 
 @Component({
   selector: 'app-hotspot-widget',
@@ -22,6 +23,7 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class HotspotWidgetComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, {}) sort: MatSort;
+  @ViewChild(MatPaginator, {}) paginator: MatPaginator;
 
   constructor(public dialog: MatDialog, private httpFetcher: HttpfetcherService, private router: Router,
               private projectService: ProjectService, private route: ActivatedRoute) { }
@@ -51,6 +53,7 @@ export class HotspotWidgetComponent implements OnInit, OnDestroy {
       });
       this.dataSource = new MatTableDataSource(this.fileMetrics);
       this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
       this.dataSource.sortingDataAccessor = this.sortingDataAccessor;
     },
     error: (err: any) => console.log(err)
