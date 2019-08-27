@@ -54,6 +54,8 @@ import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-vi
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 import { HotspotWidgetComponent } from './dashboard/hotspot-widget/hotspot-widget.component';
+import { HotspotConfigurationComponent } from './dashboard/dialogs/hotspot-configuration/hotspot-configuration.component';
+import { MetricPipe } from './dashboard/pipes/metric.pipe';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -86,7 +88,9 @@ const appRoutes: Routes = [
     CityViewComponent,
     CityViewHeaderComponent,
     DashboardComponent,
-    HotspotWidgetComponent
+    HotspotWidgetComponent,
+    HotspotConfigurationComponent,
+    MetricPipe
   ],
   imports: [
     MatSelectModule,
@@ -138,7 +142,8 @@ const appRoutes: Routes = [
       provide: REDUCER_TOKEN,
       useFactory: getReducers,
     }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [HotspotConfigurationComponent]
 })
 export class AppModule {
 }

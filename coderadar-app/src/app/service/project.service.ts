@@ -11,6 +11,7 @@ import {Module} from '../model/module';
 import {AppComponent} from '../app.component';
 import {IMetricMapping} from '../city-map/interfaces/IMetricMapping';
 import {INode} from '../city-map/interfaces/INode';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -252,13 +253,12 @@ export class ProjectService {
    * @param metricMapping The metric mapping
    * @param projectId The project id.
    */
-  public getTree(commitName: string, metricsNames: string[], projectId: number): Promise<HttpResponse<IFileNode>> {
+  public getTree(commitName: string, metricsNames: string[], projectId: number): Observable<IFileNode> {
     const body = {
       commit: commitName,
       metrics: metricsNames
     };
-
-    return this.httpClient.post<IFileNode>(this.apiURL + 'projects/' + projectId + '/metricvalues/tree', body,
-      {observe: 'response'}).toPromise();
+    console.log(this.apiURL + 'projects/' + projectId + '/metricvalues/tree');
+    return this.httpClient.post<IFileNode>(this.apiURL + 'projects/' + projectId + '/metricvalues/tree', body);
   }
 }
