@@ -8,18 +8,17 @@ export class HttpfetcherService {
   constructor(private http: HttpClient) { }
   configUrl = 'assets/config.json';
 
-  sonarQubeExampleUrl = 'https://next.sonarqube.com/sonarqube/api/measures/component?component=org.sonarsource.java:java';
-
   getConfig() {
     return this.http.get(this.configUrl);
   }
 
-  getMetricsFromSite(metricKeys) {
-    return this.http.get(this.sonarQubeExampleUrl + '&metricKeys=' + metricKeys);
-  }
-
+  /**
+   * Testdata for the issue-widget
+   * The format is from sonarqube
+   * @todo create service to get issues
+   */
   getIssues() {
-    return this.http.get('assets/issues.json');
+    return this.http.get('assets/data/issues.json');
   }
 
   getIssuesLeakPeriod() {

@@ -19,6 +19,7 @@ import {FooterComponent} from './view/footer/footer.component';
 import {UserSettingsComponent} from './view/user-settings/user-settings.component';
 import {ProjectDashboardComponent} from './view/project-dashboard/project-dashboard.component';
 import {ViewCommitComponent} from './view/view-commit/view-commit.component';
+import { ChartsModule } from 'ng2-charts';
 import {
   MatButtonModule,
   MatCardModule,
@@ -56,6 +57,8 @@ import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 import { HotspotWidgetComponent } from './dashboard/hotspot-widget/hotspot-widget.component';
 import { HotspotConfigurationComponent } from './dashboard/dialogs/hotspot-configuration/hotspot-configuration.component';
 import { MetricPipe } from './dashboard/pipes/metric.pipe';
+import { IssueWidgetComponent } from './dashboard/issue-widget/issue-widget.component';
+import { FilePipe } from './dashboard/pipes/file.pipe';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -90,7 +93,9 @@ const appRoutes: Routes = [
     DashboardComponent,
     HotspotWidgetComponent,
     HotspotConfigurationComponent,
-    MetricPipe
+    MetricPipe,
+    IssueWidgetComponent,
+    FilePipe
   ],
   imports: [
     MatSelectModule,
@@ -99,7 +104,7 @@ const appRoutes: Routes = [
     MatTableModule,
     MatSortModule,
     MatRadioModule,
-    
+    ChartsModule,
     RouterModule.forRoot(appRoutes),
     BrowserModule,
     FontAwesomeModule,

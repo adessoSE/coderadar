@@ -1,9 +1,4 @@
-import { MetricDefinition } from './metric';
-
-import { validateHorizontalPosition } from '@angular/cdk/overlay';
-import { extend } from 'webdriver-js-extender';
-
-export enum IssueSeverties {
+export enum IssueSevertyEnum {
     MINOR = 'Minor',
     MAJOR = 'Major',
     CRITICAL = 'Critical',
@@ -11,34 +6,23 @@ export enum IssueSeverties {
     BLOCKER = 'Blocker'
 }
 
-export enum IssueTypes {
+export enum IssueTypeEnum {
     CODE_SMELL = 'Code smell',
     BUG = 'Bug',
     VULNERABILITY = 'Vulnerability'
 }
 
-// Facets are type and severity
-export interface Facet {
-    property: string;
-    values: Metric[];
+export interface Issues {
+    total: number;
+    types: IssueFacet[];
+    severties: IssueFacet[];
+    issues: Issue[];
 }
 
-export interface Metric {
+export interface IssueFacet {
     val: string;
     count: number;
-}
-
-export interface Issues {
-  total: number;
-  types: FacetValue[];
-  severties: FacetValue[];
-  issues: Issue[];
-}
-
-export interface FacetValue {
-  val: string;
-  count: number;
-  countOnNewCode: number;
+    countOnNewCode: number;
 }
 
 export interface Issue {
@@ -50,36 +34,4 @@ export interface Issue {
     status: string;
     message: string;
     assignee: string;
-}
-
-export class IssueConfiguration {
-    severity: string;
-    type: string;
-    condition: string;
-    conditionValue: number;
-}
-
-// TODO auslagern
-export enum ConditionType {
-    MAX = 'max',
-    MIN = 'min',
-    lessThan = '<',
-    greaterThan = '>'
-}
-
-export interface IGoalResponse {
-    goals: Goal[];
-}
-export class GoalResponse implements IGoalResponse{
-    goals: Goal[];
-
-}
-
-export class Goal {
-    metricDefinition: MetricDefinition;
-    conditionType: ConditionType;
-    conditionValue: number;
-    metricValue: number;
-    payload: any;
-    isSuccessful: boolean;
 }
