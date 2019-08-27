@@ -46,6 +46,7 @@ import {environment} from '../environments/environment';
 import {CityViewComponent} from './view/city-view/city-view.component';
 import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -56,7 +57,7 @@ const appRoutes: Routes = [
   {path: 'project-configure/:id', component: ConfigureProjectComponent},
   {path: 'city/:id', component: CityViewComponent},
   {path: 'project-edit/:id', component: EditProjectComponent},
-  {path: 'project/:id', component: ProjectDashboardComponent},
+  {path: 'project/:id', component: DashboardComponent},
   {path: 'project/:id/:name', component: ViewCommitComponent},
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
@@ -76,7 +77,8 @@ const appRoutes: Routes = [
     ProjectDashboardComponent,
     ViewCommitComponent,
     CityViewComponent,
-    CityViewHeaderComponent
+    CityViewHeaderComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
