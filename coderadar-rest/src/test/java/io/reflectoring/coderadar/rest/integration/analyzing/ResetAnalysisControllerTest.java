@@ -19,10 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URL;
 import java.util.Date;
@@ -37,6 +34,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
     @Autowired private CommitRepository commitRepository;
     @Autowired private MetricRepository metricRepository;
     @Autowired private FindingRepository findingRepository;
+    @Autowired private Session session;
 
     private Long projectId;
 
@@ -60,14 +58,14 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
     }
 
     @Test
-    @DirtiesContext
-    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     void resetAnalyzedFlagAndDeleteMetricValues() throws Exception {
         CreateAnalyzerConfigurationCommand createAnalyzerConfigurationCommand = new CreateAnalyzerConfigurationCommand("io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
         mvc().perform(post("/projects/" + projectId + "/analyzers").content(toJson(createAnalyzerConfigurationCommand)).contentType(MediaType.APPLICATION_JSON));
 
         StartAnalyzingCommand startAnalyzingCommand = new StartAnalyzingCommand(new Date(0L), true);
         mvc().perform(post("/projects/" + projectId + "/analyze").content(toJson(startAnalyzingCommand)).contentType(MediaType.APPLICATION_JSON));
+
+        session.clear();
 
         List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
         for (CommitEntity commit : commits) {
@@ -77,6 +75,8 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         Assertions.assertEquals(40, metricValues.size());
 
         mvc().perform(post("/projects/" + projectId + "/analyze/reset"));
+
+        session.clear();
 
         commits = commitRepository.findByProjectId(projectId);
         for (CommitEntity commit : commits) {
@@ -95,18 +95,22 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         StartAnalyzingCommand startAnalyzingCommand = new StartAnalyzingCommand(new Date(0L), true);
         mvc().perform(post("/projects/" + projectId + "/analyze").content(toJson(startAnalyzingCommand)).contentType(MediaType.APPLICATION_JSON));
 
+        session.clear();
+
         List<MetricValueEntity> metricValues = metricRepository.findByProjectId(projectId);
         Assertions.assertEquals(91, metricValues.size());
 
         List<FindingEntity> findings = findingRepository.findByProjectId(projectId);
         Assertions.assertEquals(172, findings.size());
 
-        /*List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
+        List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
         for (CommitEntity commit : commits) {
             Assertions.assertTrue(commit.isAnalyzed());
-        }*/
+        }
 
         mvc().perform(post("/projects/" + projectId + "/analyze/reset"));
+
+        session.clear();
 
         metricValues = metricRepository.findByProjectId(projectId);
         Assertions.assertEquals(0, metricValues.size());
@@ -114,9 +118,9 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         findings = findingRepository.findByProjectId(projectId);
         Assertions.assertEquals(0, findings.size());
 
-        /*List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
+        commits = commitRepository.findByProjectId(projectId);
         for (CommitEntity commit : commits) {
             Assertions.assertFalse(commit.isAnalyzed());
-        }*/
+        }
     }
 }
