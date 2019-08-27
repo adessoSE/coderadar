@@ -59,6 +59,7 @@ import { HotspotConfigurationComponent } from './dashboard/dialogs/hotspot-confi
 import { MetricPipe } from './dashboard/pipes/metric.pipe';
 import { IssueWidgetComponent } from './dashboard/issue-widget/issue-widget.component';
 import { FilePipe } from './dashboard/pipes/file.pipe';
+import { CoverageWidgetComponent } from './dashboard/coverage-widget/coverage-widget.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -95,7 +96,8 @@ const appRoutes: Routes = [
     HotspotConfigurationComponent,
     MetricPipe,
     IssueWidgetComponent,
-    FilePipe
+    FilePipe,
+    CoverageWidgetComponent
   ],
   imports: [
     MatSelectModule,
