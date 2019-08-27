@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Hotspot metric configuration</h1>
+<div>
+  <mat-form-field *ngFor="let element of selectedMetrics; let i = index;">
+    <mat-label>Hotspot metrics</mat-label>
+    <mat-select [(value)]="selectedMetrics[i]">
+      <mat-option *ngFor="let metric of metrics" [value]="metric">
+        {{metric | metricPipe}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<button mat-button (click)="addMetric()">add metric</button>
+<div mat-dialog-actions class="float-right">
+  <button mat-button (click)="close()">Cancel</button>
+  <button mat-button cdkFocusInitial (click)="save()">Save</button>
+</div>
