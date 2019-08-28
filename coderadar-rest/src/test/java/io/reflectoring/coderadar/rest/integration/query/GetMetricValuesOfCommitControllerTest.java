@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.c
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -22,6 +23,7 @@ import java.util.*;
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
@@ -139,5 +141,21 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
         Assertions.assertEquals(15L, metricValuesForCommit.get(1).getValue().longValue());
         Assertions.assertEquals(27L, metricValuesForCommit.get(2).getValue().longValue());
         Assertions.assertEquals(21L, metricValuesForCommit.get(3).getValue().longValue());
+    }
+
+    @Test
+    void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
+        GetMetricsForCommitCommand command = new GetMetricsForCommitCommand();
+        command.setMetrics(Arrays.asList("coderadar:size:loc:java", "coderadar:size:sloc:java", "coderadar:size:cloc:java", "coderadar:size:eloc:java"));
+        command.setCommit("93e1d2a50811e99dd69742ccab2ae3bcaa542243");
+
+        MvcResult result = mvc().perform(get("/projects/1234/metricvalues/perCommit")
+                .contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        ErrorMessageResponse response = fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class);
+
+        Assertions.assertEquals("Project with id 1234 not found.", response.getErrorMessage());
     }
 }

@@ -10,6 +10,7 @@ import io.reflectoring.coderadar.query.domain.MetricTree;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.domain.MetricsTreeNodeType;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -27,6 +28,7 @@ import java.util.Objects;
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class GetMetricsForAllFilesInCommitControllerTest extends ControllerTestTemplate {
 
@@ -167,5 +169,21 @@ class GetMetricsForAllFilesInCommitControllerTest extends ControllerTestTemplate
         Assertions.assertEquals(1L, thirdChild.getMetrics().get(1).getValue().longValue());
         Assertions.assertEquals(1L, thirdChild.getMetrics().get(2).getValue().longValue());
         Assertions.assertEquals(1L, thirdChild.getMetrics().get(3).getValue().longValue());
+    }
+
+    @Test
+    void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
+        GetMetricsForCommitCommand command = new GetMetricsForCommitCommand();
+        command.setMetrics(Arrays.asList("coderadar:size:loc:java", "coderadar:size:sloc:java", "coderadar:size:cloc:java", "coderadar:size:eloc:java"));
+        command.setCommit("d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df");
+
+        MvcResult result = mvc().perform(get("/projects/1234/metricvalues/tree")
+                .contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        ErrorMessageResponse response = fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class);
+
+        Assertions.assertEquals("Project with id 1234 not found.", response.getErrorMessage());
     }
 }

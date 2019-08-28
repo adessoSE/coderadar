@@ -11,6 +11,7 @@ import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -28,6 +29,7 @@ import java.util.Objects;
 
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class ResetAnalysisControllerTest extends ControllerTestTemplate {
 
@@ -122,5 +124,16 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         for (CommitEntity commit : commits) {
             Assertions.assertFalse(commit.isAnalyzed());
         }
+    }
+
+    @Test
+    void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
+        MvcResult result = mvc().perform(post("/projects/123/analyze/reset"))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        ErrorMessageResponse response = fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class);
+
+        Assertions.assertEquals("Project with id 123 not found.", response.getErrorMessage());
     }
 }

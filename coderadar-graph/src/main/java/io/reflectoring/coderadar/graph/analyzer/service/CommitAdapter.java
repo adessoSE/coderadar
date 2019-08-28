@@ -163,7 +163,10 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
     if (commitId == null) {
       commitEntity = new CommitEntity();
     } else {
-      commitEntity = commitRepository.findById(commitId).orElseThrow(() -> new CommitNotFoundException(commitId));
+      commitEntity =
+          commitRepository
+              .findById(commitId)
+              .orElseThrow(() -> new CommitNotFoundException(commitId));
     }
     commitEntity.setAnalyzed(commit.isAnalyzed());
     commitEntity.setAuthor(commit.getAuthor());

@@ -9,6 +9,7 @@ import io.reflectoring.coderadar.query.domain.DeltaTree;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.domain.MetricsTreeNodeType;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForTwoCommitsCommand;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -23,6 +24,7 @@ import java.util.*;
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class GetMetricValuesOfTwoCommitsControllerTest extends ControllerTestTemplate {
 
@@ -104,5 +106,39 @@ class GetMetricValuesOfTwoCommitsControllerTest extends ControllerTestTemplate {
         Assertions.assertTrue(thirdChild.getCommit1Metrics().isEmpty());
         Assertions.assertEquals(4, thirdChild.getCommit2Metrics().size());
         Assertions.assertTrue(thirdChild.getChanges().isAdded());
+    }
+
+    @Test
+    void returnsErrorWhenCommit1IsAfterCommit2() throws Exception {
+        GetMetricsForTwoCommitsCommand command = new GetMetricsForTwoCommitsCommand();
+        command.setMetrics(Arrays.asList("coderadar:size:loc:java", "coderadar:size:sloc:java", "coderadar:size:cloc:java", "coderadar:size:eloc:java"));
+        command.setCommit1("d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df");
+        command.setCommit2("fd68136dd6489504e829b11f2fce1fe97c9f5c0c");
+
+        MvcResult result = mvc().perform(get("/projects/" + projectId + "/metricvalues/deltaTree")
+                .contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
+                .andExpect(status().isUnprocessableEntity())
+                .andReturn();
+
+        ErrorMessageResponse response = fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class);
+
+        Assertions.assertEquals("commit1 cannot be newer than commit2", response.getErrorMessage());
+    }
+
+    @Test
+    void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
+        GetMetricsForTwoCommitsCommand command = new GetMetricsForTwoCommitsCommand();
+        command.setMetrics(Arrays.asList("coderadar:size:loc:java", "coderadar:size:sloc:java", "coderadar:size:cloc:java", "coderadar:size:eloc:java"));
+        command.setCommit1("fd68136dd6489504e829b11f2fce1fe97c9f5c0c");
+        command.setCommit2("d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df");
+
+        MvcResult result = mvc().perform(get("/projects/1234/metricvalues/deltaTree")
+                .contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        ErrorMessageResponse response = fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class);
+
+        Assertions.assertEquals("Project with id 1234 not found.", response.getErrorMessage());
     }
 }

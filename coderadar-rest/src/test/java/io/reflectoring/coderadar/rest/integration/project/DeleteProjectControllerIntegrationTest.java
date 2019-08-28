@@ -2,16 +2,20 @@ package io.reflectoring.coderadar.rest.integration.project;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -31,7 +35,7 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
 
     mvc()
         .perform(delete("/projects/" + id))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andDo(
             result -> Assertions.assertFalse(projectRepository.findById(id).isPresent()))
             .andDo(document("projects/delete"));
@@ -39,11 +43,12 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void deleteProjectReturnsErrorWhenProjectNotFound() throws Exception {
-    mvc()
-        .perform(delete("/projects/1"))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
-        .andExpect(
-            MockMvcResultMatchers.jsonPath("errorMessage")
-                    .value("Project with id 1 not found."));
+    MvcResult result = mvc().perform(delete("/projects/1"))
+        .andExpect(status().isNotFound())
+        .andReturn();
+
+    ErrorMessageResponse response = fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class);
+
+    Assertions.assertEquals("Project with id 1 not found.", response.getErrorMessage());
   }
 }

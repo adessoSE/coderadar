@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.integration.query;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.query.port.driver.GetCommitResponse;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -17,6 +18,7 @@ import java.util.List;
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
 
@@ -43,5 +45,16 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
         Assertions.assertEquals(13, commits.size());
         Assertions.assertEquals("add Finding.java", commits.get(commits.size() - 1).getComment());
         Assertions.assertEquals("testCommit", commits.get(0).getComment());
+    }
+
+    @Test
+    void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
+        MvcResult result = mvc().perform(get("/projects/1234/commits").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        ErrorMessageResponse response = fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class);
+
+        Assertions.assertEquals("Project with id 1234 not found.", response.getErrorMessage());
     }
 }

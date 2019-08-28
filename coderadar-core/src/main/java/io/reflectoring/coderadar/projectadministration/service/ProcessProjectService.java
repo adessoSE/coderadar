@@ -44,5 +44,4 @@ public class ProcessProjectService {
       return taskExecutor.submitListenable(task);
     }
   }
-
 }

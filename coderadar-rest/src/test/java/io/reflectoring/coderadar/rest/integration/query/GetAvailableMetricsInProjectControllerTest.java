@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -22,6 +23,7 @@ import java.util.Objects;
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate {
 
@@ -135,5 +137,16 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"));
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.annotation.AnnotationLocationCheck"));
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.regexp.RegexpCheck"));
+    }
+
+    @Test
+    void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
+        MvcResult result = mvc().perform(get("/projects/1234/metrics").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        ErrorMessageResponse response = fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class);
+
+        Assertions.assertEquals("Project with id 1234 not found.", response.getErrorMessage());
     }
 }
