@@ -25,7 +25,7 @@ export class HotspotWidgetComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, {}) sort: MatSort;
   @ViewChild(MatPaginator, {}) paginator: MatPaginator;
 
-  constructor(public dialog: MatDialog, private httpFetcher: HttpfetcherService, private router: Router,
+  constructor(public dialog: MatDialog, private httpFetcher: HttpfetcherService,
               private projectService: ProjectService, private route: ActivatedRoute) { }
 
   configDialog: MatDialogRef<HotspotConfigurationComponent, any>;
@@ -59,6 +59,8 @@ export class HotspotWidgetComponent implements OnInit, OnDestroy {
     error: (err: any) => console.log(err)
   };
 
+
+
   /**
    * Concat filename
    * @param metricString string
@@ -81,7 +83,6 @@ export class HotspotWidgetComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       this.commit.name = params.name;
       this.projectId = params.id;
-      this.getCommits();
       this.getMetrics().then(response => {
         response.body.forEach(m => this.availableMetrics.push(m.metricName));
       }).catch(e => {
@@ -132,29 +133,5 @@ export class HotspotWidgetComponent implements OnInit, OnDestroy {
    */
   private getMetrics(): Promise<HttpResponse<any>> {
     return this.projectService.getAvailableMetrics(this.projectId);
-  }
-
-  /**
-   * Gets all commits for this project from the service and saves them in this.commits.
-   */
-  private getCommits(): void {
-    this.projectService.getCommits(this.projectId)
-      .then(response => {
-        this.commits = response.body;
-
-        this.commits.sort((a, b) => {
-          if (a.timestamp === b.timestamp) {
-            return 0;
-          } else if (a.timestamp > b.timestamp) {
-            return -1;
-          } else {
-            return 1;
-          }
-        });
-      }).catch(e => {
-        if (e.status && e.status === FORBIDDEN) {
-          console.log(e);
-        }
-      });
   }
 }

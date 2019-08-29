@@ -247,7 +247,7 @@ export class ProjectService {
 
 
   /**
-   * Returnsthe delta three of a project given two commits and a metric mapping
+   * Returns the three of a project given commit and a metric mapping
    * @param firstCommit The first commit
    * @param secondCommit The second commit
    * @param metricMapping The metric mapping
@@ -258,7 +258,20 @@ export class ProjectService {
       commit: commitName,
       metrics: metricsNames
     };
-    console.log(this.apiURL + 'projects/' + projectId + '/metricvalues/tree');
     return this.httpClient.post<IFileNode>(this.apiURL + 'projects/' + projectId + '/metricvalues/tree', body);
   }
+
+
+  public getHistory(startDateRange: number[], endDateRange: number[],
+                    intervallHistory: string, metricHistory: string, projectId: number): Observable<History> {
+    const body = {
+      dateRange: {startDate: startDateRange, endDate: endDateRange},
+      interval: intervallHistory,
+      metric: metricHistory
+    };
+    console.log(this.apiURL + 'projects/' + projectId + '/metricvalues/tree');
+    return this.httpClient.post<History>(this.apiURL + 'projects/' + projectId + '/metricvalues/history', body);
+  }
+
+
 }

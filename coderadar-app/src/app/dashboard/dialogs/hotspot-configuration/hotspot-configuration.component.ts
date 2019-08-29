@@ -3,7 +3,7 @@ import { ProjectService } from 'src/app/service/project.service';
 import { ActivatedRoute } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-export interface HotspotConfigurationData {
+export interface ConfigurationData {
   projectId: any;
   availableMetrics: [];
 }
@@ -18,7 +18,7 @@ export class HotspotConfigurationComponent implements OnInit {
   selectedMetrics: string[] = ['0', '1', '2'];
 
   constructor(public dialogRef: MatDialogRef<HotspotConfigurationComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: HotspotConfigurationData) { }
+              @Inject(MAT_DIALOG_DATA) public data: ConfigurationData) { }
 
   ngOnInit() {
     this.metrics = this.data.availableMetrics;

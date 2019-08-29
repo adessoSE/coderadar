@@ -6,11 +6,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class HttpfetcherService {
   constructor(private http: HttpClient) { }
-  configUrl = 'assets/config.json';
-
-  getConfig() {
-    return this.http.get(this.configUrl);
-  }
 
   /**
    * Testdata for the issue-widget
@@ -21,15 +16,15 @@ export class HttpfetcherService {
     return this.http.get('assets/data/issues.json');
   }
 
-  getIssuesLeakPeriod() {
-    return this.http.get('assets/issuesLeakPeriod.json');
+  /**
+   * Testdata for the goal-widget 
+   * @todo create service to get issues
+   */
+  getCoverage() {
+    return this.http.get('assets/data/goalResponse.json');
   }
 
-  getCoverageMeasurement() {
-    return this.http.get('assets/coverageMeasurement.json');
-  }
-
-  getHotspotData(){
+  getHotspotData() {
     return this.http.get('assets/data/hotspotDummyData.json');
   }
 }

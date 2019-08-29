@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>Goal definition</h1>
+<div mat-dialog-content>
+    <mat-form-field>
+        <mat-label>Metric</mat-label>
+        <mat-select [(ngModel)]="selectedMetric">
+            <mat-option *ngFor="let metric of availableMetrics" [value]="metric">
+                {{metric | metricPipe}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Condition</mat-label>
+        <mat-select [(ngModel)]="selectedCondition">
+            <mat-option *ngFor="let condition of conditions" [value]="condition">
+                {{condition}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="Value">
+    </mat-form-field>
+
+</div>

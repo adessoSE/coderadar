@@ -18,7 +18,7 @@ export class CoverageWidgetComponent implements OnInit {
   ];
   public options = {
     legend: {
-      position: 'bottom'
+      position: 'right'
     }
   };
 

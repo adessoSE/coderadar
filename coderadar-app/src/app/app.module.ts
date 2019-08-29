@@ -60,6 +60,10 @@ import { MetricPipe } from './dashboard/pipes/metric.pipe';
 import { IssueWidgetComponent } from './dashboard/issue-widget/issue-widget.component';
 import { FilePipe } from './dashboard/pipes/file.pipe';
 import { CoverageWidgetComponent } from './dashboard/coverage-widget/coverage-widget.component';
+import { PeriodWidgetComponent } from './dashboard/period-widget/period-widget.component';
+import { GoalWidgetComponent } from './dashboard/goal-widget/goal-widget.component';
+import { GoalConfigurationComponent } from './dashboard/dialogs/goal-configuration/goal-configuration.component';
+import { EvaluationWidgetComponent } from './dashboard/evaluation-widget/evaluation-widget.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -97,7 +101,11 @@ const appRoutes: Routes = [
     MetricPipe,
     IssueWidgetComponent,
     FilePipe,
-    CoverageWidgetComponent
+    CoverageWidgetComponent,
+    PeriodWidgetComponent,
+    GoalWidgetComponent,
+    GoalConfigurationComponent,
+    EvaluationWidgetComponent
   ],
   imports: [
     MatSelectModule,
@@ -150,7 +158,7 @@ const appRoutes: Routes = [
       useFactory: getReducers,
     }],
   bootstrap: [AppComponent],
-  entryComponents: [HotspotConfigurationComponent]
+  entryComponents: [HotspotConfigurationComponent, GoalConfigurationComponent]
 })
 export class AppModule {
 }

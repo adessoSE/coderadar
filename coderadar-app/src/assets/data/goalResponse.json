@@ -1,0 +1,20 @@
+{
+    "goals": [
+        {
+            "metricDefinition": "Blocker Issues",
+            "conditionType": "<",
+            "conditionValue": 30,
+            "metricValue": 10,
+            "payload": "metricKey=blocker_violations",
+            "isSuccessful": "success"
+        },
+        {
+            "metricDefinition": "Coverage",
+            "conditionType": ">",
+            "conditionValue": 99,
+            "metricValue": 63,
+            "payload": "metricKey=coverage",
+            "isSuccessful": "fail"
+        }
+    ]
+}
