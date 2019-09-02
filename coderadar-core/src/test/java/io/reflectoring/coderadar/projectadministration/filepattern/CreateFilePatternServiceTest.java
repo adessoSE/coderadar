@@ -8,34 +8,49 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.CreateFilePatternService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.mock;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class CreateFilePatternServiceTest {
-  private GetProjectPort getProjectPort = mock(GetProjectPort.class);
-  private CreateFilePatternPort createFilePatternPort = mock(CreateFilePatternPort.class);
+
+  @Mock private CreateFilePatternPort createFilePatternPort;
+
+  private CreateFilePatternService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject = new CreateFilePatternService(createFilePatternPort);
+  }
 
   @Test
   void returnsNewFilePatternId() {
-    CreateFilePatternService testSubject = new CreateFilePatternService(createFilePatternPort);
+    // given
+    long projectId = 1L;
+    long expectedFilePatternId = 1337L;
+    String pattern = "**/*.java";
+    InclusionType inclusionType = InclusionType.INCLUDE;
 
-    Project project = new Project();
-    project.setId(1L);
-    project.setName("project name");
-
-    Mockito.when(getProjectPort.get(1L)).thenReturn(project);
-
-    FilePattern filePattern = new FilePattern();
-    filePattern.setPattern("**/*.java");
-    filePattern.setInclusionType(InclusionType.INCLUDE);
-    Mockito.when(createFilePatternPort.createFilePattern(filePattern, 1L)).thenReturn(1L);
+    FilePattern filePattern = new FilePattern()
+            .setPattern(pattern)
+            .setInclusionType(inclusionType);
 
     CreateFilePatternCommand command =
-        new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
-    Long filePatternId = testSubject.createFilePattern(command, project.getId());
+            new CreateFilePatternCommand(pattern, inclusionType);
 
-    Assertions.assertEquals(1L, filePatternId.longValue());
+    when(createFilePatternPort.createFilePattern(filePattern, projectId)).thenReturn(expectedFilePatternId);
+
+    // when
+    Long filePatternId = testSubject.createFilePattern(command, projectId);
+
+    // then
+    assertThat(filePatternId).isEqualTo(expectedFilePatternId);
   }
 }

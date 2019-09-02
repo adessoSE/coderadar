@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.projectadministration.project;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
+import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
@@ -12,63 +12,167 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.Updat
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.project.UpdateProjectService;
+import io.reflectoring.coderadar.query.domain.DateRange;
+import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
+
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
-import org.junit.jupiter.api.Assertions;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 import org.springframework.scheduling.TaskScheduler;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
 class UpdateProjectServiceTest {
-  private GetProjectPort getProjectPort = mock(GetProjectPort.class);
-  private UpdateProjectPort updateProjectPort = mock(UpdateProjectPort.class);
-  private UpdateRepositoryUseCase updateRepositoryUseCase = mock(UpdateRepositoryUseCase.class);
-  private CoderadarConfigurationProperties coderadarConfigurationProperties =
-      mock(CoderadarConfigurationProperties.class);
-  private ProcessProjectService processProjectService = mock(ProcessProjectService.class);
-  private UpdateCommitsPort updateCommitsPort = mock(UpdateCommitsPort.class);
-  private GetProjectCommitsUseCase getProjectCommitsUseCase = mock(GetProjectCommitsUseCase.class);
-  private ProjectStatusPort projectStatusPort = mock(ProjectStatusPort.class);
-  private TaskScheduler taskScheduler = mock(TaskScheduler.class);
+
+  @Mock private GetProjectPort getProjectPortMock;
+
+  @Mock private UpdateProjectPort updateProjectPortMock;
+
+  @Mock private UpdateRepositoryUseCase updateRepositoryUseCaseMock;
+
+  @Mock private CoderadarConfigurationProperties configurationPropertiesMock;
+
+  @Mock private ProcessProjectService processProjectServiceMock;
+
+  @Mock private GetProjectCommitsUseCase getProjectCommitsUseCaseMock;
+
+  @Mock private UpdateCommitsPort updateCommitsPortMock;
+
+  @Mock private ProjectStatusPort projectStatusPortMock;
+
+  @Mock private TaskScheduler taskSchedulerMock;
+
+  private UpdateProjectService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject = new UpdateProjectService(
+            getProjectPortMock,
+            updateProjectPortMock,
+            updateRepositoryUseCaseMock,
+            configurationPropertiesMock,
+            processProjectServiceMock,
+            getProjectCommitsUseCaseMock,
+            updateCommitsPortMock,
+            projectStatusPortMock,
+            taskSchedulerMock);
+  }
 
   @Test
-  void updateProjectReturnsErrorWhenProjectWithNameAlreadyExists() {
-    UpdateProjectService testSubject =
-        new UpdateProjectService(
-            getProjectPort,
-            updateProjectPort,
-            updateRepositoryUseCase,
-            coderadarConfigurationProperties,
-            processProjectService,
-            getProjectCommitsUseCase,
-            updateCommitsPort,
-            projectStatusPort,
-            taskScheduler);
+  void updateProjectReturnsErrorWhenProjectWithNameAlreadyExists(@Mock Project projectToUpdateMock) {
+    // given
+    long projectId = 123L;
+    String newProjectName = "new name";
+    String newUsername = "newUsername";
+    String newPassword = "newPassword";
+    Date newStartDate = new Date();
+    Date newEndDate = new Date();
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(
-            "new project name",
-            "username",
-            "password",
+            newProjectName,
+            newUsername,
+            newPassword,
             "http://valid.url",
             true,
-            new Date(),
-            new Date());
+            newStartDate,
+            newEndDate);
 
-    Project project = new Project();
-    project.setId(1L);
-    project.setName("new project name");
+    Project projectWithCollidingName = new Project()
+            .setId(1L)
+            .setName(newProjectName);
 
-    Project project2 = new Project();
-    project2.setId(2L);
-    project2.setName("new project name");
+    when(getProjectPortMock.get(projectId)).thenReturn(projectToUpdateMock);
 
-    Mockito.when(getProjectPort.findByName(project.getName()))
-        .thenReturn(Collections.singletonList(project2));
+    when(getProjectPortMock.findByName(newProjectName))
+        .thenReturn(Collections.singletonList(projectWithCollidingName));
 
-    Assertions.assertThrows(
-        ProjectAlreadyExistsException.class, () -> testSubject.update(command, 1L));
+    // when / then
+    assertThatThrownBy(() -> testSubject.update(command, projectId))
+            .isInstanceOf(ProjectAlreadyExistsException.class);
+  }
+
+  @Test
+  void updateProjectSuccessfullyUpdatesProjectIfNameIsUnique(@Mock Project projectToUpdateMock, @Mock Commit commitMock) throws ProjectIsBeingProcessedException, UnableToUpdateRepositoryException {
+    // given
+    long projectId = 123L;
+    String newProjectName = "new name";
+    String newUsername = "newUsername";
+    String newPassword = "newPassword";
+    String newVcsUrl = "http://new.valid.url";
+    Date newStartDate = new Date();
+    Date newEndDate = new Date();
+    String projectWorkdirName = "project-workdir";
+    String globalWorkdirName = "coderadar-workdir";
+
+    DateRange expectedDateRange = new DateRange(
+            newStartDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+            newEndDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+    );
+
+    UpdateProjectCommand command =
+            new UpdateProjectCommand(
+                    newProjectName,
+                    newUsername,
+                    newPassword,
+                    newVcsUrl,
+                    false,
+                    newStartDate,
+                    newEndDate);
+
+    Path expectedUpdatedRepositoryPath =
+            new File(globalWorkdirName + "/projects/" + projectWorkdirName).toPath();
+
+    when(getProjectPortMock.get(projectId)).thenReturn(projectToUpdateMock);
+    when(projectToUpdateMock.getWorkdirName()).thenReturn(projectWorkdirName);
+    when(projectToUpdateMock.getVcsStart()).thenReturn(newStartDate);
+    when(projectToUpdateMock.getVcsEnd()).thenReturn(newEndDate);
+
+    when(getProjectPortMock.findByName(newProjectName))
+            .thenReturn(Collections.emptyList());
+
+    doAnswer((Answer<Void>) invocation -> {
+      Runnable runnable = invocation.getArgument(0);
+      runnable.run();
+
+      return null;
+    }).when(processProjectServiceMock).executeTask(any(), eq(projectId));
+
+    when(configurationPropertiesMock.getWorkdir()).thenReturn(new File(globalWorkdirName).toPath());
+
+    when(getProjectCommitsUseCaseMock.getCommits(Paths.get(projectWorkdirName), expectedDateRange))
+            .thenReturn(Collections.singletonList(commitMock));
+
+    // when
+    testSubject.update(command, projectId);
+
+    // then
+    verify(projectToUpdateMock, never()).setId(anyLong());
+    verify(projectToUpdateMock).setName(newProjectName);
+    verify(projectToUpdateMock).setVcsUrl(newVcsUrl);
+    verify(projectToUpdateMock).setVcsUsername(newUsername);
+    verify(projectToUpdateMock).setVcsPassword(newPassword);
+    verify(projectToUpdateMock).setVcsStart(newStartDate);
+    verify(projectToUpdateMock).setVcsEnd(newEndDate);
+    verify(projectToUpdateMock).setVcsOnline(false);
+
+    verify(updateRepositoryUseCaseMock).updateRepository(expectedUpdatedRepositoryPath);
+    verify(updateCommitsPortMock).updateCommits(Collections.singletonList(commitMock), projectId);
   }
 }

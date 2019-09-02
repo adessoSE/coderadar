@@ -6,31 +6,49 @@ import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.G
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.UpdateFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.update.UpdateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.UpdateFilePatternService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class UpdateFilePatternServiceTest {
-  private GetFilePatternPort getFilePatternPort = mock(GetFilePatternPort.class);
-  private UpdateFilePatternPort updateFilePatternPort = mock(UpdateFilePatternPort.class);
+
+  @Mock private GetFilePatternPort getFilePatternPortMock;
+
+  @Mock private UpdateFilePatternPort updateFilePatternPortMock;
+
+  private UpdateFilePatternService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject = new UpdateFilePatternService(getFilePatternPortMock, updateFilePatternPortMock);
+  }
 
   @Test
-  void updateFilePatternWithIdOne() {
-    UpdateFilePatternService testSubject =
-        new UpdateFilePatternService(getFilePatternPort, updateFilePatternPort);
-
-    FilePattern filePattern = new FilePattern();
-    filePattern.setId(1L);
-    filePattern.setPattern("**/*.java");
-    filePattern.setInclusionType(InclusionType.INCLUDE);
-
-    Mockito.when(getFilePatternPort.get(1L)).thenReturn(filePattern);
+  void updateFilePatternUpdatesPatternAndInclusionType(@Mock FilePattern existingFilePatternMock) {
+    // given
+    long patternId = 1L;
+    String newPattern = "**/*.java";
+    InclusionType newInclusionType = InclusionType.EXCLUDE;
 
     UpdateFilePatternCommand command =
-        new UpdateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
-    testSubject.updateFilePattern(command, filePattern.getId());
+            new UpdateFilePatternCommand(newPattern, newInclusionType);
 
-    Mockito.verify(updateFilePatternPort, Mockito.times(1)).updateFilePattern(filePattern);
+    when(getFilePatternPortMock.get(patternId)).thenReturn(existingFilePatternMock);
+
+    // when
+    testSubject.updateFilePattern(command, patternId);
+
+    // then
+    verify(existingFilePatternMock, never()).setId(anyLong());
+    verify(existingFilePatternMock).setPattern(newPattern);
+    verify(existingFilePatternMock).setInclusionType(newInclusionType);
+
+    verify(updateFilePatternPortMock).updateFilePattern(existingFilePatternMock);
   }
 }
