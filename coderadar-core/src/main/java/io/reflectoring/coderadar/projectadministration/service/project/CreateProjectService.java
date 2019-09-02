@@ -21,6 +21,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +43,12 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   private final SaveCommitPort saveCommitPort;
 
+  private final ScanProjectScheduler scanProjectScheduler;
+
+  private final WorkdirNameGenerator workdirNameGenerator;
+
+  private final Logger logger = LoggerFactory.getLogger(CreateProjectUseCase.class);
+
   @Autowired
   public CreateProjectService(
       CreateProjectPort createProjectPort,
@@ -49,7 +57,8 @@ public class CreateProjectService implements CreateProjectUseCase {
       CoderadarConfigurationProperties coderadarConfigurationProperties,
       ProcessProjectService processProjectService,
       GetProjectCommitsUseCase getProjectCommitsUseCase,
-      SaveCommitPort saveCommitPort) {
+      SaveCommitPort saveCommitPort,
+      ScanProjectScheduler scanProjectScheduler) {
     this.createProjectPort = createProjectPort;
     this.getProjectPort = getProjectPort;
     this.cloneRepositoryUseCase = cloneRepositoryUseCase;
@@ -57,6 +66,30 @@ public class CreateProjectService implements CreateProjectUseCase {
     this.processProjectService = processProjectService;
     this.getProjectCommitsUseCase = getProjectCommitsUseCase;
     this.saveCommitPort = saveCommitPort;
+    this.scanProjectScheduler = scanProjectScheduler;
+
+    this.workdirNameGenerator = new UUIDWorkdirNameGenerator();
+  }
+
+  public CreateProjectService(
+          CreateProjectPort createProjectPort,
+          GetProjectPort getProjectPort,
+          CloneRepositoryUseCase cloneRepositoryUseCase,
+          CoderadarConfigurationProperties coderadarConfigurationProperties,
+          ProcessProjectService processProjectService,
+          GetProjectCommitsUseCase getProjectCommitsUseCase,
+          SaveCommitPort saveCommitPort,
+          ScanProjectScheduler scanProjectScheduler,
+          WorkdirNameGenerator workdirNameGenerator) {
+    this.createProjectPort = createProjectPort;
+    this.getProjectPort = getProjectPort;
+    this.cloneRepositoryUseCase = cloneRepositoryUseCase;
+    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
+    this.processProjectService = processProjectService;
+    this.getProjectCommitsUseCase = getProjectCommitsUseCase;
+    this.saveCommitPort = saveCommitPort;
+    this.scanProjectScheduler = scanProjectScheduler;
+    this.workdirNameGenerator = workdirNameGenerator;
   }
 
   @Override
@@ -80,8 +113,9 @@ public class CreateProjectService implements CreateProjectUseCase {
                 getProjectCommitsUseCase.getCommits(
                     Paths.get(project.getWorkdirName()), getProjectDateRange(project)),
                 project.getId());
+            // scanProjectScheduler.scheduleUpdateTask(project);
           } catch (UnableToCloneRepositoryException e) {
-            e.printStackTrace();
+            logger.error(String.format("Unable to clone repository: %s", e.getMessage()));
           }
         },
         project.getId());
@@ -92,7 +126,7 @@ public class CreateProjectService implements CreateProjectUseCase {
    * @param project The project to get the DateRange for.
    * @return A valid DateRange object from the project dates.
    */
-  private DateRange getProjectDateRange(Project project) {
+  static DateRange getProjectDateRange(Project project) {
     LocalDate projectStart;
     LocalDate projectEnd;
 
@@ -111,9 +145,11 @@ public class CreateProjectService implements CreateProjectUseCase {
   }
 
   private Project saveProject(CreateProjectCommand command) {
+    String workdirName = workdirNameGenerator.generate(command.getName());
+
     Project project = new Project();
     project.setName(command.getName());
-    project.setWorkdirName(UUID.randomUUID().toString());
+    project.setWorkdirName(workdirName);
     project.setVcsUrl(command.getVcsUrl());
     project.setVcsUsername(command.getVcsUsername());
     project.setVcsPassword(command.getVcsPassword());
@@ -125,4 +161,41 @@ public class CreateProjectService implements CreateProjectUseCase {
     project.setId(projectId);
     return project;
   }
+
+  /**
+   * Interface used to generate a random working directory name for a newly created
+   * project.
+   *
+   * @see CreateProjectService
+   */
+  public interface WorkdirNameGenerator {
+
+    /**
+     *
+     * @param projectName The name of the project to generate the working directory name for.
+     * @return A working directory name most likely not to collide with existing projects' working directories.
+     * Must be a valid directory name without any spaces or path separators.
+     */
+    String generate(String projectName);
+
+  }
+
+  /**
+   * {@link WorkdirNameGenerator} implementation using {@link UUID}s to generate
+   * working directory names.
+   */
+  public class UUIDWorkdirNameGenerator implements WorkdirNameGenerator {
+
+    /**
+     *
+     * @param projectName The name of the project to generate the working directory name for.
+     * @return The value returned {@link UUID#randomUUID()} as a string.
+     */
+    @Override
+    public String generate(String projectName) {
+      return UUID.randomUUID().toString();
+    }
+
+  }
+
 }

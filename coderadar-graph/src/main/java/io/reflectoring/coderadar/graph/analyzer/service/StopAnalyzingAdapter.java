@@ -3,9 +3,8 @@ package io.reflectoring.coderadar.graph.analyzer.service;
 import io.reflectoring.coderadar.analyzer.AnalyzingJobNotStartedException;
 import io.reflectoring.coderadar.analyzer.port.driven.StopAnalyzingPort;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
-import io.reflectoring.coderadar.graph.analyzer.repository.GetAnalyzingStatusRepository;
-import io.reflectoring.coderadar.graph.analyzer.repository.StartAnalyzingRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
+import io.reflectoring.coderadar.graph.analyzer.repository.AnalyzingJobRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,28 +12,24 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class StopAnalyzingAdapter implements StopAnalyzingPort {
-  private final GetAnalyzingStatusRepository getAnalyzingStatusRepository;
-  private final StartAnalyzingRepository stopAnalyzingRepository;
-  private final GetProjectRepository getProjectRepository;
+  private final AnalyzingJobRepository analyzingJobRepository;
+  private final ProjectRepository projectRepository;
 
   @Autowired
   public StopAnalyzingAdapter(
-      GetAnalyzingStatusRepository getAnalyzingStatusRepository,
-      StartAnalyzingRepository stopAnalyzingRepository,
-      GetProjectRepository getProjectRepository) {
-    this.getAnalyzingStatusRepository = getAnalyzingStatusRepository;
-    this.stopAnalyzingRepository = stopAnalyzingRepository;
-    this.getProjectRepository = getProjectRepository;
+      AnalyzingJobRepository analyzingJobRepository, ProjectRepository projectRepository) {
+    this.analyzingJobRepository = analyzingJobRepository;
+    this.projectRepository = projectRepository;
   }
 
   @Override
   public void stop(Long projectId) {
-    getProjectRepository
+    projectRepository
         .findById(projectId)
         .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
     Optional<AnalyzingJobEntity> persistedAnalyzingJob =
-        getAnalyzingStatusRepository.findByProjectId(projectId);
+        analyzingJobRepository.findByProjectId(projectId);
 
     if (persistedAnalyzingJob.isPresent()) {
       AnalyzingJobEntity analyzingJob = persistedAnalyzingJob.get();
@@ -43,7 +38,7 @@ public class StopAnalyzingAdapter implements StopAnalyzingPort {
         throw new AnalyzingJobNotStartedException("Can't stop a non-running analyzing job.");
       } else {
         analyzingJob.setActive(false);
-        stopAnalyzingRepository.save(analyzingJob);
+        analyzingJobRepository.save(analyzingJob);
       }
     }
   }

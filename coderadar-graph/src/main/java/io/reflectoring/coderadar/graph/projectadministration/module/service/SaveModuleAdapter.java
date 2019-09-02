@@ -3,9 +3,8 @@ package io.reflectoring.coderadar.graph.projectadministration.module.service;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.ModuleMapper;
-import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
-import io.reflectoring.coderadar.graph.projectadministration.module.repository.ListModulesOfProjectRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
@@ -17,17 +16,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaveModuleAdapter implements SaveModulePort {
 
-  private final GetProjectRepository getProjectRepository;
-  private final CreateModuleRepository createModuleRepository;
-  private final ListModulesOfProjectRepository listModulesOfProjectRepository;
+  private final ProjectRepository projectRepository;
+  private final ModuleRepository moduleRepository;
 
-  public SaveModuleAdapter(
-      GetProjectRepository getProjectRepository,
-      CreateModuleRepository createModuleRepository,
-      ListModulesOfProjectRepository listModulesOfProjectRepository) {
-    this.getProjectRepository = getProjectRepository;
-    this.createModuleRepository = createModuleRepository;
-    this.listModulesOfProjectRepository = listModulesOfProjectRepository;
+  public SaveModuleAdapter(ProjectRepository projectRepository, ModuleRepository moduleRepository) {
+    this.projectRepository = projectRepository;
+    this.moduleRepository = moduleRepository;
   }
 
   @Override
@@ -37,7 +31,7 @@ public class SaveModuleAdapter implements SaveModulePort {
 
     ModuleEntity moduleEntity = new ModuleMapper().mapDomainObject(module);
     ProjectEntity projectEntity =
-        getProjectRepository
+        projectRepository
             .findById(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
@@ -45,7 +39,7 @@ public class SaveModuleAdapter implements SaveModulePort {
       throw new ProjectIsBeingProcessedException(projectId);
     }
     checkPathIsValid(moduleEntity, projectEntity);
-    return createModuleRepository.save(moduleEntity).getId();
+    return moduleRepository.save(moduleEntity).getId();
   }
 
   /**
@@ -70,8 +64,7 @@ public class SaveModuleAdapter implements SaveModulePort {
     }
 
     // Check if a module with the same path already exists.
-    for (ModuleEntity entity :
-        listModulesOfProjectRepository.findModulesInProject(projectEntity.getId())) {
+    for (ModuleEntity entity : moduleRepository.findModulesInProject(projectEntity.getId())) {
       if (entity.getPath().equals(moduleEntity.getPath())) {
         throw new ModuleAlreadyExistsException(moduleEntity.getPath());
       }

@@ -1,13 +1,12 @@
 package io.reflectoring.coderadar.projectadministration.port.driver.project.update;
 
+import java.util.Date;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -16,7 +15,7 @@ public class UpdateProjectCommand {
   @NotBlank private String name;
   @NotNull private String vcsUsername;
   @NotNull private String vcsPassword;
-  @NotNull @URL private String vcsUrl;
+  @NotNull @URL private String vcsUrl; // TODO: Should the user be able to change the url???
   @NotNull private Boolean vcsOnline;
   private Date startDate;
   private Date endDate;

@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.integration.project;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -18,11 +18,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired private CreateProjectRepository createProjectRepository;
+  @Autowired private ProjectRepository projectRepository;
 
   @BeforeEach
   public void setUp() {
-    createProjectRepository.deleteAll();
+    projectRepository.deleteAll();
 
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
@@ -42,8 +42,8 @@ class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
     testProject2.setVcsPassword("testPassword");
     testProject2.setVcsUsername("testUser");
 
-    createProjectRepository.save(testProject);
-    createProjectRepository.save(testProject2);
+    projectRepository.save(testProject);
+    projectRepository.save(testProject2);
   }
 
   @Test

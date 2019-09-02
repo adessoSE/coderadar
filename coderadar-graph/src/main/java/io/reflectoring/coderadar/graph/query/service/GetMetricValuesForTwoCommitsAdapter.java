@@ -1,13 +1,10 @@
 package io.reflectoring.coderadar.graph.query.service;
 
+import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
-import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
-import io.reflectoring.coderadar.query.domain.Changes;
-import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
-import io.reflectoring.coderadar.query.domain.MetricsTreeNodeType;
+import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
+import io.reflectoring.coderadar.query.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfTwoCommitsPort;
-import io.reflectoring.coderadar.query.port.driven.MetricTree;
-import io.reflectoring.coderadar.query.port.driver.DeltaTree;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForTwoCommitsCommand;
 import java.util.*;
@@ -16,15 +13,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwoCommitsPort {
 
-  private final GetCommitsInProjectRepository getCommitsInProjectRepository;
+  private final CommitRepository commitRepository;
   private final FileRepository fileRepository;
   private final GetMetricsForAllFilesInCommitAdapter getMetricsForAllFilesInCommitAdapter;
 
   public GetMetricValuesForTwoCommitsAdapter(
-      GetCommitsInProjectRepository getCommitsInProjectRepository,
+      CommitRepository commitRepository,
       FileRepository fileRepository,
       GetMetricsForAllFilesInCommitAdapter getMetricsForAllFilesInCommitAdapter) {
-    this.getCommitsInProjectRepository = getCommitsInProjectRepository;
+    this.commitRepository = commitRepository;
     this.fileRepository = fileRepository;
     this.getMetricsForAllFilesInCommitAdapter = getMetricsForAllFilesInCommitAdapter;
   }
@@ -38,12 +35,14 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
         getMetricsForAllFilesInCommitAdapter.get(
             new GetMetricsForCommitCommand(command.getCommit2(), command.getMetrics()), projectId);
     Date commit1Time =
-        getCommitsInProjectRepository
+        commitRepository
             .findByNameAndProjectId(command.getCommit1(), projectId)
+            .orElseThrow(() -> new CommitNotFoundException(command.getCommit1()))
             .getTimestamp();
     Date commit2Time =
-        getCommitsInProjectRepository
+        commitRepository
             .findByNameAndProjectId(command.getCommit2(), projectId)
+            .orElseThrow(() -> new CommitNotFoundException(command.getCommit2()))
             .getTimestamp();
 
     if (commit1Time.after(commit2Time)) {

@@ -1,29 +1,27 @@
 package io.reflectoring.coderadar.graph.analyzer;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
-import io.reflectoring.coderadar.graph.analyzer.repository.GetAnalyzingStatusRepository;
+import io.reflectoring.coderadar.graph.analyzer.repository.AnalyzingJobRepository;
 import io.reflectoring.coderadar.graph.analyzer.service.GetAnalyzingStatusAdapter;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 @DisplayName("Get analyzing status")
 class GetAnalyzingStatusAdapterTest {
-  private GetAnalyzingStatusRepository getAnalyzingStatusRepository =
-      mock(GetAnalyzingStatusRepository.class);
+  private AnalyzingJobRepository analyzingJobRepository = mock(AnalyzingJobRepository.class);
 
   private GetAnalyzingStatusAdapter getanalyzingStatusAdapter;
 
   @BeforeEach
   void setUp() {
-    getanalyzingStatusAdapter = new GetAnalyzingStatusAdapter(getAnalyzingStatusRepository);
+    getanalyzingStatusAdapter = new GetAnalyzingStatusAdapter(analyzingJobRepository);
   }
 
   @Test
@@ -39,13 +37,13 @@ class GetAnalyzingStatusAdapterTest {
     AnalyzingJobEntity mockedItem = new AnalyzingJobEntity();
     mockedItem.setId(1L);
     mockedItem.setActive(true);
-    when(getAnalyzingStatusRepository.findByProjectId(any(Long.class)))
+    when(analyzingJobRepository.findByProjectId(any(Long.class)))
         .thenReturn(Optional.of(mockedItem));
 
     boolean active = getanalyzingStatusAdapter.get(1L);
 
-    verify(getAnalyzingStatusRepository, times(1)).findByProjectId(1L);
-    verifyNoMoreInteractions(getAnalyzingStatusRepository);
+    verify(analyzingJobRepository, times(1)).findByProjectId(1L);
+    verifyNoMoreInteractions(analyzingJobRepository);
     Assertions.assertTrue(active);
   }
 
@@ -56,13 +54,13 @@ class GetAnalyzingStatusAdapterTest {
     AnalyzingJobEntity mockedItem = new AnalyzingJobEntity();
     mockedItem.setId(1L);
     mockedItem.setActive(false);
-    when(getAnalyzingStatusRepository.findByProjectId(any(Long.class)))
+    when(analyzingJobRepository.findByProjectId(any(Long.class)))
         .thenReturn(Optional.of(mockedItem));
 
     boolean active = getanalyzingStatusAdapter.get(1L);
 
-    verify(getAnalyzingStatusRepository, times(1)).findByProjectId(1L);
-    verifyNoMoreInteractions(getAnalyzingStatusRepository);
+    verify(analyzingJobRepository, times(1)).findByProjectId(1L);
+    verifyNoMoreInteractions(analyzingJobRepository);
     Assertions.assertFalse(active);
   }
 }

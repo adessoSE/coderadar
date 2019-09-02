@@ -3,8 +3,8 @@ package io.reflectoring.coderadar.graph.projectadministration.module.service;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
@@ -15,14 +15,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CreateModuleAdapter implements CreateModulePort {
-  private final CreateModuleRepository createModuleRepository;
-  private final GetProjectRepository getProjectRepository;
+  private final ModuleRepository moduleRepository;
+  private final ProjectRepository projectRepository;
 
   @Autowired
   public CreateModuleAdapter(
-      CreateModuleRepository createModuleRepository, GetProjectRepository getProjectRepository) {
-    this.createModuleRepository = createModuleRepository;
-    this.getProjectRepository = getProjectRepository;
+      ModuleRepository moduleRepository, ProjectRepository projectRepository) {
+    this.moduleRepository = moduleRepository;
+    this.projectRepository = projectRepository;
   }
 
   /**
@@ -35,11 +35,11 @@ public class CreateModuleAdapter implements CreateModulePort {
   @Override
   public void createModule(Long moduleId, Long projectId) {
     ModuleEntity moduleEntity =
-        createModuleRepository
+        moduleRepository
             .findById(moduleId)
             .orElseThrow(() -> new ModuleNotFoundException(moduleId));
     ProjectEntity projectEntity =
-        getProjectRepository
+        projectRepository
             .findById(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
     ModuleEntity foundModule = findParentModuleInProject(projectEntity, moduleEntity.getPath());
@@ -61,7 +61,7 @@ public class CreateModuleAdapter implements CreateModulePort {
     for (FileEntity fileEntity : parentModule.getFiles()) {
       if (fileEntity.getPath().startsWith(childModule.getPath())) {
         childModule.getFiles().add(fileEntity);
-        createModuleRepository.detachFileFromModule(parentModule.getId(), fileEntity.getId());
+        moduleRepository.detachFileFromModule(parentModule.getId(), fileEntity.getId());
       }
     }
     parentModule.getFiles().removeAll(childModule.getFiles());
@@ -71,12 +71,12 @@ public class CreateModuleAdapter implements CreateModulePort {
       child.setParentModule(childModule);
       childModule.getChildModules().add(child);
       parentModule.getChildModules().removeIf(entity -> entity.getId().equals(child.getId()));
-      createModuleRepository.save(child);
-      createModuleRepository.detachModuleFromModule(parentModule.getId(), child.getId());
+      moduleRepository.save(child);
+      moduleRepository.detachModuleFromModule(parentModule.getId(), child.getId());
     }
     parentModule.getChildModules().add(childModule);
-    createModuleRepository.save(parentModule);
-    createModuleRepository.save(childModule);
+    moduleRepository.save(parentModule);
+    moduleRepository.save(childModule);
   }
 
   /**
@@ -92,7 +92,7 @@ public class CreateModuleAdapter implements CreateModulePort {
     for (FileEntity fileEntity : projectEntity.getFiles()) {
       if (fileEntity.getPath().startsWith(moduleEntity.getPath())) {
         moduleEntity.getFiles().add(fileEntity);
-        createModuleRepository.detachFileFromProject(projectEntity.getId(), fileEntity.getId());
+        moduleRepository.detachFileFromProject(projectEntity.getId(), fileEntity.getId());
       }
     }
     projectEntity.getFiles().removeAll(moduleEntity.getFiles());
@@ -103,13 +103,13 @@ public class CreateModuleAdapter implements CreateModulePort {
       childModule.setParentModule(moduleEntity);
       childModule.setProject(null);
       moduleEntity.getChildModules().add(childModule);
-      createModuleRepository.save(childModule);
+      moduleRepository.save(childModule);
       projectEntity.getModules().removeIf(entity -> entity.getId().equals(childModule.getId()));
-      createModuleRepository.detachModuleFromProject(projectEntity.getId(), childModule.getId());
+      moduleRepository.detachModuleFromProject(projectEntity.getId(), childModule.getId());
     }
     projectEntity.getModules().add(moduleEntity);
-    getProjectRepository.save(projectEntity);
-    createModuleRepository.save(moduleEntity);
+    projectRepository.save(projectEntity);
+    moduleRepository.save(moduleEntity);
   }
 
   /**
@@ -139,7 +139,7 @@ public class CreateModuleAdapter implements CreateModulePort {
    */
   private ModuleEntity findModule(ModuleEntity entity, String path) {
     long id = entity.getId();
-    entity = createModuleRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException(id));
+    entity = moduleRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException(id));
     if (path.startsWith(entity.getPath())) {
       if (entity.getChildModules().isEmpty()) {
         return entity;
@@ -169,7 +169,7 @@ public class CreateModuleAdapter implements CreateModulePort {
     for (ModuleEntity m : modules) {
       if (m.getPath().startsWith(path)) {
         childModules.add(
-            createModuleRepository
+            moduleRepository
                 .findById(m.getId())
                 .orElseThrow(() -> new ModuleNotFoundException(m.getId())));
       }

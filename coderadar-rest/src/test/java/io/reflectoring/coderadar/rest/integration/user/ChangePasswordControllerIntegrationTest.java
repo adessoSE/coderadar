@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.rest.integration.user;
 import io.reflectoring.coderadar.graph.projectadministration.domain.RefreshTokenEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RefreshTokenRepository;
-import io.reflectoring.coderadar.graph.projectadministration.user.repository.RegisterUserRepository;
+import io.reflectoring.coderadar.graph.projectadministration.user.repository.UserRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.password.ChangePasswordCommand;
 import io.reflectoring.coderadar.projectadministration.service.user.security.PasswordUtil;
 import io.reflectoring.coderadar.projectadministration.service.user.security.TokenService;
@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired private RegisterUserRepository registerUserRepository;
+  @Autowired private UserRepository userRepository;
 
   @Autowired private RefreshTokenRepository refreshTokenRepository;
 
@@ -32,7 +32,7 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
     UserEntity testUser = new UserEntity();
     testUser.setUsername("username");
     testUser.setPassword(PasswordUtil.hash("password1"));
-    testUser = registerUserRepository.save(testUser);
+    testUser = userRepository.save(testUser);
 
     RefreshTokenEntity refreshToken = new RefreshTokenEntity();
     refreshToken.setToken(
@@ -54,7 +54,7 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
         new BCryptPasswordEncoder()
             .matches(
                 "newPassword1",
-                registerUserRepository.findById(testUser.getId()).get().getPassword()));
+                    userRepository.findById(testUser.getId()).get().getPassword()));
   }
 
   @Test
@@ -62,7 +62,7 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
     UserEntity testUser = new UserEntity();
     testUser.setUsername("username");
     testUser.setPassword(PasswordUtil.hash("password1"));
-    testUser = registerUserRepository.save(testUser);
+    testUser = userRepository.save(testUser);
 
     RefreshTokenEntity refreshToken = new RefreshTokenEntity();
     refreshToken.setToken(tokenService.generateRefreshToken(testUser.getId(), testUser.getUsername()));
@@ -81,7 +81,7 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
         new BCryptPasswordEncoder()
             .matches(
                 "password1",
-                registerUserRepository.findById(testUser.getId()).get().getPassword()));
+                    userRepository.findById(testUser.getId()).get().getPassword()));
   }
 
   private ResultHandler documentPasswordChange() {

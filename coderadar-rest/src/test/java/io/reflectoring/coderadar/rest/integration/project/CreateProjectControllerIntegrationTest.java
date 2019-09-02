@@ -1,7 +1,11 @@
 package io.reflectoring.coderadar.rest.integration.project;
 
+import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
+import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
+import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
+import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
@@ -14,13 +18,16 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 
 import static io.reflectoring.coderadar.rest.integration.JsonHelper.fromJson;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
-  @Autowired private CreateProjectRepository createProjectRepository;
+  @Autowired private ProjectRepository projectRepository;
+  @Autowired private FileRepository fileRepository;
+  @Autowired private CommitRepository commitRepository;
 
   @Test
   void createProjectSuccessfully() throws Exception {
@@ -36,12 +43,16 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
               //FileUtils.deleteDirectory(new File("coderadar-workdir"));
               Long id =
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
-                ProjectEntity project = createProjectRepository.findById(id).get();
+                ProjectEntity project = projectRepository.findById(id).get();
               Assertions.assertEquals("project", project.getName());
               Assertions.assertEquals("username", project.getVcsUsername());
               Assertions.assertEquals("password", project.getVcsPassword());
               Assertions.assertEquals(testRepoURL.toString(), project.getVcsUrl());
               Assertions.assertFalse(project.isVcsOnline());
+                List<CommitEntity> commits = commitRepository.findByProjectId(id);
+                Assertions.assertEquals(13, commits.size());
+                List<FileEntity> files = fileRepository.findAllinProject(id);
+                Assertions.assertEquals(8, files.size());
             })
             .andDo(documentCreateProject());
   }

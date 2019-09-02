@@ -5,26 +5,46 @@ import io.reflectoring.coderadar.projectadministration.port.driven.module.GetMod
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.projectadministration.service.module.GetModuleService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.mock;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class GetModuleServiceTest {
-  private GetModulePort getModulePort = mock(GetModulePort.class);
+
+  @Mock private GetModulePort getModulePortMock;
+
+  private GetModuleService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject = new GetModuleService(getModulePortMock);
+  }
 
   @Test
   void returnsGetModuleResponseForModule() {
-    GetModuleService testSubject = new GetModuleService(getModulePort);
+    // given
+    long moduleId = 1L;
+    String path = "module-path";
 
-    Module module = new Module();
-    module.setId(1L);
-    module.setPath("module-path");
-    Mockito.when(getModulePort.get(1L)).thenReturn(module);
+    Module module = new Module()
+            .setId(moduleId)
+            .setPath(path);
 
-    GetModuleResponse response = testSubject.get(1L);
+    GetModuleResponse expectedResponse = new GetModuleResponse(moduleId, path);
 
-    Assertions.assertEquals(module.getId(), response.getId());
-    Assertions.assertEquals(module.getPath(), response.getPath());
+    when(getModulePortMock.get(moduleId)).thenReturn(module);
+
+    // when
+    GetModuleResponse actualResponse = testSubject.get(moduleId);
+
+    // then
+    assertThat(actualResponse).isEqualTo(expectedResponse);
   }
 }

@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.rest.integration.analyzerconfig;
 
-import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.CreateAnalyzerConfigurationRepository;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -16,21 +16,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired private CreateProjectRepository createProjectRepository;
+  @Autowired private ProjectRepository projectRepository;
 
-  @Autowired private CreateAnalyzerConfigurationRepository createAnalyzerConfigurationRepository;
+  @Autowired private AnalyzerConfigurationRepository analyzerConfigurationRepository;
 
   @Test
   void updateAnalyzerConfigurationWithId() throws Exception {
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
-    testProject = createProjectRepository.save(testProject);
+    testProject = projectRepository.save(testProject);
 
     AnalyzerConfigurationEntity analyzerConfiguration = new AnalyzerConfigurationEntity();
     analyzerConfiguration.setProject(testProject);
     analyzerConfiguration.setAnalyzerName("analyzer");
 
-    analyzerConfiguration = createAnalyzerConfigurationRepository.save(analyzerConfiguration);
+    analyzerConfiguration = analyzerConfigurationRepository.save(analyzerConfiguration);
     final Long id = analyzerConfiguration.getId();
 
     UpdateAnalyzerConfigurationCommand command =
@@ -44,7 +44,7 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
         .andDo(
             result -> {
               AnalyzerConfigurationEntity configuration =
-                  createAnalyzerConfigurationRepository.findById(id).get();
+                      analyzerConfigurationRepository.findById(id).get();
               Assertions.assertEquals("new analyzer name", configuration.getAnalyzerName());
               Assertions.assertFalse(configuration.getEnabled());
             })

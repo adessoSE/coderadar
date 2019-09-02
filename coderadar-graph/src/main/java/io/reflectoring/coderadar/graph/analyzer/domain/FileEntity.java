@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -16,9 +17,11 @@ public class FileEntity {
   private String path;
 
   @Relationship(type = "MEASURED_BY")
+  @ToString.Exclude
   private List<MetricValueEntity> metricValues = new LinkedList<>();
 
   @EqualsAndHashCode.Exclude
   @Relationship(type = "CHANGED_IN")
+  @ToString.Exclude
   private List<FileToCommitRelationshipEntity> commits = new LinkedList<>();
 }

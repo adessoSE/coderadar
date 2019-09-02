@@ -1,20 +1,20 @@
 package io.reflectoring.coderadar.graph.projectadministration.user;
 
-import io.reflectoring.coderadar.graph.projectadministration.user.repository.ChangePasswordRepository;
+import static org.mockito.Mockito.mock;
+
+import io.reflectoring.coderadar.graph.projectadministration.user.repository.UserRepository;
 import io.reflectoring.coderadar.graph.projectadministration.user.service.ChangePasswordAdapter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 
-import static org.mockito.Mockito.mock;
-
 @DisplayName("Change password")
 public class ChangePasswordAdapterTest {
-  private ChangePasswordRepository changePasswordRepository = mock(ChangePasswordRepository.class);
+  private UserRepository userRepository = mock(UserRepository.class);
 
   private ChangePasswordAdapter changePasswordAdapter;
 
   @BeforeEach
   void setUp() {
-    changePasswordAdapter = new ChangePasswordAdapter(changePasswordRepository);
+    changePasswordAdapter = new ChangePasswordAdapter(userRepository);
   }
 }

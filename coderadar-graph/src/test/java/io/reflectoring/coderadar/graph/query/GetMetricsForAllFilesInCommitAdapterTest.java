@@ -2,10 +2,9 @@ package io.reflectoring.coderadar.graph.query;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
-import io.reflectoring.coderadar.graph.projectadministration.module.repository.ListModulesOfProjectRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
-import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
+import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
+import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
 import io.reflectoring.coderadar.graph.query.service.GetMetricsForAllFilesInCommitAdapter;
 import org.junit.jupiter.api.DisplayName;
@@ -16,12 +15,9 @@ class GetMetricsForAllFilesInCommitAdapterTest {
       mock(GetMetricValuesOfCommitRepository.class);
   private GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository =
       mock(GetMetricValuesOfCommitRepository.class);
-  private GetProjectRepository getProjectRepository = mock(GetProjectRepository.class);
-  private ListModulesOfProjectRepository listModulesOfProjectRepository =
-      mock(ListModulesOfProjectRepository.class);
-  private CreateModuleRepository createModuleRepository = mock(CreateModuleRepository.class);
-  private GetCommitsInProjectRepository getCommitsInProjectRepository =
-      mock(GetCommitsInProjectRepository.class);
+  private ProjectRepository projectRepository = mock(ProjectRepository.class);
+  private ModuleRepository moduleRepository = mock(ModuleRepository.class);
+  private CommitRepository commitRepository = mock(CommitRepository.class);
 
   private GetMetricsForAllFilesInCommitAdapter getMetricsForAllFilesInCommitAdapter;
 
@@ -31,10 +27,9 @@ class GetMetricsForAllFilesInCommitAdapterTest {
     getMetricsForAllFilesInCommitAdapter =
         new GetMetricsForAllFilesInCommitAdapter(
             getMetricsForAllFilesInCommitRepository,
-            getProjectRepository,
-            listModulesOfProjectRepository,
-            createModuleRepository,
-            getCommitsInProjectRepository);
+            projectRepository,
+            moduleRepository,
+            commitRepository);
 
 
     when(getProjectRepository.findById(anyLong())).thenReturn(java.util.Optional.of(new ProjectEntity()));

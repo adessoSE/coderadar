@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.projectadministration.module;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
@@ -14,35 +12,60 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.create
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.module.CreateModuleService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
 class CreateModuleServiceTest {
-  private CreateModulePort createModulePort = mock(CreateModulePort.class);
-  private GetProjectPort getProjectPort = mock(GetProjectPort.class);
-  private ProcessProjectService processProjectService = mock(ProcessProjectService.class);
-  private SaveModulePort saveModulePort = mock(SaveModulePort.class);
+
+  @Mock private CreateModulePort createModulePortMock;
+
+  @Mock private SaveModulePort saveModulePortMock;
+
+  @Mock private ProcessProjectService processProjectServiceMock;
+
+  private CreateModuleService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject = new CreateModuleService(createModulePortMock, saveModulePortMock, processProjectServiceMock);
+  }
 
   @Test
-  void returnsNewModuleId()
-      throws ModulePathInvalidException, ModuleAlreadyExistsException,
-          ProjectIsBeingProcessedException {
-    CreateModuleService testSubject =
-        new CreateModuleService(createModulePort, saveModulePort, processProjectService);
+  void returnsNewModuleId() throws ModulePathInvalidException, ModuleAlreadyExistsException, ProjectIsBeingProcessedException {
+    // given
+    long projectId = 1L;
+    long expectedModuleId = 123L;
 
-    Project project = new Project();
-    project.setId(2L);
-    project.setName("project name");
-
-    Mockito.when(getProjectPort.get(2L)).thenReturn(project);
-
-    Module module = new Module();
-    module.setPath("module-path");
-    Mockito.when(saveModulePort.saveModule(module, 2L)).thenReturn(1L);
+    Module expectedModule = new Module()
+            .setPath("module-path");
 
     CreateModuleCommand command = new CreateModuleCommand("module-path");
-    Long moduleId = testSubject.createModule(command, project.getId());
 
-    Assertions.assertEquals(1L, moduleId.longValue());
+    when(saveModulePortMock.saveModule(expectedModule, projectId)).thenReturn(expectedModuleId);
+
+    doAnswer((Answer<Void>) invocation -> {
+      Runnable runnable = invocation.getArgument(0);
+      runnable.run();
+
+      return null;
+    }).when(processProjectServiceMock).executeTask(any(), eq(projectId));
+
+    // when
+    Long actualModuleId = testSubject.createModule(command, projectId);
+
+    // then
+    assertThat(actualModuleId).isEqualTo(expectedModuleId);
+
+    verify(createModulePortMock).createModule(expectedModuleId, projectId);
   }
 }

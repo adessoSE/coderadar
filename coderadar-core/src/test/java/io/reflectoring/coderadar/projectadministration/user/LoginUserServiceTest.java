@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.projectadministration.user;
 
+import io.reflectoring.coderadar.projectadministration.domain.RefreshToken;
 import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.RefreshTokenPort;
@@ -7,39 +8,71 @@ import io.reflectoring.coderadar.projectadministration.port.driver.user.login.Lo
 import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserResponse;
 import io.reflectoring.coderadar.projectadministration.service.user.login.LoginUserService;
 import io.reflectoring.coderadar.projectadministration.service.user.security.TokenService;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import static org.mockito.Mockito.mock;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class LoginUserServiceTest {
-  private RefreshTokenPort refreshTokenPort = mock(RefreshTokenPort.class);
-  private LoadUserPort loadUserPort = mock(LoadUserPort.class);
-  private TokenService tokenService = mock(TokenService.class);
-  private AuthenticationManager authenticationManager = mock(AuthenticationManager.class);
+
+  @Mock private LoadUserPort loadUserPortMock;
+
+  @Mock private RefreshTokenPort refreshTokenPortMock;
+
+  @Mock private AuthenticationManager authenticationManagerMock;
+
+  @Mock private TokenService tokenServiceMock;
+
+  private LoginUserService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject =
+            new LoginUserService(loadUserPortMock, refreshTokenPortMock, authenticationManagerMock, tokenServiceMock);
+  }
 
   @Test
   void loginUserWithUsernameAndPassword() {
-    LoginUserService testSubject =
-        new LoginUserService(loadUserPort, refreshTokenPort, authenticationManager, tokenService);
+    // when
+    long userId = 1L;
+    String username = "username";
+    String password = "password";
+    String expectedAccessToken = "abalfgubhfuo[oi3y0823pdyu";
+    String expectedRefreshToken = "ift021789f21897f2187fg";
+    User user = new User()
+            .setId(userId)
+            .setUsername(username);
 
-    User user = new User();
-    user.setId(1L);
-    user.setUsername("username");
+    UsernamePasswordAuthenticationToken expectedToken =
+            new UsernamePasswordAuthenticationToken(username, password);
+    LoginUserResponse expectedResponse = new LoginUserResponse(expectedAccessToken, expectedRefreshToken);
+    RefreshToken expectedRefreshTokenEntity = new RefreshToken()
+            .setToken(expectedRefreshToken)
+            .setUser(user);
 
-    Mockito.when(tokenService.generateAccessToken(user.getId(), user.getUsername()))
-        .thenReturn("abalfgubhfuo[oi3y0823pdyu");
-    Mockito.when(tokenService.generateRefreshToken(user.getId(), user.getUsername()))
-        .thenReturn("ift021789f21897f2187fg");
+    LoginUserCommand command = new LoginUserCommand(username, password);
 
-    Mockito.when(loadUserPort.loadUserByUsername(user.getUsername())).thenReturn(user);
+    when(loadUserPortMock.loadUserByUsername(user.getUsername())).thenReturn(user);
 
-    LoginUserCommand command = new LoginUserCommand("username", "password");
-    LoginUserResponse response = testSubject.login(command);
+    when(tokenServiceMock.generateAccessToken(userId, username))
+        .thenReturn(expectedAccessToken);
+    when(tokenServiceMock.generateRefreshToken(userId, username))
+        .thenReturn(expectedRefreshToken);
 
-    Assertions.assertEquals("abalfgubhfuo[oi3y0823pdyu", response.getAccessToken());
-    Assertions.assertEquals("ift021789f21897f2187fg", response.getRefreshToken());
+    // when
+    LoginUserResponse actualResponse = testSubject.login(command);
+
+    // then
+    assertThat(actualResponse).isEqualTo(expectedResponse);
+
+    verify(authenticationManagerMock).authenticate(expectedToken);
+    verify(refreshTokenPortMock).saveToken(expectedRefreshTokenEntity);
   }
 }

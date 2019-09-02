@@ -1,21 +1,20 @@
 package io.reflectoring.coderadar.graph.query.service;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
+import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.MetricValueForCommitTreeQueryResult;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
-import io.reflectoring.coderadar.graph.projectadministration.module.repository.ListModulesOfProjectRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.GetProjectRepository;
-import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.query.domain.MetricTree;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.domain.MetricsTreeNodeType;
 import io.reflectoring.coderadar.query.port.driven.GetMetricsForAllFilesInCommitPort;
-import io.reflectoring.coderadar.query.port.driven.MetricTree;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
 import java.util.*;
 import org.springframework.stereotype.Service;
@@ -24,34 +23,33 @@ import org.springframework.stereotype.Service;
 public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFilesInCommitPort {
 
   private final GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository;
-  private final GetProjectRepository getProjectRepository;
-  private final ListModulesOfProjectRepository listModulesOfProjectRepository;
-  private final CreateModuleRepository createModuleRepository;
-  private final GetCommitsInProjectRepository getCommitsInProjectRepository;
+  private final ProjectRepository projectRepository;
+  private final ModuleRepository moduleRepository;
+  private final CommitRepository commitRepository;
 
   public GetMetricsForAllFilesInCommitAdapter(
       GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository,
-      GetProjectRepository getProjectRepository,
-      ListModulesOfProjectRepository listModulesOfProjectRepository,
-      CreateModuleRepository createModuleRepository,
-      GetCommitsInProjectRepository getCommitsInProjectRepository) {
+      ProjectRepository projectRepository,
+      ModuleRepository moduleRepository,
+      CommitRepository commitRepository) {
     this.getMetricValuesOfCommitRepository = getMetricValuesOfCommitRepository;
-    this.getProjectRepository = getProjectRepository;
-    this.listModulesOfProjectRepository = listModulesOfProjectRepository;
-    this.createModuleRepository = createModuleRepository;
-    this.getCommitsInProjectRepository = getCommitsInProjectRepository;
+    this.projectRepository = projectRepository;
+    this.moduleRepository = moduleRepository;
+    this.commitRepository = commitRepository;
   }
 
   @Override
   public MetricTree get(GetMetricsForCommitCommand command, Long projectId) {
 
     ProjectEntity projectEntity =
-        getProjectRepository
+        projectRepository
             .findById(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
     CommitEntity commitEntity =
-        getCommitsInProjectRepository.findByNameAndProjectId(command.getCommit(), projectId);
+        commitRepository
+            .findByNameAndProjectId(command.getCommit(), projectId)
+            .orElseThrow(() -> new CommitNotFoundException(command.getCommit()));
     if (commitEntity == null) {
       throw new CommitNotFoundException(command.getCommit());
     }
@@ -60,8 +58,7 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
         getMetricValuesOfCommitRepository.getMetricTreeForCommit(
             projectId, command.getMetrics(), commitEntity.getTimestamp().toInstant().toString());
 
-    List<ModuleEntity> moduleEntities =
-        listModulesOfProjectRepository.findModulesInProject(projectId);
+    List<ModuleEntity> moduleEntities = moduleRepository.findModulesInProject(projectId);
     moduleEntities.sort(Comparator.comparing(ModuleEntity::getPath));
     Collections.reverse(moduleEntities);
 
@@ -194,7 +191,7 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
         if (metricTree.getName().equals(moduleEntity.getPath())) {
           Long moduleId = moduleEntity.getId();
           moduleEntity =
-              createModuleRepository
+              moduleRepository
                   .findById(moduleEntity.getId())
                   .orElseThrow(() -> new ModuleNotFoundException(moduleId));
           metricTree

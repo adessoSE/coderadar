@@ -1,7 +1,9 @@
 package io.reflectoring.coderadar.projectadministration.module;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
@@ -9,22 +11,46 @@ import io.reflectoring.coderadar.projectadministration.port.driven.module.Delete
 import io.reflectoring.coderadar.projectadministration.port.driven.module.GetModulePort;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.module.DeleteModuleService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 
+@ExtendWith(MockitoExtension.class)
 class DeleteModuleServiceTest {
-  private DeleteModulePort deleteModulePort = mock(DeleteModulePort.class);
-  private GetModulePort getModulePort = mock(GetModulePort.class);
-  private ProcessProjectService processProjectService = mock(ProcessProjectService.class);
+
+  @Mock private DeleteModulePort deleteModulePortMock;
+
+  @Mock private ProcessProjectService processProjectServiceMock;
+
+  @Mock private GetModulePort getModulePortMock;
+
+  private DeleteModuleService testSubject;
+
+  @BeforeEach
+  void setUp() {
+    this.testSubject = new DeleteModuleService(deleteModulePortMock, processProjectServiceMock, getModulePortMock);
+  }
 
   @Test
-  void deleteModuleWithIdOne() throws ProjectIsBeingProcessedException {
-    DeleteModuleService testSubject =
-        new DeleteModuleService(deleteModulePort, processProjectService, getModulePort);
+  void deleteModuleDeletesModuleWithGivenId() throws ProjectIsBeingProcessedException {
+    // given
+    long moduleId = 1L;
+    long projectId = 2L;
 
-    Mockito.when(getModulePort.get(anyLong())).thenReturn(new Module());
-    testSubject.delete(1L, 2L);
+    doAnswer((Answer<Void>) invocation -> {
+      Runnable runnable = invocation.getArgument(0);
+      runnable.run();
 
-    // Mockito.verify(deleteModulePort, Mockito.times(1)).delete(1L, 2L);
+      return null;
+    }).when(processProjectServiceMock).executeTask(any(), eq(projectId));
+
+    // when
+    testSubject.delete(moduleId, projectId);
+
+    // then
+    verify(deleteModulePortMock).delete(moduleId, projectId);
   }
 }

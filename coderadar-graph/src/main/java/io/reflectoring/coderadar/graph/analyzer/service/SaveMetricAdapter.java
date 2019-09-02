@@ -6,9 +6,9 @@ import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.FindingEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
+import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
-import io.reflectoring.coderadar.graph.analyzer.repository.SaveMetricRepository;
-import io.reflectoring.coderadar.graph.query.repository.GetCommitsInProjectRepository;
+import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
 import java.util.ArrayList;
@@ -20,18 +20,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaveMetricAdapter implements SaveMetricPort {
 
-  private SaveMetricRepository saveMetricRepository;
+  private MetricRepository metricRepository;
 
-  private GetCommitsInProjectRepository getCommitsInProjectRepository;
+  private final CommitRepository commitRepository;
   private final FileRepository fileRepository;
 
   @Autowired
   public SaveMetricAdapter(
-      SaveMetricRepository saveMetricRepository,
-      GetCommitsInProjectRepository getCommitsInProjectRepository,
+      MetricRepository metricRepository,
+      CommitRepository commitRepository,
       FileRepository fileRepository) {
-    this.saveMetricRepository = saveMetricRepository;
-    this.getCommitsInProjectRepository = getCommitsInProjectRepository;
+    this.metricRepository = metricRepository;
+    this.commitRepository = commitRepository;
     this.fileRepository = fileRepository;
   }
 
@@ -43,7 +43,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
     for (MetricValue metricValue : metricValues) {
       if (!metricValue.getCommit().getId().equals(commitEntity.getId())) {
         commitEntity =
-            getCommitsInProjectRepository
+            commitRepository
                 .findById(metricValue.getCommit().getId(), 0)
                 .orElseThrow(() -> new CommitNotFoundException(metricValue.getCommit().getId()));
         commitEntity.setAnalyzed(true);
@@ -64,7 +64,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
       metricValueEntity.getCommit().getParents().clear();
       metricValueEntities.add(metricValueEntity);
     }
-    saveMetricRepository.save(metricValueEntities, 1);
+    metricRepository.save(metricValueEntities, 1);
   }
 
   private List<FindingEntity> mapFindingsToEntities(List<Finding> findings) {

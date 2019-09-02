@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.rest.integration.module;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.module.repository.CreateModuleRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.CreateProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.rest.integration.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,28 +14,28 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 class DeleteModuleControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Autowired private CreateProjectRepository createProjectRepository;
+  @Autowired private ProjectRepository projectRepository;
 
-  @Autowired private CreateModuleRepository createModuleRepository;
+  @Autowired private ModuleRepository moduleRepository;
 
   @Test
   void deleteModuleWithId() throws Exception {
     // Set up
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
-    createProjectRepository.save(testProject);
+    projectRepository.save(testProject);
 
     ModuleEntity module = new ModuleEntity();
     module.setPath("test-module");
     module.setProject(testProject);
-    module = createModuleRepository.save(module);
+    module = moduleRepository.save(module);
     final Long id = module.getId();
 
     // Test
     mvc()
         .perform(delete("/projects/" + testProject.getId() + "/modules/" + module.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andDo(result -> Assertions.assertFalse(createModuleRepository.findById(id).isPresent()))
+        .andDo(result -> Assertions.assertFalse(moduleRepository.findById(id).isPresent()))
             .andDo(document("modules/delete"));
   }
 
@@ -43,7 +43,7 @@ class DeleteModuleControllerIntegrationTest extends ControllerTestTemplate {
   void deleteModuleReturnsErrorWhenModuleNotFound() throws Exception {
     ProjectEntity testProject = new ProjectEntity();
     testProject.setId(0L);
-    createProjectRepository.save(testProject);
+    projectRepository.save(testProject);
 
     mvc()
         .perform(delete("/projects/0/modules/0"))

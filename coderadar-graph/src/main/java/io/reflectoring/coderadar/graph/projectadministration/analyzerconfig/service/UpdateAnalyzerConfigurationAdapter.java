@@ -1,39 +1,32 @@
 package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service;
 
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.AnalyzerConfigurationMapper;
-import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.GetAnalyzerConfigurationsFromProjectRepository;
-import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.UpdateAnalyzerConfigurationRepository;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.projectadministration.AnalyzerConfigurationNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class UpdateAnalyzerConfigurationAdapter implements UpdateAnalyzerConfigurationPort {
-  private final GetAnalyzerConfigurationsFromProjectRepository
-      getAnalyzerConfigurationsFromProjectRepository;
-  private final UpdateAnalyzerConfigurationRepository updateAnalyzerConfigurationRepository;
+  private final AnalyzerConfigurationRepository analyzerConfigurationRepository;
   private final AnalyzerConfigurationMapper analyzerConfigurationMapper =
       new AnalyzerConfigurationMapper();
 
   @Autowired
   public UpdateAnalyzerConfigurationAdapter(
-      GetAnalyzerConfigurationsFromProjectRepository getAnalyzerConfigurationsFromProjectRepository,
-      UpdateAnalyzerConfigurationRepository updateAnalyzerConfigurationRepository) {
-    this.getAnalyzerConfigurationsFromProjectRepository =
-        getAnalyzerConfigurationsFromProjectRepository;
-    this.updateAnalyzerConfigurationRepository = updateAnalyzerConfigurationRepository;
+      AnalyzerConfigurationRepository analyzerConfigurationRepository) {
+    this.analyzerConfigurationRepository = analyzerConfigurationRepository;
   }
 
   @Override
   public void update(AnalyzerConfiguration configuration)
       throws AnalyzerConfigurationNotFoundException {
     Optional<AnalyzerConfigurationEntity> peristedAnalyzerConfiguration =
-        getAnalyzerConfigurationsFromProjectRepository.findById(configuration.getId());
+        analyzerConfigurationRepository.findById(configuration.getId());
 
     if (peristedAnalyzerConfiguration.isPresent()) {
       peristedAnalyzerConfiguration.get().setAnalyzerName(configuration.getAnalyzerName());
@@ -45,7 +38,7 @@ public class UpdateAnalyzerConfigurationAdapter implements UpdateAnalyzerConfigu
                 analyzerConfigurationMapper.mapConfigurationFileDomainObject(
                     configuration.getAnalyzerConfigurationFile()));
       }
-      updateAnalyzerConfigurationRepository.save(peristedAnalyzerConfiguration.get());
+      analyzerConfigurationRepository.save(peristedAnalyzerConfiguration.get());
     } else {
       throw new AnalyzerConfigurationNotFoundException(configuration.getId());
     }
