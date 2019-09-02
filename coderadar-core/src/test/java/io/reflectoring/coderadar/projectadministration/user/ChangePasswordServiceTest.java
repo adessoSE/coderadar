@@ -27,7 +27,9 @@ class ChangePasswordServiceTest {
 
   @BeforeEach
   void setUp() {
-    this.testSubject = new ChangePasswordService(refreshTokenPortMock, refreshTokenServiceMock, changePasswordPortMock);
+    this.testSubject =
+        new ChangePasswordService(
+            refreshTokenPortMock, refreshTokenServiceMock, changePasswordPortMock);
   }
 
   @Test

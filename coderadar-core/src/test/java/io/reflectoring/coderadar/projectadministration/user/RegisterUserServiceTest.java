@@ -70,6 +70,6 @@ class RegisterUserServiceTest {
 
     // when / then
     assertThatThrownBy(() -> testSubject.register(registerUserCommand))
-            .isInstanceOf(UsernameAlreadyInUseException.class);
+        .isInstanceOf(UsernameAlreadyInUseException.class);
   }
 }

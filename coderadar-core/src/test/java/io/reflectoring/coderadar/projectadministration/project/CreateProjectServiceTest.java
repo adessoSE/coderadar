@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.projectadministration.project;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
@@ -23,21 +22,16 @@ import io.reflectoring.coderadar.vcs.UnableToCloneRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
-
 import java.io.File;
-import java.net.URI;
 import java.nio.file.Paths;
 import java.time.ZoneId;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
@@ -80,7 +74,8 @@ class CreateProjectServiceTest {
   }
 
   @Test
-  void returnsNewProjectIdAndClonesRepositoryAndSavesCommits(@Mock Commit commitMock) throws ProjectIsBeingProcessedException, UnableToCloneRepositoryException {
+  void returnsNewProjectIdAndClonesRepositoryAndSavesCommits(@Mock Commit commitMock)
+      throws ProjectIsBeingProcessedException, UnableToCloneRepositoryException {
     // given
     long expectedProjectId = 1L;
     String name = "proj";
@@ -91,14 +86,17 @@ class CreateProjectServiceTest {
     Date endDate = new Date();
     String projectWorkdirName = "project-workdir";
     String globalWorkdirName = "coderadar-workdir";
-    DateRange expectedDateRange = new DateRange(startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+    DateRange expectedDateRange =
+        new DateRange(
+            startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
             endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
     List<Commit> expectedCommits = Collections.singletonList(commitMock);
 
     CreateProjectCommand createCommand =
-            new CreateProjectCommand(name, vcsUsername, vcsPassword, vcsUrl, false, startDate, endDate);
+        new CreateProjectCommand(name, vcsUsername, vcsPassword, vcsUrl, false, startDate, endDate);
 
-    Project expectedProject = new Project()
+    Project expectedProject =
+        new Project()
             .setName(name)
             .setVcsUrl(vcsUrl)
             .setVcsUsername(vcsUsername)
@@ -109,29 +107,37 @@ class CreateProjectServiceTest {
             .setBeingProcessed(false)
             .setWorkdirName(projectWorkdirName);
 
-    CloneRepositoryCommand expectedCloneCommand = new CloneRepositoryCommand(vcsUrl,
-            new File(globalWorkdirName + "/projects/" + projectWorkdirName));
+    CloneRepositoryCommand expectedCloneCommand =
+        new CloneRepositoryCommand(
+            vcsUrl, new File(globalWorkdirName + "/projects/" + projectWorkdirName));
 
     when(workdirNameGeneratorMock.generate(name)).thenReturn(projectWorkdirName);
-    when(createProjectPort.createProject(expectedProject)).thenAnswer((Answer<Long>) invocation -> {
-      Project passedProject = invocation.getArgument(0);
-      passedProject.setId(expectedProjectId);
+    when(createProjectPort.createProject(expectedProject))
+        .thenAnswer(
+            (Answer<Long>)
+                invocation -> {
+                  Project passedProject = invocation.getArgument(0);
+                  passedProject.setId(expectedProjectId);
 
-      return expectedProjectId;
-    });
+                  return expectedProjectId;
+                });
 
-    doAnswer((Answer<Void>) invocation -> {
-      Runnable runnable = invocation.getArgument(0);
-      runnable.run();
+    doAnswer(
+            (Answer<Void>)
+                invocation -> {
+                  Runnable runnable = invocation.getArgument(0);
+                  runnable.run();
 
-      return null;
-    }).when(processProjectService).executeTask(any(), eq(expectedProjectId));
+                  return null;
+                })
+        .when(processProjectService)
+        .executeTask(any(), eq(expectedProjectId));
 
     when(coderadarConfigurationProperties.getWorkdir())
-            .thenReturn(new File(globalWorkdirName).toPath());
+        .thenReturn(new File(globalWorkdirName).toPath());
 
     when(getProjectCommitsUseCase.getCommits(Paths.get(projectWorkdirName), expectedDateRange))
-            .thenReturn(expectedCommits);
+        .thenReturn(expectedCommits);
 
     // when
     long actualProjectId = testSubject.createProject(createCommand);
@@ -156,6 +162,6 @@ class CreateProjectServiceTest {
 
     // when / then
     assertThatThrownBy(() -> testSubject.createProject(command))
-            .isInstanceOf(ProjectAlreadyExistsException.class);
+        .isInstanceOf(ProjectAlreadyExistsException.class);
   }
 }

@@ -1,5 +1,8 @@
 package io.reflectoring.coderadar.projectadministration.user;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
 import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.LoadUserPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.user.load.LoadUserResponse;
@@ -9,9 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class LoadUserServiceTest {
@@ -30,9 +30,7 @@ class LoadUserServiceTest {
     // given
     long userId = 1L;
     String username = "username";
-    User user = new User()
-            .setId(userId)
-            .setUsername(username);
+    User user = new User().setId(userId).setUsername(username);
 
     LoadUserResponse expectedResponse = new LoadUserResponse(userId, username);
 

@@ -1,12 +1,10 @@
 package io.reflectoring.coderadar.projectadministration.module;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
-import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.GetModulePort;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
@@ -31,7 +29,8 @@ class DeleteModuleServiceTest {
 
   @BeforeEach
   void setUp() {
-    this.testSubject = new DeleteModuleService(deleteModulePortMock, processProjectServiceMock, getModulePortMock);
+    this.testSubject =
+        new DeleteModuleService(deleteModulePortMock, processProjectServiceMock, getModulePortMock);
   }
 
   @Test
@@ -40,12 +39,16 @@ class DeleteModuleServiceTest {
     long moduleId = 1L;
     long projectId = 2L;
 
-    doAnswer((Answer<Void>) invocation -> {
-      Runnable runnable = invocation.getArgument(0);
-      runnable.run();
+    doAnswer(
+            (Answer<Void>)
+                invocation -> {
+                  Runnable runnable = invocation.getArgument(0);
+                  runnable.run();
 
-      return null;
-    }).when(processProjectServiceMock).executeTask(any(), eq(projectId));
+                  return null;
+                })
+        .when(processProjectServiceMock)
+        .executeTask(any(), eq(projectId));
 
     // when
     testSubject.delete(moduleId, projectId);

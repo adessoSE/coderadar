@@ -2,15 +2,14 @@ package io.reflectoring.coderadar.vcs.adapter;
 
 import io.reflectoring.coderadar.vcs.UnableToResetRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.ResetRepositoryPort;
+import java.io.IOException;
+import java.nio.file.Path;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.nio.file.Path;
 
 @Service
 public class ResetRepositoryAdapter implements ResetRepositoryPort {

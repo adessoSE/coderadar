@@ -5,11 +5,10 @@ import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ListFilePatternsOfProjectService implements ListFilePatternsOfProjectUseCase {
@@ -17,8 +16,7 @@ public class ListFilePatternsOfProjectService implements ListFilePatternsOfProje
   private final ListFilePatternsOfProjectPort port;
 
   @Autowired
-  public ListFilePatternsOfProjectService(
-      ListFilePatternsOfProjectPort port) {
+  public ListFilePatternsOfProjectService(ListFilePatternsOfProjectPort port) {
     this.port = port;
   }
 

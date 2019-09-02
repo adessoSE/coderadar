@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.analyzer.checkstyle;
 
 import com.puppycrawl.tools.checkstyle.PropertyResolver;
-
 import java.util.Properties;
 
 /**

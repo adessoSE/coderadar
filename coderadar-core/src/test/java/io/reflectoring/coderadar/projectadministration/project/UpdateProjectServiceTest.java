@@ -1,5 +1,10 @@
 package io.reflectoring.coderadar.projectadministration.project;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
@@ -16,14 +21,12 @@ import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
-
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,11 +34,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import org.springframework.scheduling.TaskScheduler;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateProjectServiceTest {
@@ -62,7 +60,8 @@ class UpdateProjectServiceTest {
 
   @BeforeEach
   void setUp() {
-    this.testSubject = new UpdateProjectService(
+    this.testSubject =
+        new UpdateProjectService(
             getProjectPortMock,
             updateProjectPortMock,
             updateRepositoryUseCaseMock,
@@ -75,7 +74,8 @@ class UpdateProjectServiceTest {
   }
 
   @Test
-  void updateProjectReturnsErrorWhenProjectWithNameAlreadyExists(@Mock Project projectToUpdateMock) {
+  void updateProjectReturnsErrorWhenProjectWithNameAlreadyExists(
+      @Mock Project projectToUpdateMock) {
     // given
     long projectId = 123L;
     String newProjectName = "new name";
@@ -94,9 +94,7 @@ class UpdateProjectServiceTest {
             newStartDate,
             newEndDate);
 
-    Project projectWithCollidingName = new Project()
-            .setId(1L)
-            .setName(newProjectName);
+    Project projectWithCollidingName = new Project().setId(1L).setName(newProjectName);
 
     when(getProjectPortMock.get(projectId)).thenReturn(projectToUpdateMock);
 
@@ -105,11 +103,13 @@ class UpdateProjectServiceTest {
 
     // when / then
     assertThatThrownBy(() -> testSubject.update(command, projectId))
-            .isInstanceOf(ProjectAlreadyExistsException.class);
+        .isInstanceOf(ProjectAlreadyExistsException.class);
   }
 
   @Test
-  void updateProjectSuccessfullyUpdatesProjectIfNameIsUnique(@Mock Project projectToUpdateMock, @Mock Commit commitMock) throws ProjectIsBeingProcessedException, UnableToUpdateRepositoryException {
+  void updateProjectSuccessfullyUpdatesProjectIfNameIsUnique(
+      @Mock Project projectToUpdateMock, @Mock Commit commitMock)
+      throws ProjectIsBeingProcessedException, UnableToUpdateRepositoryException {
     // given
     long projectId = 123L;
     String newProjectName = "new name";
@@ -121,43 +121,40 @@ class UpdateProjectServiceTest {
     String projectWorkdirName = "project-workdir";
     String globalWorkdirName = "coderadar-workdir";
 
-    DateRange expectedDateRange = new DateRange(
+    DateRange expectedDateRange =
+        new DateRange(
             newStartDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
-            newEndDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-    );
+            newEndDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
     UpdateProjectCommand command =
-            new UpdateProjectCommand(
-                    newProjectName,
-                    newUsername,
-                    newPassword,
-                    newVcsUrl,
-                    false,
-                    newStartDate,
-                    newEndDate);
+        new UpdateProjectCommand(
+            newProjectName, newUsername, newPassword, newVcsUrl, false, newStartDate, newEndDate);
 
     Path expectedUpdatedRepositoryPath =
-            new File(globalWorkdirName + "/projects/" + projectWorkdirName).toPath();
+        new File(globalWorkdirName + "/projects/" + projectWorkdirName).toPath();
 
     when(getProjectPortMock.get(projectId)).thenReturn(projectToUpdateMock);
     when(projectToUpdateMock.getWorkdirName()).thenReturn(projectWorkdirName);
     when(projectToUpdateMock.getVcsStart()).thenReturn(newStartDate);
     when(projectToUpdateMock.getVcsEnd()).thenReturn(newEndDate);
 
-    when(getProjectPortMock.findByName(newProjectName))
-            .thenReturn(Collections.emptyList());
+    when(getProjectPortMock.findByName(newProjectName)).thenReturn(Collections.emptyList());
 
-    doAnswer((Answer<Void>) invocation -> {
-      Runnable runnable = invocation.getArgument(0);
-      runnable.run();
+    doAnswer(
+            (Answer<Void>)
+                invocation -> {
+                  Runnable runnable = invocation.getArgument(0);
+                  runnable.run();
 
-      return null;
-    }).when(processProjectServiceMock).executeTask(any(), eq(projectId));
+                  return null;
+                })
+        .when(processProjectServiceMock)
+        .executeTask(any(), eq(projectId));
 
     when(configurationPropertiesMock.getWorkdir()).thenReturn(new File(globalWorkdirName).toPath());
 
     when(getProjectCommitsUseCaseMock.getCommits(Paths.get(projectWorkdirName), expectedDateRange))
-            .thenReturn(Collections.singletonList(commitMock));
+        .thenReturn(Collections.singletonList(commitMock));
 
     // when
     testSubject.update(command, projectId);

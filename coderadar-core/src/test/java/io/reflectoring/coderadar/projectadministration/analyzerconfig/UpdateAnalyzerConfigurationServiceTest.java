@@ -26,11 +26,12 @@ class UpdateAnalyzerConfigurationServiceTest {
   void setUp() {
     this.testSubject =
         new UpdateAnalyzerConfigurationService(
-                updateConfigurationPortMock, getConfigurationPortMock);
+            updateConfigurationPortMock, getConfigurationPortMock);
   }
 
   @Test
-  void updateAnalyzerConfigurationUpdatesNameAndEnabled(@Mock AnalyzerConfiguration existingConfigurationMock) {
+  void updateAnalyzerConfigurationUpdatesNameAndEnabled(
+      @Mock AnalyzerConfiguration existingConfigurationMock) {
     // given
     long configurationId = 1L;
     String newConfigurationName = "new analyzer name";

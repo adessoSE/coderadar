@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.filepattern;
 
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
@@ -10,10 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UpdateFilePatternServiceTest {
@@ -26,7 +25,8 @@ class UpdateFilePatternServiceTest {
 
   @BeforeEach
   void setUp() {
-    this.testSubject = new UpdateFilePatternService(getFilePatternPortMock, updateFilePatternPortMock);
+    this.testSubject =
+        new UpdateFilePatternService(getFilePatternPortMock, updateFilePatternPortMock);
   }
 
   @Test
@@ -36,8 +36,7 @@ class UpdateFilePatternServiceTest {
     String newPattern = "**/*.java";
     InclusionType newInclusionType = InclusionType.EXCLUDE;
 
-    UpdateFilePatternCommand command =
-            new UpdateFilePatternCommand(newPattern, newInclusionType);
+    UpdateFilePatternCommand command = new UpdateFilePatternCommand(newPattern, newInclusionType);
 
     when(getFilePatternPortMock.get(patternId)).thenReturn(existingFilePatternMock);
 

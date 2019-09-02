@@ -32,14 +32,10 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
     // given
     long projectId = 1L;
 
-    AnalyzerConfiguration analyzerConfiguration1 = new AnalyzerConfiguration()
-            .setId(1L)
-            .setAnalyzerName("analyzer 1")
-            .setEnabled(true);
-    AnalyzerConfiguration analyzerConfiguration2 = new AnalyzerConfiguration()
-            .setId(2L)
-            .setAnalyzerName("analyzer 2")
-            .setEnabled(false);
+    AnalyzerConfiguration analyzerConfiguration1 =
+        new AnalyzerConfiguration().setId(1L).setAnalyzerName("analyzer 1").setEnabled(true);
+    AnalyzerConfiguration analyzerConfiguration2 =
+        new AnalyzerConfiguration().setId(2L).setAnalyzerName("analyzer 2").setEnabled(false);
 
     List<AnalyzerConfiguration> configurations = new ArrayList<>();
     configurations.add(analyzerConfiguration1);

@@ -33,23 +33,19 @@ class ListFilePatternsOfProjectServiceTest {
     // given
     long projectId = 123L;
 
-    FilePattern filePattern1 = new FilePattern()
-            .setId(1L)
-            .setPattern("**/*.java")
-            .setInclusionType(InclusionType.INCLUDE);
-    FilePattern filePattern2 = new FilePattern()
-            .setId(2L)
-            .setPattern("**/*.xml")
-            .setInclusionType(InclusionType.EXCLUDE);
+    FilePattern filePattern1 =
+        new FilePattern().setId(1L).setPattern("**/*.java").setInclusionType(InclusionType.INCLUDE);
+    FilePattern filePattern2 =
+        new FilePattern().setId(2L).setPattern("**/*.xml").setInclusionType(InclusionType.EXCLUDE);
 
     List<FilePattern> filePatterns = new ArrayList<>();
     filePatterns.add(filePattern1);
     filePatterns.add(filePattern2);
 
     GetFilePatternResponse expectedResponse1 =
-            new GetFilePatternResponse(1L, "**/*.java", InclusionType.INCLUDE);
+        new GetFilePatternResponse(1L, "**/*.java", InclusionType.INCLUDE);
     GetFilePatternResponse expectedResponse2 =
-            new GetFilePatternResponse(2L, "**/*.xml", InclusionType.EXCLUDE);
+        new GetFilePatternResponse(2L, "**/*.xml", InclusionType.EXCLUDE);
 
     when(listPatternsPortMock.listFilePatterns(projectId)).thenReturn(filePatterns);
 

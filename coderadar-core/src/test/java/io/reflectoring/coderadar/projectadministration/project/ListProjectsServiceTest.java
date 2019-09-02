@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.project;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ListProjectsPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
@@ -14,13 +16,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @ExtendWith(MockitoExtension.class)
 class ListProjectsServiceTest {
 
-  @Mock
-  private ListProjectsPort listProjectsPort;
+  @Mock private ListProjectsPort listProjectsPort;
 
   private ListProjectsService testSubject;
 
@@ -35,7 +34,8 @@ class ListProjectsServiceTest {
     Date startDate = new Date();
     Date endDate = new Date();
 
-    Project project1 = new Project()
+    Project project1 =
+        new Project()
             .setId(1L)
             .setName("project 1")
             .setVcsUrl("http://github.com")
@@ -45,7 +45,8 @@ class ListProjectsServiceTest {
             .setVcsStart(startDate)
             .setVcsEnd(endDate);
 
-    Project project2 = new Project()
+    Project project2 =
+        new Project()
             .setId(2L)
             .setName("project 2")
             .setVcsUrl("http://bitbucket.org")
@@ -59,7 +60,8 @@ class ListProjectsServiceTest {
     projects.add(project1);
     projects.add(project2);
 
-    GetProjectResponse expectedResponse1 = new GetProjectResponse()
+    GetProjectResponse expectedResponse1 =
+        new GetProjectResponse()
             .setId(1L)
             .setName("project 1")
             .setVcsUrl("http://github.com")
@@ -68,7 +70,8 @@ class ListProjectsServiceTest {
             .setVcsOnline(true)
             .setStart(startDate)
             .setEnd(endDate);
-    GetProjectResponse expectedResponse2 = new GetProjectResponse()
+    GetProjectResponse expectedResponse2 =
+        new GetProjectResponse()
             .setId(2L)
             .setName("project 2")
             .setVcsUrl("http://bitbucket.org")

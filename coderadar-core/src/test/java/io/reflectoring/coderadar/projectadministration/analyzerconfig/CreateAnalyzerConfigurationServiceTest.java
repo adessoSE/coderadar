@@ -36,9 +36,8 @@ class CreateAnalyzerConfigurationServiceTest {
     CreateAnalyzerConfigurationCommand command =
         new CreateAnalyzerConfigurationCommand(analyzerName, analyzerEnabled);
 
-    AnalyzerConfiguration expectedConfiguration = new AnalyzerConfiguration()
-                    .setAnalyzerName(analyzerName)
-                    .setEnabled(analyzerEnabled);
+    AnalyzerConfiguration expectedConfiguration =
+        new AnalyzerConfiguration().setAnalyzerName(analyzerName).setEnabled(analyzerEnabled);
 
     when(createConfigurationPortMock.create(expectedConfiguration, projectId)).thenReturn(1L);
 

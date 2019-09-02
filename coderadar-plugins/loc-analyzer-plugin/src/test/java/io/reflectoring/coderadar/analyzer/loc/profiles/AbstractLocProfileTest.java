@@ -1,15 +1,14 @@
 package io.reflectoring.coderadar.analyzer.loc.profiles;
 
+import static org.assertj.core.api.Java6Assertions.assertThat;
+
 import io.reflectoring.coderadar.analyzer.loc.Loc;
 import io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin;
 import io.reflectoring.coderadar.analyzer.loc.LocCounter;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.ByteArrayOutputStream;
-
 import java.io.IOException;
 import java.io.InputStream;
-
-import static org.assertj.core.api.Java6Assertions.assertThat;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 
 public abstract class AbstractLocProfileTest {
 

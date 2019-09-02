@@ -1,11 +1,10 @@
 package io.reflectoring.coderadar.analyzer.loc.profiles;
 
-import io.reflectoring.coderadar.analyzer.loc.Loc;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import io.reflectoring.coderadar.analyzer.loc.Loc;
+import java.io.IOException;
+import org.junit.jupiter.api.Test;
 
 public class XmlLocProfileTest extends AbstractLocProfileTest {
 

@@ -32,7 +32,8 @@ class GetAnalyzerConfigurationServiceTest {
     String analyzerName = "analyzer";
     boolean analyzerEnabled = true;
 
-    AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration()
+    AnalyzerConfiguration analyzerConfiguration =
+        new AnalyzerConfiguration()
             .setId(configurationId)
             .setAnalyzerName(analyzerName)
             .setEnabled(analyzerEnabled);

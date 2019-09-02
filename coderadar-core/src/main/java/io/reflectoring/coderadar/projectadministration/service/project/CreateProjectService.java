@@ -72,15 +72,15 @@ public class CreateProjectService implements CreateProjectUseCase {
   }
 
   public CreateProjectService(
-          CreateProjectPort createProjectPort,
-          GetProjectPort getProjectPort,
-          CloneRepositoryUseCase cloneRepositoryUseCase,
-          CoderadarConfigurationProperties coderadarConfigurationProperties,
-          ProcessProjectService processProjectService,
-          GetProjectCommitsUseCase getProjectCommitsUseCase,
-          SaveCommitPort saveCommitPort,
-          ScanProjectScheduler scanProjectScheduler,
-          WorkdirNameGenerator workdirNameGenerator) {
+      CreateProjectPort createProjectPort,
+      GetProjectPort getProjectPort,
+      CloneRepositoryUseCase cloneRepositoryUseCase,
+      CoderadarConfigurationProperties coderadarConfigurationProperties,
+      ProcessProjectService processProjectService,
+      GetProjectCommitsUseCase getProjectCommitsUseCase,
+      SaveCommitPort saveCommitPort,
+      ScanProjectScheduler scanProjectScheduler,
+      WorkdirNameGenerator workdirNameGenerator) {
     this.createProjectPort = createProjectPort;
     this.getProjectPort = getProjectPort;
     this.cloneRepositoryUseCase = cloneRepositoryUseCase;
@@ -163,31 +163,27 @@ public class CreateProjectService implements CreateProjectUseCase {
   }
 
   /**
-   * Interface used to generate a random working directory name for a newly created
-   * project.
+   * Interface used to generate a random working directory name for a newly created project.
    *
    * @see CreateProjectService
    */
   public interface WorkdirNameGenerator {
 
     /**
-     *
      * @param projectName The name of the project to generate the working directory name for.
-     * @return A working directory name most likely not to collide with existing projects' working directories.
-     * Must be a valid directory name without any spaces or path separators.
+     * @return A working directory name most likely not to collide with existing projects' working
+     *     directories. Must be a valid directory name without any spaces or path separators.
      */
     String generate(String projectName);
-
   }
 
   /**
-   * {@link WorkdirNameGenerator} implementation using {@link UUID}s to generate
-   * working directory names.
+   * {@link WorkdirNameGenerator} implementation using {@link UUID}s to generate working directory
+   * names.
    */
   public class UUIDWorkdirNameGenerator implements WorkdirNameGenerator {
 
     /**
-     *
      * @param projectName The name of the project to generate the working directory name for.
      * @return The value returned {@link UUID#randomUUID()} as a string.
      */
@@ -195,7 +191,5 @@ public class CreateProjectService implements CreateProjectUseCase {
     public String generate(String projectName) {
       return UUID.randomUUID().toString();
     }
-
   }
-
 }

@@ -1,5 +1,9 @@
 package io.reflectoring.coderadar.projectadministration.user;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.projectadministration.AccessTokenNotExpiredException;
 import io.reflectoring.coderadar.projectadministration.RefreshTokenNotFoundException;
 import io.reflectoring.coderadar.projectadministration.UserNotFoundException;
@@ -15,10 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RefreshTokenServiceTest {
@@ -46,9 +46,7 @@ class RefreshTokenServiceTest {
     String username = "username";
     String expectedAccessToken = "expected-access-token";
 
-    User user = new User()
-            .setId(userId)
-            .setUsername(username);
+    User user = new User().setId(userId).setUsername(username);
 
     RefreshTokenCommand refreshTokenCommand = new RefreshTokenCommand(accessToken, refreshToken);
 
@@ -79,7 +77,7 @@ class RefreshTokenServiceTest {
 
     // when / then
     assertThatThrownBy(() -> testSubject.refreshToken(refreshTokenCommand))
-            .isInstanceOf(AccessTokenNotExpiredException.class);
+        .isInstanceOf(AccessTokenNotExpiredException.class);
   }
 
   @Test
@@ -95,7 +93,7 @@ class RefreshTokenServiceTest {
 
     // when / then
     assertThatThrownBy(() -> testSubject.refreshToken(refreshTokenCommand))
-            .isInstanceOf(RefreshTokenNotFoundException.class);
+        .isInstanceOf(RefreshTokenNotFoundException.class);
   }
 
   @Test
@@ -115,7 +113,7 @@ class RefreshTokenServiceTest {
 
     // when / then
     assertThatThrownBy(() -> testSubject.refreshToken(refreshTokenCommand))
-            .isInstanceOf(UserNotFoundException.class);
+        .isInstanceOf(UserNotFoundException.class);
   }
 
   @Test
@@ -127,9 +125,7 @@ class RefreshTokenServiceTest {
     String username = "username";
     String expectedAccessToken = "expected-access-token";
 
-    User user = new User()
-            .setId(userId)
-            .setUsername(username);
+    User user = new User().setId(userId).setUsername(username);
 
     when(refreshTokenPort.findByToken(refreshToken)).thenReturn(refreshTokenEntity);
     when(tokenService.getUsername(refreshToken)).thenReturn(username);
@@ -152,7 +148,7 @@ class RefreshTokenServiceTest {
 
     // when / then
     assertThatThrownBy(() -> testSubject.createAccessToken(refreshToken))
-            .isInstanceOf(RefreshTokenNotFoundException.class);
+        .isInstanceOf(RefreshTokenNotFoundException.class);
   }
 
   @Test
@@ -168,7 +164,7 @@ class RefreshTokenServiceTest {
 
     // when / then
     assertThatThrownBy(() -> testSubject.createAccessToken(refreshToken))
-            .isInstanceOf(UserNotFoundException.class);
+        .isInstanceOf(UserNotFoundException.class);
   }
 
   @Test
@@ -201,7 +197,7 @@ class RefreshTokenServiceTest {
 
     // when / then
     assertThatThrownBy(() -> testSubject.checkUser(refreshToken))
-            .isInstanceOf(RefreshTokenNotFoundException.class);
+        .isInstanceOf(RefreshTokenNotFoundException.class);
   }
 
   @Test
