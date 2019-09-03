@@ -86,22 +86,25 @@ public class UpdateProjectService implements UpdateProjectUseCase {
           project.setVcsOnline(command.getVcsOnline());
           project.setVcsStart(command.getStartDate());
           project.setVcsEnd(command.getEndDate());
+            updateProjectPort.update(project);
 
-          try {
-            updateRepositoryUseCase.updateRepository(
-                new File(
-                        coderadarConfigurationProperties.getWorkdir()
-                            + "/projects/"
-                            + project.getWorkdirName())
-                    .toPath());
+            if(!project.getVcsEnd().equals(command.getEndDate()) || !project.getVcsStart().equals(command.getStartDate())){
+                try {
+                    updateRepositoryUseCase.updateRepository(
+                            new File(
+                                    coderadarConfigurationProperties.getWorkdir()
+                                            + "/projects/"
+                                            + project.getWorkdirName())
+                                    .toPath());
 
-            List<Commit> commits =
-                getProjectCommitsUseCase.getCommits(
-                    Paths.get(project.getWorkdirName()), getProjectDateRange(project));
-            updateCommitsPort.updateCommits(commits, projectId);
-          } catch (UnableToUpdateRepositoryException e) {
-            logger.error(String.format("Unable to update project!%s", e.getMessage()));
-          }
+                    List<Commit> commits =
+                            getProjectCommitsUseCase.getCommits(
+                                    Paths.get(project.getWorkdirName()), getProjectDateRange(project));
+                    updateCommitsPort.updateCommits(commits, projectId);
+                } catch (UnableToUpdateRepositoryException e) {
+                    logger.error(String.format("Unable to update project!%s", e.getMessage()));
+                }
+            }
           updateProjectPort.update(project);
         },
         projectId);

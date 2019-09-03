@@ -30,8 +30,8 @@ public class ListProjectsService implements ListProjectsUseCase {
       resource.setVcsPassword(project.getVcsPassword());
       resource.setVcsOnline(project.isVcsOnline());
       resource.setVcsUrl(project.getVcsUrl());
-      resource.setStart(project.getVcsStart());
-      resource.setEnd(project.getVcsEnd());
+      resource.setStartDate(project.getVcsStart());
+      resource.setEndDate(project.getVcsEnd());
       response.add(resource);
     }
     return response;

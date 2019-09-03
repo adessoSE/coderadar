@@ -58,7 +58,9 @@ public class ScanProjectScheduler {
   @EventListener({ContextRefreshedEvent.class})
   public void onApplicationEvent() {
     for (Project project : listProjectsPort.getProjects()) {
-      scheduleUpdateTask(project);
+
+      //TODO: Figure out how to solve the problem of a project being concurrently modified
+      // scheduleUpdateTask(project);
     }
   }
 

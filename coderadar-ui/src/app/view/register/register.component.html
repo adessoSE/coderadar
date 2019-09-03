@@ -1,0 +1,43 @@
+<div class="login-card-form" fxLayoutAlign="center center">
+  <form ngNativeValidate (ngSubmit)="submitForm()">
+    <mat-card>
+
+      <!--Card title-->
+      <mat-card-header>
+        <mat-card-title>
+          <span>Coderadar</span>
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content fxLayout="column">
+
+        <!--Form fields-->
+        <mat-form-field>
+          <input [(ngModel)]="username" matInput maxlength="32" name="username" placeholder="Username" required
+                 type="text">
+        </mat-form-field>
+        <mat-form-field>
+          <input [(ngModel)]="password" matInput name="password" placeholder="Password" required type="password">
+        </mat-form-field>
+        <mat-form-field>
+          <input [(ngModel)]="confirmPassword" matInput name="confirmPassword" placeholder="Confirm password"
+                 required type="password">
+        </mat-form-field>
+
+        <!--Possible errors-->
+        <mat-error *ngIf="invalidUser">The chosen username is already in use!</mat-error>
+        <mat-error *ngIf="!validPassword">Password must be at least <br>8 symbols long and contain a character and a
+          digit!
+        </mat-error>
+        <mat-error *ngIf="passwordsDoNotMatch">Passwords do not match!</mat-error>
+
+        <div align="center" id="cardButtons">
+          <button mat-button routerLink="/login" type="button">Have an account? Log in</button>
+          <button color="primary" mat-raised-button type="submit">Sign up</button>
+        </div>
+
+      </mat-card-content>
+
+    </mat-card>
+  </form>
+</div>

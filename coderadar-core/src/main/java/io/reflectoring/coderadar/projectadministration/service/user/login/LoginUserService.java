@@ -42,7 +42,8 @@ public class LoginUserService implements LoginUserUseCase {
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(command.getUsername(), command.getPassword()));
     SecurityContextHolder.getContext().setAuthentication(authentication);
-
+    refreshTokenPort.deleteByUser(user);
+    
     String accessToken = tokenService.generateAccessToken(user.getId(), user.getUsername());
     String refreshToken = tokenService.generateRefreshToken(user.getId(), user.getUsername());
     saveRefreshToken(user, refreshToken);

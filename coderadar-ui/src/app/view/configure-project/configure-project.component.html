@@ -1,0 +1,109 @@
+<app-header [title]="[{location: '/dashboard', name: 'Dashboard'}, {location: '/project-configure/' + projectId, name: 'Configure ' + projectName}]"></app-header>
+
+<main class="mat-card-form">
+  <div class="grid-container" id="cardContainer">
+    <div fxLayoutAlign="center center">
+      <form (ngSubmit)="submitForm()">
+        <mat-card>
+
+          <!--Card title-->
+          <mat-card-header>
+            <mat-card-title>
+              <span>Configure {{(projectName)}}</span>
+            </mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
+
+            <!--Analyzers-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Select analyzers:</mat-label>
+              </div>
+              <div *ngFor="let analyzer of analyzers">
+                <mat-checkbox [(ngModel)]="analyzer.enabled" name="analyzer-{{analyzer.analyzerName}}">
+                  {{analyzer.analyzerName.split('.').pop()}}
+                </mat-checkbox>
+              </div>
+            </div>
+
+            <!--Included file patterns-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Included file patterns:</mat-label>
+              </div>
+              <div *ngFor="let pattern of filePatterns">
+                <div *ngIf="pattern.inclusionType === 'INCLUDE'">
+                  <span>{{pattern.pattern}}</span>
+                  <button (click)="addToDeletedFilePatterns(pattern)" mat-button>-</button>
+                </div>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <input [(ngModel)]="filePatternIncludeInput" matInput maxlength="100" name="includePatterns" placeholder="Pattern"
+                         type="text">
+                </mat-form-field>
+                <button (click)="addToPatterns('INCLUDE')" mat-button type="button">+</button>
+              </div>
+            </div>
+
+            <!--Excluded file patterns-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Excluded file patterns:</mat-label>
+              </div>
+              <div *ngFor="let pattern of filePatterns">
+                <div *ngIf="pattern.inclusionType === 'EXCLUDE'">
+                  <span>{{pattern.pattern}}</span>
+                  <button (click)="addToDeletedFilePatterns(pattern)" mat-button>-</button>
+                </div>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <input [(ngModel)]="filePatternExcludeInput" matInput maxlength="100" name="excludePatterns" placeholder="Pattern"
+                         type="text">
+                </mat-form-field>
+                <button (click)="addToPatterns('EXCLUDE')" mat-button style="float:right" type="button">+</button>
+              </div>
+            </div>
+
+            <!--Project modules-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Project modules:</mat-label>
+              </div>
+              <div *ngFor="let module of modules">
+                <span>{{module.modulePath}}</span>
+                <button (click)="addToDeletedModules(module)" mat-button>-</button>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <input [(ngModel)]="modulesInput" matInput maxlength="100" name="modules" placeholder="Module"
+                         type="text">
+                </mat-form-field>
+                <button (click)="addToModules()" mat-button style="float:right" type="button">+</button>
+              </div>
+            </div>
+
+            <mat-checkbox [(ngModel)]="startScan" name="analyzer">Start analyzing job</mat-checkbox>
+
+          </mat-card-content>
+
+          <!--Possible errors-->
+          <mat-error *ngIf="noAnalyzersForJob">Please select at least one analyzer to start an analyzing job.
+          </mat-error>
+          <mat-error *ngIf="noPatternsForJob">Please include at least one file pattern to start an analyzing job.
+          </mat-error>
+
+          <!--Cancel and submit buttons-->
+          <div align="center" id="cardButtons">
+            <button mat-stroked-button routerLink="/dashboard" type="button">Cancel</button>
+            <button color="primary" mat-raised-button type="submit">Done</button>
+          </div>
+        </mat-card>
+      </form>
+    </div>
+  </div>
+</main>
+
+<app-footer></app-footer>

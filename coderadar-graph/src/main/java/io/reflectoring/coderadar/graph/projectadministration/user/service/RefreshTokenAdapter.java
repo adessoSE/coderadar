@@ -38,12 +38,8 @@ public class RefreshTokenAdapter implements RefreshTokenPort {
   }
 
   @Override
-  @Transactional
   public void deleteByUser(User user) {
-    refreshTokenRepository.deleteByUser(
-        userRepository
-            .findById(user.getId())
-            .orElseThrow(() -> new UserNotFoundException(user.getId())));
+    refreshTokenRepository.deleteByUser((user.getId()));
   }
 
   @Override

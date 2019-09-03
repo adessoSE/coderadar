@@ -1,0 +1,40 @@
+<div id="legend-container">
+  <div class="legend-item">
+        <span class="legend-icon">
+            <fa-icon [icon]="faArrowsAltV"></fa-icon>
+        </span>
+    <small class="legend-label">{{heightMetric?.shortName}}</small>
+  </div>
+  <div class="legend-item">
+        <span class="legend-icon">
+            <fa-icon [icon]="faArrowsAlt"></fa-icon>
+        </span>
+    <small class="legend-label">{{groundAreaMetric?.shortName}}</small>
+  </div>
+  <div *ngIf="activeViewType === viewTypes.split" class="legend-item">
+            <span class="legend-icon">
+                    <fa-icon [icon]="faPalette"></fa-icon>
+                </span>
+    <small class="legend-label">{{colorMetric?.shortName}}</small>
+  </div>
+  <div *ngIf="activeViewType === viewTypes.merged" class="legend-item" id="legend-item-commit-1">
+    <span [ngStyle]="{'background': colorFirstCommit}" class="legend-color"></span>
+    <small class="legend-label">First revision</small>
+  </div>
+  <div *ngIf="activeViewType === viewTypes.merged" class="legend-item" id="legend-item-commit-2">
+    <span [ngStyle]="{'background': colorSecondCommit}" class="legend-color"></span>
+    <small class="legend-label">Second revision</small>
+  </div>
+  <div *ngIf="activeViewType === viewTypes.merged" class="legend-item" id="legend-item-added-files">
+    <span [ngStyle]="{'background': colorAddedFile}" class="legend-color"></span>
+    <small class="legend-label">added</small>
+  </div>
+  <div *ngIf="activeViewType === viewTypes.merged" class="legend-item" id="legend-item-deleted-files">
+    <span [ngStyle]="{'background': colorDeletedFile}" class="legend-color"></span>
+    <small class="legend-label">deleted</small>
+  </div>
+  <div *ngIf="activeViewType === viewTypes.merged" class="legend-item" id="legend-item-unchanged-files">
+    <span [ngStyle]="{'background': colorUnchangedFile}" class="legend-color"></span>
+    <small class="legend-label">unchanged</small>
+  </div>
+</div>
