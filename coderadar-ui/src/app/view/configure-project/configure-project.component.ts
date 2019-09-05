@@ -4,9 +4,10 @@ import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
 import {AnalyzerConfiguration} from '../../model/analyzer-configuration';
 import {FilePattern} from '../../model/file-pattern';
-import {FORBIDDEN} from 'http-status-codes';
+import {FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Module} from '../../model/module';
 import {Title} from '@angular/platform-browser';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-configure-project',
@@ -27,14 +28,13 @@ export class ConfigureProjectComponent implements OnInit {
   modulesInput;
   modules: Module[];
   deletedModules: Module[];
-  startScan: boolean;
   // Error fields
   noAnalyzersForJob: boolean;
   noPatternsForJob: boolean;
   analyzersExist: boolean;
   projectId: any;
 
-  constructor(private router: Router, private userService: UserService,  private titleService: Title,
+  constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService,  private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute) {
     this.projectName = '';
     this.filePatternIncludeInput = '';
@@ -45,7 +45,6 @@ export class ConfigureProjectComponent implements OnInit {
     this.analyzers = [];
     this.filePatterns = [];
     this.deletedFilePatterns = [];
-    this.startScan = false;
     this.noAnalyzersForJob = false;
     this.noPatternsForJob = false;
     this.analyzersExist = false;
@@ -68,29 +67,25 @@ export class ConfigureProjectComponent implements OnInit {
    * Does input validation and calls the appropriate submit method for each part of the form.
    */
   submitForm(): void {
-    this.noAnalyzersForJob = this.analyzers.filter(analyzer => analyzer.enabled).length === 0 && this.startScan === true;
-    this.noPatternsForJob = this.filePatterns.length === 0 && this.startScan === true;
-    if (!this.noAnalyzersForJob && !this.noPatternsForJob) {
-      this.noAnalyzersForJob = true;
-      Promise.all([
-        this.submitAnalyzerConfigurations(),
-        this.submitFilePatterns(),
-        this.submitModules()
-      ]).then(() => {
-        if (this.startScan) {
-          this.projectService.startAnalyzingJob(this.projectId, true).catch(error => {
-            if (error.status && error.status === FORBIDDEN) {
-              this.userService.refresh().then(() => this.projectService.startAnalyzingJob(this.projectId, true));
-            }
-          });
-        }
-        this.router.navigate(['/dashboard']);
-      }).catch(error => {
-        if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.submitForm());
-        }
-      });
-    }
+    this.noAnalyzersForJob = true;
+    Promise.all([
+      this.submitAnalyzerConfigurations(),
+      this.submitFilePatterns(),
+      this.submitModules()
+    ]).then(() => {
+      this.openSnackBar('Configuration saved!', '🞩');
+      this.router.navigate(['/dashboard']);
+    }).catch(error => {
+      if (error.status && error.status === FORBIDDEN) {
+        this.userService.refresh().then(() => this.submitForm());
+      }
+    });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 4000,
+    });
   }
 
   /**
@@ -99,7 +94,7 @@ export class ConfigureProjectComponent implements OnInit {
    */
   addToPatterns(type: string): void {
     let input = '';
-    if(type === 'INCLUDE'){
+    if (type === 'INCLUDE') {
       input = this.filePatternIncludeInput;
       this.filePatternIncludeInput = '';
     } else {
@@ -125,8 +120,8 @@ export class ConfigureProjectComponent implements OnInit {
    * and adds it to modules.
    */
   addToModules(): void {
-    if (this.modulesInput.trim() !== '' && this.modules.filter(m => m.modulePath === this.modulesInput).length === 0) {
-      const deletedModules = this.deletedModules.filter(m => m.modulePath === this.modulesInput);
+    if (this.modulesInput.trim() !== '' && this.modules.filter(m => m.path === this.modulesInput).length === 0) {
+      const deletedModules = this.deletedModules.filter(m => m.path === this.modulesInput);
       if (deletedModules.length !== 0) {
         this.modules.push(deletedModules[0]);
         this.deletedModules.splice(this.deletedModules.indexOf(deletedModules[0]), 1);
@@ -213,9 +208,9 @@ export class ConfigureProjectComponent implements OnInit {
   private getProjectFilePatterns(): void {
     this.projectService.getProjectFilePatterns(this.projectId)
       .then(response => {
-        if(response.body.length === 0){
+        if (response.body.length === 0) {
           this.filePatterns = [];
-        }else{
+        } else {
           this.filePatterns = response.body;
         }
       })
@@ -257,7 +252,7 @@ export class ConfigureProjectComponent implements OnInit {
    */
   private submitModules(): void {
     this.deletedModules.forEach(module => this.deleteModule(module));
-    this.modules.forEach(module => this.deleteModule(module));
+    this.modules.forEach(module => this.submitModule(module));
   }
 
   /**
@@ -342,10 +337,12 @@ export class ConfigureProjectComponent implements OnInit {
   }
 
   private submitFilePattern(pattern: FilePattern) {
-    this.projectService.addProjectFilePattern(this.projectId, pattern).catch(error => {
-      if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh().then(() => this.submitFilePattern(pattern));
-      }
-    });
+    if (pattern.id === null) {
+      this.projectService.addProjectFilePattern(this.projectId, pattern).catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh().then(() => this.submitFilePattern(pattern));
+        }
+      });
+    }
   }
 }

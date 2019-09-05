@@ -15,6 +15,5 @@ public class RefreshTokenEntity {
   private Long id;
   private String token;
 
-  @Relationship
-  private UserEntity user;
+  @Relationship private UserEntity user;
 }

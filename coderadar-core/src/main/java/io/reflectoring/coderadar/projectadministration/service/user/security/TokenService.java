@@ -87,7 +87,7 @@ public class TokenService {
     // verify signature and claims
     try {
       verifier.verify(token);
-    } catch (JWTVerificationException e){
+    } catch (JWTVerificationException e) {
       return false;
     }
     JWT jwtToken = JWT.decode(token);

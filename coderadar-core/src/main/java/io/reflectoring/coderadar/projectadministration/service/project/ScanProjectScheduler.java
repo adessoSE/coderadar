@@ -59,7 +59,7 @@ public class ScanProjectScheduler {
   public void onApplicationEvent() {
     for (Project project : listProjectsPort.getProjects()) {
 
-      //TODO: Figure out how to solve the problem of a project being concurrently modified
+      // TODO: Figure out how to solve the problem of a project being concurrently modified
       // scheduleUpdateTask(project);
     }
   }

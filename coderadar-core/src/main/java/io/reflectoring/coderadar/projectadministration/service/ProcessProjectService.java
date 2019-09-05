@@ -38,7 +38,6 @@ public class ProcessProjectService {
                   projectId)) { // check if the project still exists, this prevents exceptions if
                 // the project was deleted.
                 projectStatusPort.setBeingProcessed(projectId, false);
-                System.out.println("ASTE RESTESTSE");
               }
             }
           };

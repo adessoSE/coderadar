@@ -10,6 +10,7 @@ import {Module} from '../model/module';
 import {AppComponent} from '../app.component';
 import {IMetricMapping} from '../city-map/interfaces/IMetricMapping';
 import {INode} from '../city-map/interfaces/INode';
+import {MetricValue} from '../model/metric-value';
 
 @Injectable({
   providedIn: 'root'
@@ -101,7 +102,7 @@ export class ProjectService {
    * @param module The name (path) of the module.
    */
   public addProjectModule(id: number, module: Module): Promise<HttpResponse<any>> {
-    return this.httpClient.post(this.apiURL + 'projects/' + id + '/modules', {modulePath: module.modulePath},
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/modules', {path: module.path},
       {observe: 'response'}).toPromise();
   }
 
@@ -210,8 +211,8 @@ export class ProjectService {
    * @param commitName The name (hash) of the commit.
    * @param metricsNames The names of the wanted metrics.
    */
-  public getCommitsMetricValues(id: number, commitName: string, metricsNames: string[]): Promise<HttpResponse<any>> {
-    return this.httpClient.post(this.apiURL + 'projects/' + id + '/metricvalues/perCommit',
+  public getCommitsMetricValues(id: number, commitName: string, metricsNames: string[]): Promise<HttpResponse<MetricValue[]>> {
+    return this.httpClient.post<MetricValue[]>(this.apiURL + 'projects/' + id + '/metricvalues/perCommit',
       {commit: commitName, metrics: metricsNames}, {observe: 'response'}).toPromise();
   }
 
@@ -244,5 +245,9 @@ export class ProjectService {
 
   deleteProjectFilePattern(projectId: any, pattern: FilePattern) {
     return this.httpClient.delete(this.apiURL + 'projects/' + projectId + '/filePatterns/' + pattern.id, {observe: 'response'}).toPromise();
+  }
+
+  resetAnalysis(id: number, b: boolean) {
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze/reset', {}, {observe: 'response'}).toPromise();
   }
 }

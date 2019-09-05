@@ -8,6 +8,7 @@ import {HttpResponse} from '@angular/common/http';
 import {Title} from '@angular/platform-browser';
 import {Project} from '../../model/project';
 import {AppComponent} from '../../app.component';
+import {MetricValue} from '../../model/metric-value';
 
 @Component({
   selector: 'app-view-commit',
@@ -19,7 +20,7 @@ export class ViewCommitComponent implements OnInit {
   appComponent = AppComponent;
 
   commit: Commit = new Commit();
-  metrics = [];
+  metrics: MetricValue[] = [];
   projectId;
   project: Project;
 
@@ -45,14 +46,10 @@ export class ViewCommitComponent implements OnInit {
   private getCommitInfo(): void {
     this.getMetrics().then(response => {
       const metricsArray: string[] = [];
-      response.body.forEach(m => metricsArray.push(m.metricName));
+      response.body.forEach(m => metricsArray.push(m));
       this.projectService.getCommitsMetricValues(this.projectId, this.commit.name, metricsArray)
         .then(res => {
-          for (const i in res.body.metrics) {
-            if (res.body.metrics[i]) {
-              this.metrics.push([i, res.body.metrics[i]]);
-            }
-          }
+          this.metrics = res.body;
         })
         .catch(e => {
           if (e.status && e.status === FORBIDDEN) {

@@ -14,8 +14,8 @@ name: appComponent.trimProjectName(project.name)}, {location: '/project/' + proj
         <mat-label>Not yet analyzed or no metrics are available</mat-label>
       </div>
       <div *ngFor="let metric of metrics">
-        <mat-label>{{metric[0].split('.').pop() + ' : '}}
-          <b>{{metric[1]}}</b>
+        <mat-label>{{metric.metricName.split('.').pop() + ' : '}}
+          <b>{{metric.value}}</b>
         </mat-label>
         <br>
       </div>

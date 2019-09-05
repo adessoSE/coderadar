@@ -3,8 +3,9 @@ import {Project} from '../../model/project';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
-import {BAD_REQUEST, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND} from 'http-status-codes';
+import {BAD_REQUEST, CONFLICT, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-edit-project',
@@ -25,7 +26,7 @@ export class EditProjectComponent implements OnInit {
   nameEmpty = false;
   projectId: number;
 
-  constructor(private router: Router, private userService: UserService,  private titleService: Title,
+  constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService,  private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute) {
     this.project = new Project();
     this.projectName = '';
@@ -49,9 +50,11 @@ export class EditProjectComponent implements OnInit {
   submitForm(): void {
     if (!this.validateInput()) {
       this.projectService.editProject(this.project)
-        .then(() => this.router.navigate(['/dashboard']))
+        .then(() => {
+          this.router.navigate(['/dashboard']);
+          this.openSnackBar('Project successfully edited!', '🞩');
+        })
         .catch(error => {
-          console.log(error);
           if (error.status && error.status === FORBIDDEN) {
             this.userService.refresh().then(() => this.submitForm());
           } else if (error.status && error.status === BAD_REQUEST) {
@@ -62,12 +65,20 @@ export class EditProjectComponent implements OnInit {
                 }
               });
             }
-          } else if (error.status === INTERNAL_SERVER_ERROR &&
-            error.error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
+          } else if (error.status === CONFLICT &&
+            error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
             this.projectExists = true;
+          } else if (error.status === UNPROCESSABLE_ENTITY) {
+            this.openSnackBar('Project cannot be edited! Try again later!', '🞩');
           }
         });
     }
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 4000,
+    });
   }
 
   /**

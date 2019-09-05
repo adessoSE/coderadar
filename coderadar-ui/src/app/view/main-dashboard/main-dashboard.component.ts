@@ -3,9 +3,10 @@ import {Project} from '../../model/project';
 import {ProjectService} from '../../service/project.service';
 import {Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
-import {FORBIDDEN} from 'http-status-codes';
+import {FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import {AppComponent} from '../../app.component';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -18,7 +19,7 @@ export class MainDashboardComponent implements OnInit {
 
   appComponent = AppComponent;
 
-  constructor(private titleService: Title, private userService: UserService,
+  constructor(private snackBar: MatSnackBar, private titleService: Title, private userService: UserService,
               private router: Router, private projectService: ProjectService) {
     titleService.setTitle('Coderadar - Dashboard');
   }
@@ -43,6 +44,8 @@ export class MainDashboardComponent implements OnInit {
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.deleteProject(project));
+        } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
+          this.openSnackBar('Cannot delete project! Try again later!', '🞩');
         }
       });
   }
@@ -64,5 +67,33 @@ export class MainDashboardComponent implements OnInit {
       });
   }
 
+  startAnalysis(id: number) {
+    this.projectService.startAnalyzingJob(id, true).then(() => {
+      this.openSnackBar('Analysis started!', '🞩');
+    }).catch(error => {
+      if (error.status && error.status === FORBIDDEN) {
+        this.userService.refresh().then(() => this.projectService.startAnalyzingJob(id, true));
+      } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
+        this.openSnackBar('Analysis cannot be started! Try again later!', '🞩');
+      }
+    });
+  }
 
+  resetAnalysis(id: number) {
+    this.projectService.resetAnalysis(id, true).then(() => {
+      this.openSnackBar('Analysis results deleted!', '🞩');
+    }).catch(error => {
+      if (error.status && error.status === FORBIDDEN) {
+        this.userService.refresh().then(() => this.projectService.startAnalyzingJob(id, true));
+      } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
+        this.openSnackBar('Analysis results cannot be deleted! Try again later!', '🞩');
+      }
+    });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 4000,
+    });
+  }
 }

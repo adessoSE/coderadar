@@ -1,5 +1,5 @@
 export class FilePattern {
-  id: number;
+  id: number = null;
   pattern: string;
   inclusionType: string;
 }

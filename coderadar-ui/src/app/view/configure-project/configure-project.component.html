@@ -73,7 +73,7 @@
                 <mat-label>Project modules:</mat-label>
               </div>
               <div *ngFor="let module of modules">
-                <span>{{module.modulePath}}</span>
+                <span>{{module.path}}</span>
                 <button (click)="addToDeletedModules(module)" mat-button>-</button>
               </div>
               <div class="row">
@@ -84,9 +84,6 @@
                 <button (click)="addToModules()" mat-button style="float:right" type="button">+</button>
               </div>
             </div>
-
-            <mat-checkbox [(ngModel)]="startScan" name="analyzer">Start analyzing job</mat-checkbox>
-
           </mat-card-content>
 
           <!--Possible errors-->

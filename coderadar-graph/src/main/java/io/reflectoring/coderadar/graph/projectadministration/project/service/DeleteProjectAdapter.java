@@ -42,7 +42,7 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
         projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
     try {
       List<CommitEntity> commitEntities = commitRepository.findByProjectId(id);
-      commitEntities.forEach(commitRepository::delete);
+      commitRepository.deleteCommits(commitEntities);
       projectRepository.deleteProjectCascade(id);
       deleteWorkdir(projectEntity);
 

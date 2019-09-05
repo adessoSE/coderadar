@@ -27,6 +27,12 @@
             </mat-card-title>
           </mat-card-header>
           <mat-card-content class="mat-card-content">
+            <button (click)="startAnalysis(project.id)" style="float:right" mat-icon-button>
+              <mat-icon>play_arrow</mat-icon>
+            </button>
+            <button (click)="resetAnalysis(project.id)" style="float:right" mat-icon-button>
+              <mat-icon>clear</mat-icon>
+            </button>
             <div style="padding-bottom: 0">Project URL: <a href="{{project.vcsUrl}}" mat-flat-button>{{project.vcsUrl}}</a></div>
             <div>Project start date: <b>&nbsp;&nbsp;{{project.startDate}}</b></div>
             <div>Project end date: <b>&nbsp;&nbsp;{{project.endDate}}</b></div>

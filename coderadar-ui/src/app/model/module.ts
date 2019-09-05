@@ -1,9 +1,9 @@
 export class Module {
   public id: number;
-  public modulePath: string;
+  public path: string;
 
-  constructor(id?: number, modulePath?: string) {
+  constructor(id?: number, path?: string) {
     this.id = id;
-    this.modulePath = modulePath;
+    this.path = path;
   }
 }

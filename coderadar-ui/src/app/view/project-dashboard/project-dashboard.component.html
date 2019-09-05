@@ -5,7 +5,7 @@
     <br>
     <mat-label style="font-size: 12pt">Analyzed {{commitsAnalyzed}}/{{commits.length}} commits</mat-label>
   </p>
-  <mat-grid-list cols="1" rowHeight="130px">
+  <mat-grid-list cols="1" rowHeight="150px">
     <mat-grid-tile *ngFor="let commit of commits.slice(pageEvent.pageIndex*pageEvent.pageSize, (pageEvent.pageIndex*pageEvent.pageSize) + pageEvent.pageSize)"
                      [colspan]="1" [rowspan]="1">
       <mat-card [ngClass]=
@@ -16,6 +16,8 @@
         <mat-card-content class="mat-card-content">
           <a mat-button routerLink="/project/{{project.id}}/{{commit.name}}"><b>{{commit.name}}</b></a><br>
           <mat-label>Author: {{commit.author}}</mat-label>
+          <br>
+          <mat-label>Comment: {{commit.comment}}</mat-label>
           <br>
           <mat-label>Date: {{timestampToDate(commit.timestamp)}}</mat-label>
           <br>

@@ -5,13 +5,11 @@ import io.reflectoring.coderadar.graph.projectadministration.user.RefreshTokenMa
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.RefreshTokenRepository;
 import io.reflectoring.coderadar.graph.projectadministration.user.repository.UserRepository;
 import io.reflectoring.coderadar.projectadministration.RefreshTokenNotFoundException;
-import io.reflectoring.coderadar.projectadministration.UserNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.RefreshToken;
 import io.reflectoring.coderadar.projectadministration.domain.User;
 import io.reflectoring.coderadar.projectadministration.port.driven.user.RefreshTokenPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RefreshTokenAdapter implements RefreshTokenPort {
