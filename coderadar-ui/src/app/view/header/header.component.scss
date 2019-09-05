@@ -1,0 +1,26 @@
+header .toolbar {
+  top: 0;
+  position: fixed;
+  height: 60px;
+  z-index: 6;
+}
+
+header #dashboardLink {
+  font-size: 25pt;
+}
+
+header button {
+  font-size: 15pt;
+  position: fixed;
+  right: 30px
+}
+
+header .spacer {
+  top: 0;
+  height: 60px
+}
+
+mat-toolbar:last-child {
+  height: 80px;
+  z-index: 5;
+}

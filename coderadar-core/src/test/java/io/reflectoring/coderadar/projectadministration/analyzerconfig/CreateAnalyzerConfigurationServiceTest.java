@@ -4,10 +4,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import io.reflectoring.coderadar.analyzer.service.ListAnalyzerService;
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.CreateAnalyzerConfigurationService;
+import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.ListAnalyzerConfigurationsFromProjectService;
+import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,9 +24,19 @@ class CreateAnalyzerConfigurationServiceTest {
 
   private CreateAnalyzerConfigurationService testSubject;
 
+  @Mock
+  private ListAnalyzerConfigurationsFromProjectService
+      listAnalyzerConfigurationsFromProjectServiceMock;
+
+  @Mock private ListAnalyzerService listAnalyzerServiceMock;
+
   @BeforeEach
   void setUp() {
-    this.testSubject = new CreateAnalyzerConfigurationService(createConfigurationPortMock);
+    this.testSubject =
+        new CreateAnalyzerConfigurationService(
+            createConfigurationPortMock,
+            listAnalyzerServiceMock,
+            listAnalyzerConfigurationsFromProjectServiceMock);
   }
 
   @Test
@@ -40,6 +53,8 @@ class CreateAnalyzerConfigurationServiceTest {
         new AnalyzerConfiguration().setAnalyzerName(analyzerName).setEnabled(analyzerEnabled);
 
     when(createConfigurationPortMock.create(expectedConfiguration, projectId)).thenReturn(1L);
+    when(listAnalyzerServiceMock.listAvailableAnalyzers())
+        .thenReturn(Collections.singletonList(analyzerName));
 
     // when
     Long analyzerConfigurationId = testSubject.create(command, 1L);

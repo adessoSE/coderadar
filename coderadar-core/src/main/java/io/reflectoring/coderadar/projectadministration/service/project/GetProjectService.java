@@ -26,8 +26,8 @@ public class GetProjectService implements GetProjectUseCase {
     response.setVcsPassword(persistedProject.getVcsPassword());
     response.setVcsOnline(persistedProject.isVcsOnline());
     response.setVcsUrl(persistedProject.getVcsUrl());
-    response.setStart(persistedProject.getVcsStart());
-    response.setEnd(persistedProject.getVcsEnd());
+    response.setStartDate(persistedProject.getVcsStart());
+    response.setEndDate(persistedProject.getVcsEnd());
     return response;
   }
 }

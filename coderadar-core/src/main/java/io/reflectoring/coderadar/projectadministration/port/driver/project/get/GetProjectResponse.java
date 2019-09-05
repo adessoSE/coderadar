@@ -11,6 +11,6 @@ public class GetProjectResponse {
   private String vcsPassword;
   private String vcsUrl;
   private Boolean vcsOnline;
-  private Date start;
-  private Date end;
+  private Date startDate;
+  private Date endDate;
 }

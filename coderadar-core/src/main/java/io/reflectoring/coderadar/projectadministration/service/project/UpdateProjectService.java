@@ -84,23 +84,26 @@ public class UpdateProjectService implements UpdateProjectUseCase {
           project.setVcsUsername(command.getVcsUsername());
           project.setVcsPassword(command.getVcsPassword());
           project.setVcsOnline(command.getVcsOnline());
-          project.setVcsStart(command.getStartDate());
-          project.setVcsEnd(command.getEndDate());
+          updateProjectPort.update(project);
+          if (!project.getVcsEnd().equals(command.getEndDate())
+              || !project.getVcsStart().equals(command.getStartDate())) {
+            project.setVcsStart(command.getStartDate());
+            project.setVcsEnd(command.getEndDate());
+            try {
+              updateRepositoryUseCase.updateRepository(
+                  new File(
+                          coderadarConfigurationProperties.getWorkdir()
+                              + "/projects/"
+                              + project.getWorkdirName())
+                      .toPath());
 
-          try {
-            updateRepositoryUseCase.updateRepository(
-                new File(
-                        coderadarConfigurationProperties.getWorkdir()
-                            + "/projects/"
-                            + project.getWorkdirName())
-                    .toPath());
-
-            List<Commit> commits =
-                getProjectCommitsUseCase.getCommits(
-                    Paths.get(project.getWorkdirName()), getProjectDateRange(project));
-            updateCommitsPort.updateCommits(commits, projectId);
-          } catch (UnableToUpdateRepositoryException e) {
-            logger.error(String.format("Unable to update project!%s", e.getMessage()));
+              List<Commit> commits =
+                  getProjectCommitsUseCase.getCommits(
+                      Paths.get(project.getWorkdirName()), getProjectDateRange(project));
+              updateCommitsPort.updateCommits(commits, projectId);
+            } catch (UnableToUpdateRepositoryException e) {
+              logger.error(String.format("Unable to update project!%s", e.getMessage()));
+            }
           }
           updateProjectPort.update(project);
         },

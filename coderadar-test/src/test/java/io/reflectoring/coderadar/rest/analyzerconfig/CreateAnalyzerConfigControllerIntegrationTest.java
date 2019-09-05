@@ -32,7 +32,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
       ConstrainedFields<CreateAnalyzerConfigurationCommand> fields = fields(CreateAnalyzerConfigurationCommand.class);
 
     CreateAnalyzerConfigurationCommand command =
-        new CreateAnalyzerConfigurationCommand("analyzer", true);
+        new CreateAnalyzerConfigurationCommand("io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin", true);
     mvc()
         .perform(
             post("/projects/" + testProject.getId() + "/analyzers")
@@ -46,7 +46,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
               AnalyzerConfigurationEntity analyzerConfiguration =
                       analyzerConfigurationRepository.findById(id).get();
-              Assertions.assertEquals("analyzer", analyzerConfiguration.getAnalyzerName());
+              Assertions.assertEquals("io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin", analyzerConfiguration.getAnalyzerName());
               Assertions.assertTrue(analyzerConfiguration.getEnabled());
             })
             .andDo(
@@ -67,7 +67,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
   @Test
   void createAnalyzerConfigurationReturnsErrorWhenProjectNotFound() throws Exception {
     CreateAnalyzerConfigurationCommand command =
-        new CreateAnalyzerConfigurationCommand("analyzer", true);
+        new CreateAnalyzerConfigurationCommand("io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin", true);
     mvc()
         .perform(
             post("/projects/1/analyzers")
@@ -76,6 +76,42 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
+  }
+
+  @Test
+  void createAnalyzerConfigurationReturnsErrorWhenAnalyzerNotFound() throws Exception {
+    CreateAnalyzerConfigurationCommand command =
+            new CreateAnalyzerConfigurationCommand("analyzer", true);
+    mvc()
+            .perform(
+                    post("/projects/1/analyzers")
+                            .content(toJson(command))
+                            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isNotFound())
+            .andExpect(
+                    MockMvcResultMatchers.jsonPath("errorMessage").value("Analyzer with name analyzer not found"));
+  }
+
+  @Test
+  void createAnalyzerConfigurationReturnsErrorWhenAnalyzerAlreadyConfigured() throws Exception {
+    ProjectEntity testProject = new ProjectEntity();
+    testProject.setVcsUrl("https://valid.url");
+    AnalyzerConfigurationEntity analyzerConfigurationEntity = new AnalyzerConfigurationEntity();
+    analyzerConfigurationEntity.setAnalyzerName("io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin");
+    analyzerConfigurationEntity.setEnabled(true);
+    testProject.getAnalyzerConfigurations().add(analyzerConfigurationEntity);
+    testProject = projectRepository.save(testProject);
+
+    CreateAnalyzerConfigurationCommand command =
+            new CreateAnalyzerConfigurationCommand("io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin", true);
+    mvc()
+            .perform(
+                    post("/projects/" + testProject.getId() + "/analyzers")
+                            .content(toJson(command))
+                            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isConflict())
+            .andExpect(
+                    MockMvcResultMatchers.jsonPath("errorMessage").value("An analyzer with this name is already configured for the project!"));
   }
 
   @Test

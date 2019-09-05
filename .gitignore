@@ -8,6 +8,7 @@ coderadar-app/local.application.properties
 coderadar-app/coderadar-workdir/
 coderadar-test/coderadar-workdir/
 coderadar-test/src/test/resources/test-clone
+coderadar-ui/node_modules
 
 ### Eclipse ###
 

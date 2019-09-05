@@ -1,11 +1,15 @@
 package io.reflectoring.coderadar.projectadministration.service.analyzerconfig;
 
+import io.reflectoring.coderadar.analyzer.service.ListAnalyzerService;
+import io.reflectoring.coderadar.plugin.api.AnalyzerConfigurationException;
 import io.reflectoring.coderadar.projectadministration.AnalyzerConfigurationNotFoundException;
+import io.reflectoring.coderadar.projectadministration.AnalyzerNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,22 +18,48 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
 
   private final GetAnalyzerConfigurationPort getAnalyzerConfigurationPort;
   private final UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort;
+  private final ListAnalyzerService listAnalyzerService;
+  private final ListAnalyzerConfigurationsFromProjectService
+      listAnalyzerConfigurationsFromProjectService;
 
   @Autowired
   public UpdateAnalyzerConfigurationService(
       UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort,
-      GetAnalyzerConfigurationPort getAnalyzerConfigurationPort) {
+      GetAnalyzerConfigurationPort getAnalyzerConfigurationPort,
+      ListAnalyzerService listAnalyzerService,
+      ListAnalyzerConfigurationsFromProjectService listAnalyzerConfigurationsFromProjectService) {
     this.updateAnalyzerConfigurationPort = updateAnalyzerConfigurationPort;
     this.getAnalyzerConfigurationPort = getAnalyzerConfigurationPort;
+    this.listAnalyzerService = listAnalyzerService;
+    this.listAnalyzerConfigurationsFromProjectService =
+        listAnalyzerConfigurationsFromProjectService;
   }
 
   @Override
-  public void update(UpdateAnalyzerConfigurationCommand command, Long analyzerId)
+  public void update(UpdateAnalyzerConfigurationCommand command, Long analyzerId, Long projectId)
       throws AnalyzerConfigurationNotFoundException {
     AnalyzerConfiguration analyzerConfiguration =
         getAnalyzerConfigurationPort.getAnalyzerConfiguration(analyzerId);
-    analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
-    analyzerConfiguration.setEnabled(command.getEnabled());
-    updateAnalyzerConfigurationPort.update(analyzerConfiguration);
+
+    List<String> analyzers = listAnalyzerService.listAvailableAnalyzers();
+    if (analyzers.contains(command.getAnalyzerName())) {
+      if (listAnalyzerConfigurationsFromProjectService
+          .get(projectId)
+          .stream()
+          .noneMatch(
+              a ->
+                  a.getAnalyzerName().equals(command.getAnalyzerName())
+                      && !a.getId().equals(analyzerConfiguration.getId()))) {
+        analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
+        analyzerConfiguration.setEnabled(command.getEnabled());
+        updateAnalyzerConfigurationPort.update(analyzerConfiguration);
+      } else {
+        throw new AnalyzerConfigurationException(
+            "An analyzer with this name is already configured for the project!");
+      }
+    } else {
+      throw new AnalyzerNotFoundException(
+          "Analyzer with name " + command.getAnalyzerName() + " not found");
+    }
   }
 }

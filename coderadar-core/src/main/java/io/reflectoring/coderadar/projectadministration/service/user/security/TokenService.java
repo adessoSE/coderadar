@@ -85,7 +85,11 @@ public class TokenService {
     int leeway = configuration.getAuthentication().getRefreshTokenDurationInMinutes() * 60;
     JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret)).acceptExpiresAt(leeway).build();
     // verify signature and claims
-    verifier.verify(token);
+    try {
+      verifier.verify(token);
+    } catch (JWTVerificationException e) {
+      return false;
+    }
     JWT jwtToken = JWT.decode(token);
     return new Date().after(jwtToken.getExpiresAt());
   }

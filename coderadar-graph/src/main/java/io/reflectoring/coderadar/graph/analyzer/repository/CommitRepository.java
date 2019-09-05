@@ -29,7 +29,6 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
       "MATCH (p:ProjectEntity)-[:CONTAINS*]-(:FileEntity)-[:CHANGED_IN]->(c:CommitEntity) WHERE c.name = {0} AND ID(p) = {1} RETURN c")
   Optional<CommitEntity> findByNameAndProjectId(String commit, Long projectId);
 
-  @Query(
-      "MATCH (p:ProjectEntity)-[:CONTAINS*]-(:FileEntity)-[:CHANGED_IN]->(c:CommitEntity) WHERE c IN {0} AND ID(p) = {1} DELETE c")
+  @Query("MATCH (c:CommitEntity) WHERE c IN {0} DETACH DELETE c")
   void deleteCommits(List<CommitEntity> commitEntities);
 }

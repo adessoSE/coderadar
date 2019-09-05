@@ -84,6 +84,9 @@ class UpdateProjectServiceTest {
     Date newStartDate = new Date();
     Date newEndDate = new Date();
 
+    newStartDate.setTime(newStartDate.getTime() + 10000);
+    newEndDate.setTime(newEndDate.getTime() + 20000);
+
     UpdateProjectCommand command =
         new UpdateProjectCommand(
             newProjectName,
@@ -110,6 +113,7 @@ class UpdateProjectServiceTest {
   void updateProjectSuccessfullyUpdatesProjectIfNameIsUnique(
       @Mock Project projectToUpdateMock, @Mock Commit commitMock)
       throws ProjectIsBeingProcessedException, UnableToUpdateRepositoryException {
+
     // given
     long projectId = 123L;
     String newProjectName = "new name";
@@ -118,6 +122,10 @@ class UpdateProjectServiceTest {
     String newVcsUrl = "http://new.valid.url";
     Date newStartDate = new Date();
     Date newEndDate = new Date();
+
+    newStartDate.setTime(newStartDate.getTime() + 100000);
+    newEndDate.setTime(newEndDate.getTime() + 200000);
+
     String projectWorkdirName = "project-workdir";
     String globalWorkdirName = "coderadar-workdir";
 
@@ -135,8 +143,8 @@ class UpdateProjectServiceTest {
 
     when(getProjectPortMock.get(projectId)).thenReturn(projectToUpdateMock);
     when(projectToUpdateMock.getWorkdirName()).thenReturn(projectWorkdirName);
-    when(projectToUpdateMock.getVcsStart()).thenReturn(newStartDate);
-    when(projectToUpdateMock.getVcsEnd()).thenReturn(newEndDate);
+    when(projectToUpdateMock.getVcsStart()).thenReturn(new Date());
+    when(projectToUpdateMock.getVcsEnd()).thenReturn(new Date());
 
     when(getProjectPortMock.findByName(newProjectName)).thenReturn(Collections.emptyList());
 
