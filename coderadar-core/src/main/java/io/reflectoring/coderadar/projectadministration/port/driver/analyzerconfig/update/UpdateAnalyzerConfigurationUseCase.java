@@ -3,6 +3,6 @@ package io.reflectoring.coderadar.projectadministration.port.driver.analyzerconf
 import io.reflectoring.coderadar.projectadministration.AnalyzerConfigurationNotFoundException;
 
 public interface UpdateAnalyzerConfigurationUseCase {
-  void update(UpdateAnalyzerConfigurationCommand command, Long analyzerId)
+  void update(UpdateAnalyzerConfigurationCommand command, Long analyzerId, Long projectId)
       throws AnalyzerConfigurationNotFoundException;
 }

@@ -33,7 +33,7 @@ public class StartAnalyzingAdapter implements StartAnalyzingPort {
     Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
 
     if (persistedProject.isPresent()) {
-      if(persistedProject.get().getAnalyzingJob() == null) {
+      if (persistedProject.get().getAnalyzingJob() == null) {
         analyzingJob.setProject(persistedProject.get());
         return analyzingJobRepository.save(analyzingJob).getId();
       } else {
