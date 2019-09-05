@@ -23,7 +23,7 @@ class GetHistoryOfMetricAdapterTest {
     GetHistoryOfMetricAdapter getHistoryOfMetricAdapter = new GetHistoryOfMetricAdapter();
 
     GetHistoryOfMetricCommand command =
-        new GetHistoryOfMetricCommand(1L, "loc", new Date(), new Date(), Interval.DAY);
+        new GetHistoryOfMetricCommand("loc", new Date(), new Date(), Interval.DAY);
     Series returnedSeries = getHistoryOfMetricAdapter.get(command);
     Assertions.assertThat(returnedSeries).isNotNull();
   }
