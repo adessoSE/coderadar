@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetHistoryOfMetricCommand {
-  @NotBlank private Long projectId;
   @NotBlank private String metricName;
   private Date start;
   private Date end;

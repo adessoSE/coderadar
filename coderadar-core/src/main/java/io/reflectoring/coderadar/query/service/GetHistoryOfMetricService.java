@@ -17,7 +17,7 @@ public class GetHistoryOfMetricService implements GetHistoryOfMetricUseCase {
   }
 
   @Override
-  public Series get(GetHistoryOfMetricCommand command) {
+  public Series get(GetHistoryOfMetricCommand command, Long projectId) {
     return getHistoryOfMetricPort.get(command);
   }
 }
