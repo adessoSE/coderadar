@@ -23,9 +23,9 @@ class UpdateAnalyzerConfigurationControllerTest {
 
     UpdateAnalyzerConfigurationCommand command =
         new UpdateAnalyzerConfigurationCommand("analyzer", true);
-    ResponseEntity<String> responseEntity = testSubject.updateAnalyzerConfiguration(command, 1L);
+    ResponseEntity<String> responseEntity = testSubject.updateAnalyzerConfiguration(command, 1L, 2L);
 
-    Mockito.verify(updateAnalyzerConfigurationUseCase, Mockito.times(1)).update(command, 1L);
+    Mockito.verify(updateAnalyzerConfigurationUseCase, Mockito.times(1)).update(command, 1L, 2L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
   }
