@@ -58,8 +58,8 @@ class GetProjectServiceTest {
             .setVcsUsername(vcsUsername)
             .setVcsPassword(vcsPassword)
             .setVcsOnline(true)
-            .setStart(startDate)
-            .setEnd(endDate);
+            .setStartDate(startDate)
+            .setEndDate(endDate);
 
     when(getProjectPortMock.get(projectId)).thenReturn(project);
 

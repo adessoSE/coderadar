@@ -1,0 +1,27 @@
+<header>
+  <mat-toolbar class="mat-elevation-z6 toolbar" color="primary">
+    <a id="dashboardLink" mat-button routerLink="/dashboard">
+      <img alt="logo" src="../../../assets/logo.png">
+      &nbsp;Coderadar
+    </a>
+    <button [matMenuTriggerFor]="userDropdown" mat-button>
+      {{getUsername()}}
+      <img alt="user" height="60px" src="../../../assets/account.png" width="60px">
+      <mat-menu #userDropdown="matMenu" class="mat-menu-panel" xPosition="before">
+        <a mat-menu-item routerLink="/user-settings">User settings</a>
+        <a (click)="logout()" mat-menu-item>Logout</a>
+      </mat-menu>
+    </button>
+  </mat-toolbar>
+  <div class="spacer"></div>
+  <mat-toolbar class="md-elevation-z5" color="primary">
+    <span *ngFor="let breadcrumb of title; let i=index">
+      <a [disabled]="i === title.length-1" style="color:white; font-size: 16pt; margin: 7px"
+         mat-button routerLink="/{{breadcrumb.location}}">{{breadcrumb.name}}</a>
+      <a mat-button disabled style="min-width: 1px; width: 10px; margin-left: -20px">
+        <mat-icon style="font-size: 16pt; color: white;" *ngIf="i < title.length-1">arrow_forward_ios</mat-icon>
+      </a>
+    </span>
+  </mat-toolbar>
+</header>
+

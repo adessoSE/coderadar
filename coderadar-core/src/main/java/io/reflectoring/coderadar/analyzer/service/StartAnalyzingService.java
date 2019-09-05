@@ -109,7 +109,9 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     Collection<AnalyzerConfiguration> configs =
         getAnalyzerConfigurationsFromProjectPort.get(project.getId());
     for (AnalyzerConfiguration config : configs) {
-      analyzers.add(analyzerPluginService.createAnalyzer(config.getAnalyzerName()));
+      if (config.getEnabled()) {
+        analyzers.add(analyzerPluginService.createAnalyzer(config.getAnalyzerName()));
+      }
     }
 
     return analyzers;

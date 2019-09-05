@@ -1,0 +1,192 @@
+@import 'app/city-map/config';
+@import "./app/theme.scss";
+@include mat-core();
+@include angular-material-theme($coderadar-theme);
+
+/**
+General styles
+ */
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: whitesmoke;
+}
+
+footer {
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  height: 60px;
+}
+
+main {
+  min-height: calc(100vh - 240px);
+}
+
+/*
+Styles for most forms in the app
+ */
+
+.mat-card-form #cardContainer {
+  margin-top: 2%;
+}
+
+.mat-card-form mat-card {
+  width: 400px;
+}
+
+.mat-card-form mat-card-header {
+  justify-content: center;
+}
+
+.mat-card-form mat-card-title > span {
+  font-size: 20pt;
+}
+
+.mat-card-form #cardButtons button {
+  width: 25%;
+  margin: 10px;
+}
+
+/*
+Styles for the login and register forms
+ */
+
+
+.login-card-form {
+  margin-top: 10%;
+}
+
+.login-card-form mat-card-header {
+  justify-content: center;
+}
+
+.login-card-form mat-card-title > span {
+  font-size: 30pt;
+}
+
+.login-card-form #cardButtons button {
+  margin: 10px;
+}
+
+.login-card-form mat-card {
+  min-width: 22%;
+}
+
+.login-card-form form {
+  min-width: 22%;
+}
+
+#stage canvas {
+  position: absolute;
+  cursor: -webkit-grab;
+  transition: all 1s ease
+}
+
+#stage canvas:first-child {
+  left: 0
+}
+
+#stage canvas:last-child {
+  opacity: 0;
+  left: 100%
+}
+
+#stage.split canvas:last-child {
+  opacity: 1;
+  left: 50%
+}
+
+.dropdown-menu {
+  padding: 1.25rem
+}
+
+.ngui-auto-complete > ul {
+  min-width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
+  white-space: nowrap;
+  max-height: 250px
+}
+
+.ngui-auto-complete > ul li {
+  cursor: pointer;
+  padding: 10px 15px !important;
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis
+}
+
+.ngui-auto-complete > ul li.selected {
+  color: #000;
+  background-color: #f3f3f3 !important
+}
+
+.ngui-auto-complete > ul li:hover {
+  color: #000;
+  background-color: #f3f3f3 !important
+}
+
+#stage {
+  canvas {
+    position: absolute;
+    cursor: -webkit-grab;
+    transition: all 1s ease;
+
+    &:first-child {
+      left: 0;
+    }
+
+    &:last-child {
+      opacity: 0;
+      left: 100%;
+    }
+  }
+
+  &.split {
+    canvas:last-child {
+      opacity: 1;
+      left: 50%;
+    }
+  }
+}
+
+.dropdown-menu {
+  padding: 1.25rem;
+}
+
+/* Overwrite styles of ng2-auto-complete */
+.ngui-auto-complete {
+  width: auto;
+
+  & > ul {
+    min-width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
+    white-space: nowrap;
+    max-height: 250px;
+
+    & li {
+      cursor: pointer;
+      padding: 10px 15px !important;
+      max-width: 500px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &.selected {
+        color: $state-active-color;
+        background-color: $state-hover-color !important;
+      }
+
+      &:hover {
+        color: $state-active-color;
+        background-color: $state-hover-color !important;
+      }
+    }
+  }
+}
