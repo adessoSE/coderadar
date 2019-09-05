@@ -25,6 +25,6 @@ public class GetHistoryOfMetricController {
 
   @GetMapping(path = "/projects/{projectId}/metricvalues/history", consumes = "application/json", produces = "application/json")
   public ResponseEntity getHistoryOfMetric(@RequestBody @Validated GetHistoryOfMetricCommand command, @PathVariable Long projectId) {
-    return new ResponseEntity<>(new ErrorMessageResponse("This functionality is not implemented yet."), HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(new ErrorMessageResponse("This functionality is not implemented yet."), HttpStatus.NOT_IMPLEMENTED);
   }
 }
