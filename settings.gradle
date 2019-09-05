@@ -7,4 +7,5 @@ include 'coderadar-app'
 include 'coderadar-rest'
 include 'coderadar-graph'
 include 'coderadar-vcs'
+include 'coderadar-test'
 
