@@ -113,7 +113,7 @@ public class CreateProjectService implements CreateProjectUseCase {
                 getProjectCommitsUseCase.getCommits(
                     Paths.get(project.getWorkdirName()), getProjectDateRange(project)),
                 project.getId());
-            // scanProjectScheduler.scheduleUpdateTask(project);
+            scanProjectScheduler.scheduleUpdateTask(project);
           } catch (UnableToCloneRepositoryException e) {
             logger.error(String.format("Unable to clone repository: %s", e.getMessage()));
           }

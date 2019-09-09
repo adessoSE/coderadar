@@ -79,18 +79,21 @@ public class ScanProjectScheduler {
               if (currentProject.getVcsEnd() != null) {
                 return;
               }
+
               logger.info(
                   String.format("Scanning project %s for new commits!", currentProject.getName()));
-              updateRepositoryUseCase.updateRepository(
+              if (updateRepositoryUseCase.updateRepository(
                   Paths.get(
                       coderadarConfigurationProperties.getWorkdir()
                           + "/projects/"
-                          + currentProject.getWorkdirName()));
-              updateCommitsPort.updateCommits(
-                  getProjectCommitsUseCase.getCommits(
-                      Paths.get(currentProject.getWorkdirName()),
-                      getProjectDateRange(currentProject)),
-                  currentProject.getId());
+                          + currentProject.getWorkdirName()))) {
+                logger.info("UPDATING COMMITS!");
+                updateCommitsPort.updateCommits(
+                    getProjectCommitsUseCase.getCommits(
+                        Paths.get(currentProject.getWorkdirName()),
+                        getProjectDateRange(currentProject)),
+                    currentProject.getId());
+              }
             } catch (UnableToUpdateRepositoryException e) {
               logger.error(String.format("Unable to update the project: %s", e.getMessage()));
             }
