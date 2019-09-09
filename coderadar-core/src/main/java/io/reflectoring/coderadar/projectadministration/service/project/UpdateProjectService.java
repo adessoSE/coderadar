@@ -102,8 +102,6 @@ public class UpdateProjectService implements UpdateProjectUseCase {
           }
 
           if (datesChanged) {
-            project.setVcsStart(command.getStartDate());
-            project.setVcsEnd(command.getEndDate());
             try {
               updateRepositoryUseCase.updateRepository(
                   new File(
