@@ -58,9 +58,7 @@ public class ScanProjectScheduler {
   @EventListener({ContextRefreshedEvent.class})
   public void onApplicationEvent() {
     for (Project project : listProjectsPort.getProjects()) {
-
-      // TODO: Figure out how to solve the problem of a project being concurrently modified
-      // scheduleUpdateTask(project);
+      scheduleUpdateTask(project);
     }
   }
 
@@ -87,7 +85,6 @@ public class ScanProjectScheduler {
                       coderadarConfigurationProperties.getWorkdir()
                           + "/projects/"
                           + currentProject.getWorkdirName()))) {
-                logger.info("UPDATING COMMITS!");
                 updateCommitsPort.updateCommits(
                     getProjectCommitsUseCase.getCommits(
                         Paths.get(currentProject.getWorkdirName()),
