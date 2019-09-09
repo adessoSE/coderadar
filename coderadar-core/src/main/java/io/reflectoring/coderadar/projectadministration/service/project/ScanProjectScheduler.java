@@ -13,6 +13,7 @@ import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
@@ -82,7 +83,7 @@ public class ScanProjectScheduler {
             if (!projectStatusPort.isBeingProcessed(project.getId())) {
               try {
                 Project currentProject = getProjectPort.get(project.getId());
-                if (currentProject.getVcsEnd() != null) {
+                if (currentProject.getVcsEnd() != null && currentProject.getVcsEnd().before(new Date())) {
                   return;
                 }
                 logger.info(
