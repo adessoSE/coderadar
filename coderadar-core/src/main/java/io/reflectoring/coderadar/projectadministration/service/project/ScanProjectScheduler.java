@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.projectadministration.service.project;
 import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
@@ -12,6 +13,10 @@ import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +39,8 @@ public class ScanProjectScheduler {
   private final GetProjectPort getProjectPort;
 
   private final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
+
+  private Map<Long, ScheduledFuture<?>> tasks = new HashMap<>();
 
   @Autowired
   public ScanProjectScheduler(
@@ -69,33 +76,36 @@ public class ScanProjectScheduler {
    * @param project the project.
    */
   void scheduleUpdateTask(Project project) {
-    taskScheduler.scheduleAtFixedRate(
+    tasks.put(project.getId(), taskScheduler.scheduleAtFixedRate(
         () -> {
-          if (!projectStatusPort.isBeingProcessed(project.getId())) {
-            try {
-              Project currentProject = getProjectPort.get(project.getId());
-              if (currentProject.getVcsEnd() != null) {
-                return;
+          try {
+            if (!projectStatusPort.isBeingProcessed(project.getId())) {
+              try {
+                Project currentProject = getProjectPort.get(project.getId());
+                if (currentProject.getVcsEnd() != null) {
+                  return;
+                }
+                logger.info(
+                        String.format("Scanning project %s for new commits!", currentProject.getName()));
+                if (updateRepositoryUseCase.updateRepository(
+                        Paths.get(
+                                coderadarConfigurationProperties.getWorkdir()
+                                        + "/projects/"
+                                        + currentProject.getWorkdirName()))) {
+                  updateCommitsPort.updateCommits(
+                          getProjectCommitsUseCase.getCommits(
+                                  Paths.get(currentProject.getWorkdirName()),
+                                  getProjectDateRange(currentProject)),
+                          currentProject.getId());
+                }
+              } catch (UnableToUpdateRepositoryException e) {
+                logger.error(String.format("Unable to update the project: %s", e.getMessage()));
               }
-
-              logger.info(
-                  String.format("Scanning project %s for new commits!", currentProject.getName()));
-              if (updateRepositoryUseCase.updateRepository(
-                  Paths.get(
-                      coderadarConfigurationProperties.getWorkdir()
-                          + "/projects/"
-                          + currentProject.getWorkdirName()))) {
-                updateCommitsPort.updateCommits(
-                    getProjectCommitsUseCase.getCommits(
-                        Paths.get(currentProject.getWorkdirName()),
-                        getProjectDateRange(currentProject)),
-                    currentProject.getId());
-              }
-            } catch (UnableToUpdateRepositoryException e) {
-              logger.error(String.format("Unable to update the project: %s", e.getMessage()));
             }
+          } catch (ProjectNotFoundException e){
+            tasks.get(project.getId()).cancel(false);
           }
         },
-        coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000);
+        coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000));
   }
 }
