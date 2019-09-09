@@ -53,8 +53,8 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
     FileRepositoryBuilder builder = new FileRepositoryBuilder();
     Repository repository = builder.setWorkTree(repositoryRoot.toFile()).build();
     Git git = new Git(repository);
-    ObjectId id = git.getRepository().resolve(Constants.HEAD);
-    return !id.equals(
-        git.pull().setStrategy(MergeStrategy.THEIRS).call().getMergeResult().getNewHead());
+    ObjectId oldHead = git.getRepository().resolve(Constants.HEAD);
+    ObjectId newHead = git.pull().setStrategy(MergeStrategy.THEIRS).call().getMergeResult().getNewHead();
+    return !oldHead.equals(newHead);
   }
 }

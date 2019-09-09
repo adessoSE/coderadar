@@ -85,7 +85,6 @@ public class ScanProjectScheduler {
                       coderadarConfigurationProperties.getWorkdir()
                           + "/projects/"
                           + currentProject.getWorkdirName()))) {
-                logger.info("UPDATING COMMITS!");
                 updateCommitsPort.updateCommits(
                     getProjectCommitsUseCase.getCommits(
                         Paths.get(currentProject.getWorkdirName()),
