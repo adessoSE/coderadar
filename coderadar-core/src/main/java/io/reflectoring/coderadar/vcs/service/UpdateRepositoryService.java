@@ -18,7 +18,7 @@ public class UpdateRepositoryService implements UpdateRepositoryUseCase {
   }
 
   @Override
-  public void updateRepository(Path repositoryRoot) throws UnableToUpdateRepositoryException {
-    this.updateRepositoryPort.updateRepository(repositoryRoot);
+  public boolean updateRepository(Path repositoryRoot) throws UnableToUpdateRepositoryException {
+    return updateRepositoryPort.updateRepository(repositoryRoot);
   }
 }

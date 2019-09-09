@@ -5,5 +5,5 @@ import java.nio.file.Path;
 
 public interface UpdateRepositoryPort {
 
-  void updateRepository(Path repositoryRoot) throws UnableToUpdateRepositoryException;
+  boolean updateRepository(Path repositoryRoot) throws UnableToUpdateRepositoryException;
 }

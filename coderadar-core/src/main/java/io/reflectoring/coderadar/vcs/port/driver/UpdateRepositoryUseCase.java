@@ -11,6 +11,7 @@ public interface UpdateRepositoryUseCase {
    * @param repositoryRoot The path of the local repository.
    * @throws UnableToUpdateRepositoryException Thrown if there is an error while updating the
    *     repository.
+   * @return Returns true if new commits were added and false otherwise
    */
-  void updateRepository(Path repositoryRoot) throws UnableToUpdateRepositoryException;
+  boolean updateRepository(Path repositoryRoot) throws UnableToUpdateRepositoryException;
 }
