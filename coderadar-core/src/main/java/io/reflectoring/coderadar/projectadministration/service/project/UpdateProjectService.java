@@ -85,10 +85,23 @@ public class UpdateProjectService implements UpdateProjectUseCase {
           project.setVcsPassword(command.getVcsPassword());
           project.setVcsOnline(command.getVcsOnline());
           updateProjectPort.update(project);
-          if (!project.getVcsEnd().equals(command.getEndDate())
-              || !project.getVcsStart().equals(command.getStartDate())) {
+
+          boolean datesChanged = false;
+          if ((project.getVcsStart() == null && command.getStartDate() != null)
+              || (project.getVcsStart() != null
+                  && !project.getVcsStart().equals(command.getStartDate()))) {
             project.setVcsStart(command.getStartDate());
+            datesChanged = true;
+          }
+
+          if ((project.getVcsEnd() == null && command.getEndDate() != null)
+              || (project.getVcsEnd() != null
+                  && !project.getVcsEnd().equals(command.getEndDate()))) {
             project.setVcsEnd(command.getEndDate());
+            datesChanged = true;
+          }
+
+          if (datesChanged) {
             try {
               updateRepositoryUseCase.updateRepository(
                   new File(
