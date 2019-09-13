@@ -1,15 +1,17 @@
 package io.reflectoring.coderadar.rest.project;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
+import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
+import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private ProjectRepository projectRepository;
+  @Autowired private FilePatternRepository filePatternRepository;
 
   // This test has to be annotated with @DirtiesContext because custom Neo4j queries
   // cause problems when run inside an DB tansaction. Therefore the transaction propagation
@@ -27,18 +30,24 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   @DirtiesContext
   @Transactional(propagation = Propagation.NOT_SUPPORTED)
-  public void deleteProjectWithId() throws Exception {
+  void deleteProjectWithId() throws Exception {
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject = projectRepository.save(testProject);
     final Long id = testProject.getId();
 
+    FilePatternEntity filePatternEntity = new FilePatternEntity();
+    filePatternEntity.setInclusionType(InclusionType.INCLUDE);
+    filePatternEntity.setPattern("**/*.java");
+    filePatternEntity.setProject(testProject);
+    filePatternRepository.save(filePatternEntity);
+
     mvc()
         .perform(delete("/projects/" + id))
         .andExpect(status().isOk())
-        .andDo(
-            result -> Assertions.assertFalse(projectRepository.findById(id).isPresent()))
-            .andDo(document("projects/delete"));
+        .andDo(document("projects/delete"));
+
+    Assertions.assertFalse(projectRepository.findById(id).isPresent());
   }
 
   @Test
