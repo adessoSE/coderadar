@@ -13,8 +13,8 @@ import org.hibernate.validator.constraints.URL;
 @AllArgsConstructor
 public class UpdateProjectCommand {
   @NotBlank private String name;
-  @NotNull private String vcsUsername;
-  @NotNull private String vcsPassword;
+  private String vcsUsername;
+  private String vcsPassword;
   @NotNull @URL private String vcsUrl; // TODO: Should the user be able to change the url???
   @NotNull private Boolean vcsOnline;
   private Date startDate;
