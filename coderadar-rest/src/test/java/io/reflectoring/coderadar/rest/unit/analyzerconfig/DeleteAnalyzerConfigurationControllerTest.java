@@ -20,10 +20,10 @@ class DeleteAnalyzerConfigurationControllerTest {
     DeleteAnalyzerConfigurationController testSubject =
         new DeleteAnalyzerConfigurationController(deleteAnalyzerConfigurationUseCase);
 
-    ResponseEntity<String> responseEntity = testSubject.deleteAnalyzerConfiguration(1L);
+    ResponseEntity<String> responseEntity = testSubject.deleteAnalyzerConfiguration(1L, 2L);
 
     Mockito.verify(deleteAnalyzerConfigurationUseCase, Mockito.times(1))
-        .deleteAnalyzerConfiguration(1L);
+        .deleteAnalyzerConfiguration(1L, 2L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
   }

@@ -115,10 +115,12 @@ public class UpdateProjectService implements UpdateProjectUseCase {
                       Paths.get(project.getWorkdirName()), getProjectDateRange(project));
               updateCommitsPort.updateCommits(commits, projectId);
             } catch (UnableToUpdateRepositoryException e) {
-              logger.error(String.format("Unable to update project!%s", e.getMessage()));
+              logger.error(String.format("Unable to update project! %s", e.getMessage()));
             }
           }
           updateProjectPort.update(project);
+          logger.info(
+              String.format("Updated project %s with id %d", project.getName(), project.getId()));
         },
         projectId);
   }

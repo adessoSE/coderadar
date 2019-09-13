@@ -5,7 +5,9 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
+import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.DeleteProjectPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.project.DeleteProjectService;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,11 +24,15 @@ class DeleteProjectServiceTest {
 
   @Mock private ProcessProjectService processProjectServiceMock;
 
+  @Mock private GetProjectPort getProjectPort;
+
   private DeleteProjectService testSubject;
 
   @BeforeEach
   void setUp() {
-    this.testSubject = new DeleteProjectService(deleteProjectPortMock, processProjectServiceMock);
+    this.testSubject =
+        new DeleteProjectService(deleteProjectPortMock, processProjectServiceMock, getProjectPort);
+    when(getProjectPort.get(anyLong())).thenReturn(new Project());
   }
 
   @Test

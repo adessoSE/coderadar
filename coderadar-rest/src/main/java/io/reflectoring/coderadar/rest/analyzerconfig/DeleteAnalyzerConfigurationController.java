@@ -21,8 +21,8 @@ public class DeleteAnalyzerConfigurationController {
   }
 
   @DeleteMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}")
-  public ResponseEntity deleteAnalyzerConfiguration(@PathVariable Long analyzerConfigurationId) {
-      deleteAnalyzerConfigurationUseCase.deleteAnalyzerConfiguration(analyzerConfigurationId);
+  public ResponseEntity deleteAnalyzerConfiguration(@PathVariable("analyzerConfigurationId") Long analyzerConfigurationId, @PathVariable("projectId") Long projectId) {
+      deleteAnalyzerConfigurationUseCase.deleteAnalyzerConfiguration(analyzerConfigurationId, projectId);
       return new ResponseEntity<>(HttpStatus.OK);
   }
 }

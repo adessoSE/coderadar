@@ -5,6 +5,8 @@ import io.reflectoring.coderadar.analyzer.port.driver.ResetAnalysisUseCase;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ public class ResetAnalysisService implements ResetAnalysisUseCase {
   private final ResetAnalysisPort resetAnalysisPort;
   private final GetProjectPort getProjectPort;
   private final ProcessProjectService processProjectService;
+  private final Logger logger = LoggerFactory.getLogger(ResetAnalysisService.class);
 
   @Autowired
   public ResetAnalysisService(
@@ -29,6 +32,11 @@ public class ResetAnalysisService implements ResetAnalysisUseCase {
     if (!getProjectPort.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }
-    processProjectService.executeTask(() -> resetAnalysisPort.resetAnalysis(projectId), projectId);
+    processProjectService.executeTask(
+        () -> {
+          resetAnalysisPort.resetAnalysis(projectId);
+          logger.info(String.format("Reset analysis results for project with id %d", projectId));
+        },
+        projectId);
   }
 }

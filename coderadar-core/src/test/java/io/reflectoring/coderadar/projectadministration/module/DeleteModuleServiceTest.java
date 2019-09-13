@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
+import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.GetModulePort;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
@@ -31,6 +32,7 @@ class DeleteModuleServiceTest {
   void setUp() {
     this.testSubject =
         new DeleteModuleService(deleteModulePortMock, processProjectServiceMock, getModulePortMock);
+    when(getModulePortMock.get(anyLong())).thenReturn(new Module());
   }
 
   @Test
