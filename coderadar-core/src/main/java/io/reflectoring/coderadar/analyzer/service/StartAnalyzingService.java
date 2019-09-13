@@ -100,6 +100,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           saveMetricPort.saveMetricValues(metricValues, projectId);
           commitsToBeAnalyzed.forEach(saveCommitPort::saveCommit);
           stopAnalyzingPort.stop(projectId);
+          logger.info(String.format("Saved analysis results for project %s", project.getName()));
         },
         projectId);
   }

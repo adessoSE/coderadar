@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.service.project;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
@@ -20,6 +21,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,10 +111,15 @@ public class CreateProjectService implements CreateProjectUseCase {
                           + project.getWorkdirName()));
           try {
             cloneRepositoryUseCase.cloneRepository(cloneRepositoryCommand);
-            saveCommitPort.saveCommits(
+            logger.info(
+                String.format(
+                    "Cloned project %s from repository %s",
+                    project.getName(), cloneRepositoryCommand.getRemoteUrl()));
+            List<Commit> commits =
                 getProjectCommitsUseCase.getCommits(
-                    Paths.get(project.getWorkdirName()), getProjectDateRange(project)),
-                project.getId());
+                    Paths.get(project.getWorkdirName()), getProjectDateRange(project));
+            saveCommitPort.saveCommits(commits, project.getId());
+            logger.info(String.format("Saved project %s", project.getName()));
             scanProjectScheduler.scheduleUpdateTask(project);
           } catch (UnableToCloneRepositoryException e) {
             logger.error(String.format("Unable to clone repository: %s", e.getMessage()));

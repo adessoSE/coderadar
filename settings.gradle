@@ -8,4 +8,4 @@ include 'coderadar-rest'
 include 'coderadar-graph'
 include 'coderadar-vcs'
 include 'coderadar-test'
-
+include 'coderadar-ui'
