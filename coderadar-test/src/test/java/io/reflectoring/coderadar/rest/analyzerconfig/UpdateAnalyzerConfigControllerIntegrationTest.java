@@ -4,7 +4,6 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repo
 import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;

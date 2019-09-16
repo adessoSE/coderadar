@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.projectadministration.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.projectadministration.domain.RefreshToken;
 import io.reflectoring.coderadar.projectadministration.domain.User;

@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {Title} from '@angular/platform-browser';
+import {CONFLICT} from 'http-status-codes';
 
 @Component({
   selector: 'app-register',
@@ -40,7 +41,9 @@ export class RegisterComponent {
               () => this.router.navigate(['/dashboard']));
         })
         .catch(e => {
-          if (e.error && e.error.errorMessage === 'User ' + this.username + ' is already registered') {
+          console.log(e.error.errorMessage);
+          if (e.status === CONFLICT && e.error &&
+            e.error.errorMessage === 'A user with the username ' + this.username + ' already exists!') {
             this.invalidUser = true;
           }
         });
