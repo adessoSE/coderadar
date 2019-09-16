@@ -49,6 +49,7 @@ export class EditProjectComponent implements OnInit {
    */
   submitForm(): void {
     if (!this.validateInput()) {
+      console.log(this.project);
       this.projectService.editProject(this.project)
         .then(() => {
           this.router.navigate(['/dashboard']);
