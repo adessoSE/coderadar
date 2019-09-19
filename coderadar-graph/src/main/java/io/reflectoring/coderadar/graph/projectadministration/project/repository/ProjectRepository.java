@@ -14,6 +14,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
 
   List<ProjectEntity> findAllByName(String name);
 
-  @Query("MATCH (p:ProjectEntity)-[r*]-(c) WHERE ID(p) = {projectId} FOREACH(re IN r | DETACH DELETE p, re, c)")
+  @Query(
+      "MATCH (p:ProjectEntity)-[r*]-(c) WHERE ID(p) = {projectId} FOREACH(re IN r | DETACH DELETE p, re, c)")
   void deleteProjectCascade(@Param("projectId") Long projectId);
 }

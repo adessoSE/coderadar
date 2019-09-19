@@ -16,6 +16,7 @@ import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedEx
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.neo4j.ogm.session.Session;
 import org.springframework.core.task.TaskExecutor;
 
 @DisplayName("Create module")
@@ -24,6 +25,7 @@ class CreateModuleAdapterTest {
   private ProjectRepository projectRepository = mock(ProjectRepository.class);
   private final TaskExecutor taskExecutor = mock(TaskExecutor.class);
   private ProjectStatusAdapter projectStatusAdapter = mock(ProjectStatusAdapter.class);
+  private Session session = mock(Session.class);
 
   @Test
   @DisplayName("Should return ID when saving a module")
@@ -31,7 +33,7 @@ class CreateModuleAdapterTest {
       throws ModulePathInvalidException, ModuleAlreadyExistsException,
           ProjectIsBeingProcessedException {
     CreateModuleAdapter createModuleAdapter =
-        new CreateModuleAdapter(moduleRepository, projectRepository);
+        new CreateModuleAdapter(moduleRepository, projectRepository, session);
 
     ProjectEntity mockedProject = new ProjectEntity();
     FileEntity mockedFile = new FileEntity();

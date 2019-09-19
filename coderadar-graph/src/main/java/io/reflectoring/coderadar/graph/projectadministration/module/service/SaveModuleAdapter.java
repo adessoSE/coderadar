@@ -35,9 +35,6 @@ public class SaveModuleAdapter implements SaveModulePort {
             .findById(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
-    if (projectEntity.isBeingProcessed()) {
-      throw new ProjectIsBeingProcessedException(projectId);
-    }
     checkPathIsValid(moduleEntity, projectEntity);
     return moduleRepository.save(moduleEntity).getId();
   }

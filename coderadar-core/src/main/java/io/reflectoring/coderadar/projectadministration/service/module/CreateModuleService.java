@@ -7,9 +7,9 @@ import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.SaveModulePort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
-import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +18,16 @@ public class CreateModuleService implements CreateModuleUseCase {
 
   private final CreateModulePort createModulePort;
   private final SaveModulePort saveModulePort;
-  private final ProcessProjectService processProjectService;
+  private final ProjectStatusPort projectStatusPort;
 
   @Autowired
   public CreateModuleService(
       CreateModulePort createModulePort,
       SaveModulePort saveModulePort,
-      ProcessProjectService processProjectService) {
+      ProjectStatusPort projectStatusPort) {
     this.createModulePort = createModulePort;
     this.saveModulePort = saveModulePort;
-    this.processProjectService = processProjectService;
+    this.projectStatusPort = projectStatusPort;
   }
 
   @Override
@@ -35,12 +35,22 @@ public class CreateModuleService implements CreateModuleUseCase {
       throws ProjectNotFoundException, ModulePathInvalidException, ModuleAlreadyExistsException,
           ProjectIsBeingProcessedException {
 
-    Module module = new Module();
-    module.setPath(command.getPath());
-    Long moduleId = saveModulePort.saveModule(module, projectId);
+    if (projectStatusPort.isBeingProcessed(projectId)) {
+      throw new ProjectIsBeingProcessedException(projectId);
+    }
 
-    processProjectService.executeTask(
-        () -> createModulePort.createModule(moduleId, projectId), projectId);
+    projectStatusPort.setBeingProcessed(projectId, true);
+    Long moduleId;
+
+    try {
+      Module module = new Module();
+      module.setPath(command.getPath());
+      moduleId = saveModulePort.saveModule(module, projectId);
+      createModulePort.createModule(moduleId, projectId);
+    } finally {
+      projectStatusPort.setBeingProcessed(projectId, false);
+    }
+
     return moduleId;
   }
 }
