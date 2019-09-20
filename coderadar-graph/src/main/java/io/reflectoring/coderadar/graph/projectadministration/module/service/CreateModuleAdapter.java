@@ -10,6 +10,7 @@ import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import java.util.ArrayList;
 import java.util.List;
+import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,14 @@ import org.springframework.stereotype.Service;
 public class CreateModuleAdapter implements CreateModulePort {
   private final ModuleRepository moduleRepository;
   private final ProjectRepository projectRepository;
+  private final Session session;
 
   @Autowired
   public CreateModuleAdapter(
-      ModuleRepository moduleRepository, ProjectRepository projectRepository) {
+      ModuleRepository moduleRepository, ProjectRepository projectRepository, Session session) {
     this.moduleRepository = moduleRepository;
     this.projectRepository = projectRepository;
+    this.session = session;
   }
 
   /**
@@ -48,6 +51,7 @@ public class CreateModuleAdapter implements CreateModulePort {
     } else {
       attachModuleToProject(projectEntity, moduleEntity);
     }
+    session.clear();
   }
 
   /**
@@ -75,6 +79,7 @@ public class CreateModuleAdapter implements CreateModulePort {
       moduleRepository.detachModuleFromModule(parentModule.getId(), child.getId());
     }
     parentModule.getChildModules().add(childModule);
+    childModule.setParentModule(parentModule);
     moduleRepository.save(parentModule);
     moduleRepository.save(childModule);
   }

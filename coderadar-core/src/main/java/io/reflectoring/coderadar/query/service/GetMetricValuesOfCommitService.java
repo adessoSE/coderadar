@@ -33,7 +33,7 @@ public class GetMetricValuesOfCommitService implements GetMetricValuesOfCommitUs
 
   @Override
   public List<MetricValueForCommit> get(GetMetricsForCommitCommand command, Long projectId) {
-    if(getProjectPort.existsById(projectId)) {
+    if (getProjectPort.existsById(projectId)) {
       return getMetricValuesOfCommitPort.get(command, projectId);
     } else {
       throw new ProjectNotFoundException(projectId);

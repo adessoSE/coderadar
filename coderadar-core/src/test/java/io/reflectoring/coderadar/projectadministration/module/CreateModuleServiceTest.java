@@ -1,9 +1,8 @@
 package io.reflectoring.coderadar.projectadministration.module;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
@@ -11,15 +10,14 @@ import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedEx
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.SaveModulePort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
-import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.module.CreateModuleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
 
 @ExtendWith(MockitoExtension.class)
 class CreateModuleServiceTest {
@@ -28,15 +26,14 @@ class CreateModuleServiceTest {
 
   @Mock private SaveModulePort saveModulePortMock;
 
-  @Mock private ProcessProjectService processProjectServiceMock;
+  @Mock private ProjectStatusPort projectStatusPort;
 
   private CreateModuleService testSubject;
 
   @BeforeEach
   void setUp() {
     this.testSubject =
-        new CreateModuleService(
-            createModulePortMock, saveModulePortMock, processProjectServiceMock);
+        new CreateModuleService(createModulePortMock, saveModulePortMock, projectStatusPort);
   }
 
   @Test
@@ -52,17 +49,6 @@ class CreateModuleServiceTest {
     CreateModuleCommand command = new CreateModuleCommand("module-path");
 
     when(saveModulePortMock.saveModule(expectedModule, projectId)).thenReturn(expectedModuleId);
-
-    doAnswer(
-            (Answer<Void>)
-                invocation -> {
-                  Runnable runnable = invocation.getArgument(0);
-                  runnable.run();
-
-                  return null;
-                })
-        .when(processProjectServiceMock)
-        .executeTask(any(), eq(projectId));
 
     // when
     Long actualModuleId = testSubject.createModule(command, projectId);

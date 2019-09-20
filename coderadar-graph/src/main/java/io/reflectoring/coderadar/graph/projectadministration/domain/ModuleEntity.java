@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -26,12 +27,15 @@ public class ModuleEntity {
 
   @Relationship(direction = Relationship.INCOMING, type = "CONTAINS")
   @EqualsAndHashCode.Exclude
+  @ToString.Exclude
   private ModuleEntity parentModule;
 
   @Relationship(type = "CONTAINS")
   @EqualsAndHashCode.Exclude
+  @ToString.Exclude
   private List<ModuleEntity> childModules = new ArrayList<>();
 
   @Relationship(type = "CONTAINS")
+  @ToString.Exclude
   private List<FileEntity> files = new LinkedList<>();
 }
