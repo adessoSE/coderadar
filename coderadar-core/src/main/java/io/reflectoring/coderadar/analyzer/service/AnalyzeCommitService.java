@@ -54,9 +54,10 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
     } else {
       for (FileToCommitRelationship fileToCommitRelationship : commit.getTouchedFiles()) {
         String filePath = fileToCommitRelationship.getFile().getPath();
+        Long fileId = fileToCommitRelationship.getFile().getId();
         if (filePatterns.matches(filePath)) {
           FileMetrics fileMetrics = analyzeFile(commit, filePath, analyzers, project);
-          metricValues.addAll(getMetrics(fileMetrics, commit, filePath));
+          metricValues.addAll(getMetrics(fileMetrics, commit, fileId));
         }
       }
       commit.setAnalyzed(true);
@@ -84,7 +85,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
     return analyzeFileService.analyzeFile(analyzers, filepath, fileContent);
   }
 
-  private List<MetricValue> getMetrics(FileMetrics fileMetrics, Commit commit, String filepath) {
+  private List<MetricValue> getMetrics(FileMetrics fileMetrics, Commit commit, Long fileId) {
     List<MetricValue> metricValues = new ArrayList<>();
     for (Metric metric : fileMetrics.getMetrics()) {
       List<Finding> findings = new ArrayList<>();
@@ -100,7 +101,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
       }
       MetricValue metricValue =
           new MetricValue(
-              null, metric.getId(), fileMetrics.getMetricCount(metric), commit, findings, filepath);
+              null, metric.getId(), fileMetrics.getMetricCount(metric), commit, findings, fileId);
 
       metricValues.add(metricValue);
     }

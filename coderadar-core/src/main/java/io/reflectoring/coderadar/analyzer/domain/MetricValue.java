@@ -18,5 +18,5 @@ public class MetricValue {
 
   private List<Finding> findings = new LinkedList<>();
 
-  private String filepath;
+  private Long fileId;
 }

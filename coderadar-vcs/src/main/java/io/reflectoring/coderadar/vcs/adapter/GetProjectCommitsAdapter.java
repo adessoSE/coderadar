@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
+import com.google.common.collect.Iterables;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.analyzer.domain.FileToCommitRelationship;
@@ -14,10 +15,7 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -109,7 +107,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
   private void setFirstCommitFiles(
       Git git,
       Commit firstCommit,
-      HashMap<String, io.reflectoring.coderadar.analyzer.domain.File> files)
+      HashMap<String, List<io.reflectoring.coderadar.analyzer.domain.File>> files)
       throws IOException {
     RevCommit gitCommit = findCommit(git, firstCommit.getName());
     try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
@@ -117,12 +115,9 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
       treeWalk.setRecursive(true);
       treeWalk.addTree(gitCommit.getTree());
       while (treeWalk.next()) {
+        io.reflectoring.coderadar.analyzer.domain.File file;
 
-        io.reflectoring.coderadar.analyzer.domain.File file = files.get(treeWalk.getPathString());
-
-        if (file == null) {
-          file = new io.reflectoring.coderadar.analyzer.domain.File();
-        }
+        file = new io.reflectoring.coderadar.analyzer.domain.File();
         FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
 
         fileToCommitRelationship.setOldPath("/dev/null");
@@ -133,7 +128,9 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
 
         file.getCommits().add(fileToCommitRelationship);
         firstCommit.getTouchedFiles().add(fileToCommitRelationship);
-        files.put(file.getPath(), file);
+        List<io.reflectoring.coderadar.analyzer.domain.File> fileList = new ArrayList<>();
+        fileList.add(file);
+        files.put(file.getPath(), fileList);
       }
     }
   }
@@ -144,13 +141,14 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
    * @throws IOException Thrown if a commit cannot be processed.
    */
   private void setCommitsFiles(Git git, List<Commit> commits) throws IOException {
-    commits.sort((o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()));
-    HashMap<String, io.reflectoring.coderadar.analyzer.domain.File> files = new HashMap<>();
+    commits.sort(Comparator.comparing(Commit::getTimestamp));
+    HashMap<String, List<io.reflectoring.coderadar.analyzer.domain.File>> files = new HashMap<>();
+    setFirstCommitFiles(git, commits.get(0), files);
     DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
     diffFormatter.setRepository(git.getRepository());
     diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
     diffFormatter.setDetectRenames(true);
-    for (int i = 0; i < commits.size() - 1; i++) {
+    for (int i = 1; i < commits.size(); i++) {
       RevCommit gitCommit = findCommit(git, commits.get(i).getName());
 
       assert gitCommit != null;
@@ -160,32 +158,50 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
         for (DiffEntry diff : diffs) {
           ChangeType changeType = ChangeTypeMapper.jgitToCoderadar(diff.getChangeType());
           if (changeType != ChangeType.UNCHANGED) {
-            io.reflectoring.coderadar.analyzer.domain.File file = files.get(diff.getNewPath());
-            if (file == null) {
-              file = new io.reflectoring.coderadar.analyzer.domain.File();
+            io.reflectoring.coderadar.analyzer.domain.File file;
+
+            String path;
+            if(diff.getChangeType().equals(DiffEntry.ChangeType.DELETE)){
+              path = diff.getOldPath();
+            }else {
+              path = diff.getNewPath();
             }
+
+            List<io.reflectoring.coderadar.analyzer.domain.File> fileList =
+                    files.get(path);
+
+            if (fileList == null) {
+              fileList = new ArrayList<>();
+              file = new io.reflectoring.coderadar.analyzer.domain.File();
+              fileList.add(file);
+            } else {
+              if((diff.getChangeType().equals(DiffEntry.ChangeType.ADD))){
+                file = new io.reflectoring.coderadar.analyzer.domain.File();
+                fileList.add(file);
+              } else {
+                file = Iterables.getLast(fileList);
+              }
+            }
+
             FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
 
             fileToCommitRelationship.setOldPath(diff.getOldPath());
             fileToCommitRelationship.setChangeType(changeType);
             fileToCommitRelationship.setCommit(commits.get(i));
             fileToCommitRelationship.setFile(file);
-
-            // TODO: Why do we do this again???? ask Kilian maybe
-            if (changeType == ChangeType.DELETE) {
-              file.setPath(diff.getOldPath());
-            } else {
-              file.setPath(diff.getNewPath());
-            }
+            file.setPath(path);
 
             file.getCommits().add(fileToCommitRelationship);
             commits.get(i).getTouchedFiles().add(fileToCommitRelationship);
-            files.put(file.getPath(), file);
+            if (!files.containsKey(file.getPath())) {
+              files.put(file.getPath(), fileList);
+            } else {
+              files.replace(file.getPath(), fileList);
+            }
           }
         }
       }
     }
-    setFirstCommitFiles(git, commits.get(commits.size() - 1), files);
   }
 
   /**
