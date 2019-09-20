@@ -2,6 +2,7 @@ import {INode} from '../interfaces/INode';
 import {NodeType} from '../enum/NodeType';
 import {ScreenType} from '../enum/ScreenType';
 import {CommitReferenceType} from '../enum/CommitReferenceType';
+import {MetricValue} from "../../model/metric-value";
 
 export class ElementAnalyzer {
 
@@ -195,9 +196,9 @@ export class ElementAnalyzer {
     }
   }
 
-  static getValueFromMetric(metric: any, metricName: String) {
-    let index = metric ? Object.values(metric).findIndex(object => object.metricName === metricName): -1;
-    return index >= 0 ? Number(metric[index].value) : undefined;
+  static getValueFromMetric(metrics: MetricValue[], metricName: String) {
+    let index = metrics ? Object.values(metrics).findIndex(object => object.metricName === metricName): -1;
+    return index >= 0 ? Number(metrics[index].value) : undefined;
   }
 
 }
