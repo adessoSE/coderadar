@@ -9,6 +9,7 @@ import {Observable, of} from 'rxjs';
 import {Commit} from '../../model/commit';
 import {map} from 'rxjs/operators';
 import { AppEffects } from '../shared/effects';
+import {loadAvailableMetrics} from "../visualization/visualization.actions";
 
 @Component({
   selector: 'app-control-panel',
@@ -42,6 +43,7 @@ export class ControlPanelComponent implements OnInit {
   ngOnInit() {
     if (this.store !== undefined) {
       this.store.dispatch(loadCommits());
+      this.store.dispatch(loadAvailableMetrics());
 
       this.commits$ = this.store.select(fromRoot.getCommits).pipe(map(elements => elements.sort((a, b) => {
         if (a.timestamp === b.timestamp) {
