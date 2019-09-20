@@ -65,7 +65,7 @@ class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
             post("/user/registration")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .andExpect(MockMvcResultMatchers.status().isConflict());
   }
 
   private ResultHandler documentRegistration() {

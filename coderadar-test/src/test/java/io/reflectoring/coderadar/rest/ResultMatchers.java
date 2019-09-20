@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.test.web.servlet.ResultMatcher;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /** Collection of ResultMatchers to be used in MockMvc's fluent API. */
 public class ResultMatchers {
