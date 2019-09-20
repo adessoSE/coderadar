@@ -10,6 +10,9 @@ import io.reflectoring.coderadar.projectadministration.port.driven.module.SaveMo
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
+import io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ public class CreateModuleService implements CreateModuleUseCase {
   private final CreateModulePort createModulePort;
   private final SaveModulePort saveModulePort;
   private final ProjectStatusPort projectStatusPort;
+  private final Logger logger = LoggerFactory.getLogger(CreateProjectService.class);
 
   @Autowired
   public CreateModuleService(
@@ -50,7 +54,6 @@ public class CreateModuleService implements CreateModuleUseCase {
     } finally {
       projectStatusPort.setBeingProcessed(projectId, false);
     }
-
     return moduleId;
   }
 }

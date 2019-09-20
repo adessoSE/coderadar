@@ -3,5 +3,6 @@ package io.reflectoring.coderadar.projectadministration.port.driver.analyzerconf
 import io.reflectoring.coderadar.projectadministration.AnalyzerConfigurationNotFoundException;
 
 public interface DeleteAnalyzerConfigurationUseCase {
-  void deleteAnalyzerConfiguration(Long id) throws AnalyzerConfigurationNotFoundException;
+  void deleteAnalyzerConfiguration(Long id, Long projectId)
+      throws AnalyzerConfigurationNotFoundException;
 }

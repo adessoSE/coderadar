@@ -77,31 +77,28 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       throw new ProjectAlreadyExistsException(command.getName());
     }
 
-    this.processProjectService.executeTask(
-        () -> {
-          project.setName(command.getName());
-          project.setVcsUrl(command.getVcsUrl());
-          project.setVcsUsername(command.getVcsUsername());
-          project.setVcsPassword(command.getVcsPassword());
-          project.setVcsOnline(command.getVcsOnline());
-          updateProjectPort.update(project);
+    project.setName(command.getName());
+    project.setVcsUrl(command.getVcsUrl());
+    project.setVcsUsername(command.getVcsUsername());
+    project.setVcsPassword(command.getVcsPassword());
+    project.setVcsOnline(command.getVcsOnline());
+    boolean datesChanged = false;
+    if ((project.getVcsStart() == null && command.getStartDate() != null)
+        || (project.getVcsStart() != null
+            && !project.getVcsStart().equals(command.getStartDate()))) {
+      project.setVcsStart(command.getStartDate());
+      datesChanged = true;
+    }
 
-          boolean datesChanged = false;
-          if ((project.getVcsStart() == null && command.getStartDate() != null)
-              || (project.getVcsStart() != null
-                  && !project.getVcsStart().equals(command.getStartDate()))) {
-            project.setVcsStart(command.getStartDate());
-            datesChanged = true;
-          }
+    if ((project.getVcsEnd() == null && command.getEndDate() != null)
+        || (project.getVcsEnd() != null && !project.getVcsEnd().equals(command.getEndDate()))) {
+      project.setVcsEnd(command.getEndDate());
+      datesChanged = true;
+    }
 
-          if ((project.getVcsEnd() == null && command.getEndDate() != null)
-              || (project.getVcsEnd() != null
-                  && !project.getVcsEnd().equals(command.getEndDate()))) {
-            project.setVcsEnd(command.getEndDate());
-            datesChanged = true;
-          }
-
-          if (datesChanged) {
+    if (datesChanged) {
+      this.processProjectService.executeTask(
+          () -> {
             try {
               updateRepositoryUseCase.updateRepository(
                   new File(
@@ -115,11 +112,12 @@ public class UpdateProjectService implements UpdateProjectUseCase {
                       Paths.get(project.getWorkdirName()), getProjectDateRange(project));
               updateCommitsPort.updateCommits(commits, projectId);
             } catch (UnableToUpdateRepositoryException e) {
-              logger.error(String.format("Unable to update project!%s", e.getMessage()));
+              logger.error(String.format("Unable to update project! %s", e.getMessage()));
             }
-          }
-          updateProjectPort.update(project);
-        },
-        projectId);
+          },
+          projectId);
+    }
+    updateProjectPort.update(project);
+    logger.info(String.format("Updated project %s with id %d", project.getName(), project.getId()));
   }
 }

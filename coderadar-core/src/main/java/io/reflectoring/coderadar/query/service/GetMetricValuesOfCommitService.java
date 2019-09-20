@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.query.service;
 
 import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfCommitPort;
@@ -32,7 +33,10 @@ public class GetMetricValuesOfCommitService implements GetMetricValuesOfCommitUs
 
   @Override
   public List<MetricValueForCommit> get(GetMetricsForCommitCommand command, Long projectId) {
-    getProjectPort.get(projectId);
-    return getMetricValuesOfCommitPort.get(command, projectId);
+    if (getProjectPort.existsById(projectId)) {
+      return getMetricValuesOfCommitPort.get(command, projectId);
+    } else {
+      throw new ProjectNotFoundException(projectId);
+    }
   }
 }

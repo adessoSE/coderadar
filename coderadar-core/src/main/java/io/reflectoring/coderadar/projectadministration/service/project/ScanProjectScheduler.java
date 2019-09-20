@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,36 +76,40 @@ public class ScanProjectScheduler {
    * @param project the project.
    */
   void scheduleUpdateTask(Project project) {
-    tasks.put(project.getId(), taskScheduler.scheduleAtFixedRate(
-        () -> {
-          try {
-            if (!projectStatusPort.isBeingProcessed(project.getId())) {
+    tasks.put(
+        project.getId(),
+        taskScheduler.scheduleAtFixedRate(
+            () -> {
               try {
-                Project currentProject = getProjectPort.get(project.getId());
-                if (currentProject.getVcsEnd() != null && currentProject.getVcsEnd().before(new Date())) {
-                  return;
-                }
-                logger.info(
-                        String.format("Scanning project %s for new commits!", currentProject.getName()));
-                if (updateRepositoryUseCase.updateRepository(
+                if (!projectStatusPort.isBeingProcessed(project.getId())) {
+                  try {
+                    Project currentProject = getProjectPort.get(project.getId());
+                    if (currentProject.getVcsEnd() != null
+                        && currentProject.getVcsEnd().before(new Date())) {
+                      return;
+                    }
+                    logger.info(
+                        String.format(
+                            "Scanning project %s for new commits!", currentProject.getName()));
+                    if (updateRepositoryUseCase.updateRepository(
                         Paths.get(
-                                coderadarConfigurationProperties.getWorkdir()
-                                        + "/projects/"
-                                        + currentProject.getWorkdirName()))) {
-                  updateCommitsPort.updateCommits(
+                            coderadarConfigurationProperties.getWorkdir()
+                                + "/projects/"
+                                + currentProject.getWorkdirName()))) {
+                      updateCommitsPort.updateCommits(
                           getProjectCommitsUseCase.getCommits(
-                                  Paths.get(currentProject.getWorkdirName()),
-                                  getProjectDateRange(currentProject)),
+                              Paths.get(currentProject.getWorkdirName()),
+                              getProjectDateRange(currentProject)),
                           currentProject.getId());
+                    }
+                  } catch (UnableToUpdateRepositoryException e) {
+                    logger.error(String.format("Unable to update the project: %s", e.getMessage()));
+                  }
                 }
-              } catch (UnableToUpdateRepositoryException e) {
-                logger.error(String.format("Unable to update the project: %s", e.getMessage()));
+              } catch (ProjectNotFoundException e) {
+                tasks.get(project.getId()).cancel(false);
               }
-            }
-          } catch (ProjectNotFoundException e){
-            tasks.get(project.getId()).cancel(false);
-          }
-        },
-        coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000));
+            },
+            coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000));
   }
 }

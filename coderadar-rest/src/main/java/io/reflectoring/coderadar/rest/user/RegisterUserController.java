@@ -32,7 +32,7 @@ public class RegisterUserController {
       return new ResponseEntity<>(
           new IdResponse(registerUserUseCase.register(command)), HttpStatus.CREATED);
     } catch (UsernameAlreadyInUseException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.CONFLICT);
     }
   }
 }

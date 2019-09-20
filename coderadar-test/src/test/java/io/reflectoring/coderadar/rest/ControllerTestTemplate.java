@@ -26,10 +26,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Properties;
 
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.snippet.Attributes.key;
-
 @ExtendWith(RestDocumentationExtension.class)
 @Tag(ControllerTestTemplate.TAG)
 public abstract class ControllerTestTemplate extends IntegrationTestTemplate {

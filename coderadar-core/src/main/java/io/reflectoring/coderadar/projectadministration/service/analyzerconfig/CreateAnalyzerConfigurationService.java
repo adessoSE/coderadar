@@ -9,6 +9,8 @@ import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfi
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationUseCase;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
   private final ListAnalyzerService listAnalyzerService;
   private final ListAnalyzerConfigurationsFromProjectService
       listAnalyzerConfigurationsFromProjectService;
+  private final Logger logger = LoggerFactory.getLogger(CreateAnalyzerConfigurationService.class);
 
   @Autowired
   public CreateAnalyzerConfigurationService(
@@ -44,7 +47,12 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
         AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
         analyzerConfiguration.setEnabled(command.getEnabled());
         analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
-        return createAnalyzerConfigurationPort.create(analyzerConfiguration, projectId);
+        Long id = createAnalyzerConfigurationPort.create(analyzerConfiguration, projectId);
+        logger.info(
+            String.format(
+                "Added analyzerConfiguration %s for project with id %d",
+                analyzerConfiguration.getAnalyzerName(), projectId));
+        return id;
       } else {
         throw new AnalyzerConfigurationException(
             "An analyzer with this name is already configured for the project!");
