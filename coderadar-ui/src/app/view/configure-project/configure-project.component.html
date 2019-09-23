@@ -1,6 +1,6 @@
 <app-header [title]="[{location: '/dashboard', name: 'Dashboard'}, {location: '/project-configure/' + projectId, name: 'Configure ' + projectName}]"></app-header>
-<div *ngIf="moduleProcessed" class="dark-overlay">
-  <mat-spinner *ngIf="moduleProcessed" style="position: absolute;  margin-top: 15%; margin-left: 46%; z-index: 5" [diameter]="100"></mat-spinner>
+<div *ngIf="proccessing" class="dark-overlay">
+  <mat-spinner *ngIf="proccessing" style="position: absolute;  margin-top: 15%; margin-left: 46%; z-index: 5" [diameter]="100"></mat-spinner>
 </div>
 
 <main class="mat-card-form ">
@@ -24,7 +24,7 @@
                 <mat-label>Select analyzers:</mat-label>
               </div>
               <div *ngFor="let analyzer of analyzers">
-                <mat-checkbox (change)="submitAnalyzerConfigurations()" [(ngModel)]="analyzer.enabled" name="analyzer-{{analyzer.analyzerName}}">
+                <mat-checkbox (change)="submitAnalyzerConfiguration(analyzer)" [(ngModel)]="analyzer.enabled" name="analyzer-{{analyzer.analyzerName}}">
                   {{analyzer.analyzerName.split('.').pop()}}
                 </mat-checkbox>
               </div>
