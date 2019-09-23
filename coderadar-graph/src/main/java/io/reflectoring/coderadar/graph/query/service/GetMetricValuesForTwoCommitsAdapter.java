@@ -46,7 +46,13 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
             .getTimestamp();
 
     if (commit1Time.after(commit2Time)) {
-      throw new IllegalArgumentException("commit1 cannot be newer than commit2");
+      MetricTree temp = commit1Tree;
+      commit1Tree = commit2Tree;
+      commit2Tree = temp;
+
+      Date tempDate = commit1Time;
+      commit1Time = commit2Time;
+      commit2Time = tempDate;
     }
 
     List<String> addedFiles = new ArrayList<>();

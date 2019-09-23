@@ -161,21 +161,20 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
             io.reflectoring.coderadar.analyzer.domain.File file;
 
             String path;
-            if(diff.getChangeType().equals(DiffEntry.ChangeType.DELETE)){
+            if (diff.getChangeType().equals(DiffEntry.ChangeType.DELETE)) {
               path = diff.getOldPath();
-            }else {
+            } else {
               path = diff.getNewPath();
             }
 
-            List<io.reflectoring.coderadar.analyzer.domain.File> fileList =
-                    files.get(path);
+            List<io.reflectoring.coderadar.analyzer.domain.File> fileList = files.get(path);
 
             if (fileList == null) {
               fileList = new ArrayList<>();
               file = new io.reflectoring.coderadar.analyzer.domain.File();
               fileList.add(file);
             } else {
-              if((diff.getChangeType().equals(DiffEntry.ChangeType.ADD))){
+              if ((diff.getChangeType().equals(DiffEntry.ChangeType.ADD))) {
                 file = new io.reflectoring.coderadar.analyzer.domain.File();
                 fileList.add(file);
               } else {

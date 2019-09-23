@@ -9,7 +9,7 @@ import {Observable, of} from 'rxjs';
 import {Commit} from '../../model/commit';
 import {map} from 'rxjs/operators';
 import { AppEffects } from '../shared/effects';
-import {loadAvailableMetrics} from "../visualization/visualization.actions";
+import {loadAvailableMetrics} from '../visualization/visualization.actions';
 
 @Component({
   selector: 'app-control-panel',
@@ -31,7 +31,6 @@ export class ControlPanelComponent implements OnInit {
   uniqueFileList$: Observable<string[]>;
 
   activeViewType$: Observable<ViewType>;
-  screenShots$: Observable<any[]>;
 
   // disable the second commit chooser for demo purposes
   disableRightSelect: true;
