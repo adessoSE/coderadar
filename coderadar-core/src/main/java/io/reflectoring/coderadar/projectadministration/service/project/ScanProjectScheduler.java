@@ -107,7 +107,10 @@ public class ScanProjectScheduler {
                   }
                 }
               } catch (ProjectNotFoundException e) {
-                tasks.get(project.getId()).cancel(false);
+                ScheduledFuture f = tasks.get(project.getId());
+                if(f != null){
+                  f.cancel(false);
+                }
               }
             },
             coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000));

@@ -88,7 +88,6 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
 
         List<String> metrics = fromJson(new TypeReference<List<String>>() {}, result.getResponse().getContentAsString());
 
-        Assertions.assertEquals(13, metrics.size());
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.coding.PackageDeclarationCheck"));
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.OuterTypeFilenameCheck"));
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"));
@@ -96,7 +95,6 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"));
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"));
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocPackageCheck"));
-        Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"));
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"));
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.javadoc.WriteTagCheck"));
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"));
@@ -119,7 +117,6 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
 
         List<String> metrics = fromJson(new TypeReference<List<String>>() {}, result.getResponse().getContentAsString());
 
-        Assertions.assertEquals(17, metrics.size());
         Assertions.assertTrue(metrics.contains("coderadar:size:eloc:java"));
         Assertions.assertTrue(metrics.contains("coderadar:size:sloc:java"));
         Assertions.assertTrue(metrics.contains("coderadar:size:cloc:java"));
@@ -131,7 +128,6 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.indentation.IndentationCheck"));
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck"));
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocPackageCheck"));
-        Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"));
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocVariableCheck"));
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.javadoc.WriteTagCheck"));
         Assertions.assertTrue(metrics.contains("checkstyle:com.puppycrawl.tools.checkstyle.checks.design.VisibilityModifierCheck"));
