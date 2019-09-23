@@ -23,6 +23,7 @@ export class ViewCommitComponent implements OnInit {
   metrics: MetricValue[] = [];
   projectId;
   project: Project;
+  waiting = false;
 
 
   constructor(private router: Router, private userService: UserService, private titleService: Title,
@@ -44,12 +45,14 @@ export class ViewCommitComponent implements OnInit {
    * saves them in this.metrics;
    */
   private getCommitInfo(): void {
+    this.waiting = true;
     this.getMetrics().then(response => {
       const metricsArray: string[] = [];
       response.body.forEach(m => metricsArray.push(m));
       this.projectService.getCommitsMetricValues(this.projectId, this.commit.name, metricsArray)
         .then(res => {
           this.metrics = res.body;
+          this.waiting = false;
         })
         .catch(e => {
           if (e.status && e.status === FORBIDDEN) {

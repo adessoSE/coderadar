@@ -38,6 +38,7 @@ export class ProjectDashboardComponent implements OnInit {
   prevSelectedCommit2: Commit;
 
   pageSize = 5;
+  waiting = false;
 
   constructor(private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute,
@@ -107,6 +108,7 @@ export class ProjectDashboardComponent implements OnInit {
    * Gets all commits for this project from the service and saves them in this.commits.
    */
   private getCommits(): void {
+    this.waiting = true;
     this.projectService.getCommits(this.projectId)
       .then(response => {
         this.commits = response.body;
@@ -124,6 +126,7 @@ export class ProjectDashboardComponent implements OnInit {
             return 1;
           }
         });
+        this.waiting = false;
       })
       .catch(e => {
         if (e.status && e.status === FORBIDDEN) {

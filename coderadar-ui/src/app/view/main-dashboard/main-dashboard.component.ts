@@ -18,6 +18,7 @@ export class MainDashboardComponent implements OnInit {
   projects: Project[] = [];
 
   appComponent = AppComponent;
+  waiting = false;
 
   constructor(private snackBar: MatSnackBar, private titleService: Title, private userService: UserService,
               private router: Router, private projectService: ProjectService) {
@@ -55,11 +56,15 @@ export class MainDashboardComponent implements OnInit {
    * from the returned JSON. Sends a refresh token if access is denied.
    */
   private getProjects(): void {
+    this.waiting = true;
     this.projectService.getProjects()
-      .then(response => response.body.forEach(project => {
+      .then(response => {response.body.forEach(project => {
         const newProject = new Project(project);
         this.projects.push(newProject);
-      }))
+      });
+                         this.waiting = false;
+      }
+      )
       .catch(e => {
         if (e.status && e.status === FORBIDDEN) {
           this.userService.refresh().then(() => this.getProjects());
