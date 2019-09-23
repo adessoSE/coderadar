@@ -6,7 +6,7 @@
 <main class="mat-card-form ">
   <div class="grid-container" id="cardContainer">
     <div fxLayoutAlign="center center">
-      <form (ngSubmit)="submitForm()">
+      <form>
         <mat-card>
 
           <!--Card title-->
@@ -24,7 +24,7 @@
                 <mat-label>Select analyzers:</mat-label>
               </div>
               <div *ngFor="let analyzer of analyzers">
-                <mat-checkbox [(ngModel)]="analyzer.enabled" name="analyzer-{{analyzer.analyzerName}}">
+                <mat-checkbox (change)="submitAnalyzerConfigurations()" [(ngModel)]="analyzer.enabled" name="analyzer-{{analyzer.analyzerName}}">
                   {{analyzer.analyzerName.split('.').pop()}}
                 </mat-checkbox>
               </div>
@@ -38,7 +38,7 @@
               <div *ngFor="let pattern of filePatterns">
                 <div *ngIf="pattern.inclusionType === 'INCLUDE'">
                   <span>{{pattern.pattern}}</span>
-                  <button (click)="addToDeletedFilePatterns(pattern)" mat-button>-</button>
+                  <button (click)="deleteFilePattern(pattern)" mat-button>-</button>
                 </div>
               </div>
               <div class="row">
@@ -46,7 +46,7 @@
                   <input [(ngModel)]="filePatternIncludeInput" matInput maxlength="100" name="includePatterns" placeholder="Pattern"
                          type="text">
                 </mat-form-field>
-                <button (click)="addToPatterns('INCLUDE')" mat-button type="button">+</button>
+                <button (click)="submitFilePattern('INCLUDE')" mat-button type="button">+</button>
               </div>
             </div>
 
@@ -58,7 +58,7 @@
               <div *ngFor="let pattern of filePatterns">
                 <div *ngIf="pattern.inclusionType === 'EXCLUDE'">
                   <span>{{pattern.pattern}}</span>
-                  <button (click)="addToDeletedFilePatterns(pattern)" mat-button>-</button>
+                  <button (click)="deleteFilePattern(pattern)" mat-button>-</button>
                 </div>
               </div>
               <div class="row">
@@ -66,7 +66,7 @@
                   <input [(ngModel)]="filePatternExcludeInput" matInput maxlength="100" name="excludePatterns" placeholder="Pattern"
                          type="text">
                 </mat-form-field>
-                <button (click)="addToPatterns('EXCLUDE')" mat-button style="float:right" type="button">+</button>
+                <button (click)="submitFilePattern('EXCLUDE')" mat-button style="float:right" type="button">+</button>
               </div>
             </div>
 
@@ -87,20 +87,12 @@
                 <button (click)="submitModule()" mat-button style="float:right" type="button">+</button>
               </div>
               <mat-error *ngIf="moduleExists">A module with this name already exists!</mat-error>
-              <mat-error *ngIf="projectProcessed">Cannot change the project now! Try again later!</mat-error>
             </div>
           </mat-card-content>
 
-          <!--Possible errors-->
-          <mat-error *ngIf="noAnalyzersForJob">Please select at least one analyzer to start an analyzing job.
-          </mat-error>
-          <mat-error *ngIf="noPatternsForJob">Please include at least one file pattern to start an analyzing job.
-          </mat-error>
-
           <!--Cancel and submit buttons-->
           <div align="center" id="cardButtons">
-            <button mat-stroked-button routerLink="/dashboard" type="button">Cancel</button>
-            <button color="primary" mat-raised-button type="submit">Done</button>
+            <button color="primary" mat-raised-button routerLink="/dashboard">Done</button>
           </div>
         </mat-card>
       </form>
