@@ -25,6 +25,7 @@ export class EditProjectComponent implements OnInit {
   projectExists = false;
   nameEmpty = false;
   projectId: number;
+  waiting = false;
 
   constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService,  private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute) {
@@ -49,12 +50,15 @@ export class EditProjectComponent implements OnInit {
    */
   submitForm(): void {
     if (!this.validateInput()) {
+      this.waiting = true;
       this.projectService.editProject(this.project)
         .then(() => {
           this.router.navigate(['/dashboard']);
           this.openSnackBar('Project successfully edited!', '🞩');
+          this.waiting = false;
         })
         .catch(error => {
+          this.waiting = false;
           if (error.status && error.status === FORBIDDEN) {
             this.userService.refresh().then(() => this.submitForm());
           } else if (error.status && error.status === BAD_REQUEST) {

@@ -1,4 +1,7 @@
 <app-header [title]="[{location: '/dashboard', name: 'Dashboard'}, {location: '/project-edit/' + projectId, name: 'Edit ' + projectName}]"></app-header>
+<div *ngIf="waiting" class="dark-overlay">
+  <mat-spinner *ngIf="waiting" style="position: absolute;  margin-top: 15%; margin-left: 46%; z-index: 5" [diameter]="100"></mat-spinner>
+</div>
 
 <main class="mat-card-form">
   <div class="grid-container">
