@@ -17,3 +17,13 @@
 .list span {
   overflow-wrap: break-word;
 }
+
+.dark-overlay{
+  background-color: rgba(0,0,0,0.4);
+  position: fixed;
+  top: 0;
+  left:0;
+  width: 100%;
+  z-index: 3;
+  min-height: calc(100vh);
+}

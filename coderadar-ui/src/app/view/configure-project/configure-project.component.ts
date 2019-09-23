@@ -4,7 +4,7 @@ import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
 import {AnalyzerConfiguration} from '../../model/analyzer-configuration';
 import {FilePattern} from '../../model/file-pattern';
-import {FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
+import {CONFLICT, FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Module} from '../../model/module';
 import {Title} from '@angular/platform-browser';
 import {MatSnackBar} from '@angular/material';
@@ -28,11 +28,11 @@ export class ConfigureProjectComponent implements OnInit {
   modulesInput;
   modules: Module[];
   deletedModules: Module[];
-  // Error fields
-  noAnalyzersForJob: boolean;
-  noPatternsForJob: boolean;
+  moduleProcessed = false;
+
   analyzersExist: boolean;
   projectId: any;
+  moduleExists = false;
 
   constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService,  private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute) {
@@ -41,12 +41,8 @@ export class ConfigureProjectComponent implements OnInit {
     this.filePatternExcludeInput = '';
     this.modulesInput = '';
     this.modules = [];
-    this.deletedModules = [];
     this.analyzers = [];
     this.filePatterns = [];
-    this.deletedFilePatterns = [];
-    this.noAnalyzersForJob = false;
-    this.noPatternsForJob = false;
     this.analyzersExist = false;
   }
 
@@ -67,11 +63,8 @@ export class ConfigureProjectComponent implements OnInit {
    * Does input validation and calls the appropriate submit method for each part of the form.
    */
   submitForm(): void {
-    this.noAnalyzersForJob = true;
     Promise.all([
       this.submitAnalyzerConfigurations(),
-      this.submitFilePatterns(),
-      this.submitModules()
     ]).then(() => {
       this.openSnackBar('Configuration saved!', '🞩');
       this.router.navigate(['/dashboard']);
@@ -86,71 +79,6 @@ export class ConfigureProjectComponent implements OnInit {
     this.snackBar.open(message, action, {
       duration: 4000,
     });
-  }
-
-  /**
-   * Constructs a new FilePatterns object with whatever is in filePatternIncludeInput
-   * and adds it to filePatterns.
-   */
-  addToPatterns(type: string): void {
-    let input = '';
-    if (type === 'INCLUDE') {
-      input = this.filePatternIncludeInput;
-      this.filePatternIncludeInput = '';
-    } else {
-      input = this.filePatternExcludeInput;
-      this.filePatternExcludeInput = '';
-    }
-    if (input.trim() !== '' && this.filePatterns.filter(m => m.pattern === input).length === 0) {
-      const deletedFilePatterns = this.deletedFilePatterns.filter(m => m.pattern === input);
-      if (deletedFilePatterns.length !== 0) {
-        this.filePatterns.push(deletedFilePatterns[0]);
-        this.deletedFilePatterns.splice(this.deletedFilePatterns.indexOf(deletedFilePatterns[0]), 1);
-      } else {
-        const pattern = new FilePattern();
-        pattern.pattern = input;
-        pattern.inclusionType = type;
-        this.filePatterns.push(pattern);
-      }
-    }
-  }
-
-  /**
-   * Constructs a new Module object with whatever is in modulesInput
-   * and adds it to modules.
-   */
-  addToModules(): void {
-    if (this.modulesInput.trim() !== '' && this.modules.filter(m => m.path === this.modulesInput).length === 0) {
-      const deletedModules = this.deletedModules.filter(m => m.path === this.modulesInput);
-      if (deletedModules.length !== 0) {
-        this.modules.push(deletedModules[0]);
-        this.deletedModules.splice(this.deletedModules.indexOf(deletedModules[0]), 1);
-      } else {
-        const module = new Module(null, this.modulesInput);
-        this.modules.push(module);
-      }
-      this.modulesInput = '';
-    }
-  }
-
-  /**
-   * Removes the Module from this.modules and adds it this.deletedModules
-   */
-  addToDeletedModules(module: Module): void {
-    this.modules.splice(this.modules.indexOf(module), 1);
-    if (module.id != null) {
-      this.deletedModules.push(module);
-    }
-  }
-
-  /**
-   * Removes the FilePattern from this.filePatterns and adds it this.deletedFilePatterns
-   */
-  addToDeletedFilePatterns(filePattern: FilePattern): void {
-    this.filePatterns.splice(this.filePatterns.indexOf(filePattern), 1);
-    if (filePattern.id != null) {
-      this.deletedFilePatterns.push(filePattern);
-    }
   }
 
   /**
@@ -239,42 +167,34 @@ export class ConfigureProjectComponent implements OnInit {
   }
 
   /**
-   * Calls ProjectService.setProjectFilePatterns().
-   * Sends the refresh token if access is denied and repeats the request.
-   */
-  private submitFilePatterns(): void {
-    this.deletedFilePatterns.forEach(pattern => this.deleteFilePattern(pattern));
-    this.filePatterns.forEach(pattern => this.submitFilePattern(pattern));
-  }
-
-  /**
-   * Calls submitModule or deleteModule for every string in this.modules (as the REST API doesn't allow to send them all at once).
-   */
-  private submitModules(): void {
-    this.deletedModules.forEach(module => this.deleteModule(module));
-    this.modules.forEach(module => this.submitModule(module));
-  }
-
-  /**
-   * Calls ProjectService.addProjectModule() or editProjectModule()
+   * Calls ProjectService.addProjectModule()
    * depending on whether or not the module is new.
    * Sends the refresh token if access is denied and repeats the request.
-   * @param module The module to add to the project
    */
-  private submitModule(module: Module): void {
-    if (module.id == null) {
-      this.projectService.addProjectModule(this.projectId, module).catch(error => {
+  private submitModule(): void {
+    this.moduleExists = false;
+
+    const module: Module = new Module(null, this.modulesInput);
+    this.moduleProcessed = true;
+    this.projectService.addProjectModule(this.projectId, module).then(response => {
+        module.id = response.body.id;
+        this.moduleProcessed = false;
+        this.modules.push(module);
+        this.modulesInput = '';
+      })
+      .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.submitModule(module));
+          this.userService.refresh().then(() => this.submitModule());
+        }
+        if (error.status && error.status === CONFLICT) {
+          this.moduleExists = true;
+          this.moduleProcessed = false;
+        }
+        if (error.status && error.status === UNPROCESSABLE_ENTITY) {
+          this.moduleProcessed = false;
+          this.openSnackBar('Cannot edit the project! Try again later', '🞩');
         }
       });
-    } else if (module.id >= 0) {
-      this.projectService.editProjectModule(this.projectId, module).catch(error => {
-        if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.submitModule(module));
-        }
-      });
-    }
   }
 
   /**
@@ -283,9 +203,18 @@ export class ConfigureProjectComponent implements OnInit {
    * @param module The module to delete from the project
    */
   private deleteModule(module: Module): void {
-    this.projectService.deleteProjectModule(this.projectId, module).catch(error => {
+    this.moduleProcessed = true;
+    this.projectService.deleteProjectModule(this.projectId, module)
+      .then(() => {
+        this.moduleProcessed = false;
+        this.modules = this.modules.filter(value => value.path !== module.path);
+      }).catch(error => {
       if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh().then(() => this.submitModule(module));
+        this.userService.refresh().then(() => this.deleteModule(module));
+      }
+      if (error.status && error.status === UNPROCESSABLE_ENTITY) {
+        this.moduleProcessed = false;
+        this.openSnackBar('Cannot edit the project! Try again later', '🞩');
       }
     });
   }
@@ -310,6 +239,8 @@ export class ConfigureProjectComponent implements OnInit {
         .catch(error => {
           if (error.status && error.status === FORBIDDEN) {
             this.userService.refresh().then(() => this.submitAnalyzerConfiguration(analyzerConfiguration));
+          } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
+            this.openSnackBar('Cannot edit the project! Try again later', '🞩');
           }
         });
     } else {
@@ -317,6 +248,8 @@ export class ConfigureProjectComponent implements OnInit {
         .catch(error => {
           if (error.status && error.status === FORBIDDEN) {
             this.userService.refresh().then(() => this.submitAnalyzerConfiguration(analyzerConfiguration));
+          } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
+            this.openSnackBar('Cannot edit the project! Try again later', '🞩');
           }
         });
     }
@@ -329,20 +262,36 @@ export class ConfigureProjectComponent implements OnInit {
    * @param pattern The pattern to delete from the project
    */
   private deleteFilePattern(pattern: FilePattern): void {
-    this.projectService.deleteProjectFilePattern(this.projectId, pattern).catch(error => {
+    this.projectService.deleteProjectFilePattern(this.projectId, pattern)
+      .then(() => this.filePatterns = this.filePatterns.filter(value => value !== pattern))
+      .catch(error => {
       if (error.status && error.status === FORBIDDEN) {
         this.userService.refresh().then(() => this.deleteFilePattern(pattern));
       }
     });
   }
 
-  private submitFilePattern(pattern: FilePattern) {
-    if (pattern.id === null) {
-      this.projectService.addProjectFilePattern(this.projectId, pattern).catch(error => {
+  private submitFilePattern(type: string) {
+    const pattern = new FilePattern();
+    pattern.inclusionType = type;
+    if (type === 'INCLUDE') {
+      pattern.pattern = this.filePatternIncludeInput;
+    } else if (type === 'EXCLUDE') {
+      pattern.pattern = this.filePatternExcludeInput;
+    }
+    this.projectService.addProjectFilePattern(this.projectId, pattern).then((value) => {
+      pattern.id = value.body.id;
+      this.filePatterns.push(pattern);
+      if (type === 'INCLUDE') {
+        this.filePatternIncludeInput = '';
+      } else if (type === 'EXCLUDE') {
+        this.filePatternExcludeInput = '';
+      }
+    })
+      .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.submitFilePattern(pattern));
+          this.userService.refresh().then(() => this.submitFilePattern(type));
         }
       });
-    }
   }
 }
