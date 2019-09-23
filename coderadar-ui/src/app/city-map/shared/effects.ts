@@ -45,9 +45,9 @@ export class AppEffects {
         mergeMap((result: any) => {
           const availableMetrics = result.body.map(
             metric => {
-              const shortName = metric.metricName.split('.').pop();
+              const shortName = metric.split('.').pop();
               return {
-                metricName: metric.metricName,
+                metricName: metric,
                 shortName
               };
             }

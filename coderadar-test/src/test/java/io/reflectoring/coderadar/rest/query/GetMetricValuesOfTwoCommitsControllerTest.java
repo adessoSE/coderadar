@@ -109,20 +109,56 @@ class GetMetricValuesOfTwoCommitsControllerTest extends ControllerTestTemplate {
     }
 
     @Test
-    void returnsErrorWhenCommit1IsAfterCommit2() throws Exception {
+    void returnsTreeWhenCommit1IsAfterCommit2() throws Exception {
         GetMetricsForTwoCommitsCommand command = new GetMetricsForTwoCommitsCommand();
         command.setMetrics(Arrays.asList("coderadar:size:loc:java", "coderadar:size:sloc:java", "coderadar:size:cloc:java", "coderadar:size:eloc:java"));
         command.setCommit1("d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df");
         command.setCommit2("fd68136dd6489504e829b11f2fce1fe97c9f5c0c");
 
         MvcResult result = mvc().perform(get("/projects/" + projectId + "/metricvalues/deltaTree")
-                .contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
-                .andExpect(status().isUnprocessableEntity())
-                .andReturn();
+                .contentType(MediaType.APPLICATION_JSON).content(toJson(command))).andReturn();
 
-        ErrorMessageResponse response = fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class);
+        DeltaTree deltaTree = fromJson(result.getResponse().getContentAsString(), DeltaTree.class);
 
-        Assertions.assertEquals("commit1 cannot be newer than commit2", response.getErrorMessage());
+        Assertions.assertEquals("root", deltaTree.getName());
+        Assertions.assertEquals(MetricsTreeNodeType.MODULE, deltaTree.getType());
+
+        List<MetricValueForCommit> commit1Metrics = deltaTree.getCommit1Metrics();
+        List<MetricValueForCommit> commit2Metrics = deltaTree.getCommit2Metrics();
+
+        commit1Metrics.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
+        commit2Metrics.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
+
+        Assertions.assertEquals(0L, commit1Metrics.get(0).getValue().longValue());
+        Assertions.assertEquals(8L, commit1Metrics.get(1).getValue().longValue());
+        Assertions.assertEquals(12L, commit1Metrics.get(2).getValue().longValue());
+        Assertions.assertEquals(10L, commit1Metrics.get(3).getValue().longValue());
+
+        Assertions.assertEquals(0L, commit2Metrics.get(0).getValue().longValue());
+        Assertions.assertEquals(8L, commit2Metrics.get(1).getValue().longValue());
+        Assertions.assertEquals(18L, commit2Metrics.get(2).getValue().longValue());
+        Assertions.assertEquals(15L, commit2Metrics.get(3).getValue().longValue());
+
+        DeltaTree firstChild = deltaTree.getChildren().get(0);  // Finding.java
+        Assertions.assertEquals("Finding.java", firstChild.getName());
+        Assertions.assertEquals(MetricsTreeNodeType.FILE, firstChild.getType());
+        Assertions.assertEquals(4, firstChild.getCommit1Metrics().size());
+        Assertions.assertTrue(firstChild.getCommit2Metrics().isEmpty());
+        Assertions.assertTrue(firstChild.getChanges().isDeleted());
+
+        DeltaTree secondChild = deltaTree.getChildren().get(1); // GetMetricsForCommitCommand.java
+        Assertions.assertEquals("GetMetricsForCommitCommand.java", secondChild.getName());
+        Assertions.assertEquals(MetricsTreeNodeType.FILE, secondChild.getType());
+        Assertions.assertTrue(secondChild.getCommit1Metrics().isEmpty());
+        Assertions.assertEquals(4, secondChild.getCommit2Metrics().size());
+        Assertions.assertTrue(secondChild.getChanges().isAdded());
+
+        DeltaTree thirdChild = deltaTree.getChildren().get(2);  // testModule1/NewRandomFile.java
+        Assertions.assertEquals("testModule1/NewRandomFile.java", thirdChild.getName());
+        Assertions.assertEquals(MetricsTreeNodeType.FILE, thirdChild.getType());
+        Assertions.assertTrue(thirdChild.getCommit1Metrics().isEmpty());
+        Assertions.assertEquals(4, thirdChild.getCommit2Metrics().size());
+        Assertions.assertTrue(thirdChild.getChanges().isAdded());
     }
 
     @Test

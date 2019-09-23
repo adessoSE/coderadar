@@ -2,6 +2,7 @@ import {INode} from '../interfaces/INode';
 import {NodeType} from '../enum/NodeType';
 import {ScreenType} from '../enum/ScreenType';
 import {CommitReferenceType} from '../enum/CommitReferenceType';
+import {MetricValue} from "../../model/metric-value";
 
 export class ElementAnalyzer {
 
@@ -122,11 +123,13 @@ export class ElementAnalyzer {
     }
 
     if (commit1Metrics === null) {
-      return commit2Metrics[metricName];
+      return this.getValueFromMetric(commit2Metrics, metricName)
     } else if (commit2Metrics === null) {
-      return commit1Metrics[metricName];
+      return this.getValueFromMetric(commit1Metrics, metricName);
     } else {
-      return commit1Metrics[metricName] > commit2Metrics[metricName] ? commit1Metrics[metricName] : commit2Metrics[metricName];
+      let commit1 = this.getValueFromMetric(commit1Metrics, metricName), commit2 = this.getValueFromMetric(commit2Metrics, metricName);
+
+      return commit1 > commit2 ? commit1 : commit2;
     }
   }
 
@@ -172,18 +175,18 @@ export class ElementAnalyzer {
   ): number {
     if (screenType === ScreenType.LEFT) {
       if (commitReferenceType === CommitReferenceType.THIS) {
-        return node.commit1Metrics ? node.commit1Metrics[metricName] : undefined;
+        return this.getValueFromMetric(node.commit1Metrics, metricName);
       } else if (commitReferenceType === CommitReferenceType.OTHER) {
-        return node.commit2Metrics ? node.commit2Metrics[metricName] : undefined;
+        return this.getValueFromMetric(node.commit2Metrics, metricName);
       } else {
         throw new Error(`Unknown commitReferenceType ${commitReferenceType}!`);
       }
 
     } else if (screenType === ScreenType.RIGHT) {
       if (commitReferenceType === CommitReferenceType.THIS) {
-        return node.commit2Metrics ? node.commit2Metrics[metricName] : undefined;
+        return this.getValueFromMetric(node.commit2Metrics, metricName);
       } else if (commitReferenceType === CommitReferenceType.OTHER) {
-        return node.commit1Metrics ? node.commit1Metrics[metricName] : undefined;
+        return this.getValueFromMetric(node.commit1Metrics, metricName);
       } else {
         throw new Error(`Unknown commitReferenceType ${commitReferenceType}!`);
       }
@@ -191,6 +194,11 @@ export class ElementAnalyzer {
     } else {
       throw new Error(`Unknown screenType ${screenType}!`);
     }
+  }
+
+  static getValueFromMetric(metrics: MetricValue[], metricName: String) {
+    let index = metrics ? Object.values(metrics).findIndex(object => object.metricName === metricName): -1;
+    return index >= 0 ? Number(metrics[index].value) : undefined;
   }
 
 }
