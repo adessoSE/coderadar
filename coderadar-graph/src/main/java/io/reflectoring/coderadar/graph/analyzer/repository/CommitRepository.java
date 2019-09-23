@@ -20,8 +20,8 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS*]-(f:FileEntity)-->(c1:CommitEntity)-[:IS_CHILD_OF*0..2]-(c2:CommitEntity) "
           + "WHERE ID(p) = {0} "
-              + "UNWIND [c1, c2] AS c "
-              + "RETURN DISTINCT c "
+          + "UNWIND [c1, c2] AS c "
+          + "RETURN DISTINCT c "
           + "ORDER BY c.timestamp DESC")
   List<CommitEntity> findByProjectId(Long projectId);
 

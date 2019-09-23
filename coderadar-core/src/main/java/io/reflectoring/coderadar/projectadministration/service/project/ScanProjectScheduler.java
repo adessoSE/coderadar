@@ -108,7 +108,7 @@ public class ScanProjectScheduler {
                 }
               } catch (ProjectNotFoundException e) {
                 ScheduledFuture f = tasks.get(project.getId());
-                if(f != null){
+                if (f != null) {
                   f.cancel(false);
                 }
               }
