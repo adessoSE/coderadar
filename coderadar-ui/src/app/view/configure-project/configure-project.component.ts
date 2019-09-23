@@ -4,7 +4,7 @@ import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
 import {AnalyzerConfiguration} from '../../model/analyzer-configuration';
 import {FilePattern} from '../../model/file-pattern';
-import {FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
+import {CONFLICT, FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Module} from '../../model/module';
 import {Title} from '@angular/platform-browser';
 import {MatSnackBar} from '@angular/material';
@@ -28,11 +28,15 @@ export class ConfigureProjectComponent implements OnInit {
   modulesInput;
   modules: Module[];
   deletedModules: Module[];
+  moduleProcessed = false;
+
   // Error fields
   noAnalyzersForJob: boolean;
   noPatternsForJob: boolean;
   analyzersExist: boolean;
   projectId: any;
+  moduleExists = false;
+  projectProcessed = false;
 
   constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService,  private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute) {
@@ -71,7 +75,6 @@ export class ConfigureProjectComponent implements OnInit {
     Promise.all([
       this.submitAnalyzerConfigurations(),
       this.submitFilePatterns(),
-      this.submitModules()
     ]).then(() => {
       this.openSnackBar('Configuration saved!', '🞩');
       this.router.navigate(['/dashboard']);
@@ -112,34 +115,6 @@ export class ConfigureProjectComponent implements OnInit {
         pattern.inclusionType = type;
         this.filePatterns.push(pattern);
       }
-    }
-  }
-
-  /**
-   * Constructs a new Module object with whatever is in modulesInput
-   * and adds it to modules.
-   */
-  addToModules(): void {
-    if (this.modulesInput.trim() !== '' && this.modules.filter(m => m.path === this.modulesInput).length === 0) {
-      const deletedModules = this.deletedModules.filter(m => m.path === this.modulesInput);
-      if (deletedModules.length !== 0) {
-        this.modules.push(deletedModules[0]);
-        this.deletedModules.splice(this.deletedModules.indexOf(deletedModules[0]), 1);
-      } else {
-        const module = new Module(null, this.modulesInput);
-        this.modules.push(module);
-      }
-      this.modulesInput = '';
-    }
-  }
-
-  /**
-   * Removes the Module from this.modules and adds it this.deletedModules
-   */
-  addToDeletedModules(module: Module): void {
-    this.modules.splice(this.modules.indexOf(module), 1);
-    if (module.id != null) {
-      this.deletedModules.push(module);
     }
   }
 
@@ -248,33 +223,35 @@ export class ConfigureProjectComponent implements OnInit {
   }
 
   /**
-   * Calls submitModule or deleteModule for every string in this.modules (as the REST API doesn't allow to send them all at once).
-   */
-  private submitModules(): void {
-    this.deletedModules.forEach(module => this.deleteModule(module));
-    this.modules.forEach(module => this.submitModule(module));
-  }
-
-  /**
-   * Calls ProjectService.addProjectModule() or editProjectModule()
+   * Calls ProjectService.addProjectModule()
    * depending on whether or not the module is new.
    * Sends the refresh token if access is denied and repeats the request.
-   * @param module The module to add to the project
    */
-  private submitModule(module: Module): void {
-    if (module.id == null) {
-      this.projectService.addProjectModule(this.projectId, module).catch(error => {
+  private submitModule(): void {
+    this.moduleExists = false;
+    this.projectProcessed = false;
+
+    const module: Module = new Module(null, this.modulesInput);
+    this.moduleProcessed = true;
+    this.projectService.addProjectModule(this.projectId, module).then(response => {
+        module.id = response.body.id;
+        this.moduleProcessed = false;
+        this.modules.push(module);
+        this.modulesInput = '';
+      })
+      .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.submitModule(module));
+          this.userService.refresh().then(() => this.submitModule());
+        }
+        if (error.status && error.status === CONFLICT) {
+          this.moduleExists = true;
+          this.moduleProcessed = false;
+        }
+        if (error.status && error.status === UNPROCESSABLE_ENTITY) {
+          this.moduleProcessed = false;
+          this.projectProcessed = true;
         }
       });
-    } else if (module.id >= 0) {
-      this.projectService.editProjectModule(this.projectId, module).catch(error => {
-        if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.submitModule(module));
-        }
-      });
-    }
   }
 
   /**
@@ -283,9 +260,18 @@ export class ConfigureProjectComponent implements OnInit {
    * @param module The module to delete from the project
    */
   private deleteModule(module: Module): void {
-    this.projectService.deleteProjectModule(this.projectId, module).catch(error => {
+    this.moduleProcessed = true;
+    this.projectService.deleteProjectModule(this.projectId, module)
+      .then(() => {
+        this.moduleProcessed = false;
+        this.modules = this.modules.filter(value => value.path === module.path);
+      }).catch(error => {
       if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh().then(() => this.submitModule(module));
+        this.userService.refresh().then(() => this.deleteModule(module));
+      }
+      if (error.status && error.status === UNPROCESSABLE_ENTITY) {
+        this.moduleProcessed = false;
+        this.projectProcessed = true;
       }
     });
   }

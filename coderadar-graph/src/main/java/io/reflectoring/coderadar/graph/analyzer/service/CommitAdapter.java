@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.graph.analyzer.service;
 
 import com.google.common.collect.Iterables;
 import io.reflectoring.coderadar.analyzer.domain.Commit;
-import io.reflectoring.coderadar.analyzer.domain.File;
 import io.reflectoring.coderadar.analyzer.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
@@ -31,10 +30,10 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
 
   @Autowired
   public CommitAdapter(
-          CommitRepository commitRepository,
-          ProjectRepository projectRepository,
-          FileRepository fileRepository,
-          MetricRepository metricRepository) {
+      CommitRepository commitRepository,
+      ProjectRepository projectRepository,
+      FileRepository fileRepository,
+      MetricRepository metricRepository) {
     this.commitRepository = commitRepository;
     this.projectRepository = projectRepository;
     this.fileRepository = fileRepository;
@@ -52,10 +51,10 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   public void saveCommits(List<Commit> commits, Long projectId) {
     if (!commits.isEmpty()) {
       ProjectEntity projectEntity =
-              projectRepository
-                      .findById(projectId)
-                      .orElseThrow(() -> new ProjectNotFoundException(projectId));
-      HashMap<String,  List<FileEntity>> walkedFiles = new HashMap<>();
+          projectRepository
+              .findById(projectId)
+              .orElseThrow(() -> new ProjectNotFoundException(projectId));
+      HashMap<String, List<FileEntity>> walkedFiles = new HashMap<>();
       HashMap<String, CommitEntity> walkedCommits = new HashMap<>();
 
       commits.sort(Comparator.comparing(Commit::getTimestamp));
@@ -65,15 +64,22 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
 
       walkedCommits.putIfAbsent(commitEntity.getName(), commitEntity);
 
-
       List<CommitEntity> commitEntities = new ArrayList<>(walkedCommits.values());
       commitEntities.sort(Comparator.comparing(CommitEntity::getTimestamp));
-      for(CommitEntity c : commitEntities){
-        getFiles(commits.stream().filter(commit -> commit.getName().equals(c.getName())).findFirst().get().getTouchedFiles(), c, walkedFiles);
+      for (CommitEntity c : commitEntities) {
+        getFiles(
+            commits
+                .stream()
+                .filter(commit -> commit.getName().equals(c.getName()))
+                .findFirst()
+                .get()
+                .getTouchedFiles(),
+            c,
+            walkedFiles);
       }
 
       List<FileEntity> allFiles = new ArrayList<>();
-      for(List<FileEntity> files : walkedFiles.values()){
+      for (List<FileEntity> files : walkedFiles.values()) {
         allFiles.addAll(files);
       }
       projectEntity.getFiles().addAll(allFiles);
@@ -94,21 +100,21 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   public void updateCommits(List<Commit> commits, Long projectId) {
     if (!commits.isEmpty()) {
       ProjectEntity projectEntity =
-              projectRepository
-                      .findById(projectId)
-                      .orElseThrow(() -> new ProjectNotFoundException(projectId));
+          projectRepository
+              .findById(projectId)
+              .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
       List<CommitEntity> commitsInProject = // First we need all of the commits in the project
-              commitRepository.findByProjectId(projectId);
+          commitRepository.findByProjectId(projectId);
 
       commits.sort(Comparator.comparing(Commit::getTimestamp));
       Commit newLastCommit = commits.get(0);
       CommitEntity lastCommit =
-              commitsInProject.get(commitsInProject.size() - 1); // We grab the last one (oldest)
+          commitsInProject.get(commitsInProject.size() - 1); // We grab the last one (oldest)
       if (!lastCommit.getName().equals(newLastCommit.getName())) {
         metricRepository.deleteMetricsInCommit(
-                lastCommit
-                        .getId()); // And delete all of it's metrics, as the files this commit contains are
+            lastCommit
+                .getId()); // And delete all of it's metrics, as the files this commit contains are
         // about to change.
       }
 
@@ -117,9 +123,9 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       // Get all of the files in this project and save them in a map so that we can pass it to the
       // getFiles method
       List<FileEntity> filesInProject = fileRepository.findAllinProject(projectId);
-      Map<String,  List<FileEntity>> walkedFiles = new HashMap<>();
+      Map<String, List<FileEntity>> walkedFiles = new HashMap<>();
       for (FileEntity f : filesInProject) {
-        if(walkedFiles.containsKey(f.getPath())){
+        if (walkedFiles.containsKey(f.getPath())) {
           walkedFiles.get(f.getPath()).add(f);
         } else {
           List<FileEntity> files = new ArrayList<>();
@@ -138,11 +144,11 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       // See if any of the commits we had before have been deleted and delete their metrics.
       for (CommitEntity commit : commitsInProject) {
         Optional<CommitEntity> existingCommit =
-                walkedCommits
-                        .values()
-                        .stream()
-                        .filter(c -> c.getName().equals(commit.getName()))
-                        .findAny();
+            walkedCommits
+                .values()
+                .stream()
+                .filter(c -> c.getName().equals(commit.getName()))
+                .findAny();
         if (!existingCommit.isPresent()) {
           metricRepository.deleteMetricsInCommit(commit.getId());
         }
@@ -154,15 +160,23 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
 
       List<CommitEntity> commitEntities = new ArrayList<>(walkedCommits.values());
       commitEntities.sort(Comparator.comparing(CommitEntity::getTimestamp));
-      for(CommitEntity c : commitEntities){
-        getFiles(commits.stream().filter(commit -> commit.getName().equals(c.getName())).findFirst().get().getTouchedFiles(), c, walkedFiles);
+      for (CommitEntity c : commitEntities) {
+        getFiles(
+            commits
+                .stream()
+                .filter(commit -> commit.getName().equals(c.getName()))
+                .findFirst()
+                .get()
+                .getTouchedFiles(),
+            c,
+            walkedFiles);
       }
 
       // Save the newly created tree
       commitRepository.save(walkedCommits.values(), 1);
 
       List<FileEntity> allFiles = new ArrayList<>();
-      for(List<FileEntity> files : walkedFiles.values()){
+      for (List<FileEntity> files : walkedFiles.values()) {
         allFiles.addAll(files);
       }
       fileRepository.save(allFiles, 1);
@@ -194,9 +208,9 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       commitEntity = new CommitEntity();
     } else {
       commitEntity =
-              commitRepository
-                      .findById(commitId)
-                      .orElseThrow(() -> new CommitNotFoundException(commitId));
+          commitRepository
+              .findById(commitId)
+              .orElseThrow(() -> new CommitNotFoundException(commitId));
     }
     commitEntity.setAnalyzed(commit.isAnalyzed());
     commitEntity.setAuthor(commit.getAuthor());
@@ -229,7 +243,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
    * @return A list of fully initialized parents for the given commit.
    */
   private List<CommitEntity> findAndSaveParents(
-          Commit commit, Map<String, CommitEntity> walkedCommits) {
+      Commit commit, Map<String, CommitEntity> walkedCommits) {
     List<CommitEntity> parents = new ArrayList<>();
     for (Commit c : commit.getParents()) {
       CommitEntity commitEntity = walkedCommits.get(c.getName());
@@ -258,26 +272,25 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
    *     mapping.
    */
   private void getFiles(
-          List<FileToCommitRelationship> relationships,
-          CommitEntity entity,
-          Map<String, List<FileEntity>> walkedFiles) {
+      List<FileToCommitRelationship> relationships,
+      CommitEntity entity,
+      Map<String, List<FileEntity>> walkedFiles) {
     for (FileToCommitRelationship fileToCommitRelationship : relationships) {
       FileToCommitRelationshipEntity fileToCommitRelationshipEntity =
-              new FileToCommitRelationshipEntity();
+          new FileToCommitRelationshipEntity();
       fileToCommitRelationshipEntity.setCommit(entity);
       fileToCommitRelationshipEntity.setChangeType(fileToCommitRelationship.getChangeType());
       fileToCommitRelationshipEntity.setOldPath(fileToCommitRelationship.getOldPath());
 
       FileEntity fileEntity;
-      List<FileEntity> fileList =
-              walkedFiles.get(fileToCommitRelationship.getFile().getPath());
+      List<FileEntity> fileList = walkedFiles.get(fileToCommitRelationship.getFile().getPath());
 
       if (fileList == null) {
         fileList = new ArrayList<>();
         fileEntity = new FileEntity();
         fileList.add(fileEntity);
       } else {
-        if((fileToCommitRelationship.getChangeType().equals(ChangeType.ADD))){
+        if ((fileToCommitRelationship.getChangeType().equals(ChangeType.ADD))) {
           fileEntity = new FileEntity();
           fileList.add(fileEntity);
         } else {
@@ -289,10 +302,10 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       fileEntity.setPath(fileToCommitRelationship.getFile().getPath());
       fileEntity.getCommits().add(fileToCommitRelationshipEntity);
       if (fileEntity.getId()
-              != null) { // If the file entity already exists, check if it has any metrics and attach
+          != null) { // If the file entity already exists, check if it has any metrics and attach
         // those to the commit entity.
         for (MetricValueEntity metric :
-                fileRepository.findMetricsByFileAndCommitName(fileEntity.getId(), entity.getName())) {
+            fileRepository.findMetricsByFileAndCommitName(fileEntity.getId(), entity.getName())) {
           entity.getMetricValues().add(metric);
           entity.setAnalyzed(true);
         }

@@ -1,6 +1,9 @@
 <app-header [title]="[{location: '/dashboard', name: 'Dashboard'}, {location: '/project-configure/' + projectId, name: 'Configure ' + projectName}]"></app-header>
+<div *ngIf="moduleProcessed" class="dark-overlay">
+  <mat-spinner *ngIf="moduleProcessed" style="position: absolute;  margin-top: 15%; margin-left: 46%; z-index: 5" [diameter]="100"></mat-spinner>
+</div>
 
-<main class="mat-card-form">
+<main class="mat-card-form ">
   <div class="grid-container" id="cardContainer">
     <div fxLayoutAlign="center center">
       <form (ngSubmit)="submitForm()">
@@ -74,15 +77,17 @@
               </div>
               <div *ngFor="let module of modules">
                 <span>{{module.path}}</span>
-                <button (click)="addToDeletedModules(module)" mat-button>-</button>
+                <button (click)="deleteModule(module)" mat-button>-</button>
               </div>
               <div class="row">
                 <mat-form-field>
                   <input [(ngModel)]="modulesInput" matInput maxlength="100" name="modules" placeholder="Module"
                          type="text">
                 </mat-form-field>
-                <button (click)="addToModules()" mat-button style="float:right" type="button">+</button>
+                <button (click)="submitModule()" mat-button style="float:right" type="button">+</button>
               </div>
+              <mat-error *ngIf="moduleExists">A module with this name already exists!</mat-error>
+              <mat-error *ngIf="projectProcessed">Cannot change the project now! Try again later!</mat-error>
             </div>
           </mat-card-content>
 

@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.graph.analyzer.repository;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
-import io.reflectoring.coderadar.graph.analyzer.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
