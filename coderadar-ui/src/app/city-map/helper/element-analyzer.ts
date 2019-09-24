@@ -113,7 +113,9 @@ export class ElementAnalyzer {
     } else if (commit2Metrics === null) {
       return commit1Metrics[metricName];
     } else {
-      return commit1Metrics[metricName] < commit2Metrics[metricName] ? commit1Metrics[metricName] : commit2Metrics[metricName];
+      let commit1 = this.getValueFromMetric(commit1Metrics, metricName), commit2 = this.getValueFromMetric(commit2Metrics, metricName);
+
+      return commit1 < commit2 ? commit1 : commit2;
     }
   }
 
