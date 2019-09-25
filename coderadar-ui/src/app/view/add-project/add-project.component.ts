@@ -43,6 +43,7 @@ export class AddProjectComponent {
         this.router.navigate(['/project-configure', this.project.id]);
       })
       .catch(error => {
+        console.log(error);
         if (error.status && error.status === FORBIDDEN) { // If access is denied
           this.userService.refresh()
             .then(() => this.submitForm());
@@ -55,7 +56,7 @@ export class AddProjectComponent {
             });
           }
         } else if (error.status === CONFLICT &&
-          error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
+          error.error.errorMessage === 'The project ' + this.project.name + ' already exists.') {
           this.projectExists = true;
         }
       });
