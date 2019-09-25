@@ -20,16 +20,14 @@ export class ConfigureProjectComponent implements OnInit {
   projectName: string;
   analyzers: AnalyzerConfiguration[];
   filePatterns: FilePattern[];
-  deletedFilePatterns: FilePattern[];
 
   // Fields for input binding
   filePatternIncludeInput;
   filePatternExcludeInput;
   modulesInput;
   modules: Module[];
-  proccessing = false;
+  processing = false;
 
-  analyzersExist: boolean;
   projectId: any;
   moduleExists = false;
 
@@ -42,11 +40,9 @@ export class ConfigureProjectComponent implements OnInit {
     this.modules = [];
     this.analyzers = [];
     this.filePatterns = [];
-    this.analyzersExist = false;
   }
 
   ngOnInit(): void {
-    this.analyzersExist = false;
     this.route.params.subscribe(params => {
       this.projectId = params.id;
       this.getProjectAnalyzers();
@@ -71,7 +67,7 @@ export class ConfigureProjectComponent implements OnInit {
       .then(response => this.modules = response.body)
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getModulesForProject());
+          this.userService.refresh(() => this.getModulesForProject());
         }
       });
   }
@@ -84,14 +80,12 @@ export class ConfigureProjectComponent implements OnInit {
     this.projectService.getProjectAnalyzers(this.projectId).then(response => {
       if (response.body.length > 0) {
         this.analyzers = response.body;
-        this.analyzersExist = true;
-      } else {
-        this.getAvailableAnalyzers();
       }
+      this.getAvailableAnalyzers();
     })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getProjectAnalyzers());
+          this.userService.refresh(() => this.getProjectAnalyzers());
         }
       });
   }
@@ -103,13 +97,15 @@ export class ConfigureProjectComponent implements OnInit {
   private getAvailableAnalyzers(): void {
     this.projectService.getAnalyzers()
       .then(response => {
-        if (!this.analyzersExist) {
-          response.body.forEach(a => this.analyzers.push(new AnalyzerConfiguration(a, false)));
-        }
+        response.body.forEach(a => {
+          if (this.analyzers.find(value => value.analyzerName === a) === undefined) {
+            this.analyzers.push(new AnalyzerConfiguration(a, false));
+          }
+        });
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getAvailableAnalyzers());
+          this.userService.refresh(() => this.getAvailableAnalyzers());
         }
       });
   }
@@ -129,7 +125,7 @@ export class ConfigureProjectComponent implements OnInit {
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getProjectFilePatterns());
+          this.userService.refresh(() => this.getProjectFilePatterns());
         }
       });
   }
@@ -146,7 +142,7 @@ export class ConfigureProjectComponent implements OnInit {
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getProjectName());
+          this.userService.refresh(() => this.getProjectName());
         }
       });
   }
@@ -160,23 +156,23 @@ export class ConfigureProjectComponent implements OnInit {
     this.moduleExists = false;
 
     const module: Module = new Module(null, this.modulesInput);
-    this.proccessing = true;
+    this.processing = true;
     this.projectService.addProjectModule(this.projectId, module).then(response => {
         module.id = response.body.id;
-        this.proccessing = false;
+        this.processing = false;
         this.modules.push(module);
         this.modulesInput = '';
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.submitModule());
+          this.userService.refresh(() => this.submitModule());
         }
         if (error.status && error.status === CONFLICT) {
           this.moduleExists = true;
-          this.proccessing = false;
+          this.processing = false;
         }
         if (error.status && error.status === UNPROCESSABLE_ENTITY) {
-          this.proccessing = false;
+          this.processing = false;
           this.openSnackBar('Cannot edit the project! Try again later', '🞩');
         }
       });
@@ -188,17 +184,17 @@ export class ConfigureProjectComponent implements OnInit {
    * @param module The module to delete from the project
    */
   private deleteModule(module: Module): void {
-    this.proccessing = true;
+    this.processing = true;
     this.projectService.deleteProjectModule(this.projectId, module)
       .then(() => {
-        this.proccessing = false;
+        this.processing = false;
         this.modules = this.modules.filter(value => value.path !== module.path);
       }).catch(error => {
       if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh().then(() => this.deleteModule(module));
+        this.userService.refresh(() => this.deleteModule(module));
       }
       if (error.status && error.status === UNPROCESSABLE_ENTITY) {
-        this.proccessing = false;
+        this.processing = false;
         this.openSnackBar('Cannot edit the project! Try again later', '🞩');
       }
     });
@@ -219,11 +215,11 @@ export class ConfigureProjectComponent implements OnInit {
    * @param analyzerConfiguration The configuration to add to the project.
    */
   private submitAnalyzerConfiguration(analyzerConfiguration: AnalyzerConfiguration): void {
-    if (this.analyzersExist) {
+    if (analyzerConfiguration.id !== undefined) {
       this.projectService.editAnalyzerConfigurationForProject(this.projectId, analyzerConfiguration)
         .catch(error => {
           if (error.status && error.status === FORBIDDEN) {
-            this.userService.refresh().then(() => this.submitAnalyzerConfiguration(analyzerConfiguration));
+            this.userService.refresh(() => this.submitAnalyzerConfiguration(analyzerConfiguration));
           } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
             this.openSnackBar('Cannot edit the project! Try again later', '🞩');
           }
@@ -235,7 +231,7 @@ export class ConfigureProjectComponent implements OnInit {
         })
         .catch(error => {
           if (error.status && error.status === FORBIDDEN) {
-            this.userService.refresh().then(() => this.submitAnalyzerConfiguration(analyzerConfiguration));
+            this.userService.refresh(() => this.submitAnalyzerConfiguration(analyzerConfiguration));
           } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
             this.openSnackBar('Cannot edit the project! Try again later', '🞩');
           }
@@ -250,16 +246,16 @@ export class ConfigureProjectComponent implements OnInit {
    * @param pattern The pattern to delete from the project
    */
   private deleteFilePattern(pattern: FilePattern): void {
-    this.proccessing = true;
+    this.processing = true;
     this.projectService.deleteProjectFilePattern(this.projectId, pattern)
       .then(() => {
-        this.proccessing = false;
+        this.processing = false;
         this.filePatterns = this.filePatterns.filter(value => value !== pattern);
       })
       .catch(error => {
-        this.proccessing = false;
+        this.processing = false;
         if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh().then(() => this.deleteFilePattern(pattern));
+        this.userService.refresh(() => this.deleteFilePattern(pattern));
       }
     });
   }
@@ -273,9 +269,9 @@ export class ConfigureProjectComponent implements OnInit {
       pattern.pattern = this.filePatternExcludeInput;
     }
 
-    this.proccessing = true;
+    this.processing = true;
     this.projectService.addProjectFilePattern(this.projectId, pattern).then((value) => {
-      this.proccessing = false;
+      this.processing = false;
       pattern.id = value.body.id;
       this.filePatterns.push(pattern);
       if (type === 'INCLUDE') {
@@ -285,9 +281,9 @@ export class ConfigureProjectComponent implements OnInit {
       }
     })
       .catch(error => {
-        this.proccessing = false;
+        this.processing = false;
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.submitFilePattern(type));
+          this.userService.refresh(() => this.submitFilePattern(type));
         }
       });
   }

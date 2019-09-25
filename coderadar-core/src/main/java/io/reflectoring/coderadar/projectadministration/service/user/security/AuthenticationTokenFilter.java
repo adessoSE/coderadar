@@ -49,9 +49,14 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
             new UsernamePasswordAuthenticationToken(username.asString(), null, null);
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-      } catch (JWTVerificationException e) {
+      } catch (JWTVerificationException | NullPointerException e) {
         // in case of verification error a further filter will take care about authentication error
-        logger.error("Authentication error. Token is not valid", e);
+        if (e instanceof NullPointerException
+            || e.getMessage().startsWith("The Token has expired on")) {
+          logger.error("Authentication error. Token is expired.");
+        } else {
+          logger.error("Authentication error. Token is not valid: ", e);
+        }
       }
     }
     filterChain.doFilter(request, response);

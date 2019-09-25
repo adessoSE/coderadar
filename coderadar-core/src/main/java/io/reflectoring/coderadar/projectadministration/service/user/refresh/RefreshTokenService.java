@@ -34,9 +34,7 @@ public class RefreshTokenService implements RefreshTokenUseCase {
   @Override
   public String refreshToken(RefreshTokenCommand command) {
     if (tokenService.isExpired(command.getAccessToken())) {
-      String token = createAccessToken(command.getRefreshToken());
-      refreshTokenPort.updateRefreshToken(command.getRefreshToken(), token);
-      return token;
+      return createAccessToken(command.getRefreshToken());
     } else {
       throw new AccessTokenNotExpiredException();
     }
@@ -45,7 +43,7 @@ public class RefreshTokenService implements RefreshTokenUseCase {
   /**
    * Creates new access token, if the refresh token and the user having token are valid.
    *
-   * @param refreshToken the refresh token to be cheked
+   * @param refreshToken the refresh token to be checked
    * @return access token
    */
   public String createAccessToken(String refreshToken) {

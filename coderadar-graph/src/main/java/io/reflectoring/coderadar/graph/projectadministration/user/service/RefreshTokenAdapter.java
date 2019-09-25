@@ -29,6 +29,7 @@ public class RefreshTokenAdapter implements RefreshTokenPort {
   public RefreshToken findByToken(String refreshToken) throws RefreshTokenNotFoundException {
     RefreshTokenEntity refreshTokenEntity = refreshTokenRepository.findByToken(refreshToken);
     if (refreshTokenEntity != null) {
+      refreshTokenEntity.setUser(refreshTokenRepository.findUserByToken(refreshToken));
       return refreshTokenMapper.mapNodeEntity(refreshTokenEntity);
     } else {
       throw new RefreshTokenNotFoundException();

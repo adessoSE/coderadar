@@ -44,8 +44,7 @@ export class AddProjectComponent {
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) { // If access is denied
-          this.userService.refresh()
-            .then(() => this.submitForm());
+          this.userService.refresh(() => this.submitForm());
         } else if (error.status && error.status === BAD_REQUEST) {   // If there is a field error
           if (error.error && error.error.errorMessage === 'Validation Error') {
             error.error.fieldErrors.forEach(field => {  // Check which field
@@ -55,7 +54,7 @@ export class AddProjectComponent {
             });
           }
         } else if (error.status === CONFLICT &&
-          error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
+          error.error.errorMessage === 'The project ' + this.project.name + ' already exists.') {
           this.projectExists = true;
         }
       });

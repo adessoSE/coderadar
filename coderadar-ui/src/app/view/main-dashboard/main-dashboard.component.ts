@@ -44,7 +44,7 @@ export class MainDashboardComponent implements OnInit {
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.deleteProject(project));
+          this.userService.refresh(() => this.deleteProject(project));
         } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
           this.openSnackBar('Cannot delete project! Try again later!', '🞩');
         }
@@ -61,13 +61,13 @@ export class MainDashboardComponent implements OnInit {
       .then(response => {response.body.forEach(project => {
         const newProject = new Project(project);
         this.projects.push(newProject);
-      });
+        });
                          this.waiting = false;
-      }
+        }
       )
       .catch(e => {
         if (e.status && e.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getProjects());
+          this.userService.refresh(() => this.getProjects());
         }
       });
   }
@@ -77,7 +77,7 @@ export class MainDashboardComponent implements OnInit {
       this.openSnackBar('Analysis started!', '🞩');
     }).catch(error => {
       if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh().then(() => this.projectService.startAnalyzingJob(id, true));
+        this.userService.refresh(() => this.projectService.startAnalyzingJob(id, true));
       } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
         this.openSnackBar('Analysis cannot be started! Try again later!', '🞩');
       }
@@ -89,7 +89,7 @@ export class MainDashboardComponent implements OnInit {
       this.openSnackBar('Analysis results deleted!', '🞩');
     }).catch(error => {
       if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh().then(() => this.projectService.startAnalyzingJob(id, true));
+        this.userService.refresh(() => this.projectService.startAnalyzingJob(id, true));
       } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
         this.openSnackBar('Analysis results cannot be deleted! Try again later!', '🞩');
       }

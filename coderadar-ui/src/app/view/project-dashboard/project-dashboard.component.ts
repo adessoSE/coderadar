@@ -130,7 +130,7 @@ export class ProjectDashboardComponent implements OnInit {
       })
       .catch(e => {
         if (e.status && e.status === FORBIDDEN) {
-          this.userService.refresh().then((() => this.getCommits()));
+          this.userService.refresh(() => this.getCommits());
         }
       });
   }
@@ -146,7 +146,7 @@ export class ProjectDashboardComponent implements OnInit {
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getProject());
+          this.userService.refresh(() => this.getProject());
         } else if (error.status && error.status === NOT_FOUND) {
           this.router.navigate(['/dashboard']);
         }

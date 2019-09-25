@@ -31,7 +31,7 @@ export class AppEffects {
             return actions.loadCommitsSuccess(result.body);
           }),
           catchError((response: ICommitsGetErrorResponse) => {
-            this.userService.refresh().then(() => this.store.dispatch(loadCommits()));
+            this.userService.refresh(() => this.store.dispatch(loadCommits()));
             return of(actions.loadCommitsError(response.error));
           })
         )
@@ -63,7 +63,7 @@ export class AppEffects {
           ];
         }),
         catchError((response: any) => {
-          this.userService.refresh().then(() => this.store.dispatch(loadAvailableMetrics()));
+          this.userService.refresh(() => this.store.dispatch(loadAvailableMetrics()));
           return of(actions.loadAvailableMetricsError(response.error));
         })
       )
@@ -85,7 +85,7 @@ export class AppEffects {
             ];
           }),
           catchError((response: IDeltaTreeGetErrorResponse) => {
-            this.userService.refresh().then(() => this.store.dispatch(loadMetricTree(payload.leftCommit, payload.rightCommit,
+            this.userService.refresh(() => this.store.dispatch(loadMetricTree(payload.leftCommit, payload.rightCommit,
               payload.metricMapping)));
             return of(actions.loadMetricTreeError(response.error));
           })

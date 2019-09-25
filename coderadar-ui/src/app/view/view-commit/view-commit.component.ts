@@ -56,12 +56,12 @@ export class ViewCommitComponent implements OnInit {
         })
         .catch(e => {
           if (e.status && e.status === FORBIDDEN) {
-            this.userService.refresh().then((() => this.getCommitInfo()));
+            this.userService.refresh(() => this.getCommitInfo());
           }
         });
     }).catch(e => {
       if (e.status && e.status === FORBIDDEN) {
-        this.userService.refresh().then((() => this.getCommitInfo()));
+        this.userService.refresh(() => this.getCommitInfo());
       }
     });
   }
@@ -80,11 +80,12 @@ export class ViewCommitComponent implements OnInit {
     this.projectService.getProject(this.projectId)
       .then(response => {
         this.project = new Project(response.body);
-        this.titleService.setTitle('Coderadar - ' + this.commit.name.substring(0, 7) + ' - ' + AppComponent.trimProjectName(this.project.name));
+        this.titleService.setTitle('Coderadar - ' + this.commit.name.substring(0, 7) + ' - ' +
+          AppComponent.trimProjectName(this.project.name));
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getProject());
+          this.userService.refresh(() => this.getProject());
         } else if (error.status && error.status === NOT_FOUND) {
           this.router.navigate(['/dashboard']);
         }

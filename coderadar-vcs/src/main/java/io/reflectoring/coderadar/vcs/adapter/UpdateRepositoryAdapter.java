@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.vcs.UnableToResetRepositoryException;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.UpdateRepositoryPort;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
@@ -11,6 +12,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +28,16 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
   }
 
   @Override
-  public boolean updateRepository(Path repositoryRoot) throws UnableToUpdateRepositoryException {
+  public boolean updateRepository(Path repositoryRoot, URL url)
+      throws UnableToUpdateRepositoryException {
     try {
-      return updateInternal(repositoryRoot);
+      return updateInternal(repositoryRoot, url);
     } catch (CheckoutConflictException e) {
       // When having a checkout conflict, someone or something fiddled with the working directory.
       // Since the working directory is designed to be read only, we just revert it and try again.
       try {
         resetRepositoryAdapter.resetRepository(repositoryRoot);
-        return updateInternal(repositoryRoot);
+        return updateInternal(repositoryRoot, url);
       } catch (UnableToResetRepositoryException | IOException | GitAPIException ex) {
         throw createException(repositoryRoot, e.getMessage());
       }
@@ -49,13 +52,16 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
             "Error updating local GIT repository at %s. Reason: %s", repositoryRoot, error));
   }
 
-  private boolean updateInternal(Path repositoryRoot) throws GitAPIException, IOException {
+  private boolean updateInternal(Path repositoryRoot, URL url) throws GitAPIException, IOException {
     FileRepositoryBuilder builder = new FileRepositoryBuilder();
     Repository repository = builder.setWorkTree(repositoryRoot.toFile()).build();
     Git git = new Git(repository);
+    StoredConfig config = git.getRepository().getConfig();
+    config.setString("remote", "origin", "url", url.toString());
+    config.save();
     ObjectId oldHead = git.getRepository().resolve(Constants.HEAD);
     ObjectId newHead =
         git.pull().setStrategy(MergeStrategy.THEIRS).call().getMergeResult().getNewHead();
-    return !oldHead.equals(newHead);
+    return (oldHead == null && newHead != null) || !oldHead.equals(newHead);
   }
 }
