@@ -155,9 +155,13 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
           child.setCommit2Metrics(metricTree2.getMetrics());
 
           Changes changes = new Changes();
-          changes.setModified(
-              fileRepository.wasModifiedBetweenCommits(
-                  metricTree1.getName(), commit1Time, commit2Time, projectId));
+          if (!metricTree1.getMetrics().equals(metricTree2.getMetrics())) {
+            changes.setModified(true);
+          } else {
+            changes.setModified(
+                fileRepository.wasModifiedBetweenCommits(
+                    metricTree1.getName(), commit1Time, commit2Time, projectId));
+          }
           child.setChanges(changes);
           deltaTree.getChildren().add(child);
         }
@@ -193,7 +197,6 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
         tree2Counter++;
       }
     }
-
     return deltaTree;
   }
 
