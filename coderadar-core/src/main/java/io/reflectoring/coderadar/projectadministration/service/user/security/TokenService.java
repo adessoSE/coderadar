@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
@@ -65,7 +66,11 @@ public class TokenService {
   public DecodedJWT verify(String token) {
     byte[] secret = secretKeyService.getSecretKey().getEncoded();
     JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret)).withIssuer("coderadar").build();
-    return verifier.verify(token);
+    try {
+      return verifier.verify(token);
+    } catch (SignatureVerificationException e){
+      return null;
+    }
   }
 
   /**

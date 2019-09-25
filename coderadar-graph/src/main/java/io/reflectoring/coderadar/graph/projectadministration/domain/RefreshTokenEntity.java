@@ -1,8 +1,11 @@
 package io.reflectoring.coderadar.graph.projectadministration.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+
+import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
 /**
  * Refresh token is a JSON Web Token that is used by a client to get a new access token. In contrast
@@ -15,5 +18,7 @@ public class RefreshTokenEntity {
   private Long id;
   private String token;
 
-  @Relationship private UserEntity user;
+  @Relationship(value = "HAS", direction = INCOMING)
+  @EqualsAndHashCode.Exclude
+  private UserEntity user;
 }

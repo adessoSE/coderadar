@@ -38,7 +38,7 @@ export class CityViewHeaderComponent implements OnInit {
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getProject());
+          this.userService.refresh(() => this.getProject());
         } else if (error.status && error.status === NOT_FOUND) {
           this.router.navigate(['/dashboard']);
         }

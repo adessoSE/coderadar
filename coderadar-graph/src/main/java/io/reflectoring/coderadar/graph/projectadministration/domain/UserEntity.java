@@ -13,6 +13,6 @@ public class UserEntity {
   private String username;
   private String password;
 
-  @Relationship("HAS")
+  @Relationship(value = "HAS")
   private List<RefreshTokenEntity> refreshTokens;
 }

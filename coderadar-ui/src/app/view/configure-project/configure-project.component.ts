@@ -71,7 +71,7 @@ export class ConfigureProjectComponent implements OnInit {
       .then(response => this.modules = response.body)
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getModulesForProject());
+          this.userService.refresh(() => this.getModulesForProject());
         }
       });
   }
@@ -91,7 +91,7 @@ export class ConfigureProjectComponent implements OnInit {
     })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getProjectAnalyzers());
+          this.userService.refresh(() => this.getProjectAnalyzers());
         }
       });
   }
@@ -109,7 +109,7 @@ export class ConfigureProjectComponent implements OnInit {
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getAvailableAnalyzers());
+          this.userService.refresh(() => this.getAvailableAnalyzers());
         }
       });
   }
@@ -129,7 +129,7 @@ export class ConfigureProjectComponent implements OnInit {
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getProjectFilePatterns());
+          this.userService.refresh(() => this.getProjectFilePatterns());
         }
       });
   }
@@ -146,7 +146,7 @@ export class ConfigureProjectComponent implements OnInit {
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getProjectName());
+          this.userService.refresh(() => this.getProjectName());
         }
       });
   }
@@ -169,7 +169,7 @@ export class ConfigureProjectComponent implements OnInit {
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.submitModule());
+          this.userService.refresh(() => this.submitModule());
         }
         if (error.status && error.status === CONFLICT) {
           this.moduleExists = true;
@@ -195,7 +195,7 @@ export class ConfigureProjectComponent implements OnInit {
         this.modules = this.modules.filter(value => value.path !== module.path);
       }).catch(error => {
       if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh().then(() => this.deleteModule(module));
+        this.userService.refresh(() => this.deleteModule(module));
       }
       if (error.status && error.status === UNPROCESSABLE_ENTITY) {
         this.proccessing = false;
@@ -223,7 +223,7 @@ export class ConfigureProjectComponent implements OnInit {
       this.projectService.editAnalyzerConfigurationForProject(this.projectId, analyzerConfiguration)
         .catch(error => {
           if (error.status && error.status === FORBIDDEN) {
-            this.userService.refresh().then(() => this.submitAnalyzerConfiguration(analyzerConfiguration));
+            this.userService.refresh(() => this.submitAnalyzerConfiguration(analyzerConfiguration));
           } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
             this.openSnackBar('Cannot edit the project! Try again later', '🞩');
           }
@@ -235,7 +235,7 @@ export class ConfigureProjectComponent implements OnInit {
         })
         .catch(error => {
           if (error.status && error.status === FORBIDDEN) {
-            this.userService.refresh().then(() => this.submitAnalyzerConfiguration(analyzerConfiguration));
+            this.userService.refresh(() => this.submitAnalyzerConfiguration(analyzerConfiguration));
           } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
             this.openSnackBar('Cannot edit the project! Try again later', '🞩');
           }
@@ -259,7 +259,7 @@ export class ConfigureProjectComponent implements OnInit {
       .catch(error => {
         this.proccessing = false;
         if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh().then(() => this.deleteFilePattern(pattern));
+        this.userService.refresh(() => this.deleteFilePattern(pattern));
       }
     });
   }
@@ -287,7 +287,7 @@ export class ConfigureProjectComponent implements OnInit {
       .catch(error => {
         this.proccessing = false;
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.submitFilePattern(type));
+          this.userService.refresh(() => this.submitFilePattern(type));
         }
       });
   }

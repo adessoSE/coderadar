@@ -43,10 +43,8 @@ export class AddProjectComponent {
         this.router.navigate(['/project-configure', this.project.id]);
       })
       .catch(error => {
-        console.log(error);
         if (error.status && error.status === FORBIDDEN) { // If access is denied
-          this.userService.refresh()
-            .then(() => this.submitForm());
+          this.userService.refresh(() => this.submitForm());
         } else if (error.status && error.status === BAD_REQUEST) {   // If there is a field error
           if (error.error && error.error.errorMessage === 'Validation Error') {
             error.error.fieldErrors.forEach(field => {  // Check which field

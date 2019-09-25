@@ -20,7 +20,7 @@ export class UserService {
    * @param password the string to check.
    */
   public static validatePassword(password: string): boolean {
-    if (password != undefined) {
+    if (password !== undefined) {
       return !(password.length < 8 || !/\d/g.test(password) || !/\d+/g.test(password));
     } else {
       return false;
@@ -31,7 +31,8 @@ export class UserService {
    * returns the currently logged in user or null if they don't exist.
    */
   public static getLoggedInUser() {
-    return JSON.parse(localStorage.getItem('currentUser'));
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    return  currentUser === null ? '' : currentUser;
   }
 
   /**
@@ -68,18 +69,20 @@ export class UserService {
    * Upon receiving a successful response from the server, the new access token is saved in the localStorage.
    * If no user is found in the local storage or the refresh token has expired, redirects to /login.
    */
-  public refresh() {
+  public refresh(callback: () => any) {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (currentUser && currentUser.refreshToken && currentUser.accessToken) {
-      return this.httpClient.post<any>(this.apiURL + 'user/refresh',
+      this.httpClient.post<any>(this.apiURL + 'user/refresh',
         {accessToken: currentUser.accessToken, refreshToken: currentUser.refreshToken}).toPromise()
         .then(user => {
           if (user && user.token) {
             currentUser.accessToken = user.token;
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            callback();
           }
         })
         .catch(error => {
+          console.log(error);
           if (error.errorMessage !== 'Access token ist still valid. This token must be used for authentication.') {
             this.logout();
           }

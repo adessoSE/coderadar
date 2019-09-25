@@ -60,7 +60,7 @@ export class EditProjectComponent implements OnInit {
         .catch(error => {
           this.waiting = false;
           if (error.status && error.status === FORBIDDEN) {
-            this.userService.refresh().then(() => this.submitForm());
+            this.userService.refresh(() => this.submitForm());
           } else if (error.status && error.status === BAD_REQUEST) {
             if (error.error && error.error.errorMessage === 'Validation Error') {
               error.error.fieldErrors.forEach(field => {
@@ -99,7 +99,7 @@ export class EditProjectComponent implements OnInit {
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getProject());
+          this.userService.refresh(() => this.getProject());
         } else if (error.status && error.status === NOT_FOUND) {
           this.router.navigate(['/dashboard']);
         }
@@ -139,7 +139,7 @@ export class EditProjectComponent implements OnInit {
       }))
       .catch(e => {
         if (e.status && e.status === FORBIDDEN) {
-          this.userService.refresh().then(() => this.getProjects());
+          this.userService.refresh(() => this.getProjects());
         }
       });
   }
