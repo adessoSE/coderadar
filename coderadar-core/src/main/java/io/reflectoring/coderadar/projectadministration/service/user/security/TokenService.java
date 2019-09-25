@@ -68,7 +68,7 @@ public class TokenService {
     JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret)).withIssuer("coderadar").build();
     try {
       return verifier.verify(token);
-    } catch (SignatureVerificationException e){
+    } catch (SignatureVerificationException e) {
       return null;
     }
   }

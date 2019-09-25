@@ -12,6 +12,8 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.Proje
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.HashMap;
@@ -95,14 +97,15 @@ public class ScanProjectScheduler {
                         Paths.get(
                             coderadarConfigurationProperties.getWorkdir()
                                 + "/projects/"
-                                + currentProject.getWorkdirName()))) {
+                                + currentProject.getWorkdirName()),
+                        new URL(project.getVcsUrl()))) {
                       updateCommitsPort.updateCommits(
                           getProjectCommitsUseCase.getCommits(
                               Paths.get(currentProject.getWorkdirName()),
                               getProjectDateRange(currentProject)),
                           currentProject.getId());
                     }
-                  } catch (UnableToUpdateRepositoryException e) {
+                  } catch (UnableToUpdateRepositoryException | MalformedURLException e) {
                     logger.error(String.format("Unable to update the project: %s", e.getMessage()));
                   }
                 }

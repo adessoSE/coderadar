@@ -62,8 +62,6 @@ class RefreshTokenServiceTest {
 
     // then
     assertThat(actualAccessToken).isEqualTo(expectedAccessToken);
-
-    verify(refreshTokenPort).updateRefreshToken(refreshToken, expectedAccessToken);
   }
 
   @Test

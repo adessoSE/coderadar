@@ -82,7 +82,6 @@ export class UserService {
           }
         })
         .catch(error => {
-          console.log(error);
           if (error.errorMessage !== 'Access token ist still valid. This token must be used for authentication.') {
             this.logout();
           }
