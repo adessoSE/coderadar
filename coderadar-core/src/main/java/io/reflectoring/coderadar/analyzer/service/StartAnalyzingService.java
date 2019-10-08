@@ -114,7 +114,6 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
         analyzers.add(analyzerPluginService.createAnalyzer(config.getAnalyzerName()));
       }
     }
-
     return analyzers;
   }
 }

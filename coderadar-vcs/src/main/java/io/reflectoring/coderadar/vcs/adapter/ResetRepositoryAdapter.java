@@ -21,6 +21,8 @@ public class ResetRepositoryAdapter implements ResetRepositoryPort {
       repository = builder.setWorkTree(repositoryRoot.toFile()).build();
       Git git = new Git(repository);
       git.reset().setMode(ResetCommand.ResetType.HARD).call();
+      git.getRepository().close();
+      git.close();
     } catch (IOException | GitAPIException e) {
       throw new UnableToResetRepositoryException(
           "Error resetting git repository " + repositoryRoot + " " + e.getMessage());

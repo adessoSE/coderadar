@@ -24,7 +24,7 @@ public class CloneRepositoryAdapter implements CloneRepositoryPort {
       config.setBoolean(
           ConfigConstants.CONFIG_CORE_SECTION, null, ConfigConstants.CONFIG_KEY_AUTOCRLF, true);
       config.save();
-      git.getRepository().close();
+      git.close();
     } catch (GitAPIException | IOException e) {
       throw new UnableToCloneRepositoryException(e.getMessage());
     }

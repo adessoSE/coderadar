@@ -91,6 +91,8 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
               });
       List<Commit> result = new ArrayList<>(map.values());
       setCommitsFiles(git, result);
+      git.getRepository().close();
+      git.close();
       return result;
     } catch (Exception e) {
       throw new IllegalStateException(

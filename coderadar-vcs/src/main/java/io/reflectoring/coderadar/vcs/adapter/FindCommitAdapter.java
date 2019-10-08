@@ -43,8 +43,9 @@ public class FindCommitAdapter implements FindCommitPort {
 
       ObjectId commitId = git.getRepository().resolve(name);
       Iterable<RevCommit> commits = git.log().add(commitId).call();
+      git.getRepository().close();
+      git.close();
       return RevCommitMapper.map(commits.iterator().next());
-
     } catch (MissingObjectException e) {
       return null;
     } catch (Exception e) {
