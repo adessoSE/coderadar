@@ -9,7 +9,5 @@ public interface RefreshTokenPort {
 
   void deleteByUser(User user);
 
-  void updateRefreshToken(String oldToken, String newToken);
-
   void saveToken(RefreshToken refreshTokenEntity);
 }
