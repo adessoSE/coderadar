@@ -42,13 +42,6 @@ public class RefreshTokenAdapter implements RefreshTokenPort {
   }
 
   @Override
-  public void updateRefreshToken(String oldToken, String newToken) {
-    RefreshTokenEntity refreshToken = refreshTokenRepository.findByToken(oldToken);
-    refreshToken.setToken(newToken);
-    refreshTokenRepository.save(refreshToken);
-  }
-
-  @Override
   public void saveToken(RefreshToken refreshToken) {
     refreshTokenRepository.save(refreshTokenMapper.mapDomainObject(refreshToken));
   }

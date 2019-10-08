@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
@@ -8,7 +8,7 @@ import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import { AppEffects } from 'src/app/city-map/shared/effects';
 import {faClone, faSquare} from '@fortawesome/free-regular-svg-icons';
-import {PageEvent} from '@angular/material';
+import {MatPaginator, PageEvent} from '@angular/material';
 import {AppComponent} from '../../app.component';
 
 
@@ -27,6 +27,8 @@ export class ProjectDashboardComponent implements OnInit {
   project: Project;
 
   pageEvent: PageEvent;
+  @ViewChild('paginator1') paginator1: MatPaginator;
+  @ViewChild('paginator2') paginator2: MatPaginator;
 
   pageSizeOptions: number[] = [5, 10, 25, 100];
 
@@ -168,5 +170,13 @@ export class ProjectDashboardComponent implements OnInit {
 
     this.cityEffects.firstCommit = this.selectedCommit1;
     this.cityEffects.secondCommit = this.selectedCommit2;
+  }
+
+  syncPaginators(event: PageEvent) {
+    this.paginator2.pageIndex = event.pageIndex;
+    this.paginator2.pageSize = event.pageSize;
+    this.paginator1.pageIndex = event.pageIndex;
+    this.paginator1.pageSize = event.pageSize;
+    this.pageEvent = event;
   }
 }

@@ -98,7 +98,7 @@ public class ScanProjectScheduler {
                             coderadarConfigurationProperties.getWorkdir()
                                 + "/projects/"
                                 + currentProject.getWorkdirName()),
-                        new URL(project.getVcsUrl()))) {
+                        new URL(currentProject.getVcsUrl()))) {
                       updateCommitsPort.updateCommits(
                           getProjectCommitsUseCase.getCommits(
                               Paths.get(currentProject.getWorkdirName()),

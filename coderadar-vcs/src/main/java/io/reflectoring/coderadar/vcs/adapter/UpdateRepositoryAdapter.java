@@ -62,6 +62,8 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
     ObjectId oldHead = git.getRepository().resolve(Constants.HEAD);
     ObjectId newHead =
         git.pull().setStrategy(MergeStrategy.THEIRS).call().getMergeResult().getNewHead();
+    git.getRepository().close();
+    git.close();
     return (oldHead == null && newHead != null) || !oldHead.equals(newHead);
   }
 }

@@ -60,6 +60,7 @@ public class LoginUserService implements LoginUserUseCase {
     RefreshToken refreshTokenEntity = new RefreshToken();
     refreshTokenEntity.setToken(refreshToken);
     refreshTokenEntity.setUser(user);
+    refreshTokenPort.deleteByUser(user);
     refreshTokenPort.saveToken(refreshTokenEntity);
   }
 }

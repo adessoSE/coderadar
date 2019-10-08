@@ -17,8 +17,9 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
     try {
       Git git = Git.open(new File(projectRoot));
       ObjectId commitId = git.getRepository().resolve(name);
+      byte[] content = BlobUtils.getRawContent(git.getRepository(), commitId, filepath);
       git.close();
-      return BlobUtils.getRawContent(git.getRepository(), commitId, filepath);
+      return content;
     } catch (IOException e) {
       throw new UnableToGetCommitContentException(e.getMessage());
     }

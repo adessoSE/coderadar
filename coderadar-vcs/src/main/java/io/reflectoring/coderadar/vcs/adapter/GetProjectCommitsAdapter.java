@@ -74,14 +74,13 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
                 // Find the first commit in the given date range and build the tree from it.
                 if (!done.get() && isInDateRange(range, rc)) {
                   final RevWalk revWalk = new RevWalk(git.getRepository());
-
                   Commit commit = new Commit();
                   commit.setName(rc.getName());
                   commit.setAuthor(rc.getAuthorIdent().getName());
                   commit.setComment(rc.getShortMessage());
                   commit.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
                   try {
-                    commit.setParents(getParents(revWalk, rc, map, range.getStartDate()));
+                    commit.setParents(getParents(revWalk, rc, map, range));
                   } catch (IOException e) {
                     e.printStackTrace();
                   }
@@ -91,6 +90,8 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
               });
       List<Commit> result = new ArrayList<>(map.values());
       setCommitsFiles(git, result);
+      git.getRepository().close();
+      git.close();
       return result;
     } catch (Exception e) {
       throw new IllegalStateException(
@@ -231,15 +232,12 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
    * @param commit The start commit. This should be the newest commit.
    * @param walkedCommits A Map storing the commits we have walked so far, this prevents us from
    *     walking the same commits more than once.
-   * @param startDate The date past which no parents are checked.
+   * @param range The date past which no parents are checked.
    * @return A List of parents for the commit.
    * @throws IOException Thrown if for any reason a parent commit cannot be properly parsed.
    */
   private List<Commit> getParents(
-      RevWalk revWalk,
-      RevCommit commit,
-      HashMap<ObjectId, Commit> walkedCommits,
-      LocalDate startDate)
+      RevWalk revWalk, RevCommit commit, HashMap<ObjectId, Commit> walkedCommits, DateRange range)
       throws IOException {
 
     List<Commit> parents = new ArrayList<>();
@@ -251,11 +249,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
         parents.add(commitWithParents);
       } else {
         RevCommit commitWithMetadata = revWalk.parseCommit(rc.getId());
-        if (startDate == null
-            || !Instant.ofEpochSecond(rc.getCommitTime())
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate()
-                .isAfter(startDate)) {
+        if (range == null || !isInDateRange(range, rc)) {
           continue;
         }
         commitWithParents = new Commit();
@@ -264,8 +258,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
         commitWithParents.setComment(commitWithMetadata.getShortMessage());
         commitWithParents.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
         walkedCommits.put(rc.getId(), commitWithParents);
-        commitWithParents.setParents(
-            getParents(revWalk, commitWithMetadata, walkedCommits, startDate));
+        commitWithParents.setParents(getParents(revWalk, commitWithMetadata, walkedCommits, range));
         parents.add(commitWithParents);
       }
     }
