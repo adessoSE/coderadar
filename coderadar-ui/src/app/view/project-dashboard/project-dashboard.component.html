@@ -8,6 +8,11 @@
     <br>
     <mat-label style="font-size: 12pt">Analyzed {{commitsAnalyzed}}/{{commits.length}} commits</mat-label>
   </p>
+  <mat-paginator #paginator1 [showFirstLastButtons]="true" class="paginator" [length]="commits.length"
+                 [pageSize]="pageSize"
+                 [pageSizeOptions]="pageSizeOptions"
+                 (page)="syncPaginators($event)">
+  </mat-paginator>
   <mat-grid-list cols="1" rowHeight="150px">
     <mat-grid-tile *ngFor="let commit of commits.slice(pageEvent.pageIndex*pageEvent.pageSize, (pageEvent.pageIndex*pageEvent.pageSize) + pageEvent.pageSize)"
                      [colspan]="1" [rowspan]="1">
@@ -38,10 +43,10 @@
   </mat-grid-list>
 </main>
 
-<mat-paginator [showFirstLastButtons]="true" class="paginator" [length]="commits.length"
+<mat-paginator #paginator2 [showFirstLastButtons]="true" class="paginator" [length]="commits.length"
                [pageSize]="pageSize"
                [pageSizeOptions]="pageSizeOptions"
-               (page)="pageEvent = $event">
+               (page)="syncPaginators($event)">
 </mat-paginator>
 
 <app-footer></app-footer>
