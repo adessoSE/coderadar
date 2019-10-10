@@ -1,0 +1,55 @@
+<app-header [title]="[{location: '/dashboard', name: 'Dashboard'},
+{location: '/user-setting/', name: 'User settings'}]">
+</app-header>
+
+<main class="mat-card-form">
+  <div class="grid-container">
+    <div fxLayoutAlign="center center" id="cardContainer">
+      <form (ngSubmit)="submitForm()">
+        <mat-card>
+
+          <!--Card title-->
+          <mat-card-header>
+            <mat-card-title>
+              <span>User settings</span>
+            </mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content fxLayout="column">
+
+            <!--Form fields-->
+            <mat-form-field>
+              <input [(ngModel)]="oldPassword" matInput name="oldPassword" placeholder="Current password"
+                     required type="password">
+            </mat-form-field>
+            <mat-form-field>
+              <input [(ngModel)]="newPassword" matInput name="newPassword" placeholder="New password" required
+                     type="password">
+            </mat-form-field>
+            <mat-form-field>
+              <input [(ngModel)]="newPasswordConfirm" matInput name="confirmPassword" placeholder="Confirm new password"
+                     required type="password">
+            </mat-form-field>
+
+            <!--Possible errors-->
+            <mat-error *ngIf="currentPasswordWrong">The current password is wrong!</mat-error>
+            <mat-error *ngIf="!validPassword">Password must be at least <br>8 symbols long and contain a digit!
+            </mat-error>
+            <mat-error *ngIf="passwordsDoNotMatch">Passwords do not match!</mat-error>
+            <mat-error *ngIf="passwordsAreSame">The new password must not<br> be the same as the old one!</mat-error>
+
+
+            <!--Cancel and submit buttons-->
+            <div align="center" id="cardButtons">
+              <button mat-stroked-button routerLink="/dashboard" type="button">Cancel</button>
+              <button color="primary" mat-raised-button type="submit">Save</button>
+            </div>
+
+          </mat-card-content>
+        </mat-card>
+      </form>
+    </div>
+  </div>
+</main>
+
+<app-footer></app-footer>

@@ -1,0 +1,147 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+apply plugin: "org.springframework.boot"
+apply plugin: "com.diffplug.gradle.spotless"
+apply plugin: "com.jfrog.bintray"
+apply plugin: "war"
+
+sourceSets {
+    test {
+        java {
+            srcDir "src/test/performance"
+        }
+    }
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}
+
+processResources {
+    filter ReplaceTokens, tokens: [
+            "coderadar.version": version
+    ]
+}
+
+test {
+    useJUnitPlatform {
+        // disable long-running integration tests by default
+        excludeTags 'IntegrationTest'
+    }
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform {
+        includeTags "IntegrationTest"
+    }
+}
+
+task controllerTest(type: Test) {
+    useJUnitPlatform {
+        includeTags "ControllerTest"
+    }
+}
+
+war {
+    baseName = "coderadar"
+    version = project.version
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web:${version_spring_boot}"
+    compile "org.springframework.boot:spring-boot-starter-actuator:${version_spring_boot}"
+    compile "org.springframework.boot:spring-boot-devtools:${version_spring_boot}"
+    compile "org.eclipse.jgit:org.eclipse.jgit:4.6.0.201612231935-r"
+    compile "commons-io:commons-io:2.4"
+    compile "io.fabric8:gitective-core:0.9.10"
+    compile "org.apache.commons:commons-lang3:3.4"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8"
+    compile "io.prometheus:simpleclient:0.6.0"
+    compile "io.micrometer:micrometer-registry-prometheus:1.1.3"
+    
+    compile project(":coderadar-plugins:loc-analyzer-plugin")
+    compile project(":coderadar-plugins:checkstyle-analyzer-plugin")
+    compile project(":coderadar-graph")
+    compile project(":coderadar-vcs")
+    compile project(":coderadar-core")
+    compile project(":coderadar-rest")
+
+    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${version_spring_boot}"
+    providedRuntime group: 'org.apache.tomcat', name: 'tomcat-juli', version: property('tomcat.version')
+
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.4.RELEASE'
+
+    testCompile "org.slf4j:slf4j-ext:1.7.25"
+    runtime "com.googlecode.log4jdbc:log4jdbc:1.2"
+
+    testCompile "com.jayway.jsonpath:json-path:2.2.0"
+    testCompile "org.assertj:assertj-core:3.5.1"
+
+    configurations.all {
+        exclude(group: 'junit', module: 'junit')
+    }
+}
+
+
+def Properties localBootRunProperties() {
+    Properties p = new Properties();
+    p.load(new FileInputStream(file(project.projectDir).absolutePath + "/local.application.properties"))
+    return p;
+}
+
+bootRun {
+    jvmArgs =
+            [
+                    // debugging
+                    "-Xdebug",
+                    "-Xss8144k",
+                  "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005",
+            ]
+    doFirst {
+        // Loading the local application properties from file.
+        // We cannot do this in the configuration phase, otherwise all tasks
+        // would fail when the file is missing. So, we do it first thing
+        // in the execution phase.
+        bootRun.systemProperties = localBootRunProperties()
+    }
+}
+
+
+
+task zip(type: Zip) {
+    archiveName "coderadar-${project.version}.zip"
+    destinationDir file("build/libs")
+    from("build/libs") {
+        include "*.war"
+    }
+    from("src/main/config") {
+        include "application.properties"
+    }
+}
+zip.dependsOn bootJar
+zip.dependsOn build
+
+bintray {
+    user = System.getenv("BINTRAY_USER")
+    key = System.getenv("BINTRAY_KEY")
+    filesSpec {
+        into "."
+        from("build/libs") {
+            include "*.zip"
+        }
+    }
+    publish = true
+    pkg {
+        repo = "releases"
+        name = "coderadar"
+        userOrg = "reflectoring"
+        version {
+            name = project.version
+            released = new Date()
+        }
+    }
+}
+
+bintrayUpload.dependsOn zip

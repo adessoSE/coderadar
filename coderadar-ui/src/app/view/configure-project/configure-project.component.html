@@ -1,0 +1,103 @@
+<app-header [title]="[{location: '/dashboard', name: 'Dashboard'}, {location: '/project-configure/' + projectId, name: 'Configure ' + projectName}]"></app-header>
+<div *ngIf="processing" class="dark-overlay">
+  <mat-spinner *ngIf="processing" style="position: absolute;  margin-top: 15%; margin-left: 46%; z-index: 5" [diameter]="100"></mat-spinner>
+</div>
+
+<main class="mat-card-form ">
+  <div class="grid-container" id="cardContainer">
+    <div fxLayoutAlign="center center">
+      <form>
+        <mat-card>
+
+          <!--Card title-->
+          <mat-card-header>
+            <mat-card-title>
+              <span>Configure {{(projectName)}}</span>
+            </mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content>
+
+            <!--Analyzers-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Select analyzers:</mat-label>
+              </div>
+              <div *ngFor="let analyzer of analyzers">
+                <mat-checkbox (change)="submitAnalyzerConfiguration(analyzer)" [(ngModel)]="analyzer.enabled" name="analyzer-{{analyzer.analyzerName}}">
+                  {{analyzer.analyzerName.split('.').pop()}}
+                </mat-checkbox>
+              </div>
+            </div>
+
+            <!--Included file patterns-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Included file patterns:</mat-label>
+              </div>
+              <div *ngFor="let pattern of filePatterns">
+                <div *ngIf="pattern.inclusionType === 'INCLUDE'">
+                  <span>{{pattern.pattern}}</span>
+                  <button (click)="deleteFilePattern(pattern)" mat-button>-</button>
+                </div>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <input [(ngModel)]="filePatternIncludeInput" matInput maxlength="100" name="includePatterns" placeholder="Pattern"
+                         type="text">
+                </mat-form-field>
+                <button (click)="submitFilePattern('INCLUDE')" mat-button type="button">+</button>
+              </div>
+            </div>
+
+            <!--Excluded file patterns-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Excluded file patterns:</mat-label>
+              </div>
+              <div *ngFor="let pattern of filePatterns">
+                <div *ngIf="pattern.inclusionType === 'EXCLUDE'">
+                  <span>{{pattern.pattern}}</span>
+                  <button (click)="deleteFilePattern(pattern)" mat-button>-</button>
+                </div>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <input [(ngModel)]="filePatternExcludeInput" matInput maxlength="100" name="excludePatterns" placeholder="Pattern"
+                         type="text">
+                </mat-form-field>
+                <button (click)="submitFilePattern('EXCLUDE')" mat-button style="float:right" type="button">+</button>
+              </div>
+            </div>
+
+            <!--Project modules-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Project modules:</mat-label>
+              </div>
+              <div *ngFor="let module of modules">
+                <span>{{module.path}}</span>
+                <button (click)="deleteModule(module)" mat-button>-</button>
+              </div>
+              <div class="row">
+                <mat-form-field>
+                  <input [(ngModel)]="modulesInput" matInput maxlength="100" name="modules" placeholder="Module"
+                         type="text">
+                </mat-form-field>
+                <button (click)="submitModule()" mat-button style="float:right" type="button">+</button>
+              </div>
+              <mat-error *ngIf="moduleExists">A module with this name already exists!</mat-error>
+            </div>
+          </mat-card-content>
+
+          <!--Cancel and submit buttons-->
+          <div align="center" id="cardButtons">
+            <button color="primary" mat-raised-button routerLink="/dashboard">Done</button>
+          </div>
+        </mat-card>
+      </form>
+    </div>
+  </div>
+</main>
+
+<app-footer></app-footer>

@@ -1,0 +1,26 @@
+<span>
+
+  <mat-select (selectionChange)="applyMetricMappings()" [(ngModel)]="metricMapping.heightMetricName" disableRipple
+              style="padding-right:2%;width: 30px">
+    <mat-select-trigger>
+      <mat-label><fa-icon [icon]="faArrowsAltV"></fa-icon></mat-label>&nbsp;
+    </mat-select-trigger>
+    <mat-option *ngFor="let metric of availableMetrics" [value]="metric.metricName">{{metric.shortName}}</mat-option>
+  </mat-select>
+
+  <mat-select (selectionChange)="applyMetricMappings()" [(ngModel)]="metricMapping.groundAreaMetricName" disableRipple
+              style="padding-right:2%; width: 40px">
+    <mat-select-trigger>
+      <mat-label><fa-icon [icon]="faArrowsAlt"></fa-icon></mat-label>&nbsp;
+    </mat-select-trigger>
+    <mat-option *ngFor="let metric of availableMetrics" [value]="metric.metricName">{{metric.shortName}}</mat-option>
+  </mat-select>
+
+  <mat-select (selectionChange)="applyMetricMappings()" [(ngModel)]="metricMapping.colorMetricName" style="padding-right:2%; width: 40px" disableRipple>
+    <mat-select-trigger>
+      <mat-label><fa-icon [icon]="faPalette"></fa-icon></mat-label>&nbsp;
+    </mat-select-trigger>
+    <mat-option *ngFor="let metric of availableMetrics" [value]="metric.metricName">{{metric.shortName}}</mat-option>
+  </mat-select>
+
+</span>

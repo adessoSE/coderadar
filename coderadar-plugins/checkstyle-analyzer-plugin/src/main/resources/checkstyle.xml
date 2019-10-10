@@ -8,8 +8,7 @@
         If you set the basedir property below, then all reported file
         names will be relative to the specified directory. See
         http://checkstyle.sourceforge.net/5.x/config.html#Checker
-        <property name="basedir" value="${basedir}"/>
-    -->
+        <property name="basedir" value="${basedir}"/> -->
 
     <metadata name="com.atlas-sw.eclipse" value="I like Sydney"/>
 
@@ -97,7 +96,7 @@
             <property name="allowMissingPropertyJavadoc" value="true"/>
         </module>
         <module name="JavadocVariable"/>
-        <module name="JavadocStyle">
+            <module name="JavadocStyle">
             <property name="scope" value="public"/>
         </module>
         <module name="LeftCurly">
@@ -161,7 +160,6 @@
             <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
         </module>
         <module name="ParameterNumber"/>
-
 
 
         <module name="ParenPad"/>
@@ -269,7 +267,7 @@
             <property name="max" value="2"/>
         </module>
         <module name="TodoComment">
-            <property name="format" value="(TODO)|(FIXME)" />
+            <property name="format" value="(TODO)|(FIXME)"/>
         </module>
         <module name="UncommentedMain"/>
         <module name="UnnecessaryParentheses"/>
@@ -317,7 +315,8 @@
         <module name="ClassFanOutComplexity">
             <property name="max" value="25"/>
             <!-- Default classes are also listed-->
-            <property name="excludedClasses" value="boolean, byte, char, double, float, int, long, short,  void, Boolean, Byte, Character, Double, Float, Integer, Long, Short, Void, Object, Class, String, StringBuffer, StringBuilder, ArrayIndexOutOfBoundsException, Exception, RuntimeException, IllegalArgumentException, IllegalStateException, IndexOutOfBoundsException, NullPointerException, Throwable, SecurityException, UnsupportedOperationException, List, ArrayList, Deque, Queue, LinkedList, Set, HashSet, SortedSet, TreeSet, Map, HashMap, SortedMap, TreeMap, DetailsAST, CheckstyleException, UnsupportedEncodingException, BuildException, ConversionException, FileNotFoundException, TestException, Log, Sets, Multimap, TokenStreamRecognitionException, RecognitionException, TokenStreamException, IOException"/>
+            <property name="excludedClasses"
+                      value="boolean, byte, char, double, float, int, long, short,  void, Boolean, Byte, Character, Double, Float, Integer, Long, Short, Void, Object, Class, String, StringBuffer, StringBuilder, ArrayIndexOutOfBoundsException, Exception, RuntimeException, IllegalArgumentException, IllegalStateException, IndexOutOfBoundsException, NullPointerException, Throwable, SecurityException, UnsupportedOperationException, List, ArrayList, Deque, Queue, LinkedList, Set, HashSet, SortedSet, TreeSet, Map, HashMap, SortedMap, TreeMap, DetailsAST, CheckstyleException, UnsupportedEncodingException, BuildException, ConversionException, FileNotFoundException, TestException, Log, Sets, Multimap, TokenStreamRecognitionException, RecognitionException, TokenStreamException, IOException"/>
         </module>
 
         <module name="SingleLineJavadoc"/>

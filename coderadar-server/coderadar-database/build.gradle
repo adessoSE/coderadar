@@ -1,4 +1,0 @@
-
-dependencies {
-    compile "org.liquibase:liquibase-core:3.6.2"
-}

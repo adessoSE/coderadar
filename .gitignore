@@ -4,10 +4,11 @@
 
 ### coderadar ###
 
-coderadar-server/coderadar-core/local.application.properties
-coderadar-server/coderadar-core/coderadar-workdir/
-classes/
-.attach_pid*
+coderadar-app/local.application.properties
+coderadar-app/coderadar-workdir/
+coderadar-test/coderadar-workdir/
+coderadar-test/src/test/resources/test-clone
+coderadar-ui/node_modules
 
 ### Eclipse ###
 
