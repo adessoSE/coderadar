@@ -44,6 +44,7 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
       List<CommitEntity> commitEntities = commitRepository.findByProjectId(id);
       commitRepository.deleteCommits(commitEntities);
       projectRepository.deleteProjectCascade(id);
+      projectRepository.deleteById(id);
       deleteWorkdir(projectEntity);
 
     } catch (IllegalArgumentException e) {
