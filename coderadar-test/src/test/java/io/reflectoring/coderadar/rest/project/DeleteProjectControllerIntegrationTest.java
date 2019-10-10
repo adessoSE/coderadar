@@ -25,7 +25,7 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private FilePatternRepository filePatternRepository;
 
   // This test has to be annotated with @DirtiesContext because custom Neo4j queries
-  // cause problems when run inside an DB tansaction. Therefore the transaction propagation
+  // cause problems when run inside an DB transaction. Therefore the transaction propagation
   // must be set to NOT_SUPPORTED (no transaction) to "fix" this issue.
   @Test
   @DirtiesContext
@@ -46,6 +46,20 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
         .perform(delete("/projects/" + id))
         .andExpect(status().isOk())
         .andDo(document("projects/delete"));
+
+    Assertions.assertFalse(projectRepository.findById(id).isPresent());
+  }
+
+  @Test
+  void deleteProjectWithOnlyOneNode() throws Exception {
+    ProjectEntity testProject = new ProjectEntity();
+    testProject.setVcsUrl("https://valid.url");
+    testProject.setName("test project");
+    testProject = projectRepository.save(testProject);
+    final Long id = testProject.getId();
+
+    mvc().perform(delete("/projects/" + id))
+            .andExpect(status().isOk());
 
     Assertions.assertFalse(projectRepository.findById(id).isPresent());
   }
