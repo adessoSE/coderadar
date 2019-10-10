@@ -1,0 +1,37 @@
+@import "../../config";
+
+#tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: $tooltip-background-color;
+  color: $background-color;
+  padding: 10px;
+  font-size: 14px;
+  max-width: 300px;
+  z-index: 101;
+
+  opacity: 0;
+  transition: opacity 0.75s ease;
+
+  &.visible {
+    opacity: 1;
+  }
+
+  & > .element-name {
+    text-overflow: ellipsis;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    direction: rtl;
+    padding-bottom: 5px;
+  }
+
+  & table {
+    width: 100%;
+
+    & td.metric-value-column {
+      padding-left: 5px;
+    }
+  }
+}

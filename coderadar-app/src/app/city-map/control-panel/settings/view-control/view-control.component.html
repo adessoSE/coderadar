@@ -1,0 +1,20 @@
+<span>
+  <mat-radio-button (click)="changeViewType(viewTypes.split)" [checked]="activeViewType === viewTypes.split" [value]="viewTypes.split"
+                    class="custom-control-input"
+                    id="radio-splitscreen"
+                    name="radio-group-screen"></mat-radio-button>
+  <label #splitScreenLabel class="custom-control-label" data-placement="bottom" data-toggle="tooltip"
+         for="radio-splitscreen" title="Split view">
+      <fa-icon [icon]="faSquare" size="lg" style="color:white;"></fa-icon>
+      <fa-icon [icon]="faSquare" size="lg" style="color:white;"></fa-icon>
+  </label>
+  &nbsp;
+  <mat-radio-button (click)="changeViewType(viewTypes.merged)" [checked]="activeViewType === viewTypes.merged" [value]="viewTypes.merged"
+                    class="custom-control-input"
+                    id="radio-fullscreen"
+                    name="radio-group-screen"></mat-radio-button>
+  <label #fullScreenLabel class="custom-control-label" data-placement="bottom" data-toggle="tooltip"
+         for="radio-fullscreen" title="Combined view">
+      <fa-icon [icon]="faClone" size="lg" style="color:white;"></fa-icon>
+  </label>
+</span>
