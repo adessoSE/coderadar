@@ -110,6 +110,7 @@ fabric.properties
 *.class
 
 # Log file
+*.log.*.gz
 *.log
 
 # BlueJ files
