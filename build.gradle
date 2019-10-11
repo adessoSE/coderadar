@@ -47,7 +47,7 @@ subprojects {
             classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3"
         }
     }
-    
+
     version = project.getBuildVersion(baseVersion)
 
     sourceCompatibility = 1.8
@@ -58,13 +58,14 @@ subprojects {
         mavenCentral()
         mavenLocal()
     }
-    
+
     test {
         useJUnitPlatform()
     }
 
     dependencies {
         testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: version_junit
+        testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: version_mockito_junit
         testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: version_junit
         annotationProcessor("org.projectlombok:lombok:$lombok_version")
         compileOnly("org.projectlombok:lombok:$lombok_version")

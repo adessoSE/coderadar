@@ -3,12 +3,13 @@ install: true
 sudo: true
 addons:
   apt:
-    packages:
-    - oracle-java8-installer
-    
+    update: true
+jdk:
+  - openjdk8
+
 stages:
 
-- name: build
+  - name: build
 
 #- name: release
 #  if: branch = master AND type IN (push)
@@ -16,8 +17,8 @@ stages:
 jobs:
   include:
 
-  - stage: build
-    script: "./gradlew --stacktrace build"
+    - stage: build
+      script: "./gradlew --stacktrace build"
 
 #  - stage: release
 #    script:

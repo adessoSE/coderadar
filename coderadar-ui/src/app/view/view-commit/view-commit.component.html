@@ -1,0 +1,29 @@
+<app-header [title]="
+[{location: '/dashboard', name: 'Dashboard'}, {location: '/project/' + project.id,
+name: appComponent.trimProjectName(project.name)}, {location: '/project/' + project.id + '/' + commit.name, name: commit.name.substring(0, 7)}]">
+</app-header>
+<div *ngIf="waiting" class="dark-overlay">
+  <mat-spinner *ngIf="waiting" style="position: absolute;  margin-top: 15%; margin-left: 46%; z-index: 5" [diameter]="100"></mat-spinner>
+</div>
+
+<main class="commit-card">
+  <mat-card>
+    <mat-card-content class="mat-card-content">
+      <mat-label><b>{{commit.name}}</b></mat-label>
+      <br><br>
+      <mat-label><b>Metrics:</b></mat-label>
+      <br><br>
+      <div *ngIf="metrics.length === 0">
+        <mat-label>Not yet analyzed or no metrics are available</mat-label>
+      </div>
+      <div *ngFor="let metric of metrics">
+        <mat-label>{{metric.metricName.split('.').pop() + ' : '}}
+          <b>{{metric.value}}</b>
+        </mat-label>
+        <br>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</main>
+
+<app-footer></app-footer>
