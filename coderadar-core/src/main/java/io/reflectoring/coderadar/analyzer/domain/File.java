@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
@@ -10,6 +11,8 @@ import lombok.ToString;
 public class File {
   private Long id;
   private String path;
+
+  private List<File> oldFiles = new ArrayList<>();
 
   private List<MetricValue> metricValues = new LinkedList<>();
 

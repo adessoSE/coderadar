@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.analyzer.domain;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
@@ -24,4 +25,9 @@ public class FileEntity {
   @Relationship(type = "CHANGED_IN")
   @ToString.Exclude
   private List<FileToCommitRelationshipEntity> commits = new LinkedList<>();
+
+  @EqualsAndHashCode.Exclude
+  @Relationship(type = "RENAMED_FROM")
+  @ToString.Exclude
+  private List<FileEntity> oldFiles = new ArrayList<>();
 }

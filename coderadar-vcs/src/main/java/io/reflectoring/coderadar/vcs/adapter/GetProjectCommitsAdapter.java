@@ -159,7 +159,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
         for (DiffEntry diff : diffs) {
           ChangeType changeType = ChangeTypeMapper.jgitToCoderadar(diff.getChangeType());
           if (changeType != ChangeType.UNCHANGED) {
-            io.reflectoring.coderadar.analyzer.domain.File file;
+            List<io.reflectoring.coderadar.analyzer.domain.File> filesWithPath = new ArrayList<>();
 
             String path;
             if (diff.getChangeType().equals(DiffEntry.ChangeType.DELETE)) {
@@ -171,32 +171,58 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
             List<io.reflectoring.coderadar.analyzer.domain.File> fileList = files.get(path);
 
             if (fileList == null) {
-              fileList = new ArrayList<>();
-              file = new io.reflectoring.coderadar.analyzer.domain.File();
-              fileList.add(file);
+              io.reflectoring.coderadar.analyzer.domain.File file =
+                      new io.reflectoring.coderadar.analyzer.domain.File();
+              if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
+                file.getOldFiles().addAll(files.get(diff.getOldPath()));
+              }
+              filesWithPath.add(file);
+              fileList = new ArrayList<>(filesWithPath);
             } else {
               if ((diff.getChangeType().equals(DiffEntry.ChangeType.ADD))) {
-                file = new io.reflectoring.coderadar.analyzer.domain.File();
+                io.reflectoring.coderadar.analyzer.domain.File file =
+                    new io.reflectoring.coderadar.analyzer.domain.File();
+                filesWithPath.add(file);
+                fileList.add(file);
+              } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.DELETE))) {
+                filesWithPath.addAll(fileList);
+              } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
+                io.reflectoring.coderadar.analyzer.domain.File file =
+                        new io.reflectoring.coderadar.analyzer.domain.File();
+                file.setOldFiles(files.get(diff.getOldPath()));
+                filesWithPath.add(file);
                 fileList.add(file);
               } else {
-                file = Iterables.getLast(fileList);
+                filesWithPath.add(Iterables.getLast(fileList));
               }
             }
 
-            FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
+            for (io.reflectoring.coderadar.analyzer.domain.File file : filesWithPath) {
+              FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
 
-            fileToCommitRelationship.setOldPath(diff.getOldPath());
-            fileToCommitRelationship.setChangeType(changeType);
-            fileToCommitRelationship.setCommit(commits.get(i));
-            fileToCommitRelationship.setFile(file);
-            file.setPath(path);
+              fileToCommitRelationship.setOldPath(diff.getOldPath());
+              fileToCommitRelationship.setChangeType(changeType);
+              fileToCommitRelationship.setCommit(commits.get(i));
+              fileToCommitRelationship.setFile(file);
+              file.setPath(path);
 
-            file.getCommits().add(fileToCommitRelationship);
-            commits.get(i).getTouchedFiles().add(fileToCommitRelationship);
-            if (!files.containsKey(file.getPath())) {
-              files.put(file.getPath(), fileList);
-            } else {
-              files.replace(file.getPath(), fileList);
+              int finalI = i;
+              if (file.getCommits()
+                  .stream()
+                  .noneMatch(
+                      fileToCommitRelationship1 ->
+                          fileToCommitRelationship1
+                              .getCommit()
+                              .getName()
+                              .equals(commits.get(finalI).getName()))) {
+                file.getCommits().add(fileToCommitRelationship);
+              }
+              commits.get(i).getTouchedFiles().add(fileToCommitRelationship);
+              if (!files.containsKey(file.getPath())) {
+                files.put(file.getPath(), fileList);
+              } else {
+                files.replace(file.getPath(), fileList);
+              }
             }
           }
         }

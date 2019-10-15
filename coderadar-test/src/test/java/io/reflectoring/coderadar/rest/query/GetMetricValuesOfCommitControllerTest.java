@@ -70,7 +70,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
         metricValuesForCommit.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
 
-        Assertions.assertEquals(metricValuesForCommit.size(), 4);
+        Assertions.assertEquals(4L, metricValuesForCommit.size());
         Assertions.assertEquals(0L, metricValuesForCommit.get(0).getValue().longValue());
         Assertions.assertEquals(8L, metricValuesForCommit.get(1).getValue().longValue());
         Assertions.assertEquals(18L, metricValuesForCommit.get(2).getValue().longValue());
@@ -92,7 +92,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
         metricValuesForCommit.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
 
-        Assertions.assertEquals(metricValuesForCommit.size(), 4);
+        Assertions.assertEquals(4L, metricValuesForCommit.size());
         Assertions.assertEquals(0L, metricValuesForCommit.get(0).getValue().longValue());
         Assertions.assertEquals(8L, metricValuesForCommit.get(1).getValue().longValue());
         Assertions.assertEquals(12L, metricValuesForCommit.get(2).getValue().longValue());
@@ -114,7 +114,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
         metricValuesForCommit.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
 
-        Assertions.assertEquals(metricValuesForCommit.size(), 4);
+        Assertions.assertEquals(4L, metricValuesForCommit.size());
         Assertions.assertEquals(0L, metricValuesForCommit.get(0).getValue().longValue());
         Assertions.assertEquals(15L, metricValuesForCommit.get(1).getValue().longValue());
         Assertions.assertEquals(27L, metricValuesForCommit.get(2).getValue().longValue());
@@ -136,7 +136,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
         metricValuesForCommit.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
 
-        Assertions.assertEquals(metricValuesForCommit.size(), 4);
+        Assertions.assertEquals(4L, metricValuesForCommit.size());
         Assertions.assertEquals(0L, metricValuesForCommit.get(0).getValue().longValue());
         Assertions.assertEquals(15L, metricValuesForCommit.get(1).getValue().longValue());
         Assertions.assertEquals(27L, metricValuesForCommit.get(2).getValue().longValue());

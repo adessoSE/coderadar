@@ -276,45 +276,68 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       CommitEntity entity,
       Map<String, List<FileEntity>> walkedFiles) {
     for (FileToCommitRelationship fileToCommitRelationship : relationships) {
-      FileToCommitRelationshipEntity fileToCommitRelationshipEntity =
-          new FileToCommitRelationshipEntity();
-      fileToCommitRelationshipEntity.setCommit(entity);
-      fileToCommitRelationshipEntity.setChangeType(fileToCommitRelationship.getChangeType());
-      fileToCommitRelationshipEntity.setOldPath(fileToCommitRelationship.getOldPath());
 
-      FileEntity fileEntity;
+      List<FileEntity> fileEntities = new ArrayList<>();
       List<FileEntity> fileList = walkedFiles.get(fileToCommitRelationship.getFile().getPath());
 
       if (fileList == null) {
-        fileList = new ArrayList<>();
-        fileEntity = new FileEntity();
-        fileList.add(fileEntity);
+        FileEntity fileEntity = new FileEntity();
+        if (fileToCommitRelationship.getChangeType().equals(ChangeType.RENAME)) {
+          fileEntity.getOldFiles().addAll(walkedFiles.get(fileToCommitRelationship.getOldPath()));
+        }
+        fileEntities.add(fileEntity);
+        fileList = new ArrayList<>(fileEntities);
+
       } else {
         if ((fileToCommitRelationship.getChangeType().equals(ChangeType.ADD))) {
-          fileEntity = new FileEntity();
+          FileEntity fileEntity = new FileEntity();
+          fileEntities.add(fileEntity);
           fileList.add(fileEntity);
+        } else if ((fileToCommitRelationship.getChangeType().equals(ChangeType.DELETE))) {
+          fileEntities.addAll(fileList);
+        } else if (fileToCommitRelationship.getChangeType().equals(ChangeType.RENAME)) {
+          FileEntity file = new FileEntity();
+          file.getOldFiles().addAll(walkedFiles.get(fileToCommitRelationship.getOldPath()));
+          fileEntities.add(file);
+          fileList.add(file);
         } else {
-          fileEntity = Iterables.getLast(fileList);
+          fileEntities.add(Iterables.getLast(fileList));
         }
       }
 
-      fileToCommitRelationshipEntity.setFile(fileEntity);
-      fileEntity.setPath(fileToCommitRelationship.getFile().getPath());
-      fileEntity.getCommits().add(fileToCommitRelationshipEntity);
-      if (fileEntity.getId()
-          != null) { // If the file entity already exists, check if it has any metrics and attach
-        // those to the commit entity.
-        for (MetricValueEntity metric :
-            fileRepository.findMetricsByFileAndCommitName(fileEntity.getId(), entity.getName())) {
-          entity.getMetricValues().add(metric);
-          entity.setAnalyzed(true);
-        }
-      }
+      for (FileEntity fileEntity : fileEntities) {
 
-      if (!walkedFiles.containsKey(fileEntity.getPath())) {
-        walkedFiles.put(fileEntity.getPath(), fileList);
-      } else {
-        walkedFiles.replace(fileEntity.getPath(), fileList);
+        FileToCommitRelationshipEntity fileToCommitRelationshipEntity =
+            new FileToCommitRelationshipEntity();
+        fileToCommitRelationshipEntity.setCommit(entity);
+        fileToCommitRelationshipEntity.setChangeType(fileToCommitRelationship.getChangeType());
+        fileToCommitRelationshipEntity.setOldPath(fileToCommitRelationship.getOldPath());
+
+        fileToCommitRelationshipEntity.setFile(fileEntity);
+        fileEntity.setPath(fileToCommitRelationship.getFile().getPath());
+        if (fileEntity
+            .getCommits()
+            .stream()
+            .noneMatch(
+                fileToCommitRelationship1 ->
+                    fileToCommitRelationship1.getCommit().getName().equals(entity.getName()))) {
+          fileEntity.getCommits().add(fileToCommitRelationshipEntity);
+        }
+        if (fileEntity.getId()
+            != null) { // If the file entity already exists, check if it has any metrics and attach
+          // those to the commit entity.
+          for (MetricValueEntity metric :
+              fileRepository.findMetricsByFileAndCommitName(fileEntity.getId(), entity.getName())) {
+            entity.getMetricValues().add(metric);
+            entity.setAnalyzed(true);
+          }
+        }
+
+        if (!walkedFiles.containsKey(fileEntity.getPath())) {
+          walkedFiles.put(fileEntity.getPath(), fileList);
+        } else {
+          walkedFiles.replace(fileEntity.getPath(), fileList);
+        }
       }
     }
   }
