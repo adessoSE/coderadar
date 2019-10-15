@@ -86,6 +86,8 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
 
       commitRepository.save(walkedCommits.values(), 1);
       fileRepository.save(allFiles, 1);
+
+      projectEntity.getCommits().addAll(walkedCommits.values());
       projectRepository.save(projectEntity, 1);
     }
   }
@@ -105,7 +107,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
               .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
       List<CommitEntity> commitsInProject = // First we need all of the commits in the project
-          commitRepository.findByProjectId(projectId);
+          commitRepository.findByProjectIdAndTimestampDesc(projectId);
 
       commits.sort(Comparator.comparing(Commit::getTimestamp));
       Commit newLastCommit = commits.get(0);
@@ -185,6 +187,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       // new ones.
       projectEntity.getFiles().clear();
       projectEntity.getFiles().addAll(allFiles);
+      projectEntity.getCommits().addAll(walkedCommits.values());
 
       // Remove any files that don't have commits attached to them.
       fileRepository.removeFilesWithoutCommits(projectId);

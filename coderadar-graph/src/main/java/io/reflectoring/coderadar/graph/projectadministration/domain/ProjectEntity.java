@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.graph.projectadministration.domain;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
+import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
 import java.util.Date;
 import java.util.LinkedList;
@@ -38,6 +39,9 @@ public class ProjectEntity {
 
   @Relationship(type = "CONTAINS")
   private List<FileEntity> files = new LinkedList<>();
+
+  @Relationship(type = "CONTAINS")
+  private List<CommitEntity> commits = new LinkedList<>();
 
   @Relationship(type = "HAS")
   private List<FilePatternEntity> filePatterns = new LinkedList<>();

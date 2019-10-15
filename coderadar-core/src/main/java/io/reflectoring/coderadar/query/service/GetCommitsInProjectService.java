@@ -21,7 +21,7 @@ public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {
   @Override
   public List<GetCommitResponse> get(Long projectId) {
     List<GetCommitResponse> response = new ArrayList<>();
-    for (Commit commit : getCommitsInProjectPort.get(projectId)) {
+    for (Commit commit : getCommitsInProjectPort.getSortedByTimestampDesc(projectId)) {
       GetCommitResponse getCommitResponse = new GetCommitResponse();
       getCommitResponse.setName(commit.getName());
       getCommitResponse.setAuthor(commit.getAuthor());

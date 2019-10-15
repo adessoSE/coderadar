@@ -117,7 +117,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
               List<Commit> commits =
                   getProjectCommitsUseCase.getCommits(
                       Paths.get(project.getWorkdirName()), getProjectDateRange(project));
-              if (getCommitsInProjectPort.get(projectId).isEmpty()) {
+              if (getCommitsInProjectPort.getSortedByTimestampDesc(projectId).isEmpty()) {
                 saveCommitPort.saveCommits(commits, projectId);
               } else {
                 updateCommitsPort.updateCommits(commits, projectId);

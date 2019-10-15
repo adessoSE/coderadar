@@ -69,7 +69,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
 
         session.clear();
 
-        List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
+        List<CommitEntity> commits = commitRepository.findByProjectIdAndTimestampDesc(projectId);
         for (CommitEntity commit : commits) {
             Assertions.assertTrue(commit.isAnalyzed());
         }
@@ -80,7 +80,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
 
         session.clear();
 
-        commits = commitRepository.findByProjectId(projectId);
+        commits = commitRepository.findByProjectIdAndTimestampDesc(projectId);
         for (CommitEntity commit : commits) {
             Assertions.assertFalse(commit.isAnalyzed());
         }
@@ -105,7 +105,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         List<FindingEntity> findings = findingRepository.findByProjectId(projectId);
         Assertions.assertFalse(findings.isEmpty());
 
-        List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
+        List<CommitEntity> commits = commitRepository.findByProjectIdAndTimestampDesc(projectId);
         for (CommitEntity commit : commits) {
             Assertions.assertTrue(commit.isAnalyzed());
         }
@@ -120,7 +120,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         findings = findingRepository.findByProjectId(projectId);
         Assertions.assertEquals(0, findings.size());
 
-        commits = commitRepository.findByProjectId(projectId);
+        commits = commitRepository.findByProjectIdAndTimestampDesc(projectId);
         for (CommitEntity commit : commits) {
             Assertions.assertFalse(commit.isAnalyzed());
         }

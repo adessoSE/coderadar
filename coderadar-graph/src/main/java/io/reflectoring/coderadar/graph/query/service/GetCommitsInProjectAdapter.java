@@ -31,32 +31,47 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   }
 
   @Override
+  public List<Commit> getSortedByTimestampDesc(Long projectId) {
+    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
+    if (persistedProject.isPresent()) {
+      List<CommitEntity> commitEntities = commitRepository.findByProjectIdAndTimestampDesc(projectId);
+      return mapCommitEntities(commitEntities);
+    } else {
+      throw new ProjectNotFoundException(projectId);
+    }
+  }
+
+  private List<Commit> mapCommitEntities(List<CommitEntity> commitEntities) {
+    List<Commit> commits = new ArrayList<>();
+
+    for (CommitEntity commitEntity1 : commitEntities) {
+      CommitEntity commitEntity =
+              commitRepository
+                      .findById(commitEntity1.getId())
+                      .orElseThrow(() -> new CommitNotFoundException(commitEntity1.getId()));
+
+      Commit commit = new Commit();
+      commit.setId(commitEntity.getId());
+      commit.setName(commitEntity.getName());
+      commit.setTimestamp(commitEntity.getTimestamp());
+      commit.setAuthor(commitEntity.getAuthor());
+      commit.setComment(commitEntity.getComment());
+      commit.setMerged(commitEntity.isMerged());
+      commit.setAnalyzed(commitEntity.isAnalyzed());
+      commit.setParents(findAndSaveParents(commitEntity, new HashMap<>(), new HashMap<>()));
+      commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), commit, new HashMap<>()));
+      commits.add(commit);
+    }
+    commits.sort((o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()));
+    return commits;
+  }
+
+  @Override
   public List<Commit> get(Long projectId) {
     Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
-
     if (persistedProject.isPresent()) {
-      List<Commit> commits = new ArrayList<>();
       List<CommitEntity> commitEntities = commitRepository.findByProjectId(projectId);
-      for (CommitEntity commitEntity1 : commitEntities) {
-        CommitEntity commitEntity =
-            commitRepository
-                .findById(commitEntity1.getId())
-                .orElseThrow(() -> new CommitNotFoundException(commitEntity1.getId()));
-
-        Commit commit = new Commit();
-        commit.setId(commitEntity.getId());
-        commit.setName(commitEntity.getName());
-        commit.setTimestamp(commitEntity.getTimestamp());
-        commit.setAuthor(commitEntity.getAuthor());
-        commit.setComment(commitEntity.getComment());
-        commit.setMerged(commitEntity.isMerged());
-        commit.setAnalyzed(commitEntity.isAnalyzed());
-        commit.setParents(findAndSaveParents(commitEntity, new HashMap<>(), new HashMap<>()));
-        commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), commit, new HashMap<>()));
-        commits.add(commit);
-      }
-      commits.sort((o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()));
-      return commits;
+      return mapCommitEntities(commitEntities);
     } else {
       throw new ProjectNotFoundException(projectId);
     }

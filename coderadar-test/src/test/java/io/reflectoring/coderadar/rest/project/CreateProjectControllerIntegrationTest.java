@@ -49,7 +49,7 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
               Assertions.assertEquals("password", project.getVcsPassword());
               Assertions.assertEquals(testRepoURL.toString(), project.getVcsUrl());
               Assertions.assertFalse(project.isVcsOnline());
-                List<CommitEntity> commits = commitRepository.findByProjectId(id);
+                List<CommitEntity> commits = commitRepository.findByProjectIdAndTimestampDesc(id);
                 Assertions.assertEquals(13, commits.size());
                 List<FileEntity> files = fileRepository.findAllinProject(id);
                 Assertions.assertEquals(8, files.size());
