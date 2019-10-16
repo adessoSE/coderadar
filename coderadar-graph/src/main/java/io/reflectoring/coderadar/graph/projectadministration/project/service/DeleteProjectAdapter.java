@@ -1,8 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.project.service;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
-import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
@@ -10,7 +8,6 @@ import io.reflectoring.coderadar.projectadministration.UnableToDeleteProjectExce
 import io.reflectoring.coderadar.projectadministration.port.driven.project.DeleteProjectPort;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,18 +19,15 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
 
   private final ProjectRepository projectRepository;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
-  private final CommitRepository commitRepository;
 
   private final Logger logger = LoggerFactory.getLogger(DeleteProjectAdapter.class);
 
   @Autowired
   public DeleteProjectAdapter(
       ProjectRepository projectRepository,
-      CoderadarConfigurationProperties coderadarConfigurationProperties,
-      CommitRepository commitRepository) {
+      CoderadarConfigurationProperties coderadarConfigurationProperties) {
     this.projectRepository = projectRepository;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-    this.commitRepository = commitRepository;
   }
 
   @Override
@@ -41,12 +35,13 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
     ProjectEntity projectEntity =
         projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
     try {
-      List<CommitEntity> commitEntities = commitRepository.findByProjectIdAndTimestampDesc(id);
-      commitRepository.deleteCommits(commitEntities);
-      projectRepository.deleteProjectCascade(id);
+      projectRepository.deleteProjectFindings(id);
+      projectRepository.deleteProjectMetrics(id);
+      projectRepository.deleteProjectFilesAndModules(id);
+      projectRepository.deleteProjectCommits(id);
+      projectRepository.deleteProjectConfiguration(id);
       projectRepository.deleteById(id);
       deleteWorkdir(projectEntity);
-
     } catch (IllegalArgumentException e) {
       throw new UnableToDeleteProjectException(id);
     }

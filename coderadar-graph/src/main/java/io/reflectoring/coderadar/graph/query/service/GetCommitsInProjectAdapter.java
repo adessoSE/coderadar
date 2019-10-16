@@ -34,7 +34,8 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   public List<Commit> getSortedByTimestampDesc(Long projectId) {
     Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
     if (persistedProject.isPresent()) {
-      List<CommitEntity> commitEntities = commitRepository.findByProjectIdAndTimestampDesc(projectId);
+      List<CommitEntity> commitEntities =
+          commitRepository.findByProjectIdAndTimestampDesc(projectId);
       return mapCommitEntities(commitEntities);
     } else {
       throw new ProjectNotFoundException(projectId);
@@ -46,9 +47,9 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
     for (CommitEntity commitEntity1 : commitEntities) {
       CommitEntity commitEntity =
-              commitRepository
-                      .findById(commitEntity1.getId())
-                      .orElseThrow(() -> new CommitNotFoundException(commitEntity1.getId()));
+          commitRepository
+              .findById(commitEntity1.getId())
+              .orElseThrow(() -> new CommitNotFoundException(commitEntity1.getId()));
 
       Commit commit = new Commit();
       commit.setId(commitEntity.getId());

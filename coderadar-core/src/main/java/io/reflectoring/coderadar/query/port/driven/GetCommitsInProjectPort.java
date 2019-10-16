@@ -5,5 +5,6 @@ import java.util.List;
 
 public interface GetCommitsInProjectPort {
   List<Commit> getSortedByTimestampDesc(Long projectId);
+
   List<Commit> get(Long projectId);
 }

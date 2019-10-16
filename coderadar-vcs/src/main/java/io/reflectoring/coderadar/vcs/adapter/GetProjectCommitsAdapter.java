@@ -172,7 +172,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
 
             if (fileList == null) {
               io.reflectoring.coderadar.analyzer.domain.File file =
-                      new io.reflectoring.coderadar.analyzer.domain.File();
+                  new io.reflectoring.coderadar.analyzer.domain.File();
               if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
                 file.getOldFiles().addAll(files.get(diff.getOldPath()));
               }
@@ -188,7 +188,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
                 filesWithPath.addAll(fileList);
               } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
                 io.reflectoring.coderadar.analyzer.domain.File file =
-                        new io.reflectoring.coderadar.analyzer.domain.File();
+                    new io.reflectoring.coderadar.analyzer.domain.File();
                 file.setOldFiles(files.get(diff.getOldPath()));
                 filesWithPath.add(file);
                 fileList.add(file);
