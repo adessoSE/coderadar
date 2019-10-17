@@ -18,18 +18,18 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   void deleteProjectFindings(@Param("projectId") Long projectId);
 
   @Query(
-      "MATCH (p:ProjectEntity)-[:CONTAINS]->(:CommitEntity)<-[:VALID_FOR]-(mv:MetricValueEntity)  "
+      "MATCH (p:ProjectEntity)-[:CONTAINS]->(:CommitEntity)<-[:VALID_FOR]-(mv:MetricValueEntity) WHERE ID(p) = {projectId} "
           + "DETACH DELETE mv ")
   void deleteProjectMetrics(@Param("projectId") Long projectId);
 
   @Query(
-      "MATCH MATCH (p:ProjectEntity)-[:CONTAINS]->(:CommitEntity)<-[:CHANGED_IN]-(f:FileEntity) WHERE ID(p) = {0} "
+      "MATCH MATCH (p:ProjectEntity)-[:CONTAINS]->(:CommitEntity)<-[:CHANGED_IN]-(f:FileEntity) WHERE ID(p) = {projectId} "
           + "OPTIONAL MATCH (f)<-[:CONTAINS]-(m:ModuleEntity) "
           + "DETACH DELETE m, f")
   void deleteProjectFilesAndModules(@Param("projectId") Long projectId);
 
   @Query(
-      "PROFILE MATCH (p:ProjectEntity)-[:CONTAINS]->(c:CommitEntity) WHERE ID(p) = {0} DETACH DELETE c")
+      "PROFILE MATCH (p:ProjectEntity)-[:CONTAINS]->(c:CommitEntity) WHERE ID(p) = {projectId} DETACH DELETE c")
   void deleteProjectCommits(@Param("projectId") Long projectId);
 
   @Query(
