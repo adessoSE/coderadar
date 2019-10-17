@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +25,7 @@ public class GetProjectAdapter implements GetProjectPort {
 
   @Override
   public Project get(Long id) throws ProjectNotFoundException {
-    Optional<ProjectEntity> projectEntity = projectRepository.findById(id);
+    Optional<ProjectEntity> projectEntity = projectRepository.findProjectById(id);
     if (projectEntity.isPresent()) {
       return projectMapper.mapNodeEntity(projectEntity.get());
     } else {
@@ -55,5 +56,24 @@ public class GetProjectAdapter implements GetProjectPort {
   @Override
   public List<Project> findByName(String name) {
     return new ArrayList<>(projectMapper.mapNodeEntities(projectRepository.findAllByName(name)));
+  }
+
+  @Override
+  public GetProjectResponse getProjectResponse(Long id) {
+    Optional<ProjectEntity> projectEntity = projectRepository.findProjectById(id);
+    if (projectEntity.isPresent()) {
+      GetProjectResponse response = new GetProjectResponse();
+      response.setId(projectEntity.get().getId());
+      response.setName(projectEntity.get().getName());
+      response.setVcsUsername(projectEntity.get().getVcsUsername());
+      response.setVcsPassword(projectEntity.get().getVcsPassword());
+      response.setVcsOnline(projectEntity.get().isVcsOnline());
+      response.setVcsUrl(projectEntity.get().getVcsUrl());
+      response.setStartDate(projectEntity.get().getVcsStart());
+      response.setEndDate(projectEntity.get().getVcsEnd());
+      return response;
+    } else {
+      throw new ProjectNotFoundException(id);
+    }
   }
 }

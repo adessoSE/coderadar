@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.projectadministration.port.driven.project;
 
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
 import java.util.List;
 
 public interface GetProjectPort {
@@ -14,4 +15,6 @@ public interface GetProjectPort {
   boolean existsById(Long projectId);
 
   List<Project> findByName(String name);
+
+  GetProjectResponse getProjectResponse(Long id);
 }

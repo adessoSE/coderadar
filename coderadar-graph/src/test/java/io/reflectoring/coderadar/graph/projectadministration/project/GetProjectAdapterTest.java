@@ -29,11 +29,11 @@ class GetProjectAdapterTest {
   void shouldReturnProjectAsOptionalWhenAProjectWithThePassingIdExists() {
     ProjectEntity mockedItem = new ProjectEntity();
     mockedItem.setId(1L);
-    when(projectRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedItem));
+    when(projectRepository.findProjectById(any(Long.class))).thenReturn(Optional.of(mockedItem));
 
     Project returned = getProjectAdapter.get(1L);
 
-    verify(projectRepository, times(1)).findById(1L);
+    verify(projectRepository, times(1)).findProjectById(1L);
     verifyNoMoreInteractions(projectRepository);
     Assertions.assertNotNull(returned);
     Assertions.assertEquals(new Long(1L), returned.getId());

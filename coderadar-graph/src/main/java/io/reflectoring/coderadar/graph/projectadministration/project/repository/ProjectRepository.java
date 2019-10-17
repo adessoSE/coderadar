@@ -13,30 +13,30 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
 
   @Query(
       "MATCH (p:ProjectEntity) WHERE ID(p) = {projectId} "
-          + "OPTIONAL MATCH (p)-->(:CommitEntity)<--(:MetricValueEntity)-->(fi:FindingEntity) "
+          + "OPTIONAL MATCH (p)-[:CONTAINS]->(:CommitEntity)<-[:VALID_FOR]-(:MetricValueEntity)-[:LOCATED_IN]->(fi:FindingEntity) "
           + "DETACH DELETE fi ")
   void deleteProjectFindings(@Param("projectId") Long projectId);
 
   @Query(
-      "MATCH (p:ProjectEntity)-->(:CommitEntity)<--(mv:MetricValueEntity) WHERE ID(p) = {projectId} "
+      "MATCH (p:ProjectEntity)-[:CONTAINS]->(:CommitEntity)<-[:VALID_FOR]-(mv:MetricValueEntity)  "
           + "DETACH DELETE mv ")
   void deleteProjectMetrics(@Param("projectId") Long projectId);
 
   @Query(
-      "MATCH (p:ProjectEntity)-->(:CommitEntity)<--(f:FileEntity) WHERE ID(p) = {projectId} "
-          + "OPTIONAL MATCH (f)<--(m:ModuleEntity) "
+      "MATCH MATCH (p:ProjectEntity)-[:CONTAINS]->(:CommitEntity)<-[:CHANGED_IN]-(f:FileEntity) WHERE ID(p) = {0} "
+          + "OPTIONAL MATCH (f)<-[:CONTAINS]-(m:ModuleEntity) "
           + "DETACH DELETE m, f")
   void deleteProjectFilesAndModules(@Param("projectId") Long projectId);
 
   @Query(
-      "MATCH (p:ProjectEntity)-->(c:CommitEntity) WHERE ID(p) = {projectId} " + "DETACH DELETE c ")
+      "PROFILE MATCH (p:ProjectEntity)-[:CONTAINS]->(c:CommitEntity) WHERE ID(p) = {0} DETACH DELETE c")
   void deleteProjectCommits(@Param("projectId") Long projectId);
 
   @Query(
       "MATCH (p:ProjectEntity) WHERE ID(p) = {projectId} "
-          + "OPTIONAL MATCH (p)-->(ac:AnalyzerConfigurationEntity) "
-          + "OPTIONAL MATCH (p)-->(aj:AnalyzingJobEntity) "
-          + "OPTIONAL MATCH (p)-->(fp:FilePatternEntity) "
+          + "OPTIONAL MATCH (p)-[:HAS]->(ac:AnalyzerConfigurationEntity) "
+          + "OPTIONAL MATCH (p)-[:HAS]->(aj:AnalyzingJobEntity) "
+          + "OPTIONAL MATCH (p)-[:HAS]->(fp:FilePatternEntity) "
           + "DETACH DELETE ac, aj, fp")
   void deleteProjectConfiguration(@Param("projectId") Long projectId);
 
@@ -46,6 +46,9 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
 
   @Query("MATCH (p:ProjectEntity) WHERE p.name = {0} RETURN p LIMIT 1")
   Optional<ProjectEntity> findByName(String name);
+
+  @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} RETURN p")
+  Optional<ProjectEntity> findProjectById(Long id);
 
   @Query("MATCH (p:ProjectEntity) WHERE p.name = {0} RETURN p")
   List<ProjectEntity> findAllByName(String name);

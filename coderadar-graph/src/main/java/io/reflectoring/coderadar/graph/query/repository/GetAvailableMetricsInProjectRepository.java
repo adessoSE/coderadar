@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface GetAvailableMetricsInProjectRepository extends Neo4jRepository {
 
   @Query(
-      "MATCH (p1:ProjectEntity)-[:CONTAINS*]-(f1:FileEntity)-[:MEASURED_BY]->(n:MetricValueEntity) WHERE ID(p1) = {0} RETURN DISTINCT n.name")
+      "MATCH (p:ProjectEntity)-[:CONTAINS]->(:CommitEntity)<-[:VALID_FOR]-(mv:MetricValueEntity) WHERE ID(p) = {0} RETURN DISTINCT mv.name")
   List<String> getAvailableMetricsInProject(long projectId);
 }

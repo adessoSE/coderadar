@@ -3,11 +3,10 @@ package io.reflectoring.coderadar.projectadministration.module;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.ListModulesOfProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.projectadministration.service.module.ListModulesOfProjectService;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,17 +31,11 @@ class ListModulesOfProjectServiceTest {
     // given
     long projectId = 1234L;
 
-    Module module1 = new Module().setId(1L).setPath("module-path-one");
-    Module module2 = new Module().setId(2L).setPath("module-path-two");
-
-    List<Module> modules = new ArrayList<>();
-    modules.add(module1);
-    modules.add(module2);
-
     GetModuleResponse expectedResponse1 = new GetModuleResponse(1L, "module-path-one");
     GetModuleResponse expectedResponse2 = new GetModuleResponse(2L, "module-path-two");
 
-    when(listModulesPortMock.listModules(projectId)).thenReturn(modules);
+    when(listModulesPortMock.listModuleReponses(projectId))
+        .thenReturn(Arrays.asList(expectedResponse1, expectedResponse2));
 
     // when
     List<GetModuleResponse> actualResponses = testSubject.listModules(projectId);
