@@ -29,7 +29,7 @@ class ListProjectsAdapterTest {
     when(projectRepository.findAll()).thenReturn(new LinkedList<>());
 
     Iterable<Project> projects = listProjectsAdapter.getProjects();
-    verify(projectRepository, times(1)).findAll();
+    verify(projectRepository, times(1)).findAllProjects();
     Assertions.assertThat(projects).hasSize(0);
   }
 
@@ -38,10 +38,10 @@ class ListProjectsAdapterTest {
   void shouldReturnListWithSizeOfOneWhenOneProjectExists() {
     LinkedList<ProjectEntity> mockedItem = new LinkedList<>();
     mockedItem.add(new ProjectEntity());
-    when(projectRepository.findAll()).thenReturn(mockedItem);
+    when(projectRepository.findAllProjects()).thenReturn(mockedItem);
 
     Iterable<Project> projects = listProjectsAdapter.getProjects();
-    verify(projectRepository, times(1)).findAll();
+    verify(projectRepository, times(1)).findAllProjects();
     Assertions.assertThat(projects).hasSize(1);
   }
 
@@ -51,10 +51,10 @@ class ListProjectsAdapterTest {
     LinkedList<ProjectEntity> mockedItem = new LinkedList<>();
     mockedItem.add(new ProjectEntity());
     mockedItem.add(new ProjectEntity());
-    when(projectRepository.findAll()).thenReturn(mockedItem);
+    when(projectRepository.findAllProjects()).thenReturn(mockedItem);
 
     Iterable<Project> projects = listProjectsAdapter.getProjects();
-    verify(projectRepository, times(1)).findAll();
+    verify(projectRepository, times(1)).findAllProjects();
     Assertions.assertThat(projects).hasSize(2);
   }
 }

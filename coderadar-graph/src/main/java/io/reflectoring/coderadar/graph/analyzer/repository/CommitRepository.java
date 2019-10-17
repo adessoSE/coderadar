@@ -20,7 +20,4 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
 
   @Query("MATCH (p:ProjectEntity)-->(c:CommitEntity) WHERE c.name = {0} AND ID(p) = {1} RETURN c")
   Optional<CommitEntity> findByNameAndProjectId(String commit, Long projectId);
-
-  @Query("MATCH (c:CommitEntity) WHERE c IN {0} DETACH DELETE c")
-  void deleteCommits(List<CommitEntity> commitEntities);
 }

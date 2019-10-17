@@ -11,6 +11,7 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
+import io.reflectoring.coderadar.query.port.driver.GetCommitResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,6 +74,28 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     if (persistedProject.isPresent()) {
       List<CommitEntity> commitEntities = commitRepository.findByProjectId(projectId);
       return mapCommitEntities(commitEntities);
+    } else {
+      throw new ProjectNotFoundException(projectId);
+    }
+  }
+
+  @Override
+  public List<GetCommitResponse> getCommitsResponseSortedByTimestampDesc(Long projectId) {
+    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
+    if (persistedProject.isPresent()) {
+      List<CommitEntity> commitEntities =
+          commitRepository.findByProjectIdAndTimestampDesc(projectId);
+      List<GetCommitResponse> getCommitResponses = new ArrayList<>();
+      for (CommitEntity c : commitEntities) {
+        GetCommitResponse commitResponse = new GetCommitResponse();
+        commitResponse.setName(c.getName());
+        commitResponse.setAnalyzed(c.isAnalyzed());
+        commitResponse.setAuthor(c.getAuthor());
+        commitResponse.setComment(c.getComment());
+        commitResponse.setTimestamp(c.getTimestamp().getTime());
+        getCommitResponses.add(commitResponse);
+      }
+      return getCommitResponses;
     } else {
       throw new ProjectNotFoundException(projectId);
     }

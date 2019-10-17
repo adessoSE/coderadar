@@ -11,46 +11,25 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> {
 
-  Optional<ProjectEntity> findByName(String name);
-
-  List<ProjectEntity> findAllByName(String name);
-
-  /*  @Query(
-      "MATCH (p:ProjectEntity) WHERE ID(p) = {projectId} " +
-              "OPTIONAL MATCH (p)-->(ac:AnalyzerConfigurationEntity) " +
-              "OPTIONAL MATCH (p)-->(aj:AnalyzingJobEntity) " +
-              "OPTIONAL MATCH (p)-->(fp:FilePatternEntity) " +
-              "OPTIONAL MATCH (p)-->(c:CommitEntity) " +
-              "OPTIONAL MATCH (c)<--(f:FileEntity) " +
-              "OPTIONAL MATCH (f)<--(m:ModuleEntity) " +
-              "OPTIONAL MATCH (c)<--(mv:MetricValueEntity) " +
-              "OPTIONAL MATCH (mv)-->(fi:FindingEntity) " +
-              "DETACH DELETE m, fi, mv, f, c, ac, aj, fp, p ")
-  void deleteProjectCascade(@Param("projectId") Long projectId);*/
-
   @Query(
       "MATCH (p:ProjectEntity) WHERE ID(p) = {projectId} "
-          + "OPTIONAL MATCH (p)-->()<--(mv:MetricValueEntity) "
-          + "OPTIONAL MATCH (mv)-->(fi:FindingEntity) "
+          + "OPTIONAL MATCH (p)-->(:CommitEntity)<--(:MetricValueEntity)-->(fi:FindingEntity) "
           + "DETACH DELETE fi ")
   void deleteProjectFindings(@Param("projectId") Long projectId);
 
   @Query(
-      "MATCH (p:ProjectEntity) WHERE ID(p) = {projectId} "
-          + "OPTIONAL MATCH (p)-->()<--(mv:MetricValueEntity) "
+      "MATCH (p:ProjectEntity)-->(:CommitEntity)<--(mv:MetricValueEntity) WHERE ID(p) = {projectId} "
           + "DETACH DELETE mv ")
   void deleteProjectMetrics(@Param("projectId") Long projectId);
 
   @Query(
-      "MATCH (p:ProjectEntity) WHERE ID(p) = {projectId} "
-          + "OPTIONAL MATCH (p)-->()<--(f:FileEntity)<--(m:ModuleEntity) "
+      "MATCH (p:ProjectEntity)-->(:CommitEntity)<--(f:FileEntity) WHERE ID(p) = {projectId} "
+          + "OPTIONAL MATCH (f)<--(m:ModuleEntity) "
           + "DETACH DELETE m, f")
   void deleteProjectFilesAndModules(@Param("projectId") Long projectId);
 
   @Query(
-      "MATCH (p:ProjectEntity) WHERE ID(p) = {projectId} "
-          + "OPTIONAL MATCH (p)-->(c) "
-          + "DETACH DELETE c ")
+      "MATCH (p:ProjectEntity)-->(c:CommitEntity) WHERE ID(p) = {projectId} " + "DETACH DELETE c ")
   void deleteProjectCommits(@Param("projectId") Long projectId);
 
   @Query(
@@ -60,4 +39,14 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
           + "OPTIONAL MATCH (p)-->(fp:FilePatternEntity) "
           + "DETACH DELETE ac, aj, fp")
   void deleteProjectConfiguration(@Param("projectId") Long projectId);
+
+  /** For some reason this is much faster than the default findAll() */
+  @Query("MATCH (p:ProjectEntity) RETURN p")
+  List<ProjectEntity> findAllProjects();
+
+  @Query("MATCH (p:ProjectEntity) WHERE p.name = {0} RETURN p LIMIT 1")
+  Optional<ProjectEntity> findByName(String name);
+
+  @Query("MATCH (p:ProjectEntity) WHERE p.name = {0} RETURN p")
+  List<ProjectEntity> findAllByName(String name);
 }
