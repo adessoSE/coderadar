@@ -12,13 +12,13 @@ import org.springframework.stereotype.Repository;
 public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> {
 
   @Query(
-      "MATCH (p:ProjectEntity)-[:CONTAINS]->(:CommitEntity)<-[:VALID_FOR]-(:MetricValueEntity)-[:LOCATED_IN]->(fi:FindingEntity) "
-              + "WHERE ID(p) = {projectId} "
+      "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-()-[:LOCATED_IN]->(fi:FindingEntity) "
+          + "WHERE ID(p) = {projectId} "
           + "DETACH DELETE fi ")
   void deleteProjectFindings(@Param("projectId") Long projectId);
 
   @Query(
-      "MATCH (p:ProjectEntity)-[:CONTAINS]->(:CommitEntity)<-[:VALID_FOR]-(mv:MetricValueEntity) WHERE ID(p) = {projectId} "
+      "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv:MetricValueEntity) WHERE ID(p) = {projectId} "
           + "DETACH DELETE mv ")
   void deleteProjectMetrics(@Param("projectId") Long projectId);
 
@@ -29,15 +29,10 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   void deleteProjectFilesAndModules(@Param("projectId") Long projectId);
 
   @Query(
-      "PROFILE MATCH (p:ProjectEntity)-[:CONTAINS]->(c:CommitEntity) WHERE ID(p) = {projectId} DETACH DELETE c")
+      "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {projectId} DETACH DELETE c")
   void deleteProjectCommits(@Param("projectId") Long projectId);
 
-  @Query(
-      "MATCH (p:ProjectEntity) WHERE ID(p) = {projectId} "
-          + "OPTIONAL MATCH (p)-[:HAS]->(ac:AnalyzerConfigurationEntity) "
-          + "OPTIONAL MATCH (p)-[:HAS]->(aj:AnalyzingJobEntity) "
-          + "OPTIONAL MATCH (p)-[:HAS]->(fp:FilePatternEntity) "
-          + "DETACH DELETE ac, aj, fp")
+  @Query("MATCH (p:ProjectEntity)-[:HAS]->(a) WHERE ID(p) = {projectId} DETACH DELETE a")
   void deleteProjectConfiguration(@Param("projectId") Long projectId);
 
   /** For some reason this is much faster than the default findAll() */

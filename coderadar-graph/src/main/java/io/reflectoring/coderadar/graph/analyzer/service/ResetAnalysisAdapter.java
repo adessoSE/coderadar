@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.graph.analyzer.service;
 
 import io.reflectoring.coderadar.analyzer.port.driven.ResetAnalysisPort;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
-import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,18 +10,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class ResetAnalysisAdapter implements ResetAnalysisPort {
   private final CommitRepository commitRepository;
-  private final MetricRepository metricRepository;
+  private final ProjectRepository projectRepository;
 
   @Autowired
   public ResetAnalysisAdapter(
-      CommitRepository commitRepository, MetricRepository metricRepository) {
+      CommitRepository commitRepository, ProjectRepository projectRepository) {
     this.commitRepository = commitRepository;
-    this.metricRepository = metricRepository;
+    this.projectRepository = projectRepository;
   }
 
   @Override
   public void resetAnalysis(Long projectId) throws ProjectIsBeingProcessedException {
-    metricRepository.deleteAllMetricValuesAndFindingsFromProject(projectId);
+    projectRepository.deleteProjectFindings(projectId);
+    projectRepository.deleteProjectMetrics(projectId);
     commitRepository.resetAnalyzedStatus(projectId);
   }
 }

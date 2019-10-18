@@ -40,7 +40,7 @@ public class ProjectEntity {
   @Relationship(type = "CONTAINS")
   private List<FileEntity> files = new LinkedList<>();
 
-  @Relationship(type = "CONTAINS")
+  @Relationship(type = "CONTAINS_COMMIT")
   private List<CommitEntity> commits = new LinkedList<>();
 
   @Relationship(type = "HAS")

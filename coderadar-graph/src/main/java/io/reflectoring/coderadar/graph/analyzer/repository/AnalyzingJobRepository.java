@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AnalyzingJobRepository extends Neo4jRepository<AnalyzingJobEntity, Long> {
-  @Query("MATCH (a:AnalyzingJobEntity)<-[:HAS]-(p:ProjectEntity) WHERE ID(p) = {0} RETURN a")
+  @Query("MATCH (p:ProjectEntity)-[:HAS]->(a:AnalyzingJobEntity) WHERE ID(p) = {0} RETURN a")
   Optional<AnalyzingJobEntity> findByProjectId(Long projectId);
 }

@@ -14,16 +14,11 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
   void deleteMetricsInCommit(Long id);
 
   @Query(
-      "MATCH (p:ProjectEntity)-->(f:FileEntity)-->(m:MetricValueEntity) WHERE ID(p) = {0} AND size((m)-[:VALID_FOR]-()) = 0 DETACH DELETE m")
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-[:MEASURED_BY]->(m) WHERE ID(p) = {0} AND size((m)-[:VALID_FOR]-()) = 0 DETACH DELETE m")
   void removeMetricsWithoutCommits(Long id);
 
   @Query(
-      "MATCH (p:ProjectEntity)-->(f:FileEntity)-->(m:MetricValueEntity) WHERE ID(p) = {0} "
-          + "OPTIONAL MATCH (m)-->(fi:FindingEntity) DETACH DELETE m, fi")
-  void deleteAllMetricValuesAndFindingsFromProject(Long projectId);
-
-  @Query(
-      "MATCH (p:ProjectEntity)-->(f:FileEntity)-->(m:MetricValueEntity) "
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(:FileEntity)-[:MEASURED_BY]->(m:MetricValueEntity) "
           + "WHERE ID(p) = {0} RETURN m")
   List<MetricValueEntity> findByProjectId(Long projectId);
 }
