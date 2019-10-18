@@ -230,7 +230,6 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     this.interactionHandler = new InteractionHandler(
       this.scene,
       this.renderer,
-      this.screenType,
       this.isMergedView,
       this.focusService,
       this.tooltipService

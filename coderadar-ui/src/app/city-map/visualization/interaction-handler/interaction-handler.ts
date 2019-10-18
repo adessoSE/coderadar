@@ -1,7 +1,17 @@
-import {Intersection, Object3D, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer} from 'three';
+import {
+  Geometry,
+  Intersection,
+  Object3D,
+  PerspectiveCamera,
+  Raycaster,
+  Scene,
+  Vector2,
+  Vector3,
+  WebGLRenderer,
+  LineBasicMaterial
+} from 'three';
 import {FocusService} from '../../service/focus.service';
 import {TooltipService} from '../../service/tooltip.service';
-import {ScreenType} from '../../enum/ScreenType';
 
 export class InteractionHandler {
 
@@ -11,6 +21,7 @@ export class InteractionHandler {
   mouse: Vector2 = new Vector2();
   mouseForRaycaster: Vector2 = new Vector2();
 
+
   hoveredElementUuid = undefined;
   clickedElementUuid = undefined;
 
@@ -19,7 +30,6 @@ export class InteractionHandler {
   constructor(
     private scene: Scene,
     private renderer: WebGLRenderer,
-    private screenType: ScreenType,
     private isMergedView: boolean,
     private focusService: FocusService,
     private tooltipService: TooltipService
@@ -77,10 +87,16 @@ export class InteractionHandler {
     this.mouse.x = event.clientX;
     this.mouse.y = event.clientY;
 
-    const screenOffset = this.screenType === ScreenType.LEFT ? 0 : this.getScreenWidth();
+    //Canvas object offset
+    const screenOffset = new Vector2(this.renderer.domElement.getBoundingClientRect().left,this.renderer.domElement.getBoundingClientRect().top);
+    //Canvas object size
+    const screenDimensions = new Vector2(this.renderer.domElement.getBoundingClientRect().width,this.renderer.domElement.getBoundingClientRect().height);
 
-    this.mouseForRaycaster.x = ((event.clientX - screenOffset) / this.getScreenWidth()) * 2 - 1;
-    this.mouseForRaycaster.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    //Canvas local mouse position
+    var localMousePosition = new Vector2(event.clientX - screenOffset.x,event.clientY - screenOffset.y);
+
+    this.mouseForRaycaster.x = (localMousePosition.x / screenDimensions.x) * 2 - 1;
+    this.mouseForRaycaster.y = -(localMousePosition.y / screenDimensions.y) * 2 + 1;
   }
 
   onDocumentMouseDown(event) {
@@ -138,13 +154,6 @@ export class InteractionHandler {
     this.renderer.domElement.addEventListener('mousemove', this.onDocumentMouseMove.bind(this), false);
     this.renderer.domElement.addEventListener('mousedown', this.onDocumentMouseDown.bind(this), false);
     this.renderer.domElement.addEventListener('mouseup', this.onDocumentMouseUp.bind(this), false);
-  }
-
-  private getScreenWidth() {
-    if (this.isMergedView) {
-      return window.innerWidth;
-    }
-    return window.innerWidth / 2;
   }
 
 }
