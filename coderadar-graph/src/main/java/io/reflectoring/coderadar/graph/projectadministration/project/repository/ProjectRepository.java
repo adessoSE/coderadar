@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository;
 public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> {
 
   @Query(
-      "MATCH (p:ProjectEntity) WHERE ID(p) = {projectId} "
-          + "OPTIONAL MATCH (p)-[:CONTAINS]->(:CommitEntity)<-[:VALID_FOR]-(:MetricValueEntity)-[:LOCATED_IN]->(fi:FindingEntity) "
+      "MATCH (p:ProjectEntity)-[:CONTAINS]->(:CommitEntity)<-[:VALID_FOR]-(:MetricValueEntity)-[:LOCATED_IN]->(fi:FindingEntity) "
+              + "WHERE ID(p) = {projectId} "
           + "DETACH DELETE fi ")
   void deleteProjectFindings(@Param("projectId") Long projectId);
 
@@ -23,7 +23,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   void deleteProjectMetrics(@Param("projectId") Long projectId);
 
   @Query(
-      "MATCH MATCH (p:ProjectEntity)-[:CONTAINS]->(:CommitEntity)<-[:CHANGED_IN]-(f:FileEntity) WHERE ID(p) = {projectId} "
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {projectId} "
           + "OPTIONAL MATCH (f)<-[:CONTAINS]-(m:ModuleEntity) "
           + "DETACH DELETE m, f")
   void deleteProjectFilesAndModules(@Param("projectId") Long projectId);
