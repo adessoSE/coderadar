@@ -236,6 +236,11 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
     commitRepository.save(commitEntity, 0);
   }
 
+  @Override
+  public void setCommitsWithIDsAsAnalyzed(List<Long> commitIds) {
+    commitRepository.setCommitsWithIDsAsAnalyzed(commitIds);
+  }
+
   /**
    * Recursively finds all parents of a Commit, and returns a new CommitEntity tree. Also calls
    * getFiles to set the files and relationships.

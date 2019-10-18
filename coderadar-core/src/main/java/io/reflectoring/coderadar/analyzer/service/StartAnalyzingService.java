@@ -25,6 +25,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,6 +41,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final ProcessProjectService processProjectService;
   private final StartAnalyzingPort startAnalyzingPort;
   private final StopAnalyzingPort stopAnalyzingPort;
+  private final TaskExecutor taskExecutor;
 
   private final Logger logger = LoggerFactory.getLogger(StartAnalyzingService.class);
 
@@ -55,7 +57,8 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       SaveCommitPort saveCommitPort,
       ProcessProjectService processProjectService,
       StartAnalyzingPort startAnalyzingPort,
-      StopAnalyzingPort stopAnalyzingPort) {
+      StopAnalyzingPort stopAnalyzingPort,
+      TaskExecutor taskExecutor) {
     this.getProjectPort = getProjectPort;
     this.analyzeCommitService = analyzeCommitService;
     this.analyzerPluginService = analyzerPluginService;
@@ -67,6 +70,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     this.processProjectService = processProjectService;
     this.startAnalyzingPort = startAnalyzingPort;
     this.stopAnalyzingPort = stopAnalyzingPort;
+    this.taskExecutor = taskExecutor;
   }
 
   @Override
@@ -96,9 +100,17 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
                       "Analyzed commit: %s %s, total analyzed: %d",
                       commit.getComment(), commit.getName(), counter));
             }
+            if (metricValues.size() > 1000) {
+              List<MetricValue> metricValuesCopy = new ArrayList<>(metricValues);
+              taskExecutor.execute(
+                  () -> saveMetricPort.saveMetricValues(metricValuesCopy, projectId));
+              metricValues.clear();
+            }
           }
           saveMetricPort.saveMetricValues(metricValues, projectId);
-          commitsToBeAnalyzed.forEach(saveCommitPort::saveCommit);
+          List<Long> commitIds = new ArrayList<>();
+          commitsToBeAnalyzed.forEach(commit -> commitIds.add(commit.getId()));
+          saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
           stopAnalyzingPort.stop(projectId);
           logger.info(String.format("Saved analysis results for project %s", project.getName()));
         },

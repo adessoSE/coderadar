@@ -9,7 +9,6 @@ import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
-import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,19 +36,23 @@ public class SaveMetricAdapter implements SaveMetricPort {
 
   @Override
   public void saveMetricValues(List<MetricValue> metricValues, Long projectId) {
-    CommitEntity commitEntity = new CommitEntity();
+
+    // Save all project commits in a HashMap
+    List<CommitEntity> commitEntities = commitRepository.findByProjectId(projectId);
+    HashMap<Long, CommitEntity> commits = new HashMap<>();
+    for (CommitEntity commitEntity : commitEntities) {
+      commits.put(commitEntity.getId(), commitEntity);
+    }
+
+    // Save Visited FileEntities in a HashMap
     List<MetricValueEntity> metricValueEntities = new ArrayList<>();
     HashMap<Long, FileEntity> visitedFiles = new HashMap<>();
-    for (MetricValue metricValue : metricValues) {
-      if (!metricValue.getCommit().getId().equals(commitEntity.getId())) {
-        commitEntity =
-            commitRepository
-                .findById(metricValue.getCommit().getId(), 0)
-                .orElseThrow(() -> new CommitNotFoundException(metricValue.getCommit().getId()));
-        commitEntity.setAnalyzed(true);
-      }
 
+    for (MetricValue metricValue : metricValues) {
       MetricValueEntity metricValueEntity = new MetricValueEntity();
+
+      CommitEntity commitEntity = commits.get(metricValue.getCommit().getId());
+      commitEntity.getMetricValues().add(metricValueEntity);
       metricValueEntity.setCommit(commitEntity);
 
       FileEntity fileEntity = visitedFiles.get(metricValue.getFileId());
@@ -61,7 +64,6 @@ public class SaveMetricAdapter implements SaveMetricPort {
       metricValueEntity.setFindings(mapFindingsToEntities(metricValue.getFindings()));
       metricValueEntity.setValue(metricValue.getValue());
       metricValueEntity.setName(metricValue.getName());
-      metricValueEntity.getCommit().getParents().clear();
       metricValueEntities.add(metricValueEntity);
     }
     metricRepository.save(metricValueEntities, 1);

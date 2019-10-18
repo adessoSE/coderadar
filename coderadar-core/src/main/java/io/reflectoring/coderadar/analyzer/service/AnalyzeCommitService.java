@@ -60,7 +60,6 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
           metricValues.addAll(getMetrics(fileMetrics, commit, fileId));
         }
       }
-      commit.setAnalyzed(true);
     }
     return metricValues;
   }

@@ -8,7 +8,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 
 public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   @Query(
-      "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} WITH c SET c.analyzed = false")
+      "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} SET c.analyzed = false")
   void resetAnalyzedStatus(Long projectId);
 
   @Query(
@@ -21,4 +21,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE c.name = {0} AND ID(p) = {1} RETURN c")
   Optional<CommitEntity> findByNameAndProjectId(String commit, Long projectId);
+
+  @Query("MATCH (c:CommitEntity) WHERE ID(c) IN {0} SET c.analyzed = true")
+  void setCommitsWithIDsAsAnalyzed(List<Long> commitIds);
 }
