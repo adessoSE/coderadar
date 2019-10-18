@@ -57,31 +57,23 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       HashMap<String, List<FileEntity>> walkedFiles = new HashMap<>();
       HashMap<String, CommitEntity> walkedCommits = new HashMap<>();
 
-      commits.sort(Comparator.comparing(Commit::getTimestamp));
       Commit newestCommit = commits.get(commits.size() - 1);
       CommitEntity commitEntity = mapCommitBaseData(newestCommit, newestCommit.getId());
+
       commitEntity.setParents(findAndSaveParents(newestCommit, walkedCommits));
-
       walkedCommits.putIfAbsent(commitEntity.getName(), commitEntity);
-
       List<CommitEntity> commitEntities = new ArrayList<>(walkedCommits.values());
+
       commitEntities.sort(Comparator.comparing(CommitEntity::getTimestamp));
-      for (CommitEntity c : commitEntities) {
-        getFiles(
-            commits
-                .stream()
-                .filter(commit -> commit.getName().equals(c.getName()))
-                .findFirst()
-                .get()
-                .getTouchedFiles(),
-            c,
-            walkedFiles);
+      for (int i = 0; i < commitEntities.size(); i++) {
+        getFiles(commits.get(i).getTouchedFiles(), commitEntities.get(i), walkedFiles);
       }
 
       List<FileEntity> allFiles = new ArrayList<>();
       for (List<FileEntity> files : walkedFiles.values()) {
         allFiles.addAll(files);
       }
+
       projectEntity.getFiles().addAll(allFiles);
 
       commitRepository.save(walkedCommits.values(), 1);
@@ -259,11 +251,12 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
         parents.add(commitEntity);
       } else {
         commitEntity = new CommitEntity();
+        walkedCommits.putIfAbsent(c.getName(), commitEntity);
+
         commitEntity.setName(c.getName());
         commitEntity.setAuthor(c.getAuthor());
         commitEntity.setComment(c.getComment());
         commitEntity.setTimestamp(c.getTimestamp());
-        walkedCommits.putIfAbsent(c.getName(), commitEntity);
         commitEntity.setParents(findAndSaveParents(c, walkedCommits));
         parents.add(commitEntity);
       }
@@ -279,6 +272,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
    * @param walkedFiles Files we have already walked. We need this to prevent endless recursion when
    *     mapping.
    */
+  // TODO: Fix this mess
   private void getFiles(
       List<FileToCommitRelationship> relationships,
       CommitEntity entity,

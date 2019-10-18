@@ -10,4 +10,6 @@ public interface GetCommitsInProjectPort {
   List<Commit> get(Long projectId);
 
   List<GetCommitResponse> getCommitsResponseSortedByTimestampDesc(Long projectId);
+
+  List<Commit> getSortedByTimestampAsc(Long projectId);
 }

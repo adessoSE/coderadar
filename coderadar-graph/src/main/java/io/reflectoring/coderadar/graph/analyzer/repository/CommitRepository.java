@@ -15,6 +15,10 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c ORDER BY c.timestamp DESC")
   List<CommitEntity> findByProjectIdAndTimestampDesc(Long projectId);
 
+  @Query(
+      "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c ORDER BY c.timestamp")
+  List<CommitEntity> findByProjectIdAndTimestampAsc(Long projectId);
+
   @Query("MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c")
   List<CommitEntity> findByProjectId(Long projectId);
 
@@ -24,4 +28,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
 
   @Query("MATCH (c:CommitEntity) WHERE ID(c) IN {0} SET c.analyzed = true")
   void setCommitsWithIDsAsAnalyzed(List<Long> commitIds);
+
+  @Query("MATCH (c:CommitEntity) WHERE ID(c) IN {0} RETURN c")
+  List<CommitEntity> findCommitsByIds(List<Long> commitIds);
 }

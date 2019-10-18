@@ -188,7 +188,7 @@ public class CreateProjectService implements CreateProjectUseCase {
    * {@link WorkdirNameGenerator} implementation using {@link UUID}s to generate working directory
    * names.
    */
-  public class UUIDWorkdirNameGenerator implements WorkdirNameGenerator {
+  public static class UUIDWorkdirNameGenerator implements WorkdirNameGenerator {
 
     /**
      * @param projectName The name of the project to generate the working directory name for.

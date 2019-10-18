@@ -37,30 +37,44 @@ public class SaveMetricAdapter implements SaveMetricPort {
   @Override
   public void saveMetricValues(List<MetricValue> metricValues, Long projectId) {
 
-    // Save all project commits in a HashMap
-    List<CommitEntity> commitEntities = commitRepository.findByProjectId(projectId);
+    // Get the commit entities of the metric values.
+    List<Long> commitIds = new ArrayList<>();
+    for (MetricValue metricValue : metricValues) {
+      commitIds.add(metricValue.getCommit().getId());
+    }
+    List<CommitEntity> commitEntities = commitRepository.findCommitsByIds(commitIds);
     HashMap<Long, CommitEntity> commits = new HashMap<>();
     for (CommitEntity commitEntity : commitEntities) {
+      commitEntity.setAnalyzed(true);
       commits.put(commitEntity.getId(), commitEntity);
     }
 
-    // Save Visited FileEntities in a HashMap
+    // Get the file entities of the metric values.
+    List<Long> fileIds = new ArrayList<>();
+    for (MetricValue metricValue : metricValues) {
+      fileIds.add(metricValue.getFileId());
+    }
+    List<FileEntity> fileEntities = fileRepository.findFilesByIds(fileIds);
+    HashMap<Long, FileEntity> files = new HashMap<>();
+
     List<MetricValueEntity> metricValueEntities = new ArrayList<>();
-    HashMap<Long, FileEntity> visitedFiles = new HashMap<>();
+    for (FileEntity fileEntity : fileEntities) {
+      files.put(fileEntity.getId(), fileEntity);
+    }
 
     for (MetricValue metricValue : metricValues) {
       MetricValueEntity metricValueEntity = new MetricValueEntity();
 
+      // Set CommitEntity
       CommitEntity commitEntity = commits.get(metricValue.getCommit().getId());
       commitEntity.getMetricValues().add(metricValueEntity);
       metricValueEntity.setCommit(commitEntity);
 
-      FileEntity fileEntity = visitedFiles.get(metricValue.getFileId());
-      if (fileEntity == null) {
-        fileEntity = fileRepository.findById(metricValue.getFileId()).get();
-        visitedFiles.put(metricValue.getFileId(), fileEntity);
-      }
+      // Set FileEntity
+      FileEntity fileEntity = files.get(metricValue.getFileId());
       metricValueEntity.setFile(fileEntity);
+
+      // Set rest of attributes
       metricValueEntity.setFindings(mapFindingsToEntities(metricValue.getFindings()));
       metricValueEntity.setValue(metricValue.getValue());
       metricValueEntity.setName(metricValue.getName());

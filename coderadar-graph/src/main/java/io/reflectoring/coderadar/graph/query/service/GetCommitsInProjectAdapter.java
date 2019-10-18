@@ -64,7 +64,6 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
       commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), commit, new HashMap<>()));
       commits.add(commit);
     }
-    commits.sort((o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()));
     return commits;
   }
 
@@ -96,6 +95,18 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
         getCommitResponses.add(commitResponse);
       }
       return getCommitResponses;
+    } else {
+      throw new ProjectNotFoundException(projectId);
+    }
+  }
+
+  @Override
+  public List<Commit> getSortedByTimestampAsc(Long projectId) {
+    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
+    if (persistedProject.isPresent()) {
+      List<CommitEntity> commitEntities =
+          commitRepository.findByProjectIdAndTimestampAsc(projectId);
+      return mapCommitEntities(commitEntities);
     } else {
       throw new ProjectNotFoundException(projectId);
     }

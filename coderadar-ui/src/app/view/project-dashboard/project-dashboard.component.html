@@ -22,7 +22,7 @@
                   'dashboard-card-selected' : commit === selectedCommit1 || commit === selectedCommit2}"
                 class="dashboard-card" (click)="selectCard(commit)">
         <mat-card-content class="mat-card-content">
-          <a mat-button routerLink="/project/{{project.id}}/{{commit.name}}"><b>{{commit.name}}</b></a><br>
+          <button mat-button [disabled]="!commit.analyzed" routerLink="/project/{{project.id}}/{{commit.name}}"><b>{{commit.name}}</b></button><br>
           <mat-label>Author: {{commit.author}}</mat-label>
           <br>
           <mat-label>Comment: {{commit.comment}}</mat-label>

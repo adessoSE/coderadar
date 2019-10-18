@@ -33,4 +33,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
   @Query(
       "MATCH (p:ProjectEntity)-[:HAS*]->(f:FileEntity) WHERE ID(p) = {0} AND size((f)-[:CHANGED_IN]-()) = 0 DETACH DELETE f")
   void removeFilesWithoutCommits(Long id);
+
+  @Query("MATCH (f:FileEntity) WHERE ID(f) IN {0} RETURN f")
+  List<FileEntity> findFilesByIds(List<Long> fileIds);
 }
