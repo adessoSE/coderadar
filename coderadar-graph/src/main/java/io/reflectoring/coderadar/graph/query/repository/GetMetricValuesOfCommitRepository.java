@@ -13,14 +13,14 @@ public interface GetMetricValuesOfCommitRepository extends Neo4jRepository<Commi
 
   @Query(
       "MATCH (p:ProjectEntity) WHERE ID(p) = {0} "
-          + "WITH datetime({2}).epochMillis AS commitTime, p "
+          + "WITH timestamp({2}) AS commitTime, p "
           + "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:CHANGED_IN]-(f) WHERE "
-          + "datetime(c.timestamp).epochMillis <= commitTime WITH DISTINCT p, f, commitTime "
-          + "OPTIONAL MATCH (f)-[r:RENAMED_FROM]->(f2) WITH p, collect(DISTINCT f2) AS renames, commitTime "
-          + "OPTIONAL MATCH (f)-[r:CHANGED_IN]->(c:CommitEntity) WHERE r.changeType = \"DELETE\" AND datetime(c.timestamp).epochMillis <= commitTime "
+          + "timestamp(c.timestamp) <= commitTime WITH DISTINCT p, f, commitTime "
+          + "OPTIONAL MATCH (f)-[:RENAMED_FROM]->(f2) WITH p, collect(DISTINCT f2) AS renames, commitTime "
+          + "OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: \"DELETE\"}]->(c:CommitEntity)<-[:CONTAINS_COMMIT]-(p) WHERE timestamp(c.timestamp) <= commitTime "
           + "WITH p, collect(DISTINCT f) AS deletes, commitTime, renames "
           + "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:VALID_FOR]-(m)<-[:MEASURED_BY]-(f) "
-          + "WHERE datetime(c.timestamp).epochMillis <= commitTime AND NOT(f IN deletes OR f IN renames) AND m.name in {1} WITH f, m ORDER BY c.timestamp DESC "
+          + "WHERE timestamp(c.timestamp) <= commitTime AND NOT(f IN deletes OR f IN renames) AND m.name in {1} WITH f, m ORDER BY c.timestamp DESC "
           + "WITH f.path AS path, m.name AS name, head(collect(m.value)) AS value "
           + "RETURN name, SUM(value) AS value")
   List<MetricValueForCommitQueryResult> getMetricValuesForCommit(
@@ -28,14 +28,14 @@ public interface GetMetricValuesOfCommitRepository extends Neo4jRepository<Commi
 
   @Query(
       "MATCH (p:ProjectEntity) WHERE ID(p) = {0} "
-          + "WITH datetime({2}).epochMillis AS commitTime, p "
+          + "WITH timestamp({2}) AS commitTime, p "
           + "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:CHANGED_IN]-(f) WHERE "
-          + "datetime(c.timestamp).epochMillis <= commitTime WITH DISTINCT p, f, commitTime "
-          + "OPTIONAL MATCH (f)-[r:RENAMED_FROM]->(f2) WITH p, collect(DISTINCT f2) AS renames, commitTime "
-          + "OPTIONAL MATCH (f)-[r:CHANGED_IN]->(c:CommitEntity) WHERE r.changeType = \"DELETE\" AND datetime(c.timestamp).epochMillis <= commitTime "
+          + "timestamp(c.timestamp) <= commitTime WITH DISTINCT p, f, commitTime "
+          + "OPTIONAL MATCH (f)-[:RENAMED_FROM]->(f2) WITH p, collect(DISTINCT f2) AS renames, commitTime "
+          + "OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: \"DELETE\"}]->(c:CommitEntity)<-[:CONTAINS_COMMIT]-(p) WHERE timestamp(c.timestamp) <= commitTime "
           + "WITH p, collect(DISTINCT f) AS deletes, commitTime, renames "
           + "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:VALID_FOR]-(m)<-[:MEASURED_BY]-(f) "
-          + "WHERE datetime(c.timestamp).epochMillis <= commitTime AND NOT(f IN deletes OR f IN renames) AND m.name in {1} WITH f, m ORDER BY c.timestamp DESC "
+          + "WHERE timestamp(c.timestamp) <= commitTime AND NOT(f IN deletes OR f IN renames) AND m.name in {1} WITH f, m ORDER BY c.timestamp DESC "
           + "WITH f.path AS path, m.name AS name, head(collect(m.value)) AS value "
           + "RETURN path, collect({name: name, value: value}) AS metrics ORDER BY path")
   List<MetricValueForCommitTreeQueryResult> getMetricTreeForCommit(
