@@ -33,7 +33,7 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
   @Override
   public void delete(Long id) {
     ProjectEntity projectEntity =
-        projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
+        projectRepository.findProjectById(id).orElseThrow(() -> new ProjectNotFoundException(id));
     try {
       projectRepository.deleteProjectFindings(id);
       projectRepository.deleteProjectMetrics(id);

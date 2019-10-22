@@ -10,7 +10,13 @@ import { AppEffects } from 'src/app/city-map/shared/effects';
 import {faClone, faSquare} from '@fortawesome/free-regular-svg-icons';
 import {MatPaginator, PageEvent} from '@angular/material';
 import {AppComponent} from '../../app.component';
-
+import {Store} from '@ngrx/store';
+import * as fromRoot from '../../city-map/shared/reducers';
+import {changeActiveFilter, setMetricMapping} from '../../city-map/control-panel/settings/settings.actions';
+import {changeCommit, loadCommits} from '../../city-map/control-panel/control-panel.actions';
+import {CommitType} from '../../city-map/enum/CommitType';
+import {timer} from 'rxjs';
+import {loadAvailableMetrics} from '../../city-map/visualization/visualization.actions';
 
 @Component({
   selector: 'app-project-dashboard',
@@ -39,26 +45,36 @@ export class ProjectDashboardComponent implements OnInit {
   prevSelectedCommit1: Commit;
   prevSelectedCommit2: Commit;
 
-  pageSize = 5;
+  pageSize = 15;
   waiting = false;
 
   constructor(private router: Router, private userService: UserService, private titleService: Title,
-              private projectService: ProjectService, private route: ActivatedRoute,
+              private projectService: ProjectService, private route: ActivatedRoute, private store: Store<fromRoot.AppState>,
               private cityEffects: AppEffects) {
     this.project = new Project();
     this.commits = [];
     this.selectedCommit1 = null;
     this.selectedCommit2 = null;
     this.pageEvent = new PageEvent();
-    this.pageEvent.pageSize = 5;
+    this.pageEvent.pageSize = this.pageSize;
     this.pageEvent.pageIndex = 0;
   }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.projectId = params.id;
-      this.getCommits();
+      this.getCommits(true);
       this.getProject();
+      // Schedule a task to check if all commits are analyzed and update them if they're not
+      timer(4000, 4000).subscribe(x => {
+        if (this.commitsAnalyzed < this.commits.length) {
+          this.getCommits(false);
+        }
+      });
+
+      this.cityEffects.currentProjectId  = this.projectId;
+      this.store.dispatch(loadCommits());
+      this.store.dispatch(loadAvailableMetrics());
     });
   }
 
@@ -109,16 +125,31 @@ export class ProjectDashboardComponent implements OnInit {
   /**
    * Gets all commits for this project from the service and saves them in this.commits.
    */
-  private getCommits(): void {
-    this.waiting = true;
+  private getCommits(displayLoadingIndicator: boolean): void {
+    this.waiting = displayLoadingIndicator;
     this.projectService.getCommits(this.projectId)
       .then(response => {
+        this.commitsAnalyzed = 0;
+        let selectedCommit1Id = null;
+        if (this.selectedCommit1 !== null) {
+          selectedCommit1Id = this.selectedCommit1.name;
+        }
+        let selectedCommit2Id = null;
+        if (this.selectedCommit2 !== null) {
+          selectedCommit2Id = this.selectedCommit2.name;
+        }
         this.commits = response.body;
         this.commits.forEach(c => {
           if (c.analyzed) {
             this.commitsAnalyzed++;
           }
         });
+        if (selectedCommit1Id != null) {
+          this.selectedCommit1 = this.commits.find(value => value.name === selectedCommit1Id);
+        }
+        if (selectedCommit2Id != null) {
+          this.selectedCommit2 = this.commits.find(value => value.name === selectedCommit2Id);
+        }
         this.commits.sort((a, b) => {
           if (a.timestamp === b.timestamp) {
             return 0;
@@ -132,7 +163,7 @@ export class ProjectDashboardComponent implements OnInit {
       })
       .catch(e => {
         if (e.status && e.status === FORBIDDEN) {
-          this.userService.refresh(() => this.getCommits());
+          this.userService.refresh(() => this.getCommits(true));
         }
       });
   }
@@ -167,9 +198,6 @@ export class ProjectDashboardComponent implements OnInit {
     } else {
       this.selectedCommit2 = selectedCommit;
     }
-
-    this.cityEffects.firstCommit = this.selectedCommit1;
-    this.cityEffects.secondCommit = this.selectedCommit2;
   }
 
   syncPaginators(event: PageEvent) {
@@ -179,4 +207,34 @@ export class ProjectDashboardComponent implements OnInit {
     this.paginator1.pageSize = event.pageSize;
     this.pageEvent = event;
   }
+
+  /**
+   * Opens the 3D city-map with the complexity preset (LOC+LOC+Complexity, without unmodified) for the selected commits.
+   * Switches the commit positions if the first one is newer than the second one.
+   */
+  startComplexityAnalysis(): void {
+    this.store.dispatch(setMetricMapping({
+      colorMetricName: 'checkstyle:com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck',
+      groundAreaMetricName: 'coderadar:size:sloc:java',
+      heightMetricName: 'coderadar:size:sloc:java',
+    }));
+    if (this.selectedCommit1.timestamp > this.selectedCommit2.timestamp) {
+      const temp = this.selectedCommit1;
+      this.selectedCommit1 = this.selectedCommit2;
+      this.selectedCommit2 = temp;
+    }
+    this.store.dispatch(changeCommit(CommitType.LEFT, this.selectedCommit1));
+    this.store.dispatch(changeCommit(CommitType.RIGHT, this.selectedCommit2));
+    this.store.dispatch(changeActiveFilter({
+      added: true,
+      deleted: true,
+      modified: true,
+      renamed: true,
+      unmodified: false
+    }));
+
+    this.cityEffects.isLoaded = true;
+    this.router.navigate(['/city/' + this.projectId]);
+  }
+
 }

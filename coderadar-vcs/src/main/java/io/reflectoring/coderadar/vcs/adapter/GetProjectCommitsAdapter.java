@@ -105,10 +105,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
    * @param files A HashMap containing files already created for the project.
    * @throws IOException Thrown if the commit tree cannot be walked.
    */
-  private void setFirstCommitFiles(
-      Git git,
-      Commit firstCommit,
-      HashMap<String, List<File>> files)
+  private void setFirstCommitFiles(Git git, Commit firstCommit, HashMap<String, List<File>> files)
       throws IOException {
     RevCommit gitCommit = findCommit(git, firstCommit.getName());
     try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
@@ -116,7 +113,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
       treeWalk.setRecursive(true);
       treeWalk.addTree(gitCommit.getTree());
       while (treeWalk.next()) {
-          File file;
+        File file;
 
         file = new File();
         FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
@@ -171,26 +168,24 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
             List<File> fileList = files.get(path);
 
             if (fileList == null) {
-                File file =
-                  new File();
+              File file = new File();
               if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
-                  List<File> filesWithOldPath = files.get(diff.getOldPath());
-                  if(filesWithOldPath != null){
-                      file.getOldFiles().addAll(files.get(diff.getOldPath()));
-                  }
+                List<File> filesWithOldPath = files.get(diff.getOldPath());
+                if (filesWithOldPath != null) {
+                  file.getOldFiles().addAll(files.get(diff.getOldPath()));
+                }
               }
               filesWithPath.add(file);
               fileList = new ArrayList<>(filesWithPath);
             } else {
               if ((diff.getChangeType().equals(DiffEntry.ChangeType.ADD))) {
-                  File file = new File();
+                File file = new File();
                 filesWithPath.add(file);
                 fileList.add(file);
               } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.DELETE))) {
                 filesWithPath.addAll(fileList);
               } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
-                  File file =
-                    new File();
+                File file = new File();
                 file.setOldFiles(files.get(diff.getOldPath()));
                 filesWithPath.add(file);
                 fileList.add(file);

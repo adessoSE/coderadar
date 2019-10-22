@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.graph.analyzer.service;
 
 import com.google.common.collect.Iterables;
 import io.reflectoring.coderadar.analyzer.domain.Commit;
-import io.reflectoring.coderadar.analyzer.domain.File;
 import io.reflectoring.coderadar.analyzer.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
@@ -286,8 +285,9 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       if (fileList == null) {
         FileEntity fileEntity = new FileEntity();
         if (fileToCommitRelationship.getChangeType().equals(ChangeType.RENAME)) {
-          List<FileEntity> filesWithOldPath = walkedFiles.get(fileToCommitRelationship.getOldPath());
-          if(filesWithOldPath != null){
+          List<FileEntity> filesWithOldPath =
+              walkedFiles.get(fileToCommitRelationship.getOldPath());
+          if (filesWithOldPath != null) {
             fileEntity.getOldFiles().addAll(filesWithOldPath);
           }
         }
