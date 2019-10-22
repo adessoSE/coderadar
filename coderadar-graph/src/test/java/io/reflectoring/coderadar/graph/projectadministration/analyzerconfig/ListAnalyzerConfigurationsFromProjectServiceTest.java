@@ -42,7 +42,7 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
   @DisplayName("Should return empty list when no analyzer configurations in the project exist")
   void shouldReturnEmptyListWhenNoAnalyzerConfigurationsInTheProjectExist() {
     ProjectEntity mockedProject = new ProjectEntity();
-    when(projectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
+    when(projectRepository.findProjectById(1L)).thenReturn(java.util.Optional.of(mockedProject));
     when(analyzerConfigurationRepository.findByProjectId(1L)).thenReturn(new LinkedList<>());
 
     Iterable<AnalyzerConfiguration> configurations =
@@ -58,7 +58,7 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
     ProjectEntity mockedProject = new ProjectEntity();
     LinkedList<AnalyzerConfigurationEntity> mockedAnalyzerConfigurations = new LinkedList<>();
     mockedAnalyzerConfigurations.add(new AnalyzerConfigurationEntity());
-    when(projectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
+    when(projectRepository.findProjectById(1L)).thenReturn(java.util.Optional.of(mockedProject));
     when(analyzerConfigurationRepository.findByProjectId(1L))
         .thenReturn(mockedAnalyzerConfigurations);
 
@@ -76,7 +76,7 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
     LinkedList<AnalyzerConfigurationEntity> mockedAnalyzerConfigurations = new LinkedList<>();
     mockedAnalyzerConfigurations.add(new AnalyzerConfigurationEntity());
     mockedAnalyzerConfigurations.add(new AnalyzerConfigurationEntity());
-    when(projectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
+    when(projectRepository.findProjectById(1L)).thenReturn(java.util.Optional.of(mockedProject));
     when(analyzerConfigurationRepository.findByProjectId(1L))
         .thenReturn(mockedAnalyzerConfigurations);
 

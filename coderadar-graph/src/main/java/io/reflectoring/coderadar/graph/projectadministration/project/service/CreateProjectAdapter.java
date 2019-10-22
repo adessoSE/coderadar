@@ -33,7 +33,5 @@ public class CreateProjectAdapter implements CreateProjectPort {
   public void createIndexesAndConstraints() {
     Session session = sessionFactory.openSession();
     session.query("CREATE INDEX ON :ProjectEntity(id)", Collections.emptyMap());
-    session.query("CREATE INDEX ON :CommitEntity(timestamp)", Collections.emptyMap());
-    session.query("CREATE INDEX ON :FileEntity(path)", Collections.emptyMap());
   }
 }

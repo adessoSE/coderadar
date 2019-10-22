@@ -47,4 +47,10 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
 
   @Query("MATCH (p:ProjectEntity) WHERE p.name = {0} RETURN p")
   List<ProjectEntity> findAllByName(String name);
+
+  @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} RETURN p.isBeingProcessed")
+  Boolean isBeingProcessed(Long id);
+
+  @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} SET p.isBeingProcessed = {1}")
+  void setBeingProcessed(Long id, Boolean value);
 }

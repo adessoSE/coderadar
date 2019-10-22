@@ -43,7 +43,7 @@ class StopAnalyzingAdapterTest {
     AnalyzingJobEntity mockItem = new AnalyzingJobEntity();
     mockItem.setId(10L);
     mockItem.setActive(false);
-    when(projectRepository.findById(1L)).thenReturn(Optional.of(mockProject));
+    when(projectRepository.findProjectById(1L)).thenReturn(Optional.of(mockProject));
     when(analyzingJobRepository.findByProjectId(1L)).thenReturn(Optional.of(mockItem));
 
     Assertions.assertThrows(
@@ -58,7 +58,7 @@ class StopAnalyzingAdapterTest {
     AnalyzingJobEntity mockItem = new AnalyzingJobEntity();
     mockItem.setId(10L);
     mockItem.setActive(true);
-    when(projectRepository.findById(1L)).thenReturn(Optional.of(mockProject));
+    when(projectRepository.findProjectById(1L)).thenReturn(Optional.of(mockProject));
     when(analyzingJobRepository.findByProjectId(1L)).thenReturn(Optional.of(mockItem));
 
     stopAnalyzingAdapter.stop(1L);

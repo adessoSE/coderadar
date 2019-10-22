@@ -83,6 +83,13 @@ public class ScanProjectScheduler {
         taskScheduler.scheduleAtFixedRate(
             () -> {
               try {
+                if (!getProjectPort.existsById(project.getId())) {
+                  ScheduledFuture f = tasks.get(project.getId());
+                  if (f != null) {
+                    f.cancel(false);
+                  }
+                  return;
+                }
                 if (!projectStatusPort.isBeingProcessed(project.getId())) {
                   try {
                     Project currentProject = getProjectPort.get(project.getId());

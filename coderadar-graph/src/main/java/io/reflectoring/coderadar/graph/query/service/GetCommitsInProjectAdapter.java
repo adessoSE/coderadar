@@ -33,7 +33,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
   @Override
   public List<Commit> getSortedByTimestampDesc(Long projectId) {
-    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
+    Optional<ProjectEntity> persistedProject = projectRepository.findProjectById(projectId);
     if (persistedProject.isPresent()) {
       List<CommitEntity> commitEntities =
           commitRepository.findByProjectIdAndTimestampDesc(projectId);
@@ -69,7 +69,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
   @Override
   public List<Commit> get(Long projectId) {
-    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
+    Optional<ProjectEntity> persistedProject = projectRepository.findProjectById(projectId);
     if (persistedProject.isPresent()) {
       List<CommitEntity> commitEntities = commitRepository.findByProjectId(projectId);
       return mapCommitEntities(commitEntities);
@@ -80,7 +80,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
   @Override
   public List<GetCommitResponse> getCommitsResponseSortedByTimestampDesc(Long projectId) {
-    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
+    Optional<ProjectEntity> persistedProject = projectRepository.findProjectById(projectId);
     if (persistedProject.isPresent()) {
       List<CommitEntity> commitEntities =
           commitRepository.findByProjectIdAndTimestampDesc(projectId);
@@ -102,7 +102,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
   @Override
   public List<Commit> getSortedByTimestampAsc(Long projectId) {
-    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
+    Optional<ProjectEntity> persistedProject = projectRepository.findProjectById(projectId);
     if (persistedProject.isPresent()) {
       List<CommitEntity> commitEntities =
           commitRepository.findByProjectIdAndTimestampAsc(projectId);

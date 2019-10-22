@@ -50,12 +50,13 @@ class StartAnalyzingAdapterTest {
     mockItem.setRescan(true);
     mockItem.setFrom(mockDate);
     when(analyzingJobRepository.save(any(AnalyzingJobEntity.class))).thenReturn(mockItem);
-    when(projectRepository.findById(anyLong())).thenReturn(java.util.Optional.of(mockProject));
+    when(projectRepository.findProjectById(anyLong()))
+        .thenReturn(java.util.Optional.of(mockProject));
 
     StartAnalyzingCommand item = new StartAnalyzingCommand(mockDate, true);
     Long idFromItem = startAnalyzingAdapter.start(item, 1L);
 
-    verify(projectRepository, times(1)).findById(1L);
+    verify(projectRepository, times(1)).findProjectById(1L);
     verify(analyzingJobRepository, times(1)).save(any(AnalyzingJobEntity.class));
     verifyNoMoreInteractions(projectRepository);
     verifyNoMoreInteractions(analyzingJobRepository);

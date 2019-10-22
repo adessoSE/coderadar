@@ -30,7 +30,7 @@ class CreateFilePatternAdapterTest {
     filePattern.setId(2L);
     FilePatternEntity filePatternEntity = new FilePatternEntity();
     filePatternEntity.setId(2L);
-    when(projectRepository.findById(anyLong()))
+    when(projectRepository.findProjectById(anyLong()))
         .thenReturn(java.util.Optional.of(new ProjectEntity()));
     when(filePatternRepository.save(any())).thenReturn(filePatternEntity);
     Long returnedId = createFilePatternAdapter.createFilePattern(filePattern, 1L);

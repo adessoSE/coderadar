@@ -26,7 +26,7 @@ class ListFilePatternsOfProjectAdapterTest {
     ListFilePatternsOfProjectAdapter listFilePatternsOfProjectAdapter =
         new ListFilePatternsOfProjectAdapter(filePatternRepository, projectRepository);
 
-    when(projectRepository.findById(anyLong()))
+    when(projectRepository.findProjectById(anyLong()))
         .thenReturn(java.util.Optional.of(new ProjectEntity()));
     Collection<FilePattern> returnedList = listFilePatternsOfProjectAdapter.listFilePatterns(1L);
     Assertions.assertThat(returnedList).isNotNull();

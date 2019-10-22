@@ -49,7 +49,8 @@ class CreateModuleAdapterTest {
     when(moduleRepository.save(any(ModuleEntity.class))).thenReturn(mockedItem);
     when(moduleRepository.findById(anyLong())).thenReturn(java.util.Optional.of(mockedItem));
 
-    when(projectRepository.findById(anyLong())).thenReturn(java.util.Optional.of(mockedProject));
+    when(projectRepository.findProjectById(anyLong()))
+        .thenReturn(java.util.Optional.of(mockedProject));
     createModuleAdapter.createModule(newItem.getId(), 1L);
 
     // verify(createModuleRepository, times(1)).save(any());

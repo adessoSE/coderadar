@@ -43,7 +43,7 @@ public class CreateModuleAdapter implements CreateModulePort {
             .orElseThrow(() -> new ModuleNotFoundException(moduleId));
     ProjectEntity projectEntity =
         projectRepository
-            .findById(projectId)
+            .findProjectById(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
     ModuleEntity foundModule = findParentModuleInProject(projectEntity, moduleEntity.getPath());
     if (foundModule != null) {

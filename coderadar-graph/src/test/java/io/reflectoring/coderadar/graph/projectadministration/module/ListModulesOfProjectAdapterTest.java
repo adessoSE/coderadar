@@ -40,7 +40,7 @@ class ListModulesOfProjectAdapterTest {
   @DisplayName("Should return empty list when no modules in the project exist")
   void shouldReturnEmptyListWhenNoModulesInTheProjectExist() {
     ProjectEntity mockedProject = new ProjectEntity();
-    when(projectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
+    when(projectRepository.findProjectById(1L)).thenReturn(java.util.Optional.of(mockedProject));
     when(moduleRepository.findModulesInProject(1L)).thenReturn(new LinkedList<>());
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);
@@ -54,7 +54,7 @@ class ListModulesOfProjectAdapterTest {
     LinkedList<ModuleEntity> mockedItem = new LinkedList<>();
     mockedItem.add(new ModuleEntity());
     ProjectEntity mockedProject = new ProjectEntity();
-    when(projectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
+    when(projectRepository.findProjectById(1L)).thenReturn(java.util.Optional.of(mockedProject));
     when(moduleRepository.findModulesInProject(1L)).thenReturn(mockedItem);
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);
@@ -69,7 +69,7 @@ class ListModulesOfProjectAdapterTest {
     mockedItem.add(new ModuleEntity());
     mockedItem.add(new ModuleEntity());
     ProjectEntity mockedProject = new ProjectEntity();
-    when(projectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
+    when(projectRepository.findProjectById(1L)).thenReturn(java.util.Optional.of(mockedProject));
     when(moduleRepository.findModulesInProject(1L)).thenReturn(mockedItem);
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);

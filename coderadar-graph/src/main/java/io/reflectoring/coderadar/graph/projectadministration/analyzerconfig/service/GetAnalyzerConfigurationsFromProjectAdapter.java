@@ -27,9 +27,9 @@ public class GetAnalyzerConfigurationsFromProjectAdapter
   }
 
   @Override
-  public Collection<AnalyzerConfiguration> get(Long projectId) throws ProjectNotFoundException {
+  public Collection<AnalyzerConfiguration> get(Long projectId) {
     projectRepository
-        .findById(projectId)
+        .findProjectById(projectId)
         .orElseThrow(() -> new ProjectNotFoundException(projectId));
     return analyzerConfigurationMapper.mapNodeEntities(
         analyzerConfigurationRepository.findByProjectId(projectId));

@@ -29,7 +29,7 @@ public class ListFilePatternsOfProjectAdapter implements ListFilePatternsOfProje
   @Override
   public List<FilePattern> listFilePatterns(Long projectId) throws ProjectNotFoundException {
     projectRepository
-        .findById(projectId)
+        .findProjectById(projectId)
         .orElseThrow(() -> new ProjectNotFoundException(projectId));
     return new ArrayList<>(
         filePatternMapper.mapNodeEntities(filePatternRepository.findByProjectId(projectId)));

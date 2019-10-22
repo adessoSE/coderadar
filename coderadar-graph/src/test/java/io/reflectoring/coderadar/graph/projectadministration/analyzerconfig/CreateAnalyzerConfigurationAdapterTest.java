@@ -32,7 +32,7 @@ class CreateAnalyzerConfigurationAdapterTest {
     when(analyzerConfigurationRepository.save(any(AnalyzerConfigurationEntity.class)))
         .thenReturn(mockItem);
 
-    when(projectRepository.findById(anyLong()))
+    when(projectRepository.findProjectById(anyLong()))
         .thenReturn(java.util.Optional.of(new ProjectEntity()));
 
     AnalyzerConfiguration item = new AnalyzerConfiguration();

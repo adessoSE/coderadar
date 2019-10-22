@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.module;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -10,6 +11,7 @@ import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedEx
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.SaveModulePort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.service.module.CreateModuleService;
@@ -28,12 +30,15 @@ class CreateModuleServiceTest {
 
   @Mock private ProjectStatusPort projectStatusPort;
 
+  @Mock private GetProjectPort getProjectPort;
+
   private CreateModuleService testSubject;
 
   @BeforeEach
   void setUp() {
     this.testSubject =
-        new CreateModuleService(createModulePortMock, saveModulePortMock, projectStatusPort);
+        new CreateModuleService(
+            createModulePortMock, saveModulePortMock, projectStatusPort, getProjectPort);
   }
 
   @Test
@@ -48,6 +53,7 @@ class CreateModuleServiceTest {
 
     CreateModuleCommand command = new CreateModuleCommand("module-path");
 
+    when(getProjectPort.existsById(anyLong())).thenReturn(true);
     when(saveModulePortMock.saveModule(expectedModule, projectId)).thenReturn(expectedModuleId);
 
     // when

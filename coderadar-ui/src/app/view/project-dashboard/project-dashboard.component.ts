@@ -66,7 +66,7 @@ export class ProjectDashboardComponent implements OnInit {
       this.getCommits(true);
       this.getProject();
       // Schedule a task to check if all commits are analyzed and update them if they're not
-      timer(4000, 4000).subscribe(x => {
+      timer(4000, 8000).subscribe(x => {
         if (this.commitsAnalyzed < this.commits.length) {
           this.getCommits(false);
         }
@@ -74,7 +74,7 @@ export class ProjectDashboardComponent implements OnInit {
 
       this.cityEffects.currentProjectId  = this.projectId;
       this.store.dispatch(loadCommits());
-      this.store.dispatch(loadAvailableMetrics());
+      console.log(this.commitsAnalyzed)
     });
   }
 
@@ -144,6 +144,9 @@ export class ProjectDashboardComponent implements OnInit {
             this.commitsAnalyzed++;
           }
         });
+        if (this.commitsAnalyzed > 0) {
+          this.store.dispatch(loadAvailableMetrics());
+        }
         if (selectedCommit1Id != null) {
           this.selectedCommit1 = this.commits.find(value => value.name === selectedCommit1Id);
         }
