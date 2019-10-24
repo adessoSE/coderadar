@@ -42,12 +42,6 @@ public class DeleteModuleAdapter implements DeleteModulePort {
     delete(moduleEntity);
   }
 
-  private ProjectEntity getProject(Long projectId) {
-    return projectRepository
-        .findById(projectId)
-        .orElseThrow(() -> new ProjectNotFoundException(projectId));
-  }
-
   /**
    * Delete a ModuleEntity and adjusts all the relationships it had between the project, other
    * modules and files.

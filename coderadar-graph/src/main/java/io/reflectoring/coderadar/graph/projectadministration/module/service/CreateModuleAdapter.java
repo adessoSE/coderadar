@@ -39,7 +39,7 @@ public class CreateModuleAdapter implements CreateModulePort {
   public void createModule(Long moduleId, Long projectId) {
     ModuleEntity moduleEntity =
         moduleRepository
-            .findById(moduleId)
+            .findModuleById(moduleId)
             .orElseThrow(() -> new ModuleNotFoundException(moduleId));
     ProjectEntity projectEntity =
         projectRepository
@@ -150,7 +150,7 @@ public class CreateModuleAdapter implements CreateModulePort {
    */
   private ModuleEntity findModule(ModuleEntity entity, String path) {
     long id = entity.getId();
-    entity = moduleRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException(id));
+    entity = moduleRepository.findModuleById(id).orElseThrow(() -> new ModuleNotFoundException(id));
     if (path.startsWith(entity.getPath())) {
       if (entity.getChildModules().isEmpty()) {
         return entity;

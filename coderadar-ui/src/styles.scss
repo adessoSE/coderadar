@@ -15,7 +15,7 @@ body {
   margin: 0;
   height: 100%;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: whitesmoke;
+  background-color: ghostwhite;
 }
 
 footer {
@@ -60,10 +60,6 @@ Styles for the login and register forms
  */
 
 
-.login-card-form {
-  margin-top: 10%;
-}
-
 .login-card-form mat-card-header {
   justify-content: center;
 }
@@ -77,6 +73,8 @@ Styles for the login and register forms
 }
 
 .login-card-form mat-card {
+  position: fixed;
+  top: 20%;
   min-width: 22%;
 }
 
