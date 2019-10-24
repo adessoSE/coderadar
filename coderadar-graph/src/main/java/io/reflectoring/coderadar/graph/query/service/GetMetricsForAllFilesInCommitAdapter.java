@@ -56,12 +56,10 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
 
     List<MetricValueForCommitTreeQueryResult> result =
         getMetricValuesOfCommitRepository.getMetricTreeForCommit(
-            projectId, command.getMetrics(), commitEntity.getTimestamp().toInstant().toString());
-
-    List<ModuleEntity> moduleEntities = moduleRepository.findModulesInProject(projectId);
-    moduleEntities.sort(Comparator.comparing(ModuleEntity::getPath));
-    Collections.reverse(moduleEntities);
-
+            projectId,
+            command.getMetrics(),
+            commitEntity.getTimestamp().toInstant().toEpochMilli());
+    List<ModuleEntity> moduleEntities = moduleRepository.findModulesInProjectSortedDesc(projectId);
     List<MetricTree> moduleChildren = processModules(moduleEntities, result);
     MetricTree rootModule = processRootModule(result);
     rootModule.getChildren().addAll(findChildModules(projectEntity.getModules(), moduleChildren));
@@ -192,7 +190,7 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
           Long moduleId = moduleEntity.getId();
           moduleEntity =
               moduleRepository
-                  .findById(moduleEntity.getId())
+                  .findModuleById(moduleEntity.getId())
                   .orElseThrow(() -> new ModuleNotFoundException(moduleId));
           metricTree
               .getChildren()

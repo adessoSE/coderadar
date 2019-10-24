@@ -54,27 +54,26 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
       commit1Time = commit2Time;
       commit2Time = tempDate;
     }
+    System.out.println("END METRIC_TREES");
 
     List<String> addedFiles = new ArrayList<>();
     List<String> removedFiles = new ArrayList<>();
+    List<String> modifiedFiles =
+        fileRepository.getFilesModifiedBetweenCommits(
+            commit1Time.toInstant().toEpochMilli(),
+            commit2Time.toInstant().toEpochMilli(),
+            projectId);
 
     DeltaTree deltaTree =
-        createDeltaTree(
-            commit1Tree,
-            commit2Tree,
-            commit1Time.toInstant().toString(),
-            commit2Time.toInstant().toString(),
-            projectId,
-            addedFiles,
-            removedFiles);
+        createDeltaTree(commit1Tree, commit2Tree, modifiedFiles, addedFiles, removedFiles);
 
     // Renames are processed here
     for (String addedFile : addedFiles) {
       String oldPath =
           fileRepository.wasRenamedBetweenCommits(
               addedFile,
-              commit1Time.toInstant().toString(),
-              commit2Time.toInstant().toString(),
+              commit1Time.toInstant().toEpochMilli(),
+              commit2Time.toInstant().toEpochMilli(),
               projectId);
       if (removedFiles.contains(oldPath)) {
         DeltaTree oldName = findChildInDeltaTree(deltaTree, oldPath);
@@ -97,9 +96,7 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
    *
    * @param commit1Tree The metric tree of the first commit.
    * @param commit2Tree The metric tree of the second commit.
-   * @param commit1Time The commit time of the first commit.
-   * @param commit2Time The commit time of the second commit.
-   * @param projectId The project id.
+   * @param modifiedFiles A list of file paths that were modified between the two commits
    * @param addedFiles A list, that must be filled with all files added in the newest commit.
    * @param removedFiles A list, that must be filled with all files removed in the newest commit.
    * @return A delta tree, which contains no information about renames. Renames must be processed
@@ -108,9 +105,7 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
   private DeltaTree createDeltaTree(
       MetricTree commit1Tree,
       MetricTree commit2Tree,
-      String commit1Time,
-      String commit2Time,
-      Long projectId,
+      List<String> modifiedFiles,
       List<String> addedFiles,
       List<String> removedFiles) {
     DeltaTree deltaTree = new DeltaTree();
@@ -140,13 +135,7 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
               .getChildren()
               .add(
                   createDeltaTree(
-                      metricTree1,
-                      metricTree2,
-                      commit1Time,
-                      commit2Time,
-                      projectId,
-                      addedFiles,
-                      removedFiles));
+                      metricTree1, metricTree2, modifiedFiles, addedFiles, removedFiles));
         } else {
           DeltaTree child = new DeltaTree();
           child.setName(metricTree1.getName());
@@ -155,13 +144,7 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
           child.setCommit2Metrics(metricTree2.getMetrics());
 
           Changes changes = new Changes();
-          if (!metricTree1.getMetrics().equals(metricTree2.getMetrics())) {
-            changes.setModified(true);
-          } else {
-            changes.setModified(
-                fileRepository.wasModifiedBetweenCommits(
-                    metricTree1.getName(), commit1Time, commit2Time, projectId));
-          }
+          changes.setModified(modifiedFiles.contains(metricTree1.getName()));
           child.setChanges(changes);
           deltaTree.getChildren().add(child);
         }

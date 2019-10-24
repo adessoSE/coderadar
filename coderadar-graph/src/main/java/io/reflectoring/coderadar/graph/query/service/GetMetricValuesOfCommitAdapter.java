@@ -33,8 +33,10 @@ public class GetMetricValuesOfCommitAdapter implements GetMetricValuesOfCommitPo
             .orElseThrow(() -> new CommitNotFoundException(command.getCommit()));
     List<MetricValueForCommitQueryResult> result =
         getMetricValuesOfCommitRepository.getMetricValuesForCommit(
-            projectId, command.getMetrics(), commitEntity.getTimestamp().toInstant().toString());
-    List<MetricValueForCommit> values = new ArrayList<>();
+            projectId,
+            command.getMetrics(),
+            commitEntity.getTimestamp().toInstant().toEpochMilli());
+    List<MetricValueForCommit> values = new ArrayList<>(result.size());
     for (MetricValueForCommitQueryResult queryResult : result) {
       values.add(new MetricValueForCommit(queryResult.getName(), queryResult.getValue()));
     }

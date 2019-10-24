@@ -62,13 +62,17 @@ public class CreateModuleAdapter implements CreateModulePort {
    * @param childModule The child module
    */
   private void attachModuleToModule(ModuleEntity parentModule, ModuleEntity childModule) {
+
+    List<Long> childModuleFileIds = new ArrayList<>();
     for (FileEntity fileEntity : parentModule.getFiles()) {
       if (fileEntity.getPath().startsWith(childModule.getPath())) {
         childModule.getFiles().add(fileEntity);
-        moduleRepository.detachFileFromModule(parentModule.getId(), fileEntity.getId());
+        childModuleFileIds.add(fileEntity.getId());
       }
     }
+    moduleRepository.detachFilesFromModule(parentModule.getId(), childModuleFileIds);
     parentModule.getFiles().removeAll(childModule.getFiles());
+
     // Check to see if the module could a have child
     for (ModuleEntity child :
         findChildModules(parentModule.getChildModules(), childModule.getPath())) {
@@ -94,12 +98,14 @@ public class CreateModuleAdapter implements CreateModulePort {
 
     // Move all files contained in the module path from the project to the module.
     moduleEntity.setProject(projectEntity);
+    List<Long> moduleFileIds = new ArrayList<>();
     for (FileEntity fileEntity : projectEntity.getFiles()) {
       if (fileEntity.getPath().startsWith(moduleEntity.getPath())) {
         moduleEntity.getFiles().add(fileEntity);
-        moduleRepository.detachFileFromProject(projectEntity.getId(), fileEntity.getId());
+        moduleFileIds.add(fileEntity.getId());
       }
     }
+    moduleRepository.detachFilesFromProject(projectEntity.getId(), moduleFileIds);
     projectEntity.getFiles().removeAll(moduleEntity.getFiles());
 
     // Check to see if the module could a have child

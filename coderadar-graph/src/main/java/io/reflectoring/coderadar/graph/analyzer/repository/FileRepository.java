@@ -11,19 +11,25 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
   @Query("MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} RETURN f")
   List<FileEntity> findAllinProject(Long projectId);
 
+
+  /**
+   * @param commit1Time The time of the first commit
+   * @param commit2Time The time of the second commits
+   * @param projectId The project id
+   * @return The names of the files that have been modified
+   */
   @Query(
-      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity) WHERE f.path = {0} AND datetime(c.timestamp).epochMillis <= datetime({2}).epochMillis  "
-          + "AND datetime(c.timestamp).epochMillis > datetime({1}).epochMillis AND ID(p) = {3} AND r.changeType = \"MODIFY\""
-          + " RETURN size(collect(r)) > 0")
-  Boolean wasModifiedBetweenCommits(
-      String path, String commit1Time, String commit2Time, Long projectId);
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity) WHERE ID(p) = {2} "
+          + "AND timestamp(c.timestamp) <= {1}  "
+          + "AND timestamp(c.timestamp) > {0} AND r.changeType = \"MODIFY\" "
+          + "RETURN f.path")
+  List<String> getFilesModifiedBetweenCommits(Long commit1Time, Long commit2Time, Long projectId);
 
   @Query(
-      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity) WHERE f.path = {0} AND datetime(c.timestamp).epochMillis <= datetime({2}).epochMillis  "
-          + "AND datetime(c.timestamp).epochMillis > datetime({1}).epochMillis AND ID(p) = {3} AND r.changeType = \"RENAME\""
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity) WHERE f.path = {0} AND timestamp(c.timestamp) <= {2}  "
+          + "AND timestamp(c.timestamp) > {1} AND ID(p) = {3} AND r.changeType = \"RENAME\""
           + " RETURN head(collect(r)).oldPath")
-  String wasRenamedBetweenCommits(
-      String path, String commit1Time, String commit2Time, Long projectId);
+  String wasRenamedBetweenCommits(String path, Long commit1Time, Long commit2Time, Long projectId);
 
   @Query(
       "MATCH (f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity)<-[:VALID_FOR]-(m:MetricValueEntity) WHERE ID(f) = {0} AND c.name = {1}"
@@ -31,7 +37,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
   List<MetricValueEntity> findMetricsByFileAndCommitName(Long id, String commitHash);
 
   @Query(
-      "MATCH (p:ProjectEntity)-[:HAS*]->(f:FileEntity) WHERE ID(p) = {0} AND size((f)-[:CHANGED_IN]-()) = 0 DETACH DELETE f")
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND size((f)-[:CHANGED_IN]-()) = 0 DETACH DELETE f")
   void removeFilesWithoutCommits(Long id);
 
   @Query("MATCH (f:FileEntity) WHERE ID(f) IN {0} RETURN f")
