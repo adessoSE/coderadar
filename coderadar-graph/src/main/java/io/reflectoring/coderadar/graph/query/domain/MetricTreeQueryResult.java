@@ -1,6 +1,5 @@
-package io.reflectoring.coderadar.graph.query.service;
+package io.reflectoring.coderadar.graph.query.domain;
 
-import io.reflectoring.coderadar.graph.projectadministration.domain.MetricValueForCommitQueryResult;
 import io.reflectoring.coderadar.query.domain.MetricsTreeNodeType;
 import java.util.List;
 import lombok.AllArgsConstructor;

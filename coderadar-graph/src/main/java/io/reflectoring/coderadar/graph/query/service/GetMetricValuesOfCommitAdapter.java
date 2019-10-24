@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.graph.query.service;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
-import io.reflectoring.coderadar.graph.projectadministration.domain.MetricValueForCommitQueryResult;
+import io.reflectoring.coderadar.graph.query.domain.MetricValueForCommitQueryResult;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;

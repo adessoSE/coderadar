@@ -59,7 +59,7 @@ public class CreateModuleService implements CreateModuleUseCase {
       createModulePort.createModule(moduleId, projectId);
       logger.info(
           String.format(
-              "Create module with path %s for project with id %d", command.getPath(), projectId));
+              "Created module with path %s for project with id %d", command.getPath(), projectId));
     } finally {
       projectStatusPort.setBeingProcessed(projectId, false);
     }

@@ -54,7 +54,6 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
       commit1Time = commit2Time;
       commit2Time = tempDate;
     }
-    System.out.println("END METRIC_TREES");
 
     List<String> addedFiles = new ArrayList<>();
     List<String> removedFiles = new ArrayList<>();

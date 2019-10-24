@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.graph.projectadministration.domain;
+package io.reflectoring.coderadar.graph.query.domain;
 
 import java.util.List;
 import java.util.Map;

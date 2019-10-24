@@ -2,11 +2,11 @@ package io.reflectoring.coderadar.graph.query.service;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
-import io.reflectoring.coderadar.graph.projectadministration.domain.MetricValueForCommitTreeQueryResult;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
+import io.reflectoring.coderadar.graph.query.domain.MetricValueForCommitTreeQueryResult;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
@@ -190,7 +190,7 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
           Long moduleId = moduleEntity.getId();
           moduleEntity =
               moduleRepository
-                  .findModuleById(moduleEntity.getId())
+                  .findById(moduleEntity.getId())
                   .orElseThrow(() -> new ModuleNotFoundException(moduleId));
           metricTree
               .getChildren()

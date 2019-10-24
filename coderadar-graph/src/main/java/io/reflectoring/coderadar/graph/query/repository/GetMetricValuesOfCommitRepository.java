@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.query.repository;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
-import io.reflectoring.coderadar.graph.projectadministration.domain.MetricValueForCommitQueryResult;
-import io.reflectoring.coderadar.graph.projectadministration.domain.MetricValueForCommitTreeQueryResult;
+import io.reflectoring.coderadar.graph.query.domain.MetricValueForCommitQueryResult;
+import io.reflectoring.coderadar.graph.query.domain.MetricValueForCommitTreeQueryResult;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;

@@ -38,6 +38,7 @@ public class Neo4jConfiguration {
     return new SessionFactory(
         configuration,
         "io.reflectoring.coderadar.graph.projectadministration.domain",
-        "io.reflectoring.coderadar.graph.analyzer.domain");
+        "io.reflectoring.coderadar.graph.analyzer.domain",
+        "io.reflectoring.coderadar.graph.query.domain");
   }
 }
