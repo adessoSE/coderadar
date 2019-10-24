@@ -11,7 +11,6 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
   @Query("MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} RETURN f")
   List<FileEntity> findAllinProject(Long projectId);
 
-
   /**
    * @param commit1Time The time of the first commit
    * @param commit2Time The time of the second commits
