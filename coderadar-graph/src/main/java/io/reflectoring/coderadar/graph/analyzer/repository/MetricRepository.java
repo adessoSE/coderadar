@@ -14,7 +14,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
   void deleteMetricsInCommit(Long id);
 
   @Query(
-      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-[:MEASURED_BY]->(m) WHERE ID(p) = {0} AND size((m)-[:VALID_FOR]-()) = 0 DETACH DELETE m")
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-[:MEASURED_BY]->(m) WHERE ID(p) = {0} AND size((m)-[:VALID_FOR]->()) = 0 DETACH DELETE m")
   void removeMetricsWithoutCommits(Long id);
 
   @Query(

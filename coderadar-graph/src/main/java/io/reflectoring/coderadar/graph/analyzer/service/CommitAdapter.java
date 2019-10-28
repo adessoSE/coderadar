@@ -136,7 +136,9 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       walkedCommits.putIfAbsent(commitEntity.getName(), commitEntity);
 
       // See if any of the commits we had before have been deleted and delete their metrics.
+      List<Long> commitsInProjectIds = new ArrayList<>();
       for (CommitEntity commit : commitsInProject) {
+        commitsInProjectIds.add(commit.getId());
         Optional<CommitEntity> existingCommit =
             walkedCommits
                 .values()
@@ -150,7 +152,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
 
       // Delete all of the old commit nodes, we don't need these anymore as we'll be saving the
       // newly created tree.
-      commitRepository.deleteAll(commitsInProject);
+      commitRepository.deleteCommits(commitsInProjectIds);
 
       List<CommitEntity> commitEntities = new ArrayList<>(walkedCommits.values());
       commitEntities.sort(Comparator.comparing(CommitEntity::getTimestamp));
