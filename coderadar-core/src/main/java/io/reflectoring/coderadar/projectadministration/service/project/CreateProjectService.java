@@ -95,7 +95,7 @@ public class CreateProjectService implements CreateProjectUseCase {
   }
 
   @Override
-  public Long createProject(CreateProjectCommand command) throws ProjectIsBeingProcessedException {
+  public Long createProject(CreateProjectCommand command) {
     if (getProjectPort.existsByName(command.getName())) {
       throw new ProjectAlreadyExistsException(command.getName());
     }
@@ -121,8 +121,8 @@ public class CreateProjectService implements CreateProjectUseCase {
                     Paths.get(project.getWorkdirName()), getProjectDateRange(project));
             saveCommitPort.saveCommits(commits, project.getId());
             logger.info(String.format("Saved project %s", project.getName()));
-          } catch (UnableToCloneRepositoryException e) {
-            logger.error(String.format("Unable to clone repository: %s", e.getMessage()));
+          } catch (Exception e) {
+            logger.error(String.format("Unable to create project: %s", e.getMessage()));
           }
         },
         project.getId());

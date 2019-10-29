@@ -23,13 +23,13 @@
               {{commit.name.substr(0, 7)}}
             </mat-panel-description>
             <mat-panel-description style="position: absolute; left: 13%;">
-              Author: {{commit.author}}
+              {{commit.author}}
             </mat-panel-description>
             <mat-panel-description style="position: absolute; left: 33%;">
-              Comment: {{commit.comment.substr(0, 50)}}
+              {{commit.comment.substr(0, 50)}}
             </mat-panel-description>
             <mat-panel-description style="position: absolute; left: 78%;">
-              Date: {{timestampToDate(commit.timestamp)}}
+              {{timestampToDate(commit.timestamp)}}
             </mat-panel-description>
           </mat-expansion-panel-header>
           <mat-label>Analyzed: <b>{{booleanToString(commit.analyzed)}}</b></mat-label>
@@ -46,8 +46,6 @@
         <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">3d_rotation</mat-icon>
       </div>
     </a>
-
-
   </mat-grid-list>
 </main>
 

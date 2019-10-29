@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
@@ -60,9 +61,11 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
     config.setString("remote", "origin", "url", url.toString());
     config.save();
     ObjectId oldHead = git.getRepository().resolve(Constants.HEAD);
-    ObjectId newHead =
-        git.pull().setStrategy(MergeStrategy.THEIRS).call().getMergeResult().getNewHead();
-    git.getRepository().close();
+    git.fetch().call();
+    git.checkout().setName("origin/master").setForce(true).call();
+    git.reset().setMode(ResetCommand.ResetType.HARD).setRef("origin/master").call();
+    ObjectId newHead = git.getRepository().resolve(Constants.HEAD);
+            git.getRepository().close();
     git.close();
     return (oldHead == null && newHead != null) || !oldHead.equals(newHead);
   }

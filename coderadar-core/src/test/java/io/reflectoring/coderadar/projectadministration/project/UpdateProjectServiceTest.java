@@ -10,20 +10,18 @@ import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsExcep
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.project.UpdateProjectService;
 import io.reflectoring.coderadar.query.domain.DateRange;
-import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
 import java.io.File;
-import java.net.MalformedURLException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.util.Collections;
@@ -51,11 +49,11 @@ class UpdateProjectServiceTest {
 
   @Mock private GetProjectCommitsUseCase getProjectCommitsUseCaseMock;
 
-  @Mock private UpdateCommitsPort updateCommitsPortMock;
-
-  @Mock private GetCommitsInProjectPort getCommitsInProjectPortMock;
-
   @Mock private SaveCommitPort saveCommitPortMock;
+
+  @Mock private CreateModuleUseCase createModuleUseCase;
+
+  @Mock private ListModulesOfProjectUseCase listModulesOfProjectUseCase;
 
   private UpdateProjectService testSubject;
 
@@ -69,9 +67,9 @@ class UpdateProjectServiceTest {
             configurationPropertiesMock,
             processProjectServiceMock,
             getProjectCommitsUseCaseMock,
-            getCommitsInProjectPortMock,
-            updateCommitsPortMock,
-            saveCommitPortMock);
+            saveCommitPortMock,
+            listModulesOfProjectUseCase,
+            createModuleUseCase);
   }
 
   @Test
@@ -112,8 +110,7 @@ class UpdateProjectServiceTest {
 
   @Test
   void updateProjectSuccessfullyUpdatesProjectIfNameIsUnique(@Mock Commit commitMock)
-      throws ProjectIsBeingProcessedException, UnableToUpdateRepositoryException,
-          MalformedURLException {
+      throws ProjectIsBeingProcessedException, UnableToUpdateRepositoryException {
 
     // given
     long projectId = 123L;
@@ -138,9 +135,6 @@ class UpdateProjectServiceTest {
     UpdateProjectCommand command =
         new UpdateProjectCommand(
             newProjectName, newUsername, newPassword, newVcsUrl, false, newStartDate, newEndDate);
-
-    Path expectedUpdatedRepositoryPath =
-        new File(globalWorkdirName + "/projects/" + projectWorkdirName).toPath();
 
     Project testProject = new Project();
     testProject.setWorkdirName(projectWorkdirName);

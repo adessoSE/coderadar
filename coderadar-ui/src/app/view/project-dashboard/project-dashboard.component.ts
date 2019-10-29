@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
@@ -15,7 +15,7 @@ import * as fromRoot from '../../city-map/shared/reducers';
 import {changeActiveFilter, setMetricMapping} from '../../city-map/control-panel/settings/settings.actions';
 import {changeCommit, loadCommits} from '../../city-map/control-panel/control-panel.actions';
 import {CommitType} from '../../city-map/enum/CommitType';
-import {timer} from 'rxjs';
+import {Observable, Subscription, timer} from 'rxjs';
 import {loadAvailableMetrics} from '../../city-map/visualization/visualization.actions';
 
 @Component({
@@ -23,7 +23,7 @@ import {loadAvailableMetrics} from '../../city-map/visualization/visualization.a
   templateUrl: './project-dashboard.component.html',
   styleUrls: ['./project-dashboard.component.scss']
 })
-export class ProjectDashboardComponent implements OnInit {
+export class ProjectDashboardComponent implements OnInit, OnDestroy {
 
   appComponent = AppComponent;
 
@@ -48,6 +48,8 @@ export class ProjectDashboardComponent implements OnInit {
   pageSize = 15;
   waiting = false;
 
+  updateCommitsTimer: Subscription;
+
   constructor(private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute, private store: Store<fromRoot.AppState>,
               private cityEffects: AppEffects) {
@@ -66,7 +68,7 @@ export class ProjectDashboardComponent implements OnInit {
       this.getCommits(true);
       this.getProject();
       // Schedule a task to check if all commits are analyzed and update them if they're not
-      timer(4000, 8000).subscribe(x => {
+      this.updateCommitsTimer = timer(4000, 8000).subscribe(() => {
         if (this.commitsAnalyzed < this.commits.length) {
           this.getCommits(false);
         }
@@ -74,9 +76,10 @@ export class ProjectDashboardComponent implements OnInit {
 
       this.cityEffects.currentProjectId  = this.projectId;
       this.store.dispatch(loadCommits());
-      console.log(this.commitsAnalyzed)
     });
   }
+
+
 
   /**
    * Return 'yes' for true and 'no' for false.
@@ -238,6 +241,10 @@ export class ProjectDashboardComponent implements OnInit {
 
     this.cityEffects.isLoaded = true;
     this.router.navigate(['/city/' + this.projectId]);
+  }
+
+  ngOnDestroy(): void {
+    this.updateCommitsTimer.unsubscribe();
   }
 
 }
