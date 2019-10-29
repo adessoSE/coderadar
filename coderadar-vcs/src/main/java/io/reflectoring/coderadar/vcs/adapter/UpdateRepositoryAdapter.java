@@ -14,7 +14,6 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
-import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,7 +64,7 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
     git.checkout().setName("origin/master").setForce(true).call();
     git.reset().setMode(ResetCommand.ResetType.HARD).setRef("origin/master").call();
     ObjectId newHead = git.getRepository().resolve(Constants.HEAD);
-            git.getRepository().close();
+    git.getRepository().close();
     git.close();
     return (oldHead == null && newHead != null) || !oldHead.equals(newHead);
   }
