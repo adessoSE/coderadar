@@ -1,0 +1,22 @@
+apply plugin: "com.diffplug.gradle.spotless"
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}
+
+dependencies {
+    compile project(":coderadar-core")
+
+    implementation group: 'org.apache.axis2', name: 'axis2-kernel', version: '1.7.9'
+    implementation 'com.google.re2j:re2j:1.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}

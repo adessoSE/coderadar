@@ -67,6 +67,7 @@ dependencies {
     compile project(":coderadar-vcs")
     compile project(":coderadar-core")
     compile project(":coderadar-rest")
+    compile project(":coderadar-dependency-map")
 
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${version_spring_boot}"
     providedRuntime group: 'org.apache.tomcat', name: 'tomcat-juli', version: property('tomcat.version')
