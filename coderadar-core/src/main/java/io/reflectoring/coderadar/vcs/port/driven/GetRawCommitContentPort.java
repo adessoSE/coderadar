@@ -4,6 +4,9 @@ import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import java.util.HashMap;
 import java.util.List;
 
+import java.util.HashMap;
+import java.util.List;
+
 public interface GetRawCommitContentPort {
 
   /**

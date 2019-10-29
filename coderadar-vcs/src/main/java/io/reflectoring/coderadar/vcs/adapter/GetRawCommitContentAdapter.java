@@ -12,8 +12,15 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.gitective.core.BlobUtils;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+
 @Service
 public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
+
   @Override
   public byte[] getCommitContent(String projectRoot, String filepath, String name)
       throws UnableToGetCommitContentException {

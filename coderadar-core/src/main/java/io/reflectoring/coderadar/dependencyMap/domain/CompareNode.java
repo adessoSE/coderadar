@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class CompareNode {
 
@@ -21,12 +22,9 @@ public class CompareNode {
         this.filename = filename;
         this.path = path;
         this.packageName = packageName;
-        children = new ArrayList<>();
-        dependencies = new ArrayList<>();
+        children = new CopyOnWriteArrayList<>();
+        dependencies = new CopyOnWriteArrayList<>();
         this.changed = changed;
-    }
-
-    public CompareNode() {
     }
 
     /**
@@ -39,15 +37,6 @@ public class CompareNode {
     }
 
     /**
-     * Check if this Node-object has dependencies.
-     *
-     * @return true if this Node-object has dependencies.
-     */
-    public boolean hasDependencies() {
-        return !dependencies.isEmpty();
-    }
-
-    /**
      * Add a Node-object to this Node-object's children.
      *
      * @param node Node-object to add as a child.
@@ -57,37 +46,23 @@ public class CompareNode {
     }
 
     /**
-     * Add a Node-object to this Node-object's children.
-     *
-     * @param nodes Node-object to add as children.
-     */
-    public void addToChildren(List<CompareNode> nodes) {
-        children.addAll(nodes);
-
-    }
-
-    /**
      * Add a Node-object to this Node-object's dependencies.
      *
      * @param node path of Node-object to add as a dependency.
      */
-    public void addToDependencies(CompareNodeDTO node) {
-        boolean contains = false;
-        for (CompareNodeDTO dependency : dependencies) {
-            if (dependency.getPath().equals(node.getPath())) {
-                if (dependency.getChanged() != null) {
-                    if (dependency.getChanged().equals(node.getChanged())) {
-                        contains = true;
+    public void addToDependencies(CompareNode node) {
+        if (!filename.equals(node.getFilename())) {
+            CompareNodeDTO dto = new CompareNodeDTO(node);
+            if (!dependencies.contains(dto)) {
+                dependencies.add(dto);
+            } else {
+                for (CompareNodeDTO dependency : dependencies) {
+                    if (dto.equals(dependency) && !dependency.getChanged().equals(dto.getChanged())) {
+                        dependencies.add(dto);
                         break;
                     }
-                } else if (node.getChanged() == null) {
-                    contains = true;
-                    break;
                 }
             }
-        }
-        if (!contains) {
-            dependencies.add(node);
         }
     }
 
@@ -155,7 +130,6 @@ public class CompareNode {
                 tmp = tmp.getChildByName(s);
             } else {
                 // create new Node
-//                Node node = new Node(new ArrayList<>(), tmp.getPath() + "/" + s, s, packageName);
                 CompareNode node = new CompareNode(s, tmp.getPath().equals("") ? s : tmp.getPath() + "/" + s, "", changeType);
                 tmp.addToChildren(node);
                 tmp = node;
@@ -238,7 +212,10 @@ public class CompareNode {
      * @return CompareNodeDTO with the given path or else null.
      */
     public CompareNodeDTO getDependencyByPath(String path) {
-        return dependencies.stream().filter(dependency -> dependency.getPath().equals(path)).findFirst().orElse(null);
+        if (path == null || dependencies == null) {
+            return null;
+        }
+        return dependencies.stream().filter(dependency -> path.equals(dependency.getPath())).findFirst().orElse(null);
     }
 
     /**
@@ -253,7 +230,7 @@ public class CompareNode {
         stack.push(root);
         while (!stack.isEmpty()) {
             root = stack.peek();
-            if (root.children.size() == 0 || hash.contains(root)) {
+            if (root.children.isEmpty() || hash.contains(root)) {
                 traverseInterface.traverseMethod(stack.pop());
             } else {
                 root.children.forEach(stack::push);

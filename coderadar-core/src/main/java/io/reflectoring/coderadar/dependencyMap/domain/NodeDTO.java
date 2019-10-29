@@ -8,9 +8,6 @@ public class NodeDTO {
         this.path = path;
     }
 
-    public NodeDTO() {
-    }
-
     public String getPath() {
         return path;
     }

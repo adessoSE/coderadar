@@ -1,17 +1,16 @@
 package io.reflectoring.coderadar.analyzer.levelizedStructureMap.domain;
 
-import io.reflectoring.coderadar.analyzer.levelizedStructureMap.NoFileContentException;
+import io.reflectoring.coderadar.analyzer.levelizedStructureMap.analyzers.JavaAnalyzer;
 import io.reflectoring.coderadar.dependencyMap.domain.Node;
-import io.reflectoring.coderadar.dependencyMap.domain.NodeDTO;
+import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.UnableToWalkCommitTreeException;
+import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import io.reflectoring.coderadar.vcs.port.driven.WalkCommitTreePort;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import io.reflectoring.coderadar.analyzer.levelizedStructureMap.analyzers.JavaAnalyzer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -20,15 +19,17 @@ public class DependencyTree {
     private Node root;
     private String repository;
     private String commitName;
+    private HashMap<String, byte[]> commitContents;
 
     private final JavaAnalyzer javaAnalyzer;
     private final WalkCommitTreePort walkCommitTreePort;
-    private final Logger logger = LoggerFactory.getLogger(DependencyTree.class);
+    private final GetRawCommitContentPort rawCommitContentPort;
 
     @Autowired
-    public DependencyTree(JavaAnalyzer javaAnalyzer, WalkCommitTreePort walkCommitTreePort) {
+    public DependencyTree(JavaAnalyzer javaAnalyzer, WalkCommitTreePort walkCommitTreePort, GetRawCommitContentPort rawCommitContentPort) {
         this.javaAnalyzer = javaAnalyzer;
         this.walkCommitTreePort = walkCommitTreePort;
+        this.rawCommitContentPort = rawCommitContentPort;
     }
 
     /**
@@ -36,8 +37,13 @@ public class DependencyTree {
      */
     private void createTree() {
         try {
-            walkCommitTreePort.walkCommitTree(repository, commitName, pathString -> root.createNodeByPath(pathString));
-        } catch (UnableToWalkCommitTreeException e) {
+            List<String> paths = new ArrayList<>();
+            walkCommitTreePort.walkCommitTree(repository, commitName, pathString -> {
+                root.createNodeByPath(pathString);
+                paths.add(pathString);
+            });
+            commitContents = rawCommitContentPort.getCommitContentBulk(repository, paths, commitName);
+        } catch (UnableToWalkCommitTreeException | UnableToGetCommitContentException e) {
             e.printStackTrace();
         }
     }
@@ -54,43 +60,11 @@ public class DependencyTree {
         this.commitName = commitName;
         this.root = new Node(repoName, "", "");
         createTree();
+
         // traverse to set packageName and dependencies from fileContent
         this.root.traversePost(node -> {
-            // set packageNames
-            if (!node.hasChildren()) {
-                // set this nodes and parent nodes packageName
-                // set also parent.packageName to prevent trouble with .java ending
-                String parentPackage = "";
-                try {
-                    parentPackage = javaAnalyzer.getPackageName(node.getPath(), projectRoot, commitName);
-                } catch (NoFileContentException e) {
-                    logger.error("Can't set packageName: " + e.getMessage());
-                }
-                node.getParent(root).setPackageName(parentPackage);
-                node.setPackageName(parentPackage + "." + node.getFilename());
-            } else {
-                if ("".equals(node.getPackageName())) {
-                    String childPackage = (node.getChildren().get(0).getPackageName() == null ? "" : node.getChildren().get(0).getPackageName());
-                    node.setPackageName(childPackage.contains(".") ? childPackage.substring(0, childPackage.lastIndexOf(".")) : "");
-                }
-            }
-
-            // set dependencies
-            if (node.hasChildren()) {
-                node.getChildren().forEach(child -> node.addToDependencies(child.getDependencies()));
-            } else {
-                try {
-                    javaAnalyzer.getValidImportsFromFile(node.getPath(), projectRoot, commitName)
-                            .forEach(importString -> getNodeFromImport(importString).stream()
-                                    .filter(dependency -> !node.getDependencies().contains(new NodeDTO(dependency.getPath()))
-                                            && !dependency.getFilename().equals(node.getFilename()))
-                                    .map(dependency -> new NodeDTO(dependency.getPath()))
-                                    .forEach(node::addToDependencies)
-                            );
-                } catch (NoFileContentException e) {
-                    logger.error("Can't set dependencies: " + e.getMessage());
-                }
-            }
+            setPackage(node);
+            setDependencies(node);
         });
 
         // traverse to compare nodes and to set their level
@@ -122,6 +96,32 @@ public class DependencyTree {
             }
         });
         return root;
+    }
+
+    private void setPackage(Node node) {
+        if (!node.hasChildren()) {
+            // set this nodes and parent nodes packageName, also set parent.packageName to prevent trouble with .java ending
+            String parentPackage = javaAnalyzer.getPackageName(commitContents.get(node.getPath()));
+            node.getParent(root).setPackageName(parentPackage);
+            node.setPackageName(parentPackage + "." + node.getFilename());
+        } else {
+            if (node.getPackageName().equals("")) {
+                String childPackage = node.getChildren().get(0).getPackageName();
+                node.setPackageName(childPackage.contains(".") ? childPackage.substring(0, childPackage.lastIndexOf(".")) : "");
+            }
+        }
+    }
+
+    private void setDependencies(Node node) {
+        // set dependencies
+        if (node.hasChildren()) {
+            node.getChildren().forEach(child -> node.addToDependencies(child.getDependencies()));
+        } else {
+            javaAnalyzer.getValidImports(new String(commitContents.get(node.getPath()))).parallelStream()
+                    .forEach(importString -> getNodeFromImport(importString).parallelStream()
+                            .forEach(node::addToDependencies)
+                    );
+        }
     }
 
     public List<Node> getNodeFromImport(String importString) {

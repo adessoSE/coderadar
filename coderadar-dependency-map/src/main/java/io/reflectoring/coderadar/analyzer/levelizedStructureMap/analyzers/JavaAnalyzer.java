@@ -2,19 +2,17 @@ package io.reflectoring.coderadar.analyzer.levelizedStructureMap.analyzers;
 
 import com.google.re2j.Matcher;
 import com.google.re2j.Pattern;
-import io.reflectoring.coderadar.analyzer.levelizedStructureMap.NoFileContentException;
-import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
-import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
+import io.reflectoring.coderadar.analyzer.levelizedStructureMap.domain.RegexPatternCache;
 import org.apache.axis2.util.JavaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import io.reflectoring.coderadar.analyzer.levelizedStructureMap.domain.RegexPatternCache;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 public class JavaAnalyzer {
@@ -26,10 +24,8 @@ public class JavaAnalyzer {
     private Map<String, Boolean> separators;
     public int count = 0;
 
-    private final GetRawCommitContentPort rawCommitContentPort;
-
     @Autowired
-    public JavaAnalyzer(GetRawCommitContentPort rawCommitContentPort) {
+    public JavaAnalyzer() {
         this.cache = new RegexPatternCache();
         importPattern = cache.getPattern(" (([a-z_$][\\w$]*)\\.)+(([a-zA-Z_$][\\w$]*)|\\*);");
         fullyClassifiedPattern = cache.getPattern("([a-zA-Z_$][\\w$]*\\.)*[a-zA-Z_$][\\w$]*");
@@ -60,56 +56,33 @@ public class JavaAnalyzer {
             separators.put("@[a-zA-Z_$][\\w$]*", true);
             separators.put(";", false);
         }
-        this.rawCommitContentPort = rawCommitContentPort;
     }
 
-    public String getPackageName(String path, String repository, String commitName) throws NoFileContentException {
-        try {
-            byte[] bytes = rawCommitContentPort.getCommitContent(repository, path, commitName);
-            if (bytes != null) {
-                String fileContent = clearFileContent(new String(bytes));
-                Matcher packageMatcher = cache.getPattern("^(\\s*)package(\\s*)(([A-Za-z_$][\\w$]*)\\.)*([A-Za-z_$][\\w$]*);").matcher(fileContent);
-                if (packageMatcher.find()) {
-                    Matcher nameMatcher = cache.getPattern(" (([A-Za-z_$][\\w$]*)\\.)*([A-Za-z_$][\\w$]*)").matcher(packageMatcher.group());
-                    if (nameMatcher.find()) {
-                        return nameMatcher.group().substring(1);
-                    }
-                } else {
-                    throw new NoFileContentException("No FileContent for " + path + " in " + repository + "/" + commitName);
+    public String getPackageName(byte[] byteFileContent) {
+        if (byteFileContent != null) {
+            String fileContent = clearFileContent(new String(byteFileContent));
+            Matcher packageMatcher = cache.getPattern("^(\\s*)package(\\s*)(([A-Za-z_$][\\w$]*)\\.)*([A-Za-z_$][\\w$]*);").matcher(fileContent);
+            if (packageMatcher.find()) {
+                Matcher nameMatcher = cache.getPattern(" (([A-Za-z_$][\\w$]*)\\.)*([A-Za-z_$][\\w$]*)").matcher(packageMatcher.group());
+                if (nameMatcher.find()) {
+                    return nameMatcher.group().substring(1);
                 }
             }
-            return "";
-        } catch (UnableToGetCommitContentException e) {
-            throw new NoFileContentException("No FileContent for " + path + " in " + repository + "/" + commitName);
         }
-    }
-
-    public List<String> getValidImportsFromFile(String path, String repository, String commitName) throws NoFileContentException {
-        try {
-            byte[] bytes = rawCommitContentPort.getCommitContent(repository, path, commitName);
-            if (bytes == null) {
-                return Collections.emptyList();
-            }
-            return getValidImports(new String(bytes));
-        } catch (UnableToGetCommitContentException e) {
-            throw new NoFileContentException("No FileContent for " + path + " in " + repository + "/" + commitName);
-        }
+        return "";
     }
 
     public List<String> getValidImports(String fileContent) {
-        List<String> foundDependencies = new ArrayList<>();
+        List<String> foundDependencies = new CopyOnWriteArrayList<>();
         String[] lines = clearFileContent(fileContent).split("\n");
-        for (String line : lines) {
-            if (line.matches("^\\s*//.*$") || line.matches("^\\s*/\\*.*$") || line.matches("^\\s*\\*.*$")
-                    || line.matches("^.*\".*$") || line.matches("^\\s*package.*$")) {
-                continue;
-            }
+        Arrays.stream(lines).filter(line -> !line.matches("^\\s*//.*$") && !line.matches("^\\s*/\\*.*$") && !line.matches("^\\s*\\*.*$")
+                && !line.matches("^.*\".*$") && !line.matches("^\\s*package.*$")).parallel().forEach(line -> {
             if (line.contains("import ")) {
                 getDependenciesFromImportLine(line).stream().filter(imp -> !foundDependencies.contains(imp)).forEach(foundDependencies::add);
             } else {
                 getDependenciesFromLine(line).stream().filter(imp -> !foundDependencies.contains(imp)).forEach(foundDependencies::add);
             }
-        }
+        });
         return foundDependencies;
     }
 

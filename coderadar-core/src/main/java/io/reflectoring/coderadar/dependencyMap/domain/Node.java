@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.dependencyMap.domain;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Node {
 
@@ -18,8 +18,8 @@ public class Node {
         this.filename = filename;
         this.path = path;
         this.packageName = packageName;
-        children = new ArrayList<>();
-        dependencies = new ArrayList<>();
+        children = new CopyOnWriteArrayList<>();
+        dependencies = new CopyOnWriteArrayList<>();
     }
 
     public Node() {
@@ -35,15 +35,6 @@ public class Node {
     }
 
     /**
-     * Check if this Node-object has dependencies.
-     *
-     * @return true if this Node-object has dependencies.
-     */
-    public boolean hasDependencies() {
-        return !dependencies.isEmpty();
-    }
-
-    /**
      * Add a Node-object to this Node-object's children.
      *
      * @param node Node-object to add as a child.
@@ -53,21 +44,17 @@ public class Node {
     }
 
     /**
-     * Add a Node-object to this Node-object's children.
-     *
-     * @param nodes Node-object to add as children.
-     */
-    public void addToChildren(List<Node> nodes) {
-        children.addAll(nodes);
-    }
-
-    /**
      * Add a Node-object to this Node-object's dependencies.
      *
      * @param node path of Node-object to add as a dependency.
      */
-    public void addToDependencies(NodeDTO node) {
-        dependencies.add(node);
+    public void addToDependencies(Node node) {
+        if (!filename.equals(node.getFilename())) {
+            NodeDTO dto = new NodeDTO(node.getPath());
+            if (!dependencies.contains(dto)) {
+                dependencies.add(dto);
+            }
+        }
     }
 
     /**
