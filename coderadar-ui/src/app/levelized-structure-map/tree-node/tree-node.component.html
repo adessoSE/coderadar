@@ -1,0 +1,40 @@
+<!-- a node with one child with siblings is displayed in an own box, without siblings it is displayed inline -->
+<ng-container *ngIf="node.children.length === 1">
+  <span>
+    <span [ngClass]="(node.path === '' || (hasSiblings && node.children.length > 0)) ? (getClassString(node) + (node.path === '' ? ' package__base' : '')) : ''">
+          <span [id]="node.path" class="filename-span" (click)="onClick($event)" (dblclick)="stopSingleClick($event)"
+                [ngClass]="(node.children.length > 1 || node.dependencies.length > 0) && node.packageName !== '' ? 'clickable' : ''">
+            {{node.filename}}</span>/
+      <span>
+        <span>
+          <app-tree-node [node]="node.children[0]" [root]="root" [hasSiblings]="false"></app-tree-node>
+        </span>
+      </span>
+    </span>
+  </span>
+</ng-container>
+<!-- a node with more than one child is displayed in a box and its children are listed below -->
+<div *ngIf="node.children.length > 1">
+  <span [ngClass]="getClassString(node)">
+    <span [id]="node.path" class="filename-span" (click)="onClick($event)" (dblclick)="onDBClick($event)"
+          [ngClass]="(node.children.length > 1 || node.dependencies.length > 0) && node.packageName !== '' ? 'clickable' : ''">
+    {{node.filename}}
+    </span>
+    <ul class="list" [ngClass]="(node.packageName !== '' ? 'nested' : '') + (node.path === '' ? ' list__root' : '')">
+      <ng-container>{{setLevel(0)}}</ng-container>
+      <li *ngFor="let child of node.children; let i = index" [ngStyle]="{display: (child.level > level && i !== 0 ? 'block' : 'inline')}">
+        <ng-container *ngIf="child.level > level && i !== 0">{{setLevel(child.level)}}</ng-container>
+        <app-tree-node [node]="child" [root]="root" [hasSiblings]="true"></app-tree-node>
+      </li>
+    </ul>
+  </span>
+</div>
+<!-- a node without children is just listed with its filename -->
+<span *ngIf="node.children.length === 0">
+  <span>
+    <span [id]="node.path" class="filename-span" (click)="onClick($event)" (dblclick)="onDBClick($event)"
+          [ngClass]="getClassString(node) + (node.dependencies.length > 0 && node.packageName !== '' ? ' clickable' : '')">
+      {{node.filename}}
+    </span>
+  </span>
+</span>

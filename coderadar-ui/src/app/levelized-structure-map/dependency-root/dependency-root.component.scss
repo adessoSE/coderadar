@@ -1,0 +1,29 @@
+[id='3canvas'] {
+  position: absolute;
+  z-index: -1;
+}
+
+[id='3list__root'] {
+  padding-left: 20px;
+  width: max-content;
+}
+
+.header-background {
+  height: 140px;
+  position: absolute;
+  top: 0;
+  background-color: #016EC7;
+  z-index: -1;
+}
+
+.filename-span {
+  width: min-content;
+}
+
+.margin-right {
+  margin-right: 10px;
+}
+
+.margin-left {
+  margin-left: 10px;
+}

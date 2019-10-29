@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.analyzer.levelizedStructureMap.analyzers;
 
 import com.google.re2j.Matcher;
 import com.google.re2j.Pattern;
+import io.reflectoring.coderadar.analyzer.levelizedStructureMap.NoFileContentException;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import org.apache.axis2.util.JavaUtils;
@@ -62,9 +63,9 @@ public class JavaAnalyzer {
         this.rawCommitContentPort = rawCommitContentPort;
     }
 
-    public String getPackageName(String path, String repository, String commitName) {
+    public String getPackageName(String path, String repository, String commitName) throws NoFileContentException {
         try {
-            byte[] bytes = rawCommitContentPort.getCommitContent("", repository, commitName);
+            byte[] bytes = rawCommitContentPort.getCommitContent(repository, path, commitName);
             if (bytes != null) {
                 String fileContent = clearFileContent(new String(bytes));
                 Matcher packageMatcher = cache.getPattern("^(\\s*)package(\\s*)(([A-Za-z_$][\\w$]*)\\.)*([A-Za-z_$][\\w$]*);").matcher(fileContent);
@@ -74,25 +75,24 @@ public class JavaAnalyzer {
                         return nameMatcher.group().substring(1);
                     }
                 } else {
-                    return null;
+                    throw new NoFileContentException("No FileContent for " + path + " in " + repository + "/" + commitName);
                 }
             }
             return "";
         } catch (UnableToGetCommitContentException e) {
-            return null;
+            throw new NoFileContentException("No FileContent for " + path + " in " + repository + "/" + commitName);
         }
     }
 
-    public List<String> getValidImportsFromFile(String path, String repository, String commitName) {
+    public List<String> getValidImportsFromFile(String path, String repository, String commitName) throws NoFileContentException {
         try {
-            // TODO that is projectRoot
-            byte[] bytes = rawCommitContentPort.getCommitContent("", repository, commitName);
+            byte[] bytes = rawCommitContentPort.getCommitContent(repository, path, commitName);
             if (bytes == null) {
                 return Collections.emptyList();
             }
             return getValidImports(new String(bytes));
         } catch (UnableToGetCommitContentException e) {
-            return Collections.emptyList();
+            throw new NoFileContentException("No FileContent for " + path + " in " + repository + "/" + commitName);
         }
     }
 

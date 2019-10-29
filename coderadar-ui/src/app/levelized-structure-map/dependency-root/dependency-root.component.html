@@ -1,0 +1,27 @@
+<app-header id="header" [title]="[{location: '/structure-map', name: 'Structure Map'}]"></app-header>
+<div class="header-background" #3headerBackground></div>
+
+<mat-checkbox class="margin-left margin-right" #3showUpward [checked]="checkUp" (change)="onShowUpwardChanged()">Show all upward Dependencies</mat-checkbox>
+<mat-checkbox class="margin-left margin-right" #3showDownward [checked]="checkDown" (change)="onShowDownwardChanged()">Show all downward Dependencies</mat-checkbox>
+<mat-form-field>
+  <mat-select [(value)]="selected">
+    <mat-option *ngFor="let format of formats; let i = index" [value]="i">{{format.value}}</mat-option>
+  </mat-select>
+</mat-form-field>
+<button mat-button class="margin-left margin-right" #3screenshot (click)="screenshotListener()">Export</button>
+<span #3activeDependency class="margin-left">No active dependency chosen.</span>
+<div #3canvasContainer id="3canvasContainer">
+  <canvas id="3canvas" #3canvas class="canvas"></canvas>
+  <div id="3dependencyTree" #3dependencyTree class="dependencyTree">
+    <div *ngIf="node === undefined">
+      <mat-spinner mode="indeterminate" class="spinner-center"></mat-spinner>
+    </div>
+    <div *ngIf="node !== undefined">
+      <ul [id]="node.path === '' ? '3list__root' : ''">
+        <li style="display: inline;">
+          <app-tree-node [node]="node" [root]="this"  [hasSiblings]="false"></app-tree-node>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.analyzer.levelizedStructureMap.domain;
 
+import io.reflectoring.coderadar.analyzer.levelizedStructureMap.NoFileContentException;
 import io.reflectoring.coderadar.analyzer.levelizedStructureMap.analyzers.JavaAnalyzer;
 import io.reflectoring.coderadar.dependencyMap.domain.CompareNode;
 import io.reflectoring.coderadar.dependencyMap.domain.CompareNodeDTO;
@@ -9,6 +10,8 @@ import io.reflectoring.coderadar.vcs.UnableToWalkCommitTreeException;
 import io.reflectoring.coderadar.vcs.domain.DiffEntry;
 import io.reflectoring.coderadar.vcs.port.driven.GetDiffEntriesForCommitsPort;
 import io.reflectoring.coderadar.vcs.port.driven.WalkCommitTreePort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +30,8 @@ public class DependencyCompareTree {
     private final JavaAnalyzer javaAnalyzer;
     private final WalkCommitTreePort walkCommitTreePort;
     private final GetDiffEntriesForCommitsPort getDiffEntriesForCommitsPort;
+
+    private final Logger logger = LoggerFactory.getLogger(DependencyCompareTree.class);
 
     @Autowired
     public DependencyCompareTree(JavaAnalyzer javaAnalyzer, WalkCommitTreePort walkCommitTreePort, GetDiffEntriesForCommitsPort getDiffEntriesForCommitsPort) {
@@ -113,10 +118,14 @@ public class DependencyCompareTree {
                     // set this nodes and parent nodes packageName
                     // set also parent.packageName to prevent trouble with .java ending
                     String parentPackage = "";
-                    if (ChangeType.ADD.equals(node.getChanged()) || ChangeType.MODIFY.equals(node.getChanged())) {
-                        parentPackage = javaAnalyzer.getPackageName(node.getPath(), this.repository, this.commitName2);
-                    } else {
-                        parentPackage = javaAnalyzer.getPackageName(node.getPath(), this.repository, this.commitName);
+                    try {
+                        if (ChangeType.ADD.equals(node.getChanged()) || ChangeType.MODIFY.equals(node.getChanged())) {
+                            parentPackage = javaAnalyzer.getPackageName(node.getPath(), this.repository, this.commitName2);
+                        } else {
+                            parentPackage = javaAnalyzer.getPackageName(node.getPath(), this.repository, this.commitName);
+                        }
+                    } catch (NoFileContentException e) {
+                        logger.error("Can't set packageName: " + e.getMessage());
                     }
                     node.getParent(root).setPackageName(parentPackage);
                     node.setPackageName(parentPackage + "." + node.getFilename());
@@ -130,13 +139,17 @@ public class DependencyCompareTree {
                 // set dependencies in leave nodes from first commit,
                 // dependencies in other nodes are created from the merge of new and olf leave
                 if (!node.hasChildren()) {
-                    javaAnalyzer.getValidImportsFromFile(node.getPath(), repository, commitName)
-                            .forEach(importString -> getNodeFromImport(importString).stream()
-                                    .filter(dependency -> !node.getDependencies().contains(new CompareNodeDTO(dependency))
-                                        && !dependency.getFilename().equals(node.getFilename()))
-                                    .map(CompareNodeDTO::new)
-                                    .forEach(node::addToDependencies)
-                            );
+                    try {
+                        javaAnalyzer.getValidImportsFromFile(node.getPath(), repository, commitName)
+                                .forEach(importString -> getNodeFromImport(importString).stream()
+                                        .filter(dependency -> !node.getDependencies().contains(new CompareNodeDTO(dependency))
+                                                && !dependency.getFilename().equals(node.getFilename()))
+                                        .map(CompareNodeDTO::new)
+                                        .forEach(node::addToDependencies)
+                                );
+                    } catch (NoFileContentException e) {
+                        logger.error("Can't set dependencies: " + e.getMessage());
+                    }
                 }
 
                 // read dependencies from second commit and merge them
@@ -146,8 +159,12 @@ public class DependencyCompareTree {
                     // analyze file second commit
                     // nodes contains new dependencies, node.dependencies contains old dependencies
                     List<CompareNode> nodes = new ArrayList<>();
-                    javaAnalyzer.getValidImportsFromFile(node.getPath(), repository, commitName2)
-                            .stream().map(this::getNodeFromImport).forEach(nodes::addAll);
+                    try {
+                        javaAnalyzer.getValidImportsFromFile(node.getPath(), repository, commitName2)
+                                .stream().map(this::getNodeFromImport).forEach(nodes::addAll);
+                    } catch (NoFileContentException e) {
+                        logger.error("Can't set dependencies: " + e.getMessage());
+                    }
 
                     // migrate list to CompareNodeDTO for comparison
                     List<CompareNodeDTO> foundInSecondCommit = nodes.stream()

@@ -18,7 +18,7 @@ public class DependencyCompareTreeController {
         this.getCompareTreeUseCase = getCompareTreeUseCase;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/{projectId}/structureMap/{commitName}/{secondCommit}")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/analyzers/{projectId}/structureMap/{commitName}/{secondCommit}")
     public ResponseEntity<Object> getDependencyTree(@PathVariable("projectId") Long projectId,
                                                     @PathVariable("commitName") String commitName,
                                                     @PathVariable("secondCommit") String secondCommit) {
