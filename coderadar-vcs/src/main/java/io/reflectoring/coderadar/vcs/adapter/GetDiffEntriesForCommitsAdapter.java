@@ -27,9 +27,8 @@ public class GetDiffEntriesForCommitsAdapter implements GetDiffEntriesForCommits
         try {
             Git git = Git.open(new File(projectRoot));
             Repository repository = git.getRepository();
-            RevWalk revWalk = new RevWalk(git.getRepository());
-            RevCommit commit1 = revWalk.lookupCommit(ObjectId.fromString(commitName1));
-            RevCommit commit2 = revWalk.lookupCommit(ObjectId.fromString(commitName2));
+            RevCommit commit1 = repository.parseCommit(ObjectId.fromString(commitName1));
+            RevCommit commit2 = repository.parseCommit(ObjectId.fromString(commitName2));
             // change commits so that commit2 is the older one
             if (commit1.getCommitTime() > commit2.getCommitTime()) {
                 RevCommit tmp = commit1;
@@ -37,13 +36,15 @@ public class GetDiffEntriesForCommitsAdapter implements GetDiffEntriesForCommits
                 commit2 = tmp;
             }
 
-            ObjectReader reader = repository.newObjectReader();
+            ObjectReader reader = git.getRepository().newObjectReader();
+
             CanonicalTreeParser oldTreeIter = new CanonicalTreeParser();
-            ObjectId baseTree = commit1.getTree();
-            oldTreeIter.reset(reader, baseTree);
+            ObjectId oldTree = commit1.getTree();
+            oldTreeIter.reset(reader, oldTree);
+
             CanonicalTreeParser newTreeIter = new CanonicalTreeParser();
-            ObjectId alteredTree = commit2.getTree();
-            newTreeIter.reset(reader, alteredTree);
+            ObjectId newTree = commit2.getTree();
+            newTreeIter.reset(reader, newTree);
 
             DiffFormatter df = new DiffFormatter(new ByteArrayOutputStream());
             df.setRepository(repository);

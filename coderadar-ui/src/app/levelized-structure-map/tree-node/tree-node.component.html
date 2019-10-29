@@ -14,7 +14,8 @@
   </span>
 </ng-container>
 <!-- a node with more than one child is displayed in a box and its children are listed below -->
-<div *ngIf="node.children.length > 1">
+<span *ngIf="node.children.length > 1">
+  <span *ngIf="!hasSiblings"><br></span>
   <span [ngClass]="getClassString(node)">
     <span [id]="node.path" class="filename-span" (click)="onClick($event)" (dblclick)="onDBClick($event)"
           [ngClass]="(node.children.length > 1 || node.dependencies.length > 0) && node.packageName !== '' ? 'clickable' : ''">
@@ -28,7 +29,7 @@
       </li>
     </ul>
   </span>
-</div>
+</span>
 <!-- a node without children is just listed with its filename -->
 <span *ngIf="node.children.length === 0">
   <span>

@@ -51,19 +51,19 @@ public class DependencyCompareTree {
     /**
      * Create a dependency tree from a given commit in a git repo beginning with a root Node-object.
      *
-     * @param repository repo to analyze.
+     * @param projectRoot repo to analyze.
      * @param commitName commit to analyze.
      * @param repoName name of the repository.
      */
-    public CompareNode getRoot(String repository, String commitName, String repoName, String commitName2) {
+    public CompareNode getRoot(String projectRoot, String commitName, String repoName, String commitName2) {
         this.commitName2 = commitName2;
-        this.repository = repository;
+        this.repository = projectRoot;
         this.commitName = commitName;
         this.root = new CompareNode(repoName, "", "", null);
         try {
             createTree();
 
-            List<DiffEntry> diffs = getDiffEntriesForCommitsPort.getDiffs(repository, commitName, commitName2);
+            List<DiffEntry> diffs = getDiffEntriesForCommitsPort.getDiffs(projectRoot, commitName, commitName2);
             for (DiffEntry entry : diffs) {
                 // filter for forbidden dirs (output dirs, test dirs, ..)
                 String newPath = !entry.getNewPath().equals("/dev/null") ? entry.getNewPath() : entry.getOldPath();
@@ -140,7 +140,7 @@ public class DependencyCompareTree {
                 // dependencies in other nodes are created from the merge of new and olf leave
                 if (!node.hasChildren()) {
                     try {
-                        javaAnalyzer.getValidImportsFromFile(node.getPath(), repository, commitName)
+                        javaAnalyzer.getValidImportsFromFile(node.getPath(), projectRoot, commitName)
                                 .forEach(importString -> getNodeFromImport(importString).stream()
                                         .filter(dependency -> !node.getDependencies().contains(new CompareNodeDTO(dependency))
                                                 && !dependency.getFilename().equals(node.getFilename()))
@@ -160,7 +160,7 @@ public class DependencyCompareTree {
                     // nodes contains new dependencies, node.dependencies contains old dependencies
                     List<CompareNode> nodes = new ArrayList<>();
                     try {
-                        javaAnalyzer.getValidImportsFromFile(node.getPath(), repository, commitName2)
+                        javaAnalyzer.getValidImportsFromFile(node.getPath(), projectRoot, commitName2)
                                 .stream().map(this::getNodeFromImport).forEach(nodes::addAll);
                     } catch (NoFileContentException e) {
                         logger.error("Can't set dependencies: " + e.getMessage());

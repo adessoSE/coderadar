@@ -20,7 +20,6 @@ export class DependencyRootComponent extends DependencyBase implements AfterView
 
   ngAfterViewInit(): void {
     this.route.params.subscribe(params => {
-      console.log('test');
       this.projectId = params.projectId;
       this.commitName = params.commitName;
       this.getData();
@@ -28,11 +27,8 @@ export class DependencyRootComponent extends DependencyBase implements AfterView
   }
 
   getData(): void {
-    console.log('getData');
     this.projectService.getDependencyTree(this.projectId, this.commitName).then(response => {
-      console.log('test 2');
       this.node = response.body;
-      console.log(response.body);
       this.ctx = (this.canvas.nativeElement as HTMLCanvasElement).getContext('2d');
       this.checkDown = this.checkUp = true;
       setTimeout(() => this.draw(() => this.loadDependencies(this.node)), 50);

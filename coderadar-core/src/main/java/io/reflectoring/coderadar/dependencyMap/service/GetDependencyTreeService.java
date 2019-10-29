@@ -27,7 +27,6 @@ public class GetDependencyTreeService implements GetDependencyTreeUseCase {
     public Node getDependencyTree(Long projectId, String commitName) {
         Project project = getProjectPort.get(projectId);
         String projectRoot = coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName();
-        // TODO is projectRoot correct this way?
         return getDependencyTreePort.getRoot(projectRoot, commitName, project.getName());
     }
 }

@@ -97,15 +97,7 @@ public class DependencyTree {
         NodeComparator nodeComparator = new NodeComparator();
         this.root.traversePost(node -> {
             if (node.hasChildren()) {
-                // TODO change sort method
-//                node.getChildren().sort(nodeComparator);
-                sortChildren(node, nodeComparator);
-
-
-
-
-
-
+                node.getChildren().sort(nodeComparator);
                 int level = 0;
                 for (int i = 0; i < node.getChildren().size(); i++) {
                     // for every child in the current layer check
@@ -156,20 +148,5 @@ public class DependencyTree {
             }
         });
         return imports;
-    }
-
-    private void sortChildren(Node node, NodeComparator nodeComparator) {
-        Node tmp;
-        if (node != null && node.getChildren().size() > 1) {
-            for (int x = 0; x < node.getChildren().size(); x++) {
-                for (int i = 0; i < node.getChildren().size() - x - 1; i++) {
-                    if (nodeComparator.compare(node.getChildren().get(i), node.getChildren().get(i + 1)) > 0) {
-                        tmp = node.getChildren().get(i);
-                        node.getChildren().set(i, node.getChildren().get(i + 1));
-                        node.getChildren().set(i + 1, tmp);
-                    }
-                }
-            }
-        }
     }
 }

@@ -258,7 +258,6 @@ export class ProjectService {
    * @param commitName The name (hash) of the commit.
    */
   public getDependencyTree(projectId: number, commitName: string) {
-    console.log('call backend');127
     return this.httpClient.get(this.apiURL + 'analyzers/' + projectId + '/structureMap/' + commitName, {observe: 'response'}).toPromise();
   }
 
@@ -270,6 +269,7 @@ export class ProjectService {
    * @param commitName2 The name (hash) of the second commit.
    */
   public getCompareTree(projectId: number, commitName1: string, commitName2: string) {
-    return this.httpClient.get(this.apiURL + 'analyzers/' + projectId + '/structureMap/' + commitName1 + '/' + commitName2, {observe: 'response'}).toPromise();
+    return this.httpClient.get(this.apiURL + 'analyzers/' + projectId + '/structureMap/' + commitName1 + '/' + commitName2,
+      {observe: 'response'}).toPromise();
   }
 }

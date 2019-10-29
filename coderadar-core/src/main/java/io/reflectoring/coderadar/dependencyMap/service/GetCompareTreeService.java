@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.dependencyMap.service;
 
+import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.dependencyMap.domain.CompareNode;
 import io.reflectoring.coderadar.dependencyMap.port.driven.GetCompareTreePort;
 import io.reflectoring.coderadar.dependencyMap.port.driver.GetCompareTreeUseCase;
@@ -12,17 +13,19 @@ import org.springframework.stereotype.Service;
 public class GetCompareTreeService implements GetCompareTreeUseCase {
     private final GetCompareTreePort getCompareTreePort;
     private final GetProjectPort getProjectPort;
+    private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
     @Autowired
-    public GetCompareTreeService(GetCompareTreePort getCompareTreePort, GetProjectPort getProjectPort) {
+    public GetCompareTreeService(GetCompareTreePort getCompareTreePort, GetProjectPort getProjectPort, CoderadarConfigurationProperties coderadarConfigurationProperties) {
         this.getCompareTreePort = getCompareTreePort;
         this.getProjectPort = getProjectPort;
+        this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     }
 
     @Override
     public CompareNode getDependencyTree(Long projectId, String commitName, String secondCommit) {
         Project project = getProjectPort.get(projectId);
-        // TODO is projectRoot correct this way?
-        return getCompareTreePort.getRoot(project.getWorkdirName(), commitName, project.getName(), secondCommit);
+        String projectRoot = coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName();
+        return getCompareTreePort.getRoot(projectRoot, commitName, project.getName(), secondCommit);
     }
 }
