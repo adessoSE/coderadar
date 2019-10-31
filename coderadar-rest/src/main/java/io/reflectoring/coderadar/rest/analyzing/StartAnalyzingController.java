@@ -26,7 +26,7 @@ public class StartAnalyzingController {
   @PostMapping(path = "projects/{projectId}/analyze")
   public ResponseEntity startAnalyzing(
       @PathVariable("projectId") Long projectId,
-      @Validated @RequestBody StartAnalyzingCommand command) throws ProjectIsBeingProcessedException {
+      @Validated @RequestBody StartAnalyzingCommand command) {
     startAnalyzingUseCase.start(command, projectId);
     return new ResponseEntity<>(HttpStatus.OK);
   }

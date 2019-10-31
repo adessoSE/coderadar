@@ -172,7 +172,7 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
               if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
                 List<File> filesWithOldPath = files.get(diff.getOldPath());
                 if (filesWithOldPath != null) {
-                  file.getOldFiles().addAll(files.get(diff.getOldPath()));
+                  file.getOldFiles().addAll(filesWithOldPath);
                 }
               }
               filesWithPath.add(file);
@@ -186,7 +186,11 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
                 filesWithPath.addAll(fileList);
               } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
                 File file = new File();
-                file.setOldFiles(files.get(diff.getOldPath()));
+
+                List<File> filesWithOldPath = files.get(diff.getOldPath());
+                if (filesWithOldPath != null) {
+                  file.getOldFiles().addAll(filesWithOldPath);
+                }
                 filesWithPath.add(file);
                 fileList.add(file);
               } else {

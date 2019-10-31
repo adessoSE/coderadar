@@ -1,7 +1,8 @@
 <app-header [title]="[{location: '/dashboard', name: 'Dashboard'}, {location: '/project/' + project.id, name: appComponent.trimProjectName(project.name)}]"></app-header>
 <div *ngIf="waiting">
-  <mat-spinner *ngIf="waiting" style="position: absolute;  margin-top: 15%; margin-left: 46%; z-index: 5" [diameter]="100"></mat-spinner>
+  <mat-spinner [diameter]="100"  class="waitingIndicator"></mat-spinner>
 </div>
+
 <main class="card-list">
   <p>{{getTitleText()}}
     <br>

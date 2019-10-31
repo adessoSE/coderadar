@@ -29,7 +29,7 @@ public class CreateProjectController {
 
   @PostMapping(consumes = "application/json", produces = "application/json", path = "/projects")
   public ResponseEntity createProject(@RequestBody @Validated CreateProjectCommand command)
-          throws MalformedURLException, ProjectIsBeingProcessedException {
+          throws MalformedURLException {
     try {
       return new ResponseEntity<>(
           new IdResponse(createProjectUseCase.createProject(command)), HttpStatus.CREATED);

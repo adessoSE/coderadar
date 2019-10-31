@@ -55,6 +55,24 @@ Styles for most forms in the app
   margin: 10px;
 }
 
+.waitingIndicator {
+  position: absolute !important;
+  margin-top: 20%;
+  margin-left: calc(50% - 50px);
+  z-index: 5;
+}
+
+.dark-overlay{
+  background-color: rgba(0,0,0,0.4);
+  position: fixed;
+  top: 0;
+  left:0;
+  width: 100%;
+  z-index: 3;
+  min-height: calc(100vh);
+}
+
+
 /*
 Styles for the login and register forms
  */

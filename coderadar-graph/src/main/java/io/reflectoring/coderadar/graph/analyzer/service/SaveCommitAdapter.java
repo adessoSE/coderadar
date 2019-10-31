@@ -189,7 +189,11 @@ public class SaveCommitAdapter implements SaveCommitPort {
           fileEntities.addAll(fileList);
         } else if (fileToCommitRelationship.getChangeType().equals(ChangeType.RENAME)) {
           FileEntity file = new FileEntity();
-          file.getOldFiles().addAll(walkedFiles.get(fileToCommitRelationship.getOldPath()));
+          List<FileEntity> filesWithOldPath =
+                  walkedFiles.get(fileToCommitRelationship.getOldPath());
+          if (filesWithOldPath != null) {
+            file.getOldFiles().addAll(filesWithOldPath);
+          }
           fileEntities.add(file);
           fileList.add(file);
         } else {

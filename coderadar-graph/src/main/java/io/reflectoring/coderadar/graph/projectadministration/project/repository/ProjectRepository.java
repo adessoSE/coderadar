@@ -35,17 +35,16 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   @Query("MATCH (p:ProjectEntity)-[:HAS]->(a) WHERE ID(p) = {projectId} DETACH DELETE a")
   void deleteProjectConfiguration(@Param("projectId") Long projectId);
 
-  /** For some reason this is much faster than the default findAll() */
-  @Query("MATCH (p:ProjectEntity) RETURN p")
+  @Query("MATCH (p:ProjectEntity) WHERE p.isBeingDeleted = FALSE RETURN p")
   List<ProjectEntity> findAllProjects();
 
-  @Query("MATCH (p:ProjectEntity) WHERE p.name = {0} RETURN p LIMIT 1")
+  @Query("MATCH (p:ProjectEntity) WHERE p.name = {0} AND p.isBeingDeleted = FALSE RETURN p LIMIT 1")
   Optional<ProjectEntity> findByName(String name);
 
-  @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} RETURN p")
+  @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} AND p.isBeingDeleted = FALSE RETURN p")
   Optional<ProjectEntity> findProjectById(Long id);
 
-  @Query("MATCH (p:ProjectEntity) WHERE p.name = {0} RETURN p")
+  @Query("MATCH (p:ProjectEntity) WHERE p.name = {0} AND p.isBeingDeleted = FALSE RETURN p")
   List<ProjectEntity> findAllByName(String name);
 
   @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} RETURN p.isBeingProcessed")

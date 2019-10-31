@@ -63,6 +63,7 @@ export class ControlPanelComponent implements OnInit {
   }
 
   handleCommitChanged(payload: { commitType: CommitType, commit: Commit }) {
+    console.log(payload);
     this.store.dispatch(changeCommit(payload.commitType, payload.commit));
   }
 

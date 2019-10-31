@@ -21,7 +21,7 @@ public class DeleteProjectController {
   }
 
   @DeleteMapping(produces = "application/json", path = "/projects/{projectId}")
-  public ResponseEntity deleteProject(@PathVariable(name = "projectId") Long projectId) throws ProjectIsBeingProcessedException {
+  public ResponseEntity deleteProject(@PathVariable(name = "projectId") Long projectId) {
       deleteProjectUseCase.delete(projectId);
       return new ResponseEntity<>(HttpStatus.OK);
   }

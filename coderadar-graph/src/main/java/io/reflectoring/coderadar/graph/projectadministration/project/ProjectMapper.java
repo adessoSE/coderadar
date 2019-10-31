@@ -35,6 +35,7 @@ public class ProjectMapper extends AbstractMapper<Project, ProjectEntity> {
     project.setVcsUrl(domainObject.getVcsUrl());
     project.setWorkdirName(domainObject.getWorkdirName());
     project.setBeingProcessed(domainObject.isBeingProcessed());
+    project.setBeingDeleted(false);
     return project;
   }
 }

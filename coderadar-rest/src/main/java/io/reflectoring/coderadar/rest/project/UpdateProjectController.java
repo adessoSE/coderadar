@@ -31,7 +31,7 @@ public class UpdateProjectController {
   public ResponseEntity updateProject(
       @RequestBody @Validated UpdateProjectCommand command,
       @PathVariable(name = "projectId") Long projectId)
-          throws MalformedURLException, ProjectIsBeingProcessedException {
+          throws MalformedURLException {
     try {
       updateProjectUseCase.update(command, projectId);
       return new ResponseEntity<>(HttpStatus.OK);

@@ -66,11 +66,17 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       this.projectId = params.id;
       this.getCommits(true);
+      if (this.commits.length === 0) {
+        this.waiting = true;
+      }
       this.getProject();
       // Schedule a task to check if all commits are analyzed and update them if they're not
       this.updateCommitsTimer = timer(4000, 8000).subscribe(() => {
         if (this.commitsAnalyzed < this.commits.length) {
           this.getCommits(false);
+        }
+        if (this.commits.length === 0) {
+          this.getCommits(true);
         }
       });
 
@@ -150,7 +156,9 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         if (selectedCommit2Id != null) {
           this.selectedCommit2 = this.commits.find(value => value.name === selectedCommit2Id);
         }
-        this.waiting = false;
+        if (this.commits.length !== 0) {
+          this.waiting = false;
+        }
       })
       .catch(e => {
         if (e.status && e.status === FORBIDDEN) {

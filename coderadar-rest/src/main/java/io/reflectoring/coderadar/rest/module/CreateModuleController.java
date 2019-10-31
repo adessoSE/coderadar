@@ -30,7 +30,7 @@ public class CreateModuleController {
   @PostMapping(path = "/projects/{projectId}/modules")
   public ResponseEntity createModule(
       @RequestBody @Validated CreateModuleCommand command,
-      @PathVariable(name = "projectId") Long projectId) throws ProjectIsBeingProcessedException {
+      @PathVariable(name = "projectId") Long projectId) {
     try {
       return new ResponseEntity<>(
           new IdResponse(createModuleUseCase.createModule(command, projectId)), HttpStatus.CREATED);
