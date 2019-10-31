@@ -17,14 +17,20 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
   List<ModuleEntity> findModulesInProject(Long projectId);
 
   @Query(
-      "MATCH (p:ProjectEntity)-[r:CONTAINS]->(f:FileEntity) WHERE ID(p) = {projectId} AND ID(f) IN {fileIds} DELETE r")
-  void detachFilesFromProject(
-      @Param("projectId") Long projectId, @Param("fileIds") List<Long> fileIds);
+      "CREATE (m:ModuleEntity { path: {1} }) WITH m "
+          + "MATCH (p:ProjectEntity)-[r1:CONTAINS]->(f:FileEntity) WHERE ID(p) = {0} AND f.path STARTS WITH {1} WITH DISTINCT m, p, f, r1 "
+          + "CREATE (m)-[r2:CONTAINS]->(f) WITH DISTINCT m,f,p,r1 "
+          + "DELETE r1 WITH m, p LIMIT 1 "
+          + "CREATE (p)-[r3:CONTAINS]->(m) RETURN m")
+  ModuleEntity createModuleInProject(Long projectId, String modulePath);
 
   @Query(
-      "MATCH (p:ModuleEntity)-[r:CONTAINS]->(f:FileEntity) WHERE ID(p) = {moduleId} AND ID(f) IN {fileIds} DELETE r")
-  void detachFilesFromModule(
-      @Param("moduleId") Long moduleId, @Param("fileIds") List<Long> fileIds);
+      "CREATE (m:ModuleEntity { path: {1} }) WITH m "
+          + "MATCH (m2:ModuleEntity)-[r1:CONTAINS]->(f:FileEntity) WHERE ID(m2) = {0} AND f.path STARTS WITH {1} WITH DISTINCT m, m2, f, r1 "
+          + "CREATE (m)-[r2:CONTAINS]->(f) WITH DISTINCT m,f,m2,r1 "
+          + "DELETE r1 WITH m, m2 LIMIT 1 "
+          + "CREATE (m2)-[r3:CONTAINS]->(m) RETURN m")
+  ModuleEntity createModuleInModule(Long moduleId, String modulePath);
 
   @Query(
       "MATCH (p:ProjectEntity)-[r:CONTAINS]->(m:ModuleEntity) WHERE ID(p) = {projectId} AND ID(m) = {moduleId} DELETE r")

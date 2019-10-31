@@ -10,7 +10,6 @@ import io.reflectoring.coderadar.projectadministration.ModulePathInvalidExceptio
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
-import io.reflectoring.coderadar.projectadministration.port.driven.module.SaveModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
@@ -26,8 +25,6 @@ class CreateModuleServiceTest {
 
   @Mock private CreateModulePort createModulePortMock;
 
-  @Mock private SaveModulePort saveModulePortMock;
-
   @Mock private ProjectStatusPort projectStatusPort;
 
   @Mock private GetProjectPort getProjectPort;
@@ -37,8 +34,7 @@ class CreateModuleServiceTest {
   @BeforeEach
   void setUp() {
     this.testSubject =
-        new CreateModuleService(
-            createModulePortMock, saveModulePortMock, projectStatusPort, getProjectPort);
+        new CreateModuleService(createModulePortMock, projectStatusPort, getProjectPort);
   }
 
   @Test
@@ -54,7 +50,8 @@ class CreateModuleServiceTest {
     CreateModuleCommand command = new CreateModuleCommand("module-path");
 
     when(getProjectPort.existsById(anyLong())).thenReturn(true);
-    when(saveModulePortMock.saveModule(expectedModule, projectId)).thenReturn(expectedModuleId);
+    when(createModulePortMock.createModule(command.getPath(), projectId))
+        .thenReturn(expectedModuleId);
 
     // when
     Long actualModuleId = testSubject.createModule(command, projectId);
@@ -62,6 +59,6 @@ class CreateModuleServiceTest {
     // then
     assertThat(actualModuleId).isEqualTo(expectedModuleId);
 
-    verify(createModulePortMock).createModule(expectedModuleId, projectId);
+    verify(createModulePortMock).createModule(command.getPath(), projectId);
   }
 }

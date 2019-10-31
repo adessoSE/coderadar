@@ -1,5 +1,9 @@
 package io.reflectoring.coderadar.projectadministration.port.driven.module;
 
+import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
+import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
+
 public interface CreateModulePort {
-  void createModule(Long moduleId, Long projectId);
+  Long createModule(String modulePath, Long projectId)
+      throws ModuleAlreadyExistsException, ModulePathInvalidException;
 }
