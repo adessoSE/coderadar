@@ -36,7 +36,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   @ViewChild('paginator1') paginator1: MatPaginator;
   @ViewChild('paginator2') paginator2: MatPaginator;
 
-  pageSizeOptions: number[] = [5, 10, 25, 100];
+  pageSizeOptions: number[] = [15, 25, 50, 100];
 
   selectedCommit1: Commit;
   selectedCommit2: Commit;
@@ -79,8 +79,6 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-
-
   /**
    * Return 'yes' for true and 'no' for false.
    * @param arg boolean
@@ -91,10 +89,6 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     } else {
       return 'no';
     }
-  }
-
-  setPageSizeOptions(setPageSizeOptionsInput: string) {
-    this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
   }
 
   /**
@@ -156,15 +150,6 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         if (selectedCommit2Id != null) {
           this.selectedCommit2 = this.commits.find(value => value.name === selectedCommit2Id);
         }
-        this.commits.sort((a, b) => {
-          if (a.timestamp === b.timestamp) {
-            return 0;
-          } else if (a.timestamp > b.timestamp) {
-            return -1;
-          } else {
-            return 1;
-          }
-        });
         this.waiting = false;
       })
       .catch(e => {
