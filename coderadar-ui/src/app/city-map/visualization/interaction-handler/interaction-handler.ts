@@ -21,6 +21,9 @@ export class InteractionHandler {
   mouse: Vector2 = new Vector2();
   mouseForRaycaster: Vector2 = new Vector2();
 
+  screenOffset:Vector2 = new Vector2();
+  screenDimensions:Vector2 = new Vector2();
+  localMousePosition:Vector2 = new Vector2();
 
   hoveredElementUuid = undefined;
   clickedElementUuid = undefined;
@@ -79,6 +82,7 @@ export class InteractionHandler {
     this.tooltipService.hide();
   }
 
+
   onDocumentMouseMove(event) {
     if (!this.enabled) {
       return;
@@ -88,15 +92,15 @@ export class InteractionHandler {
     this.mouse.y = event.clientY;
 
     //Canvas object offset
-    const screenOffset = new Vector2(this.renderer.domElement.getBoundingClientRect().left,this.renderer.domElement.getBoundingClientRect().top);
+    this.screenOffset.set(this.renderer.domElement.getBoundingClientRect().left,this.renderer.domElement.getBoundingClientRect().top);
     //Canvas object size
-    const screenDimensions = new Vector2(this.renderer.domElement.getBoundingClientRect().width,this.renderer.domElement.getBoundingClientRect().height);
+    this.screenDimensions.set(this.renderer.domElement.getBoundingClientRect().width,this.renderer.domElement.getBoundingClientRect().height);
 
     //Canvas local mouse position
-    var localMousePosition = new Vector2(event.clientX - screenOffset.x,event.clientY - screenOffset.y);
+    this.localMousePosition.set(event.clientX - this.screenOffset.x,event.clientY - this.screenOffset.y);
 
-    this.mouseForRaycaster.x = (localMousePosition.x / screenDimensions.x) * 2 - 1;
-    this.mouseForRaycaster.y = -(localMousePosition.y / screenDimensions.y) * 2 + 1;
+    this.mouseForRaycaster.x = (this.localMousePosition.x / this.screenDimensions.x) * 2 - 1;
+    this.mouseForRaycaster.y = -(this.localMousePosition.y / this.screenDimensions.y) * 2 + 1;
   }
 
   onDocumentMouseDown(event) {
