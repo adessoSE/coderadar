@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import io.reflectoring.coderadar.dependencyMap.domain.CompareNode;
 import io.reflectoring.coderadar.dependencyMap.domain.CompareNodeDTO;
 import io.reflectoring.coderadar.analyzer.levelizedStructureMap.domain.DependencyCompareTree;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
+@ExtendWith(MockitoExtension.class)
 public class CompareTreeTest {
 
     private String repository;
@@ -26,8 +30,13 @@ public class CompareTreeTest {
     private CompareNode root;
     private File f;
 
-    private CloneRepositoryPort cloneRepositoryPort = mock(CloneRepositoryPort.class);
-    private DependencyCompareTree dependencyTree = mock(DependencyCompareTree.class);
+
+    @Mock
+    private CloneRepositoryPort cloneRepositoryPort;
+    @Mock
+    private DependencyCompareTree dependencyTree;
+//    private CloneRepositoryPort cloneRepositoryPort = mock(CloneRepositoryPort.class);
+//    private DependencyCompareTree dependencyTree = mock(DependencyCompareTree.class);
 
     @BeforeEach
     public void initEach() {

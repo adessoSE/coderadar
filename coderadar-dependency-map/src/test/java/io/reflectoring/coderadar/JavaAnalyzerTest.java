@@ -3,9 +3,13 @@ package io.reflectoring.coderadar;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import io.reflectoring.coderadar.analyzer.levelizedStructureMap.analyzers.JavaAnalyzer;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+@ExtendWith(MockitoExtension.class)
 public class JavaAnalyzerTest {
 
     private String fileContent =
@@ -51,7 +55,8 @@ public class JavaAnalyzerTest {
             "\n" +
             "}";
 
-    private JavaAnalyzer analyzer = new JavaAnalyzer();
+    @Mock
+    private JavaAnalyzer analyzer;
 
     /**
      * imports: 7
