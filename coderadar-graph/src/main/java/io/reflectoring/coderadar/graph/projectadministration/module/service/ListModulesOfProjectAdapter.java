@@ -40,7 +40,7 @@ public class ListModulesOfProjectAdapter implements ListModulesOfProjectPort {
   }
 
   @Override
-  public List<GetModuleResponse> listModuleReponses(Long projectId) {
+  public List<GetModuleResponse> listModuleResponses(Long projectId) {
     Optional<ProjectEntity> project = projectRepository.findProjectById(projectId);
     if (project.isPresent()) {
       List<GetModuleResponse> getModuleResponses = new ArrayList<>();

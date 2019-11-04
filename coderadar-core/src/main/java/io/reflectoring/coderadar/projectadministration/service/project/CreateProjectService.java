@@ -108,7 +108,6 @@ public class CreateProjectService implements CreateProjectUseCase {
                           + "/projects/"
                           + project.getWorkdirName()));
           try {
-            scanProjectScheduler.scheduleUpdateTask(project);
             cloneRepositoryUseCase.cloneRepository(cloneRepositoryCommand);
             logger.info(
                 String.format(
@@ -118,6 +117,7 @@ public class CreateProjectService implements CreateProjectUseCase {
                 getProjectCommitsUseCase.getCommits(
                     Paths.get(project.getWorkdirName()), getProjectDateRange(project));
             saveCommitPort.saveCommits(commits, project.getId());
+            scanProjectScheduler.scheduleUpdateTask(project);
             logger.info(String.format("Saved project %s", project.getName()));
           } catch (Exception e) {
             logger.error(String.format("Unable to create project: %s", e.getMessage()));

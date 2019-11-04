@@ -9,5 +9,5 @@ import java.util.List;
 public interface ListModulesOfProjectPort {
   Collection<Module> listModules(Long projectId) throws ProjectNotFoundException;
 
-  List<GetModuleResponse> listModuleReponses(Long projectId);
+  List<GetModuleResponse> listModuleResponses(Long projectId);
 }
