@@ -38,7 +38,7 @@ public class ListFilePatternsOfProjectAdapter implements ListFilePatternsOfProje
   @Override
   public List<GetFilePatternResponse> listFilePatternResponses(Long projectId) {
     projectRepository
-        .findById(projectId)
+        .findProjectById(projectId)
         .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
     List<GetFilePatternResponse> getFilePatternResponses = new ArrayList<>();
