@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import io.reflectoring.coderadar.analyzer.levelizedStructureMap.analyzers.JavaAnalyzer;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -55,8 +55,12 @@ public class JavaAnalyzerTest {
             "\n" +
             "}";
 
-    @Mock
     private JavaAnalyzer analyzer;
+
+    @BeforeEach
+    public void setUp() {
+        this.analyzer = new JavaAnalyzer();
+    }
 
     /**
      * imports: 7
@@ -71,7 +75,6 @@ public class JavaAnalyzerTest {
     @Test
     public void testGetValidImports() {
         List<String> imports = analyzer.getValidImports(fileContent);
-        System.out.println(analyzer.count);
         Assertions.assertEquals(50, imports.size());
         Assertions.assertEquals("java.util.Objects", imports.get(0));
         Assertions.assertEquals("java.io.BufferedReader", imports.get(1));

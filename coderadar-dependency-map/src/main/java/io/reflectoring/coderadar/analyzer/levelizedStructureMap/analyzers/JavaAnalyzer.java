@@ -76,7 +76,7 @@ public class JavaAnalyzer {
         List<String> foundDependencies = new CopyOnWriteArrayList<>();
         String[] lines = clearFileContent(fileContent).split("\n");
         Arrays.stream(lines).filter(line -> !line.matches("^\\s*//.*$") && !line.matches("^\\s*/\\*.*$") && !line.matches("^\\s*\\*.*$")
-                && !line.matches("^.*\".*$") && !line.matches("^\\s*package.*$")).parallel().forEach(line -> {
+                && !line.matches("^.*\".*$") && !line.matches("^\\s*package.*$")).forEach(line -> {
             if (line.contains("import ")) {
                 getDependenciesFromImportLine(line).stream().filter(imp -> !foundDependencies.contains(imp)).forEach(foundDependencies::add);
             } else {

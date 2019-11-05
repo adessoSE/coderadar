@@ -12,6 +12,9 @@ public class CompareNodeDTO {
         this.changed = changeType;
     }
 
+    public CompareNodeDTO() {
+    }
+
     /**
      * Create a CompareNodeDTO-object from a given CompareNode-object.
      *

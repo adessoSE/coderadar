@@ -56,7 +56,9 @@ public class DependencyCompareTree {
                 paths.add(pathString);
             });
             commit1Contents = rawCommitContentPort.getCommitContentBulk(repository, paths, commitName);
-            commit2Contents = rawCommitContentPort.getCommitContentBulk(repository, paths, commitName2);
+            List<String> paths2 = new ArrayList<>();
+            walkCommitTreePort.walkCommitTree(repository, commitName2, paths2::add);
+            commit2Contents = rawCommitContentPort.getCommitContentBulk(repository, paths2, commitName2);
         } catch (UnableToWalkCommitTreeException | UnableToGetCommitContentException e) {
             e.printStackTrace();
         }
@@ -80,9 +82,9 @@ public class DependencyCompareTree {
             // traverse to set packageName and dependencies from fileContent
             this.root.traversePost(this::setPackage);
 
-            commit1Contents.entrySet().parallelStream().forEach(e -> javaAnalyzer.getValidImports(new String(e.getValue()))
-                    .parallelStream().forEach(importString -> getNodeFromImport(importString).parallelStream()
-                            .forEach(dto -> root.getNodeByPath(e.getKey()).addToDependencies(dto))));
+            commit1Contents.forEach((key, value) -> javaAnalyzer.getValidImports(new String(value))
+                    .forEach(importString -> getNodeFromImport(importString)
+                            .forEach(dto -> root.getNodeByPath(key).addToDependencies(dto))));
 
             this.root.traversePost(this::setSecondCommitDependencies);
 
@@ -178,7 +180,10 @@ public class DependencyCompareTree {
             } else {
                 parentPackage = javaAnalyzer.getPackageName(commit1Contents.get(node.getPath()));
             }
-            node.getParent(root).setPackageName(parentPackage);
+            CompareNode parent = node.getParent(root);
+            if (parent != null) {
+                node.getParent(root).setPackageName(parentPackage);
+            }
             node.setPackageName(parentPackage + "." + node.getFilename());
         } else {
             if (node.getPackageName().equals("")) {
@@ -194,46 +199,63 @@ public class DependencyCompareTree {
         } else {
             // analyze file second commit
             List<CompareNode> nodes = new ArrayList<>();
-            javaAnalyzer.getValidImports(new String(commit2Contents.get(node.getPath()))).stream()
-                    .map(this::getNodeFromImport).forEach(nodes::addAll);
 
-            // migrate list to CompareNodeDTO for comparison
-            List<CompareNodeDTO> foundInSecondCommit = nodes.stream()
-                    .map(currentNode -> new CompareNodeDTO(currentNode.getPath(), ChangeType.UNCHANGED))
-                    .collect(Collectors.toList());
+            // the file has to be in the second commit and its fileContent can't be empty
+            if (commit2Contents.containsKey(node.getPath()) && commit2Contents.get(node.getPath()) != null) {
+                // for all valid imports of a file get all dependent CompareNode-objects and add them to nodes
+                javaAnalyzer.getValidImports(new String(commit2Contents.get(node.getPath()))).stream().map(this::getNodeFromImport)
+                        .forEach(importDependencies -> importDependencies.stream().filter(importDependency
+                                -> !nodes.contains(importDependency) && !importDependency.getFilename().equals(node.getFilename()))
+                                .forEach(nodes::add));
 
-            List<CompareNodeDTO> merged = new ArrayList<>(node.getDependencies());
-            foundInSecondCommit.stream().filter(compareNodeDTO -> !compareNodeDTO.getPath().endsWith(node.getFilename()))
-                    .forEach(compareNodeDTO -> {
-                        if (node.getDependencies().contains(compareNodeDTO)) {
-                            // if there are elements in the new and the old list, set their changeType to the newer one
-                            CompareNodeDTO dependency = node.getDependencyByPath(compareNodeDTO.getPath());
-                            if (dependency != null) {
-                                dependency.setChanged(compareNodeDTO.getChanged());
+                // migrate nodes to CompareNodeDTO list for comparison
+                List<CompareNodeDTO> foundInSecondCommit = nodes.stream().map(currentNode -> {
+                            if (ChangeType.ADD.equals(currentNode.getChanged()) || ChangeType.DELETE.equals(currentNode.getChanged())) {
+                                return new CompareNodeDTO(currentNode);
+                            } else {
+                                return new CompareNodeDTO(currentNode.getPath(), ChangeType.UNCHANGED);
                             }
-                        } else if (!merged.contains(compareNodeDTO)) {
-                            // if there are elements in the new list but not in the old one, set them to add
-                            compareNodeDTO.setChanged(ChangeType.ADD);
-                            merged.add(compareNodeDTO);
-                        }
-                    });
+                        }).collect(Collectors.toList());
 
-            // if there are elements in the old list but nor in the new one, set them to delete
-            node.setDependencies(merged);
-            node.getDependencies().parallelStream().forEach(dto -> {
-                if (!foundInSecondCommit.contains(dto)) {
-                    dto.setChanged(ChangeType.DELETE);
-                } else {
-                    CompareNode tmp = root.getNodeByPath(dto.getPath());
-                    if (dto.getChanged() == null && tmp.getChanged() != null) {
-                        if (tmp.getChanged().equals(ChangeType.ADD)) {
-                            dto.setChanged(ChangeType.ADD);
-                        } else if (tmp.getChanged().equals(ChangeType.DELETE)) {
-                            dto.setChanged(ChangeType.DELETE);
+                List<CompareNodeDTO> merged = new ArrayList<>(node.getDependencies());
+
+                // for every CompareNode found in second commit which is not the current CompareNode
+                foundInSecondCommit.stream().filter(compareNodeDTO -> !compareNodeDTO.getPath().endsWith(node.getFilename()))
+                        .forEach(compareNodeDTO -> {
+                            if (node.getDependencies().contains(compareNodeDTO)) {
+                                // if there are elements in the new and the old list, set their changeType to the new changeType
+                                // because it could be changed in the newer commit or left unchanged
+                                CompareNodeDTO dependency = node.getDependencyByPath(compareNodeDTO.getPath());
+                                if (dependency != null) {
+                                    dependency.setChanged(compareNodeDTO.getChanged());
+                                }
+                            } else if (!merged.contains(compareNodeDTO)) {
+                                // if there are elements in the new list but not in the old one, set them to add
+                                compareNodeDTO.setChanged(ChangeType.ADD);
+                                merged.add(compareNodeDTO);
+                            }
+                        });
+
+                // if there are elements in the old list but not in the new one, set them to delete
+                node.setDependencies(merged);
+                node.getDependencies().forEach(dto -> {
+                    if (!foundInSecondCommit.contains(dto)) {
+                        dto.setChanged(ChangeType.DELETE);
+                    } else {
+                        CompareNode tmp = root.getNodeByPath(dto.getPath());
+                        if (dto.getChanged() == null && tmp.getChanged() != null) {
+                            if (tmp.getChanged().equals(ChangeType.ADD)) {
+                                dto.setChanged(ChangeType.ADD);
+                            } else if (tmp.getChanged().equals(ChangeType.DELETE)) {
+                                dto.setChanged(ChangeType.DELETE);
+                            }
                         }
                     }
-                }
-            });
+                });
+            } else {
+                node.getDependencies().forEach(dependency -> dependency.setChanged(ChangeType.DELETE));
+            }
+
         }
     }
 

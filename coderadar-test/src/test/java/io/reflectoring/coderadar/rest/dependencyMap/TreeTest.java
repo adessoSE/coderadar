@@ -1,53 +1,77 @@
-package io.reflectoring.coderadar;
+package io.reflectoring.coderadar.rest.dependencyMap;
 
-import io.reflectoring.coderadar.vcs.UnableToCloneRepositoryException;
-import io.reflectoring.coderadar.vcs.port.driven.CloneRepositoryPort;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.levelizedStructureMap.domain.DependencyTree;
 import io.reflectoring.coderadar.dependencyMap.domain.Node;
 import io.reflectoring.coderadar.dependencyMap.domain.NodeDTO;
+import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
+import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.vcs.port.driven.DeleteRepositoryPort;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.*;
+import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
+import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class TreeTest {
+public class TreeTest extends ControllerTestTemplate {
 
-    private String repository;
-    private String commitName;
     private Node root;
     private File f;
+    private final Logger logger = LoggerFactory.getLogger(TreeTest.class);
 
-    private CloneRepositoryPort cloneRepositoryPort = mock(CloneRepositoryPort.class);
-    private DependencyTree dependencyTree = mock(DependencyTree.class);
+    @Autowired private DependencyTree dependencyTree;
+    @Autowired private DeleteRepositoryPort deleteRepositoryPort;
+    @Autowired private CoderadarConfigurationProperties coderadarConfigurationProperties;
+    @Autowired private CreateProjectUseCase createProjectUseCase;
+    @Autowired private GetProjectPort getProjectPort;
 
-    @BeforeAll
+    @BeforeEach
     public void initEach() {
         try {
-            f = new File(this.getClass().getClassLoader().getResource("").getPath(), "testSrc");
-            commitName = "d026b5e9ad0ff034a137711e4faa47322f014fbb";
-//            commitName = "44f0adc62806ecbb34cb4a6fa2d9c24d6a85b0e1";
-            cloneRepositoryPort.cloneRepository("https://github.com/jo2/testSrc.git", f);
-            // TODO how to get repository info from here
-            root = dependencyTree.getRoot(repository, commitName, "testSrc");
-        } catch (UnableToCloneRepositoryException e) {
-            e.printStackTrace();
+            CreateProjectCommand command = new CreateProjectCommand();
+            command.setVcsUrl("https://github.com/jo2/testSrc");
+            command.setName("testSrc");
+            command.setVcsOnline(true);
+            Project testProject = getProjectPort.get(createProjectUseCase.createProject(command));
+            String commitName = "d026b5e9ad0ff034a137711e4faa47322f014fbb";
+
+            f = new File(coderadarConfigurationProperties.getWorkdir() + "/projects/" + testProject.getWorkdirName());
+
+            mvc()
+                    .perform(get("/analyzers/" + testProject.getId() + "/structureMap/" + commitName))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(containsResource(Node.class))
+                    .andDo(result -> root = fromJson(result.getResponse().getContentAsString(), Node.class));
+            Assertions.assertNotNull(root);
+        } catch (Exception e) {
+            logger.error("Error getting dependency tree: " + e.getMessage());
         }
     }
 
-    @AfterAll
+    @AfterEach
     public void cleanUpEach() {
-        // TODO delete repository
-        repository.close();
-        deleteFile(f);
+        try {
+            deleteRepositoryPort.deleteRepository(f.getPath());
+            deleteFile(f);
+        } catch (IOException e) {
+            logger.error("Problems with deleting test repository after tests.");
+        }
     }
 
     private void deleteFile(File f) {
@@ -60,6 +84,7 @@ public class TreeTest {
 
     @Test
     public void testInPackageDependencies() {
+        Assertions.assertNotNull(root);
         Node notADependencyTest = root.getNodeByPath("src/org/wickedsource/dependencytree/somepackage/NotADependencyTest.java");
         Assertions.assertNotNull(notADependencyTest);
         Assertions.assertEquals(1, notADependencyTest.getDependencies().size());
@@ -67,6 +92,7 @@ public class TreeTest {
 
     @Test
     public void testTraversePre() {
+        Assertions.assertNotNull(root);
         StringBuilder traversed = new StringBuilder();
         root.traversePre(node -> traversed.append(node.getFilename()).append("\n"));
         String expected = "testSrc\n" +
@@ -95,6 +121,7 @@ public class TreeTest {
 
     @Test
     public void testTraversePost() {
+        Assertions.assertNotNull(root);
         StringBuilder traversed = new StringBuilder();
         root.traversePost(node -> traversed.append(node.getFilename()).append("\n"));
         String expected = "WildcardImportCircularDependency.java\n" +
@@ -123,6 +150,7 @@ public class TreeTest {
 
     @Test
     public void testCreateTree() {
+        Assertions.assertNotNull(root);
         Assertions.assertEquals("testSrc", root.getFilename());
         Assertions.assertEquals(1, root.getChildren().size());
         Node dependencytreeNode = root.getChildByName("src").getChildByName("org").getChildByName("wickedsource").getChildByName("dependencytree");
@@ -209,6 +237,7 @@ public class TreeTest {
 
     @Test
     public void testHasDependencyOn() {
+        Assertions.assertNotNull(root);
         Node wildcardpackage = root.getNodeByPath("src/org/wickedsource/dependencytree/wildcardpackage");
         Node somepackage = root.getNodeByPath("src/org/wickedsource/dependencytree/somepackage");
         Node coreTest = root.getNodeByPath("src/org/wickedsource/dependencytree/CoreTest.java");
@@ -223,6 +252,7 @@ public class TreeTest {
 
     @Test
     public void testCountDependenciesOn() {
+        Assertions.assertNotNull(root);
         Node wildcardpackage = root.getNodeByPath("src/org/wickedsource/dependencytree/wildcardpackage");
         Node somepackage = root.getNodeByPath("src/org/wickedsource/dependencytree/somepackage");
         Node coreTest = root.getNodeByPath("src/org/wickedsource/dependencytree/CoreTest.java");
@@ -255,17 +285,20 @@ public class TreeTest {
 
     @Test
     public void testGetParent() {
+        Assertions.assertNotNull(root);
         Node somepackage = root.getNodeByPath("src/org/wickedsource/dependencytree/somepackage");
         Assertions.assertEquals("dependencytree", somepackage.getParent(this.root).getFilename());
     }
 
     @Test
     public void testGetParentRootChild() {
+        Assertions.assertNotNull(root);
         Assertions.assertEquals("testSrc", root.getNodeByPath("src").getParent(this.root).getFilename());
     }
 
     @Test
     public void testGetParentRoot() {
+        Assertions.assertNotNull(root);
         Assertions.assertNull(root.getParent(this.root));
     }
 

@@ -1,51 +1,51 @@
-package io.reflectoring.coderadar;
+package io.reflectoring.coderadar.rest.dependencyMap;
 
+import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.analyzer.levelizedStructureMap.domain.DependencyCompareTree;
+import io.reflectoring.coderadar.dependencyMap.domain.CompareNode;
+import io.reflectoring.coderadar.dependencyMap.domain.CompareNodeDTO;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
-import io.reflectoring.coderadar.vcs.UnableToCloneRepositoryException;
-import io.reflectoring.coderadar.vcs.port.driven.CloneRepositoryPort;
+import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
+import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.vcs.port.driven.DeleteRepositoryPort;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import io.reflectoring.coderadar.dependencyMap.domain.CompareNode;
-import io.reflectoring.coderadar.dependencyMap.domain.CompareNodeDTO;
-import io.reflectoring.coderadar.analyzer.levelizedStructureMap.domain.DependencyCompareTree;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
+import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
+import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-@ExtendWith(MockitoExtension.class)
-public class CompareTreeTest {
+public class CompareTreeTest extends ControllerTestTemplate {
 
-    private String repository;
-    private String commitName;
-    private String commitName2;
     private CompareNode root;
     private File f;
 
+    private final Logger logger = LoggerFactory.getLogger(CompareTreeTest.class);
 
-    @Mock
-    private CloneRepositoryPort cloneRepositoryPort;
-    @Mock
-    private DependencyCompareTree dependencyTree;
-//    private CloneRepositoryPort cloneRepositoryPort = mock(CloneRepositoryPort.class);
-//    private DependencyCompareTree dependencyTree = mock(DependencyCompareTree.class);
+    @Autowired private DependencyCompareTree dependencyTree;
+    @Autowired private DeleteRepositoryPort deleteRepositoryPort;
+    @Autowired private CoderadarConfigurationProperties coderadarConfigurationProperties;
+    @Autowired private CreateProjectUseCase createProjectUseCase;
+    @Autowired private GetProjectPort getProjectPort;
 
     @BeforeEach
     public void initEach() {
         try {
-            f = new File(this.getClass().getClassLoader().getResource("").getPath(), "testSrc");
-            cloneRepositoryPort.cloneRepository("https://github.com/jo2/testSrc.git", f);
-            // TODO how to get repository info from here
-            commitName = "44f0adc62806ecbb34cb4a6fa2d9c24d6a85b0e1";
-            commitName2 = "d823c8d85b6f28e67ec21b832dd19f1687125041";
             // second commit contains:
             //    - add dependency on existing file - done (WildcardImport2Test -> NotADependencyTest)
             //    - add file - done (RandomCLass)
@@ -58,16 +58,37 @@ public class CompareTreeTest {
             //    - add a dependency on a renamed file - done (CoreTest -> WildcardImportCircularDependency)
             //    - remove a dependency on a renamed file - done (DuplicateDependencies2Test -> WildcardImportCircularDependencyTest)
             //    - change a files content - done (DuplicateDependenciesTest)
-            root = dependencyTree.getRoot(repository, commitName, "testSrc", commitName2);
-        } catch (UnableToCloneRepositoryException e) {
+            CreateProjectCommand command = new CreateProjectCommand();
+            command.setVcsUrl("https://github.com/jo2/testSrc");
+            command.setName("testSrc");
+            command.setVcsOnline(true);
+            Project testProject = getProjectPort.get(createProjectUseCase.createProject(command));
+
+            String commitName = "44f0adc62806ecbb34cb4a6fa2d9c24d6a85b0e1";
+            String commitName2 = "d823c8d85b6f28e67ec21b832dd19f1687125041";
+
+            f = new File(coderadarConfigurationProperties.getWorkdir() + "/projects/" + testProject.getWorkdirName());
+
+            mvc()
+                    .perform(get("/analyzers/" + testProject.getId() + "/structureMap/" + commitName + "/" + commitName2))
+                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(containsResource(CompareNode.class))
+                    .andDo(result -> root = fromJson(result.getResponse().getContentAsString(), CompareNode.class));
+            Assertions.assertNotNull(root);
+        } catch (Exception e) {
+            logger.error("Error getting dependency tree: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     @AfterEach
     public void cleanUpEach() {
-        repository.close();
-        deleteFile(f);
+        try {
+            deleteRepositoryPort.deleteRepository(f.getPath());
+            deleteFile(f);
+        } catch (IOException e) {
+            logger.error("Problems with deleting test repository after tests: " + e.getMessage());
+        }
     }
 
     private void deleteFile(File f) {
@@ -80,6 +101,7 @@ public class CompareTreeTest {
 
     @Test
     public void testTraversePre() {
+        Assertions.assertNotNull(root);
         StringBuilder traversed = new StringBuilder();
         root.traversePre(node -> traversed.append(node.getFilename()).append("\n"));
         String expected = "testSrc\n" +
@@ -111,6 +133,7 @@ public class CompareTreeTest {
 
     @Test
     public void testTraversePost() {
+        Assertions.assertNotNull(root);
         StringBuilder traversed = new StringBuilder();
         root.traversePost(node -> traversed.append(node.getFilename()).append("\n"));
         String expected = "WildcardImportCircularDependencyTest.java\n" +
@@ -142,6 +165,7 @@ public class CompareTreeTest {
 
     @Test
     public void testCreateTree() {
+        Assertions.assertNotNull(root);
         Assertions.assertEquals("testSrc", root.getFilename());
         Assertions.assertEquals(1, root.getChildren().size());
         CompareNode dependencytree = root.getChildByName("src").getChildByName("org").getChildByName("wickedsource").getChildByName("dependencytree");
@@ -157,7 +181,7 @@ public class CompareTreeTest {
             CompareNode coreTest = dependencytree.getChildByName("CoreTest.java");
             dtos = new ArrayList<>();
             dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport1Test.java", ChangeType.DELETE));
-            dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport2Test.java", null));
+            dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport2Test.java", ChangeType.UNCHANGED));
             dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImportCircularDependency.java", ChangeType.ADD));
             dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImportCircularDependencyTest.java", ChangeType.DELETE));
             dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/somepackage/FullyClassifiedDependencyTest.java", ChangeType.DELETE));
@@ -175,7 +199,7 @@ public class CompareTreeTest {
             dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/somepackage/extras/FullyClassifiedDependencyTest.java", ChangeType.ADD));
             dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/somepackage/FullyClassifiedDependencyTest.java", ChangeType.ADD));
             dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/CoreTest.java", ChangeType.DELETE));
-            assertHasDependencies(wildcardPackage, dtos, null);
+            assertHasDependencies(wildcardPackage, dtos, ChangeType.UNCHANGED);
 
             // all children of wildcardpackage
             {
@@ -202,16 +226,16 @@ public class CompareTreeTest {
             Assertions.assertEquals(10, somepackage.getChildren().size());
 
             dtos = new ArrayList<>();
-            dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport2Test.java", null));
+            dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport2Test.java", ChangeType.UNCHANGED));
             dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport1Test.java", ChangeType.DELETE));
             dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImportCircularDependency.java", ChangeType.DELETE));
             dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImportCircularDependencyTest.java", ChangeType.DELETE));
-            dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport2Test.java", null));
+            dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport2Test.java", ChangeType.UNCHANGED));
             dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport1Test.java", ChangeType.DELETE));
             dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImportCircularDependency.java", ChangeType.ADD));
             dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImportCircularDependencyTest.java", ChangeType.DELETE));
-            dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/CoreTest.java", null));
-            assertHasDependencies(somepackage, dtos, null);
+            dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/CoreTest.java", ChangeType.UNCHANGED));
+            assertHasDependencies(somepackage, dtos, ChangeType.UNCHANGED);
 
             // all children of somepackage
             {
@@ -222,26 +246,26 @@ public class CompareTreeTest {
                 // all children of extras
                 assertLeafWithoutDependencies(extras.getChildByName("FullyClassifiedDependencyTest.java"), ChangeType.ADD);
 
-                assertLeafWithoutDependencies(somepackage.getChildByName("CircularDependencyTest.java"), null);
-                assertLeafWithoutDependencies(somepackage.getChildByName("CoreDependencyTest.java"), null);
+                assertLeafWithoutDependencies(somepackage.getChildByName("CircularDependencyTest.java"), ChangeType.UNCHANGED);
+                assertLeafWithoutDependencies(somepackage.getChildByName("CoreDependencyTest.java"), ChangeType.UNCHANGED);
 
                 dtos = new ArrayList<>();
-                dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport2Test.java", null));
+                dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport2Test.java", ChangeType.UNCHANGED));
                 dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport1Test.java", ChangeType.DELETE));
                 dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImportCircularDependency.java", ChangeType.DELETE));
                 dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImportCircularDependencyTest.java", ChangeType.DELETE));
                 assertHasDependencies(somepackage.getChildByName("DuplicateDependencies2Test.java"), dtos, ChangeType.MODIFY);
 
                 dtos = new ArrayList<>();
-                dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport2Test.java", null));
+                dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport2Test.java", ChangeType.UNCHANGED));
                 dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImport1Test.java", ChangeType.DELETE));
                 dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImportCircularDependency.java", ChangeType.ADD));
                 dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/wildcardpackage/WildcardImportCircularDependencyTest.java", ChangeType.DELETE));
-                dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/CoreTest.java", null));
-                assertHasDependencies(somepackage.getChildByName("DuplicateDependenciesTest.java"), dtos, null);
+                dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/CoreTest.java", ChangeType.UNCHANGED));
+                assertHasDependencies(somepackage.getChildByName("DuplicateDependenciesTest.java"), dtos, ChangeType.UNCHANGED);
 
-                assertLeafWithoutDependencies(somepackage.getChildByName("InvalidDependencyTest.java"), null);
-                assertLeafWithoutDependencies(somepackage.getChildByName("NotADependencyTest.java"), null);
+                assertLeafWithoutDependencies(somepackage.getChildByName("InvalidDependencyTest.java"), ChangeType.UNCHANGED);
+                assertLeafWithoutDependencies(somepackage.getChildByName("NotADependencyTest.java"), ChangeType.UNCHANGED);
                 assertLeafWithoutDependencies(somepackage.getChildByName("RandomClass.java"), ChangeType.ADD);
                 assertLeafWithoutDependencies(somepackage.getChildByName("RandomClass2.java"), ChangeType.ADD);
                 assertLeafWithoutDependencies(somepackage.getChildByName("FullyClassifiedDependencyTest.java"), ChangeType.DELETE);
@@ -251,6 +275,7 @@ public class CompareTreeTest {
 
     @Test
     public void testHasDependencyOn() {
+        Assertions.assertNotNull(root);
         CompareNode wildcardpackage = root.getNodeByPath("src/org/wickedsource/dependencytree/wildcardpackage");
         CompareNode somepackage = root.getNodeByPath("src/org/wickedsource/dependencytree/somepackage");
         CompareNode coreTest = root.getNodeByPath("src/org/wickedsource/dependencytree/CoreTest.java");
@@ -265,6 +290,7 @@ public class CompareTreeTest {
 
     @Test
     public void testCountDependenciesOn() {
+        Assertions.assertNotNull(root);
         CompareNode wildcardpackage = root.getNodeByPath("src/org/wickedsource/dependencytree/wildcardpackage");
         CompareNode somepackage = root.getNodeByPath("src/org/wickedsource/dependencytree/somepackage");
         CompareNode coreTest = root.getNodeByPath("src/org/wickedsource/dependencytree/CoreTest.java");
@@ -300,17 +326,24 @@ public class CompareTreeTest {
 
     @Test
     public void testGetParent() {
+        Assertions.assertNotNull(root);
         CompareNode somepackage = root.getNodeByPath("src/org/wickedsource/dependencytree/somepackage");
         Assertions.assertEquals("dependencytree", somepackage.getParent(this.root).getFilename());
     }
 
     @Test
     public void testGetParentRootChild() {
-        Assertions.assertEquals("testSrc", root.getNodeByPath("src").getParent(this.root).getFilename());
+        Assertions.assertNotNull(root);
+        CompareNode src = root.getNodeByPath("src");
+        Assertions.assertNotNull(src);
+        CompareNode srcParent = src.getParent(this.root);
+        Assertions.assertNotNull(srcParent);
+        Assertions.assertEquals("testSrc", srcParent.getFilename());
     }
 
     @Test
     public void testGetParentRoot() {
+        Assertions.assertNotNull(root);
         Assertions.assertNull(root.getParent(this.root));
     }
 

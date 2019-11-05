@@ -27,6 +27,9 @@ public class CompareNode {
         this.changed = changed;
     }
 
+    public CompareNode() {
+    }
+
     /**
      * Check if this Node-object has children.
      *
@@ -52,7 +55,8 @@ public class CompareNode {
      */
     public void addToDependencies(CompareNode node) {
         if (!filename.equals(node.getFilename())) {
-            CompareNodeDTO dto = new CompareNodeDTO(node);
+            // create a CompareNodeDTO representing the CompareNode and set its changeType to UNCHANGED because there is nothing to compare
+            CompareNodeDTO dto = new CompareNodeDTO(node.getPath(), ChangeType.UNCHANGED);
             if (!dependencies.contains(dto)) {
                 dependencies.add(dto);
             } else {
@@ -258,8 +262,8 @@ public class CompareNode {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof CompareNodeDTO) {
-            return ((CompareNodeDTO) obj).getPath().equals(this.path);
+        if (obj instanceof CompareNode) {
+            return ((CompareNode) obj).getPath().equals(this.path);
         }
         return false;
     }
