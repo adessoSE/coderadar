@@ -34,7 +34,7 @@ class ListModulesOfProjectServiceTest {
     GetModuleResponse expectedResponse1 = new GetModuleResponse(1L, "module-path-one");
     GetModuleResponse expectedResponse2 = new GetModuleResponse(2L, "module-path-two");
 
-    when(listModulesPortMock.listModuleReponses(projectId))
+    when(listModulesPortMock.listModuleResponses(projectId))
         .thenReturn(Arrays.asList(expectedResponse1, expectedResponse2));
 
     // when

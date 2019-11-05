@@ -175,7 +175,9 @@ public class CreateProjectService implements CreateProjectUseCase {
   public interface WorkdirNameGenerator {
 
     /**
-     * @param projectName The name of the project to generate the working directory name for.
+     * e
+     *
+     * @param projectName The name of the project to generat the working directory name for.
      * @return A working directory name most likely not to collide with existing projects' working
      *     directories. Must be a valid directory name without any spaces or path separators.
      */
