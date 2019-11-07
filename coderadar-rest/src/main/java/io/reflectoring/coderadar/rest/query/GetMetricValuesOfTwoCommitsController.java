@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.query.port.driver.GetMetricValuesOfTwoCommitsUs
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForTwoCommitsCommand;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -19,7 +20,7 @@ public class GetMetricValuesOfTwoCommitsController {
         this.getMetricValuesOfTwoCommitsUseCase = getMetricValuesOfTwoCommitsUseCase;
     }
 
-    @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET}, path = "/projects/{projectId}/metricvalues/deltaTree", consumes = "application/json", produces = "application/json")
+    @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET}, path = "/projects/{projectId}/metricvalues/deltaTree", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getMetricValuesForTwoCommits(@Validated @RequestBody GetMetricsForTwoCommitsCommand command, @PathVariable("projectId") Long projectId){
         try {
             return new ResponseEntity<>(getMetricValuesOfTwoCommitsUseCase.get(command, projectId), HttpStatus.OK);

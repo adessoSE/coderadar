@@ -1,14 +1,14 @@
 package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig;
 
+import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.DeleteAnalyzerConfigurationAdapter;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
-
-import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
-import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.DeleteAnalyzerConfigurationAdapter;
-import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConfigurationEntity;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
 @DisplayName("Delete analyzer configuration")
 class DeleteAnalyzerConfigurationAdapterTest {

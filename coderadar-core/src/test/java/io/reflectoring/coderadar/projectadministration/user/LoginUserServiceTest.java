@@ -1,17 +1,13 @@
 package io.reflectoring.coderadar.projectadministration.user;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import io.reflectoring.coderadar.projectadministration.domain.RefreshToken;
-import io.reflectoring.coderadar.projectadministration.domain.User;
-import io.reflectoring.coderadar.projectadministration.port.driven.user.LoadUserPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.user.RefreshTokenPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserCommand;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserResponse;
-import io.reflectoring.coderadar.projectadministration.service.user.login.LoginUserService;
-import io.reflectoring.coderadar.projectadministration.service.user.security.TokenService;
+import io.reflectoring.coderadar.useradministration.domain.RefreshToken;
+import io.reflectoring.coderadar.useradministration.domain.User;
+import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
+import io.reflectoring.coderadar.useradministration.port.driven.RefreshTokenPort;
+import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserCommand;
+import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserResponse;
+import io.reflectoring.coderadar.useradministration.service.login.LoginUserService;
+import io.reflectoring.coderadar.useradministration.service.security.TokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +15,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class LoginUserServiceTest {

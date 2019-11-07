@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.module;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ public class ListModulesOfProjectController {
     this.listModulesOfProjectUseCase = listModulesOfProjectUseCase;
   }
 
-  @GetMapping(path = "/projects/{projectId}/modules")
+  @GetMapping(path = "/projects/{projectId}/modules", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity listModules(@PathVariable Long projectId) {
     return new ResponseEntity<>(listModulesOfProjectUseCase.listModules(projectId), HttpStatus.OK);
   }

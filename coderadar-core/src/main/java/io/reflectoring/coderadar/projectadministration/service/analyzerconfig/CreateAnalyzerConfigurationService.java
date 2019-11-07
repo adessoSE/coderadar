@@ -1,10 +1,9 @@
 package io.reflectoring.coderadar.projectadministration.service.analyzerconfig;
 
+import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.analyzer.service.ListAnalyzerService;
 import io.reflectoring.coderadar.plugin.api.AnalyzerConfigurationException;
 import io.reflectoring.coderadar.projectadministration.AnalyzerNotFoundException;
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationUseCase;
@@ -36,8 +35,7 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
   }
 
   @Override
-  public Long create(CreateAnalyzerConfigurationCommand command, Long projectId)
-      throws ProjectNotFoundException {
+  public Long create(CreateAnalyzerConfigurationCommand command, Long projectId) {
     List<String> analyzers = listAnalyzerService.listAvailableAnalyzers();
     if (analyzers.contains(command.getAnalyzerName())) {
       if (listAnalyzerConfigurationsFromProjectService

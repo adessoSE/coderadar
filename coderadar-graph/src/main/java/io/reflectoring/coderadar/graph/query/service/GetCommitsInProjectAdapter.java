@@ -1,15 +1,15 @@
 package io.reflectoring.coderadar.graph.query.service;
 
-import io.reflectoring.coderadar.analyzer.domain.Commit;
-import io.reflectoring.coderadar.analyzer.domain.File;
-import io.reflectoring.coderadar.analyzer.domain.FileToCommitRelationship;
-import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
-import io.reflectoring.coderadar.graph.analyzer.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
+import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.projectadministration.domain.Commit;
+import io.reflectoring.coderadar.projectadministration.domain.File;
+import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.query.port.driver.GetCommitResponse;
 import java.util.ArrayList;
@@ -29,18 +29,6 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
       ProjectRepository projectRepository, CommitRepository commitRepository) {
     this.projectRepository = projectRepository;
     this.commitRepository = commitRepository;
-  }
-
-  @Override
-  public List<Commit> getSortedByTimestampDesc(Long projectId) {
-    Optional<ProjectEntity> persistedProject = projectRepository.findProjectById(projectId);
-    if (persistedProject.isPresent()) {
-      List<CommitEntity> commitEntities =
-          commitRepository.findByProjectIdAndTimestampDesc(projectId);
-      return mapCommitEntities(commitEntities);
-    } else {
-      throw new ProjectNotFoundException(projectId);
-    }
   }
 
   private List<Commit> mapCommitEntities(List<CommitEntity> commitEntities) {

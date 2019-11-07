@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.projectadministration.service.project;
 
-import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.DeleteProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
@@ -32,7 +30,7 @@ public class DeleteProjectService implements DeleteProjectUseCase {
   }
 
   @Override
-  public void delete(Long id) throws ProjectNotFoundException, ProjectIsBeingProcessedException {
+  public void delete(Long id) {
     Project project = getProjectPort.get(id);
     processProjectService.executeTask(
         () -> {

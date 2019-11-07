@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.projectadministration.service.filepattern;
 
-import io.reflectoring.coderadar.projectadministration.FilePatternNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.DeleteFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
@@ -25,7 +24,7 @@ public class DeleteFilePatternService implements DeleteFilePatternFromProjectUse
   }
 
   @Override
-  public void delete(Long id, Long projectId) throws FilePatternNotFoundException {
+  public void delete(Long id, Long projectId) {
     FilePattern filePattern = getFilePatternPort.get(id);
     deleteFilePatternPort.delete(id);
     logger.info(

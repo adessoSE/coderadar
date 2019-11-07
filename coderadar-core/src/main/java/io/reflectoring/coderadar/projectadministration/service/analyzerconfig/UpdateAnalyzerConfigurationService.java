@@ -1,10 +1,9 @@
 package io.reflectoring.coderadar.projectadministration.service.analyzerconfig;
 
+import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.analyzer.service.ListAnalyzerService;
 import io.reflectoring.coderadar.plugin.api.AnalyzerConfigurationException;
-import io.reflectoring.coderadar.projectadministration.AnalyzerConfigurationNotFoundException;
 import io.reflectoring.coderadar.projectadministration.AnalyzerNotFoundException;
-import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
@@ -39,8 +38,7 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
   }
 
   @Override
-  public void update(UpdateAnalyzerConfigurationCommand command, Long analyzerId, Long projectId)
-      throws AnalyzerConfigurationNotFoundException {
+  public void update(UpdateAnalyzerConfigurationCommand command, Long analyzerId, Long projectId) {
     AnalyzerConfiguration analyzerConfiguration =
         getAnalyzerConfigurationPort.getAnalyzerConfiguration(analyzerId);
 

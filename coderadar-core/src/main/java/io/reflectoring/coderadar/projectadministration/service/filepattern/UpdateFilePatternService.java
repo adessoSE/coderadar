@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.projectadministration.service.filepattern;
 
-import io.reflectoring.coderadar.projectadministration.FilePatternNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.UpdateFilePatternPort;
@@ -23,8 +22,7 @@ public class UpdateFilePatternService implements UpdateFilePatternUseCase {
   }
 
   @Override
-  public void updateFilePattern(UpdateFilePatternCommand command, Long filePatternId)
-      throws FilePatternNotFoundException {
+  public void updateFilePattern(UpdateFilePatternCommand command, Long filePatternId) {
     FilePattern filePattern = getFilePatternPort.get(filePatternId);
     filePattern.setPattern(command.getPattern());
     filePattern.setInclusionType(command.getInclusionType());

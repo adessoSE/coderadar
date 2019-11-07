@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph.analyzer.repository;
 
-import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.neo4j.annotation.Query;
@@ -23,6 +23,10 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   List<CommitEntity> findByProjectId(Long projectId);
 
   @Query(
+      "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c ORDER BY c.timestamp DESC LIMIT 1")
+  CommitEntity findHeadCommit(Long projectId);
+
+  @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE c.name = {0} AND ID(p) = {1} RETURN c")
   Optional<CommitEntity> findByNameAndProjectId(String commit, Long projectId);
 
@@ -31,8 +35,4 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
 
   @Query("MATCH (c:CommitEntity) WHERE ID(c) IN {0} RETURN c")
   List<CommitEntity> findCommitsByIds(List<Long> commitIds);
-
-  @Query(
-      "MATCH (c:CommitEntity)<-[r:CONTAINS_COMMIT]-(:ProjectEntity) WHERE ID(c) IN {0} DETACH DELETE c, r")
-  void deleteCommits(List<Long> commitsInProjectIds);
 }

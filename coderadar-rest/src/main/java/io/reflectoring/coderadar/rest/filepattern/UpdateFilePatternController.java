@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.u
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.update.UpdateFilePatternUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +23,7 @@ public class UpdateFilePatternController {
     this.updateFilePatternForProjectUseCase = updateFilePatternForProjectUseCase;
   }
 
-  @PostMapping(path = "/projects/{projectId}/filePatterns/{filePatternId}")
+  @PostMapping(path = "/projects/{projectId}/filePatterns/{filePatternId}", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity updateFilePattern(
       @RequestBody @Validated UpdateFilePatternCommand command,
       @PathVariable(name = "filePatternId") Long filePatternId) {

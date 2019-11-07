@@ -2,10 +2,10 @@ package io.reflectoring.coderadar.vcs.adapter;
 
 import com.google.common.collect.Iterables;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.analyzer.domain.Commit;
-import io.reflectoring.coderadar.analyzer.domain.File;
-import io.reflectoring.coderadar.analyzer.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
+import io.reflectoring.coderadar.projectadministration.domain.Commit;
+import io.reflectoring.coderadar.projectadministration.domain.File;
+import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
 import io.reflectoring.coderadar.vcs.port.driven.GetProjectCommitsPort;
@@ -16,7 +16,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
@@ -52,12 +51,11 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
   public List<Commit> getCommits(Path repositoryRoot, DateRange range) {
     Git git;
     try {
-      Repository repository;
       Path actualPath =
           Paths.get(coderadarConfigurationProperties.getWorkdir() + "/projects/" + repositoryRoot);
 
       FileRepositoryBuilder builder = new FileRepositoryBuilder();
-      repository =
+      Repository repository =
           builder
               .setWorkTree(actualPath.toFile())
               .setGitDir(new java.io.File(actualPath + "/.git"))
@@ -65,29 +63,20 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
       git = new Git(repository);
 
       HashMap<ObjectId, Commit> map = new HashMap<>();
-      AtomicReference<Boolean> done = new AtomicReference<>(false);
 
-      git.log()
-          .call()
-          .forEach(
-              rc -> {
-                // Find the first commit in the given date range and build the tree from it.
-                if (!done.get() && isInDateRange(range, rc)) {
-                  final RevWalk revWalk = new RevWalk(git.getRepository());
-                  Commit commit = new Commit();
-                  commit.setName(rc.getName());
-                  commit.setAuthor(rc.getAuthorIdent().getName());
-                  commit.setComment(rc.getShortMessage());
-                  commit.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
-                  try {
-                    commit.setParents(getParents(revWalk, rc, map, range));
-                  } catch (IOException e) {
-                    e.printStackTrace();
-                  }
-                  map.put(rc, commit);
-                  done.set(true);
-                }
-              });
+      for (RevCommit rc : git.log().call()) {
+        if (isInDateRange(range, rc)) {
+          final RevWalk revWalk = new RevWalk(git.getRepository());
+          Commit commit = new Commit();
+          commit.setName(rc.getName());
+          commit.setAuthor(rc.getAuthorIdent().getName());
+          commit.setComment(rc.getShortMessage());
+          commit.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
+          commit.setParents(getParents(revWalk, rc, map, range));
+          map.put(rc, commit);
+          break;
+        }
+      }
       List<Commit> result = new ArrayList<>(map.values());
       setCommitsFiles(git, result);
       git.getRepository().close();
@@ -148,86 +137,96 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
     diffFormatter.setDetectRenames(true);
     for (int i = 1; i < commits.size(); i++) {
       RevCommit gitCommit = findCommit(git, commits.get(i).getName());
-
       assert gitCommit != null;
       if (gitCommit.getParentCount() > 0) {
         RevCommit parent = gitCommit.getParent(0);
         List<DiffEntry> diffs = diffFormatter.scan(parent, gitCommit);
         for (DiffEntry diff : diffs) {
-          ChangeType changeType = ChangeTypeMapper.jgitToCoderadar(diff.getChangeType());
-          if (changeType != ChangeType.UNCHANGED) {
-            List<File> filesWithPath = new ArrayList<>();
-
-            String path;
-            if (diff.getChangeType().equals(DiffEntry.ChangeType.DELETE)) {
-              path = diff.getOldPath();
-            } else {
-              path = diff.getNewPath();
-            }
-
-            List<File> fileList = files.get(path);
-
-            if (fileList == null) {
-              File file = new File();
-              if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
-                List<File> filesWithOldPath = files.get(diff.getOldPath());
-                if (filesWithOldPath != null) {
-                  file.getOldFiles().addAll(filesWithOldPath);
-                }
-              }
-              filesWithPath.add(file);
-              fileList = new ArrayList<>(filesWithPath);
-            } else {
-              if ((diff.getChangeType().equals(DiffEntry.ChangeType.ADD))) {
-                File file = new File();
-                filesWithPath.add(file);
-                fileList.add(file);
-              } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.DELETE))) {
-                filesWithPath.addAll(fileList);
-              } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
-                File file = new File();
-
-                List<File> filesWithOldPath = files.get(diff.getOldPath());
-                if (filesWithOldPath != null) {
-                  file.getOldFiles().addAll(filesWithOldPath);
-                }
-                filesWithPath.add(file);
-                fileList.add(file);
-              } else {
-                filesWithPath.add(Iterables.getLast(fileList));
-              }
-            }
-
-            for (File file : filesWithPath) {
-              FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
-
-              fileToCommitRelationship.setOldPath(diff.getOldPath());
-              fileToCommitRelationship.setChangeType(changeType);
-              fileToCommitRelationship.setCommit(commits.get(i));
-              fileToCommitRelationship.setFile(file);
-              file.setPath(path);
-
-              int finalI = i;
-              if (file.getCommits()
-                  .stream()
-                  .noneMatch(
-                      fileToCommitRelationship1 ->
-                          fileToCommitRelationship1
-                              .getCommit()
-                              .getName()
-                              .equals(commits.get(finalI).getName()))) {
-                file.getCommits().add(fileToCommitRelationship);
-              }
-              commits.get(i).getTouchedFiles().add(fileToCommitRelationship);
-              if (!files.containsKey(file.getPath())) {
-                files.put(file.getPath(), fileList);
-              } else {
-                files.replace(file.getPath(), fileList);
-              }
-            }
-          }
+          processDiffEntry(diff, files, commits.get(i));
         }
       }
+    }
+  }
+
+  /**
+   * Processes a single diff entry. Sets the correct file to commit relationships for each commit
+   *
+   * @param diff The diff entry to process
+   * @param files All of the files walked so far
+   * @param commit The current commit
+   */
+  private void processDiffEntry(DiffEntry diff, HashMap<String, List<File>> files, Commit commit) {
+    ChangeType changeType = ChangeTypeMapper.jgitToCoderadar(diff.getChangeType());
+    if (changeType == ChangeType.UNCHANGED) {
+      return;
+    }
+    List<File> filesWithPath = computeFilesToSave(diff, files);
+    for (File file : filesWithPath) {
+      FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
+      fileToCommitRelationship.setOldPath(diff.getOldPath());
+      fileToCommitRelationship.setChangeType(changeType);
+      fileToCommitRelationship.setCommit(commit);
+      fileToCommitRelationship.setFile(file);
+      if (file.getCommits()
+          .stream()
+          .noneMatch(rel -> rel.getCommit().getName().equals(commit.getName()))) {
+        file.getCommits().add(fileToCommitRelationship);
+      }
+      commit.getTouchedFiles().add(fileToCommitRelationship);
+    }
+  }
+
+  /**
+   * Looks at already walked files and the change type of the diff entry to compute a list of files
+   * to need to be created/updated and to set proper relationships between them.
+   *
+   * @param diff The current diff entry.
+   * @param files The list of walked files.
+   * @return List of files to save.
+   */
+  private List<File> computeFilesToSave(DiffEntry diff, HashMap<String, List<File>> files) {
+    String path = getFilepathFromDiffEntry(diff);
+    List<File> existingFilesWithPath = files.get(path);
+    List<File> filesToSave = new ArrayList<>();
+    File file = new File();
+    file.setPath(path);
+    if (existingFilesWithPath == null) {
+      if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
+        List<File> filesWithOldPath = files.get(diff.getOldPath());
+        if (filesWithOldPath != null) {
+          file.getOldFiles().addAll(filesWithOldPath);
+        }
+      }
+      filesToSave.add(file);
+    } else {
+      if ((diff.getChangeType().equals(DiffEntry.ChangeType.ADD))) {
+        filesToSave.add(file);
+        existingFilesWithPath.add(file);
+      } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.DELETE))) {
+        filesToSave.addAll(existingFilesWithPath);
+      } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
+        List<File> filesWithOldPath = files.get(diff.getOldPath());
+        if (filesWithOldPath != null) {
+          file.getOldFiles().addAll(filesWithOldPath);
+        }
+        filesToSave.add(file);
+        existingFilesWithPath.add(file);
+      } else {
+        filesToSave.add(Iterables.getLast(existingFilesWithPath));
+      }
+    }
+    return filesToSave;
+  }
+
+  /**
+   * @param diff The diff entry to check.
+   * @return Correct path for the current diffEntry.
+   */
+  private String getFilepathFromDiffEntry(DiffEntry diff) {
+    if (diff.getChangeType().equals(DiffEntry.ChangeType.DELETE)) {
+      return diff.getOldPath();
+    } else {
+      return diff.getNewPath();
     }
   }
 

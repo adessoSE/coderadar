@@ -26,8 +26,7 @@ public class CreateFilePatternAdapter implements CreateFilePatternPort {
   }
 
   @Override
-  public Long createFilePattern(FilePattern filePattern, Long projectId)
-      throws ProjectNotFoundException {
+  public Long createFilePattern(FilePattern filePattern, Long projectId) {
     FilePatternEntity filePatternEntity = filePatternMapper.mapDomainObject(filePattern);
     ProjectEntity projectEntity =
         projectRepository

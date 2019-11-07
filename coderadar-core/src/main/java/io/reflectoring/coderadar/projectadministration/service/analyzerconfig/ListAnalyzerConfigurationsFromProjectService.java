@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.projectadministration.service.analyzerconfig;
 
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationsFromProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationsFromProjectUseCase;
@@ -22,8 +21,7 @@ public class ListAnalyzerConfigurationsFromProjectService
   }
 
   @Override
-  public List<GetAnalyzerConfigurationResponse> get(Long projectId)
-      throws ProjectNotFoundException {
+  public List<GetAnalyzerConfigurationResponse> get(Long projectId) {
     List<GetAnalyzerConfigurationResponse> configurations = new ArrayList<>();
     for (AnalyzerConfiguration analyzerConfiguration : port.get(projectId)) {
       configurations.add(

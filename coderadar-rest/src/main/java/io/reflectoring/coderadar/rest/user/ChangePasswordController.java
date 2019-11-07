@@ -1,11 +1,12 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.projectadministration.RefreshTokenNotFoundException;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.password.ChangePasswordCommand;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.password.ChangePasswordUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
+import io.reflectoring.coderadar.useradministration.RefreshTokenNotFoundException;
+import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordCommand;
+import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ public class ChangePasswordController {
     this.changePasswordUseCase = changePasswordUseCase;
   }
 
-  @PostMapping(path = "/user/password/change")
+  @PostMapping(path = "/user/password/change", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity changePassword(@RequestBody @Validated ChangePasswordCommand command) {
     try {
       changePasswordUseCase.changePassword(command);

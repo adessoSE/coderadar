@@ -22,8 +22,7 @@ class GetCommitsInProjectAdapterTest {
     getCommitsInProjectAdapter =
         new GetCommitsInProjectAdapter(projectRepository, commitRepository);
 
-    Throwable thrown =
-        catchThrowable(() -> getCommitsInProjectAdapter.getSortedByTimestampDesc(1L));
+    Throwable thrown = catchThrowable(() -> getCommitsInProjectAdapter.getSortedByTimestampAsc(1L));
 
     assertThat(thrown)
         .isInstanceOf(ProjectNotFoundException.class)

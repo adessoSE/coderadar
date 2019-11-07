@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.module;
 
-import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;

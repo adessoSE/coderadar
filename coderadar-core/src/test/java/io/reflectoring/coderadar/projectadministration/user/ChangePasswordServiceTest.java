@@ -1,18 +1,18 @@
 package io.reflectoring.coderadar.projectadministration.user;
 
-import static org.mockito.Mockito.*;
-
-import io.reflectoring.coderadar.projectadministration.domain.User;
-import io.reflectoring.coderadar.projectadministration.port.driven.user.ChangePasswordPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.user.RefreshTokenPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.password.ChangePasswordCommand;
-import io.reflectoring.coderadar.projectadministration.service.user.password.ChangePasswordService;
-import io.reflectoring.coderadar.projectadministration.service.user.refresh.RefreshTokenService;
+import io.reflectoring.coderadar.useradministration.domain.User;
+import io.reflectoring.coderadar.useradministration.port.driven.ChangePasswordPort;
+import io.reflectoring.coderadar.useradministration.port.driven.RefreshTokenPort;
+import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordCommand;
+import io.reflectoring.coderadar.useradministration.service.password.ChangePasswordService;
+import io.reflectoring.coderadar.useradministration.service.refresh.RefreshTokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ChangePasswordServiceTest {

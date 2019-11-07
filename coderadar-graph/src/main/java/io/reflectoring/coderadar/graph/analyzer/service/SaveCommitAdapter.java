@@ -1,25 +1,26 @@
 package io.reflectoring.coderadar.graph.analyzer.service;
 
 import com.google.common.collect.Iterables;
-import io.reflectoring.coderadar.analyzer.domain.Commit;
-import io.reflectoring.coderadar.analyzer.domain.FileToCommitRelationship;
-import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
-import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
-import io.reflectoring.coderadar.graph.analyzer.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
+import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
-import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.projectadministration.domain.Commit;
+import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
+import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
-import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.*;
+
 @Service
-public class SaveCommitAdapter implements SaveCommitPort {
+public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
   private final CommitRepository commitRepository;
   private final ProjectRepository projectRepository;
   private final FileRepository fileRepository;
@@ -51,11 +52,21 @@ public class SaveCommitAdapter implements SaveCommitPort {
       HashMap<String, List<FileEntity>> walkedFiles = new HashMap<>();
       HashMap<String, CommitEntity> walkedCommits = new HashMap<>();
 
-      Commit newestCommit = commits.get(commits.size() - 1);
-      CommitEntity commitEntity = mapCommitBaseData(newestCommit, newestCommit.getId());
+      commits.sort(Comparator.comparing(Commit::getTimestamp));
 
-      commitEntity.setParents(findAndSaveParents(newestCommit, walkedCommits));
-      walkedCommits.putIfAbsent(commitEntity.getName(), commitEntity);
+      for (Commit commit : commits) {
+        walkedCommits.put(commit.getName(), CommitBaseDataMapper.mapCommit(commit));
+      }
+
+      for (Commit commit : commits) {
+        CommitEntity commitEntity = walkedCommits.get(commit.getName());
+        // set parents
+        for (Commit parent : commit.getParents()) {
+          commitEntity.getParents().add(walkedCommits.get(parent.getName()));
+        }
+        walkedCommits.putIfAbsent(commitEntity.getName(), commitEntity);
+      }
+
       List<CommitEntity> commitEntities = new ArrayList<>(walkedCommits.values());
 
       commitEntities.sort(Comparator.comparing(CommitEntity::getTimestamp));
@@ -68,7 +79,7 @@ public class SaveCommitAdapter implements SaveCommitPort {
         allFiles.addAll(files);
       }
 
-      projectEntity.getFiles().addAll(allFiles);
+      projectEntity.setFiles(allFiles);
 
       commitRepository.save(walkedCommits.values(), 1);
       fileRepository.save(allFiles, 1);
@@ -77,77 +88,10 @@ public class SaveCommitAdapter implements SaveCommitPort {
       projectRepository.save(projectEntity, 1);
     }
   }
-  /**
-   * Maps a Commit object to a CommitEntity object. Does not set files or parents
-   *
-   * @param commit The commit to map.
-   * @return A new CommitEntity object.
-   */
-  private CommitEntity mapCommitBaseData(Commit commit, Long commitId) {
-    CommitEntity commitEntity;
-    if (commitId == null) {
-      commitEntity = new CommitEntity();
-    } else {
-      commitEntity =
-          commitRepository
-              .findById(commitId)
-              .orElseThrow(() -> new CommitNotFoundException(commitId));
-    }
-    commitEntity.setAnalyzed(commit.isAnalyzed());
-    commitEntity.setAuthor(commit.getAuthor());
-    commitEntity.setComment(commit.getComment());
-    commitEntity.setMerged(commit.isMerged());
-    commitEntity.setName(commit.getName());
-    commitEntity.setTimestamp(commit.getTimestamp());
-    return commitEntity;
-  }
-
-  /**
-   * Saves a single commit in the database , this operation can only be used to save/update basic
-   * data (no parents/files).
-   *
-   * @param commit The commit to save/update.
-   */
-  @Override
-  public void saveCommit(Commit commit) {
-    CommitEntity commitEntity = mapCommitBaseData(commit, commit.getId());
-    commitRepository.save(commitEntity, 0);
-  }
 
   @Override
   public void setCommitsWithIDsAsAnalyzed(List<Long> commitIds) {
     commitRepository.setCommitsWithIDsAsAnalyzed(commitIds);
-  }
-
-  /**
-   * Recursively finds all parents of a Commit, and returns a new CommitEntity tree. Also calls
-   * getFiles to set the files and relationships.
-   *
-   * @param commit The commit whose parents to find.
-   * @param walkedCommits Commits we have already found/created. We need this to prevent creating
-   *     thousands of duplicate nodes and going into endless recursion
-   * @return A list of fully initialized parents for the given commit.
-   */
-  private List<CommitEntity> findAndSaveParents(
-      Commit commit, Map<String, CommitEntity> walkedCommits) {
-    List<CommitEntity> parents = new ArrayList<>();
-    for (Commit c : commit.getParents()) {
-      CommitEntity commitEntity = walkedCommits.get(c.getName());
-      if (commitEntity != null) {
-        parents.add(commitEntity);
-      } else {
-        commitEntity = new CommitEntity();
-        walkedCommits.putIfAbsent(c.getName(), commitEntity);
-
-        commitEntity.setName(c.getName());
-        commitEntity.setAuthor(c.getAuthor());
-        commitEntity.setComment(c.getComment());
-        commitEntity.setTimestamp(c.getTimestamp());
-        commitEntity.setParents(findAndSaveParents(c, walkedCommits));
-        parents.add(commitEntity);
-      }
-    }
-    return parents;
   }
 
   /**
@@ -159,7 +103,7 @@ public class SaveCommitAdapter implements SaveCommitPort {
    *     mapping.
    */
   // TODO: Fix this mess
-  private void getFiles(
+  static void getFiles(
       List<FileToCommitRelationship> relationships,
       CommitEntity entity,
       Map<String, List<FileEntity>> walkedFiles) {
@@ -226,5 +170,53 @@ public class SaveCommitAdapter implements SaveCommitPort {
         }
       }
     }
+  }
+
+  /**
+   * Adds new commits to an existing project.
+   *
+   * @param commits The new commits to add.
+   * @param projectId The project id.
+   */
+  public void addCommits(List<Commit> commits, Long projectId) {
+    ProjectEntity projectEntity =
+        projectRepository
+            .findById(projectId)
+            .orElseThrow(() -> new ProjectNotFoundException(projectId));
+    Map<String, CommitEntity> walkedCommits = new HashMap<>();
+    for (CommitEntity c : commitRepository.findByProjectId(projectId)) {
+      walkedCommits.put(c.getName(), c);
+    }
+    Map<String, List<FileEntity>> walkedFiles = new HashMap<>();
+    for (FileEntity f : fileRepository.findAllinProject(projectId)) {
+      walkedFiles.computeIfAbsent(f.getPath(), k -> new ArrayList<>());
+      walkedFiles.get(f.getPath()).add(f);
+    }
+
+    for (Commit commit : commits) {
+      walkedCommits.put(commit.getName(), CommitBaseDataMapper.mapCommit(commit));
+    }
+
+    for (Commit commit : commits) {
+      CommitEntity commitEntity = walkedCommits.get(commit.getName());
+      // set parents
+      for (Commit parent : commit.getParents()) {
+        commitEntity.getParents().add(walkedCommits.get(parent.getName()));
+      }
+      // set files
+      SaveCommitAdapter.getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles);
+      walkedCommits.put(commit.getName(), commitEntity);
+      projectEntity.getCommits().add(commitEntity);
+    }
+    List<FileEntity> allFiles = new ArrayList<>();
+    for (List<FileEntity> files : walkedFiles.values()) {
+      allFiles.addAll(files);
+    }
+
+    commitRepository.save(walkedCommits.values(), 1);
+    fileRepository.save(allFiles, 1);
+    projectEntity.setFiles(allFiles);
+    projectEntity.getCommits().addAll(walkedCommits.values());
+    projectRepository.save(projectEntity, 1);
   }
 }

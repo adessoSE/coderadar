@@ -72,9 +72,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
       this.getProject();
       // Schedule a task to check if all commits are analyzed and update them if they're not
       this.updateCommitsTimer = timer(4000, 8000).subscribe(() => {
-        if (this.commitsAnalyzed < this.commits.length) {
-          this.getCommits(false);
-        }
+        this.getCommits(false);
         if (this.commits.length === 0) {
           this.getCommits(true);
         }

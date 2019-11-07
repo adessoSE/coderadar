@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfi
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -25,7 +26,7 @@ public class UpdateAnalyzerConfigurationController {
     this.updateAnalyzerConfigurationUseCase = updateAnalyzerConfigurationUseCase;
   }
 
-  @PostMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}")
+  @PostMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity updateAnalyzerConfiguration(
       @RequestBody @Validated UpdateAnalyzerConfigurationCommand command,
       @PathVariable(name = "analyzerConfigurationId") Long analyzerConfigurationId, @PathVariable(name = "projectId") Long projectId) {

@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.graph.projectadministration.domain.UserEntity;
-import io.reflectoring.coderadar.graph.projectadministration.user.repository.UserRepository;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserCommand;
-import io.reflectoring.coderadar.projectadministration.service.user.security.PasswordUtil;
+import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
+import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserCommand;
+import io.reflectoring.coderadar.useradministration.service.security.PasswordUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

@@ -7,8 +7,9 @@ import io.reflectoring.coderadar.query.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfTwoCommitsPort;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForTwoCommitsCommand;
-import java.util.*;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwoCommitsPort {

@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.rest.project;
 
-import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.delete.DeleteProjectUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,7 @@ public class DeleteProjectController {
     this.deleteProjectUseCase = deleteProjectUseCase;
   }
 
-  @DeleteMapping(produces = "application/json", path = "/projects/{projectId}")
+  @DeleteMapping(path = "/projects/{projectId}")
   public ResponseEntity deleteProject(@PathVariable(name = "projectId") Long projectId) {
       deleteProjectUseCase.delete(projectId);
       return new ResponseEntity<>(HttpStatus.OK);

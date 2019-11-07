@@ -1,13 +1,13 @@
 package io.reflectoring.coderadar.graph.query;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
 import io.reflectoring.coderadar.graph.query.service.GetMetricsForAllFilesInCommitAdapter;
 import org.junit.jupiter.api.DisplayName;
+
+import static org.mockito.Mockito.mock;
 
 @DisplayName("Get metrics for all files in commit")
 class GetMetricsForAllFilesInCommitAdapterTest {

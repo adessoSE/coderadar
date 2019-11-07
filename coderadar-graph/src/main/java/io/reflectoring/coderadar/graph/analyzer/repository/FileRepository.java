@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph.analyzer.repository;
 
-import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -28,10 +28,6 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
           + "AND timestamp(c.timestamp) > {1} AND ID(p) = {3} AND r.changeType = \"RENAME\""
           + " RETURN head(collect(DISTINCT r)).oldPath")
   String wasRenamedBetweenCommits(String path, Long commit1Time, Long commit2Time, Long projectId);
-
-  @Query(
-      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND size((f)-[:CHANGED_IN]->()) = 0 DETACH DELETE f")
-  void removeFilesWithoutCommits(Long id);
 
   @Query("MATCH (f:FileEntity) WHERE ID(f) IN {0} RETURN f")
   List<FileEntity> findFilesByIds(List<Long> fileIds);

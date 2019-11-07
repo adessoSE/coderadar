@@ -1,18 +1,16 @@
 package io.reflectoring.coderadar.projectadministration.service.project;
 
-import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
-
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.GetProjectHeadCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ListProjectsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
@@ -20,6 +18,14 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.get.Li
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.stereotype.Component;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -28,13 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.TaskScheduler;
-import org.springframework.stereotype.Component;
+
+import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
 
 @Component
 public class ScanProjectScheduler {
@@ -46,10 +47,10 @@ public class ScanProjectScheduler {
   private final ProjectStatusPort projectStatusPort;
   private final TaskScheduler taskScheduler;
   private final GetProjectPort getProjectPort;
-  private final UpdateProjectPort updateProjectPort;
-  private final SaveCommitPort saveCommitPort;
   private final ListModulesOfProjectUseCase listModulesOfProjectUseCase;
   private final CreateModuleUseCase createModuleUseCase;
+  private final AddCommitsPort addCommitsPort;
+  private final GetProjectHeadCommitPort getProjectHeadCommitPort;
 
   private final Logger logger = LoggerFactory.getLogger(ScanProjectScheduler.class);
 
@@ -64,10 +65,10 @@ public class ScanProjectScheduler {
       ProjectStatusPort projectStatusPort,
       TaskScheduler taskScheduler,
       GetProjectPort getProjectPort,
-      UpdateProjectPort updateProjectPort,
-      SaveCommitPort saveCommitPort,
       ListModulesOfProjectUseCase listModulesOfProjectUseCase,
-      CreateModuleUseCase createModuleUseCase) {
+      CreateModuleUseCase createModuleUseCase,
+      AddCommitsPort addCommitsPort,
+      GetProjectHeadCommitPort getProjectHeadCommitPort) {
     this.updateRepositoryUseCase = updateRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.getProjectCommitsUseCase = getProjectCommitsUseCase;
@@ -75,16 +76,24 @@ public class ScanProjectScheduler {
     this.projectStatusPort = projectStatusPort;
     this.taskScheduler = taskScheduler;
     this.getProjectPort = getProjectPort;
-    this.updateProjectPort = updateProjectPort;
-    this.saveCommitPort = saveCommitPort;
     this.listModulesOfProjectUseCase = listModulesOfProjectUseCase;
     this.createModuleUseCase = createModuleUseCase;
+    this.addCommitsPort = addCommitsPort;
+    this.getProjectHeadCommitPort = getProjectHeadCommitPort;
   }
 
+  /** Starts the scheduleCheckTask tasks upon application start */
   @EventListener({ContextRefreshedEvent.class})
   public void onApplicationEvent() {
+    taskScheduler.scheduleAtFixedRate(this::scheduleCheckTask, 6000);
+  }
+
+  /** Starts update tasks for all projects that don't have one running already. */
+  private void scheduleCheckTask() {
     for (Project project : listProjectsPort.getProjects()) {
-      scheduleUpdateTask(project);
+      if (!tasks.containsKey(project.getId())) {
+        scheduleUpdateTask(project.getId());
+      }
     }
   }
 
@@ -92,74 +101,83 @@ public class ScanProjectScheduler {
    * Schedules an update task for the project. This will do a pull on the repository and save the
    * commits in the database.
    *
-   * @param project the project.
+   * @param projectId the project id
    */
-  void scheduleUpdateTask(Project project) {
+  private void scheduleUpdateTask(Long projectId) {
     tasks.put(
-        project.getId(),
+        projectId,
         taskScheduler.scheduleAtFixedRate(
             () -> {
               try {
-                if (!getProjectPort.existsById(project.getId())) {
-                  ScheduledFuture f = tasks.get(project.getId());
-                  if (f != null) {
-                    f.cancel(false);
-                  }
+                Project currentProject = getProjectPort.get(projectId);
+                if (projectStatusPort.isBeingProcessed(projectId)
+                    || checkProjectDate(currentProject)) {
                   return;
                 }
-                if (!projectStatusPort.isBeingProcessed(project.getId())) {
-                  try {
-                    Project currentProject = getProjectPort.get(project.getId());
-                    if (currentProject.getVcsEnd() != null
-                        && currentProject.getVcsEnd().before(new Date())) {
-                      return;
+                logger.info(
+                    String.format(
+                        "Scanning project %s for new commits!", currentProject.getName()));
+                try {
+                  if (updateRepositoryUseCase.updateRepository(
+                      Paths.get(
+                          coderadarConfigurationProperties.getWorkdir()
+                              + "/projects/"
+                              + currentProject.getWorkdirName()),
+                      new URL(currentProject.getVcsUrl()))) {
+
+                    // Check what modules where previously in the project
+                    List<GetModuleResponse> modules =
+                        listModulesOfProjectUseCase.listModules(currentProject.getId());
+
+                    // Get the new commits
+                    List<Commit> commits = getNewCommits(currentProject);
+
+                    // Save the new commit tree
+                    addCommitsPort.addCommits(commits, currentProject.getId());
+
+                    // Re-create the modules
+                    for (GetModuleResponse module : modules) {
+                      createModuleUseCase.createModule(
+                          new CreateModuleCommand(module.getPath()), currentProject.getId());
                     }
-                    logger.info(
-                        String.format(
-                            "Scanning project %s for new commits!", currentProject.getName()));
-
-                    if (updateRepositoryUseCase.updateRepository(
-                        Paths.get(
-                            coderadarConfigurationProperties.getWorkdir()
-                                + "/projects/"
-                                + currentProject.getWorkdirName()),
-                        new URL(currentProject.getVcsUrl()))) {
-
-                      // Check what modules where previously in the project
-                      List<GetModuleResponse> modules =
-                          listModulesOfProjectUseCase.listModules(currentProject.getId());
-
-                      // Delete all files, commits and modules as they have to be re-created
-                      updateProjectPort.deleteProjectFilesCommitsAndMetrics(currentProject.getId());
-
-                      // Get the new commit tree
-                      List<Commit> commits =
-                          getProjectCommitsUseCase.getCommits(
-                              Paths.get(project.getWorkdirName()), getProjectDateRange(project));
-
-                      // Save the new commit tree
-                      saveCommitPort.saveCommits(commits, currentProject.getId());
-
-                      // Re-create the modules
-                      for (GetModuleResponse module : modules) {
-                        createModuleUseCase.createModule(
-                            new CreateModuleCommand(module.getPath()), currentProject.getId());
-                      }
-                    }
-                  } catch (UnableToUpdateRepositoryException
-                      | MalformedURLException
-                      | ModuleAlreadyExistsException
-                      | ModulePathInvalidException e) {
-                    logger.error(String.format("Unable to update the project: %s", e.getMessage()));
                   }
+                } catch (UnableToUpdateRepositoryException
+                    | MalformedURLException
+                    | ModuleAlreadyExistsException
+                    | ModulePathInvalidException e) {
+                  logger.error(String.format("Unable to update the project: %s", e.getMessage()));
                 }
               } catch (ProjectNotFoundException e) {
-                ScheduledFuture f = tasks.get(project.getId());
+                ScheduledFuture f = tasks.get(projectId);
                 if (f != null) {
                   f.cancel(false);
                 }
+                tasks.remove(projectId);
               }
             },
-            coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000));
+            coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000L));
+  }
+
+  /**
+   * @param project The project to check.
+   * @return True if the project should be scanned for new commits, false otherwise.
+   */
+  private boolean checkProjectDate(Project project) {
+    return project.getVcsEnd() != null && project.getVcsEnd().before(new Date());
+  }
+
+  /**
+   * @param project
+   * @return Only the new commits from the local git repository.
+   */
+  private List<Commit> getNewCommits(Project project) {
+    List<Commit> commits =
+        getProjectCommitsUseCase.getCommits(
+            Paths.get(project.getWorkdirName()), getProjectDateRange(project));
+
+    Commit head = getProjectHeadCommitPort.getHeadCommit(project.getId());
+
+    commits.removeIf(commit -> commit.getTimestamp().getTime() <= head.getTimestamp().getTime());
+    return commits;
   }
 }

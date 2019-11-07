@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
-import io.reflectoring.coderadar.projectadministration.port.driver.user.load.LoadUserResponse;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.load.LoadUserUseCase;
 import io.reflectoring.coderadar.rest.user.LoadUserController;
+import io.reflectoring.coderadar.useradministration.port.driver.load.LoadUserResponse;
+import io.reflectoring.coderadar.useradministration.port.driver.load.LoadUserUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

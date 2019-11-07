@@ -1,11 +1,12 @@
 package io.reflectoring.coderadar.query.port.driver;
 
 import io.reflectoring.coderadar.query.domain.Interval;
-import java.util.Date;
-import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotBlank;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor

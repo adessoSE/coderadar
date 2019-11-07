@@ -1,14 +1,15 @@
 package io.reflectoring.coderadar.rest.user;
 
 import io.reflectoring.coderadar.projectadministration.AccessTokenNotExpiredException;
-import io.reflectoring.coderadar.projectadministration.RefreshTokenNotFoundException;
-import io.reflectoring.coderadar.projectadministration.UserNotFoundException;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.RefreshTokenCommand;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.RefreshTokenResponse;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.RefreshTokenUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
+import io.reflectoring.coderadar.useradministration.RefreshTokenNotFoundException;
+import io.reflectoring.coderadar.useradministration.UserNotFoundException;
+import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenCommand;
+import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenResponse;
+import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +27,7 @@ public class RefreshTokenController {
     this.refreshTokenUseCase = refreshTokenUseCase;
   }
 
-  @PostMapping(path = "/user/refresh")
+  @PostMapping(path = "/user/refresh", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity refreshToken(@RequestBody @Validated RefreshTokenCommand command) {
     try {
       return new ResponseEntity<>(

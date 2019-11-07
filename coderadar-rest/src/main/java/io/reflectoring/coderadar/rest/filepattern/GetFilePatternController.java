@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.filepattern;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ public class GetFilePatternController {
     this.getFilePatternUseCase = getFilePatternUseCase;
   }
 
-  @GetMapping(path = "/projects/{projectId}/filePatterns/{filePatternId}")
+  @GetMapping(path = "/projects/{projectId}/filePatterns/{filePatternId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity getFilePattern(@PathVariable(name = "filePatternId") Long filePatternId) {
     return new ResponseEntity<>(getFilePatternUseCase.get(filePatternId), HttpStatus.OK);
   }

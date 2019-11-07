@@ -1,10 +1,11 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserCommand;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.login.LoginUserUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
+import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserCommand;
+import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class LoginUserController {
     this.loginUserUseCase = loginUserUseCase;
   }
 
-  @PostMapping(path = "/user/auth")
+  @PostMapping(path = "/user/auth", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity login(@RequestBody @Validated LoginUserCommand command) {
     try {
       return new ResponseEntity<>(loginUserUseCase.login(command), HttpStatus.OK);

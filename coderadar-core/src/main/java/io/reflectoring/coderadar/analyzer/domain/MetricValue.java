@@ -1,10 +1,12 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
-import java.util.LinkedList;
-import java.util.List;
+import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor

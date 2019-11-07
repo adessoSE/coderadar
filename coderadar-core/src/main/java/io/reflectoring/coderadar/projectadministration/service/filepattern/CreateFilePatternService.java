@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.projectadministration.service.filepattern;
 
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.CreateFilePatternPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
@@ -22,8 +21,7 @@ public class CreateFilePatternService implements CreateFilePatternUseCase {
   }
 
   @Override
-  public Long createFilePattern(CreateFilePatternCommand command, Long projectId)
-      throws ProjectNotFoundException {
+  public Long createFilePattern(CreateFilePatternCommand command, Long projectId) {
     FilePattern filePattern = new FilePattern();
     filePattern.setPattern(command.getPattern());
     filePattern.setInclusionType(command.getInclusionType());

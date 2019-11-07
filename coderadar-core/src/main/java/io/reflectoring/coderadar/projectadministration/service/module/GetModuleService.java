@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.projectadministration.service.module;
 
-import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.GetModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleUseCase;
@@ -17,7 +16,7 @@ public class GetModuleService implements GetModuleUseCase {
   }
 
   @Override
-  public GetModuleResponse get(Long id) throws ModuleNotFoundException {
+  public GetModuleResponse get(Long id) {
     return new GetModuleResponse(id, getModulePort.get(id).getPath());
   }
 }
