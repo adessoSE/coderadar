@@ -267,7 +267,8 @@ export abstract class DependencyBase {
               endy += end.offsetHeight;
               this.canvasArrow(startx, starty, endx, endy, 'red', 3, true);
             }
-          } else if (!checkChanged && (dependency.changed === null || dependency.changed === undefined)) {
+            // TODO add more color codes for more change types?
+          } else if (!checkChanged) {
             // check if downward dependencies should be shown
             if (this.checkDown && starty < endy) {
               this.canvasArrow(startx, starty, endx, endy, 'black', 1, false);
