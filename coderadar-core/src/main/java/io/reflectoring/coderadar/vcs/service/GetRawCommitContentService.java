@@ -6,6 +6,9 @@ import io.reflectoring.coderadar.vcs.port.driver.GetCommitRawContentUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.List;
+
 @Service
 public class GetRawCommitContentService implements GetCommitRawContentUseCase {
   private final GetRawCommitContentPort getRawCommitContentPort;
@@ -19,5 +22,10 @@ public class GetRawCommitContentService implements GetCommitRawContentUseCase {
   public byte[] getCommitContent(String projectRoot, String filepath, String name)
       throws UnableToGetCommitContentException {
     return getRawCommitContentPort.getCommitContent(projectRoot, filepath, name);
+  }
+
+  @Override
+  public HashMap<String, byte[]> getCommitContentBulk(String projectRoot, List<String> filepaths, String name) throws UnableToGetCommitContentException {
+    return getRawCommitContentPort.getCommitContentBulk(projectRoot, filepaths, name);
   }
 }
