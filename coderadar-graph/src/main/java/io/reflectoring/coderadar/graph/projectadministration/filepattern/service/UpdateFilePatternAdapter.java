@@ -19,7 +19,7 @@ public class UpdateFilePatternAdapter implements UpdateFilePatternPort {
   }
 
   @Override
-  public void updateFilePattern(FilePattern filePattern) throws FilePatternNotFoundException {
+  public void updateFilePattern(FilePattern filePattern) {
     FilePatternEntity filePatternEntity =
         filePatternRepository
             .findById(filePattern.getId())

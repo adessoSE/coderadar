@@ -9,13 +9,11 @@ import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.ListModulesOfProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ListModulesOfProjectAdapter implements ListModulesOfProjectPort {
@@ -23,7 +21,6 @@ public class ListModulesOfProjectAdapter implements ListModulesOfProjectPort {
   private final ModuleRepository moduleRepository;
   private final ModuleMapper moduleMapper = new ModuleMapper();
 
-  @Autowired
   public ListModulesOfProjectAdapter(
       ProjectRepository projectRepository, ModuleRepository moduleRepository) {
     this.projectRepository = projectRepository;

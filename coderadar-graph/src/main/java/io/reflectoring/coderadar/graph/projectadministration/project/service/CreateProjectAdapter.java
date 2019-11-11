@@ -4,13 +4,12 @@ import io.reflectoring.coderadar.graph.projectadministration.project.ProjectMapp
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.CreateProjectPort;
+import java.util.Collections;
+import javax.annotation.PostConstruct;
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
-import java.util.Collections;
 
 @Service
 public class CreateProjectAdapter implements CreateProjectPort {
@@ -18,7 +17,6 @@ public class CreateProjectAdapter implements CreateProjectPort {
 
   private final ProjectMapper projectMapper = new ProjectMapper();
 
-  @Autowired
   public CreateProjectAdapter(ProjectRepository projectRepository) {
     this.projectRepository = projectRepository;
   }

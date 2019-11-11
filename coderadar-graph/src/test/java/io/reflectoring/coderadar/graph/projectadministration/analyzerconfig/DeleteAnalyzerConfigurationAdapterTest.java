@@ -1,14 +1,13 @@
 package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig;
 
-import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.DeleteAnalyzerConfigurationAdapter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.Mockito.*;
 
 @DisplayName("Delete analyzer configuration")
 class DeleteAnalyzerConfigurationAdapterTest {
@@ -23,8 +22,7 @@ class DeleteAnalyzerConfigurationAdapterTest {
   void shouldDeleteAnalyzerConfigurationWhenAAnalyzerConfigurationWithThePassingIdExists() {
     deleteAnalyzerConfigurationAdapter =
         new DeleteAnalyzerConfigurationAdapter(analyzerConfigurationRepository);
-    when(analyzerConfigurationRepository.findById(anyLong()))
-        .thenReturn(java.util.Optional.of(new AnalyzerConfigurationEntity()));
+    when(analyzerConfigurationRepository.existsById(anyLong())).thenReturn(true);
     doNothing().when(analyzerConfigurationRepository).deleteById(isA(Long.class));
     deleteAnalyzerConfigurationAdapter.deleteAnalyzerConfiguration(1L);
     verify(analyzerConfigurationRepository, times(1)).deleteById(any(Long.class));

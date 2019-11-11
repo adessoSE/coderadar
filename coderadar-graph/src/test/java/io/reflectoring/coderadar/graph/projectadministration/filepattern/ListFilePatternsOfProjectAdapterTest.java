@@ -1,19 +1,16 @@
 package io.reflectoring.coderadar.graph.projectadministration.filepattern;
 
-import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.service.ListFilePatternsOfProjectAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
+import java.util.Collection;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collection;
-
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @DisplayName("List file patterns of project")
 class ListFilePatternsOfProjectAdapterTest {
@@ -27,8 +24,8 @@ class ListFilePatternsOfProjectAdapterTest {
     ListFilePatternsOfProjectAdapter listFilePatternsOfProjectAdapter =
         new ListFilePatternsOfProjectAdapter(filePatternRepository, projectRepository);
 
-    when(projectRepository.findProjectById(anyLong()))
-        .thenReturn(java.util.Optional.of(new ProjectEntity()));
+    when(projectRepository.existsById(1L)).thenReturn(true);
+
     Collection<FilePattern> returnedList = listFilePatternsOfProjectAdapter.listFilePatterns(1L);
     Assertions.assertThat(returnedList).isNotNull();
   }

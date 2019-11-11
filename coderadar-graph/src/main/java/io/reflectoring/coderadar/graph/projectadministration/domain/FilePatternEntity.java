@@ -14,7 +14,7 @@ import org.neo4j.ogm.annotation.Relationship;
 public class FilePatternEntity {
   private Long id;
   private String pattern;
-  private InclusionType inclusionType; // TODO:  A converter may have to be used here.
+  private InclusionType inclusionType;
 
   @Relationship(direction = Relationship.INCOMING, type = "HAS")
   private ProjectEntity project;

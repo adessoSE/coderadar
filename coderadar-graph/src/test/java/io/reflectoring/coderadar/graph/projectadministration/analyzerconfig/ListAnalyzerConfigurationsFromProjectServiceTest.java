@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig;
 
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
@@ -7,14 +9,11 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.serv
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import java.util.LinkedList;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.LinkedList;
-
-import static org.mockito.Mockito.*;
 
 @DisplayName("Get analyzer configurations from project")
 class ListAnalyzerConfigurationsFromProjectServiceTest {
@@ -43,7 +42,7 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
   @DisplayName("Should return empty list when no analyzer configurations in the project exist")
   void shouldReturnEmptyListWhenNoAnalyzerConfigurationsInTheProjectExist() {
     ProjectEntity mockedProject = new ProjectEntity();
-    when(projectRepository.findProjectById(1L)).thenReturn(java.util.Optional.of(mockedProject));
+    when(projectRepository.existsById(1L)).thenReturn(true);
     when(analyzerConfigurationRepository.findByProjectId(1L)).thenReturn(new LinkedList<>());
 
     Iterable<AnalyzerConfiguration> configurations =
@@ -59,7 +58,7 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
     ProjectEntity mockedProject = new ProjectEntity();
     LinkedList<AnalyzerConfigurationEntity> mockedAnalyzerConfigurations = new LinkedList<>();
     mockedAnalyzerConfigurations.add(new AnalyzerConfigurationEntity());
-    when(projectRepository.findProjectById(1L)).thenReturn(java.util.Optional.of(mockedProject));
+    when(projectRepository.existsById(1L)).thenReturn(true);
     when(analyzerConfigurationRepository.findByProjectId(1L))
         .thenReturn(mockedAnalyzerConfigurations);
 
@@ -77,7 +76,7 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
     LinkedList<AnalyzerConfigurationEntity> mockedAnalyzerConfigurations = new LinkedList<>();
     mockedAnalyzerConfigurations.add(new AnalyzerConfigurationEntity());
     mockedAnalyzerConfigurations.add(new AnalyzerConfigurationEntity());
-    when(projectRepository.findProjectById(1L)).thenReturn(java.util.Optional.of(mockedProject));
+    when(projectRepository.existsById(1L)).thenReturn(true);
     when(analyzerConfigurationRepository.findByProjectId(1L))
         .thenReturn(mockedAnalyzerConfigurations);
 

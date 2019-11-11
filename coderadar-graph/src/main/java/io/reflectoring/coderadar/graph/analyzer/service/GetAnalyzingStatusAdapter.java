@@ -17,7 +17,7 @@ public class GetAnalyzingStatusAdapter implements GetAnalyzingStatusPort {
   }
 
   @Override
-  public boolean get(Long projectId) throws ProjectNotFoundException {
+  public boolean get(Long projectId) {
     AnalyzingJobEntity analyzingJob =
         analyzingJobRepository
             .findByProjectId(projectId)

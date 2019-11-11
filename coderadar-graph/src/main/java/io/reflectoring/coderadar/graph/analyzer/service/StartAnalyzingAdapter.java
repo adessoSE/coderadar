@@ -7,10 +7,9 @@ import io.reflectoring.coderadar.graph.analyzer.repository.AnalyzingJobRepositor
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class StartAnalyzingAdapter implements StartAnalyzingPort {
@@ -25,7 +24,7 @@ public class StartAnalyzingAdapter implements StartAnalyzingPort {
   }
 
   @Override
-  public Long start(StartAnalyzingCommand command, Long projectId) throws ProjectNotFoundException {
+  public Long start(StartAnalyzingCommand command, Long projectId) {
     AnalyzingJobEntity analyzingJob = new AnalyzingJobEntity();
     analyzingJob.setRescan(command.getRescan());
     analyzingJob.setFrom(command.getFrom());

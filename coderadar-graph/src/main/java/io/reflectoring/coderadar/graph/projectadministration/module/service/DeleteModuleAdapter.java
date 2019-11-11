@@ -23,7 +23,7 @@ public class DeleteModuleAdapter implements DeleteModulePort {
   }
 
   @Override
-  public void delete(Long id, Long projectId) throws ModuleNotFoundException {
+  public void delete(Long id, Long projectId) {
     ModuleEntity moduleEntity =
         moduleRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException(id));
 
@@ -31,7 +31,7 @@ public class DeleteModuleAdapter implements DeleteModulePort {
   }
 
   @Override
-  public void delete(Module module, Long projectId) throws ModuleNotFoundException {
+  public void delete(Module module, Long projectId) {
 
     ModuleEntity moduleEntity =
         moduleRepository

@@ -5,14 +5,12 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UpdateProjectAdapter implements UpdateProjectPort {
   private final ProjectRepository projectRepository;
 
-  @Autowired
   public UpdateProjectAdapter(ProjectRepository projectRepository) {
     this.projectRepository = projectRepository;
   }
@@ -38,9 +36,9 @@ public class UpdateProjectAdapter implements UpdateProjectPort {
 
   @Override
   public void deleteProjectFilesCommitsAndMetrics(Long projectId) {
-    projectRepository
-        .findProjectById(projectId)
-        .orElseThrow(() -> new ProjectNotFoundException(projectId));
+    if (!projectRepository.existsById(projectId)) {
+      throw new ProjectNotFoundException(projectId);
+    }
     projectRepository.deleteProjectFindings(projectId);
     projectRepository.deleteProjectMetrics(projectId);
     projectRepository.deleteProjectFilesAndModules(projectId);

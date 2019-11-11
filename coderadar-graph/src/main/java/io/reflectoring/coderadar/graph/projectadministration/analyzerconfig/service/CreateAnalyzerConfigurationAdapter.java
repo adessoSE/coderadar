@@ -8,7 +8,6 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntit
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +17,6 @@ public class CreateAnalyzerConfigurationAdapter implements CreateAnalyzerConfigu
       new AnalyzerConfigurationMapper();
   private final ProjectRepository projectRepository;
 
-  @Autowired
   public CreateAnalyzerConfigurationAdapter(
       AnalyzerConfigurationRepository analyzerConfigurationRepository,
       ProjectRepository projectRepository) {
@@ -27,7 +25,7 @@ public class CreateAnalyzerConfigurationAdapter implements CreateAnalyzerConfigu
   }
 
   @Override
-  public Long create(AnalyzerConfiguration entity, Long projectId) throws ProjectNotFoundException {
+  public Long create(AnalyzerConfiguration entity, Long projectId) {
     AnalyzerConfigurationEntity analyzerConfigurationEntity =
         analyzerConfigurationMapper.mapDomainObject(entity);
     ProjectEntity projectEntity =

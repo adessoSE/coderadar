@@ -6,10 +6,8 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repo
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationsFromProjectPort;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.Collection;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GetAnalyzerConfigurationsFromProjectAdapter
@@ -19,7 +17,6 @@ public class GetAnalyzerConfigurationsFromProjectAdapter
   private final AnalyzerConfigurationMapper analyzerConfigurationMapper =
       new AnalyzerConfigurationMapper();
 
-  @Autowired
   public GetAnalyzerConfigurationsFromProjectAdapter(
       ProjectRepository projectRepository,
       AnalyzerConfigurationRepository analyzerConfigurationRepository) {
@@ -29,9 +26,9 @@ public class GetAnalyzerConfigurationsFromProjectAdapter
 
   @Override
   public Collection<AnalyzerConfiguration> get(Long projectId) {
-    projectRepository
-        .findProjectById(projectId)
-        .orElseThrow(() -> new ProjectNotFoundException(projectId));
+    if (!projectRepository.existsById(projectId)) {
+      throw new ProjectNotFoundException(projectId);
+    }
     return analyzerConfigurationMapper.mapNodeEntities(
         analyzerConfigurationRepository.findByProjectId(projectId));
   }

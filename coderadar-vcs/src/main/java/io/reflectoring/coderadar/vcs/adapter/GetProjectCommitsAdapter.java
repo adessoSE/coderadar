@@ -28,7 +28,6 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,7 +35,6 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
 
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
-  @Autowired
   public GetProjectCommitsAdapter(
       CoderadarConfigurationProperties coderadarConfigurationProperties) {
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
