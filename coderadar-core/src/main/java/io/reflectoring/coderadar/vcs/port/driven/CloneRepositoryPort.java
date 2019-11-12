@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.vcs.port.driven;
 
 import io.reflectoring.coderadar.vcs.UnableToCloneRepositoryException;
-
 import java.io.File;
 
 public interface CloneRepositoryPort {

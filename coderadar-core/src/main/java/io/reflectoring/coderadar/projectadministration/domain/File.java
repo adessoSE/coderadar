@@ -1,12 +1,11 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
-import lombok.Data;
-import lombok.ToString;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import lombok.Data;
+import lombok.ToString;
 
 /** Represents a file in a VCS repository. */
 @Data

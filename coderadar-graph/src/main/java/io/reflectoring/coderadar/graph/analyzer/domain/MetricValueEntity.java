@@ -2,12 +2,11 @@ package io.reflectoring.coderadar.graph.analyzer.domain;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
+import java.util.LinkedList;
+import java.util.List;
 import lombok.*;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @Data
 @AllArgsConstructor

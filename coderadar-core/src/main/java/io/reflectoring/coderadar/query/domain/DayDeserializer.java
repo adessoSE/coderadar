@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.query.domain;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-
 import java.io.IOException;
 import java.util.Arrays;
 

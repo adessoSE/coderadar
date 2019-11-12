@@ -1,12 +1,11 @@
 package io.reflectoring.coderadar.useradministration.port.driver.password;
 
 import io.reflectoring.coderadar.useradministration.port.driver.ValidPassword;
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor

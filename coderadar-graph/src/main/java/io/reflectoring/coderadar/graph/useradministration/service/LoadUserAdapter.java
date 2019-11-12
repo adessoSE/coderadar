@@ -6,10 +6,9 @@ import io.reflectoring.coderadar.graph.useradministration.repository.UserReposit
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class LoadUserAdapter implements LoadUserPort {

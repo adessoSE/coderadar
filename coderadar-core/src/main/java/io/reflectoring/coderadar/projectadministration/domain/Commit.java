@@ -1,13 +1,12 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
-import lombok.Data;
-import lombok.ToString;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import lombok.Data;
+import lombok.ToString;
 
 /** Metadata about a commit to a Git repository. */
 @Data
