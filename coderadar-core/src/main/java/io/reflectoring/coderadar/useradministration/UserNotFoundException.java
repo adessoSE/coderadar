@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.useradministration;
 
-import io.reflectoring.coderadar.projectadministration.EntityNotFoundException;
+import io.reflectoring.coderadar.EntityNotFoundException;
 
 public class UserNotFoundException extends EntityNotFoundException {
   public UserNotFoundException(Long id) {

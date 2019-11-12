@@ -36,12 +36,11 @@ public class CreateModuleAdapter implements CreateModulePort {
    * @return The id of the newly created module
    */
   @Override
-  public Long createModule(String modulePath, Long projectId)
-      throws ModuleAlreadyExistsException, ModulePathInvalidException {
+  public Long createModule(String modulePath, Long projectId) throws ModulePathInvalidException {
 
     ProjectEntity projectEntity =
         projectRepository
-            .findProjectById(projectId)
+            .findByIdWithModules(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
     ModuleEntity foundModule = findParentModuleInProject(projectEntity, modulePath);
     ModuleEntity newModule;

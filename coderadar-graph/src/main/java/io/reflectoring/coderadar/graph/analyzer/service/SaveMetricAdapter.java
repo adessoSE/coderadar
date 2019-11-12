@@ -10,12 +10,11 @@ import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class SaveMetricAdapter implements SaveMetricPort {
@@ -43,7 +42,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
     for (MetricValue metricValue : metricValues) {
       commitIds.add(metricValue.getCommit().getId());
     }
-    List<CommitEntity> commitEntities = commitRepository.findCommitsByIds(commitIds);
+    List<CommitEntity> commitEntities = commitRepository.findAllById(commitIds);
     HashMap<Long, CommitEntity> commits = new HashMap<>();
     for (CommitEntity commitEntity : commitEntities) {
       commitEntity.setAnalyzed(true);

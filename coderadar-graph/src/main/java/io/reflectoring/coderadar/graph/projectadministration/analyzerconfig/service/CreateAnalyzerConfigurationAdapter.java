@@ -30,7 +30,7 @@ public class CreateAnalyzerConfigurationAdapter implements CreateAnalyzerConfigu
         analyzerConfigurationMapper.mapDomainObject(entity);
     ProjectEntity projectEntity =
         projectRepository
-            .findProjectById(projectId)
+            .findById(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
     analyzerConfigurationEntity.setProject(projectEntity);
     projectEntity.getAnalyzerConfigurations().add(analyzerConfigurationEntity);

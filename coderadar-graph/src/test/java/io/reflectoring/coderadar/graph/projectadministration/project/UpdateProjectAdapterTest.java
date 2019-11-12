@@ -1,18 +1,17 @@
 package io.reflectoring.coderadar.graph.projectadministration.project;
 
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.service.UpdateProjectAdapter;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-
-import static org.mockito.Mockito.*;
 
 @DisplayName("Update project")
 class UpdateProjectAdapterTest {
@@ -38,7 +37,7 @@ class UpdateProjectAdapterTest {
     ProjectEntity mockedOldItem = new ProjectEntity();
     mockedOldItem.setId(1L);
     mockedOldItem.setName("Mustermann");
-    when(projectRepository.findProjectById(any(Long.class))).thenReturn(Optional.of(mockedOldItem));
+    when(projectRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedOldItem));
 
     ProjectEntity mockedItem = new ProjectEntity();
     mockedItem.setId(1L);

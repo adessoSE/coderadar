@@ -7,7 +7,6 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.delet
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,7 +18,6 @@ public class DeleteProjectService implements DeleteProjectUseCase {
 
   private final Logger logger = LoggerFactory.getLogger(DeleteProjectService.class);
 
-  @Autowired
   public DeleteProjectService(
       DeleteProjectPort deleteProjectPort,
       ProcessProjectService processProjectService,
@@ -35,7 +33,7 @@ public class DeleteProjectService implements DeleteProjectUseCase {
     processProjectService.executeTask(
         () -> {
           deleteProjectPort.delete(id);
-          logger.info(String.format("Deleted project %s with id %d", project.getName(), id));
+          logger.info("Deleted project {} with id {}", project.getName(), id);
         },
         id);
   }

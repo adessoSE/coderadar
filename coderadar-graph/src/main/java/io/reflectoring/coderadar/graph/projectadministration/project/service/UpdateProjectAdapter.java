@@ -19,7 +19,7 @@ public class UpdateProjectAdapter implements UpdateProjectPort {
   public void update(Project project) {
     ProjectEntity projectEntity =
         projectRepository
-            .findProjectById(project.getId())
+            .findById(project.getId())
             .orElseThrow(() -> new ProjectNotFoundException(project.getId()));
 
     projectEntity.setName(project.getName());

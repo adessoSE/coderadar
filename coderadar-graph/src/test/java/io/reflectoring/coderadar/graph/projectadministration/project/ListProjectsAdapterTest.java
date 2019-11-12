@@ -1,17 +1,16 @@
 package io.reflectoring.coderadar.graph.projectadministration.project;
 
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.service.ListProjectsAdapter;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
+import java.util.LinkedList;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.LinkedList;
-
-import static org.mockito.Mockito.*;
 
 @DisplayName("List projects")
 class ListProjectsAdapterTest {
@@ -30,7 +29,7 @@ class ListProjectsAdapterTest {
     when(projectRepository.findAll()).thenReturn(new LinkedList<>());
 
     Iterable<Project> projects = listProjectsAdapter.getProjects();
-    verify(projectRepository, times(1)).findAllProjects();
+    verify(projectRepository, times(1)).findAll();
     Assertions.assertThat(projects).hasSize(0);
   }
 
@@ -39,10 +38,10 @@ class ListProjectsAdapterTest {
   void shouldReturnListWithSizeOfOneWhenOneProjectExists() {
     LinkedList<ProjectEntity> mockedItem = new LinkedList<>();
     mockedItem.add(new ProjectEntity());
-    when(projectRepository.findAllProjects()).thenReturn(mockedItem);
+    when(projectRepository.findAll()).thenReturn(mockedItem);
 
     Iterable<Project> projects = listProjectsAdapter.getProjects();
-    verify(projectRepository, times(1)).findAllProjects();
+    verify(projectRepository, times(1)).findAll();
     Assertions.assertThat(projects).hasSize(1);
   }
 
@@ -52,10 +51,10 @@ class ListProjectsAdapterTest {
     LinkedList<ProjectEntity> mockedItem = new LinkedList<>();
     mockedItem.add(new ProjectEntity());
     mockedItem.add(new ProjectEntity());
-    when(projectRepository.findAllProjects()).thenReturn(mockedItem);
+    when(projectRepository.findAll()).thenReturn(mockedItem);
 
     Iterable<Project> projects = listProjectsAdapter.getProjects();
-    verify(projectRepository, times(1)).findAllProjects();
+    verify(projectRepository, times(1)).findAll();
     Assertions.assertThat(projects).hasSize(2);
   }
 }

@@ -29,7 +29,7 @@ public class ListModulesOfProjectAdapter implements ListModulesOfProjectPort {
 
   @Override
   public Collection<Module> listModules(Long projectId) {
-    Optional<ProjectEntity> project = projectRepository.findProjectById(projectId);
+    Optional<ProjectEntity> project = projectRepository.findById(projectId);
     if (project.isPresent()) {
       return moduleMapper.mapNodeEntities(moduleRepository.findModulesInProject(projectId));
     } else {
@@ -39,7 +39,7 @@ public class ListModulesOfProjectAdapter implements ListModulesOfProjectPort {
 
   @Override
   public List<GetModuleResponse> listModuleResponses(Long projectId) {
-    Optional<ProjectEntity> project = projectRepository.findProjectById(projectId);
+    Optional<ProjectEntity> project = projectRepository.findById(projectId);
     if (project.isPresent()) {
       List<GetModuleResponse> getModuleResponses = new ArrayList<>();
       for (ModuleEntity m : moduleRepository.findModulesInProject(projectId)) {

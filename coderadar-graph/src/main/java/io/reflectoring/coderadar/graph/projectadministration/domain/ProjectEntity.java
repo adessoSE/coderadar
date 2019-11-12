@@ -2,23 +2,18 @@ package io.reflectoring.coderadar.graph.projectadministration.domain;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
 /** A coderadar project that defines the source of files that are to be analyzed. */
 @NodeEntity
 @Data
-@EqualsAndHashCode(
-  exclude = {"files", "filePatterns", "modules", "analyzerConfigurations", "analyzingJob"}
-)
-@ToString(exclude = {"files", "filePatterns", "modules", "analyzerConfigurations", "analyzingJob"})
 public class ProjectEntity {
   private Long id;
   private String name;
@@ -30,27 +25,38 @@ public class ProjectEntity {
   private Date vcsStart;
   private Date vcsEnd;
 
-  private boolean isBeingProcessed;
+  @EqualsAndHashCode.Exclude private boolean isBeingProcessed;
 
-  private boolean isBeingDeleted;
+  @EqualsAndHashCode.Exclude private boolean isBeingDeleted = false;
 
   // The graph starts from a project and goes only in one direction.
   // https://en.wikipedia.org/wiki/Directed_acyclic_graph
   @Relationship(type = "CONTAINS")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private List<ModuleEntity> modules = new LinkedList<>();
 
   @Relationship(type = "CONTAINS")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private List<FileEntity> files = new LinkedList<>();
 
   @Relationship(type = "CONTAINS_COMMIT")
+  @ToString.Exclude
   private List<CommitEntity> commits = new LinkedList<>();
 
   @Relationship(type = "HAS")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private List<FilePatternEntity> filePatterns = new LinkedList<>();
 
   @Relationship(type = "HAS")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private List<AnalyzerConfigurationEntity> analyzerConfigurations = new LinkedList<>();
 
   @Relationship(type = "HAS")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
   private AnalyzingJobEntity analyzingJob;
 }

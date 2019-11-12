@@ -1,17 +1,16 @@
 package io.reflectoring.coderadar.graph.projectadministration.project;
 
+import static org.mockito.Mockito.*;
+
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.service.DeleteProjectAdapter;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-
-import static org.mockito.Mockito.*;
 
 @DisplayName("Delete project")
 class DeleteProjectAdapterTest {
@@ -23,7 +22,7 @@ class DeleteProjectAdapterTest {
 
   @BeforeEach
   void setUp() {
-    when(projectRepository.findProjectById(anyLong())).thenReturn(Optional.of(new ProjectEntity()));
+    when(projectRepository.findById(anyLong())).thenReturn(Optional.of(new ProjectEntity()));
     deleteProjectAdapter =
         new DeleteProjectAdapter(projectRepository, coderadarConfigurationProperties);
   }

@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.service.project;
 
+import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
+
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
@@ -18,14 +20,6 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.get.Li
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.TaskScheduler;
-import org.springframework.stereotype.Component;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -34,8 +28,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
-
-import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ScanProjectScheduler {
@@ -56,7 +54,6 @@ public class ScanProjectScheduler {
 
   private Map<Long, ScheduledFuture<?>> tasks = new HashMap<>();
 
-  @Autowired
   public ScanProjectScheduler(
       UpdateRepositoryUseCase updateRepositoryUseCase,
       CoderadarConfigurationProperties coderadarConfigurationProperties,
@@ -110,52 +107,24 @@ public class ScanProjectScheduler {
             () -> {
               try {
                 Project currentProject = getProjectPort.get(projectId);
-                if (projectStatusPort.isBeingProcessed(projectId)
-                    || checkProjectDate(currentProject)) {
-                  return;
-                }
-                logger.info(
-                    String.format(
-                        "Scanning project %s for new commits!", currentProject.getName()));
-                try {
-                  if (updateRepositoryUseCase.updateRepository(
-                      Paths.get(
-                          coderadarConfigurationProperties.getWorkdir()
-                              + "/projects/"
-                              + currentProject.getWorkdirName()),
-                      new URL(currentProject.getVcsUrl()))) {
-
-                    // Check what modules where previously in the project
-                    List<GetModuleResponse> modules =
-                        listModulesOfProjectUseCase.listModules(currentProject.getId());
-
-                    // Get the new commits
-                    List<Commit> commits = getNewCommits(currentProject);
-
-                    // Save the new commit tree
-                    addCommitsPort.addCommits(commits, currentProject.getId());
-
-                    // Re-create the modules
-                    for (GetModuleResponse module : modules) {
-                      createModuleUseCase.createModule(
-                          new CreateModuleCommand(module.getPath()), currentProject.getId());
-                    }
-                  }
-                } catch (UnableToUpdateRepositoryException
-                    | MalformedURLException
-                    | ModuleAlreadyExistsException
-                    | ModulePathInvalidException e) {
-                  logger.error(String.format("Unable to update the project: %s", e.getMessage()));
+                if (!projectStatusPort.isBeingProcessed(projectId)
+                    && !checkProjectDate(currentProject)) {
+                  logger.info("Scanning project {} for new commits!", currentProject.getName());
+                  checkForNewCommits(currentProject);
                 }
               } catch (ProjectNotFoundException e) {
-                ScheduledFuture f = tasks.get(projectId);
-                if (f != null) {
-                  f.cancel(false);
-                }
-                tasks.remove(projectId);
+                stopUpdateTask(projectId);
               }
             },
             coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000L));
+  }
+
+  private void stopUpdateTask(Long projectId) {
+    ScheduledFuture f = tasks.get(projectId);
+    if (f != null) {
+      f.cancel(false);
+    }
+    tasks.remove(projectId);
   }
 
   /**
@@ -167,7 +136,7 @@ public class ScanProjectScheduler {
   }
 
   /**
-   * @param project
+   * @param project The project to check
    * @return Only the new commits from the local git repository.
    */
   private List<Commit> getNewCommits(Project project) {
@@ -179,5 +148,37 @@ public class ScanProjectScheduler {
 
     commits.removeIf(commit -> commit.getTimestamp().getTime() <= head.getTimestamp().getTime());
     return commits;
+  }
+
+  private void checkForNewCommits(Project project) {
+    try {
+      if (updateRepositoryUseCase.updateRepository(
+          Paths.get(
+              coderadarConfigurationProperties.getWorkdir()
+                  + "/projects/"
+                  + project.getWorkdirName()),
+          new URL(project.getVcsUrl()))) {
+
+        // Check what modules where previously in the project
+        List<GetModuleResponse> modules = listModulesOfProjectUseCase.listModules(project.getId());
+
+        // Get the new commits
+        List<Commit> commits = getNewCommits(project);
+
+        // Save the new commit tree
+        addCommitsPort.addCommits(commits, project.getId());
+
+        // Re-create the modules
+        for (GetModuleResponse module : modules) {
+          createModuleUseCase.createModule(
+              new CreateModuleCommand(module.getPath()), project.getId());
+        }
+      }
+    } catch (UnableToUpdateRepositoryException
+        | MalformedURLException
+        | ModuleAlreadyExistsException
+        | ModulePathInvalidException e) {
+      logger.error("Unable to update the project: {}", e.getMessage());
+    }
   }
 }

@@ -1,9 +1,7 @@
 package io.reflectoring.coderadar.rest.project;
 
-import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,11 +30,7 @@ public class UpdateProjectController {
       @RequestBody @Validated UpdateProjectCommand command,
       @PathVariable(name = "projectId") Long projectId)
           throws MalformedURLException {
-    try {
       updateProjectUseCase.update(command, projectId);
       return new ResponseEntity<>(HttpStatus.OK);
-    } catch (ProjectAlreadyExistsException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
-    }
   }
 }

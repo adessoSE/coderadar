@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.rest.module;
 
-import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
@@ -36,8 +35,6 @@ public class CreateModuleController {
           new IdResponse(createModuleUseCase.createModule(command, projectId)), HttpStatus.CREATED);
     } catch (ModulePathInvalidException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
-    } catch (ModuleAlreadyExistsException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.CONFLICT);
     }
   }
 }

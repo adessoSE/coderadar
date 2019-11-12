@@ -14,11 +14,6 @@ import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -26,6 +21,9 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 @Service
 public class CreateProjectService implements CreateProjectUseCase {
@@ -46,7 +44,6 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   private final Logger logger = LoggerFactory.getLogger(CreateProjectService.class);
 
-  @Autowired
   public CreateProjectService(
       CreateProjectPort createProjectPort,
       GetProjectPort getProjectPort,
@@ -82,16 +79,16 @@ public class CreateProjectService implements CreateProjectUseCase {
           try {
             cloneRepositoryUseCase.cloneRepository(cloneRepositoryCommand);
             logger.info(
-                String.format(
-                    "Cloned project %s from repository %s",
-                    project.getName(), cloneRepositoryCommand.getRemoteUrl()));
+                "Cloned project {} from repository {}",
+                project.getName(),
+                cloneRepositoryCommand.getRemoteUrl());
             List<Commit> commits =
                 getProjectCommitsUseCase.getCommits(
                     Paths.get(project.getWorkdirName()), getProjectDateRange(project));
             saveCommitPort.saveCommits(commits, project.getId());
-            logger.info(String.format("Saved project %s", project.getName()));
+            logger.info("Saved project {}", project.getName());
           } catch (Exception e) {
-            logger.error(String.format("Unable to create project: %s", e.getMessage()));
+            logger.error("Unable to create project: {}", e.getMessage());
           }
         },
         project.getId());

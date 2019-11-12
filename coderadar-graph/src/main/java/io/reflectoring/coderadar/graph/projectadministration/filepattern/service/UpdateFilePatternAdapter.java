@@ -5,7 +5,6 @@ import io.reflectoring.coderadar.graph.projectadministration.filepattern.reposit
 import io.reflectoring.coderadar.projectadministration.FilePatternNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.UpdateFilePatternPort;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +12,6 @@ public class UpdateFilePatternAdapter implements UpdateFilePatternPort {
 
   private final FilePatternRepository filePatternRepository;
 
-  @Autowired
   public UpdateFilePatternAdapter(FilePatternRepository filePatternRepository) {
     this.filePatternRepository = filePatternRepository;
   }

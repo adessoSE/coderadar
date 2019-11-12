@@ -11,7 +11,6 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.create
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,7 +22,6 @@ public class CreateModuleService implements CreateModuleUseCase {
 
   private final Logger logger = LoggerFactory.getLogger(CreateModuleService.class);
 
-  @Autowired
   public CreateModuleService(
       CreateModulePort createModulePort,
       ProjectStatusPort projectStatusPort,
@@ -49,8 +47,7 @@ public class CreateModuleService implements CreateModuleUseCase {
     try {
       moduleId = createModulePort.createModule(command.getPath(), projectId);
       logger.info(
-          String.format(
-              "Created module with path %s for project with id %d", command.getPath(), projectId));
+          "Created module with path {} for project with id {}", command.getPath(), projectId);
     } finally {
       projectStatusPort.setBeingProcessed(projectId, false);
     }

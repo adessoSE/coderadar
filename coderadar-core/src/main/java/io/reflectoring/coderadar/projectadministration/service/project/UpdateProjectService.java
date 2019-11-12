@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.service.project;
 
+import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
+
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
@@ -19,18 +21,14 @@ import io.reflectoring.coderadar.projectadministration.service.ProcessProjectSer
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.List;
-
-import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UpdateProjectService implements UpdateProjectUseCase {
@@ -48,7 +46,6 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
   private final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
 
-  @Autowired
   public UpdateProjectService(
       GetProjectPort getProjectPort,
       UpdateProjectPort updateProjectPort,
@@ -132,13 +129,13 @@ public class UpdateProjectService implements UpdateProjectUseCase {
                 | MalformedURLException
                 | ModuleAlreadyExistsException
                 | ModulePathInvalidException e) {
-              logger.error(String.format("Unable to update project! %s", e.getMessage()));
+              logger.error("Unable to update project! {}", e.getMessage());
             }
           },
           projectId);
     }
     updateProjectPort.update(project);
-    logger.info(String.format("Updated project %s with id %d", project.getName(), project.getId()));
+    logger.info("Updated project {} with id {}", project.getName(), project.getId());
   }
 
   private boolean projectDatesHaveChanged(Project project, UpdateProjectCommand command) {

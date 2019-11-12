@@ -7,9 +7,8 @@ import io.reflectoring.coderadar.query.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfTwoCommitsPort;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForTwoCommitsCommand;
-import org.springframework.stereotype.Service;
-
 import java.util.*;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwoCommitsPort {
@@ -70,7 +69,7 @@ public class GetMetricValuesForTwoCommitsAdapter implements GetMetricValuesOfTwo
     // Renames are processed here
     for (String addedFile : addedFiles) {
       String oldPath =
-          fileRepository.wasRenamedBetweenCommits(
+          fileRepository.findOldpathIfRenamedBetweenCommits(
               addedFile,
               commit1Time.toInstant().toEpochMilli(),
               commit2Time.toInstant().toEpochMilli(),

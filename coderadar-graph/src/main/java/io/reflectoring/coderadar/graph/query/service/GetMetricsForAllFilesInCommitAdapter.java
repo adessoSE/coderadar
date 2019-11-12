@@ -16,12 +16,11 @@ import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.domain.MetricsTreeNodeType;
 import io.reflectoring.coderadar.query.port.driven.GetMetricsForAllFilesInCommitPort;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFilesInCommitPort {
@@ -47,7 +46,7 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
 
     ProjectEntity projectEntity =
         projectRepository
-            .findById(projectId)
+            .findByIdWithModules(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
     CommitEntity commitEntity =

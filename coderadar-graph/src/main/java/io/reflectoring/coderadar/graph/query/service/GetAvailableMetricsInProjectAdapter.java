@@ -23,7 +23,7 @@ public class GetAvailableMetricsInProjectAdapter implements GetAvailableMetricsI
 
   @Override
   public List<String> get(Long projectId) {
-    Optional<ProjectEntity> persistedProject = projectRepository.findProjectById(projectId);
+    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
     if (persistedProject.isPresent()) {
       return getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(projectId);
     } else {

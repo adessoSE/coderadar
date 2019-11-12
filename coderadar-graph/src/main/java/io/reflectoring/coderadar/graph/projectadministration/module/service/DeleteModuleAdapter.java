@@ -7,7 +7,6 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +14,6 @@ public class DeleteModuleAdapter implements DeleteModulePort {
   private final ModuleRepository moduleRepository;
   private final ProjectRepository projectRepository;
 
-  @Autowired
   public DeleteModuleAdapter(
       ModuleRepository moduleRepository, ProjectRepository projectRepository) {
     this.moduleRepository = moduleRepository;

@@ -6,7 +6,6 @@ import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfi
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.delete.DeleteAnalyzerConfigurationUseCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +15,6 @@ public class DeleteAnalyzerConfigurationService implements DeleteAnalyzerConfigu
   private final GetAnalyzerConfigurationPort getAnalyzerConfigurationPort;
   private final Logger logger = LoggerFactory.getLogger(DeleteAnalyzerConfigurationService.class);
 
-  @Autowired
   public DeleteAnalyzerConfigurationService(
       DeleteAnalyzerConfigurationPort port,
       GetAnalyzerConfigurationPort getAnalyzerConfigurationPort) {

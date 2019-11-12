@@ -11,7 +11,6 @@ import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfi
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +23,6 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
       listAnalyzerConfigurationsFromProjectService;
   private final Logger logger = LoggerFactory.getLogger(UpdateAnalyzerConfigurationService.class);
 
-  @Autowired
   public UpdateAnalyzerConfigurationService(
       UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort,
       GetAnalyzerConfigurationPort getAnalyzerConfigurationPort,

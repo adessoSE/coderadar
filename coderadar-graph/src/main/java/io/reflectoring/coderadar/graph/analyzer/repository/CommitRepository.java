@@ -5,34 +5,41 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.lang.NonNull;
 
 public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} SET c.analyzed = false")
-  void resetAnalyzedStatus(Long projectId);
+  void resetAnalyzedStatus(@NonNull Long projectId);
 
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c ORDER BY c.timestamp DESC")
-  List<CommitEntity> findByProjectIdAndTimestampDesc(Long projectId);
+  @NonNull
+  List<CommitEntity> findByProjectIdAndTimestampDesc(@NonNull Long projectId);
 
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c ORDER BY c.timestamp")
-  List<CommitEntity> findByProjectIdAndTimestampAsc(Long projectId);
+  @NonNull
+  List<CommitEntity> findByProjectIdAndTimestampAsc(@NonNull Long projectId);
 
   @Query("MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c")
-  List<CommitEntity> findByProjectId(Long projectId);
+  @NonNull
+  List<CommitEntity> findByProjectId(@NonNull Long projectId);
 
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c ORDER BY c.timestamp DESC LIMIT 1")
-  CommitEntity findHeadCommit(Long projectId);
+  @NonNull
+  CommitEntity findHeadCommit(@NonNull Long projectId);
 
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE c.name = {0} AND ID(p) = {1} RETURN c")
-  Optional<CommitEntity> findByNameAndProjectId(String commit, Long projectId);
+  @NonNull
+  Optional<CommitEntity> findByNameAndProjectId(@NonNull String commit, @NonNull Long projectId);
 
   @Query("MATCH (c:CommitEntity) WHERE ID(c) IN {0} SET c.analyzed = true")
-  void setCommitsWithIDsAsAnalyzed(List<Long> commitIds);
+  void setCommitsWithIDsAsAnalyzed(@NonNull List<Long> commitIds);
 
   @Query("MATCH (c:CommitEntity) WHERE ID(c) IN {0} RETURN c")
-  List<CommitEntity> findCommitsByIds(List<Long> commitIds);
+  @NonNull
+  List<CommitEntity> findAllById(@NonNull List<Long> commitIds);
 }

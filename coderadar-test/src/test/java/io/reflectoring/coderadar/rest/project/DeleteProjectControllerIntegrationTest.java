@@ -47,7 +47,7 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
         .andExpect(status().isOk())
         .andDo(document("projects/delete"));
 
-    Assertions.assertFalse(projectRepository.findProjectById(id).isPresent());
+    Assertions.assertFalse(projectRepository.findById(id).isPresent());
   }
 
   @Test
@@ -61,7 +61,7 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
     mvc().perform(delete("/projects/" + id))
             .andExpect(status().isOk());
 
-    Assertions.assertFalse(projectRepository.findProjectById(id).isPresent());
+    Assertions.assertFalse(projectRepository.findById(id).isPresent());
   }
 
   @Test
