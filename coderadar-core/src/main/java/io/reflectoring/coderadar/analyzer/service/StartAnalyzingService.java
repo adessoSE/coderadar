@@ -7,7 +7,6 @@ import io.reflectoring.coderadar.analyzer.port.driven.StopAnalyzingPort;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
-import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
@@ -19,15 +18,14 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 @Service
 public class StartAnalyzingService implements StartAnalyzingUseCase {
@@ -75,8 +73,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   }
 
   @Override
-  public void start(StartAnalyzingCommand command, Long projectId)
-      throws ProjectIsBeingProcessedException {
+  public void start(StartAnalyzingCommand command, Long projectId) {
     processProjectService.executeTask(
         () -> {
           Project project = getProjectPort.get(projectId);
@@ -101,9 +98,10 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
                       commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher));
               ++counter;
               logger.info(
-                  String.format(
-                      "Analyzed commit: %s %s, total analyzed: %d",
-                      commit.getComment(), commit.getName(), counter));
+                  "Analyzed commit: {} {}, total analyzed: {}",
+                  commit.getComment(),
+                  commit.getName(),
+                  counter);
             }
             if (metricValues.size() > 100) {
               List<MetricValue> metricValuesCopy = new ArrayList<>(metricValues);
@@ -115,7 +113,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           saveMetricPort.saveMetricValues(metricValues, projectId);
           saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
           stopAnalyzingPort.stop(projectId);
-          logger.info(String.format("Saved analysis results for project %s", project.getName()));
+          logger.info("Saved analysis results for project {}", project.getName());
         },
         projectId);
   }

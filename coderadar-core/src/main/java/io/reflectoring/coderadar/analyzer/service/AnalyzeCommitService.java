@@ -8,18 +8,19 @@ import io.reflectoring.coderadar.plugin.api.FileMetrics;
 import io.reflectoring.coderadar.plugin.api.Metric;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driver.GetCommitRawContentUseCase;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AnalyzeCommitService implements AnalyzeCommitUseCase {
@@ -53,36 +54,52 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
           commit.getName(),
           project.getName());
     } else {
-      for (FileToCommitRelationship fileToCommitRelationship : commit.getTouchedFiles()) {
-        String filePath = fileToCommitRelationship.getFile().getPath();
-        Long fileId = fileToCommitRelationship.getFile().getId();
-        if (filePatterns.matches(filePath)) {
-          FileMetrics fileMetrics = analyzeFile(commit, filePath, analyzers, project);
-          metricValues.addAll(getMetrics(fileMetrics, commit, fileId));
-        }
-      }
+      List<String> filepaths =
+          commit
+              .getTouchedFiles()
+              .stream()
+              .map(fileToCommitRelationship -> fileToCommitRelationship.getFile().getPath())
+              .collect(Collectors.toList());
+      analyzeBulk(commit, filepaths, analyzers, project)
+          .forEach(
+              (key, value) ->
+                  commit
+                      .getTouchedFiles()
+                      .stream()
+                      .filter(relationship -> key.equals(relationship.getFile().getPath()))
+                      .findFirst()
+                      .ifPresent(
+                          relationship -> {
+                            Long fileId = relationship.getFile().getId();
+                            if (filePatterns.matches(key)) {
+                              metricValues.addAll(getMetrics(value, commit, fileId));
+                            }
+                          }));
     }
     return metricValues;
   }
 
-  private FileMetrics analyzeFile(
+  private HashMap<String, FileMetrics> analyzeBulk(
       Commit commit,
-      String filepath,
+      List<String> filepaths,
       List<SourceCodeFileAnalyzerPlugin> analyzers,
       Project project) {
-    byte[] fileContent = new byte[0];
+    HashMap<String, FileMetrics> fileMetricsMap = new LinkedHashMap<>();
     try {
-      fileContent =
-          getCommitRawContentUseCase.getCommitContent(
+      HashMap<String, byte[]> fileContents =
+          getCommitRawContentUseCase.getCommitContentBulk(
               coderadarConfigurationProperties.getWorkdir()
                   + "/projects/"
                   + project.getWorkdirName(),
-              filepath,
+              filepaths,
               commit.getName());
+      fileContents.forEach(
+          (key, value) ->
+              fileMetricsMap.put(key, analyzeFileService.analyzeFile(analyzers, key, value)));
     } catch (UnableToGetCommitContentException e) {
       e.printStackTrace();
     }
-    return analyzeFileService.analyzeFile(analyzers, filepath, fileContent);
+    return fileMetricsMap;
   }
 
   private List<MetricValue> getMetrics(FileMetrics fileMetrics, Commit commit, Long fileId) {
