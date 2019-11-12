@@ -85,7 +85,7 @@ dependencies {
 }
 
 
-def Properties localBootRunProperties() {
+Properties localBootRunProperties() {
     Properties p = new Properties();
     p.load(new FileInputStream(file(project.projectDir).absolutePath + "/local.application.properties"))
     return p;

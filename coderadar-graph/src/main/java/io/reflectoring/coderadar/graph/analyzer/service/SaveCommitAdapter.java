@@ -52,16 +52,19 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
       commits.sort(Comparator.comparing(Commit::getTimestamp));
 
       for (Commit commit : commits) {
-        walkedCommits.put(commit.getName(), CommitBaseDataMapper.mapCommit(commit));
-      }
-
-      for (Commit commit : commits) {
         CommitEntity commitEntity = walkedCommits.get(commit.getName());
-        // set parents
-        for (Commit parent : commit.getParents()) {
-          commitEntity.getParents().add(walkedCommits.get(parent.getName()));
+        if (commitEntity == null) {
+          commitEntity = CommitBaseDataMapper.mapCommit(commit);
         }
-        walkedCommits.putIfAbsent(commitEntity.getName(), commitEntity);
+        for (Commit parent : commit.getParents()) {
+          CommitEntity parentCommit = walkedCommits.get(parent.getName());
+          if (parentCommit == null) {
+            parentCommit = CommitBaseDataMapper.mapCommit(parent);
+            walkedCommits.put(parent.getName(), parentCommit);
+          }
+          commitEntity.getParents().add(parentCommit);
+        }
+        walkedCommits.put(commit.getName(), commitEntity);
       }
 
       List<CommitEntity> commitEntities = new ArrayList<>(walkedCommits.values());
@@ -76,12 +79,10 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
         allFiles.addAll(files);
       }
 
-      projectEntity.setFiles(allFiles);
-
-      commitRepository.save(walkedCommits.values(), 1);
+      commitRepository.save(commitEntities, 1);
       fileRepository.save(allFiles, 1);
-
-      projectEntity.getCommits().addAll(walkedCommits.values());
+      projectEntity.setFiles(allFiles);
+      projectEntity.setCommits(commitEntities);
       projectRepository.save(projectEntity, 1);
     }
   }
@@ -160,11 +161,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
                     fileToCommitRelationship1.getCommit().getName().equals(entity.getName()))) {
           fileEntity.getCommits().add(fileToCommitRelationshipEntity);
         }
-        if (!walkedFiles.containsKey(fileEntity.getPath())) {
-          walkedFiles.put(fileEntity.getPath(), fileList);
-        } else {
-          walkedFiles.replace(fileEntity.getPath(), fileList);
-        }
+        walkedFiles.put(fileEntity.getPath(), fileList);
       }
     }
   }

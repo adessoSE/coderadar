@@ -18,9 +18,11 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   List<CommitEntity> findByProjectIdAndTimestampDesc(@NonNull Long projectId);
 
   @Query(
-      "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c ORDER BY c.timestamp")
+      "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} WITH c "
+          + "OPTIONAL MATCH (c)-[r2:IS_CHILD_OF]-(c1) "
+          + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f:FileEntity) RETURN DISTINCT c, c1, r, r2, f ORDER BY c.timestamp")
   @NonNull
-  List<CommitEntity> findByProjectIdAndTimestampAsc(@NonNull Long projectId);
+  List<CommitEntity> findByProjectIdAndTimestampAscWithRelationships(@NonNull Long projectId);
 
   @Query("MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c")
   @NonNull

@@ -24,7 +24,6 @@ import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
@@ -61,20 +60,27 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
       git = new Git(repository);
 
       HashMap<ObjectId, Commit> map = new HashMap<>();
-
-      for (RevCommit rc : git.log().call()) {
+      List<RevCommit> revCommits = new ArrayList<>();
+      git.log().call().iterator().forEachRemaining(revCommits::add);
+      Collections.reverse(revCommits);
+      for (RevCommit rc : revCommits) {
         if (isInDateRange(range, rc)) {
-          final RevWalk revWalk = new RevWalk(git.getRepository());
-          Commit commit = new Commit();
-          commit.setName(rc.getName());
-          commit.setAuthor(rc.getAuthorIdent().getName());
-          commit.setComment(rc.getShortMessage());
-          commit.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
-          commit.setParents(getParents(revWalk, rc, map, range));
-          map.put(rc, commit);
-          break;
+          Commit commit = map.get(rc.getId());
+          if (commit == null) {
+            commit = mapRevCommitToCommit(rc);
+          }
+          for (RevCommit parent : rc.getParents()) {
+            Commit parentCommit = map.get(parent.getId());
+            if (parentCommit == null) {
+              parentCommit = mapRevCommitToCommit(parent);
+              map.put(parent.getId(), parentCommit);
+            }
+            commit.getParents().add(parentCommit);
+          }
+          map.put(rc.getId(), commit);
         }
       }
+
       List<Commit> result = new ArrayList<>(map.values());
       setCommitsFiles(git, result);
       git.getRepository().close();
@@ -84,6 +90,15 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
       throw new IllegalStateException(
           String.format("Error accessing git repository at %s", repositoryRoot), e);
     }
+  }
+
+  private Commit mapRevCommitToCommit(RevCommit rc) {
+    Commit commit = new Commit();
+    commit.setName(rc.getName());
+    commit.setAuthor(rc.getAuthorIdent().getName());
+    commit.setComment(rc.getShortMessage());
+    commit.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
+    return commit;
   }
 
   /**
@@ -247,46 +262,6 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
               gitClient.getRepository().getDirectory().getAbsolutePath()),
           e);
     }
-  }
-
-  /**
-   * Recursively walks through all the parents of a commit and builds the commit tree.
-   *
-   * @param revWalk RevWalk Object we use to efficiently get the parent commits of a any commit.
-   * @param commit The start commit. This should be the newest commit.
-   * @param walkedCommits A Map storing the commits we have walked so far, this prevents us from
-   *     walking the same commits more than once.
-   * @param range The date past which no parents are checked.
-   * @return A List of parents for the commit.
-   * @throws IOException Thrown if for any reason a parent commit cannot be properly parsed.
-   */
-  private List<Commit> getParents(
-      RevWalk revWalk, RevCommit commit, HashMap<ObjectId, Commit> walkedCommits, DateRange range)
-      throws IOException {
-
-    List<Commit> parents = new ArrayList<>();
-
-    for (RevCommit rc : commit.getParents()) {
-
-      Commit commitWithParents = walkedCommits.get(rc.getId());
-      if (commitWithParents != null) {
-        parents.add(commitWithParents);
-      } else {
-        RevCommit commitWithMetadata = revWalk.parseCommit(rc.getId());
-        if (range == null || !isInDateRange(range, rc)) {
-          continue;
-        }
-        commitWithParents = new Commit();
-        commitWithParents.setName(commitWithMetadata.getName());
-        commitWithParents.setAuthor(commitWithMetadata.getAuthorIdent().getName());
-        commitWithParents.setComment(commitWithMetadata.getShortMessage());
-        commitWithParents.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
-        walkedCommits.put(rc.getId(), commitWithParents);
-        commitWithParents.setParents(getParents(revWalk, commitWithMetadata, walkedCommits, range));
-        parents.add(commitWithParents);
-      }
-    }
-    return parents;
   }
 
   /**

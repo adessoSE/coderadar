@@ -13,4 +13,7 @@ public interface AnalyzingJobRepository extends Neo4jRepository<AnalyzingJobEnti
   @Query("MATCH (p:ProjectEntity)-[:HAS]->(a:AnalyzingJobEntity) WHERE ID(p) = {0} RETURN a")
   @NonNull
   Optional<AnalyzingJobEntity> findByProjectId(@NonNull Long projectId);
+
+  @Query("MATCH (p:ProjectEntity)-[:HAS]->(a:AnalyzingJobEntity) WHERE ID(p) = {0} DETACH DELETE a")
+  void deleteByProjectId(@NonNull Long projectId);
 }
