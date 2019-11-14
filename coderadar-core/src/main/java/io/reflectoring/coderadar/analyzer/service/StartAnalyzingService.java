@@ -21,11 +21,12 @@ import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.concurrent.ListenableFuture;
 
 @Service
 public class StartAnalyzingService implements StartAnalyzingUseCase {
@@ -44,7 +45,6 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
 
   private final Logger logger = LoggerFactory.getLogger(StartAnalyzingService.class);
 
-  @Autowired
   public StartAnalyzingService(
       GetProjectPort getProjectPort,
       AnalyzeCommitService analyzeCommitService,
@@ -91,6 +91,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           Long counter = 0L;
           List<Long> commitIds = new ArrayList<>();
           commitsToBeAnalyzed.forEach(commit -> commitIds.add(commit.getId()));
+          ListenableFuture<?> saveTask = null;
           for (Commit commit : commitsToBeAnalyzed) {
             if (!commit.isAnalyzed()) {
               metricValues.addAll(
@@ -103,10 +104,14 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
                   commit.getName(),
                   counter);
             }
-            if (metricValues.size() > 100) {
+            if (metricValues.size() > 200) {
               List<MetricValue> metricValuesCopy = new ArrayList<>(metricValues);
-              taskExecutor.submitListenable(
-                  () -> saveMetricPort.saveMetricValues(metricValuesCopy, projectId));
+              if (saveTask != null) {
+                waitForTask(saveTask);
+              }
+              saveTask =
+                  taskExecutor.submitListenable(
+                      () -> saveMetricPort.saveMetricValues(metricValuesCopy, projectId));
               metricValues.clear();
             }
           }
@@ -116,6 +121,13 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           logger.info("Saved analysis results for project {}", project.getName());
         },
         projectId);
+  }
+
+  private void waitForTask(ListenableFuture<?> saveTask) {
+    try {
+      saveTask.get();
+    } catch (InterruptedException | ExecutionException ignored) {
+    }
   }
 
   private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Project project) {

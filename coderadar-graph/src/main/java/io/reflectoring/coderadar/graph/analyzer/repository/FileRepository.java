@@ -40,5 +40,5 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
 
   @Query("MATCH (f:FileEntity) WHERE ID(f) IN {0} RETURN f")
   @NonNull
-  List<FileEntity> findFilesByIds(@NonNull List<Long> fileIds);
+  List<FileEntity> findAllById(@NonNull List<Long> fileIds);
 }

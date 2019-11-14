@@ -54,7 +54,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
     for (MetricValue metricValue : metricValues) {
       fileIds.add(metricValue.getFileId());
     }
-    List<FileEntity> fileEntities = fileRepository.findFilesByIds(fileIds);
+    List<FileEntity> fileEntities = fileRepository.findAllById(fileIds);
     HashMap<Long, FileEntity> files = new HashMap<>();
 
     List<MetricValueEntity> metricValueEntities = new ArrayList<>();
