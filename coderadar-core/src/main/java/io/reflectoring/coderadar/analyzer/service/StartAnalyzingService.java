@@ -99,6 +99,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           List<Long> commitIds = new ArrayList<>();
           commitsToBeAnalyzed.forEach(commit -> commitIds.add(commit.getId()));
           ListenableFuture<?> saveTask = null;
+          boolean metricAvailable = false;
           for (Commit commit : commitsToBeAnalyzed) {
             if (!commit.isAnalyzed()) {
               metricValues.addAll(
@@ -110,20 +111,21 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
                   commit.getComment(),
                   commit.getName(),
                   counter);
-            }
-            if (metricValues.size() > 200) {
-              List<MetricValue> metricValuesCopy = new ArrayList<>(metricValues);
-              if (saveTask != null) {
-                waitForTask(saveTask);
+              if (metricValues.size() > 200) {
+                metricAvailable = true;
+                List<MetricValue> metricValuesCopy = new ArrayList<>(metricValues);
+                if (saveTask != null) {
+                  waitForTask(saveTask);
+                }
+                saveTask =
+                    taskExecutor.submitListenable(
+                        () -> saveMetricPort.saveMetricValues(metricValuesCopy, projectId));
+                metricValues.clear();
               }
-              saveTask =
-                  taskExecutor.submitListenable(
-                      () -> saveMetricPort.saveMetricValues(metricValuesCopy, projectId));
-              metricValues.clear();
             }
           }
           saveMetricPort.saveMetricValues(metricValues, projectId);
-          if (!metricValues.isEmpty()) {
+          if (!metricValues.isEmpty() || metricAvailable) {
             saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
           }
           stopAnalyzingPort.stop(projectId);
