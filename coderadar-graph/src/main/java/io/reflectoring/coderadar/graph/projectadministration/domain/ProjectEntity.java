@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.graph.projectadministration.domain;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,26 +34,26 @@ public class ProjectEntity {
   @Relationship(type = "CONTAINS")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
-  private List<ModuleEntity> modules = new LinkedList<>();
+  private List<ModuleEntity> modules = new ArrayList<>();
 
   @Relationship(type = "CONTAINS")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
-  private List<FileEntity> files = new LinkedList<>();
+  private List<FileEntity> files = new ArrayList<>();
 
   @Relationship(type = "CONTAINS_COMMIT")
   @ToString.Exclude
-  private List<CommitEntity> commits = new LinkedList<>();
+  private List<CommitEntity> commits = new ArrayList<>();
 
   @Relationship(type = "HAS")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
-  private List<FilePatternEntity> filePatterns = new LinkedList<>();
+  private List<FilePatternEntity> filePatterns = new ArrayList<>();
 
   @Relationship(type = "HAS")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
-  private List<AnalyzerConfigurationEntity> analyzerConfigurations = new LinkedList<>();
+  private List<AnalyzerConfigurationEntity> analyzerConfigurations = new ArrayList<>();
 
   @Relationship(type = "HAS")
   @ToString.Exclude

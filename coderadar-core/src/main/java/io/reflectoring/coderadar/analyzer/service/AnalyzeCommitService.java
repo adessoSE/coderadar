@@ -48,34 +48,26 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
       List<SourceCodeFileAnalyzerPlugin> analyzers,
       FilePatternMatcher filePatterns) {
     List<MetricValue> metricValues = new ArrayList<>();
-    if (analyzers.isEmpty()) {
-      logger.warn(
-          "skipping analysis of commit {} since there are no analyzers configured for project {}!",
-          commit.getName(),
-          project.getName());
-    } else {
-      List<String> filepaths =
-          commit
-              .getTouchedFiles()
-              .stream()
-              .map(fileToCommitRelationship -> fileToCommitRelationship.getFile().getPath())
-              .collect(Collectors.toList());
-      analyzeBulk(commit, filepaths, analyzers, project)
-          .forEach(
-              (key, value) ->
-                  commit
-                      .getTouchedFiles()
-                      .stream()
-                      .filter(relationship -> key.equals(relationship.getFile().getPath()))
-                      .findFirst()
-                      .ifPresent(
-                          relationship -> {
-                            Long fileId = relationship.getFile().getId();
-                            if (filePatterns.matches(key)) {
-                              metricValues.addAll(getMetrics(value, commit, fileId));
-                            }
-                          }));
-    }
+    List<String> filepaths =
+        commit
+            .getTouchedFiles()
+            .stream()
+            .map(fileToCommitRelationship -> fileToCommitRelationship.getFile().getPath())
+            .filter(filePatterns::matches)
+            .collect(Collectors.toList());
+    analyzeBulk(commit, filepaths, analyzers, project)
+        .forEach(
+            (key, value) ->
+                commit
+                    .getTouchedFiles()
+                    .stream()
+                    .filter(relationship -> key.equals(relationship.getFile().getPath()))
+                    .findFirst()
+                    .ifPresent(
+                        relationship -> {
+                          Long fileId = relationship.getFile().getId();
+                          metricValues.addAll(getMetrics(value, commit, fileId));
+                        }));
     return metricValues;
   }
 

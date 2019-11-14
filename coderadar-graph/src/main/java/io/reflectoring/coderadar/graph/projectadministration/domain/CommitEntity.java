@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.graph.projectadministration.domain;
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,12 +32,12 @@ public class CommitEntity {
   @Relationship(direction = Relationship.INCOMING, type = "CHANGED_IN")
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  private List<FileToCommitRelationshipEntity> touchedFiles = new LinkedList<>();
+  private List<FileToCommitRelationshipEntity> touchedFiles = new ArrayList<>();
 
   @Relationship(direction = Relationship.INCOMING, type = "VALID_FOR")
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  private List<MetricValueEntity> metricValues = new LinkedList<>();
+  private List<MetricValueEntity> metricValues = new ArrayList<>();
 
   public void setComment(String comment) {
     if (comment.length() > 255) {

@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.domain;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,5 +35,5 @@ public class ModuleEntity {
 
   @Relationship(type = "CONTAINS")
   @ToString.Exclude
-  private List<FileEntity> files = new LinkedList<>();
+  private List<FileEntity> files = new ArrayList<>();
 }

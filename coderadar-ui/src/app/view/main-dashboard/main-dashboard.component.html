@@ -19,10 +19,10 @@
           <mat-card-header>
             <mat-card-title>
               <a mat-button routerLink="/project/{{project.id}}">{{appComponent.trimProjectName(project.name)}}</a>
-              <button (click)="startAnalysis(project.id)" style="float:right" mat-icon-button>
+              <button title="Start analysis" (click)="startAnalysis(project.id)" style="float:right" mat-icon-button>
                 <mat-icon>play_arrow</mat-icon>
               </button>
-              <button (click)="resetAnalysis(project.id)" style="float:right" mat-icon-button>
+              <button title="Delete analysis results" (click)="resetAnalysis(project.id)" style="float:right" mat-icon-button>
                 <mat-icon>clear</mat-icon>
               </button>
               <button [matMenuTriggerFor]="menu" aria-label="Toggle menu" class="more-button" mat-icon-button>

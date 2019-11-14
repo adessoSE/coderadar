@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.graph.projectadministration.domain;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,12 +19,12 @@ public class FileEntity {
 
   @Relationship(type = "MEASURED_BY")
   @ToString.Exclude
-  private List<MetricValueEntity> metricValues = new LinkedList<>();
+  private List<MetricValueEntity> metricValues = new ArrayList<>();
 
   @EqualsAndHashCode.Exclude
   @Relationship(type = "CHANGED_IN")
   @ToString.Exclude
-  private List<FileToCommitRelationshipEntity> commits = new LinkedList<>();
+  private List<FileToCommitRelationshipEntity> commits = new ArrayList<>();
 
   @EqualsAndHashCode.Exclude
   @Relationship(type = "RENAMED_FROM")

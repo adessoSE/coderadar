@@ -13,14 +13,13 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
 
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-()-[:LOCATED_IN]->(fi:FindingEntity) "
-          + "WHERE ID(p) = {0} "
-          + "DETACH DELETE fi ")
-  void deleteProjectFindings(@NonNull Long projectId);
+          + "WHERE ID(p) = {0} WITH fi LIMIT 10000 DETACH DELETE fi RETURN COUNT(fi)")
+  long deleteProjectFindings(@NonNull Long projectId);
 
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv:MetricValueEntity) WHERE ID(p) = {0} "
-          + "DETACH DELETE mv ")
-  void deleteProjectMetrics(@NonNull Long projectId);
+          + "WITH mv LIMIT 10000 DETACH DELETE mv RETURN COUNT(mv)")
+  long deleteProjectMetrics(@NonNull Long projectId);
 
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} "

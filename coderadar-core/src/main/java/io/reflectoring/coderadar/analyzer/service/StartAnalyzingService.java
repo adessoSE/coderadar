@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.analyzer.service;
 
+import io.reflectoring.coderadar.analyzer.MisconfigurationException;
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.analyzer.port.driven.StartAnalyzingPort;
@@ -74,16 +75,22 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
 
   @Override
   public void start(StartAnalyzingCommand command, Long projectId) {
+    List<FilePattern> filePatterns = listFilePatternsOfProjectPort.listFilePatterns(projectId);
+    List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
+        getAnalyzersForProject(projectId);
+
+    if (filePatterns.isEmpty()) {
+      throw new MisconfigurationException("Cannot analyze project without file patterns");
+    } else if (sourceCodeFileAnalyzerPlugins.isEmpty()) {
+      throw new MisconfigurationException("Cannot analyze project without analyzers");
+    }
     processProjectService.executeTask(
         () -> {
           Project project = getProjectPort.get(projectId);
           List<Commit> commitsToBeAnalyzed =
               getCommitsInProjectPort.getSortedByTimestampAsc(projectId);
           List<MetricValue> metricValues = new ArrayList<>();
-          List<FilePattern> filePatterns =
-              listFilePatternsOfProjectPort.listFilePatterns(projectId);
-          List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
-              getAnalyzersForProject(project);
+
           FilePatternMatcher filePatternMatcher = new FilePatternMatcher(filePatterns);
 
           startAnalyzingPort.start(command, projectId);
@@ -116,7 +123,9 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
             }
           }
           saveMetricPort.saveMetricValues(metricValues, projectId);
-          saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
+          if (!metricValues.isEmpty()) {
+            saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
+          }
           stopAnalyzingPort.stop(projectId);
           logger.info("Saved analysis results for project {}", project.getName());
         },
@@ -130,10 +139,10 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     }
   }
 
-  private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Project project) {
+  private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Long projectId) {
     List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>();
     Collection<AnalyzerConfiguration> configs =
-        getAnalyzerConfigurationsFromProjectPort.get(project.getId());
+        getAnalyzerConfigurationsFromProjectPort.get(projectId);
     for (AnalyzerConfiguration config : configs) {
       if (config.getEnabled()) {
         analyzers.add(analyzerPluginService.createAnalyzer(config.getAnalyzerName()));

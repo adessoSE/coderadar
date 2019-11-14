@@ -7,8 +7,6 @@ export const LOAD_COMMITS = 'LOAD_COMMITS';
 export const LOAD_COMMITS_SUCCESS = 'LOAD_COMMITS_SUCCESS';
 export const LOAD_COMMITS_ERROR = 'LOAD_COMMITS_ERROR';
 export const CHANGE_COMMIT = 'CHANGE_COMMIT';
-export const ADD_SCREENSHOT = 'ADD_SCREENSHOT';
-export const CLEAR_SCREENSHOTS = 'CLEAR_SCREENSHOTS';
 
 export function loadCommits(): Action {
   return {

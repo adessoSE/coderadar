@@ -39,8 +39,8 @@ public class UpdateProjectAdapter implements UpdateProjectPort {
     if (!projectRepository.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }
-    projectRepository.deleteProjectFindings(projectId);
-    projectRepository.deleteProjectMetrics(projectId);
+    while (projectRepository.deleteProjectFindings(projectId) > 0) ;
+    while (projectRepository.deleteProjectMetrics(projectId) > 0) ;
     projectRepository.deleteProjectFilesAndModules(projectId);
     projectRepository.deleteProjectCommits(projectId);
   }

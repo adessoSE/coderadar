@@ -12,7 +12,10 @@ import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.query.port.driver.GetCommitResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -44,9 +47,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
       commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), commit, walkedFiles));
       walkedCommits.put(commitEntity.getId(), commit);
     }
-    List<Commit> commits = new ArrayList<>(walkedCommits.values());
-    commits.sort(Comparator.comparing(Commit::getTimestamp));
-    return commits;
+    return new ArrayList<>(walkedCommits.values());
   }
 
   @Override

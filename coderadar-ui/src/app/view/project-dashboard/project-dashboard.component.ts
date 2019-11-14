@@ -77,9 +77,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
           this.getCommits(true);
         }
       });
-
       this.cityEffects.currentProjectId  = this.projectId;
-      this.store.dispatch(loadCommits());
     });
   }
 

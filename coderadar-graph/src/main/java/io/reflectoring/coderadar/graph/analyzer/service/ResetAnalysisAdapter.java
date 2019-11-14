@@ -23,8 +23,8 @@ public class ResetAnalysisAdapter implements ResetAnalysisPort {
 
   @Override
   public void resetAnalysis(Long projectId) {
-    projectRepository.deleteProjectFindings(projectId);
-    projectRepository.deleteProjectMetrics(projectId);
+    while (projectRepository.deleteProjectFindings(projectId) > 0) ;
+    while (projectRepository.deleteProjectMetrics(projectId) > 0) ;
     commitRepository.resetAnalyzedStatus(projectId);
     analyzingJobRepository.deleteByProjectId(projectId);
   }

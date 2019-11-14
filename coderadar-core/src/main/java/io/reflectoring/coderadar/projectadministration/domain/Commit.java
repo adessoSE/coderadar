@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.projectadministration.domain;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import lombok.Data;
 import lombok.ToString;
@@ -21,9 +20,9 @@ public class Commit {
 
   @ToString.Exclude private List<Commit> parents = new ArrayList<>();
 
-  @ToString.Exclude private List<FileToCommitRelationship> touchedFiles = new LinkedList<>();
+  @ToString.Exclude private List<FileToCommitRelationship> touchedFiles = new ArrayList<>();
 
-  private List<MetricValue> metricValues = new LinkedList<>();
+  private List<MetricValue> metricValues = new ArrayList<>();
 
   public void setComment(String comment) {
     if (comment.length() > 255) {
