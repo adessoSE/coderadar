@@ -88,8 +88,13 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
   }
 
   @Override
-  public void setCommitsWithIDsAsAnalyzed(List<Long> commitIds) {
+  public void setCommitsWithIDsAsAnalyzed(Long[] commitIds) {
     commitRepository.setCommitsWithIDsAsAnalyzed(commitIds);
+  }
+
+  @Override
+  public void setCommitAsAnalyzed(Long commitId) {
+    commitRepository.setCommitAsAnalyzed(commitId);
   }
 
   /**

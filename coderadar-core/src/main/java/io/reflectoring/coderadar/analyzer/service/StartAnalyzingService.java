@@ -84,60 +84,64 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     } else if (sourceCodeFileAnalyzerPlugins.isEmpty()) {
       throw new MisconfigurationException("Cannot analyze project without analyzers");
     }
+    startAnalyzingTask(command, projectId, filePatterns, sourceCodeFileAnalyzerPlugins);
+  }
+
+  private void startAnalyzingTask(
+      StartAnalyzingCommand command,
+      Long projectId,
+      List<FilePattern> filePatterns,
+      List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins) {
     processProjectService.executeTask(
         () -> {
           Project project = getProjectPort.get(projectId);
           List<Commit> commitsToBeAnalyzed =
               getCommitsInProjectPort.getSortedByTimestampAsc(projectId);
-          List<MetricValue> metricValues = new ArrayList<>();
-
+          Long[] commitIds = new Long[commitsToBeAnalyzed.size()];
           FilePatternMatcher filePatternMatcher = new FilePatternMatcher(filePatterns);
 
           startAnalyzingPort.start(command, projectId);
-
-          Long counter = 0L;
-          List<Long> commitIds = new ArrayList<>();
-          commitsToBeAnalyzed.forEach(commit -> commitIds.add(commit.getId()));
+          int counter = 0;
           ListenableFuture<?> saveTask = null;
-          boolean metricAvailable = false;
           for (Commit commit : commitsToBeAnalyzed) {
             if (!commit.isAnalyzed()) {
-              metricValues.addAll(
+              List<MetricValue> metrics =
                   analyzeCommitService.analyzeCommit(
-                      commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher));
-              ++counter;
-              logger.info(
-                  "Analyzed commit: {} {}, total analyzed: {}",
-                  commit.getComment(),
-                  commit.getName(),
-                  counter);
-              if (metricValues.size() > 200) {
-                metricAvailable = true;
-                List<MetricValue> metricValuesCopy = new ArrayList<>(metricValues);
-                if (saveTask != null) {
-                  waitForTask(saveTask);
-                }
+                      commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher);
+              if (!metrics.isEmpty()) {
+                waitForTask(saveTask);
                 saveTask =
                     taskExecutor.submitListenable(
-                        () -> saveMetricPort.saveMetricValues(metricValuesCopy, projectId));
-                metricValues.clear();
+                        () -> {
+                          saveMetricPort.saveMetricValues(metrics, projectId);
+                          saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
+                        });
               }
+              commitIds[counter] = commit.getId();
+              ++counter;
+              log(commit, counter);
             }
           }
-          saveMetricPort.saveMetricValues(metricValues, projectId);
-          if (!metricValues.isEmpty() || metricAvailable) {
-            saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
-          }
           stopAnalyzingPort.stop(projectId);
-          logger.info("Saved analysis results for project {}", project.getName());
+          logger.info("Analysis complete for project {}", project.getName());
         },
         projectId);
   }
 
+  private void log(Commit commit, int counter) {
+    logger.info(
+        "Analyzed commit: {} {}, total analyzed: {}",
+        commit.getComment(),
+        commit.getName(),
+        counter);
+  }
+
   private void waitForTask(ListenableFuture<?> saveTask) {
-    try {
-      saveTask.get();
-    } catch (InterruptedException | ExecutionException ignored) {
+    if (saveTask != null) {
+      try {
+        saveTask.get();
+      } catch (InterruptedException | ExecutionException ignored) {
+      }
     }
   }
 

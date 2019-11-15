@@ -6,5 +6,7 @@ import java.util.List;
 public interface SaveCommitPort {
   void saveCommits(List<Commit> commits, Long id);
 
-  void setCommitsWithIDsAsAnalyzed(List<Long> commitIds);
+  void setCommitsWithIDsAsAnalyzed(Long[] commitIds);
+
+  void setCommitAsAnalyzed(Long commitId);
 }

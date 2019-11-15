@@ -39,9 +39,12 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   Optional<CommitEntity> findByNameAndProjectId(@NonNull String commit, @NonNull Long projectId);
 
   @Query("MATCH (c:CommitEntity) WHERE ID(c) IN {0} SET c.analyzed = true")
-  void setCommitsWithIDsAsAnalyzed(@NonNull List<Long> commitIds);
+  void setCommitsWithIDsAsAnalyzed(@NonNull Long[] commitIds);
 
   @Query("MATCH (c:CommitEntity) WHERE ID(c) IN {0} RETURN c")
   @NonNull
   List<CommitEntity> findAllById(@NonNull List<Long> commitIds);
+
+  @Query("MATCH (c:CommitEntity) WHERE ID(c) = {0} SET c.analyzed = true")
+  void setCommitAsAnalyzed(@NonNull Long id);
 }
