@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.analyzing;
+package io.reflectoring.coderadar.rest.analysis;
 
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.graph.analyzer.domain.FindingEntity;

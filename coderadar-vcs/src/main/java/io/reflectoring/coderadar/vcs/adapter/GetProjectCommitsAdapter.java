@@ -70,12 +70,14 @@ public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
             commit = mapRevCommitToCommit(rc);
           }
           for (RevCommit parent : rc.getParents()) {
-            Commit parentCommit = map.get(parent.getId());
-            if (parentCommit == null) {
-              parentCommit = mapRevCommitToCommit(parent);
-              map.put(parent.getId(), parentCommit);
+            if (isInDateRange(range, parent)) {
+              Commit parentCommit = map.get(parent.getId());
+              if (parentCommit == null) {
+                parentCommit = mapRevCommitToCommit(parent);
+                map.put(parent.getId(), parentCommit);
+              }
+              commit.getParents().add(parentCommit);
             }
-            commit.getParents().add(parentCommit);
           }
           map.put(rc.getId(), commit);
         }

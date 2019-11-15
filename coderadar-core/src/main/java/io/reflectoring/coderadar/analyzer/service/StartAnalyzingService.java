@@ -122,7 +122,10 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
               log(commit, counter);
             }
           }
+          waitForTask(saveTask);
           stopAnalyzingPort.stop(projectId);
+          saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
+
           logger.info("Analysis complete for project {}", project.getName());
         },
         projectId);
