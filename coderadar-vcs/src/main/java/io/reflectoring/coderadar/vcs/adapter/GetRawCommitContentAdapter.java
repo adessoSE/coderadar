@@ -40,4 +40,25 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
       throw new UnableToGetCommitContentException(e.getMessage());
     }
   }
+
+  @Override
+  public HashMap<io.reflectoring.coderadar.projectadministration.domain.File, byte[]>
+      getCommitContentBulkWithFiles(
+          String projectRoot,
+          List<io.reflectoring.coderadar.projectadministration.domain.File> files,
+          String name)
+          throws UnableToGetCommitContentException {
+    try (Git git = Git.open(new File(projectRoot))) {
+      ObjectId commitId = git.getRepository().resolve(name);
+      HashMap<io.reflectoring.coderadar.projectadministration.domain.File, byte[]> bulkContent =
+          new LinkedHashMap<>();
+      for (io.reflectoring.coderadar.projectadministration.domain.File file : files) {
+        bulkContent.put(
+            file, BlobUtils.getRawContent(git.getRepository(), commitId, file.getPath()));
+      }
+      return bulkContent;
+    } catch (IOException e) {
+      throw new UnableToGetCommitContentException(e.getMessage());
+    }
+  }
 }

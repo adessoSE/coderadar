@@ -12,10 +12,7 @@ import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.query.port.driver.GetCommitResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,17 +48,6 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   }
 
   @Override
-  public List<Commit> get(Long projectId) {
-    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
-    if (persistedProject.isPresent()) {
-      List<CommitEntity> commitEntities = commitRepository.findByProjectId(projectId);
-      return mapCommitEntities(commitEntities);
-    } else {
-      throw new ProjectNotFoundException(projectId);
-    }
-  }
-
-  @Override
   public List<GetCommitResponse> getCommitsResponseSortedByTimestampDesc(Long projectId) {
     Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
     if (persistedProject.isPresent()) {
@@ -88,11 +74,36 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
     if (persistedProject.isPresent()) {
       List<CommitEntity> commitEntities =
-          commitRepository.findByProjectIdAndTimestampAscWithRelationships(projectId);
-      return mapCommitEntities(commitEntities);
+          commitRepository.findByProjectIdWithAllRelationshipsSortedByTimestampAsc(projectId);
+      List<Commit> commits = mapCommitEntities(commitEntities);
+      commits.sort(Comparator.comparing(Commit::getTimestamp));
+      return commits;
     } else {
       throw new ProjectNotFoundException(projectId);
     }
+  }
+
+  @Override
+  public List<Commit> getSortedByTimestampAscWithNoParents(Long projectId) {
+    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
+    if (persistedProject.isPresent()) {
+      List<CommitEntity> commitEntities =
+          commitRepository.findByProjectIdWithFileRelationshipsSortedByTimestampAsc(projectId);
+      return mapCommitEntitiesNoParents(commitEntities);
+    } else {
+      throw new ProjectNotFoundException(projectId);
+    }
+  }
+
+  private List<Commit> mapCommitEntitiesNoParents(List<CommitEntity> commitEntities) {
+    List<Commit> commits = new ArrayList<>();
+    HashMap<Long, File> walkedFiles = new HashMap<>();
+    for (CommitEntity commitEntity : commitEntities) {
+      Commit commit = CommitBaseDataMapper.mapCommitEntity(commitEntity);
+      commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), commit, walkedFiles));
+      commits.add(commit);
+    }
+    return commits;
   }
 
   private List<FileToCommitRelationship> getFiles(

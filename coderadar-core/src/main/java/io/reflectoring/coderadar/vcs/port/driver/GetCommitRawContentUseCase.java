@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.vcs.port.driver;
 
+import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +22,20 @@ public interface GetCommitRawContentUseCase {
    *
    * @param filepaths The list of paths of the local repository.
    * @param name The name of the commit
-   * @return The raw commit data grouped by the file.
+   * @return The raw commit data grouped by the filepath.
    */
   HashMap<String, byte[]> getCommitContentBulk(
       String projectRoot, List<String> filepaths, String name)
+      throws UnableToGetCommitContentException;
+
+  /**
+   * Returns the raw content of a list of files in a commit.
+   *
+   * @param filepaths The list of files in the commit.
+   * @param name The name of the commit
+   * @return The raw commit data grouped by the file.
+   */
+  HashMap<File, byte[]> getCommitContentBulkWithFiles(
+      String projectRoot, List<File> filepaths, String name)
       throws UnableToGetCommitContentException;
 }

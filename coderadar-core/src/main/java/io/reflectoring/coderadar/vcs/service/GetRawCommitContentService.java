@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.vcs.service;
 
+import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import io.reflectoring.coderadar.vcs.port.driver.GetCommitRawContentUseCase;
@@ -28,5 +29,11 @@ public class GetRawCommitContentService implements GetCommitRawContentUseCase {
       String projectRoot, List<String> filepaths, String name)
       throws UnableToGetCommitContentException {
     return getRawCommitContentPort.getCommitContentBulk(projectRoot, filepaths, name);
+  }
+
+  @Override
+  public HashMap<File, byte[]> getCommitContentBulkWithFiles(
+      String projectRoot, List<File> files, String name) throws UnableToGetCommitContentException {
+    return getRawCommitContentPort.getCommitContentBulkWithFiles(projectRoot, files, name);
   }
 }
