@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar;
+package io.reflectoring.coderadar.dependencyMap;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;

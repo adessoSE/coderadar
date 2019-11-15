@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.dependencyMap;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.analyzer.levelizedStructureMap.domain.DependencyCompareTree;
+import io.reflectoring.coderadar.dependencyMap.domain.DependencyCompareTree;
 import io.reflectoring.coderadar.dependencyMap.domain.CompareNode;
 import io.reflectoring.coderadar.dependencyMap.domain.CompareNodeDTO;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
@@ -211,7 +211,7 @@ public class CompareTreeTest extends ControllerTestTemplate {
                 assertHasDependencies(wildcardImport1Test, dtos, ChangeType.DELETE);
 
                 dtos = new ArrayList<>();
-                // TODO dependency auf classe A wurde hinzugefügt, aber A ist nicht mehr A sondern sth/A (unter git ADD und DELETE), sth/A hinzugefügt ist klar, aber wie ist der Status der dependency auf A?
+                // TODO dependency auf classe A wurde hinzugefügt, aber A ist nicht mehr A sondern sth/A (unter git ADD und DELETE), sth/A hinzugefügt ist klar, aber wie ist der Status der dependency auf A? bisher add
                 dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/somepackage/NotADependencyTest.java", ChangeType.ADD));
                 dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/somepackage/RandomClass2.java", ChangeType.ADD));
                 dtos.add(new CompareNodeDTO("src/org/wickedsource/dependencytree/somepackage/extras/FullyClassifiedDependencyTest.java", ChangeType.ADD));

@@ -1,6 +1,6 @@
-package io.reflectoring.coderadar.analyzer.levelizedStructureMap.adapter;
+package io.reflectoring.coderadar.analyzer.dependencyMap.adapter;
 
-import io.reflectoring.coderadar.analyzer.levelizedStructureMap.domain.DependencyTree;
+import io.reflectoring.coderadar.analyzer.dependencyMap.domain.DependencyTree;
 import io.reflectoring.coderadar.dependencyMap.domain.Node;
 import io.reflectoring.coderadar.dependencyMap.port.driven.GetDependencyTreePort;
 import org.springframework.beans.factory.annotation.Autowired;

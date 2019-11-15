@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.analyzer.levelizedStructureMap;
+package io.reflectoring.coderadar.dependencyMap;
 
 public class NoFileContentException extends Exception {
     public NoFileContentException(String message) {

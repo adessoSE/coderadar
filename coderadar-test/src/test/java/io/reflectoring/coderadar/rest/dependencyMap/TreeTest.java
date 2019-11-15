@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.dependencyMap;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.analyzer.levelizedStructureMap.domain.DependencyTree;
+import io.reflectoring.coderadar.dependencyMap.domain.DependencyTree;
 import io.reflectoring.coderadar.dependencyMap.domain.Node;
 import io.reflectoring.coderadar.dependencyMap.domain.NodeDTO;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
