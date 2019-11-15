@@ -107,12 +107,12 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         getMetricsForCommitCommand.setMetrics(availableMetrics);
         getMetricsForCommitCommand.setCommit("5d7ba2de71dcce2746a75bc0cf668a129f023c5d");
 
-        MvcResult result3 = mvc().perform(get("/projects/" + projectId + "/metricvalues/perCommit")
+        MvcResult result = mvc().perform(get("/projects/" + projectId + "/metricvalues/perCommit")
                 .contentType(MediaType.APPLICATION_JSON).content(toJson(getMetricsForCommitCommand)))
                 .andReturn();
 
         List<MetricValueForCommit> metricValuesForCommit = fromJson(new TypeReference<List<MetricValueForCommit>>() {},
-                result3.getResponse().getContentAsString());
+                result.getResponse().getContentAsString());
 
         metricValuesForCommit.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
 
