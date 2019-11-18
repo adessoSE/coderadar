@@ -30,7 +30,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
@@ -64,11 +63,9 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     @Autowired private MetricRepository metricRepository;
     @Autowired private GetAvailableMetricsInProjectRepository getAvailableMetricsInProjectRepository;
 
-    @Autowired private Session session;
-
     @BeforeAll
     static void setUp() throws IOException {
-        FileUtils.deleteDirectory(new File("coderadar-workdir/PaySim"));
+        //FileUtils.deleteDirectory(new File("coderadar-workdir/PaySim"));
         ZipFile zipFile = new ZipFile(PaySimProjectIntegrationTest.class.getClassLoader().getResource("PaySim.zip").getPath());
         zipFile.extractAll("coderadar-workdir");
     }
@@ -76,7 +73,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     @AfterAll
     static void cleanUp() throws IOException {
         FileUtils.deleteDirectory(new File("coderadar-workdir/projects"));
-        FileUtils.deleteDirectory(new File("coderadar-workdir/PaySim"));
+        //FileUtils.deleteDirectory(new File("coderadar-workdir/PaySim"));
     }
 
     /**
@@ -127,10 +124,10 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
     private void testUpdatingProject(Long projectId) throws Exception {
         //Update project
-        String testRepoURL = Paths.get("coderadar-workdir/PaySim").toAbsolutePath().normalize().toString();
+        URL testRepoURL = new File("coderadar-workdir/PaySim").toURI().toURL();
         UpdateProjectCommand updateProjectCommand =
                 new UpdateProjectCommand(
-                        "PaySim", "username", "password", "file://" + testRepoURL, true, new SimpleDateFormat("dd/MM/yyyy").parse("01/05/2019")  ,null);
+                        "PaySim", "username", "password", testRepoURL.toString(), true, new SimpleDateFormat("dd/MM/yyyy").parse("01/05/2019")  ,null);
         mvc().perform(
                         post("/projects/" + projectId)
                                 .content(toJson(updateProjectCommand))
@@ -255,10 +252,10 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     }
 
     private Long testSavingProject() throws Exception {
-        String testRepoURL = Paths.get("coderadar-workdir/PaySim").toAbsolutePath().normalize().toString();
+        URL testRepoURL = new File("coderadar-workdir/PaySim").toURI().toURL();
         CreateProjectCommand command =
                 new CreateProjectCommand(
-                        "PaySim", "username", "password", testRepoURL, false, null, null);
+                        "PaySim", "username", "password", testRepoURL.toString(), false, null, null);
 
         mvc()
                 .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))

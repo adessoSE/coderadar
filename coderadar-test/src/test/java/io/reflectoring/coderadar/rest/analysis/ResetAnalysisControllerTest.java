@@ -20,7 +20,10 @@ import org.junit.jupiter.api.Test;
 import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URL;
 import java.util.Date;
@@ -31,12 +34,12 @@ import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 class ResetAnalysisControllerTest extends ControllerTestTemplate {
 
     @Autowired private CommitRepository commitRepository;
     @Autowired private MetricRepository metricRepository;
     @Autowired private FindingRepository findingRepository;
-    @Autowired private Session session;
 
     private Long projectId;
 
@@ -60,6 +63,8 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
     }
 
     @Test
+    @DirtiesContext
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     void resetAnalyzedFlagAndDeleteMetricValues() throws Exception {
         CreateAnalyzerConfigurationCommand createAnalyzerConfigurationCommand = new CreateAnalyzerConfigurationCommand("io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
         mvc().perform(post("/projects/" + projectId + "/analyzers").content(toJson(createAnalyzerConfigurationCommand)).contentType(MediaType.APPLICATION_JSON));
@@ -67,7 +72,6 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         StartAnalyzingCommand startAnalyzingCommand = new StartAnalyzingCommand(new Date(0L), true);
         mvc().perform(post("/projects/" + projectId + "/analyze").content(toJson(startAnalyzingCommand)).contentType(MediaType.APPLICATION_JSON));
 
-        session.clear();
 
         List<CommitEntity> commits = commitRepository.findByProjectIdAndTimestampDesc(projectId);
         for (CommitEntity commit : commits) {
@@ -77,8 +81,6 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         Assertions.assertEquals(40, metricValues.size());
 
         mvc().perform(post("/projects/" + projectId + "/analyze/reset"));
-
-        session.clear();
 
         commits = commitRepository.findByProjectIdAndTimestampDesc(projectId);
         for (CommitEntity commit : commits) {
@@ -90,14 +92,14 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
     }
 
     @Test
+    @DirtiesContext
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     void resetAnalyzedFlagAndDeleteMetricValuesAndFindings() throws Exception {
         CreateAnalyzerConfigurationCommand createAnalyzerConfigurationCommand = new CreateAnalyzerConfigurationCommand("io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin", true);
         mvc().perform(post("/projects/" + projectId + "/analyzers").content(toJson(createAnalyzerConfigurationCommand)).contentType(MediaType.APPLICATION_JSON));
 
         StartAnalyzingCommand startAnalyzingCommand = new StartAnalyzingCommand(new Date(0L), true);
         mvc().perform(post("/projects/" + projectId + "/analyze").content(toJson(startAnalyzingCommand)).contentType(MediaType.APPLICATION_JSON));
-
-        session.clear();
 
         List<MetricValueEntity> metricValues = metricRepository.findByProjectId(projectId);
         Assertions.assertFalse(metricValues.isEmpty());
@@ -112,8 +114,6 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
 
         mvc().perform(post("/projects/" + projectId + "/analyze/reset"));
 
-        session.clear();
-
         metricValues = metricRepository.findByProjectId(projectId);
         Assertions.assertEquals(0, metricValues.size());
 
@@ -127,6 +127,8 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
     }
 
     @Test
+    @DirtiesContext
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
         MvcResult result = mvc().perform(post("/projects/123/analyze/reset"))
                 .andExpect(status().isNotFound())
