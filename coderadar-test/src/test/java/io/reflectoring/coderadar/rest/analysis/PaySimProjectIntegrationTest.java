@@ -41,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -126,7 +127,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
     private void testUpdatingProject(Long projectId) throws Exception {
         //Update project
-        String testRepoURL = Paths.get("coderadar-workdir/Paysim").toAbsolutePath().normalize().toString();
+        String testRepoURL = Paths.get("coderadar-workdir/PaySim").toAbsolutePath().normalize().toString();
         UpdateProjectCommand updateProjectCommand =
                 new UpdateProjectCommand(
                         "PaySim", "username", "password", "file://" + testRepoURL, true, new SimpleDateFormat("dd/MM/yyyy").parse("01/05/2019")  ,null);
@@ -254,10 +255,10 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     }
 
     private Long testSavingProject() throws Exception {
-        String testRepoURL = Paths.get("coderadar-workdir/Paysim").toAbsolutePath().normalize().toString();
+        String testRepoURL = Paths.get("coderadar-workdir/PaySim").toAbsolutePath().normalize().toString();
         CreateProjectCommand command =
                 new CreateProjectCommand(
-                        "PaySim", "username", "password", "file://" + testRepoURL, false, null, null);
+                        "PaySim", "username", "password", testRepoURL, false, null, null);
 
         mvc()
                 .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
