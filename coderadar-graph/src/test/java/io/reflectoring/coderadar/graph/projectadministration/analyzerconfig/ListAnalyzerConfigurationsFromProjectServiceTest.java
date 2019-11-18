@@ -5,7 +5,7 @@ import static org.mockito.Mockito.*;
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
-import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.GetAnalyzerConfigurationsFromProjectAdapter;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.ListAnalyzerConfigurationsAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
@@ -22,13 +22,12 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
 
   private ProjectRepository projectRepository = mock(ProjectRepository.class);
 
-  private GetAnalyzerConfigurationsFromProjectAdapter getAnalyzerConfigurationsFromProjectAdapter;
+  private ListAnalyzerConfigurationsAdapter getAnalyzerConfigurationsFromProjectAdapter;
 
   @BeforeEach
   void setUp() {
     getAnalyzerConfigurationsFromProjectAdapter =
-        new GetAnalyzerConfigurationsFromProjectAdapter(
-            projectRepository, analyzerConfigurationRepository);
+        new ListAnalyzerConfigurationsAdapter(projectRepository, analyzerConfigurationRepository);
   }
 
   @Test

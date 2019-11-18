@@ -27,6 +27,11 @@ public class ResetAnalysisService implements ResetAnalysisUseCase {
     this.processProjectService = processProjectService;
   }
 
+  /**
+   * Deletes all metric values and findings for the given project.
+   *
+   * @param projectId The id of the project.
+   */
   @Override
   public void resetAnalysis(Long projectId) {
     if (!getProjectPort.existsById(projectId)) {

@@ -44,8 +44,7 @@ class GetAnalyzerConfigurationServiceTest {
     when(getConfigurationPortMock.getAnalyzerConfiguration(1L)).thenReturn(analyzerConfiguration);
 
     // when
-    GetAnalyzerConfigurationResponse actualResponse =
-        testSubject.getSingleAnalyzerConfiguration(1L);
+    GetAnalyzerConfigurationResponse actualResponse = testSubject.getAnalyzerConfiguration(1L);
 
     // then
     assertThat(actualResponse).isEqualTo(expectedResponse);

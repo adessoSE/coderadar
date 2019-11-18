@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationsFromProjectPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.ListAnalyzerConfigurationsPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
-import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.ListAnalyzerConfigurationsFromProjectService;
+import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.ListAnalyzerConfigurationsService;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,13 +18,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class ListAnalyzerConfigurationsFromProjectServiceTest {
 
-  @Mock private GetAnalyzerConfigurationsFromProjectPort getConfigurationsPortMock;
+  @Mock private ListAnalyzerConfigurationsPort getConfigurationsPortMock;
 
-  private ListAnalyzerConfigurationsFromProjectService testSubject;
+  private ListAnalyzerConfigurationsService testSubject;
 
   @BeforeEach
   void setUp() {
-    this.testSubject = new ListAnalyzerConfigurationsFromProjectService(getConfigurationsPortMock);
+    this.testSubject = new ListAnalyzerConfigurationsService(getConfigurationsPortMock);
   }
 
   @Test

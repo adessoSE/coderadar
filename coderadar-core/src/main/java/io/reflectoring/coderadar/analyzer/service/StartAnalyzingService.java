@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.analyzer.port.driven.StartAnalyzingPort;
 import io.reflectoring.coderadar.analyzer.port.driven.StopAnalyzingPort;
+import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
@@ -13,7 +14,7 @@ import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationsFromProjectPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.ListAnalyzerConfigurationsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
@@ -32,9 +33,9 @@ import org.springframework.util.concurrent.ListenableFuture;
 @Service
 public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final GetProjectPort getProjectPort;
-  private final AnalyzeCommitService analyzeCommitService;
+  private final AnalyzeCommitUseCase analyzeCommitUseCase;
   private final AnalyzerPluginService analyzerPluginService;
-  private final GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort;
+  private final ListAnalyzerConfigurationsPort listAnalyzerConfigurationsPort;
   private final ListFilePatternsOfProjectPort listFilePatternsOfProjectPort;
   private final GetCommitsInProjectPort getCommitsInProjectPort;
   private final SaveMetricPort saveMetricPort;
@@ -48,9 +49,9 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
 
   public StartAnalyzingService(
       GetProjectPort getProjectPort,
-      AnalyzeCommitService analyzeCommitService,
+      AnalyzeCommitUseCase analyzeCommitUseCase,
       AnalyzerPluginService analyzerPluginService,
-      GetAnalyzerConfigurationsFromProjectPort getAnalyzerConfigurationsFromProjectPort,
+      ListAnalyzerConfigurationsPort listAnalyzerConfigurationsPort,
       ListFilePatternsOfProjectPort listFilePatternsOfProjectPort,
       GetCommitsInProjectPort getCommitsInProjectPort,
       SaveMetricPort saveMetricPort,
@@ -60,9 +61,9 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       StopAnalyzingPort stopAnalyzingPort,
       AsyncListenableTaskExecutor taskExecutor) {
     this.getProjectPort = getProjectPort;
-    this.analyzeCommitService = analyzeCommitService;
+    this.analyzeCommitUseCase = analyzeCommitUseCase;
     this.analyzerPluginService = analyzerPluginService;
-    this.getAnalyzerConfigurationsFromProjectPort = getAnalyzerConfigurationsFromProjectPort;
+    this.listAnalyzerConfigurationsPort = listAnalyzerConfigurationsPort;
     this.listFilePatternsOfProjectPort = listFilePatternsOfProjectPort;
     this.getCommitsInProjectPort = getCommitsInProjectPort;
     this.saveMetricPort = saveMetricPort;
@@ -73,6 +74,12 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     this.taskExecutor = taskExecutor;
   }
 
+  /**
+   * Starts the analysis of a project.
+   *
+   * @param command Command containing analysis parameters.
+   * @param projectId The id of the project to analyze.
+   */
   @Override
   public void start(StartAnalyzingCommand command, Long projectId) {
     List<FilePattern> filePatterns = listFilePatternsOfProjectPort.listFilePatterns(projectId);
@@ -87,6 +94,14 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     startAnalyzingTask(command, projectId, filePatterns, sourceCodeFileAnalyzerPlugins);
   }
 
+  /**
+   * Starts a background task using the TaskExecutor. It will perform the analysis of the project.
+   *
+   * @param command The analysing command to use.
+   * @param projectId The id of the project to analyze.
+   * @param filePatterns The patterns to use.
+   * @param sourceCodeFileAnalyzerPlugins The analyzers to use.
+   */
   private void startAnalyzingTask(
       StartAnalyzingCommand command,
       Long projectId,
@@ -106,7 +121,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           for (Commit commit : commitsToBeAnalyzed) {
             if (!commit.isAnalyzed()) {
               List<MetricValue> metrics =
-                  analyzeCommitService.analyzeCommit(
+                  analyzeCommitUseCase.analyzeCommit(
                       commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher);
               if (!metrics.isEmpty()) {
                 waitForTask(saveTask);
@@ -131,6 +146,12 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
         projectId);
   }
 
+  /**
+   * Logs the successful analysis of a commit.
+   *
+   * @param commit The commit that was analyzed.
+   * @param counter The number of the commit.
+   */
   private void log(Commit commit, int counter) {
     logger.info(
         "Analyzed commit: {} {}, total analyzed: {}",
@@ -139,6 +160,11 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
         counter);
   }
 
+  /**
+   * Waits for the save task to complete.
+   *
+   * @param saveTask The saveTask object.
+   */
   private void waitForTask(ListenableFuture<?> saveTask) {
     if (saveTask != null) {
       try {
@@ -148,10 +174,16 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     }
   }
 
+  /**
+   * Gets the configured analyzers for the current project and returns a list of
+   * SourceCodeFileAnalyzerPlugin objects.
+   *
+   * @param projectId The id of the project.
+   * @return A list of SourceCodeFileAnalyzerPlugins.
+   */
   private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Long projectId) {
     List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>();
-    Collection<AnalyzerConfiguration> configs =
-        getAnalyzerConfigurationsFromProjectPort.get(projectId);
+    Collection<AnalyzerConfiguration> configs = listAnalyzerConfigurationsPort.get(projectId);
     for (AnalyzerConfiguration config : configs) {
       if (config.getEnabled()) {
         analyzers.add(analyzerPluginService.createAnalyzer(config.getAnalyzerName()));

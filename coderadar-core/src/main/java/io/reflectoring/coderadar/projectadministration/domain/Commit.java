@@ -24,12 +24,12 @@ public class Commit {
 
   private List<MetricValue> metricValues = new ArrayList<>();
 
-  public void setComment(String comment) {
+  /*  public void setComment(String comment) {
     if (comment.length() > 255) {
       // truncating commit message if too long for database
       this.comment = comment.substring(0, 252) + "...";
     } else {
       this.comment = comment;
     }
-  }
+  }*/
 }

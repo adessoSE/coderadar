@@ -18,7 +18,6 @@ public class ProjectMapper extends AbstractMapper<Project, ProjectEntity> {
     project.setVcsPassword(nodeEntity.getVcsPassword());
     project.setVcsUrl(nodeEntity.getVcsUrl());
     project.setWorkdirName(nodeEntity.getWorkdirName());
-    project.setBeingProcessed(nodeEntity.isBeingProcessed());
     return project;
   }
 
@@ -34,7 +33,6 @@ public class ProjectMapper extends AbstractMapper<Project, ProjectEntity> {
     project.setVcsPassword(domainObject.getVcsPassword());
     project.setVcsUrl(domainObject.getVcsUrl());
     project.setWorkdirName(domainObject.getWorkdirName());
-    project.setBeingProcessed(domainObject.isBeingProcessed());
     project.setBeingDeleted(false);
     return project;
   }

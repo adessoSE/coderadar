@@ -8,6 +8,16 @@ import io.reflectoring.coderadar.projectadministration.service.filepattern.FileP
 import java.util.List;
 
 public interface AnalyzeCommitUseCase {
+
+  /**
+   * Analyzes a single commit.
+   *
+   * @param commit The commit to analyze.
+   * @param project The project the commit is part of.
+   * @param analyzers The analyzers to use.
+   * @param filePatterns The file patterns to use.
+   * @return A list of metric values calculated for the commit.
+   */
   List<MetricValue> analyzeCommit(
       Commit commit,
       Project project,

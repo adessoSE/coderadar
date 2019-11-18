@@ -16,7 +16,7 @@ public class GetAnalyzerConfigurationService implements GetAnalyzerConfiguration
   }
 
   @Override
-  public GetAnalyzerConfigurationResponse getSingleAnalyzerConfiguration(Long id) {
+  public GetAnalyzerConfigurationResponse getAnalyzerConfiguration(Long id) {
     AnalyzerConfiguration analyzerConfiguration = port.getAnalyzerConfiguration(id);
 
     return new GetAnalyzerConfigurationResponse(

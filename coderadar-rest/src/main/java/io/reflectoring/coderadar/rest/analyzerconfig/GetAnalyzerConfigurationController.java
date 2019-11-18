@@ -24,7 +24,7 @@ public class GetAnalyzerConfigurationController {
   @GetMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity getAnalyzerConfiguration(@PathVariable Long analyzerConfigurationId) {
       return new ResponseEntity<>(
-          getAnalyzerConfigurationUseCase.getSingleAnalyzerConfiguration(analyzerConfigurationId),
+          getAnalyzerConfigurationUseCase.getAnalyzerConfiguration(analyzerConfigurationId),
           HttpStatus.OK);
   }
 }

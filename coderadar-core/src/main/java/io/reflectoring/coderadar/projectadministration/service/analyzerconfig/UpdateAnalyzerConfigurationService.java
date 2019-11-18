@@ -19,15 +19,14 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
   private final GetAnalyzerConfigurationPort getAnalyzerConfigurationPort;
   private final UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort;
   private final ListAnalyzerService listAnalyzerService;
-  private final ListAnalyzerConfigurationsFromProjectService
-      listAnalyzerConfigurationsFromProjectService;
+  private final ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService;
   private final Logger logger = LoggerFactory.getLogger(UpdateAnalyzerConfigurationService.class);
 
   public UpdateAnalyzerConfigurationService(
       UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort,
       GetAnalyzerConfigurationPort getAnalyzerConfigurationPort,
       ListAnalyzerService listAnalyzerService,
-      ListAnalyzerConfigurationsFromProjectService listAnalyzerConfigurationsFromProjectService) {
+      ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService) {
     this.updateAnalyzerConfigurationPort = updateAnalyzerConfigurationPort;
     this.getAnalyzerConfigurationPort = getAnalyzerConfigurationPort;
     this.listAnalyzerService = listAnalyzerService;
@@ -36,9 +35,10 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
   }
 
   @Override
-  public void update(UpdateAnalyzerConfigurationCommand command, Long analyzerId, Long projectId) {
+  public void update(
+      UpdateAnalyzerConfigurationCommand command, Long configurationId, Long projectId) {
     AnalyzerConfiguration analyzerConfiguration =
-        getAnalyzerConfigurationPort.getAnalyzerConfiguration(analyzerId);
+        getAnalyzerConfigurationPort.getAnalyzerConfiguration(configurationId);
 
     List<String> analyzers = listAnalyzerService.listAvailableAnalyzers();
     if (analyzers.contains(command.getAnalyzerName())) {

@@ -17,14 +17,13 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
 
   private final CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort;
   private final ListAnalyzerService listAnalyzerService;
-  private final ListAnalyzerConfigurationsFromProjectService
-      listAnalyzerConfigurationsFromProjectService;
+  private final ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService;
   private final Logger logger = LoggerFactory.getLogger(CreateAnalyzerConfigurationService.class);
 
   public CreateAnalyzerConfigurationService(
       CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort,
       ListAnalyzerService listAnalyzerService,
-      ListAnalyzerConfigurationsFromProjectService listAnalyzerConfigurationsFromProjectService) {
+      ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService) {
 
     this.createAnalyzerConfigurationPort = createAnalyzerConfigurationPort;
     this.listAnalyzerService = listAnalyzerService;

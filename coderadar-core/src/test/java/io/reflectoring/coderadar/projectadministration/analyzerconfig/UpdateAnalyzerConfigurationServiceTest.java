@@ -7,7 +7,7 @@ import io.reflectoring.coderadar.analyzer.service.ListAnalyzerService;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
-import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.ListAnalyzerConfigurationsFromProjectService;
+import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.ListAnalyzerConfigurationsService;
 import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.UpdateAnalyzerConfigurationService;
 import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +26,7 @@ class UpdateAnalyzerConfigurationServiceTest {
   private UpdateAnalyzerConfigurationService testSubject;
   @Mock private ListAnalyzerService listAnalyzerServiceMock;
 
-  @Mock
-  private ListAnalyzerConfigurationsFromProjectService
-      listAnalyzerConfigurationsFromProjectServiceMock;
+  @Mock private ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectServiceMock;
 
   @BeforeEach
   void setUp() {

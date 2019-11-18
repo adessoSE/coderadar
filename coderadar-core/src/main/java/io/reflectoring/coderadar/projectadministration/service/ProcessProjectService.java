@@ -24,6 +24,14 @@ public class ProcessProjectService {
     this.getProjectPort = getProjectPort;
   }
 
+  /**
+   * Executes a task for a given project. The project is locked while this operation is performed
+   * and cannot be modified/deleted.
+   *
+   * @param runnable The task to execute
+   * @param projectId The id of the project.
+   * @return A ListenableFuture object for the started task.
+   */
   public ListenableFuture<?> executeTask(Runnable runnable, Long projectId) {
     if (!getProjectPort.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);

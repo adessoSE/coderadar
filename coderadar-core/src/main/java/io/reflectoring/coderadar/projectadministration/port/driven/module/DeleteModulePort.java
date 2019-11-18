@@ -1,9 +1,12 @@
 package io.reflectoring.coderadar.projectadministration.port.driven.module;
 
-import io.reflectoring.coderadar.projectadministration.domain.Module;
-
 public interface DeleteModulePort {
-  void delete(Long id, Long projectId);
 
-  void delete(Module module, Long projectId);
+  /**
+   * Deletes a module given its id.
+   *
+   * @param id The id of the module
+   * @param projectId The id of the project
+   */
+  void delete(Long id, Long projectId);
 }

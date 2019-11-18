@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
+/** Performs analysis on a commit. */
 @Service
 public class AnalyzeCommitService implements AnalyzeCommitUseCase {
 
@@ -37,6 +38,15 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
   }
 
+  /**
+   * Analyzes a single commit.
+   *
+   * @param commit The commit to analyze.
+   * @param project The project the commit is part of.
+   * @param analyzers The analyzers to use.
+   * @param filePatterns The file patterns to use.
+   * @return A list of metric values for the given commit.
+   */
   @Override
   public List<MetricValue> analyzeCommit(
       Commit commit,
@@ -58,6 +68,15 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
     return metricValues;
   }
 
+  /**
+   * Analyzes all files of a commit in bulk.
+   *
+   * @param commit The commit to analyze.
+   * @param files The files of the commit.
+   * @param analyzers The analyzers to use.
+   * @param project The project the commit is in.
+   * @return A map of File and corresponding FileMetrics
+   */
   private HashMap<File, FileMetrics> analyzeBulk(
       Commit commit,
       List<File> files,
@@ -82,6 +101,14 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
     return fileMetricsMap;
   }
 
+  /**
+   * Extracts the metrics out of the FileMetrics (plugin) objects and returns a list of MetricValues
+   *
+   * @param fileMetrics The file metrics to use.
+   * @param commit The commit.
+   * @param fileId The DB id of the current file.
+   * @return A list of MetricValues.
+   */
   private List<MetricValue> getMetrics(FileMetrics fileMetrics, Commit commit, Long fileId) {
     List<MetricValue> metricValues = new ArrayList<>();
     for (Metric metric : fileMetrics.getMetrics()) {

@@ -117,6 +117,12 @@ public class CreateProjectService implements CreateProjectUseCase {
     return new DateRange(projectStart, projectEnd);
   }
 
+  /**
+   * Saves the project in the database given the command object.
+   *
+   * @param command The project to save
+   * @return The newly saved project.
+   */
   private Project saveProject(CreateProjectCommand command) {
     String workdirName = UUID.randomUUID().toString();
 
@@ -129,7 +135,6 @@ public class CreateProjectService implements CreateProjectUseCase {
     project.setVcsOnline(command.getVcsOnline());
     project.setVcsStart(command.getStartDate());
     project.setVcsEnd(command.getEndDate());
-    project.setBeingProcessed(false);
     Long projectId = createProjectPort.createProject(project);
     project.setId(projectId);
     return project;

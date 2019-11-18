@@ -6,7 +6,20 @@ import java.util.Collection;
 import java.util.List;
 
 public interface ListModulesOfProjectPort {
+
+  /**
+   * Retrieves all module in a project given the project id.
+   *
+   * @param projectId The id of the project.
+   * @return All modules in the project.
+   */
   Collection<Module> listModules(Long projectId);
 
+  /**
+   * Retrieves all module in a project given the project id.
+   *
+   * @param projectId The id of the project.
+   * @return All modules in the project.
+   */
   List<GetModuleResponse> listModuleResponses(Long projectId);
 }

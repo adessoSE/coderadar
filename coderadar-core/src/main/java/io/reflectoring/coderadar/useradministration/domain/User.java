@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.useradministration.domain;
 
 import lombok.Data;
 
-/** a user of application, who has to login to access to functionality */
+/** User of the application. Has to login to access to functionality */
 @Data
 public class User {
   private Long id;

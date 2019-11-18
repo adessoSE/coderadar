@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/** A single metric for a given File and Commit. */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

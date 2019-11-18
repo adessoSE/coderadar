@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.graph.analyzer.service;
+package io.reflectoring.coderadar.graph.projectadministration.project.service;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;

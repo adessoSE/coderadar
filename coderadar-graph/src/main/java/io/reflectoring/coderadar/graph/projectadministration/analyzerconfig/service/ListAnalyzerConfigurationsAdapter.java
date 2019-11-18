@@ -5,19 +5,18 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.Anal
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationsFromProjectPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.ListAnalyzerConfigurationsPort;
 import java.util.Collection;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GetAnalyzerConfigurationsFromProjectAdapter
-    implements GetAnalyzerConfigurationsFromProjectPort {
+public class ListAnalyzerConfigurationsAdapter implements ListAnalyzerConfigurationsPort {
   private final ProjectRepository projectRepository;
   private final AnalyzerConfigurationRepository analyzerConfigurationRepository;
   private final AnalyzerConfigurationMapper analyzerConfigurationMapper =
       new AnalyzerConfigurationMapper();
 
-  public GetAnalyzerConfigurationsFromProjectAdapter(
+  public ListAnalyzerConfigurationsAdapter(
       ProjectRepository projectRepository,
       AnalyzerConfigurationRepository analyzerConfigurationRepository) {
     this.projectRepository = projectRepository;

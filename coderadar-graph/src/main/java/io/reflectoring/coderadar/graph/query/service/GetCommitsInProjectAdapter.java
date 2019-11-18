@@ -1,11 +1,11 @@
 package io.reflectoring.coderadar.graph.query.service;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
-import io.reflectoring.coderadar.graph.analyzer.service.CommitBaseDataMapper;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
+import io.reflectoring.coderadar.graph.projectadministration.project.service.CommitBaseDataMapper;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;

@@ -10,7 +10,6 @@ import io.reflectoring.coderadar.graph.projectadministration.module.repository.M
 import io.reflectoring.coderadar.graph.projectadministration.module.service.DeleteModuleAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
-import io.reflectoring.coderadar.projectadministration.domain.Module;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,18 +30,6 @@ class DeleteModuleAdapterTest {
     moduleEntity.setId(1L);
     moduleEntity.setProject(projectEntity);
     deleteModuleAdapter = new DeleteModuleAdapter(moduleRepository, projectRepository);
-  }
-
-  @Test
-  @DisplayName("Should delete module when passing a valid module entity")
-  void shouldDeleteModuleWhenPassingAValidModuleEntity() throws ProjectIsBeingProcessedException {
-    doNothing().when(moduleRepository).delete(isA(ModuleEntity.class));
-    when(moduleRepository.findById(anyLong())).thenReturn(java.util.Optional.of(moduleEntity));
-    when(moduleRepository.findById(anyLong())).thenReturn(java.util.Optional.of(moduleEntity));
-    Module module = new Module();
-    module.setId(1L);
-    deleteModuleAdapter.delete(module, 2L);
-    verify(moduleRepository, times(1)).deleteById(1L);
   }
 
   @Test

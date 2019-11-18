@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.graph.analyzer.service;
+package io.reflectoring.coderadar.graph.projectadministration.project.service;
 
 import com.google.common.collect.Iterables;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
@@ -87,16 +87,6 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
     }
   }
 
-  @Override
-  public void setCommitsWithIDsAsAnalyzed(Long[] commitIds) {
-    commitRepository.setCommitsWithIDsAsAnalyzed(commitIds);
-  }
-
-  @Override
-  public void setCommitAsAnalyzed(Long commitId) {
-    commitRepository.setCommitAsAnalyzed(commitId);
-  }
-
   /**
    * Sets the files and relationships for a given CommitEntity
    *
@@ -158,14 +148,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
 
         fileToCommitRelationshipEntity.setFile(fileEntity);
         fileEntity.setPath(fileToCommitRelationship.getFile().getPath());
-        if (fileEntity
-            .getCommits()
-            .stream()
-            .noneMatch(
-                fileToCommitRelationship1 ->
-                    fileToCommitRelationship1.getCommit().getName().equals(entity.getName()))) {
-          fileEntity.getCommits().add(fileToCommitRelationshipEntity);
-        }
+        fileEntity.getCommits().add(fileToCommitRelationshipEntity);
         walkedFiles.put(fileEntity.getPath(), fileList);
       }
     }
@@ -217,5 +200,10 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
     projectEntity.setFiles(allFiles);
     projectEntity.getCommits().addAll(walkedCommits.values());
     projectRepository.save(projectEntity, 1);
+  }
+
+  @Override
+  public void setCommitsWithIDsAsAnalyzed(Long[] commitIds) {
+    commitRepository.setCommitsWithIDsAsAnalyzed(commitIds);
   }
 }

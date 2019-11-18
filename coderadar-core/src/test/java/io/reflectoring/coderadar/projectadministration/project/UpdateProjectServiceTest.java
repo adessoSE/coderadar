@@ -22,6 +22,7 @@ import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.util.Collections;
@@ -73,8 +74,8 @@ class UpdateProjectServiceTest {
   }
 
   @Test
-  void updateProjectReturnsErrorWhenProjectWithNameAlreadyExists(
-      @Mock Project projectToUpdateMock) {
+  void updateProjectReturnsErrorWhenProjectWithNameAlreadyExists(@Mock Project projectToUpdateMock)
+      throws MalformedURLException {
     // given
     long projectId = 123L;
     String newProjectName = "new name";
@@ -96,12 +97,12 @@ class UpdateProjectServiceTest {
             newStartDate,
             newEndDate);
 
-    Project projectWithCollidingName = new Project().setId(1L).setName(newProjectName);
+    Project projectWithCollidingName = new Project().setId(2L).setName(newProjectName);
 
     when(getProjectPortMock.get(projectId)).thenReturn(projectToUpdateMock);
 
-    when(getProjectPortMock.findByName(newProjectName))
-        .thenReturn(Collections.singletonList(projectWithCollidingName));
+    when(getProjectPortMock.existsByName(newProjectName)).thenReturn(true);
+    when(getProjectPortMock.get(newProjectName)).thenReturn(projectWithCollidingName);
 
     // when / then
     assertThatThrownBy(() -> testSubject.update(command, projectId))
@@ -113,7 +114,7 @@ class UpdateProjectServiceTest {
       throws ProjectIsBeingProcessedException, UnableToUpdateRepositoryException {
 
     // given
-    long projectId = 123L;
+    long projectId = 1L;
     String newProjectName = "new name";
     String newUsername = "newUsername";
     String newPassword = "newPassword";
@@ -137,13 +138,15 @@ class UpdateProjectServiceTest {
             newProjectName, newUsername, newPassword, newVcsUrl, false, newStartDate, newEndDate);
 
     Project testProject = new Project();
+    testProject.setId(1L);
     testProject.setWorkdirName(projectWorkdirName);
     testProject.setVcsStart(new Date());
     testProject.setVcsEnd(new Date());
     testProject.setVcsUrl("");
-    when(getProjectPortMock.get(projectId)).thenReturn(testProject);
 
-    when(getProjectPortMock.findByName(newProjectName)).thenReturn(Collections.emptyList());
+    when(getProjectPortMock.get(projectId)).thenReturn(testProject);
+    when(getProjectPortMock.existsByName(newProjectName)).thenReturn(true);
+    when(getProjectPortMock.get(newProjectName)).thenReturn(testProject);
 
     doAnswer(
             (Answer<Void>)
