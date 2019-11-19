@@ -5,7 +5,6 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.create
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.IdResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CreateModuleController {
   private final CreateModuleUseCase createModuleUseCase;
 
-  @Autowired
   public CreateModuleController(CreateModuleUseCase createModuleUseCase) {
     this.createModuleUseCase = createModuleUseCase;
   }

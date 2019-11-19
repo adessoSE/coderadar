@@ -1,13 +1,12 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.projectadministration.AccessTokenNotExpiredException;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
+import io.reflectoring.coderadar.useradministration.AccessTokenNotExpiredException;
 import io.reflectoring.coderadar.useradministration.RefreshTokenNotFoundException;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenResponse;
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class RefreshTokenController {
   private final RefreshTokenUseCase refreshTokenUseCase;
 
-  @Autowired
   public RefreshTokenController(RefreshTokenUseCase refreshTokenUseCase) {
     this.refreshTokenUseCase = refreshTokenUseCase;
   }

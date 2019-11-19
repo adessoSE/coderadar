@@ -11,11 +11,7 @@ import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
 import org.springframework.data.neo4j.annotation.QueryResult;
 
-/**
- * Associates a Commit to a File. Each Commit is associated to all Files that have been modified in
- * the Commit and to all files that have been left untouched by it, so that one can easily access
- * the full set of files at the time of the Commit.
- */
+/** @see io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship */
 @RelationshipEntity("CHANGED_IN")
 @NoArgsConstructor
 @AllArgsConstructor

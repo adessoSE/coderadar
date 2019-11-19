@@ -10,16 +10,16 @@ import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedEx
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.project.UpdateProjectService;
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
-import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
 import java.io.File;
 import java.net.MalformedURLException;
@@ -48,11 +48,11 @@ class UpdateProjectServiceTest {
 
   @Mock private ProcessProjectService processProjectServiceMock;
 
-  @Mock private GetProjectCommitsUseCase getProjectCommitsUseCaseMock;
+  @Mock private ExtractProjectCommitsUseCase extractProjectCommitsUseCaseMock;
 
   @Mock private SaveCommitPort saveCommitPortMock;
 
-  @Mock private CreateModuleUseCase createModuleUseCase;
+  @Mock private CreateModulePort createModulePort;
 
   @Mock private ListModulesOfProjectUseCase listModulesOfProjectUseCase;
 
@@ -67,10 +67,10 @@ class UpdateProjectServiceTest {
             updateRepositoryUseCaseMock,
             configurationPropertiesMock,
             processProjectServiceMock,
-            getProjectCommitsUseCaseMock,
+            extractProjectCommitsUseCaseMock,
             saveCommitPortMock,
             listModulesOfProjectUseCase,
-            createModuleUseCase);
+            createModulePort);
   }
 
   @Test
@@ -161,7 +161,8 @@ class UpdateProjectServiceTest {
 
     when(configurationPropertiesMock.getWorkdir()).thenReturn(new File(globalWorkdirName).toPath());
 
-    when(getProjectCommitsUseCaseMock.getCommits(Paths.get(projectWorkdirName), expectedDateRange))
+    when(extractProjectCommitsUseCaseMock.getCommits(
+            Paths.get(projectWorkdirName), expectedDateRange))
         .thenReturn(Collections.singletonList(commitMock));
 
     // when

@@ -49,7 +49,7 @@ class GetAvailableMetricsInProjectAdapterTest {
   void shouldReturnEmptyListOfStringsWhenNoMetricsAreAvailable() {
     Optional<ProjectEntity> mockProject = Optional.of(new ProjectEntity());
     List<String> mockListOfMetrics = new LinkedList<>();
-    when(projectRepository.findById(anyLong())).thenReturn(mockProject);
+    when(projectRepository.existsById(anyLong())).thenReturn(true);
     when(getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(anyLong()))
         .thenReturn(mockListOfMetrics);
 
@@ -64,7 +64,7 @@ class GetAvailableMetricsInProjectAdapterTest {
     Optional<ProjectEntity> mockProject = Optional.of(new ProjectEntity());
     List<String> mockListOfMetrics = new LinkedList<>();
     mockListOfMetrics.add("loc");
-    when(projectRepository.findById(anyLong())).thenReturn(mockProject);
+    when(projectRepository.existsById(anyLong())).thenReturn(true);
     when(getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(anyLong()))
         .thenReturn(mockListOfMetrics);
 
@@ -80,7 +80,7 @@ class GetAvailableMetricsInProjectAdapterTest {
     List<String> mockListOfMetrics = new LinkedList<>();
     mockListOfMetrics.add("sloc");
     mockListOfMetrics.add("cloc");
-    when(projectRepository.findById(anyLong())).thenReturn(mockProject);
+    when(projectRepository.existsById(anyLong())).thenReturn(true);
     when(getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(anyLong()))
         .thenReturn(mockListOfMetrics);
 

@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.useradministration.service.refresh;
 
-import io.reflectoring.coderadar.projectadministration.AccessTokenNotExpiredException;
+import io.reflectoring.coderadar.useradministration.AccessTokenNotExpiredException;
 import io.reflectoring.coderadar.useradministration.RefreshTokenNotFoundException;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.domain.RefreshToken;
@@ -10,7 +10,6 @@ import io.reflectoring.coderadar.useradministration.port.driven.RefreshTokenPort
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenUseCase;
 import io.reflectoring.coderadar.useradministration.service.security.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,6 @@ public class RefreshTokenService implements RefreshTokenUseCase {
 
   private final TokenService tokenService;
 
-  @Autowired
   public RefreshTokenService(
       LoadUserPort loadUserPort, RefreshTokenPort refreshTokenPort, TokenService tokenService) {
     this.loadUserPort = loadUserPort;
@@ -81,7 +79,7 @@ public class RefreshTokenService implements RefreshTokenUseCase {
    * @param refreshToken refresh token
    * @return User according to the refresh token
    */
-  public User getUser(String refreshToken) throws UserNotFoundException {
+  public User getUser(String refreshToken) {
     String username = tokenService.getUsername(refreshToken);
     return loadUserPort.loadUserByUsername(username);
   }

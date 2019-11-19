@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.rest.project;
 
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,6 @@ import java.net.MalformedURLException;
 public class UpdateProjectController {
   private final UpdateProjectUseCase updateProjectUseCase;
 
-  @Autowired
   public UpdateProjectController(UpdateProjectUseCase updateProjectUseCase) {
     this.updateProjectUseCase = updateProjectUseCase;
   }

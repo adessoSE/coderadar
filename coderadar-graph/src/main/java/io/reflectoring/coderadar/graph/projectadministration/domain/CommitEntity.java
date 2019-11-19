@@ -10,7 +10,7 @@ import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-/** Metadata about a commit to a Git repository. */
+/** @see io.reflectoring.coderadar.projectadministration.domain.Commit */
 @NodeEntity
 @Data
 @EqualsAndHashCode

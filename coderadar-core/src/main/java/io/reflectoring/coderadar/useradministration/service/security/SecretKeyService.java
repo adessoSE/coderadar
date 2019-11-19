@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SecretKeyService {
 
-  private static final String ALGORITHM = "AES";
-  private static final int KEY_LENGTH = 256;
-  private static SecretKey secretKey;
+  private SecretKey secretKey;
 
   @PostConstruct
   public void initSecretKey() {
@@ -26,8 +24,8 @@ public class SecretKeyService {
 
   private SecretKey generateSecretKey() {
     try {
-      KeyGenerator keyGenerator = KeyGenerator.getInstance(ALGORITHM);
-      keyGenerator.init(KEY_LENGTH);
+      KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+      keyGenerator.init(256);
       return keyGenerator.generateKey();
     } catch (NoSuchAlgorithmException e) {
       throw new IllegalStateException("Could not generate secret authentication token key");

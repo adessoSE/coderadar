@@ -8,7 +8,6 @@ import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserC
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserResponse;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserUseCase;
 import io.reflectoring.coderadar.useradministration.service.security.TokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +22,6 @@ public class LoginUserService implements LoginUserUseCase {
   private final AuthenticationManager authenticationManager;
   private final TokenService tokenService;
 
-  @Autowired
   public LoginUserService(
       LoadUserPort loadUserPort,
       RefreshTokenPort refreshTokenPort,
@@ -56,7 +54,7 @@ public class LoginUserService implements LoginUserUseCase {
    * @param user User, that is logged in.
    * @param refreshToken the new refresh token.
    */
-  void saveRefreshToken(User user, String refreshToken) {
+  private void saveRefreshToken(User user, String refreshToken) {
     RefreshToken refreshTokenEntity = new RefreshToken();
     refreshTokenEntity.setToken(refreshToken);
     refreshTokenEntity.setUser(user);

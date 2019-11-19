@@ -5,10 +5,7 @@ import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-/**
- * Contains an Ant-style path pattern to define a certain set of files that is of importance to a
- * coderadar Project.
- */
+/** @see io.reflectoring.coderadar.projectadministration.domain.FilePattern */
 @NodeEntity
 @Data
 public class FilePatternEntity {

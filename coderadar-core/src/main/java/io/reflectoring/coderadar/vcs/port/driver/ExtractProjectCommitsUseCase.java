@@ -5,6 +5,6 @@ import io.reflectoring.coderadar.query.domain.DateRange;
 import java.nio.file.Path;
 import java.util.List;
 
-public interface GetProjectCommitsUseCase {
+public interface ExtractProjectCommitsUseCase {
   List<Commit> getCommits(Path repositoryRoot, DateRange range);
 }

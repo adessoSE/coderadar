@@ -18,7 +18,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.create
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
-import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -40,7 +40,7 @@ public class ScanProjectScheduler {
 
   private final UpdateRepositoryUseCase updateRepositoryUseCase;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
-  private final GetProjectCommitsUseCase getProjectCommitsUseCase;
+  private final ExtractProjectCommitsUseCase extractProjectCommitsUseCase;
   private final ListProjectsPort listProjectsPort;
   private final ProjectStatusPort projectStatusPort;
   private final TaskScheduler taskScheduler;
@@ -57,7 +57,7 @@ public class ScanProjectScheduler {
   public ScanProjectScheduler(
       UpdateRepositoryUseCase updateRepositoryUseCase,
       CoderadarConfigurationProperties coderadarConfigurationProperties,
-      GetProjectCommitsUseCase getProjectCommitsUseCase,
+      ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
       ListProjectsPort listProjectsPort,
       ProjectStatusPort projectStatusPort,
       TaskScheduler taskScheduler,
@@ -68,7 +68,7 @@ public class ScanProjectScheduler {
       GetProjectHeadCommitPort getProjectHeadCommitPort) {
     this.updateRepositoryUseCase = updateRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-    this.getProjectCommitsUseCase = getProjectCommitsUseCase;
+    this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
     this.listProjectsPort = listProjectsPort;
     this.projectStatusPort = projectStatusPort;
     this.taskScheduler = taskScheduler;
@@ -141,7 +141,7 @@ public class ScanProjectScheduler {
    */
   private List<Commit> getNewCommits(Project project) {
     List<Commit> commits =
-        getProjectCommitsUseCase.getCommits(
+        extractProjectCommitsUseCase.getCommits(
             Paths.get(project.getWorkdirName()), getProjectDateRange(project));
 
     Commit head = getProjectHeadCommitPort.getHeadCommit(project.getId());

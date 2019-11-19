@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.reflectoring.coderadar.projectadministration.AccessTokenNotExpiredException;
+import io.reflectoring.coderadar.useradministration.AccessTokenNotExpiredException;
 import io.reflectoring.coderadar.useradministration.RefreshTokenNotFoundException;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.domain.RefreshToken;

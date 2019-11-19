@@ -5,7 +5,7 @@ import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-/** a user of application, who has to login to access to functionality */
+/** @see io.reflectoring.coderadar.useradministration.domain.User */
 @NodeEntity
 @Data
 public class UserEntity {

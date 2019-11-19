@@ -9,7 +9,7 @@ import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-/** Represents a file in a VCS repository. */
+/** @see io.reflectoring.coderadar.projectadministration.domain.File */
 @NodeEntity
 @Data
 @EqualsAndHashCode

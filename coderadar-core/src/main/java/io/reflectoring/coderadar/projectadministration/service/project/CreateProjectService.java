@@ -11,7 +11,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.creat
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.query.domain.DateRange;
-import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
 import java.io.File;
@@ -38,7 +38,7 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   private final ProcessProjectService processProjectService;
 
-  private final GetProjectCommitsUseCase getProjectCommitsUseCase;
+  private final ExtractProjectCommitsUseCase extractProjectCommitsUseCase;
 
   private final SaveCommitPort saveCommitPort;
 
@@ -50,14 +50,14 @@ public class CreateProjectService implements CreateProjectUseCase {
       CloneRepositoryUseCase cloneRepositoryUseCase,
       CoderadarConfigurationProperties coderadarConfigurationProperties,
       ProcessProjectService processProjectService,
-      GetProjectCommitsUseCase getProjectCommitsUseCase,
+      ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
       SaveCommitPort saveCommitPort) {
     this.createProjectPort = createProjectPort;
     this.getProjectPort = getProjectPort;
     this.cloneRepositoryUseCase = cloneRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.processProjectService = processProjectService;
-    this.getProjectCommitsUseCase = getProjectCommitsUseCase;
+    this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
     this.saveCommitPort = saveCommitPort;
   }
 
@@ -75,7 +75,9 @@ public class CreateProjectService implements CreateProjectUseCase {
                   new File(
                       coderadarConfigurationProperties.getWorkdir()
                           + "/projects/"
-                          + project.getWorkdirName()));
+                          + project.getWorkdirName()),
+                  project.getVcsUsername(),
+                  project.getVcsPassword());
           try {
             cloneRepositoryUseCase.cloneRepository(cloneRepositoryCommand);
             logger.info(
@@ -83,7 +85,7 @@ public class CreateProjectService implements CreateProjectUseCase {
                 project.getName(),
                 cloneRepositoryCommand.getRemoteUrl());
             List<Commit> commits =
-                getProjectCommitsUseCase.getCommits(
+                extractProjectCommitsUseCase.getCommits(
                     Paths.get(project.getWorkdirName()), getProjectDateRange(project));
             saveCommitPort.saveCommits(commits, project.getId());
             logger.info("Saved project {}", project.getName());

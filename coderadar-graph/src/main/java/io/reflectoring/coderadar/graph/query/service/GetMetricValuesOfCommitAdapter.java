@@ -9,6 +9,7 @@ import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfCommitPort;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,7 @@ public class GetMetricValuesOfCommitAdapter implements GetMetricValuesOfCommitPo
     for (MetricValueForCommitQueryResult queryResult : result) {
       values.add(new MetricValueForCommit(queryResult.getName(), queryResult.getValue()));
     }
+    values.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
     return values;
   }
 }

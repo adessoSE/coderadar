@@ -13,4 +13,7 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
   @Query("MATCH (u:UserEntity) WHERE u.username = {0} RETURN u")
   @NonNull
   Optional<UserEntity> findByUsername(@NonNull String username);
+
+  @Query("MATCH (u:UserEntity) WHERE u.username = {0} RETURN COUNT(u) > 0")
+  boolean existsByUsername(@NonNull String username);
 }

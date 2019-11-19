@@ -5,7 +5,6 @@ import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.useradministration.UsernameAlreadyInUseException;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegisterUserController {
   private final RegisterUserUseCase registerUserUseCase;
 
-  @Autowired
   public RegisterUserController(RegisterUserUseCase registerUserUseCase) {
     this.registerUserUseCase = registerUserUseCase;
   }

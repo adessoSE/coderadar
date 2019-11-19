@@ -7,10 +7,9 @@ import io.reflectoring.coderadar.useradministration.port.driver.password.ChangeP
 import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordUseCase;
 import io.reflectoring.coderadar.useradministration.service.refresh.RefreshTokenService;
 import io.reflectoring.coderadar.useradministration.service.security.PasswordUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/** Service for change password of a user. */
+/** Service for changing the password of a user. */
 @Service
 public class ChangePasswordService implements ChangePasswordUseCase {
 
@@ -20,12 +19,10 @@ public class ChangePasswordService implements ChangePasswordUseCase {
 
   private final ChangePasswordPort changePasswordPort;
 
-  @Autowired
   public ChangePasswordService(
       RefreshTokenPort refreshTokenPort,
       RefreshTokenService refreshTokenService,
       ChangePasswordPort changePasswordPort) {
-
     this.refreshTokenPort = refreshTokenPort;
     this.refreshTokenService = refreshTokenService;
     this.changePasswordPort = changePasswordPort;

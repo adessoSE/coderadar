@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.projectadministration;
+package io.reflectoring.coderadar.useradministration;
 
 public class AccessTokenNotExpiredException extends RuntimeException {
 

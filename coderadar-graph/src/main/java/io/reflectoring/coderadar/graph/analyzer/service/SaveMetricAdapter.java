@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.graph.analyzer.service;
 
 import io.reflectoring.coderadar.analyzer.domain.Finding;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
+import io.reflectoring.coderadar.graph.analyzer.FindingsMapper;
 import io.reflectoring.coderadar.graph.analyzer.domain.FindingEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
@@ -13,7 +14,6 @@ import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.Save
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +24,6 @@ public class SaveMetricAdapter implements SaveMetricPort {
   private final CommitRepository commitRepository;
   private final FileRepository fileRepository;
 
-  @Autowired
   public SaveMetricAdapter(
       MetricRepository metricRepository,
       CommitRepository commitRepository,
@@ -84,14 +83,10 @@ public class SaveMetricAdapter implements SaveMetricPort {
   }
 
   private List<FindingEntity> mapFindingsToEntities(List<Finding> findings) {
+    FindingsMapper findingsMapper = new FindingsMapper();
     List<FindingEntity> result = new ArrayList<>();
     for (Finding finding : findings) {
-      FindingEntity findingEntity = new FindingEntity();
-      findingEntity.setCharEnd(finding.getCharEnd());
-      findingEntity.setCharStart(finding.getCharStart());
-      findingEntity.setLineEnd(finding.getLineEnd());
-      findingEntity.setLineStart(finding.getLineStart());
-      result.add(findingEntity);
+      result.add(findingsMapper.mapDomainObject(finding));
     }
     return result;
   }

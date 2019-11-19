@@ -4,7 +4,6 @@ import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.useradministration.RefreshTokenNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChangePasswordController {
   private final ChangePasswordUseCase changePasswordUseCase;
 
-  @Autowired
   public ChangePasswordController(ChangePasswordUseCase changePasswordUseCase) {
     this.changePasswordUseCase = changePasswordUseCase;
   }

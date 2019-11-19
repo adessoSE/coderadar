@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.rest.project;
 
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.ListProjectsUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import java.util.List;
 public class ListProjectsController {
   private final ListProjectsUseCase listProjectsUseCase;
 
-  @Autowired
   public ListProjectsController(ListProjectsUseCase listProjectsUseCase) {
     this.listProjectsUseCase = listProjectsUseCase;
   }

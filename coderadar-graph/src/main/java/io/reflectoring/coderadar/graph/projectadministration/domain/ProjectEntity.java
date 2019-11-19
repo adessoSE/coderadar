@@ -11,7 +11,7 @@ import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-/** A coderadar project that defines the source of files that are to be analyzed. */
+/** @see io.reflectoring.coderadar.projectadministration.domain.Project */
 @NodeEntity
 @Data
 public class ProjectEntity {

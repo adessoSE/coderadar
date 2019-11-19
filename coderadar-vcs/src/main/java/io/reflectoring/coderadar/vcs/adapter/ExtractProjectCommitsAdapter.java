@@ -8,7 +8,7 @@ import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
-import io.reflectoring.coderadar.vcs.port.driven.GetProjectCommitsPort;
+import io.reflectoring.coderadar.vcs.port.driven.ExtractProjectCommitsPort;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,11 +30,11 @@ import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GetProjectCommitsAdapter implements GetProjectCommitsPort {
+public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
 
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
-  public GetProjectCommitsAdapter(
+  public ExtractProjectCommitsAdapter(
       CoderadarConfigurationProperties coderadarConfigurationProperties) {
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
   }

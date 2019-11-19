@@ -6,7 +6,6 @@ import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.ChangePasswordPort;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,7 +13,6 @@ public class ChangePasswordAdapter implements ChangePasswordPort {
 
   private final UserRepository userRepository;
 
-  @Autowired
   public ChangePasswordAdapter(UserRepository userRepository) {
     this.userRepository = userRepository;
   }

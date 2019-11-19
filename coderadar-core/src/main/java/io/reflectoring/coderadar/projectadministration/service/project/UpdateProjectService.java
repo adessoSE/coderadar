@@ -9,17 +9,16 @@ import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsExcep
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
-import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
-import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
 import java.io.File;
 import java.net.MalformedURLException;
@@ -39,10 +38,10 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final UpdateRepositoryUseCase updateRepositoryUseCase;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
   private final ProcessProjectService processProjectService;
-  private final GetProjectCommitsUseCase getProjectCommitsUseCase;
+  private final ExtractProjectCommitsUseCase extractProjectCommitsUseCase;
   private final SaveCommitPort saveCommitPort;
   private final ListModulesOfProjectUseCase listModulesOfProjectUseCase;
-  private final CreateModuleUseCase createModuleUseCase;
+  private final CreateModulePort createModulePort;
 
   private final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
 
@@ -52,19 +51,19 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       UpdateRepositoryUseCase updateRepositoryUseCase,
       CoderadarConfigurationProperties coderadarConfigurationProperties,
       ProcessProjectService processProjectService,
-      GetProjectCommitsUseCase getProjectCommitsUseCase,
+      ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
       SaveCommitPort saveCommitPort,
       ListModulesOfProjectUseCase listModulesOfProjectUseCase,
-      CreateModuleUseCase createModuleUseCase) {
+      CreateModulePort createModulePort) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
     this.updateRepositoryUseCase = updateRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.processProjectService = processProjectService;
-    this.getProjectCommitsUseCase = getProjectCommitsUseCase;
+    this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
     this.saveCommitPort = saveCommitPort;
     this.listModulesOfProjectUseCase = listModulesOfProjectUseCase;
-    this.createModuleUseCase = createModuleUseCase;
+    this.createModulePort = createModulePort;
   }
 
   @Override
@@ -111,7 +110,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
               // Get the new commit tree
               List<Commit> commits =
-                  getProjectCommitsUseCase.getCommits(
+                  extractProjectCommitsUseCase.getCommits(
                       Paths.get(project.getWorkdirName()), getProjectDateRange(project));
 
               // Save the new commit tree
@@ -119,8 +118,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
               // Re-create the modules
               for (GetModuleResponse module : modules) {
-                createModuleUseCase.createModule(
-                    new CreateModuleCommand(module.getPath()), projectId);
+                createModulePort.createModule(module.getPath(), projectId);
               }
 
             } catch (UnableToUpdateRepositoryException

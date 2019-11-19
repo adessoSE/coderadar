@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetMetricsForTwoCommitsCommand {
+public class GetDeltaTreeForTwoCommitsCommand {
   @NotNull @NotEmpty String commit1;
   @NotNull @NotEmpty String commit2;
   @NotNull List<String> metrics;

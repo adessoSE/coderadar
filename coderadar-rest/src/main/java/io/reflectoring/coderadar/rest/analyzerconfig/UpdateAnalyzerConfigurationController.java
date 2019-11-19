@@ -4,7 +4,6 @@ import io.reflectoring.coderadar.plugin.api.AnalyzerConfigurationException;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UpdateAnalyzerConfigurationController {
   private final UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase;
 
-  @Autowired
   public UpdateAnalyzerConfigurationController(
       UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase) {
     this.updateAnalyzerConfigurationUseCase = updateAnalyzerConfigurationUseCase;

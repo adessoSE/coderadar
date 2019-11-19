@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.useradministration.service.security;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,7 +31,6 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
 
   private CorsFilter corsFilter;
 
-  @Autowired
   public CoderadarSecurityConfiguration(
       UserDetailsService userDetailsService,
       TokenService tokenService,
@@ -41,14 +39,12 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
     this.userDetailsService = userDetailsService;
     this.tokenService = tokenService;
     this.coderadarConfiguration = coderadarConfiguration;
-    if (corsFilter.isPresent()) {
-      this.corsFilter = corsFilter.get();
-    }
+    corsFilter.ifPresent(filter -> this.corsFilter = filter);
   }
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    // user CoderadarUserDetailService for authentication
+    // use CoderadarUserDetailService for authentication
     auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
   }
 

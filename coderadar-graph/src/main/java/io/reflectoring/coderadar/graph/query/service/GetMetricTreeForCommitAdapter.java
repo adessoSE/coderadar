@@ -12,25 +12,22 @@ import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.query.domain.MetricTree;
+import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
-import io.reflectoring.coderadar.query.domain.MetricsTreeNodeType;
-import io.reflectoring.coderadar.query.port.driven.GetMetricsForAllFilesInCommitPort;
+import io.reflectoring.coderadar.query.port.driven.GetMetricTreeForCommitPort;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFilesInCommitPort {
+public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort {
 
   private final GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository;
   private final ProjectRepository projectRepository;
   private final ModuleRepository moduleRepository;
   private final CommitRepository commitRepository;
 
-  public GetMetricsForAllFilesInCommitAdapter(
+  public GetMetricTreeForCommitAdapter(
       GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository,
       ProjectRepository projectRepository,
       ModuleRepository moduleRepository,
@@ -82,7 +79,7 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
     List<MetricTree> moduleChildren = new ArrayList<>();
     for (ModuleEntity moduleEntity : moduleEntities) {
       MetricTree metricTree = new MetricTree();
-      metricTree.setType(MetricsTreeNodeType.MODULE);
+      metricTree.setType(MetricTreeNodeType.MODULE);
       metricTree.setName(moduleEntity.getPath());
 
       Map<String, Long> aggregatedMetrics = new HashMap<>();
@@ -94,7 +91,7 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
         if (commitTreeQueryResult.getPath().startsWith(moduleEntity.getPath())) {
           MetricTree metricTreeFile = new MetricTree();
           metricTreeFile.setName(commitTreeQueryResult.getPath());
-          metricTreeFile.setType(MetricsTreeNodeType.FILE);
+          metricTreeFile.setType(MetricTreeNodeType.FILE);
           for (Map<String, Object> metric : commitTreeQueryResult.getMetrics()) {
             MetricValueForCommit metricValueForCommit =
                 new MetricValueForCommit((String) metric.get("name"), (Long) metric.get("value"));
@@ -105,6 +102,9 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
                 aggregatedMetrics.get(metricValueForCommit.getMetricName())
                     + metricValueForCommit.getValue());
           }
+          metricTreeFile
+              .getMetrics()
+              .sort(Comparator.comparing(MetricValueForCommit::getMetricName));
           metricTree.getChildren().add(metricTreeFile);
           processedFiles.add(commitTreeQueryResult);
         }
@@ -113,6 +113,7 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
       for (Map.Entry<String, Long> metric : aggregatedMetrics.entrySet()) {
         metricTree.getMetrics().add(new MetricValueForCommit(metric.getKey(), metric.getValue()));
       }
+      metricTree.getMetrics().sort(Comparator.comparing(MetricValueForCommit::getMetricName));
       moduleChildren.add(metricTree);
     }
     return moduleChildren;
@@ -126,20 +127,21 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
    */
   private MetricTree processRootModule(List<MetricValueForCommitTreeQueryResult> metricValues) {
     MetricTree rootModule = new MetricTree();
-    rootModule.setType(MetricsTreeNodeType.MODULE);
+    rootModule.setType(MetricTreeNodeType.MODULE);
     rootModule.setName("root");
 
     for (MetricValueForCommitTreeQueryResult value : metricValues) {
       MetricTree metricTreeFile = new MetricTree();
 
       metricTreeFile.setName(value.getPath());
-      metricTreeFile.setType(MetricsTreeNodeType.FILE);
+      metricTreeFile.setType(MetricTreeNodeType.FILE);
 
       for (Map<String, Object> metric : value.getMetrics()) {
         MetricValueForCommit metricValueForCommit =
             new MetricValueForCommit((String) metric.get("name"), (Long) metric.get("value"));
         metricTreeFile.getMetrics().add(metricValueForCommit);
       }
+      metricTreeFile.getMetrics().sort(Comparator.comparing(MetricValueForCommit::getMetricName));
       rootModule.getChildren().add(metricTreeFile);
     }
     return rootModule;
@@ -174,6 +176,7 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
     for (Map.Entry<String, Long> metric : aggregatedMetrics.entrySet()) {
       resultList.add(new MetricValueForCommit(metric.getKey(), metric.getValue()));
     }
+    resultList.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
     return resultList;
   }
 

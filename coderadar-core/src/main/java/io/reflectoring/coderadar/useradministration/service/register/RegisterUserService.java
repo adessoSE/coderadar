@@ -9,7 +9,6 @@ import io.reflectoring.coderadar.useradministration.port.driver.register.Registe
 import io.reflectoring.coderadar.useradministration.service.security.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,14 +18,13 @@ public class RegisterUserService implements RegisterUserUseCase {
   private final LoadUserPort loadUserPort;
   private final Logger logger = LoggerFactory.getLogger(RegisterUserService.class);
 
-  @Autowired
   public RegisterUserService(RegisterUserPort port, LoadUserPort loadUserPort) {
     this.port = port;
     this.loadUserPort = loadUserPort;
   }
 
   @Override
-  public Long register(RegisterUserCommand command) throws UsernameAlreadyInUseException {
+  public Long register(RegisterUserCommand command) {
     if (loadUserPort.existsByUsername(command.getUsername())) {
       throw new UsernameAlreadyInUseException(command.getUsername());
     }
@@ -34,7 +32,7 @@ public class RegisterUserService implements RegisterUserUseCase {
     user.setUsername(command.getUsername());
     user.setPassword(PasswordUtil.hash(command.getPassword()));
     Long id = port.register(user);
-    logger.info(String.format("Created user %s", user.getUsername()));
+    logger.info("Created user {}", user.getUsername());
     return id;
   }
 }

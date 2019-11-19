@@ -14,6 +14,5 @@ public interface CreateModuleUseCase {
    * @throws ModuleAlreadyExistsException Thrown if a module with the given path already exists.
    * @throws ModulePathInvalidException Thrown if the supplied path is invalid.
    */
-  Long createModule(CreateModuleCommand command, Long projectId)
-      throws ModulePathInvalidException, ModuleAlreadyExistsException;
+  Long createModule(CreateModuleCommand command, Long projectId) throws ModulePathInvalidException;
 }

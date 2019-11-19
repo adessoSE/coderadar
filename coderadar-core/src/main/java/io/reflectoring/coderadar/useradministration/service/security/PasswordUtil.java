@@ -5,6 +5,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 /** Service for working with passwords, for example hashing or verification. */
 public class PasswordUtil {
 
+  private PasswordUtil() {}
+
   private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
   /**

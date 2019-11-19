@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.rest.filepattern;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternUseCase;
 import io.reflectoring.coderadar.rest.IdResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CreateFilePatternController {
   private final CreateFilePatternUseCase createFilePatternUseCase;
 
-  @Autowired
   public CreateFilePatternController(CreateFilePatternUseCase createFilePatternUseCase) {
     this.createFilePatternUseCase = createFilePatternUseCase;
   }

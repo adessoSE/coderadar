@@ -11,7 +11,6 @@ import java.io.IOException;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +21,6 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
 
   private final Logger logger = LoggerFactory.getLogger(DeleteProjectAdapter.class);
 
-  @Autowired
   public DeleteProjectAdapter(
       ProjectRepository projectRepository,
       CoderadarConfigurationProperties coderadarConfigurationProperties) {

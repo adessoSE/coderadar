@@ -5,7 +5,7 @@ import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-/** An AnalyzerConfiguration stores the configuration for a single analyzer plugin in a project. */
+/** @see io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration */
 @NodeEntity
 @Data
 public class AnalyzerConfigurationEntity {

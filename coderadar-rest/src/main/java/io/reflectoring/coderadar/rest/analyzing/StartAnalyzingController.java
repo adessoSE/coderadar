@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.rest.analyzing;
 
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class StartAnalyzingController {
   private final StartAnalyzingUseCase startAnalyzingUseCase;
 
-  @Autowired
   public StartAnalyzingController(StartAnalyzingUseCase startAnalyzingUseCase) {
     this.startAnalyzingUseCase = startAnalyzingUseCase;
   }

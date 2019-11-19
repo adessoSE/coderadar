@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -26,18 +27,20 @@ import org.springframework.web.filter.OncePerRequestFilter;
  */
 public class AuthenticationTokenFilter extends OncePerRequestFilter {
 
-  public static final String TOKEN_HEADER = "Authorization";
+  private static final String TOKEN_HEADER = "Authorization";
 
   private final TokenService tokenService;
 
   @Autowired
-  public AuthenticationTokenFilter(TokenService tokenService) {
+  AuthenticationTokenFilter(TokenService tokenService) {
     this.tokenService = tokenService;
   }
 
   @Override
   protected void doFilterInternal(
-      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      HttpServletRequest request,
+      @NonNull HttpServletResponse response,
+      @NonNull FilterChain filterChain)
       throws ServletException, IOException {
     String token = request.getHeader(TOKEN_HEADER);
     if (token != null) {
@@ -49,13 +52,11 @@ public class AuthenticationTokenFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
             new UsernamePasswordAuthenticationToken(username.asString(), null, null);
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-      } catch (JWTVerificationException | NullPointerException e) {
-        // in case of verification error a further filter will take care about authentication error
-        if (e instanceof NullPointerException
-            || e.getMessage().startsWith("The Token has expired on")) {
+      } catch (JWTVerificationException e) {
+        logger.error("Authentication error. Token is not valid: ", e);
+      } catch (NullPointerException e) {
+        if (e.getMessage() != null && e.getMessage().startsWith("The Token has expired on")) {
           logger.error("Authentication error. Token is expired.");
-        } else {
-          logger.error("Authentication error. Token is not valid: ", e);
         }
       }
     }

@@ -7,7 +7,6 @@ import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +15,6 @@ public class LoadUserAdapter implements LoadUserPort {
   private final UserRepository userRepository;
   private final UserMapper userMapper = new UserMapper();
 
-  @Autowired
   public LoadUserAdapter(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
@@ -43,6 +41,6 @@ public class LoadUserAdapter implements LoadUserPort {
 
   @Override
   public boolean existsByUsername(String username) {
-    return userRepository.findByUsername(username).isPresent();
+    return userRepository.existsByUsername(username);
   }
 }

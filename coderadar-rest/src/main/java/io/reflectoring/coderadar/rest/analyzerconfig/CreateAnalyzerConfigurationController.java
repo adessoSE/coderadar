@@ -5,7 +5,6 @@ import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfi
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.IdResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class CreateAnalyzerConfigurationController {
   private final CreateAnalyzerConfigurationUseCase createAnalyzerConfigurationUseCase;
 
-  @Autowired
   public CreateAnalyzerConfigurationController(
       CreateAnalyzerConfigurationUseCase addAnalyzerConfigurationUseCase) {
     this.createAnalyzerConfigurationUseCase = addAnalyzerConfigurationUseCase;

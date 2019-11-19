@@ -10,7 +10,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import java.util.Date;
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /** Service for generation and verification of authentication tokens. */
@@ -21,7 +20,6 @@ public class TokenService {
 
   private final SecretKeyService secretKeyService;
 
-  @Autowired
   public TokenService(
       CoderadarConfigurationProperties configuration, SecretKeyService secretKeyService) {
     this.configuration = configuration;
@@ -45,14 +43,14 @@ public class TokenService {
     return generateToken(userId, username, expiresAt, tokenType);
   }
 
-  String generateToken(Long userId, String username, Date expiresAt, TokenType tokenType) {
+  private String generateToken(Long userId, String username, Date expiresAt, TokenType tokenType) {
     byte[] secret = secretKeyService.getSecretKey().getEncoded();
-    return JWT.create() //
-        .withExpiresAt(expiresAt) //
-        .withIssuedAt(new Date()) //
-        .withIssuer("coderadar") //
-        .withClaim("userId", userId.toString()) //
-        .withClaim("username", username) //
+    return JWT.create()
+        .withExpiresAt(expiresAt)
+        .withIssuedAt(new Date())
+        .withIssuer("coderadar")
+        .withClaim("userId", userId.toString())
+        .withClaim("username", username)
         .withClaim("type", tokenType.toString())
         .sign(Algorithm.HMAC256(secret));
   }

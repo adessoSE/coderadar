@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.rest.analyzing;
 
 import io.reflectoring.coderadar.analyzer.port.driver.ListAnalyzerUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ListAnalyzerController {
   private final ListAnalyzerUseCase listAnalyzerUseCase;
 
-  @Autowired
   public ListAnalyzerController(ListAnalyzerUseCase listAnalyzerUseCase) {
     this.listAnalyzerUseCase = listAnalyzerUseCase;
   }

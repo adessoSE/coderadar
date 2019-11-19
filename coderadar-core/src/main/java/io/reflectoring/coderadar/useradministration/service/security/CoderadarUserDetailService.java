@@ -4,11 +4,9 @@ import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
 import java.util.Collections;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,13 +14,12 @@ public class CoderadarUserDetailService implements UserDetailsService {
 
   private final LoadUserPort loadUserPort;
 
-  @Autowired
   public CoderadarUserDetailService(LoadUserPort loadUserPort) {
     this.loadUserPort = loadUserPort;
   }
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public UserDetails loadUserByUsername(String username) {
     User user = loadUserPort.loadUserByUsername(username);
     // TODO add authorities to user
     List<SimpleGrantedAuthority> authorities =

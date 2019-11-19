@@ -6,7 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Value
-public class CoderadarUserDetails implements UserDetails {
+class CoderadarUserDetails implements UserDetails {
 
   private final String username;
   private final String password;

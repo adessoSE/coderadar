@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.query;
 
-import io.reflectoring.coderadar.query.port.driver.GetMetricValuesOfTwoCommitsUseCase;
-import io.reflectoring.coderadar.query.port.driver.GetMetricsForTwoCommitsCommand;
+import io.reflectoring.coderadar.query.port.driver.GetDeltaTreeForTwoCommitsCommand;
+import io.reflectoring.coderadar.query.port.driver.GetDeltaTreeForTwoCommitsUseCase;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.*;
 @Transactional
 public class GetMetricValuesOfTwoCommitsController {
 
-    private final GetMetricValuesOfTwoCommitsUseCase getMetricValuesOfTwoCommitsUseCase;
+    private final GetDeltaTreeForTwoCommitsUseCase getDeltaTreeForTwoCommitsUseCase;
 
-    public GetMetricValuesOfTwoCommitsController(GetMetricValuesOfTwoCommitsUseCase getMetricValuesOfTwoCommitsUseCase) {
-        this.getMetricValuesOfTwoCommitsUseCase = getMetricValuesOfTwoCommitsUseCase;
+    public GetMetricValuesOfTwoCommitsController(GetDeltaTreeForTwoCommitsUseCase getDeltaTreeForTwoCommitsUseCase) {
+        this.getDeltaTreeForTwoCommitsUseCase = getDeltaTreeForTwoCommitsUseCase;
     }
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET}, path = "/projects/{projectId}/metricvalues/deltaTree", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getMetricValuesForTwoCommits(@Validated @RequestBody GetMetricsForTwoCommitsCommand command, @PathVariable("projectId") Long projectId){
+    public ResponseEntity getMetricValuesForTwoCommits(@Validated @RequestBody GetDeltaTreeForTwoCommitsCommand command, @PathVariable("projectId") Long projectId){
         try {
-            return new ResponseEntity<>(getMetricValuesOfTwoCommitsUseCase.get(command, projectId), HttpStatus.OK);
+            return new ResponseEntity<>(getDeltaTreeForTwoCommitsUseCase.get(command, projectId), HttpStatus.OK);
         } catch (IllegalArgumentException e){
             return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
         }
