@@ -60,7 +60,7 @@ public class CoderadarConfigurationProperties {
 
   @PostConstruct
   public void validateWorkdirIsWritable() {
-    if (this.workdir.toFile().exists()) {
+    if (!this.workdir.toFile().exists()) {
       try {
         Files.createDirectories(this.workdir);
       } catch (IOException e) {
