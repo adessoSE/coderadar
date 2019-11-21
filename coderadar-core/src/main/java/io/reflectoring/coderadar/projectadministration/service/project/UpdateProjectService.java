@@ -19,10 +19,9 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.updat
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
-import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
+import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Paths;
 import java.util.List;
 import org.slf4j.Logger;
@@ -101,12 +100,15 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
               // Perform a git pull on the remote repository
               updateRepositoryUseCase.updateRepository(
-                  new File(
-                          coderadarConfigurationProperties.getWorkdir()
-                              + "/projects/"
-                              + project.getWorkdirName())
-                      .toPath(),
-                  new URL(project.getVcsUrl()));
+                  new UpdateRepositoryCommand()
+                      .setLocalDir(
+                          new File(
+                              coderadarConfigurationProperties.getWorkdir()
+                                  + "/projects/"
+                                  + project.getWorkdirName()))
+                      .setPassword(project.getVcsPassword())
+                      .setUsername(project.getVcsUsername())
+                      .setRemoteUrl(project.getVcsUrl()));
 
               // Get the new commit tree
               List<Commit> commits =
@@ -122,7 +124,6 @@ public class UpdateProjectService implements UpdateProjectUseCase {
               }
 
             } catch (UnableToUpdateRepositoryException
-                | MalformedURLException
                 | ModuleAlreadyExistsException
                 | ModulePathInvalidException e) {
               logger.error("Unable to update project! {}", e.getMessage());

@@ -67,7 +67,6 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     @Autowired private ModuleRepository moduleRepository;
     @Autowired private Session session;
 
-
     @BeforeAll
     static void setUp() throws IOException {
         FileUtils.deleteDirectory(new File("coderadar-workdir/PaySim"));
@@ -305,6 +304,8 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
                 .andReturn();
 
         //Commits analyzed?
+        session.clear();
+
         Collection<CommitEntity> commits = commitRepository.findByProjectIdWithAllRelationshipsSortedByTimestampAsc(projectId);
 
         for (CommitEntity commit : commits) {

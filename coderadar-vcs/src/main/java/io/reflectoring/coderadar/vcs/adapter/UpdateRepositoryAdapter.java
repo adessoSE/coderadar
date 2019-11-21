@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.vcs.adapter;
 
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.UpdateRepositoryPort;
+import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Path;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ResetCommand;
@@ -14,27 +14,28 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
 
   @Override
-  public boolean updateRepository(Path repositoryRoot, URL url)
+  public boolean updateRepository(UpdateRepositoryCommand command)
       throws UnableToUpdateRepositoryException {
     try {
-      return updateInternal(repositoryRoot, url);
+      return updateInternal(command);
     } catch (CheckoutConflictException e) {
       // When having a checkout conflict, someone or something fiddled with the working directory.
       // Since the working directory is designed to be read only, we just revert it and try again.
       try {
-        resetRepository(repositoryRoot);
-        return updateInternal(repositoryRoot, url);
+        resetRepository(command.getLocalDir().toPath());
+        return updateInternal(command);
       } catch (IOException | GitAPIException ex) {
-        throw createException(repositoryRoot, e.getMessage());
+        throw createException(command.getLocalDir().toPath(), e.getMessage());
       }
     } catch (IOException | GitAPIException e) {
-      throw createException(repositoryRoot, e.getMessage());
+      throw createException(command.getLocalDir().toPath(), e.getMessage());
     }
   }
 
@@ -44,15 +45,23 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
             "Error updating local GIT repository at %s. Reason: %s", repositoryRoot, error));
   }
 
-  private boolean updateInternal(Path repositoryRoot, URL url) throws GitAPIException, IOException {
+  private boolean updateInternal(UpdateRepositoryCommand command)
+      throws GitAPIException, IOException {
     FileRepositoryBuilder builder = new FileRepositoryBuilder();
-    Repository repository = builder.setWorkTree(repositoryRoot.toFile()).build();
+    Repository repository = builder.setWorkTree(command.getLocalDir()).build();
     Git git = new Git(repository);
     StoredConfig config = git.getRepository().getConfig();
-    config.setString("remote", "origin", "url", url.toString());
+    config.setString("remote", "origin", "url", command.getRemoteUrl());
     config.save();
     ObjectId oldHead = git.getRepository().resolve(Constants.HEAD);
-    git.fetch().call();
+    try {
+      git.fetch().call();
+    } catch (GitAPIException e) {
+      git.fetch()
+          .setCredentialsProvider(
+              new UsernamePasswordCredentialsProvider(
+                  command.getUsername(), command.getPassword()));
+    }
     git.checkout().setName("origin/master").setForce(true).call();
     git.reset().setMode(ResetCommand.ResetType.HARD).setRef("origin/master").call();
     ObjectId newHead = git.getRepository().resolve(Constants.HEAD);

@@ -18,8 +18,8 @@ export class Project {
       this.id = project.id;
       this.name = project.name;
       this.vcsUrl = project.vcsUrl;
-      this.vcsUsername = project.vcsUser;
-      this.vcsPassword = project.vcsPassword;
+      this.vcsUsername = project.vcsUsername;
+      this.vcsPassword = '';
 
       if (project.startDate !== null) {
         const startDate = new Date(project.startDate);

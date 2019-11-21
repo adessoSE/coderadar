@@ -20,7 +20,7 @@ import io.reflectoring.coderadar.projectadministration.service.project.UpdatePro
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
-import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.nio.file.Paths;
@@ -176,7 +176,7 @@ class UpdateProjectServiceTest {
     Assert.assertEquals(testProject.getVcsEnd(), newEndDate);
     Assert.assertEquals(testProject.getVcsUrl(), newVcsUrl);
 
-    verify(updateRepositoryUseCaseMock).updateRepository(any(), any());
+    verify(updateRepositoryUseCaseMock).updateRepository(any());
     verify(saveCommitPortMock).saveCommits(Collections.singletonList(commitMock), projectId);
   }
 }

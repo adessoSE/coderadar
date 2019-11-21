@@ -19,9 +19,9 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.get.Ge
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
-import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
-import java.net.MalformedURLException;
-import java.net.URL;
+import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
+import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.HashMap;
@@ -153,11 +153,15 @@ public class ScanProjectScheduler {
   private void checkForNewCommits(Project project) {
     try {
       if (updateRepositoryUseCase.updateRepository(
-          Paths.get(
-              coderadarConfigurationProperties.getWorkdir()
-                  + "/projects/"
-                  + project.getWorkdirName()),
-          new URL(project.getVcsUrl()))) {
+          new UpdateRepositoryCommand()
+              .setLocalDir(
+                  new File(
+                      coderadarConfigurationProperties.getWorkdir()
+                          + "/projects/"
+                          + project.getWorkdirName()))
+              .setPassword(project.getVcsPassword())
+              .setUsername(project.getVcsUsername())
+              .setRemoteUrl(project.getVcsUrl()))) {
 
         // Check what modules where previously in the project
         List<GetModuleResponse> modules = listModulesOfProjectUseCase.listModules(project.getId());
@@ -175,7 +179,6 @@ public class ScanProjectScheduler {
         }
       }
     } catch (UnableToUpdateRepositoryException
-        | MalformedURLException
         | ModuleAlreadyExistsException
         | ModulePathInvalidException e) {
       logger.error("Unable to update the project: {}", e.getMessage());
