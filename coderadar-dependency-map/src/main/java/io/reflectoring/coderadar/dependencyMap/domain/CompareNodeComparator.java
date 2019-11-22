@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.analyzer.dependencyMap.domain;
+package io.reflectoring.coderadar.dependencyMap.domain;
 
 import io.reflectoring.coderadar.dependencyMap.domain.CompareNode;
 

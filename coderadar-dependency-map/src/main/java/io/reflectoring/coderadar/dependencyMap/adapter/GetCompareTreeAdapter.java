@@ -1,6 +1,6 @@
-package io.reflectoring.coderadar.analyzer.dependencyMap.adapter;
+package io.reflectoring.coderadar.dependencyMap.adapter;
 
-import io.reflectoring.coderadar.analyzer.dependencyMap.domain.DependencyCompareTree;
+import io.reflectoring.coderadar.dependencyMap.domain.DependencyCompareTree;
 import io.reflectoring.coderadar.dependencyMap.domain.CompareNode;
 import io.reflectoring.coderadar.dependencyMap.port.driven.GetCompareTreePort;
 import org.springframework.beans.factory.annotation.Autowired;

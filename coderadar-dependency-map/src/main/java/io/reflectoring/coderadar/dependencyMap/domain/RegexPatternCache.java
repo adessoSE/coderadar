@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.analyzer.dependencyMap.domain;
+package io.reflectoring.coderadar.dependencyMap.domain;
 
 import com.google.re2j.Pattern;
 

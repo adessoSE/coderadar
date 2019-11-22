@@ -1,8 +1,6 @@
-package io.reflectoring.coderadar.analyzer.dependencyMap.domain;
+package io.reflectoring.coderadar.dependencyMap.domain;
 
-import io.reflectoring.coderadar.analyzer.dependencyMap.analyzers.JavaAnalyzer;
-import io.reflectoring.coderadar.dependencyMap.domain.CompareNode;
-import io.reflectoring.coderadar.dependencyMap.domain.CompareNodeDTO;
+import io.reflectoring.coderadar.dependencyMap.analyzers.JavaAnalyzer;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.UnableToGetDiffsFromCommitsException;

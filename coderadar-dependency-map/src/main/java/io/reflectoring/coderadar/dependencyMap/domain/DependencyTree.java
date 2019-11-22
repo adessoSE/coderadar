@@ -1,7 +1,6 @@
-package io.reflectoring.coderadar.analyzer.dependencyMap.domain;
+package io.reflectoring.coderadar.dependencyMap.domain;
 
-import io.reflectoring.coderadar.analyzer.dependencyMap.analyzers.JavaAnalyzer;
-import io.reflectoring.coderadar.dependencyMap.domain.Node;
+import io.reflectoring.coderadar.dependencyMap.analyzers.JavaAnalyzer;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.UnableToWalkCommitTreeException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
