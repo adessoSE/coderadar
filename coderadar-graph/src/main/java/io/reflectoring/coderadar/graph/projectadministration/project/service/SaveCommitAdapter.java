@@ -46,45 +46,33 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
           projectRepository
               .findById(projectId)
               .orElseThrow(() -> new ProjectNotFoundException(projectId));
-      List<CommitEntity> commitEntities = mapCommitTree(commits);
-      List<FileEntity> fileEntities = mapFileRelationships(commits, commitEntities);
 
-      commitRepository.save(commitEntities, 1);
-      fileRepository.save(fileEntities, 1);
-      projectEntity.setFiles(fileEntities);
+      HashMap<String, List<FileEntity>> walkedFiles = new HashMap<>();
+      List<CommitEntity> commitEntities = mapCommitTree(commits, walkedFiles);
+      List<FileEntity> allFiles = new ArrayList<>();
+      for (List<FileEntity> files : walkedFiles.values()) {
+        allFiles.addAll(files);
+      }
+
+      projectEntity.setFiles(allFiles);
       projectEntity.setCommits(commitEntities);
       projectRepository.save(projectEntity, 1);
+      commitRepository.save(commitEntities, 1);
+      fileRepository.save(allFiles, 1);
     }
-  }
-
-  /**
-   * @param commits Domain objects with FileToCommitRelationships.
-   * @param commitEntities CommitEntities corresponding to the Commit domain objects.
-   * @return All fileEntities in the project.
-   */
-  private List<FileEntity> mapFileRelationships(
-      List<Commit> commits, List<CommitEntity> commitEntities) {
-    HashMap<String, List<FileEntity>> walkedFiles = new HashMap<>();
-    commitEntities.sort(Comparator.comparing(CommitEntity::getTimestamp));
-    for (int i = 0; i < commitEntities.size(); i++) {
-      getFiles(commits.get(i).getTouchedFiles(), commitEntities.get(i), walkedFiles);
-    }
-    List<FileEntity> allFiles = new ArrayList<>();
-    for (List<FileEntity> files : walkedFiles.values()) {
-      allFiles.addAll(files);
-    }
-    return allFiles;
   }
 
   /**
    * Creates CommitEntities with initialized parents.
    *
    * @param commits A list of domain Commit objects that need to be mapped to CommitEntities
+   * @param walkedFiles A map of files that have been processed already
    * @return All CommitEntities in the project.
    */
-  private List<CommitEntity> mapCommitTree(List<Commit> commits) {
+  private List<CommitEntity> mapCommitTree(
+      List<Commit> commits, HashMap<String, List<FileEntity>> walkedFiles) {
     HashMap<String, CommitEntity> walkedCommits = new HashMap<>();
-    commits.sort(Comparator.comparing(Commit::getTimestamp));
+    List<CommitEntity> result = new ArrayList<>();
     for (Commit commit : commits) {
       CommitEntity commitEntity = walkedCommits.get(commit.getName());
       if (commitEntity == null) {
@@ -95,12 +83,16 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
         if (parentCommit == null) {
           parentCommit = CommitBaseDataMapper.mapCommit(parent);
           walkedCommits.put(parent.getName(), parentCommit);
+          getFiles(commit.getTouchedFiles(), parentCommit, walkedFiles);
+          result.add(parentCommit);
         }
         commitEntity.getParents().add(parentCommit);
       }
       walkedCommits.put(commit.getName(), commitEntity);
+      result.add(commitEntity);
+      getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles);
     }
-    return new ArrayList<>(walkedCommits.values());
+    return result;
   }
 
   /**
@@ -147,20 +139,19 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
       fileEntities.add(fileEntity);
       fileList = new ArrayList<>(fileEntities);
     } else {
+      FileEntity fileEntity = new FileEntity();
       if ((fileToCommitRelationship.getChangeType().equals(ChangeType.ADD))) {
-        FileEntity fileEntity = new FileEntity();
         fileEntities.add(fileEntity);
         fileList.add(fileEntity);
       } else if ((fileToCommitRelationship.getChangeType().equals(ChangeType.DELETE))) {
         fileEntities.addAll(fileList);
       } else if (fileToCommitRelationship.getChangeType().equals(ChangeType.RENAME)) {
-        FileEntity file = new FileEntity();
         List<FileEntity> filesWithOldPath = walkedFiles.get(fileToCommitRelationship.getOldPath());
         if (filesWithOldPath != null) {
-          file.getOldFiles().addAll(filesWithOldPath);
+          fileEntity.getOldFiles().addAll(filesWithOldPath);
         }
-        fileEntities.add(file);
-        fileList.add(file);
+        fileEntities.add(fileEntity);
+        fileList.add(fileEntity);
       } else {
         fileEntities.add(Iterables.getLast(fileList));
       }

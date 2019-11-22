@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.analyzer.port.driven.ResetAnalysisPort;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
@@ -56,6 +57,8 @@ class UpdateProjectServiceTest {
 
   @Mock private ListModulesOfProjectUseCase listModulesOfProjectUseCase;
 
+  @Mock private ResetAnalysisPort resetAnalysisPort;
+
   private UpdateProjectService testSubject;
 
   @BeforeEach
@@ -70,6 +73,7 @@ class UpdateProjectServiceTest {
             extractProjectCommitsUseCaseMock,
             saveCommitPortMock,
             listModulesOfProjectUseCase,
+            resetAnalysisPort,
             createModulePort);
   }
 

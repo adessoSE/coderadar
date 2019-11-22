@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.projectadministration.service.project;
 import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.analyzer.port.driven.ResetAnalysisPort;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
@@ -40,6 +41,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final ExtractProjectCommitsUseCase extractProjectCommitsUseCase;
   private final SaveCommitPort saveCommitPort;
   private final ListModulesOfProjectUseCase listModulesOfProjectUseCase;
+  private final ResetAnalysisPort resetAnalysisPort;
   private final CreateModulePort createModulePort;
 
   private final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
@@ -53,6 +55,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
       SaveCommitPort saveCommitPort,
       ListModulesOfProjectUseCase listModulesOfProjectUseCase,
+      ResetAnalysisPort resetAnalysisPort,
       CreateModulePort createModulePort) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
@@ -62,6 +65,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
     this.saveCommitPort = saveCommitPort;
     this.listModulesOfProjectUseCase = listModulesOfProjectUseCase;
+    this.resetAnalysisPort = resetAnalysisPort;
     this.createModulePort = createModulePort;
   }
 
@@ -96,7 +100,8 @@ public class UpdateProjectService implements UpdateProjectUseCase {
               List<GetModuleResponse> modules = listModulesOfProjectUseCase.listModules(projectId);
 
               // Delete all files, commits and modules as they have to be re-created
-              updateProjectPort.deleteProjectFilesCommitsAndMetrics(projectId);
+              resetAnalysisPort.resetAnalysis(projectId);
+              updateProjectPort.deleteFilesAndCommits(projectId);
 
               // Perform a git pull on the remote repository
               updateRepositoryUseCase.updateRepository(

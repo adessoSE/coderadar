@@ -11,9 +11,9 @@ public interface UpdateProjectPort {
   void update(Project project);
 
   /**
-   * Deletes all files, commits and metric for the given project
+   * Deletes all files and commits for the given project
    *
    * @param projectId The id of the project.
    */
-  void deleteProjectFilesCommitsAndMetrics(Long projectId);
+  void deleteFilesAndCommits(Long projectId);
 }

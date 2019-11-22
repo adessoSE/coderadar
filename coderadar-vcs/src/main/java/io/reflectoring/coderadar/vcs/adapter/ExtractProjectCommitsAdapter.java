@@ -61,6 +61,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
 
       HashMap<ObjectId, Commit> map = new HashMap<>();
       List<RevCommit> revCommits = new ArrayList<>();
+      List<Commit> result = new ArrayList<>();
       git.log().call().iterator().forEachRemaining(revCommits::add);
       Collections.reverse(revCommits);
       for (RevCommit rc : revCommits) {
@@ -75,15 +76,16 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
               if (parentCommit == null) {
                 parentCommit = mapRevCommitToCommit(parent);
                 map.put(parent.getId(), parentCommit);
+                result.add(parentCommit);
               }
               commit.getParents().add(parentCommit);
             }
           }
           map.put(rc.getId(), commit);
+          result.add(commit);
         }
       }
 
-      List<Commit> result = new ArrayList<>(map.values());
       setCommitsFiles(git, result);
       git.getRepository().close();
       git.close();
@@ -143,7 +145,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    * @throws IOException Thrown if a commit cannot be processed.
    */
   private void setCommitsFiles(Git git, List<Commit> commits) throws IOException {
-    commits.sort(Comparator.comparing(Commit::getTimestamp));
     HashMap<String, List<File>> files = new HashMap<>();
     setFirstCommitFiles(git, commits.get(0), files);
     DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
@@ -182,11 +183,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       fileToCommitRelationship.setChangeType(changeType);
       fileToCommitRelationship.setCommit(commit);
       fileToCommitRelationship.setFile(file);
-      if (file.getCommits()
-          .stream()
-          .noneMatch(rel -> rel.getCommit().getName().equals(commit.getName()))) {
-        file.getCommits().add(fileToCommitRelationship);
-      }
+      file.getCommits().add(fileToCommitRelationship);
       commit.getTouchedFiles().add(fileToCommitRelationship);
     }
   }
@@ -213,10 +210,12 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         }
       }
       filesToSave.add(file);
+      files.put(file.getPath(), filesToSave);
     } else {
       if ((diff.getChangeType().equals(DiffEntry.ChangeType.ADD))) {
         filesToSave.add(file);
         existingFilesWithPath.add(file);
+        files.put(file.getPath(), existingFilesWithPath);
       } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.DELETE))) {
         filesToSave.addAll(existingFilesWithPath);
       } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
@@ -226,6 +225,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         }
         filesToSave.add(file);
         existingFilesWithPath.add(file);
+        files.put(file.getPath(), existingFilesWithPath);
       } else {
         filesToSave.add(Iterables.getLast(existingFilesWithPath));
       }
