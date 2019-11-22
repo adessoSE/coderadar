@@ -29,6 +29,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   private List<Commit> mapCommitEntities(List<CommitEntity> commitEntities) {
     HashMap<Long, Commit> walkedCommits = new HashMap<>();
     HashMap<Long, File> walkedFiles = new HashMap<>();
+    List<Commit> result = new ArrayList<>();
     for (CommitEntity commitEntity : commitEntities) {
       Commit commit = walkedCommits.get(commitEntity.getId());
       if (commit == null) {
@@ -38,13 +39,16 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
         Commit parentCommit = walkedCommits.get(parent.getId());
         if (parentCommit == null) {
           parentCommit = CommitBaseDataMapper.mapCommitEntity(parent);
+          parentCommit.setTouchedFiles(getFiles(parent.getTouchedFiles(), parentCommit, walkedFiles));
+          result.add(parentCommit);
         }
         commit.getParents().add(parentCommit);
       }
       commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), commit, walkedFiles));
       walkedCommits.put(commitEntity.getId(), commit);
+      result.add(commit);
     }
-    return new ArrayList<>(walkedCommits.values());
+    return result;
   }
 
   @Override
@@ -75,9 +79,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     if (persistedProject.isPresent()) {
       List<CommitEntity> commitEntities =
           commitRepository.findByProjectIdWithAllRelationshipsSortedByTimestampAsc(projectId);
-      List<Commit> commits = mapCommitEntities(commitEntities);
-      commits.sort(Comparator.comparing(Commit::getTimestamp));
-      return commits;
+      return mapCommitEntities(commitEntities);
     } else {
       throw new ProjectNotFoundException(projectId);
     }
