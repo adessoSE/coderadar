@@ -39,7 +39,8 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
         Commit parentCommit = walkedCommits.get(parent.getId());
         if (parentCommit == null) {
           parentCommit = CommitBaseDataMapper.mapCommitEntity(parent);
-          parentCommit.setTouchedFiles(getFiles(parent.getTouchedFiles(), parentCommit, walkedFiles));
+          parentCommit.setTouchedFiles(
+              getFiles(parent.getTouchedFiles(), parentCommit, walkedFiles));
           result.add(parentCommit);
         }
         commit.getParents().add(parentCommit);
