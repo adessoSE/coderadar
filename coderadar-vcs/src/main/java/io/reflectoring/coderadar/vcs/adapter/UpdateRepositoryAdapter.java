@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.vcs.port.driven.UpdateRepositoryPort;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
 import java.io.IOException;
 import java.nio.file.Path;
+import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
@@ -54,14 +55,12 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
     config.setString("remote", "origin", "url", command.getRemoteUrl());
     config.save();
     ObjectId oldHead = git.getRepository().resolve(Constants.HEAD);
-    try {
-      git.fetch().call();
-    } catch (GitAPIException e) {
-      git.fetch()
-          .setCredentialsProvider(
-              new UsernamePasswordCredentialsProvider(
-                  command.getUsername(), command.getPassword()));
+    FetchCommand fetchCommand = git.fetch();
+    if (command.getUsername() != null && command.getPassword() != null) {
+      fetchCommand.setCredentialsProvider(
+          new UsernamePasswordCredentialsProvider(command.getUsername(), command.getPassword()));
     }
+    fetchCommand.call();
     git.checkout().setName("origin/master").setForce(true).call();
     git.reset().setMode(ResetCommand.ResetType.HARD).setRef("origin/master").call();
     ObjectId newHead = git.getRepository().resolve(Constants.HEAD);

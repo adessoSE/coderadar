@@ -9,16 +9,20 @@ import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
+import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
+import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.ListAnalyzerConfigurationsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
+import io.reflectoring.coderadar.query.port.driven.GetAvailableMetricsInProjectPort;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,6 +48,8 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final StartAnalyzingPort startAnalyzingPort;
   private final StopAnalyzingPort stopAnalyzingPort;
   private final AsyncListenableTaskExecutor taskExecutor;
+  private final GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort;
+  private final ProjectStatusPort projectStatusPort;
 
   private final Logger logger = LoggerFactory.getLogger(StartAnalyzingService.class);
 
@@ -59,7 +65,9 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       ProcessProjectService processProjectService,
       StartAnalyzingPort startAnalyzingPort,
       StopAnalyzingPort stopAnalyzingPort,
-      AsyncListenableTaskExecutor taskExecutor) {
+      AsyncListenableTaskExecutor taskExecutor,
+      GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort,
+      ProjectStatusPort projectStatusPort) {
     this.getProjectPort = getProjectPort;
     this.analyzeCommitUseCase = analyzeCommitUseCase;
     this.analyzerPluginService = analyzerPluginService;
@@ -72,6 +80,8 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     this.startAnalyzingPort = startAnalyzingPort;
     this.stopAnalyzingPort = stopAnalyzingPort;
     this.taskExecutor = taskExecutor;
+    this.getAvailableMetricsInProjectPort = getAvailableMetricsInProjectPort;
+    this.projectStatusPort = projectStatusPort;
   }
 
   /**
@@ -82,11 +92,18 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
    */
   @Override
   public void start(StartAnalyzingCommand command, Long projectId) {
+    if (projectStatusPort.isBeingProcessed(projectId)) {
+      throw new ProjectIsBeingProcessedException(projectId);
+    }
     List<FilePattern> filePatterns = listFilePatternsOfProjectPort.listFilePatterns(projectId);
     List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
         getAnalyzersForProject(projectId);
 
-    if (filePatterns.isEmpty()) {
+    if (filePatterns.isEmpty()
+        || filePatterns
+            .stream()
+            .noneMatch(
+                filePattern -> filePattern.getInclusionType().equals(InclusionType.INCLUDE))) {
       throw new MisconfigurationException("Cannot analyze project without file patterns");
     } else if (sourceCodeFileAnalyzerPlugins.isEmpty()) {
       throw new MisconfigurationException("Cannot analyze project without analyzers");
@@ -139,7 +156,9 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           }
           waitForTask(saveTask);
           stopAnalyzingPort.stop(projectId);
-          saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
+          if (!getAvailableMetricsInProjectPort.get(projectId).isEmpty()) {
+            saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
+          }
 
           logger.info("Analysis complete for project {}", project.getName());
         },

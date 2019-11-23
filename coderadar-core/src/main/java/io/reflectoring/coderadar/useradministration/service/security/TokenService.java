@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.useradministration.service.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.InvalidClaimException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.interfaces.Claim;
@@ -66,7 +67,7 @@ public class TokenService {
     JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret)).withIssuer("coderadar").build();
     try {
       return verifier.verify(token);
-    } catch (SignatureVerificationException e) {
+    } catch (SignatureVerificationException | InvalidClaimException e) {
       return null;
     }
   }

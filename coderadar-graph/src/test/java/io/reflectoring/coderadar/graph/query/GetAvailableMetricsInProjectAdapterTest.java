@@ -8,8 +8,8 @@ import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
+import io.reflectoring.coderadar.graph.query.adapter.GetAvailableMetricsInProjectAdapter;
 import io.reflectoring.coderadar.graph.query.repository.GetAvailableMetricsInProjectRepository;
-import io.reflectoring.coderadar.graph.query.service.GetAvailableMetricsInProjectAdapter;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import java.util.LinkedList;
 import java.util.List;

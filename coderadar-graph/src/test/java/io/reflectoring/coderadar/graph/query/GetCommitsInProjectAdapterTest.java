@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.graph.query.service.GetCommitsInProjectAdapter;
+import io.reflectoring.coderadar.graph.query.adapter.GetCommitsInProjectAdapter;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -6,8 +6,8 @@ import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
+import io.reflectoring.coderadar.graph.projectadministration.module.adapter.DeleteModuleAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
-import io.reflectoring.coderadar.graph.projectadministration.module.service.DeleteModuleAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import org.junit.jupiter.api.BeforeEach;

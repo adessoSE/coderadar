@@ -5,8 +5,8 @@ import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.adapter.CreateAnalyzerConfigurationAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
-import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.CreateAnalyzerConfigurationAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.Project;

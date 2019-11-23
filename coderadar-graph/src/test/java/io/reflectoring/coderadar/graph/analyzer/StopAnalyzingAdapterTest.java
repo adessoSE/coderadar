@@ -3,9 +3,9 @@ package io.reflectoring.coderadar.graph.analyzer;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.analyzer.AnalyzingJobNotStartedException;
+import io.reflectoring.coderadar.graph.analyzer.adapter.StopAnalyzingAdapter;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.AnalyzingJobRepository;
-import io.reflectoring.coderadar.graph.analyzer.service.StopAnalyzingAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;

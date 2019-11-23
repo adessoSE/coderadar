@@ -5,8 +5,8 @@ import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
+import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.adapter.GetAnalyzerConfigurationAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
-import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.service.GetAnalyzerConfigurationAdapter;
 import io.reflectoring.coderadar.projectadministration.AnalyzerConfigurationNotFoundException;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;

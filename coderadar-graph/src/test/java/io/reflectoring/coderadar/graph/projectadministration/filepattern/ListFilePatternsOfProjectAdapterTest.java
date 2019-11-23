@@ -3,8 +3,8 @@ package io.reflectoring.coderadar.graph.projectadministration.filepattern;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import io.reflectoring.coderadar.graph.projectadministration.filepattern.adapter.ListFilePatternsOfProjectAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
-import io.reflectoring.coderadar.graph.projectadministration.filepattern.service.ListFilePatternsOfProjectAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import java.util.Collection;
