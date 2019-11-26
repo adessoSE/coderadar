@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.dependencyMap.domain;
+package io.reflectoring.coderadar.dependencymap.domain;
 
 import java.util.HashSet;
 import java.util.List;

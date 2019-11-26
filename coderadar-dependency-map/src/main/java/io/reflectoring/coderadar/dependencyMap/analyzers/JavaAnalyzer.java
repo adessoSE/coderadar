@@ -1,8 +1,8 @@
-package io.reflectoring.coderadar.dependencyMap.analyzers;
+package io.reflectoring.coderadar.dependencymap.analyzers;
 
 import com.google.re2j.Matcher;
 import com.google.re2j.Pattern;
-import io.reflectoring.coderadar.dependencyMap.domain.RegexPatternCache;
+import io.reflectoring.coderadar.dependencymap.util.RegexPatternCache;
 import org.apache.axis2.util.JavaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

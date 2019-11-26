@@ -1,6 +1,10 @@
-package io.reflectoring.coderadar.dependencyMap.domain;
+package io.reflectoring.coderadar.dependencymap.adapter;
 
-import io.reflectoring.coderadar.dependencyMap.analyzers.JavaAnalyzer;
+import io.reflectoring.coderadar.dependencymap.analyzers.JavaAnalyzer;
+import io.reflectoring.coderadar.dependencymap.util.CompareNode;
+import io.reflectoring.coderadar.dependencymap.util.CompareNodeComparator;
+import io.reflectoring.coderadar.dependencymap.util.CompareNodeDTO;
+import io.reflectoring.coderadar.dependencymap.port.driven.GetCompareTreePort;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.UnableToGetDiffsFromCommitsException;
@@ -20,7 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class DependencyCompareTree {
+public class DependencyCompareTreeAdapter implements GetCompareTreePort {
 
     private CompareNode root;
     private String repository;
@@ -35,10 +39,10 @@ public class DependencyCompareTree {
     private final GetDiffEntriesForCommitsPort getDiffEntriesForCommitsPort;
     private final GetRawCommitContentPort rawCommitContentPort;
 
-    private final Logger logger = LoggerFactory.getLogger(DependencyCompareTree.class);
+    private final Logger logger = LoggerFactory.getLogger(DependencyCompareTreeAdapter.class);
 
     @Autowired
-    public DependencyCompareTree(JavaAnalyzer javaAnalyzer, WalkCommitTreePort walkCommitTreePort, GetDiffEntriesForCommitsPort getDiffEntriesForCommitsPort, GetRawCommitContentPort rawCommitContentPort) {
+    public DependencyCompareTreeAdapter(JavaAnalyzer javaAnalyzer, WalkCommitTreePort walkCommitTreePort, GetDiffEntriesForCommitsPort getDiffEntriesForCommitsPort, GetRawCommitContentPort rawCommitContentPort) {
         this.javaAnalyzer = javaAnalyzer;
         this.walkCommitTreePort = walkCommitTreePort;
         this.getDiffEntriesForCommitsPort = getDiffEntriesForCommitsPort;
@@ -69,6 +73,7 @@ public class DependencyCompareTree {
      * @param commitName commit to analyze.
      * @param repoName name of the repository.
      */
+    @Override
     public CompareNode getRoot(String projectRoot, String commitName, String repoName, String commitName2) {
         this.commitName2 = commitName2;
         this.repository = projectRoot;

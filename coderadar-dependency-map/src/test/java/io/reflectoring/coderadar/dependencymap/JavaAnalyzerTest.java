@@ -1,9 +1,9 @@
-package io.reflectoring.coderadar.dependencyMap;
+package io.reflectoring.coderadar.dependencymap;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import io.reflectoring.coderadar.dependencyMap.analyzers.JavaAnalyzer;
+import io.reflectoring.coderadar.dependencymap.analyzers.JavaAnalyzer;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 

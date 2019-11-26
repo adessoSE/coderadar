@@ -1,6 +1,6 @@
-package io.reflectoring.coderadar.dependencyMap.port.driven;
+package io.reflectoring.coderadar.dependencymap.port.driven;
 
-import io.reflectoring.coderadar.dependencyMap.domain.Node;
+import io.reflectoring.coderadar.dependencymap.domain.Node;
 
 public interface GetDependencyTreePort {
     Node getRoot(String projectRoot, String commitName, String projectName);

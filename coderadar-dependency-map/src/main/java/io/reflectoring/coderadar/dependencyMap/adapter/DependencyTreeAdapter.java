@@ -1,6 +1,9 @@
-package io.reflectoring.coderadar.dependencyMap.domain;
+package io.reflectoring.coderadar.dependencymap.adapter;
 
-import io.reflectoring.coderadar.dependencyMap.analyzers.JavaAnalyzer;
+import io.reflectoring.coderadar.dependencymap.analyzers.JavaAnalyzer;
+import io.reflectoring.coderadar.dependencymap.util.Node;
+import io.reflectoring.coderadar.dependencymap.util.NodeComparator;
+import io.reflectoring.coderadar.dependencymap.port.driven.GetDependencyTreePort;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.UnableToWalkCommitTreeException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
@@ -13,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class DependencyTree {
+public class DependencyTreeAdapter implements GetDependencyTreePort {
 
     private Node root;
     private String repository;
@@ -25,7 +28,7 @@ public class DependencyTree {
     private final GetRawCommitContentPort rawCommitContentPort;
 
     @Autowired
-    public DependencyTree(JavaAnalyzer javaAnalyzer, WalkCommitTreePort walkCommitTreePort, GetRawCommitContentPort rawCommitContentPort) {
+    public DependencyTreeAdapter(JavaAnalyzer javaAnalyzer, WalkCommitTreePort walkCommitTreePort, GetRawCommitContentPort rawCommitContentPort) {
         this.javaAnalyzer = javaAnalyzer;
         this.walkCommitTreePort = walkCommitTreePort;
         this.rawCommitContentPort = rawCommitContentPort;
@@ -54,6 +57,7 @@ public class DependencyTree {
      * @param commitName commit to analyze.
      * @param repoName name of the repository.
      */
+    @Override
     public Node getRoot(String projectRoot, String commitName, String repoName) {
         this.repository = projectRoot;
         this.commitName = commitName;

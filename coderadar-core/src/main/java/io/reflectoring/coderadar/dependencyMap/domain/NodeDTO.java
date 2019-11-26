@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.dependencyMap.domain;
+package io.reflectoring.coderadar.dependencymap.domain;
 
 public class NodeDTO {
 

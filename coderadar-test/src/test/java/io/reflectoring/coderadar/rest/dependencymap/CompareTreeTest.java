@@ -1,9 +1,9 @@
-package io.reflectoring.coderadar.rest.dependencyMap;
+package io.reflectoring.coderadar.rest.dependencymap;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.dependencyMap.domain.DependencyCompareTree;
-import io.reflectoring.coderadar.dependencyMap.domain.CompareNode;
-import io.reflectoring.coderadar.dependencyMap.domain.CompareNodeDTO;
+import io.reflectoring.coderadar.dependencymap.adapter.DependencyCompareTreeAdapter;
+import io.reflectoring.coderadar.dependencymap.domain.CompareNode;
+import io.reflectoring.coderadar.dependencymap.domain.CompareNodeDTO;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +38,7 @@ public class CompareTreeTest extends ControllerTestTemplate {
 
     private final Logger logger = LoggerFactory.getLogger(CompareTreeTest.class);
 
-    @Autowired private DependencyCompareTree dependencyTree;
+    @Autowired private DependencyCompareTreeAdapter dependencyTree;
     @Autowired private DeleteRepositoryPort deleteRepositoryPort;
     @Autowired private CoderadarConfigurationProperties coderadarConfigurationProperties;
     @Autowired private CreateProjectUseCase createProjectUseCase;
@@ -58,8 +59,9 @@ public class CompareTreeTest extends ControllerTestTemplate {
             //    - add a dependency on a renamed file - done (CoreTest -> WildcardImportCircularDependency)
             //    - remove a dependency on a renamed file - done (DuplicateDependencies2Test -> WildcardImportCircularDependencyTest)
             //    - change a files content - done (DuplicateDependenciesTest)
+            URL testRepoURL =  this.getClass().getClassLoader().getResource("testSrc");
             CreateProjectCommand command = new CreateProjectCommand();
-            command.setVcsUrl("https://github.com/jo2/testSrc");
+            command.setVcsUrl(testRepoURL.toString());
             command.setName("testSrc");
             command.setVcsOnline(true);
             Project testProject = getProjectPort.get(createProjectUseCase.createProject(command));

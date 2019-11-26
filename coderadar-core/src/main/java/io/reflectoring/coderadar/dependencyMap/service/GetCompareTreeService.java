@@ -1,9 +1,9 @@
-package io.reflectoring.coderadar.dependencyMap.service;
+package io.reflectoring.coderadar.dependencymap.service;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.dependencyMap.domain.CompareNode;
-import io.reflectoring.coderadar.dependencyMap.port.driven.GetCompareTreePort;
-import io.reflectoring.coderadar.dependencyMap.port.driver.GetCompareTreeUseCase;
+import io.reflectoring.coderadar.dependencymap.domain.CompareNode;
+import io.reflectoring.coderadar.dependencymap.port.driven.GetCompareTreePort;
+import io.reflectoring.coderadar.dependencymap.port.driver.GetCompareTreeUseCase;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import org.springframework.beans.factory.annotation.Autowired;

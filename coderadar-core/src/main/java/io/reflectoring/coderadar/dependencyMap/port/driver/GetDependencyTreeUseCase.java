@@ -1,6 +1,6 @@
-package io.reflectoring.coderadar.dependencyMap.port.driver;
+package io.reflectoring.coderadar.dependencymap.port.driver;
 
-import io.reflectoring.coderadar.dependencyMap.domain.Node;
+import io.reflectoring.coderadar.dependencymap.domain.Node;
 
 public interface GetDependencyTreeUseCase {
     Node getDependencyTree(Long projectId, String commitName);

@@ -1,8 +1,7 @@
-package io.reflectoring.coderadar.dependencyMap.domain;
+package io.reflectoring.coderadar.dependencymap.domain;
 
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;

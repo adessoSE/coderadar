@@ -1,10 +1,10 @@
-package io.reflectoring.coderadar.dependencyMap.domain;
+package io.reflectoring.coderadar.dependencymap.util;
 
-import io.reflectoring.coderadar.dependencyMap.domain.Node;
+import io.reflectoring.coderadar.dependencymap.domain.CompareNode;
 
 import java.util.Comparator;
 
-public class NodeComparator implements Comparator<Node> {
+public class CompareNodeComparator implements Comparator<CompareNode> {
 
     /**
      * Compare two Node-objects:
@@ -22,7 +22,7 @@ public class NodeComparator implements Comparator<Node> {
      *   o2 is lower than o1
      * else compare o1 and o2 lexically
      */
-    public int compare(Node o1, Node o2) {
+    public int compare(CompareNode o1, CompareNode o2) {
         if (o1.hasDependencyOn(o2) && !o2.hasDependencyOn(o1)) {
             return -1;
         } else if (o2.hasDependencyOn(o1) && !o1.hasDependencyOn(o2)) {

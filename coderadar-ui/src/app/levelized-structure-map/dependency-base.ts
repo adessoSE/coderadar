@@ -34,7 +34,7 @@ export abstract class DependencyBase {
 
   public onShowDownwardChanged(): void {
     this.checkDown = !this.checkDown;
-    this.draw(() => this.loadDependencies(this.node));
+    this.draw(() => this.loadDependencies(this.node, this.checkChanged));
   }
 
   public screenshotListener(): void {

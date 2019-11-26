@@ -1,6 +1,6 @@
-package io.reflectoring.coderadar.dependencyMap.port.driven;
+package io.reflectoring.coderadar.dependencymap.port.driven;
 
-import io.reflectoring.coderadar.dependencyMap.domain.CompareNode;
+import io.reflectoring.coderadar.dependencymap.domain.CompareNode;
 
 public interface GetCompareTreePort {
     CompareNode getRoot(String projectRoot, String commitName, String projectName, String secondCommit);

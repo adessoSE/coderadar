@@ -1,9 +1,9 @@
-package io.reflectoring.coderadar.rest.dependencyMap;
+package io.reflectoring.coderadar.rest.dependencymap;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.dependencyMap.domain.DependencyTree;
-import io.reflectoring.coderadar.dependencyMap.domain.Node;
-import io.reflectoring.coderadar.dependencyMap.domain.NodeDTO;
+import io.reflectoring.coderadar.dependencymap.adapter.DependencyTreeAdapter;
+import io.reflectoring.coderadar.dependencymap.domain.Node;
+import io.reflectoring.coderadar.dependencymap.domain.NodeDTO;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +36,7 @@ public class TreeTest extends ControllerTestTemplate {
     private File f;
     private final Logger logger = LoggerFactory.getLogger(TreeTest.class);
 
-    @Autowired private DependencyTree dependencyTree;
+    @Autowired private DependencyTreeAdapter dependencyTree;
     @Autowired private DeleteRepositoryPort deleteRepositoryPort;
     @Autowired private CoderadarConfigurationProperties coderadarConfigurationProperties;
     @Autowired private CreateProjectUseCase createProjectUseCase;
@@ -44,8 +45,9 @@ public class TreeTest extends ControllerTestTemplate {
     @BeforeEach
     public void initEach() {
         try {
+            URL testRepoURL =  this.getClass().getClassLoader().getResource("testSrc");
             CreateProjectCommand command = new CreateProjectCommand();
-            command.setVcsUrl("https://github.com/jo2/testSrc");
+            command.setVcsUrl(testRepoURL.toString());
             command.setName("testSrc");
             command.setVcsOnline(true);
             Project testProject = getProjectPort.get(createProjectUseCase.createProject(command));
@@ -88,64 +90,6 @@ public class TreeTest extends ControllerTestTemplate {
         Node notADependencyTest = root.getNodeByPath("src/org/wickedsource/dependencytree/somepackage/NotADependencyTest.java");
         Assertions.assertNotNull(notADependencyTest);
         Assertions.assertEquals(1, notADependencyTest.getDependencies().size());
-    }
-
-    @Test
-    public void testTraversePre() {
-        Assertions.assertNotNull(root);
-        StringBuilder traversed = new StringBuilder();
-        root.traversePre(node -> traversed.append(node.getFilename()).append("\n"));
-        String expected = "testSrc\n" +
-                "src\n" +
-                "org\n" +
-                "wickedsource\n" +
-                "dependencytree\n" +
-                "wildcardpackage\n" +
-                "WildcardImportCircularDependency.java\n" +
-                "WildcardImport2Test.java\n" +
-                "CoreTest.java\n" +
-                "somepackage\n" +
-                "RandomClass2.java\n" +
-                "RandomClass.java\n" +
-                "NotADependencyTest.java\n" +
-                "InvalidDependencyTest.java\n" +
-                "DuplicateDependenciesTest.java\n" +
-                "DuplicateDependencies2Test.java\n" +
-                "CoreDependencyTest.java\n" +
-                "CircularDependencyTest.java\n" +
-                "extras\n" +
-                "FullyClassifiedDependencyTest.java\n";
-        Assertions.assertNotNull(traversed.toString());
-        Assertions.assertEquals(expected, traversed.toString());
-    }
-
-    @Test
-    public void testTraversePost() {
-        Assertions.assertNotNull(root);
-        StringBuilder traversed = new StringBuilder();
-        root.traversePost(node -> traversed.append(node.getFilename()).append("\n"));
-        String expected = "WildcardImportCircularDependency.java\n" +
-                "WildcardImport2Test.java\n" +
-                "wildcardpackage\n" +
-                "CoreTest.java\n" +
-                "RandomClass2.java\n" +
-                "RandomClass.java\n" +
-                "NotADependencyTest.java\n" +
-                "InvalidDependencyTest.java\n" +
-                "DuplicateDependenciesTest.java\n" +
-                "DuplicateDependencies2Test.java\n" +
-                "CoreDependencyTest.java\n" +
-                "CircularDependencyTest.java\n" +
-                "FullyClassifiedDependencyTest.java\n" +
-                "extras\n" +
-                "somepackage\n" +
-                "dependencytree\n" +
-                "wickedsource\n" +
-                "org\n" +
-                "src\n" +
-                "testSrc\n";
-        Assertions.assertNotNull(traversed.toString());
-        Assertions.assertEquals(expected, traversed.toString());
     }
 
     @Test
@@ -281,25 +225,6 @@ public class TreeTest extends ControllerTestTemplate {
     public void testGetNodeFromImportClass() {
         List<Node> imports = dependencyTree.getNodeFromImport("org.wickedsource.dependencytree.somepackage.CoreDependencyTest");
         Assertions.assertEquals(1, imports.size());
-    }
-
-    @Test
-    public void testGetParent() {
-        Assertions.assertNotNull(root);
-        Node somepackage = root.getNodeByPath("src/org/wickedsource/dependencytree/somepackage");
-        Assertions.assertEquals("dependencytree", somepackage.getParent(this.root).getFilename());
-    }
-
-    @Test
-    public void testGetParentRootChild() {
-        Assertions.assertNotNull(root);
-        Assertions.assertEquals("testSrc", root.getNodeByPath("src").getParent(this.root).getFilename());
-    }
-
-    @Test
-    public void testGetParentRoot() {
-        Assertions.assertNotNull(root);
-        Assertions.assertNull(root.getParent(this.root));
     }
 
     private void assertLeafWithoutDependencies(Node node) {

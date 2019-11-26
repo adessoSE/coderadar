@@ -1,6 +1,6 @@
-package io.reflectoring.coderadar.rest.dependencyMap;
+package io.reflectoring.coderadar.rest.dependencymap;
 
-import io.reflectoring.coderadar.dependencyMap.port.driver.GetCompareTreeUseCase;
+import io.reflectoring.coderadar.dependencymap.port.driver.GetCompareTreeUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
