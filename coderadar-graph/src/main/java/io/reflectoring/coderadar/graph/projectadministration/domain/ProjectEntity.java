@@ -15,8 +15,7 @@ import org.neo4j.ogm.annotation.Relationship;
 @NodeEntity
 @Data
 @EqualsAndHashCode(
-  exclude = {"files", "filePatterns", "modules", "analyzerConfigurations", "analyzingJob"}
-)
+    exclude = {"files", "filePatterns", "modules", "analyzerConfigurations", "analyzingJob"})
 @ToString(exclude = {"files", "filePatterns", "modules", "analyzerConfigurations", "analyzingJob"})
 public class ProjectEntity {
   private Long id;

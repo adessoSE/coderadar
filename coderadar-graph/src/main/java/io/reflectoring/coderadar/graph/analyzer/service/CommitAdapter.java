@@ -68,8 +68,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       commitEntities.sort(Comparator.comparing(CommitEntity::getTimestamp));
       for (CommitEntity c : commitEntities) {
         getFiles(
-            commits
-                .stream()
+            commits.stream()
                 .filter(commit -> commit.getName().equals(c.getName()))
                 .findFirst()
                 .get()
@@ -144,9 +143,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       // See if any of the commits we had before have been deleted and delete their metrics.
       for (CommitEntity commit : commitsInProject) {
         Optional<CommitEntity> existingCommit =
-            walkedCommits
-                .values()
-                .stream()
+            walkedCommits.values().stream()
                 .filter(c -> c.getName().equals(commit.getName()))
                 .findAny();
         if (!existingCommit.isPresent()) {
@@ -162,8 +159,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       commitEntities.sort(Comparator.comparing(CommitEntity::getTimestamp));
       for (CommitEntity c : commitEntities) {
         getFiles(
-            commits
-                .stream()
+            commits.stream()
                 .filter(commit -> commit.getName().equals(c.getName()))
                 .findFirst()
                 .get()

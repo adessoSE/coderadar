@@ -46,9 +46,7 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
 
     List<String> analyzers = listAnalyzerService.listAvailableAnalyzers();
     if (analyzers.contains(command.getAnalyzerName())) {
-      if (listAnalyzerConfigurationsFromProjectService
-          .get(projectId)
-          .stream()
+      if (listAnalyzerConfigurationsFromProjectService.get(projectId).stream()
           .noneMatch(
               a ->
                   a.getAnalyzerName().equals(command.getAnalyzerName())

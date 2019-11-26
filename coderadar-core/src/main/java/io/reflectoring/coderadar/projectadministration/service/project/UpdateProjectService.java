@@ -71,9 +71,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       throws ProjectIsBeingProcessedException {
     Project project = getProjectPort.get(projectId);
 
-    if (getProjectPort
-        .findByName(command.getName())
-        .stream()
+    if (getProjectPort.findByName(command.getName()).stream()
         .anyMatch(p -> !p.getId().equals(projectId))) {
       throw new ProjectAlreadyExistsException(command.getName());
     }

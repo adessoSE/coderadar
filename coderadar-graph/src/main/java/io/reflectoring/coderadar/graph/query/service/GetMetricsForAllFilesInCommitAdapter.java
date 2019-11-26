@@ -155,9 +155,7 @@ public class GetMetricsForAllFilesInCommitAdapter implements GetMetricsForAllFil
     Map<String, Long> aggregatedMetrics = new HashMap<>();
     for (MetricTree metricTree : children) {
       for (MetricValueForCommit val : aggregateChildMetrics(metricTree.getChildren())) {
-        if (metricTree
-            .getMetrics()
-            .stream()
+        if (metricTree.getMetrics().stream()
             .noneMatch(metric -> metric.getMetricName().equals(val.getMetricName()))) {
           metricTree
               .getMetrics()
