@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.dependencymap.adapter;
 
 import io.reflectoring.coderadar.dependencymap.analyzers.JavaAnalyzer;
-import io.reflectoring.coderadar.dependencymap.util.CompareNode;
+import io.reflectoring.coderadar.dependencymap.domain.CompareNode;
 import io.reflectoring.coderadar.dependencymap.util.CompareNodeComparator;
-import io.reflectoring.coderadar.dependencymap.util.CompareNodeDTO;
+import io.reflectoring.coderadar.dependencymap.domain.CompareNodeDTO;
 import io.reflectoring.coderadar.dependencymap.port.driven.GetCompareTreePort;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;

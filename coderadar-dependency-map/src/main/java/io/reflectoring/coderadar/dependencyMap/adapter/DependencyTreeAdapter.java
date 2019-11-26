@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.dependencymap.adapter;
 
 import io.reflectoring.coderadar.dependencymap.analyzers.JavaAnalyzer;
-import io.reflectoring.coderadar.dependencymap.util.Node;
+import io.reflectoring.coderadar.dependencymap.domain.Node;
 import io.reflectoring.coderadar.dependencymap.util.NodeComparator;
 import io.reflectoring.coderadar.dependencymap.port.driven.GetDependencyTreePort;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
