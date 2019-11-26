@@ -102,70 +102,6 @@ public class CompareTreeTest extends ControllerTestTemplate {
     }
 
     @Test
-    public void testTraversePre() {
-        Assertions.assertNotNull(root);
-        StringBuilder traversed = new StringBuilder();
-        root.traversePre(node -> traversed.append(node.getFilename()).append("\n"));
-        String expected = "testSrc\n" +
-                "src\n" +
-                "org\n" +
-                "wickedsource\n" +
-                "dependencytree\n" +
-                "wildcardpackage\n" +
-                "WildcardImportCircularDependencyTest.java\n" +
-                "WildcardImportCircularDependency.java\n" +
-                "WildcardImport2Test.java\n" +
-                "WildcardImport1Test.java\n" +
-                "somepackage\n" +
-                "RandomClass2.java\n" +
-                "RandomClass.java\n" +
-                "NotADependencyTest.java\n" +
-                "InvalidDependencyTest.java\n" +
-                "FullyClassifiedDependencyTest.java\n" +
-                "DuplicateDependenciesTest.java\n" +
-                "DuplicateDependencies2Test.java\n" +
-                "CoreDependencyTest.java\n" +
-                "CircularDependencyTest.java\n" +
-                "extras\n" +
-                "FullyClassifiedDependencyTest.java\n" +
-                "CoreTest.java\n";
-        Assertions.assertNotNull(traversed.toString());
-        Assertions.assertEquals(expected, traversed.toString());
-    }
-
-    @Test
-    public void testTraversePost() {
-        Assertions.assertNotNull(root);
-        StringBuilder traversed = new StringBuilder();
-        root.traversePost(node -> traversed.append(node.getFilename()).append("\n"));
-        String expected = "WildcardImportCircularDependencyTest.java\n" +
-                "WildcardImportCircularDependency.java\n" +
-                "WildcardImport2Test.java\n" +
-                "WildcardImport1Test.java\n" +
-                "wildcardpackage\n" +
-                "RandomClass2.java\n" +
-                "RandomClass.java\n" +
-                "NotADependencyTest.java\n" +
-                "InvalidDependencyTest.java\n" +
-                "FullyClassifiedDependencyTest.java\n" +
-                "DuplicateDependenciesTest.java\n" +
-                "DuplicateDependencies2Test.java\n" +
-                "CoreDependencyTest.java\n" +
-                "CircularDependencyTest.java\n" +
-                "FullyClassifiedDependencyTest.java\n" +
-                "extras\n" +
-                "somepackage\n" +
-                "CoreTest.java\n" +
-                "dependencytree\n" +
-                "wickedsource\n" +
-                "org\n" +
-                "src\n" +
-                "testSrc\n";
-        Assertions.assertNotNull(traversed.toString());
-        Assertions.assertEquals(expected, traversed.toString());
-    }
-
-    @Test
     public void testCreateTree() {
         Assertions.assertNotNull(root);
         Assertions.assertEquals("testSrc", root.getFilename());
@@ -324,29 +260,6 @@ public class CompareTreeTest extends ControllerTestTemplate {
     public void testGetNodeFromImportClass() {
         List<CompareNode> imports = dependencyTree.getNodeFromImport("org.wickedsource.dependencytree.somepackage.CoreDependencyTest");
         Assertions.assertEquals(1, imports.size());
-    }
-
-    @Test
-    public void testGetParent() {
-        Assertions.assertNotNull(root);
-        CompareNode somepackage = root.getNodeByPath("src/org/wickedsource/dependencytree/somepackage");
-        Assertions.assertEquals("dependencytree", somepackage.getParent(this.root).getFilename());
-    }
-
-    @Test
-    public void testGetParentRootChild() {
-        Assertions.assertNotNull(root);
-        CompareNode src = root.getNodeByPath("src");
-        Assertions.assertNotNull(src);
-        CompareNode srcParent = src.getParent(this.root);
-        Assertions.assertNotNull(srcParent);
-        Assertions.assertEquals("testSrc", srcParent.getFilename());
-    }
-
-    @Test
-    public void testGetParentRoot() {
-        Assertions.assertNotNull(root);
-        Assertions.assertNull(root.getParent(this.root));
     }
 
     private void assertLeafWithoutDependencies(CompareNode node, ChangeType changed) {

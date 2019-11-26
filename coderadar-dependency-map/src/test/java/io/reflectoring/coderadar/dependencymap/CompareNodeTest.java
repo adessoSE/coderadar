@@ -96,12 +96,12 @@ public class CompareNodeTest {
         testRoot.traversePre(node -> traversed.append(node.getFilename()).append("\n"));
         String expected =
                 "testRoot\n" +
-                        "testNode1_4\n" +
-                        "testNode1_3\n" +
-                        "testNode1_2\n" +
+                    "testNode1_4\n" +
+                    "testNode1_3\n" +
+                    "testNode1_2\n" +
                         "testNode2_4\n" +
                         "testNode2_3\n" +
-                        "testNode1_1\n" +
+                    "testNode1_1\n" +
                         "testNode2_2\n" +
                         "testNode2_1\n";
         Assertions.assertNotNull(traversed.toString());
@@ -114,15 +114,15 @@ public class CompareNodeTest {
         StringBuilder traversed = new StringBuilder();
         testRoot.traversePost(node -> traversed.append(node.getFilename()).append("\n"));
         String expected =
-                "testNode1_4\n" +
-                        "testNode1_3\n" +
+                    "testNode1_4\n" +
+                    "testNode1_3\n" +
                         "testNode2_4\n" +
                         "testNode2_3\n" +
-                        "testNode1_2\n" +
+                    "testNode1_2\n" +
                         "testNode2_2\n" +
                         "testNode2_1\n" +
-                        "testNode1_1\n" +
-                        "testRoot\n";
+                    "testNode1_1\n" +
+                "testRoot\n";
         Assertions.assertNotNull(traversed.toString());
         Assertions.assertEquals(expected, traversed.toString());
     }
