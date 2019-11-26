@@ -101,12 +101,12 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     commit.setName(rc.getName());
     commit.setAuthor(rc.getAuthorIdent().getName());
     commit.setComment(rc.getShortMessage());
-    commit.setTimestamp(Date.from(Instant.ofEpochSecond(rc.getCommitTime())));
+    commit.setTimestamp(rc.getAuthorIdent().getWhen());
     return commit;
   }
 
   /**
-   * @param git The git API object .
+   * @param git The git API object.
    * @param firstCommit The firstCommit of the repository.
    * @param files A HashMap containing files already created for the project.
    * @throws IOException Thrown if the commit tree cannot be walked.
