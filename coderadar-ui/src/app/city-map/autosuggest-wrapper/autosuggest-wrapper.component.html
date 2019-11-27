@@ -1,10 +1,11 @@
 <form style="padding-top: 20px; width: 100%">
   <mat-form-field style="width: 100%">
-    <input [formControl]="formControl" [matAutocomplete]="auto" matInput placeholder="{{label}}" type="text">
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="formatValue" [panelWidth]="auto">
-      <mat-option (onSelectionChange)="handleValueChanged(option)" *ngFor="let option of filteredOptions | async"
+    <input matInput [formControl]="formControl"  (focus)="$event.target.select()" [matAutocomplete]="auto"  placeholder="{{label}}" type="text">
+    <mat-autocomplete #auto="matAutocomplete"  [displayWith]="formatCommit" [panelWidth]="auto">
+      <mat-option (onSelectionChange)="handleValueChanged(option)"
+                  *ngFor="let option of filteredOptions | async"
                   [value]="option">
-        {{formatValue(option)}}
+                  {{option?.timestamp | date:"EE, dd LLL y h:mm:ss O"}},  {{option?.name | slice:-8}}, {{option?.author}}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
