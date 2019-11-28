@@ -11,27 +11,24 @@ import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import java.util.ArrayList;
 import java.util.List;
-import org.neo4j.ogm.session.Session;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CreateModuleAdapter implements CreateModulePort {
   private final ModuleRepository moduleRepository;
   private final ProjectRepository projectRepository;
-  private final Session session;
 
   public CreateModuleAdapter(
-      ModuleRepository moduleRepository, ProjectRepository projectRepository, Session session) {
+      ModuleRepository moduleRepository, ProjectRepository projectRepository) {
     this.moduleRepository = moduleRepository;
     this.projectRepository = projectRepository;
-    this.session = session;
   }
 
   /**
    * Adds a new module to the project.
    *
-   * @param modulePath The module id.
-   * @param projectId The project id/
+   * @param modulePath The module path.
+   * @param projectId The project id.
    * @throws ProjectNotFoundException Thrown if a project with projectId is not found.
    * @return The id of the newly created module
    */
@@ -43,15 +40,12 @@ public class CreateModuleAdapter implements CreateModulePort {
             .findByIdWithModules(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
     ModuleEntity foundModule = findParentModuleInProject(projectEntity, modulePath);
-    ModuleEntity newModule;
     modulePath = checkPathIsValid(modulePath, projectEntity);
     if (foundModule != null) {
-      newModule = attachModuleToModule(foundModule, modulePath);
+      return attachModuleToModule(foundModule, modulePath);
     } else {
-      newModule = attachModuleToProject(projectEntity, modulePath);
+      return attachModuleToProject(projectEntity, modulePath);
     }
-    session.clear();
-    return newModule.getId();
   }
 
   /**
@@ -61,9 +55,17 @@ public class CreateModuleAdapter implements CreateModulePort {
    * @param parentModule The parent module
    * @param childModulePath The child module path
    */
-  private ModuleEntity attachModuleToModule(ModuleEntity parentModule, String childModulePath) {
-    ModuleEntity childModule =
-        moduleRepository.createModuleInModule(parentModule.getId(), childModulePath);
+  private Long attachModuleToModule(ModuleEntity parentModule, String childModulePath) {
+    ModuleEntity childModule;
+
+    if (moduleRepository.fileInPathExists(childModulePath, parentModule.getId())) {
+      childModule = moduleRepository.createModuleInModule(parentModule.getId(), childModulePath);
+    } else {
+      childModule = new ModuleEntity();
+      childModule.setPath(childModulePath);
+      childModule.setParentModule(parentModule);
+      moduleRepository.save(childModule);
+    }
 
     // Check to see if the module could a have child
     for (ModuleEntity child : findChildModules(parentModule.getChildModules(), childModulePath)) {
@@ -73,7 +75,7 @@ public class CreateModuleAdapter implements CreateModulePort {
       moduleRepository.save(child);
       moduleRepository.detachModuleFromModule(parentModule.getId(), child.getId());
     }
-    return childModule;
+    return childModule.getId();
   }
 
   /**
@@ -82,9 +84,17 @@ public class CreateModuleAdapter implements CreateModulePort {
    * @param projectEntity The project to attach the module to.
    * @param modulePath The module path.
    */
-  private ModuleEntity attachModuleToProject(ProjectEntity projectEntity, String modulePath) {
-    ModuleEntity moduleEntity =
-        moduleRepository.createModuleInProject(projectEntity.getId(), modulePath);
+  private Long attachModuleToProject(ProjectEntity projectEntity, String modulePath) {
+    ModuleEntity moduleEntity;
+
+    if (moduleRepository.fileInPathExists(modulePath, projectEntity.getId())) {
+      moduleEntity = moduleRepository.createModuleInProject(projectEntity.getId(), modulePath);
+    } else {
+      moduleEntity = new ModuleEntity();
+      moduleEntity.setPath(modulePath);
+      moduleEntity.setProject(projectEntity);
+      moduleRepository.save(moduleEntity);
+    }
 
     // Check to see if the module could a have child
     for (ModuleEntity childModule : findChildModules(projectEntity.getModules(), modulePath)) {
@@ -95,7 +105,7 @@ public class CreateModuleAdapter implements CreateModulePort {
       projectEntity.getModules().removeIf(entity -> entity.getId().equals(childModule.getId()));
       moduleRepository.detachModuleFromProject(projectEntity.getId(), childModule.getId());
     }
-    return moduleEntity;
+    return moduleEntity.getId();
   }
 
   /**

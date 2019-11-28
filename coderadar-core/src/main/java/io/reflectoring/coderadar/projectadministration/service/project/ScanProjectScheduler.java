@@ -10,11 +10,11 @@ import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.GetProjectHeadCommitPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
+import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ListProjectsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
-import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
@@ -46,9 +46,10 @@ public class ScanProjectScheduler {
   private final TaskScheduler taskScheduler;
   private final GetProjectPort getProjectPort;
   private final ListModulesOfProjectUseCase listModulesOfProjectUseCase;
-  private final CreateModuleUseCase createModuleUseCase;
+  private final CreateModulePort createModulePort;
   private final AddCommitsPort addCommitsPort;
   private final GetProjectHeadCommitPort getProjectHeadCommitPort;
+  private final DeleteModulePort deleteModulePort;
 
   private final Logger logger = LoggerFactory.getLogger(ScanProjectScheduler.class);
 
@@ -63,9 +64,10 @@ public class ScanProjectScheduler {
       TaskScheduler taskScheduler,
       GetProjectPort getProjectPort,
       ListModulesOfProjectUseCase listModulesOfProjectUseCase,
-      CreateModuleUseCase createModuleUseCase,
+      CreateModulePort createModulePort,
       AddCommitsPort addCommitsPort,
-      GetProjectHeadCommitPort getProjectHeadCommitPort) {
+      GetProjectHeadCommitPort getProjectHeadCommitPort,
+      DeleteModulePort deleteModulePort) {
     this.updateRepositoryUseCase = updateRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
@@ -74,15 +76,17 @@ public class ScanProjectScheduler {
     this.taskScheduler = taskScheduler;
     this.getProjectPort = getProjectPort;
     this.listModulesOfProjectUseCase = listModulesOfProjectUseCase;
-    this.createModuleUseCase = createModuleUseCase;
+    this.createModulePort = createModulePort;
     this.addCommitsPort = addCommitsPort;
     this.getProjectHeadCommitPort = getProjectHeadCommitPort;
+    this.deleteModulePort = deleteModulePort;
   }
 
   /** Starts the scheduleCheckTask tasks upon application start */
   @EventListener({ContextRefreshedEvent.class})
   public void onApplicationEvent() {
-    taskScheduler.scheduleAtFixedRate(this::scheduleCheckTask, 6000);
+    taskScheduler.scheduleAtFixedRate(
+        this::scheduleCheckTask, coderadarConfigurationProperties.getScanIntervalInSeconds() * 100);
   }
 
   /** Starts update tasks for all projects that don't have one running already. */
@@ -166,6 +170,10 @@ public class ScanProjectScheduler {
         // Check what modules where previously in the project
         List<GetModuleResponse> modules = listModulesOfProjectUseCase.listModules(project.getId());
 
+        for (GetModuleResponse module : modules) {
+          deleteModulePort.delete(module.getId(), project.getId());
+        }
+
         // Get the new commits
         List<Commit> commits = getNewCommits(project);
 
@@ -174,8 +182,7 @@ public class ScanProjectScheduler {
 
         // Re-create the modules
         for (GetModuleResponse module : modules) {
-          createModuleUseCase.createModule(
-              new CreateModuleCommand(module.getPath()), project.getId());
+          createModulePort.createModule(module.getPath(), project.getId());
         }
       }
     } catch (UnableToUpdateRepositoryException

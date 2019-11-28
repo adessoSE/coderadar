@@ -51,6 +51,8 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
     FileRepositoryBuilder builder = new FileRepositoryBuilder();
     Repository repository = builder.setWorkTree(command.getLocalDir()).build();
     Git git = new Git(repository);
+    git.close();
+    git = new Git(repository);
     StoredConfig config = git.getRepository().getConfig();
     config.setString("remote", "origin", "url", command.getRemoteUrl());
     config.save();
