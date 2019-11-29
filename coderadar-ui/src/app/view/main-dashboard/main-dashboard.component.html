@@ -22,6 +22,9 @@
               <button title="Start analysis" (click)="startAnalysis(project.id)" style="float:right" mat-icon-button>
                 <mat-icon>play_arrow</mat-icon>
               </button>
+              <button title="Stop analysis" (click)="stopAnalysis(project.id)" style="float:right" mat-icon-button>
+                <mat-icon>stop</mat-icon>
+              </button>
               <button title="Delete analysis results" (click)="resetAnalysis(project.id)" style="float:right" mat-icon-button>
                 <mat-icon>clear</mat-icon>
               </button>

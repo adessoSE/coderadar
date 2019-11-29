@@ -95,7 +95,7 @@ export class MainDashboardComponent implements OnInit {
       this.openSnackBar('Analysis results deleted!', '🞩');
     }).catch(error => {
       if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh(() => this.projectService.startAnalyzingJob(id, true));
+        this.userService.refresh(() => this.projectService.resetAnalysis(id, true));
       } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
         this.openSnackBar('Analysis results cannot be deleted! Try again later!', '🞩');
       }
@@ -105,6 +105,18 @@ export class MainDashboardComponent implements OnInit {
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: 4000,
+    });
+  }
+
+  stopAnalysis(id: number) {
+    this.projectService.stopAnalyzingJob(id).then(() => {
+      this.openSnackBar('Analysis stopped!', '🞩');
+    }).catch(error => {
+      if (error.status && error.status === FORBIDDEN) {
+        this.userService.refresh(() => this.projectService.stopAnalyzingJob(id));
+      } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
+        this.openSnackBar('Analysis stopped!', '🞩');
+      }
     });
   }
 }

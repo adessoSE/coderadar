@@ -191,7 +191,7 @@ export class ProjectService {
    * @param id The id of the project.
    */
   public stopAnalyzingJob(id: number): Promise<HttpResponse<any>> {
-    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyzingJob', {fromDate: 0, active: false, rescan: false},
+    return this.httpClient.get(this.apiURL + 'projects/' + id + '/stopAnalysis',
       {observe: 'response'}).toPromise();
   }
 

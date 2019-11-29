@@ -50,6 +50,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final AsyncListenableTaskExecutor taskExecutor;
   private final GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort;
   private final ProjectStatusPort projectStatusPort;
+  private final GetAnalyzingStatusService getAnalyzingStatusService;
 
   private final Logger logger = LoggerFactory.getLogger(StartAnalyzingService.class);
 
@@ -67,7 +68,8 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       StopAnalyzingPort stopAnalyzingPort,
       AsyncListenableTaskExecutor taskExecutor,
       GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort,
-      ProjectStatusPort projectStatusPort) {
+      ProjectStatusPort projectStatusPort,
+      GetAnalyzingStatusService getAnalyzingStatusService) {
     this.getProjectPort = getProjectPort;
     this.analyzeCommitUseCase = analyzeCommitUseCase;
     this.analyzerPluginService = analyzerPluginService;
@@ -82,6 +84,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     this.taskExecutor = taskExecutor;
     this.getAvailableMetricsInProjectPort = getAvailableMetricsInProjectPort;
     this.projectStatusPort = projectStatusPort;
+    this.getAnalyzingStatusService = getAnalyzingStatusService;
   }
 
   /**
@@ -136,7 +139,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           int counter = 0;
           ListenableFuture<?> saveTask = null;
           for (Commit commit : commitsToBeAnalyzed) {
-            if (!commit.isAnalyzed()) {
+            if (!commit.isAnalyzed() && getAnalyzingStatusService.get(projectId)) {
               List<MetricValue> metrics =
                   analyzeCommitUseCase.analyzeCommit(
                       commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher);
