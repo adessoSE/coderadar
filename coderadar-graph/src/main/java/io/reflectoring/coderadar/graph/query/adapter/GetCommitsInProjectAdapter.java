@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.graph.query.adapter;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommitRelationshipEntity;
-import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.CommitBaseDataMapper;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
@@ -12,7 +11,9 @@ import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.query.port.driver.GetCommitResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -54,48 +55,40 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
   @Override
   public List<GetCommitResponse> getCommitsResponseSortedByTimestampDesc(Long projectId) {
-    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
-    if (persistedProject.isPresent()) {
-      List<CommitEntity> commitEntities =
-          commitRepository.findByProjectIdAndTimestampDesc(projectId);
-      List<GetCommitResponse> getCommitResponses = new ArrayList<>();
-      for (CommitEntity c : commitEntities) {
-        GetCommitResponse commitResponse = new GetCommitResponse();
-        commitResponse.setName(c.getName());
-        commitResponse.setAnalyzed(c.isAnalyzed());
-        commitResponse.setAuthor(c.getAuthor());
-        commitResponse.setComment(c.getComment());
-        commitResponse.setTimestamp(c.getTimestamp().getTime());
-        getCommitResponses.add(commitResponse);
-      }
-      return getCommitResponses;
-    } else {
+    if (!projectRepository.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }
+    List<GetCommitResponse> getCommitResponses = new ArrayList<>();
+    for (CommitEntity c : commitRepository.findByProjectIdAndTimestampDesc(projectId)) {
+      GetCommitResponse commitResponse = new GetCommitResponse();
+      commitResponse.setName(c.getName());
+      commitResponse.setAnalyzed(c.isAnalyzed());
+      commitResponse.setAuthor(c.getAuthor());
+      commitResponse.setComment(c.getComment());
+      commitResponse.setTimestamp(c.getTimestamp().getTime());
+      getCommitResponses.add(commitResponse);
+    }
+    return getCommitResponses;
   }
 
   @Override
   public List<Commit> getSortedByTimestampAsc(Long projectId) {
-    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
-    if (persistedProject.isPresent()) {
-      List<CommitEntity> commitEntities =
-          commitRepository.findByProjectIdWithAllRelationshipsSortedByTimestampAsc(projectId);
-      return mapCommitEntities(commitEntities);
-    } else {
+    if (!projectRepository.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }
+    List<CommitEntity> commitEntities =
+        commitRepository.findByProjectIdWithAllRelationshipsSortedByTimestampAsc(projectId);
+    return mapCommitEntities(commitEntities);
   }
 
   @Override
   public List<Commit> getSortedByTimestampAscWithNoParents(Long projectId) {
-    Optional<ProjectEntity> persistedProject = projectRepository.findById(projectId);
-    if (persistedProject.isPresent()) {
-      List<CommitEntity> commitEntities =
-          commitRepository.findByProjectIdWithFileRelationshipsSortedByTimestampAsc(projectId);
-      return mapCommitEntitiesNoParents(commitEntities);
-    } else {
+    if (!projectRepository.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }
+    List<CommitEntity> commitEntities =
+        commitRepository.findByProjectIdWithFileRelationshipsSortedByTimestampAsc(projectId);
+    return mapCommitEntitiesNoParents(commitEntities);
   }
 
   private List<Commit> mapCommitEntitiesNoParents(List<CommitEntity> commitEntities) {

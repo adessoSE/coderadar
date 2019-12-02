@@ -41,8 +41,8 @@ export class ControlPanelComponent implements OnInit {
 
   ngOnInit() {
     if (this.store !== undefined) {
+      this.store.dispatch(loadCommits());
       if (!this.cityEffects.isLoaded) {
-        this.store.dispatch(loadCommits());
         this.store.dispatch(loadAvailableMetrics());
       }
       this.commits$ = this.store.select(fromRoot.getCommits).pipe(map(elements => elements.sort((a, b) => {
@@ -63,7 +63,6 @@ export class ControlPanelComponent implements OnInit {
   }
 
   handleCommitChanged(payload: { commitType: CommitType, commit: Commit }) {
-    console.log(payload);
     this.store.dispatch(changeCommit(payload.commitType, payload.commit));
   }
 

@@ -40,7 +40,6 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
 
   @Override
   public MetricTree get(GetMetricsForCommitCommand command, Long projectId) {
-
     ProjectEntity projectEntity =
         projectRepository
             .findByIdWithModules(projectId)
@@ -50,6 +49,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
         commitRepository
             .findByNameAndProjectId(command.getCommit(), projectId)
             .orElseThrow(() -> new CommitNotFoundException(command.getCommit()));
+
     if (commitEntity == null) {
       throw new CommitNotFoundException(command.getCommit());
     }

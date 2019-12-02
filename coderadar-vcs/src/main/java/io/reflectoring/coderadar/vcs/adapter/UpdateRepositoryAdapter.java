@@ -51,12 +51,10 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
     FileRepositoryBuilder builder = new FileRepositoryBuilder();
     Repository repository = builder.setWorkTree(command.getLocalDir()).build();
     Git git = new Git(repository);
-    git.close();
-    git = new Git(repository);
+    ObjectId oldHead = git.getRepository().resolve(Constants.HEAD);
     StoredConfig config = git.getRepository().getConfig();
     config.setString("remote", "origin", "url", command.getRemoteUrl());
     config.save();
-    ObjectId oldHead = git.getRepository().resolve(Constants.HEAD);
     FetchCommand fetchCommand = git.fetch();
     if (command.getUsername() != null && command.getPassword() != null) {
       fetchCommand.setCredentialsProvider(

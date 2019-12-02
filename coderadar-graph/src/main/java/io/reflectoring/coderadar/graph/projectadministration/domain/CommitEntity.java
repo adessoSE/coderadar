@@ -38,13 +38,4 @@ public class CommitEntity {
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   private List<MetricValueEntity> metricValues = new ArrayList<>();
-
-  public void setComment(String comment) {
-    if (comment.length() > 255) {
-      // truncating commit message if too long for database
-      this.comment = comment.substring(0, 252) + "...";
-    } else {
-      this.comment = comment;
-    }
-  }
 }
