@@ -99,8 +99,8 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       throw new ProjectIsBeingProcessedException(projectId);
     }
     List<FilePattern> filePatterns = listFilePatternsOfProjectPort.listFilePatterns(projectId);
-    List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
-        getAnalyzersForProject(projectId);
+    Collection<AnalyzerConfiguration> analyzerConfigurations =
+        listAnalyzerConfigurationsPort.get(projectId);
 
     if (filePatterns.isEmpty()
         || filePatterns
@@ -108,10 +108,10 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
             .noneMatch(
                 filePattern -> filePattern.getInclusionType().equals(InclusionType.INCLUDE))) {
       throw new MisconfigurationException("Cannot analyze project without file patterns");
-    } else if (sourceCodeFileAnalyzerPlugins.isEmpty()) {
+    } else if (analyzerConfigurations.isEmpty()) {
       throw new MisconfigurationException("Cannot analyze project without analyzers");
     }
-    startAnalyzingTask(command, projectId, filePatterns, sourceCodeFileAnalyzerPlugins);
+    startAnalyzingTask(command, projectId, filePatterns);
   }
 
   /**
@@ -120,15 +120,13 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
    * @param command The analysing command to use.
    * @param projectId The id of the project to analyze.
    * @param filePatterns The patterns to use.
-   * @param sourceCodeFileAnalyzerPlugins The analyzers to use.
    */
   private void startAnalyzingTask(
-      StartAnalyzingCommand command,
-      Long projectId,
-      List<FilePattern> filePatterns,
-      List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins) {
+      StartAnalyzingCommand command, Long projectId, List<FilePattern> filePatterns) {
     processProjectService.executeTask(
         () -> {
+          List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
+              getAnalyzersForProject(projectId);
           Project project = getProjectPort.get(projectId);
           List<Commit> commitsToBeAnalyzed =
               getCommitsInProjectPort.getSortedByTimestampAscWithNoParents(projectId);
