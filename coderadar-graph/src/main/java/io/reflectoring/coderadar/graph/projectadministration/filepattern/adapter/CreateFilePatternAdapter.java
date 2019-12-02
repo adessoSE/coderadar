@@ -30,7 +30,6 @@ public class CreateFilePatternAdapter implements CreateFilePatternPort {
         projectRepository
             .findById(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
-    filePatternEntity.setProject(projectEntity);
     projectEntity.getFilePatterns().add(filePatternEntity);
     projectRepository.save(projectEntity);
     return filePatternRepository.save(filePatternEntity).getId();

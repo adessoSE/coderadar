@@ -7,6 +7,7 @@ export const LOAD_COMMITS = 'LOAD_COMMITS';
 export const LOAD_COMMITS_SUCCESS = 'LOAD_COMMITS_SUCCESS';
 export const LOAD_COMMITS_ERROR = 'LOAD_COMMITS_ERROR';
 export const CHANGE_COMMIT = 'CHANGE_COMMIT';
+export const SET_COMMITS = 'SET_COMMITS';
 
 export function loadCommits(): Action {
   return {
@@ -35,5 +36,12 @@ export function changeCommit(commitType: CommitType, commit: Commit): IActionWit
       commitType,
       commit
     }
+  };
+}
+
+export function setCommits(commits: Commit[]): IActionWithPayload<Commit[]> {
+  return {
+    type: SET_COMMITS,
+    payload: commits
   };
 }

@@ -41,9 +41,9 @@ export class ControlPanelComponent implements OnInit {
 
   ngOnInit() {
     if (this.store !== undefined) {
-      this.store.dispatch(loadCommits());
       if (!this.cityEffects.isLoaded) {
         this.store.dispatch(loadAvailableMetrics());
+        this.store.dispatch(loadCommits());
       }
       this.commits$ = this.store.select(fromRoot.getCommits).pipe(map(elements => elements.sort((a, b) => {
         if (a.timestamp === b.timestamp) {
