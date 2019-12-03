@@ -108,7 +108,10 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
             .noneMatch(
                 filePattern -> filePattern.getInclusionType().equals(InclusionType.INCLUDE))) {
       throw new MisconfigurationException("Cannot analyze project without file patterns");
-    } else if (analyzerConfigurations.isEmpty()) {
+    } else if (analyzerConfigurations.isEmpty()
+        || analyzerConfigurations
+            .stream()
+            .noneMatch(analyzerConfiguration -> analyzerConfiguration.getEnabled())) {
       throw new MisconfigurationException("Cannot analyze project without analyzers");
     }
     startAnalyzingTask(command, projectId, filePatterns);
