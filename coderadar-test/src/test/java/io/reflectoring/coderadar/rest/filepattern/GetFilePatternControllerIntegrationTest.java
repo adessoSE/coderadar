@@ -49,7 +49,8 @@ class GetFilePatternControllerIntegrationTest extends ControllerTestTemplate {
                   fromJson(result.getResponse().getContentAsString(), GetFilePatternResponse.class);
               Assertions.assertEquals("**/*.java", response.getPattern());
               Assertions.assertEquals(InclusionType.INCLUDE, response.getInclusionType());
-            });
+            })
+        .andDo(document("filepatterns/get"));
   }
 
   @Test

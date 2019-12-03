@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.List;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,7 +38,18 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
 
     @Test
     void returnsAllCommitsInProject() throws Exception {
-        MvcResult result = mvc().perform(get("/projects/" + projectId + "/commits").contentType(MediaType.APPLICATION_JSON)).andReturn();
+        MvcResult result = mvc().perform(get("/projects/" + projectId + "/commits").contentType(MediaType.APPLICATION_JSON))
+                .andDo(document(
+                        "commit/list",
+                        responseFields(
+                                fieldWithPath("[]").description("Array of all the commits in this project."),
+                                fieldWithPath("[].name").description("The name of the commit."),
+                                fieldWithPath("[].author").description("The author of the commit"),
+                                fieldWithPath("[].comment").description("The comment of this commit"),
+                                fieldWithPath("[].timestamp").description("The timestamp of this commit"),
+                                fieldWithPath("[].analyzed").description("Whether this commit is already analyzed or not.")
+                        )))
+                .andReturn();
 
         List<GetCommitResponse> commits = fromJson(new TypeReference<List<GetCommitResponse>>() {},
                 result.getResponse().getContentAsString());

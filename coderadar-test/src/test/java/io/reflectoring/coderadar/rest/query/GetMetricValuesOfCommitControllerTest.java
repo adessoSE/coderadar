@@ -21,6 +21,7 @@ import java.net.URL;
 import java.util.*;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -57,12 +58,23 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
     @Test
     void checkMetricsAreCalculatedCorrectlyForCommit() throws Exception {
+        ConstrainedFields fields = fields(GetMetricsForCommitCommand.class);
         GetMetricsForCommitCommand command = new GetMetricsForCommitCommand();
         command.setMetrics(Arrays.asList("coderadar:size:loc:java", "coderadar:size:sloc:java", "coderadar:size:cloc:java", "coderadar:size:eloc:java"));
         command.setCommit("d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df");
 
         MvcResult result = mvc().perform(get("/projects/" + projectId + "/metricvalues/perCommit")
                 .contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
+                .andDo(document(
+                        "metrics/commit/metrics",
+                        requestFields(
+                                fields
+                                        .withPath("commit")
+                                        .description("The Name of the commit whose metric values to get."),
+                                fields
+                                        .withPath("metrics")
+                                        .description("List of the names of the metrics whose values you want to query.")
+                        )))
                 .andReturn();
 
         List<MetricValueForCommit> metricValuesForCommit = fromJson(new TypeReference<List<MetricValueForCommit>>() {},

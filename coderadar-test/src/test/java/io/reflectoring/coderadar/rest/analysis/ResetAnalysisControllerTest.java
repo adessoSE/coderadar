@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -64,8 +66,24 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         CreateAnalyzerConfigurationCommand createAnalyzerConfigurationCommand = new CreateAnalyzerConfigurationCommand("io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
         mvc().perform(post("/projects/" + projectId + "/analyzers").content(toJson(createAnalyzerConfigurationCommand)).contentType(MediaType.APPLICATION_JSON));
 
-        StartAnalyzingCommand startAnalyzingCommand = new StartAnalyzingCommand(new Date(0L), true);
-        mvc().perform(post("/projects/" + projectId + "/analyze").content(toJson(startAnalyzingCommand)).contentType(MediaType.APPLICATION_JSON));
+        ConstrainedFields fields = fields(StartAnalyzingCommand.class);
+        StartAnalyzingCommand startAnalyzingCommand = new StartAnalyzingCommand(null, true);
+        mvc().perform(post("/projects/" + projectId + "/analyze").content(toJson(startAnalyzingCommand)).contentType(MediaType.APPLICATION_JSON))
+                .andDo(document("analyzing-job/start",
+                        requestFields(
+                                fields
+                                        .withPath("from")
+                                        .type("Date")
+                                        .description("Date (in milliseconds since epoch) from which to start analyzing commits. Commits before this date are ignored during analysis. If no date is specified, all commits will be analyzed."),
+                                fields
+                                        .withPath("rescan")
+                                        .description("Set this to true when setting the AnalyzingJob for a project if you want to delete all existing analysis results and restart analysis with the new AnalyzingJob. You will get an error response if you try rescanning a project while there are running or queued analysis jobs (i.e. when the previous scan over all commits is not yet finished).")
+                                )));
+
+        mvc().perform(get("/projects/" + projectId + "/analyzingStatus"))
+                .andDo(document("analyzing-job/status",
+                        responseFields(fieldWithPath("status").description("Whether the Analyzing Job is started or not."))
+                ));
 
         session.clear();
 
@@ -76,7 +94,8 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         List<MetricValueEntity> metricValues = metricRepository.findByProjectId(projectId);
         Assertions.assertEquals(40, metricValues.size());
 
-        mvc().perform(post("/projects/" + projectId + "/analyze/reset"));
+        mvc().perform(post("/projects/" + projectId + "/analyze/reset"))
+                .andDo(document("analyzing-job/reset"));
 
         session.clear();
 

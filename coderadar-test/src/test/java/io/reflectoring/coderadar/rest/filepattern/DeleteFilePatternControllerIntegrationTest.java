@@ -37,7 +37,8 @@ class DeleteFilePatternControllerIntegrationTest extends ControllerTestTemplate 
             delete("/projects/" + testProject.getId() + "/filePatterns/" + filePattern.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(
-            result -> Assertions.assertFalse(filePatternRepository.findById(id).isPresent()));
+            result -> Assertions.assertFalse(filePatternRepository.findById(id).isPresent()))
+        .andDo(document("filepatterns/delete"));
   }
 
   @Test

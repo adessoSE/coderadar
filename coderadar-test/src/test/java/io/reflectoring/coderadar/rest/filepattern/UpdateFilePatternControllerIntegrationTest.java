@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntit
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
+import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.update.UpdateFilePatternCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate {
@@ -35,6 +37,7 @@ class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
     final Long id = filePattern.getId();
 
     // Test
+    ConstrainedFields fields = fields(UpdateFilePatternCommand.class);
     UpdateFilePatternCommand command =
         new UpdateFilePatternCommand("**/*.xml", InclusionType.EXCLUDE);
     mvc()
@@ -48,7 +51,16 @@ class UpdateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
               FilePatternEntity configuration = filePatternRepository.findById(id).get();
               Assertions.assertEquals("**/*.xml", configuration.getPattern());
               Assertions.assertEquals(InclusionType.EXCLUDE, configuration.getInclusionType());
-            });
+            })
+        .andDo(document(
+                "filepatterns/update",
+                requestFields(
+                        fields
+                                .withPath("pattern")
+                                .description("The pattern string of this FilePattern."),
+                        fields
+                                .withPath("inclusionType")
+                                .description("Whether the pattern is included or excluded."))));
   }
 
   @Test
