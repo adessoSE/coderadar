@@ -3,8 +3,8 @@ package io.reflectoring.coderadar.graph.projectadministration.project;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
+import io.reflectoring.coderadar.graph.projectadministration.project.adapter.UpdateProjectAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.service.UpdateProjectAdapter;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import java.util.Optional;

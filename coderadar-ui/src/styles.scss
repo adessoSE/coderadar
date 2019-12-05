@@ -15,7 +15,7 @@ body {
   margin: 0;
   height: 100%;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  background-color: whitesmoke;
+  background-color: ghostwhite;
 }
 
 footer {
@@ -27,7 +27,7 @@ footer {
 }
 
 main {
-  min-height: calc(100vh - 240px);
+  min-height: calc(100vh - 243px);
 }
 
 /*
@@ -55,14 +55,28 @@ Styles for most forms in the app
   margin: 10px;
 }
 
+.waitingIndicator {
+  position: absolute !important;
+  margin-top: 20%;
+  margin-left: calc(50% - 50px);
+  z-index: 5;
+}
+
+.dark-overlay{
+  background-color: rgba(0,0,0,0.4);
+  position: fixed;
+  top: 0;
+  left:0;
+  width: 100%;
+  z-index: 3;
+  min-height: calc(100vh);
+}
+
+
 /*
 Styles for the login and register forms
  */
 
-
-.login-card-form {
-  margin-top: 10%;
-}
 
 .login-card-form mat-card-header {
   justify-content: center;
@@ -77,6 +91,8 @@ Styles for the login and register forms
 }
 
 .login-card-form mat-card {
+  position: fixed;
+  top: 20%;
   min-width: 22%;
 }
 

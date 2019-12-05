@@ -15,7 +15,7 @@ public class UpdateProjectCommand {
   @NotBlank private String name;
   private String vcsUsername;
   private String vcsPassword;
-  @NotNull @URL private String vcsUrl; // TODO: Should the user be able to change the url???
+  @NotNull @URL private String vcsUrl;
   @NotNull private Boolean vcsOnline;
   private Date startDate;
   private Date endDate;

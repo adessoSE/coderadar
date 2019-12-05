@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.service;
 
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
@@ -23,8 +24,18 @@ public class ProcessProjectService {
     this.getProjectPort = getProjectPort;
   }
 
-  public ListenableFuture<?> executeTask(Runnable runnable, Long projectId)
-      throws ProjectIsBeingProcessedException {
+  /**
+   * Executes a task for a given project. The project is locked while this operation is performed
+   * and cannot be modified/deleted.
+   *
+   * @param runnable The task to execute
+   * @param projectId The id of the project.
+   * @return A ListenableFuture object for the started task.
+   */
+  public ListenableFuture<?> executeTask(Runnable runnable, Long projectId) {
+    if (!getProjectPort.existsById(projectId)) {
+      throw new ProjectNotFoundException(projectId);
+    }
     if (projectStatusPort.isBeingProcessed(projectId)) {
       throw new ProjectIsBeingProcessedException(projectId);
     } else {

@@ -1,7 +1,11 @@
 package io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig;
 
-import io.reflectoring.coderadar.projectadministration.AnalyzerConfigurationNotFoundException;
-
 public interface DeleteAnalyzerConfigurationPort {
-  void deleteAnalyzerConfiguration(Long id) throws AnalyzerConfigurationNotFoundException;
+
+  /**
+   * Deletes an analyzers configuration given its id.
+   *
+   * @param id The id of the configuration.
+   */
+  void deleteAnalyzerConfiguration(Long id);
 }

@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.projectadministration.project;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.projectadministration.service.project.GetProjectService;
@@ -31,24 +30,11 @@ class GetProjectServiceTest {
     // given
     long projectId = 1L;
     String projectName = "project name";
-    String workdirName = "workdir-name";
     String vcsUrl = "http://valid.url";
     String vcsUsername = "username";
     String vcsPassword = "password";
     Date startDate = new Date();
     Date endDate = new Date();
-
-    Project project =
-        new Project()
-            .setId(projectId)
-            .setName(projectName)
-            .setWorkdirName(workdirName)
-            .setVcsUrl(vcsUrl)
-            .setVcsUsername(vcsUsername)
-            .setVcsPassword(vcsPassword)
-            .setVcsOnline(true)
-            .setVcsStart(startDate)
-            .setVcsEnd(endDate);
 
     GetProjectResponse expectedResponse =
         new GetProjectResponse()
@@ -61,7 +47,7 @@ class GetProjectServiceTest {
             .setStartDate(startDate)
             .setEndDate(endDate);
 
-    when(getProjectPortMock.get(projectId)).thenReturn(project);
+    when(getProjectPortMock.getProjectResponse(projectId)).thenReturn(expectedResponse);
 
     // when
     GetProjectResponse actualResponse = testSubject.get(1L);

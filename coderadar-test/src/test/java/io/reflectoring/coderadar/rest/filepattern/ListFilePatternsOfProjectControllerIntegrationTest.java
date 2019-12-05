@@ -33,15 +33,12 @@ class ListFilePatternsOfProjectControllerIntegrationTest extends ControllerTestT
     FilePatternEntity filePattern = new FilePatternEntity();
     filePattern.setInclusionType(InclusionType.INCLUDE);
     filePattern.setPattern("**/*.java");
-    filePattern.setProject(testProject);
     filePattern = filePatternRepository.save(filePattern);
 
     FilePatternEntity filePattern2 = new FilePatternEntity();
     filePattern2.setInclusionType(InclusionType.EXCLUDE);
     filePattern2.setPattern("**/*.xml");
-    filePattern2.setProject(testProject);
     filePattern2 = filePatternRepository.save(filePattern2);
-
     testProject.setFilePatterns(Arrays.asList(filePattern, filePattern2));
     testProject = projectRepository.save(testProject);
 

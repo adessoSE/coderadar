@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class MetricTree {
   private String name;
-  private MetricsTreeNodeType type;
+  private MetricTreeNodeType type;
   private List<MetricValueForCommit> metrics = new ArrayList<>();
   private List<MetricTree> children = new ArrayList<>();
 }

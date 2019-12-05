@@ -79,7 +79,13 @@ export class MainDashboardComponent implements OnInit {
       if (error.status && error.status === FORBIDDEN) {
         this.userService.refresh(() => this.projectService.startAnalyzingJob(id, true));
       } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
-        this.openSnackBar('Analysis cannot be started! Try again later!', '🞩');
+        if (error.error.errorMessage === 'Cannot analyze project without analyzers') {
+          this.openSnackBar('Cannot analyze, no analyzers configured for this project!', '🞩');
+        } else if (error.error.errorMessage === 'Cannot analyze project without file patterns') {
+          this.openSnackBar('Cannot analyze, no file patterns configured for this project!', '🞩');
+        } else {
+          this.openSnackBar('Analysis cannot be started! Try again later!', '🞩');
+        }
       }
     });
   }
@@ -89,7 +95,7 @@ export class MainDashboardComponent implements OnInit {
       this.openSnackBar('Analysis results deleted!', '🞩');
     }).catch(error => {
       if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh(() => this.projectService.startAnalyzingJob(id, true));
+        this.userService.refresh(() => this.projectService.resetAnalysis(id, true));
       } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
         this.openSnackBar('Analysis results cannot be deleted! Try again later!', '🞩');
       }
@@ -99,6 +105,18 @@ export class MainDashboardComponent implements OnInit {
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: 4000,
+    });
+  }
+
+  stopAnalysis(id: number) {
+    this.projectService.stopAnalyzingJob(id).then(() => {
+      this.openSnackBar('Analysis stopped!', '🞩');
+    }).catch(error => {
+      if (error.status && error.status === FORBIDDEN) {
+        this.userService.refresh(() => this.projectService.stopAnalyzingJob(id));
+      } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
+        this.openSnackBar('Analysis stopped!', '🞩');
+      }
     });
   }
 }

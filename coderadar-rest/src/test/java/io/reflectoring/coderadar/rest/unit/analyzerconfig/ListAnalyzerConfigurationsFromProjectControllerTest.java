@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.analyzerconfig;
 
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
-import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationsFromProjectUseCase;
+import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.ListAnalyzerConfigurationsUseCase;
 import io.reflectoring.coderadar.rest.analyzerconfig.ListAnalyzerConfigurationsFromProjectController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,14 +16,14 @@ import static org.mockito.Mockito.mock;
 
 class ListAnalyzerConfigurationsFromProjectControllerTest {
 
-  private GetAnalyzerConfigurationsFromProjectUseCase getAnalyzerConfigurationsFromProjectUseCase =
-      mock(GetAnalyzerConfigurationsFromProjectUseCase.class);
+  private ListAnalyzerConfigurationsUseCase listAnalyzerConfigurationsUseCase =
+      mock(ListAnalyzerConfigurationsUseCase.class);
 
   @Test
   void returnsTwoGetAnalyzerConfigurationResponsesFromProject() {
     ListAnalyzerConfigurationsFromProjectController testSubject =
         new ListAnalyzerConfigurationsFromProjectController(
-            getAnalyzerConfigurationsFromProjectUseCase);
+                listAnalyzerConfigurationsUseCase);
 
     GetAnalyzerConfigurationResponse response1 =
         new GetAnalyzerConfigurationResponse(1L, "analyzer1", true);
@@ -34,7 +34,7 @@ class ListAnalyzerConfigurationsFromProjectControllerTest {
     responses.add(response1);
     responses.add(response2);
 
-    Mockito.when(getAnalyzerConfigurationsFromProjectUseCase.get(1L)).thenReturn(responses);
+    Mockito.when(listAnalyzerConfigurationsUseCase.get(1L)).thenReturn(responses);
 
     ResponseEntity<List<GetAnalyzerConfigurationResponse>> responseEntity =
         testSubject.getAnalyzerConfigurationsFromProject(1L);

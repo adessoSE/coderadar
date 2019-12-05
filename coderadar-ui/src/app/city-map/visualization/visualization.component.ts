@@ -50,8 +50,6 @@ export class VisualizationComponent implements OnInit, OnDestroy {
     this.leftCommit$ = this.store.select(fromRoot.getLeftCommit);
     this.rightCommit$ = this.store.select(fromRoot.getRightCommit);
 
-    this.store.dispatch(loadAvailableMetrics());
-
     this.subscriptions.push(
       combineLatest(
         this.store.select(fromRoot.getLeftCommit),

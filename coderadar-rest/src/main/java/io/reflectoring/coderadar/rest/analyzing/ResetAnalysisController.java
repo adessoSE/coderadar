@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.rest.analyzing;
 
 import io.reflectoring.coderadar.analyzer.port.driver.ResetAnalysisUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ResetAnalysisController {
     private final ResetAnalysisUseCase resetAnalysisUseCase;
 
-    @Autowired
     public ResetAnalysisController(ResetAnalysisUseCase resetAnalysisUseCase) {
         this.resetAnalysisUseCase = resetAnalysisUseCase;
     }

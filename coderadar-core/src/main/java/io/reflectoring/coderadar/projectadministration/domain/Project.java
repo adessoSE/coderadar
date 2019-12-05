@@ -15,5 +15,4 @@ public class Project {
   private boolean vcsOnline;
   private Date vcsStart;
   private Date vcsEnd;
-  private boolean beingProcessed;
 }

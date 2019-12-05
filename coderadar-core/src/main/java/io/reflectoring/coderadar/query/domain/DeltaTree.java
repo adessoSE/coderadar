@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DeltaTree {
   private String name;
-  private MetricsTreeNodeType type;
+  private MetricTreeNodeType type;
   private List<MetricValueForCommit> commit1Metrics = new ArrayList<>();
   private List<MetricValueForCommit> commit2Metrics = new ArrayList<>();
   private String renamedFrom;

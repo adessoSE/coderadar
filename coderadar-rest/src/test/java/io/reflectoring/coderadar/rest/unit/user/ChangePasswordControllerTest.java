@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
-import io.reflectoring.coderadar.projectadministration.port.driver.user.password.ChangePasswordCommand;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.password.ChangePasswordUseCase;
 import io.reflectoring.coderadar.rest.user.ChangePasswordController;
+import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordCommand;
+import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

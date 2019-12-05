@@ -4,12 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.analyzer.service.ListAnalyzerService;
-import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.CreateAnalyzerConfigurationService;
-import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.ListAnalyzerConfigurationsFromProjectService;
+import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.ListAnalyzerConfigurationsService;
 import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,9 +24,7 @@ class CreateAnalyzerConfigurationServiceTest {
 
   private CreateAnalyzerConfigurationService testSubject;
 
-  @Mock
-  private ListAnalyzerConfigurationsFromProjectService
-      listAnalyzerConfigurationsFromProjectServiceMock;
+  @Mock private ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectServiceMock;
 
   @Mock private ListAnalyzerService listAnalyzerServiceMock;
 

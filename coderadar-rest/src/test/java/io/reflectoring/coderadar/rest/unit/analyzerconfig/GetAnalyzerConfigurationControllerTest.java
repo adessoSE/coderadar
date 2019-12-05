@@ -24,7 +24,7 @@ class GetAnalyzerConfigurationControllerTest {
     GetAnalyzerConfigurationResponse analyzerConfiguration =
         new GetAnalyzerConfigurationResponse(1L, "analyzer", true);
 
-    Mockito.when(getAnalyzerConfigurationUseCase.getSingleAnalyzerConfiguration(1L))
+    Mockito.when(getAnalyzerConfigurationUseCase.getAnalyzerConfiguration(1L))
         .thenReturn(analyzerConfiguration);
 
     ResponseEntity<GetAnalyzerConfigurationResponse> responseEntity =

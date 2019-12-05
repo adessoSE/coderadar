@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig;
 
+import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfigurationFile;
 import io.reflectoring.coderadar.graph.AbstractMapper;
-import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConfigurationEntity;
-import io.reflectoring.coderadar.graph.projectadministration.domain.AnalyzerConfigurationFileEntity;
-import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
-import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfigurationFile;
+import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
+import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationFileEntity;
 
 public class AnalyzerConfigurationMapper
     extends AbstractMapper<AnalyzerConfiguration, AnalyzerConfigurationEntity> {
