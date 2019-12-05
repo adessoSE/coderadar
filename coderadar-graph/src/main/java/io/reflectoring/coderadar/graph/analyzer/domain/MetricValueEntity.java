@@ -1,11 +1,15 @@
 package io.reflectoring.coderadar.graph.analyzer.domain;
 
-import java.util.LinkedList;
+import io.reflectoring.coderadar.analyzer.domain.MetricValue;
+import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+/** @see MetricValue */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,7 +27,7 @@ public class MetricValueEntity {
   @Relationship(type = "LOCATED_IN")
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  private List<FindingEntity> findings = new LinkedList<>();
+  private List<FindingEntity> findings = new ArrayList<>();
 
   @Relationship(type = "MEASURED_BY", direction = Relationship.INCOMING)
   @EqualsAndHashCode.Exclude

@@ -3,9 +3,9 @@ package io.reflectoring.coderadar.graph.analyzer;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import io.reflectoring.coderadar.graph.analyzer.adapter.GetAnalyzingStatusAdapter;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.AnalyzingJobRepository;
-import io.reflectoring.coderadar.graph.analyzer.service.GetAnalyzingStatusAdapter;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;

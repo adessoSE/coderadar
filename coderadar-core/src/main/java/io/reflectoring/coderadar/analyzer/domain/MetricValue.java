@@ -1,11 +1,13 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
-import java.util.LinkedList;
+import io.reflectoring.coderadar.projectadministration.domain.Commit;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/** A single metric for a given File and Commit. */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +18,7 @@ public class MetricValue {
 
   private Commit commit;
 
-  private List<Finding> findings = new LinkedList<>();
+  private List<Finding> findings = new ArrayList<>();
 
   private Long fileId;
 }

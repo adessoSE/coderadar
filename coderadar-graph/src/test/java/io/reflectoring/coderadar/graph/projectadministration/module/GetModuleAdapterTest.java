@@ -4,8 +4,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
+import io.reflectoring.coderadar.graph.projectadministration.module.adapter.GetModuleAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
-import io.reflectoring.coderadar.graph.projectadministration.module.service.GetModuleAdapter;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import java.util.Optional;

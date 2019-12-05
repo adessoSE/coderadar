@@ -70,13 +70,16 @@ export class ComparisonPanelComponent implements OnInit, OnDestroy {
     for (const key of Object.keys(this.metricMapping)) {
       const metricName = this.metricMapping[key];
       let leftCommitValue;
-      if (foundElement.commit1Metrics && foundElement.commit1Metrics[metricName]) {
-        leftCommitValue = foundElement.commit1Metrics[metricName];
+      let rightCommitValue;
+
+      const commit1Element = foundElement.commit1Metrics.find(value => value.metricName === metricName);
+      if (foundElement.commit1Metrics && commit1Element) {
+        leftCommitValue = commit1Element.value;
       }
 
-      let rightCommitValue;
-      if (foundElement.commit2Metrics && foundElement.commit2Metrics[metricName]) {
-        rightCommitValue = foundElement.commit2Metrics[metricName];
+      const commit2Element = foundElement.commit2Metrics.find(value => value.metricName === metricName);
+      if (foundElement.commit2Metrics && commit2Element) {
+        rightCommitValue = commit2Element.value;
       }
 
       let difference = 0;

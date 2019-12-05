@@ -3,10 +3,10 @@ package io.reflectoring.coderadar.projectadministration.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import io.reflectoring.coderadar.projectadministration.domain.User;
-import io.reflectoring.coderadar.projectadministration.port.driven.user.LoadUserPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.load.LoadUserResponse;
-import io.reflectoring.coderadar.projectadministration.service.user.load.LoadUserService;
+import io.reflectoring.coderadar.useradministration.domain.User;
+import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
+import io.reflectoring.coderadar.useradministration.port.driver.load.LoadUserResponse;
+import io.reflectoring.coderadar.useradministration.service.load.LoadUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

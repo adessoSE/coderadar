@@ -5,8 +5,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
+import io.reflectoring.coderadar.graph.projectadministration.filepattern.adapter.GetFilePatternAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
-import io.reflectoring.coderadar.graph.projectadministration.filepattern.service.GetFilePatternAdapter;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;

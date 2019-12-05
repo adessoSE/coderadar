@@ -29,7 +29,6 @@ class DeleteFilePatternControllerIntegrationTest extends ControllerTestTemplate 
     FilePatternEntity filePattern = new FilePatternEntity();
     filePattern.setInclusionType(InclusionType.INCLUDE);
     filePattern.setPattern("**/*.java");
-    filePattern.setProject(testProject);
     filePattern = filePatternRepository.save(filePattern);
     final Long id = filePattern.getId();
 

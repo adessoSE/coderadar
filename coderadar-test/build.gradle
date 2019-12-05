@@ -27,6 +27,8 @@ dependencies {
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.4.RELEASE'
     testCompile "org.springframework.restdocs:spring-restdocs-mockmvc:${version_spring_restdocs}"
     testCompile "org.springframework.restdocs:spring-restdocs-core:${version_spring_restdocs}"
+    testCompile group: 'net.lingala.zip4j', name: 'zip4j', version: '2.2.4'
+
 }
 
 /*asciidoctor {
