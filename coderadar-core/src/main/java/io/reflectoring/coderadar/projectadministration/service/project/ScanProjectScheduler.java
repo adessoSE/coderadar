@@ -184,21 +184,24 @@ public class ScanProjectScheduler {
               .setRemoteUrl(project.getVcsUrl()))) {
         projectStatusPort.setBeingProcessed(project.getId(), true);
 
-        // Check what modules where previously in the project
-        List<GetModuleResponse> modules = listModulesOfProjectUseCase.listModules(project.getId());
+        try {
+          // Check what modules where previously in the project
+          List<GetModuleResponse> modules =
+              listModulesOfProjectUseCase.listModules(project.getId());
 
-        for (GetModuleResponse module : modules) {
-          deleteModulePort.delete(module.getId(), project.getId());
+          for (GetModuleResponse module : modules) {
+            deleteModulePort.delete(module.getId(), project.getId());
+          }
+
+          saveCommits(project);
+
+          // Re-create the modules
+          for (GetModuleResponse module : modules) {
+            createModulePort.createModule(module.getPath(), project.getId());
+          }
+        } finally {
+          projectStatusPort.setBeingProcessed(project.getId(), false);
         }
-
-        saveCommits(project);
-
-        // Re-create the modules
-        for (GetModuleResponse module : modules) {
-          createModulePort.createModule(module.getPath(), project.getId());
-        }
-
-        projectStatusPort.setBeingProcessed(project.getId(), false);
       }
     } catch (UnableToUpdateRepositoryException
         | ModuleAlreadyExistsException

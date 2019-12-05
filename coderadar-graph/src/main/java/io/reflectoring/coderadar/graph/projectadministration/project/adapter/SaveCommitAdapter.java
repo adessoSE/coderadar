@@ -201,11 +201,11 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
       allFiles.addAll(files);
     }
 
+    projectEntity.setFiles(allFiles);
+    projectEntity.setCommits(new ArrayList<>(walkedCommits.values()));
+    projectRepository.save(projectEntity, 1);
     commitRepository.save(walkedCommits.values(), 1);
     fileRepository.save(allFiles, 1);
-    projectEntity.setFiles(allFiles);
-    projectEntity.getCommits().addAll(walkedCommits.values());
-    projectRepository.save(projectEntity, 1);
   }
 
   @Override
