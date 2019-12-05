@@ -1,8 +1,0 @@
-<span style="margin-right: 2%">
-<mat-form-field>
-  <mat-label>Filter</mat-label>
-  <mat-select multiple disableRipple [(ngModel)]="selectedList" (selectionChange)="handleFilterChanged()">
-    <mat-option *ngFor="let filter of filterList" [value]="filter">{{filter}}</mat-option>
-  </mat-select>
-</mat-form-field>
-</span>
