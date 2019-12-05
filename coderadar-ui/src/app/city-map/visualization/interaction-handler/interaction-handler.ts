@@ -1,14 +1,12 @@
 import {
-  Geometry,
+  Camera,
   Intersection,
   Object3D,
   PerspectiveCamera,
   Raycaster,
   Scene,
-  Vector2,
-  Vector3,
-  WebGLRenderer,
-  LineBasicMaterial
+  Vector2, Vector3,
+  WebGLRenderer
 } from 'three';
 import {FocusService} from '../../service/focus.service';
 import {TooltipService} from '../../service/tooltip.service';
@@ -18,6 +16,7 @@ export class InteractionHandler {
   enabled = false;
 
   raycaster: Raycaster = new Raycaster();
+
   mouse: Vector2 = new Vector2();
   mouseForRaycaster: Vector2 = new Vector2();
 
@@ -35,9 +34,28 @@ export class InteractionHandler {
     private renderer: WebGLRenderer,
     private isMergedView: boolean,
     private focusService: FocusService,
-    private tooltipService: TooltipService
+    private tooltipService: TooltipService,
+    private tooltipLine: Object3D,
+    private highlightBox: Object3D
   ) {
     this.bindEvents();
+    this.focusService.elementHighlighted$.subscribe((elementName) => {
+      if(elementName == ""){
+        this.highlightBox.visible=false;
+
+      }else {
+        var target: Object3D = this.scene.getObjectByName(elementName);
+        var shouldBeHighlighted = true;
+        if(!elementName.includes("."))shouldBeHighlighted=false//should not highlight when the element is not a file
+        if (target&&shouldBeHighlighted) {
+          this.highlightBox.visible = true;
+          this.highlightBox.position.copy(new Vector3(target.position.x + target.scale.x / 2, target.position.y + target.scale.y / 2, target.position.z + target.scale.z / 2));
+          this.highlightBox.scale.copy(target.scale).addScalar(0.25);
+        } else {
+          this.highlightBox.visible = false;
+        }
+      }
+    });
   }
 
   setIsMergedView(isMergedView: boolean) {
@@ -50,13 +68,14 @@ export class InteractionHandler {
     }
 
     this.raycaster.setFromCamera(this.mouseForRaycaster, camera);
-    const intersects = this.raycaster.intersectObjects(this.scene.children);
-    const target = this.findFirstNonHelperBlock(intersects);
+    const intersects: Intersection[] = this.raycaster.intersectObjects(this.scene.children);;
+    const intersection: Intersection = this.findFirstNonHelperBlockIntersection(intersects);
+    const target = intersection?intersection.object:undefined;
 
-    this.updateTooltip(target);
+    this.updateTooltip(target,intersection,camera);
   }
 
-  updateTooltip(target: Object3D) {
+  updateTooltip(target: Object3D,intersection : Intersection,camera : Camera) {
     if (target) {
       if (target.uuid !== this.hoveredElementUuid) {
         this.tooltipService.setContent({
@@ -66,10 +85,26 @@ export class InteractionHandler {
         this.hoveredElementUuid = target.uuid;
       }
 
-      this.tooltipService.show();
-      this.tooltipService.setMousePosition({x: this.mouse.x, y: this.mouse.y});
+
+      var tooltipPos:Vector2;
+      var vCameraDistance: Vector3 = intersection.point.clone().sub(camera.position);
+      var cameraDistance: number = vCameraDistance.length();
+      var tooltipHover = cameraDistance*0.1;
+      var tooltipTipSize = cameraDistance*0.1;
+      var tooltipLineArrow = this.tooltipLine.children[0];
+      this.tooltipLine.position.copy(new Vector3(0,tooltipHover,0).add(intersection.point));
+      this.focusService.highlightElement(target.userData.elementName);
+      tooltipPos = this.worldPositionToScreenPosition(this.tooltipLine.position.clone(),camera);
+      //Make the line that hovers the tooltip longer based on camera distance
+      this.tooltipLine.scale.setY(tooltipHover);
+      //Make the sphere at the cursor change size based on camera distance
+      tooltipLineArrow.scale.set(tooltipTipSize,tooltipTipSize/tooltipHover,tooltipTipSize);
+
+      this.setTooltipVisible(true);
+      this.tooltipService.setMousePosition({x: tooltipPos.x, y: tooltipPos.y});
     } else {
-      this.tooltipService.hide();
+      this.setTooltipVisible(false);
+      this.focusService.highlightElement("");
     }
   }
 
@@ -79,7 +114,7 @@ export class InteractionHandler {
 
   onDocumentMouseOut() {
     this.enabled = false;
-    this.tooltipService.hide();
+    this.setTooltipVisible(false);
   }
 
 
@@ -124,7 +159,8 @@ export class InteractionHandler {
     }
 
     const intersects = this.raycaster.intersectObjects(this.scene.children);
-    const target = this.findFirstNonHelperBlock(intersects);
+    const intersection = this.findFirstNonHelperBlockIntersection(intersects);
+    const target = intersection?intersection.object:undefined;
     if (target) {
       if (event.which === 1) { // left mouse button
         if (target.uuid !== this.clickedElementUuid) {
@@ -138,18 +174,33 @@ export class InteractionHandler {
     }
   }
 
-  private findFirstNonHelperBlock(intersections: Intersection[]): Object3D {
+  private findFirstNonHelperBlockIntersection(intersections: Intersection[]): Intersection {
     if (intersections.length > 0) {
       for (let i = 0; i < intersections.length; i++) {
         // find the first block that is not a helper block
         // this lets the clicks go through the helper blocks
         if (!intersections[i].object.userData.isHelper) {
-          return intersections[i].object;
+          return intersections[i];
         }
       }
     }
 
     return undefined;
+  }
+
+  private worldPositionToScreenPosition(worldPosition:Vector3,camera :Camera) : Vector2{
+    var screenCoordinate:Vector3 = worldPosition.project(camera);
+    var screenPosition:Vector2 = new Vector2(
+      this.screenOffset.x+(( (screenCoordinate.x+1)*this.screenDimensions.x/2)),
+      this.screenOffset.y+((-(screenCoordinate.y-1)*this.screenDimensions.y/2)));
+    return screenPosition;
+  }
+
+  private setTooltipVisible(visible:boolean){
+
+    if(visible) this.tooltipService.show();
+    else this.tooltipService.hide();
+    this.tooltipLine.visible=visible;
   }
 
   private bindEvents() {
