@@ -2,6 +2,8 @@ package io.reflectoring.coderadar.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Properties;
@@ -43,6 +46,11 @@ public abstract class ControllerTestTemplate extends IntegrationTestTemplate {
         MockMvcBuilders.webAppContextSetup(applicationContext)
             .apply(MockMvcRestDocumentation.documentationConfiguration(restDocumentation))
             .build();
+  }
+
+  @AfterAll
+  static void cleanUp() throws IOException {
+    FileUtils.deleteDirectory(new File("coderadar-workdir/projects"));
   }
 
   @SuppressWarnings("unchecked")

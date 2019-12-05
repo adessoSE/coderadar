@@ -1,8 +1,13 @@
 package io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create;
 
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-
 public interface CreateAnalyzerConfigurationUseCase {
-  Long create(CreateAnalyzerConfigurationCommand command, Long projectId)
-      throws ProjectNotFoundException;
+
+  /**
+   * Creates a new analyzer configuration.
+   *
+   * @param command Parameters for the new configuration.
+   * @param projectId The project id.
+   * @return The id of the new configuration.
+   */
+  Long create(CreateAnalyzerConfigurationCommand command, Long projectId);
 }

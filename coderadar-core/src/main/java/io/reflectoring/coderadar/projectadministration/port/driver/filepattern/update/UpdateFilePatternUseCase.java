@@ -1,8 +1,10 @@
 package io.reflectoring.coderadar.projectadministration.port.driver.filepattern.update;
 
-import io.reflectoring.coderadar.projectadministration.FilePatternNotFoundException;
-
 public interface UpdateFilePatternUseCase {
-  void updateFilePattern(UpdateFilePatternCommand command, Long filePatternId)
-      throws FilePatternNotFoundException;
+
+  /**
+   * @param command The command containing the update pattern parameters
+   * @param filePatternId The id of the file pattern.
+   */
+  void updateFilePattern(UpdateFilePatternCommand command, Long filePatternId);
 }

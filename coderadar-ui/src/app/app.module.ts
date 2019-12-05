@@ -31,7 +31,7 @@ import {
   MatListModule,
   MatMenuModule, MatPaginatorModule,
   MatSidenavModule,
-  MatToolbarModule, MatProgressSpinnerModule,
+  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule,
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
@@ -77,13 +77,13 @@ const appRoutes: Routes = [
     ProjectDashboardComponent,
     ViewCommitComponent,
     CityViewComponent,
-    CityViewHeaderComponent
+    CityViewHeaderComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes),
+    RouterModule.forRoot(appRoutes, {scrollPositionRestoration: 'enabled'}),
     BrowserAnimationsModule,
     BrowserModule,
     FontAwesomeModule,
@@ -113,7 +113,8 @@ const appRoutes: Routes = [
     EffectsModule.forRoot([AppEffects]),
     environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 50}),
     MatPaginatorModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatExpansionModule
   ],
   providers: [
     {

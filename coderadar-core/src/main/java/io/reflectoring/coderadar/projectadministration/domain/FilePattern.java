@@ -10,5 +10,5 @@ import lombok.Data;
 public class FilePattern {
   private Long id;
   private String pattern;
-  private InclusionType inclusionType; // TODO:  A converter may have to be used here.
+  private InclusionType inclusionType;
 }

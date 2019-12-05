@@ -1,36 +1,44 @@
 package io.reflectoring.coderadar.graph.analyzer.repository;
 
-import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
-import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.lang.NonNull;
 
 public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
 
   @Query("MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} RETURN f")
-  List<FileEntity> findAllinProject(Long projectId);
+  @NonNull
+  List<FileEntity> findAllinProject(@NonNull Long projectId);
+
+  /**
+   * @param commit1Time The time of the first commit
+   * @param commit2Time The time of the second commit
+   * @param projectId The project id
+   * @return The paths of the files that have been modified
+   */
+  @Query(
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity) WHERE ID(p) = {2} "
+          + "AND timestamp(c.timestamp) <= {1}  "
+          + "AND timestamp(c.timestamp) > {0} AND r.changeType = \"MODIFY\" "
+          + "RETURN DISTINCT f.path")
+  @NonNull
+  List<String> getFilesModifiedBetweenCommits(
+      @NonNull Long commit1Time, @NonNull Long commit2Time, @NonNull Long projectId);
 
   @Query(
-      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity) WHERE f.path = {0} AND datetime(c.timestamp).epochMillis <= datetime({2}).epochMillis  "
-          + "AND datetime(c.timestamp).epochMillis > datetime({1}).epochMillis AND ID(p) = {3} AND r.changeType = \"MODIFY\""
-          + " RETURN size(collect(r)) > 0")
-  Boolean wasModifiedBetweenCommits(
-      String path, String commit1Time, String commit2Time, Long projectId);
+      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity) WHERE f.path = {0} AND timestamp(c.timestamp) <= {2}  "
+          + "AND timestamp(c.timestamp) > {1} AND ID(p) = {3} AND r.changeType = \"RENAME\""
+          + " RETURN head(collect(DISTINCT r)).oldPath")
+  @NonNull
+  String findOldpathIfRenamedBetweenCommits(
+      @NonNull String path,
+      @NonNull Long commit1Time,
+      @NonNull Long commit2Time,
+      @NonNull Long projectId);
 
-  @Query(
-      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity) WHERE f.path = {0} AND datetime(c.timestamp).epochMillis <= datetime({2}).epochMillis  "
-          + "AND datetime(c.timestamp).epochMillis > datetime({1}).epochMillis AND ID(p) = {3} AND r.changeType = \"RENAME\""
-          + " RETURN head(collect(r)).oldPath")
-  String wasRenamedBetweenCommits(
-      String path, String commit1Time, String commit2Time, Long projectId);
-
-  @Query(
-      "MATCH (f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity)<-[:VALID_FOR]-(m:MetricValueEntity) WHERE ID(f) = {0} AND c.name = {1}"
-          + " RETURN m")
-  List<MetricValueEntity> findMetricsByFileAndCommitName(Long id, String commitHash);
-
-  @Query(
-      "MATCH (p:ProjectEntity)-[:HAS*]->(f:FileEntity) WHERE ID(p) = {0} AND size((f)-[:CHANGED_IN]-()) = 0 DETACH DELETE f")
-  void removeFilesWithoutCommits(Long id);
+  @Query("MATCH (f:FileEntity) WHERE ID(f) IN {0} RETURN f")
+  @NonNull
+  List<FileEntity> findAllById(@NonNull List<Long> fileIds);
 }

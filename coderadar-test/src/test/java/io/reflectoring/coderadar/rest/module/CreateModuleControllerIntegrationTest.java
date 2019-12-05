@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.module;
 
-import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
@@ -13,6 +13,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
@@ -58,6 +62,41 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
                                             .withPath("path")
                                             .description(
                                                     "The path of this module starting at the VCS root. All files below that path are considered to be part of the module."))));
+  }
+
+  @Test
+  void createModuleSuccessfullyWithNonExistentPath() throws Exception {
+    // Set up
+    ProjectEntity testProject = new ProjectEntity();
+    FileEntity fileEntity = new FileEntity();
+    fileEntity.setPath("module-path/Main.java");
+    testProject.setVcsUrl("https://valid.url");
+    testProject.getFiles().add(fileEntity);
+    testProject = projectRepository.save(testProject);
+
+    // Test
+    CreateModuleCommand command = new CreateModuleCommand("module-path1");
+    mvc()
+            .perform(
+                    post("/projects/" + testProject.getId() + "/modules")
+                            .content(toJson(command))
+                            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isCreated())
+            .andDo(
+                    result -> {
+                      Long id =
+                              fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
+                      ModuleEntity module = moduleRepository.findById(id).get();
+                      Assertions.assertEquals("module-path1/", module.getPath());
+                    }).andReturn();
+
+    Assertions.assertEquals(1L, moduleRepository.findModulesInProject(testProject.getId()).size());
+
+    List<ModuleEntity> allModules = new ArrayList<>();
+    for(ModuleEntity m : moduleRepository.findAll()){
+      allModules.add(m);
+    }
+    Assertions.assertEquals(1L, allModules.size());
   }
 
   @Test

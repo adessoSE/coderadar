@@ -33,8 +33,14 @@ export const ControlPanelReducer: ActionReducer<ControlPanelState> = (state = in
       newState = Object.assign({}, state);
       newState.commits = _.sortBy(action.payload, (commit: Commit) => commit.timestamp);
       newState.commitsLoading = false;
-      newState.leftCommit = newState.commits[0];
-      newState.rightCommit = newState.commits[1];
+      newState.leftCommit = newState.commits[newState.commits.length - 1];
+      newState.rightCommit = newState.commits[newState.commits.length - 2];
+      return newState;
+
+    case ControlPanelActions.SET_COMMITS:
+      newState = Object.assign({}, state);
+      newState.commits = _.sortBy(action.payload, (commit: Commit) => commit.timestamp);
+      newState.commitsLoading = false;
       return newState;
 
     case ControlPanelActions.LOAD_COMMITS_ERROR:
