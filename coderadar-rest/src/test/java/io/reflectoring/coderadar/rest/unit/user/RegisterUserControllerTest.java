@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
-import io.reflectoring.coderadar.projectadministration.port.driver.user.register.RegisterUserCommand;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.register.RegisterUserUseCase;
 import io.reflectoring.coderadar.rest.IdResponse;
 import io.reflectoring.coderadar.rest.user.RegisterUserController;
+import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserCommand;
+import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

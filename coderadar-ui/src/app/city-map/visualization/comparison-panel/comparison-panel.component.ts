@@ -8,8 +8,8 @@ import {ComparisonPanelService} from '../../service/comparison-panel.service';
 import {VisualizationConfig} from '../../VisualizationConfig';
 import {Subscription} from 'rxjs';
 import {Commit} from '../../../model/commit';
-import {MetricValue} from "../../../model/metric-value";
-import {ElementAnalyzer} from "../../helper/element-analyzer";
+import {MetricValue} from '../../../model/metric-value';
+import {ElementAnalyzer} from '../../helper/element-analyzer';
 
 @Component({
   selector: 'app-comparison-panel',
@@ -72,17 +72,17 @@ export class ComparisonPanelComponent implements OnInit, OnDestroy {
       const metricName = this.metricMapping[key];
 
       let leftCommitValue;
-      if (foundElement.commit1Metrics && ElementAnalyzer.getValueFromMetric(foundElement.commit1Metrics,metricName)) {
-        leftCommitValue = ElementAnalyzer.getValueFromMetric(foundElement.commit1Metrics,metricName);
+      if (foundElement.commit1Metrics && ElementAnalyzer.getValueFromMetric(foundElement.commit1Metrics, metricName)) {
+        leftCommitValue = ElementAnalyzer.getValueFromMetric(foundElement.commit1Metrics, metricName);
       }
 
       let rightCommitValue;
-      if (foundElement.commit2Metrics && ElementAnalyzer.getValueFromMetric(foundElement.commit2Metrics,metricName)) {
-        rightCommitValue = ElementAnalyzer.getValueFromMetric(foundElement.commit2Metrics,metricName);
+      if (foundElement.commit2Metrics && ElementAnalyzer.getValueFromMetric(foundElement.commit2Metrics, metricName)) {
+        rightCommitValue = ElementAnalyzer.getValueFromMetric(foundElement.commit2Metrics, metricName);
       }
 
       let difference = 0;
-      difference = (rightCommitValue||0) - (leftCommitValue||0);
+      difference = (rightCommitValue || 0) - (leftCommitValue || 0);
 
       rows.push({
         metricName: VisualizationConfig.getShortNameByMetricName(metricName).shortName,

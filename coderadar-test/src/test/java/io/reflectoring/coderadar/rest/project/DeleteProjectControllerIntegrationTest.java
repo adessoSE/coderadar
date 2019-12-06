@@ -39,7 +39,6 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
     FilePatternEntity filePatternEntity = new FilePatternEntity();
     filePatternEntity.setInclusionType(InclusionType.INCLUDE);
     filePatternEntity.setPattern("**/*.java");
-    filePatternEntity.setProject(testProject);
     filePatternRepository.save(filePatternEntity);
 
     mvc()

@@ -1,7 +1,12 @@
 package io.reflectoring.coderadar.projectadministration.port.driver.filepattern.delete;
 
-import io.reflectoring.coderadar.projectadministration.FilePatternNotFoundException;
-
 public interface DeleteFilePatternFromProjectUseCase {
-  void delete(Long filePatternId, Long projectId) throws FilePatternNotFoundException;
+
+  /**
+   * Deletes a file pattern from the DB given its id.
+   *
+   * @param filePatternId The id of the file pattern.
+   * @param projectId The id of the project.
+   */
+  void delete(Long filePatternId, Long projectId);
 }

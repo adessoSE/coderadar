@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.projectadministration.analyzerconfig;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import io.reflectoring.coderadar.projectadministration.domain.AnalyzerConfiguration;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.GetAnalyzerConfigurationService;
@@ -44,8 +44,7 @@ class GetAnalyzerConfigurationServiceTest {
     when(getConfigurationPortMock.getAnalyzerConfiguration(1L)).thenReturn(analyzerConfiguration);
 
     // when
-    GetAnalyzerConfigurationResponse actualResponse =
-        testSubject.getSingleAnalyzerConfiguration(1L);
+    GetAnalyzerConfigurationResponse actualResponse = testSubject.getAnalyzerConfiguration(1L);
 
     // then
     assertThat(actualResponse).isEqualTo(expectedResponse);

@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.projectadministration.port.driver.project.crea
 import java.util.Date;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,6 @@ public class CreateProjectCommand {
   private String vcsPassword;
   @NotNull @URL private String vcsUrl;
   @NotNull private Boolean vcsOnline;
-  private Date startDate;
+  private @Past Date startDate;
   private Date endDate;
 }

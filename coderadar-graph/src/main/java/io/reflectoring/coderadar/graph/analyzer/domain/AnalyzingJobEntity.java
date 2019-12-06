@@ -6,11 +6,12 @@ import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+/** @see io.reflectoring.coderadar.analyzer.domain.AnalyzingJob */
 @Data
 @NodeEntity
 public class AnalyzingJobEntity {
   private Long id;
-  private Date from; // TODO: Maybe use date converter.
+  private Date from;
   private boolean active;
   private boolean rescan;
 

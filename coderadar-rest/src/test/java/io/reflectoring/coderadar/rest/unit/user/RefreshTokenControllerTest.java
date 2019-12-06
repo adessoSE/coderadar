@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
-import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.RefreshTokenCommand;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.RefreshTokenResponse;
-import io.reflectoring.coderadar.projectadministration.port.driver.user.refresh.RefreshTokenUseCase;
 import io.reflectoring.coderadar.rest.user.RefreshTokenController;
+import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenCommand;
+import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenResponse;
+import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -1,7 +1,11 @@
 package io.reflectoring.coderadar.analyzer.port.driven;
 
-import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
-
 public interface ResetAnalysisPort {
-  void resetAnalysis(Long projectId) throws ProjectIsBeingProcessedException;
+
+  /**
+   * Deletes all metric values and findings for the given project.
+   *
+   * @param projectId The id of the project.
+   */
+  void resetAnalysis(Long projectId);
 }

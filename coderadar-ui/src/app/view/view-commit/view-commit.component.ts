@@ -47,12 +47,10 @@ export class ViewCommitComponent implements OnInit {
   private getCommitInfo(): void {
     this.waiting = true;
     this.getMetrics().then(response => {
-      const metricsArray: string[] = [];
-      response.body.forEach(m => metricsArray.push(m));
-      this.projectService.getCommitsMetricValues(this.projectId, this.commit.name, metricsArray)
+      this.projectService.getCommitsMetricValues(this.projectId, this.commit.name, response.body)
         .then(res => {
-          this.metrics = res.body;
           this.waiting = false;
+          this.metrics = res.body;
         })
         .catch(e => {
           if (e.status && e.status === FORBIDDEN) {

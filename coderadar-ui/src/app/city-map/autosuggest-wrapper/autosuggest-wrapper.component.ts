@@ -10,8 +10,8 @@ import {
 import {Observable} from 'rxjs';
 import {startWith} from 'rxjs/internal/operators/startWith';
 import {FormControl} from '@angular/forms';
-import {Commit} from "../../model/commit";
-import {map} from "rxjs/operators";
+import {Commit} from '../../model/commit';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-autosuggest-wrapper',
@@ -36,46 +36,43 @@ export class AutosuggestWrapperComponent implements  OnInit {
     this.valueChanged.emit(chosenModel);
   }
 
-  formatCommit(commit: Commit) : string {
+  formatCommit(commit: Commit): string {
     if (commit === null || commit === undefined) {
       return '';
     }
-    if (commit.hasOwnProperty("analyzed")) {
-      return new Date(commit.timestamp).toUTCString() + ',  ' + commit.name.substring(0, 7) + ', ' + commit.author;
-    } else {
-      return commit.toString();
-    }
+    return new Date(commit.timestamp).toUTCString() + ',  ' + commit.name.substring(0, 7) + ', ' + commit.author;
   }
 
   private _filter(value: string): Commit[] {
     if (this.source === undefined) {
       return [];
-    }else if(typeof value !== "string"){
+    } else if (typeof value !== 'string') {
       return [];
-    }else if(value === undefined){
+    } else if (value === undefined) {
       return [];
     }
 
-    var lowercaseValue = value.toLowerCase();
+    const lowercaseValue = value.toLowerCase();
 
-    var filteredCommits : Commit[] = this.source.filter( option => {
-      var score = 0;
-      if(typeof option !== "undefined"){
-        if(option.author.startsWith(value))score+=200;
-        if(option.author.toLowerCase().startsWith(lowercaseValue))score+=100;
-        if(option.author.includes(value))score+=50;
-        if(option.author.toLowerCase().includes(lowercaseValue))score+=25;
-        if(option.name.startsWith(value))score+=1000;
-        if(option.name.includes(lowercaseValue))score+=500;
-        if(score>0){
-          option["score"]=score;
+    const filteredCommits: any[] = this.source.filter(option => {
+      let score = 0;
+      const optionAny = option as any;
+      if (typeof optionAny !== 'undefined') {
+        if (optionAny.author.startsWith(value)) {score += 200; }
+        if (optionAny.author.toLowerCase().startsWith(lowercaseValue)) {score += 100; }
+        if (optionAny.author.includes(value)) {score += 50; }
+        if (optionAny.author.toLowerCase().includes(lowercaseValue)) {score += 25; }
+        if (optionAny.name.startsWith(value)) {score += 1000; }
+        if (optionAny.name.includes(lowercaseValue)) {score += 500; }
+        if (score > 0) {
+          optionAny.score = score;
           return option;
         }
       }
     });
     return filteredCommits.sort((a, b) => {
-        return Math.sign(b["score"]-a["score"]);
-    })
+        return Math.sign(b.score - a.score);
+    });
   }
 
   ngOnInit(): void {

@@ -1,7 +1,10 @@
 package io.reflectoring.coderadar.analyzer.port.driven;
 
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-
 public interface GetAnalyzingStatusPort {
-  boolean get(Long projectId) throws ProjectNotFoundException;
+
+  /**
+   * @param projectId The id of the project to check.
+   * @return True if the project is being analyzed, false otherwise
+   */
+  boolean get(Long projectId);
 }

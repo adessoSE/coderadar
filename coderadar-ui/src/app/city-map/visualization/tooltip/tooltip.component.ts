@@ -31,8 +31,8 @@ export class TooltipComponent implements OnInit {
               readableMetrics[VisualizationConfig.getShortNameByMetricName(key).shortName] = tooltipObject.metrics[key];
             });
           }
-          //Hack: Add a zero width space character so css can wrap the elementName
-          var partitionedName = tooltipObject.elementName.replace(new RegExp("/","g"),"/\u200b");
+          // Hack: Add a zero width space character so css can wrap the elementName
+          const partitionedName = tooltipObject.elementName.replace(new RegExp('/', 'g'), '/\u200b');
 
           return {
             elementName: partitionedName,
@@ -58,7 +58,7 @@ export class TooltipComponent implements OnInit {
   followPosition(position: { x: number, y: number }) {
     // this.tooltipElement.style.left = position.x + 15 + 'px';
     // this.tooltipElement.style.top = position.y + 15 + 'px';
-    this.tooltipElement.style.left = position.x - this.tooltipElement.offsetWidth/2 + 'px';
+    this.tooltipElement.style.left = position.x - this.tooltipElement.offsetWidth / 2 + 'px';
     this.tooltipElement.style.top = position.y - this.tooltipElement.offsetHeight + 'px';
   }
 

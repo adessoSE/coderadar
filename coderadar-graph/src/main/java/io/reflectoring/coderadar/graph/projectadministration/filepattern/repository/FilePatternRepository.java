@@ -4,10 +4,12 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternE
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FilePatternRepository extends Neo4jRepository<FilePatternEntity, Long> {
   @Query("MATCH (p:ProjectEntity)-[:HAS]->(f:FilePatternEntity) WHERE ID(p) = {0} RETURN f")
-  List<FilePatternEntity> findByProjectId(Long projectId);
+  @NonNull
+  List<FilePatternEntity> findByProjectId(@NonNull Long projectId);
 }

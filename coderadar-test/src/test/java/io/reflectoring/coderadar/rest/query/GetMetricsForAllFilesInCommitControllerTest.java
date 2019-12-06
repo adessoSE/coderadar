@@ -8,7 +8,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.create
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.query.domain.MetricTree;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
-import io.reflectoring.coderadar.query.domain.MetricsTreeNodeType;
+import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.ErrorMessageResponse;
@@ -72,10 +72,8 @@ class GetMetricsForAllFilesInCommitControllerTest extends ControllerTestTemplate
 
         MetricTree metricTree = fromJson(result.getResponse().getContentAsString(), MetricTree.class);
 
-        metricTree.getMetrics().sort(Comparator.comparing(MetricValueForCommit::getMetricName));
-
         Assertions.assertEquals("root", metricTree.getName());
-        Assertions.assertEquals(MetricsTreeNodeType.MODULE, metricTree.getType());
+        Assertions.assertEquals(MetricTreeNodeType.MODULE, metricTree.getType());
         Assertions.assertEquals(4, metricTree.getMetrics().size());
         Assertions.assertEquals(0L, metricTree.getMetrics().get(0).getValue().longValue());
         Assertions.assertEquals(8L, metricTree.getMetrics().get(1).getValue().longValue());
@@ -84,10 +82,8 @@ class GetMetricsForAllFilesInCommitControllerTest extends ControllerTestTemplate
 
         MetricTree firstChild = metricTree.getChildren().get(0);
 
-        firstChild.getMetrics().sort(Comparator.comparing(MetricValueForCommit::getMetricName));
-
         Assertions.assertEquals("GetMetricsForCommitCommand.java", firstChild.getName());
-        Assertions.assertEquals(MetricsTreeNodeType.FILE, firstChild.getType());
+        Assertions.assertEquals(MetricTreeNodeType.FILE, firstChild.getType());
         Assertions.assertTrue(firstChild.getChildren().isEmpty());
         Assertions.assertEquals(0L, firstChild.getMetrics().get(0).getValue().longValue());
         Assertions.assertEquals(7L, firstChild.getMetrics().get(1).getValue().longValue());
@@ -96,10 +92,8 @@ class GetMetricsForAllFilesInCommitControllerTest extends ControllerTestTemplate
 
         MetricTree secondChild = metricTree.getChildren().get(1);
 
-        secondChild.getMetrics().sort(Comparator.comparing(MetricValueForCommit::getMetricName));
-
         Assertions.assertEquals("testModule1/NewRandomFile.java", secondChild.getName());
-        Assertions.assertEquals(MetricsTreeNodeType.FILE, secondChild.getType());
+        Assertions.assertEquals(MetricTreeNodeType.FILE, secondChild.getType());
         Assertions.assertTrue(secondChild.getChildren().isEmpty());
         Assertions.assertEquals(0L, secondChild.getMetrics().get(0).getValue().longValue());
         Assertions.assertEquals(1L, secondChild.getMetrics().get(1).getValue().longValue());
@@ -126,10 +120,8 @@ class GetMetricsForAllFilesInCommitControllerTest extends ControllerTestTemplate
 
         MetricTree metricTree = fromJson(result.getResponse().getContentAsString(), MetricTree.class);
 
-        metricTree.getMetrics().sort(Comparator.comparing(MetricValueForCommit::getMetricName));
-
         Assertions.assertEquals("root", metricTree.getName());
-        Assertions.assertEquals(MetricsTreeNodeType.MODULE, metricTree.getType());
+        Assertions.assertEquals(MetricTreeNodeType.MODULE, metricTree.getType());
         Assertions.assertEquals(4, metricTree.getMetrics().size());
         Assertions.assertEquals(0L, metricTree.getMetrics().get(0).getValue().longValue());
         Assertions.assertEquals(8L, metricTree.getMetrics().get(1).getValue().longValue());
@@ -138,10 +130,8 @@ class GetMetricsForAllFilesInCommitControllerTest extends ControllerTestTemplate
 
         MetricTree firstChild = metricTree.getChildren().get(0);
 
-        firstChild.getMetrics().sort(Comparator.comparing(MetricValueForCommit::getMetricName));
-
         Assertions.assertEquals("GetMetricsForCommitCommand.java", firstChild.getName());
-        Assertions.assertEquals(MetricsTreeNodeType.FILE, firstChild.getType());
+        Assertions.assertEquals(MetricTreeNodeType.FILE, firstChild.getType());
         Assertions.assertTrue(firstChild.getChildren().isEmpty());
         Assertions.assertEquals(0L, firstChild.getMetrics().get(0).getValue().longValue());
         Assertions.assertEquals(7L, firstChild.getMetrics().get(1).getValue().longValue());
@@ -150,10 +140,8 @@ class GetMetricsForAllFilesInCommitControllerTest extends ControllerTestTemplate
 
         MetricTree secondChild = metricTree.getChildren().get(1);
 
-        secondChild.getMetrics().sort(Comparator.comparing(MetricValueForCommit::getMetricName));
-
         Assertions.assertEquals("testModule1/", secondChild.getName());
-        Assertions.assertEquals(MetricsTreeNodeType.MODULE, secondChild.getType());
+        Assertions.assertEquals(MetricTreeNodeType.MODULE, secondChild.getType());
         Assertions.assertFalse(secondChild.getChildren().isEmpty());
         Assertions.assertEquals(0L, secondChild.getMetrics().get(0).getValue().longValue());
         Assertions.assertEquals(1L, secondChild.getMetrics().get(1).getValue().longValue());
@@ -162,10 +150,8 @@ class GetMetricsForAllFilesInCommitControllerTest extends ControllerTestTemplate
 
         MetricTree thirdChild = secondChild.getChildren().get(0);
 
-        thirdChild.getMetrics().sort(Comparator.comparing(MetricValueForCommit::getMetricName));
-
         Assertions.assertEquals("testModule1/NewRandomFile.java", thirdChild.getName());
-        Assertions.assertEquals(MetricsTreeNodeType.FILE, thirdChild.getType());
+        Assertions.assertEquals(MetricTreeNodeType.FILE, thirdChild.getType());
         Assertions.assertTrue(thirdChild.getChildren().isEmpty());
         Assertions.assertEquals(0L, thirdChild.getMetrics().get(0).getValue().longValue());
         Assertions.assertEquals(1L, thirdChild.getMetrics().get(1).getValue().longValue());

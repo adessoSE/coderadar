@@ -1,8 +1,13 @@
 package io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create;
 
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-
 public interface CreateFilePatternUseCase {
-  Long createFilePattern(CreateFilePatternCommand command, Long projectId)
-      throws ProjectNotFoundException;
+
+  /**
+   * Creates a new file pattern.
+   *
+   * @param command The file pattern parameters to use.
+   * @param projectId The id of the project.
+   * @return The id of the file pattern.
+   */
+  Long createFilePattern(CreateFilePatternCommand command, Long projectId);
 }

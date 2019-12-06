@@ -9,4 +9,6 @@ import lombok.Data;
 public class CloneRepositoryCommand {
   private String remoteUrl;
   private File localDir;
+  private String username;
+  private String password;
 }
