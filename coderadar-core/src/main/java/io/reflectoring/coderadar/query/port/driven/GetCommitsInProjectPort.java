@@ -11,4 +11,6 @@ public interface GetCommitsInProjectPort {
   List<Commit> getSortedByTimestampAsc(Long projectId);
 
   List<Commit> getSortedByTimestampAscWithNoParents(Long projectId);
+
+  List<Commit> getNonanalyzedSortedByTimestampAscWithNoParents(Long projectId);
 }

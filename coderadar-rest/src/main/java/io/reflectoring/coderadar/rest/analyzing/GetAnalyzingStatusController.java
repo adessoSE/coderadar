@@ -23,7 +23,7 @@ public class GetAnalyzingStatusController {
   @GetMapping(path = "/projects/{projectId}/analyzingStatus")
   public ResponseEntity getProjectAnalyzingStatus(@PathVariable("projectId") Long projectId){
     Map<String, Boolean> response = new HashMap<>();
-    response.put("status", this.getAnalyzingStatusUseCase.get(projectId));
+    response.put("status", this.getAnalyzingStatusUseCase.getStatus(projectId));
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 }

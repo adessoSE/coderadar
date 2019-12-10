@@ -9,7 +9,6 @@ public interface StartAnalyzingPort {
    *
    * @param command Command containing analysis parameters.
    * @param projectId The id of the project to analyze.
-   * @return Id of the analyzing job.
    */
-  Long start(StartAnalyzingCommand command, Long projectId);
+  void start(StartAnalyzingCommand command, Long projectId);
 }

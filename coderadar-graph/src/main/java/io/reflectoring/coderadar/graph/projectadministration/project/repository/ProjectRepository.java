@@ -66,9 +66,10 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} RETURN COUNT(*) > 0")
   boolean existsById(@NonNull Long id);
 
-  @Query(
-      "MATCH (p:ProjectEntity) WHERE ID(p) = {0} WITH p "
-          + "MATCH (a:AnalyzingJobEntity) WHERE ID(a) = {1} "
-          + "CREATE (p)-[r:HAS]->(a)")
-  void setAnalyzingJob(@NonNull Long projectId, @NonNull Long analyzingJobId);
+  @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} RETURN p.analyzingStatus")
+  @NonNull
+  Boolean getProjectAnalyzingStatus(@NonNull Long projectId);
+
+  @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} SET p.analyzingStatus = {1}")
+  void setAnalyzingStatus(@NonNull Long projectId, @NonNull Boolean b);
 }

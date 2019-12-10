@@ -6,5 +6,5 @@ public interface GetAnalyzingStatusPort {
    * @param projectId The id of the project to check.
    * @return True if the project is being analyzed, false otherwise
    */
-  boolean get(Long projectId);
+  boolean getStatus(Long projectId);
 }

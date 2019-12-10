@@ -91,6 +91,17 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     return mapCommitEntitiesNoParents(commitEntities);
   }
 
+  @Override
+  public List<Commit> getNonanalyzedSortedByTimestampAscWithNoParents(Long projectId) {
+    if (!projectRepository.existsById(projectId)) {
+      throw new ProjectNotFoundException(projectId);
+    }
+    List<CommitEntity> commitEntities =
+        commitRepository.findByProjectIdNonanalyzedWithFileRelationshipsSortedByTimestampAsc(
+            projectId);
+    return mapCommitEntitiesNoParents(commitEntities);
+  }
+
   private List<Commit> mapCommitEntitiesNoParents(List<CommitEntity> commitEntities) {
     List<Commit> commits = new ArrayList<>();
     HashMap<Long, File> walkedFiles = new HashMap<>();

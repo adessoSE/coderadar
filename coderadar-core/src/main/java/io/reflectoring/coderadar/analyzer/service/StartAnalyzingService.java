@@ -140,7 +140,10 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           int counter = 0;
           ListenableFuture<?> saveTask = null;
           for (Commit commit : commitsToBeAnalyzed) {
-            if (!commit.isAnalyzed() && getAnalyzingStatusService.get(projectId)) {
+            if (!getAnalyzingStatusService.getStatus(projectId)) {
+              break;
+            }
+            if (!commit.isAnalyzed()) {
               List<MetricValue> metrics =
                   analyzeCommitUseCase.analyzeCommit(
                       commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher);
