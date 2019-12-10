@@ -66,7 +66,6 @@ public class SaveMetricAdapter implements SaveMetricPort {
 
       // Set CommitEntity
       CommitEntity commitEntity = commits.get(metricValue.getCommit().getId());
-      commitEntity.getMetricValues().add(metricValueEntity);
       metricValueEntity.setCommit(commitEntity);
 
       // Set FileEntity

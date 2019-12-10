@@ -159,13 +159,13 @@ public class ScanProjectScheduler {
             Paths.get(project.getWorkdirName()), getProjectDateRange(project));
 
     Commit head = getProjectHeadCommitPort.getHeadCommit(project.getId());
-    if (head.getTimestamp().after(Iterables.getLast(commits).getTimestamp())) {
+    if (head.getTimestamp() > Iterables.getLast(commits).getTimestamp()) {
       resetAnalysisPort.resetAnalysis(project.getId());
       updateProjectPort.deleteFilesAndCommits(project.getId());
       saveCommitPort.saveCommits(commits, project.getId());
     } else {
       // Save the new commit tree
-      commits.removeIf(commit -> commit.getTimestamp().getTime() <= head.getTimestamp().getTime());
+      commits.removeIf(commit -> commit.getTimestamp() <= head.getTimestamp());
       addCommitsPort.addCommits(commits, project.getId());
     }
   }

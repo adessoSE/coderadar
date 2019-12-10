@@ -1,8 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.domain;
 
-import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,10 +16,9 @@ import org.neo4j.ogm.annotation.Relationship;
 public class CommitEntity {
   private Long id;
   private String name;
-  private Date timestamp;
+  private Long timestamp;
   private String comment;
   private String author;
-  private boolean merged = false;
   private boolean analyzed = false;
 
   @Relationship(type = "IS_CHILD_OF")
@@ -33,9 +30,4 @@ public class CommitEntity {
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
   private List<FileToCommitRelationshipEntity> touchedFiles = new ArrayList<>();
-
-  @Relationship(direction = Relationship.INCOMING, type = "VALID_FOR")
-  @EqualsAndHashCode.Exclude
-  @ToString.Exclude
-  private List<MetricValueEntity> metricValues = new ArrayList<>();
 }

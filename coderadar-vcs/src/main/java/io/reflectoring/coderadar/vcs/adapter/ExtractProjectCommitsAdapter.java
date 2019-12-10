@@ -101,7 +101,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     commit.setName(rc.getName());
     commit.setAuthor(rc.getAuthorIdent().getName());
     commit.setComment(rc.getShortMessage());
-    commit.setTimestamp(rc.getAuthorIdent().getWhen());
+    commit.setTimestamp(rc.getAuthorIdent().getWhen().toInstant().toEpochMilli());
     return commit;
   }
 

@@ -65,7 +65,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
       commitResponse.setAnalyzed(c.isAnalyzed());
       commitResponse.setAuthor(c.getAuthor());
       commitResponse.setComment(c.getComment());
-      commitResponse.setTimestamp(c.getTimestamp().getTime());
+      commitResponse.setTimestamp(c.getTimestamp());
       getCommitResponses.add(commitResponse);
     }
     return getCommitResponses;
