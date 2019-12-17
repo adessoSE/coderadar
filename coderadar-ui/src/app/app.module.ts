@@ -117,7 +117,6 @@ const appRoutes: Routes = [
     MatExpansionModule
   ],
   providers: [
-    {provide: Store},
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
