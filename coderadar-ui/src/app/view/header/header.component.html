@@ -16,8 +16,10 @@
   <div class="spacer"></div>
   <mat-toolbar class="md-elevation-z5" color="primary">
     <span *ngFor="let breadcrumb of title; let i=index">
-      <a [disabled]="i === title.length-1" style="color:white; font-size: 16pt; margin: 7px"
+      <a style="color:white; font-size: 16pt; margin: 7px" *ngIf="i !== title.length-1"
          mat-button routerLink="/{{breadcrumb.location}}">{{breadcrumb.name}}</a>
+      <span style="color:white; font-size: 16pt; margin: 7px; min-width: 64px; line-height: 36px;
+       padding: 0 16px; border-radius: 4px; cursor: context-menu" *ngIf="i === title.length-1">{{breadcrumb.name}}</span>
       <a mat-button disabled style="min-width: 1px; width: 10px; margin-left: -20px">
         <mat-icon style="font-size: 16pt; color: white;" *ngIf="i < title.length-1">arrow_forward_ios</mat-icon>
       </a>
