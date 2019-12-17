@@ -1,19 +1,28 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {VisualizationComponent} from './visualization.component';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {ActionsSubject, ReducerManager, StateObservable, Store} from '@ngrx/store';
+import {ComparisonPanelService} from '../service/comparison-panel.service';
 
 describe('VisualizationComponent', () => {
   let component: VisualizationComponent;
   let fixture: ComponentFixture<VisualizationComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [VisualizationComponent]
+      declarations: [VisualizationComponent],
+      providers: [
+        Store,
+        ComparisonPanelService,
+        {provide: StateObservable},
+        {provide: ReducerManager},
+        {provide: ActionsSubject}
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(VisualizationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

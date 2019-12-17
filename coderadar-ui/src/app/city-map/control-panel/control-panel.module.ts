@@ -1,5 +1,5 @@
-import {NgModule} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {ControlPanelComponent} from './control-panel.component';
 import {SettingsComponent} from './settings/settings.component';
@@ -68,12 +68,14 @@ import {HighlightSearchPipe} from "./pipes/highlight-search.pipe";
     HighlightSearchPipe
   ],
   exports: [
-    ControlPanelComponent
+    ControlPanelComponent,
+    FilterComponent
   ],
   providers: [
     ProjectService,
     DatePipe
-  ]
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ControlPanelModule {
 }

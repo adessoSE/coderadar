@@ -7,17 +7,15 @@ import {Project} from '../../model/project';
 import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import { AppEffects } from 'src/app/city-map/shared/effects';
-import {faClone, faSquare} from '@fortawesome/free-regular-svg-icons';
 import {MatPaginator, PageEvent} from '@angular/material';
 import {AppComponent} from '../../app.component';
 import {Store} from '@ngrx/store';
 import * as fromRoot from '../../city-map/shared/reducers';
 import {changeActiveFilter, setMetricMapping} from '../../city-map/control-panel/settings/settings.actions';
-import {changeCommit, loadCommits, setCommits} from '../../city-map/control-panel/control-panel.actions';
+import {changeCommit, setCommits} from '../../city-map/control-panel/control-panel.actions';
 import {CommitType} from '../../city-map/enum/CommitType';
-import {Observable, Subscription, timer} from 'rxjs';
+import {Subscription, timer} from 'rxjs';
 import {loadAvailableMetrics} from '../../city-map/visualization/visualization.actions';
-import {AppState} from '../../city-map/shared/reducers';
 
 @Component({
   selector: 'app-project-dashboard',

@@ -36,7 +36,7 @@ import {
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
 import {getReducers, REDUCER_TOKEN} from './city-map/shared/reducers';
-import {StoreModule} from '@ngrx/store';
+import {Store, StoreModule} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {AppEffects} from './city-map/shared/effects';
@@ -80,10 +80,13 @@ const appRoutes: Routes = [
     CityViewHeaderComponent,
   ],
   imports: [
+    RouterModule.forRoot(appRoutes, {scrollPositionRestoration: 'enabled'}),
+    StoreModule.forRoot(REDUCER_TOKEN),
+    EffectsModule.forRoot([AppEffects]),
+    environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 50}),
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes, {scrollPositionRestoration: 'enabled'}),
     BrowserAnimationsModule,
     BrowserModule,
     FontAwesomeModule,
@@ -109,14 +112,12 @@ const appRoutes: Routes = [
     HttpClientModule,
     ControlPanelModule,
     VisualizationModule,
-    StoreModule.forRoot(REDUCER_TOKEN),
-    EffectsModule.forRoot([AppEffects]),
-    environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 50}),
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatExpansionModule
   ],
   providers: [
+    {provide: Store},
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

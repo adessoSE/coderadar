@@ -1,7 +1,7 @@
-import {FilePatterns} from './file-pattern';
+import {FilePattern} from './file-pattern';
 
-describe('FilePatterns', () => {
+describe('FilePattern', () => {
   it('should create an instance', () => {
-    expect(new FilePatterns()).toBeTruthy();
+    expect(new FilePattern()).toBeTruthy();
   });
 });
