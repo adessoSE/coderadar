@@ -132,7 +132,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
               getAnalyzersForProject(projectId);
           Project project = getProjectPort.get(projectId);
           List<Commit> commitsToBeAnalyzed =
-              getCommitsInProjectPort.getSortedByTimestampAscWithNoParents(projectId);
+              getCommitsInProjectPort.getNonanalyzedSortedByTimestampAscWithNoParents(projectId);
           Long[] commitIds = new Long[commitsToBeAnalyzed.size()];
           FilePatternMatcher filePatternMatcher = new FilePatternMatcher(filePatterns);
 
