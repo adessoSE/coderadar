@@ -3,15 +3,12 @@ import {
   EventEmitter,
   Input,
   OnInit,
-  Output,
-  ViewChild,
+  Output, ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import {Observable} from 'rxjs';
-import {startWith} from 'rxjs/internal/operators/startWith';
 import {FormControl} from '@angular/forms';
-import {Commit} from '../../model/commit';
-import {map} from 'rxjs/operators';
+import {map, startWith} from 'rxjs/operators';
 
 @Component({
   selector: 'app-autosuggest-wrapper',
@@ -19,70 +16,46 @@ import {map} from 'rxjs/operators';
   templateUrl: './autosuggest-wrapper.component.html',
   styleUrls: ['./autosuggest-wrapper.component.scss']
 })
-export class AutosuggestWrapperComponent implements  OnInit {
+export class AutosuggestWrapperComponent implements  OnInit{
 
   @ViewChild('inputElement') inputElement;
 
-  @Input() model: Commit;
-  @Input() source: Commit[];
+  @Input() model$: Observable<any>;
+  @Input() source$: Observable<any[]>;
   @Input() isDisabled: boolean;
   @Input() alignRight = false;
   @Input() label: string;
   @Output() valueChanged = new EventEmitter();
-  filteredOptions: Observable<Commit[]>;
+  @Input() filterOptions :((value: any,source:any[])=> any[]) = (value, options) => options;
+  @Input() formatOption :((value: any)=> string ) = value => value.toString();
+  displayOptions: Observable<{value:any,displayValue:string }[]>;
+  formattedOptions: {value:any,displayValue:string }[];
   formControl = new FormControl();
 
-  handleValueChanged(chosenModel: any) {
-    this.valueChanged.emit(chosenModel);
+  handleValueChanged(selectedOption: any) {
+    this.valueChanged.emit(selectedOption.value);
   }
 
-  formatCommit(commit: Commit): string {
-    if (commit === null || commit === undefined) {
-      return '';
+  displayFunction(option:{value:any,displayValue:string }):string{
+    if(option){
+      return option.displayValue;
+    }else{
+      return "";
     }
-    return new Date(commit.timestamp).toUTCString() + ',  ' + commit.name.substring(0, 7) + ', ' + commit.author;
   }
 
-  private _filter(value: string): Commit[] {
-    if (this.source === undefined) {
-      return [];
-    } else if (typeof value !== 'string') {
-      return [];
-    } else if (value === undefined) {
-      return [];
-    }
-
-    const lowercaseValue = value.toLowerCase();
-
-    const filteredCommits: any[] = this.source.filter(option => {
-      let score = 0;
-      const optionAny = option as any;
-      if (typeof optionAny !== 'undefined') {
-        if (optionAny.author.startsWith(value)) {score += 200; }
-        if (optionAny.author.toLowerCase().startsWith(lowercaseValue)) {score += 100; }
-        if (optionAny.author.includes(value)) {score += 50; }
-        if (optionAny.author.toLowerCase().includes(lowercaseValue)) {score += 25; }
-        if (optionAny.name.startsWith(value)) {score += 1000; }
-        if (optionAny.name.includes(lowercaseValue)) {score += 500; }
-        if (score > 0) {
-          optionAny.score = score;
-          return option;
-        }
-      }
-    });
-    return filteredCommits.sort((a, b) => {
-        return Math.sign(b.score - a.score);
-    });
+  associateFormattedOptions(value):{value:any,displayValue:string}{
+    return {value:value,displayValue:this.formatOption(value)};
   }
 
   ngOnInit(): void {
-    if (this.model !== null && this.model !== undefined) {
-      this.formControl.setValue(this.model);
-    }
-
-    this.filteredOptions = this.formControl.valueChanges
+    if(this.model$)this.model$.subscribe(value => this.formControl.setValue(this.associateFormattedOptions(value)));
+    this.formattedOptions = [];
+    this.source$.subscribe(value => value.forEach(option => this.formattedOptions.push(this.associateFormattedOptions(option))));
+    this.displayOptions = this.formControl.valueChanges
       .pipe(
-        map(value => this._filter((value)))
+        startWith(' '),
+        map(value => this.filterOptions(value,this.formattedOptions))
       );
   }
 }
