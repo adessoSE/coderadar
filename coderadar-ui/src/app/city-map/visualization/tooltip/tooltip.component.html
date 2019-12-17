@@ -1,7 +1,7 @@
 <div id="tooltip">
   <div class="element-name">{{(content$ | async)?.elementName}}</div>
   <table>
-    <tr *ngFor="let metric of (content$ | async)?.metrics | keyValue">
+    <tr *ngFor="let metric of (content$ | async)?.metrics | keyvalue">
       <td class="metric-name-column">
         <small>{{metric.key}}</small>
       </td>

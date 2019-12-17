@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {ControlPanelComponent} from './control-panel.component';
@@ -29,7 +29,7 @@ import {
   MatTooltipModule,
 } from '@angular/material';
 import {LayoutModule} from '@angular/cdk/layout';
-import {ProjectService} from '../../service/project.service';
+import {Store} from '@ngrx/store';
 
 @NgModule({
   imports: [
@@ -66,11 +66,13 @@ import {ProjectService} from '../../service/project.service';
     AutosuggestWrapperComponent
   ],
   exports: [
-    ControlPanelComponent
+    ControlPanelComponent,
+    FilterComponent
   ],
   providers: [
-    ProjectService
-  ]
+    {provide: Store},
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ControlPanelModule {
 }
