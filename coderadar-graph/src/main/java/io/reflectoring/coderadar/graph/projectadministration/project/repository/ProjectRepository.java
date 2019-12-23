@@ -11,11 +11,25 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> {
 
+  /**
+   * Deletes a maximum of 10000 findings in a project. This value can be adjusted as required by
+   * your Neo4j installation in order to prevent out of memory errors.
+   *
+   * @param projectId The id of the project.
+   * @return The number of deleted findings, a maximum of 10000 at a time.
+   */
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-()-[:LOCATED_IN]->(fi:FindingEntity) "
           + "WHERE ID(p) = {0} WITH fi LIMIT 10000 DETACH DELETE fi RETURN COUNT(fi)")
   long deleteProjectFindings(@NonNull Long projectId);
 
+  /**
+   * Deletes a maximum of 10000 metrics in a project. This value can be adjusted as required by your
+   * Neo4j installation in order to prevent out of memory errors.
+   *
+   * @param projectId The id of the project.
+   * @return The number of deleted metrics, a maximum of 10000 at a time.
+   */
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv:MetricValueEntity) WHERE ID(p) = {0} "
           + "WITH mv LIMIT 10000 DETACH DELETE mv RETURN COUNT(mv)")

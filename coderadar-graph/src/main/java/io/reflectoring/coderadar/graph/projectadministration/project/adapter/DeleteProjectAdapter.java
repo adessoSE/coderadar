@@ -36,6 +36,11 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
       projectEntity.setBeingDeleted(true);
       projectRepository.save(projectEntity);
 
+      /*
+       * The empty while loops are necessary because only 10000 entities can be deleted at a time.
+       * @see ProjectRepository#deleteProjectFindings(Long)
+       * @see ProjectRepository#deleteProjectMetrics(Long)
+       */
       while (projectRepository.deleteProjectFindings(id) > 0) ;
       while (projectRepository.deleteProjectMetrics(id) > 0) ;
       projectRepository.deleteProjectFilesAndModules(id);
