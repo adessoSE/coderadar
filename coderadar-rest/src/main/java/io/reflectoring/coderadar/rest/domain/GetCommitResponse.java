@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.query.port.driver;
+package io.reflectoring.coderadar.rest.domain;
 
 import lombok.Data;
 

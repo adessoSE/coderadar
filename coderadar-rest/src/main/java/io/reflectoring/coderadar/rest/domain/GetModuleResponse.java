@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest;
+package io.reflectoring.coderadar.rest.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorMessageResponse {
-  private String errorMessage;
+public class GetModuleResponse {
+  private Long id;
+  private String path;
 }

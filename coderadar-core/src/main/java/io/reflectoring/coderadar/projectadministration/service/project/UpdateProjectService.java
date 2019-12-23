@@ -8,12 +8,12 @@ import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsExcept
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
+import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
@@ -97,7 +97,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
           () -> {
             try {
               // Check what modules where previously in the project
-              List<GetModuleResponse> modules = listModulesOfProjectUseCase.listModules(projectId);
+              List<Module> modules = listModulesOfProjectUseCase.listModules(projectId);
 
               // Delete all files, commits and modules as they have to be re-created
               resetAnalysisPort.resetAnalysis(projectId);
@@ -124,7 +124,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
               saveCommitPort.saveCommits(commits, projectId);
 
               // Re-create the modules
-              for (GetModuleResponse module : modules) {
+              for (Module module : modules) {
                 createModulePort.createModule(module.getPath(), projectId);
               }
 

@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.query.service;
 
+import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
-import io.reflectoring.coderadar.query.port.driver.GetCommitResponse;
 import io.reflectoring.coderadar.query.port.driver.GetCommitsInProjectUseCase;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {
   }
 
   @Override
-  public List<GetCommitResponse> get(Long projectId) {
-    return getCommitsInProjectPort.getCommitsResponseSortedByTimestampDesc(projectId);
+  public List<Commit> get(Long projectId) {
+    return getCommitsInProjectPort.getCommitsSortedByTimestampDescWithNoRelationships(projectId);
   }
 }

@@ -3,9 +3,9 @@ package io.reflectoring.coderadar.projectadministration.filepattern;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.ListFilePatternsOfProjectService;
 import java.util.Arrays;
 import java.util.List;
@@ -32,16 +32,14 @@ class ListFilePatternsOfProjectServiceTest {
     // given
     long projectId = 123L;
 
-    GetFilePatternResponse expectedResponse1 =
-        new GetFilePatternResponse(1L, "**/*.java", InclusionType.INCLUDE);
-    GetFilePatternResponse expectedResponse2 =
-        new GetFilePatternResponse(2L, "**/*.xml", InclusionType.EXCLUDE);
+    FilePattern expectedResponse1 = new FilePattern(1L, "**/*.java", InclusionType.INCLUDE);
+    FilePattern expectedResponse2 = new FilePattern(2L, "**/*.xml", InclusionType.EXCLUDE);
 
-    when(listPatternsPortMock.listFilePatternResponses(projectId))
+    when(listPatternsPortMock.listFilePatterns(projectId))
         .thenReturn(Arrays.asList(expectedResponse1, expectedResponse2));
 
     // when
-    List<GetFilePatternResponse> actualResponse = testSubject.listFilePatterns(projectId);
+    List<FilePattern> actualResponse = testSubject.listFilePatterns(projectId);
 
     // then
     assertThat(actualResponse).containsExactly(expectedResponse1, expectedResponse2);

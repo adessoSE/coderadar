@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.graph;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 public abstract class AbstractMapper<T, E> {
 
@@ -9,16 +9,16 @@ public abstract class AbstractMapper<T, E> {
 
   public abstract E mapDomainObject(T domainObject);
 
-  public Collection<T> mapNodeEntities(Iterable<E> nodeEntities) {
-    Collection<T> domainObjects = new ArrayList<>();
+  public List<T> mapNodeEntities(Iterable<E> nodeEntities) {
+    List<T> domainObjects = new ArrayList<>();
     for (E e : nodeEntities) {
       domainObjects.add(mapNodeEntity(e));
     }
     return domainObjects;
   }
 
-  public Collection<E> mapDomainObjects(Iterable<T> domainObjects) {
-    Collection<E> nodeEntities = new ArrayList<>();
+  public List<E> mapDomainObjects(Iterable<T> domainObjects) {
+    List<E> nodeEntities = new ArrayList<>();
     for (T t : domainObjects) {
       nodeEntities.add(mapDomainObject(t));
     }

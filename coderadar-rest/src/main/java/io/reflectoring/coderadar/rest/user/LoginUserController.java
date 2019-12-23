@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserUseCase;
 import org.springframework.http.HttpStatus;

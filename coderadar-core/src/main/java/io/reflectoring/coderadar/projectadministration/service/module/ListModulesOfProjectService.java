@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.service.module;
 
+import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.ListModulesOfProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class ListModulesOfProjectService implements ListModulesOfProjectUseCase 
   }
 
   @Override
-  public List<GetModuleResponse> listModules(Long projectId) {
-    return port.listModuleResponses(projectId);
+  public List<Module> listModules(Long projectId) {
+    return port.listModules(projectId);
   }
 }

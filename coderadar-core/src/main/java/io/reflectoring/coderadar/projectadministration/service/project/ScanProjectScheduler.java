@@ -9,6 +9,7 @@ import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsExcept
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
+import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.GetProjectHeadCommitPort;
@@ -19,7 +20,6 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ListProjectsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
@@ -99,7 +99,8 @@ public class ScanProjectScheduler {
   @EventListener({ContextRefreshedEvent.class})
   public void onApplicationEvent() {
     taskScheduler.scheduleAtFixedRate(
-        this::scheduleCheckTask, coderadarConfigurationProperties.getScanIntervalInSeconds() * 100);
+        this::scheduleCheckTask,
+        coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000);
   }
 
   /** Starts update tasks for all projects that don't have one running already. */
@@ -186,17 +187,16 @@ public class ScanProjectScheduler {
 
         try {
           // Check what modules where previously in the project
-          List<GetModuleResponse> modules =
-              listModulesOfProjectUseCase.listModules(project.getId());
+          List<Module> modules = listModulesOfProjectUseCase.listModules(project.getId());
 
-          for (GetModuleResponse module : modules) {
+          for (Module module : modules) {
             deleteModulePort.delete(module.getId(), project.getId());
           }
 
           saveCommits(project);
 
           // Re-create the modules
-          for (GetModuleResponse module : modules) {
+          for (Module module : modules) {
             createModulePort.createModule(module.getPath(), project.getId());
           }
         } finally {

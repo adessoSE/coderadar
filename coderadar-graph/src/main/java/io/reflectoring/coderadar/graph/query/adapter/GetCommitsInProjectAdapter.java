@@ -10,10 +10,10 @@ import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
-import io.reflectoring.coderadar.query.port.driver.GetCommitResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -54,21 +54,24 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   }
 
   @Override
-  public List<GetCommitResponse> getCommitsResponseSortedByTimestampDesc(Long projectId) {
+  public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(Long projectId) {
     if (!projectRepository.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }
-    List<GetCommitResponse> getCommitResponses = new ArrayList<>();
-    for (CommitEntity c : commitRepository.findByProjectIdAndTimestampDesc(projectId)) {
-      GetCommitResponse commitResponse = new GetCommitResponse();
-      commitResponse.setName(c.getName());
-      commitResponse.setAnalyzed(c.isAnalyzed());
-      commitResponse.setAuthor(c.getAuthor());
-      commitResponse.setComment(c.getComment());
-      commitResponse.setTimestamp(c.getTimestamp());
-      getCommitResponses.add(commitResponse);
-    }
-    return getCommitResponses;
+    return commitRepository
+        .findByProjectIdAndTimestampDesc(projectId)
+        .stream()
+        .map(
+            commitEntity -> {
+              Commit commit = new Commit();
+              commit.setName(commitEntity.getName());
+              commit.setAnalyzed(commitEntity.isAnalyzed());
+              commit.setAuthor(commitEntity.getAuthor());
+              commit.setComment(commitEntity.getComment());
+              commit.setTimestamp(commitEntity.getTimestamp());
+              return commit;
+            })
+        .collect(Collectors.toList());
   }
 
   @Override

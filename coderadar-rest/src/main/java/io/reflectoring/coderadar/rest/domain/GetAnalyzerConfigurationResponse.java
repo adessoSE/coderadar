@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get;
+package io.reflectoring.coderadar.rest.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

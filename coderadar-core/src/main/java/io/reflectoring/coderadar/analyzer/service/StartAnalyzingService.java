@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.analyzer.port.driven.StopAnalyzingPort;
 import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
+import io.reflectoring.coderadar.analyzer.service.filepatterns.FilePatternMatcher;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
@@ -21,7 +22,6 @@ import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.L
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
-import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
 import io.reflectoring.coderadar.query.port.driven.GetAvailableMetricsInProjectPort;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.ArrayList;

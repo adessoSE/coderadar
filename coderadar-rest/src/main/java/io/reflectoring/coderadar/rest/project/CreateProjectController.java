@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.rest.project;
 
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
-import io.reflectoring.coderadar.rest.IdResponse;
+import io.reflectoring.coderadar.rest.domain.IdResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

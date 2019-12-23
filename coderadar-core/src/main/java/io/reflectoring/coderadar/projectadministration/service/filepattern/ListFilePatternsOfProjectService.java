@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.service.filepattern;
 
+import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class ListFilePatternsOfProjectService implements ListFilePatternsOfProje
   }
 
   @Override
-  public List<GetFilePatternResponse> listFilePatterns(Long projectId) {
-    return port.listFilePatternResponses(projectId);
+  public List<FilePattern> listFilePatterns(Long projectId) {
+    return port.listFilePatterns(projectId);
   }
 }

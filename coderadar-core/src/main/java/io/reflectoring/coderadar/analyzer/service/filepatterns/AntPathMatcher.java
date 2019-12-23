@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.reflectoring.coderadar.projectadministration.service.filepattern;
+package io.reflectoring.coderadar.analyzer.service.filepatterns;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

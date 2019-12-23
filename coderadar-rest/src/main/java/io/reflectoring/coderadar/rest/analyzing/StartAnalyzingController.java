@@ -22,7 +22,7 @@ public class StartAnalyzingController {
   }
 
   @PostMapping(path = "projects/{projectId}/analyze", consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity startAnalyzing(
+  public ResponseEntity<HttpStatus> startAnalyzing(
       @PathVariable("projectId") Long projectId,
       @Validated @RequestBody StartAnalyzingCommand command) {
     startAnalyzingUseCase.start(command, projectId);

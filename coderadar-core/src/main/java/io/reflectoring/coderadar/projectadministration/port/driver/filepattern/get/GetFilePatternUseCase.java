@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get;
 
+import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
+
 public interface GetFilePatternUseCase {
 
   /**
@@ -8,5 +10,5 @@ public interface GetFilePatternUseCase {
    * @param filePatternId The id of the pattern
    * @return The FilePattern
    */
-  GetFilePatternResponse get(Long filePatternId);
+  FilePattern get(Long filePatternId);
 }

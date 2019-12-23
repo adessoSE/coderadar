@@ -5,7 +5,7 @@ import io.reflectoring.coderadar.projectadministration.ModulePathInvalidExceptio
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
-import io.reflectoring.coderadar.rest.IdResponse;
+import io.reflectoring.coderadar.rest.domain.IdResponse;
 import io.reflectoring.coderadar.rest.module.CreateModuleController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

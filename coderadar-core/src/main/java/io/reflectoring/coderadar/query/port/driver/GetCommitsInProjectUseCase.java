@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.query.port.driver;
 
+import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import java.util.List;
 
 public interface GetCommitsInProjectUseCase {
-  List<GetCommitResponse> get(Long projectId);
+  List<Commit> get(Long projectId);
 }

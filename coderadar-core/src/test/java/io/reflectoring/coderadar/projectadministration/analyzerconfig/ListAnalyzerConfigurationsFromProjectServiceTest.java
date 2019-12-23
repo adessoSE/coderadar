@@ -5,7 +5,6 @@ import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.ListAnalyzerConfigurationsPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.ListAnalyzerConfigurationsService;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,15 +40,13 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
     configurations.add(analyzerConfiguration1);
     configurations.add(analyzerConfiguration2);
 
-    GetAnalyzerConfigurationResponse expectedResponse1 =
-        new GetAnalyzerConfigurationResponse(1L, "analyzer 1", true);
-    GetAnalyzerConfigurationResponse expectedResponse2 =
-        new GetAnalyzerConfigurationResponse(2L, "analyzer 2", false);
+    AnalyzerConfiguration expectedResponse1 = new AnalyzerConfiguration(1L, "analyzer 1", true);
+    AnalyzerConfiguration expectedResponse2 = new AnalyzerConfiguration(2L, "analyzer 2", false);
 
     when(getConfigurationsPortMock.get(projectId)).thenReturn(configurations);
 
     // given
-    List<GetAnalyzerConfigurationResponse> actualResponse = testSubject.get(projectId);
+    List<AnalyzerConfiguration> actualResponse = testSubject.get(projectId);
 
     // then
     assertThat(actualResponse).containsExactly(expectedResponse1, expectedResponse2);

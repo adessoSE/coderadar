@@ -9,8 +9,8 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.creat
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
-import io.reflectoring.coderadar.rest.IdResponse;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
+import io.reflectoring.coderadar.rest.domain.IdResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

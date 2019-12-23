@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.projectadministration.service.filepattern;
+package io.reflectoring.coderadar.analyzer.service.filepatterns;
 
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import java.util.ArrayList;

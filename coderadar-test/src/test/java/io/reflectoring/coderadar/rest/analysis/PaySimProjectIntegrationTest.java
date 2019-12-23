@@ -25,9 +25,7 @@ import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driver.GetDeltaTreeForTwoCommitsCommand;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
-import io.reflectoring.coderadar.rest.IdResponse;
 import net.lingala.zip4j.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -44,9 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 

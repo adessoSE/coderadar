@@ -6,7 +6,6 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -47,24 +46,5 @@ public class GetProjectAdapter implements GetProjectPort {
   @Override
   public boolean existsById(Long projectId) {
     return projectRepository.existsById(projectId);
-  }
-
-  @Override
-  public GetProjectResponse getProjectResponse(Long id) {
-    Optional<ProjectEntity> projectEntity = projectRepository.findById(id);
-    if (projectEntity.isPresent()) {
-      GetProjectResponse response = new GetProjectResponse();
-      response.setId(projectEntity.get().getId());
-      response.setName(projectEntity.get().getName());
-      response.setVcsUsername(projectEntity.get().getVcsUsername());
-      response.setVcsPassword(projectEntity.get().getVcsPassword());
-      response.setVcsOnline(projectEntity.get().isVcsOnline());
-      response.setVcsUrl(projectEntity.get().getVcsUrl());
-      response.setStartDate(projectEntity.get().getVcsStart());
-      response.setEndDate(projectEntity.get().getVcsEnd());
-      return response;
-    } else {
-      throw new ProjectNotFoundException(id);
-    }
   }
 }

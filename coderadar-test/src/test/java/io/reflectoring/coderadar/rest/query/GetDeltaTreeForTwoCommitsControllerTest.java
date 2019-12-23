@@ -6,12 +6,12 @@ import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfi
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.query.domain.DeltaTree;
-import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
+import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driver.GetDeltaTreeForTwoCommitsCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
-import io.reflectoring.coderadar.rest.IdResponse;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
+import io.reflectoring.coderadar.rest.domain.IdResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

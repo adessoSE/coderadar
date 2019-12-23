@@ -2,10 +2,10 @@ package io.reflectoring.coderadar.rest.query;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
-import io.reflectoring.coderadar.query.port.driver.GetCommitResponse;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
-import io.reflectoring.coderadar.rest.IdResponse;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
+import io.reflectoring.coderadar.rest.domain.GetCommitResponse;
+import io.reflectoring.coderadar.rest.domain.IdResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

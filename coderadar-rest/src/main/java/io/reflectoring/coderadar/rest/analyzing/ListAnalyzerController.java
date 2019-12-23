@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @Transactional
 public class ListAnalyzerController {
@@ -18,7 +20,7 @@ public class ListAnalyzerController {
   }
 
   @GetMapping(path = "/analyzers", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity listAvailableAnalyzers() {
+  public ResponseEntity<List<String>> listAvailableAnalyzers() {
     return new ResponseEntity<>(listAnalyzerUseCase.listAvailableAnalyzers(), HttpStatus.OK);
   }
 }

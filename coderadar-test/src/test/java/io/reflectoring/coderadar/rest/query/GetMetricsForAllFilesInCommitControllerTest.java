@@ -7,12 +7,11 @@ import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.c
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.query.domain.MetricTree;
-import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
-import io.reflectoring.coderadar.rest.IdResponse;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
+import io.reflectoring.coderadar.rest.domain.IdResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
 

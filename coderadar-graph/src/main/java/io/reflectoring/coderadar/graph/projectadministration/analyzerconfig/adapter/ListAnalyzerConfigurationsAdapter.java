@@ -6,7 +6,7 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repo
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.ListAnalyzerConfigurationsPort;
-import java.util.Collection;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,7 +24,7 @@ public class ListAnalyzerConfigurationsAdapter implements ListAnalyzerConfigurat
   }
 
   @Override
-  public Collection<AnalyzerConfiguration> get(Long projectId) {
+  public List<AnalyzerConfiguration> get(Long projectId) {
     if (!projectRepository.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }

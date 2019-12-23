@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.graph.projectadministration.module;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
-import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.adapter.ListModulesOfProjectAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
@@ -39,8 +38,7 @@ class ListModulesOfProjectAdapterTest {
   @Test
   @DisplayName("Should return empty list when no modules in the project exist")
   void shouldReturnEmptyListWhenNoModulesInTheProjectExist() {
-    ProjectEntity mockedProject = new ProjectEntity();
-    when(projectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
+    when(projectRepository.existsById(1L)).thenReturn(true);
     when(moduleRepository.findModulesInProject(1L)).thenReturn(new LinkedList<>());
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);
@@ -53,8 +51,7 @@ class ListModulesOfProjectAdapterTest {
   void shouldReturnListWithSizeOfOneWhenOneModuleInTheProjectExists() {
     LinkedList<ModuleEntity> mockedItem = new LinkedList<>();
     mockedItem.add(new ModuleEntity());
-    ProjectEntity mockedProject = new ProjectEntity();
-    when(projectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
+    when(projectRepository.existsById(1L)).thenReturn(true);
     when(moduleRepository.findModulesInProject(1L)).thenReturn(mockedItem);
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);
@@ -68,8 +65,7 @@ class ListModulesOfProjectAdapterTest {
     LinkedList<ModuleEntity> mockedItem = new LinkedList<>();
     mockedItem.add(new ModuleEntity());
     mockedItem.add(new ModuleEntity());
-    ProjectEntity mockedProject = new ProjectEntity();
-    when(projectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
+    when(projectRepository.existsById(1L)).thenReturn(true);
     when(moduleRepository.findModulesInProject(1L)).thenReturn(mockedItem);
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);

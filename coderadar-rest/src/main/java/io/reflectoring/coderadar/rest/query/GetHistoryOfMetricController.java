@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.rest.query;
 
 import io.reflectoring.coderadar.query.port.driver.GetHistoryOfMetricCommand;
 import io.reflectoring.coderadar.query.port.driver.GetHistoryOfMetricUseCase;
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
