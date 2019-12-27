@@ -1,10 +1,13 @@
 package io.reflectoring.coderadar.projectadministration.service.project;
 
+import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.DeleteProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.delete.DeleteProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
+import io.reflectoring.coderadar.vcs.port.driven.DeleteRepositoryPort;
+import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,16 +18,22 @@ public class DeleteProjectService implements DeleteProjectUseCase {
   private final DeleteProjectPort deleteProjectPort;
   private final ProcessProjectService processProjectService;
   private final GetProjectPort getProjectPort;
+  private final DeleteRepositoryPort deleteRepositoryPort;
+  private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
   private final Logger logger = LoggerFactory.getLogger(DeleteProjectService.class);
 
   public DeleteProjectService(
       DeleteProjectPort deleteProjectPort,
       ProcessProjectService processProjectService,
-      GetProjectPort getProjectPort) {
+      GetProjectPort getProjectPort,
+      DeleteRepositoryPort deleteRepositoryPort,
+      CoderadarConfigurationProperties coderadarConfigurationProperties) {
     this.deleteProjectPort = deleteProjectPort;
     this.processProjectService = processProjectService;
     this.getProjectPort = getProjectPort;
+    this.deleteRepositoryPort = deleteRepositoryPort;
+    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
   }
 
   @Override
@@ -32,8 +41,19 @@ public class DeleteProjectService implements DeleteProjectUseCase {
     Project project = getProjectPort.get(id);
     processProjectService.executeTask(
         () -> {
-          deleteProjectPort.delete(project);
-          logger.info("Deleted project {} with id {}", project.getName(), id);
+          deleteProjectPort.delete(id);
+          try {
+            deleteRepositoryPort.deleteRepository(
+                coderadarConfigurationProperties.getWorkdir()
+                    + "/projects/"
+                    + project.getWorkdirName());
+            logger.info("Deleted project {} with id {}", project.getName(), id);
+          } catch (IOException e) {
+            logger.error(
+                "Unable to delete local repository for project {}, {}",
+                project.getName(),
+                e.getMessage());
+          }
         },
         id);
   }

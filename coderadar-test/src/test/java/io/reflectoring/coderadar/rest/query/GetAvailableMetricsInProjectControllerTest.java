@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.net.URL;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
