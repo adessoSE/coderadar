@@ -23,7 +23,6 @@ import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,21 +103,21 @@ public class UpdateProjectService implements UpdateProjectUseCase {
               updateProjectPort.deleteFilesAndCommits(projectId);
 
               // Perform a git pull on the remote repository
+              File localDir =
+                  new File(
+                      coderadarConfigurationProperties.getWorkdir()
+                          + "/projects/"
+                          + project.getWorkdirName());
               updateRepositoryUseCase.updateRepository(
                   new UpdateRepositoryCommand()
-                      .setLocalDir(
-                          new File(
-                              coderadarConfigurationProperties.getWorkdir()
-                                  + "/projects/"
-                                  + project.getWorkdirName()))
+                      .setLocalDir(localDir)
                       .setPassword(project.getVcsPassword())
                       .setUsername(project.getVcsUsername())
                       .setRemoteUrl(project.getVcsUrl()));
 
               // Get the new commit tree
               List<Commit> commits =
-                  extractProjectCommitsUseCase.getCommits(
-                      Paths.get(project.getWorkdirName()), getProjectDateRange(project));
+                  extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
 
               // Save the new commit tree
               saveCommitPort.saveCommits(commits, projectId);

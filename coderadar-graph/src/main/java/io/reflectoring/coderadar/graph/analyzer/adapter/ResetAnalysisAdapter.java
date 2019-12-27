@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.graph.analyzer.adapter;
 import io.reflectoring.coderadar.analyzer.port.driven.ResetAnalysisPort;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,9 @@ public class ResetAnalysisAdapter implements ResetAnalysisPort {
 
   @Override
   public void resetAnalysis(Long projectId) {
+    if (!projectRepository.existsById(projectId)) {
+      throw new ProjectNotFoundException(projectId);
+    }
     commitRepository.resetAnalyzedStatus(projectId);
 
     /*

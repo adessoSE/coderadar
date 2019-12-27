@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
 import com.google.common.collect.Iterables;
-import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
@@ -10,24 +9,21 @@ import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
 import io.reflectoring.coderadar.vcs.port.driven.ExtractProjectCommitsPort;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.springframework.stereotype.Service;
@@ -35,63 +31,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
 
-  private final CoderadarConfigurationProperties coderadarConfigurationProperties;
-
-  public ExtractProjectCommitsAdapter(
-      CoderadarConfigurationProperties coderadarConfigurationProperties) {
-    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-  }
-
   /**
    * @param repositoryRoot The root path of the local repository.
    * @param range The date range in which to collect commits
    * @return A list of fully initialized Commit objects (containing files and fileToCommit
    *     relationships).
    */
-  public List<Commit> getCommits(Path repositoryRoot, DateRange range) {
-    Git git;
-    try {
-      Path actualPath =
-          Paths.get(coderadarConfigurationProperties.getWorkdir() + "/projects/" + repositoryRoot);
-
-      FileRepositoryBuilder builder = new FileRepositoryBuilder();
-      Repository repository =
-          builder
-              .setWorkTree(actualPath.toFile())
-              .setGitDir(new java.io.File(actualPath + "/.git"))
-              .build();
-      git = new Git(repository);
-
-      HashMap<ObjectId, Commit> map = new HashMap<>();
-      List<RevCommit> revCommits = new ArrayList<>();
-      List<Commit> result = new ArrayList<>();
-      git.log().call().iterator().forEachRemaining(revCommits::add);
-      Collections.reverse(revCommits);
-      for (RevCommit rc : revCommits) {
-        if (isInDateRange(range, rc)) {
-          Commit commit = map.get(rc.getId());
-          if (commit == null) {
-            commit = mapRevCommitToCommit(rc);
-          }
-          for (RevCommit parent : rc.getParents()) {
-            if (isInDateRange(range, parent)) {
-              Commit parentCommit = map.get(parent.getId());
-              if (parentCommit == null) {
-                parentCommit = mapRevCommitToCommit(parent);
-                map.put(parent.getId(), parentCommit);
-                result.add(parentCommit);
-              }
-              commit.getParents().add(parentCommit);
-            }
-          }
-          map.put(rc.getId(), commit);
-          result.add(commit);
-        }
-      }
-
+  public List<Commit> extractCommits(java.io.File repositoryRoot, DateRange range) {
+    try (Git git = Git.open(repositoryRoot)) {
+      List<Commit> result = getCommits(git, range);
       setCommitsFiles(git, result);
-      git.getRepository().close();
-      git.close();
       return result;
     } catch (Exception e) {
       throw new IllegalStateException(
@@ -99,12 +48,39 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     }
   }
 
+  private List<Commit> getCommits(Git git, DateRange range) throws GitAPIException {
+    Map<ObjectId, Commit> map = new HashMap<>();
+    List<Commit> result = new ArrayList<>();
+    List<RevCommit> revCommits = new ArrayList<>();
+    git.log().call().iterator().forEachRemaining(revCommits::add);
+
+    for (int i = revCommits.size() - 1; i >= 0; --i) {
+      RevCommit rc = revCommits.get(i);
+      if (isInDateRange(range, rc)) {
+        Commit commit = map.computeIfAbsent(rc.getId(), objectId -> mapRevCommitToCommit(rc));
+        for (RevCommit parent : rc.getParents()) {
+          if (isInDateRange(range, parent)) {
+            Commit parentCommit = map.get(parent.getId());
+            if (parentCommit == null) {
+              parentCommit = mapRevCommitToCommit(parent);
+              map.put(parent.getId(), parentCommit);
+              result.add(parentCommit);
+            }
+            commit.getParents().add(parentCommit);
+          }
+        }
+        result.add(commit);
+      }
+    }
+    return result;
+  }
+
   private Commit mapRevCommitToCommit(RevCommit rc) {
     Commit commit = new Commit();
     commit.setName(rc.getName());
     commit.setAuthor(rc.getAuthorIdent().getName());
     commit.setComment(rc.getShortMessage());
-    commit.setTimestamp(rc.getAuthorIdent().getWhen().toInstant().toEpochMilli());
+    commit.setTimestamp(rc.getAuthorIdent().getWhen().getTime());
     return commit;
   }
 
@@ -122,11 +98,9 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       treeWalk.setRecursive(true);
       treeWalk.addTree(gitCommit.getTree());
       while (treeWalk.next()) {
-        File file;
+        File file = new File();
 
-        file = new File();
         FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
-
         fileToCommitRelationship.setOldPath("/dev/null");
         fileToCommitRelationship.setChangeType(ChangeType.ADD);
         fileToCommitRelationship.setCommit(firstCommit);

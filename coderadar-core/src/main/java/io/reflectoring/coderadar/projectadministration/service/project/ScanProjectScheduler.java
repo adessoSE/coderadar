@@ -26,7 +26,6 @@ import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -153,11 +152,13 @@ public class ScanProjectScheduler {
     return project.getVcsEnd() != null && project.getVcsEnd().before(new Date());
   }
 
-  /** @param project The project to check */
-  private void saveCommits(Project project) {
+  /**
+   * @param project The project to check
+   * @param localDir The project workdir
+   */
+  private void saveCommits(Project project, File localDir) {
     List<Commit> commits =
-        extractProjectCommitsUseCase.getCommits(
-            Paths.get(project.getWorkdirName()), getProjectDateRange(project));
+        extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
 
     Commit head = getProjectHeadCommitPort.getHeadCommit(project.getId());
     if (head.getTimestamp() > Iterables.getLast(commits).getTimestamp()) {
@@ -173,13 +174,14 @@ public class ScanProjectScheduler {
 
   private void checkForNewCommits(Project project) {
     try {
+      File localDir =
+          new File(
+              coderadarConfigurationProperties.getWorkdir()
+                  + "/projects/"
+                  + project.getWorkdirName());
       if (updateRepositoryUseCase.updateRepository(
           new UpdateRepositoryCommand()
-              .setLocalDir(
-                  new File(
-                      coderadarConfigurationProperties.getWorkdir()
-                          + "/projects/"
-                          + project.getWorkdirName()))
+              .setLocalDir(localDir)
               .setPassword(project.getVcsPassword())
               .setUsername(project.getVcsUsername())
               .setRemoteUrl(project.getVcsUrl()))) {
@@ -193,7 +195,7 @@ public class ScanProjectScheduler {
             deleteModulePort.delete(module.getId(), project.getId());
           }
 
-          saveCommits(project);
+          saveCommits(project, localDir);
 
           // Re-create the modules
           for (Module module : modules) {
