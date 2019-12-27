@@ -75,12 +75,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
       metricValueEntity.setFile(fileEntity);
       metricValueEntity.setValue(metricValue.getValue());
       metricValueEntity.setName(metricValue.getName());
-      metricValueEntity.setFindings(
-          metricValue
-              .getFindings()
-              .stream()
-              .map(findingsMapper::mapDomainObject)
-              .collect(Collectors.toList()));
+      metricValueEntity.setFindings(findingsMapper.mapDomainObjects(metricValue.getFindings()));
 
       metricValueEntities.add(metricValueEntity);
     }
