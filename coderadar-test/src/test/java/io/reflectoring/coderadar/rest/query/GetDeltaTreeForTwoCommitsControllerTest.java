@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.rest.query;
 
-import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
@@ -51,8 +50,7 @@ class GetDeltaTreeForTwoCommitsControllerTest extends ControllerTestTemplate {
         CreateAnalyzerConfigurationCommand command3 = new CreateAnalyzerConfigurationCommand("io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
         mvc().perform(post("/projects/" + projectId + "/analyzers").content(toJson(command3)).contentType(MediaType.APPLICATION_JSON));
 
-        StartAnalyzingCommand command4 = new StartAnalyzingCommand(new Date(), true);
-        mvc().perform(post("/projects/" + projectId + "/analyze").content(toJson(command4)).contentType(MediaType.APPLICATION_JSON));
+        mvc().perform(post("/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test

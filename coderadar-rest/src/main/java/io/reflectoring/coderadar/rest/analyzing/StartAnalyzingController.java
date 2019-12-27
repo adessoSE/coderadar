@@ -1,15 +1,12 @@
 package io.reflectoring.coderadar.rest.analyzing;
 
-import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,9 +20,8 @@ public class StartAnalyzingController {
 
   @PostMapping(path = "projects/{projectId}/analyze", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<HttpStatus> startAnalyzing(
-      @PathVariable("projectId") Long projectId,
-      @Validated @RequestBody StartAnalyzingCommand command) {
-    startAnalyzingUseCase.start(command, projectId);
+      @PathVariable("projectId") Long projectId) {
+    startAnalyzingUseCase.start(projectId);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }

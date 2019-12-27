@@ -11,16 +11,16 @@ import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
 @Service
 public class SaveMetricAdapter implements SaveMetricPort {
 
-  private MetricRepository metricRepository;
-
+  private final MetricRepository metricRepository;
   private final CommitRepository commitRepository;
   private final FileRepository fileRepository;
 
@@ -34,7 +34,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
   }
 
   @Override
-  public void saveMetricValues(List<MetricValue> metricValues, Long projectId) {
+  public void saveMetricValues(List<MetricValue> metricValues) {
 
     // Get the commit entities of the metric values.
     List<Long> commitIds = new ArrayList<>();

@@ -3,10 +3,8 @@ package io.reflectoring.coderadar.analyzer.service;
 import io.reflectoring.coderadar.analyzer.MisconfigurationException;
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
-import io.reflectoring.coderadar.analyzer.port.driven.StartAnalyzingPort;
-import io.reflectoring.coderadar.analyzer.port.driven.StopAnalyzingPort;
+import io.reflectoring.coderadar.analyzer.port.driven.SetAnalyzingStatusPort;
 import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
-import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import io.reflectoring.coderadar.analyzer.service.filepatterns.FilePatternMatcher;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
@@ -45,8 +43,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final SaveMetricPort saveMetricPort;
   private final SaveCommitPort saveCommitPort;
   private final ProcessProjectService processProjectService;
-  private final StartAnalyzingPort startAnalyzingPort;
-  private final StopAnalyzingPort stopAnalyzingPort;
+  private final SetAnalyzingStatusPort setAnalyzingStatusPort;
   private final AsyncListenableTaskExecutor taskExecutor;
   private final GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort;
   private final ProjectStatusPort projectStatusPort;
@@ -64,8 +61,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       SaveMetricPort saveMetricPort,
       SaveCommitPort saveCommitPort,
       ProcessProjectService processProjectService,
-      StartAnalyzingPort startAnalyzingPort,
-      StopAnalyzingPort stopAnalyzingPort,
+      SetAnalyzingStatusPort setAnalyzingStatusPort,
       AsyncListenableTaskExecutor taskExecutor,
       GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort,
       ProjectStatusPort projectStatusPort,
@@ -79,8 +75,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     this.saveMetricPort = saveMetricPort;
     this.saveCommitPort = saveCommitPort;
     this.processProjectService = processProjectService;
-    this.startAnalyzingPort = startAnalyzingPort;
-    this.stopAnalyzingPort = stopAnalyzingPort;
+    this.setAnalyzingStatusPort = setAnalyzingStatusPort;
     this.taskExecutor = taskExecutor;
     this.getAvailableMetricsInProjectPort = getAvailableMetricsInProjectPort;
     this.projectStatusPort = projectStatusPort;
@@ -90,11 +85,10 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   /**
    * Starts the analysis of a project.
    *
-   * @param command Command containing analysis parameters.
    * @param projectId The id of the project to analyze.
    */
   @Override
-  public void start(StartAnalyzingCommand command, Long projectId) {
+  public void start(Long projectId) {
     if (projectStatusPort.isBeingProcessed(projectId)) {
       throw new ProjectIsBeingProcessedException(projectId);
     }
@@ -114,18 +108,16 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
             .noneMatch(analyzerConfiguration -> analyzerConfiguration.getEnabled())) {
       throw new MisconfigurationException("Cannot analyze project without analyzers");
     }
-    startAnalyzingTask(command, projectId, filePatterns);
+    startAnalyzingTask(projectId, filePatterns);
   }
 
   /**
    * Starts a background task using the TaskExecutor. It will perform the analysis of the project.
    *
-   * @param command The analysing command to use.
    * @param projectId The id of the project to analyze.
    * @param filePatterns The patterns to use.
    */
-  private void startAnalyzingTask(
-      StartAnalyzingCommand command, Long projectId, List<FilePattern> filePatterns) {
+  private void startAnalyzingTask(Long projectId, List<FilePattern> filePatterns) {
     processProjectService.executeTask(
         () -> {
           List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
@@ -136,7 +128,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           Long[] commitIds = new Long[commitsToBeAnalyzed.size()];
           FilePatternMatcher filePatternMatcher = new FilePatternMatcher(filePatterns);
 
-          startAnalyzingPort.start(command, projectId);
+          setAnalyzingStatusPort.setStatus(projectId, true);
           int counter = 0;
           ListenableFuture<?> saveTask = null;
           for (Commit commit : commitsToBeAnalyzed) {
@@ -162,7 +154,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
             }
           }
           waitForTask(saveTask);
-          stopAnalyzingPort.stop(projectId);
+          setAnalyzingStatusPort.setStatus(projectId, false);
           if (!getAvailableMetricsInProjectPort.get(projectId).isEmpty()) {
             saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
           }

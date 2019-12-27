@@ -85,16 +85,6 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   }
 
   @Override
-  public List<Commit> getSortedByTimestampAscWithNoParents(Long projectId) {
-    if (!projectRepository.existsById(projectId)) {
-      throw new ProjectNotFoundException(projectId);
-    }
-    List<CommitEntity> commitEntities =
-        commitRepository.findByProjectIdWithFileRelationshipsSortedByTimestampAsc(projectId);
-    return mapCommitEntitiesNoParents(commitEntities);
-  }
-
-  @Override
   public List<Commit> getNonanalyzedSortedByTimestampAscWithNoParents(Long projectId) {
     if (!projectRepository.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
