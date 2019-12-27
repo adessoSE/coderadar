@@ -28,7 +28,7 @@ class DeleteProjectAdapterTest {
   }
 
   @Test
-  @DisplayName("Should delete project when passing a valid project id")
+  @DisplayName("Should delete project when passing a valid project")
   void shouldDeleteProjectWhenPassingAValidProjectId() {
     when(projectRepository.deleteProjectFindings(anyLong())).thenReturn(0L);
     doNothing().when(projectRepository).deleteProjectFilesAndModules(isA(Long.class));
@@ -38,7 +38,7 @@ class DeleteProjectAdapterTest {
 
     Project testProject = new Project();
     testProject.setId(1L);
-    deleteProjectAdapter.delete(testProject.getId());
+    deleteProjectAdapter.delete(testProject);
 
     verify(projectRepository, times(1)).deleteProjectFindings(anyLong());
     verify(projectRepository, times(1)).deleteProjectFilesAndModules(anyLong());

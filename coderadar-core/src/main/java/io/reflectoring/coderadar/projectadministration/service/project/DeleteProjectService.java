@@ -32,7 +32,7 @@ public class DeleteProjectService implements DeleteProjectUseCase {
     Project project = getProjectPort.get(id);
     processProjectService.executeTask(
         () -> {
-          deleteProjectPort.delete(id);
+          deleteProjectPort.delete(project);
           logger.info("Deleted project {} with id {}", project.getName(), id);
         },
         id);

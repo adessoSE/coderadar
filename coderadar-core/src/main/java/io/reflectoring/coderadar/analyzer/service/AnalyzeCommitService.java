@@ -126,7 +126,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
               .collect(Collectors.toList());
       MetricValue metricValue =
           new MetricValue(
-              null, metric.getId(), fileMetrics.getMetricCount(metric), commit, findings, fileId);
+              metric.getId(), fileMetrics.getMetricCount(metric), commit, findings, fileId);
       metricValues.add(metricValue);
     }
     return metricValues;

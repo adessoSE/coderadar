@@ -1,10 +1,8 @@
 package io.reflectoring.coderadar.graph.projectadministration.project.adapter;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.UnableToDeleteProjectException;
+import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.DeleteProjectPort;
 import java.io.File;
 import java.io.IOException;
@@ -29,46 +27,34 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
   }
 
   @Override
-  public void delete(Long id) {
-    ProjectEntity projectEntity =
-        projectRepository.findById(id).orElseThrow(() -> new ProjectNotFoundException(id));
-    try {
-      projectEntity.setBeingDeleted(true);
-      projectRepository.save(projectEntity);
+  public void delete(Project project) {
+    projectRepository.setBeingDeleted(project.getId(), true);
 
-      /*
-       * The empty while loops are necessary because only 10000 entities can be deleted at a time.
-       * @see ProjectRepository#deleteProjectFindings(Long)
-       * @see ProjectRepository#deleteProjectMetrics(Long)
-       */
-      while (projectRepository.deleteProjectFindings(id) > 0) ;
-      while (projectRepository.deleteProjectMetrics(id) > 0) ;
-      projectRepository.deleteProjectFilesAndModules(id);
-      projectRepository.deleteProjectCommits(id);
-      projectRepository.deleteProjectConfiguration(id);
-      projectRepository.deleteById(id);
-      deleteWorkdir(projectEntity);
-    } catch (IllegalArgumentException e) {
-      throw new UnableToDeleteProjectException(id);
-    }
+    /*
+     * The empty while loops are necessary because only 10000 entities can be deleted at a time.
+     * @see ProjectRepository#deleteProjectFindings(Long)
+     * @see ProjectRepository#deleteProjectMetrics(Long)
+     */
+    while (projectRepository.deleteProjectFindings(project.getId()) > 0) ;
+    while (projectRepository.deleteProjectMetrics(project.getId()) > 0) ;
+    projectRepository.deleteProjectFilesAndModules(project.getId());
+    projectRepository.deleteProjectCommits(project.getId());
+    projectRepository.deleteProjectConfiguration(project.getId());
+    projectRepository.deleteById(project.getId());
+    deleteWorkdir(project.getWorkdirName());
   }
 
   /**
    * Deletes the working directory of the project.
    *
-   * @param projectEntity The project, whose directory to delete.
+   * @param workdir The directory to delete.
    */
-  private void deleteWorkdir(ProjectEntity projectEntity) {
+  private void deleteWorkdir(String workdir) {
     try {
       FileUtils.deleteDirectory(
-          new File(
-              coderadarConfigurationProperties.getWorkdir()
-                  + "/projects/"
-                  + projectEntity.getWorkdirName()));
+          new File(coderadarConfigurationProperties.getWorkdir() + "/projects/" + workdir));
     } catch (IOException e) {
-      logger.error(
-          String.format(
-              "Could not delete project working directory %s", projectEntity.getWorkdirName()));
+      logger.error(String.format("Could not delete project working directory %s", workdir));
     }
   }
 }

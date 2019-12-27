@@ -86,4 +86,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
 
   @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} SET p.analyzingStatus = {1}")
   void setAnalyzingStatus(@NonNull Long projectId, @NonNull Boolean b);
+
+  @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} SET p.isBeingDeleted = {1}")
+  void setBeingDeleted(@NonNull Long id, @NonNull Boolean value);
 }
