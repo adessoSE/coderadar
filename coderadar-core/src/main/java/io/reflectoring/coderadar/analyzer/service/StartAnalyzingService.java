@@ -144,7 +144,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
                 saveTask =
                     taskExecutor.submitListenable(
                         () -> {
-                          saveMetricPort.saveMetricValues(metrics, projectId);
+                          saveMetricPort.saveMetricValues(metrics);
                           saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
                         });
               }
