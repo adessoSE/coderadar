@@ -2,26 +2,36 @@ package io.reflectoring.coderadar.adapter;
 
 import io.reflectoring.coderadar.vcs.UnableToCloneRepositoryException;
 import io.reflectoring.coderadar.vcs.adapter.CloneRepositoryAdapter;
+import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 public class CloneRepositoryAdapterTest {
 
-  @Rule public TemporaryFolder folder = new TemporaryFolder();
+  @TempDir public File folder;
 
   @Test
   public void test() throws UnableToCloneRepositoryException {
     URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
 
     CloneRepositoryAdapter cloneRepositoryAdapter = new CloneRepositoryAdapter();
-    cloneRepositoryAdapter.cloneRepository(testRepoURL.toString(), folder.getRoot());
+    cloneRepositoryAdapter.cloneRepository(
+        new CloneRepositoryCommand(testRepoURL.toString(), folder, "", ""));
 
-    Assert.assertEquals(3, folder.getRoot().list().length);
-    Assert.assertEquals(".git", folder.getRoot().list()[0]);
-    Assert.assertEquals("GetMetricsForCommitCommand.java", folder.getRoot().list()[1]);
-    Assert.assertEquals("testModule1", folder.getRoot().list()[2]);
+    Assertions.assertEquals(3, folder.list().length);
+    Assertions.assertEquals(".git", folder.list()[0]);
+    Assertions.assertEquals("GetMetricsForCommitCommand.java", folder.list()[1]);
+    Assertions.assertEquals("testModule1", folder.list()[2]);
+  }
+
+  @AfterEach
+  public void tearDown() throws IOException {
+    FileUtils.deleteDirectory(folder);
   }
 }
