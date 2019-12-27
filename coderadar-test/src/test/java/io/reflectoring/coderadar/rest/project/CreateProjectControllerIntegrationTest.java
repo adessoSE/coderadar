@@ -1,9 +1,9 @@
 package io.reflectoring.coderadar.rest.project;
 
-import io.reflectoring.coderadar.graph.analyzer.domain.CommitEntity;
-import io.reflectoring.coderadar.graph.analyzer.domain.FileEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
+import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
@@ -49,7 +49,7 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
               Assertions.assertEquals("password", project.getVcsPassword());
               Assertions.assertEquals(testRepoURL.toString(), project.getVcsUrl());
               Assertions.assertFalse(project.isVcsOnline());
-                List<CommitEntity> commits = commitRepository.findByProjectId(id);
+                List<CommitEntity> commits = commitRepository.findByProjectIdAndTimestampDesc(id);
                 Assertions.assertEquals(13, commits.size());
                 List<FileEntity> files = fileRepository.findAllinProject(id);
                 Assertions.assertEquals(8, files.size());

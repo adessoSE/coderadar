@@ -1,7 +1,12 @@
 package io.reflectoring.coderadar.analyzer.port.driver;
 
-import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
-
 public interface StartAnalyzingUseCase {
-  void start(StartAnalyzingCommand command, Long projectId) throws ProjectIsBeingProcessedException;
+
+  /**
+   * Starts the analysis of a project.
+   *
+   * @param command Command containing analysis parameters.
+   * @param projectId The id of the project to analyze.
+   */
+  void start(StartAnalyzingCommand command, Long projectId);
 }

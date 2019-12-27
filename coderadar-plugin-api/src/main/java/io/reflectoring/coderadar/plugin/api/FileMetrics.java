@@ -63,7 +63,7 @@ public class FileMetrics {
      *
      * @param metric the metric whose count to increment by one.
      */
-    public void incrementMetricCount(Metric metric, Long increment) {
+    private void incrementMetricCount(Metric metric, Long increment) {
         Long count = counts.get(metric);
         if (count == null) {
             count = 0L;
@@ -97,11 +97,7 @@ public class FileMetrics {
      * @param count   the number by which to increment the metric count
      */
     public void addFinding(Metric metric, Finding finding, Long count) {
-        List<Finding> findingsForMetric = findings.get(metric);
-        if (findingsForMetric == null) {
-            findingsForMetric = new ArrayList<>();
-            findings.put(metric, findingsForMetric);
-        }
+        List<Finding> findingsForMetric = findings.computeIfAbsent(metric, k -> new ArrayList<>());
         incrementMetricCount(metric, count);
         findingsForMetric.add(finding);
     }
@@ -115,11 +111,7 @@ public class FileMetrics {
      * @param findingsToAdd the findings to add.
      */
     public void addFindings(Metric metric, Collection<Finding> findingsToAdd) {
-        List<Finding> findingsForMetric = findings.get(metric);
-        if (findingsForMetric == null) {
-            findingsForMetric = new ArrayList<>();
-            findings.put(metric, findingsForMetric);
-        }
+        List<Finding> findingsForMetric = findings.computeIfAbsent(metric, k -> new ArrayList<>());
         incrementMetricCount(metric, (long) findingsToAdd.size());
         findingsForMetric.addAll(findingsToAdd);
     }
@@ -159,12 +151,8 @@ public class FileMetrics {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         FileMetrics that = (FileMetrics) o;
-
-        if (counts != null ? !counts.equals(that.counts) : that.counts != null) return false;
-
-        return true;
+        return counts != null ? counts.equals(that.counts) : that.counts == null;
     }
 
     @Override

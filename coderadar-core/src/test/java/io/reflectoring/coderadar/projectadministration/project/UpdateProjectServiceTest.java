@@ -5,25 +5,25 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.analyzer.domain.Commit;
+import io.reflectoring.coderadar.analyzer.port.driven.ResetAnalysisPort;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
+import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.project.UpdateProjectService;
 import io.reflectoring.coderadar.query.domain.DateRange;
-import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
-import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
-import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.util.Collections;
@@ -49,13 +49,15 @@ class UpdateProjectServiceTest {
 
   @Mock private ProcessProjectService processProjectServiceMock;
 
-  @Mock private GetProjectCommitsUseCase getProjectCommitsUseCaseMock;
-
-  @Mock private UpdateCommitsPort updateCommitsPortMock;
-
-  @Mock private GetCommitsInProjectPort getCommitsInProjectPortMock;
+  @Mock private ExtractProjectCommitsUseCase extractProjectCommitsUseCaseMock;
 
   @Mock private SaveCommitPort saveCommitPortMock;
+
+  @Mock private CreateModulePort createModulePort;
+
+  @Mock private ListModulesOfProjectUseCase listModulesOfProjectUseCase;
+
+  @Mock private ResetAnalysisPort resetAnalysisPort;
 
   private UpdateProjectService testSubject;
 
@@ -68,15 +70,16 @@ class UpdateProjectServiceTest {
             updateRepositoryUseCaseMock,
             configurationPropertiesMock,
             processProjectServiceMock,
-            getProjectCommitsUseCaseMock,
-            getCommitsInProjectPortMock,
-            updateCommitsPortMock,
-            saveCommitPortMock);
+            extractProjectCommitsUseCaseMock,
+            saveCommitPortMock,
+            listModulesOfProjectUseCase,
+            resetAnalysisPort,
+            createModulePort);
   }
 
   @Test
-  void updateProjectReturnsErrorWhenProjectWithNameAlreadyExists(
-      @Mock Project projectToUpdateMock) {
+  void updateProjectReturnsErrorWhenProjectWithNameAlreadyExists(@Mock Project projectToUpdateMock)
+      throws MalformedURLException {
     // given
     long projectId = 123L;
     String newProjectName = "new name";
@@ -98,12 +101,12 @@ class UpdateProjectServiceTest {
             newStartDate,
             newEndDate);
 
-    Project projectWithCollidingName = new Project().setId(1L).setName(newProjectName);
+    Project projectWithCollidingName = new Project().setId(2L).setName(newProjectName);
 
     when(getProjectPortMock.get(projectId)).thenReturn(projectToUpdateMock);
 
-    when(getProjectPortMock.findByName(newProjectName))
-        .thenReturn(Collections.singletonList(projectWithCollidingName));
+    when(getProjectPortMock.existsByName(newProjectName)).thenReturn(true);
+    when(getProjectPortMock.get(newProjectName)).thenReturn(projectWithCollidingName);
 
     // when / then
     assertThatThrownBy(() -> testSubject.update(command, projectId))
@@ -112,11 +115,10 @@ class UpdateProjectServiceTest {
 
   @Test
   void updateProjectSuccessfullyUpdatesProjectIfNameIsUnique(@Mock Commit commitMock)
-      throws ProjectIsBeingProcessedException, UnableToUpdateRepositoryException,
-          MalformedURLException {
+      throws ProjectIsBeingProcessedException, UnableToUpdateRepositoryException {
 
     // given
-    long projectId = 123L;
+    long projectId = 1L;
     String newProjectName = "new name";
     String newUsername = "newUsername";
     String newPassword = "newPassword";
@@ -139,17 +141,16 @@ class UpdateProjectServiceTest {
         new UpdateProjectCommand(
             newProjectName, newUsername, newPassword, newVcsUrl, false, newStartDate, newEndDate);
 
-    Path expectedUpdatedRepositoryPath =
-        new File(globalWorkdirName + "/projects/" + projectWorkdirName).toPath();
-
     Project testProject = new Project();
+    testProject.setId(1L);
     testProject.setWorkdirName(projectWorkdirName);
     testProject.setVcsStart(new Date());
     testProject.setVcsEnd(new Date());
     testProject.setVcsUrl("");
-    when(getProjectPortMock.get(projectId)).thenReturn(testProject);
 
-    when(getProjectPortMock.findByName(newProjectName)).thenReturn(Collections.emptyList());
+    when(getProjectPortMock.get(projectId)).thenReturn(testProject);
+    when(getProjectPortMock.existsByName(newProjectName)).thenReturn(true);
+    when(getProjectPortMock.get(newProjectName)).thenReturn(testProject);
 
     doAnswer(
             (Answer<Void>)
@@ -164,7 +165,8 @@ class UpdateProjectServiceTest {
 
     when(configurationPropertiesMock.getWorkdir()).thenReturn(new File(globalWorkdirName).toPath());
 
-    when(getProjectCommitsUseCaseMock.getCommits(Paths.get(projectWorkdirName), expectedDateRange))
+    when(extractProjectCommitsUseCaseMock.getCommits(
+            Paths.get(projectWorkdirName), expectedDateRange))
         .thenReturn(Collections.singletonList(commitMock));
 
     // when
@@ -178,7 +180,7 @@ class UpdateProjectServiceTest {
     Assert.assertEquals(testProject.getVcsEnd(), newEndDate);
     Assert.assertEquals(testProject.getVcsUrl(), newVcsUrl);
 
-    verify(updateRepositoryUseCaseMock).updateRepository(any(), any());
+    verify(updateRepositoryUseCaseMock).updateRepository(any());
     verify(saveCommitPortMock).saveCommits(Collections.singletonList(commitMock), projectId);
   }
 }

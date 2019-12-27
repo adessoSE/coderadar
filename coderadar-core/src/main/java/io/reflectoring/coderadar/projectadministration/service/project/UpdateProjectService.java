@@ -3,29 +3,30 @@ package io.reflectoring.coderadar.projectadministration.service.project;
 import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.analyzer.domain.Commit;
+import io.reflectoring.coderadar.analyzer.port.driven.ResetAnalysisPort;
+import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
+import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
-import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
+import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
+import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
-import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
-import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
-import io.reflectoring.coderadar.vcs.port.driver.UpdateRepositoryUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
+import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Paths;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,44 +38,43 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final UpdateRepositoryUseCase updateRepositoryUseCase;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
   private final ProcessProjectService processProjectService;
-  private final GetProjectCommitsUseCase getProjectCommitsUseCase;
-  private final GetCommitsInProjectPort getCommitsInProjectPort;
-  private final UpdateCommitsPort updateCommitsPort;
+  private final ExtractProjectCommitsUseCase extractProjectCommitsUseCase;
   private final SaveCommitPort saveCommitPort;
+  private final ListModulesOfProjectUseCase listModulesOfProjectUseCase;
+  private final ResetAnalysisPort resetAnalysisPort;
+  private final CreateModulePort createModulePort;
 
   private final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
 
-  @Autowired
   public UpdateProjectService(
       GetProjectPort getProjectPort,
       UpdateProjectPort updateProjectPort,
       UpdateRepositoryUseCase updateRepositoryUseCase,
       CoderadarConfigurationProperties coderadarConfigurationProperties,
       ProcessProjectService processProjectService,
-      GetProjectCommitsUseCase getProjectCommitsUseCase,
-      GetCommitsInProjectPort getCommitsInProjectPort,
-      UpdateCommitsPort updateCommitsPort,
-      SaveCommitPort saveCommitPort) {
+      ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
+      SaveCommitPort saveCommitPort,
+      ListModulesOfProjectUseCase listModulesOfProjectUseCase,
+      ResetAnalysisPort resetAnalysisPort,
+      CreateModulePort createModulePort) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
     this.updateRepositoryUseCase = updateRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.processProjectService = processProjectService;
-    this.getProjectCommitsUseCase = getProjectCommitsUseCase;
-    this.getCommitsInProjectPort = getCommitsInProjectPort;
-    this.updateCommitsPort = updateCommitsPort;
+    this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
     this.saveCommitPort = saveCommitPort;
+    this.listModulesOfProjectUseCase = listModulesOfProjectUseCase;
+    this.resetAnalysisPort = resetAnalysisPort;
+    this.createModulePort = createModulePort;
   }
 
   @Override
-  public void update(UpdateProjectCommand command, Long projectId)
-      throws ProjectIsBeingProcessedException {
+  public void update(UpdateProjectCommand command, Long projectId) {
     Project project = getProjectPort.get(projectId);
 
-    if (getProjectPort
-        .findByName(command.getName())
-        .stream()
-        .anyMatch(p -> !p.getId().equals(projectId))) {
+    if (getProjectPort.existsByName(command.getName())
+        && !getProjectPort.get(command.getName()).getId().equals(projectId)) {
       throw new ProjectAlreadyExistsException(command.getName());
     }
 
@@ -82,53 +82,75 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     project.setVcsUsername(command.getVcsUsername());
     project.setVcsPassword(command.getVcsPassword());
     project.setVcsOnline(command.getVcsOnline());
-    boolean datesChanged = false;
     boolean urlChanged = false;
 
     if (!project.getVcsUrl().equals(command.getVcsUrl())) {
       project.setVcsUrl(command.getVcsUrl());
       urlChanged = true;
     }
-    if ((project.getVcsStart() == null && command.getStartDate() != null)
-        || (project.getVcsStart() != null
-            && !project.getVcsStart().equals(command.getStartDate()))) {
+
+    if (projectDatesHaveChanged(project, command) || urlChanged) {
       project.setVcsStart(command.getStartDate());
-      datesChanged = true;
-    }
-
-    if ((project.getVcsEnd() == null && command.getEndDate() != null)
-        || (project.getVcsEnd() != null && !project.getVcsEnd().equals(command.getEndDate()))) {
       project.setVcsEnd(command.getEndDate());
-      datesChanged = true;
-    }
 
-    if (datesChanged || urlChanged) {
       this.processProjectService.executeTask(
           () -> {
             try {
-              updateRepositoryUseCase.updateRepository(
-                  new File(
-                          coderadarConfigurationProperties.getWorkdir()
-                              + "/projects/"
-                              + project.getWorkdirName())
-                      .toPath(),
-                  new URL(project.getVcsUrl()));
+              // Check what modules where previously in the project
+              List<GetModuleResponse> modules = listModulesOfProjectUseCase.listModules(projectId);
 
+              // Delete all files, commits and modules as they have to be re-created
+              resetAnalysisPort.resetAnalysis(projectId);
+              updateProjectPort.deleteFilesAndCommits(projectId);
+
+              // Perform a git pull on the remote repository
+              updateRepositoryUseCase.updateRepository(
+                  new UpdateRepositoryCommand()
+                      .setLocalDir(
+                          new File(
+                              coderadarConfigurationProperties.getWorkdir()
+                                  + "/projects/"
+                                  + project.getWorkdirName()))
+                      .setPassword(project.getVcsPassword())
+                      .setUsername(project.getVcsUsername())
+                      .setRemoteUrl(project.getVcsUrl()));
+
+              // Get the new commit tree
               List<Commit> commits =
-                  getProjectCommitsUseCase.getCommits(
+                  extractProjectCommitsUseCase.getCommits(
                       Paths.get(project.getWorkdirName()), getProjectDateRange(project));
-              if (getCommitsInProjectPort.get(projectId).isEmpty()) {
-                saveCommitPort.saveCommits(commits, projectId);
-              } else {
-                updateCommitsPort.updateCommits(commits, projectId);
+
+              // Save the new commit tree
+              saveCommitPort.saveCommits(commits, projectId);
+
+              // Re-create the modules
+              for (GetModuleResponse module : modules) {
+                createModulePort.createModule(module.getPath(), projectId);
               }
-            } catch (UnableToUpdateRepositoryException | MalformedURLException e) {
-              logger.error(String.format("Unable to update project! %s", e.getMessage()));
+
+            } catch (UnableToUpdateRepositoryException
+                | ModuleAlreadyExistsException
+                | ModulePathInvalidException e) {
+              logger.error("Unable to update project! {}", e.getMessage());
             }
           },
           projectId);
     }
     updateProjectPort.update(project);
-    logger.info(String.format("Updated project %s with id %d", project.getName(), project.getId()));
+    logger.info("Updated project {} with id {}", project.getName(), project.getId());
+  }
+
+  private boolean projectDatesHaveChanged(Project project, UpdateProjectCommand command) {
+    boolean datesChanged = false;
+    if ((project.getVcsStart() == null && command.getStartDate() != null)
+        || (project.getVcsStart() != null
+            && !project.getVcsStart().equals(command.getStartDate()))) {
+      datesChanged = true;
+    }
+    if ((project.getVcsEnd() == null && command.getEndDate() != null)
+        || (project.getVcsEnd() != null && !project.getVcsEnd().equals(command.getEndDate()))) {
+      datesChanged = true;
+    }
+    return datesChanged;
   }
 }

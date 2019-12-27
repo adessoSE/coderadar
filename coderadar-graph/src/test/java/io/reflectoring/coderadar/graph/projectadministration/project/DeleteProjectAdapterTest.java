@@ -3,10 +3,9 @@ package io.reflectoring.coderadar.graph.projectadministration.project;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
+import io.reflectoring.coderadar.graph.projectadministration.project.adapter.DeleteProjectAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.graph.projectadministration.project.service.DeleteProjectAdapter;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Delete project")
 class DeleteProjectAdapterTest {
   private ProjectRepository projectRepository = mock(ProjectRepository.class);
-  private CommitRepository commitRepository = mock(CommitRepository.class);
   private CoderadarConfigurationProperties coderadarConfigurationProperties =
       mock(CoderadarConfigurationProperties.class);
 
@@ -26,29 +24,26 @@ class DeleteProjectAdapterTest {
   void setUp() {
     when(projectRepository.findById(anyLong())).thenReturn(Optional.of(new ProjectEntity()));
     deleteProjectAdapter =
-        new DeleteProjectAdapter(
-            projectRepository, coderadarConfigurationProperties, commitRepository);
-  }
-
-  @Test
-  @DisplayName("Should delete project when passing a valid project entity")
-  void shouldDeleteProjectWhenPassingAValidProjectEntity() {
-    doNothing().when(projectRepository).deleteProjectCascade(isA(Long.class));
-
-    Project testProject = new Project();
-    testProject.setId(1L);
-    deleteProjectAdapter.delete(testProject.getId());
-
-    verify(projectRepository, times(1)).deleteProjectCascade(anyLong());
+        new DeleteProjectAdapter(projectRepository, coderadarConfigurationProperties);
   }
 
   @Test
   @DisplayName("Should delete project when passing a valid project id")
   void shouldDeleteProjectWhenPassingAValidProjectId() {
-    doNothing().when(projectRepository).deleteProjectCascade(isA(Long.class));
+    when(projectRepository.deleteProjectFindings(anyLong())).thenReturn(0L);
+    doNothing().when(projectRepository).deleteProjectFilesAndModules(isA(Long.class));
+    doNothing().when(projectRepository).deleteProjectCommits(isA(Long.class));
+    when(projectRepository.deleteProjectMetrics(anyLong())).thenReturn(0L);
+    doNothing().when(projectRepository).deleteProjectConfiguration(isA(Long.class));
 
-    deleteProjectAdapter.delete(1L);
+    Project testProject = new Project();
+    testProject.setId(1L);
+    deleteProjectAdapter.delete(testProject.getId());
 
-    verify(projectRepository, times(1)).deleteProjectCascade(any(Long.class));
+    verify(projectRepository, times(1)).deleteProjectFindings(anyLong());
+    verify(projectRepository, times(1)).deleteProjectFilesAndModules(anyLong());
+    verify(projectRepository, times(1)).deleteProjectCommits(anyLong());
+    verify(projectRepository, times(1)).deleteProjectConfiguration(anyLong());
+    verify(projectRepository, times(1)).deleteProjectMetrics(anyLong());
   }
 }

@@ -1,6 +1,6 @@
 <app-header [title]="[{location: '/dashboard', name: 'Dashboard'}]"></app-header>
-<div *ngIf="waiting">
-  <mat-spinner *ngIf="waiting" style="position: absolute;  margin-top: 15%; margin-left: 46%; z-index: 5" [diameter]="100"></mat-spinner>
+<div *ngIf="waiting" style="height: 100%">
+  <mat-spinner class="waitingIndicator" [diameter]="100"></mat-spinner>
 </div>
 
 <main class="card-list">
@@ -19,10 +19,13 @@
           <mat-card-header>
             <mat-card-title>
               <a mat-button routerLink="/project/{{project.id}}">{{appComponent.trimProjectName(project.name)}}</a>
-              <button (click)="startAnalysis(project.id)" style="float:right" mat-icon-button>
+              <button title="Start analysis" (click)="startAnalysis(project.id)" style="float:right" mat-icon-button>
                 <mat-icon>play_arrow</mat-icon>
               </button>
-              <button (click)="resetAnalysis(project.id)" style="float:right" mat-icon-button>
+              <button title="Stop analysis" (click)="stopAnalysis(project.id)" style="float:right" mat-icon-button>
+                <mat-icon>stop</mat-icon>
+              </button>
+              <button title="Delete analysis results" (click)="resetAnalysis(project.id)" style="float:right" mat-icon-button>
                 <mat-icon>clear</mat-icon>
               </button>
               <button [matMenuTriggerFor]="menu" aria-label="Toggle menu" class="more-button" mat-icon-button>

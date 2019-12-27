@@ -4,6 +4,7 @@ import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+/** @see io.reflectoring.coderadar.analyzer.domain.Finding */
 @NodeEntity
 @Data
 public class FindingEntity {

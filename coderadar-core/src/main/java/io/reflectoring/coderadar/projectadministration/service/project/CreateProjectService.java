@@ -1,9 +1,8 @@
 package io.reflectoring.coderadar.projectadministration.service.project;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.analyzer.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
-import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
+import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.CreateProjectPort;
@@ -12,8 +11,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.creat
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.query.domain.DateRange;
-import io.reflectoring.coderadar.vcs.UnableToCloneRepositoryException;
-import io.reflectoring.coderadar.vcs.port.driver.GetProjectCommitsUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
 import java.io.File;
@@ -25,7 +23,6 @@ import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,37 +38,11 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   private final ProcessProjectService processProjectService;
 
-  private final GetProjectCommitsUseCase getProjectCommitsUseCase;
+  private final ExtractProjectCommitsUseCase extractProjectCommitsUseCase;
 
   private final SaveCommitPort saveCommitPort;
 
-  private final ScanProjectScheduler scanProjectScheduler;
-
-  private final WorkdirNameGenerator workdirNameGenerator;
-
-  private final Logger logger = LoggerFactory.getLogger(CreateProjectUseCase.class);
-
-  @Autowired
-  public CreateProjectService(
-      CreateProjectPort createProjectPort,
-      GetProjectPort getProjectPort,
-      CloneRepositoryUseCase cloneRepositoryUseCase,
-      CoderadarConfigurationProperties coderadarConfigurationProperties,
-      ProcessProjectService processProjectService,
-      GetProjectCommitsUseCase getProjectCommitsUseCase,
-      SaveCommitPort saveCommitPort,
-      ScanProjectScheduler scanProjectScheduler) {
-    this.createProjectPort = createProjectPort;
-    this.getProjectPort = getProjectPort;
-    this.cloneRepositoryUseCase = cloneRepositoryUseCase;
-    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-    this.processProjectService = processProjectService;
-    this.getProjectCommitsUseCase = getProjectCommitsUseCase;
-    this.saveCommitPort = saveCommitPort;
-    this.scanProjectScheduler = scanProjectScheduler;
-
-    this.workdirNameGenerator = new UUIDWorkdirNameGenerator();
-  }
+  private final Logger logger = LoggerFactory.getLogger(CreateProjectService.class);
 
   public CreateProjectService(
       CreateProjectPort createProjectPort,
@@ -79,23 +50,19 @@ public class CreateProjectService implements CreateProjectUseCase {
       CloneRepositoryUseCase cloneRepositoryUseCase,
       CoderadarConfigurationProperties coderadarConfigurationProperties,
       ProcessProjectService processProjectService,
-      GetProjectCommitsUseCase getProjectCommitsUseCase,
-      SaveCommitPort saveCommitPort,
-      ScanProjectScheduler scanProjectScheduler,
-      WorkdirNameGenerator workdirNameGenerator) {
+      ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
+      SaveCommitPort saveCommitPort) {
     this.createProjectPort = createProjectPort;
     this.getProjectPort = getProjectPort;
     this.cloneRepositoryUseCase = cloneRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.processProjectService = processProjectService;
-    this.getProjectCommitsUseCase = getProjectCommitsUseCase;
+    this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
     this.saveCommitPort = saveCommitPort;
-    this.scanProjectScheduler = scanProjectScheduler;
-    this.workdirNameGenerator = workdirNameGenerator;
   }
 
   @Override
-  public Long createProject(CreateProjectCommand command) throws ProjectIsBeingProcessedException {
+  public Long createProject(CreateProjectCommand command) {
     if (getProjectPort.existsByName(command.getName())) {
       throw new ProjectAlreadyExistsException(command.getName());
     }
@@ -108,21 +75,22 @@ public class CreateProjectService implements CreateProjectUseCase {
                   new File(
                       coderadarConfigurationProperties.getWorkdir()
                           + "/projects/"
-                          + project.getWorkdirName()));
+                          + project.getWorkdirName()),
+                  project.getVcsUsername(),
+                  project.getVcsPassword());
           try {
-            scanProjectScheduler.scheduleUpdateTask(project);
             cloneRepositoryUseCase.cloneRepository(cloneRepositoryCommand);
             logger.info(
-                String.format(
-                    "Cloned project %s from repository %s",
-                    project.getName(), cloneRepositoryCommand.getRemoteUrl()));
+                "Cloned project {} from repository {}",
+                project.getName(),
+                cloneRepositoryCommand.getRemoteUrl());
             List<Commit> commits =
-                getProjectCommitsUseCase.getCommits(
+                extractProjectCommitsUseCase.getCommits(
                     Paths.get(project.getWorkdirName()), getProjectDateRange(project));
             saveCommitPort.saveCommits(commits, project.getId());
-            logger.info(String.format("Saved project %s", project.getName()));
-          } catch (UnableToCloneRepositoryException e) {
-            logger.error(String.format("Unable to clone repository: %s", e.getMessage()));
+            logger.info("Saved project {}", project.getName());
+          } catch (Exception e) {
+            logger.error("Unable to create project: {}", e.getMessage());
           }
         },
         project.getId());
@@ -151,8 +119,14 @@ public class CreateProjectService implements CreateProjectUseCase {
     return new DateRange(projectStart, projectEnd);
   }
 
+  /**
+   * Saves the project in the database given the command object.
+   *
+   * @param command The project to save
+   * @return The newly saved project.
+   */
   private Project saveProject(CreateProjectCommand command) {
-    String workdirName = workdirNameGenerator.generate(command.getName());
+    String workdirName = UUID.randomUUID().toString();
 
     Project project = new Project();
     project.setName(command.getName());
@@ -163,40 +137,8 @@ public class CreateProjectService implements CreateProjectUseCase {
     project.setVcsOnline(command.getVcsOnline());
     project.setVcsStart(command.getStartDate());
     project.setVcsEnd(command.getEndDate());
-    project.setBeingProcessed(false);
     Long projectId = createProjectPort.createProject(project);
     project.setId(projectId);
     return project;
-  }
-
-  /**
-   * Interface used to generate a random working directory name for a newly created project.
-   *
-   * @see CreateProjectService
-   */
-  public interface WorkdirNameGenerator {
-
-    /**
-     * @param projectName The name of the project to generate the working directory name for.
-     * @return A working directory name most likely not to collide with existing projects' working
-     *     directories. Must be a valid directory name without any spaces or path separators.
-     */
-    String generate(String projectName);
-  }
-
-  /**
-   * {@link WorkdirNameGenerator} implementation using {@link UUID}s to generate working directory
-   * names.
-   */
-  public class UUIDWorkdirNameGenerator implements WorkdirNameGenerator {
-
-    /**
-     * @param projectName The name of the project to generate the working directory name for.
-     * @return The value returned {@link UUID#randomUUID()} as a string.
-     */
-    @Override
-    public String generate(String projectName) {
-      return UUID.randomUUID().toString();
-    }
   }
 }

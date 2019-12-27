@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -38,7 +39,7 @@ public class AnalyzerPluginService {
     initRegistry(packageName);
   }
 
-  public List<String> getAvailableAnalyzers() {
+  List<String> getAvailableAnalyzers() {
     List<String> analyzerList = new ArrayList<>(sourceCodeFileAnalyzerPlugins.keySet());
     analyzerList.sort(String::compareTo);
     return analyzerList;
@@ -49,7 +50,7 @@ public class AnalyzerPluginService {
    * method of ConfigurationAnalyzerPlugins. Throws an IllegalArgumentException if the analyzer is
    * not registered.
    */
-  public SourceCodeFileAnalyzerPlugin createAnalyzer(String analyzerName) {
+  SourceCodeFileAnalyzerPlugin createAnalyzer(String analyzerName) {
     try {
       if (!isAnalyzerRegistered(analyzerName)) {
         throw new IllegalArgumentException(
@@ -57,8 +58,11 @@ public class AnalyzerPluginService {
       }
       Class<? extends SourceCodeFileAnalyzerPlugin> pluginClass =
           sourceCodeFileAnalyzerPlugins.get(analyzerName);
-      return pluginClass.newInstance();
-    } catch (InstantiationException | IllegalAccessException e) {
+      return pluginClass.getDeclaredConstructor().newInstance();
+    } catch (InstantiationException
+        | IllegalAccessException
+        | NoSuchMethodException
+        | InvocationTargetException e) {
       throw new IllegalStateException(
           String.format("Could not instantiate analyzer plugin %s", analyzerName));
     }
@@ -90,17 +94,17 @@ public class AnalyzerPluginService {
         InputStreamReader reader =
             new InputStreamReader(new ByteArrayInputStream(configurationFile));
         BufferedReader bufferedReader = new BufferedReader(reader);
-        String firstCoupleLines = "";
+        StringBuilder firstCoupleLines = new StringBuilder("");
         for (int i = 0; i < 5; i++) {
           String line = bufferedReader.readLine();
           if (line != null) {
-            firstCoupleLines += bufferedReader.readLine();
+            firstCoupleLines.append(bufferedReader.readLine());
           }
         }
         throw new IllegalArgumentException(
             String.format(
                 "Not a valid configuration file for analyzer plugin %s. The first couple lines of configuration file are:\n %s",
-                configurableAnalyzer.getClass(), firstCoupleLines));
+                configurableAnalyzer.getClass(), firstCoupleLines.toString()));
       } catch (IOException e) {
         throw new IllegalArgumentException(
             String.format(
@@ -120,7 +124,7 @@ public class AnalyzerPluginService {
   }
 
   /** Checks whether an analyzer with the given name is registered. */
-  public boolean isAnalyzerRegistered(String analyzerName) {
+  private boolean isAnalyzerRegistered(String analyzerName) {
     return sourceCodeFileAnalyzerPlugins.get(analyzerName) != null;
   }
 
