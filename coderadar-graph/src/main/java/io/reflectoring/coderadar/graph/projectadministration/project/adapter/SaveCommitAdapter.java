@@ -212,7 +212,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
   }
 
   @Override
-  public void setCommitsWithIDsAsAnalyzed(List<Long> commitIds) {
+  public void setCommitsWithIDsAsAnalyzed(long[] commitIds) {
     commitRepository.setCommitsWithIDsAsAnalyzed(commitIds);
   }
 }

@@ -18,5 +18,5 @@ public interface SaveCommitPort {
    *
    * @param commitIds A list with the DB ids of the commits.
    */
-  void setCommitsWithIDsAsAnalyzed(List<Long> commitIds);
+  void setCommitsWithIDsAsAnalyzed(long[] commitIds);
 }

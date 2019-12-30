@@ -25,6 +25,7 @@ import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
@@ -123,38 +124,35 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     processProjectService.executeTask(
         () -> {
           List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
-              getAnalyzersForProject(project.getId(), analyzerConfigurations);
+              getAnalyzersForProject(analyzerConfigurations);
           List<Commit> commitsToBeAnalyzed =
               getCommitsInProjectPort.getNonanalyzedSortedByTimestampAscWithNoParents(
                   project.getId());
-          List<Long> commitIds = new ArrayList<>(commitsToBeAnalyzed.size());
+          long[] commitIds = new long[commitsToBeAnalyzed.size()];
           FilePatternMatcher filePatternMatcher = new FilePatternMatcher(filePatterns);
-
           setAnalyzingStatusPort.setStatus(project.getId(), true);
           int counter = 0;
           ListenableFuture<?> saveTask = null;
+          AtomicBoolean running = new AtomicBoolean(true);
           for (Commit commit : commitsToBeAnalyzed) {
-            if (!getAnalyzingStatusService.getStatus(project.getId())) {
+            if (!running.get()) {
               break;
             }
-            if (!commit.isAnalyzed()) {
-              List<MetricValue> metrics =
-                  analyzeCommitUseCase.analyzeCommit(
-                      commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher);
-              if (!metrics.isEmpty()) {
-                waitForTask(saveTask);
-                saveTask =
-                    taskExecutor.submitListenable(
-                        () -> {
-                          saveMetricPort.saveMetricValues(metrics);
-                          saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
-                          commitIds.clear();
-                        });
-              }
-              commitIds.add(commit.getId());
-              ++counter;
-              log(commit, counter);
+            List<MetricValue> metrics =
+                analyzeCommitUseCase.analyzeCommit(
+                    commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher);
+            if (!metrics.isEmpty()) {
+              waitForTask(saveTask);
+              saveTask =
+                  taskExecutor.submitListenable(
+                      () -> {
+                        saveMetricPort.saveMetricValues(metrics);
+                        saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
+                        running.set(getAnalyzingStatusService.getStatus(project.getId()));
+                      });
             }
+            commitIds[counter++] = commit.getId();
+            log(commit, counter);
           }
           waitForTask(saveTask);
           setAnalyzingStatusPort.setStatus(project.getId(), false);
@@ -198,12 +196,11 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
    * Gets the configured analyzers for the current project and returns a list of
    * SourceCodeFileAnalyzerPlugin objects.
    *
-   * @param projectId The id of the project.
    * @param analyzerConfigurations The analyzer configurations for the project.
    * @return A list of SourceCodeFileAnalyzerPlugins.
    */
   private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(
-      Long projectId, List<AnalyzerConfiguration> analyzerConfigurations) {
+      List<AnalyzerConfiguration> analyzerConfigurations) {
     List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>();
     for (AnalyzerConfiguration config : analyzerConfigurations) {
       if (config.getEnabled()) {
