@@ -36,6 +36,17 @@ import {ConfigureProjectComponent} from '../configure-project/configure-project.
 import {AppComponent} from '../../app.component';
 import {Project} from '../../model/project';
 
+const project = {
+  id: null,
+  name: 'test',
+  vcsUrl: 'https://valid.url',
+  vcsUsername: '',
+  vcsPassword: '',
+  vcsOnline: true,
+  startDate: null,
+  endDate: null
+};
+
 describe('AddProjectComponent', () => {
   let component: AddProjectComponent;
   let fixture: ComponentFixture<AddProjectComponent>;
@@ -105,38 +116,19 @@ describe('AddProjectComponent', () => {
 
   it('should get unauthenticated and call userService for new authentication',
     inject([UserService], (userService: UserService) => {
-        component.project = {
-          id: null,
-          name: 'test',
-          vcsUrl: 'https://valid.url',
-          vcsUsername: '',
-          vcsPassword: '',
-          vcsOnline: true,
-          startDate: null,
-          endDate: null
-        };
+        component.project = project;
         const http = TestBed.get(HttpTestingController);
         const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {});
         component.submitForm();
         http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({
-          id: null,
-          name: 'test',
-          vcsUrl: 'https://valid.url',
-          vcsUsername: '',
-          vcsPassword: '',
-          vcsOnline: true,
-          startDate: null,
-          endDate: null
-        }, {
-          status: 403,
-          statusText: 'OK',
-          url: '/projects',
-          error: {
             status: 403,
             error: 'Forbidden',
             message: 'Access Denied',
             path: '/projects'
-          }
+          }, {
+          status: 403,
+          statusText: 'Forbidden',
+          url: '/projects',
         });
         fixture.whenStable().then(() => {
           expect(refreshSpy).toHaveBeenCalled();
@@ -144,17 +136,52 @@ describe('AddProjectComponent', () => {
       })
   );
 
-  it('should submit form', /*inject([ProjectService], (projectService: MockProjectService)*/() => {
-    const project = {
-      id: null,
-      name: 'test',
-      vcsUrl: 'https://valid.url',
-      vcsUsername: '',
-      vcsPassword: '',
-      vcsOnline: true,
-      startDate: null,
-      endDate: null
-    };
+  it('should get conflict', () => {
+    component.project = project;
+    const http = TestBed.get(HttpTestingController);
+    component.submitForm();
+    http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({
+        status: 409,
+        error: 'Conflict',
+        errorMessage: 'The project test already exists.',
+        path: '/projects'
+      }, {
+      status: 409,
+      statusText: 'Conflict',
+      url: '/projects',
+    });
+    fixture.whenStable().then(() => {
+      expect(component.incorrectURL).toBeFalsy();
+      expect(component.projectExists).toBeTruthy();
+    });
+  });
+
+  it('should get bad request',
+    inject([UserService], (userService: UserService) => {
+      component.project = project;
+      const http = TestBed.get(HttpTestingController);
+      component.submitForm();
+      http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({
+          status: 400,
+          error: 'Bad Request',
+          errorMessage: 'Validation Error',
+          path: '/projects',
+          fieldErrors: [
+            {field: 'vcsUrl'}
+          ]
+        }, {
+        status: 400,
+        statusText: 'Bad Request',
+        url: '/projects',
+      });
+      fixture.whenStable().then(() => {
+        expect(component.incorrectURL).toBeTruthy();
+        expect(component.projectExists).toBeFalsy();
+      });
+    })
+  );
+
+  it('should submit form', () => {
     const data = project;
     const http = TestBed.get(HttpTestingController);
     component.project = project;
