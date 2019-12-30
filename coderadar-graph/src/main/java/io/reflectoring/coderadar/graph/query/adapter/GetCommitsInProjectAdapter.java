@@ -4,9 +4,7 @@ import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.CommitBaseDataMapper;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.File;
-import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
+import io.reflectoring.coderadar.projectadministration.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,11 +62,35 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     return mapCommitEntities(commitEntities);
   }
 
+  /**
+   * Returns all not yet analyzed commits in this project, that match the supplied file patterns
+   *
+   * @param projectId The id of the project.
+   * @param filePatterns The patterns to use.
+   * @return A list of commits with initialized FileToCommitRelationShips and no parents.
+   */
   @Override
-  public List<Commit> getNonanalyzedSortedByTimestampAscWithNoParents(Long projectId) {
+  public List<Commit> getNonanalyzedSortedByTimestampAscWithNoParents(
+      Long projectId, List<FilePattern> filePatterns) {
+
+    // Map Ant-Patterns to RegEx
+    List<String> includes =
+        filePatterns
+            .stream()
+            .filter(filePattern -> filePattern.getInclusionType().equals(InclusionType.INCLUDE))
+            .map(filePattern -> PatternUtil.toPattern(filePattern.getPattern()).toString())
+            .collect(Collectors.toList());
+
+    List<String> excludes =
+        filePatterns
+            .stream()
+            .filter(filePattern -> filePattern.getInclusionType().equals(InclusionType.EXCLUDE))
+            .map(filePattern -> PatternUtil.toPattern(filePattern.getPattern()).toString())
+            .collect(Collectors.toList());
+
     List<CommitEntity> commitEntities =
         commitRepository.findByProjectIdNonanalyzedWithFileRelationshipsSortedByTimestampAsc(
-            projectId);
+            projectId, includes, excludes);
     return mapCommitEntitiesNoParents(commitEntities);
   }
 

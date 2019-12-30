@@ -4,7 +4,6 @@ import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.domain.Finding;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
-import io.reflectoring.coderadar.analyzer.service.filepatterns.FilePatternMatcher;
 import io.reflectoring.coderadar.plugin.api.FileMetrics;
 import io.reflectoring.coderadar.plugin.api.Metric;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
@@ -44,22 +43,17 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
    * @param commit The commit to analyze.
    * @param project The project the commit is part of.
    * @param analyzers The analyzers to use.
-   * @param filePatterns The file patterns to use.
    * @return A list of metric values for the given commit.
    */
   @Override
   public List<MetricValue> analyzeCommit(
-      Commit commit,
-      Project project,
-      List<SourceCodeFileAnalyzerPlugin> analyzers,
-      FilePatternMatcher filePatterns) {
+      Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers) {
     List<MetricValue> metricValues = new ArrayList<>(400);
     List<File> files =
         commit
             .getTouchedFiles()
             .stream()
             .map(FileToCommitRelationship::getFile)
-            .filter(file -> filePatterns.matches(file.getPath()))
             .collect(Collectors.toList());
     analyzeBulk(commit, files, analyzers, project)
         .forEach(

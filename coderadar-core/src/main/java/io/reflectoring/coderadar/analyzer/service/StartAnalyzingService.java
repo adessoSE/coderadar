@@ -6,7 +6,6 @@ import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import io.reflectoring.coderadar.analyzer.port.driven.SetAnalyzingStatusPort;
 import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
-import io.reflectoring.coderadar.analyzer.service.filepatterns.FilePatternMatcher;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
@@ -127,9 +126,8 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
               getAnalyzersForProject(analyzerConfigurations);
           List<Commit> commitsToBeAnalyzed =
               getCommitsInProjectPort.getNonanalyzedSortedByTimestampAscWithNoParents(
-                  project.getId());
+                  project.getId(), filePatterns);
           long[] commitIds = new long[commitsToBeAnalyzed.size()];
-          FilePatternMatcher filePatternMatcher = new FilePatternMatcher(filePatterns);
           setAnalyzingStatusPort.setStatus(project.getId(), true);
           int counter = 0;
           ListenableFuture<?> saveTask = null;
@@ -139,8 +137,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
               break;
             }
             List<MetricValue> metrics =
-                analyzeCommitUseCase.analyzeCommit(
-                    commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher);
+                analyzeCommitUseCase.analyzeCommit(commit, project, sourceCodeFileAnalyzerPlugins);
             if (!metrics.isEmpty()) {
               waitForTask(saveTask);
               saveTask =
