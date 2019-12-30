@@ -1,8 +1,8 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, inject, TestBed} from '@angular/core/testing';
 
 import {AddProjectComponent} from './add-project.component';
 import {BrowserModule} from '@angular/platform-browser';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule, HttpHandler, HttpResponse} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -27,14 +27,26 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {UserService} from '../../service/user.service';
+import {ProjectService} from '../../service/project.service';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {of} from 'rxjs';
+import {RouterTestingModule} from '@angular/router/testing';
+import {ConfigureProjectComponent} from '../configure-project/configure-project.component';
+import {AppComponent} from '../../app.component';
+import {Project} from '../../model/project';
 
 describe('AddProjectComponent', () => {
   let component: AddProjectComponent;
   let fixture: ComponentFixture<AddProjectComponent>;
+  let routerSpy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [AddProjectComponent],
+      declarations: [
+        AddProjectComponent,
+        ConfigureProjectComponent
+      ],
       imports: [
         BrowserModule,
         HttpClientModule,
@@ -66,7 +78,11 @@ describe('AddProjectComponent', () => {
         VisualizationModule,
         MatPaginatorModule,
         MatProgressSpinnerModule,
-        MatExpansionModule
+        MatExpansionModule,
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes([
+          {path: 'project-configure/:id', component: ConfigureProjectComponent},
+        ]),
       ],
       providers: [
         {provide: Router},
@@ -78,10 +94,82 @@ describe('AddProjectComponent', () => {
 
     fixture = TestBed.createComponent(AddProjectComponent);
     component = fixture.componentInstance;
+    routerSpy = spyOn(Router.prototype, 'navigate').and.callFake((url) => {
+    });
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should get unauthenticated and call userService for new authentication',
+    inject([UserService], (userService: UserService) => {
+        component.project = {
+          id: null,
+          name: 'test',
+          vcsUrl: 'https://valid.url',
+          vcsUsername: '',
+          vcsPassword: '',
+          vcsOnline: true,
+          startDate: null,
+          endDate: null
+        };
+        const http = TestBed.get(HttpTestingController);
+        const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {});
+        component.submitForm();
+        http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({
+          id: null,
+          name: 'test',
+          vcsUrl: 'https://valid.url',
+          vcsUsername: '',
+          vcsPassword: '',
+          vcsOnline: true,
+          startDate: null,
+          endDate: null
+        }, {
+          status: 403,
+          statusText: 'OK',
+          url: '/projects',
+          error: {
+            status: 403,
+            error: 'Forbidden',
+            message: 'Access Denied',
+            path: '/projects'
+          }
+        });
+        fixture.whenStable().then(() => {
+          expect(refreshSpy).toHaveBeenCalled();
+        });
+      })
+  );
+
+  it('should submit form', /*inject([ProjectService], (projectService: MockProjectService)*/() => {
+    const project = {
+      id: null,
+      name: 'test',
+      vcsUrl: 'https://valid.url',
+      vcsUsername: '',
+      vcsPassword: '',
+      vcsOnline: true,
+      startDate: null,
+      endDate: null
+    };
+    const data = project;
+    const http = TestBed.get(HttpTestingController);
+    component.project = project;
+    project.id = 1;
+    component.submitForm();
+    http.expectOne(`${AppComponent.getApiUrl()}projects`).flush(data, {
+      status: 201,
+      url: '/projects',
+      statusText: 'Created',
+      body: project
+    });
+    fixture.whenStable().then(() => {
+      expect(component.incorrectURL).toBeFalsy();
+      expect(component.projectExists).toBeFalsy();
+      expect(component.project.id).toBe(1);
+    });
   });
 });
