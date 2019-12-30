@@ -4,8 +4,6 @@ import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.CommitBaseDataMapper;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
@@ -18,12 +16,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
-  private final ProjectRepository projectRepository;
   private final CommitRepository commitRepository;
 
-  public GetCommitsInProjectAdapter(
-      ProjectRepository projectRepository, CommitRepository commitRepository) {
-    this.projectRepository = projectRepository;
+  public GetCommitsInProjectAdapter(CommitRepository commitRepository) {
     this.commitRepository = commitRepository;
   }
 
@@ -55,30 +50,15 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
   @Override
   public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(Long projectId) {
-    if (!projectRepository.existsById(projectId)) {
-      throw new ProjectNotFoundException(projectId);
-    }
     return commitRepository
         .findByProjectIdAndTimestampDesc(projectId)
         .stream()
-        .map(
-            commitEntity -> {
-              Commit commit = new Commit();
-              commit.setName(commitEntity.getName());
-              commit.setAnalyzed(commitEntity.isAnalyzed());
-              commit.setAuthor(commitEntity.getAuthor());
-              commit.setComment(commitEntity.getComment());
-              commit.setTimestamp(commitEntity.getTimestamp());
-              return commit;
-            })
+        .map(CommitBaseDataMapper::mapCommitEntity)
         .collect(Collectors.toList());
   }
 
   @Override
   public List<Commit> getSortedByTimestampAsc(Long projectId) {
-    if (!projectRepository.existsById(projectId)) {
-      throw new ProjectNotFoundException(projectId);
-    }
     List<CommitEntity> commitEntities =
         commitRepository.findByProjectIdWithAllRelationshipsSortedByTimestampAsc(projectId);
     return mapCommitEntities(commitEntities);
@@ -86,9 +66,6 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
   @Override
   public List<Commit> getNonanalyzedSortedByTimestampAscWithNoParents(Long projectId) {
-    if (!projectRepository.existsById(projectId)) {
-      throw new ProjectNotFoundException(projectId);
-    }
     List<CommitEntity> commitEntities =
         commitRepository.findByProjectIdNonanalyzedWithFileRelationshipsSortedByTimestampAsc(
             projectId);

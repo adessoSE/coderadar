@@ -22,7 +22,7 @@ class ListFilePatternsOfProjectAdapterTest {
   @DisplayName("Should return list of file patterns when passing valid argument")
   void shouldReturnListOfFilePatternsWhenPassingValidArgument() {
     ListFilePatternsOfProjectAdapter listFilePatternsOfProjectAdapter =
-        new ListFilePatternsOfProjectAdapter(filePatternRepository, projectRepository);
+        new ListFilePatternsOfProjectAdapter(filePatternRepository);
 
     when(projectRepository.existsById(1L)).thenReturn(true);
 

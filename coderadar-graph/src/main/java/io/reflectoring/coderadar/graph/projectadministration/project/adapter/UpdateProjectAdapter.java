@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.graph.projectadministration.project.adapter;
 
-import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
@@ -17,21 +16,18 @@ public class UpdateProjectAdapter implements UpdateProjectPort {
 
   @Override
   public void update(Project project) {
-    ProjectEntity projectEntity =
+    projectRepository.save(
         projectRepository
             .findById(project.getId())
-            .orElseThrow(() -> new ProjectNotFoundException(project.getId()));
-
-    projectEntity.setName(project.getName());
-    projectEntity.setVcsEnd(project.getVcsEnd());
-    projectEntity.setVcsStart(project.getVcsStart());
-    projectEntity.setVcsOnline(project.isVcsOnline());
-    projectEntity.setVcsUsername(project.getVcsUsername());
-    projectEntity.setVcsPassword(project.getVcsPassword());
-    projectEntity.setVcsUrl(project.getVcsUrl());
-    projectEntity.setWorkdirName(project.getWorkdirName());
-
-    projectRepository.save(projectEntity);
+            .orElseThrow(() -> new ProjectNotFoundException(project.getId()))
+            .setName(project.getName())
+            .setVcsEnd(project.getVcsEnd())
+            .setVcsStart(project.getVcsStart())
+            .setVcsOnline(project.isVcsOnline())
+            .setVcsUsername(project.getVcsUsername())
+            .setVcsPassword(project.getVcsPassword())
+            .setVcsUrl(project.getVcsUrl())
+            .setWorkdirName(project.getWorkdirName()));
   }
 
   @Override

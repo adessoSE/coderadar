@@ -40,7 +40,7 @@ public class GetProjectAdapter implements GetProjectPort {
 
   @Override
   public boolean existsByName(String name) {
-    return projectRepository.findByName(name).isPresent();
+    return projectRepository.existsByName(name);
   }
 
   @Override
