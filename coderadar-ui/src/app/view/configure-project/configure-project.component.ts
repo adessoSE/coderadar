@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
 import {AnalyzerConfiguration} from '../../model/analyzer-configuration';
@@ -31,7 +31,7 @@ export class ConfigureProjectComponent implements OnInit {
   projectId: any;
   moduleExists = false;
 
-  constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService,  private titleService: Title,
+  constructor(private snackBar: MatSnackBar, private userService: UserService,  private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute) {
     this.projectName = '';
     this.filePatternIncludeInput = '';

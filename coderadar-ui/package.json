@@ -46,7 +46,8 @@
     "three": "^0.102.1",
     "three-orbitcontrols-ts": "git+https://git@github.com/nicolaspanel/three-orbitcontrols-ts.git",
     "tslib": "^1.10.0",
-    "zone.js": "~0.8.29"
+    "zone.js": "~0.8.29",
+    "@angular/http": "latest"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.13.9",

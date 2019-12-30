@@ -54,6 +54,6 @@ export class CityViewHeaderComponent implements OnInit {
    * Gets the current username from the user service.
    */
   getUsername(): string {
-    return UserService.getLoggedInUser().username;
+    return (UserService.getLoggedInUser() === '') ? '' : UserService.getLoggedInUser().username;
   }
 }
