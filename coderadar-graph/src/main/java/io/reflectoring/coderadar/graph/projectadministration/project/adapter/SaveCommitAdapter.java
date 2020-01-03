@@ -86,7 +86,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
         if (parentCommit == null) {
           parentCommit = CommitBaseDataMapper.mapCommit(parent);
           walkedCommits.put(parent.getName(), parentCommit);
-          getFiles(commit.getTouchedFiles(), parentCommit, walkedFiles);
+          getFiles(parent.getTouchedFiles(), parentCommit, walkedFiles);
           result.add(parentCommit);
         }
         commitEntity.getParents().add(parentCommit);
@@ -120,7 +120,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
         fileToCommitRelationshipEntity.setOldPath(fileToCommitRelationship.getOldPath());
         fileToCommitRelationshipEntity.setFile(fileEntity);
         fileEntity.setPath(fileToCommitRelationship.getFile().getPath());
-        fileEntity.getCommits().add(fileToCommitRelationshipEntity);
+        entity.getTouchedFiles().add(fileToCommitRelationshipEntity);
       }
     }
   }

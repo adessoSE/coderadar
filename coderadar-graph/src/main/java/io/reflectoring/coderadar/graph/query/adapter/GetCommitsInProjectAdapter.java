@@ -125,7 +125,6 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
         file.setPath(fileToCommitRelationshipEntity.getFile().getPath());
         walkedFiles.put(file.getId(), file);
       }
-      file.getCommits().add(fileToCommitRelationship);
       fileToCommitRelationship.setFile(file);
 
       fileToCommitRelationships.add(fileToCommitRelationship);

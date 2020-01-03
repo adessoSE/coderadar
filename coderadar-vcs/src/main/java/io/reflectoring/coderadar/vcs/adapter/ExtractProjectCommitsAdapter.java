@@ -106,8 +106,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         fileToCommitRelationship.setCommit(firstCommit);
         fileToCommitRelationship.setFile(file);
         file.setPath(treeWalk.getPathString());
-
-        file.getCommits().add(fileToCommitRelationship);
         firstCommit.getTouchedFiles().add(fileToCommitRelationship);
         List<File> fileList = new ArrayList<>();
         fileList.add(file);
@@ -160,7 +158,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       fileToCommitRelationship.setChangeType(changeType);
       fileToCommitRelationship.setCommit(commit);
       fileToCommitRelationship.setFile(file);
-      file.getCommits().add(fileToCommitRelationship);
       commit.getTouchedFiles().add(fileToCommitRelationship);
     }
   }
