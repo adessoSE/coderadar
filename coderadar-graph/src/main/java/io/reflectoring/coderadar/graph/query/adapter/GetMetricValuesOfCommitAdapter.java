@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
-import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.query.domain.MetricValueForCommitQueryResult;
 import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
@@ -9,7 +8,6 @@ import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfCommitPort;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -28,18 +26,17 @@ public class GetMetricValuesOfCommitAdapter implements GetMetricValuesOfCommitPo
 
   @Override
   public List<MetricValueForCommit> get(GetMetricsForCommitCommand command, Long projectId) {
-    CommitEntity commitEntity =
+    long commitTimestamp =
         commitRepository
-            .findByNameAndProjectId(command.getCommit(), projectId)
+            .findTimeStampByNameAndProjectId(command.getCommit(), projectId)
             .orElseThrow(() -> new CommitNotFoundException(command.getCommit()));
     List<MetricValueForCommitQueryResult> result =
         getMetricValuesOfCommitRepository.getMetricValuesForCommit(
-            projectId, command.getMetrics(), commitEntity.getTimestamp());
+            projectId, command.getMetrics(), commitTimestamp);
     List<MetricValueForCommit> values = new ArrayList<>(result.size());
     for (MetricValueForCommitQueryResult queryResult : result) {
       values.add(new MetricValueForCommit(queryResult.getName(), queryResult.getValue()));
     }
-    values.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
     return values;
   }
 }

@@ -16,7 +16,7 @@ import org.neo4j.ogm.annotation.Relationship;
 public class CommitEntity {
   private Long id;
   private String name;
-  private Long timestamp;
+  private long timestamp;
   private String comment;
   private String author;
   private boolean analyzed = false;

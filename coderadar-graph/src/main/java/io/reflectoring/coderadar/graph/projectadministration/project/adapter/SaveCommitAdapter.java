@@ -50,13 +50,9 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
       List<CommitEntity> commitEntities = mapCommitTree(commits, walkedFiles);
       List<FileEntity> fileEntities = new ArrayList<>(walkedFiles.values());
 
-      // commitRepository.save(commitEntities, 1);
-      // fileRepository.save(fileEntities, 1);
-      // System.gc();
       projectEntity.setFiles(fileEntities);
       projectEntity.setCommits(commitEntities);
       projectRepository.save(projectEntity, 1);
-      //  System.gc();
     }
   }
 
