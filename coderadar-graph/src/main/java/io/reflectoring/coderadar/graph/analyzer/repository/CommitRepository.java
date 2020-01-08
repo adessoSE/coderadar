@@ -34,9 +34,8 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
 
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.analyzed = FALSE WITH c "
-          + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f:FileEntity) WHERE any(x IN {1} WHERE f.path =~ x) "
-          + "AND none(x IN {2} WHERE f.path =~ x) "
-          + "RETURN DISTINCT c, r, f ORDER BY c.timestamp")
+          + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f:FileEntity) WHERE r.changeType <> \"DELETE\" AND any(x IN {1} WHERE f.path =~ x) "
+          + "AND none(x IN {2} WHERE f.path =~ x) RETURN DISTINCT c, r, f ORDER BY c.timestamp")
   @NonNull
   List<CommitEntity> findByProjectIdNonanalyzedWithFileRelationshipsSortedByTimestampAsc(
       @NonNull Long projectId, @NonNull List<String> includes, List<String> excludes);

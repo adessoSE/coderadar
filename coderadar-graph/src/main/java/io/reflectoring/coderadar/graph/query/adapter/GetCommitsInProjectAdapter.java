@@ -113,7 +113,6 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
     for (FileToCommitRelationshipEntity fileToCommitRelationshipEntity : relationships) {
       FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
-      fileToCommitRelationship.setId(fileToCommitRelationshipEntity.getId());
       fileToCommitRelationship.setCommit(entity);
       fileToCommitRelationship.setOldPath(fileToCommitRelationshipEntity.getOldPath());
       fileToCommitRelationship.setChangeType(fileToCommitRelationshipEntity.getChangeType());

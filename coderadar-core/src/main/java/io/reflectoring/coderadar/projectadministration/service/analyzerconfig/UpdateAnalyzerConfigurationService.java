@@ -48,9 +48,9 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
           .noneMatch(
               a ->
                   a.getAnalyzerName().equals(command.getAnalyzerName())
-                      && !a.getId().equals(analyzerConfiguration.getId()))) {
+                      && a.getId() != analyzerConfiguration.getId())) {
         analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
-        analyzerConfiguration.setEnabled(command.getEnabled());
+        analyzerConfiguration.setEnabled(command.isEnabled());
         updateAnalyzerConfigurationPort.update(analyzerConfiguration);
         logger.info(
             String.format(

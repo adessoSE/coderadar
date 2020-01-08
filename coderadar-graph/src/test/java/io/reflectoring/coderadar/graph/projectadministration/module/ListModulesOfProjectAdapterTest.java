@@ -40,7 +40,7 @@ class ListModulesOfProjectAdapterTest {
   @DisplayName("Should return list with size of one when one module in the project exists")
   void shouldReturnListWithSizeOfOneWhenOneModuleInTheProjectExists() {
     LinkedList<ModuleEntity> mockedItem = new LinkedList<>();
-    mockedItem.add(new ModuleEntity());
+    mockedItem.add(new ModuleEntity().setId(3L));
     when(projectRepository.existsById(1L)).thenReturn(true);
     when(moduleRepository.findModulesInProject(1L)).thenReturn(mockedItem);
 
@@ -53,8 +53,8 @@ class ListModulesOfProjectAdapterTest {
   @DisplayName("Should return list with size of two when two modules in the project exist")
   void shouldReturnListWithSizeOfTwoWhenTwoModulesInTheProjectExist() {
     LinkedList<ModuleEntity> mockedItem = new LinkedList<>();
-    mockedItem.add(new ModuleEntity());
-    mockedItem.add(new ModuleEntity());
+    mockedItem.add(new ModuleEntity().setId(3L));
+    mockedItem.add(new ModuleEntity().setId(3L));
     when(projectRepository.existsById(1L)).thenReturn(true);
     when(moduleRepository.findModulesInProject(1L)).thenReturn(mockedItem);
 

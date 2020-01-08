@@ -134,7 +134,7 @@ public class CreateProjectService implements CreateProjectUseCase {
     project.setVcsUrl(command.getVcsUrl());
     project.setVcsUsername(command.getVcsUsername());
     project.setVcsPassword(command.getVcsPassword());
-    project.setVcsOnline(command.getVcsOnline());
+    project.setVcsOnline(command.isVcsOnline());
     project.setVcsStart(command.getStartDate());
     project.setVcsEnd(command.getEndDate());
     Long projectId = createProjectPort.createProject(project);

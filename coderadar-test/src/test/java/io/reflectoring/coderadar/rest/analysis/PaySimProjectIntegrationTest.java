@@ -143,10 +143,10 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
         //Values correct?
         Assertions.assertEquals(4, metricValuesForCommit.size());
-        Assertions.assertEquals(23L, metricValuesForCommit.get(0).getValue().longValue());
-        Assertions.assertEquals(1022L, metricValuesForCommit.get(1).getValue().longValue());
-        Assertions.assertEquals(1717L, metricValuesForCommit.get(2).getValue().longValue());
-        Assertions.assertEquals(1362L, metricValuesForCommit.get(3).getValue().longValue());
+        Assertions.assertEquals(23L, metricValuesForCommit.get(0).getValue());
+        Assertions.assertEquals(1022L, metricValuesForCommit.get(1).getValue());
+        Assertions.assertEquals(1717L, metricValuesForCommit.get(2).getValue());
+        Assertions.assertEquals(1362L, metricValuesForCommit.get(3).getValue());
         session.clear();
     }
 
@@ -195,10 +195,10 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
         //Values correct?
         Assertions.assertEquals(4, metricValuesForCommit.size());
-        Assertions.assertEquals(23L, metricValuesForCommit.get(0).getValue().longValue());
-        Assertions.assertEquals(1022L, metricValuesForCommit.get(1).getValue().longValue());
-        Assertions.assertEquals(1717L, metricValuesForCommit.get(2).getValue().longValue());
-        Assertions.assertEquals(1362L, metricValuesForCommit.get(3).getValue().longValue());
+        Assertions.assertEquals(23L, metricValuesForCommit.get(0).getValue());
+        Assertions.assertEquals(1022L, metricValuesForCommit.get(1).getValue());
+        Assertions.assertEquals(1717L, metricValuesForCommit.get(2).getValue());
+        Assertions.assertEquals(1362L, metricValuesForCommit.get(3).getValue());
 
         //Check values for second commit
         GetMetricsForCommitCommand getMetricsForCommitCommand2 = new GetMetricsForCommitCommand();
@@ -216,10 +216,10 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
         //Values correct?
         Assertions.assertEquals(4, metricValuesForCommit2.size());
-        Assertions.assertEquals(549L, metricValuesForCommit2.get(0).getValue().longValue());
-        Assertions.assertEquals(3903L, metricValuesForCommit2.get(1).getValue().longValue());
-        Assertions.assertEquals(7170L, metricValuesForCommit2.get(2).getValue().longValue());
-        Assertions.assertEquals(4914L, metricValuesForCommit2.get(3).getValue().longValue());
+        Assertions.assertEquals(549L, metricValuesForCommit2.get(0).getValue());
+        Assertions.assertEquals(3903L, metricValuesForCommit2.get(1).getValue());
+        Assertions.assertEquals(7170L, metricValuesForCommit2.get(2).getValue());
+        Assertions.assertEquals(4914L, metricValuesForCommit2.get(3).getValue());
 
         session.clear();
     }
@@ -241,15 +241,15 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         List<MetricValueForCommit> commit1Metrics = deltaTree.getCommit1Metrics();
         List<MetricValueForCommit> commit2Metrics = deltaTree.getCommit2Metrics();
 
-        Assertions.assertEquals(23L, commit1Metrics.get(0).getValue().longValue());
-        Assertions.assertEquals(1022L, commit1Metrics.get(1).getValue().longValue());
-        Assertions.assertEquals(1721L, commit1Metrics.get(2).getValue().longValue());
-        Assertions.assertEquals(1360L, commit1Metrics.get(3).getValue().longValue());
+        Assertions.assertEquals(23L, commit1Metrics.get(0).getValue());
+        Assertions.assertEquals(1022L, commit1Metrics.get(1).getValue());
+        Assertions.assertEquals(1721L, commit1Metrics.get(2).getValue());
+        Assertions.assertEquals(1360L, commit1Metrics.get(3).getValue());
 
-        Assertions.assertEquals(23L, commit2Metrics.get(0).getValue().longValue());
-        Assertions.assertEquals(1022L, commit2Metrics.get(1).getValue().longValue());
-        Assertions.assertEquals(1717L, commit2Metrics.get(2).getValue().longValue());
-        Assertions.assertEquals(1362L, commit2Metrics.get(3).getValue().longValue());
+        Assertions.assertEquals(23L, commit2Metrics.get(0).getValue());
+        Assertions.assertEquals(1022L, commit2Metrics.get(1).getValue());
+        Assertions.assertEquals(1717L, commit2Metrics.get(2).getValue());
+        Assertions.assertEquals(1362L, commit2Metrics.get(3).getValue());
 
         Assertions.assertEquals(1, deltaTree.getChildren().size());
 
@@ -266,7 +266,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         Assertions.assertEquals("src/paysim/PaySim.java", firstChangedFile.getName());
         Assertions.assertEquals(MetricTreeNodeType.FILE, firstChangedFile.getType());
         Assertions.assertEquals(4, firstChangedFile.getCommit1Metrics().size());
-        Assertions.assertEquals(firstChangedFile.getCommit2Metrics().get(2).getValue().longValue(),
+        Assertions.assertEquals(firstChangedFile.getCommit2Metrics().get(2).getValue(),
                 firstChangedFile.getCommit1Metrics().get(2).getValue()-3L);
         Assertions.assertTrue(firstChangedFile.getChanges().isModified());
 
@@ -274,7 +274,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         Assertions.assertEquals("src/paysim/output/KafkaOutput.java", secondChangedFile.getName());
         Assertions.assertEquals(MetricTreeNodeType.FILE, firstChangedFile.getType());
         Assertions.assertEquals(4, secondChangedFile.getCommit1Metrics().size());
-        Assertions.assertEquals(secondChangedFile.getCommit2Metrics().get(2).getValue().longValue(),
+        Assertions.assertEquals(secondChangedFile.getCommit2Metrics().get(2).getValue(),
                 secondChangedFile.getCommit1Metrics().get(2).getValue() - 1L);
         Assertions.assertTrue(secondChangedFile.getChanges().isModified());
 

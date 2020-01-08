@@ -128,10 +128,25 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     diffFormatter.setDetectRenames(true);
     for (int i = 1; i < commits.size(); i++) {
       RevCommit gitCommit = findCommit(git, commits.get(i).getName());
-      assert gitCommit != null;
-      if (gitCommit.getParentCount() > 0) {
-        RevCommit parent = gitCommit.getParent(0);
-        List<DiffEntry> diffs = diffFormatter.scan(parent, gitCommit);
+      if (gitCommit != null && gitCommit.getParentCount() > 0) {
+        List<DiffEntry> diffs =
+            new ArrayList<>(diffFormatter.scan(gitCommit.getParent(0), gitCommit));
+        for (int j = 1; j < gitCommit.getParentCount(); ++j) {
+          List<DiffEntry> diffEntries = diffFormatter.scan(gitCommit.getParent(j), gitCommit);
+          for (DiffEntry diff : diffEntries) {
+            if ((diff.getChangeType().equals(DiffEntry.ChangeType.DELETE)
+                    || diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))
+                && diffs
+                    .stream()
+                    .noneMatch(
+                        diffEntry ->
+                            diffEntry.getChangeType().equals(diff.getChangeType())
+                                && diffEntry.getOldPath().equals(diff.getOldPath())
+                                && diffEntry.getNewPath().equals(diff.getNewPath()))) {
+              diffs.add(diff);
+            }
+          }
+        }
         for (DiffEntry diff : diffs) {
           processDiffEntry(diff, files, commits.get(i));
         }

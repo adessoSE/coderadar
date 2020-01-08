@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.useradministration.service.load;
 
+import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
-import io.reflectoring.coderadar.useradministration.port.driver.load.LoadUserResponse;
 import io.reflectoring.coderadar.useradministration.port.driver.load.LoadUserUseCase;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +16,11 @@ public class LoadUserService implements LoadUserUseCase {
   }
 
   @Override
-  public LoadUserResponse loadUser(Long id) {
-    User user = port.loadUser(id);
-    return new LoadUserResponse(user.getId(), user.getUsername());
+  public User loadUser(Long id) {
+    if (port.existsById(id)) {
+      return port.loadUser(id);
+    } else {
+      throw new UserNotFoundException(id);
+    }
   }
 }

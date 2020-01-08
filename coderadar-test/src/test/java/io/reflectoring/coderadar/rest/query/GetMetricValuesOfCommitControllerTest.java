@@ -69,10 +69,10 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
                 result.getResponse().getContentAsString());
 
         Assertions.assertEquals(4L, metricValuesForCommit.size());
-        Assertions.assertEquals(0L, metricValuesForCommit.get(0).getValue().longValue());
-        Assertions.assertEquals(8L, metricValuesForCommit.get(1).getValue().longValue());
-        Assertions.assertEquals(18L, metricValuesForCommit.get(2).getValue().longValue());
-        Assertions.assertEquals(15L, metricValuesForCommit.get(3).getValue().longValue());
+        Assertions.assertEquals(0L, metricValuesForCommit.get(0).getValue());
+        Assertions.assertEquals(8L, metricValuesForCommit.get(1).getValue());
+        Assertions.assertEquals(18L, metricValuesForCommit.get(2).getValue());
+        Assertions.assertEquals(15L, metricValuesForCommit.get(3).getValue());
     }
 
     @Test
@@ -89,10 +89,10 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
                 result.getResponse().getContentAsString());
 
         Assertions.assertEquals(4L, metricValuesForCommit.size());
-        Assertions.assertEquals(0L, metricValuesForCommit.get(0).getValue().longValue());
-        Assertions.assertEquals(8L, metricValuesForCommit.get(1).getValue().longValue());
-        Assertions.assertEquals(12L, metricValuesForCommit.get(2).getValue().longValue());
-        Assertions.assertEquals(10L, metricValuesForCommit.get(3).getValue().longValue());
+        Assertions.assertEquals(0L, metricValuesForCommit.get(0).getValue());
+        Assertions.assertEquals(8L, metricValuesForCommit.get(1).getValue());
+        Assertions.assertEquals(12L, metricValuesForCommit.get(2).getValue());
+        Assertions.assertEquals(10L, metricValuesForCommit.get(3).getValue());
     }
 
     @Test
@@ -109,10 +109,10 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
                 result.getResponse().getContentAsString());
 
         Assertions.assertEquals(4L, metricValuesForCommit.size());
-        Assertions.assertEquals(0L, metricValuesForCommit.get(0).getValue().longValue());
-        Assertions.assertEquals(15L, metricValuesForCommit.get(1).getValue().longValue());
-        Assertions.assertEquals(27L, metricValuesForCommit.get(2).getValue().longValue());
-        Assertions.assertEquals(21L, metricValuesForCommit.get(3).getValue().longValue());
+        Assertions.assertEquals(0L, metricValuesForCommit.get(0).getValue());
+        Assertions.assertEquals(15L, metricValuesForCommit.get(1).getValue());
+        Assertions.assertEquals(27L, metricValuesForCommit.get(2).getValue());
+        Assertions.assertEquals(21L, metricValuesForCommit.get(3).getValue());
     }
 
     @Test
@@ -129,10 +129,10 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
                 result.getResponse().getContentAsString());
 
         Assertions.assertEquals(4L, metricValuesForCommit.size());
-        Assertions.assertEquals(0L, metricValuesForCommit.get(0).getValue().longValue());
-        Assertions.assertEquals(15L, metricValuesForCommit.get(1).getValue().longValue());
-        Assertions.assertEquals(27L, metricValuesForCommit.get(2).getValue().longValue());
-        Assertions.assertEquals(21L, metricValuesForCommit.get(3).getValue().longValue());
+        Assertions.assertEquals(0L, metricValuesForCommit.get(0).getValue());
+        Assertions.assertEquals(15L, metricValuesForCommit.get(1).getValue());
+        Assertions.assertEquals(27L, metricValuesForCommit.get(2).getValue());
+        Assertions.assertEquals(21L, metricValuesForCommit.get(3).getValue());
     }
 
     @Test

@@ -20,7 +20,6 @@ public class CommitBaseDataMapper {
 
   public static CommitEntity mapCommit(Commit commit) {
     CommitEntity commitEntity = new CommitEntity();
-    commitEntity.setId(commit.getId());
     commitEntity.setName(commit.getName());
     commitEntity.setAnalyzed(commit.isAnalyzed());
     commitEntity.setAuthor(commit.getAuthor());

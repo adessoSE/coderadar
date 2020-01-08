@@ -39,7 +39,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
     List<Long> fileIds = new ArrayList<>();
 
     for (MetricValue metricValue : metricValues) {
-      commitIds.add(metricValue.getCommit().getId());
+      commitIds.add(metricValue.getCommitId());
       fileIds.add(metricValue.getFileId());
     }
 
@@ -66,7 +66,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
     List<MetricValueEntity> metricValueEntities = new ArrayList<>();
 
     for (MetricValue metricValue : metricValues) {
-      CommitEntity commitEntity = commits.get(metricValue.getCommit().getId());
+      CommitEntity commitEntity = commits.get(metricValue.getCommitId());
       FileEntity fileEntity = files.get(metricValue.getFileId());
 
       MetricValueEntity metricValueEntity = new MetricValueEntity();

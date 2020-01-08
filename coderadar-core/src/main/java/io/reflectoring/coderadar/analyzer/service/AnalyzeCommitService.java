@@ -48,31 +48,31 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
   @Override
   public List<MetricValue> analyzeCommit(
       Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers) {
-    List<MetricValue> metricValues = new ArrayList<>(400);
+    List<MetricValue> metricValues = new ArrayList<>();
     List<File> files =
         commit
             .getTouchedFiles()
             .stream()
             .map(FileToCommitRelationship::getFile)
             .collect(Collectors.toList());
-    analyzeBulk(commit, files, analyzers, project)
+    analyzeBulk(commit.getName(), files, analyzers, project)
         .forEach(
             (file, fileMetrics) ->
-                metricValues.addAll(getMetrics(fileMetrics, commit, file.getId())));
+                metricValues.addAll(getMetrics(fileMetrics, commit.getId(), file.getId())));
     return metricValues;
   }
 
   /**
    * Analyzes all files of a commit in bulk.
    *
-   * @param commit The commit to analyze.
+   * @param commitHash The commit hash.
    * @param files The files of the commit.
    * @param analyzers The analyzers to use.
    * @param project The project the commit is in.
    * @return A map of File and corresponding FileMetrics
    */
   private HashMap<File, FileMetrics> analyzeBulk(
-      Commit commit,
+      String commitHash,
       List<File> files,
       List<SourceCodeFileAnalyzerPlugin> analyzers,
       Project project) {
@@ -84,7 +84,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
                   + "/projects/"
                   + project.getWorkdirName(),
               files,
-              commit.getName());
+              commitHash);
       fileContents.forEach(
           (key, value) ->
               fileMetricsMap.put(
@@ -99,11 +99,11 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
    * Extracts the metrics out of the FileMetrics (plugin) objects and returns a list of MetricValues
    *
    * @param fileMetrics The file metrics to use.
-   * @param commit The commit.
+   * @param commitId The DB id of the commit.
    * @param fileId The DB id of the current file.
    * @return A list of MetricValues.
    */
-  private List<MetricValue> getMetrics(FileMetrics fileMetrics, Commit commit, Long fileId) {
+  private List<MetricValue> getMetrics(FileMetrics fileMetrics, Long commitId, Long fileId) {
     List<MetricValue> metricValues = new ArrayList<>();
     for (Metric metric : fileMetrics.getMetrics()) {
       List<Finding> findings =
@@ -120,7 +120,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
               .collect(Collectors.toList());
       MetricValue metricValue =
           new MetricValue(
-              metric.getId(), fileMetrics.getMetricCount(metric), commit, findings, fileId);
+              metric.getId(), fileMetrics.getMetricCount(metric), commitId, fileId, findings);
       metricValues.add(metricValue);
     }
     return metricValues;

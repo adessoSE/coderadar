@@ -8,9 +8,9 @@ import lombok.ToString;
 /** Metadata about a commit to a Git repository. */
 @Data
 public class Commit {
-  private Long id;
+  private long id;
   private String name;
-  private Long timestamp;
+  private long timestamp;
   private String comment;
   private String author;
   private boolean analyzed = false;

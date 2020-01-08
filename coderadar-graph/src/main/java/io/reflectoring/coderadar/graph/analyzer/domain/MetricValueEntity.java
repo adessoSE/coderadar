@@ -18,7 +18,7 @@ import org.neo4j.ogm.annotation.Relationship;
 public class MetricValueEntity {
   private Long id;
   private String name;
-  private Long value;
+  private long value;
 
   @Relationship(type = "VALID_FOR")
   @ToString.Exclude

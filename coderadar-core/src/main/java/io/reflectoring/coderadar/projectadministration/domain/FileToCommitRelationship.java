@@ -12,13 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class FileToCommitRelationship {
-  private Long id;
-
   private ChangeType changeType;
-
   private String oldPath;
-
   private File file;
-
   private Commit commit;
 }

@@ -33,6 +33,7 @@ class GetAnalyzerConfigurationAdapterTest {
   void
       shouldReturnAnalyzerConfigurationAsOptionalWhenAAnalyzerConfigurationWithThePassingIdExists() {
     AnalyzerConfigurationEntity mockedItem = new AnalyzerConfigurationEntity();
+    mockedItem.setEnabled(true);
     mockedItem.setId(1L);
     when(analyzerConfigurationRepository.findById(any(Long.class)))
         .thenReturn(Optional.of(mockedItem));

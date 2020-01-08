@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.neo4j.ogm.annotation.EndNode;
-import org.neo4j.ogm.annotation.Property;
-import org.neo4j.ogm.annotation.RelationshipEntity;
-import org.neo4j.ogm.annotation.StartNode;
+import org.neo4j.ogm.annotation.*;
 import org.springframework.data.neo4j.annotation.QueryResult;
 
 /** @see io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship */
@@ -19,7 +16,6 @@ import org.springframework.data.neo4j.annotation.QueryResult;
 @QueryResult
 @Data
 public class FileToCommitRelationshipEntity {
-
   private Long id;
 
   @Property private ChangeType changeType;

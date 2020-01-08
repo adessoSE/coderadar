@@ -74,15 +74,15 @@ class GetDeltaTreeForTwoCommitsControllerTest extends ControllerTestTemplate {
         List<MetricValueForCommit> commit1Metrics = deltaTree.getCommit1Metrics();
         List<MetricValueForCommit> commit2Metrics = deltaTree.getCommit2Metrics();
 
-        Assertions.assertEquals(0L, commit1Metrics.get(0).getValue().longValue());
-        Assertions.assertEquals(8L, commit1Metrics.get(1).getValue().longValue());
-        Assertions.assertEquals(12L, commit1Metrics.get(2).getValue().longValue());
-        Assertions.assertEquals(10L, commit1Metrics.get(3).getValue().longValue());
+        Assertions.assertEquals(0L, commit1Metrics.get(0).getValue());
+        Assertions.assertEquals(8L, commit1Metrics.get(1).getValue());
+        Assertions.assertEquals(12L, commit1Metrics.get(2).getValue());
+        Assertions.assertEquals(10L, commit1Metrics.get(3).getValue());
 
-        Assertions.assertEquals(0L, commit2Metrics.get(0).getValue().longValue());
-        Assertions.assertEquals(8L, commit2Metrics.get(1).getValue().longValue());
-        Assertions.assertEquals(18L, commit2Metrics.get(2).getValue().longValue());
-        Assertions.assertEquals(15L, commit2Metrics.get(3).getValue().longValue());
+        Assertions.assertEquals(0L, commit2Metrics.get(0).getValue());
+        Assertions.assertEquals(8L, commit2Metrics.get(1).getValue());
+        Assertions.assertEquals(18L, commit2Metrics.get(2).getValue());
+        Assertions.assertEquals(15L, commit2Metrics.get(3).getValue());
 
         DeltaTree firstChild = deltaTree.getChildren().get(0);  // Finding.java
         Assertions.assertEquals("Finding.java", firstChild.getName());
@@ -127,15 +127,15 @@ class GetDeltaTreeForTwoCommitsControllerTest extends ControllerTestTemplate {
         commit1Metrics.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
         commit2Metrics.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
 
-        Assertions.assertEquals(0L, commit1Metrics.get(0).getValue().longValue());
-        Assertions.assertEquals(8L, commit1Metrics.get(1).getValue().longValue());
-        Assertions.assertEquals(12L, commit1Metrics.get(2).getValue().longValue());
-        Assertions.assertEquals(10L, commit1Metrics.get(3).getValue().longValue());
+        Assertions.assertEquals(0L, commit1Metrics.get(0).getValue());
+        Assertions.assertEquals(8L, commit1Metrics.get(1).getValue());
+        Assertions.assertEquals(12L, commit1Metrics.get(2).getValue());
+        Assertions.assertEquals(10L, commit1Metrics.get(3).getValue());
 
-        Assertions.assertEquals(0L, commit2Metrics.get(0).getValue().longValue());
-        Assertions.assertEquals(8L, commit2Metrics.get(1).getValue().longValue());
-        Assertions.assertEquals(18L, commit2Metrics.get(2).getValue().longValue());
-        Assertions.assertEquals(15L, commit2Metrics.get(3).getValue().longValue());
+        Assertions.assertEquals(0L, commit2Metrics.get(0).getValue());
+        Assertions.assertEquals(8L, commit2Metrics.get(1).getValue());
+        Assertions.assertEquals(18L, commit2Metrics.get(2).getValue());
+        Assertions.assertEquals(15L, commit2Metrics.get(3).getValue());
 
         DeltaTree firstChild = deltaTree.getChildren().get(0);  // Finding.java
         Assertions.assertEquals("Finding.java", firstChild.getName());
