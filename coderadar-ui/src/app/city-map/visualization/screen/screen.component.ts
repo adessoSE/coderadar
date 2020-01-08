@@ -131,7 +131,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   createRenderer() {
-    this.renderer = new WebGLRenderer({antialias: true, preserveDrawingBuffer: true});
+    this.renderer = new WebGLRenderer({antialias: true, preserveDrawingBuffer: true,logarithmicDepthBuffer:true});
     this.renderer.setClearColor(0xf0f0f0);
     this.renderer.setSize(this.getScreenWidth() - 0, window.innerHeight);
 

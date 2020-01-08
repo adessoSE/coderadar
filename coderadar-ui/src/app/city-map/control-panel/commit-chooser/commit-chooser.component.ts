@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {CommitType} from '../../enum/CommitType';
 import {Commit} from '../../../model/commit';
 import {Observable} from "rxjs";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-commit-chooser',
@@ -19,7 +20,7 @@ export class CommitChooserComponent implements OnInit{
 
   @Output() changeCommit = new EventEmitter();
 
-  constructor() {}
+  constructor(public datepipe:DatePipe) {}
 
   ngOnInit() {
     // if (this.selected !== null && this.selected !== undefined) {
@@ -28,10 +29,12 @@ export class CommitChooserComponent implements OnInit{
     this.selected.subscribe(value => this.handleCommitChanged(value));
   }
 
+
   formatCommit(commit: Commit): string {
     if (commit === null || commit === undefined) {
       return "empty";
     }
+    //this.datepipe.transform(new Date(commit.timestamp),"ddd, dd. mmm yyyy hh:mm:ss ")
     return new Date(commit.timestamp).toUTCString() + ',  ' + commit.name.substring(0, 7) + ', ' + commit.author;
   }
 
@@ -55,6 +58,7 @@ export class CommitChooserComponent implements OnInit{
         if (optionAny.author.toLowerCase().includes(lowercaseValue)) {score += 25; }
         if (optionAny.name.startsWith(value)) {score += 1000; }
         if (optionAny.name.includes(lowercaseValue)) {score += 500; }
+        if (option.displayValue.substring(0,25).toLowerCase().includes(lowercaseValue)){score+=1000}
         if (score > 0||value==="") {
           optionAny.score = score;
           return option;

@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {ControlPanelComponent} from './control-panel.component';
 import {SettingsComponent} from './settings/settings.component';
@@ -30,6 +30,7 @@ import {
 } from '@angular/material';
 import {LayoutModule} from '@angular/cdk/layout';
 import {ProjectService} from '../../service/project.service';
+import {HighlightSearchPipe} from "./pipes/highlight-search.pipe";
 
 @NgModule({
   imports: [
@@ -63,13 +64,15 @@ import {ProjectService} from '../../service/project.service';
     SearchComponent,
     FilterComponent,
     MetricMappingComponent,
-    AutosuggestWrapperComponent
+    AutosuggestWrapperComponent,
+    HighlightSearchPipe
   ],
   exports: [
     ControlPanelComponent
   ],
   providers: [
-    ProjectService
+    ProjectService,
+    DatePipe
   ]
 })
 export class ControlPanelModule {

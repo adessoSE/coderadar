@@ -14,7 +14,7 @@ export class VisualizationConfig {
 
   // CAMERA SETTINGS
   static CAMERA_NEAR = 0.1;
-  static CAMERA_FAR = 100000;
+  static CAMERA_FAR = 10000;
   static CAMERA_DISTANCE_TO_FOCUSSED_ELEMENT = 300;
   static CAMERA_ANIMATION_DURATION = 1500;
 

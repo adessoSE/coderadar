@@ -5,7 +5,7 @@
       <mat-option (onSelectionChange)="handleValueChanged(option)"
                   *ngFor="let option of displayOptions | async"
                   [value]="option">
-                  {{option.displayValue}}
+                  <div innerHTML="{{option.displayValue | highlightSearch : formControl.value}}"></div>
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>

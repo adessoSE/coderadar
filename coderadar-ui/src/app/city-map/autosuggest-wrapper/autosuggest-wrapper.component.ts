@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import {Observable} from 'rxjs';
 import {FormControl} from '@angular/forms';
-import {map, startWith} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map, startWith} from 'rxjs/operators';
 
 @Component({
   selector: 'app-autosuggest-wrapper',
@@ -54,8 +54,11 @@ export class AutosuggestWrapperComponent implements  OnInit{
     this.source$.subscribe(value => value.forEach(option => this.formattedOptions.push(this.associateFormattedOptions(option))));
     this.displayOptions = this.formControl.valueChanges
       .pipe(
+        debounceTime(200),
+        distinctUntilChanged(),
         startWith(' '),
         map(value => this.filterOptions(value,this.formattedOptions))
       );
   }
 }
+
