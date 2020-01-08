@@ -26,9 +26,9 @@ class CreateModuleControllerTest {
     CreateModuleCommand command = new CreateModuleCommand("module-path-test");
     Mockito.when(createModuleUseCase.createModule(command, 5L)).thenReturn(1L);
 
-    ResponseEntity<IdResponse> responseEntity = testSubject.createModule(command, 5L);
+    ResponseEntity responseEntity = testSubject.createModule(command, 5L);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-    Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
+    Assertions.assertEquals(1L, ((IdResponse)responseEntity.getBody()).getId().longValue());
   }
 }
