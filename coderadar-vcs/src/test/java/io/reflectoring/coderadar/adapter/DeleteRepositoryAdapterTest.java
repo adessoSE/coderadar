@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.adapter;
 
-import io.reflectoring.coderadar.vcs.adapter.DeleteRepositoryAdapter;
+import io.reflectoring.coderadar.vcs.adapter.DeleteLocalRepositoryAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -25,7 +25,7 @@ public class DeleteRepositoryAdapterTest {
 
   @Test
   public void testRepositoryDelete() throws IOException {
-    DeleteRepositoryAdapter deleteRepositoryAdapter = new DeleteRepositoryAdapter();
+    DeleteLocalRepositoryAdapter deleteRepositoryAdapter = new DeleteLocalRepositoryAdapter();
 
     deleteRepositoryAdapter.deleteRepository(folder.getPath());
     Assertions.assertNull(folder.list());

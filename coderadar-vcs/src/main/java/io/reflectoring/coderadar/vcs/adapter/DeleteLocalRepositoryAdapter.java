@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
-import io.reflectoring.coderadar.vcs.port.driven.DeleteRepositoryPort;
+import io.reflectoring.coderadar.vcs.port.driven.DeleteLocalRepositoryPort;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -11,7 +11,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DeleteRepositoryAdapter implements DeleteRepositoryPort {
+public class DeleteLocalRepositoryAdapter implements DeleteLocalRepositoryPort {
 
   /**
    * Closes the Jgit repository and deletes the local repository.
