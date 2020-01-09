@@ -70,76 +70,12 @@ export abstract class DependencyBase {
     this.draw(() => this.loadDependencies(this.node, this.checkChanged));
   }
 
-  canvasArrow(fromx, fromy, tox, toy, color, width?, dashed?): void {
-    if (width === undefined) {
-      width = 1;
-    }
-    if (dashed === undefined) {
-      dashed = true;
-    }
-
-    this.ctx.lineWidth = width;
-    const headlen = 10;
-
-    // draw curved line
-    this.ctx.beginPath();
-    this.ctx.setLineDash((dashed ? [10] : [0]));
-    this.ctx.moveTo(fromx, fromy);
-    this.ctx.strokeStyle = color;
-    // span right triangle with X, Y and Z with X = (fromx, fromy) and Y = (tox, toy) and Z as the point at the right angle
-    // calculate all sides x, y as the sides leading to the right angle
-    const x = Math.abs(fromx - tox);
-    const y = Math.abs(fromy - toy);
-    // calculate z with (zx, zy)
-    let angle;
-    // tslint:disable-next-line:radix
-    if (Math.abs(parseInt(fromx) - parseInt(tox)) < 10) {
-      // draw line from X to Y
-      this.ctx.lineTo(tox, toy);
-      this.ctx.stroke();
-      // calculate angle for arrow head in relation to line
-      angle = Math.atan2(toy - fromy, tox - fromx);
-    } else {
-      let zx;
-      let zy;
-
-      if (fromx <= tox && fromy <= toy) {
-        zx = Math.max(fromx, tox) - x;
-        zy = Math.max(fromy, toy);
-      } else if (fromx <= tox && fromy > toy) {
-        zx = Math.max(fromx, tox);
-        zy = Math.min(fromy, toy) + y;
-      } else if (fromx > tox && fromy <= toy) {
-        zx = Math.min(fromx, tox) + x;
-        zy = Math.max(fromy, toy);
-      } else if (fromx > tox && fromy > toy) {
-        zx = Math.min(fromx, tox);
-        zy = Math.min(fromy, toy) + y;
-      }
-
-      // draw quadratic curve from X over Z to Y
-      this.ctx.quadraticCurveTo(zx, zy, tox, toy);
-      this.ctx.stroke();
-      // calculate angle for arrow head in relation to line
-      angle = Math.atan2(toy - zy, tox - zx);
-    }
-
-    // draw arrow head
-    this.ctx.beginPath();
-    this.ctx.moveTo(tox, toy);
-    this.ctx.setLineDash([0]);
-    this.ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
-    this.ctx.moveTo(tox, toy);
-    this.ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
-    this.ctx.stroke();
-  }
-
   checkOnActiveDependency(tmp): boolean {
     while (tmp.id !== '') {
       if (tmp === this.activeDependency) {
         return true;
       }
-      tmp = tmp.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+      tmp = tmp.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
     }
     return false;
   }
@@ -147,7 +83,7 @@ export abstract class DependencyBase {
   findLastHTMLElement(node): HTMLElement {
     let element = document.getElementById(node);
     while (element.offsetParent === null) {
-      element = element.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+      element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
     }
     return element as HTMLElement;
   }
@@ -164,20 +100,21 @@ export abstract class DependencyBase {
   }
 
   toggle(currentNode): void {
-    if (currentNode.nextSibling.classList.contains('nested')) {
-      currentNode.nextSibling.classList.remove('nested');
-      if (currentNode.nextSibling.classList.contains('list__root')) {
-        currentNode.nextSibling.classList.add('active__root');
+    const nextSibling = currentNode.nextElementSibling;
+    if (nextSibling.classList.contains('nested')) {
+      nextSibling.classList.remove('nested');
+      if (nextSibling.classList.contains('list__root')) {
+        nextSibling.classList.add('active__root');
       } else {
-        currentNode.nextSibling.classList.add('active');
+        nextSibling.classList.add('active');
       }
-    } else if (currentNode.nextSibling.classList.contains('active')) {
+    } else if (nextSibling.classList.contains('active')) {
       this.collapseChildren(currentNode);
-      currentNode.nextSibling.classList.add('nested');
-      if (currentNode.nextSibling.classList.contains('list__root')) {
-        currentNode.nextSibling.classList.remove('active__root');
+      nextSibling.classList.add('nested');
+      if (nextSibling.classList.contains('list__root')) {
+        nextSibling.classList.remove('active__root');
       } else {
-        currentNode.nextSibling.classList.remove('active');
+        nextSibling.classList.remove('active');
       }
     }
   }
@@ -283,5 +220,69 @@ export abstract class DependencyBase {
         }
       });
     }
+  }
+
+  canvasArrow(fromx, fromy, tox, toy, color, width?, dashed?): void {
+    if (width === undefined) {
+      width = 1;
+    }
+    if (dashed === undefined) {
+      dashed = true;
+    }
+
+    this.ctx.lineWidth = width;
+    const headlen = 10;
+
+    // draw curved line
+    this.ctx.beginPath();
+    this.ctx.setLineDash((dashed ? [10] : [0]));
+    this.ctx.moveTo(fromx, fromy);
+    this.ctx.strokeStyle = color;
+    // span right triangle with X, Y and Z with X = (fromx, fromy) and Y = (tox, toy) and Z as the point at the right angle
+    // calculate all sides x, y as the sides leading to the right angle
+    const x = Math.abs(fromx - tox);
+    const y = Math.abs(fromy - toy);
+    // calculate z with (zx, zy)
+    let angle;
+    // tslint:disable-next-line:radix
+    if (Math.abs(parseInt(fromx) - parseInt(tox)) < 10) {
+      // draw line from X to Y
+      this.ctx.lineTo(tox, toy);
+      this.ctx.stroke();
+      // calculate angle for arrow head in relation to line
+      angle = Math.atan2(toy - fromy, tox - fromx);
+    } else {
+      let zx;
+      let zy;
+
+      if (fromx <= tox && fromy <= toy) {
+        zx = Math.max(fromx, tox) - x;
+        zy = Math.max(fromy, toy);
+      } else if (fromx <= tox && fromy > toy) {
+        zx = Math.max(fromx, tox);
+        zy = Math.min(fromy, toy) + y;
+      } else if (fromx > tox && fromy <= toy) {
+        zx = Math.min(fromx, tox) + x;
+        zy = Math.max(fromy, toy);
+      } else if (fromx > tox && fromy > toy) {
+        zx = Math.min(fromx, tox);
+        zy = Math.min(fromy, toy) + y;
+      }
+
+      // draw quadratic curve from X over Z to Y
+      this.ctx.quadraticCurveTo(zx, zy, tox, toy);
+      this.ctx.stroke();
+      // calculate angle for arrow head in relation to line
+      angle = Math.atan2(toy - zy, tox - zx);
+    }
+
+    // draw arrow head
+    this.ctx.beginPath();
+    this.ctx.moveTo(tox, toy);
+    this.ctx.setLineDash([0]);
+    this.ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+    this.ctx.moveTo(tox, toy);
+    this.ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+    this.ctx.stroke();
   }
 }
