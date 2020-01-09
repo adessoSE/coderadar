@@ -167,7 +167,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   resetCamera() {
-    const root = this.scene.getObjectByName('root');
+    const root = this.getRoot();
     // pythagoras
     const diagonal = Math.sqrt(Math.pow(root.scale.x, 2) + Math.pow(root.scale.z, 2));
     this.camera.position.x = root.scale.x * 2;
@@ -259,7 +259,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
 
-    const root = this.scene.getObjectByName('root');
+    const root = this.getRoot();
     // pythagoras
     const diagonal = Math.sqrt(Math.pow(root.scale.x, 2) + Math.pow(root.scale.z, 2));
 
@@ -283,7 +283,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private getCentralCoordinates() {
-    const root = this.scene.getObjectByName('root');
+    const root = this.getRoot();
     if (!root) {
       console.warn(`no root found in screen #${this.screenType}`);
       return;
@@ -294,6 +294,10 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
       y: 0,
       z: root.scale.z / 2
     };
+  }
+
+  private getRoot():Object3D{
+    return this.scene.getObjectByName(VisualizationConfig.ROOT_NAME);
   }
 
   private getScreenWidth() {

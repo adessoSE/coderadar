@@ -10,6 +10,7 @@ import {
 } from 'three';
 import {FocusService} from '../../service/focus.service';
 import {TooltipService} from '../../service/tooltip.service';
+import {VisualizationConfig} from "../../VisualizationConfig";
 
 export class InteractionHandler {
 
@@ -44,6 +45,8 @@ export class InteractionHandler {
         this.highlightBox.visible = false;
 
       } else {
+        const addedMargin = VisualizationConfig.HIGHLIGHT_BOX_MARGIN;
+
         const target: Object3D = this.scene.getObjectByName(elementName);
         let shouldBeHighlighted = true;
         if (!elementName.includes('.')) {shouldBeHighlighted = false; }// should not highlight when the element is not a file
@@ -51,7 +54,7 @@ export class InteractionHandler {
           this.highlightBox.visible = true;
           this.highlightBox.position.copy(new Vector3(target.position.x + target.scale.x / 2,
             target.position.y + target.scale.y / 2, target.position.z + target.scale.z / 2));
-          this.highlightBox.scale.copy(target.scale).addScalar(0.25);
+          this.highlightBox.scale.copy(target.scale).addScalar(addedMargin);
         } else {
           this.highlightBox.visible = false;
         }

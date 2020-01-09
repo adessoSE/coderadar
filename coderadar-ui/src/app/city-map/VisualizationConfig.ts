@@ -5,6 +5,7 @@ export class VisualizationConfig {
   // VISUALIZATION SETTINGS
   static EDGE_LENGTH_FACTOR = 2;
   static HEIGHT_FACTOR = 0.1;
+  static ROOT_NAME = "root";
   // static GLOBAL_MAX_GROUND_AREA = 100;
   // static GLOBAL_MIN_GROUND_AREA = 1;
   // static GLOBAL_MAX_HEIGHT = 100;
@@ -13,7 +14,7 @@ export class VisualizationConfig {
   static MODULE_BLOCK_HEIGHT = 5;
 
   // CAMERA SETTINGS
-  static CAMERA_NEAR = 0.1;
+  static CAMERA_NEAR = 5;
   static CAMERA_FAR = 10000;
   static CAMERA_DISTANCE_TO_FOCUSSED_ELEMENT = 300;
   static CAMERA_ANIMATION_DURATION = 1500;
@@ -29,6 +30,9 @@ export class VisualizationConfig {
   static COLOR_ADDED_FILE = '#49c35c';
   static COLOR_DELETED_FILE = '#d90206';
   static COLOR_UNCHANGED_FILE = '#cccccc';
+
+  //HIGHLIGHTING
+  static HIGHLIGHT_BOX_MARGIN = 0.25;
 
   static getShortNameByMetricName(metricName: string): IMetric {
     const shortname = metricName.split('.').pop();

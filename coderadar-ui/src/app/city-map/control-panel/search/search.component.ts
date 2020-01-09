@@ -1,8 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Commit} from "../../../model/commit";
-import {filter} from "rxjs/operators";
 import {Observable} from "rxjs";
-import {text} from "@fortawesome/fontawesome-svg-core";
+import {VisualizationConfig} from "../../VisualizationConfig";
 
 @Component({
   selector: 'app-search',
@@ -30,12 +28,16 @@ export class SearchComponent implements OnInit {
 
     source.forEach(option => {
         var score = 0;
+        //Positive conditions
         if(option.displayValue.startsWith(value))score += 10
-        if(option.displayValue.includes(value))score +=1;
+        if(option.displayValue.toLowerCase().includes(lowercaseValue))score +=1;
+        //Final conditions
+        if(option.displayValue===VisualizationConfig.ROOT_NAME)score = 0;
         option["score"] = score;
     });
     const filteredFiles: {value:string,displayValue:string}[] = source.filter(option => {
-      if(option.value.includes(value))return option;
+      if(option["score"]<=0)return;
+      if(option.value.toLowerCase().includes(lowercaseValue))return option;
     });
 
     return filteredFiles.sort(
