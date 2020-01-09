@@ -23,9 +23,6 @@ export class CommitChooserComponent implements OnInit{
   constructor(public datepipe:DatePipe) {}
 
   ngOnInit() {
-    // if (this.selected !== null && this.selected !== undefined) {
-    //   this.handleCommitChanged(this.selected);
-    // }
     this.selected.subscribe(value => this.handleCommitChanged(value));
   }
 
@@ -34,7 +31,6 @@ export class CommitChooserComponent implements OnInit{
     if (commit === null || commit === undefined) {
       return "empty";
     }
-    //this.datepipe.transform(new Date(commit.timestamp),"ddd, dd. mmm yyyy hh:mm:ss ")
     return new Date(commit.timestamp).toUTCString() + ',  ' + commit.name.substring(0, 7) + ', ' + commit.author;
   }
 
