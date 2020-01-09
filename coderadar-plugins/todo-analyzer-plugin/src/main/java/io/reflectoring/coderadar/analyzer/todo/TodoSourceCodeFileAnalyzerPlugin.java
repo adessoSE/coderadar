@@ -2,21 +2,20 @@ package io.reflectoring.coderadar.analyzer.todo;
 
 import io.reflectoring.coderadar.plugin.api.*;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 public class TodoSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerPlugin {
 
   public static final Metric TODO_METRIC =
-      new Metric("org.wickedsource.coderadar.analyzer.todo.TodoAnalyzer.todo");
+      new Metric("io.reflectoring.coderadar.analyzer.todo.TodoAnalyzer.todo");
 
   private String patternPropertyPrefix =
       TodoSourceCodeFileAnalyzerPlugin.class.getName() + ".pattern";
 
-  private TodoFinder todoFinder;
+  private TodoFinder todoFinder = new TodoFinder(getDefaultPatterns());
 
-  private List<String> getDefaultPatterns() {
-    return Arrays.asList("TODO", "FIXME", "todo", "fixme");
+  private String[] getDefaultPatterns() {
+    return new String[] {"TODO", "FIXME", "todo", "fixme"};
   }
 
   @Override
