@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
-import io.reflectoring.coderadar.rest.IdResponse;
+import io.reflectoring.coderadar.rest.domain.IdResponse;
 import io.reflectoring.coderadar.rest.user.RegisterUserController;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserUseCase;

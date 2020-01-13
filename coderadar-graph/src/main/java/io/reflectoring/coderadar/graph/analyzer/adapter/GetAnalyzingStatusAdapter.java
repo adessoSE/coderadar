@@ -1,25 +1,19 @@
 package io.reflectoring.coderadar.graph.analyzer.adapter;
 
 import io.reflectoring.coderadar.analyzer.port.driven.GetAnalyzingStatusPort;
-import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
-import io.reflectoring.coderadar.graph.analyzer.repository.AnalyzingJobRepository;
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GetAnalyzingStatusAdapter implements GetAnalyzingStatusPort {
-  private final AnalyzingJobRepository analyzingJobRepository;
+  private final ProjectRepository projectRepository;
 
-  public GetAnalyzingStatusAdapter(AnalyzingJobRepository analyzingJobRepository) {
-    this.analyzingJobRepository = analyzingJobRepository;
+  public GetAnalyzingStatusAdapter(ProjectRepository projectRepository) {
+    this.projectRepository = projectRepository;
   }
 
   @Override
-  public boolean get(Long projectId) {
-    AnalyzingJobEntity analyzingJob =
-        analyzingJobRepository
-            .findByProjectId(projectId)
-            .orElseThrow(() -> new ProjectNotFoundException(projectId));
-    return analyzingJob.isActive();
+  public boolean getStatus(Long projectId) {
+    return projectRepository.getProjectAnalyzingStatus(projectId);
   }
 }

@@ -12,7 +12,6 @@ public class CommitBaseDataMapper {
     commit.setId(entity.getId());
     commit.setName(entity.getName());
     commit.setAnalyzed(entity.isAnalyzed());
-    commit.setMerged(entity.isMerged());
     commit.setAuthor(entity.getAuthor());
     commit.setComment(entity.getComment());
     commit.setTimestamp(entity.getTimestamp());
@@ -24,7 +23,6 @@ public class CommitBaseDataMapper {
     commitEntity.setId(commit.getId());
     commitEntity.setName(commit.getName());
     commitEntity.setAnalyzed(commit.isAnalyzed());
-    commitEntity.setMerged(commit.isMerged());
     commitEntity.setAuthor(commit.getAuthor());
     commitEntity.setComment(commit.getComment());
     commitEntity.setTimestamp(commit.getTimestamp());

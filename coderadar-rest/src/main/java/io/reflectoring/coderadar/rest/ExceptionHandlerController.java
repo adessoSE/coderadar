@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.EntityAlreadyExistsException;
 import io.reflectoring.coderadar.EntityNotFoundException;
 import io.reflectoring.coderadar.analyzer.MisconfigurationException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.module;
 
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleUseCase;
+import io.reflectoring.coderadar.rest.domain.GetModuleResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class GetModuleController {
   }
 
   @GetMapping(path = "/projects/{projectId}/modules/{moduleId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity getModule(@PathVariable(name = "moduleId") Long moduleId) {
-    return new ResponseEntity<>(getModuleUseCase.get(moduleId), HttpStatus.OK);
+  public ResponseEntity<GetModuleResponse> getModule(@PathVariable(name = "moduleId") Long moduleId) {
+    return new ResponseEntity<>(new GetModuleResponse(moduleId, getModuleUseCase.get(moduleId).getPath()), HttpStatus.OK);
   }
 }

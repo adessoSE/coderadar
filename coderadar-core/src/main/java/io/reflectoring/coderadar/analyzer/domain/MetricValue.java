@@ -1,24 +1,18 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /** A single metric for a given File and Commit. */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class MetricValue {
   private Long id;
-  private String name;
-  private Long value;
-
-  private Commit commit;
-
-  private List<Finding> findings = new ArrayList<>();
-
-  private Long fileId;
+  private final String name;
+  private final Long value;
+  private final Commit commit;
+  private final List<Finding> findings;
+  private final Long fileId;
 }

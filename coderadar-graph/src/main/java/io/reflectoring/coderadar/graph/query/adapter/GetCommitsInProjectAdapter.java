@@ -4,26 +4,19 @@ import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.CommitBaseDataMapper;
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.File;
-import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
+import io.reflectoring.coderadar.projectadministration.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
-import io.reflectoring.coderadar.query.port.driver.GetCommitResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
-  private final ProjectRepository projectRepository;
   private final CommitRepository commitRepository;
 
-  public GetCommitsInProjectAdapter(
-      ProjectRepository projectRepository, CommitRepository commitRepository) {
-    this.projectRepository = projectRepository;
+  public GetCommitsInProjectAdapter(CommitRepository commitRepository) {
     this.commitRepository = commitRepository;
   }
 
@@ -54,40 +47,50 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   }
 
   @Override
-  public List<GetCommitResponse> getCommitsResponseSortedByTimestampDesc(Long projectId) {
-    if (!projectRepository.existsById(projectId)) {
-      throw new ProjectNotFoundException(projectId);
-    }
-    List<GetCommitResponse> getCommitResponses = new ArrayList<>();
-    for (CommitEntity c : commitRepository.findByProjectIdAndTimestampDesc(projectId)) {
-      GetCommitResponse commitResponse = new GetCommitResponse();
-      commitResponse.setName(c.getName());
-      commitResponse.setAnalyzed(c.isAnalyzed());
-      commitResponse.setAuthor(c.getAuthor());
-      commitResponse.setComment(c.getComment());
-      commitResponse.setTimestamp(c.getTimestamp().getTime());
-      getCommitResponses.add(commitResponse);
-    }
-    return getCommitResponses;
+  public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(Long projectId) {
+    return commitRepository
+        .findByProjectIdAndTimestampDesc(projectId)
+        .stream()
+        .map(CommitBaseDataMapper::mapCommitEntity)
+        .collect(Collectors.toList());
   }
 
   @Override
   public List<Commit> getSortedByTimestampAsc(Long projectId) {
-    if (!projectRepository.existsById(projectId)) {
-      throw new ProjectNotFoundException(projectId);
-    }
     List<CommitEntity> commitEntities =
         commitRepository.findByProjectIdWithAllRelationshipsSortedByTimestampAsc(projectId);
     return mapCommitEntities(commitEntities);
   }
 
+  /**
+   * Returns all not yet analyzed commits in this project, that match the supplied file patterns
+   *
+   * @param projectId The id of the project.
+   * @param filePatterns The patterns to use.
+   * @return A list of commits with initialized FileToCommitRelationShips and no parents.
+   */
   @Override
-  public List<Commit> getSortedByTimestampAscWithNoParents(Long projectId) {
-    if (!projectRepository.existsById(projectId)) {
-      throw new ProjectNotFoundException(projectId);
-    }
+  public List<Commit> getNonanalyzedSortedByTimestampAscWithNoParents(
+      Long projectId, List<FilePattern> filePatterns) {
+
+    // Map Ant-Patterns to RegEx
+    List<String> includes =
+        filePatterns
+            .stream()
+            .filter(filePattern -> filePattern.getInclusionType().equals(InclusionType.INCLUDE))
+            .map(filePattern -> PatternUtil.toPattern(filePattern.getPattern()).toString())
+            .collect(Collectors.toList());
+
+    List<String> excludes =
+        filePatterns
+            .stream()
+            .filter(filePattern -> filePattern.getInclusionType().equals(InclusionType.EXCLUDE))
+            .map(filePattern -> PatternUtil.toPattern(filePattern.getPattern()).toString())
+            .collect(Collectors.toList());
+
     List<CommitEntity> commitEntities =
-        commitRepository.findByProjectIdWithFileRelationshipsSortedByTimestampAsc(projectId);
+        commitRepository.findByProjectIdNonanalyzedWithFileRelationshipsSortedByTimestampAsc(
+            projectId, includes, excludes);
     return mapCommitEntitiesNoParents(commitEntities);
   }
 
@@ -122,7 +125,6 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
         file.setPath(fileToCommitRelationshipEntity.getFile().getPath());
         walkedFiles.put(file.getId(), file);
       }
-      file.getCommits().add(fileToCommitRelationship);
       fileToCommitRelationship.setFile(file);
 
       fileToCommitRelationships.add(fileToCommitRelationship);

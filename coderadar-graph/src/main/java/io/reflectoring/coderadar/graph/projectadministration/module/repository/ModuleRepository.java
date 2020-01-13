@@ -37,7 +37,7 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
   ModuleEntity createModuleInModule(@NonNull Long moduleId, @NonNull String modulePath);
 
   @Query(
-      "MATCH (e)-[:CONTAINS]->(f:FileEntity) WHERE ID(e) = {1} AND f.path STARTS WITH {0} return COUNT(f) > 0 ")
+      "MATCH (e)-[:CONTAINS]->(f:FileEntity) WHERE ID(e) = {1} AND f.path STARTS WITH {0} RETURN COUNT(f) > 0 ")
   @NonNull
   Boolean fileInPathExists(@NonNull String path, @NonNull Long projectOrModuleId);
 

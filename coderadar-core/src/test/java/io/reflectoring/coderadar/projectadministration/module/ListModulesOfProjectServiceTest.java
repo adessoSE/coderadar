@@ -1,10 +1,12 @@
 package io.reflectoring.coderadar.projectadministration.module;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.ListModulesOfProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.service.module.ListModulesOfProjectService;
 import java.util.Arrays;
 import java.util.List;
@@ -18,12 +20,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class ListModulesOfProjectServiceTest {
 
   @Mock private ListModulesOfProjectPort listModulesPortMock;
+  @Mock private GetProjectPort getProjectPort;
 
   private ListModulesOfProjectService testSubject;
 
   @BeforeEach
   void setUp() {
-    this.testSubject = new ListModulesOfProjectService(listModulesPortMock);
+    this.testSubject = new ListModulesOfProjectService(listModulesPortMock, getProjectPort);
   }
 
   @Test
@@ -31,14 +34,16 @@ class ListModulesOfProjectServiceTest {
     // given
     long projectId = 1234L;
 
-    GetModuleResponse expectedResponse1 = new GetModuleResponse(1L, "module-path-one");
-    GetModuleResponse expectedResponse2 = new GetModuleResponse(2L, "module-path-two");
+    Module expectedResponse1 = new Module(1L, "module-path-one");
+    Module expectedResponse2 = new Module(2L, "module-path-two");
 
-    when(listModulesPortMock.listModuleResponses(projectId))
+    when(getProjectPort.existsById(anyLong())).thenReturn(true);
+
+    when(listModulesPortMock.listModules(projectId))
         .thenReturn(Arrays.asList(expectedResponse1, expectedResponse2));
 
     // when
-    List<GetModuleResponse> actualResponses = testSubject.listModules(projectId);
+    List<Module> actualResponses = testSubject.listModules(projectId);
 
     // then
     assertThat(actualResponses).containsExactly(expectedResponse1, expectedResponse2);

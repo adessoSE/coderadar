@@ -24,7 +24,6 @@ import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
@@ -165,8 +164,7 @@ class UpdateProjectServiceTest {
 
     when(configurationPropertiesMock.getWorkdir()).thenReturn(new File(globalWorkdirName).toPath());
 
-    when(extractProjectCommitsUseCaseMock.getCommits(
-            Paths.get(projectWorkdirName), expectedDateRange))
+    when(extractProjectCommitsUseCaseMock.getCommits(any(), any()))
         .thenReturn(Collections.singletonList(commitMock));
 
     // when
