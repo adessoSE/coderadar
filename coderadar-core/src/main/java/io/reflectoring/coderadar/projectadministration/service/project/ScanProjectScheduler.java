@@ -9,6 +9,7 @@ import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsExcept
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
+import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.GetProjectHeadCommitPort;
@@ -19,14 +20,12 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ListProjectsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -99,7 +98,8 @@ public class ScanProjectScheduler {
   @EventListener({ContextRefreshedEvent.class})
   public void onApplicationEvent() {
     taskScheduler.scheduleAtFixedRate(
-        this::scheduleCheckTask, coderadarConfigurationProperties.getScanIntervalInSeconds() * 100);
+        this::scheduleCheckTask,
+        coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000);
   }
 
   /** Starts update tasks for all projects that don't have one running already. */
@@ -152,33 +152,36 @@ public class ScanProjectScheduler {
     return project.getVcsEnd() != null && project.getVcsEnd().before(new Date());
   }
 
-  /** @param project The project to check */
-  private void saveCommits(Project project) {
+  /**
+   * @param project The project to check
+   * @param localDir The project workdir
+   */
+  private void saveCommits(Project project, File localDir) {
     List<Commit> commits =
-        extractProjectCommitsUseCase.getCommits(
-            Paths.get(project.getWorkdirName()), getProjectDateRange(project));
+        extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
 
     Commit head = getProjectHeadCommitPort.getHeadCommit(project.getId());
-    if (head.getTimestamp().after(Iterables.getLast(commits).getTimestamp())) {
+    if (head.getTimestamp() > Iterables.getLast(commits).getTimestamp()) {
       resetAnalysisPort.resetAnalysis(project.getId());
       updateProjectPort.deleteFilesAndCommits(project.getId());
       saveCommitPort.saveCommits(commits, project.getId());
     } else {
       // Save the new commit tree
-      commits.removeIf(commit -> commit.getTimestamp().getTime() <= head.getTimestamp().getTime());
+      commits.removeIf(commit -> commit.getTimestamp() <= head.getTimestamp());
       addCommitsPort.addCommits(commits, project.getId());
     }
   }
 
   private void checkForNewCommits(Project project) {
     try {
+      File localDir =
+          new File(
+              coderadarConfigurationProperties.getWorkdir()
+                  + "/projects/"
+                  + project.getWorkdirName());
       if (updateRepositoryUseCase.updateRepository(
           new UpdateRepositoryCommand()
-              .setLocalDir(
-                  new File(
-                      coderadarConfigurationProperties.getWorkdir()
-                          + "/projects/"
-                          + project.getWorkdirName()))
+              .setLocalDir(localDir)
               .setPassword(project.getVcsPassword())
               .setUsername(project.getVcsUsername())
               .setRemoteUrl(project.getVcsUrl()))) {
@@ -186,17 +189,16 @@ public class ScanProjectScheduler {
 
         try {
           // Check what modules where previously in the project
-          List<GetModuleResponse> modules =
-              listModulesOfProjectUseCase.listModules(project.getId());
+          List<Module> modules = listModulesOfProjectUseCase.listModules(project.getId());
 
-          for (GetModuleResponse module : modules) {
+          for (Module module : modules) {
             deleteModulePort.delete(module.getId(), project.getId());
           }
 
-          saveCommits(project);
+          saveCommits(project, localDir);
 
           // Re-create the modules
-          for (GetModuleResponse module : modules) {
+          for (Module module : modules) {
             createModulePort.createModule(module.getPath(), project.getId());
           }
         } finally {

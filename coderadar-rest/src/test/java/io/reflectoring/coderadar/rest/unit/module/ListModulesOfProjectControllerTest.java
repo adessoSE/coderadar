@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.rest.unit.module;
 
-import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
+import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
+import io.reflectoring.coderadar.rest.domain.GetModuleResponse;
 import io.reflectoring.coderadar.rest.module.ListModulesOfProjectController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,9 +25,9 @@ class ListModulesOfProjectControllerTest {
     ListModulesOfProjectController testSubject =
         new ListModulesOfProjectController(listModulesOfProjectUseCase);
 
-    List<GetModuleResponse> responses = new ArrayList<>();
-    GetModuleResponse response1 = new GetModuleResponse(1L, "module-path-one");
-    GetModuleResponse response2 = new GetModuleResponse(2L, "module-path-two");
+    List<Module> responses = new ArrayList<>();
+    Module response1 = new Module(1L, "module-path-one");
+    Module response2 = new Module(2L, "module-path-two");
     responses.add(response1);
     responses.add(response2);
 

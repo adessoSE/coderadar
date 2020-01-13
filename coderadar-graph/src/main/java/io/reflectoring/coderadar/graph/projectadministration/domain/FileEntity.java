@@ -22,11 +22,6 @@ public class FileEntity {
   private List<MetricValueEntity> metricValues = new ArrayList<>();
 
   @EqualsAndHashCode.Exclude
-  @Relationship(type = "CHANGED_IN")
-  @ToString.Exclude
-  private List<FileToCommitRelationshipEntity> commits = new ArrayList<>();
-
-  @EqualsAndHashCode.Exclude
   @Relationship(type = "RENAMED_FROM")
   @ToString.Exclude
   private List<FileEntity> oldFiles = new ArrayList<>();

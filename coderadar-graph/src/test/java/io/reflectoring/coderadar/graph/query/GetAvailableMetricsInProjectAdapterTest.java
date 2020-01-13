@@ -1,19 +1,15 @@
 package io.reflectoring.coderadar.graph.query;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.query.adapter.GetAvailableMetricsInProjectAdapter;
 import io.reflectoring.coderadar.graph.query.repository.GetAvailableMetricsInProjectRepository;
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,25 +25,12 @@ class GetAvailableMetricsInProjectAdapterTest {
   @BeforeEach
   void setUp() {
     getAvailableMetricsInProjectAdapter =
-        new GetAvailableMetricsInProjectAdapter(
-            projectRepository, getAvailableMetricsInProjectRepository);
-  }
-
-  @Test
-  @DisplayName("Should throw exception when a project with the passing ID doesn't exists")
-  void shouldThrowExceptionWhenAProjectWithThePassingIdDoesntExists() {
-    Throwable thrown = catchThrowable(() -> getAvailableMetricsInProjectAdapter.get(1L));
-
-    assertThat(thrown)
-        .isInstanceOf(ProjectNotFoundException.class)
-        .hasNoCause()
-        .hasMessage("Project with id 1 not found.");
+        new GetAvailableMetricsInProjectAdapter(getAvailableMetricsInProjectRepository);
   }
 
   @Test
   @DisplayName("Should return empty list of strings when no metrics are available")
   void shouldReturnEmptyListOfStringsWhenNoMetricsAreAvailable() {
-    Optional<ProjectEntity> mockProject = Optional.of(new ProjectEntity());
     List<String> mockListOfMetrics = new LinkedList<>();
     when(projectRepository.existsById(anyLong())).thenReturn(true);
     when(getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(anyLong()))
@@ -61,7 +44,6 @@ class GetAvailableMetricsInProjectAdapterTest {
   @Test
   @DisplayName("Should return list of strings with size of one when one metric is available")
   void shouldReturnListOfStringsWithSizeOfOneWhenOneMetricIsAvailable() {
-    Optional<ProjectEntity> mockProject = Optional.of(new ProjectEntity());
     List<String> mockListOfMetrics = new LinkedList<>();
     mockListOfMetrics.add("loc");
     when(projectRepository.existsById(anyLong())).thenReturn(true);
@@ -76,7 +58,6 @@ class GetAvailableMetricsInProjectAdapterTest {
   @Test
   @DisplayName("Should return list of strings with size of two when two metrics are available")
   void shouldReturnListOfStringsWithSizeOfTwoWhenTwoMetricsAreAvailable() {
-    Optional<ProjectEntity> mockProject = Optional.of(new ProjectEntity());
     List<String> mockListOfMetrics = new LinkedList<>();
     mockListOfMetrics.add("sloc");
     mockListOfMetrics.add("cloc");

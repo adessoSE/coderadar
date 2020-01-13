@@ -14,7 +14,10 @@ import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -83,7 +86,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
         if (parentCommit == null) {
           parentCommit = CommitBaseDataMapper.mapCommit(parent);
           walkedCommits.put(parent.getName(), parentCommit);
-          getFiles(commit.getTouchedFiles(), parentCommit, walkedFiles);
+          getFiles(parent.getTouchedFiles(), parentCommit, walkedFiles);
           result.add(parentCommit);
         }
         commitEntity.getParents().add(parentCommit);
@@ -117,7 +120,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
         fileToCommitRelationshipEntity.setOldPath(fileToCommitRelationship.getOldPath());
         fileToCommitRelationshipEntity.setFile(fileEntity);
         fileEntity.setPath(fileToCommitRelationship.getFile().getPath());
-        fileEntity.getCommits().add(fileToCommitRelationshipEntity);
+        entity.getTouchedFiles().add(fileToCommitRelationshipEntity);
       }
     }
   }
@@ -209,7 +212,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
   }
 
   @Override
-  public void setCommitsWithIDsAsAnalyzed(Long[] commitIds) {
+  public void setCommitsWithIDsAsAnalyzed(long[] commitIds) {
     commitRepository.setCommitsWithIDsAsAnalyzed(commitIds);
   }
 }

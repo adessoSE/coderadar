@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.rest.unit.project;
 
-import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
+import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.ListProjectsUseCase;
+import io.reflectoring.coderadar.rest.domain.GetProjectResponse;
 import io.reflectoring.coderadar.rest.project.ListProjectsController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,11 +23,11 @@ class ListProjectsControllerTest {
   void listAllProjects() {
     ListProjectsController testSubject = new ListProjectsController(listProjectsUseCase);
 
-    GetProjectResponse project1 = new GetProjectResponse();
-    GetProjectResponse project2 = new GetProjectResponse();
-    GetProjectResponse project3 = new GetProjectResponse();
+    Project project1 = new Project();
+    Project project2 = new Project();
+    Project project3 = new Project();
 
-    List<GetProjectResponse> projects = new ArrayList<>();
+    List<Project> projects = new ArrayList<>();
     projects.add(project1);
     projects.add(project2);
     projects.add(project3);

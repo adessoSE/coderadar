@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.useradministration.RefreshTokenNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordUseCase;

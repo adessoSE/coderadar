@@ -1,6 +1,8 @@
 package io.reflectoring.coderadar.rest.project;
 
+import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectUseCase;
+import io.reflectoring.coderadar.rest.domain.GetProjectResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,16 @@ public class GetProjectController {
   }
 
   @GetMapping(path = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity getProject(@PathVariable Long projectId) {
-    return new ResponseEntity<>(getProjectUseCase.get(projectId), HttpStatus.OK);
+  public ResponseEntity<GetProjectResponse> getProject(@PathVariable Long projectId) {
+    Project project = getProjectUseCase.get(projectId);
+    GetProjectResponse getProjectResponse = new GetProjectResponse();
+    getProjectResponse.setName(project.getName());
+    getProjectResponse.setId(project.getId());
+    getProjectResponse.setVcsUsername(project.getVcsUsername());
+    getProjectResponse.setEndDate(project.getVcsEnd());
+    getProjectResponse.setStartDate(project.getVcsStart());
+    getProjectResponse.setVcsUrl(project.getVcsUrl());
+    getProjectResponse.setVcsOnline(project.isVcsOnline());
+    return new ResponseEntity<>(getProjectResponse, HttpStatus.OK);
   }
 }

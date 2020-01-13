@@ -32,7 +32,7 @@ public class CoderadarConfigurationProperties {
 
   @NotNull private Path workdir;
 
-  @NotNull private Integer scanIntervalInSeconds = 300;
+  @NotNull private Integer scanIntervalInSeconds = 30;
 
   @NotNull private Locale dateLocale = Locale.ENGLISH;
 

@@ -3,8 +3,8 @@ package io.reflectoring.coderadar.projectadministration.project;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectResponse;
 import io.reflectoring.coderadar.projectadministration.service.project.GetProjectService;
 import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,21 +36,21 @@ class GetProjectServiceTest {
     Date startDate = new Date();
     Date endDate = new Date();
 
-    GetProjectResponse expectedResponse =
-        new GetProjectResponse()
+    Project expectedResponse =
+        new Project()
             .setId(projectId)
             .setName(projectName)
             .setVcsUrl(vcsUrl)
             .setVcsUsername(vcsUsername)
             .setVcsPassword(vcsPassword)
             .setVcsOnline(true)
-            .setStartDate(startDate)
-            .setEndDate(endDate);
+            .setVcsStart(startDate)
+            .setVcsEnd(endDate);
 
-    when(getProjectPortMock.getProjectResponse(projectId)).thenReturn(expectedResponse);
+    when(getProjectPortMock.get(projectId)).thenReturn(expectedResponse);
 
     // when
-    GetProjectResponse actualResponse = testSubject.get(1L);
+    Project actualResponse = testSubject.get(1L);
 
     // then
     assertThat(actualResponse).isEqualTo(expectedResponse);
