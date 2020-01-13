@@ -24,7 +24,7 @@ public class CreateProjectController {
   }
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = "/projects")
-  public ResponseEntity createProject(@RequestBody @Validated CreateProjectCommand command)
+  public ResponseEntity<IdResponse> createProject(@RequestBody @Validated CreateProjectCommand command)
           throws MalformedURLException {
       return new ResponseEntity<>(
           new IdResponse(createProjectUseCase.createProject(command)), HttpStatus.CREATED);
