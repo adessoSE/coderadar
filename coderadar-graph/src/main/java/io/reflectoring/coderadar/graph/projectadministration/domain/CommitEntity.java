@@ -24,10 +24,10 @@ public class CommitEntity {
   @Relationship(type = "IS_CHILD_OF")
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  private List<CommitEntity> parents = Collections.EMPTY_LIST;
+  private List<CommitEntity> parents = Collections.emptyList();
 
   @Relationship(direction = Relationship.INCOMING, type = "CHANGED_IN")
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  private List<FileToCommitRelationshipEntity> touchedFiles = Collections.EMPTY_LIST;
+  private List<FileToCommitRelationshipEntity> touchedFiles = Collections.emptyList();
 }

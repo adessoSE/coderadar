@@ -7,7 +7,6 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.create
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import io.reflectoring.coderadar.rest.module.CreateModuleController;
-import jdk.nashorn.internal.ir.IfNode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

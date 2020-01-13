@@ -70,7 +70,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
           }
           commit.setParents(parents);
         } else {
-          commit.setParents(Collections.EMPTY_LIST);
+          commit.setParents(Collections.emptyList());
         }
         result.add(commit);
       }
@@ -102,13 +102,14 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       treeWalk.addTree(gitCommit.getTree());
       while (treeWalk.next()) {
         File file = new File();
+        file.setPath(treeWalk.getPathString());
 
         FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
         fileToCommitRelationship.setOldPath("/dev/null");
         fileToCommitRelationship.setChangeType(ChangeType.ADD);
         fileToCommitRelationship.setCommit(firstCommit);
         fileToCommitRelationship.setFile(file);
-        file.setPath(treeWalk.getPathString());
+
         firstCommit.getTouchedFiles().add(fileToCommitRelationship);
         List<File> fileList = new ArrayList<>(1);
         fileList.add(file);
@@ -157,7 +158,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
           processDiffEntry(diff, files, commits.get(i));
         }
       } else {
-        commits.get(i).setTouchedFiles(new ArrayList<>(0));
+        commits.get(i).setTouchedFiles(Collections.emptyList());
       }
     }
   }
@@ -203,7 +204,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
         List<File> filesWithOldPath = files.get(diff.getOldPath());
         if (filesWithOldPath != null) {
-          file.getOldFiles().addAll(filesWithOldPath);
+          file.setOldFiles(new ArrayList<>(filesWithOldPath));
         }
       }
       filesToSave = new ArrayList<>(1);
@@ -220,7 +221,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
         List<File> filesWithOldPath = files.get(diff.getOldPath());
         if (filesWithOldPath != null) {
-          file.getOldFiles().addAll(filesWithOldPath);
+          file.setOldFiles(new ArrayList<>(filesWithOldPath));
         }
         filesToSave = new ArrayList<>(1);
         filesToSave.add(file);

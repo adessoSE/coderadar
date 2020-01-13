@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.query;
 
+import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driver.GetMetricValuesOfCommitUseCase;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class GetMetricValuesOfCommitController {
   }
 
   @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET}, path = "/projects/{projectId}/metricvalues/perCommit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity getMetricValues(@Validated @RequestBody GetMetricsForCommitCommand command, @PathVariable("projectId") Long projectId){
+  public ResponseEntity<MetricValueForCommit[]> getMetricValues(@Validated @RequestBody GetMetricsForCommitCommand command, @PathVariable("projectId") Long projectId){
     return new ResponseEntity<>(getMetricValuesOfCommitUseCase.get(command, projectId), HttpStatus.OK);
   }
 }

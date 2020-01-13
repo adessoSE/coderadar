@@ -26,8 +26,10 @@ public class GetCommitsInProjectController {
   @GetMapping(path = "/projects/{projectId}/commits", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetCommitResponse>> listCommits(@PathVariable("projectId") Long projectId) {
     List<Commit> commits = getCommitsInProjectUseCase.get(projectId);
-    List<GetCommitResponse> responses = new ArrayList<>(commits.size());
-    for(Commit commit : commits){
+    int commitsSize = commits.size();
+    List<GetCommitResponse> responses = new ArrayList<>(commitsSize);
+    for(int i = 0; i < commitsSize; i++){
+      Commit commit = commits.get(i);
       responses.add(new GetCommitResponse()
               .setName(commit.getName())
               .setAnalyzed(commit.isAnalyzed())
