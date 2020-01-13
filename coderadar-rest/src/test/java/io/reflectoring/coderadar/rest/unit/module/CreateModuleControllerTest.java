@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.create
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import io.reflectoring.coderadar.rest.module.CreateModuleController;
+import jdk.nashorn.internal.ir.IfNode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -26,9 +27,9 @@ class CreateModuleControllerTest {
     CreateModuleCommand command = new CreateModuleCommand("module-path-test");
     Mockito.when(createModuleUseCase.createModule(command, 5L)).thenReturn(1L);
 
-    ResponseEntity<IdResponse> responseEntity = testSubject.createModule(command, 5L);
+    ResponseEntity responseEntity = testSubject.createModule(command, 5L);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-    Assertions.assertEquals(1L, responseEntity.getBody().getId());
+    Assertions.assertEquals(1L, ((IdResponse)responseEntity.getBody()).getId());
   }
 }

@@ -82,6 +82,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
 
   /**
    * Sets the [:RENAMED_FROM] relationship between file nodes
+   *
    * @param fileEntities All of the (already saved) file entities.
    */
   private void saveFileRenameRelationships(List<FileEntity> fileEntities) {
@@ -101,10 +102,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
     fileRepository.createRenameRelationships(renameRels);
   }
 
-  /**
-   *
-   * @param commitEntities
-   */
+  /** @param commitEntities */
   private void saveFileToCommitRelationShips(List<CommitEntity> commitEntities) {
     List<HashMap<String, Object>> fileRels = new ArrayList<>(30000);
     for (CommitEntity commitEntity : commitEntities) {

@@ -141,7 +141,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
             if (!metrics.isEmpty()) {
               waitForTask(saveTask);
               saveTask =
-                 taskExecutor.submitListenable(
+                  taskExecutor.submitListenable(
                       () -> {
                         saveMetricPort.saveMetricValues(metrics);
                         saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);

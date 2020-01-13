@@ -25,7 +25,7 @@ public class CreateModuleController {
   }
 
   @PostMapping(path = "/projects/{projectId}/modules", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity createModule(
+  public ResponseEntity<Object> createModule(
       @RequestBody @Validated CreateModuleCommand command,
       @PathVariable(name = "projectId") Long projectId) {
     try {
