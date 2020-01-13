@@ -34,6 +34,6 @@ class GetAnalyzerConfigurationControllerTest {
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     Assertions.assertEquals(1L, responseEntity.getBody().getId());
     Assertions.assertEquals("analyzer", responseEntity.getBody().getAnalyzerName());
-    Assertions.assertEquals(true, responseEntity.getBody().getEnabled());
+    Assertions.assertEquals(true, responseEntity.getBody().isEnabled());
   }
 }

@@ -34,9 +34,8 @@ public interface GetMetricValuesOfCommitRepository extends Neo4jRepository<Commi
           + "c.timestamp <= {2} WITH collect(DISTINCT f) AS deletes, renames "
           + "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c)<-[:VALID_FOR]-(m)<-[:MEASURED_BY]-(f) "
           + "WHERE ID(p) = {0} AND c.timestamp <= {2} AND NOT(f IN deletes OR f IN renames) AND m.name in {1} WITH f, m ORDER BY c.timestamp DESC "
-          + "WITH f.path AS path, m.name AS name, head(collect(m.value)) AS value "
-          + "WITH path, (name + \"~\" + value) AS metric ORDER BY path, name "
-          + "RETURN path, collect(metric) as metrics")
+          + "WITH f.path AS path, m.name AS name, head(collect(m.value)) AS value ORDER BY path, name "
+          + "RETURN path, collect(name + \"=\" + value) AS metrics")
   @NonNull
   List<MetricValueForCommitTreeQueryResult> getMetricTreeForCommit(
       @NonNull Long projectId, @NonNull List<String> metricNames, @NonNull Long date);

@@ -1,9 +1,10 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
-import io.reflectoring.coderadar.analyzer.domain.MetricValue;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /** Represents a file in a VCS repository. */
 @NoArgsConstructor
@@ -14,5 +15,4 @@ public class File {
   private String path;
 
   @EqualsAndHashCode.Exclude private List<File> oldFiles = new ArrayList<>();
-  @EqualsAndHashCode.Exclude private List<MetricValue> metricValues = new ArrayList<>();
 }

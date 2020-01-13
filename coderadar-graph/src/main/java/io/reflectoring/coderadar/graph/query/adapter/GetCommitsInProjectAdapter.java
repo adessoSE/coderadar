@@ -9,7 +9,6 @@ import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,14 +20,15 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   }
 
   private List<Commit> mapCommitEntities(List<CommitEntity> commitEntities) {
-    HashMap<Long, Commit> walkedCommits = new HashMap<>();
-    HashMap<Long, File> walkedFiles = new HashMap<>();
-    List<Commit> result = new ArrayList<>();
+    HashMap<Long, Commit> walkedCommits = new HashMap<>((int) (commitEntities.size() / 0.75) + 1);
+    HashMap<Long, File> walkedFiles = new HashMap<>((int) (commitEntities.size() / 0.75) + 1);
+    List<Commit> result = new ArrayList<>(commitEntities.size());
     for (CommitEntity commitEntity : commitEntities) {
       Commit commit = walkedCommits.get(commitEntity.getId());
       if (commit == null) {
         commit = CommitBaseDataMapper.mapCommitEntity(commitEntity);
       }
+      List<Commit> parents = new ArrayList<>(commitEntity.getParents().size());
       for (CommitEntity parent : commitEntity.getParents()) {
         Commit parentCommit = walkedCommits.get(parent.getId());
         if (parentCommit == null) {
@@ -37,8 +37,9 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
               getFiles(parent.getTouchedFiles(), parentCommit, walkedFiles));
           result.add(parentCommit);
         }
-        commit.getParents().add(parentCommit);
+        parents.add(parentCommit);
       }
+      commit.setParents(parents);
       commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), commit, walkedFiles));
       walkedCommits.put(commitEntity.getId(), commit);
       result.add(commit);
@@ -48,11 +49,12 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
   @Override
   public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(Long projectId) {
-    return commitRepository
-        .findByProjectIdAndTimestampDesc(projectId)
-        .stream()
-        .map(CommitBaseDataMapper::mapCommitEntity)
-        .collect(Collectors.toList());
+    List<CommitEntity> commitEntities = commitRepository.findByProjectIdAndTimestampDesc(projectId);
+    List<Commit> commits = new ArrayList<>(commitEntities.size());
+    for (CommitEntity commitEntity : commitEntities) {
+      commits.add(CommitBaseDataMapper.mapCommitEntity(commitEntity));
+    }
+    return commits;
   }
 
   @Override
@@ -70,33 +72,29 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
    * @return A list of commits with initialized FileToCommitRelationShips and no parents.
    */
   @Override
-  public List<Commit> getNonanalyzedSortedByTimestampAscWithNoParents(
+  public List<Commit> getNonAnalyzedSortedByTimestampAscWithNoParents(
       Long projectId, List<FilePattern> filePatterns) {
-
     // Map Ant-Patterns to RegEx
-    List<String> includes =
-        filePatterns
-            .stream()
-            .filter(filePattern -> filePattern.getInclusionType().equals(InclusionType.INCLUDE))
-            .map(filePattern -> PatternUtil.toPattern(filePattern.getPattern()).toString())
-            .collect(Collectors.toList());
-
-    List<String> excludes =
-        filePatterns
-            .stream()
-            .filter(filePattern -> filePattern.getInclusionType().equals(InclusionType.EXCLUDE))
-            .map(filePattern -> PatternUtil.toPattern(filePattern.getPattern()).toString())
-            .collect(Collectors.toList());
+    List<String> includes = new ArrayList<>();
+    List<String> excludes = new ArrayList<>();
+    for (FilePattern filePattern : filePatterns) {
+      if (filePattern.getInclusionType().equals(InclusionType.INCLUDE)) {
+        includes.add(PatternUtil.toPattern(filePattern.getPattern()).toString());
+      } else {
+        excludes.add(PatternUtil.toPattern(filePattern.getPattern()).toString());
+      }
+    }
 
     List<CommitEntity> commitEntities =
-        commitRepository.findByProjectIdNonanalyzedWithFileRelationshipsSortedByTimestampAsc(
+        commitRepository.findByProjectIdNonAnalyzedWithFileRelationshipsSortedByTimestampAsc(
             projectId, includes, excludes);
+
     return mapCommitEntitiesNoParents(commitEntities);
   }
 
   private List<Commit> mapCommitEntitiesNoParents(List<CommitEntity> commitEntities) {
-    List<Commit> commits = new ArrayList<>();
-    HashMap<Long, File> walkedFiles = new HashMap<>();
+    List<Commit> commits = new ArrayList<>(commitEntities.size());
+    HashMap<Long, File> walkedFiles = new HashMap<>((int) (commitEntities.size() / 0.75) + 1);
     for (CommitEntity commitEntity : commitEntities) {
       Commit commit = CommitBaseDataMapper.mapCommitEntity(commitEntity);
       commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), commit, walkedFiles));
@@ -109,7 +107,8 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
       List<FileToCommitRelationshipEntity> relationships,
       Commit entity,
       HashMap<Long, File> walkedFiles) {
-    List<FileToCommitRelationship> fileToCommitRelationships = new ArrayList<>();
+    List<FileToCommitRelationship> fileToCommitRelationships =
+        new ArrayList<>(relationships.size());
 
     for (FileToCommitRelationshipEntity fileToCommitRelationshipEntity : relationships) {
       FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();

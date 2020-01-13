@@ -7,7 +7,6 @@ import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfCommitPort;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,7 @@ public class GetMetricValuesOfCommitAdapter implements GetMetricValuesOfCommitPo
   }
 
   @Override
-  public List<MetricValueForCommit> get(GetMetricsForCommitCommand command, Long projectId) {
+  public MetricValueForCommit[] get(GetMetricsForCommitCommand command, Long projectId) {
     long commitTimestamp =
         commitRepository
             .findTimeStampByNameAndProjectId(command.getCommit(), projectId)
@@ -33,9 +32,10 @@ public class GetMetricValuesOfCommitAdapter implements GetMetricValuesOfCommitPo
     List<MetricValueForCommitQueryResult> result =
         getMetricValuesOfCommitRepository.getMetricValuesForCommit(
             projectId, command.getMetrics(), commitTimestamp);
-    List<MetricValueForCommit> values = new ArrayList<>(result.size());
-    for (MetricValueForCommitQueryResult queryResult : result) {
-      values.add(new MetricValueForCommit(queryResult.getName(), queryResult.getValue()));
+    MetricValueForCommit[] values = new MetricValueForCommit[result.size()];
+    for (int i = 0; i < result.size(); ++i) {
+      MetricValueForCommitQueryResult queryResult = result.get(i);
+      values[i] = new MetricValueForCommit(queryResult.getName(), queryResult.getValue());
     }
     return values;
   }

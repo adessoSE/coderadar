@@ -125,7 +125,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
               getAnalyzersForProject(analyzerConfigurations);
           List<Commit> commitsToBeAnalyzed =
-              getCommitsInProjectPort.getNonanalyzedSortedByTimestampAscWithNoParents(
+              getCommitsInProjectPort.getNonAnalyzedSortedByTimestampAscWithNoParents(
                   project.getId(), filePatterns);
           long[] commitIds = new long[commitsToBeAnalyzed.size()];
           setAnalyzingStatusPort.setStatus(project.getId(), true);
@@ -141,7 +141,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
             if (!metrics.isEmpty()) {
               waitForTask(saveTask);
               saveTask =
-                  taskExecutor.submitListenable(
+                 taskExecutor.submitListenable(
                       () -> {
                         saveMetricPort.saveMetricValues(metrics);
                         saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);

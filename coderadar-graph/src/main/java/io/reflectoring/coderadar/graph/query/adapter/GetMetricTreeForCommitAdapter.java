@@ -15,9 +15,7 @@ import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driven.GetMetricTreeForCommitPort;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
-
 import java.util.*;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,27 +37,30 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
     this.commitRepository = commitRepository;
   }
 
+  MetricTree get(long commitTimestamp, List<String> metrics, ProjectEntity project) {
+    List<MetricValueForCommitTreeQueryResult> result =
+        getMetricValuesOfCommitRepository.getMetricTreeForCommit(
+            project.getId(), metrics, commitTimestamp);
+    List<ModuleEntity> moduleEntities =
+        moduleRepository.findModulesInProjectSortedDesc(project.getId());
+    List<MetricTree> moduleChildren = processModules(moduleEntities, result);
+    MetricTree rootModule = processRootModule(result);
+    rootModule.getChildren().addAll(findChildModules(project.getModules(), moduleChildren));
+    rootModule.setMetrics(aggregateChildMetrics(rootModule.getChildren()));
+    return rootModule;
+  }
+
   @Override
   public MetricTree get(GetMetricsForCommitCommand command, Long projectId) {
     ProjectEntity projectEntity =
         projectRepository
             .findByIdWithModules(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
-
     Long commitTimestamp =
         commitRepository
             .findTimeStampByNameAndProjectId(command.getCommit(), projectId)
             .orElseThrow(() -> new CommitNotFoundException(command.getCommit()));
-
-    List<MetricValueForCommitTreeQueryResult> result =
-        getMetricValuesOfCommitRepository.getMetricTreeForCommit(
-            projectId, command.getMetrics(), commitTimestamp);
-    List<ModuleEntity> moduleEntities = moduleRepository.findModulesInProjectSortedDesc(projectId);
-    List<MetricTree> moduleChildren = processModules(moduleEntities, result);
-    MetricTree rootModule = processRootModule(result);
-    rootModule.getChildren().addAll(findChildModules(projectEntity.getModules(), moduleChildren));
-    rootModule.setMetrics(aggregateChildMetrics(rootModule.getChildren()));
-    return rootModule;
+    return get(commitTimestamp, command.getMetrics(), projectEntity);
   }
 
   /**
@@ -88,7 +89,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
           metricTreeFile.setName(commitTreeQueryResult.getPath());
           metricTreeFile.setType(MetricTreeNodeType.FILE);
           for (String metric : commitTreeQueryResult.getMetrics()) {
-            String[] temp = metric.split("~");
+            String[] temp = metric.split("=");
             MetricValueForCommit metricValueForCommit =
                 new MetricValueForCommit(temp[0], Long.parseLong(temp[1]));
             metricTreeFile.getMetrics().add(metricValueForCommit);
@@ -129,7 +130,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
       metricTreeFile.setType(MetricTreeNodeType.FILE);
 
       for (String metric : value.getMetrics()) {
-        String[] temp = metric.split("~");
+        String[] temp = metric.split("=");
         MetricValueForCommit metricValueForCommit =
             new MetricValueForCommit(temp[0], Long.parseLong(temp[1]));
         metricTreeFile.getMetrics().add(metricValueForCommit);

@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 /** Performs analysis on a commit. */
@@ -49,12 +48,11 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
   public List<MetricValue> analyzeCommit(
       Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers) {
     List<MetricValue> metricValues = new ArrayList<>();
-    List<File> files =
-        commit
-            .getTouchedFiles()
-            .stream()
-            .map(FileToCommitRelationship::getFile)
-            .collect(Collectors.toList());
+    List<File> files = new ArrayList<>(commit.getTouchedFiles().size());
+    for (FileToCommitRelationship ftr : commit.getTouchedFiles()) {
+      files.add(ftr.getFile());
+    }
+
     analyzeBulk(commit.getName(), files, analyzers, project)
         .forEach(
             (file, fileMetrics) ->
@@ -106,22 +104,18 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
   private List<MetricValue> getMetrics(FileMetrics fileMetrics, Long commitId, Long fileId) {
     List<MetricValue> metricValues = new ArrayList<>();
     for (Metric metric : fileMetrics.getMetrics()) {
-      List<Finding> findings =
-          fileMetrics
-              .getFindings(metric)
-              .stream()
-              .map(
-                  finding ->
-                      new Finding(
-                          finding.getLineStart(),
-                          finding.getLineEnd(),
-                          finding.getCharStart(),
-                          finding.getCharEnd()))
-              .collect(Collectors.toList());
-      MetricValue metricValue =
+      List<Finding> findings = new ArrayList<>();
+      for (io.reflectoring.coderadar.plugin.api.Finding finding : fileMetrics.getFindings(metric)) {
+        findings.add(
+            new Finding(
+                finding.getLineStart(),
+                finding.getLineEnd(),
+                finding.getCharStart(),
+                finding.getCharEnd()));
+      }
+      metricValues.add(
           new MetricValue(
-              metric.getId(), fileMetrics.getMetricCount(metric), commitId, fileId, findings);
-      metricValues.add(metricValue);
+              metric.getId(), fileMetrics.getMetricCount(metric), commitId, fileId, findings));
     }
     return metricValues;
   }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FindingRepository extends Neo4jRepository<FindingEntity, Long> {
   @Query(
-      "MATCH (p:ProjectEntity)-[:CONTAINS*]->(:FileEntity)-[:MEASURED_BY]->()-[:LOCATED_IN]->(fi:FindingEntity) "
+      "MATCH (p)-[:CONTAINS*]->()-[:MEASURED_BY]->()-[:LOCATED_IN]->(fi) "
           + "WHERE ID(p) = {0} RETURN fi")
   List<FindingEntity> findByProjectId(@NonNull Long projectId);
 }

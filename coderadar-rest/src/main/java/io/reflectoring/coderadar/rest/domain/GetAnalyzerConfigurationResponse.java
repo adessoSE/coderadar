@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class GetAnalyzerConfigurationResponse {
   private long id;
   private String analyzerName;
-  private Boolean enabled;
+  private boolean enabled;
 }

@@ -41,19 +41,88 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
   @Override
   public void saveCommits(List<Commit> commits, Long projectId) {
     if (!commits.isEmpty()) {
-      ProjectEntity projectEntity =
-          projectRepository
-              .findById(projectId)
-              .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
-      IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>();
+      IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>(commits.size());
       List<CommitEntity> commitEntities = mapCommitTree(commits, walkedFiles);
       List<FileEntity> fileEntities = new ArrayList<>(walkedFiles.values());
 
-      projectEntity.setFiles(fileEntities);
-      projectEntity.setCommits(commitEntities);
-      projectRepository.save(projectEntity, 1);
+      commitRepository.save(commitEntities, 0);
+      fileRepository.save(fileEntities, 0);
+
+      attachCommitsAndFilesToProject(projectId, commitEntities, fileEntities);
+      saveCommitParentsRelationships(commitEntities);
+      saveFileToCommitRelationShips(commitEntities);
+      saveFileRenameRelationships(fileEntities);
     }
+  }
+
+  private void attachCommitsAndFilesToProject(
+      Long projectId, List<CommitEntity> commitEntities, List<FileEntity> fileEntities) {
+    List<Long> fileIds = new ArrayList<>(fileEntities.size());
+    fileEntities.forEach(fileEntity -> fileIds.add(fileEntity.getId()));
+    projectRepository.attachFilesWithIds(projectId, fileIds);
+
+    List<Long> commitIds = new ArrayList<>(commitEntities.size());
+    commitEntities.forEach(commitEntity -> commitIds.add(commitEntity.getId()));
+    projectRepository.attachCommitsWithIds(projectId, commitIds);
+  }
+
+  private void saveCommitParentsRelationships(List<CommitEntity> commitEntities) {
+    List<HashMap<String, Object>> parentRels = new ArrayList<>(commitEntities.size());
+    for (CommitEntity commitEntity : commitEntities) {
+      for (CommitEntity parent : commitEntity.getParents()) {
+        HashMap<String, Object> parents = new HashMap<>(4);
+        parents.put("id1", commitEntity.getId());
+        parents.put("id2", parent.getId());
+        parentRels.add(parents);
+      }
+    }
+    commitRepository.createParentRelationships(parentRels);
+  }
+
+  /**
+   * Sets the [:RENAMED_FROM] relationship between file nodes
+   * @param fileEntities All of the (already saved) file entities.
+   */
+  private void saveFileRenameRelationships(List<FileEntity> fileEntities) {
+    List<HashMap<String, Object>> renameRels = new ArrayList<>(10000);
+    for (FileEntity fileEntity : fileEntities) {
+      for (FileEntity oldFile : fileEntity.getOldFiles()) {
+        HashMap<String, Object> rename = new HashMap<>(4);
+        rename.put("fileId1", fileEntity.getId());
+        rename.put("fileId2", oldFile.getId());
+        renameRels.add(rename);
+      }
+      if (renameRels.size() > 10000) {
+        fileRepository.createRenameRelationships(renameRels);
+        renameRels.clear();
+      }
+    }
+    fileRepository.createRenameRelationships(renameRels);
+  }
+
+  /**
+   *
+   * @param commitEntities
+   */
+  private void saveFileToCommitRelationShips(List<CommitEntity> commitEntities) {
+    List<HashMap<String, Object>> fileRels = new ArrayList<>(30000);
+    for (CommitEntity commitEntity : commitEntities) {
+      for (FileToCommitRelationshipEntity fileToCommitRelationship :
+          commitEntity.getTouchedFiles()) {
+        HashMap<String, Object> files = new HashMap<>(8);
+        files.put("commitId", commitEntity.getId());
+        files.put("fileId", fileToCommitRelationship.getFile().getId());
+        files.put("changeType", fileToCommitRelationship.getChangeType());
+        files.put("oldPath", fileToCommitRelationship.getOldPath());
+        fileRels.add(files);
+      }
+      if (fileRels.size() > 30000) {
+        commitRepository.createFileRelationships(fileRels);
+        fileRels.clear();
+      }
+    }
+    commitRepository.createFileRelationships(fileRels);
   }
 
   /**
@@ -65,26 +134,29 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
    */
   private List<CommitEntity> mapCommitTree(
       List<Commit> commits, IdentityHashMap<File, FileEntity> walkedFiles) {
-    IdentityHashMap<Commit, CommitEntity> walkedCommits = new IdentityHashMap<>();
-    List<CommitEntity> result = new ArrayList<>();
+    IdentityHashMap<Commit, CommitEntity> walkedCommits = new IdentityHashMap<>(commits.size());
+    List<CommitEntity> result = new ArrayList<>(commits.size());
     for (Commit commit : commits) {
       CommitEntity commitEntity = walkedCommits.get(commit);
       if (commitEntity == null) {
         commitEntity = CommitBaseDataMapper.mapCommit(commit);
       }
-      for (Commit parent : commit.getParents()) {
-        CommitEntity parentCommit = walkedCommits.get(parent);
-        if (parentCommit == null) {
-          parentCommit = CommitBaseDataMapper.mapCommit(parent);
-          walkedCommits.put(parent, parentCommit);
-          result.add(parentCommit);
+      if (!commit.getParents().isEmpty()) {
+        List<CommitEntity> parents = new ArrayList<>(commit.getParents().size());
+        for (Commit parent : commit.getParents()) {
+          CommitEntity parentCommit = walkedCommits.get(parent);
+          if (parentCommit == null) {
+            parentCommit = CommitBaseDataMapper.mapCommit(parent);
+            walkedCommits.put(parent, parentCommit);
+            result.add(parentCommit);
+          }
+          parents.add(parentCommit);
         }
-        commitEntity.getParents().add(parentCommit);
+        commitEntity.setParents(parents);
       }
       walkedCommits.put(commit, commitEntity);
       result.add(commitEntity);
       getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles);
-      commitRepository.save(commitEntity, 1);
     }
     return result;
   }
@@ -101,15 +173,18 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
       CommitEntity commitEntity,
       IdentityHashMap<File, FileEntity> walkedFiles) {
 
+    List<FileToCommitRelationshipEntity> rels = new ArrayList<>(relationships.size());
     for (FileToCommitRelationship fileToCommitRelationship : relationships) {
       FileEntity fileEntity = walkedFiles.get(fileToCommitRelationship.getFile());
       if (fileEntity == null) {
         fileEntity = FileBaseDataMapper.mapFile(fileToCommitRelationship.getFile());
         walkedFiles.put(fileToCommitRelationship.getFile(), fileEntity);
+        List<FileEntity> oldFiles =
+            new ArrayList<>(fileToCommitRelationship.getFile().getOldFiles().size());
         for (File oldFile : fileToCommitRelationship.getFile().getOldFiles()) {
-          fileEntity.getOldFiles().add(walkedFiles.get(oldFile));
+          oldFiles.add(walkedFiles.get(oldFile));
         }
-        fileRepository.save(fileEntity, 1);
+        fileEntity.setOldFiles(oldFiles);
       }
       FileToCommitRelationshipEntity fileToCommitRelationshipEntity =
           new FileToCommitRelationshipEntity();
@@ -117,8 +192,9 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
       fileToCommitRelationshipEntity.setCommit(commitEntity);
       fileToCommitRelationshipEntity.setFile(fileEntity);
       fileToCommitRelationshipEntity.setOldPath(fileToCommitRelationship.getOldPath());
-      commitEntity.getTouchedFiles().add(fileToCommitRelationshipEntity);
+      rels.add(fileToCommitRelationshipEntity);
     }
+    commitEntity.setTouchedFiles(rels);
   }
 
   /**
@@ -159,7 +235,9 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
     List<FileEntity> allFiles = new ArrayList<>(walkedFiles.values());
     projectEntity.setFiles(allFiles);
     projectEntity.setCommits(new ArrayList<>(walkedCommits.values()));
-    projectRepository.save(projectEntity, 2);
+    projectRepository.save(projectEntity, 1);
+    commitRepository.save(walkedCommits.values(), 1);
+    fileRepository.save(allFiles, 1);
   }
 
   @Override

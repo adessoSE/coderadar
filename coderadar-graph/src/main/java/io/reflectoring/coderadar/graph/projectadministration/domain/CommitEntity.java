@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.domain;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,10 +24,10 @@ public class CommitEntity {
   @Relationship(type = "IS_CHILD_OF")
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  private List<CommitEntity> parents = new ArrayList<>();
+  private List<CommitEntity> parents = Collections.EMPTY_LIST;
 
   @Relationship(direction = Relationship.INCOMING, type = "CHANGED_IN")
   @EqualsAndHashCode.Exclude
   @ToString.Exclude
-  private List<FileToCommitRelationshipEntity> touchedFiles = new ArrayList<>();
+  private List<FileToCommitRelationshipEntity> touchedFiles = Collections.EMPTY_LIST;
 }

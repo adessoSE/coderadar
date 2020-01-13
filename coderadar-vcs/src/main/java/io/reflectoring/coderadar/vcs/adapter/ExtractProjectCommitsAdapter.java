@@ -12,10 +12,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -49,25 +46,31 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   }
 
   private List<Commit> getCommits(Git git, DateRange range) throws GitAPIException {
-    Map<ObjectId, Commit> map = new HashMap<>();
-    List<Commit> result = new ArrayList<>();
     List<RevCommit> revCommits = new ArrayList<>();
     git.log().call().iterator().forEachRemaining(revCommits::add);
-
-    for (int i = revCommits.size() - 1; i >= 0; --i) {
+    int revCommitsSize = revCommits.size();
+    List<Commit> result = new ArrayList<>(revCommitsSize);
+    Map<ObjectId, Commit> map = new HashMap<>((int) (revCommitsSize / 0.75) + 1);
+    for (int i = revCommitsSize - 1; i >= 0; --i) {
       RevCommit rc = revCommits.get(i);
       if (isInDateRange(range, rc)) {
         Commit commit = map.computeIfAbsent(rc.getId(), objectId -> mapRevCommitToCommit(rc));
-        for (RevCommit parent : rc.getParents()) {
-          if (isInDateRange(range, parent)) {
-            Commit parentCommit = map.get(parent.getId());
-            if (parentCommit == null) {
-              parentCommit = mapRevCommitToCommit(parent);
-              map.put(parent.getId(), parentCommit);
-              result.add(parentCommit);
+        if (rc.getParentCount() > 0) {
+          List<Commit> parents = new ArrayList<>(rc.getParentCount());
+          for (RevCommit parent : rc.getParents()) {
+            if (isInDateRange(range, parent)) {
+              Commit parentCommit = map.get(parent.getId());
+              if (parentCommit == null) {
+                parentCommit = mapRevCommitToCommit(parent);
+                map.put(parent.getId(), parentCommit);
+                result.add(parentCommit);
+              }
+              parents.add(parentCommit);
             }
-            commit.getParents().add(parentCommit);
           }
+          commit.setParents(parents);
+        } else {
+          commit.setParents(Collections.EMPTY_LIST);
         }
         result.add(commit);
       }
@@ -107,7 +110,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         fileToCommitRelationship.setFile(file);
         file.setPath(treeWalk.getPathString());
         firstCommit.getTouchedFiles().add(fileToCommitRelationship);
-        List<File> fileList = new ArrayList<>();
+        List<File> fileList = new ArrayList<>(1);
         fileList.add(file);
         files.put(file.getPath(), fileList);
       }
@@ -120,13 +123,15 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    * @throws IOException Thrown if a commit cannot be processed.
    */
   private void setCommitsFiles(Git git, List<Commit> commits) throws IOException {
-    HashMap<String, List<File>> files = new HashMap<>();
+    int commitsSize = commits.size();
+    HashMap<String, List<File>> files = new HashMap<>((int) (commitsSize / 0.75) + 1);
+    commits.get(0).setTouchedFiles(new ArrayList<>(commitsSize));
     setFirstCommitFiles(git, commits.get(0), files);
     DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
     diffFormatter.setRepository(git.getRepository());
     diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
     diffFormatter.setDetectRenames(true);
-    for (int i = 1; i < commits.size(); i++) {
+    for (int i = 1; i < commitsSize; i++) {
       RevCommit gitCommit = findCommit(git, commits.get(i).getName());
       if (gitCommit != null && gitCommit.getParentCount() > 0) {
         List<DiffEntry> diffs =
@@ -147,9 +152,12 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
             }
           }
         }
+        commits.get(i).setTouchedFiles(new ArrayList<>(diffs.size() + 2));
         for (DiffEntry diff : diffs) {
           processDiffEntry(diff, files, commits.get(i));
         }
+      } else {
+        commits.get(i).setTouchedFiles(new ArrayList<>(0));
       }
     }
   }
@@ -188,7 +196,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   private List<File> computeFilesToSave(DiffEntry diff, HashMap<String, List<File>> files) {
     String path = getFilepathFromDiffEntry(diff);
     List<File> existingFilesWithPath = files.get(path);
-    List<File> filesToSave = new ArrayList<>();
+    List<File> filesToSave;
     File file = new File();
     file.setPath(path);
     if (existingFilesWithPath == null) {
@@ -198,24 +206,28 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
           file.getOldFiles().addAll(filesWithOldPath);
         }
       }
+      filesToSave = new ArrayList<>(1);
       filesToSave.add(file);
       files.put(file.getPath(), filesToSave);
     } else {
       if ((diff.getChangeType().equals(DiffEntry.ChangeType.ADD))) {
+        filesToSave = new ArrayList<>(1);
         filesToSave.add(file);
         existingFilesWithPath.add(file);
         files.put(file.getPath(), existingFilesWithPath);
       } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.DELETE))) {
-        filesToSave.addAll(existingFilesWithPath);
+        filesToSave = new ArrayList<>(existingFilesWithPath);
       } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
         List<File> filesWithOldPath = files.get(diff.getOldPath());
         if (filesWithOldPath != null) {
           file.getOldFiles().addAll(filesWithOldPath);
         }
+        filesToSave = new ArrayList<>(1);
         filesToSave.add(file);
         existingFilesWithPath.add(file);
         files.put(file.getPath(), existingFilesWithPath);
       } else {
+        filesToSave = new ArrayList<>(1);
         filesToSave.add(Iterables.getLast(existingFilesWithPath));
       }
     }
