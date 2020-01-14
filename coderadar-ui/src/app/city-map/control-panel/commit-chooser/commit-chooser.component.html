@@ -5,7 +5,9 @@
   [model$]="selected"
   [source$]="commits"
   [filterOptions]="filterCommitOptions"
-  [formatOption]="formatCommit">
+  [formatOption]="formatCommit"
+  [resetOnBlur]="true"
+>
 </app-autosuggest-wrapper>
 
 <p *ngIf="loading">Loading</p>

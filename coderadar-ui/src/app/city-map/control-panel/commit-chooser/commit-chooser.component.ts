@@ -20,6 +20,8 @@ export class CommitChooserComponent implements OnInit{
 
   @Output() changeCommit = new EventEmitter();
 
+  static readonly COMMIT_HASH_LENGTH = 7;
+
   constructor(public datepipe:DatePipe) {}
 
   ngOnInit() {
@@ -31,7 +33,7 @@ export class CommitChooserComponent implements OnInit{
     if (commit === null || commit === undefined) {
       return "empty";
     }
-    return new Date(commit.timestamp).toUTCString() + ',  ' + commit.name.substring(0, 7) + ', ' + commit.author;
+    return commit.name.substring(0, CommitChooserComponent.COMMIT_HASH_LENGTH) + ', ' + commit.author + ', ' + new Date(commit.timestamp).toUTCString();
   }
 
   filterCommitOptions(value: string,source:{value:Commit,displayValue:string}[]): {value:Commit,displayValue:string}[] {
@@ -54,7 +56,7 @@ export class CommitChooserComponent implements OnInit{
         if (optionAny.author.toLowerCase().includes(lowercaseValue)) {score += 25; }
         if (optionAny.name.startsWith(value)) {score += 1000; }
         if (optionAny.name.includes(lowercaseValue)) {score += 500; }
-        if (option.displayValue.substring(0,25).toLowerCase().includes(lowercaseValue)){score+=1000}
+        if (option.displayValue.substring(option.value.author.length+CommitChooserComponent.COMMIT_HASH_LENGTH).toLowerCase().includes(lowercaseValue)){score+=1000}
         if (score > 0||value==="") {
           optionAny.score = score;
           return option;

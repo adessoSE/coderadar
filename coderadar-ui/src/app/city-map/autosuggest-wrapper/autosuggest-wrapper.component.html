@@ -1,7 +1,7 @@
-<form style="padding-top: 20px; width: 100%">
+<form style="padding-top: 20px; width: 100%" >
   <mat-form-field style="width: 100%">
-    <input matInput [formControl]="formControl"  (focus)="$event.target.select()" [matAutocomplete]="auto"  placeholder="{{label}}" type="text">
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFunction" [panelWidth]="auto">
+    <input matInput [formControl]="formControl" (blur)="onBlur()" (focus)="$event.target.select()" [matAutocomplete]="auto" placeholder="{{label}}" type="text">
+    <mat-autocomplete #auto="matAutocomplete"  [displayWith]="displayFunction" [panelWidth]="auto">
       <mat-option (onSelectionChange)="handleValueChanged(option)"
                   *ngFor="let option of displayOptions | async"
                   [value]="option">

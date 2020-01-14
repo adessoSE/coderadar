@@ -23,6 +23,7 @@ export class AutosuggestWrapperComponent implements  OnInit{
   @Input() model$: Observable<any>;
   @Input() source$: Observable<any[]>;
   @Input() isDisabled: boolean;
+  @Input() resetOnBlur:boolean = false;
   @Input() alignRight = false;
   @Input() label: string;
   @Output() valueChanged = new EventEmitter();
@@ -30,9 +31,12 @@ export class AutosuggestWrapperComponent implements  OnInit{
   @Input() formatOption :((value: any)=> string ) = value => value.toString();
   displayOptions: Observable<{value:any,displayValue:string }[]>;
   formattedOptions: {value:any,displayValue:string }[];
+
   formControl = new FormControl();
+  lastSetValue:any;
 
   handleValueChanged(selectedOption: any) {
+    this.lastSetValue = selectedOption;
     this.valueChanged.emit(selectedOption.value);
   }
 
@@ -44,12 +48,21 @@ export class AutosuggestWrapperComponent implements  OnInit{
     }
   }
 
+  onBlur(){
+    if (this.resetOnBlur)this.formControl.reset(this.associateFormattedOptions(this.lastSetValue))
+  }
+
   associateFormattedOptions(value):{value:any,displayValue:string}{
     return {value:value,displayValue:this.formatOption(value)};
   }
 
+
   ngOnInit(): void {
-    if(this.model$)this.model$.subscribe(value => this.formControl.setValue(this.associateFormattedOptions(value)));
+    if(this.model$)this.model$.subscribe(value => {
+      this.formControl.setValue(this.associateFormattedOptions(value));
+      this.lastSetValue = value;
+    });
+
     this.formattedOptions = [];
     this.source$.subscribe(value => value.forEach(option => this.formattedOptions.push(this.associateFormattedOptions(option))));
     this.displayOptions = this.formControl.valueChanges
