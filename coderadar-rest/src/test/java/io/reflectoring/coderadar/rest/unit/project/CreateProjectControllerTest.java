@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.rest.unit.project;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
-import io.reflectoring.coderadar.rest.IdResponse;
+import io.reflectoring.coderadar.rest.domain.IdResponse;
 import io.reflectoring.coderadar.rest.project.CreateProjectController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

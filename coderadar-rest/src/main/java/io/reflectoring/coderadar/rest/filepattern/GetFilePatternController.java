@@ -1,6 +1,8 @@
 package io.reflectoring.coderadar.rest.filepattern;
 
+import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternUseCase;
+import io.reflectoring.coderadar.rest.domain.GetFilePatternResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,8 @@ public class GetFilePatternController {
   }
 
   @GetMapping(path = "/projects/{projectId}/filePatterns/{filePatternId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity getFilePattern(@PathVariable(name = "filePatternId") Long filePatternId) {
-    return new ResponseEntity<>(getFilePatternUseCase.get(filePatternId), HttpStatus.OK);
+  public ResponseEntity<GetFilePatternResponse> getFilePattern(@PathVariable(name = "filePatternId") Long filePatternId) {
+    FilePattern filePattern  = getFilePatternUseCase.get(filePatternId);
+    return new ResponseEntity<>(new GetFilePatternResponse(filePatternId, filePattern.getPattern(), filePattern.getInclusionType()), HttpStatus.OK);
   }
 }

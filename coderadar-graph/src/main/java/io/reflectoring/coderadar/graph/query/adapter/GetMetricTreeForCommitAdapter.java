@@ -56,9 +56,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
 
     List<MetricValueForCommitTreeQueryResult> result =
         getMetricValuesOfCommitRepository.getMetricTreeForCommit(
-            projectId,
-            command.getMetrics(),
-            commitEntity.getTimestamp().toInstant().toEpochMilli());
+            projectId, command.getMetrics(), commitEntity.getTimestamp());
     List<ModuleEntity> moduleEntities = moduleRepository.findModulesInProjectSortedDesc(projectId);
     List<MetricTree> moduleChildren = processModules(moduleEntities, result);
     MetricTree rootModule = processRootModule(result);

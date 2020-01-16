@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar.graph.useradministration;
 
-import io.reflectoring.coderadar.graph.AbstractMapper;
+import io.reflectoring.coderadar.graph.Mapper;
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.useradministration.domain.User;
 
-public class UserMapper extends AbstractMapper<User, UserEntity> {
+public class UserMapper implements Mapper<User, UserEntity> {
 
   @Override
   public User mapNodeEntity(UserEntity nodeEntity) {

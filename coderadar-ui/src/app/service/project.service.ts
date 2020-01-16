@@ -181,7 +181,7 @@ export class ProjectService {
    * @param rescanProject Rescan all commits if true.
    */
   public startAnalyzingJob(id: number, rescanProject: boolean): Promise<HttpResponse<any>> {
-    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze', {fromDate: 0, active: true, rescan: rescanProject},
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze', {},
       {observe: 'response'}).toPromise();
   }
 

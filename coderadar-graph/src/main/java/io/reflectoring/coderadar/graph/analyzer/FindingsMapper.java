@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar.graph.analyzer;
 
 import io.reflectoring.coderadar.analyzer.domain.Finding;
-import io.reflectoring.coderadar.graph.AbstractMapper;
+import io.reflectoring.coderadar.graph.Mapper;
 import io.reflectoring.coderadar.graph.analyzer.domain.FindingEntity;
 
-public class FindingsMapper extends AbstractMapper<Finding, FindingEntity> {
+public class FindingsMapper implements Mapper<Finding, FindingEntity> {
 
   @Override
   public Finding mapNodeEntity(FindingEntity nodeEntity) {

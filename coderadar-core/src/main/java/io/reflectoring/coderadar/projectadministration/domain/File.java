@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 /** Represents a file in a VCS repository. */
 @Data
@@ -17,7 +16,4 @@ public class File {
   @EqualsAndHashCode.Exclude private List<File> oldFiles = new ArrayList<>();
 
   @EqualsAndHashCode.Exclude private List<MetricValue> metricValues = new ArrayList<>();
-
-  @EqualsAndHashCode.Exclude @ToString.Exclude
-  private List<FileToCommitRelationship> commits = new ArrayList<>();
 }

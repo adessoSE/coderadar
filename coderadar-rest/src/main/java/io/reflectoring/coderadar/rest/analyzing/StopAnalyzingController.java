@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.analyzing;
 
-import io.reflectoring.coderadar.analyzer.AnalyzingJobNotStartedException;
+import io.reflectoring.coderadar.analyzer.AnalysisNotRunningException;
 import io.reflectoring.coderadar.analyzer.port.driver.StopAnalyzingUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class StopAnalyzingController {
           @PathVariable("projectId") Long projectId) {
     try {
       stopAnalyzingUseCase.stop(projectId);
-    } catch (AnalyzingJobNotStartedException e){
+    } catch (AnalysisNotRunningException e){
       return new ResponseEntity<>(HttpStatus.OK);
     }
     return new ResponseEntity<>(HttpStatus.OK);

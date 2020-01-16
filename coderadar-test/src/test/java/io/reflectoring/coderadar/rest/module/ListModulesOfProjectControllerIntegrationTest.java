@@ -4,8 +4,8 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.rest.domain.GetModuleResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
