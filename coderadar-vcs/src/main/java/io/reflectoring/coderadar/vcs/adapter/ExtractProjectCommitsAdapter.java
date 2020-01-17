@@ -140,8 +140,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
           for (DiffEntry diff : diffEntries) {
             if ((diff.getChangeType().equals(DiffEntry.ChangeType.DELETE)
                     || diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))
-                && diffs
-                    .stream()
+                && diffs.stream()
                     .noneMatch(
                         diffEntry ->
                             diffEntry.getChangeType().equals(diff.getChangeType())
