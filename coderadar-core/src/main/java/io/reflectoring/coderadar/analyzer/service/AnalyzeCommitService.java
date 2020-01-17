@@ -11,7 +11,6 @@ import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driver.GetCommitRawContentUseCase;
 import java.util.ArrayList;
@@ -44,22 +43,17 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
    * @param commit The commit to analyze.
    * @param project The project the commit is part of.
    * @param analyzers The analyzers to use.
-   * @param filePatterns The file patterns to use.
    * @return A list of metric values for the given commit.
    */
   @Override
   public List<MetricValue> analyzeCommit(
-      Commit commit,
-      Project project,
-      List<SourceCodeFileAnalyzerPlugin> analyzers,
-      FilePatternMatcher filePatterns) {
+      Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers) {
     List<MetricValue> metricValues = new ArrayList<>(400);
     List<File> files =
         commit
             .getTouchedFiles()
             .stream()
             .map(FileToCommitRelationship::getFile)
-            .filter(file -> filePatterns.matches(file.getPath()))
             .collect(Collectors.toList());
     analyzeBulk(commit, files, analyzers, project)
         .forEach(
@@ -126,7 +120,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
               .collect(Collectors.toList());
       MetricValue metricValue =
           new MetricValue(
-              null, metric.getId(), fileMetrics.getMetricCount(metric), commit, findings, fileId);
+              metric.getId(), fileMetrics.getMetricCount(metric), commit, findings, fileId);
       metricValues.add(metricValue);
     }
     return metricValues;

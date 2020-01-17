@@ -34,7 +34,6 @@ public class CreateModuleAdapter implements CreateModulePort {
    */
   @Override
   public Long createModule(String modulePath, Long projectId) throws ModulePathInvalidException {
-
     ProjectEntity projectEntity =
         projectRepository
             .findByIdWithModules(projectId)

@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
-import io.reflectoring.coderadar.rest.IdResponse;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
+import io.reflectoring.coderadar.rest.domain.IdResponse;
 import io.reflectoring.coderadar.useradministration.UsernameAlreadyInUseException;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserUseCase;

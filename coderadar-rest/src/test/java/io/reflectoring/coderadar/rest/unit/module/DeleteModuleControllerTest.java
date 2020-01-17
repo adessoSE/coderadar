@@ -19,7 +19,7 @@ class DeleteModuleControllerTest {
   void deleteModuleWithIdOne() throws ProjectIsBeingProcessedException {
     DeleteModuleController testSubject = new DeleteModuleController(deleteModuleUseCase);
 
-    ResponseEntity<String> responseEntity = testSubject.deleteModule(1L, 2L);
+    ResponseEntity<HttpStatus> responseEntity = testSubject.deleteModule(1L, 2L);
 
     Mockito.verify(deleteModuleUseCase, Mockito.times(1)).delete(1L, 2L);
 
