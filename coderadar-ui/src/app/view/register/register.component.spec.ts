@@ -1,4 +1,4 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, inject, TestBed} from '@angular/core/testing';
 
 import {RegisterComponent} from './register.component';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
@@ -6,7 +6,7 @@ import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {of} from 'rxjs';
-import {HttpClient, HttpHandler, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpClientModule, HttpHandler, HttpResponse} from '@angular/common/http';
 import {MainDashboardComponent} from '../main-dashboard/main-dashboard.component';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {LayoutModule} from '@angular/cdk/layout';
@@ -17,37 +17,40 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {RouterTestingModule} from '@angular/router/testing';
+import {AppComponent} from "../../app.component";
+import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
-  let userService;
+  let http;
   let routerSpy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
         RegisterComponent,
-        MainDashboardComponent,
       ],
       imports: [
         FormsModule, // ngModel
-        NoopAnimationsModule,
-        LayoutModule,
-        MatButtonModule,
-        MatCardModule,
-        MatGridListModule,
-        MatSnackBarModule,
-        MatIconModule,
-        MatMenuModule,
-        RouterTestingModule.withRoutes([
+        // NoopAnimationsModule,
+        // LayoutModule,
+        // MatButtonModule,
+        // MatCardModule,
+        // MatGridListModule,
+        // MatSnackBarModule,
+        // MatIconModule,
+        // MatMenuModule,
+        HttpClientModule,
+        HttpClientTestingModule,
+        RouterTestingModule/*.withRoutes([
           {path: 'dashboard', component: MainDashboardComponent},
-        ]),
+        ]),*/
       ],
       providers: [
-        {provide: UserService, useClass: MockUserService},
-        HttpClient,
-        HttpHandler
+        // {provide: UserService, useClass: MockUserService},
+        // HttpClient,
+        // HttpHandler
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
@@ -55,7 +58,7 @@ describe('RegisterComponent', () => {
 
     fixture = TestBed.createComponent(RegisterComponent);
     component = fixture.componentInstance;
-    userService = TestBed.get(UserService);
+    http = TestBed.get(HttpTestingController);
     routerSpy = spyOn(Router.prototype, 'navigate').and.callFake((url) => {});
     fixture.detectChanges();
   });
@@ -64,31 +67,66 @@ describe('RegisterComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should register user', () => {
+  it('should register user', inject([UserService], (userService: UserService) => {
+    component.username = 'test';
+    component.password = 'password123';
+    component.confirmPassword = 'password123';
+    const loginSpy = spyOn(userService, 'login');
+    component.submitForm();
+    http.expectOne(`${AppComponent.getApiUrl()}user/registration`).flush({id: 1}, {
+      status: 201,
+      url: '/user/registration',
+      statusText: 'Created',
+    });
+    fixture.whenStable().then(() => {
+      http.expectOne(`${AppComponent.getApiUrl()}user/auth`).flush({
+        accessToken: 'test',
+        refreshToken: 'test'
+      }, {
+        status: 200,
+        statusText: 'Ok',
+        url: '/user/auth'
+      });
+      fixture.whenStable().then(() => {
+        expect(UserService.getLoggedInUser().username).toBe('test');
+      });
+      // expect(loginSpy).toHaveBeenCalledWith('test', 'password123');
+    });
+  }));
+
+  it('should register user invalid password', () => {
+    component.username = 'test';
+    component.password = 'password';
+    component.confirmPassword = 'password';
+    component.submitForm();
+    expect(component.validPassword).toBeFalsy();
+  });
+
+  it('should register user passwords do not match', () => {
+    component.username = 'test';
+    component.password = 'password123';
+    component.confirmPassword = 'password124';
+    component.submitForm();
+    expect(component.passwordsDoNotMatch).toBeTruthy();
+  });
+
+  it('should register user user already exists', () => {
     component.username = 'test';
     component.password = 'password123';
     component.confirmPassword = 'password123';
     component.submitForm();
+    http.expectOne(`${AppComponent.getApiUrl()}user/registration`).flush({
+      status: 409,
+      error: 'Conflict',
+      errorMessage: 'A user with the username test already exists!',
+      path: '/user/registration'
+    }, {
+      status: 409,
+      statusText: 'Conflict',
+      url: '/user/registration',
+    });
     fixture.whenStable().then(() => {
-      expect(routerSpy).toHaveBeenCalledWith(['/dashboard']);
+      expect(component.invalidUser).toBeTruthy();
     });
   });
 });
-
-class MockUserService extends UserService {
-  register(usernameValue: string, passwordValue: string) {
-    return of(new HttpResponse({
-      body: {
-        id: 1
-      }
-    })).toPromise();
-  }
-  login(usernameValue: string, passwordValue: string) {
-    const user = {
-      username: usernameValue,
-      accessToken: 'accessToken',
-      refreshToken: 'refreshToken'
-    };
-    return of(localStorage.setItem('currentUser', JSON.stringify(user))).toPromise();
-  }
-}

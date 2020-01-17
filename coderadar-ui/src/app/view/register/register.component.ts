@@ -35,13 +35,13 @@ export class RegisterComponent {
 
     if (this.validPassword && !this.passwordsDoNotMatch) {
       this.userService.register(this.username, this.password)
-        .then(e => {
+        .then(() => {
           this.userService.login(this.username, this.password)
-            .then(
-              () => this.router.navigate(['/dashboard']));
+            .then(() => {
+              this.router.navigate(['/dashboard']);
+            });
         })
         .catch(e => {
-          console.log(e.error.errorMessage);
           if (e.status === CONFLICT && e.error &&
             e.error.errorMessage === 'A user with the username ' + this.username + ' already exists!') {
             this.invalidUser = true;

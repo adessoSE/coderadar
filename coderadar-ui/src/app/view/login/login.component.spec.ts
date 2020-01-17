@@ -7,7 +7,7 @@ import {UserService} from '../../service/user.service';
 import {Title} from '@angular/platform-browser';
 import {Router} from '@angular/router';
 import {of} from 'rxjs';
-import {HttpClient, HttpHandler} from '@angular/common/http';
+import {HttpClient, HttpClientModule, HttpHandler} from '@angular/common/http';
 import {RouterTestingModule} from '@angular/router/testing';
 import {MainDashboardComponent} from '../main-dashboard/main-dashboard.component';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
@@ -18,11 +18,14 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
+import {AppComponent} from '../../app.component';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  let userService;
+  // let userService;
+  let http;
   let routerSpy;
 
   beforeEach(() => {
@@ -41,15 +44,17 @@ describe('LoginComponent', () => {
         MatSnackBarModule,
         MatIconModule,
         MatMenuModule,
+        HttpClientModule,
+        HttpClientTestingModule,
         RouterTestingModule.withRoutes([
           {path: 'login', component: LoginComponent},
         ]),
       ],
       providers: [
-        {provide: UserService, useClass: MockUserService},
-        HttpClient,
-        HttpHandler,
-        Title
+        // {provide: UserService, useClass: MockUserService},
+        // HttpClient,
+        // HttpHandler,
+        // Title
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
@@ -57,7 +62,8 @@ describe('LoginComponent', () => {
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
-    userService = TestBed.get(UserService);
+    // userService = TestBed.get(UserService);
+    http = TestBed.get(HttpTestingController);
     routerSpy = spyOn(Router.prototype, 'navigate').and.callFake((url) => {});
     fixture.detectChanges();
   });
@@ -70,19 +76,67 @@ describe('LoginComponent', () => {
     component.username = 'test';
     component.password = 'password123';
     component.submitForm();
+    http.expectOne(`${AppComponent.getApiUrl()}user/auth`).flush({
+      accessToken: 'test',
+      refreshToken: 'test'
+    }, {
+      status: 200,
+      statusText: 'Ok',
+      url: '/user/auth',
+    });
     fixture.whenStable().then(() => {
       expect(routerSpy).toHaveBeenCalledWith(['/dashboard']);
     });
   });
-});
 
-class MockUserService extends UserService {
-  login(usernameValue: string, passwordValue: string) {
-    const user = {
-      username: usernameValue,
-      accessToken: 'accessToken',
-      refreshToken: 'refreshToken'
-    };
-    return of(localStorage.setItem('currentUser', JSON.stringify(user))).toPromise();
-  }
-}
+  it('should login user invalid password', () => {
+    component.username = 'test';
+    component.password = 'password';
+    component.submitForm();
+    fixture.whenStable().then(() => {
+      expect(component.validPassword).toBeFalsy();
+    });
+  });
+
+  it('should login user not found', () => {
+    component.username = 'test';
+    component.password = 'password123';
+    component.submitForm();
+    http.expectOne(`${AppComponent.getApiUrl()}user/auth`).flush({
+      status: 404,
+      error: 'Not Found',
+      message: 'Not Found',
+      url: '/user/auth',
+    }, {
+      status: 404,
+      statusText: 'Not Found',
+      url: '/user/auth',
+    });
+    fixture.whenStable().then(() => {
+      fixture.whenStable().then(() => {
+        expect(component.invalidUser).toBeTruthy();
+      });
+    });
+  });
+
+  it('should login user forbidden', () => {
+    component.username = 'test';
+    component.password = 'password123';
+    component.submitForm();
+    http.expectOne(`${AppComponent.getApiUrl()}user/auth`).flush({
+      status: 403,
+      error: 'Forbidden',
+      message: 'Access Denied',
+      path: '/user/auth'
+    }, {
+      status: 403,
+      statusText: 'Forbidden',
+      url: '/user/auth',
+    });
+    fixture.whenStable().then(() => {
+      fixture.whenStable().then(() => {
+        expect(component.invalidUser).toBeTruthy();
+      });
+    });
+  });
+});

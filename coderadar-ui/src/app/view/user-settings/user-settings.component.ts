@@ -40,13 +40,17 @@ export class UserSettingsComponent implements OnInit {
 
     if (!this.passwordsDoNotMatch && this.validPassword && !this.passwordsAreSame) {
       this.userService.login(UserService.getLoggedInUser().username, this.oldPassword) // authenticate with the current password
-        .then(() => this.userService.changeUserPassword(this.newPassword) // change the password
-          .then(() => { // login again to refresh the token and navigate to the dashboard when done
-            this.router.navigate(['/dashboard']);
-            this.userService.login(UserService.getLoggedInUser().username, this.newPassword);
-          })
-          .catch(() => this.validPassword = true))
-        .catch(() => this.currentPasswordWrong = true);
+        .then(() => {
+          this.userService.changeUserPassword(this.newPassword) // change the password
+            .then(() => { // login again to refresh the token and navigate to the dashboard when done
+              this.router.navigate(['/dashboard']);
+              this.userService.login(UserService.getLoggedInUser().username, this.newPassword);
+            })
+            .catch(() => this.validPassword = true);
+        })
+        .catch(() => {
+          this.currentPasswordWrong = true;
+        });
     }
   }
 }

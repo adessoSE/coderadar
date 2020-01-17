@@ -2,7 +2,7 @@ import {ComponentFixture, inject, TestBed} from '@angular/core/testing';
 
 import {AddProjectComponent} from './add-project.component';
 import {BrowserModule} from '@angular/platform-browser';
-import {HttpClient, HttpClientModule, HttpHandler, HttpResponse} from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -28,13 +28,10 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {UserService} from '../../service/user.service';
-import {ProjectService} from '../../service/project.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {of} from 'rxjs';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ConfigureProjectComponent} from '../configure-project/configure-project.component';
 import {AppComponent} from '../../app.component';
-import {Project} from '../../model/project';
 
 const project = {
   id: null,
@@ -60,7 +57,6 @@ describe('AddProjectComponent', () => {
       ],
       imports: [
         BrowserModule,
-        HttpClientModule,
         FormsModule,
         BrowserAnimationsModule,
         BrowserModule,
@@ -97,7 +93,7 @@ describe('AddProjectComponent', () => {
       ],
       providers: [
         {provide: Router},
-        {provide: ActivatedRoute}
+        {provide: ActivatedRoute},
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
@@ -105,8 +101,7 @@ describe('AddProjectComponent', () => {
 
     fixture = TestBed.createComponent(AddProjectComponent);
     component = fixture.componentInstance;
-    routerSpy = spyOn(Router.prototype, 'navigate').and.callFake((url) => {
-    });
+    routerSpy = spyOn(Router.prototype, 'navigate').and.callFake((url) => {});
     fixture.detectChanges();
   });
 
@@ -116,24 +111,24 @@ describe('AddProjectComponent', () => {
 
   it('should get unauthenticated and call userService for new authentication',
     inject([UserService], (userService: UserService) => {
-        component.project = project;
-        const http = TestBed.get(HttpTestingController);
-        const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {});
-        component.submitForm();
-        http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({
-            status: 403,
-            error: 'Forbidden',
-            message: 'Access Denied',
-            path: '/projects'
-          }, {
-          status: 403,
-          statusText: 'Forbidden',
-          url: '/projects',
-        });
-        fixture.whenStable().then(() => {
-          expect(refreshSpy).toHaveBeenCalled();
-        });
-      })
+      component.project = project;
+      const http = TestBed.get(HttpTestingController);
+      const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {});
+      component.submitForm();
+      http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({
+        status: 403,
+        error: 'Forbidden',
+        message: 'Access Denied',
+        path: '/projects'
+      }, {
+        status: 403,
+        statusText: 'Forbidden',
+        url: '/projects',
+      });
+      fixture.whenStable().then(() => {
+        expect(refreshSpy).toHaveBeenCalled();
+      });
+    })
   );
 
   it('should get conflict', () => {
@@ -141,11 +136,11 @@ describe('AddProjectComponent', () => {
     const http = TestBed.get(HttpTestingController);
     component.submitForm();
     http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({
-        status: 409,
-        error: 'Conflict',
-        errorMessage: 'The project test already exists.',
-        path: '/projects'
-      }, {
+      status: 409,
+      error: 'Conflict',
+      errorMessage: 'The project test already exists.',
+      path: '/projects'
+    }, {
       status: 409,
       statusText: 'Conflict',
       url: '/projects',
@@ -156,42 +151,37 @@ describe('AddProjectComponent', () => {
     });
   });
 
-  it('should get bad request',
-    inject([UserService], (userService: UserService) => {
-      component.project = project;
-      const http = TestBed.get(HttpTestingController);
-      component.submitForm();
-      http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({
-          status: 400,
-          error: 'Bad Request',
-          errorMessage: 'Validation Error',
-          path: '/projects',
-          fieldErrors: [
-            {field: 'vcsUrl'}
-          ]
-        }, {
-        status: 400,
-        statusText: 'Bad Request',
-        url: '/projects',
-      });
-      fixture.whenStable().then(() => {
-        expect(component.incorrectURL).toBeTruthy();
-        expect(component.projectExists).toBeFalsy();
-      });
-    })
-  );
+  it('should get bad request', () => {
+    component.project = project;
+    const http = TestBed.get(HttpTestingController);
+    component.submitForm();
+    http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({
+      status: 400,
+      error: 'Bad Request',
+      errorMessage: 'Validation Error',
+      path: '/projects',
+      fieldErrors: [
+        {field: 'vcsUrl'}
+      ]
+    }, {
+      status: 400,
+      statusText: 'Bad Request',
+      url: '/projects',
+    });
+    fixture.whenStable().then(() => {
+      expect(component.incorrectURL).toBeTruthy();
+      expect(component.projectExists).toBeFalsy();
+    });
+  });
 
   it('should submit form', () => {
-    const data = project;
     const http = TestBed.get(HttpTestingController);
     component.project = project;
-    project.id = 1;
     component.submitForm();
-    http.expectOne(`${AppComponent.getApiUrl()}projects`).flush(data, {
+    http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({id: 1}, {
       status: 201,
       url: '/projects',
       statusText: 'Created',
-      body: project
     });
     fixture.whenStable().then(() => {
       expect(component.incorrectURL).toBeFalsy();
@@ -199,4 +189,39 @@ describe('AddProjectComponent', () => {
       expect(component.project.id).toBe(1);
     });
   });
+
+  it('should fail validation of new project data because of empty name', () => {
+    component.project = {
+      id: 1,
+      name: '',
+      vcsUrl: 'https://valid.url',
+      vcsUsername: '',
+      vcsPassword: '',
+      vcsOnline: true,
+      startDate: null,
+      endDate: null
+    };
+    component.submitForm();
+    fixture.whenStable().then(() => {
+      expect(component.nameEmpty).toBeTruthy();
+    });
+  });
+
+  // TODO fix url validation
+  /*it('should fail validation of new project data because of url', () => {
+    component.project = {
+      id: 1,
+      name: 'test',
+      vcsUrl: 'an invalid url',
+      vcsUsername: '',
+      vcsPassword: '',
+      vcsOnline: true,
+      startDate: null,
+      endDate: null
+    };
+    component.submitForm();
+    fixture.whenStable().then(() => {
+      expect(component.incorrectURL).toBeTruthy();
+    });
+  });*/
 });
