@@ -66,7 +66,7 @@ export class EditProjectComponent implements OnInit {
               });
             }
           } else if (error.status === CONFLICT &&
-            error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
+            error.error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
             this.projectExists = true;
           } else if (error.status === UNPROCESSABLE_ENTITY) {
             this.openSnackBar('Project cannot be edited! Try again later!', '🞩');
