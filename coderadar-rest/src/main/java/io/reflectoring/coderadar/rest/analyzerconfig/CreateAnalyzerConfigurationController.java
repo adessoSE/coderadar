@@ -3,8 +3,8 @@ package io.reflectoring.coderadar.rest.analyzerconfig;
 import io.reflectoring.coderadar.plugin.api.AnalyzerConfigurationException;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationUseCase;
-import io.reflectoring.coderadar.rest.ErrorMessageResponse;
-import io.reflectoring.coderadar.rest.IdResponse;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
+import io.reflectoring.coderadar.rest.domain.IdResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ public class CreateAnalyzerConfigurationController {
   }
 
   @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity addAnalyzerConfiguration(
+  public ResponseEntity<Object> addAnalyzerConfiguration(
       @RequestBody @Validated CreateAnalyzerConfigurationCommand command,
       @PathVariable Long projectId) {
     try {

@@ -5,7 +5,6 @@ import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
 import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.GetAnalyzerConfigurationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,13 +37,13 @@ class GetAnalyzerConfigurationServiceTest {
             .setAnalyzerName(analyzerName)
             .setEnabled(analyzerEnabled);
 
-    GetAnalyzerConfigurationResponse expectedResponse =
-        new GetAnalyzerConfigurationResponse(configurationId, analyzerName, analyzerEnabled);
+    AnalyzerConfiguration expectedResponse =
+        new AnalyzerConfiguration(configurationId, analyzerName, analyzerEnabled);
 
     when(getConfigurationPortMock.getAnalyzerConfiguration(1L)).thenReturn(analyzerConfiguration);
 
     // when
-    GetAnalyzerConfigurationResponse actualResponse = testSubject.getAnalyzerConfiguration(1L);
+    AnalyzerConfiguration actualResponse = testSubject.getAnalyzerConfiguration(1L);
 
     // then
     assertThat(actualResponse).isEqualTo(expectedResponse);

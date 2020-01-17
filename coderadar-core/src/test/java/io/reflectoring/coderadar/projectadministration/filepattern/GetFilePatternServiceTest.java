@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.GetFilePatternPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.projectadministration.service.filepattern.GetFilePatternService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,13 +35,12 @@ class GetFilePatternServiceTest {
     FilePattern filePattern =
         new FilePattern().setId(patternId).setPattern(pattern).setInclusionType(inclusionType);
 
-    GetFilePatternResponse expectedResponse =
-        new GetFilePatternResponse(patternId, pattern, inclusionType);
+    FilePattern expectedResponse = new FilePattern(patternId, pattern, inclusionType);
 
     when(port.get(patternId)).thenReturn(filePattern);
 
     // when
-    GetFilePatternResponse actualResponse = testSubject.get(patternId);
+    FilePattern actualResponse = testSubject.get(patternId);
 
     // then
     assertThat(actualResponse).isEqualTo(expectedResponse);

@@ -5,7 +5,6 @@ import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.GetModulePort;
-import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
 import io.reflectoring.coderadar.projectadministration.service.module.GetModuleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,12 +32,12 @@ class GetModuleServiceTest {
 
     Module module = new Module().setId(moduleId).setPath(path);
 
-    GetModuleResponse expectedResponse = new GetModuleResponse(moduleId, path);
+    Module expectedResponse = new Module(moduleId, path);
 
     when(getModulePortMock.get(moduleId)).thenReturn(module);
 
     // when
-    GetModuleResponse actualResponse = testSubject.get(moduleId);
+    Module actualResponse = testSubject.get(moduleId);
 
     // then
     assertThat(actualResponse).isEqualTo(expectedResponse);

@@ -11,11 +11,25 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> {
 
+  /**
+   * Deletes a maximum of 10000 findings in a project. This value can be adjusted as required by
+   * your Neo4j installation in order to prevent out of memory errors.
+   *
+   * @param projectId The id of the project.
+   * @return The number of deleted findings, a maximum of 10000 at a time.
+   */
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-()-[:LOCATED_IN]->(fi:FindingEntity) "
           + "WHERE ID(p) = {0} WITH fi LIMIT 10000 DETACH DELETE fi RETURN COUNT(fi)")
   long deleteProjectFindings(@NonNull Long projectId);
 
+  /**
+   * Deletes a maximum of 10000 metrics in a project. This value can be adjusted as required by your
+   * Neo4j installation in order to prevent out of memory errors.
+   *
+   * @param projectId The id of the project.
+   * @return The number of deleted metrics, a maximum of 10000 at a time.
+   */
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv:MetricValueEntity) WHERE ID(p) = {0} "
           + "WITH mv LIMIT 10000 DETACH DELETE mv RETURN COUNT(mv)")
@@ -67,8 +81,16 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   boolean existsById(@NonNull Long id);
 
   @Query(
-      "MATCH (p:ProjectEntity) WHERE ID(p) = {0} WITH p "
-          + "MATCH (a:AnalyzingJobEntity) WHERE ID(a) = {1} "
-          + "CREATE (p)-[r:HAS]->(a)")
-  void setAnalyzingJob(@NonNull Long projectId, @NonNull Long analyzingJobId);
+      "MATCH (p:ProjectEntity) WHERE p.name = {0} AND p.isBeingDeleted = FALSE RETURN COUNT(*) > 0")
+  boolean existsByName(@NonNull String name);
+
+  @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} RETURN p.analyzingStatus")
+  @NonNull
+  Boolean getProjectAnalyzingStatus(@NonNull Long projectId);
+
+  @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} SET p.analyzingStatus = {1}")
+  void setAnalyzingStatus(@NonNull Long projectId, @NonNull Boolean b);
+
+  @Query("MATCH (p:ProjectEntity) WHERE ID(p) = {0} SET p.isBeingDeleted = {1}")
+  void setBeingDeleted(@NonNull Long id, @NonNull Boolean value);
 }

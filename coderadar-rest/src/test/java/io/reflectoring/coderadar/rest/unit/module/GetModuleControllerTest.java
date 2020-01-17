@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.rest.unit.module;
 
-import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleResponse;
+import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleUseCase;
+import io.reflectoring.coderadar.rest.domain.GetModuleResponse;
 import io.reflectoring.coderadar.rest.module.GetModuleController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ class GetModuleControllerTest {
   void returnsModuleWithIdOne() {
     GetModuleController testSubject = new GetModuleController(getModuleUseCase);
 
-    GetModuleResponse module = new GetModuleResponse(1L, "module-path");
+    Module module = new Module(1L, "module-path");
 
     Mockito.when(getModuleUseCase.get(1L)).thenReturn(module);
     ResponseEntity<GetModuleResponse> responseEntity = testSubject.getModule(1L);

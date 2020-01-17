@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get;
 
+import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import java.util.List;
 
 public interface ListFilePatternsOfProjectUseCase {
@@ -10,5 +11,5 @@ public interface ListFilePatternsOfProjectUseCase {
    * @param projectId The project id.
    * @return All file patterns in the project.
    */
-  List<GetFilePatternResponse> listFilePatterns(Long projectId);
+  List<FilePattern> listFilePatterns(Long projectId);
 }
