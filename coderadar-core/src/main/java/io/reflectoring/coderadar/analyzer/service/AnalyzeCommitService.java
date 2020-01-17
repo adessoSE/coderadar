@@ -50,9 +50,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
       Commit commit, Project project, List<SourceCodeFileAnalyzerPlugin> analyzers) {
     List<MetricValue> metricValues = new ArrayList<>(400);
     List<File> files =
-        commit
-            .getTouchedFiles()
-            .stream()
+        commit.getTouchedFiles().stream()
             .map(FileToCommitRelationship::getFile)
             .collect(Collectors.toList());
     analyzeBulk(commit, files, analyzers, project)
@@ -107,9 +105,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
     List<MetricValue> metricValues = new ArrayList<>();
     for (Metric metric : fileMetrics.getMetrics()) {
       List<Finding> findings =
-          fileMetrics
-              .getFindings(metric)
-              .stream()
+          fileMetrics.getFindings(metric).stream()
               .map(
                   finding ->
                       new Finding(
