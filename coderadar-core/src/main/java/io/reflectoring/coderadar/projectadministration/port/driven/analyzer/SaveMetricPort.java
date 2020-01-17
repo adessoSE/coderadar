@@ -9,7 +9,6 @@ public interface SaveMetricPort {
    * Saves metric values in the DB.
    *
    * @param metricValues The metric values to save.
-   * @param projectId The id of the project.
    */
-  void saveMetricValues(List<MetricValue> metricValues, Long projectId);
+  void saveMetricValues(List<MetricValue> metricValues);
 }

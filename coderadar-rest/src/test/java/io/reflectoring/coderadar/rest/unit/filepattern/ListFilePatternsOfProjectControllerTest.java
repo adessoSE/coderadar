@@ -1,8 +1,9 @@
 package io.reflectoring.coderadar.rest.unit.filepattern;
 
+import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
-import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternResponse;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
+import io.reflectoring.coderadar.rest.domain.GetFilePatternResponse;
 import io.reflectoring.coderadar.rest.filepattern.ListFilePatternsOfProjectController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,11 +26,11 @@ class ListFilePatternsOfProjectControllerTest {
     ListFilePatternsOfProjectController testSubject =
         new ListFilePatternsOfProjectController(listFilePatternsOfProjectUseCase);
 
-    GetFilePatternResponse response1 =
-        new GetFilePatternResponse(1L, "**/*.java", InclusionType.INCLUDE);
-    GetFilePatternResponse response2 =
-        new GetFilePatternResponse(2L, "**/*.xml", InclusionType.EXCLUDE);
-    List<GetFilePatternResponse> responses = new ArrayList<>();
+    FilePattern response1 =
+        new FilePattern(1L, "**/*.java", InclusionType.INCLUDE);
+    FilePattern response2 =
+        new FilePattern(2L, "**/*.xml", InclusionType.EXCLUDE);
+    List<FilePattern> responses = new ArrayList<>();
     responses.add(response1);
     responses.add(response2);
 

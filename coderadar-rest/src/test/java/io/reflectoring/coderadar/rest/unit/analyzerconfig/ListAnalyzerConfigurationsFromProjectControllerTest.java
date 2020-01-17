@@ -1,8 +1,9 @@
 package io.reflectoring.coderadar.rest.unit.analyzerconfig;
 
-import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.ListAnalyzerConfigurationsUseCase;
 import io.reflectoring.coderadar.rest.analyzerconfig.ListAnalyzerConfigurationsFromProjectController;
+import io.reflectoring.coderadar.rest.domain.GetAnalyzerConfigurationResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -25,11 +26,11 @@ class ListAnalyzerConfigurationsFromProjectControllerTest {
         new ListAnalyzerConfigurationsFromProjectController(
                 listAnalyzerConfigurationsUseCase);
 
-    GetAnalyzerConfigurationResponse response1 =
-        new GetAnalyzerConfigurationResponse(1L, "analyzer1", true);
-    GetAnalyzerConfigurationResponse response2 =
-        new GetAnalyzerConfigurationResponse(2L, "analyzer2", false);
-    List<GetAnalyzerConfigurationResponse> responses = new ArrayList<>();
+    AnalyzerConfiguration response1 =
+        new AnalyzerConfiguration(1L, "analyzer1", true);
+    AnalyzerConfiguration response2 =
+        new AnalyzerConfiguration(2L, "analyzer2", false);
+    List<AnalyzerConfiguration> responses = new ArrayList<>();
 
     responses.add(response1);
     responses.add(response2);

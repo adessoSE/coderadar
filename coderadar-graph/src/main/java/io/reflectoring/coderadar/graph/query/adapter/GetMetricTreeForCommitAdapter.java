@@ -56,9 +56,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
 
     List<MetricValueForCommitTreeQueryResult> result =
         getMetricValuesOfCommitRepository.getMetricTreeForCommit(
-            projectId,
-            command.getMetrics(),
-            commitEntity.getTimestamp().toInstant().toEpochMilli());
+            projectId, command.getMetrics(), commitEntity.getTimestamp());
     List<ModuleEntity> moduleEntities = moduleRepository.findModulesInProjectSortedDesc(projectId);
     List<MetricTree> moduleChildren = processModules(moduleEntities, result);
     MetricTree rootModule = processRootModule(result);
@@ -158,9 +156,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
     Map<String, Long> aggregatedMetrics = new HashMap<>();
     for (MetricTree metricTree : children) {
       for (MetricValueForCommit val : aggregateChildMetrics(metricTree.getChildren())) {
-        if (metricTree
-            .getMetrics()
-            .stream()
+        if (metricTree.getMetrics().stream()
             .noneMatch(metric -> metric.getMetricName().equals(val.getMetricName()))) {
           metricTree
               .getMetrics()

@@ -3,10 +3,8 @@ package io.reflectoring.coderadar.analyzer.service;
 import io.reflectoring.coderadar.analyzer.MisconfigurationException;
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
-import io.reflectoring.coderadar.analyzer.port.driven.StartAnalyzingPort;
-import io.reflectoring.coderadar.analyzer.port.driven.StopAnalyzingPort;
+import io.reflectoring.coderadar.analyzer.port.driven.SetAnalyzingStatusPort;
 import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
-import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingCommand;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
@@ -21,13 +19,12 @@ import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.L
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
-import io.reflectoring.coderadar.projectadministration.service.filepattern.FilePatternMatcher;
 import io.reflectoring.coderadar.query.port.driven.GetAvailableMetricsInProjectPort;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
@@ -45,8 +42,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final SaveMetricPort saveMetricPort;
   private final SaveCommitPort saveCommitPort;
   private final ProcessProjectService processProjectService;
-  private final StartAnalyzingPort startAnalyzingPort;
-  private final StopAnalyzingPort stopAnalyzingPort;
+  private final SetAnalyzingStatusPort setAnalyzingStatusPort;
   private final AsyncListenableTaskExecutor taskExecutor;
   private final GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort;
   private final ProjectStatusPort projectStatusPort;
@@ -64,8 +60,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       SaveMetricPort saveMetricPort,
       SaveCommitPort saveCommitPort,
       ProcessProjectService processProjectService,
-      StartAnalyzingPort startAnalyzingPort,
-      StopAnalyzingPort stopAnalyzingPort,
+      SetAnalyzingStatusPort setAnalyzingStatusPort,
       AsyncListenableTaskExecutor taskExecutor,
       GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort,
       ProjectStatusPort projectStatusPort,
@@ -79,8 +74,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     this.saveMetricPort = saveMetricPort;
     this.saveCommitPort = saveCommitPort;
     this.processProjectService = processProjectService;
-    this.startAnalyzingPort = startAnalyzingPort;
-    this.stopAnalyzingPort = stopAnalyzingPort;
+    this.setAnalyzingStatusPort = setAnalyzingStatusPort;
     this.taskExecutor = taskExecutor;
     this.getAvailableMetricsInProjectPort = getAvailableMetricsInProjectPort;
     this.projectStatusPort = projectStatusPort;
@@ -90,83 +84,80 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   /**
    * Starts the analysis of a project.
    *
-   * @param command Command containing analysis parameters.
    * @param projectId The id of the project to analyze.
    */
   @Override
-  public void start(StartAnalyzingCommand command, Long projectId) {
+  public void start(Long projectId) {
+    Project project = getProjectPort.get(projectId);
     if (projectStatusPort.isBeingProcessed(projectId)) {
       throw new ProjectIsBeingProcessedException(projectId);
     }
     List<FilePattern> filePatterns = listFilePatternsOfProjectPort.listFilePatterns(projectId);
-    Collection<AnalyzerConfiguration> analyzerConfigurations =
-        listAnalyzerConfigurationsPort.get(projectId);
+    List<AnalyzerConfiguration> analyzerConfigurations =
+        listAnalyzerConfigurationsPort.listAnalyzerConfigurations(projectId);
 
     if (filePatterns.isEmpty()
-        || filePatterns
-            .stream()
+        || filePatterns.stream()
             .noneMatch(
                 filePattern -> filePattern.getInclusionType().equals(InclusionType.INCLUDE))) {
       throw new MisconfigurationException("Cannot analyze project without file patterns");
     } else if (analyzerConfigurations.isEmpty()
-        || analyzerConfigurations
-            .stream()
-            .noneMatch(analyzerConfiguration -> analyzerConfiguration.getEnabled())) {
+        || analyzerConfigurations.stream().noneMatch(AnalyzerConfiguration::getEnabled)) {
       throw new MisconfigurationException("Cannot analyze project without analyzers");
     }
-    startAnalyzingTask(command, projectId, filePatterns);
+    startAnalyzingTask(project, filePatterns, analyzerConfigurations);
   }
 
   /**
    * Starts a background task using the TaskExecutor. It will perform the analysis of the project.
    *
-   * @param command The analysing command to use.
-   * @param projectId The id of the project to analyze.
+   * @param project The project to analyze.
    * @param filePatterns The patterns to use.
+   * @param analyzerConfigurations The analyzer configurations to use.
    */
   private void startAnalyzingTask(
-      StartAnalyzingCommand command, Long projectId, List<FilePattern> filePatterns) {
+      Project project,
+      List<FilePattern> filePatterns,
+      List<AnalyzerConfiguration> analyzerConfigurations) {
     processProjectService.executeTask(
         () -> {
           List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
-              getAnalyzersForProject(projectId);
-          Project project = getProjectPort.get(projectId);
+              getAnalyzersForProject(analyzerConfigurations);
           List<Commit> commitsToBeAnalyzed =
-              getCommitsInProjectPort.getSortedByTimestampAscWithNoParents(projectId);
-          Long[] commitIds = new Long[commitsToBeAnalyzed.size()];
-          FilePatternMatcher filePatternMatcher = new FilePatternMatcher(filePatterns);
-
-          startAnalyzingPort.start(command, projectId);
+              getCommitsInProjectPort.getNonanalyzedSortedByTimestampAscWithNoParents(
+                  project.getId(), filePatterns);
+          long[] commitIds = new long[commitsToBeAnalyzed.size()];
+          setAnalyzingStatusPort.setStatus(project.getId(), true);
           int counter = 0;
           ListenableFuture<?> saveTask = null;
+          AtomicBoolean running = new AtomicBoolean(true);
           for (Commit commit : commitsToBeAnalyzed) {
-            if (!commit.isAnalyzed() && getAnalyzingStatusService.get(projectId)) {
-              List<MetricValue> metrics =
-                  analyzeCommitUseCase.analyzeCommit(
-                      commit, project, sourceCodeFileAnalyzerPlugins, filePatternMatcher);
-              if (!metrics.isEmpty()) {
-                waitForTask(saveTask);
-                saveTask =
-                    taskExecutor.submitListenable(
-                        () -> {
-                          saveMetricPort.saveMetricValues(metrics, projectId);
-                          saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
-                        });
-              }
-              commitIds[counter] = commit.getId();
-              ++counter;
-              log(commit, counter);
+            if (!running.get()) {
+              break;
             }
+            List<MetricValue> metrics =
+                analyzeCommitUseCase.analyzeCommit(commit, project, sourceCodeFileAnalyzerPlugins);
+            if (!metrics.isEmpty()) {
+              waitForTask(saveTask);
+              saveTask =
+                  taskExecutor.submitListenable(
+                      () -> {
+                        saveMetricPort.saveMetricValues(metrics);
+                        saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
+                        running.set(getAnalyzingStatusService.getStatus(project.getId()));
+                      });
+            }
+            commitIds[counter++] = commit.getId();
+            log(commit, counter);
           }
           waitForTask(saveTask);
-          stopAnalyzingPort.stop(projectId);
-          if (!getAvailableMetricsInProjectPort.get(projectId).isEmpty()) {
+          setAnalyzingStatusPort.setStatus(project.getId(), false);
+          if (!getAvailableMetricsInProjectPort.get(project.getId()).isEmpty()) {
             saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
           }
-
           logger.info("Analysis complete for project {}", project.getName());
         },
-        projectId);
+        project.getId());
   }
 
   /**
@@ -201,13 +192,13 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
    * Gets the configured analyzers for the current project and returns a list of
    * SourceCodeFileAnalyzerPlugin objects.
    *
-   * @param projectId The id of the project.
+   * @param analyzerConfigurations The analyzer configurations for the project.
    * @return A list of SourceCodeFileAnalyzerPlugins.
    */
-  private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(Long projectId) {
+  private List<SourceCodeFileAnalyzerPlugin> getAnalyzersForProject(
+      List<AnalyzerConfiguration> analyzerConfigurations) {
     List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>();
-    Collection<AnalyzerConfiguration> configs = listAnalyzerConfigurationsPort.get(projectId);
-    for (AnalyzerConfiguration config : configs) {
+    for (AnalyzerConfiguration config : analyzerConfigurations) {
       if (config.getEnabled()) {
         analyzers.add(analyzerPluginService.createAnalyzer(config.getAnalyzerName()));
       }

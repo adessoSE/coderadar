@@ -8,7 +8,10 @@ import io.reflectoring.coderadar.query.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetDeltaTreeForTwoCommitsPort;
 import io.reflectoring.coderadar.query.port.driver.GetDeltaTreeForTwoCommitsCommand;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -38,23 +41,23 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
     MetricTree commit2Tree =
         getMetricsForAllFilesInCommitAdapter.get(
             new GetMetricsForCommitCommand(command.getCommit2(), command.getMetrics()), projectId);
-    Date commit1Time =
+    Long commit1Time =
         commitRepository
             .findByNameAndProjectId(command.getCommit1(), projectId)
             .orElseThrow(() -> new CommitNotFoundException(command.getCommit1()))
             .getTimestamp();
-    Date commit2Time =
+    Long commit2Time =
         commitRepository
             .findByNameAndProjectId(command.getCommit2(), projectId)
             .orElseThrow(() -> new CommitNotFoundException(command.getCommit2()))
             .getTimestamp();
 
-    if (commit1Time.after(commit2Time)) {
+    if (commit1Time > commit2Time) {
       MetricTree temp = commit1Tree;
       commit1Tree = commit2Tree;
       commit2Tree = temp;
 
-      Date tempDate = commit1Time;
+      Long tempDate = commit1Time;
       commit1Time = commit2Time;
       commit2Time = tempDate;
     }
@@ -62,10 +65,7 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
     List<String> addedFiles = new ArrayList<>();
     List<String> removedFiles = new ArrayList<>();
     List<String> modifiedFiles =
-        fileRepository.getFilesModifiedBetweenCommits(
-            commit1Time.toInstant().toEpochMilli(),
-            commit2Time.toInstant().toEpochMilli(),
-            projectId);
+        fileRepository.getFilesModifiedBetweenCommits(commit1Time, commit2Time, projectId);
 
     DeltaTree deltaTree =
         createDeltaTree(commit1Tree, commit2Tree, modifiedFiles, addedFiles, removedFiles);
@@ -78,16 +78,13 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
       DeltaTree deltaTree,
       List<String> removedFiles,
       List<String> addedFiles,
-      Date commit1Time,
-      Date commit2Time,
+      Long commit1Time,
+      Long commit2Time,
       Long projectId) {
     for (String addedFile : addedFiles) {
       String oldPath =
           fileRepository.findOldpathIfRenamedBetweenCommits(
-              addedFile,
-              commit1Time.toInstant().toEpochMilli(),
-              commit2Time.toInstant().toEpochMilli(),
-              projectId);
+              addedFile, commit1Time, commit2Time, projectId);
       if (removedFiles.contains(oldPath)) {
         DeltaTree oldName = findChildInDeltaTree(deltaTree, oldPath);
         DeltaTree newName = findChildInDeltaTree(deltaTree, addedFile);
@@ -275,9 +272,7 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
     Map<String, Long> aggregatedMetrics = new HashMap<>();
     for (DeltaTree deltaTree : children) {
       for (MetricValueForCommit val : aggregateChildMetrics(deltaTree.getChildren())) {
-        if (deltaTree
-            .getCommit1Metrics()
-            .stream()
+        if (deltaTree.getCommit1Metrics().stream()
             .noneMatch(metric -> metric.getMetricName().equals(val.getMetricName()))) {
           deltaTree
               .getCommit1Metrics()
