@@ -50,28 +50,27 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     git.log().call().iterator().forEachRemaining(revCommits::add);
     int revCommitsSize = revCommits.size();
     List<Commit> result = new ArrayList<>(revCommitsSize);
-    Map<ObjectId, Commit> map = new HashMap<>((int) (revCommitsSize / 0.75) + 1);
+    IdentityHashMap<RevCommit, Commit> map = new IdentityHashMap<>(revCommitsSize);
     for (int i = revCommitsSize - 1; i >= 0; --i) {
       RevCommit rc = revCommits.get(i);
       if (isInDateRange(range, rc)) {
-        Commit commit = map.computeIfAbsent(rc.getId(), objectId -> mapRevCommitToCommit(rc));
-        if (rc.getParentCount() > 0) {
-          List<Commit> parents = new ArrayList<>(rc.getParentCount());
-          for (RevCommit parent : rc.getParents()) {
-            if (isInDateRange(range, parent)) {
-              Commit parentCommit = map.get(parent.getId());
-              if (parentCommit == null) {
-                parentCommit = mapRevCommitToCommit(parent);
-                map.put(parent.getId(), parentCommit);
-                result.add(parentCommit);
-              }
-              parents.add(parentCommit);
+        Commit commit = map.computeIfAbsent(rc, objectId -> mapRevCommitToCommit(rc));
+        List<Commit> parents =
+            rc.getParentCount() > 0
+                ? new ArrayList<>(rc.getParentCount())
+                : Collections.emptyList();
+        for (RevCommit parent : rc.getParents()) {
+          if (isInDateRange(range, parent)) {
+            Commit parentCommit = map.get(parent.getId());
+            if (parentCommit == null) {
+              parentCommit = mapRevCommitToCommit(parent);
+              map.put(parent, parentCommit);
+              result.add(parentCommit);
             }
+            parents.add(parentCommit);
           }
-          commit.setParents(parents);
-        } else {
-          commit.setParents(Collections.emptyList());
         }
+        commit.setParents(parents);
         result.add(commit);
       }
     }
@@ -107,7 +106,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
         fileToCommitRelationship.setOldPath("/dev/null");
         fileToCommitRelationship.setChangeType(ChangeType.ADD);
-        fileToCommitRelationship.setCommit(firstCommit);
         fileToCommitRelationship.setFile(file);
 
         firstCommit.getTouchedFiles().add(fileToCommitRelationship);
@@ -180,7 +178,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
       fileToCommitRelationship.setOldPath(diff.getOldPath());
       fileToCommitRelationship.setChangeType(changeType);
-      fileToCommitRelationship.setCommit(commit);
       fileToCommitRelationship.setFile(file);
       commit.getTouchedFiles().add(fileToCommitRelationship);
     }

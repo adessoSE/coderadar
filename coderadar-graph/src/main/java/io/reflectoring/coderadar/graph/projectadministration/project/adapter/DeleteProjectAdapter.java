@@ -24,7 +24,7 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
      */
     while (projectRepository.deleteProjectFindings(projectId) > 0) ;
     while (projectRepository.deleteProjectMetrics(projectId) > 0) ;
-    projectRepository.deleteProjectFilesAndModules(projectId);
+    while (projectRepository.deleteProjectFilesAndModules(projectId) > 0) ;
     projectRepository.deleteProjectCommits(projectId);
     projectRepository.deleteProjectConfiguration(projectId);
     projectRepository.deleteById(projectId);
