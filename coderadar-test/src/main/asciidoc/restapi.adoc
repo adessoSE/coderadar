@@ -87,7 +87,6 @@ You need to define a username and a password. The password will be sent as
 plain text and hashed on server side for persisting.
 
 ==== Registering a User
-// TODO should password really be send as plaintext or is it in plaintext but encrypted?
 
 ===== Registration Data Structure
 include::{snippets}/user/registration/request-fields.adoc[]
@@ -119,8 +118,6 @@ If the log in is successful, user obtains two JSON Web Tokens https://jwt.io
 * a refresh token.
 
 How to use the tokens is described in <<authentication, Authentication>>
-
-// TODO shouldn't it be a hash which is sent to the server?
 
 ===== Login Data Structure
 include::{snippets}/user/auth/request-fields.adoc[]
