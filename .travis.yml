@@ -5,7 +5,7 @@ addons:
   apt:
     update: true
 jdk:
-  - openjdk8
+  - openjdk11
 
 stages:
 

@@ -45,9 +45,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
 
     // Get the commit entities of the metric values.
     Map<Long, CommitEntity> commits =
-        commitRepository
-            .findAllById(commitIds)
-            .stream()
+        commitRepository.findAllById(commitIds).stream()
             .collect(
                 Collectors.toMap(
                     CommitEntity::getId,
@@ -58,9 +56,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
 
     // Get the file entities of the metric values.
     Map<Long, FileEntity> files =
-        fileRepository
-            .findAllById(fileIds)
-            .stream()
+        fileRepository.findAllById(fileIds).stream()
             .collect(Collectors.toMap(FileEntity::getId, fileEntity -> fileEntity));
 
     List<MetricValueEntity> metricValueEntities = new ArrayList<>();

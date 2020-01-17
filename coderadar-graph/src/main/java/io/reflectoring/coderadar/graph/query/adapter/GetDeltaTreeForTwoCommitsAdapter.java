@@ -272,9 +272,7 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
     Map<String, Long> aggregatedMetrics = new HashMap<>();
     for (DeltaTree deltaTree : children) {
       for (MetricValueForCommit val : aggregateChildMetrics(deltaTree.getChildren())) {
-        if (deltaTree
-            .getCommit1Metrics()
-            .stream()
+        if (deltaTree.getCommit1Metrics().stream()
             .noneMatch(metric -> metric.getMetricName().equals(val.getMetricName()))) {
           deltaTree
               .getCommit1Metrics()
