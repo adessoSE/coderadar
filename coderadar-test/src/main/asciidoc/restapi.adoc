@@ -335,7 +335,7 @@ If a project has no File Patterns defined, the analysis won't start.
 
 ==== Structure
 
-include::{snippets}/filepatterns/create/request-fields.adoc[]
+include::{snippets}/filepatterns/create-update/request-fields.adoc[]
 
 ==== Listing a Project's File Patterns
 
