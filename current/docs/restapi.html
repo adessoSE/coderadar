@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v0.2.3.null, 2019-04-04">
+<meta name="author" content="v0.2.3.null, 2020-01-17">
 <title>coderadar REST API</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v0.2.3.null, 2019-04-04</span><br>
+<span id="author" class="author">v0.2.3.null, 2020-01-17</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2144,17 +2144,18 @@ table.tableblock.grid-all {
 <li><a href="#_project">3.1. Project</a>
 <ul class="sectlevel3">
 <li><a href="#_structure">3.1.1. Structure</a></li>
-<li><a href="#_listing_projects">3.1.2. Listing Projects</a></li>
-<li><a href="#_creating_a_project">3.1.3. Creating a Project</a></li>
+<li><a href="#_creating_a_project">3.1.2. Creating a Project</a></li>
+<li><a href="#_listing_projects">3.1.3. Listing Projects</a></li>
 <li><a href="#_updating_a_project">3.1.4. Updating a Project</a></li>
-<li><a href="#_deleting_a_project">3.1.5. Deleting a Project</a></li>
+<li><a href="#_get_a_project">3.1.5. Get a Project</a></li>
+<li><a href="#_deleting_a_project">3.1.6. Deleting a Project</a></li>
 </ul>
 </li>
 <li><a href="#_modules">3.2. Modules</a>
 <ul class="sectlevel3">
 <li><a href="#_structure_2">3.2.1. Structure</a></li>
 <li><a href="#_creating_a_module">3.2.2. Creating a Module</a></li>
-<li><a href="#_updating_a_module">3.2.3. Updating a Module</a></li>
+<li><a href="#_get_a_module_of_a_project">3.2.3. Get a Module of a Project</a></li>
 <li><a href="#_listing_all_modules_of_a_project">3.2.4. Listing all Modules of a Project</a></li>
 <li><a href="#_deleting_a_module">3.2.5. Deleting a Module</a></li>
 </ul>
@@ -2163,7 +2164,10 @@ table.tableblock.grid-all {
 <ul class="sectlevel3">
 <li><a href="#_structure_3">3.3.1. Structure</a></li>
 <li><a href="#_listing_a_project_s_file_patterns">3.3.2. Listing a Project&#8217;s File Patterns</a></li>
-<li><a href="#_setting_a_project_s_file_patterns">3.3.3. Setting a Project&#8217;s File Patterns</a></li>
+<li><a href="#_adding_a_file_pattern_to_a_project">3.3.3. Adding a File Pattern to a Project</a></li>
+<li><a href="#_removing_a_file_pattern_from_a_project">3.3.4. Removing a File Pattern from a Project</a></li>
+<li><a href="#_get_a_specific_file_pattern_from_a_project">3.3.5. Get a specific File Pattern from a Project</a></li>
+<li><a href="#_update_a_file_pattern_for_a_project">3.3.6. Update a File Pattern for a Project</a></li>
 </ul>
 </li>
 <li><a href="#_analyzer_configuration">3.4. Analyzer Configuration</a>
@@ -2176,27 +2180,11 @@ table.tableblock.grid-all {
 <li><a href="#_loading_a_single_analyzer_configuration">3.4.6. Loading a single Analyzer Configuration</a></li>
 </ul>
 </li>
-<li><a href="#_analyzer_configuration_file">3.5. Analyzer Configuration File</a>
+<li><a href="#_analyzing_job">3.5. Analyzing Job</a>
 <ul class="sectlevel3">
-<li><a href="#_uploading_an_analyzer_configuration_file">3.5.1. Uploading an Analyzer Configuration File</a></li>
-<li><a href="#_downloading_an_analyzer_configuration_file">3.5.2. Downloading an Analyzer Configuration File</a></li>
-</ul>
-</li>
-<li><a href="#_analyzing_job">3.6. Analyzing Job</a>
-<ul class="sectlevel3">
-<li><a href="#_structure_5">3.6.1. Structure</a></li>
-<li><a href="#_starting_an_analyzing_job">3.6.2. Starting an Analyzing Job</a></li>
-<li><a href="#_retrieving_an_analyzing_job">3.6.3. Retrieving an Analyzing Job</a></li>
-</ul>
-</li>
-<li><a href="#_quality_profile">3.7. Quality Profile</a>
-<ul class="sectlevel3">
-<li><a href="#_structure_6">3.7.1. Structure</a></li>
-<li><a href="#_creating_a_quality_profile">3.7.2. Creating a Quality Profile</a></li>
-<li><a href="#_updating_a_quality_profile">3.7.3. Updating a Quality Profile</a></li>
-<li><a href="#_loading_a_single_quality_profile">3.7.4. Loading a single Quality Profile</a></li>
-<li><a href="#_deleting_a_quality_profile">3.7.5. Deleting a Quality Profile</a></li>
-<li><a href="#_listing_a_project_s_quality_profiles">3.7.6. Listing a Project&#8217;s Quality Profiles</a></li>
+<li><a href="#_starting_an_analyzing_job">3.5.1. Starting an Analyzing Job</a></li>
+<li><a href="#_retrieving_an_analyzing_job_status">3.5.2. Retrieving an Analyzing Job status</a></li>
+<li><a href="#_resetting_an_analyzing_job">3.5.3. Resetting an Analyzing Job</a></li>
 </ul>
 </li>
 </ul>
@@ -2219,15 +2207,13 @@ table.tableblock.grid-all {
 </li>
 <li><a href="#_commit">5.2. Commit</a>
 <ul class="sectlevel3">
-<li><a href="#_structure_7">5.2.1. Structure</a></li>
+<li><a href="#_structure_5">5.2.1. Structure</a></li>
 <li><a href="#_listing_a_project_s_commits">5.2.2. Listing a Project&#8217;s Commits</a></li>
 </ul>
 </li>
 <li><a href="#_commit_metric_values">5.3. Commit Metric Values</a>
 <ul class="sectlevel3">
 <li><a href="#_querying_metric_values_of_a_commit">5.3.1. Querying Metric Values of a Commit</a></li>
-<li><a href="#_querying_quality_profile_ratings_of_a_commit">5.3.2. Querying Quality Profile Ratings of a Commit</a></li>
-<li><a href="#_querying_the_history_of_a_metric">5.3.3. Querying the History of a Metric</a></li>
 </ul>
 </li>
 <li><a href="#_metrics_trees">5.4. Metrics Trees</a>
@@ -2343,58 +2329,9 @@ an error JSON structure object that looks like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 400 Bad Request
-Content-Length: 195
-Content-Type: application/json;charset=UTF-8
-
-{
-  "errorMessage" : "Validation Error",
-  "fieldErrors" : [ {
-    "field" : "name",
-    "message" : "may not be null"
-  }, {
-    "field" : "vcsUrl",
-    "message" : "must be a valid URL"
-  } ]
-}</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 400 Bad Request</code></pre>
 </div>
 </div>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 33%;">
-<col style="width: 33%;">
-<col style="width: 33%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>errorMessage</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Short message describing what went wrong. In case of validation errors, the detailed validation error messages can be found in the fieldErrors array.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fieldErrors</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">List of fields in the JSON payload of a request that had invalid values. May be empty. In this case, the 'message' field should contain an explanation of what went wrong.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fieldErrors[].field</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the field in the JSON payload of the request that had an invalid value.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fieldErrors[].message</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Reason why the value is invalid.</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="sect3">
 <h4 id="_general_errors"><a class="link" href="#_general_errors">1.2.3. General Errors</a></h4>
@@ -2426,29 +2363,27 @@ plain text and hashed on server side for persisting.</p>
 <h5 id="_registration_data_structure"><a class="link" href="#_registration_data_structure">Registration Data Structure</a></h5>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">username</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>username</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The name of the user to be registered.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">password</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The password of the user as plaintext</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Password must not be null and must contain at least one alphabetical and one digit character and no white spaces.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2459,12 +2394,12 @@ plain text and hashed on server side for persisting.</p>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /user/registration HTTP/1.1
 Content-Type: application/json
-Content-Length: 56
 Host: localhost:8080
+Content-Length: 57
 
 {
-  "username" : "radar",
-  "password" : "Password12!"
+  "username" : "username",
+  "password" : "password1"
 }</code></pre>
 </div>
 </div>
@@ -2474,12 +2409,11 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Length: 38
 Content-Type: application/json;charset=UTF-8
+Content-Length: 15
 
 {
-  "id" : 1,
-  "username" : "radar"
+  "id" : 49
 }</code></pre>
 </div>
 </div>
@@ -2491,7 +2425,7 @@ Content-Type: application/json;charset=UTF-8
 <h5 id="_example_request_2"><a class="link" href="#_example_request_2">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /user/1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /user/60 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -2501,12 +2435,12 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Length: 43
 Content-Type: application/json;charset=UTF-8
-Content-Length: 37
 
 {
-  "id" : 1,
-  "username" : "user"
+  "id" : 60,
+  "username" : "username2"
 }</code></pre>
 </div>
 </div>
@@ -2536,29 +2470,27 @@ If the log in is successful, user obtains two JSON Web Tokens <a href="https://j
 <h5 id="_login_data_structure"><a class="link" href="#_login_data_structure">Login Data Structure</a></h5>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">username</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>username</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The name of the user to be logged in.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">password</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>password</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The password of the user as plaintext</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null. Size must be between 8 and 2147483647 inclusive</p></td>
 </tr>
 </tbody>
 </table>
@@ -2569,12 +2501,12 @@ If the log in is successful, user obtains two JSON Web Tokens <a href="https://j
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /user/auth HTTP/1.1
 Content-Type: application/json
-Content-Length: 56
 Host: localhost:8080
+Content-Length: 57
 
 {
-  "username" : "radar",
-  "password" : "Password12!"
+  "username" : "username",
+  "password" : "password1"
 }</code></pre>
 </div>
 </div>
@@ -2585,11 +2517,11 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 448
+Content-Length: 459
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NTQzODM0MzEsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NTQzODI1MzEsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.lUP8QbgmGj93ZcZ2XFtmj46FGVl80Np6kSHaaxs6PYo",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NTk1NjY1MzEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTU0MzgyNTMxLCJ1c2VySWQiOiIyIiwidXNlcm5hbWUiOiJyYWRhciJ9.QTtYLQTiWffHXt81AG1-jFpdJ3YKgDwayy7_JzmOGck"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NzkyODA3MDEsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NzkyNzk4MDEsInVzZXJJZCI6IjQxIiwidXNlcm5hbWUiOiJ1c2VybmFtZSJ9.NDP9EnxIUfNKfe9g8GQLxzRDEltqwIdXbKCta5NQssg",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODQ0NjM4MDEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTc5Mjc5ODAxLCJ1c2VySWQiOiI0MSIsInVzZXJuYW1lIjoidXNlcm5hbWUifQ.xw1ZX0LF36IDkr1bNGu87KUhOZnXojk3Up7lsxYVJ1k"
 }</code></pre>
 </div>
 </div>
@@ -2606,29 +2538,27 @@ to use the refresh token you got after successful login</p>
 <h5 id="_login_data_structure_2"><a class="link" href="#_login_data_structure_2">Login Data Structure</a></h5>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">accessToken</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>accessToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The expired access token</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">refreshToken</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>refreshToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The valid refresh token</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
 </tr>
 </tbody>
 </table>
@@ -2639,12 +2569,12 @@ to use the refresh token you got after successful login</p>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /user/refresh HTTP/1.1
 Content-Type: application/json
+Content-Length: 447
 Host: localhost:8080
-Content-Length: 443
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NTQzODE2OTEsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NTQzODA3OTEsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.NY3KNNbdhCXycndMty_F55z8ZGtM2ly4XgoWghNuyHo",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NTQ1NjI1MzEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTU0MjAyNTMxLCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.bDM9LY3S-RRy2u4zuf7SzNL5YqvIYMNMwFM1dPC07is"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NzkyNzg5NTksInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NzkyNzgwNTksInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.tTVLjxvDGDtaJ-75i62_gOznu_TZX1kSQSv0VszeyDs",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODQ0NjM3OTksInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTc5Mjc5Nzk5LCJ1c2VySWQiOiI2NSIsInVzZXJuYW1lIjoicmFkYXIifQ.MG0Nu_acn7cj3PnoAnvutnRHp1ZyA21K0HPRwzHVM1M"
 }</code></pre>
 </div>
 </div>
@@ -2654,11 +2584,11 @@ Content-Length: 443
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Length: 218
+Content-Length: 219
 Content-Type: application/json;charset=UTF-8
 
 {
-  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NTQzODM0MzIsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NTQzODI1MzIsInVzZXJJZCI6IjIiLCJ1c2VybmFtZSI6InJhZGFyIn0.Nw9jVrxVcCHl-lEpDj3eQzZtwlPnLEt0tQ5SSRIMoaU"
+  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NzkyODA3MDAsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1NzkyNzk4MDAsInVzZXJJZCI6IjY1IiwidXNlcm5hbWUiOiJyYWRhciJ9.FOOsTapcnKmgcjiu3fm7Sw_i3quWY7GteQYu50EO_fM"
 }</code></pre>
 </div>
 </div>
@@ -2676,29 +2606,27 @@ again after the current access token is expired.</p>
 <h5 id="_login_data_structure_3"><a class="link" href="#_login_data_structure_3">Login Data Structure</a></h5>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">refreshToken</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>refreshToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">the current refresh token of the user</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">newPassword</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>newPassword</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The password of the user as plaintext</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
 </tr>
 </tbody>
 </table>
@@ -2710,11 +2638,11 @@ again after the current access token is expired.</p>
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /user/password/change HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 256
+Content-Length: 266
 
 {
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1NTQ1NjI1MzEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTU0MjAyNTMxLCJ1c2VySWQiOjEsInVzZXJuYW1lIjoicmFkYXIifQ.bDM9LY3S-RRy2u4zuf7SzNL5YqvIYMNMwFM1dPC07is",
-  "newPassword" : "Coderadar4"
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODQ0NjM4MDAsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTc5Mjc5ODAwLCJ1c2VySWQiOiIzMyIsInVzZXJuYW1lIjoidXNlcm5hbWUifQ.LQa0eRk2pwVxSMHGJ4lWad2uZqMRYwH6888PcvraFQs",
+  "newPassword" : "newPassword1"
 }</code></pre>
 </div>
 </div>
@@ -2723,13 +2651,7 @@ Content-Length: 256
 <h5 id="_example_response_5"><a class="link" href="#_example_response_5">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 25
-
-{
-  "successful" : true
-}</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2819,7 +2741,7 @@ To run an analysis on a project, you have to at least follow these steps:</p>
 <li>
 <p><a href="#creating-a-project">Create a Project</a> so that coderadar knows where to get the code base. Once this step
 is done, coderadar will clone the repository and create some metadata on the commits and code base. Depending
-on the size of the project, it may take some while to complete.</p>
+on the size of the project, it may take a while to complete.</p>
 </li>
 <li>
 <p><a href="#setting-filepatterns">Define File Patterns</a> to tell coderadar which files should be analyzed. If this step
@@ -2830,9 +2752,9 @@ is omitted, an analysis will provide no results.</p>
 files specified in the previous step and provide some code metrics.</p>
 </li>
 <li>
-<p><a href="#creating-analyzing-job">Add an Analyzing Job</a> for your project. Once this is done, coderadar
-will start to analyze all files in the commits defined by the job. Depending on the size of the code base
-and the number of configured analyzers, this may take some time to finish.</p>
+<p><a href="#start-analysis">Start an Analyzing Job</a> for your project. coderadar will start to analyze all files
+in the commits between startDate and endDate using the analyzers you have configured. Depending on the size
+of the code base and the number of configured analyzers, this may take some time to finish.</p>
 </li>
 </ol>
 </div>
@@ -2846,73 +2768,101 @@ and its sub-resources you provide coderadar with the information it needs to ana
 <h4 id="_structure"><a class="link" href="#_structure">3.1.1. Structure</a></h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The id of the project.</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The name of the project to be analyzed.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Length must be between 0 and 100 inclusive. Must not be null</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">vcsUrl</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vcsUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The URL to the version control repository where the project&#8217;s source files are kept.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must be a well-formed URL. Must not be null</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">vcsUser</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vcsUsername</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The user name used to access the version control system of your project. Needs read access only. Don&#8217;t provide this field if anonymous access is possible.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Length must be between 0 and 100 inclusive</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">vcsPassword</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vcsPassword</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The password of the version control system user. This password has to be stored in plain text for coderadar to be usable, so make sure to provide a user with only reading permissions. Don&#8217;t provide this field if anonymous access is possible.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Length must be between 0 and 100 inclusive</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">vcsOnline</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>vcsOnline</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set to false if you want no interaction with a remote repository for this project. True by default.</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">startDate</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>startDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Date</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The start date of the range of commits which should be analyzed by coderadar. Leave empty to start at the first commit.</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">endDate</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>endDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Date</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The end date of the range of commits which should be analyzed by coderadar. Leave empty to automatically process all new incoming commits.</p></td>
-<td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_listing_projects"><a class="link" href="#_listing_projects">3.1.2. Listing Projects</a></h4>
+<h4 id="_creating_a_project"><a class="link" href="#_creating_a_project">3.1.2. Creating a Project</a></h4>
+<div class="paragraph">
+<p><a id="creating-a-project"></a></p>
+</div>
 <div class="sect4">
 <h5 id="_example_request_6"><a class="link" href="#_example_request_6">Example Request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects HTTP/1.1
+Content-Length: 264
+Content-Type: application/json
+Host: localhost:8080
+
+{
+  "name" : "project",
+  "vcsUsername" : "username",
+  "vcsPassword" : "password",
+  "vcsUrl" : "file:/home/travis/build/reflectoring/coderadar/coderadar-test/build/resources/test/test-repository",
+  "vcsOnline" : false,
+  "startDate" : null,
+  "endDate" : null
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_example_response_6"><a class="link" href="#_example_response_6">Example Response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
+Content-Type: application/json;charset=UTF-8
+Content-Length: 15
+
+{
+  "id" : 67
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_listing_projects"><a class="link" href="#_listing_projects">3.1.3. Listing Projects</a></h4>
+<div class="sect4">
+<h5 id="_example_request_7"><a class="link" href="#_example_request_7">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects HTTP/1.1
@@ -2921,81 +2871,32 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_6"><a class="link" href="#_example_response_6">Example Response</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 398
-
-[ {
-  "id" : 1,
-  "name" : "name",
-  "vcsUrl" : "http://valid.url",
-  "vcsUser" : "user",
-  "vcsPassword" : "pass",
-  "startDate" : "2016-01-01",
-  "endDate" : "2016-12-31",
-  "vcsOnline" : true
-}, {
-  "id" : 2,
-  "name" : "name2",
-  "vcsUrl" : "http://valid.url2",
-  "vcsUser" : "user2",
-  "vcsPassword" : "pass2",
-  "startDate" : "2016-01-01",
-  "endDate" : "2016-12-31",
-  "vcsOnline" : true
-} ]</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_creating_a_project"><a class="link" href="#_creating_a_project">3.1.3. Creating a Project</a></h4>
-<div class="paragraph">
-<p><a id="creating-a-project"></a></p>
-</div>
-<div class="sect4">
-<h5 id="_example_request_7"><a class="link" href="#_example_request_7">Example Request</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects HTTP/1.1
-Content-Length: 203
-Content-Type: application/json
-Host: localhost:8080
-
-{
-  "id" : null,
-  "name" : "name",
-  "vcsUrl" : "http://valid.url",
-  "vcsUser" : "user",
-  "vcsPassword" : "pass",
-  "startDate" : [ 2016, 1, 1 ],
-  "endDate" : [ 2016, 12, 31 ],
-  "vcsOnline" : true
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
 <h5 id="_example_response_7"><a class="link" href="#_example_response_7">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Length: 194
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
+Content-Length: 488
 
-{
-  "id" : 1,
-  "name" : "name",
-  "vcsUrl" : "http://valid.url",
-  "vcsUser" : "user",
-  "vcsPassword" : "pass",
-  "startDate" : "2016-01-01",
-  "endDate" : "2016-12-31",
-  "vcsOnline" : true
-}</code></pre>
+[ {
+  "id" : 59,
+  "name" : "project",
+  "vcsUsername" : "testUser",
+  "vcsPassword" : null,
+  "vcsUrl" : "https://valid.url",
+  "vcsOnline" : true,
+  "startDate" : "2020-01-17T16:50:01.609+0000",
+  "endDate" : "2020-01-17T16:50:01.609+0000"
+}, {
+  "id" : 42,
+  "name" : "project",
+  "vcsUsername" : "testUser",
+  "vcsPassword" : null,
+  "vcsUrl" : "https://valid.url",
+  "vcsOnline" : true,
+  "startDate" : "2020-01-17T16:50:01.609+0000",
+  "endDate" : "2020-01-17T16:50:01.609+0000"
+} ]</code></pre>
 </div>
 </div>
 </div>
@@ -3006,20 +2907,19 @@ Content-Type: application/json;charset=UTF-8
 <h5 id="_example_request_8"><a class="link" href="#_example_request_8">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1 HTTP/1.1
-Content-Length: 207
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/20 HTTP/1.1
+Content-Length: 208
 Content-Type: application/json
 Host: localhost:8080
 
 {
-  "id" : null,
-  "name" : "name2",
-  "vcsUrl" : "http://valid.url2",
-  "vcsUser" : "user2",
-  "vcsPassword" : "pass2",
-  "startDate" : [ 2016, 1, 1 ],
-  "endDate" : [ 2016, 12, 31 ],
-  "vcsOnline" : true
+  "name" : "new-project-name",
+  "vcsUsername" : "username",
+  "vcsPassword" : "password",
+  "vcsUrl" : "http://valid.url",
+  "vcsOnline" : true,
+  "startDate" : 1579279805579,
+  "endDate" : 1579279805579
 }</code></pre>
 </div>
 </div>
@@ -3028,37 +2928,57 @@ Host: localhost:8080
 <h5 id="_example_response_8"><a class="link" href="#_example_response_8">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Length: 198
-Content-Type: application/json;charset=UTF-8
-
-{
-  "id" : 1,
-  "name" : "name2",
-  "vcsUrl" : "http://valid.url2",
-  "vcsUser" : "user2",
-  "vcsPassword" : "pass2",
-  "startDate" : "2016-01-01",
-  "endDate" : "2016-12-31",
-  "vcsOnline" : true
-}</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_deleting_a_project"><a class="link" href="#_deleting_a_project">3.1.5. Deleting a Project</a></h4>
+<h4 id="_get_a_project"><a class="link" href="#_get_a_project">3.1.5. Get a Project</a></h4>
 <div class="sect4">
 <h5 id="_example_request_9"><a class="link" href="#_example_request_9">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/25 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_example_response_9"><a class="link" href="#_example_response_9">Example Response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Length: 241
+Content-Type: application/json;charset=UTF-8
+
+{
+  "id" : 25,
+  "name" : "project",
+  "vcsUsername" : "testUser",
+  "vcsPassword" : null,
+  "vcsUrl" : "https://valid.url",
+  "vcsOnline" : true,
+  "startDate" : "2020-01-17T16:50:01.892+0000",
+  "endDate" : "2020-01-17T16:50:01.892+0000"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_deleting_a_project"><a class="link" href="#_deleting_a_project">3.1.6. Deleting a Project</a></h4>
+<div class="sect4">
+<h5 id="_example_request_10"><a class="link" href="#_example_request_10">Example Request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/26 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_example_response_10"><a class="link" href="#_example_response_10">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
@@ -3084,29 +3004,22 @@ files in all commits have to be updated during these operations.</p>
 <h4 id="_structure_2"><a class="link" href="#_structure_2">3.2.1. Structure</a></h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The id of the module.</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">modulePath</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>path</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The path of this module starting at the VCS root. All files below that path are considered to be part of the module.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
 </tr>
 </tbody>
 </table>
@@ -3114,51 +3027,16 @@ files in all commits have to be updated during these operations.</p>
 <div class="sect3">
 <h4 id="_creating_a_module"><a class="link" href="#_creating_a_module">3.2.2. Creating a Module</a></h4>
 <div class="sect4">
-<h5 id="_example_request_10"><a class="link" href="#_example_request_10">Example Request</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/modules HTTP/1.1
-Content-Length: 61
-Content-Type: application/json
-Host: localhost:8080
-
-{
-  "id" : null,
-  "modulePath" : "server/coderadar-webapp"
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_example_response_10"><a class="link" href="#_example_response_10">Example Response</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Type: application/json;charset=UTF-8
-Content-Length: 58
-
-{
-  "id" : 1,
-  "modulePath" : "server/coderadar-webapp"
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_updating_a_module"><a class="link" href="#_updating_a_module">3.2.3. Updating a Module</a></h4>
-<div class="sect4">
 <h5 id="_example_request_11"><a class="link" href="#_example_request_11">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/modules/1 HTTP/1.1
-Content-Length: 61
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/35/modules HTTP/1.1
+Content-Length: 28
 Content-Type: application/json
 Host: localhost:8080
 
 {
-  "id" : null,
-  "modulePath" : "server/coderadar-server"
+  "path" : "module-path"
 }</code></pre>
 </div>
 </div>
@@ -3167,25 +3045,24 @@ Host: localhost:8080
 <h5 id="_example_response_11"><a class="link" href="#_example_response_11">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 58
+Content-Length: 15
 
 {
-  "id" : 1,
-  "modulePath" : "server/coderadar-server"
+  "id" : 36
 }</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_listing_all_modules_of_a_project"><a class="link" href="#_listing_all_modules_of_a_project">3.2.4. Listing all Modules of a Project</a></h4>
+<h4 id="_get_a_module_of_a_project"><a class="link" href="#_get_a_module_of_a_project">3.2.3. Get a Module of a Project</a></h4>
 <div class="sect4">
 <h5 id="_example_request_12"><a class="link" href="#_example_request_12">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/modules HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/2/modules/3 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3195,21 +3072,48 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Length: 40
 Content-Type: application/json;charset=UTF-8
-Content-Length: 233
+
+{
+  "id" : 3,
+  "path" : "test-module"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_listing_all_modules_of_a_project"><a class="link" href="#_listing_all_modules_of_a_project">3.2.4. Listing all Modules of a Project</a></h4>
+<div class="sect4">
+<h5 id="_example_request_13"><a class="link" href="#_example_request_13">Example Request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/37/modules HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_example_response_13"><a class="link" href="#_example_response_13">Example Response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Length: 186
+Content-Type: application/json;charset=UTF-8
 
 [ {
-  "id" : 2,
-  "modulePath" : "client/coderadar-app"
+  "id" : 20,
+  "path" : "test-module2"
 }, {
-  "id" : 3,
-  "modulePath" : "server/analyzer"
-}, {
-  "id" : 4,
-  "modulePath" : "server/analyzer/submodule"
+  "id" : 0,
+  "path" : "test-module/"
 }, {
   "id" : 1,
-  "modulePath" : "server/coderadar-webapp"
+  "path" : "test-module/src"
+}, {
+  "id" : 21,
+  "path" : "test-module/src/asd"
 } ]</code></pre>
 </div>
 </div>
@@ -3218,16 +3122,16 @@ Content-Length: 233
 <div class="sect3">
 <h4 id="_deleting_a_module"><a class="link" href="#_deleting_a_module">3.2.5. Deleting a Module</a></h4>
 <div class="sect4">
-<h5 id="_example_request_13"><a class="link" href="#_example_request_13">Example Request</a></h5>
+<h5 id="_example_request_14"><a class="link" href="#_example_request_14">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/modules/1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/32/modules/33 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_13"><a class="link" href="#_example_response_13">Example Response</a></h5>
+<h5 id="_example_response_14"><a class="link" href="#_example_response_14">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
@@ -3239,51 +3143,37 @@ Host: localhost:8080</code></pre>
 <div class="sect2">
 <h3 id="_file_patterns"><a class="link" href="#_file_patterns">3.3. File Patterns</a></h3>
 <div class="paragraph">
-<p>A file pattern describes a set of files within a project&#8217;s code base. Each project can have several file patterns
-defined. Each file pattern belongs to a certain file set, the most important of which is the SOURCE file set that
-is supposed to contain all source code files of your project.</p>
+<p>A File Pattern describes a set of files within a Project&#8217;s code base. Each project can have several file patterns
+defined. File Patterns may either define a pattern for files to be INCLUDED or files to be EXCLUDED.</p>
 </div>
 <div class="paragraph">
-<p>File patterns may either define a pattern for files to be INCLUDED or files to be EXCLUDED. To compile the list of files
-contained in a certain file set (like the SOURCE file set), coderadar will first apply all INCLUDE patterns of that file set and then apply all EXCLUDE
-patterns. Thus, the file set will include all INCLUDED files except those that were part of an EXCLUDE pattern.</p>
-</div>
-<div class="paragraph">
-<p>If a project has no file patterns defined, no files will be analyzed.</p>
+<p>If a project has no File Patterns defined, the analysis won&#8217;t start.</p>
 </div>
 <div class="sect3">
 <h4 id="_structure_3"><a class="link" href="#_structure_3">3.3.1. Structure</a></h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pattern</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The pattern string of this FilePattern.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">filePatterns[].pattern</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Ant-style file pattern matching a set of files in the project&#8217;s code base.</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">filePatterns[].inclusionType</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Either 'INCLUDE' if the matching set of files is to be included or 'EXCLUDE' if it is to be excluded.</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">filePatterns[].fileSetType</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The set of files the files matching this pattern belong to. Currently, the only available value is 'SOURCE' describing source code files.</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>inclusionType</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether the pattern is included or excluded.</p></td>
 </tr>
 </tbody>
 </table>
@@ -3291,66 +3181,11 @@ patterns. Thus, the file set will include all INCLUDED files except those that w
 <div class="sect3">
 <h4 id="_listing_a_project_s_file_patterns"><a class="link" href="#_listing_a_project_s_file_patterns">3.3.2. Listing a Project&#8217;s File Patterns</a></h4>
 <div class="sect4">
-<h5 id="_example_request_14"><a class="link" href="#_example_request_14">Example Request</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/files HTTP/1.1
-Host: localhost:8080</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_example_response_14"><a class="link" href="#_example_response_14">Example Response</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Length: 262
-Content-Type: application/json;charset=UTF-8
-
-{
-  "filePatterns" : [ {
-    "pattern" : "src/main/java/**/*.java",
-    "inclusionType" : "INCLUDE",
-    "fileSetType" : "SOURCE"
-  }, {
-    "pattern" : "src/main/java/**/generated/**/*.java",
-    "inclusionType" : "EXCLUDE",
-    "fileSetType" : "SOURCE"
-  } ]
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_setting_a_project_s_file_patterns"><a class="link" href="#_setting_a_project_s_file_patterns">3.3.3. Setting a Project&#8217;s File Patterns</a></h4>
-<div class="paragraph">
-<p><a id="setting-filepatterns"></a></p>
-</div>
-<div class="paragraph">
-<p>Coderadar views a project&#8217;s list of file patterns as a single resource. Hence, you can only list and save
-all file patterns of a project at once.</p>
-</div>
-<div class="sect4">
 <h5 id="_example_request_15"><a class="link" href="#_example_request_15">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/files HTTP/1.1
-Content-Length: 262
-Content-Type: application/json
-Host: localhost:8080
-
-{
-  "filePatterns" : [ {
-    "pattern" : "src/main/java/**/*.java",
-    "inclusionType" : "INCLUDE",
-    "fileSetType" : "SOURCE"
-  }, {
-    "pattern" : "src/main/java/**/generated/**/*.java",
-    "inclusionType" : "EXCLUDE",
-    "fileSetType" : "SOURCE"
-  } ]
-}</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/25/filePatterns HTTP/1.1
+Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
@@ -3358,20 +3193,135 @@ Host: localhost:8080
 <h5 id="_example_response_15"><a class="link" href="#_example_response_15">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Length: 151
+Content-Type: application/json;charset=UTF-8
+
+[ {
+  "id" : 23,
+  "pattern" : "**/*.java",
+  "inclusionType" : "INCLUDE"
+}, {
+  "id" : 24,
+  "pattern" : "**/*.xml",
+  "inclusionType" : "EXCLUDE"
+} ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_adding_a_file_pattern_to_a_project"><a class="link" href="#_adding_a_file_pattern_to_a_project">3.3.3. Adding a File Pattern to a Project</a></h4>
+<div class="paragraph">
+<p><a id="setting-filepatterns"></a></p>
+</div>
+<div class="sect4">
+<h5 id="_example_request_16"><a class="link" href="#_example_request_16">Example Request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/3/filePatterns HTTP/1.1
+Content-Length: 60
+Content-Type: application/json
+Host: localhost:8080
+
+{
+  "pattern" : "**/*.java",
+  "inclusionType" : "INCLUDE"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_example_response_16"><a class="link" href="#_example_response_16">Example Response</a></h5>
+<div class="listingblock">
+<div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Length: 262
+Content-Type: application/json;charset=UTF-8
+Content-Length: 14
+
+{
+  "id" : 4
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_removing_a_file_pattern_from_a_project"><a class="link" href="#_removing_a_file_pattern_from_a_project">3.3.4. Removing a File Pattern from a Project</a></h4>
+<div class="sect4">
+<h5 id="_example_request_17"><a class="link" href="#_example_request_17">Example Request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/21/filePatterns/22 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_example_response_17"><a class="link" href="#_example_response_17">Example Response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_get_a_specific_file_pattern_from_a_project"><a class="link" href="#_get_a_specific_file_pattern_from_a_project">3.3.5. Get a specific File Pattern from a Project</a></h4>
+<div class="sect4">
+<h5 id="_example_request_18"><a class="link" href="#_example_request_18">Example Request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/filePatterns/2 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_example_response_18"><a class="link" href="#_example_response_18">Example Response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Length: 72
 Content-Type: application/json;charset=UTF-8
 
 {
-  "filePatterns" : [ {
-    "pattern" : "src/main/java/**/*.java",
-    "inclusionType" : "INCLUDE",
-    "fileSetType" : "SOURCE"
-  }, {
-    "pattern" : "src/main/java/**/generated/**/*.java",
-    "inclusionType" : "EXCLUDE",
-    "fileSetType" : "SOURCE"
-  } ]
+  "id" : 2,
+  "pattern" : "**/*.java",
+  "inclusionType" : "INCLUDE"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_update_a_file_pattern_for_a_project"><a class="link" href="#_update_a_file_pattern_for_a_project">3.3.6. Update a File Pattern for a Project</a></h4>
+<div class="sect4">
+<h5 id="_example_request_19"><a class="link" href="#_example_request_19">Example Request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/3/filePatterns HTTP/1.1
+Content-Length: 60
+Content-Type: application/json
+Host: localhost:8080
+
+{
+  "pattern" : "**/*.java",
+  "inclusionType" : "INCLUDE"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_example_response_19"><a class="link" href="#_example_response_19">Example Response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
+Content-Type: application/json;charset=UTF-8
+Content-Length: 14
+
+{
+  "id" : 4
 }</code></pre>
 </div>
 </div>
@@ -3389,35 +3339,27 @@ plugin via the AnalyzerConfiguration resource.</p>
 <h4 id="_structure_4"><a class="link" href="#_structure_4">3.4.1. Structure</a></h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">id of the AnalyzerConfiguration</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">analyzerName</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>analyzerName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Name of the analyzer plugin to which the AnalyzerConfiguration is applied. This should always be the fully qualified class name of the class that implements the plugin interface.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">enabled</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Set to TRUE if you want the analyzer plugin to be enabled and to FALSE if not. You have to specify each analyzer plugin you want to have enabled. If a project does not have a configuration for a certain plugin, that plugin is NOT enabled by default.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
 </tr>
 </tbody>
 </table>
@@ -3428,34 +3370,31 @@ plugin via the AnalyzerConfiguration resource.</p>
 <p><a id="create-analyzer"></a></p>
 </div>
 <div class="sect4">
-<h5 id="_example_request_16"><a class="link" href="#_example_request_16">Example Request</a></h5>
+<h5 id="_example_request_20"><a class="link" href="#_example_request_20">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers HTTP/1.1
-Content-Length: 116
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/0/analyzers HTTP/1.1
 Content-Type: application/json
+Content-Length: 129
 Host: localhost:8080
 
 {
-  "id" : null,
-  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
+  "analyzerName" : "io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin",
   "enabled" : true
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_16"><a class="link" href="#_example_response_16">Example Response</a></h5>
+<h5 id="_example_response_20"><a class="link" href="#_example_response_20">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
 Content-Type: application/json;charset=UTF-8
-Content-Length: 113
+Content-Length: 14
 
 {
-  "id" : 1,
-  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
-  "enabled" : true
+  "id" : 1
 }</code></pre>
 </div>
 </div>
@@ -3464,144 +3403,11 @@ Content-Length: 113
 <div class="sect3">
 <h4 id="_deleting_an_analyzer_configuration"><a class="link" href="#_deleting_an_analyzer_configuration">3.4.3. Deleting an Analyzer Configuration</a></h4>
 <div class="sect4">
-<h5 id="_example_request_17"><a class="link" href="#_example_request_17">Example Request</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/analyzers/51 HTTP/1.1
-Host: localhost:8080</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_example_response_17"><a class="link" href="#_example_response_17">Example Response</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_updating_an_analyzer_configuration"><a class="link" href="#_updating_an_analyzer_configuration">3.4.4. Updating an Analyzer Configuration</a></h4>
-<div class="sect4">
-<h5 id="_example_request_18"><a class="link" href="#_example_request_18">Example Request</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers/1 HTTP/1.1
-Content-Type: application/json
-Content-Length: 117
-Host: localhost:8080
-
-{
-  "id" : null,
-  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
-  "enabled" : false
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_example_response_18"><a class="link" href="#_example_response_18">Example Response</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 114
-
-{
-  "id" : 1,
-  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
-  "enabled" : false
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_listing_a_project_s_analyzer_configurations"><a class="link" href="#_listing_a_project_s_analyzer_configurations">3.4.5. Listing a Project&#8217;s Analyzer Configurations</a></h4>
-<div class="sect4">
-<h5 id="_example_request_19"><a class="link" href="#_example_request_19">Example Request</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers HTTP/1.1
-Host: localhost:8080</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_example_response_19"><a class="link" href="#_example_response_19">Example Response</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 234
-
-[ {
-  "id" : 1,
-  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
-  "enabled" : true
-}, {
-  "id" : 51,
-  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer2",
-  "enabled" : true
-} ]</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_loading_a_single_analyzer_configuration"><a class="link" href="#_loading_a_single_analyzer_configuration">3.4.6. Loading a single Analyzer Configuration</a></h4>
-<div class="sect4">
-<h5 id="_example_request_20"><a class="link" href="#_example_request_20">Example Request</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers/1 HTTP/1.1
-Host: localhost:8080</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_example_response_20"><a class="link" href="#_example_response_20">Example Response</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json;charset=UTF-8
-Content-Length: 113
-
-{
-  "id" : 1,
-  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer",
-  "enabled" : true
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_analyzer_configuration_file"><a class="link" href="#_analyzer_configuration_file">3.5. Analyzer Configuration File</a></h3>
-<div class="paragraph">
-<p>An AnalyzerConfiguration can be supplied with a configuration file. For example, the Checkstyle analyzer
-can be supplied with a checkstyle configuration xml file to define which rules to check. The content of
-the configuration file can be text, xml, or even a binary format, depending on the configuration format
-the analyzer needs.</p>
-</div>
-<div class="sect3">
-<h4 id="_uploading_an_analyzer_configuration_file"><a class="link" href="#_uploading_an_analyzer_configuration_file">3.5.1. Uploading an Analyzer Configuration File</a></h4>
-<div class="sect4">
 <h5 id="_example_request_21"><a class="link" href="#_example_request_21">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzers/1/file HTTP/1.1
-Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Host: localhost:8080
-
---6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=file; filename=config.txt
-Content-Type: text/plain
-
-abc
---6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/22/analyzers/23 HTTP/1.1
+Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
@@ -3615,13 +3421,20 @@ abc
 </div>
 </div>
 <div class="sect3">
-<h4 id="_downloading_an_analyzer_configuration_file"><a class="link" href="#_downloading_an_analyzer_configuration_file">3.5.2. Downloading an Analyzer Configuration File</a></h4>
+<h4 id="_updating_an_analyzer_configuration"><a class="link" href="#_updating_an_analyzer_configuration">3.4.4. Updating an Analyzer Configuration</a></h4>
 <div class="sect4">
 <h5 id="_example_request_22"><a class="link" href="#_example_request_22">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzers/1/file HTTP/1.1
-Host: localhost:8080</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/27/analyzers/28 HTTP/1.1
+Content-Length: 130
+Content-Type: application/json
+Host: localhost:8080
+
+{
+  "analyzerName" : "io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin",
+  "enabled" : false
+}</code></pre>
 </div>
 </div>
 </div>
@@ -3629,95 +3442,19 @@ Host: localhost:8080</code></pre>
 <h5 id="_example_response_22"><a class="link" href="#_example_response_22">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Accept-Ranges: bytes
-Content-Length: 3
-Content-Type: text/plain
-
-abc</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_analyzing_job"><a class="link" href="#_analyzing_job">3.6. Analyzing Job</a></h3>
-<div class="paragraph">
-<p>By providing an Analyzing Job to coderadar, you can trigger an analysis of a Project&#8217;s codebase. Note
-the following hints:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>coderadar will automatically start to analyze the codebase once an Analyzing Job has been provided,
-unless the Analyzing Job is set to inactive.</p>
-</li>
-<li>
-<p>Only one Analyzing Job can be active for a project at a time. You will have to wait until a running job
-is finished to start another one.</p>
-</li>
-<li>
-<p>New incoming commits to the underlying git repository will automatically be analyzed, unless the Analyzing
-Job is set to inactive.</p>
-</li>
-</ul>
 </div>
 <div class="sect3">
-<h4 id="_structure_5"><a class="link" href="#_structure_5">3.6.1. Structure</a></h4>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">active</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Defines if this AnalyzingJob is active. If it is not active (or there is no AnalyzingJob for the project at all), no commits of the project will be analyzed. Analyses of commits that are already queued will be finished, however.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">rescan</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set this to true when setting the AnalyzingJob for a project if you want to delete all existing analysis results and restart analysis with the new AnalyzingJob. You will get an error response if you try rescanning a project while there are running or queued analysis jobs (i.e. when the previous scan over all commits is not yet finished).</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">fromDate</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date (in milliseconds since epoch) from which to start analyzing commits. Commits before this date are ignored during analysis. If no date is specified, all commits will be analyzed.</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect3">
-<h4 id="_starting_an_analyzing_job"><a class="link" href="#_starting_an_analyzing_job">3.6.2. Starting an Analyzing Job</a></h4>
-<div class="paragraph">
-<p><a id="creating-analyzing-job"></a></p>
-</div>
+<h4 id="_listing_a_project_s_analyzer_configurations"><a class="link" href="#_listing_a_project_s_analyzer_configurations">3.4.5. Listing a Project&#8217;s Analyzer Configurations</a></h4>
 <div class="sect4">
 <h5 id="_example_request_23"><a class="link" href="#_example_request_23">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/analyzingJob HTTP/1.1
-Content-Length: 70
-Content-Type: application/json
-Host: localhost:8080
-
-{
-  "fromDate" : 1451606400000,
-  "active" : true,
-  "rescan" : true
-}</code></pre>
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/29/analyzers HTTP/1.1
+Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
@@ -3726,24 +3463,29 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Length: 140
 Content-Type: application/json;charset=UTF-8
-Content-Length: 68
 
-{
-  "fromDate" : "2016-01-01T00:00:00.000+0000",
-  "active" : true
-}</code></pre>
+[ {
+  "id" : 31,
+  "analyzerName" : "analyzer2",
+  "enabled" : false
+}, {
+  "id" : 30,
+  "analyzerName" : "analyzer",
+  "enabled" : true
+} ]</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_retrieving_an_analyzing_job"><a class="link" href="#_retrieving_an_analyzing_job">3.6.3. Retrieving an Analyzing Job</a></h4>
+<h4 id="_loading_a_single_analyzer_configuration"><a class="link" href="#_loading_a_single_analyzer_configuration">3.4.6. Loading a single Analyzer Configuration</a></h4>
 <div class="sect4">
 <h5 id="_example_request_24"><a class="link" href="#_example_request_24">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/analyzingJob HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/0/analyzers/1 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -3753,12 +3495,13 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Length: 65
 Content-Type: application/json;charset=UTF-8
-Content-Length: 68
 
 {
-  "fromDate" : "2016-01-01T00:00:00.000+0000",
-  "active" : true
+  "id" : 1,
+  "analyzerName" : "analyzer",
+  "enabled" : true
 }</code></pre>
 </div>
 </div>
@@ -3766,214 +3509,28 @@ Content-Length: 68
 </div>
 </div>
 <div class="sect2">
-<h3 id="_quality_profile"><a class="link" href="#_quality_profile">3.7. Quality Profile</a></h3>
+<h3 id="_analyzing_job"><a class="link" href="#_analyzing_job">3.5. Analyzing Job</a></h3>
 <div class="paragraph">
-<p>The main goal of coderadar is to make it easy for you to monitor your quality standards.
-To be able to focus on the quality metrics that are most important to you and your team,
-you can combine a set  metrics within a quality profile. There are several API methods
-that take a quality profile as parameter and return information on the metrics that are
-part of the quality profile and thus are most important to you.</p>
+<p>An analysis can be started for a project in coderadar. By default a Project&#8217;s codebase is not analyzed.
+To analyze the codebase an Analyzing Job has to be executed.</p>
 </div>
 <div class="sect3">
-<h4 id="_structure_6"><a class="link" href="#_structure_6">3.7.1. Structure</a></h4>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">id</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The id of the profile.</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">profileName</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The display name of the profile.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">metrics[].metricName</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the metric that is part of this quality profile.</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">metrics[].metricType</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Either VIOLATION if high metric values should be interpreted as negative or COMPLIANCE if high metric values should be interpreted as positive.</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
+<h4 id="_starting_an_analyzing_job"><a class="link" href="#_starting_an_analyzing_job">3.5.1. Starting an Analyzing Job</a></h4>
+<div class="paragraph">
+<p><a id="start-analysis"></a></p>
 </div>
-<div class="sect3">
-<h4 id="_creating_a_quality_profile"><a class="link" href="#_creating_a_quality_profile">3.7.2. Creating a Quality Profile</a></h4>
 <div class="sect4">
 <h5 id="_example_request_25"><a class="link" href="#_example_request_25">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/qualityprofiles HTTP/1.1
-Content-Length: 219
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/0/analyze HTTP/1.1
 Content-Type: application/json
-Host: localhost:8080
-
-{
-  "id" : null,
-  "profileName" : "Quality Profile",
-  "metrics" : [ {
-    "metricName" : "dummyMetric1",
-    "metricType" : "VIOLATION"
-  }, {
-    "metricName" : "dummyMetric2",
-    "metricType" : "COMPLIANCE"
-  } ]
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_example_response_25"><a class="link" href="#_example_response_25">Example Response</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 216
-
-{
-  "id" : 1,
-  "profileName" : "Quality Profile",
-  "metrics" : [ {
-    "metricName" : "dummyMetric1",
-    "metricType" : "VIOLATION"
-  }, {
-    "metricName" : "dummyMetric2",
-    "metricType" : "COMPLIANCE"
-  } ]
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_updating_a_quality_profile"><a class="link" href="#_updating_a_quality_profile">3.7.3. Updating a Quality Profile</a></h4>
-<div class="sect4">
-<h5 id="_example_request_26"><a class="link" href="#_example_request_26">Example Request</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/1/qualityprofiles/1 HTTP/1.1
-Content-Length: 229
-Content-Type: application/json
-Host: localhost:8080
-
-{
-  "id" : null,
-  "profileName" : "Quality Profile (updated)",
-  "metrics" : [ {
-    "metricName" : "dummyMetric3",
-    "metricType" : "VIOLATION"
-  }, {
-    "metricName" : "dummyMetric4",
-    "metricType" : "COMPLIANCE"
-  } ]
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_example_response_26"><a class="link" href="#_example_response_26">Example Response</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 226
-
-{
-  "id" : 1,
-  "profileName" : "Quality Profile (updated)",
-  "metrics" : [ {
-    "metricName" : "dummyMetric3",
-    "metricType" : "VIOLATION"
-  }, {
-    "metricName" : "dummyMetric4",
-    "metricType" : "COMPLIANCE"
-  } ]
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_loading_a_single_quality_profile"><a class="link" href="#_loading_a_single_quality_profile">3.7.4. Loading a single Quality Profile</a></h4>
-<div class="sect4">
-<h5 id="_example_request_27"><a class="link" href="#_example_request_27">Example Request</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/qualityprofiles/1 HTTP/1.1
-Content-Length: 219
-Content-Type: application/json
-Host: localhost:8080
-
-{
-  "id" : null,
-  "profileName" : "Quality Profile",
-  "metrics" : [ {
-    "metricName" : "dummyMetric1",
-    "metricType" : "VIOLATION"
-  }, {
-    "metricName" : "dummyMetric2",
-    "metricType" : "COMPLIANCE"
-  } ]
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_example_response_27"><a class="link" href="#_example_response_27">Example Response</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 216
-
-{
-  "id" : 1,
-  "profileName" : "Quality Profile",
-  "metrics" : [ {
-    "metricName" : "dummyMetric1",
-    "metricType" : "VIOLATION"
-  }, {
-    "metricName" : "dummyMetric2",
-    "metricType" : "COMPLIANCE"
-  } ]
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_deleting_a_quality_profile"><a class="link" href="#_deleting_a_quality_profile">3.7.5. Deleting a Quality Profile</a></h4>
-<div class="sect4">
-<h5 id="_example_request_28"><a class="link" href="#_example_request_28">Example Request</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">DELETE /projects/1/qualityprofiles/1 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_28"><a class="link" href="#_example_response_28">Example Response</a></h5>
+<h5 id="_example_response_25"><a class="link" href="#_example_response_25">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
@@ -3982,75 +3539,47 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_listing_a_project_s_quality_profiles"><a class="link" href="#_listing_a_project_s_quality_profiles">3.7.6. Listing a Project&#8217;s Quality Profiles</a></h4>
+<h4 id="_retrieving_an_analyzing_job_status"><a class="link" href="#_retrieving_an_analyzing_job_status">3.5.2. Retrieving an Analyzing Job status</a></h4>
 <div class="sect4">
-<h5 id="_example_request_29"><a class="link" href="#_example_request_29">Example Request</a></h5>
+<h5 id="_example_request_26"><a class="link" href="#_example_request_26">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/qualityprofiles?page=0&amp;size=2 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/0/analyzingStatus HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_29"><a class="link" href="#_example_response_29">Example Response</a></h5>
+<h5 id="_example_response_26"><a class="link" href="#_example_response_26">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 1102
+Content-Length: 22
+Content-Type: application/json;charset=UTF-8
 
-[ {
-  "id" : 1,
-  "profileName" : "Quality Profile 1",
-  "metrics" : [ {
-    "metricName" : "dummyMetric1",
-    "metricType" : "VIOLATION"
-  }, {
-    "metricName" : "dummyMetric2",
-    "metricType" : "COMPLIANCE"
-  } ]
-}, {
-  "id" : 2,
-  "profileName" : "Quality Profile 2",
-  "metrics" : [ {
-    "metricName" : "dummyMetric1",
-    "metricType" : "VIOLATION"
-  }, {
-    "metricName" : "dummyMetric2",
-    "metricType" : "COMPLIANCE"
-  } ]
-}, {
-  "id" : 3,
-  "profileName" : "Quality Profile 3",
-  "metrics" : [ {
-    "metricName" : "dummyMetric1",
-    "metricType" : "VIOLATION"
-  }, {
-    "metricName" : "dummyMetric2",
-    "metricType" : "COMPLIANCE"
-  } ]
-}, {
-  "id" : 4,
-  "profileName" : "Quality Profile 4",
-  "metrics" : [ {
-    "metricName" : "dummyMetric1",
-    "metricType" : "VIOLATION"
-  }, {
-    "metricName" : "dummyMetric2",
-    "metricType" : "COMPLIANCE"
-  } ]
-}, {
-  "id" : 5,
-  "profileName" : "Quality Profile 5",
-  "metrics" : [ {
-    "metricName" : "dummyMetric1",
-    "metricType" : "VIOLATION"
-  }, {
-    "metricName" : "dummyMetric2",
-    "metricType" : "COMPLIANCE"
-  } ]
-} ]</code></pre>
+{
+  "status" : false
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_resetting_an_analyzing_job"><a class="link" href="#_resetting_an_analyzing_job">3.5.3. Resetting an Analyzing Job</a></h4>
+<div class="sect4">
+<h5 id="_example_request_27"><a class="link" href="#_example_request_27">Example Request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /projects/0/analyze/reset HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_example_response_27"><a class="link" href="#_example_response_27">Example Response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
 </div>
 </div>
 </div>
@@ -4075,39 +3604,23 @@ Content-Length: 1102
 <div class="sect3">
 <h4 id="_listing_available_analyzers"><a class="link" href="#_listing_available_analyzers">4.1.1. Listing available Analyzers</a></h4>
 <div class="sect4">
-<h5 id="_example_request_30"><a class="link" href="#_example_request_30">Example Request</a></h5>
+<h5 id="_example_request_28"><a class="link" href="#_example_request_28">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /analyzers?page=0&amp;size=2 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /analyzers HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_30"><a class="link" href="#_example_response_30">Example Response</a></h5>
+<h5 id="_example_response_28"><a class="link" href="#_example_response_28">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 750
+Content-Length: 150
+Content-Type: application/json;charset=UTF-8
 
-[ {
-  "analyzerName" : "org.wickedsource.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin"
-}, {
-  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.AbstractDummyAnalyzer"
-}, {
-  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.AndAnotherDummyAnalyzer"
-}, {
-  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.AnotherDummyAnalyzer"
-}, {
-  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.DummyAnalyzer"
-}, {
-  "analyzerName" : "org.wickedsource.coderadar.analyzer.domain.YetAnotherDummyAnalyzer"
-}, {
-  "analyzerName" : "org.wickedsource.coderadar.analyzer.loc.LocAnalyzerPlugin"
-}, {
-  "analyzerName" : "org.wickedsource.coderadar.factories.entities.AnalyzerFactory$DummyAnalyzer"
-} ]</code></pre>
+[ "io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin", "io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin" ]</code></pre>
 </div>
 </div>
 </div>
@@ -4143,40 +3656,34 @@ project.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Metrics will become available as soon as you have provided an <a href="#creating-analyzing-job">Analyzing Job</a> for your project.
-At that moment, analysis of each commit defined in the job starts. Depending on how many commits that are,
-analysis will take a while.</p>
+<p>Metric values will become available as soon as an <a href="#start-analysis">analysis</a> starts for your project.
+At that moment, analysis of each commit in the date range starts The date range is set in the project
+settings. The project will only be regarded in this date range. Depending on how many commits that are and how
+many analyzers are configured, analysis will take a while.</p>
 </div>
 </td>
 </tr>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_example_request_31"><a class="link" href="#_example_request_31">Example Request</a></h5>
+<h5 id="_example_request_29"><a class="link" href="#_example_request_29">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metrics HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/23/metrics HTTP/1.1
+Content-Type: application/json
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_31"><a class="link" href="#_example_response_31">Example Response</a></h5>
+<h5 id="_example_response_29"><a class="link" href="#_example_response_29">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Length: 130
-Content-Type: application/hal+json;charset=UTF-8
+Content-Type: application/json;charset=UTF-8
+Content-Length: 3
 
-[ {
-  "metricName" : "metric1"
-}, {
-  "metricName" : "metric2"
-}, {
-  "metricName" : "metric3"
-}, {
-  "metricName" : "metric4"
-} ]</code></pre>
+[ ]</code></pre>
 </div>
 </div>
 </div>
@@ -4191,7 +3698,7 @@ Depending of the number of commits you have in your project, it may take a while
 are available.</p>
 </div>
 <div class="sect3">
-<h4 id="_structure_7"><a class="link" href="#_structure_7">5.2.1. Structure</a></h4>
+<h4 id="_structure_5"><a class="link" href="#_structure_5">5.2.1. Structure</a></h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -4207,24 +3714,34 @@ are available.</p>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array of all the commits in this project.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The name of the commit.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>author</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].author</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The author (committer) of the commit.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The author of the commit</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timestamp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].comment</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The timestamp of the commit in milliseconds since epoch.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The comment of this commit</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>analyzed</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].timestamp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The timestamp of this commit</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].analyzed</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Whether this commit has already been analyzed by the source code analyzers or not. If it has been analyzed, code metrics for this commit should be available.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether this commit is already analyzed or not.</p></td>
 </tr>
 </tbody>
 </table>
@@ -4232,106 +3749,100 @@ are available.</p>
 <div class="sect3">
 <h4 id="_listing_a_project_s_commits"><a class="link" href="#_listing_a_project_s_commits">5.2.2. Listing a Project&#8217;s Commits</a></h4>
 <div class="sect4">
-<h5 id="_example_request_32"><a class="link" href="#_example_request_32">Example Request</a></h5>
+<h5 id="_example_request_30"><a class="link" href="#_example_request_30">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/commits HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/6/commits HTTP/1.1
+Content-Type: application/json
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_32"><a class="link" href="#_example_response_32">Example Response</a></h5>
+<h5 id="_example_response_30"><a class="link" href="#_example_response_30">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 2014
+Content-Length: 2397
+Content-Type: application/json;charset=UTF-8
 
 [ {
-  "name" : "cafebabe",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "name" : "d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df",
+  "author" : "maximAtanasov",
+  "comment" : "testCommit",
+  "timestamp" : 1565615004000,
   "analyzed" : false
 }, {
-  "name" : "cafebabe1",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "name" : "251dc2fde2db8d9acaedede2bcf742e0f32c128b",
+  "author" : "maximAtanasov",
+  "comment" : "modify GetMetricForCommitCommand.java",
+  "timestamp" : 1565598255000,
   "analyzed" : false
 }, {
-  "name" : "cafebabe2",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "name" : "b7be4fc8d394e296c1b4f7bd84080303a0af3a4d",
+  "author" : "maximAtanasov",
+  "comment" : "remove FindingRename.java",
+  "timestamp" : 1565594249000,
   "analyzed" : false
 }, {
-  "name" : "cafebabe3",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "name" : "53e2f71da54128579dc2d6d130c00405186105d4",
+  "author" : "maximAtanasov",
+  "comment" : "move GetMetricsForCommitCommand.java",
+  "timestamp" : 1565344010000,
   "analyzed" : false
 }, {
-  "name" : "cafebabe4",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "name" : "c113e1d39183da5a21c2495f8e3aa2db8813e95a",
+  "author" : "maximAtanasov",
+  "comment" : "delete AnalyzingJobRename.java",
+  "timestamp" : 1565266154000,
   "analyzed" : false
 }, {
-  "name" : "cafebabe5",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "name" : "da3cb1254c0a0a1f9049b50bada8caafc2a12312",
+  "author" : "maximAtanasov",
+  "comment" : "remove MetricValue.java",
+  "timestamp" : 1565262980000,
   "analyzed" : false
 }, {
-  "name" : "cafebabe6",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "name" : "1933c99825e8b50ac5e05660431d35bf6520fc45",
+  "author" : "maximAtanasov",
+  "comment" : "rename Finding.java",
+  "timestamp" : 1565262963000,
   "analyzed" : false
 }, {
-  "name" : "cafebabe7",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "name" : "ac59bac0618002034e9c106420746d61dba3341c",
+  "author" : "maximAtanasov",
+  "comment" : "add GetMetricsForCommitCommand.java",
+  "timestamp" : 1565248394000,
   "analyzed" : false
 }, {
-  "name" : "cafebabe8",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "name" : "1df7d307cf41f7535a23b07265bfe324dcb68a77",
+  "author" : "maximAtanasov",
+  "comment" : "add MetricValue.java",
+  "timestamp" : 1565012161000,
   "analyzed" : false
 }, {
-  "name" : "cafebabe9",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "name" : "7d95f61ba5a8f2cc2f2035da20a28edbceeb0e1d",
+  "author" : "maximAtanasov",
+  "comment" : "modify Finding.java",
+  "timestamp" : 1565005871000,
   "analyzed" : false
 }, {
-  "name" : "cafebabe10",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "name" : "93e1d2a50811e99dd69742ccab2ae3bcaa542243",
+  "author" : "maximAtanasov",
+  "comment" : "rename AnalyzingJob.java",
+  "timestamp" : 1565005823000,
   "analyzed" : false
 }, {
-  "name" : "cafebabe11",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "name" : "2c37909c99f4518302484c646db16ce1b22b0762",
+  "author" : "maximAtanasov",
+  "comment" : "add AnalyzingJob.java",
+  "timestamp" : 1565005785000,
   "analyzed" : false
 }, {
-  "name" : "cafebabe12",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
-  "analyzed" : false
-}, {
-  "name" : "cafebabe13",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
-  "analyzed" : false
-}, {
-  "name" : "cafebabe14",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
-  "analyzed" : false
-}, {
-  "name" : "cafebabe15",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
-  "analyzed" : false
-}, {
-  "name" : "cafebabe16",
-  "author" : "Tom",
-  "timestamp" : "2016-05-05T05:05:05.000+0000",
+  "name" : "fd68136dd6489504e829b11f2fce1fe97c9f5c0c",
+  "author" : "maximAtanasov",
+  "comment" : "add Finding.java",
+  "timestamp" : 1565005560000,
   "analyzed" : false
 } ]</code></pre>
 </div>
@@ -4353,9 +3864,9 @@ that defines which metrics you are interested in.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Metric values will become available as soon as you have provided an <a href="#creating-analyzing-job">Analyzing Job</a> for your project.
-At that moment, analysis of each commit defined in the job starts. Depending on how many commits that are,
-analysis will take a while.</p>
+<p>Metric values will become available as soon as an <a href="#start-analysis">Analyzing Job</a> starts for your project.
+At that moment, analysis of each commit defined in the job starts. Depending on how many commits that are and how
+many analyzers are configured, analysis will take a while.</p>
 </div>
 </td>
 </tr>
@@ -4367,35 +3878,33 @@ analysis will take a while.</p>
 <h5 id="_query_structure"><a class="link" href="#_query_structure">Query Structure</a></h5>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>commit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The Name of the commit whose metric values to get.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">commit</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the commit whose metric values to get.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">metrics</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>metrics</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">List of the names of the metrics whose values you want to query.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Size must be between 1 and 2147483647 inclusive</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_example_request_33"><a class="link" href="#_example_request_33">Example Request</a></h5>
+<h5 id="_example_request_31"><a class="link" href="#_example_request_31">Example Request</a></h5>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -4412,254 +3921,39 @@ analysis will take a while.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metricvalues/perCommit HTTP/1.1
-Content-Length: 121
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/355/metricvalues/perCommit HTTP/1.1
 Content-Type: application/json
+Content-Length: 188
 Host: localhost:8080
 
 {
-  "commit" : "eb7cbd429530dc26d06a9ea2a62794421dce1e9a",
-  "metrics" : [ "metric1", "metric2", "metric3", "metric4" ]
+  "commit" : "d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df",
+  "metrics" : [ "coderadar:size:loc:java", "coderadar:size:sloc:java", "coderadar:size:cloc:java", "coderadar:size:eloc:java" ]
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_33"><a class="link" href="#_example_response_33">Example Response</a></h5>
+<h5 id="_example_response_31"><a class="link" href="#_example_response_31">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 102
+Content-Length: 259
+Content-Type: application/json;charset=UTF-8
 
-{
-  "metrics" : {
-    "metric1" : 26,
-    "metric2" : 28,
-    "metric3" : 14,
-    "metric4" : 16
-  }
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_querying_quality_profile_ratings_of_a_commit"><a class="link" href="#_querying_quality_profile_ratings_of_a_commit">5.3.2. Querying Quality Profile Ratings of a Commit</a></h4>
-<div class="sect4">
-<h5 id="_query_structure_2"><a class="link" href="#_query_structure_2">Query Structure</a></h5>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">commit</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the commit whose metric values to get.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">profiles</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">List of names of the quality profiles whose ratings you want to query.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Size must be between 1 and 2147483647 inclusive</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
-<h5 id="_example_request_34"><a class="link" href="#_example_request_34">Example Request</a></h5>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>This request can be sent using either the GET or the POST method. See <a href="#usage-of-get">Usage of GET</a>.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/profileratings/perCommit HTTP/1.1
-Content-Type: application/json
-Host: localhost:8080
-Content-Length: 102
-
-{
-  "commit" : "eb7cbd429530dc26d06a9ea2a62794421dce1e9a",
-  "profiles" : [ "profile1", "profile2" ]
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_example_response_34"><a class="link" href="#_example_response_34">Example Response</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Length: 195
-Content-Type: application/hal+json;charset=UTF-8
-
-{
-  "profiles" : {
-    "profile1" : {
-      "complianceRating" : 22,
-      "violationRating" : 20
-    },
-    "profile2" : {
-      "complianceRating" : 18,
-      "violationRating" : 21
-    }
-  }
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_querying_the_history_of_a_metric"><a class="link" href="#_querying_the_history_of_a_metric">5.3.3. Querying the History of a Metric</a></h4>
-<div class="paragraph">
-<p>Use this endpoint to receive the history of a specific metric over time.</p>
-</div>
-<div class="sect4">
-<h5 id="_query_structure_3"><a class="link" href="#_query_structure_3">Query Structure</a></h5>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">dateRange.startDate</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date from which to start the metric history.</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">dateRange.endDate</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Date at which to end the metric history.</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">metric</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the metric whose history to query.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">interval</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The resolution of the history. The history result will contain one data point in each interval. Can be one of DAY, WEEK, MONTH or YEAR.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
-<h5 id="_example_request_35"><a class="link" href="#_example_request_35">Example Request</a></h5>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>This request can be sent using either the GET or the POST method. See <a href="#usage-of-get">Usage of GET</a>.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metricvalues/history HTTP/1.1
-Content-Length: 137
-Content-Type: application/json
-Host: localhost:8080
-
-{
-  "metric" : "metric1",
-  "dateRange" : {
-    "startDate" : [ 2016, 2, 1 ],
-    "endDate" : [ 2016, 4, 1 ]
-  },
-  "interval" : "WEEK"
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_example_response_35"><a class="link" href="#_example_response_35">Example Response</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 599
-
-{
-  "points" : [ {
-    "type" : "week",
-    "x" : [ 2016, 6 ],
-    "y" : 10
-  }, {
-    "type" : "week",
-    "x" : [ 2016, 7 ],
-    "y" : 10
-  }, {
-    "type" : "week",
-    "x" : [ 2016, 8 ],
-    "y" : 10
-  }, {
-    "type" : "week",
-    "x" : [ 2016, 10 ],
-    "y" : 26
-  }, {
-    "type" : "week",
-    "x" : [ 2016, 11 ],
-    "y" : 26
-  }, {
-    "type" : "week",
-    "x" : [ 2016, 12 ],
-    "y" : 26
-  }, {
-    "type" : "week",
-    "x" : [ 2016, 9 ],
-    "y" : 26
-  }, {
-    "type" : "week",
-    "x" : [ 2016, 5 ],
-    "y" : 10
-  }, {
-    "type" : "week",
-    "x" : [ 2016, 13 ],
-    "y" : 73
-  } ]
-}</code></pre>
+[ {
+  "metricName" : "coderadar:size:cloc:java",
+  "value" : 0
+}, {
+  "metricName" : "coderadar:size:eloc:java",
+  "value" : 8
+}, {
+  "metricName" : "coderadar:size:loc:java",
+  "value" : 18
+}, {
+  "metricName" : "coderadar:size:sloc:java",
+  "value" : 15
+} ]</code></pre>
 </div>
 </div>
 </div>
@@ -4677,29 +3971,27 @@ time of a specified commit.</p>
 <h5 id="_request_structure"><a class="link" href="#_request_structure">Request Structure</a></h5>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>commit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Commit to get the metrics for.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">commit</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the commit that defines the point in time at which the metrics should be queried.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">metrics</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">List of the names of the metrics whose values you want to query.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Size must be between 1 and 2147483647 inclusive</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>metrics</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of Metrics to query.</p></td>
 </tr>
 </tbody>
 </table>
@@ -4732,7 +4024,7 @@ time of a specified commit.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>metrics</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Contains a map of metric values for each of the metrics specified in the query at the time of the commit specified in the request. If this node is a MODULE, the metrics are aggregated over all files within this module.</p></td>
 </tr>
 <tr>
@@ -4744,7 +4036,7 @@ time of a specified commit.</p>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_example_request_36"><a class="link" href="#_example_request_36">Example Request</a></h5>
+<h5 id="_example_request_32"><a class="link" href="#_example_request_32">Example Request</a></h5>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -4761,86 +4053,76 @@ time of a specified commit.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metricvalues/tree HTTP/1.1
-Content-Length: 110
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/449/metricvalues/tree HTTP/1.1
 Content-Type: application/json
+Content-Length: 188
 Host: localhost:8080
 
 {
-  "commit" : "eb7cbd429530dc26d06a9ea2a62794421dce1e9a",
-  "metrics" : [ "metric1", "metric2", "metric3" ]
+  "commit" : "d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df",
+  "metrics" : [ "coderadar:size:loc:java", "coderadar:size:sloc:java", "coderadar:size:cloc:java", "coderadar:size:eloc:java" ]
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_36"><a class="link" href="#_example_response_36">Example Response</a></h5>
+<h5 id="_example_response_32"><a class="link" href="#_example_response_32">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Length: 1341
-Content-Type: application/hal+json;charset=UTF-8
+Content-Length: 1201
+Content-Type: application/json;charset=UTF-8
 
 {
   "name" : "root",
   "type" : "MODULE",
-  "metrics" : {
-    "metric1" : 38,
-    "metric2" : 28,
-    "metric3" : 19
-  },
-  "children" : [ {
-    "name" : "/path/to/module1",
-    "type" : "MODULE",
-    "metrics" : {
-      "metric1" : 26,
-      "metric2" : 28,
-      "metric3" : 14
-    },
-    "children" : [ {
-      "name" : "/path/to/module1/src/main/java/test.java",
-      "type" : "FILE",
-      "metrics" : {
-        "metric1" : 12,
-        "metric2" : 13,
-        "metric3" : 11
-      },
-      "children" : [ ]
-    }, {
-      "name" : "/path/to/module1/submodule2",
-      "type" : "MODULE",
-      "metrics" : {
-        "metric1" : 14,
-        "metric2" : 15,
-        "metric3" : 3
-      },
-      "children" : [ {
-        "name" : "/path/to/module1/submodule2/src/main/java/fileOnlyTouchedInFirstCommit.java",
-        "type" : "FILE",
-        "metrics" : {
-          "metric1" : 14,
-          "metric2" : 15,
-          "metric3" : 3
-        },
-        "children" : [ ]
-      } ]
-    } ]
+  "metrics" : [ {
+    "metricName" : "coderadar:size:cloc:java",
+    "value" : 0
   }, {
-    "name" : "/path/to/module3",
-    "type" : "MODULE",
-    "metrics" : {
-      "metric1" : 12,
-      "metric3" : 5
-    },
-    "children" : [ {
-      "name" : "/path/to/module3/src/main/java/anotherfile.java",
-      "type" : "FILE",
-      "metrics" : {
-        "metric1" : 12,
-        "metric3" : 5
-      },
-      "children" : [ ]
-    } ]
+    "metricName" : "coderadar:size:eloc:java",
+    "value" : 8
+  }, {
+    "metricName" : "coderadar:size:loc:java",
+    "value" : 18
+  }, {
+    "metricName" : "coderadar:size:sloc:java",
+    "value" : 15
+  } ],
+  "children" : [ {
+    "name" : "GetMetricsForCommitCommand.java",
+    "type" : "FILE",
+    "metrics" : [ {
+      "metricName" : "coderadar:size:cloc:java",
+      "value" : 0
+    }, {
+      "metricName" : "coderadar:size:eloc:java",
+      "value" : 7
+    }, {
+      "metricName" : "coderadar:size:loc:java",
+      "value" : 17
+    }, {
+      "metricName" : "coderadar:size:sloc:java",
+      "value" : 14
+    } ],
+    "children" : [ ]
+  }, {
+    "name" : "testModule1/NewRandomFile.java",
+    "type" : "FILE",
+    "metrics" : [ {
+      "metricName" : "coderadar:size:cloc:java",
+      "value" : 0
+    }, {
+      "metricName" : "coderadar:size:eloc:java",
+      "value" : 1
+    }, {
+      "metricName" : "coderadar:size:loc:java",
+      "value" : 1
+    }, {
+      "metricName" : "coderadar:size:sloc:java",
+      "value" : 1
+    } ],
+    "children" : [ ]
   } ]
 }</code></pre>
 </div>
@@ -4859,35 +4141,32 @@ commits.</p>
 <h5 id="_request_structure_2"><a class="link" href="#_request_structure_2">Request Structure</a></h5>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
 </colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Type</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Description</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Constraints</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>commit1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">First commit to get the metrics for.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">commit1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the first commit whose metric values should be queried.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>commit2</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Second commit to get the metrics for.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">commit2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the second commit whose metric values should be queried. This commit&#8217;s timestamp must be later than the first commit&#8217;s timestamp!</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Must not be null</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">metrics</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Array</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">List of the names of the metrics whose values you want to query.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Size must be between 1 and 2147483647 inclusive</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>metrics</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of Metrics to query.</p></td>
 </tr>
 </tbody>
 </table>
@@ -4920,39 +4199,39 @@ commits.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>commit1Metrics</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Contains a map of metric values for each of the metrics specified in the query at the time of the commit specified as 'commit1' in the request. This field is NULL if the file or module has not existed yet in commit1. If this node is a MODULE, the metrics are aggregated over all files within this module.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Contains a map of metric values for each of the metrics specified in the query at the time of the commit specified in the request. If this node is a MODULE, the metrics are aggregated over all files within this module.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>commit2Metrics</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Contains a map of metric values for each of the metrics specified in the query at the time of the commit specified as 'commit2' in the request. This field is NULL if the file or module does not exist anymore in commit2. If this node is a MODULE, the metrics are aggregated over all files within this module.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>renamedFrom</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Varies</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Only contains a value if this file has been renamed (moved) between commit1 and commit2. In this case, this field contains the old name of the file, before it was renamed. Otherwise, this field is NULL.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>renamedTo</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Varies</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Only contains a value if this file has been renamed (moved) between commit1 and commit2. In this case, this field contains the new name of the file, after it was renamed. Otherwise, this field is NULL.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>changes</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Varies</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Contains information about what kind of changes were made to this file between commit1 and commit2. This field is only filled for FILEs and not for MODULEs.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Contains a map of metric values for each of the metrics specified in the query at the time of the commit specified in the request. If this node is a MODULE, the metrics are aggregated over all files within this module.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>children</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">If this node describes a MODULE, this field contains the list of child nodes of the same structure, which can be of type MODULE or FILE.</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>renamedFrom</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>renamedTo</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>changes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
 </tbody>
 </table>
 </div>
 <div class="sect4">
-<h5 id="_example_request_37"><a class="link" href="#_example_request_37">Example Request</a></h5>
+<h5 id="_example_request_33"><a class="link" href="#_example_request_33">Example Request</a></h5>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -4969,156 +4248,137 @@ commits.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/1/metricvalues/deltaTree HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/0/metricvalues/deltaTree HTTP/1.1
+Content-Length: 247
 Content-Type: application/json
 Host: localhost:8080
-Content-Length: 169
 
 {
-  "commit1" : "eb7cbd429530dc26d06a9ea2a62794421dce1e9a",
-  "commit2" : "eb7cbd429530dc26d06a9ea2a62794421dce1e9a",
-  "metrics" : [ "metric1", "metric2", "metric3" ]
+  "commit1" : "fd68136dd6489504e829b11f2fce1fe97c9f5c0c",
+  "commit2" : "d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df",
+  "metrics" : [ "coderadar:size:loc:java", "coderadar:size:sloc:java", "coderadar:size:cloc:java", "coderadar:size:eloc:java" ]
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_example_response_37"><a class="link" href="#_example_response_37">Example Response</a></h5>
+<h5 id="_example_response_33"><a class="link" href="#_example_response_33">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 2928
+Content-Type: application/json;charset=UTF-8
+Content-Length: 2604
 
 {
   "name" : "root",
   "type" : "MODULE",
-  "commit1Metrics" : {
-    "metric1" : 38,
-    "metric2" : 28,
-    "metric3" : 19
-  },
-  "commit2Metrics" : {
-    "metric1" : 38,
-    "metric2" : 28,
-    "metric3" : 19
-  },
+  "commit1Metrics" : [ {
+    "metricName" : "coderadar:size:cloc:java",
+    "value" : 0
+  }, {
+    "metricName" : "coderadar:size:eloc:java",
+    "value" : 8
+  }, {
+    "metricName" : "coderadar:size:loc:java",
+    "value" : 12
+  }, {
+    "metricName" : "coderadar:size:sloc:java",
+    "value" : 10
+  } ],
+  "commit2Metrics" : [ {
+    "metricName" : "coderadar:size:cloc:java",
+    "value" : 0
+  }, {
+    "metricName" : "coderadar:size:eloc:java",
+    "value" : 8
+  }, {
+    "metricName" : "coderadar:size:loc:java",
+    "value" : 18
+  }, {
+    "metricName" : "coderadar:size:sloc:java",
+    "value" : 15
+  } ],
   "renamedFrom" : null,
   "renamedTo" : null,
   "changes" : null,
   "children" : [ {
-    "name" : "/path/to/module1",
-    "type" : "MODULE",
-    "commit1Metrics" : {
-      "metric1" : 26,
-      "metric2" : 28,
-      "metric3" : 14
-    },
-    "commit2Metrics" : {
-      "metric1" : 26,
-      "metric2" : 28,
-      "metric3" : 14
-    },
-    "renamedFrom" : null,
-    "renamedTo" : null,
-    "changes" : null,
-    "children" : [ {
-      "name" : "/path/to/module1/src/main/java/test.java",
-      "type" : "FILE",
-      "commit1Metrics" : {
-        "metric1" : 12,
-        "metric2" : 13,
-        "metric3" : 11
-      },
-      "commit2Metrics" : {
-        "metric1" : 12,
-        "metric2" : 13,
-        "metric3" : 11
-      },
-      "renamedFrom" : null,
-      "renamedTo" : null,
-      "changes" : {
-        "renamed" : false,
-        "modified" : true,
-        "deleted" : false,
-        "added" : false
-      },
-      "children" : [ ]
+    "name" : "Finding.java",
+    "type" : "FILE",
+    "commit1Metrics" : [ {
+      "metricName" : "coderadar:size:cloc:java",
+      "value" : 0
     }, {
-      "name" : "/path/to/module1/submodule2",
-      "type" : "MODULE",
-      "commit1Metrics" : {
-        "metric1" : 14,
-        "metric2" : 15,
-        "metric3" : 3
-      },
-      "commit2Metrics" : {
-        "metric1" : 14,
-        "metric2" : 15,
-        "metric3" : 3
-      },
-      "renamedFrom" : null,
-      "renamedTo" : null,
-      "changes" : null,
-      "children" : [ {
-        "name" : "/path/to/module1/submodule2/src/main/java/fileOnlyTouchedInFirstCommit.java",
-        "type" : "FILE",
-        "commit1Metrics" : {
-          "metric1" : 14,
-          "metric2" : 15,
-          "metric3" : 3
-        },
-        "commit2Metrics" : {
-          "metric1" : 14,
-          "metric2" : 15,
-          "metric3" : 3
-        },
-        "renamedFrom" : null,
-        "renamedTo" : null,
-        "changes" : {
-          "renamed" : false,
-          "modified" : false,
-          "deleted" : false,
-          "added" : false
-        },
-        "children" : [ ]
-      } ]
-    } ]
-  }, {
-    "name" : "/path/to/module3",
-    "type" : "MODULE",
-    "commit1Metrics" : {
-      "metric1" : 12,
-      "metric3" : 5
-    },
-    "commit2Metrics" : {
-      "metric1" : 12,
-      "metric3" : 5
-    },
+      "metricName" : "coderadar:size:eloc:java",
+      "value" : 8
+    }, {
+      "metricName" : "coderadar:size:loc:java",
+      "value" : 12
+    }, {
+      "metricName" : "coderadar:size:sloc:java",
+      "value" : 10
+    } ],
+    "commit2Metrics" : [ ],
     "renamedFrom" : null,
     "renamedTo" : null,
-    "changes" : null,
-    "children" : [ {
-      "name" : "/path/to/module3/src/main/java/anotherfile.java",
-      "type" : "FILE",
-      "commit1Metrics" : {
-        "metric1" : 12,
-        "metric3" : 5
-      },
-      "commit2Metrics" : {
-        "metric1" : 12,
-        "metric3" : 5
-      },
-      "renamedFrom" : null,
-      "renamedTo" : null,
-      "changes" : {
-        "renamed" : false,
-        "modified" : false,
-        "deleted" : false,
-        "added" : true
-      },
-      "children" : [ ]
-    } ]
+    "changes" : {
+      "renamed" : false,
+      "modified" : false,
+      "deleted" : true,
+      "added" : false
+    },
+    "children" : [ ]
+  }, {
+    "name" : "GetMetricsForCommitCommand.java",
+    "type" : "FILE",
+    "commit1Metrics" : [ ],
+    "commit2Metrics" : [ {
+      "metricName" : "coderadar:size:cloc:java",
+      "value" : 0
+    }, {
+      "metricName" : "coderadar:size:eloc:java",
+      "value" : 7
+    }, {
+      "metricName" : "coderadar:size:loc:java",
+      "value" : 17
+    }, {
+      "metricName" : "coderadar:size:sloc:java",
+      "value" : 14
+    } ],
+    "renamedFrom" : null,
+    "renamedTo" : null,
+    "changes" : {
+      "renamed" : false,
+      "modified" : false,
+      "deleted" : false,
+      "added" : true
+    },
+    "children" : [ ]
+  }, {
+    "name" : "testModule1/NewRandomFile.java",
+    "type" : "FILE",
+    "commit1Metrics" : [ ],
+    "commit2Metrics" : [ {
+      "metricName" : "coderadar:size:cloc:java",
+      "value" : 0
+    }, {
+      "metricName" : "coderadar:size:eloc:java",
+      "value" : 1
+    }, {
+      "metricName" : "coderadar:size:loc:java",
+      "value" : 1
+    }, {
+      "metricName" : "coderadar:size:sloc:java",
+      "value" : 1
+    } ],
+    "renamedFrom" : null,
+    "renamedTo" : null,
+    "changes" : {
+      "renamed" : false,
+      "modified" : false,
+      "deleted" : false,
+      "added" : true
+    },
+    "children" : [ ]
   } ]
 }</code></pre>
 </div>
@@ -5131,7 +4391,7 @@ Content-Length: 2928
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2019-04-04 12:52:39 +00:00
+Last updated 2020-01-17 16:47:07 +00:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
