@@ -11,8 +11,8 @@ stages:
 
   - name: build
 
-#- name: release
-#  if: branch = master AND type IN (push)
+  - name: publish_gh
+    if: branch = master AND type IN (push)
 
 jobs:
   include:
@@ -20,10 +20,7 @@ jobs:
     - stage: build
       script: "./gradlew --stacktrace build"
 
-#  - stage: release
-#    script:
-#   - "cd coderadar-server/coderadar-core"
-#   - "../../gradlew --console=plain clean preparePages"
-#   - "../../gradlew gitPublishPush --stacktrace"
+    - stage: publish_gh
+      script: "cd coderadar-server/coderadar-core && ../../gradlew --console=plain clean preparePages && ../../gradlew gitPublishPush --stacktrace"
 #   - "../../gradlew bintrayUpload --stacktrace"
 
