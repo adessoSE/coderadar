@@ -67,6 +67,10 @@ class GetMetricsForAllFilesInCommitControllerTest extends ControllerTestTemplate
                 .contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
                 .andDo(document(
                         "metrics/tree",
+                        requestFields(
+                                fields.withPath("commit").description("Commit to get the metrics for."),
+                                fields.withPath("metrics").description("List of Metrics to query.")
+                        ),
                         responseFields(
                                 fieldWithPath("name")
                                         .description("The name of the file or module, containing the full path."),

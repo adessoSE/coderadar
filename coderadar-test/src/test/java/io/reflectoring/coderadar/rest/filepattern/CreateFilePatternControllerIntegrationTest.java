@@ -48,7 +48,7 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
   private ResultHandler documentCreateFilePattern() {
     ConstrainedFields fields = fields(CreateFilePatternCommand.class);
     return document(
-            "filepatterns/create",
+            "filepatterns/create-update",
             requestFields(
                     fields
                             .withPath("pattern")

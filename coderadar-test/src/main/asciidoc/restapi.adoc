@@ -382,11 +382,11 @@ include::{snippets}/filepatterns/get/http-response.adoc[]
 
 ===== Example Request
 
-include::{snippets}/filepatterns/update/http-request.adoc[]
+include::{snippets}/filepatterns/create-update/http-request.adoc[]
 
 ===== Example Response
 
-include::{snippets}/filepatterns/update/http-response.adoc[]
+include::{snippets}/filepatterns/create-update/http-response.adoc[]
 
 === Analyzer Configuration
 
@@ -456,10 +456,6 @@ To analyze the codebase an Analyzing Job has to be executed.
 
 ==== Starting an Analyzing Job
 anchor:start-analysis[]
-
-===== Structure
-
-include::{snippets}/analysis/start/request-fields.adoc[]
 
 ===== Example Request
 

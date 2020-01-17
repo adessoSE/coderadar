@@ -66,7 +66,8 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
             "project", "username", "password", "invalid", true, new Date(), new Date());
     mvc()
         .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andDo(document("projects/create/error400"));
   }
 
     private ResultHandler documentCreateProject() {
