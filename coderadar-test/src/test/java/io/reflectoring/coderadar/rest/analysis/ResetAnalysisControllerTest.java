@@ -69,7 +69,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         ConstrainedFields fields = fields(StartAnalyzingCommand.class);
         StartAnalyzingCommand startAnalyzingCommand = new StartAnalyzingCommand(null, true);
         mvc().perform(post("/projects/" + projectId + "/analyze").content(toJson(startAnalyzingCommand)).contentType(MediaType.APPLICATION_JSON))
-                .andDo(document("analyzing-job/start",
+                .andDo(document("analysis/start",
                         requestFields(
                                 fields
                                         .withPath("from")
@@ -81,7 +81,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
                                 )));
 
         mvc().perform(get("/projects/" + projectId + "/analyzingStatus"))
-                .andDo(document("analyzing-job/status",
+                .andDo(document("analysis/status",
                         responseFields(fieldWithPath("status").description("Whether the Analyzing Job is started or not."))
                 ));
 
@@ -95,7 +95,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         Assertions.assertEquals(40, metricValues.size());
 
         mvc().perform(post("/projects/" + projectId + "/analyze/reset"))
-                .andDo(document("analyzing-job/reset"));
+                .andDo(document("analysis/reset"));
 
         session.clear();
 

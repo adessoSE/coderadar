@@ -41,7 +41,6 @@ The following table describes how the coderadar API interprets the HTTP verbs.
 
 |PUT
 |PUT is not used at this time.
-// TODO PUT really not used?
 
 |PATCH
 |PATCH is not used at this time.
@@ -56,7 +55,6 @@ provided as parameters encoded in the URL. However, in some cases parameters are
 encode them in the URL. In these cases the parameters are expected as JSON string within the request
 body. Since some tools don't allow GET requests with a body, coderadar accepts the POST method in
 these cases as well.
-// TODO still true?
 =====
 
 === Error Handling
@@ -210,7 +208,7 @@ To run an analysis on a project, you have to at least follow these steps:
   is omitted, an analysis will provide no results.
 . <<create-analyzer, Add at least one analyzer>> to your project. Each added analyzer will run over the
   files specified in the previous step and provide some code metrics.
-. <<start-analyzing-job, Start an Analyzing Job>> for your project. coderadar will start to analyze all files
+. <<start-analysis, Start an Analyzing Job>> for your project. coderadar will start to analyze all files
   in the commits between startDate and endDate using the analyzers you have configured. Depending on the size
   of the code base and the number of configured analyzers, this may take some time to finish.
 
@@ -336,7 +334,7 @@ include::{snippets}/modules/delete/http-response.adoc[]
 A File Pattern describes a set of files within a Project's code base. Each project can have several file patterns
 defined. File Patterns may either define a pattern for files to be INCLUDED or files to be EXCLUDED.
 
-If a project has no File Patterns defined, no files will be analyzed.
+If a project has no File Patterns defined, the analysis won't start.
 
 ==== Structure
 
@@ -456,47 +454,43 @@ include::{snippets}/analyzerConfiguration/getSingle/http-response.adoc[]
 
 === Analyzing Job
 
-Analyzing Jobs can be started for a project in coderadar. By default a Project's codebase is not analyzed.
+An analysis can be started for a project in coderadar. By default a Project's codebase is not analyzed.
 To analyze the codebase an Analyzing Job has to be executed.
 
-[NOTE]
-The execution of an Analyzing Job may take some time. This is especially true for larger projects.
-Spring Boot for example takes about 30 minutes. This may vary with different hardware specifications.
-
 ==== Starting an Analyzing Job
-anchor:start-analyzing-job[]
+anchor:start-analysis[]
 
 ===== Structure
 
-include::{snippets}/analyzing-job/start/request-fields.adoc[]
+include::{snippets}/analysis/start/request-fields.adoc[]
 
 ===== Example Request
 
-include::{snippets}/analyzing-job/start/http-request.adoc[]
+include::{snippets}/analysis/start/http-request.adoc[]
 
 ===== Example Response
 
-include::{snippets}/analyzing-job/start/http-response.adoc[]
+include::{snippets}/analysis/start/http-response.adoc[]
 
 ==== Retrieving an Analyzing Job status
 
 ===== Example Request
 
-include::{snippets}/analyzing-job/status/http-request.adoc[]
+include::{snippets}/analysis/status/http-request.adoc[]
 
 ===== Example Response
 
-include::{snippets}/analyzing-job/status/http-response.adoc[]
+include::{snippets}/analysis/status/http-response.adoc[]
 
 ==== Resetting an Analyzing Job
 
 ===== Example Request
 
-include::{snippets}/analyzing-job/reset/http-request.adoc[]
+include::{snippets}/analysis/reset/http-request.adoc[]
 
 ===== Example Response
 
-include::{snippets}/analyzing-job/reset/http-response.adoc[]
+include::{snippets}/analysis/reset/http-response.adoc[]
 
 == Querying Global Data
 anchor:chapter-query-global-data[]
@@ -533,8 +527,9 @@ You can list all metrics that have been measured for your project by calling the
 
 [NOTE]
 =====
-Metric values will become available as soon as an <<start-analyzing-job,Analyzing Job>> starts for your project.
-At that moment, analysis of each commit defined in the job starts. Depending on how many commits that are and how
+Metric values will become available as soon as an <<start-analysis,analysis>> starts for your project.
+At that moment, analysis of each commit in the date range starts The date range is set in the project
+settings. The project will only be regarded in this date range. Depending on how many commits that are and how
 many analyzers are configured, analysis will take a while.
 =====
 
@@ -573,7 +568,7 @@ that defines which metrics you are interested in.
 
 [NOTE]
 =====
-Metric values will become available as soon as an <<start-analyzing-job,Analyzing Job>> starts for your project.
+Metric values will become available as soon as an <<start-analysis,Analyzing Job>> starts for your project.
 At that moment, analysis of each commit defined in the job starts. Depending on how many commits that are and how
 many analyzers are configured, analysis will take a while.
 =====
@@ -586,7 +581,6 @@ include::{snippets}/metrics/commit/metrics/request-fields.adoc[]
 
 ===== Example Request
 
-// TODO still valid?
 [NOTE]
 =====
 This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
@@ -613,7 +607,6 @@ include::{snippets}/metrics/tree/response-fields.adoc[]
 
 ===== Example Request
 
-// TODO still valid?
 [NOTE]
 =====
 This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
@@ -631,7 +624,6 @@ Also, the tree contains information about files that have been renamed or moved 
 commits.
 
 ===== Request Structure
-// TODO encoding in commit2
 
 include::{snippets}/metrics/deltaTree/request-fields.adoc[]
 
@@ -642,7 +634,6 @@ include::{snippets}/metrics/deltaTree/response-fields.adoc[]
 
 ===== Example Request
 
-// TODO still valid?
 [NOTE]
 =====
 This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
