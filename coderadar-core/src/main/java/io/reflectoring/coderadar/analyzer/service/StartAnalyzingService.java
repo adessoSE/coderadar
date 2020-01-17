@@ -97,8 +97,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
         listAnalyzerConfigurationsPort.listAnalyzerConfigurations(projectId);
 
     if (filePatterns.isEmpty()
-        || filePatterns
-            .stream()
+        || filePatterns.stream()
             .noneMatch(
                 filePattern -> filePattern.getInclusionType().equals(InclusionType.INCLUDE))) {
       throw new MisconfigurationException("Cannot analyze project without file patterns");

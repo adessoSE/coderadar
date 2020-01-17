@@ -35,9 +35,7 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
   public Long create(CreateAnalyzerConfigurationCommand command, Long projectId) {
     List<String> analyzers = listAnalyzerService.listAvailableAnalyzers();
     if (analyzers.contains(command.getAnalyzerName())) {
-      if (listAnalyzerConfigurationsFromProjectService
-          .get(projectId)
-          .stream()
+      if (listAnalyzerConfigurationsFromProjectService.get(projectId).stream()
           .noneMatch(a -> a.getAnalyzerName().equals(command.getAnalyzerName()))) {
         AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
         analyzerConfiguration.setEnabled(command.isEnabled());
