@@ -8,13 +8,13 @@
     <br>
     <mat-label style="font-size: 12pt">Analyzed {{commitsAnalyzed}}/{{commits.length}} commits</mat-label>
   </p>
-  <mat-paginator #paginator1 [showFirstLastButtons]="true" class="paginator" [length]="commits.length"
+  <mat-paginator #paginator1 [showFirstLastButtons]="true" class="paginator" [length]="numberOfCommits"
                  [pageSize]="pageSize"
                  [pageSizeOptions]="pageSizeOptions"
                  (page)="syncPaginators($event)">
   </mat-paginator>
   <mat-grid-list cols="1" rowHeight="50px" gutterSize="-2px" >
-    <mat-accordion class="example-headers-align" *ngFor="let commit of commits.slice(pageEvent.pageIndex*pageEvent.pageSize, (pageEvent.pageIndex*pageEvent.pageSize) + pageEvent.pageSize)">
+    <mat-accordion class="example-headers-align" *ngFor="let commit of commits">
       <mat-grid-tile [colspan]="1" [rowspan]="(commit === selectedCommit1 || commit === selectedCommit2) ? 4 : 1">
         <mat-expansion-panel [expanded]="(commit === selectedCommit1 || commit === selectedCommit2)"
                              [ngClass]="{'dashboard-card-selected' : commit === selectedCommit1 || commit === selectedCommit2}"
@@ -50,7 +50,7 @@
   </mat-grid-list>
 </main>
 
-<mat-paginator #paginator2 [showFirstLastButtons]="true" class="paginator" [length]="commits.length"
+<mat-paginator #paginator2 [showFirstLastButtons]="true" class="paginator" [length]="numberOfCommits"
                [pageSize]="pageSize"
                [pageSizeOptions]="pageSizeOptions"
                (page)="syncPaginators($event)">

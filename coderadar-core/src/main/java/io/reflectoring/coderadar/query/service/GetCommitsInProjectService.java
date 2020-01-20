@@ -6,6 +6,9 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import io.reflectoring.coderadar.query.port.driver.GetCommitsInProjectUseCase;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,6 +26,15 @@ public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {
   public List<Commit> get(Long projectId) {
     if (getProjectPort.existsById(projectId)) {
       return getCommitsInProjectPort.getCommitsSortedByTimestampDescWithNoRelationships(projectId);
+    } else {
+      throw new ProjectNotFoundException(projectId);
+    }
+  }
+
+  @Override
+  public Page<Commit> getPaged(Long projectId, Pageable pageRequest) {
+    if (getProjectPort.existsById(projectId)) {
+      return getCommitsInProjectPort.getCommitsSortedByTimestampDescWithNoRelationshipsPaged(projectId, pageRequest);
     } else {
       throw new ProjectNotFoundException(projectId);
     }

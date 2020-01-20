@@ -8,6 +8,7 @@ dependencies {
     compile "org.passay:passay:1.2.0"
     compile "com.auth0:java-jwt:3.1.0"
     compile "joda-time:joda-time:2.9.7"
+    compile "org.springframework.data:spring-data-commons:${version_spring_boot}"
     compile "org.springframework.boot:spring-boot-starter-web:${version_spring_boot}"
     compile "org.springframework.boot:spring-boot-starter-security:${version_spring_boot}"
     compile "io.dropwizard:dropwizard-metrics:1.0.6"

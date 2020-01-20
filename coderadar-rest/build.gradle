@@ -2,6 +2,6 @@ apply plugin: "com.diffplug.gradle.spotless"
 
 dependencies {
     compile group: 'org.springframework', name: 'spring-tx', version: '5.1.9.RELEASE'
-
+    compile "org.springframework.data:spring-data-commons:${version_spring_boot}"
     compile project(":coderadar-core")
 }

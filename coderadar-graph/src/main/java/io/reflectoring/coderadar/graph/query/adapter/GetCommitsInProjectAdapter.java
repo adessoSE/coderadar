@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,6 +54,11 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     return commitRepository.findByProjectIdAndTimestampDesc(projectId).stream()
         .map(CommitBaseDataMapper::mapCommitEntity)
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public Page<Commit> getCommitsSortedByTimestampDescWithNoRelationshipsPaged(Long projectId, Pageable pageRequest) {
+    return commitRepository.findByProjectIdAndTimestampDescPaged(projectId, pageRequest).map(CommitBaseDataMapper::mapCommitEntity);
   }
 
   @Override

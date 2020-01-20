@@ -3,6 +3,10 @@ package io.reflectoring.coderadar.graph.analyzer.repository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
@@ -16,6 +20,12 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c ORDER BY c.timestamp DESC")
   @NonNull
   List<CommitEntity> findByProjectIdAndTimestampDesc(@NonNull Long projectId);
+
+  @Query(
+          value = "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} RETURN c ORDER BY c.timestamp DESC",
+          countQuery = "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} RETURN COUNT(c)")
+  @NonNull
+  Page<CommitEntity> findByProjectIdAndTimestampDescPaged(@NonNull Long projectId, @NonNull Pageable page);
 
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} WITH c "

@@ -200,8 +200,8 @@ export class ProjectService {
    * Sends a GET request to /projects/{id}/commits
    * @param id The project id.
    */
-  public getCommits(id: number): Promise<HttpResponse<Commit[]>> {
-    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/commits', {observe: 'response'}).toPromise();
+  public getCommits(id: number, pageIndex: number, pageSize: number): Promise<HttpResponse<any>> {
+    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/commits?page=' + pageIndex + '&size=' + pageSize, {observe: 'response'}).toPromise();
   }
 
   /**

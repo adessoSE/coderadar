@@ -31,6 +31,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   projectId;
   commits: Commit[];
   commitsAnalyzed = 0;
+  numberOfCommits = 0;
   project: Project;
 
   pageEvent: PageEvent;
@@ -127,7 +128,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
    */
   private getCommits(displayLoadingIndicator: boolean): void {
     this.waiting = displayLoadingIndicator;
-    this.projectService.getCommits(this.projectId)
+    this.projectService.getCommits(this.projectId, this.pageEvent.pageIndex, this.pageEvent.pageSize)
       .then(response => {
         this.commitsAnalyzed = 0;
         let selectedCommit1Id = null;
@@ -138,7 +139,9 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         if (this.selectedCommit2 !== null) {
           selectedCommit2Id = this.selectedCommit2.name;
         }
-        this.commits = response.body;
+        console.log(response);
+        this.commits = response.body.content;
+        this.numberOfCommits = response.body.totalElements;
         this.commits.forEach(c => {
           if (c.analyzed) {
             this.commitsAnalyzed++;
@@ -202,6 +205,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     this.paginator1.pageIndex = event.pageIndex;
     this.paginator1.pageSize = event.pageSize;
     this.pageEvent = event;
+    this.getCommits(false);
   }
 
   /**
