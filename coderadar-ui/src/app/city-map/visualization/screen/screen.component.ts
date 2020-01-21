@@ -363,11 +363,6 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     );
     var tipSize = 0.1;
     var tipGeometry = new THREE.SphereGeometry(tipSize,16,16);
-    /*tipGeometry.vertices.push(
-      new Vector3(tipSize,tipSize,0),
-      new Vector3(0,0,0),
-      new Vector3(-tipSize,tipSize,0)
-    );*/
     this.tooltipLine = new Line(geometry,material);
     var tooltipLineTip = new Mesh(tipGeometry,material);
     tooltipLineTip.position.setY(-1);

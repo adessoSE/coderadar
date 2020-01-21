@@ -56,8 +56,6 @@ export class TooltipComponent implements OnInit {
   }
 
   followPosition(position: { x: number, y: number }) {
-    // this.tooltipElement.style.left = position.x + 15 + 'px';
-    // this.tooltipElement.style.top = position.y + 15 + 'px';
     this.tooltipElement.style.left = position.x - this.tooltipElement.offsetWidth / 2 + 'px';
     this.tooltipElement.style.top = position.y - this.tooltipElement.offsetHeight + 'px';
   }
