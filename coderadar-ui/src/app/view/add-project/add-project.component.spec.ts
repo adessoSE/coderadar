@@ -47,6 +47,7 @@ const project = {
 describe('AddProjectComponent', () => {
   let component: AddProjectComponent;
   let fixture: ComponentFixture<AddProjectComponent>;
+  let http;
   let routerSpy;
 
   beforeEach(() => {
@@ -101,6 +102,7 @@ describe('AddProjectComponent', () => {
 
     fixture = TestBed.createComponent(AddProjectComponent);
     component = fixture.componentInstance;
+    http = TestBed.get(HttpTestingController);
     routerSpy = spyOn(Router.prototype, 'navigate').and.callFake((url) => {});
     fixture.detectChanges();
   });
@@ -112,7 +114,6 @@ describe('AddProjectComponent', () => {
   it('should get unauthenticated and call userService for new authentication',
     inject([UserService], (userService: UserService) => {
       component.project = project;
-      const http = TestBed.get(HttpTestingController);
       const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {});
       component.submitForm();
       http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({
@@ -133,7 +134,6 @@ describe('AddProjectComponent', () => {
 
   it('should get conflict', () => {
     component.project = project;
-    const http = TestBed.get(HttpTestingController);
     component.submitForm();
     http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({
       status: 409,
@@ -153,7 +153,6 @@ describe('AddProjectComponent', () => {
 
   it('should get bad request', () => {
     component.project = project;
-    const http = TestBed.get(HttpTestingController);
     component.submitForm();
     http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({
       status: 400,
@@ -175,7 +174,6 @@ describe('AddProjectComponent', () => {
   });
 
   it('should submit form', () => {
-    const http = TestBed.get(HttpTestingController);
     component.project = project;
     component.submitForm();
     http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({id: 1}, {

@@ -6,7 +6,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {UserService} from '../../../service/user.service';
 import {AppEffects} from '../../../city-map/shared/effects';
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClient, HttpHandler} from '@angular/common/http';
+import {HttpClient, HttpClientModule, HttpHandler} from '@angular/common/http';
 import {of} from 'rxjs';
 import {Router} from '@angular/router';
 import {MainDashboardComponent} from '../../main-dashboard/main-dashboard.component';
@@ -19,12 +19,25 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatIconModule} from '@angular/material/icon';
 import {LoginComponent} from '../../login/login.component';
 import {FormsModule} from '@angular/forms';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {AppComponent} from '../../../app.component';
+import {Project} from '../../../model/project';
 
 describe('CityViewHeaderComponent', () => {
   let component: CityViewHeaderComponent;
   let fixture: ComponentFixture<CityViewHeaderComponent>;
-  let userService;
   let routerSpy;
+  let http;
+  const project = {
+    id: 1,
+    name: 'test',
+    vcsUrl: 'https://valid.url',
+    vcsUsername: '',
+    vcsPassword: '',
+    vcsOnline: true,
+    startDate: null,
+    endDate: null
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -44,6 +57,8 @@ describe('CityViewHeaderComponent', () => {
         MatIconModule,
         MatMenuModule,
         FormsModule,
+        HttpClientModule,
+        HttpClientTestingModule,
         RouterTestingModule.withRoutes([
           {path: 'login', component: LoginComponent},
           {path: 'dashboard', component: MainDashboardComponent},
@@ -53,9 +68,6 @@ describe('CityViewHeaderComponent', () => {
         {provide: AppEffects, useValue: {
             currentProjectId: 1
           }},
-        HttpClient,
-        HttpHandler,
-        {provide: UserService, useClass: MockUserService},
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
@@ -63,7 +75,7 @@ describe('CityViewHeaderComponent', () => {
 
     fixture = TestBed.createComponent(CityViewHeaderComponent);
     component = fixture.componentInstance;
-    userService = TestBed.get(UserService);
+    http = TestBed.get(HttpTestingController);
     localStorage.clear();
     routerSpy = spyOn(Router.prototype, 'navigate').and.callFake((url) => {});
     fixture.detectChanges();
@@ -78,12 +90,22 @@ describe('CityViewHeaderComponent', () => {
   });
 
   it('should get logged in user', () => {
-    userService.login('test', 'test');
+    const user = {
+      username: 'test',
+      accessToken: 'accessToken',
+      refreshToken: 'refreshToken'
+    };
+    localStorage.setItem('currentUser', JSON.stringify(user));
     expect(component.getUsername()).toBe('test');
   });
 
   it('should log out user', () => {
-    userService.login('test', 'test');
+    const user = {
+      username: 'test',
+      accessToken: 'accessToken',
+      refreshToken: 'refreshToken'
+    };
+    localStorage.setItem('currentUser', JSON.stringify(user));
     expect(component.getUsername()).toBe('test');
     component.logout();
     fixture.whenStable().then(() => {
@@ -92,15 +114,78 @@ describe('CityViewHeaderComponent', () => {
       expect(UserService.getLoggedInUser()).toBeFalsy();
     });
   });
-});
 
-class MockUserService extends UserService {
-  login(usernameValue: string, passwordValue: string) {
-    const user = {
-      username: usernameValue,
-      accessToken: 'accessToken',
-      refreshToken: 'refreshToken'
-    };
-    return of(localStorage.setItem('currentUser', JSON.stringify(user))).toPromise();
-  }
-}
+  // TODO
+  //  get project
+  //  get project forbidden
+  //  get project not found
+
+  it('should get project', () => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush(project, {
+      status: 200,
+      url: '/projects/1',
+      statusText: 'Ok',
+    });
+    fixture.whenStable().then(() => {
+      (component as any).getProject();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush(project, {
+        status: 200,
+        url: '/projects/1',
+        statusText: 'Ok',
+      });
+      fixture.whenStable().then(() => {
+        expect(JSON.stringify(component.project)).toBe(JSON.stringify(new Project(project)));
+      });
+    });
+  });
+
+  it('should get project forbidden', inject([UserService], (userService: UserService) => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush(project, {
+      status: 200,
+      url: '/projects/1',
+      statusText: 'Ok',
+    });
+    fixture.whenStable().then(() => {
+      const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {});
+      (component as any).getProject();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
+        status: 403,
+        error: 'Forbidden',
+        message: 'Access Denied',
+        path: '/projects'
+      }, {
+        status: 403,
+        statusText: 'Forbidden',
+        url: '/projects',
+      });
+      fixture.whenStable().then(() => {
+        expect(refreshSpy).toHaveBeenCalled();
+      });
+    });
+  }));
+
+  it('should get project not found', inject([UserService], (userService: UserService) => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush(project, {
+      status: 200,
+      url: '/projects/1',
+      statusText: 'Ok',
+    });
+    fixture.whenStable().then(() => {
+      const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {});
+      (component as any).getProject();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
+        status: 404,
+        error: 'Not Found',
+        message: 'Not Found',
+        url: '/user/auth',
+      }, {
+        status: 404,
+        statusText: 'Not Found',
+        url: '/user/auth',
+      });
+      fixture.whenStable().then(() => {
+        expect(routerSpy).toHaveBeenCalledWith(['/dashboard']);
+      });
+    });
+  }));
+});
