@@ -2,8 +2,12 @@
   (valueChanged)="handleCommitChanged($event)"
   [isDisabled]="isDisabled"
   [label]="label"
-  [model]="selected"
-  [source]="commits">
+  [model$]="selected"
+  [source$]="commits"
+  [filterOptions]="filterCommitOptions"
+  [formatOption]="formatCommit"
+  [resetOnBlur]="true"
+>
 </app-autosuggest-wrapper>
 
 <p *ngIf="loading">Loading</p>

@@ -2,5 +2,7 @@
   (valueChanged)="handleSearchChanged($event)"
   [alignRight]="true"
   [label]="'Search'"
-  [source]="uniqueFileList">
+  [source$]="uniqueFileList$"
+  [filterOptions]="filterFileOptions"
+  [formatOption]="formatFileOptions">
 </app-autosuggest-wrapper>
