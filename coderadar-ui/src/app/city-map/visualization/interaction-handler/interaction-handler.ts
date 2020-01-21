@@ -5,12 +5,14 @@ import {
   PerspectiveCamera,
   Raycaster,
   Scene,
-  Vector2, Vector3,
+  Vector2,
+  Vector3,
   WebGLRenderer
 } from 'three';
 import {FocusService} from '../../service/focus.service';
 import {TooltipService} from '../../service/tooltip.service';
-import {VisualizationConfig} from "../../VisualizationConfig";
+import {ScreenType} from "../../enum/ScreenType";
+import {ScreenInteractionService} from "../../service/screen-interaction.service";
 
 export class InteractionHandler {
 
@@ -33,33 +35,14 @@ export class InteractionHandler {
   constructor(
     private scene: Scene,
     private renderer: WebGLRenderer,
+    private screenType: ScreenType,
     private isMergedView: boolean,
     private focusService: FocusService,
+    private screenInteractionService:ScreenInteractionService,
     private tooltipService: TooltipService,
-    private tooltipLine: Object3D,
-    private highlightBox: Object3D
+    private tooltipLine: Object3D
   ) {
     this.bindEvents();
-    this.focusService.elementHighlighted$.subscribe((elementName) => {
-      if (elementName === '') {
-        this.highlightBox.visible = false;
-
-      } else {
-        const addedMargin = VisualizationConfig.HIGHLIGHT_BOX_MARGIN;
-
-        const target: Object3D = this.scene.getObjectByName(elementName);
-        let shouldBeHighlighted = true;
-        if (!elementName.includes('.')) {shouldBeHighlighted = false; }// should not highlight when the element is not a file
-        if (target && shouldBeHighlighted) {
-          this.highlightBox.visible = true;
-          this.highlightBox.position.copy(new Vector3(target.position.x + target.scale.x / 2,
-            target.position.y + target.scale.y / 2, target.position.z + target.scale.z / 2));
-          this.highlightBox.scale.copy(target.scale).addScalar(addedMargin);
-        } else {
-          this.highlightBox.visible = false;
-        }
-      }
-    });
   }
 
   setIsMergedView(isMergedView: boolean) {
@@ -88,8 +71,6 @@ export class InteractionHandler {
         });
         this.hoveredElementUuid = target.uuid;
       }
-
-
       let tooltipPos: Vector2;
       const vCameraDistance: Vector3 = intersection.point.clone().sub(camera.position);
       const cameraDistance: number = vCameraDistance.length();
@@ -97,18 +78,22 @@ export class InteractionHandler {
       const tooltipTipSize = cameraDistance * 0.1;
       const tooltipLineArrow = this.tooltipLine.children[0];
       this.tooltipLine.position.copy(new Vector3(0, tooltipHover, 0).add(intersection.point));
-      this.focusService.highlightElement(target.userData.elementName);
       tooltipPos = this.worldPositionToScreenPosition(this.tooltipLine.position.clone(), camera);
       // Make the line that hovers the tooltip longer based on camera distance
       this.tooltipLine.scale.setY(tooltipHover);
       // Make the sphere at the cursor change size based on camera distance
       tooltipLineArrow.scale.set(tooltipTipSize, tooltipTipSize / tooltipHover, tooltipTipSize);
 
+      var other = this.screenInteractionService.getCounterpart(target);
+
+      // this.tooltipService.show(ScreenType.LEFT);
+      // this.tooltipService.show(ScreenType.RIGHT);
+      this.screenInteractionService.setMouseHighlight(target.name);
       this.setTooltipVisible(true);
-      this.tooltipService.setMousePosition({x: tooltipPos.x, y: tooltipPos.y});
     } else {
       this.setTooltipVisible(false);
-      this.focusService.highlightElement('');
+      // this.tooltipService.hide(ScreenType.LEFT);
+      // this.tooltipService.hide(ScreenType.RIGHT);
     }
   }
 
@@ -168,6 +153,31 @@ export class InteractionHandler {
     const target = intersection ? intersection.object : undefined;
     if (target) {
       if (event.which === 1) { // left mouse button
+        if(event.shiftKey){
+          this.screenInteractionService.toggleSelect(target.name);
+        }else{
+          this.screenInteractionService.select(target.name);
+        }
+
+        if (target.uuid !== this.clickedElementUuid) {
+          this.clickedElementUuid = target.uuid;
+        } else {
+          this.clickedElementUuid = undefined;
+        }
+      }
+    }else{
+      this.screenInteractionService.resetSelection();
+    }
+
+
+  }
+
+  onDocumentDoubleClick(event){
+    const intersects = this.raycaster.intersectObjects(this.scene.children);
+    const intersection = this.findFirstNonHelperBlockIntersection(intersects);
+    const target = intersection ? intersection.object : undefined;
+    if (target) {
+      if (event.which === 1) { // left mouse button
         if (target.uuid !== this.clickedElementUuid) {
           this.clickedElementUuid = target.uuid;
         } else {
@@ -202,8 +212,6 @@ export class InteractionHandler {
   }
 
   private setTooltipVisible(visible: boolean) {
-
-    if (visible) { this.tooltipService.show(); } else { this.tooltipService.hide(); }
     this.tooltipLine.visible = visible;
   }
 
@@ -213,6 +221,7 @@ export class InteractionHandler {
     this.renderer.domElement.addEventListener('mousemove', this.onDocumentMouseMove.bind(this), false);
     this.renderer.domElement.addEventListener('mousedown', this.onDocumentMouseDown.bind(this), false);
     this.renderer.domElement.addEventListener('mouseup', this.onDocumentMouseUp.bind(this), false);
+    this.renderer.domElement.addEventListener('dblclick', this.onDocumentDoubleClick.bind(this), false);
   }
 
 }

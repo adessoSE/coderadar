@@ -47,6 +47,7 @@ import {environment} from '../environments/environment';
 import {CityViewComponent} from './view/city-view/city-view.component';
 import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {ScreenInteractionService} from "./city-map/service/screen-interaction.service";
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -125,6 +126,7 @@ const appRoutes: Routes = [
     FocusService,
     TooltipService,
     ComparisonPanelService,
+    ScreenInteractionService,
     {
       provide: REDUCER_TOKEN,
       useFactory: getReducers,
