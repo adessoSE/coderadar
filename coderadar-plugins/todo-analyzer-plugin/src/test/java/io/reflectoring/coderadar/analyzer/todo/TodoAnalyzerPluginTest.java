@@ -8,6 +8,7 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class TodoAnalyzerPluginTest {
@@ -39,5 +40,19 @@ public class TodoAnalyzerPluginTest {
     Assertions.assertTrue(results.getFindings(todoMetric).contains(firstFinding));
     Assertions.assertTrue(results.getFindings(todoMetric).contains(secondFinding));
     Assertions.assertTrue(results.getFindings(todoMetric).contains(thirdFinding));
+  }
+
+  @Test
+  @DisplayName("Returns no findings and metrics when file does not contain any todo")
+  public void noTodoFound() throws IOException {
+    InputStream in = getClass().getResourceAsStream("noTodos.txt");
+    byte[] fileContent = IOUtils.toByteArray(in);
+
+    // override Metrics because we need to analyze a different file
+    results = plugin.analyzeFile("noTodos.txt", fileContent);
+
+    Assertions.assertEquals(0, results.getMetricCount(todoMetric));
+    Assertions.assertEquals(0, results.getFindings(todoMetric).size());
+    Assertions.assertEquals(0, results.getMetrics().size());
   }
 }

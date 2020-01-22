@@ -28,6 +28,9 @@ public class TodoSourceCodeFileAnalyzerPlugin implements SourceCodeFileAnalyzerP
     try {
       List<Finding> findings = todoFinder.findTodos(fileContent);
       FileMetrics metrics = new FileMetrics();
+      if (findings.size() == 0) {
+        return metrics;
+      }
       metrics.addFindings(TODO_METRIC, findings);
       metrics.setMetricCount(TODO_METRIC, (long) findings.size());
       return metrics;
