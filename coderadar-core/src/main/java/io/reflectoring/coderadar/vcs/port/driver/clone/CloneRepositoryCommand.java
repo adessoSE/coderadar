@@ -1,9 +1,8 @@
 package io.reflectoring.coderadar.vcs.port.driver.clone;
 
+import java.io.File;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.io.File;
 
 @Data
 @AllArgsConstructor

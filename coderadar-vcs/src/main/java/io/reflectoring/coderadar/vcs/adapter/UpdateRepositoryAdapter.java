@@ -3,6 +3,8 @@ package io.reflectoring.coderadar.vcs.adapter;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.UpdateRepositoryPort;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
+import java.io.IOException;
+import java.nio.file.Path;
 import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ResetCommand;
@@ -15,9 +17,6 @@ import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.nio.file.Path;
 
 @Service
 public class UpdateRepositoryAdapter implements UpdateRepositoryPort {

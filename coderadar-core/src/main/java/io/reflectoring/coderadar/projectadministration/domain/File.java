@@ -1,11 +1,10 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /** Represents a file in a VCS repository. */
 @Data

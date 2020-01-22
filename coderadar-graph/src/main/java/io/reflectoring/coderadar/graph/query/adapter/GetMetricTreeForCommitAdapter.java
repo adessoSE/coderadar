@@ -16,9 +16,8 @@ import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driven.GetMetricTreeForCommitPort;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
-import org.springframework.stereotype.Service;
-
 import java.util.*;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort {

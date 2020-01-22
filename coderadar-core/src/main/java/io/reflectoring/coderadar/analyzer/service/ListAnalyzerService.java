@@ -1,10 +1,9 @@
 package io.reflectoring.coderadar.analyzer.service;
 
 import io.reflectoring.coderadar.analyzer.port.driver.ListAnalyzerUseCase;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ListAnalyzerService implements ListAnalyzerUseCase {

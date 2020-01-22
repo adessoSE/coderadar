@@ -4,10 +4,9 @@ import io.reflectoring.coderadar.graph.projectadministration.project.ProjectMapp
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ListProjectsPort;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ListProjectsAdapter implements ListProjectsPort {

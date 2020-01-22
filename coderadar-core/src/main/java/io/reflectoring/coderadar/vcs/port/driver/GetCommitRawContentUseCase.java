@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.vcs.port.driver;
 
 import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
-
 import java.util.HashMap;
 import java.util.List;
 

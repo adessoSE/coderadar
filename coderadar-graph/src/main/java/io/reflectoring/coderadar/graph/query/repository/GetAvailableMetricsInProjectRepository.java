@@ -1,11 +1,10 @@
 package io.reflectoring.coderadar.graph.query.repository;
 
+import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface GetAvailableMetricsInProjectRepository extends Neo4jRepository {

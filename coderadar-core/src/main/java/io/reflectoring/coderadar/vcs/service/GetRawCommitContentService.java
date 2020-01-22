@@ -4,10 +4,9 @@ import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import io.reflectoring.coderadar.vcs.port.driver.GetCommitRawContentUseCase;
-import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GetRawCommitContentService implements GetCommitRawContentUseCase {

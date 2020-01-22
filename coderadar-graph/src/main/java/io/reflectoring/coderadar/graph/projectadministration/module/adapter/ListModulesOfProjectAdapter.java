@@ -4,9 +4,8 @@ import io.reflectoring.coderadar.graph.projectadministration.module.ModuleMapper
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.ListModulesOfProjectPort;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ListModulesOfProjectAdapter implements ListModulesOfProjectPort {
