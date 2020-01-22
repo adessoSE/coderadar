@@ -2,8 +2,9 @@ package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.graph.query.repository.GetAvailableMetricsInProjectRepository;
 import io.reflectoring.coderadar.query.port.driven.GetAvailableMetricsInProjectPort;
-import java.util.List;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class GetAvailableMetricsInProjectAdapter implements GetAvailableMetricsInProjectPort {

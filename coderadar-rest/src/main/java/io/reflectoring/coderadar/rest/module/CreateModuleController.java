@@ -1,9 +1,7 @@
 package io.reflectoring.coderadar.rest.module;
 
-import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
-import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,14 +23,10 @@ public class CreateModuleController {
   }
 
   @PostMapping(path = "/projects/{projectId}/modules", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Object> createModule(
+  public ResponseEntity<IdResponse> createModule(
       @RequestBody @Validated CreateModuleCommand command,
       @PathVariable(name = "projectId") Long projectId) {
-    try {
-      return new ResponseEntity<>(
-          new IdResponse(createModuleUseCase.createModule(command, projectId)), HttpStatus.CREATED);
-    } catch (ModulePathInvalidException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
-    }
+    return new ResponseEntity<>(
+            new IdResponse(createModuleUseCase.createModule(command, projectId)), HttpStatus.CREATED);
   }
 }

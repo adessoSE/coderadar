@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.query;
 
+import io.reflectoring.coderadar.query.domain.DeltaTree;
 import io.reflectoring.coderadar.query.port.driver.GetDeltaTreeForTwoCommitsCommand;
 import io.reflectoring.coderadar.query.port.driver.GetDeltaTreeForTwoCommitsUseCase;
-import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +21,7 @@ public class GetDeltaTreeForTwoCommitsController {
     }
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET}, path = "/projects/{projectId}/metricvalues/deltaTree", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getDeltaTreeForTwoCommits(@Validated @RequestBody GetDeltaTreeForTwoCommitsCommand command, @PathVariable("projectId") Long projectId){
-        try {
-            return new ResponseEntity<>(getDeltaTreeForTwoCommitsUseCase.get(command, projectId), HttpStatus.OK);
-        } catch (IllegalArgumentException e){
-            return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+    public ResponseEntity<DeltaTree> getDeltaTreeForTwoCommits(@Validated @RequestBody GetDeltaTreeForTwoCommitsCommand command, @PathVariable("projectId") Long projectId){
+        return new ResponseEntity<>(getDeltaTreeForTwoCommitsUseCase.get(command, projectId), HttpStatus.OK);
     }
 }

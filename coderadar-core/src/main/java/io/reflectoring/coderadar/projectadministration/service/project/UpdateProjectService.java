@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.projectadministration.service.project;
 
-import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
-
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.port.driven.ResetAnalysisPort;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
@@ -22,11 +20,14 @@ import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
-import java.io.File;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.util.List;
+
+import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
 
 @Service
 public class UpdateProjectService implements UpdateProjectUseCase {

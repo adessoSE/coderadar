@@ -1,15 +1,16 @@
 package io.reflectoring.coderadar.adapter;
 
 import io.reflectoring.coderadar.vcs.adapter.DeleteLocalRepositoryAdapter;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 public class DeleteRepositoryAdapterTest {
 

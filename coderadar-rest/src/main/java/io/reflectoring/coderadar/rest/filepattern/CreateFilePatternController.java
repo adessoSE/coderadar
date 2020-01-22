@@ -23,7 +23,7 @@ public class CreateFilePatternController {
   }
 
   @PostMapping(path = "/projects/{projectId}/filePatterns", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity createFilePattern(
+  public ResponseEntity<IdResponse> createFilePattern(
       @RequestBody @Validated CreateFilePatternCommand command,
       @PathVariable(name = "projectId") Long projectId) {
       return new ResponseEntity<>(

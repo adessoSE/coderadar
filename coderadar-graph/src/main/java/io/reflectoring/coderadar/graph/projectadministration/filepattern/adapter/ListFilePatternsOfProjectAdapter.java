@@ -4,8 +4,9 @@ import io.reflectoring.coderadar.graph.projectadministration.filepattern.FilePat
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
-import java.util.List;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ListFilePatternsOfProjectAdapter implements ListFilePatternsOfProjectPort {

@@ -1,13 +1,14 @@
 package io.reflectoring.coderadar.analyzer.todo;
 
 import io.reflectoring.coderadar.plugin.api.Finding;
+import org.apache.commons.lang.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang.StringUtils;
 
 public class TodoFinder {
 

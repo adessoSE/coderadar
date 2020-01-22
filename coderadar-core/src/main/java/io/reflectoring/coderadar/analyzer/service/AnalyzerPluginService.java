@@ -2,16 +2,17 @@ package io.reflectoring.coderadar.analyzer.service;
 
 import io.reflectoring.coderadar.plugin.api.ConfigurableAnalyzerPlugin;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
+import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import org.reflections.Reflections;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 @Service
 public class AnalyzerPluginService {

@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
+
 import java.util.List;
 
 public interface ListAnalyzerConfigurationsPort {

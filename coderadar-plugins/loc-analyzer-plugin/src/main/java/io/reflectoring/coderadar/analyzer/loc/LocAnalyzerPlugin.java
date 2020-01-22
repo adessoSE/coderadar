@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.analyzer.loc;
 import io.reflectoring.coderadar.analyzer.loc.profiles.LocProfile;
 import io.reflectoring.coderadar.analyzer.loc.profiles.Profiles;
 import io.reflectoring.coderadar.plugin.api.*;
+
 import java.io.IOException;
 
 /** Counts several types of lines of code. */

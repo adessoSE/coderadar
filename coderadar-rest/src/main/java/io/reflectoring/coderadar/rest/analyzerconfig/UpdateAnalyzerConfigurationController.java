@@ -1,9 +1,7 @@
 package io.reflectoring.coderadar.rest.analyzerconfig;
 
-import io.reflectoring.coderadar.plugin.api.AnalyzerConfigurationException;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
-import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +23,10 @@ public class UpdateAnalyzerConfigurationController {
   }
 
   @PostMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Object> updateAnalyzerConfiguration(
+  public ResponseEntity<HttpStatus> updateAnalyzerConfiguration(
       @RequestBody @Validated UpdateAnalyzerConfigurationCommand command,
       @PathVariable(name = "analyzerConfigurationId") Long analyzerConfigurationId, @PathVariable(name = "projectId") Long projectId) {
-      try {
           updateAnalyzerConfigurationUseCase.update(command, analyzerConfigurationId, projectId);
           return new ResponseEntity<>(HttpStatus.OK);
-      } catch (AnalyzerConfigurationException e){
-          return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.CONFLICT);
-      }
   }
 }

@@ -19,7 +19,7 @@ public class DeleteFilePatternController {
   }
 
   @DeleteMapping(path = "/projects/{projectId}/filePatterns/{filePatternId}")
-  public ResponseEntity deleteFilePattern(
+  public ResponseEntity<HttpStatus> deleteFilePattern(
       @PathVariable(name = "filePatternId") Long filePatternId,  @PathVariable(name = "projectId") Long projectId) {
     deleteFilePatternFromProjectUseCase.delete(filePatternId, projectId);
     return new ResponseEntity<>(HttpStatus.OK);

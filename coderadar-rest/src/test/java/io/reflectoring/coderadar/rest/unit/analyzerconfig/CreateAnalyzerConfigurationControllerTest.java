@@ -26,7 +26,7 @@ class CreateAnalyzerConfigurationControllerTest {
         new CreateAnalyzerConfigurationCommand("analyzer", true);
     Mockito.when(createAnalyzerConfigurationUseCase.create(command, 5L)).thenReturn(1L);
 
-    ResponseEntity<Object> responseEntity = testSubject.addAnalyzerConfiguration(command, 5L);
+    ResponseEntity<IdResponse> responseEntity = testSubject.addAnalyzerConfiguration(command, 5L);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
     Assertions.assertEquals(1L, ((IdResponse)responseEntity.getBody()).getId().longValue());
