@@ -49,6 +49,7 @@ class UpdateAnalyzerConfigurationAdapterTest {
     AnalyzerConfigurationEntity mockedItem = new AnalyzerConfigurationEntity();
     mockedItem.setId(1L);
     mockedItem.setAnalyzerName("SLoC");
+    mockedItem.setEnabled(false);
     when(analyzerConfigurationRepository.save(any(AnalyzerConfigurationEntity.class)))
         .thenReturn(mockedItem);
 

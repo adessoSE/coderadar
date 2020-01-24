@@ -27,6 +27,7 @@ class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
     AnalyzerConfigurationEntity analyzerConfiguration = new AnalyzerConfigurationEntity();
     analyzerConfiguration.setProject(testProject);
     analyzerConfiguration.setAnalyzerName("analyzer");
+    analyzerConfiguration.setEnabled(true);
 
     analyzerConfiguration = analyzerConfigurationRepository.save(analyzerConfiguration);
     final Long id = analyzerConfiguration.getId();

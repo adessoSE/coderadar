@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetAnalyzerConfigurationResponse {
-  private Long id;
+  private long id;
   private String analyzerName;
-  private Boolean enabled;
+  private boolean enabled;
 }

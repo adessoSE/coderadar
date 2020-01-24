@@ -37,7 +37,7 @@ class ListProjectsAdapterTest {
   @DisplayName("Should return list with size of one when one project exists")
   void shouldReturnListWithSizeOfOneWhenOneProjectExists() {
     LinkedList<ProjectEntity> mockedItem = new LinkedList<>();
-    mockedItem.add(new ProjectEntity());
+    mockedItem.add(new ProjectEntity().setId(1L));
     when(projectRepository.findAll()).thenReturn(mockedItem);
 
     Iterable<Project> projects = listProjectsAdapter.getProjects();
@@ -49,8 +49,8 @@ class ListProjectsAdapterTest {
   @DisplayName("Should return list with size of two when two projects exist")
   void shouldReturnListWithSizeOfTwoWhenTwoProjectsExist() {
     LinkedList<ProjectEntity> mockedItem = new LinkedList<>();
-    mockedItem.add(new ProjectEntity());
-    mockedItem.add(new ProjectEntity());
+    mockedItem.add(new ProjectEntity().setId(1L));
+    mockedItem.add(new ProjectEntity().setId(1L));
     when(projectRepository.findAll()).thenReturn(mockedItem);
 
     Iterable<Project> projects = listProjectsAdapter.getProjects();

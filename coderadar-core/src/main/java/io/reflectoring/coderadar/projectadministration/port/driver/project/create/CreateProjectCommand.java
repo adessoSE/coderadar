@@ -17,7 +17,7 @@ public class CreateProjectCommand {
   private String vcsUsername;
   private String vcsPassword;
   @NotNull @URL private String vcsUrl;
-  @NotNull private Boolean vcsOnline;
+  private boolean vcsOnline;
   private @Past Date startDate;
   private Date endDate;
 }

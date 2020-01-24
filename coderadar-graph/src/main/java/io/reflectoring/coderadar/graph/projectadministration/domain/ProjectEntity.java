@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -14,8 +15,12 @@ import org.neo4j.ogm.annotation.Relationship;
 @NodeEntity
 @Data
 public class ProjectEntity {
-  private Long id;
+
+  @Index private Long id;
+
+  @Index(unique = true)
   private String name;
+
   private String workdirName;
   private String vcsUrl;
   private String vcsUsername;

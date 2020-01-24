@@ -16,7 +16,7 @@ public class UpdateProjectCommand {
   private String vcsUsername;
   private String vcsPassword;
   @NotNull @URL private String vcsUrl;
-  @NotNull private Boolean vcsOnline;
+  private boolean vcsOnline;
   private Date startDate;
   private Date endDate;
 }

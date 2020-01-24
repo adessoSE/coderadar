@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MetricValueForCommit {
   private String metricName;
-  private Long value;
+  private long value;
 }
