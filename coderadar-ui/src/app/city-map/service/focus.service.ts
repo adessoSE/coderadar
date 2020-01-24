@@ -8,8 +8,16 @@ export class FocusService {
 
   elementFocussed$ = this.focusElementSource.asObservable();
 
+  private highlightedElementSource = new Subject<string>();
+
+  elementHighlighted$ = this.highlightedElementSource.asObservable();
+
   focusElement(elementName: string) {
     this.focusElementSource.next(elementName);
+  }
+
+  highlightElement(elementName: string) {
+    this.highlightedElementSource.next(elementName);
   }
 
 }
