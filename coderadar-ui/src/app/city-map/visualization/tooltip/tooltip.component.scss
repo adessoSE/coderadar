@@ -10,20 +10,19 @@
   font-size: 14px;
   max-width: 300px;
   z-index: 101;
-
+  pointer-events: none;
   opacity: 0;
   transition: opacity 0.75s ease;
 
   &.visible {
-    opacity: 1;
+    opacity: 0.8;
   }
 
   & > .element-name {
     text-overflow: ellipsis;
     text-align: left;
-    white-space: nowrap;
     overflow: hidden;
-    direction: rtl;
+    direction: ltr;
     padding-bottom: 5px;
   }
 

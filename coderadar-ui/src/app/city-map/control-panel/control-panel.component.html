@@ -2,10 +2,10 @@
   <app-commit-chooser
     (changeCommit)="handleCommitChanged($event)"
     [commitType]="commitTypes.left"
-    [commits]="commits$ | async"
+    [commits]="commits$"
     [label]="'First revision'"
     [loading]="commitsLoading$ | async"
-    [selected]="leftCommit$ | async">
+    [selected]="leftCommit$">
   </app-commit-chooser>
 </div>
 
@@ -13,16 +13,16 @@
   <app-commit-chooser
     (changeCommit)="handleCommitChanged($event)"
     [commitType]="commitTypes.right"
-    [commits]="commits$ | async"
+    [commits]="commits$"
     [isDisabled]="disableRightSelect"
     [label]="'Second revision'"
     [loading]="commitsLoading$ | async"
-    [selected]="rightCommit$ | async">
+    [selected]="rightCommit$">
   </app-commit-chooser>
 </div>
 
 <div style="float: left; padding-right: 1%; width: 15%">
-  <app-search (startSearch)="handleSearchStarted($event)" [uniqueFileList]="uniqueFileList$ | async"></app-search>
+  <app-search (startSearch)="handleSearchStarted($event)" [uniqueFileList$]="uniqueFileList$"></app-search>
 </div>
 
 <app-settings></app-settings>

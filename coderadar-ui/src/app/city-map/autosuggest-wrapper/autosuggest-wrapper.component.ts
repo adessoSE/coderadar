@@ -1,19 +1,14 @@
 import {
-  AfterViewInit,
   Component,
   EventEmitter,
   Input,
-  OnChanges,
   OnInit,
-  Output,
-  SimpleChanges,
-  ViewChild,
+  Output, ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 import {Observable} from 'rxjs';
-import {startWith} from 'rxjs/internal/operators/startWith';
-import {map} from 'rxjs/operators';
 import {FormControl} from '@angular/forms';
+import {debounceTime, distinctUntilChanged, map, startWith} from 'rxjs/operators';
 
 @Component({
   selector: 'app-autosuggest-wrapper',
@@ -21,80 +16,62 @@ import {FormControl} from '@angular/forms';
   templateUrl: './autosuggest-wrapper.component.html',
   styleUrls: ['./autosuggest-wrapper.component.scss']
 })
-export class AutosuggestWrapperComponent implements OnChanges, OnInit {
+export class AutosuggestWrapperComponent implements  OnInit{
 
   @ViewChild('inputElement') inputElement;
 
-  @Input() model: any;
-  @Input() source: any;
+  @Input() model$: Observable<any>;
+  @Input() source$: Observable<any[]>;
   @Input() isDisabled: boolean;
+  @Input() resetOnBlur:boolean = false;
   @Input() alignRight = false;
   @Input() label: string;
   @Output() valueChanged = new EventEmitter();
+  @Input() filterOptions :((value: any,source:any[])=> any[]) = (value, options) => options;
+  @Input() formatOption :((value: any)=> string ) = value => value.toString();
+  displayOptions: Observable<{value:any,displayValue:string }[]>;
+  formattedOptions: {value:any,displayValue:string }[];
 
-  filteredOptions: Observable<any[]>;
   formControl = new FormControl();
+  lastSetValue:any;
 
-  handleValueChanged(chosenModel: any) {
-    this.valueChanged.emit(chosenModel);
+  handleValueChanged(selectedOption: any) {
+    this.lastSetValue = selectedOption;
+    this.valueChanged.emit(selectedOption.value);
   }
 
-  formatValue(value: any) {
-    if (value === null || value === undefined) {
-      return '';
-    }
-    if (value.hasOwnProperty('name')) {
-      return new Date(value.timestamp).toUTCString() + ',  ' + value.name.substring(0, 7) + ', ' + value.author;
-    } else {
-      return value;
+  displayFunction(option:{value:any,displayValue:string }):string{
+    if(option){
+      return option.displayValue;
+    }else{
+      return "";
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.model !== null && this.model !== undefined) {
-      this.formControl.setValue(this.model);
-    }
-    this.filteredOptions = this.formControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
+  onBlur(){
+    if (this.resetOnBlur)this.formControl.reset(this.associateFormattedOptions(this.lastSetValue))
   }
 
-  private _filter(value: any): string[] {
-    if (this.source === undefined) {
-      return [];
-    } else if (value === undefined) {
-      return this.source;
-    }
-
-    let filterValue = '';
-    if (value.hasOwnProperty('name')) {
-      filterValue = value.name.toLowerCase();
-    } else {
-      filterValue = value.toLowerCase();
-    }
-
-    return this.source.filter(option => {
-      if (option.hasOwnProperty('name')) {
-        return option.name.toLowerCase().includes(filterValue)
-          || option.author.toLowerCase().includes(filterValue)
-          || new Date(option.timestamp).toUTCString().toLowerCase().includes(filterValue) ||
-          filterValue.includes(this.formatValue(option).toLowerCase());
-      } else {
-        return option.toLowerCase().includes(filterValue);
-      }
-    });
+  associateFormattedOptions(value):{value:any,displayValue:string}{
+    return {value:value,displayValue:this.formatOption(value)};
   }
+
 
   ngOnInit(): void {
-    if (this.model !== null && this.model !== undefined) {
-      this.formControl.setValue(this.model);
-    }
-    this.filteredOptions = this.formControl.valueChanges
+    if(this.model$)this.model$.subscribe(value => {
+      this.formControl.setValue(this.associateFormattedOptions(value));
+      this.lastSetValue = value;
+    });
+
+    this.formattedOptions = [];
+    this.source$.subscribe(value => value.forEach(option => this.formattedOptions.push(this.associateFormattedOptions(option))));
+    this.displayOptions = this.formControl.valueChanges
       .pipe(
-        startWith(''),
-        map(value => this._filter(value))
+        debounceTime(200),
+        distinctUntilChanged(),
+        startWith(' '),
+        map(value => this.filterOptions(value,this.formattedOptions))
       );
   }
 }
+
