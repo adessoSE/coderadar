@@ -26,6 +26,10 @@ public interface MetricQueryRepository extends Neo4jRepository<CommitEntity, Lon
   List<MetricValueForCommitQueryResult> getMetricValuesForCommit(
       @NonNull Long projectId, @NonNull List<String> metricNames, @NonNull Long date);
 
+  /*
+   * Metrics for each file are collected as string in the following format: "metricName=value"
+   * The string is then split in the adapter. This greatly reduces HashMap usage.
+   */
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c)<-[:CHANGED_IN]-(f) WHERE ID(p) = {0} "
           + "AND c.timestamp <= {2} WITH DISTINCT f "

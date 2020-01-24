@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Transactional
 public class GetMetricValuesOfCommitController {
@@ -21,7 +23,7 @@ public class GetMetricValuesOfCommitController {
   }
 
   @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET}, path = "/projects/{projectId}/metricvalues/perCommit", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<MetricValueForCommit[]> getMetricValues(@Validated @RequestBody GetMetricsForCommitCommand command, @PathVariable("projectId") Long projectId){
+  public ResponseEntity<List<MetricValueForCommit>> getMetricValues(@Validated @RequestBody GetMetricsForCommitCommand command, @PathVariable("projectId") Long projectId){
     return new ResponseEntity<>(getMetricValuesOfCommitUseCase.get(command, projectId), HttpStatus.OK);
   }
 }

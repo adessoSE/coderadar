@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   private final CommitRepository commitRepository;
+  private final CommitBaseDataMapper commitBaseDataMapper = new CommitBaseDataMapper();
 
   public GetCommitsInProjectAdapter(CommitRepository commitRepository) {
     this.commitRepository = commitRepository;
@@ -28,13 +29,13 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     for (CommitEntity commitEntity : commitEntities) {
       Commit commit = walkedCommits.get(commitEntity);
       if (commit == null) {
-        commit = CommitBaseDataMapper.mapCommitEntity(commitEntity);
+        commit = commitBaseDataMapper.mapNodeEntity(commitEntity);
       }
       List<Commit> parents = new ArrayList<>(commitEntity.getParents().size());
       for (CommitEntity parent : commitEntity.getParents()) {
         Commit parentCommit = walkedCommits.get(parent);
         if (parentCommit == null) {
-          parentCommit = CommitBaseDataMapper.mapCommitEntity(parent);
+          parentCommit = commitBaseDataMapper.mapNodeEntity(parent);
           parentCommit.setTouchedFiles(getFiles(parent.getTouchedFiles(), walkedFiles, true));
           result.add(parentCommit);
         }
@@ -53,7 +54,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     List<CommitEntity> commitEntities = commitRepository.findByProjectIdAndTimestampDesc(projectId);
     List<Commit> commits = new ArrayList<>(commitEntities.size());
     for (CommitEntity commitEntity : commitEntities) {
-      commits.add(CommitBaseDataMapper.mapCommitEntity(commitEntity));
+      commits.add(commitBaseDataMapper.mapNodeEntity(commitEntity));
     }
     return commits;
   }
@@ -97,7 +98,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     List<Commit> commits = new ArrayList<>(commitEntities.size());
     IdentityHashMap<FileEntity, File> walkedFiles = new IdentityHashMap<>(commitEntities.size());
     for (CommitEntity commitEntity : commitEntities) {
-      Commit commit = CommitBaseDataMapper.mapCommitEntity(commitEntity);
+      Commit commit = commitBaseDataMapper.mapNodeEntity(commitEntity);
       commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), walkedFiles, false));
       commits.add(commit);
     }
