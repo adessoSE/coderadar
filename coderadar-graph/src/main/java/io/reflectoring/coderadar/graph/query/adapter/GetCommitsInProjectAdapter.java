@@ -48,9 +48,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
   @Override
   public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(Long projectId) {
-    return commitRepository
-        .findByProjectIdAndTimestampDesc(projectId)
-        .stream()
+    return commitRepository.findByProjectIdAndTimestampDesc(projectId).stream()
         .map(CommitBaseDataMapper::mapCommitEntity)
         .collect(Collectors.toList());
   }
@@ -75,15 +73,13 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
     // Map Ant-Patterns to RegEx
     List<String> includes =
-        filePatterns
-            .stream()
+        filePatterns.stream()
             .filter(filePattern -> filePattern.getInclusionType().equals(InclusionType.INCLUDE))
             .map(filePattern -> PatternUtil.toPattern(filePattern.getPattern()).toString())
             .collect(Collectors.toList());
 
     List<String> excludes =
-        filePatterns
-            .stream()
+        filePatterns.stream()
             .filter(filePattern -> filePattern.getInclusionType().equals(InclusionType.EXCLUDE))
             .map(filePattern -> PatternUtil.toPattern(filePattern.getPattern()).toString())
             .collect(Collectors.toList());

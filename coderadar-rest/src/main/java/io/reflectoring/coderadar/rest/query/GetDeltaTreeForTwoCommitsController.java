@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Transactional
-public class GetMetricValuesOfTwoCommitsController {
+public class GetDeltaTreeForTwoCommitsController {
 
     private final GetDeltaTreeForTwoCommitsUseCase getDeltaTreeForTwoCommitsUseCase;
 
-    public GetMetricValuesOfTwoCommitsController(GetDeltaTreeForTwoCommitsUseCase getDeltaTreeForTwoCommitsUseCase) {
+    public GetDeltaTreeForTwoCommitsController(GetDeltaTreeForTwoCommitsUseCase getDeltaTreeForTwoCommitsUseCase) {
         this.getDeltaTreeForTwoCommitsUseCase = getDeltaTreeForTwoCommitsUseCase;
     }
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET}, path = "/projects/{projectId}/metricvalues/deltaTree", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getMetricValuesForTwoCommits(@Validated @RequestBody GetDeltaTreeForTwoCommitsCommand command, @PathVariable("projectId") Long projectId){
+    public ResponseEntity getDeltaTreeForTwoCommits(@Validated @RequestBody GetDeltaTreeForTwoCommitsCommand command, @PathVariable("projectId") Long projectId){
         try {
             return new ResponseEntity<>(getDeltaTreeForTwoCommitsUseCase.get(command, projectId), HttpStatus.OK);
         } catch (IllegalArgumentException e){
