@@ -10,7 +10,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GetMetricValuesOfCommitRepository extends Neo4jRepository<CommitEntity, Long> {
+public interface MetricQueryRepository extends Neo4jRepository<CommitEntity, Long> {
 
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c)<-[:CHANGED_IN]-(f) WHERE ID(p) = {0} "
@@ -39,4 +39,9 @@ public interface GetMetricValuesOfCommitRepository extends Neo4jRepository<Commi
   @NonNull
   List<MetricValueForCommitTreeQueryResult> getMetricTreeForCommit(
       @NonNull Long projectId, @NonNull List<String> metricNames, @NonNull Long date);
+
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv) WHERE ID(p) = {0} RETURN DISTINCT mv.name")
+  @NonNull
+  List<String> getAvailableMetricsInProject(@NonNull Long projectId);
 }

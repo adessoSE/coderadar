@@ -6,7 +6,7 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntit
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.query.domain.MetricValueForCommitTreeQueryResult;
-import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
+import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
@@ -24,17 +24,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort {
 
-  private final GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository;
+  private final MetricQueryRepository metricQueryRepository;
   private final ProjectRepository projectRepository;
   private final ModuleRepository moduleRepository;
   private final CommitRepository commitRepository;
 
   public GetMetricTreeForCommitAdapter(
-      GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository,
+      MetricQueryRepository metricQueryRepository,
       ProjectRepository projectRepository,
       ModuleRepository moduleRepository,
       CommitRepository commitRepository) {
-    this.getMetricValuesOfCommitRepository = getMetricValuesOfCommitRepository;
+    this.metricQueryRepository = metricQueryRepository;
     this.projectRepository = projectRepository;
     this.moduleRepository = moduleRepository;
     this.commitRepository = commitRepository;
@@ -42,8 +42,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
 
   MetricTree get(long commitTimestamp, List<String> metrics, ProjectEntity project) {
     List<MetricValueForCommitTreeQueryResult> result =
-        getMetricValuesOfCommitRepository.getMetricTreeForCommit(
-            project.getId(), metrics, commitTimestamp);
+        metricQueryRepository.getMetricTreeForCommit(project.getId(), metrics, commitTimestamp);
     List<ModuleEntity> moduleEntities =
         moduleRepository.findModulesInProjectSortedDesc(project.getId());
     List<MetricTree> moduleChildren = processModules(moduleEntities, result);

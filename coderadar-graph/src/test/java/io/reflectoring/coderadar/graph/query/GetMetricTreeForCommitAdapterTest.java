@@ -6,15 +6,14 @@ import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.query.adapter.GetMetricTreeForCommitAdapter;
-import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
+import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
 import org.junit.jupiter.api.DisplayName;
 
 @DisplayName("Get metrics for all files in commit")
-class GetMetricsForAllFilesInCommitAdapterTest {
-  private GetMetricValuesOfCommitRepository getMetricsForAllFilesInCommitRepository =
-      mock(GetMetricValuesOfCommitRepository.class);
-  private GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository =
-      mock(GetMetricValuesOfCommitRepository.class);
+class GetMetricTreeForCommitAdapterTest {
+  private MetricQueryRepository getMetricsForAllFilesInCommitRepository =
+      mock(MetricQueryRepository.class);
+  private MetricQueryRepository metricQueryRepository = mock(MetricQueryRepository.class);
   private ProjectRepository projectRepository = mock(ProjectRepository.class);
   private ModuleRepository moduleRepository = mock(ModuleRepository.class);
   private CommitRepository commitRepository = mock(CommitRepository.class);

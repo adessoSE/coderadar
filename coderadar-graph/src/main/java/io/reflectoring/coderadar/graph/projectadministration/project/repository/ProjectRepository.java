@@ -71,9 +71,6 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   @NonNull
   Optional<ProjectEntity> findByIdWithModules(@NonNull Long id);
 
-  @Query("MATCH (p:ProjectEntity) WHERE p.name = {0} AND p.isBeingDeleted = FALSE RETURN p")
-  List<ProjectEntity> findAllByName(@NonNull String name);
-
   @Query("MATCH (p) WHERE ID(p) = {0} RETURN p.isBeingProcessed")
   @NonNull
   Boolean isBeingProcessed(@NonNull Long id);
