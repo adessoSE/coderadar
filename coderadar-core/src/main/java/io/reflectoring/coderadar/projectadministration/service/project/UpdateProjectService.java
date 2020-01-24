@@ -73,14 +73,14 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     Project project = getProjectPort.get(projectId);
 
     if (getProjectPort.existsByName(command.getName())
-        && !getProjectPort.get(command.getName()).getId().equals(projectId)) {
+        && getProjectPort.get(command.getName()).getId() != projectId) {
       throw new ProjectAlreadyExistsException(command.getName());
     }
 
     project.setName(command.getName());
     project.setVcsUsername(command.getVcsUsername());
     project.setVcsPassword(command.getVcsPassword());
-    project.setVcsOnline(command.getVcsOnline());
+    project.setVcsOnline(command.isVcsOnline());
     boolean urlChanged = false;
 
     if (!project.getVcsUrl().equals(command.getVcsUrl())) {

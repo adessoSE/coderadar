@@ -19,7 +19,6 @@ import org.springframework.data.neo4j.annotation.QueryResult;
 @QueryResult
 @Data
 public class FileToCommitRelationshipEntity {
-
   private Long id;
 
   @Property private ChangeType changeType;

@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.rest.user;
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
-import io.reflectoring.coderadar.useradministration.port.driver.load.LoadUserResponse;
+import io.reflectoring.coderadar.rest.domain.LoadUserResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

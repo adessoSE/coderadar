@@ -20,7 +20,7 @@ class DeleteProjectControllerTest {
   void deleteProjectWithIdOne() throws JsonProcessingException, ProjectIsBeingProcessedException {
     DeleteProjectController testSubject = new DeleteProjectController(deleteProjectUseCase);
 
-    ResponseEntity<String> responseEntity = testSubject.deleteProject(1L);
+    ResponseEntity<HttpStatus> responseEntity = testSubject.deleteProject(1L);
     Mockito.verify(deleteProjectUseCase, Mockito.times(1)).delete(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

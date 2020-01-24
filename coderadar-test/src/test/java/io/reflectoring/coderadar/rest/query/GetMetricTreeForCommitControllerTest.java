@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class GetMetricsForAllFilesInCommitControllerTest extends ControllerTestTemplate {
+class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
 
     private Long projectId;
 
@@ -88,30 +88,30 @@ class GetMetricsForAllFilesInCommitControllerTest extends ControllerTestTemplate
         Assertions.assertEquals("root", metricTree.getName());
         Assertions.assertEquals(MetricTreeNodeType.MODULE, metricTree.getType());
         Assertions.assertEquals(4, metricTree.getMetrics().size());
-        Assertions.assertEquals(0L, metricTree.getMetrics().get(0).getValue().longValue());
-        Assertions.assertEquals(8L, metricTree.getMetrics().get(1).getValue().longValue());
-        Assertions.assertEquals(18L, metricTree.getMetrics().get(2).getValue().longValue());
-        Assertions.assertEquals(15L, metricTree.getMetrics().get(3).getValue().longValue());
+        Assertions.assertEquals(0L, metricTree.getMetrics().get(0).getValue());
+        Assertions.assertEquals(8L, metricTree.getMetrics().get(1).getValue());
+        Assertions.assertEquals(18L, metricTree.getMetrics().get(2).getValue());
+        Assertions.assertEquals(15L, metricTree.getMetrics().get(3).getValue());
 
         MetricTree firstChild = metricTree.getChildren().get(0);
 
         Assertions.assertEquals("GetMetricsForCommitCommand.java", firstChild.getName());
         Assertions.assertEquals(MetricTreeNodeType.FILE, firstChild.getType());
         Assertions.assertTrue(firstChild.getChildren().isEmpty());
-        Assertions.assertEquals(0L, firstChild.getMetrics().get(0).getValue().longValue());
-        Assertions.assertEquals(7L, firstChild.getMetrics().get(1).getValue().longValue());
-        Assertions.assertEquals(17L, firstChild.getMetrics().get(2).getValue().longValue());
-        Assertions.assertEquals(14L, firstChild.getMetrics().get(3).getValue().longValue());
+        Assertions.assertEquals(0L, firstChild.getMetrics().get(0).getValue());
+        Assertions.assertEquals(7L, firstChild.getMetrics().get(1).getValue());
+        Assertions.assertEquals(17L, firstChild.getMetrics().get(2).getValue());
+        Assertions.assertEquals(14L, firstChild.getMetrics().get(3).getValue());
 
         MetricTree secondChild = metricTree.getChildren().get(1);
 
         Assertions.assertEquals("testModule1/NewRandomFile.java", secondChild.getName());
         Assertions.assertEquals(MetricTreeNodeType.FILE, secondChild.getType());
         Assertions.assertTrue(secondChild.getChildren().isEmpty());
-        Assertions.assertEquals(0L, secondChild.getMetrics().get(0).getValue().longValue());
-        Assertions.assertEquals(1L, secondChild.getMetrics().get(1).getValue().longValue());
-        Assertions.assertEquals(1L, secondChild.getMetrics().get(2).getValue().longValue());
-        Assertions.assertEquals(1L, secondChild.getMetrics().get(3).getValue().longValue());
+        Assertions.assertEquals(0L, secondChild.getMetrics().get(0).getValue());
+        Assertions.assertEquals(1L, secondChild.getMetrics().get(1).getValue());
+        Assertions.assertEquals(1L, secondChild.getMetrics().get(2).getValue());
+        Assertions.assertEquals(1L, secondChild.getMetrics().get(3).getValue());
     }
 
     @Test
@@ -136,40 +136,40 @@ class GetMetricsForAllFilesInCommitControllerTest extends ControllerTestTemplate
         Assertions.assertEquals("root", metricTree.getName());
         Assertions.assertEquals(MetricTreeNodeType.MODULE, metricTree.getType());
         Assertions.assertEquals(4, metricTree.getMetrics().size());
-        Assertions.assertEquals(0L, metricTree.getMetrics().get(0).getValue().longValue());
-        Assertions.assertEquals(8L, metricTree.getMetrics().get(1).getValue().longValue());
-        Assertions.assertEquals(18L, metricTree.getMetrics().get(2).getValue().longValue());
-        Assertions.assertEquals(15L, metricTree.getMetrics().get(3).getValue().longValue());
+        Assertions.assertEquals(0L, metricTree.getMetrics().get(0).getValue());
+        Assertions.assertEquals(8L, metricTree.getMetrics().get(1).getValue());
+        Assertions.assertEquals(18L, metricTree.getMetrics().get(2).getValue());
+        Assertions.assertEquals(15L, metricTree.getMetrics().get(3).getValue());
 
         MetricTree firstChild = metricTree.getChildren().get(0);
 
         Assertions.assertEquals("GetMetricsForCommitCommand.java", firstChild.getName());
         Assertions.assertEquals(MetricTreeNodeType.FILE, firstChild.getType());
         Assertions.assertTrue(firstChild.getChildren().isEmpty());
-        Assertions.assertEquals(0L, firstChild.getMetrics().get(0).getValue().longValue());
-        Assertions.assertEquals(7L, firstChild.getMetrics().get(1).getValue().longValue());
-        Assertions.assertEquals(17L, firstChild.getMetrics().get(2).getValue().longValue());
-        Assertions.assertEquals(14L, firstChild.getMetrics().get(3).getValue().longValue());
+        Assertions.assertEquals(0L, firstChild.getMetrics().get(0).getValue());
+        Assertions.assertEquals(7L, firstChild.getMetrics().get(1).getValue());
+        Assertions.assertEquals(17L, firstChild.getMetrics().get(2).getValue());
+        Assertions.assertEquals(14L, firstChild.getMetrics().get(3).getValue());
 
         MetricTree secondChild = metricTree.getChildren().get(1);
 
         Assertions.assertEquals("testModule1/", secondChild.getName());
         Assertions.assertEquals(MetricTreeNodeType.MODULE, secondChild.getType());
         Assertions.assertFalse(secondChild.getChildren().isEmpty());
-        Assertions.assertEquals(0L, secondChild.getMetrics().get(0).getValue().longValue());
-        Assertions.assertEquals(1L, secondChild.getMetrics().get(1).getValue().longValue());
-        Assertions.assertEquals(1L, secondChild.getMetrics().get(2).getValue().longValue());
-        Assertions.assertEquals(1L, secondChild.getMetrics().get(3).getValue().longValue());
+        Assertions.assertEquals(0L, secondChild.getMetrics().get(0).getValue());
+        Assertions.assertEquals(1L, secondChild.getMetrics().get(1).getValue());
+        Assertions.assertEquals(1L, secondChild.getMetrics().get(2).getValue());
+        Assertions.assertEquals(1L, secondChild.getMetrics().get(3).getValue());
 
         MetricTree thirdChild = secondChild.getChildren().get(0);
 
         Assertions.assertEquals("testModule1/NewRandomFile.java", thirdChild.getName());
         Assertions.assertEquals(MetricTreeNodeType.FILE, thirdChild.getType());
         Assertions.assertTrue(thirdChild.getChildren().isEmpty());
-        Assertions.assertEquals(0L, thirdChild.getMetrics().get(0).getValue().longValue());
-        Assertions.assertEquals(1L, thirdChild.getMetrics().get(1).getValue().longValue());
-        Assertions.assertEquals(1L, thirdChild.getMetrics().get(2).getValue().longValue());
-        Assertions.assertEquals(1L, thirdChild.getMetrics().get(3).getValue().longValue());
+        Assertions.assertEquals(0L, thirdChild.getMetrics().get(0).getValue());
+        Assertions.assertEquals(1L, thirdChild.getMetrics().get(1).getValue());
+        Assertions.assertEquals(1L, thirdChild.getMetrics().get(2).getValue());
+        Assertions.assertEquals(1L, thirdChild.getMetrics().get(3).getValue());
     }
 
     @Test

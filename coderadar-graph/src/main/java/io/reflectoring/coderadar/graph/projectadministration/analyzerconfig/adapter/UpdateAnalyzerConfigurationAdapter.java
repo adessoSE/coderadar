@@ -27,7 +27,7 @@ public class UpdateAnalyzerConfigurationAdapter implements UpdateAnalyzerConfigu
             .orElseThrow(() -> new AnalyzerConfigurationNotFoundException(configuration.getId()));
 
     analyzerConfigurationEntity.setAnalyzerName(configuration.getAnalyzerName());
-    analyzerConfigurationEntity.setEnabled(configuration.getEnabled());
+    analyzerConfigurationEntity.setEnabled(configuration.isEnabled());
     if (configuration.getAnalyzerConfigurationFile() != null) {
       analyzerConfigurationEntity.setAnalyzerConfigurationFile(
           analyzerConfigurationMapper.mapConfigurationFileDomainObject(

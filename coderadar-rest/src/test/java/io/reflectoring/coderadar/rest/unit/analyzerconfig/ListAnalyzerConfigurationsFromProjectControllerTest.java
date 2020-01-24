@@ -45,10 +45,10 @@ class ListAnalyzerConfigurationsFromProjectControllerTest {
     Assertions.assertEquals(response1.getId(), responseEntity.getBody().get(0).getId());
     Assertions.assertEquals(
         response1.getAnalyzerName(), responseEntity.getBody().get(0).getAnalyzerName());
-    Assertions.assertEquals(response1.getEnabled(), responseEntity.getBody().get(0).getEnabled());
+    Assertions.assertEquals(response1.isEnabled(), responseEntity.getBody().get(0).isEnabled());
     Assertions.assertEquals(response2.getId(), responseEntity.getBody().get(1).getId());
     Assertions.assertEquals(
         response2.getAnalyzerName(), responseEntity.getBody().get(1).getAnalyzerName());
-    Assertions.assertEquals(response2.getEnabled(), responseEntity.getBody().get(1).getEnabled());
+    Assertions.assertEquals(response2.isEnabled(), responseEntity.getBody().get(1).isEnabled());
   }
 }

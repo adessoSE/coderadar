@@ -38,7 +38,7 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
       if (listAnalyzerConfigurationsFromProjectService.get(projectId).stream()
           .noneMatch(a -> a.getAnalyzerName().equals(command.getAnalyzerName()))) {
         AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
-        analyzerConfiguration.setEnabled(command.getEnabled());
+        analyzerConfiguration.setEnabled(command.isEnabled());
         analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
         Long id = createAnalyzerConfigurationPort.create(analyzerConfiguration, projectId);
         logger.info(

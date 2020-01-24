@@ -12,7 +12,6 @@ import org.springframework.data.neo4j.annotation.QueryResult;
 @QueryResult
 @EqualsAndHashCode
 public class MetricValueForCommitQueryResult {
-  private String path;
   private String name;
-  private Long value;
+  private long value;
 }

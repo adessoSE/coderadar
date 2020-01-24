@@ -29,7 +29,7 @@ public class ListAnalyzerConfigurationsFromProjectController {
       return new ResponseEntity<>(listAnalyzerConfigurationsUseCase.get(projectId).stream().map(analyzerConfiguration ->
               new GetAnalyzerConfigurationResponse(analyzerConfiguration.getId(),
                       analyzerConfiguration.getAnalyzerName(),
-                      analyzerConfiguration.getEnabled()))
+                      analyzerConfiguration.isEnabled()))
               .collect(Collectors.toList()), HttpStatus.OK);
   }
 }

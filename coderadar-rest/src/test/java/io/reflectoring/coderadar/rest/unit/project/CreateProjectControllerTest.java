@@ -39,6 +39,6 @@ class CreateProjectControllerTest {
     ResponseEntity<IdResponse> responseEntity = testSubject.createProject(command);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-    Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
+    Assertions.assertEquals(1L, responseEntity.getBody().getId());
   }
 }

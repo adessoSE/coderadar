@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 public class GetProjectHeadCommitAdapter implements GetProjectHeadCommitPort {
 
   private final CommitRepository commitRepository;
+  private final CommitBaseDataMapper commitBaseDataMapper = new CommitBaseDataMapper();
 
   public GetProjectHeadCommitAdapter(CommitRepository commitRepository) {
     this.commitRepository = commitRepository;
@@ -16,6 +17,6 @@ public class GetProjectHeadCommitAdapter implements GetProjectHeadCommitPort {
 
   @Override
   public Commit getHeadCommit(Long projectId) {
-    return CommitBaseDataMapper.mapCommitEntity(commitRepository.findHeadCommit(projectId));
+    return commitBaseDataMapper.mapNodeEntity(commitRepository.findHeadCommit(projectId));
   }
 }

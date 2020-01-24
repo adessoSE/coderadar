@@ -26,7 +26,7 @@ class GetModuleControllerTest {
     ResponseEntity<GetModuleResponse> responseEntity = testSubject.getModule(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
+    Assertions.assertEquals(1L, responseEntity.getBody().getId());
     Assertions.assertEquals("module-path", responseEntity.getBody().getPath());
   }
 }

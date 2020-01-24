@@ -24,7 +24,6 @@ public class ProjectMapper implements Mapper<Project, ProjectEntity> {
   @Override
   public ProjectEntity mapDomainObject(Project domainObject) {
     ProjectEntity project = new ProjectEntity();
-    project.setId(domainObject.getId());
     project.setName(domainObject.getName());
     project.setVcsEnd(domainObject.getVcsEnd());
     project.setVcsStart(domainObject.getVcsStart());

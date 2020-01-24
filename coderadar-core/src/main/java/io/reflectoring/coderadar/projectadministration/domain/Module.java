@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Module {
-  private Long id;
+  private long id;
   private String path;
 }

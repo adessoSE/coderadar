@@ -58,7 +58,7 @@ class UpdateAnalyzerConfigurationServiceTest {
     testSubject.update(command, 1L, 2L);
 
     // then
-    verify(existingConfigurationMock, never()).setId(any());
+    verify(existingConfigurationMock, never()).setId(anyLong());
     verify(existingConfigurationMock).setAnalyzerName(newConfigurationName);
     verify(existingConfigurationMock).setEnabled(false);
 

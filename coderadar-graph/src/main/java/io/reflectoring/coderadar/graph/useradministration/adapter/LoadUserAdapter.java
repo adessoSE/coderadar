@@ -35,4 +35,9 @@ public class LoadUserAdapter implements LoadUserPort {
   public boolean existsByUsername(String username) {
     return userRepository.existsByUsername(username);
   }
+
+  @Override
+  public boolean existsById(Long id) {
+    return userRepository.existsById(id);
+  }
 }
