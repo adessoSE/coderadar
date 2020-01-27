@@ -19,6 +19,7 @@ import {FooterComponent} from './view/footer/footer.component';
 import {UserSettingsComponent} from './view/user-settings/user-settings.component';
 import {ProjectDashboardComponent} from './view/project-dashboard/project-dashboard.component';
 import {ViewCommitComponent} from './view/view-commit/view-commit.component';
+import { ChartsModule } from 'ng2-charts';
 import {
   MatButtonModule,
   MatCardModule,
@@ -29,9 +30,23 @@ import {
   MatInputModule,
   MatSnackBarModule,
   MatListModule,
-  MatMenuModule, MatPaginatorModule,
+  MatMenuModule,
+  MatPaginatorModule,
   MatSidenavModule,
-  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule,
+  MatToolbarModule,
+  MatProgressSpinnerModule,
+  MatExpansionModule,
+  MatTableModule,
+  MatSortModule,
+  MatSelectModule,
+  MatDialogModule,
+  MatTabsModule,
+  MatRadioModule,
+  MatProgressBarModule,
+  MatDatepickerModule,
+  MatChipsModule,
+  MatBadgeModule,
+  MatTooltipModule,
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
@@ -48,6 +63,28 @@ import {CityViewComponent} from './view/city-view/city-view.component';
 import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
+/**
+ * Dashboard imports
+ */
+import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
+
+import { HotspotWidgetComponent } from './dashboard/hotspot-widget/hotspot-widget.component';
+import { HotspotConfigurationComponent } from './dashboard/dialogs/hotspot-configuration/hotspot-configuration.component';
+import { MetricPipe } from './dashboard/pipes/metric.pipe';
+import { IssueWidgetComponent } from './dashboard/issue-widget/issue-widget.component';
+import { FilePipe } from './dashboard/pipes/file.pipe';
+import { CoverageWidgetComponent } from './dashboard/coverage-widget/coverage-widget.component';
+import { PeriodWidgetComponent } from './dashboard/period-widget/period-widget.component';
+import { GoalWidgetComponent } from './dashboard/goal-widget/goal-widget.component';
+import { GoalConfigurationComponent } from './dashboard/dialogs/goal-configuration/goal-configuration.component';
+import { PeriodConfigurationComponent } from './dashboard/dialogs/period-configuration/period-configuration.component';
+import { MatNativeDateModule} from '@angular/material/core';
+import { CommitWidgetComponent } from './dashboard/commit-widget/commit-widget.component';
+import { ArchitectureWidgetComponent } from './dashboard/architecture-widget/architecture-widget.component';
+import { TodoWidgetComponent } from './dashboard/todo-widget/todo-widget.component';
+import { HeadMonopolyWidgetComponent } from './dashboard/head-monopoly-widget/head-monopoly-widget.component';
+import { MaterialDashboardComponent } from './dashboard/material-dashboard/material-dashboard.component';
+
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
@@ -58,7 +95,7 @@ const appRoutes: Routes = [
   {path: 'city/:id', component: CityViewComponent},
   {path: 'project-edit/:id', component: EditProjectComponent},
   {path: 'project/:id', component: ProjectDashboardComponent},
-  {path: 'project/:id/:name', component: ViewCommitComponent},
+  {path: 'project/:id/:name', component: DashboardComponent},
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
 
@@ -78,6 +115,22 @@ const appRoutes: Routes = [
     ViewCommitComponent,
     CityViewComponent,
     CityViewHeaderComponent,
+    DashboardComponent,
+    MaterialDashboardComponent,
+    HotspotWidgetComponent,
+    HotspotConfigurationComponent,
+    MetricPipe,
+    IssueWidgetComponent,
+    FilePipe,
+    CoverageWidgetComponent,
+    PeriodWidgetComponent,
+    GoalWidgetComponent,
+    GoalConfigurationComponent,
+    PeriodConfigurationComponent,
+    CommitWidgetComponent,
+    ArchitectureWidgetComponent,
+    TodoWidgetComponent,
+    HeadMonopolyWidgetComponent,
   ],
   imports: [
     BrowserModule,
@@ -85,6 +138,17 @@ const appRoutes: Routes = [
     FormsModule,
     RouterModule.forRoot(appRoutes, {scrollPositionRestoration: 'enabled'}),
     BrowserAnimationsModule,
+    MatBadgeModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    MatProgressBarModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatTabsModule,
+    MatTableModule,
+    MatSortModule,
+    MatRadioModule,
+    ChartsModule,
     BrowserModule,
     FontAwesomeModule,
     BrowserAnimationsModule,
@@ -114,7 +178,9 @@ const appRoutes: Routes = [
     environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 50}),
     MatPaginatorModule,
     MatProgressSpinnerModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatNativeDateModule,
+    MatTooltipModule,
   ],
   providers: [
     {
@@ -129,7 +195,8 @@ const appRoutes: Routes = [
       provide: REDUCER_TOKEN,
       useFactory: getReducers,
     }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [HotspotConfigurationComponent, GoalConfigurationComponent, PeriodConfigurationComponent]
 })
 export class AppModule {
 }

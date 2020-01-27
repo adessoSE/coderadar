@@ -8,10 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Transactional
@@ -23,7 +20,7 @@ public class GetMetricTreeForCommitController {
     this.getMetricTreeForCommitUseCase = getMetricTreeForCommitUseCase;
   }
 
-  @GetMapping(path = "/projects/{projectId}/metricvalues/tree", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, path = "/projects/{projectId}/metricvalues/tree", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<MetricTree> getMetricValues(@Validated @RequestBody GetMetricsForCommitCommand command, @PathVariable("projectId") Long projectId){
     return new ResponseEntity<>(getMetricTreeForCommitUseCase.get(command, projectId), HttpStatus.OK);
   }

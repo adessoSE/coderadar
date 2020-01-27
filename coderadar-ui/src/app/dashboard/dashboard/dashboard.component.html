@@ -1,0 +1,52 @@
+<app-header [title]="[{location: '/dashboard', name: 'Dashboard'}]"></app-header>
+
+<mat-sidenav-container>
+  <mat-sidenav-content>
+    <main class="container-fluid">
+      <div class="row">
+        <div class="col-10">
+          <div class="row">
+            <div class="col-4" *ngIf="headMonopolyMultipleAuthorResult">
+              <app-head-monopoly-widget [metricValuesTreeResponse]="headMonopolyMultipleAuthorResult"
+                subTitel="Multiple authors and high complexity" titel="Knowledge Bottleneck">
+              </app-head-monopoly-widget>
+            </div>
+            <div class="col-4" *ngIf="headMonopolySingleAuthorKomplexityResult">
+              <app-head-monopoly-widget [metricValuesTreeResponse]="headMonopolySingleAuthorKomplexityResult"
+                subTitel="Single author and high complexity" titel="Knowledge Bottleneck">
+              </app-head-monopoly-widget>
+            </div>
+            <div class="col-4" *ngIf="headMonopolyFrequencyOfChange">
+              <app-head-monopoly-widget [metricValuesTreeResponse]="headMonopolyFrequencyOfChange"
+                subTitel="High change frequency" titel="Hotspots">
+              </app-head-monopoly-widget>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-5">
+              <app-issue-widget></app-issue-widget>
+            </div>
+            <div class="col-3">
+              <app-coverage-widget></app-coverage-widget>
+            </div>
+            <div class="col-4">
+                <app-architecture-widget></app-architecture-widget>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <app-hotspot-widget></app-hotspot-widget>
+            </div>
+            <div class="col-6">
+              <app-todo-widget></app-todo-widget>
+            </div>
+          </div>
+        </div>
+        <aside class="col-2">
+          <app-goal-widget></app-goal-widget>
+          <app-commit-widget></app-commit-widget>
+        </aside>
+      </div>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

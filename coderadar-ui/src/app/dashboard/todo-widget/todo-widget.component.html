@@ -1,0 +1,20 @@
+<mat-card class="mt-3">
+  <div class="d-flex justify-content-between">
+    <mat-card-header>
+      <mat-card-title>To Do's</mat-card-title>
+      <mat-card-subtitle *ngIf='todosList'>Total {{todosList.numberOfTodosTotal}}, in leak period
+        {{todosList.numberOfTodosLeakPeriod}}</mat-card-subtitle>
+    </mat-card-header>
+  </div>
+  <mat-card-content>
+    <ul *ngIf='todosList' class="list-group">
+      <li *ngFor='let element of todosList.todos; let i = index' class="d-flex flex-column list-item mb-4">
+        <p class="m-0">{{ element.committedAt | date:'dd.MM.yyyy' }} in <strong>{{ element.file | filePipe }}</strong>
+        </p>
+        <div class="text-muted d-flex">
+          <div [matTooltip]="element.author">{{ element.extractedTodo }}</div>
+        </div>
+      </li>
+    </ul>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Leak period configuration</h1>
+<div>
+<mat-form-field>
+    <input matInput [matDatepicker]="startDatePicker" placeholder="Start date" [formControl]="startDate">
+    <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #startDatePicker></mat-datepicker>
+</mat-form-field>
+<mat-form-field>
+    <input matInput [matDatepicker]="endDatePicker"  placeholder="End date" [formControl]="endDate">
+    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #endDatePicker></mat-datepicker>
+</mat-form-field>
+</div>
+<div mat-dialog-actions class="float-right">
+    <button mat-button (click)="close()">Cancel</button>
+    <button mat-button (click)="save()">Save</button>
+</div>

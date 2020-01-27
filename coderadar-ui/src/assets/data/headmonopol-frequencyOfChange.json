@@ -1,0 +1,67 @@
+{
+    "name": "root",
+    "type": "MODULE",
+    "metrics": [
+        {
+            "metricName": "coderadar:frequencyOfChange:java",
+            "value": 74
+        }
+    ],
+    "children": [
+        {
+            "name": "coderadar-server/coderadar-core/src/main/java/org/wickedsource/coderadar/core/common/ResourceNotFoundException.java",
+            "type": "FILE",
+            "metrics": [
+                {
+                    "metricName": "coderadar:frequencyOfChange:java",
+                    "value": 500
+                }
+            ],
+            "children": []
+        },
+        {
+            "name": "coderadar-server/coderadar-core/src/main/java/org/wickedsource/coderadar/metric/MetricRegistryBean.java",
+            "type": "FILE",
+            "metrics": [
+                {
+                    "metricName": "coderadar:frequencyOfChange:java",
+                    "value": 600
+                }
+            ],
+            "children": []
+        },
+        {
+            "name": "coderadar-server/coderadar-core/src/main/java/org/wickedsource/coderadar/user/rest/UserResource.java",
+            "type": "FILE",
+            "metrics": [
+                {
+                    "metricName": "coderadar:frequencyOfChange:java",
+                    "value": 350
+                }
+            ],
+            "children": []
+        },
+        {
+            "name": "coderadar-server/coderadar-core/src/main/java/org/wickedsource/coderadar/user/rest/Dummy.java",
+            "type": "FILE",
+            "metrics": [
+                {
+                    "metricName": "coderadar:frequencyOfChange:java",
+                    "value": 335
+                }
+            ],
+            "children": []
+        },
+        {
+            "name": "coderadar-server/coderadar-core/src/main/java/org/wickedsource/coderadar/user/rest/Configuration.java",
+            "type": "FILE",
+            "metrics": [
+                {
+                    "metricName": "coderadar:frequencyOfChange:java",
+                    "value": 300
+                }
+            ],
+            "children": []
+        }
+    ]
+}

@@ -1,3 +1,4 @@
+import { IFileNode } from './../dashboard/interfaces/metric';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Project} from '../model/project';
@@ -11,6 +12,7 @@ import {AppComponent} from '../app.component';
 import {IMetricMapping} from '../city-map/interfaces/IMetricMapping';
 import {INode} from '../city-map/interfaces/INode';
 import {MetricValue} from '../model/metric-value';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -249,5 +251,30 @@ export class ProjectService {
 
   resetAnalysis(id: number, b: boolean) {
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze/reset', {}, {observe: 'response'}).toPromise();
+  }
+
+  /**
+   * Returns the tree of a project given commit and a metric mapping
+   * @param commitName The commit name
+   * @param metricsNames The metric mapping
+   * @param projectId The project id
+   */
+  public getTree(commitName: string, metricsNames: string[], projectId: number): Observable<IFileNode> {
+    const body = {
+      commit: commitName,
+      metrics: metricsNames
+    };
+    return this.httpClient.post<IFileNode>(this.apiURL + 'projects/' + projectId + '/metricvalues/tree', body);
+  }
+
+
+  public getHistory(startDateRange: number[], endDateRange: number[],
+                    intervallHistory: string, metricHistory: string, projectId: number): Observable<History> {
+    const body = {
+      dateRange: {startDate: startDateRange, endDate: endDateRange},
+      interval: intervallHistory,
+      metric: metricHistory
+    };
+    return this.httpClient.post<History>(this.apiURL + 'projects/' + projectId + '/metricvalues/history', body);
   }
 }

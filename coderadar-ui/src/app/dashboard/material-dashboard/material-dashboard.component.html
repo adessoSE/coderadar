@@ -1,0 +1,40 @@
+<div class="grid-container">
+  <h1 class="mat-h1">Dashboard</h1>
+  <mat-grid-list cols="5" rowHeight="200px">
+
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <app-head-monopoly-widget [metricValuesTreeResponse]="headMonopolyMultipleAuthorResult"
+        subTitel="Multiple authors and high complexity" titel="Knowledge Bottleneck">
+      </app-head-monopoly-widget>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="2">
+      <app-head-monopoly-widget [metricValuesTreeResponse]="headMonopolySingleAuthorKomplexityResult"
+        subTitel="Single author and high complexity" titel="Knowledge Bottleneck">
+      </app-head-monopoly-widget>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="2">
+      <app-head-monopoly-widget [metricValuesTreeResponse]="headMonopolyFrequencyOfChange"
+        subTitel="High change frequency" titel="Hotspots">
+      </app-head-monopoly-widget>
+    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="1" [rowspan]="2">
+      <app-issue-widget></app-issue-widget>
+    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="1" [rowspan]="2">
+      <app-coverage-widget></app-coverage-widget>
+    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="2" [rowspan]="2">
+      <app-todo-widget></app-todo-widget>
+    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="1" [rowspan]="1">
+      <app-goal-widget></app-goal-widget>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="1" [rowspan]="5">
+      <app-commit-widget></app-commit-widget>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

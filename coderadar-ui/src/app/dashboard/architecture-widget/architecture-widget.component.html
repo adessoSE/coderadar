@@ -1,0 +1,17 @@
+<mat-card class="mt-3">
+  <div class="d-flex justify-content-between">
+    <mat-card-title>Cyclical dependencies</mat-card-title>
+  </div>
+  <div>
+    <div>Total cyclical dependencies <b>{{cyclicalDependenciesTotal}}</b></div>
+    <br>
+    <div>Size of the cycles</div>
+    <div>Max: {{maxCyclicalSize}}</div>
+    <div>Min: {{minCyclicalSize}}</div>
+    <div>Average: {{averageCyclicalSize}}</div>
+    <br>
+    <div>
+      <a href="">View dependencies</a>
+    </div>
+  </div>
+</mat-card>

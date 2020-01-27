@@ -1,0 +1,50 @@
+{
+    "project": "Lorem ipsum",
+    "numberOfTodosTotal": 7,
+    "numberOfTodosLeakPeriod": 1,
+    "todos": [
+        {
+            "file": "com.javapackage.controllers.data.java",
+            "extractedTodo": "TODO: Ensure logged in user has correct security claims",
+            "author": "max.mustermann@musterfirma.de",
+            "committedAt": "2018-06-21T10:53:26.729Z"
+        },
+        {
+            "file": "com.javapackage.lib.webrawler.java",
+            "extractedTodo": "TODO: Find describing texts",
+            "author": "frida.froehlich@musterfirma.de",
+            "committedAt": "2018-06-25T10:53:26.729Z"
+        },
+        {
+            "file": "com.javapackage.somefolder.doit.java",
+            "extractedTodo": "TODO: Check that the method does the right thing",
+            "author": "hans.halbgar@musterfirma.de",
+            "committedAt": "2018-06-25T14:26:26.729Z"
+        },
+        {
+            "file": "com.javapackage.somefolder.doit.java",
+            "extractedTodo": "TODO: Check that the method does the right thing",
+            "author": "hans.halbgar@musterfirma.de",
+            "committedAt": "2018-06-25T14:26:26.729Z"
+        },
+        {
+            "file": "com.javapackage.somefolder.doit.java",
+            "extractedTodo": "TODO: Check that the method does the right thing",
+            "author": "hans.halbgar@musterfirma.de",
+            "committedAt": "2018-08-01T14:26:26.729Z"
+        },
+        {
+            "file": "com.javapackage.somefolder.doit.java",
+            "extractedTodo": "TODO: Check that the method does the right thing",
+            "author": "hans.halbgar@musterfirma.de",
+            "committedAt": "2018-09-15T09:04:26.729Z"
+        },
+        {
+            "file": "com.javapackage.somefolder.doit.java",
+            "extractedTodo": "TODO: Check that the method does the right thing",
+            "author": "hans.halbgar@musterfirma.de",
+            "committedAt": "2018-09-18T17:26:26.729Z"
+        }
+
+    ]
+}

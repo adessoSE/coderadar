@@ -1,0 +1,24 @@
+{
+    "metrics": [
+        {
+            "metricName": "coderadar:dependenciesTotal:java",
+            "value": 50
+        },
+        {
+            "metricName": "coderadar:cyclicalDependenciesTotal:java",
+            "value": 20
+        },
+        {
+            "metricName": "coderadar:maxCyclicalSize:java",
+            "value": 8
+        },
+        {
+            "metricName": "coderadar:minCyclicalSize:java",
+            "value": 2
+        },
+        {
+            "metricName": "coderadar:averageCyclicalSize:java",
+            "value": 5
+        }
+    ]
+}

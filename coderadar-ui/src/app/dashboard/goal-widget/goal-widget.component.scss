@@ -1,0 +1,21 @@
+.goal {
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 8.5pt;
+}
+.goal-success {
+   background-color: #008e5e;
+   color: #FFF;
+} 
+.goal-warn {
+    background-color: #e8bf28;
+    color: #000;
+}
+.goal-fail {
+    background-color: #a1262d;
+    color: #FFF;
+}

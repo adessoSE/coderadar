@@ -1,0 +1,91 @@
+{
+    "name": "root",
+    "type": "MODULE",
+    "metrics": [
+        {
+            "metricName": "coderadar:multipleAuthor:java",
+            "value": 12
+        },
+        {
+            "metricName": "coderadar:complexity:java",
+            "value": 30
+        }
+    ],
+    "children": [
+        {
+            "name": "coderadar-server/coderadar-core/src/main/java/org/wickedsource/coderadar/core/common/ControllorTest.java",
+            "type": "FILE",
+            "metrics": [
+                {
+                    "metricName": "coderadar:multipleAuthor:java",
+                    "value": 6
+                },
+                {
+                    "metricName": "coderadar:complexity:java",
+                    "value": 22
+                }
+            ],
+            "children": []
+        },
+        {
+            "name": "coderadar-server/coderadar-core/src/main/java/org/wickedsource/coderadar/metric/ViewDesign.java",
+            "type": "FILE",
+            "metrics": [
+                {
+                    "metricName": "coderadar:multipleAuthor:java",
+                    "value": 5
+                },
+                {
+                    "metricName": "coderadar:complexity:java",
+                    "value": 12
+                }
+            ],
+            "children": []
+        },
+        {
+            "name": "coderadar-server/coderadar-core/src/main/java/org/wickedsource/coderadar/user/rest/BasicCalculator.java",
+            "type": "FILE",
+            "metrics": [
+                {
+                    "metricName": "coderadar:multipleAuthor:java",
+                    "value": 5
+                },
+                {
+                    "metricName": "coderadar:complexity:java",
+                    "value": 12
+                }
+            ],
+            "children": []
+        },
+        {
+            "name": "coderadar-server/coderadar-core/src/main/java/org/wickedsource/coderadar/user/rest/Administration.java",
+            "type": "FILE",
+            "metrics": [
+                {
+                    "metricName": "coderadar:multipleAuthor:java",
+                    "value": 6
+                },
+                {
+                    "metricName": "coderadar:complexity:java",
+                    "value": 12
+                }
+            ],
+            "children": []
+        },
+        {
+            "name": "coderadar-server/coderadar-core/src/main/java/org/wickedsource/coderadar/user/rest/Configuration.java",
+            "type": "FILE",
+            "metrics": [
+                {
+                    "metricName": "coderadar:multipleAuthor:java",
+                    "value": 7
+                },
+                {
+                    "metricName": "coderadar:complexity:java",
+                    "value": 12
+                }
+            ],
+            "children": []
+        }
+    ]
+}
