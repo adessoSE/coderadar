@@ -38,6 +38,11 @@ import {
   MatDialogModule,
   MatTabsModule,
   MatRadioModule,
+  MatProgressBarModule,
+  MatDatepickerModule,
+  MatChipsModule,
+  MatBadgeModule,
+  MatTooltipModule,
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
@@ -53,7 +58,11 @@ import {environment} from '../environments/environment';
 import {CityViewComponent} from './view/city-view/city-view.component';
 import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+/**
+ * Dashboard imports
+ */
 import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
+
 import { HotspotWidgetComponent } from './dashboard/hotspot-widget/hotspot-widget.component';
 import { HotspotConfigurationComponent } from './dashboard/dialogs/hotspot-configuration/hotspot-configuration.component';
 import { MetricPipe } from './dashboard/pipes/metric.pipe';
@@ -63,7 +72,14 @@ import { CoverageWidgetComponent } from './dashboard/coverage-widget/coverage-wi
 import { PeriodWidgetComponent } from './dashboard/period-widget/period-widget.component';
 import { GoalWidgetComponent } from './dashboard/goal-widget/goal-widget.component';
 import { GoalConfigurationComponent } from './dashboard/dialogs/goal-configuration/goal-configuration.component';
-import { EvaluationWidgetComponent } from './dashboard/evaluation-widget/evaluation-widget.component';
+import { PeriodConfigurationComponent } from './dashboard/dialogs/period-configuration/period-configuration.component';
+import { MatNativeDateModule} from '@angular/material/core';
+import { CommitWidgetComponent } from './dashboard/commit-widget/commit-widget.component';
+import { ArchitectureWidgetComponent } from './dashboard/architecture-widget/architecture-widget.component';
+import { TodoWidgetComponent } from './dashboard/todo-widget/todo-widget.component';
+import { HeadMonopolyWidgetComponent } from './dashboard/head-monopoly-widget/head-monopoly-widget.component';
+import { MaterialDashboardComponent } from './dashboard/material-dashboard/material-dashboard.component';
+
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -96,6 +112,7 @@ const appRoutes: Routes = [
     CityViewComponent,
     CityViewHeaderComponent,
     DashboardComponent,
+    MaterialDashboardComponent,
     HotspotWidgetComponent,
     HotspotConfigurationComponent,
     MetricPipe,
@@ -105,9 +122,17 @@ const appRoutes: Routes = [
     PeriodWidgetComponent,
     GoalWidgetComponent,
     GoalConfigurationComponent,
-    EvaluationWidgetComponent
+    PeriodConfigurationComponent,
+    CommitWidgetComponent,
+    ArchitectureWidgetComponent,
+    TodoWidgetComponent,
+    HeadMonopolyWidgetComponent,
   ],
   imports: [
+    MatBadgeModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    MatProgressBarModule,
     MatSelectModule,
     MatDialogModule,
     MatTabsModule,
@@ -142,7 +167,9 @@ const appRoutes: Routes = [
     StoreModule.forRoot(REDUCER_TOKEN),
     EffectsModule.forRoot([AppEffects]),
     environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 50}),
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatNativeDateModule,
+    MatTooltipModule,
   ],
   providers: [
     {
@@ -158,7 +185,7 @@ const appRoutes: Routes = [
       useFactory: getReducers,
     }],
   bootstrap: [AppComponent],
-  entryComponents: [HotspotConfigurationComponent, GoalConfigurationComponent]
+  entryComponents: [HotspotConfigurationComponent, GoalConfigurationComponent, PeriodConfigurationComponent]
 })
 export class AppModule {
 }

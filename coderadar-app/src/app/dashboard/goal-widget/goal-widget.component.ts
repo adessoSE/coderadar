@@ -11,21 +11,15 @@ import { GoalConfigurationComponent } from '../dialogs/goal-configuration/goal-c
   styleUrls: ['./goal-widget.component.scss']
 })
 export class GoalWidgetComponent implements OnInit, OnDestroy {
-  fetchedData: Subscription;
+  goalIsSuccessful = true;
   configDialog: MatDialogRef<GoalConfigurationComponent, any>;
-  goalRespObj = new GoalResponse();
 
   constructor(public dialog: MatDialog, private service: HttpfetcherService) { }
 
   ngOnInit() {
-    this.fetchedData = this.service.getCoverage().subscribe(
-      (resp: IGoalResponse) => {
-        this.goalRespObj.goals = resp.goals;
-      });
   }
 
   ngOnDestroy() {
-    this.fetchedData.unsubscribe();
   }
 
   openGoalConfigurationDialog(): void {

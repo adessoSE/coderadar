@@ -247,11 +247,10 @@ export class ProjectService {
 
 
   /**
-   * Returns the three of a project given commit and a metric mapping
-   * @param firstCommit The first commit
-   * @param secondCommit The second commit
-   * @param metricMapping The metric mapping
-   * @param projectId The project id.
+   * Returns the tree of a project given commit and a metric mapping
+   * @param commitName The commit name
+   * @param metricsNames The metric mapping
+   * @param projectId The project id
    */
   public getTree(commitName: string, metricsNames: string[], projectId: number): Observable<IFileNode> {
     const body = {
@@ -269,9 +268,7 @@ export class ProjectService {
       interval: intervallHistory,
       metric: metricHistory
     };
-    console.log(this.apiURL + 'projects/' + projectId + '/metricvalues/tree');
     return this.httpClient.post<History>(this.apiURL + 'projects/' + projectId + '/metricvalues/history', body);
   }
-
 
 }

@@ -1,5 +1,6 @@
 {
     "total": 600,
+    "countOnNewCode": 20,
     "types": [
         {
             "val": "CODE_SMELL",
@@ -75,7 +76,7 @@
             ],
             "creationDate": "2019-08-22T15:56:55+0200",
             "updateDate": "2019-08-22T17:19:19+0200",
-            "type": "CODE_SMELL",
+            "type": "BUG",
             "organization": "default-organization",
             "fromHotspot": false
         },
@@ -104,7 +105,7 @@
             ],
             "creationDate": "2019-08-22T15:56:55+0200",
             "updateDate": "2019-08-22T17:19:19+0200",
-            "type": "CODE_SMELL",
+            "type": "BUG",
             "organization": "default-organization",
             "fromHotspot": false
         },
@@ -158,7 +159,7 @@
             ],
             "creationDate": "2019-08-22T15:56:55+0200",
             "updateDate": "2019-08-22T17:19:19+0200",
-            "type": "CODE_SMELL",
+            "type": "BUG",
             "organization": "default-organization",
             "fromHotspot": false
         },
@@ -208,7 +209,7 @@
             ],
             "creationDate": "2019-08-22T15:56:55+0200",
             "updateDate": "2019-08-22T17:19:19+0200",
-            "type": "CODE_SMELL",
+            "type": "BUG",
             "organization": "default-organization",
             "fromHotspot": false
         },
@@ -266,7 +267,7 @@
             ],
             "creationDate": "2019-08-22T15:56:55+0200",
             "updateDate": "2019-08-22T17:19:19+0200",
-            "type": "CODE_SMELL",
+            "type": "BUG",
             "organization": "default-organization",
             "fromHotspot": false
         },

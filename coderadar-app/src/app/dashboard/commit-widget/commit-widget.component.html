@@ -1,0 +1,36 @@
+<mat-card class="mt-3">
+  <div class="d-flex justify-content-between">
+    <mat-card-title>LOG's</mat-card-title>
+    <div>
+      <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" xPosition="before">
+        <button mat-menu-item>Log configuration</button>
+      </mat-menu>
+    </div>
+  </div>
+  <mat-grid-list cols="1" rowHeight="130px">
+    <mat-grid-tile
+      *ngFor="let commit of commits.slice(pageEvent.pageIndex*pageEvent.pageSize, (pageEvent.pageIndex*pageEvent.pageSize) + pageEvent.pageSize)"
+      [colspan]="1" [rowspan]="1">
+      <mat-card 
+        (click)="selectCard(commit)">
+        <mat-card-content>
+          <a class="commitName" routerLink="/project/{{project.id}}/{{commit.name}}">{{commit.name}}</a>
+          <br><mat-label>Author: {{commit.author}}</mat-label>
+          <br><mat-label>Date: {{timestampToDate(commit.timestamp)}}</mat-label>
+          <mat-chip-list>
+            <mat-chip class="allow-overflow" disableRipple color="primary" matBadge="3" matBadgePosition="below after">Issues</mat-chip>
+            <mat-chip color="warn" selected>Goal failed</mat-chip>
+          </mat-chip-list>
+        </mat-card-content>
+      </mat-card>
+      
+    </mat-grid-tile>
+  </mat-grid-list>
+  <mat-paginator class="paginator" [length]="commits.length"
+  [pageSize]="pageSize"
+  (page)="pageEvent = $event">
+</mat-paginator>
+</mat-card>

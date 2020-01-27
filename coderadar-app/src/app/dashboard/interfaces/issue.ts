@@ -12,8 +12,9 @@ export enum IssueTypeEnum {
     VULNERABILITY = 'Vulnerability'
 }
 
-export interface Issues {
+export interface FetchedIssues {
     total: number;
+    countOnNewCode: number;
     types: IssueFacet[];
     severties: IssueFacet[];
     issues: Issue[];

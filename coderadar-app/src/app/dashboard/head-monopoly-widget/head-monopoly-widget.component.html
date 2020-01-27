@@ -1,0 +1,30 @@
+<mat-card class="mt-3">
+  <div class="d-flex justify-content-between">
+    <mat-card-header>
+      <mat-card-title>{{titel}}</mat-card-title>
+      <mat-card-subtitle>{{subTitel}}</mat-card-subtitle>
+    </mat-card-header>
+    <div>
+      <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" xPosition="before">
+        <button mat-menu-item>Metric configuration</button>
+      </mat-menu>
+    </div>
+  </div>
+  <mat-card-content>
+  <div *ngFor="let item of headMonopoly" class="row">
+    <div class=col-1>
+      {{item.metricValue}}
+    </div>
+    <div class="col-3">
+      <mat-progress-bar mode="determinate" [value]="item.percentageValue" [matTooltip]="item.tooltipText">
+      </mat-progress-bar>
+    </div>
+    <div class="col-8">
+      <mat-label [matTooltip]="item.filename">{{item.filename | filePipe}}</mat-label>
+    </div>
+  </div>
+  </mat-card-content>
+</mat-card>

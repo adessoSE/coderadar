@@ -35,7 +35,7 @@
 
 <mat-paginator [showFirstLastButtons]="true" class="paginator" [length]="commits.length"
                [pageSize]="pageSize"
-               [pageSizeOptions]="pageSizeOptions"
+               [pageSizeOptions]="[pageSizeOptions]"
                (page)="pageEvent = $event">
 </mat-paginator>
 

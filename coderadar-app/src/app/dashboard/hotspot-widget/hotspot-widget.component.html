@@ -11,7 +11,7 @@
     </div>
   </div>
   <mat-card-content>
-    <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8 w-100">
+    <table mat-table matSort matSortDirection="asc" [dataSource]="dataSource" class="mat-elevation-z8 w-100">
 
       <ng-container *ngFor="let heading of rowHeadings" [matColumnDef]="heading">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ (heading == 'name' ? 'Filename' : heading) | metricPipe }}</th>
@@ -21,6 +21,6 @@
       <tr mat-header-row *matHeaderRowDef="rowHeadings"></tr>
       <tr mat-row *matRowDef="let row; columns: rowHeadings;"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[3]" showFirstLastButtons></mat-paginator>
   </mat-card-content>
 </mat-card>

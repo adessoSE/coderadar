@@ -2,12 +2,10 @@
   <div class="d-flex justify-content-between">
     <mat-card-title>Coverage</mat-card-title>
   </div>
+  <canvas baseChart [data]="chartData" [labels]="chartLabels" [colors]="chartColors"
+    [chartType]="chartType" [legend]="false" [options]="options"></canvas>
   <div>
-    <canvas class="coverage-canvas" baseChart [data]="chartData" [labels]="chartLabels" [colors]="chartColors"
-      [chartType]="chartType" [options]="options"></canvas>
-  </div>
-  <div>
-      <p>{{dataCoverageOnNewCode[0]}} % coverage on new code</p>
-      <p>{{dataCoverageOverall[1]}} % coverage overall</p>
+    <div class="coverageOnNewCode">{{coverageOnNewCode}} % coverage on new code</div>
+    <div class="coverageOverall">{{coverageOverall}} % coverage overall</div>
   </div>
 </mat-card>

@@ -6,15 +6,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./coverage-widget.component.css']
 })
 export class CoverageWidgetComponent implements OnInit {
-  chartLabels = ['Coverage on new code', 'Coverage overall', 'Uncovered'];
-  dataCoverageOnNewCode = [81, 0, 19];
-  dataCoverageOverall = [0, 63, 37];
+  chartLabels = ['Coverage overall', 'Coverage on new code', 'Uncovered'];
+  // @TODO use service to get metrics -this are testdata
+  coverageOnNewCode = 81;
+  coverageOverall = 63;
+  dataCoverageOnNewCode = [0, 81, 19];
+  dataCoverageOverall = [63, 0, 37];
 
-  public chartData = [this.dataCoverageOnNewCode, this.dataCoverageOverall];
+  public chartData = [this.dataCoverageOverall, this.dataCoverageOnNewCode];
   public chartType = 'doughnut';
   public chartColors: any[] = [
-    { backgroundColor: ['#008000', '#8080ff', '#ff4d4d'] },
-    { backgroundColor: ['#008000', '#8080ff', '#ff4d4d'] }
+    { backgroundColor: ['#016ec7', 'coral', '#d9d9d9'] },
+    { backgroundColor: ['#016ec7', 'coral', '#d9d9d9'] }
   ];
   public options = {
     legend: {

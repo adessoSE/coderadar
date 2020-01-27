@@ -5,7 +5,8 @@ import { Subscription } from 'rxjs';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatRadioChange, MatPaginator } from '@angular/material';
-import { Issues, IssueSevertyEnum, IssueTypeEnum } from '../interfaces/issue';
+import { DataPoint } from '../interfaces/history';
+import { IssueSevertyEnum, IssueTypeEnum, FetchedIssues } from '../interfaces/issue';
 
 export enum GraphType {
   OVERALL = 'Overall', LEAKPERIOD = 'Leak Period'
@@ -22,6 +23,8 @@ export class IssueWidgetComponent implements OnInit, OnDestroy {
   public barChartType = 'horizontalBar';
   public graphs: string[] = [GraphType.OVERALL, GraphType.LEAKPERIOD];
   public barOptions = {
+    maintainAspectRatio: false,
+    responsive : false
   };
 
   // Tab Severity
@@ -39,6 +42,38 @@ export class IssueWidgetComponent implements OnInit, OnDestroy {
   public chartIssueTypeDataOverall = [];
   public selectedIssueTypeGraph = GraphType.LEAKPERIOD;
 
+  // Tab Trend
+  chartTrendLabels: string [] = [];
+  chartTrendData: number [] = [];
+  chartTrendDatasets = [ ];
+
+  historyMetricObserver = {
+    next: (resp: any) => {
+      resp.metricValues.forEach(metric => {
+        metric.points.forEach((element: DataPoint) => {
+          let label = '';
+          element.x.forEach(x => {
+            label += x;
+          });
+          // Check label is already in list
+          if (!this.chartTrendLabels.includes(label)) {
+            this.chartTrendLabels.push(label);
+          }
+          this.chartTrendData.push(element.y);
+        });
+      });
+    },
+    error: (err: any) => console.log(err)
+  };
+
+  /**
+   * Get testdata from service
+   */
+  private getHistory() {
+    this.service.getIssueBugHistory().subscribe(this.historyMetricObserver);
+  }
+
+
   // Tab Issues
   public displayedIssueColumns = [
     'severity',
@@ -47,6 +82,8 @@ export class IssueWidgetComponent implements OnInit, OnDestroy {
     'creationDate',
     'message'
   ];
+  totalIssues: number;
+  leakPeriodIssues: number;
   public issues;
   public fetchedData: Subscription;
 
@@ -54,7 +91,12 @@ export class IssueWidgetComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.fetchedData = this.service.getIssues().subscribe(
-      (resp: Issues) => {
+      (resp: FetchedIssues) => {
+        this.totalIssues = resp.total;
+        this.leakPeriodIssues = resp.countOnNewCode;
+        // Tab Trend
+        this.getHistory();
+        
         // Issue table
         this.issues = new MatTableDataSource(resp.issues);
         this.issues.sort = this.sort;
