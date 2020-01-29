@@ -11,7 +11,7 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.*;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.graph.query.repository.GetAvailableMetricsInProjectRepository;
+import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
@@ -61,7 +61,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     @Autowired private FilePatternRepository filePatternRepository;
     @Autowired private AnalyzerConfigurationRepository analyzerConfigurationRepository;
     @Autowired private MetricRepository metricRepository;
-    @Autowired private GetAvailableMetricsInProjectRepository getAvailableMetricsInProjectRepository;
+    @Autowired private MetricQueryRepository metricQueryRepository;
     @Autowired private ModuleRepository moduleRepository;
     @Autowired private Session session;
 
@@ -74,7 +74,6 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
     @AfterAll
     static void cleanUp() throws IOException {
-        FileUtils.deleteDirectory(new File("coderadar-workdir/projects"));
         FileUtils.deleteDirectory(new File("coderadar-workdir/PaySim"));
     }
 
@@ -127,7 +126,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
                 .andReturn();
 
         //Check values for latest (newest) commit
-        List<String> availableMetrics = getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(projectId);
+        List<String> availableMetrics = metricQueryRepository.getAvailableMetricsInProject(projectId);
         GetMetricsForCommitCommand getMetricsForCommitCommand = new GetMetricsForCommitCommand();
         getMetricsForCommitCommand.setMetrics(availableMetrics);
         getMetricsForCommitCommand.setCommit("5d7ba2de71dcce2746a75bc0cf668a129f023c5d");
@@ -143,10 +142,10 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
         //Values correct?
         Assertions.assertEquals(4, metricValuesForCommit.size());
-        Assertions.assertEquals(23L, metricValuesForCommit.get(0).getValue().longValue());
-        Assertions.assertEquals(1022L, metricValuesForCommit.get(1).getValue().longValue());
-        Assertions.assertEquals(1717L, metricValuesForCommit.get(2).getValue().longValue());
-        Assertions.assertEquals(1362L, metricValuesForCommit.get(3).getValue().longValue());
+        Assertions.assertEquals(23L, metricValuesForCommit.get(0).getValue());
+        Assertions.assertEquals(1022L, metricValuesForCommit.get(1).getValue());
+        Assertions.assertEquals(1717L, metricValuesForCommit.get(2).getValue());
+        Assertions.assertEquals(1362L, metricValuesForCommit.get(3).getValue());
         session.clear();
     }
 
@@ -179,7 +178,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
     private void testMetricValues(Long projectId) throws Exception {
         //Check values for latest (newest) commit
-        List<String> availableMetrics = getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(projectId);
+        List<String> availableMetrics = metricQueryRepository.getAvailableMetricsInProject(projectId);
         GetMetricsForCommitCommand getMetricsForCommitCommand = new GetMetricsForCommitCommand();
         getMetricsForCommitCommand.setMetrics(availableMetrics);
         getMetricsForCommitCommand.setCommit("5d7ba2de71dcce2746a75bc0cf668a129f023c5d");
@@ -195,10 +194,10 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
         //Values correct?
         Assertions.assertEquals(4, metricValuesForCommit.size());
-        Assertions.assertEquals(23L, metricValuesForCommit.get(0).getValue().longValue());
-        Assertions.assertEquals(1022L, metricValuesForCommit.get(1).getValue().longValue());
-        Assertions.assertEquals(1717L, metricValuesForCommit.get(2).getValue().longValue());
-        Assertions.assertEquals(1362L, metricValuesForCommit.get(3).getValue().longValue());
+        Assertions.assertEquals(23L, metricValuesForCommit.get(0).getValue());
+        Assertions.assertEquals(1022L, metricValuesForCommit.get(1).getValue());
+        Assertions.assertEquals(1717L, metricValuesForCommit.get(2).getValue());
+        Assertions.assertEquals(1362L, metricValuesForCommit.get(3).getValue());
 
         //Check values for second commit
         GetMetricsForCommitCommand getMetricsForCommitCommand2 = new GetMetricsForCommitCommand();
@@ -216,10 +215,10 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
         //Values correct?
         Assertions.assertEquals(4, metricValuesForCommit2.size());
-        Assertions.assertEquals(549L, metricValuesForCommit2.get(0).getValue().longValue());
-        Assertions.assertEquals(3903L, metricValuesForCommit2.get(1).getValue().longValue());
-        Assertions.assertEquals(7170L, metricValuesForCommit2.get(2).getValue().longValue());
-        Assertions.assertEquals(4914L, metricValuesForCommit2.get(3).getValue().longValue());
+        Assertions.assertEquals(549L, metricValuesForCommit2.get(0).getValue());
+        Assertions.assertEquals(3903L, metricValuesForCommit2.get(1).getValue());
+        Assertions.assertEquals(7170L, metricValuesForCommit2.get(2).getValue());
+        Assertions.assertEquals(4914L, metricValuesForCommit2.get(3).getValue());
 
         session.clear();
     }
@@ -241,15 +240,15 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         List<MetricValueForCommit> commit1Metrics = deltaTree.getCommit1Metrics();
         List<MetricValueForCommit> commit2Metrics = deltaTree.getCommit2Metrics();
 
-        Assertions.assertEquals(23L, commit1Metrics.get(0).getValue().longValue());
-        Assertions.assertEquals(1022L, commit1Metrics.get(1).getValue().longValue());
-        Assertions.assertEquals(1721L, commit1Metrics.get(2).getValue().longValue());
-        Assertions.assertEquals(1360L, commit1Metrics.get(3).getValue().longValue());
+        Assertions.assertEquals(23L, commit1Metrics.get(0).getValue());
+        Assertions.assertEquals(1022L, commit1Metrics.get(1).getValue());
+        Assertions.assertEquals(1721L, commit1Metrics.get(2).getValue());
+        Assertions.assertEquals(1360L, commit1Metrics.get(3).getValue());
 
-        Assertions.assertEquals(23L, commit2Metrics.get(0).getValue().longValue());
-        Assertions.assertEquals(1022L, commit2Metrics.get(1).getValue().longValue());
-        Assertions.assertEquals(1717L, commit2Metrics.get(2).getValue().longValue());
-        Assertions.assertEquals(1362L, commit2Metrics.get(3).getValue().longValue());
+        Assertions.assertEquals(23L, commit2Metrics.get(0).getValue());
+        Assertions.assertEquals(1022L, commit2Metrics.get(1).getValue());
+        Assertions.assertEquals(1717L, commit2Metrics.get(2).getValue());
+        Assertions.assertEquals(1362L, commit2Metrics.get(3).getValue());
 
         Assertions.assertEquals(1, deltaTree.getChildren().size());
 
@@ -266,7 +265,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         Assertions.assertEquals("src/paysim/PaySim.java", firstChangedFile.getName());
         Assertions.assertEquals(MetricTreeNodeType.FILE, firstChangedFile.getType());
         Assertions.assertEquals(4, firstChangedFile.getCommit1Metrics().size());
-        Assertions.assertEquals(firstChangedFile.getCommit2Metrics().get(2).getValue().longValue(),
+        Assertions.assertEquals(firstChangedFile.getCommit2Metrics().get(2).getValue(),
                 firstChangedFile.getCommit1Metrics().get(2).getValue()-3L);
         Assertions.assertTrue(firstChangedFile.getChanges().isModified());
 
@@ -274,7 +273,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         Assertions.assertEquals("src/paysim/output/KafkaOutput.java", secondChangedFile.getName());
         Assertions.assertEquals(MetricTreeNodeType.FILE, firstChangedFile.getType());
         Assertions.assertEquals(4, secondChangedFile.getCommit1Metrics().size());
-        Assertions.assertEquals(secondChangedFile.getCommit2Metrics().get(2).getValue().longValue(),
+        Assertions.assertEquals(secondChangedFile.getCommit2Metrics().get(2).getValue(),
                 secondChangedFile.getCommit1Metrics().get(2).getValue() - 1L);
         Assertions.assertTrue(secondChangedFile.getChanges().isModified());
 
@@ -309,7 +308,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         }
 
         //Metrics available?
-        List<String> availableMetrics = getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(projectId);
+        List<String> availableMetrics = metricQueryRepository.getAvailableMetricsInProject(projectId);
         Assertions.assertEquals(4, availableMetrics.size());
         Assertions.assertTrue(availableMetrics.contains("coderadar:size:sloc:java"));
         Assertions.assertTrue(availableMetrics.contains("coderadar:size:loc:java"));

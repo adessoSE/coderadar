@@ -25,9 +25,8 @@ public class AnalyzerConfigurationMapper
   @Override
   public AnalyzerConfigurationEntity mapDomainObject(AnalyzerConfiguration domainObject) {
     AnalyzerConfigurationEntity analyzerConfiguration = new AnalyzerConfigurationEntity();
-    analyzerConfiguration.setId(domainObject.getId());
     analyzerConfiguration.setAnalyzerName(domainObject.getAnalyzerName());
-    analyzerConfiguration.setEnabled(domainObject.getEnabled());
+    analyzerConfiguration.setEnabled(domainObject.isEnabled());
     if (domainObject.getAnalyzerConfigurationFile() != null) {
       analyzerConfiguration.setAnalyzerConfigurationFile(
           mapConfigurationFileDomainObject(domainObject.getAnalyzerConfigurationFile()));

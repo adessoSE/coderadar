@@ -18,7 +18,7 @@ coderadar aims to be a continuous source code analysis tool that **automatically
 * coderadar is a tool for **gamification**. It provides mechanisms to gamify code quality and to improve motivation for developers to produce quality code.
 
 ## Documentation
-* [REST API documentation](https://cdn.rawgit.com/reflectoring/coderadar/gh-pages/current/docs/restapi.html).
+* [REST API documentation](https://reflectoring.github.io/coderadar/current/docs/restapi.html).
 * [Administration Guide](https://cdn.rawgit.com/reflectoring/coderadar/gh-pages/current/docs/admin.html)
 
 ## Want to contribute?

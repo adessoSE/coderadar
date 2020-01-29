@@ -45,7 +45,7 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
       "Should return list of size of one when one analyzer configuration in the project exists")
   void shouldReturnListOfSizeOfOneWhenOneAnalyzerConfigurationInTheProjectExists() {
     LinkedList<AnalyzerConfigurationEntity> mockedAnalyzerConfigurations = new LinkedList<>();
-    mockedAnalyzerConfigurations.add(new AnalyzerConfigurationEntity());
+    mockedAnalyzerConfigurations.add(new AnalyzerConfigurationEntity().setId(3L).setEnabled(true));
     when(projectRepository.existsById(1L)).thenReturn(true);
     when(analyzerConfigurationRepository.findByProjectId(1L))
         .thenReturn(mockedAnalyzerConfigurations);
@@ -61,8 +61,8 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
       "Should return list of size of two when two analyzer configurations in the project exist")
   void shouldReturnListOfSizeOfTwoWhenTwoAnalyzerConfigurationsInTheProjectExist() {
     LinkedList<AnalyzerConfigurationEntity> mockedAnalyzerConfigurations = new LinkedList<>();
-    mockedAnalyzerConfigurations.add(new AnalyzerConfigurationEntity());
-    mockedAnalyzerConfigurations.add(new AnalyzerConfigurationEntity());
+    mockedAnalyzerConfigurations.add(new AnalyzerConfigurationEntity().setId(4L).setEnabled(true));
+    mockedAnalyzerConfigurations.add(new AnalyzerConfigurationEntity().setId(4L).setEnabled(true));
     when(projectRepository.existsById(1L)).thenReturn(true);
     when(analyzerConfigurationRepository.findByProjectId(1L))
         .thenReturn(mockedAnalyzerConfigurations);

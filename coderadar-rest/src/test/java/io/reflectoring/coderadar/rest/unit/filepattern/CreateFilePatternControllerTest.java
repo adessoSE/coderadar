@@ -29,6 +29,6 @@ class CreateFilePatternControllerTest {
     ResponseEntity<IdResponse> responseEntity = testSubject.createFilePattern(command, 5L);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-    Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
+    Assertions.assertEquals(1L, responseEntity.getBody().getId());
   }
 }

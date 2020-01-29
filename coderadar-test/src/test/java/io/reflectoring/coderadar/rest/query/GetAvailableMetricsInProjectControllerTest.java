@@ -48,7 +48,9 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
 
     @Test
     void returnsNothingWhenNotAnalyzed() throws Exception {
-        MvcResult result = mvc().perform(get("/projects/" + projectId + "/metrics").contentType(MediaType.APPLICATION_JSON)).andReturn();
+        MvcResult result = mvc().perform(get("/projects/" + projectId + "/metrics").contentType(MediaType.APPLICATION_JSON))
+                .andDo(document("metrics/list"))
+                .andReturn();
 
         List<String> metrics = fromJson(new TypeReference<List<String>>() {}, result.getResponse().getContentAsString());
 

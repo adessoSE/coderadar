@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @Transactional
 public class GetAvailableMetricsInProjectController {
@@ -20,7 +22,7 @@ public class GetAvailableMetricsInProjectController {
   }
 
   @GetMapping(path = "/projects/{projectId}/metrics", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity getMetrics(@PathVariable("projectId") Long projectId) {
+  public ResponseEntity<List<String>> getMetrics(@PathVariable("projectId") Long projectId) {
       return new ResponseEntity<>(getAvailableMetricsInProjectUseCase.get(projectId), HttpStatus.OK);
   }
 }

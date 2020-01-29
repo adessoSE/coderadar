@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.query.adapter.GetAvailableMetricsInProjectAdapter;
-import io.reflectoring.coderadar.graph.query.repository.GetAvailableMetricsInProjectRepository;
+import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
 import java.util.LinkedList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,15 +17,14 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Get available metrics in project")
 class GetAvailableMetricsInProjectAdapterTest {
   private ProjectRepository projectRepository = mock(ProjectRepository.class);
-  private GetAvailableMetricsInProjectRepository getAvailableMetricsInProjectRepository =
-      mock(GetAvailableMetricsInProjectRepository.class);
+  private MetricQueryRepository metricQueryRepository = mock(MetricQueryRepository.class);
 
   private GetAvailableMetricsInProjectAdapter getAvailableMetricsInProjectAdapter;
 
   @BeforeEach
   void setUp() {
     getAvailableMetricsInProjectAdapter =
-        new GetAvailableMetricsInProjectAdapter(getAvailableMetricsInProjectRepository);
+        new GetAvailableMetricsInProjectAdapter(metricQueryRepository);
   }
 
   @Test
@@ -33,7 +32,7 @@ class GetAvailableMetricsInProjectAdapterTest {
   void shouldReturnEmptyListOfStringsWhenNoMetricsAreAvailable() {
     List<String> mockListOfMetrics = new LinkedList<>();
     when(projectRepository.existsById(anyLong())).thenReturn(true);
-    when(getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(anyLong()))
+    when(metricQueryRepository.getAvailableMetricsInProject(anyLong()))
         .thenReturn(mockListOfMetrics);
 
     List<String> returnedMetrics = getAvailableMetricsInProjectAdapter.get(1L);
@@ -47,7 +46,7 @@ class GetAvailableMetricsInProjectAdapterTest {
     List<String> mockListOfMetrics = new LinkedList<>();
     mockListOfMetrics.add("loc");
     when(projectRepository.existsById(anyLong())).thenReturn(true);
-    when(getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(anyLong()))
+    when(metricQueryRepository.getAvailableMetricsInProject(anyLong()))
         .thenReturn(mockListOfMetrics);
 
     List<String> returnedMetrics = getAvailableMetricsInProjectAdapter.get(1L);
@@ -62,7 +61,7 @@ class GetAvailableMetricsInProjectAdapterTest {
     mockListOfMetrics.add("sloc");
     mockListOfMetrics.add("cloc");
     when(projectRepository.existsById(anyLong())).thenReturn(true);
-    when(getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(anyLong()))
+    when(metricQueryRepository.getAvailableMetricsInProject(anyLong()))
         .thenReturn(mockListOfMetrics);
 
     List<String> returnedMetrics = getAvailableMetricsInProjectAdapter.get(1L);

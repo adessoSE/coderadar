@@ -29,6 +29,7 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
     AnalyzerConfigurationEntity analyzerConfiguration = new AnalyzerConfigurationEntity();
     analyzerConfiguration.setProject(testProject);
     analyzerConfiguration.setAnalyzerName("io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin");
+    analyzerConfiguration.setEnabled(true);
 
     analyzerConfiguration = analyzerConfigurationRepository.save(analyzerConfiguration);
     final Long id = analyzerConfiguration.getId();
@@ -76,12 +77,14 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
     AnalyzerConfigurationEntity analyzerConfiguration = new AnalyzerConfigurationEntity();
     analyzerConfiguration.setProject(testProject);
     analyzerConfiguration.setAnalyzerName("io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin");
+    analyzerConfiguration.setEnabled(true);
 
     analyzerConfiguration = analyzerConfigurationRepository.save(analyzerConfiguration);
 
     AnalyzerConfigurationEntity analyzerConfiguration2 = new AnalyzerConfigurationEntity();
     analyzerConfiguration2.setProject(testProject);
     analyzerConfiguration2.setAnalyzerName("io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin");
+    analyzerConfiguration2.setEnabled(true);
 
     analyzerConfigurationRepository.save(analyzerConfiguration2);
 

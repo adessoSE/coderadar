@@ -46,7 +46,7 @@ class GetAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate 
                       result.getResponse().getContentAsString(),
                       GetAnalyzerConfigurationResponse.class);
               Assertions.assertEquals("analyzer", response.getAnalyzerName());
-              Assertions.assertTrue(response.getEnabled());
+              Assertions.assertTrue(response.isEnabled());
             })
             .andDo(document("analyzerConfiguration/getSingle"));
 

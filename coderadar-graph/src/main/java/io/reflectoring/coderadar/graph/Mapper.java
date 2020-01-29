@@ -17,8 +17,8 @@ public interface Mapper<T, E> {
     return domainObjects;
   }
 
-  default List<E> mapDomainObjects(Iterable<T> domainObjects) {
-    List<E> nodeEntities = new ArrayList<>();
+  default List<E> mapDomainObjects(List<T> domainObjects) {
+    List<E> nodeEntities = new ArrayList<>(domainObjects.size());
     for (T t : domainObjects) {
       nodeEntities.add(mapDomainObject(t));
     }

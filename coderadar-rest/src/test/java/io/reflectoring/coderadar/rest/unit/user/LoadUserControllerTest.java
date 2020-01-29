@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
+import io.reflectoring.coderadar.rest.domain.LoadUserResponse;
 import io.reflectoring.coderadar.rest.user.LoadUserController;
-import io.reflectoring.coderadar.useradministration.port.driver.load.LoadUserResponse;
+import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driver.load.LoadUserUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,9 +20,7 @@ class LoadUserControllerTest {
   void loadUserWithIdOne() {
     LoadUserController testSubject = new LoadUserController(loadUserUseCase);
 
-    LoadUserResponse user = new LoadUserResponse(1L, "username");
-
-    Mockito.when(loadUserUseCase.loadUser(1L)).thenReturn(user);
+    Mockito.when(loadUserUseCase.loadUser(1L)).thenReturn(new User().setUsername("username").setId(1L));
 
     ResponseEntity<LoadUserResponse> responseEntity = testSubject.loadUser(1L);
 
