@@ -1,13 +1,11 @@
-import {ComponentFixture, inject, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {UserSettingsComponent} from './user-settings.component';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
-import {Title} from '@angular/platform-browser';
 import {UserService} from '../../service/user.service';
-import {of} from 'rxjs';
-import {HttpClient, HttpClientModule, HttpHandler, HttpResponse} from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 import {MainDashboardComponent} from '../main-dashboard/main-dashboard.component';
 import {RouterTestingModule} from '@angular/router/testing';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
@@ -48,12 +46,6 @@ describe('UserSettingsComponent', () => {
         RouterTestingModule.withRoutes([
           {path: 'dashboard', component: MainDashboardComponent},
         ]),
-      ],
-      providers: [
-        // Title,
-        // HttpClient,
-        // HttpHandler,
-        // {provide: UserService, useClass: MockUserService}
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

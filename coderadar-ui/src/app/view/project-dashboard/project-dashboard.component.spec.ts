@@ -1,4 +1,4 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, inject, TestBed} from '@angular/core/testing';
 
 import {ProjectDashboardComponent} from './project-dashboard.component';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
@@ -14,14 +14,34 @@ import {
 import {AppEffects} from '../../city-map/shared/effects';
 import {of} from 'rxjs';
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClient, HttpHandler} from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 import {Actions} from '@ngrx/effects';
 import {CityViewComponent} from '../city-view/city-view.component';
+import {AppComponent} from "../../app.component";
+import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
+import {Title} from "@angular/platform-browser";
 
 describe('ProjectDashboardComponent', () => {
   let component: ProjectDashboardComponent;
   let fixture: ComponentFixture<ProjectDashboardComponent>;
   let routerSpy;
+  let http;
+  const commits = [
+    {
+      name: 'init',
+      author: 'testUser',
+      comment: 'initial commit',
+      timestamp: 1576832400000,
+      analyzed: true
+    },
+    {
+      name: 'second',
+      author: 'testUser',
+      comment: 'second commit',
+      timestamp: 1576832800000,
+      analyzed: true
+    }
+  ];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -30,6 +50,8 @@ describe('ProjectDashboardComponent', () => {
         CityViewComponent
       ],
       imports: [
+        HttpClientModule,
+        HttpClientTestingModule,
         RouterTestingModule.withRoutes([
           {path: 'city/:id', component: CityViewComponent},
         ]),
@@ -41,12 +63,9 @@ describe('ProjectDashboardComponent', () => {
           }
         },
         {provide: StateObservable},
-        {provide: UserService, useClass: MockUserService},
         Actions,
         ActionsSubject,
         AppEffects,
-        HttpClient,
-        HttpHandler,
         {provide: ReducerManager},
         ReducerManagerDispatcher,
         ScannedActionsSubject,
@@ -57,24 +76,10 @@ describe('ProjectDashboardComponent', () => {
       .compileComponents();
 
     fixture = TestBed.createComponent(ProjectDashboardComponent);
+    http = TestBed.get(HttpTestingController);
     component = fixture.componentInstance;
     routerSpy = spyOn(Router.prototype, 'navigate').and.callFake((url) => {});
-    component.commits = [
-      {
-        name: 'init',
-        author: 'testUser',
-        comment: 'initial commit',
-        timestamp: 1576832400000,
-        analyzed: false
-      },
-      {
-        name: 'second',
-        author: 'testUser',
-        comment: 'scond commit',
-        timestamp: 1576832800000,
-        analyzed: false
-      }
-    ];
+    component.commits = commits;
     fixture.detectChanges();
   });
 
@@ -82,19 +87,19 @@ describe('ProjectDashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should convert a boolean into a string: true', () => {
+  it('should boolean to string true', () => {
     expect(component.booleanToString(true)).toBe('yes');
   });
 
-  it('should convert a boolean into a string: false', () => {
+  it('should boolean to string false', () => {
     expect(component.booleanToString(false)).toBe('no');
   });
 
-  it('should convert a timestamp into a string', () => {
+  it('should timestamp to string', () => {
     expect(component.timestampToDate(1576832400000)).toBe('20.12.2019');
   });
 
-  it('should convert trim project name: all commits', () => {
+  it('should get title all commits', () => {
     component.project = {
       id: 1,
       name: 'test',
@@ -108,7 +113,7 @@ describe('ProjectDashboardComponent', () => {
     expect(component.getTitleText()).toBe('Showing commits for project test (2)');
   });
 
-  it('should convert trim project name: from date', () => {
+  it('should get title from date', () => {
     component.project = {
       id: 1,
       name: 'test',
@@ -122,7 +127,7 @@ describe('ProjectDashboardComponent', () => {
     expect(component.getTitleText()).toBe('Showing commits for project test from 16.12.2019 up until today (2)');
   });
 
-  it('should convert trim project name: to date', () => {
+  it('should get title to date', () => {
     component.project = {
       id: 1,
       name: 'test',
@@ -136,7 +141,7 @@ describe('ProjectDashboardComponent', () => {
     expect(component.getTitleText()).toBe('Showing commits for project test from 20.12.2019 up until 22.12.2019 (2)');
   });
 
-  it('should convert trim project name: from date to date', () => {
+  it('should get title from date to date', () => {
     component.project = {
       id: 1,
       name: 'test',
@@ -158,10 +163,396 @@ describe('ProjectDashboardComponent', () => {
       expect(routerSpy).toHaveBeenCalledWith(['/city/1']);
     });
   });
-});
 
-class MockUserService extends UserService {
-  refresh(callback: () => any) {
-    callback();
-  }
-}
+  it('should get commits', () => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([], {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1/commits',
+    });
+    fixture.whenStable().then(() => {
+      component.projectId = 1;
+      component.selectedCommit1 = commits[0];
+      component.selectedCommit2 = commits[1];
+      (component as any).getCommits();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([commits], {
+        status: 200,
+        statusText: 'Ok',
+        url: '/projects/1/commits',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(component.selectedCommit1.name).toBe('initial commit');
+          expect(component.selectedCommit1.analyzed).toBe(true);
+          expect(component.selectedCommit2.name).toBe('second commit');
+          expect(component.selectedCommit2.analyzed).toBe(true);
+          expect(component.commitsAnalyzed).toBe(2);
+        });
+      });
+    });
+  });
+
+  it('should get commits no selectedCommit1', () => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([], {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1/commits',
+    });
+    fixture.whenStable().then(() => {
+      component.projectId = 1;
+      component.selectedCommit2 = commits[1];
+      (component as any).getCommits();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([commits], {
+        status: 200,
+        statusText: 'Ok',
+        url: '/projects/1/commits',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(component.selectedCommit1).toBe(null);
+          expect(component.selectedCommit2.name).toBe('second commit');
+          expect(component.selectedCommit2.analyzed).toBe(true);
+          expect(component.commitsAnalyzed).toBe(1);
+        });
+      });
+    });
+  });
+
+  it('should get commits no selectedCommit2', () => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([], {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1/commits',
+    });
+    fixture.whenStable().then(() => {
+      component.projectId = 1;
+      component.selectedCommit1 = commits[0];
+      (component as any).getCommits();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([commits], {
+        status: 200,
+        statusText: 'Ok',
+        url: '/projects/1/commits',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(component.selectedCommit1.name).toBe('initial commit');
+          expect(component.selectedCommit1.analyzed).toBe(true);
+          expect(component.selectedCommit2).toBe(null);
+          expect(component.commitsAnalyzed).toBe(2);
+        });
+      });
+    });
+  });
+
+  it('should get commits no selectedCommit1 and selectedCommit2', () => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([], {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1/commits',
+    });
+    fixture.whenStable().then(() => {
+      component.projectId = 1;
+      component.selectedCommit2 = commits[1];
+      (component as any).getCommits();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([commits], {
+        status: 200,
+        statusText: 'Ok',
+        url: '/projects/1/commits',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(component.selectedCommit1).toBe(null);
+          expect(component.selectedCommit2).toBe(null);
+          expect(component.commitsAnalyzed).toBe(2);
+        });
+      });
+    });
+  });
+
+  it('should get commits no commits analyzed', () => {
+    commits[0].analyzed = false;
+    commits[1].analyzed = false;
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([], {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1/commits',
+    });
+    fixture.whenStable().then(() => {
+      component.projectId = 1;
+      component.selectedCommit1 = commits[0];
+      component.selectedCommit2 = commits[1];
+      (component as any).getCommits();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([commits], {
+        status: 200,
+        statusText: 'Ok',
+        url: '/projects/1/commits',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(component.selectedCommit1.name).toBe('initial commit');
+          expect(component.selectedCommit1.analyzed).toBe(false);
+          expect(component.selectedCommit2.name).toBe('second commit');
+          expect(component.selectedCommit2.analyzed).toBe(false);
+          expect(component.commitsAnalyzed).toBe(0);
+        });
+      });
+    });
+  });
+
+  it('should get commits one commit analyzed', () => {
+    commits[0].analyzed = false;
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([], {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1/commits',
+    });
+    fixture.whenStable().then(() => {
+      component.projectId = 1;
+      component.selectedCommit1 = commits[0];
+      component.selectedCommit2 = commits[1];
+      (component as any).getCommits();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([commits], {
+        status: 200,
+        statusText: 'Ok',
+        url: '/projects/1/commits',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(component.selectedCommit1.name).toBe('initial commit');
+          expect(component.selectedCommit1.analyzed).toBe(true);
+          expect(component.selectedCommit2.name).toBe('second commit');
+          expect(component.selectedCommit2.analyzed).toBe(false);
+          expect(component.commitsAnalyzed).toBe(1);
+        });
+      });
+    });
+  });
+
+  it('should get commits no commits analyzed', () => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([], {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1/commits',
+    });
+    fixture.whenStable().then(() => {
+      commits[0].analyzed = false;
+      commits[1].analyzed = false;
+      component.projectId = 1;
+      component.selectedCommit1 = commits[0];
+      component.selectedCommit2 = commits[1];
+      (component as any).getCommits();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([{
+        name: 'init',
+        author: 'testUser',
+        comment: 'initial commit',
+        timestamp: 1576832400000,
+        analyzed: true
+      }], {
+        status: 200,
+        statusText: 'Ok',
+        url: '/projects/1/commits',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(component.selectedCommit1.name).toBe('initial commit');
+          expect(component.selectedCommit1.analyzed).toBe(true);
+          expect(component.selectedCommit2).toBe(null);
+          expect(component.commitsAnalyzed).toBe(1);
+        });
+      });
+    });
+  });
+
+  it('should get commits no commits analyzed', () => {
+    commits[0].analyzed = false;
+    commits[1].analyzed = false;
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([], {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1/commits',
+    });
+    fixture.whenStable().then(() => {
+      component.projectId = 1;
+      component.selectedCommit1 = commits[0];
+      component.selectedCommit2 = commits[1];
+      (component as any).getCommits();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([], {
+        status: 200,
+        statusText: 'Ok',
+        url: '/projects/1/commits',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(component.selectedCommit1).toBe(null);
+          expect(component.selectedCommit2).toBe(null);
+          expect(component.commitsAnalyzed).toBe(0);
+        });
+      });
+    });
+  });
+
+  it('should get commits no commits analyzed', inject([UserService], (userService: UserService) => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush([], {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1/commits',
+    });
+    fixture.whenStable().then(() => {
+      component.projectId = 1;
+      component.selectedCommit1 = commits[0];
+      component.selectedCommit2 = commits[1];
+      const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {});
+      (component as any).getCommits();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush({
+        status: 403,
+        error: 'Forbidden',
+        message: 'Access Denied',
+        path: '/projects/1/commits'
+      }, {
+        status: 403,
+        statusText: 'Forbidden',
+        url: '/projects/1/commits',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(refreshSpy).toHaveBeenCalled();
+        });
+      });
+    });
+  }));
+
+  it('should get projects', inject([Title], (titleService: Title) => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({}, {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1',
+    });
+    fixture.whenStable().then(() => {
+      component.projectId = 1;
+      const titleSpy = spyOn(titleService, 'setTitle').and.callFake(callback => {});
+      (component as any).getProject();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
+        id: 1,
+        name: 'test',
+        vcsUrl: 'https://valid.url',
+        vcsUsername: '',
+        vcsPassword: '',
+        vcsOnline: true,
+        startDate: null,
+        endDate: null
+      }, {
+        status: 200,
+        statusText: 'Ok',
+        url: '/projects/1',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(titleSpy).toHaveBeenCalledWith('Coderadar - test');
+        });
+      });
+    });
+  }));
+
+  it('should get projects forbidden', inject([UserService], (userService: UserService) => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({}, {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1',
+    });
+    fixture.whenStable().then(() => {
+      component.projectId = 1;
+      const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {});
+      (component as any).getProject();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
+        status: 403,
+        error: 'Forbidden',
+        message: 'Access Denied',
+        path: '/projects/1'
+      }, {
+        status: 403,
+        statusText: 'Forbidden',
+        url: '/projects/1',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(refreshSpy).toHaveBeenCalled();
+        });
+      });
+    });
+  }));
+
+  it('should get projects not found', () => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({}, {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1',
+    });
+    fixture.whenStable().then(() => {
+      component.projectId = 1;
+      (component as any).getProject();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
+        status: 404,
+        error: 'Not Found',
+        message: 'Not Found',
+        url: '/projects/1',
+      }, {
+        status: 404,
+        statusText: 'Not Found',
+        url: '/projects/1',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(routerSpy).toHaveBeenCalledWith(['/dashboard']);
+        });
+      });
+    });
+  });
+
+  it('should select card select selectedCommit1', () => {
+    component.selectedCommit1 = null;
+    component.selectedCommit2 = commits[1];
+    const selectedCommit = commits[0];
+    component.selectCard(selectedCommit);
+    expect(component.selectedCommit1).toBe(selectedCommit);
+  });
+
+  it('should select card deselect selectedCommit1', () => {
+    component.selectedCommit1 = commits[0];
+    component.selectedCommit2 = commits[1];
+    const selectedCommit = commits[0];
+    component.selectCard(selectedCommit);
+    expect(component.selectedCommit1).toBe(null);
+  });
+
+  it('should select card deselect selectedCommit1 no second commit', () => {
+    component.selectedCommit1 = commits[0];
+    component.selectedCommit2 = null;
+    const selectedCommit = commits[0];
+    component.selectCard(selectedCommit);
+    expect(component.selectedCommit1).toBe(null);
+  });
+
+  it('should select card deselect selectedCommit2', () => {
+    component.selectedCommit1 = commits[0];
+    component.selectedCommit2 = commits[1];
+    const selectedCommit = commits[1];
+    component.selectCard(selectedCommit);
+    expect(component.selectedCommit2).toBe(null);
+  });
+
+  it('should select card deselect selectedCommit1 no second commit', () => {
+    component.selectedCommit1 = null;
+    component.selectedCommit2 = commits[1];
+    const selectedCommit = commits[1];
+    component.selectCard(selectedCommit);
+    expect(component.selectedCommit2).toBe(null);
+  });
+
+  it('should select card select selectedCommit1', () => {
+    component.selectedCommit1 = commits[0];
+    component.selectedCommit2 = null;
+    const selectedCommit = commits[1];
+    component.selectCard(selectedCommit);
+    expect(component.selectedCommit2).toBe(selectedCommit);
+  });
+});

@@ -27,8 +27,6 @@ describe('RegisterComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule
       ],
-      providers: [
-      ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();

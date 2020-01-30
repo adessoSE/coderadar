@@ -7,9 +7,7 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {of} from 'rxjs';
-import {HttpClient, HttpClientModule, HttpHandler, HttpResponse} from '@angular/common/http';
-import {ProjectService} from '../../service/project.service';
-import {Project} from '../../model/project';
+import {HttpClientModule} from '@angular/common/http';
 import {RouterTestingModule} from '@angular/router/testing';
 import {MainDashboardComponent} from '../main-dashboard/main-dashboard.component';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
@@ -21,6 +19,8 @@ import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {AppComponent} from '../../app.component';
+import {Title} from "@angular/platform-browser";
+import {Project} from "../../model/project";
 
 describe('EditProjectComponent', () => {
   let component: EditProjectComponent;
@@ -62,7 +62,6 @@ describe('EditProjectComponent', () => {
         ]),
       ],
       providers: [
-        {provide: ProjectService, useClass: MockProjectService},
         {
           provide: ActivatedRoute, useValue: {
             params: of({id: 1})
@@ -87,103 +86,201 @@ describe('EditProjectComponent', () => {
   });
 
   it('should edit project', () => {
-    component.project = project;
-    component.submitForm();
     http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({}, {
       status: 200,
-      url: '/projects/1',
       statusText: 'Ok',
+      url: '/projects/1',
     });
     fixture.whenStable().then(() => {
-      expect(routerSpy).toHaveBeenCalledWith(['/dashboard']);
-      expect(component.incorrectURL).toBeFalsy();
-      expect(component.projectExists).toBeFalsy();
-      expect(mockSnackbar.open).toHaveBeenCalledWith('Project successfully edited!', '🞩', {duration: 4000});
+      component.project = project;
+      component.submitForm();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({}, {
+        status: 200,
+        url: '/projects/1',
+        statusText: 'Ok',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(routerSpy).toHaveBeenCalledWith(['/dashboard']);
+          expect(component.incorrectURL).toBeFalsy();
+          expect(component.projectExists).toBeFalsy();
+          expect(mockSnackbar.open).toHaveBeenCalledWith('Project successfully edited!', '🞩', {duration: 4000});
+        });
+      });
     });
   });
 
-  it('should get unauthenticated and call userService for new authentication on add module',
+  it('should edit project forbidden',
     inject([UserService], (userService: UserService) => {
-      component.project = project;
-      const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {
-      });
-      component.submitForm();
-      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
-        status: 403,
-        error: 'Forbidden',
-        message: 'Access Denied',
-        path: '/projects/1/modules'
-      }, {
-        status: 403,
-        statusText: 'Forbidden',
-        url: '/projects/1/modules',
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({}, {
+        status: 200,
+        statusText: 'Ok',
+        url: '/projects/1',
       });
       fixture.whenStable().then(() => {
-        expect(refreshSpy).toHaveBeenCalled();
+        component.project = project;
+        const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {
+        });
+        component.submitForm();
+        http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
+          status: 403,
+          error: 'Forbidden',
+          message: 'Access Denied',
+          path: '/projects/1'
+        }, {
+          status: 403,
+          statusText: 'Forbidden',
+          url: '/projects/1',
+        });
+        fixture.whenStable().then(() => {
+          fixture.whenStable().then(() => {
+            expect(refreshSpy).toHaveBeenCalled();
+          });
+        });
       });
     })
   );
 
-  it('should get conflict on edit project', () => {
-    component.project = project;
-    component.submitForm();
-    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
-      status: 409,
-      error: 'Conflict',
-      errorMessage: 'Project with name \'test\' already exists. Please choose another name.',
-      path: '/projects/1'
-    }, {
-      status: 409,
-      statusText: 'Conflict',
+  it('should edit project conflict', () => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({}, {
+      status: 200,
+      statusText: 'Ok',
       url: '/projects/1',
     });
     fixture.whenStable().then(() => {
-      expect(component.projectExists).toBeTruthy();
+      component.project = project;
+      component.submitForm();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
+        status: 409,
+        error: 'Conflict',
+        errorMessage: 'Project with name \'test\' already exists. Please choose another name.',
+        path: '/projects/1'
+      }, {
+        status: 409,
+        statusText: 'Conflict',
+        url: '/projects/1',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(component.projectExists).toBeTruthy();
+        });
+      });
     });
   });
 
-  it('should get bad request on edit project', () => {
-    component.project = project;
-    component.submitForm();
-    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
-      status: 400,
-      error: 'Bad Request',
-      errorMessage: 'Validation Error',
-      path: '/projects/1',
-      fieldErrors: [
-        {field: 'vcsUrl'}
-      ]
-    }, {
-      status: 400,
-      statusText: 'Bad Request',
+  it('should edit project bad request', () => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({}, {
+      status: 200,
+      statusText: 'Ok',
       url: '/projects/1',
     });
     fixture.whenStable().then(() => {
-      expect(component.incorrectURL).toBeTruthy();
-      expect(component.projectExists).toBeFalsy();
+      component.project = project;
+      component.submitForm();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
+        status: 400,
+        error: 'Bad Request',
+        errorMessage: 'Validation Error',
+        path: '/projects/1',
+        fieldErrors: [
+          {field: 'vcsUrl'}
+        ]
+      }, {
+        status: 400,
+        statusText: 'Bad Request',
+        url: '/projects/1',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(component.incorrectURL).toBeTruthy();
+          expect(component.projectExists).toBeFalsy();
+        });
+      });
     });
   });
 
-  it('should get Unprocessable Entity on editing a project', () => {
-    component.project = project;
-    component.submitForm();
-    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
-      status: 422,
-      error: 'Unprocessable Entity',
-      errorMessage: 'The project test already exists.',
-      path: '/projects/1'
-    }, {
-      status: 422,
-      statusText: 'Unprocessable Entity',
+  it('should edit a project unprocessable entity', () => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({}, {
+      status: 200,
+      statusText: 'Ok',
       url: '/projects/1',
     });
     fixture.whenStable().then(() => {
-      expect(mockSnackbar.open).toHaveBeenCalledWith('Project cannot be edited! Try again later!', '🞩', {duration: 4000});
+      component.project = project;
+      component.submitForm();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
+        status: 422,
+        error: 'Unprocessable Entity',
+        errorMessage: 'The project test already exists.',
+        path: '/projects/1'
+      }, {
+        status: 422,
+        statusText: 'Unprocessable Entity',
+        url: '/projects/1',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(mockSnackbar.open).toHaveBeenCalledWith('Project cannot be edited! Try again later!', '🞩', {duration: 4000});
+        });
+      });
     });
+  });
+
+  it('should validate input', () => {
+    component.project = {
+      id: 1,
+      name: 'test',
+      vcsUrl: 'https://valid.url',
+      vcsUsername: '',
+      vcsPassword: '',
+      vcsOnline: true,
+      startDate: null,
+      endDate: null
+    };
+    const valid = (component as any).validateInput();
+    expect(valid).toBeFalsy();
+    expect(component.nameEmpty).toBeFalsy();
+    expect(component.incorrectURL).toBeFalsy();
+  });
+
+  it('should validate input startDate first commit', () => {
+    component.project = {
+      id: 1,
+      name: 'test',
+      vcsUrl: 'https://valid.url',
+      vcsUsername: '',
+      vcsPassword: '',
+      vcsOnline: true,
+      startDate: 'first commit',
+      endDate: null
+    };
+    const valid = (component as any).validateInput();
+    expect(valid).toBeFalsy();
+    expect(component.nameEmpty).toBeFalsy();
+    expect(component.incorrectURL).toBeFalsy();
+    expect(component.project.startDate).toBe(null);
+  });
+
+  it('should validate input endDate current', () => {
+    component.project = {
+      id: 1,
+      name: 'test',
+      vcsUrl: 'https://valid.url',
+      vcsUsername: '',
+      vcsPassword: '',
+      vcsOnline: true,
+      startDate: null,
+      endDate: 'current'
+    };
+    const valid = (component as any).validateInput();
+    expect(valid).toBeFalsy();
+    expect(component.nameEmpty).toBeFalsy();
+    expect(component.incorrectURL).toBeFalsy();
+    expect(component.project.endDate).toBe(null);
   });
 
   // TODO fix url validation
-  /*it('should fail validation of new project data because of url', () => {
+  /*it('should validate input empty name invalid url', () => {
     component.project = {
       id: 1,
       name: 'test',
@@ -194,13 +291,12 @@ describe('EditProjectComponent', () => {
       startDate: null,
       endDate: null
     };
-    component.submitForm();
-    fixture.whenStable().then(() => {
-      expect(component.incorrectURL).toBeTruthy();
-    });
+    const valid = (component as any).validateInput();
+    expect(valid).toBeTruthy();
+    expect(component.incorrectUrl).toBeTruthy();
   });*/
 
-  it('should fail validation of new project data because of empty name', () => {
+  it('should validate input empty name', () => {
     component.project = {
       id: 1,
       name: '',
@@ -211,26 +307,90 @@ describe('EditProjectComponent', () => {
       startDate: null,
       endDate: null
     };
-    component.submitForm();
+    const valid = (component as any).validateInput();
+    expect(valid).toBeTruthy();
+    expect(component.nameEmpty).toBeTruthy();
+  });
+
+  it('should get project', inject([Title], (titleService: Title) => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({}, {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1',
+    });
     fixture.whenStable().then(() => {
-      expect(component.nameEmpty).toBeTruthy();
+      const titleSpy = spyOn(titleService, 'setTitle').and.callFake(callback => {
+      });
+      component.projectId = 1;
+      (component as any).getProject();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush(project, {
+        status: 200,
+        url: '/projects/1',
+        statusText: 'Ok',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(JSON.stringify(component.project)).toBe(JSON.stringify(new Project(project)));
+          expect(component.projectName).toBe('test');
+          expect(titleSpy).toHaveBeenCalledWith('Coderadar - Edit test');
+        });
+      });
+    });
+  }));
+
+  it('should get project forbidden', inject([UserService], (userService: UserService) => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({}, {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1',
+    });
+    fixture.whenStable().then(() => {
+      const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {
+      });
+      component.projectId = 1;
+      (component as any).getProject();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
+        status: 403,
+        error: 'Forbidden',
+        message: 'Access Denied',
+        path: '/projects/1'
+      }, {
+        status: 403,
+        statusText: 'Forbidden',
+        url: '/projects/1',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(refreshSpy).toHaveBeenCalled();
+        });
+      });
+    });
+  }));
+
+  it('should get project not found', () => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({}, {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects/1',
+    });
+    fixture.whenStable().then(() => {
+      component.projectId = 1;
+      (component as any).getProject();
+      http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
+        status: 404,
+        error: 'Not Found',
+        message: 'Not Found',
+        path: '/projects/1'
+      }, {
+        status: 404,
+        statusText: 'Not Found',
+        url: '/projects/1',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(routerSpy).toHaveBeenCalledWith(['/dashboard']);
+        });
+      });
     });
   });
 });
-
-class MockProjectService extends ProjectService {
-  getProject(id: number): Promise<HttpResponse<any>> {
-    return of(new HttpResponse({
-      body: {
-        id: 1,
-        name: 'test',
-        vcsUrl: 'https://valid.url',
-        vcsUsername: '',
-        vcsPassword: '',
-        vcsOnline: true,
-        startDate: null,
-        endDate: null
-      }
-    })).toPromise();
-  }
-}
