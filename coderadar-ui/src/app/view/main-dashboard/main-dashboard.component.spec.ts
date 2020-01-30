@@ -14,11 +14,10 @@ import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {UserService} from '../../service/user.service';
 import {RouterTestingModule} from '@angular/router/testing';
-import {ProjectService} from '../../service/project.service';
 import {AppComponent} from '../../app.component';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {HttpClient, HttpClientModule, HttpHandler, HttpResponse} from '@angular/common/http';
-import {of} from "rxjs";
+import {HttpClientModule} from '@angular/common/http';
+import {Project} from "../../model/project";
 
 describe('MainDashboardComponent', () => {
   let component: MainDashboardComponent;
@@ -52,7 +51,6 @@ describe('MainDashboardComponent', () => {
         HttpClientTestingModule,
       ],
       providers: [
-        {provide: ProjectService, useClass: MockProjectService},
         {provide: MatSnackBar, useValue: mockSnackbar},
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -78,7 +76,9 @@ describe('MainDashboardComponent', () => {
       url: '/projects/1',
     });
     fixture.whenStable().then(() => {
-      expect(component.projects.length).toBe(0);
+      fixture.whenStable().then(() => {
+        expect(component.projects.length).toBe(0);
+      });
     });
   });
 
@@ -102,9 +102,6 @@ describe('MainDashboardComponent', () => {
       fixture.whenStable().then(() => {
         expect(refreshSpy).toHaveBeenCalled();
         expect(component.projects.length).toBe(1);
-        if (component.projects.length > 0) {
-          component.projects.splice(0, component.projects.length);
-        }
       });
     });
   }));
@@ -127,9 +124,6 @@ describe('MainDashboardComponent', () => {
       fixture.whenStable().then(() => {
         expect(component.projects.length).toBe(1);
         expect(mockSnackbar.open).toHaveBeenCalledWith('Cannot delete project! Try again later!', '🞩', {duration: 4000});
-        if (component.projects.length > 0) {
-          component.projects.splice(0, component.projects.length);
-        }
       });
     });
   });
@@ -200,15 +194,29 @@ describe('MainDashboardComponent', () => {
     });
     fixture.whenStable().then(() => {
       fixture.whenStable().then(() => {
-        expect(mockSnackbar.open)
-          .toHaveBeenCalledWith('Cannot analyze, no file patterns configured for this project!', '🞩', {duration: 4000});
+        expect(mockSnackbar.open).toHaveBeenCalledWith('Cannot analyze, no file patterns configured for this project!', '🞩', {duration: 4000});
       });
     });
   });
 
-  // TODO:
-  //  start analysis forbidden
-  //  start analysis unprocessable entity other
+  it('should start analysis unprocessable entity other', () => {
+    component.startAnalysis(1);
+    http.expectOne(`${AppComponent.getApiUrl()}projects/1/analyze`).flush({
+      status: 422,
+      error: 'Unprocessable Entity',
+      errorMessage: 'Other',
+      path: '/projects/1/analyze'
+    }, {
+      status: 422,
+      statusText: 'Unprocessable Entity',
+      url: '/projects/1/analyze',
+    });
+    fixture.whenStable().then(() => {
+      fixture.whenStable().then(() => {
+        expect(mockSnackbar.open).toHaveBeenCalledWith('Analysis cannot be started! Try again later!', '🞩', {duration: 4000});
+      });
+    });
+  });
 
   it('should reset analysis', () => {
     component.resetAnalysis(1);
@@ -318,21 +326,66 @@ describe('MainDashboardComponent', () => {
       });
     });
   });
-});
 
-class MockProjectService extends ProjectService {
-  getProject(id: number): Promise<HttpResponse<any>> {
-    return of(new HttpResponse({
-      body: {
-        id: 1,
-        name: 'test',
+  it('should get projects', () => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({}, {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects',
+    });
+    fixture.whenStable().then(() => {
+      const project2 = {
+        id: 2,
+        name: 'test 2',
         vcsUrl: 'https://valid.url',
         vcsUsername: '',
         vcsPassword: '',
         vcsOnline: true,
         startDate: null,
         endDate: null
-      }
-    })).toPromise();
-  }
-}
+      };
+      const projects = [project, project2];
+      (component as any).getProjects();
+      http.expectOne(`${AppComponent.getApiUrl()}projects`).flush(projects, {
+        status: 200,
+        url: '/projects',
+        statusText: 'Ok',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(component.projects.length).toBe(2);
+          expect(JSON.stringify(component.projects[0])).toBe(JSON.stringify(new Project(project)));
+          expect(component.projects[0].name).toBe('test');
+          expect(component.projects[1].name).toBe('test 2');
+        });
+      });
+    });
+  });
+
+  it('should get project forbidden', inject([UserService], (userService: UserService) => {
+    http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({}, {
+      status: 200,
+      statusText: 'Ok',
+      url: '/projects',
+    });
+    fixture.whenStable().then(() => {
+      const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {});
+      (component as any).getProjects();
+      http.expectOne(`${AppComponent.getApiUrl()}projects`).flush({
+        status: 403,
+        error: 'Forbidden',
+        message: 'Access Denied',
+        path: '/projects'
+      }, {
+        status: 403,
+        statusText: 'Forbidden',
+        url: '/projects',
+      });
+      fixture.whenStable().then(() => {
+        fixture.whenStable().then(() => {
+          expect(refreshSpy).toHaveBeenCalled();
+        });
+      });
+    });
+  }));
+});

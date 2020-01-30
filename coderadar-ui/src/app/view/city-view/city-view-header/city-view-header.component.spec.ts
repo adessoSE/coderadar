@@ -6,8 +6,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {UserService} from '../../../service/user.service';
 import {AppEffects} from '../../../city-map/shared/effects';
 import {RouterTestingModule} from '@angular/router/testing';
-import {HttpClient, HttpClientModule, HttpHandler} from '@angular/common/http';
-import {of} from 'rxjs';
+import {HttpClientModule} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {MainDashboardComponent} from '../../main-dashboard/main-dashboard.component';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
@@ -115,11 +114,6 @@ describe('CityViewHeaderComponent', () => {
     });
   });
 
-  // TODO
-  //  get project
-  //  get project forbidden
-  //  get project not found
-
   it('should get project', () => {
     http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush(project, {
       status: 200,
@@ -152,11 +146,11 @@ describe('CityViewHeaderComponent', () => {
         status: 403,
         error: 'Forbidden',
         message: 'Access Denied',
-        path: '/projects'
+        path: '/projects/1'
       }, {
         status: 403,
         statusText: 'Forbidden',
-        url: '/projects',
+        url: '/projects/1',
       });
       fixture.whenStable().then(() => {
         expect(refreshSpy).toHaveBeenCalled();
@@ -171,7 +165,6 @@ describe('CityViewHeaderComponent', () => {
       statusText: 'Ok',
     });
     fixture.whenStable().then(() => {
-      const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {});
       (component as any).getProject();
       http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
         status: 404,
