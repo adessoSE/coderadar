@@ -121,7 +121,7 @@ public class ScanProjectScheduler {
    * @param projectId the project id
    */
   private void scheduleUpdateTask(Long projectId) {
-    projectStatusPort.setBeingProcessed(projectId,false);
+    projectStatusPort.setBeingProcessed(projectId, false);
     tasks.put(
         projectId,
         taskScheduler.scheduleAtFixedRate(
