@@ -309,6 +309,9 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
       CommitEntity commitEntity = walkedCommits.get(commit.getName());
       // set parents
       for (Commit parent : commit.getParents()) {
+        if (commitEntity.getParents().isEmpty()) {
+          commitEntity.setParents(new ArrayList<>(parent.getParents().size()));
+        }
         commitEntity.getParents().add(walkedCommits.get(parent.getName()));
       }
       // set files
