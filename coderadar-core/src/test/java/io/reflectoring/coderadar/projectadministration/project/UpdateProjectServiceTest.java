@@ -23,7 +23,6 @@ import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
 import java.io.File;
-import java.net.MalformedURLException;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
@@ -77,8 +76,8 @@ class UpdateProjectServiceTest {
   }
 
   @Test
-  void updateProjectReturnsErrorWhenProjectWithNameAlreadyExists(@Mock Project projectToUpdateMock)
-      throws MalformedURLException {
+  void updateProjectReturnsErrorWhenProjectWithNameAlreadyExists(
+      @Mock Project projectToUpdateMock) {
     // given
     long projectId = 123L;
     String newProjectName = "new name";

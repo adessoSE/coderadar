@@ -8,7 +8,6 @@ import static org.mockito.Mockito.when;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
-import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
@@ -44,8 +43,6 @@ class CreateModuleServiceTest {
     // given
     long projectId = 1L;
     long expectedModuleId = 123L;
-
-    Module expectedModule = new Module().setPath("module-path");
 
     CreateModuleCommand command = new CreateModuleCommand("module-path");
 
