@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetModuleResponse {
-  private Long id;
+  private long id;
   private String path;
 }

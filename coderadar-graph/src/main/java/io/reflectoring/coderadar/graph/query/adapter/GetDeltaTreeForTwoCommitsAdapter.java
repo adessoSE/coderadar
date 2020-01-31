@@ -2,12 +2,14 @@ package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.query.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetDeltaTreeForTwoCommitsPort;
 import io.reflectoring.coderadar.query.port.driver.GetDeltaTreeForTwoCommitsCommand;
-import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,36 +23,40 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
   private final CommitRepository commitRepository;
   private final FileRepository fileRepository;
   private final GetMetricTreeForCommitAdapter getMetricsForAllFilesInCommitAdapter;
+  private final ProjectRepository projectRepository;
 
   private static final String PROCESSING_ERROR = "Cannot calculate delta tree!";
 
   public GetDeltaTreeForTwoCommitsAdapter(
       CommitRepository commitRepository,
       FileRepository fileRepository,
-      GetMetricTreeForCommitAdapter getMetricsForAllFilesInCommitAdapter) {
+      GetMetricTreeForCommitAdapter getMetricsForAllFilesInCommitAdapter,
+      ProjectRepository projectRepository) {
     this.commitRepository = commitRepository;
     this.fileRepository = fileRepository;
     this.getMetricsForAllFilesInCommitAdapter = getMetricsForAllFilesInCommitAdapter;
+    this.projectRepository = projectRepository;
   }
 
   @Override
   public DeltaTree get(GetDeltaTreeForTwoCommitsCommand command, Long projectId) {
-    MetricTree commit1Tree =
-        getMetricsForAllFilesInCommitAdapter.get(
-            new GetMetricsForCommitCommand(command.getCommit1(), command.getMetrics()), projectId);
-    MetricTree commit2Tree =
-        getMetricsForAllFilesInCommitAdapter.get(
-            new GetMetricsForCommitCommand(command.getCommit2(), command.getMetrics()), projectId);
+    ProjectEntity projectEntity =
+        projectRepository
+            .findByIdWithModules(projectId)
+            .orElseThrow(() -> new ProjectNotFoundException(projectId));
     Long commit1Time =
         commitRepository
-            .findByNameAndProjectId(command.getCommit1(), projectId)
-            .orElseThrow(() -> new CommitNotFoundException(command.getCommit1()))
-            .getTimestamp();
+            .findTimeStampByNameAndProjectId(command.getCommit1(), projectId)
+            .orElseThrow(() -> new CommitNotFoundException(command.getCommit1()));
     Long commit2Time =
         commitRepository
-            .findByNameAndProjectId(command.getCommit2(), projectId)
-            .orElseThrow(() -> new CommitNotFoundException(command.getCommit2()))
-            .getTimestamp();
+            .findTimeStampByNameAndProjectId(command.getCommit2(), projectId)
+            .orElseThrow(() -> new CommitNotFoundException(command.getCommit2()));
+
+    MetricTree commit1Tree =
+        getMetricsForAllFilesInCommitAdapter.get(commit1Time, command.getMetrics(), projectEntity);
+    MetricTree commit2Tree =
+        getMetricsForAllFilesInCommitAdapter.get(commit2Time, command.getMetrics(), projectEntity);
 
     if (commit1Time > commit2Time) {
       MetricTree temp = commit1Tree;
@@ -81,19 +87,22 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
       Long commit1Time,
       Long commit2Time,
       Long projectId) {
-    for (String addedFile : addedFiles) {
-      String oldPath =
-          fileRepository.findOldpathIfRenamedBetweenCommits(
-              addedFile, commit1Time, commit2Time, projectId);
+
+    List<Map<String, Object>> oldPaths =
+        fileRepository.findOldpathIfRenamedBetweenCommits(
+            addedFiles, commit1Time, commit2Time, projectId);
+    for (Map<String, Object> rename : oldPaths) {
+      String oldPath = (String) rename.get("oldPath");
+      String newPath = (String) rename.get("newPath");
       if (removedFiles.contains(oldPath)) {
         DeltaTree oldName = findChildInDeltaTree(deltaTree, oldPath);
-        DeltaTree newName = findChildInDeltaTree(deltaTree, addedFile);
+        DeltaTree newName = findChildInDeltaTree(deltaTree, newPath);
         if (oldName != null && newName != null) {
           newName.setCommit1Metrics(oldName.getCommit1Metrics());
           newName.getChanges().setAdded(false);
           newName.getChanges().setRenamed(true);
           newName.setRenamedFrom(oldPath);
-          newName.setRenamedTo(addedFile);
+          newName.setRenamedTo(newPath);
           removeChildFromDeltaTree(deltaTree, oldName);
         }
       }
@@ -272,9 +281,7 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
     Map<String, Long> aggregatedMetrics = new HashMap<>();
     for (DeltaTree deltaTree : children) {
       for (MetricValueForCommit val : aggregateChildMetrics(deltaTree.getChildren())) {
-        if (deltaTree
-            .getCommit1Metrics()
-            .stream()
+        if (deltaTree.getCommit1Metrics().stream()
             .noneMatch(metric -> metric.getMetricName().equals(val.getMetricName()))) {
           deltaTree
               .getCommit1Metrics()

@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.graph.projectadministration.domain;
 
-import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,12 +15,8 @@ public class FileEntity {
   private Long id;
   private String path;
 
-  @Relationship(type = "MEASURED_BY")
-  @ToString.Exclude
-  private List<MetricValueEntity> metricValues = new ArrayList<>();
-
   @EqualsAndHashCode.Exclude
   @Relationship(type = "RENAMED_FROM")
   @ToString.Exclude
-  private List<FileEntity> oldFiles = new ArrayList<>();
+  private List<FileEntity> oldFiles;
 }

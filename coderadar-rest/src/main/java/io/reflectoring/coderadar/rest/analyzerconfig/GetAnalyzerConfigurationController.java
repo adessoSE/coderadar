@@ -25,7 +25,7 @@ public class GetAnalyzerConfigurationController {
   public ResponseEntity<GetAnalyzerConfigurationResponse> getAnalyzerConfiguration(@PathVariable Long analyzerConfigurationId) {
     AnalyzerConfiguration analyzerConfiguration = getAnalyzerConfigurationUseCase.getAnalyzerConfiguration(analyzerConfigurationId);
     return new ResponseEntity<>(
-        new GetAnalyzerConfigurationResponse(analyzerConfiguration.getId(), analyzerConfiguration.getAnalyzerName(), analyzerConfiguration.getEnabled()),
+        new GetAnalyzerConfigurationResponse(analyzerConfiguration.getId(), analyzerConfiguration.getAnalyzerName(), analyzerConfiguration.isEnabled()),
         HttpStatus.OK);
   }
 }

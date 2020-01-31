@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class AnalyzerConfiguration {
-  private Long id;
+  private long id;
   private String analyzerName;
-  private Boolean enabled;
+  private boolean enabled;
 
   private AnalyzerConfigurationFile analyzerConfigurationFile;
 
-  public AnalyzerConfiguration(Long id, String analyzerName, Boolean enabled) {
+  public AnalyzerConfiguration(long id, String analyzerName, boolean enabled) {
     this.id = id;
     this.analyzerName = analyzerName;
     this.enabled = enabled;

@@ -20,7 +20,7 @@ class DeleteFilePatternControllerTest {
     DeleteFilePatternController testSubject =
         new DeleteFilePatternController(deleteFilePatternFromProjectUseCase);
 
-    ResponseEntity<String> responseEntity = testSubject.deleteFilePattern(1L, 2L);
+    ResponseEntity<HttpStatus> responseEntity = testSubject.deleteFilePattern(1L, 2L);
 
     Mockito.verify(deleteFilePatternFromProjectUseCase, Mockito.times(1)).delete(1L, 2L);
 

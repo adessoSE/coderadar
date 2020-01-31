@@ -10,6 +10,6 @@ public interface GetCommitsInProjectPort {
 
   List<Commit> getSortedByTimestampAsc(Long projectId);
 
-  List<Commit> getNonanalyzedSortedByTimestampAscWithNoParents(
+  List<Commit> getNonAnalyzedSortedByTimestampAscWithNoParents(
       Long projectId, List<FilePattern> filePatterns);
 }

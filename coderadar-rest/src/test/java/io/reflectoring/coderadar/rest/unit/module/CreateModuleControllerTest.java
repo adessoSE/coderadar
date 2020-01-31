@@ -29,6 +29,6 @@ class CreateModuleControllerTest {
     ResponseEntity responseEntity = testSubject.createModule(command, 5L);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-    Assertions.assertEquals(1L, ((IdResponse)responseEntity.getBody()).getId().longValue());
+    Assertions.assertEquals(1L, ((IdResponse)responseEntity.getBody()).getId());
   }
 }

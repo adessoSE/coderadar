@@ -97,13 +97,12 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
         listAnalyzerConfigurationsPort.listAnalyzerConfigurations(projectId);
 
     if (filePatterns.isEmpty()
-        || filePatterns
-            .stream()
+        || filePatterns.stream()
             .noneMatch(
                 filePattern -> filePattern.getInclusionType().equals(InclusionType.INCLUDE))) {
       throw new MisconfigurationException("Cannot analyze project without file patterns");
     } else if (analyzerConfigurations.isEmpty()
-        || analyzerConfigurations.stream().noneMatch(AnalyzerConfiguration::getEnabled)) {
+        || analyzerConfigurations.stream().noneMatch(AnalyzerConfiguration::isEnabled)) {
       throw new MisconfigurationException("Cannot analyze project without analyzers");
     }
     startAnalyzingTask(project, filePatterns, analyzerConfigurations);
@@ -125,7 +124,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
               getAnalyzersForProject(analyzerConfigurations);
           List<Commit> commitsToBeAnalyzed =
-              getCommitsInProjectPort.getNonanalyzedSortedByTimestampAscWithNoParents(
+              getCommitsInProjectPort.getNonAnalyzedSortedByTimestampAscWithNoParents(
                   project.getId(), filePatterns);
           long[] commitIds = new long[commitsToBeAnalyzed.size()];
           setAnalyzingStatusPort.setStatus(project.getId(), true);
@@ -200,7 +199,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       List<AnalyzerConfiguration> analyzerConfigurations) {
     List<SourceCodeFileAnalyzerPlugin> analyzers = new ArrayList<>();
     for (AnalyzerConfiguration config : analyzerConfigurations) {
-      if (config.getEnabled()) {
+      if (config.isEnabled()) {
         analyzers.add(analyzerPluginService.createAnalyzer(config.getAnalyzerName()));
       }
     }

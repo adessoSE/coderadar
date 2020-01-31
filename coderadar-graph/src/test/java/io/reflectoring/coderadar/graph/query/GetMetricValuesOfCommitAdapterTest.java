@@ -4,13 +4,12 @@ import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.query.adapter.GetMetricValuesOfCommitAdapter;
-import io.reflectoring.coderadar.graph.query.repository.GetMetricValuesOfCommitRepository;
+import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
 import org.junit.jupiter.api.DisplayName;
 
 @DisplayName("Get metric values of commit")
 class GetMetricValuesOfCommitAdapterTest {
-  private GetMetricValuesOfCommitRepository getMetricValuesOfCommitRepository =
-      mock(GetMetricValuesOfCommitRepository.class);
+  private MetricQueryRepository metricQueryRepository = mock(MetricQueryRepository.class);
   private GetMetricValuesOfCommitAdapter getMetricValuesOfCommitAdapter;
   private CommitRepository commitRepository = mock(CommitRepository.class);
 

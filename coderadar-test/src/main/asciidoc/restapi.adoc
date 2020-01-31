@@ -12,6 +12,8 @@ v{version}, {date}
 [introduction]
 == Introduction
 
+// TODO schreibweise von coderadar-Begriffen (Project, FilePattern, Module, ..) und Fachbegriffen (refresh token, ..)
+
 coderadar server is a tool for continuous source code analysis. This document describes the REST API of coderadar.
 The REST API may for example be accessed by the following clients:
 
@@ -69,7 +71,6 @@ contains values that are invalid, the API returns a response with HTTP status 40
 an error JSON structure object that looks like this:
 
 include::{snippets}/projects/create/error400/http-response.adoc[]
-include::{snippets}/projects/create/error400/response-fields.adoc[]
 
 ==== General Errors
 
@@ -84,9 +85,6 @@ This section describes the REST endpoints for managing coderadar users.
 To access the functionality of coderadar you have to register a user.
 You need to define a username and a password. The password will be sent as
 plain text and hashed on server side for persisting.
-
-==== Hypermedia links
-include::{snippets}/user/registration/links.adoc[]
 
 ==== Registering a User
 
@@ -202,14 +200,14 @@ To run an analysis on a project, you have to at least follow these steps:
 
 . <<creating-a-project, Create a Project>> so that coderadar knows where to get the code base. Once this step
   is done, coderadar will clone the repository and create some metadata on the commits and code base. Depending
-  on the size of the project, it may take some while to complete.
+  on the size of the project, it may take a while to complete.
 . <<setting-filepatterns, Define File Patterns>> to tell coderadar which files should be analyzed. If this step
   is omitted, an analysis will provide no results.
 . <<create-analyzer, Add at least one analyzer>> to your project. Each added analyzer will run over the
   files specified in the previous step and provide some code metrics.
-. <<creating-analyzing-job, Add an Analyzing Job>> for your project. Once this is done, coderadar
-  will start to analyze all files in the commits defined by the job. Depending on the size of the code base
-  and the number of configured analyzers, this may take some time to finish.
+. <<start-analysis, Start an Analyzing Job>> for your project. coderadar will start to analyze all files
+  in the commits between startDate and endDate using the analyzers you have configured. Depending on the size
+  of the code base and the number of configured analyzers, this may take some time to finish.
 
 === Project
 
@@ -220,9 +218,18 @@ and its sub-resources you provide coderadar with the information it needs to ana
 
 include::{snippets}/projects/create/request-fields.adoc[]
 
-==== Hypermedia Links
+==== Creating a Project
+anchor:creating-a-project[]
 
-include::{snippets}/projects/create/links.adoc[]
+// TODO dates have Null as data type
+
+===== Example Request
+
+include::{snippets}/projects/create/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/projects/create/http-response.adoc[]
 
 ==== Listing Projects
 
@@ -234,16 +241,6 @@ include::{snippets}/projects/list/http-request.adoc[]
 
 include::{snippets}/projects/list/http-response.adoc[]
 
-==== Creating a Project
-anchor:creating-a-project[]
-
-===== Example Request
-
-include::{snippets}/projects/create/http-request.adoc[]
-
-===== Example Response
-
-include::{snippets}/projects/create/http-response.adoc[]
 
 ==== Updating a Project
 
@@ -254,6 +251,16 @@ include::{snippets}/projects/update/http-request.adoc[]
 ===== Example Response
 
 include::{snippets}/projects/update/http-response.adoc[]
+
+==== Get a Project
+
+===== Example Request
+
+include::{snippets}/projects/get/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/projects/get/http-response.adoc[]
 
 ==== Deleting a Project
 
@@ -279,10 +286,6 @@ files in all commits have to be updated during these operations.
 
 include::{snippets}/modules/create/request-fields.adoc[]
 
-==== Hypermedia Links
-
-include::{snippets}/modules/create/links.adoc[]
-
 ==== Creating a Module
 
 ===== Example Request
@@ -293,15 +296,15 @@ include::{snippets}/modules/create/http-request.adoc[]
 
 include::{snippets}/modules/create/http-response.adoc[]
 
-==== Updating a Module
+==== Get a Module of a Project
 
 ===== Example Request
 
-include::{snippets}/modules/update/http-request.adoc[]
+include::{snippets}/modules/get/http-request.adoc[]
 
 ===== Example Response
 
-include::{snippets}/modules/update/http-response.adoc[]
+include::{snippets}/modules/get/http-response.adoc[]
 
 ==== Listing all Modules of a Project
 
@@ -325,25 +328,47 @@ include::{snippets}/modules/delete/http-response.adoc[]
 
 === File Patterns
 
-A file pattern describes a set of files within a project's code base. Each project can have several file patterns
-defined. Each file pattern belongs to a certain file set, the most important of which is the SOURCE file set that
-is supposed to contain all source code files of your project.
+A File Pattern describes a set of files within a Project's code base. Each project can have several file patterns
+defined. File Patterns may either define a pattern for files to be INCLUDED or files to be EXCLUDED.
 
-File patterns may either define a pattern for files to be INCLUDED or files to be EXCLUDED. To compile the list of files
-contained in a certain file set (like the SOURCE file set), coderadar will first apply all INCLUDE patterns of that file set and then apply all EXCLUDE
-patterns. Thus, the file set will include all INCLUDED files except those that were part of an EXCLUDE pattern.
-
-If a project has no file patterns defined, no files will be analyzed.
+If a project has no File Patterns defined, the analysis won't start.
 
 ==== Structure
 
 include::{snippets}/filepatterns/create-update/request-fields.adoc[]
 
-==== Hypermedia Links
-
-include::{snippets}/filepatterns/create-update/links.adoc[]
-
 ==== Listing a Project's File Patterns
+
+===== Example Request
+
+include::{snippets}/filepatterns/list/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/filepatterns/list/http-response.adoc[]
+
+==== Adding a File Pattern to a Project
+anchor:setting-filepatterns[]
+
+===== Example Request
+
+include::{snippets}/filepatterns/create-update/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/filepatterns/create-update/http-response.adoc[]
+
+==== Removing a File Pattern from a Project
+
+===== Example Request
+
+include::{snippets}/filepatterns/delete/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/filepatterns/delete/http-response.adoc[]
+
+==== Get a specific File Pattern from a Project
 
 ===== Example Request
 
@@ -353,11 +378,7 @@ include::{snippets}/filepatterns/get/http-request.adoc[]
 
 include::{snippets}/filepatterns/get/http-response.adoc[]
 
-==== Setting a Project's File Patterns
-anchor:setting-filepatterns[]
-
-Coderadar views a project's list of file patterns as a single resource. Hence, you can only list and save
-all file patterns of a project at once.
+==== Update a File Pattern for a Project
 
 ===== Example Request
 
@@ -376,10 +397,6 @@ plugin via the AnalyzerConfiguration resource.
 ==== Structure
 
 include::{snippets}/analyzerConfiguration/post/request-fields.adoc[]
-
-==== Hypermedia Links
-
-include::{snippets}/analyzerConfiguration/post/links.adoc[]
 
 ==== Adding an Analyzer Configuration
 anchor:create-analyzer[]
@@ -432,141 +449,41 @@ include::{snippets}/analyzerConfiguration/getSingle/http-request.adoc[]
 
 include::{snippets}/analyzerConfiguration/getSingle/http-response.adoc[]
 
-=== Analyzer Configuration File
-
-An AnalyzerConfiguration can be supplied with a configuration file. For example, the Checkstyle analyzer
-can be supplied with a checkstyle configuration xml file to define which rules to check. The content of
-the configuration file can be text, xml, or even a binary format, depending on the configuration format
-the analyzer needs.
-
-==== Uploading an Analyzer Configuration File
-
-===== Example Request
-
-include::{snippets}/analyzerConfigurationFile/upload/http-request.adoc[]
-
-===== Example Response
-
-include::{snippets}/analyzerConfigurationFile/upload/http-response.adoc[]
-
-
-==== Downloading an Analyzer Configuration File
-
-===== Example Request
-
-include::{snippets}/analyzerConfigurationFile/download/http-request.adoc[]
-
-===== Example Response
-
-include::{snippets}/analyzerConfigurationFile/download/http-response.adoc[]
-
 === Analyzing Job
 
-By providing an Analyzing Job to coderadar, you can trigger an analysis of a Project's codebase. Note
-the following hints:
-
-* coderadar will automatically start to analyze the codebase once an Analyzing Job has been provided,
-unless the Analyzing Job is set to inactive.
-* Only one Analyzing Job can be active for a project at a time. You will have to wait until a running job
-is finished to start another one.
-* New incoming commits to the underlying git repository will automatically be analyzed, unless the Analyzing
-Job is set to inactive.
-
-
-==== Structure
-
-include::{snippets}/analyzing-job/create-update/request-fields.adoc[]
-
-==== Hypermedia Links
-
-include::{snippets}/analyzing-job/create-update/links.adoc[]
+An analysis can be started for a project in coderadar. By default a Project's codebase is not analyzed.
+To analyze the codebase an Analyzing Job has to be executed.
 
 ==== Starting an Analyzing Job
-anchor:creating-analyzing-job[]
+anchor:start-analysis[]
 
 ===== Example Request
 
-include::{snippets}/analyzing-job/create-update/http-request.adoc[]
+include::{snippets}/analysis/start/http-request.adoc[]
 
 ===== Example Response
 
-include::{snippets}/analyzing-job/create-update/http-response.adoc[]
+include::{snippets}/analysis/start/http-response.adoc[]
 
-==== Retrieving an Analyzing Job
+==== Retrieving an Analyzing Job status
 
 ===== Example Request
 
-include::{snippets}/analyzing-job/get/http-request.adoc[]
+include::{snippets}/analysis/status/http-request.adoc[]
 
 ===== Example Response
 
-include::{snippets}/analyzing-job/get/http-response.adoc[]
+include::{snippets}/analysis/status/http-response.adoc[]
 
-=== Quality Profile
-
-The main goal of coderadar is to make it easy for you to monitor your quality standards.
-To be able to focus on the quality metrics that are most important to you and your team,
-you can combine a set  metrics within a quality profile. There are several API methods
-that take a quality profile as parameter and return information on the metrics that are
-part of the quality profile and thus are most important to you.
-
-==== Structure
-
-include::{snippets}/qualityprofiles/create/request-fields.adoc[]
-
-==== Hypermedia Links
-
-include::{snippets}/qualityprofiles/create/links.adoc[]
-
-==== Creating a Quality Profile
+==== Resetting an Analyzing Job
 
 ===== Example Request
 
-include::{snippets}/qualityprofiles/create/http-request.adoc[]
+include::{snippets}/analysis/reset/http-request.adoc[]
 
 ===== Example Response
 
-include::{snippets}/qualityprofiles/create/http-response.adoc[]
-
-==== Updating a Quality Profile
-
-===== Example Request
-
-include::{snippets}/qualityprofiles/update/http-request.adoc[]
-
-===== Example Response
-
-include::{snippets}/qualityprofiles/update/http-response.adoc[]
-
-==== Loading a single Quality Profile
-
-===== Example Request
-
-include::{snippets}/qualityprofiles/get/http-request.adoc[]
-
-===== Example Response
-
-include::{snippets}/qualityprofiles/get/http-response.adoc[]
-
-==== Deleting a Quality Profile
-
-===== Example Request
-
-include::{snippets}/qualityprofiles/delete/http-request.adoc[]
-
-===== Example Response
-
-include::{snippets}/qualityprofiles/delete/http-response.adoc[]
-
-==== Listing a Project's Quality Profiles
-
-===== Example Request
-
-include::{snippets}/qualityprofiles/list/http-request.adoc[]
-
-===== Example Response
-
-include::{snippets}/qualityprofiles/list/http-response.adoc[]
+include::{snippets}/analysis/reset/http-response.adoc[]
 
 == Querying Global Data
 anchor:chapter-query-global-data[]
@@ -603,9 +520,10 @@ You can list all metrics that have been measured for your project by calling the
 
 [NOTE]
 =====
-Metrics will become available as soon as you have provided an <<creating-analyzing-job,Analyzing Job>> for your project.
-At that moment, analysis of each commit defined in the job starts. Depending on how many commits that are,
-analysis will take a while.
+Metric values will become available as soon as an <<start-analysis,analysis>> starts for your project.
+At that moment, analysis of each commit in the date range starts The date range is set in the project
+settings. The project will only be regarded in this date range. Depending on how many commits that are and how
+many analyzers are configured, analysis will take a while.
 =====
 
 ===== Example Request
@@ -626,9 +544,6 @@ are available.
 ==== Structure
 include::{snippets}/commit/list/response-fields.adoc[]
 
-==== Hypermedia Links
-include::{snippets}/commit/list/links.adoc[]
-
 ==== Listing a Project's Commits
 
 ===== Example Request
@@ -646,9 +561,9 @@ that defines which metrics you are interested in.
 
 [NOTE]
 =====
-Metric values will become available as soon as you have provided an <<creating-analyzing-job,Analyzing Job>> for your project.
-At that moment, analysis of each commit defined in the job starts. Depending on how many commits that are,
-analysis will take a while.
+Metric values will become available as soon as an <<start-analysis,Analyzing Job>> starts for your project.
+At that moment, analysis of each commit defined in the job starts. Depending on how many commits that are and how
+many analyzers are configured, analysis will take a while.
 =====
 
 ==== Querying Metric Values of a Commit
@@ -668,43 +583,6 @@ include::{snippets}/metrics/commit/metrics/http-request.adoc[]
 ===== Example Response
 
 include::{snippets}/metrics/commit/metrics/http-response.adoc[]
-
-==== Querying Quality Profile Ratings of a Commit
-
-===== Query Structure
-
-include::{snippets}/metrics/commit/profiles/request-fields.adoc[]
-
-===== Example Request
-
-[NOTE]
-=====
-This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
-=====
-include::{snippets}/metrics/commit/profiles/http-request.adoc[]
-
-===== Example Response
-
-include::{snippets}/metrics/commit/profiles/http-response.adoc[]
-
-==== Querying the History of a Metric
-Use this endpoint to receive the history of a specific metric over time.
-
-===== Query Structure
-
-include::{snippets}/metrics/history/metrics/request-fields.adoc[]
-
-===== Example Request
-
-[NOTE]
-=====
-This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
-=====
-include::{snippets}/metrics/history/metrics/http-request.adoc[]
-
-===== Example Response
-
-include::{snippets}/metrics/history/metrics/http-response.adoc[]
 
 === Metrics Trees
 
@@ -743,6 +621,7 @@ commits.
 include::{snippets}/metrics/deltaTree/request-fields.adoc[]
 
 ===== Response Structure
+// TODO renamedFrom, renamedTo, changes without data type; renamedFrom, renamedTo without description
 
 include::{snippets}/metrics/deltaTree/response-fields.adoc[]
 

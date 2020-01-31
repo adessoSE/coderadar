@@ -7,6 +7,6 @@ public class GetCommitResponse {
   private String name;
   private String author;
   private String comment;
-  private Long timestamp;
-  private Boolean analyzed;
+  private long timestamp;
+  private boolean analyzed;
 }

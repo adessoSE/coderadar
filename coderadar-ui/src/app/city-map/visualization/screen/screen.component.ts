@@ -1,6 +1,6 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import * as THREE from 'three';
-import {Scene, WebGLRenderer} from 'three';
+import {Line, Mesh, Object3D, Scene, Vector3, WebGLRenderer} from 'three';
 import * as TWEEN from '@tweenjs/tween.js';
 
 import {Subscription} from 'rxjs';
@@ -41,6 +41,8 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   // (see https://github.com/nicolaspanel/three-orbitcontrols-ts/issues/1)
   camera: THREE.PerspectiveCamera;
   controls: OrbitControls;
+  tooltipLine: Object3D;
+  highlightBox: Object3D;
   interactionHandler: InteractionHandler;
 
   // use THREE.PerspectiveCamera instead of importing PerspectiveCamera to avoid warning for panning and zooming are disabled
@@ -103,6 +105,8 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     this.createControls();
     this.createLight();
     this.createRenderer();
+    this.createTooltip();
+    this.createSelectionHighlightBox();
     this.createInteractionHandler();
 
     this.initializeEventListeners();
@@ -127,7 +131,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   createRenderer() {
-    this.renderer = new WebGLRenderer({antialias: true, preserveDrawingBuffer: true});
+    this.renderer = new WebGLRenderer({antialias: true, preserveDrawingBuffer: true,logarithmicDepthBuffer:true});
     this.renderer.setClearColor(0xf0f0f0);
     this.renderer.setSize(this.getScreenWidth() - 0, window.innerHeight);
 
@@ -163,7 +167,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   resetCamera() {
-    const root = this.scene.getObjectByName('root');
+    const root = this.getRoot();
     // pythagoras
     const diagonal = Math.sqrt(Math.pow(root.scale.x, 2) + Math.pow(root.scale.z, 2));
     this.camera.position.x = root.scale.x * 2;
@@ -230,10 +234,11 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     this.interactionHandler = new InteractionHandler(
       this.scene,
       this.renderer,
-      this.screenType,
       this.isMergedView,
       this.focusService,
-      this.tooltipService
+      this.tooltipService,
+      this.tooltipLine,
+      this.highlightBox
     );
   }
 
@@ -254,7 +259,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
 
-    const root = this.scene.getObjectByName('root');
+    const root = this.getRoot();
     // pythagoras
     const diagonal = Math.sqrt(Math.pow(root.scale.x, 2) + Math.pow(root.scale.z, 2));
 
@@ -278,7 +283,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private getCentralCoordinates() {
-    const root = this.scene.getObjectByName('root');
+    const root = this.getRoot();
     if (!root) {
       console.warn(`no root found in screen #${this.screenType}`);
       return;
@@ -289,6 +294,10 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
       y: 0,
       z: root.scale.z / 2
     };
+  }
+
+  private getRoot():Object3D{
+    return this.scene.getObjectByName(VisualizationConfig.ROOT_NAME);
   }
 
   private getScreenWidth() {
@@ -342,4 +351,40 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
   }
+
+  private createTooltip() {
+    var material = new THREE.MeshBasicMaterial({
+      color:0xff0000
+    });
+    var geometry = new THREE.Geometry();
+    geometry.vertices.push(
+      new Vector3(0,0,0),
+      new Vector3(0,-1,0)
+    );
+    var tipSize = 0.1;
+    var tipGeometry = new THREE.SphereGeometry(tipSize,16,16);
+    this.tooltipLine = new Line(geometry,material);
+    var tooltipLineTip = new Mesh(tipGeometry,material);
+    tooltipLineTip.position.setY(-1);
+    this.tooltipLine.add(tooltipLineTip);
+    this.tooltipLine.type = "TooltipLine";
+    this.tooltipLine.visible = false;
+    this.tooltipLine.userData.isHelper = true;
+    this.scene.add(this.tooltipLine);
+  }
+
+  private createSelectionHighlightBox(){
+    var material = new THREE.MeshBasicMaterial({
+      color:0xffff00,
+      opacity:0.5,
+      transparent:true
+    });
+    var geometry = new THREE.BoxGeometry(1,1,1);
+    this.highlightBox = new Mesh(geometry,material);
+    this.highlightBox.type = "HighlightBox";
+    this.highlightBox.visible = false;
+    this.highlightBox.userData.isHelper = true;
+    this.scene.add(this.highlightBox);
+  }
+
 }

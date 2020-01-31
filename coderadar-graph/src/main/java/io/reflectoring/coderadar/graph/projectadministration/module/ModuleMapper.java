@@ -17,7 +17,6 @@ public class ModuleMapper implements Mapper<Module, ModuleEntity> {
   @Override
   public ModuleEntity mapDomainObject(Module domainObject) {
     ModuleEntity moduleEntity = new ModuleEntity();
-    moduleEntity.setId(domainObject.getId());
     moduleEntity.setPath(domainObject.getPath());
     return moduleEntity;
   }
