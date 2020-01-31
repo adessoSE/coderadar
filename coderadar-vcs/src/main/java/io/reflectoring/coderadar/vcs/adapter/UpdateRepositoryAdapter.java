@@ -91,8 +91,10 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
   }
 
   private void deleteAndCloneRepository(UpdateRepositoryCommand command)
-      throws IOException, UnableToCloneRepositoryException {
-    FileUtils.forceDelete(command.getLocalDir());
+      throws UnableToCloneRepositoryException, IOException {
+    if (command.getLocalDir().exists()) {
+      FileUtils.forceDelete(command.getLocalDir());
+    }
     cloneRepositoryAdapter.cloneRepository(
         new CloneRepositoryCommand(
             command.getRemoteUrl(),
