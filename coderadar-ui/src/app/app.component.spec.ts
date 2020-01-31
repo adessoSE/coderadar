@@ -25,4 +25,22 @@ describe('AppComponent', () => {
     const app = fixture.debugElement.componentInstance;
     expect(app.title).toEqual('coderadar');
   });
+
+  it('should trim project name', () => {
+    expect(AppComponent.trimProjectName('projectName')).toBe('projectName');
+    expect(AppComponent.trimProjectName('this is a really long project name which is longer than 50 characters'))
+      .toBe('this is a really long project name which is longer...');
+    expect(AppComponent.trimProjectName(null)).toBe('');
+    expect(AppComponent.trimProjectName(undefined)).toBe('');
+    expect(AppComponent.trimProjectName('')).toBe('');
+  });
+
+  it('should trim project name to length', () => {
+    expect(AppComponent.trimProjectNameToLength('projectName', 12)).toBe('projectName');
+    expect(AppComponent.trimProjectNameToLength('longProjectName', 12)).toBe('longProjectN...');
+    expect(AppComponent.trimProjectNameToLength(null, 12)).toBe('');
+    expect(AppComponent.trimProjectNameToLength(undefined, 12)).toBe('');
+    expect(AppComponent.trimProjectNameToLength('', 12)).toBe('');
+    expect(AppComponent.trimProjectNameToLength('test', -1)).toBe('...');
+  });
 });
