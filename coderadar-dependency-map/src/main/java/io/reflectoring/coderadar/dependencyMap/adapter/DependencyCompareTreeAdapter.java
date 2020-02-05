@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.dependencymap.adapter;
 
 import io.reflectoring.coderadar.dependencymap.analyzers.JavaAnalyzer;
 import io.reflectoring.coderadar.dependencymap.domain.CompareNode;
+import io.reflectoring.coderadar.dependencymap.domain.Node;
 import io.reflectoring.coderadar.dependencymap.util.CompareNodeComparator;
 import io.reflectoring.coderadar.dependencymap.domain.CompareNodeDTO;
 import io.reflectoring.coderadar.dependencymap.port.driven.GetCompareTreePort;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -94,28 +96,26 @@ public class DependencyCompareTreeAdapter implements GetCompareTreePort {
             // traverse to compare nodes and to set their level
             this.root.traversePost(node -> {
                 if (node.hasChildren()) {
-                    node.getChildren().sort(nodeComparator);
                     int level = 0;
                     for (int i = 0; i < node.getChildren().size(); i++) {
                         // for every child in the current layer check
-                        for (int j = 0; j < i; j++) {
-                            if (node.getChildren().get(j).getLevel() == level) {
-                                // if any child before this has a dependency on this
-                                // or any child before has more dependencies on this than this has on any child before
-                                //   raise layer, break
-                                if (node.getChildren().get(j).hasDependencyOn(node.getChildren().get(i))
-                                        && !node.getChildren().get(i).hasDependencyOn(node.getChildren().get(j))) {
-                                    level++;
-                                    break;
-                                } else if (node.getChildren().get(j).countDependenciesOn(node.getChildren().get(i))
-                                        > node.getChildren().get(i).countDependenciesOn(node.getChildren().get(j))) {
-                                    level++;
-                                    break;
-                                }
+                        for (int j = 0; j < node.getChildren().size(); j++) {
+                            if (i == j) continue;
+                            // if any child before this has a dependency on this
+                            // or any child before has more dependencies on this than this has on any child before
+                            //   raise layer, break
+                            if (node.getChildren().get(j).hasDependencyOn(node.getChildren().get(i))
+                                    && !node.getChildren().get(i).hasDependencyOn(node.getChildren().get(j))) {
+                                level++;
+                            } else if (node.getChildren().get(j).countDependenciesOn(node.getChildren().get(i))
+                                    > node.getChildren().get(i).countDependenciesOn(node.getChildren().get(j))) {
+                                level++;
                             }
                         }
                         node.getChildren().get(i).setLevel(level);
+                        level = 0;
                     }
+                    node.getChildren().sort(Comparator.comparingInt(CompareNode::getLevel));
                 }
             });
             return root;

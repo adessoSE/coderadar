@@ -24,12 +24,25 @@ public class JavaAnalyzer {
     private Map<String, Boolean> separators;
     public int count = 0;
 
+    private final String FILTER_PATTERN = "(\\/\\*(.|[\\r\\n])+?\\*\\/)|(\\/\\/.*[\\r\\n])";
+    private final String IMPORT_PATTERN = " (([a-z_$][\\w$]*)\\.)+(([a-zA-Z_$][\\w$]*)|\\*);";
+//                                                " ([A-Za-z_$][\\w$]*\\.)*[A-Za-z_$][\\w$]*"
+    private final String FULLYCLASSIFIED_PATTERN = "([a-zA-Z_$][\\w$]*\\.)*[a-zA-Z_$][\\w$]*";
+    private final String NAME_PATTERN = " (([A-Za-z_$][\\w$]*)\\.)*([A-Za-z_$][\\w$]*)";
+    private final String SKIP_PATTERN = "[\\w$]+";
+    private final String PACKAGE_PATTERN = "^(\\s*)package(\\s*)(([A-Za-z_$][\\w$]*)\\.)*([A-Za-z_$][\\w$]*);";
+    private final String SINGLE_LINE_COMMENT = "^\\s*//.*$";
+    private final String PACKAGE_DECLARATION = "^\\s*package.*$";
+    private final String MULTILINE_COMMENT_START = "^\\s*/\\*.*$";
+    private final String MULTILINE_COMMENT = "^\\s*\\*.*$";
+    private final String IN_STRING = "^.*\".*$";
+
     @Autowired
     public JavaAnalyzer() {
         this.cache = new RegexPatternCache();
-        importPattern = cache.getPattern(" (([a-z_$][\\w$]*)\\.)+(([a-zA-Z_$][\\w$]*)|\\*);");
-        fullyClassifiedPattern = cache.getPattern("([a-zA-Z_$][\\w$]*\\.)*[a-zA-Z_$][\\w$]*");
-        skipPattern = cache.getPattern("[\\w$]+");
+        importPattern = cache.getPattern(IMPORT_PATTERN);
+        fullyClassifiedPattern = cache.getPattern(FULLYCLASSIFIED_PATTERN);
+        skipPattern = cache.getPattern(SKIP_PATTERN);
         separators = new LinkedHashMap<String, Boolean>();
         {
             // this list is ordered by the estimated order of the separators in a line to minimize skipPattern checks
@@ -61,9 +74,9 @@ public class JavaAnalyzer {
     public String getPackageName(byte[] byteFileContent) {
         if (byteFileContent != null) {
             String fileContent = clearFileContent(new String(byteFileContent));
-            Matcher packageMatcher = cache.getPattern("^(\\s*)package(\\s*)(([A-Za-z_$][\\w$]*)\\.)*([A-Za-z_$][\\w$]*);").matcher(fileContent);
+            Matcher packageMatcher = cache.getPattern(PACKAGE_PATTERN).matcher(fileContent);
             if (packageMatcher.find()) {
-                Matcher nameMatcher = cache.getPattern(" (([A-Za-z_$][\\w$]*)\\.)*([A-Za-z_$][\\w$]*)").matcher(packageMatcher.group());
+                Matcher nameMatcher = cache.getPattern(NAME_PATTERN).matcher(packageMatcher.group());
                 if (nameMatcher.find()) {
                     return nameMatcher.group().substring(1);
                 }
@@ -75,8 +88,8 @@ public class JavaAnalyzer {
     public List<String> getValidImports(String fileContent) {
         List<String> foundDependencies = new CopyOnWriteArrayList<>();
         String[] lines = clearFileContent(fileContent).split("\n");
-        Arrays.stream(lines).filter(line -> !line.matches("^\\s*//.*$") && !line.matches("^\\s*/\\*.*$") && !line.matches("^\\s*\\*.*$")
-                && !line.matches("^.*\".*$") && !line.matches("^\\s*package.*$")).forEach(line -> {
+        Arrays.stream(lines).filter(line -> !line.matches(SINGLE_LINE_COMMENT) && !line.matches(MULTILINE_COMMENT_START) && !line.matches(MULTILINE_COMMENT)
+                && !line.matches(IN_STRING) && !line.matches(PACKAGE_DECLARATION)).forEach(line -> {
             if (line.contains("import ")) {
                 getDependenciesFromImportLine(line).stream().filter(imp -> !foundDependencies.contains(imp)).forEach(foundDependencies::add);
             } else {
@@ -93,7 +106,7 @@ public class JavaAnalyzer {
      * @return cleaned fileContent.
      */
     private String clearFileContent(final String fileContent) {
-        return cache.getPattern("(\\/\\*(.|[\\r\\n])+?\\*\\/)|(\\/\\/.*[\\r\\n])").matcher(fileContent).replaceAll("");
+        return cache.getPattern(FILTER_PATTERN).matcher(fileContent).replaceAll("");
     }
 
     /**

@@ -51,6 +51,7 @@ import {DependencyRootComponent} from './levelized-structure-map/dependency-root
 import {DependencyCompareComponent} from './levelized-structure-map/dependency-compare/dependency-compare.component';
 import {TreeNodeComponent} from './levelized-structure-map/tree-node/tree-node.component';
 import {MatSelectModule} from '@angular/material/select';
+import {DragScrollModule} from "ngx-drag-scroll";
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -63,8 +64,8 @@ const appRoutes: Routes = [
   {path: 'project-edit/:id', component: EditProjectComponent},
   {path: 'project/:id', component: ProjectDashboardComponent},
   {path: 'project/:id/:name', component: ViewCommitComponent},
-  {path: 'structure-map/:projectId/:commitName', component: DependencyRootComponent},
-  {path: 'structure-map/:projectId/:commitName1/:commitName2', component: DependencyCompareComponent},
+  {path: 'project/:projectId/:commitName/dependency-map', component: DependencyRootComponent},
+  {path: 'project/:projectId/:commitName1/:commitName2/dependency-map', component: DependencyCompareComponent},
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
 
@@ -97,6 +98,7 @@ const appRoutes: Routes = [
     BrowserModule,
     FontAwesomeModule,
     BrowserAnimationsModule,
+    DragScrollModule,
     FlexLayoutModule,
     MatFormFieldModule,
     MatInputModule,
@@ -123,7 +125,7 @@ const appRoutes: Routes = [
     environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 50}),
     MatPaginatorModule,
     MatProgressSpinnerModule,
-    MatSelectModule
+    MatSelectModule,
     MatExpansionModule
   ],
   providers: [

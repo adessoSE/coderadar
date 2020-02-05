@@ -26,6 +26,7 @@ export abstract class DependencyBase {
   @ViewChild('3headerBackground') headerBackground;
   @ViewChild('3canvas') canvas: ElementRef;
   @ViewChild('3canvasContainer') canvasContainer;
+  @ViewChild('3scrollBlock') scrollBlock;
 
   public onShowUpwardChanged(): void {
     this.checkUp = !this.checkUp;
@@ -139,12 +140,15 @@ export abstract class DependencyBase {
     // set height of canvas to the height of dependencyTree after toggle
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     const rootList = document.getElementById('3list__root');
-    this.ctx.canvas.height = rootList.offsetHeight + 10;
+    this.ctx.canvas.height = rootList.offsetHeight;
     this.ctx.canvas.width = rootList.offsetWidth + 30;
-    const canvasContainer = document.getElementById('3canvasContainer');
-    canvasContainer.style.width = rootList.offsetWidth + 30 + 'px';
-    canvasContainer.style.height = rootList.offsetHeight + 10 + 'px';
-    this.headerBackground.nativeElement.style.width = rootList.offsetWidth + 30 + 'px';
+    const scroll = document.querySelector('drag-scroll[id="3scrollBlock"] > div') as HTMLElement;
+    scroll.style.height = (window.innerHeight - scroll.offsetTop < rootList.offsetHeight + 30 ? window.innerHeight - scroll.offsetTop : rootList.offsetHeight + 30) + 'px';
+    scroll.style.width = (window.innerWidth < rootList.offsetWidth + 30 ? window.innerWidth : rootList.offsetWidth + 30) + 'px';
+    (document.querySelector('drag-scroll[id="3scrollBlock"] > div > div') as HTMLElement).style.overflow = 'hidden';
+    const canvas = document.getElementById('3canvas');
+    canvas.style.top = -rootList.offsetHeight + 'px';
+    canvas.style.marginBottom = -rootList.offsetHeight + 'px';
     callback.call();
   }
 

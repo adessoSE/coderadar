@@ -1,11 +1,12 @@
 [id='3canvas'] {
-  position: absolute;
+  position: relative;
   z-index: -1;
 }
 
 [id='3list__root'] {
   padding-left: 20px;
   width: max-content;
+  margin: 0;
 }
 
 .header-background {
