@@ -68,32 +68,35 @@ export class InteractionHandler {
         this.tooltipService.setContent({
           elementName: target.userData.elementName,
           metrics: target.userData.metrics
-        });
+        },this.screenType);
+        if(this.screenInteractionService.getCounterpart(target)){
+          this.tooltipService.setContent({
+            elementName: this.screenInteractionService.getCounterpart(target).userData.elementName,
+            metrics: this.screenInteractionService.getCounterpart(target).userData.metrics
+          },this.screenInteractionService.otherType(this.screenType));
+        }else{
+          this.tooltipService.setContent({
+            elementName: "Does not exist in this commit",
+            metrics: null
+          },this.screenInteractionService.otherType(this.screenType));
+        }
         this.hoveredElementUuid = target.uuid;
       }
-      let tooltipPos: Vector2;
+      var tooltipPos: Vector2;
       const vCameraDistance: Vector3 = intersection.point.clone().sub(camera.position);
       const cameraDistance: number = vCameraDistance.length();
-      const tooltipHover = cameraDistance * 0.1;
-      const tooltipTipSize = cameraDistance * 0.1;
-      const tooltipLineArrow = this.tooltipLine.children[0];
-      this.tooltipLine.position.copy(new Vector3(0, tooltipHover, 0).add(intersection.point));
-      tooltipPos = this.worldPositionToScreenPosition(this.tooltipLine.position.clone(), camera);
-      // Make the line that hovers the tooltip longer based on camera distance
-      this.tooltipLine.scale.setY(tooltipHover);
-      // Make the sphere at the cursor change size based on camera distance
-      tooltipLineArrow.scale.set(tooltipTipSize, tooltipTipSize / tooltipHover, tooltipTipSize);
+      var cursorScale = cameraDistance * 0.1;
+      var cursorPosition = intersection.point.clone();
+      tooltipPos = this.worldPositionToScreenPosition(this.tooltipLine.position.clone().add(new Vector3(0,cursorScale,0)), camera);
+      this.screenInteractionService.setCursorState(cursorPosition,true,cursorScale);
 
       var other = this.screenInteractionService.getCounterpart(target);
-
-      // this.tooltipService.show(ScreenType.LEFT);
-      // this.tooltipService.show(ScreenType.RIGHT);
       this.screenInteractionService.setMouseHighlight(target.name);
-      this.setTooltipVisible(true);
+      this.tooltipService.show(null)
     } else {
-      this.setTooltipVisible(false);
-      // this.tooltipService.hide(ScreenType.LEFT);
-      // this.tooltipService.hide(ScreenType.RIGHT);
+      this.tooltipService.hide(null)
+      this.screenInteractionService.setCursorState(null,false)
+      this.screenInteractionService.setMouseHighlight("");
     }
   }
 

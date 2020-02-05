@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ScreenComponent} from "../visualization/screen/screen.component";
 import {ScreenType} from "../enum/ScreenType";
-import {Object3D} from "three";
+import {Object3D, Vector2, Vector3} from "three";
 import {Subject} from "rxjs";
 
 @Injectable()
@@ -9,8 +9,11 @@ export class ScreenInteractionService {
   rightScreen:ScreenComponent;
   leftScreen:ScreenComponent;
 
+  private tooltipPositionSubject = new Subject <Vector2>();
+  public tooltipPosition$ = this.tooltipPositionSubject.asObservable();
 
-
+  private cursorStateSubject = new Subject<{position:Vector3,visible:boolean,scale:number}>();
+  public cursorState$ = this.cursorStateSubject.asObservable();
 
   private hoverHighlight:string;
   private highlightedElements: string[] = [];
@@ -18,6 +21,15 @@ export class ScreenInteractionService {
   private highlightedElementsSubject = new Subject<string[]>();
   public highlightedElements$ = this.highlightedElementsSubject.asObservable();
 
+
+
+  constructor() {
+
+  }
+
+  public setCursorState(pPosition:Vector3=null,pVisible = true,pScale = 1){
+    this.cursorStateSubject.next({position:pPosition,visible:pVisible,scale:pScale});
+  }
 
   public setMouseHighlight(elementName:string){
     if(this.hoverHighlight == elementName)return;
@@ -35,14 +47,22 @@ export class ScreenInteractionService {
     this.emitHighlights();
   }
 
+  public setTooltipVisibility(visible:boolean){
+
+  }
+
   public select(elementName:string){
-    this.highlightedElements = [elementName];
+    var index = this.highlightedElements.indexOf(elementName);
+    if(index == -1) {
+      this.highlightedElements = [elementName];
+    }else{
+      this.highlightedElements = [];
+    }
     this.emitHighlights();
   }
 
   public toggleSelect(elementName:string){
     var index = this.highlightedElements.indexOf(elementName);
-    console.log(index);
     if(index === -1){
       this.highlightedElements.push(elementName);
     } else{
@@ -58,7 +78,6 @@ export class ScreenInteractionService {
   }
 
   public resetSelection(){
-    console.log("Reset");
     this.highlightedElements = [];
     this.emitHighlights();
   }
@@ -74,14 +93,15 @@ export class ScreenInteractionService {
     this.highlightedElementsSubject.next(emittedHighlights);
   }
 
-  constructor() {
-
-  }
-
   public otherScreen(screen:ScreenComponent): ScreenComponent{
     if(screen.screenType==ScreenType.LEFT)return this.rightScreen;
     else if(screen.screenType==ScreenType.RIGHT)return this.leftScreen;
     else return null;
+  }
+
+  public otherType(screenType:ScreenType):ScreenType{
+    if(screenType == ScreenType.RIGHT)return ScreenType.LEFT;
+    else return ScreenType.RIGHT;
   }
 
   public addScreen(screen:ScreenComponent) {

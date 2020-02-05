@@ -43,7 +43,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   // (see https://github.com/nicolaspanel/three-orbitcontrols-ts/issues/1)
   camera: THREE.PerspectiveCamera;
   controls: OrbitControls;
-  tooltipLine: Object3D;
+  spatialCursor: Object3D;
   highlightBoxes: Object3D[] = [];
   interactionHandler: InteractionHandler;
 
@@ -104,6 +104,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
+    this.tooltipService.addScreen(this);
     this.screenInteractionService.addScreen(this);
     this.view = new SplitView(this.screenType, this.metricMapping);
 
@@ -111,7 +112,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     this.createControls();
     this.createLight();
     this.createRenderer();
-    this.createTooltip();
+    this.create3DCursor();
     this.createSelectionHighlightBox();
     this.createInteractionHandler();
 
@@ -137,6 +138,19 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.highlightBoxes.forEach((value,index) => this.highlightElement(this.scene.getObjectByName(highlightedElements[index]),value));
       })
+    );
+    this.subscriptions.push(
+      this.screenInteractionService.cursorState$.subscribe((state => {
+        if(state.position){
+          this.spatialCursor.position.copy(state.position);
+          this.tooltipService.setMousePosition(this.getTooltipPosition(),this.screenType);
+        }
+        this.spatialCursor.visible = state.visible;
+        if(state.scale){
+          this.spatialCursor.scale.set(1,state.scale,1);
+          this.spatialCursor.children[0].scale.set(state.scale,1,state.scale)
+        }
+      }))
     );
   }
 
@@ -273,7 +287,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
       this.focusService,
       this.screenInteractionService,
       this.tooltipService,
-      this.tooltipLine
+      this.spatialCursor
     );
   }
 
@@ -387,25 +401,39 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private createTooltip() {
+  public getTooltipPosition(): {x:number,y:number}{
+    var tooltipPosition:Vector2 = this.worldPositionToScreenPosition(this.spatialCursor.position.clone().add(new Vector3(0, this.spatialCursor.scale.y,0)));
+    return {x:tooltipPosition.x,y:tooltipPosition.y}
+  }
+
+  public worldPositionToScreenPosition(worldPosition: Vector3): Vector2 {
+    const screenCoordinate: Vector3 = worldPosition.project(this.camera);
+    const screenPosition: Vector2 = new Vector2(
+      this.screenOffset.x + (( (screenCoordinate.x + 1) * this.screenDimensions.x / 2)),
+      ((-(screenCoordinate.y - 1) * this.screenDimensions.y / 2)));
+    return screenPosition;
+  }
+
+  private create3DCursor() {
     var material = new THREE.MeshBasicMaterial({
       color:0xff0000
     });
     var geometry = new THREE.Geometry();
     geometry.vertices.push(
       new Vector3(0,0,0),
-      new Vector3(0,-1,0)
+      new Vector3(0,1,0)
     );
-    var tipSize = 0.1;
-    var tipGeometry = new THREE.SphereGeometry(tipSize,16,16);
-    this.tooltipLine = new Line(geometry,material);
+    var tipSize = 0.2;
+    var tipGeometry = new THREE.ConeGeometry(tipSize/2,tipSize,16,16);
+    tipGeometry.rotateX(Math.PI);
+    tipGeometry.translate(0,tipSize/2,0);
+    this.spatialCursor = new Line(geometry,material);
     var tooltipLineTip = new Mesh(tipGeometry,material);
-    tooltipLineTip.position.setY(-1);
-    this.tooltipLine.add(tooltipLineTip);
-    this.tooltipLine.type = "TooltipLine";
-    this.tooltipLine.visible = false;
-    this.tooltipLine.userData.isHelper = true;
-    this.scene.add(this.tooltipLine);
+    this.spatialCursor.add(tooltipLineTip);
+    this.spatialCursor.type = "TooltipLine";
+    this.spatialCursor.visible = false;
+    this.spatialCursor.userData.isHelper = true;
+    this.scene.add(this.spatialCursor);
   }
 
   private highlightBoxGeometry:BoxGeometry;
@@ -415,8 +443,8 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     var highlightBox:Object3D;
     if(!this.highlightBoxMaterial){
       this.highlightBoxMaterial = new THREE.MeshBasicMaterial({
-      color:0xffff00,
-      opacity:0.5,
+      color:0x01ff01,
+      opacity:.8,
       transparent:true
       });
     }
