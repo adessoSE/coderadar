@@ -7,6 +7,7 @@ import {ScreenType} from '../../enum/ScreenType';
 import {NodeType} from '../../enum/NodeType';
 import {CommitReferenceType} from '../../enum/CommitReferenceType';
 import {ElementAnalyzer} from '../../helper/element-analyzer';
+import {MetricValue} from "../../../model/metric-value";
 
 declare var GrowingPacker: any;
 
@@ -36,7 +37,6 @@ export abstract class AbstractView {
     }
 
     this.maxModuleLevel = ElementAnalyzer.getMaxModuleLevel(this.rootNode);
-
     this.calculateGroundAreas([this.rootNode]);
     this.calculateElements([this.rootNode], null, 0);
   }
@@ -65,14 +65,12 @@ export abstract class AbstractView {
         element.w = result.w + 2 * VisualizationConfig.BLOCK_SPACING;
         element.h = result.h + 2 * VisualizationConfig.BLOCK_SPACING;
       }
-
       node.packerInfo = element;
     }
 
     nodes.sort((a, b) => {
       return b.packerInfo.w - a.packerInfo.w;
     });
-
     this.packer.fit(nodes.map(node => node.packerInfo));
     return {
       packer: this.packer.root,
@@ -166,7 +164,7 @@ export abstract class AbstractView {
     return this.blockElements;
   }
 
-  private getEdgeLength(commit1Metrics: any, commit2Metrics: any): number {
+  private getEdgeLength(commit1Metrics: MetricValue[], commit2Metrics: MetricValue[]): number {
     const groundAreaValue = ElementAnalyzer.getMaxMetricValueByMetricName(
       commit1Metrics,
       commit2Metrics,
