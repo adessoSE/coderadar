@@ -2,8 +2,26 @@ import {ElementRef, HostListener, ViewChild} from '@angular/core';
 import html2canvas from 'html2canvas';
 import * as $ from 'jquery';
 import * as jspdf from 'jspdf';
+import {AppComponent} from "../app.component";
+import {Project} from "../model/project";
+import {FORBIDDEN, NOT_FOUND} from "http-status-codes";
 
 export abstract class DependencyBase {
+
+  appComponent = AppComponent;
+  projectService: any;
+  userService: any;
+  router: any;
+  project: Project = new Project({
+    id: null,
+    name: null,
+    vcsUrl: null,
+    vcsUsername: '',
+    vcsPassword: '',
+    vcsOnline: true,
+    startDate: null,
+    endDate: null
+  });
   node: any;
   projectId: number;
   commitName: any;
@@ -285,5 +303,19 @@ export abstract class DependencyBase {
     this.ctx.moveTo(tox, toy);
     this.ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
     this.ctx.stroke();
+  }
+
+  getProject(): void {
+    this.projectService.getProject(this.projectId)
+      .then(response => {
+        this.project = new Project(response.body);
+      })
+      .catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh(() => this.getProject());
+        } else if (error.status && error.status === NOT_FOUND) {
+          this.router.navigate(['/dashboard']);
+        }
+      });
   }
 }

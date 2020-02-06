@@ -1,5 +1,4 @@
-<app-header id="header" [title]="[{location: '/structure-map', name: 'Structure Map'}]"></app-header>
-<div class="header-background" #3headerBackground></div>
+<app-header id="header" [title]="[{location: '/dependency-map', name: 'Dependency Map'}, {location: '/project/' + project.id, name: appComponent.trimProjectName(project.name)}, {location: '/project/' + projectId + '/' + commitName + '/' + commitName2 + '/dependency-map', name: 'Dependency Map for ' + commitName + ' amd ' + commitName2}]"></app-header>
 
 <mat-checkbox class="margin-left margin-right" #3showUpward [checked]="checkUp" (change)="onShowUpwardChanged()">Show upward Dependencies</mat-checkbox>
 <mat-checkbox class="margin-left margin-right" #3showDownward [checked]="checkDown" (change)="onShowDownwardChanged()">Show downward Dependencies</mat-checkbox>

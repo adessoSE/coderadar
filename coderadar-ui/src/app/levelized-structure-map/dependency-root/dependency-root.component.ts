@@ -13,15 +13,18 @@ import {DependencyBase} from '../dependency-base';
 })
 export class DependencyRootComponent extends DependencyBase implements AfterViewInit {
 
-  constructor(private router: Router, private userService: UserService, private projectService: ProjectService,
-              private route: ActivatedRoute) {
+  constructor(router: Router, userService: UserService, projectService: ProjectService, private route: ActivatedRoute) {
     super();
+    this.projectService = projectService;
+    this.userService = userService;
+    this.router = router;
   }
 
   ngAfterViewInit(): void {
     this.route.params.subscribe(params => {
       this.projectId = params.projectId;
       this.commitName = params.commitName;
+      this.getProject();
       this.getData();
     });
   }
