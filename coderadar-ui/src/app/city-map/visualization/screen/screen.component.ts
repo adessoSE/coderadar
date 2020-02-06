@@ -21,7 +21,6 @@ import {ViewType} from '../../enum/ViewType';
 import {BlockConnection} from '../../geometry/block-connection';
 import {NodeType} from '../../enum/NodeType';
 import {ElementAnalyzer} from '../../helper/element-analyzer';
-import {Camera} from "three";
 import {ScreenInteractionService} from "../../service/screen-interaction.service";
 
 @Component({
@@ -46,6 +45,8 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   spatialCursor: Object3D;
   highlightBoxes: Object3D[] = [];
   interactionHandler: InteractionHandler;
+
+  public displayTooltip = true;
 
   // use THREE.PerspectiveCamera instead of importing PerspectiveCamera to avoid warning for panning and zooming are disabled
   view: AbstractView;
@@ -72,13 +73,14 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
         this.view = new MergedView(this.screenType, this.metricMapping);
         if (this.screenType === ScreenType.RIGHT) {
           this.pauseRendering();
+          this.displayTooltip = false;
         }
         document.querySelector('#stage').classList.remove('split');
-
       } else {
         this.view = new SplitView(this.screenType, this.metricMapping);
         if (this.screenType === ScreenType.RIGHT) {
           this.resumeRendering();
+          this.displayTooltip = true;
         }
         document.querySelector('#stage').classList.add('split');
       }
@@ -402,7 +404,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public getTooltipPosition(): {x:number,y:number}{
-    var tooltipPosition:Vector2 = this.worldPositionToScreenPosition(this.spatialCursor.position.clone().add(new Vector3(0, this.spatialCursor.scale.y,0)));
+    const tooltipPosition:Vector2 = this.worldPositionToScreenPosition(this.spatialCursor.position.clone().add(new Vector3(0, this.spatialCursor.scale.y,0)));
     return {x:tooltipPosition.x,y:tooltipPosition.y}
   }
 
