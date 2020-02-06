@@ -50,7 +50,9 @@
     "zone.js": "~0.8.29",
     "jspdf": "^1.5.3",
     "jquery": "^3.4.1",
-    "html2canvas": "^1.0.0-rc.5"
+    "html2canvas": "^1.0.0-rc.5",
+    "ngx-drag-scroll": "^8.0.0-beta.2",
+    "ngx-pinch-zoom": "^2.3.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.13.9",

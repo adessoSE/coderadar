@@ -52,6 +52,7 @@ import {DependencyCompareComponent} from './levelized-structure-map/dependency-c
 import {TreeNodeComponent} from './levelized-structure-map/tree-node/tree-node.component';
 import {MatSelectModule} from '@angular/material/select';
 import {DragScrollModule} from "ngx-drag-scroll";
+import {PinchZoomModule} from "ngx-pinch-zoom";
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -126,6 +127,7 @@ const appRoutes: Routes = [
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatSelectModule,
+    PinchZoomModule,
     MatExpansionModule
   ],
   providers: [

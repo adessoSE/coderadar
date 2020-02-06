@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, HostListener, ViewChild, ViewEncapsulation} from '@angular/core';
+import {AfterViewInit, Component, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';

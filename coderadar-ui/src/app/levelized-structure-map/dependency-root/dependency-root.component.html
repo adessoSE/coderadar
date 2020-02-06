@@ -11,19 +11,21 @@
 <button mat-button class="margin-left margin-right" #3screenshot (click)="screenshotListener()">Export</button>
 <span #3activeDependency class="margin-left">No active dependency chosen.</span>
 <div #3canvasContainer id="3canvasContainer">
-  <drag-scroll id="3scrollBlock" [scrollbar-hidden]="true">
-    <div id="3dependencyTree" #3dependencyTree class="dependencyTree">
-      <div *ngIf="node === undefined">
-        <mat-spinner mode="indeterminate" class="spinner-center"></mat-spinner>
+  <pinch-zoom #3zoom id="3zoom" [disableZoomControl]="'disable'" [backgroundColor]="'transparent'" [limit-zoom]="5">
+    <drag-scroll #3scroll id="3scroll" [scrollbar-hidden]="true">
+      <div id="3dependencyTree" #3dependencyTree class="dependencyTree">
+        <div *ngIf="node === undefined">
+          <mat-spinner mode="indeterminate" class="spinner-center"></mat-spinner>
+        </div>
+        <div *ngIf="node !== undefined">
+          <div [id]="node.path === '' ? '3list__root' : ''">
+            <span>
+              <app-tree-node [node]="node" [root]="this"  [hasSiblings]="false"></app-tree-node>
+            </span>
+          </div>
+        </div>
       </div>
-      <div *ngIf="node !== undefined">
-        <ul [id]="node.path === '' ? '3list__root' : ''">
-          <li style="display: inline;">
-            <app-tree-node [node]="node" [root]="this"  [hasSiblings]="false"></app-tree-node>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <canvas id="3canvas" #3canvas class="canvas"></canvas>
-  </drag-scroll>
+      <canvas id="3canvas" #3canvas class="canvas"></canvas>
+    </drag-scroll>
+  </pinch-zoom>
 </div>

@@ -18,15 +18,9 @@ export abstract class DependencyBase {
     { format: 'application/pdf', value: 'pdf' }
   ];
   selected = 0;
-  @ViewChild('3dependencyTree') div;
   @ViewChild('3activeDependency') activeDependencyContainer;
-  @ViewChild('3dependencyTree') dependencyTreeContainer;
-  @ViewChild('3showUpward') showUpwardContainer;
-  @ViewChild('3showDownward') showDownwardContainer;
-  @ViewChild('3headerBackground') headerBackground;
   @ViewChild('3canvas') canvas: ElementRef;
   @ViewChild('3canvasContainer') canvasContainer;
-  @ViewChild('3scrollBlock') scrollBlock;
 
   public onShowUpwardChanged(): void {
     this.checkUp = !this.checkUp;
@@ -72,19 +66,13 @@ export abstract class DependencyBase {
   }
 
   checkOnActiveDependency(tmp): boolean {
-    while (tmp.id !== '') {
-      if (tmp === this.activeDependency) {
-        return true;
-      }
-      tmp = tmp.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
-    }
-    return false;
+    return tmp.id.indexOf(this.activeDependency.id) !== -1;
   }
 
   findLastHTMLElement(node): HTMLElement {
     let element = document.getElementById(node);
     while (element.offsetParent === null) {
-      element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstChild as HTMLElement;
+      element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstElementChild as HTMLElement;
     }
     return element as HTMLElement;
   }
@@ -140,15 +128,25 @@ export abstract class DependencyBase {
     // set height of canvas to the height of dependencyTree after toggle
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     const rootList = document.getElementById('3list__root');
-    this.ctx.canvas.height = rootList.offsetHeight;
-    this.ctx.canvas.width = rootList.offsetWidth + 30;
-    const scroll = document.querySelector('drag-scroll[id="3scrollBlock"] > div') as HTMLElement;
-    scroll.style.height = (window.innerHeight - scroll.offsetTop < rootList.offsetHeight + 30 ? window.innerHeight - scroll.offsetTop : rootList.offsetHeight + 30) + 'px';
-    scroll.style.width = (window.innerWidth < rootList.offsetWidth + 30 ? window.innerWidth : rootList.offsetWidth + 30) + 'px';
-    (document.querySelector('drag-scroll[id="3scrollBlock"] > div > div') as HTMLElement).style.overflow = 'hidden';
+    const zoom = document.getElementById('3zoom');
+    const scroll = document.querySelector('drag-scroll[id="3scroll"] > div') as HTMLElement;
     const canvas = document.getElementById('3canvas');
+    const drawHeight = rootList.offsetHeight;
+    const drawWidth = rootList.offsetWidth + 20;
+    const containerHeight = window.innerHeight - document.getElementById('3canvasContainer').offsetTop;
+    const containerWidth = window.innerWidth;
+
+    this.ctx.canvas.height = drawHeight;
+    this.ctx.canvas.width = drawWidth;
+    zoom.style.height = containerHeight + 'px';
+    zoom.style.width = containerWidth + 'px';
+    scroll.style.height = containerHeight + 'px';
+    scroll.style.width = containerWidth + 'px';
+    (document.querySelector('drag-scroll[id="3scroll"] > div > div') as HTMLElement).style.overflow = 'hidden';
+    canvas.style.height = drawHeight + 'px';
+    canvas.style.width = drawWidth + 'px';
     canvas.style.top = -rootList.offsetHeight + 'px';
-    canvas.style.marginBottom = -rootList.offsetHeight + 'px';
+    canvas.style.marginBottom = -rootList.offsetHeight + 10 + 'px';
     callback.call();
   }
 
@@ -175,13 +173,12 @@ export abstract class DependencyBase {
 
         start = start.parentNode as HTMLElement;
         end = end.parentNode as HTMLElement;
-
         // use jquery for position calculation because plain js position calculation working with offsets returns
         // different values for chrome and firefox
         // (ref: https://stackoverflow.com/questions/1472842/firefox-and-chrome-give-different-values-for-offsettop).
-        const startx = $(start).offset().left + start.offsetWidth / 2;
+        const startx = $(start).offset().left + start.offsetWidth / 2 - $(this.ctx.canvas).offset().left;
         let starty = $(start).offset().top + start.offsetHeight - $(this.ctx.canvas).offset().top;
-        const endx = $(end).offset().left + end.offsetWidth / 2;
+        const endx = $(end).offset().left + end.offsetWidth / 2 - $(this.ctx.canvas).offset().left;
         let endy = $(end).offset().top - $(this.ctx.canvas).offset().top;
 
         // ignore all arrows with same start and end node

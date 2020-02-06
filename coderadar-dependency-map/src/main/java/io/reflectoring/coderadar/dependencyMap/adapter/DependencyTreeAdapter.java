@@ -72,26 +72,28 @@ public class DependencyTreeAdapter implements GetDependencyTreePort {
         });
 
         // traverse to compare nodes and to set their level
-
         this.root.traversePost(node -> {
             if (node.hasChildren()) {
+                node.getChildren().sort(new NodeComparator());
                 int level = 0;
+                Node childI;
+                Node childJ;
                 for (int i = 0; i < node.getChildren().size(); i++) {
+                    childI = node.getChildren().get(i);
                     // for every child in the current layer check
                     for (int j = 0; j < node.getChildren().size(); j++) {
+                        childJ = node.getChildren().get(j);
                         if (i == j) continue;
                         // if any child before this has a dependency on this
                         // or any child before has more dependencies on this than this has on any child before
                         //   raise layer, break
-                        if (node.getChildren().get(j).hasDependencyOn(node.getChildren().get(i))
-                                && !node.getChildren().get(i).hasDependencyOn(node.getChildren().get(j))) {
-                            level++;
-                        } else if (node.getChildren().get(j).countDependenciesOn(node.getChildren().get(i))
-                                > node.getChildren().get(i).countDependenciesOn(node.getChildren().get(j))) {
-                            level++;
+                        if (childJ.hasDependencyOn(childI) && !childI.hasDependencyOn(childJ)) {
+                            level = (level < childJ.getLevel() ? childJ.getLevel() + 1 : level + 1);
+                        } else if (childJ.countDependenciesOn(childI) > childI.countDependenciesOn(childJ)) {
+                            level = (level < childJ.getLevel() ? childJ.getLevel() + 1 : level + 1);
                         }
                     }
-                    node.getChildren().get(i).setLevel(level);
+                    childI.setLevel(level);
                     level = 0;
                 }
                 node.getChildren().sort(Comparator.comparingInt(Node::getLevel));

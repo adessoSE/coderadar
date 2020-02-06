@@ -35,6 +35,10 @@ public class NodeComparator implements Comparator<Node> {
             return -1;
         } else if (!o1.hasChildren() && o2.hasChildren()) {
             return 1;
+        } else if (o1.getDependencies().size() > 0 && o2.getDependencies().size() == 0) {
+            return -1;
+        } else if (o2.getDependencies().size() > 0 && o1.getDependencies().size() == 0) {
+            return 1;
         } else {
             return o1.getFilename().compareTo(o2.getFilename());
         }
