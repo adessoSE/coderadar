@@ -15,6 +15,8 @@ export class ScreenInteractionService {
   private cursorStateSubject = new Subject<{position:Vector3,visible:boolean,scale:number}>();
   public cursorState$ = this.cursorStateSubject.asObservable();
 
+  private static readonly NOTHING = "";
+
   private hoverHighlight:string;
   private highlightedElements: string[] = [];
 
@@ -34,15 +36,16 @@ export class ScreenInteractionService {
   public setMouseHighlight(elementName:string){
     if(this.hoverHighlight == elementName)return;
     var isFile = elementName.includes(".");
-    var exists = elementName != "";
+    var exists = elementName != ScreenInteractionService.NOTHING;
+    var exists = elementName != ScreenInteractionService.NOTHING;
     if(exists){
       if(isFile){
         this.hoverHighlight = elementName;
       }else{
-        this.hoverHighlight = "";
+        this.hoverHighlight = ScreenInteractionService.NOTHING;
       }
     }else{
-      this.hoverHighlight = "";
+      this.hoverHighlight = ScreenInteractionService.NOTHING;
     }
     this.emitHighlights();
   }
@@ -89,6 +92,7 @@ export class ScreenInteractionService {
   private emitHighlights(){
     var emittedHighlights:string[] = [];
     emittedHighlights = emittedHighlights.concat(this.highlightedElements);
+    //Make sure the hover highlight isn't emitted twice
     if(this.hoverHighlight != ""&&emittedHighlights.indexOf(this.hoverHighlight)<0)emittedHighlights.push(this.hoverHighlight);
     this.highlightedElementsSubject.next(emittedHighlights);
   }
