@@ -10,6 +10,7 @@ public class BranchMapper implements Mapper<Branch, BranchEntity> {
     Branch branch = new Branch();
     branch.setId(nodeEntity.getId());
     branch.setName(nodeEntity.getName());
+    branch.setCommitHash(nodeEntity.getCommit().getName());
     return branch;
   }
 

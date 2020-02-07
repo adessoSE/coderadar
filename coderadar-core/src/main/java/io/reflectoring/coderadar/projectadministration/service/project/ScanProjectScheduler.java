@@ -14,6 +14,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.GetProjectHeadCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBranchesPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
@@ -56,6 +57,7 @@ public class ScanProjectScheduler {
   private final SaveCommitPort saveCommitPort;
   private final ResetAnalysisPort resetAnalysisPort;
   private final UpdateProjectPort updateProjectPort;
+  private final ListBranchesPort listBranchesPort;
 
   private final Logger logger = LoggerFactory.getLogger(ScanProjectScheduler.class);
 
@@ -76,7 +78,8 @@ public class ScanProjectScheduler {
       DeleteModulePort deleteModulePort,
       SaveCommitPort saveCommitPort,
       ResetAnalysisPort resetAnalysisPort,
-      UpdateProjectPort updateProjectPort) {
+      UpdateProjectPort updateProjectPort,
+      ListBranchesPort listBranchesPort) {
     this.updateRepositoryUseCase = updateRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
@@ -92,6 +95,7 @@ public class ScanProjectScheduler {
     this.saveCommitPort = saveCommitPort;
     this.resetAnalysisPort = resetAnalysisPort;
     this.updateProjectPort = updateProjectPort;
+    this.listBranchesPort = listBranchesPort;
   }
 
   /** Starts the scheduleCheckTask tasks upon application start */
@@ -164,7 +168,8 @@ public class ScanProjectScheduler {
     if (head.getTimestamp() > Iterables.getLast(commits).getTimestamp()) {
       resetAnalysisPort.resetAnalysis(project.getId());
       updateProjectPort.deleteFilesAndCommits(project.getId());
-      saveCommitPort.saveCommits(commits, project.getId());
+      saveCommitPort.saveCommits(
+          commits, listBranchesPort.listBranchesInProject(project.getId()), project.getId());
     } else {
       // Save the new commit tree
       commits.removeIf(commit -> commit.getTimestamp() <= head.getTimestamp());

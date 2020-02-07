@@ -8,4 +8,5 @@ import lombok.NoArgsConstructor;
 public class Branch {
   private long id;
   private String name;
+  private String commitHash;
 }

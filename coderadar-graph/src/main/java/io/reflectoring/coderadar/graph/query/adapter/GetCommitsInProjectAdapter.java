@@ -1,6 +1,8 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
+import io.reflectoring.coderadar.graph.projectadministration.branch.repository.BranchRepository;
+import io.reflectoring.coderadar.graph.projectadministration.domain.BranchEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommitRelationshipEntity;
@@ -10,14 +12,18 @@ import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 @Service
 public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   private final CommitRepository commitRepository;
+  private final BranchRepository branchRepository;
 
-  public GetCommitsInProjectAdapter(CommitRepository commitRepository) {
+  public GetCommitsInProjectAdapter(CommitRepository commitRepository, BranchRepository branchRepository) {
     this.commitRepository = commitRepository;
+    this.branchRepository = branchRepository;
   }
 
   private List<Commit> mapCommitEntities(List<CommitEntity> commitEntities) {
@@ -50,12 +56,14 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
   @Override
   public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(Long projectId) {
-    List<CommitEntity> commitEntities = commitRepository.findByProjectIdAndTimestampDesc(projectId);
+    BranchEntity master = branchRepository.getBranchesInProject(projectId).stream().filter(branchEntity -> branchEntity.getName().equals("master")).collect(Collectors.toList()).get(0);
+    return getCommitsInBranch(projectId, master.getId());
+/*    List<CommitEntity> commitEntities = commitRepository.findByProjectIdAndTimestampDesc(projectId);
     List<Commit> commits = new ArrayList<>(commitEntities.size());
     for (CommitEntity commitEntity : commitEntities) {
       commits.add(CommitBaseDataMapper.mapCommitEntity(commitEntity));
     }
-    return commits;
+    return commits;*/
   }
 
   @Override
@@ -131,5 +139,30 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
       fileToCommitRelationships.add(fileToCommitRelationship);
     }
     return fileToCommitRelationships;
+  }
+
+  private List<Commit> getCommitsInBranch(Long projectId, Long branchId){
+    List<CommitEntity> commitsWithParents = commitRepository.findByProjectIdWithParentRelationships(projectId);
+    CommitEntity branchCommit = branchRepository.getCommitForBranch(branchId);
+    CommitEntity startCommit = commitsWithParents.stream().filter(commitEntity -> commitEntity.getName().equals(branchCommit.getName())).collect(Collectors.toList()).get(0);
+    List<CommitEntity> result = new ArrayList<>();
+    setCommitParents(startCommit, result);
+
+    List<Commit> domainObjects = new ArrayList<>();
+    for (CommitEntity commitEntity : result) {
+      domainObjects.add(CommitBaseDataMapper.mapCommitEntity(commitEntity));
+    }
+    return domainObjects;
+  }
+
+  private void setCommitParents(CommitEntity startCommit, List<CommitEntity> result){
+    result.add(startCommit);
+    if(!startCommit.getParents().isEmpty()){
+      for(CommitEntity parent : startCommit.getParents()){
+        if(!result.contains(parent)) {
+          setCommitParents(parent, result);
+        }
+      }
+    }
   }
 }

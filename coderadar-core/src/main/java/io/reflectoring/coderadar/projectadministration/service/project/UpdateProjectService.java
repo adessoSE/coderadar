@@ -11,6 +11,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBranchesPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
@@ -42,6 +43,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final ListModulesOfProjectUseCase listModulesOfProjectUseCase;
   private final ResetAnalysisPort resetAnalysisPort;
   private final CreateModulePort createModulePort;
+  private final ListBranchesPort listBranchesPort;
 
   private final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
 
@@ -55,7 +57,8 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       SaveCommitPort saveCommitPort,
       ListModulesOfProjectUseCase listModulesOfProjectUseCase,
       ResetAnalysisPort resetAnalysisPort,
-      CreateModulePort createModulePort) {
+      CreateModulePort createModulePort,
+      ListBranchesPort listBranchesPort) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
     this.updateRepositoryUseCase = updateRepositoryUseCase;
@@ -66,6 +69,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     this.listModulesOfProjectUseCase = listModulesOfProjectUseCase;
     this.resetAnalysisPort = resetAnalysisPort;
     this.createModulePort = createModulePort;
+    this.listBranchesPort = listBranchesPort;
   }
 
   @Override
@@ -120,7 +124,8 @@ public class UpdateProjectService implements UpdateProjectUseCase {
                   extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
 
               // Save the new commit tree
-              saveCommitPort.saveCommits(commits, projectId);
+              saveCommitPort.saveCommits(
+                  commits, listBranchesPort.listBranchesInProject(projectId), projectId);
 
               // Re-create the modules
               for (Module module : modules) {

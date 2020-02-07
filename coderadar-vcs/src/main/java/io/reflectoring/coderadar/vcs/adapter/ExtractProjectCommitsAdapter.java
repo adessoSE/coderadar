@@ -8,26 +8,29 @@ import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelati
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
 import io.reflectoring.coderadar.vcs.port.driven.ExtractProjectCommitsPort;
-import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
+
 @Service
 public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
-
   /**
    * @param repositoryRoot The root path of the local repository.
    * @param range The date range in which to collect commits
@@ -45,36 +48,47 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     }
   }
 
-  private List<Commit> getCommits(Git git, DateRange range) throws GitAPIException {
+  private List<Commit> getCommits(Git git, DateRange range) throws GitAPIException, IOException {
     List<RevCommit> revCommits = new ArrayList<>();
-    git.log().call().iterator().forEachRemaining(revCommits::add);
-    int revCommitsSize = revCommits.size();
-    List<Commit> result = new ArrayList<>(revCommitsSize);
-    IdentityHashMap<RevCommit, Commit> map = new IdentityHashMap<>(revCommitsSize);
-    for (int i = revCommitsSize - 1; i >= 0; --i) {
-      RevCommit rc = revCommits.get(i);
-      if (isInDateRange(range, rc)) {
-        Commit commit = map.computeIfAbsent(rc, objectId -> mapRevCommitToCommit(rc));
-        List<Commit> parents =
-            rc.getParentCount() > 0
-                ? new ArrayList<>(rc.getParentCount())
-                : Collections.emptyList();
-        for (RevCommit parent : rc.getParents()) {
-          if (isInDateRange(range, parent)) {
-            Commit parentCommit = map.get(parent.getId());
-            if (parentCommit == null) {
-              parentCommit = mapRevCommitToCommit(parent);
-              map.put(parent, parentCommit);
-              result.add(parentCommit);
-            }
-            parents.add(parentCommit);
-          }
+    RevWalk revWalk = new RevWalk(git.getRepository());
+    for (Ref ref : git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call()) {
+      revWalk.markStart(revWalk.parseCommit(ref.getObjectId()));
+      revWalk.iterator().forEachRemaining(revCommit -> {
+        if(revCommits.stream().noneMatch(revCommit1 -> revCommit1.getId().equals(revCommit.getId()))){
+          revCommits.add(revCommit);
         }
-        commit.setParents(parents);
-        result.add(commit);
-      }
+      });
+      revWalk.reset();
     }
-    return result;
+
+    int revCommitsSize = revCommits.size();
+    revCommits.sort(Comparator.comparingLong(RevCommit::getCommitTime));
+    HashMap<String, Commit> map = new HashMap<>(revCommitsSize);
+    for (RevCommit rc : revCommits) {
+      if (isInDateRange(range, rc)) {
+        Commit commit = map.get(rc.getName());
+        if(commit == null) {
+          commit = mapRevCommitToCommit(rc);
+        }
+          List<Commit> parents =
+                  rc.getParentCount() > 0
+                          ? new ArrayList<>(rc.getParentCount())
+                          : Collections.emptyList();
+          for (RevCommit parent : rc.getParents()) {
+            if (isInDateRange(range, parent)) {
+              Commit parentCommit = map.get(parent.getId().getName());
+              if (parentCommit == null) {
+                parentCommit = mapRevCommitToCommit(parent);
+                map.put(parent.getName(), parentCommit);
+              }
+              parents.add(parentCommit);
+            }
+          }
+          commit.setParents(parents);
+          map.put(rc.getName(), commit);
+        }
+    }
+    return new ArrayList<>(map.values());
   }
 
   private Commit mapRevCommitToCommit(RevCommit rc) {
@@ -122,6 +136,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    * @throws IOException Thrown if a commit cannot be processed.
    */
   private void setCommitsFiles(Git git, List<Commit> commits) throws IOException {
+    commits.sort(Comparator.comparingLong(Commit::getTimestamp));
     int commitsSize = commits.size();
     HashMap<String, List<File>> files = new HashMap<>((int) (commitsSize / 0.75) + 1);
     commits.get(0).setTouchedFiles(new ArrayList<>(commitsSize));

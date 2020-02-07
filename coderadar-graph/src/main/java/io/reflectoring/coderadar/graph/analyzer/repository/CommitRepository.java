@@ -18,7 +18,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} WITH c "
-          + "OPTIONAL MATCH (c)-[r2:IS_CHILD_OF]-(c1) "
+          + "OPTIONAL MATCH (c)-[r2:IS_CHILD_OF]->(c1) "
           + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f:FileEntity) RETURN DISTINCT c, c1, r, r2, f ORDER BY c.timestamp")
   @NonNull
   List<CommitEntity> findByProjectIdWithAllRelationshipsSortedByTimestampAsc(
@@ -42,6 +42,16 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} RETURN c")
   @NonNull
   List<CommitEntity> findByProjectId(@NonNull Long projectId);
+
+  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} " +
+          "OPTIONAL MATCH (c)-[r2:IS_CHILD_OF]->(c1) RETURN c, r2, c1")
+  @NonNull
+  List<CommitEntity> findByProjectIdWithParentRelationships(@NonNull Long projectId);
+
+/*  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:POINTS_TO]-(b) WHERE ID(p) = {0} AND ID(b) = {1} WITH c " +
+          "MATCH (c)-[:IS_CHILD_OF*0..]->(c2) WITH collect(c) as commit, collect(c2) as parents UNWIND commit + parents as commits RETURN DISTINCT commits")
+  @NonNull
+  List<CommitEntity> findByProjectIdAndBranch(@NonNull Long projectId, Long branchId);*/
 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} RETURN c ORDER BY c.timestamp DESC LIMIT 1")
@@ -77,10 +87,4 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "MATCH (f) WHERE ID(f) = x.fileId "
           + "CREATE (f)-[:CHANGED_IN {changeType: x.changeType, oldPath: x.oldPath}]->(c)")
   void createFileRelationships(List<HashMap<String, Object>> fileRels);
-
-  @Query(
-      "MATCH (c) WHERE ID(c) = {0} "
-          + "CREATE (b:BranchEntity {name: {1} } ) "
-          + "CREATE (b)-[:POINTS_TO]->(c)")
-  void setBranchOnCommit(Long commitId, String branchName);
 }

@@ -11,6 +11,7 @@ import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedEx
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBranchesPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
@@ -25,6 +26,7 @@ import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import org.junit.Assert;
@@ -58,6 +60,8 @@ class UpdateProjectServiceTest {
 
   @Mock private ResetAnalysisPort resetAnalysisPort;
 
+  @Mock private ListBranchesPort listBranchesPort;
+
   private UpdateProjectService testSubject;
 
   @BeforeEach
@@ -73,7 +77,8 @@ class UpdateProjectServiceTest {
             saveCommitPortMock,
             listModulesOfProjectUseCase,
             resetAnalysisPort,
-            createModulePort);
+            createModulePort,
+            listBranchesPort);
   }
 
   @Test
@@ -179,6 +184,7 @@ class UpdateProjectServiceTest {
     Assert.assertEquals(testProject.getVcsUrl(), newVcsUrl);
 
     verify(updateRepositoryUseCaseMock).updateRepository(any());
-    verify(saveCommitPortMock).saveCommits(Collections.singletonList(commitMock), projectId);
+    verify(saveCommitPortMock)
+        .saveCommits(Collections.singletonList(commitMock), new ArrayList<>(), projectId);
   }
 }

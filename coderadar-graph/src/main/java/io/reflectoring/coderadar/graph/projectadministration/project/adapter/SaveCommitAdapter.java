@@ -2,12 +2,14 @@ package io.reflectoring.coderadar.graph.projectadministration.project.adapter;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
+import io.reflectoring.coderadar.graph.projectadministration.branch.repository.BranchRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
@@ -21,14 +23,17 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
   private final ProjectRepository projectRepository;
   private final FileRepository fileRepository;
   private final CommitRepository commitRepository;
+  private final BranchRepository branchRepository;
 
   public SaveCommitAdapter(
       CommitRepository commitRepository,
       ProjectRepository projectRepository,
-      FileRepository fileRepository) {
+      FileRepository fileRepository,
+      BranchRepository branchRepository) {
     this.projectRepository = projectRepository;
     this.fileRepository = fileRepository;
     this.commitRepository = commitRepository;
+    this.branchRepository = branchRepository;
   }
 
   /**
@@ -36,10 +41,11 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
    * all of the domain objects to entities and saves them in the DB.
    *
    * @param commits The commit tree to save.
+   * @param branches
    * @param projectId The id of the project.
    */
   @Override
-  public void saveCommits(List<Commit> commits, Long projectId) {
+  public void saveCommits(List<Commit> commits, List<Branch> branches, Long projectId) {
     if (!commits.isEmpty()) {
       IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>(commits.size() * 2);
       List<CommitEntity> commitEntities = mapCommitTree(commits, walkedFiles);
@@ -65,8 +71,13 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
       saveCommitParentsRelationships(commitEntities, commitBulkSaveChunk);
       saveFileToCommitRelationships(commitEntities, fileBulkSaveChunk);
       saveFileRenameRelationships(fileEntities, fileBulkSaveChunk);
-      commitRepository.setBranchOnCommit(
-          commitRepository.findHeadCommit(projectId).getId(), "master");
+      setBranchPointers(projectId, branches);
+    }
+  }
+
+  private void setBranchPointers(Long projectId, List<Branch> branches) {
+    for (Branch branch : branches) {
+      branchRepository.setBranchOnCommit(projectId, branch.getCommitHash(), branch.getName());
     }
   }
 
@@ -225,23 +236,23 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
       if (commitEntity == null) {
         commitEntity = CommitBaseDataMapper.mapCommit(commit);
       }
-      if (!commit.getParents().isEmpty()) {
-        List<CommitEntity> parents = new ArrayList<>(commit.getParents().size());
-        for (Commit parent : commit.getParents()) {
-          CommitEntity parentCommit = walkedCommits.get(parent);
-          if (parentCommit == null) {
-            parentCommit = CommitBaseDataMapper.mapCommit(parent);
-            walkedCommits.put(parent, parentCommit);
-            result.add(parentCommit);
+        if (!commit.getParents().isEmpty()) {
+          List<CommitEntity> parents = new ArrayList<>(commit.getParents().size());
+          for (Commit parent : commit.getParents()) {
+            CommitEntity parentCommit = walkedCommits.get(parent);
+            if (parentCommit == null) {
+              parentCommit = CommitBaseDataMapper.mapCommit(parent);
+              walkedCommits.put(parent, parentCommit);
+              result.add(parentCommit);
+            }
+            parents.add(parentCommit);
           }
-          parents.add(parentCommit);
+          commitEntity.setParents(parents);
         }
-        commitEntity.setParents(parents);
+        walkedCommits.put(commit, commitEntity);
+        result.add(commitEntity);
+        getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles);
       }
-      walkedCommits.put(commit, commitEntity);
-      result.add(commitEntity);
-      getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles);
-    }
     return result;
   }
 
