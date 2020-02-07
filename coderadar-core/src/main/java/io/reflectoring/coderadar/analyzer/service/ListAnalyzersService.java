@@ -1,17 +1,17 @@
 package io.reflectoring.coderadar.analyzer.service;
 
-import io.reflectoring.coderadar.analyzer.port.driver.ListAnalyzerUseCase;
+import io.reflectoring.coderadar.analyzer.port.driver.ListAnalyzersUseCase;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ListAnalyzerService implements ListAnalyzerUseCase {
+public class ListAnalyzersService implements ListAnalyzersUseCase {
 
   private AnalyzerPluginService analyzerPluginService;
 
   @Autowired
-  public ListAnalyzerService(AnalyzerPluginService analyzerPluginService) {
+  public ListAnalyzersService(AnalyzerPluginService analyzerPluginService) {
     this.analyzerPluginService = analyzerPluginService;
   }
 

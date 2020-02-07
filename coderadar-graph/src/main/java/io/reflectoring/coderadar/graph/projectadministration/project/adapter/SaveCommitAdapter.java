@@ -65,6 +65,8 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
       saveCommitParentsRelationships(commitEntities, commitBulkSaveChunk);
       saveFileToCommitRelationships(commitEntities, fileBulkSaveChunk);
       saveFileRenameRelationships(fileEntities, fileBulkSaveChunk);
+      commitRepository.setBranchOnCommit(
+          commitRepository.findHeadCommit(projectId).getId(), "master");
     }
   }
 

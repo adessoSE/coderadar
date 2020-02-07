@@ -77,4 +77,10 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "MATCH (f) WHERE ID(f) = x.fileId "
           + "CREATE (f)-[:CHANGED_IN {changeType: x.changeType, oldPath: x.oldPath}]->(c)")
   void createFileRelationships(List<HashMap<String, Object>> fileRels);
+
+  @Query(
+      "MATCH (c) WHERE ID(c) = {0} "
+          + "CREATE (b:BranchEntity {name: {1} } ) "
+          + "CREATE (b)-[:POINTS_TO]->(c)")
+  void setBranchOnCommit(Long commitId, String branchName);
 }

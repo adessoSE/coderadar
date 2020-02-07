@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.service.analyzerconfig;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
-import io.reflectoring.coderadar.analyzer.service.ListAnalyzerService;
+import io.reflectoring.coderadar.analyzer.service.ListAnalyzersService;
 import io.reflectoring.coderadar.plugin.api.AnalyzerConfigurationException;
 import io.reflectoring.coderadar.projectadministration.AnalyzerNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
@@ -16,13 +16,13 @@ import org.springframework.stereotype.Service;
 public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigurationUseCase {
 
   private final CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort;
-  private final ListAnalyzerService listAnalyzerService;
+  private final ListAnalyzersService listAnalyzerService;
   private final ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService;
   private final Logger logger = LoggerFactory.getLogger(CreateAnalyzerConfigurationService.class);
 
   public CreateAnalyzerConfigurationService(
       CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort,
-      ListAnalyzerService listAnalyzerService,
+      ListAnalyzersService listAnalyzerService,
       ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService) {
 
     this.createAnalyzerConfigurationPort = createAnalyzerConfigurationPort;

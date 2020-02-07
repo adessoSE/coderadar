@@ -9,8 +9,8 @@ public interface Mapper<T, E> {
 
   E mapDomainObject(T domainObject);
 
-  default List<T> mapNodeEntities(Iterable<E> nodeEntities) {
-    List<T> domainObjects = new ArrayList<>();
+  default List<T> mapNodeEntities(List<E> nodeEntities) {
+    List<T> domainObjects = new ArrayList<>(nodeEntities.size());
     for (E e : nodeEntities) {
       domainObjects.add(mapNodeEntity(e));
     }

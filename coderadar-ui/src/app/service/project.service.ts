@@ -11,6 +11,7 @@ import {AppComponent} from '../app.component';
 import {IMetricMapping} from '../city-map/interfaces/IMetricMapping';
 import {INode} from '../city-map/interfaces/INode';
 import {MetricValue} from '../model/metric-value';
+import {Branch} from '../model/branch';
 
 @Injectable({
   providedIn: 'root'
@@ -247,7 +248,21 @@ export class ProjectService {
     return this.httpClient.delete(this.apiURL + 'projects/' + projectId + '/filePatterns/' + pattern.id, {observe: 'response'}).toPromise();
   }
 
-  resetAnalysis(id: number, b: boolean) {
+  /**
+   * Reset the analysis results of a project.
+   * Sends a POST request to /projects/{id}/analyze/reset
+   * @param id The id of the project.
+   */
+  resetAnalysis(id: number) {
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze/reset', {}, {observe: 'response'}).toPromise();
+  }
+
+  /**
+   * Returns all of the branches for a project.
+   * Sends a GET request to /projects/{id}/branches
+   * @param id The id of the project.
+   */
+  public getProjectBranches(id: number): Promise<HttpResponse<Branch[]>> {
+    return this.httpClient.get<any>(this.apiURL + 'projects/' + id + '/branches', {observe: 'response'}).toPromise();
   }
 }

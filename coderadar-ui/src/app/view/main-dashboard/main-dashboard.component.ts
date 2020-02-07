@@ -91,11 +91,11 @@ export class MainDashboardComponent implements OnInit {
   }
 
   resetAnalysis(id: number) {
-    this.projectService.resetAnalysis(id, true).then(() => {
+    this.projectService.resetAnalysis(id).then(() => {
       this.openSnackBar('Analysis results deleted!', '🞩');
     }).catch(error => {
       if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh(() => this.projectService.resetAnalysis(id, true));
+        this.userService.refresh(() => this.projectService.resetAnalysis(id));
       } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
         this.openSnackBar('Analysis results cannot be deleted! Try again later!', '🞩');
       }

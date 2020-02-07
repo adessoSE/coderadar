@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.analyzer.port.driver;
 
 import java.util.List;
 
-public interface ListAnalyzerUseCase {
+public interface ListAnalyzersUseCase {
 
   /**
    * Lists all available analyzers in coderadar.

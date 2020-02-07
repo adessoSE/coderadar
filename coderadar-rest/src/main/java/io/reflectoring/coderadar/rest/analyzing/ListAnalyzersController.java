@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.analyzing;
 
-import io.reflectoring.coderadar.analyzer.port.driver.ListAnalyzerUseCase;
+import io.reflectoring.coderadar.analyzer.port.driver.ListAnalyzersUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,15 +12,15 @@ import java.util.List;
 
 @RestController
 @Transactional
-public class ListAnalyzerController {
-  private final ListAnalyzerUseCase listAnalyzerUseCase;
+public class ListAnalyzersController {
+  private final ListAnalyzersUseCase listAnalyzersUseCase;
 
-  public ListAnalyzerController(ListAnalyzerUseCase listAnalyzerUseCase) {
-    this.listAnalyzerUseCase = listAnalyzerUseCase;
+  public ListAnalyzersController(ListAnalyzersUseCase listAnalyzersUseCase) {
+    this.listAnalyzersUseCase = listAnalyzersUseCase;
   }
 
   @GetMapping(path = "/analyzers", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<String>> listAvailableAnalyzers() {
-    return new ResponseEntity<>(listAnalyzerUseCase.listAvailableAnalyzers(), HttpStatus.OK);
+    return new ResponseEntity<>(listAnalyzersUseCase.listAvailableAnalyzers(), HttpStatus.OK);
   }
 }
