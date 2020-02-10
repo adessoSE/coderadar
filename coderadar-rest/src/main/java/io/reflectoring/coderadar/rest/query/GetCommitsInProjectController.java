@@ -23,9 +23,9 @@ public class GetCommitsInProjectController {
     this.getCommitsInProjectUseCase = getCommitsInProjectUseCase;
   }
 
-  @GetMapping(path = "/projects/{projectId}/commits", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<GetCommitResponse>> listCommits(@PathVariable("projectId") Long projectId) {
-    List<Commit> commits = getCommitsInProjectUseCase.get(projectId);
+  @GetMapping(path = "/projects/{projectId}/{branchName}/commits", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<List<GetCommitResponse>> listCommits(@PathVariable("projectId") Long projectId, @PathVariable("branchName") String branchName) {
+    List<Commit> commits = getCommitsInProjectUseCase.get(projectId, branchName);
     int commitsSize = commits.size();
     List<GetCommitResponse> responses = new ArrayList<>(commitsSize);
     for(int i = 0; i < commitsSize; ++i){

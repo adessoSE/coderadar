@@ -26,14 +26,27 @@
 }
 
 .paginator {
+   position: static;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   float: right;
+   background-color: ghostwhite;
+   width: 50%;
+   margin-right: 11%;
+   margin-bottom: 30px;
+ }
+
+
+.branchSelector {
   position: static;
   right: 0;
   bottom: 0;
   left: 0;
-  float: right;
+  float: left;
   background-color: ghostwhite;
-  width: 50%;
-  margin-right: 11%;
+  width: 17%;
+  margin-left: 22%;
   margin-bottom: 30px;
 }
 

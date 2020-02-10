@@ -6,10 +6,8 @@ import java.util.List;
 
 public interface GetCommitsInProjectPort {
 
-  List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(Long projectId);
-
-  List<Commit> getSortedByTimestampAsc(Long projectId);
+  List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(Long projectId, String branch);
 
   List<Commit> getNonAnalyzedSortedByTimestampAscWithNoParents(
-      Long projectId, List<FilePattern> filePatterns);
+      Long projectId, List<FilePattern> filePatterns, String branch);
 }

@@ -200,9 +200,10 @@ export class ProjectService {
    * Gets all available commits for a project.
    * Sends a GET request to /projects/{id}/commits
    * @param id The project id.
+   * @param branch The branch to use for getting the commits.
    */
-  public getCommits(id: number): Promise<HttpResponse<Commit[]>> {
-    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/commits', {observe: 'response'}).toPromise();
+  public getCommits(id: number, branch: string): Promise<HttpResponse<Commit[]>> {
+    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/' + branch + '/commits', {observe: 'response'}).toPromise();
   }
 
   /**

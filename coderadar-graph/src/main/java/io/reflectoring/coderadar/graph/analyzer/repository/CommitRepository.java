@@ -32,23 +32,25 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
       @NonNull Long projectId);
 
   @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.analyzed = FALSE WITH c "
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} WITH c "
           + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f:FileEntity) WHERE r.changeType <> \"DELETE\" AND any(x IN {1} WHERE f.path =~ x) "
-          + "AND none(x IN {2} WHERE f.path =~ x) RETURN DISTINCT c, r, f ORDER BY c.timestamp")
+          + "AND none(x IN {2} WHERE f.path =~ x) WITH DISTINCT c, r, f "
+          + "OPTIONAL MATCH (c)-[r2:IS_CHILD_OF]->(c1) RETURN c, r, f, r2, c1")
   @NonNull
-  List<CommitEntity> findByProjectIdNonAnalyzedWithFileRelationshipsSortedByTimestampAsc(
+  List<CommitEntity> findByProjectIdWithFileAndParentRelationshipsSortedByTimestampAsc(
       @NonNull Long projectId, @NonNull List<String> includes, List<String> excludes);
 
   @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} RETURN c")
   @NonNull
   List<CommitEntity> findByProjectId(@NonNull Long projectId);
 
-  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} " +
-          "OPTIONAL MATCH (c)-[r2:IS_CHILD_OF]->(c1) RETURN c, r2, c1")
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} "
+          + "OPTIONAL MATCH (c)-[r2:IS_CHILD_OF]->(c1) RETURN c, r2, c1")
   @NonNull
   List<CommitEntity> findByProjectIdWithParentRelationships(@NonNull Long projectId);
 
-/*  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:POINTS_TO]-(b) WHERE ID(p) = {0} AND ID(b) = {1} WITH c " +
+  /*  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:POINTS_TO]-(b) WHERE ID(p) = {0} AND ID(b) = {1} WITH c " +
           "MATCH (c)-[:IS_CHILD_OF*0..]->(c2) WITH collect(c) as commit, collect(c2) as parents UNWIND commit + parents as commits RETURN DISTINCT commits")
   @NonNull
   List<CommitEntity> findByProjectIdAndBranch(@NonNull Long projectId, Long branchId);*/

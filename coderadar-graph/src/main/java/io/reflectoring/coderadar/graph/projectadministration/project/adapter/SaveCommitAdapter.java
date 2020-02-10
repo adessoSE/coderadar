@@ -41,7 +41,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
    * all of the domain objects to entities and saves them in the DB.
    *
    * @param commits The commit tree to save.
-   * @param branches
+   * @param branches All of the branches in the project
    * @param projectId The id of the project.
    */
   @Override
@@ -72,6 +72,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
       saveFileToCommitRelationships(commitEntities, fileBulkSaveChunk);
       saveFileRenameRelationships(fileEntities, fileBulkSaveChunk);
       setBranchPointers(projectId, branches);
+      System.out.println("AAA");
     }
   }
 
@@ -235,24 +236,24 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
       CommitEntity commitEntity = walkedCommits.get(commit);
       if (commitEntity == null) {
         commitEntity = CommitBaseDataMapper.mapCommit(commit);
-      }
-        if (!commit.getParents().isEmpty()) {
-          List<CommitEntity> parents = new ArrayList<>(commit.getParents().size());
-          for (Commit parent : commit.getParents()) {
-            CommitEntity parentCommit = walkedCommits.get(parent);
-            if (parentCommit == null) {
-              parentCommit = CommitBaseDataMapper.mapCommit(parent);
-              walkedCommits.put(parent, parentCommit);
-              result.add(parentCommit);
-            }
-            parents.add(parentCommit);
-          }
-          commitEntity.setParents(parents);
-        }
         walkedCommits.put(commit, commitEntity);
         result.add(commitEntity);
-        getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles);
       }
+      if (!commit.getParents().isEmpty()) {
+        List<CommitEntity> parents = new ArrayList<>(commit.getParents().size());
+        for (Commit parent : commit.getParents()) {
+          CommitEntity parentCommit = walkedCommits.get(parent);
+          if (parentCommit == null) {
+            parentCommit = CommitBaseDataMapper.mapCommit(parent);
+            walkedCommits.put(parent, parentCommit);
+            result.add(parentCommit);
+          }
+          parents.add(parentCommit);
+        }
+        commitEntity.setParents(parents);
+      }
+      getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles);
+    }
     return result;
   }
 

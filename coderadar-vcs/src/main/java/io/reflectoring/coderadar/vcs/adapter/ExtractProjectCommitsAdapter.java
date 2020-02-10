@@ -8,6 +8,11 @@ import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelati
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
 import io.reflectoring.coderadar.vcs.port.driven.ExtractProjectCommitsPort;
+import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -22,12 +27,6 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
 
 @Service
 public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
@@ -53,11 +52,15 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     RevWalk revWalk = new RevWalk(git.getRepository());
     for (Ref ref : git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call()) {
       revWalk.markStart(revWalk.parseCommit(ref.getObjectId()));
-      revWalk.iterator().forEachRemaining(revCommit -> {
-        if(revCommits.stream().noneMatch(revCommit1 -> revCommit1.getId().equals(revCommit.getId()))){
-          revCommits.add(revCommit);
-        }
-      });
+      revWalk
+          .iterator()
+          .forEachRemaining(
+              revCommit -> {
+                if (revCommits.stream()
+                    .noneMatch(revCommit1 -> revCommit1.getId().equals(revCommit.getId()))) {
+                  revCommits.add(revCommit);
+                }
+              });
       revWalk.reset();
     }
 
@@ -67,26 +70,26 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     for (RevCommit rc : revCommits) {
       if (isInDateRange(range, rc)) {
         Commit commit = map.get(rc.getName());
-        if(commit == null) {
+        if (commit == null) {
           commit = mapRevCommitToCommit(rc);
         }
-          List<Commit> parents =
-                  rc.getParentCount() > 0
-                          ? new ArrayList<>(rc.getParentCount())
-                          : Collections.emptyList();
-          for (RevCommit parent : rc.getParents()) {
-            if (isInDateRange(range, parent)) {
-              Commit parentCommit = map.get(parent.getId().getName());
-              if (parentCommit == null) {
-                parentCommit = mapRevCommitToCommit(parent);
-                map.put(parent.getName(), parentCommit);
-              }
-              parents.add(parentCommit);
+        List<Commit> parents =
+            rc.getParentCount() > 0
+                ? new ArrayList<>(rc.getParentCount())
+                : Collections.emptyList();
+        for (RevCommit parent : rc.getParents()) {
+          if (isInDateRange(range, parent)) {
+            Commit parentCommit = map.get(parent.getId().getName());
+            if (parentCommit == null) {
+              parentCommit = mapRevCommitToCommit(parent);
+              map.put(parent.getName(), parentCommit);
             }
+            parents.add(parentCommit);
           }
-          commit.setParents(parents);
-          map.put(rc.getName(), commit);
         }
+        commit.setParents(parents);
+        map.put(rc.getName(), commit);
+      }
     }
     return new ArrayList<>(map.values());
   }

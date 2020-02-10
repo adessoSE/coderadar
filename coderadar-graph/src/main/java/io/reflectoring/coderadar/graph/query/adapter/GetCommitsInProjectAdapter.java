@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +20,8 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   private final CommitRepository commitRepository;
   private final BranchRepository branchRepository;
 
-  public GetCommitsInProjectAdapter(CommitRepository commitRepository, BranchRepository branchRepository) {
+  public GetCommitsInProjectAdapter(
+      CommitRepository commitRepository, BranchRepository branchRepository) {
     this.commitRepository = commitRepository;
     this.branchRepository = branchRepository;
   }
@@ -55,18 +55,11 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   }
 
   @Override
-  public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(Long projectId) {
-    BranchEntity master = branchRepository.getBranchesInProject(projectId).stream().filter(branchEntity -> branchEntity.getName().equals("master")).collect(Collectors.toList()).get(0);
-    return getCommitsInBranch(projectId, master.getId());
-/*    List<CommitEntity> commitEntities = commitRepository.findByProjectIdAndTimestampDesc(projectId);
-    List<Commit> commits = new ArrayList<>(commitEntities.size());
-    for (CommitEntity commitEntity : commitEntities) {
-      commits.add(CommitBaseDataMapper.mapCommitEntity(commitEntity));
-    }
-    return commits;*/
+  public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(
+      Long projectId, String branch) {
+    return getCommitsInBranch(projectId, branch);
   }
 
-  @Override
   public List<Commit> getSortedByTimestampAsc(Long projectId) {
     List<CommitEntity> commitEntities =
         commitRepository.findByProjectIdWithAllRelationshipsSortedByTimestampAsc(projectId);
@@ -82,7 +75,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
    */
   @Override
   public List<Commit> getNonAnalyzedSortedByTimestampAscWithNoParents(
-      Long projectId, List<FilePattern> filePatterns) {
+      Long projectId, List<FilePattern> filePatterns, String branch) {
     // Map Ant-Patterns to RegEx
     List<String> includes = new ArrayList<>();
     List<String> excludes = new ArrayList<>();
@@ -93,12 +86,20 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
         excludes.add(PatternUtil.toPattern(filePattern.getPattern()).toString());
       }
     }
-
     List<CommitEntity> commitEntities =
-        commitRepository.findByProjectIdNonAnalyzedWithFileRelationshipsSortedByTimestampAsc(
+        commitRepository.findByProjectIdWithFileAndParentRelationshipsSortedByTimestampAsc(
             projectId, includes, excludes);
 
-    return mapCommitEntitiesNoParents(commitEntities);
+    CommitEntity branchCommit =
+        branchRepository.getCommitForBranch(projectId, branch);
+    CommitEntity startCommit =
+        commitEntities.stream()
+            .filter(commitEntity -> commitEntity.getName().equals(branchCommit.getName()))
+            .collect(Collectors.toList())
+            .get(0);
+    List<CommitEntity> result = new ArrayList<>();
+    setCommitParents(startCommit, result);
+    return mapCommitEntitiesNoParents(result);
   }
 
   private List<Commit> mapCommitEntitiesNoParents(List<CommitEntity> commitEntities) {
@@ -141,10 +142,15 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     return fileToCommitRelationships;
   }
 
-  private List<Commit> getCommitsInBranch(Long projectId, Long branchId){
-    List<CommitEntity> commitsWithParents = commitRepository.findByProjectIdWithParentRelationships(projectId);
-    CommitEntity branchCommit = branchRepository.getCommitForBranch(branchId);
-    CommitEntity startCommit = commitsWithParents.stream().filter(commitEntity -> commitEntity.getName().equals(branchCommit.getName())).collect(Collectors.toList()).get(0);
+  private List<Commit> getCommitsInBranch(Long projectId, String branch) {
+    List<CommitEntity> commitsWithParents =
+        commitRepository.findByProjectIdWithParentRelationships(projectId);
+    CommitEntity branchCommit = branchRepository.getCommitForBranch(projectId, branch);
+    CommitEntity startCommit =
+        commitsWithParents.stream()
+            .filter(commitEntity -> commitEntity.getName().equals(branchCommit.getName()))
+            .collect(Collectors.toList())
+            .get(0);
     List<CommitEntity> result = new ArrayList<>();
     setCommitParents(startCommit, result);
 
@@ -155,11 +161,11 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     return domainObjects;
   }
 
-  private void setCommitParents(CommitEntity startCommit, List<CommitEntity> result){
+  private void setCommitParents(CommitEntity startCommit, List<CommitEntity> result) {
     result.add(startCommit);
-    if(!startCommit.getParents().isEmpty()){
-      for(CommitEntity parent : startCommit.getParents()){
-        if(!result.contains(parent)) {
+    if (!startCommit.getParents().isEmpty()) {
+      for (CommitEntity parent : startCommit.getParents()) {
+        if (!result.contains(parent)) {
           setCommitParents(parent, result);
         }
       }

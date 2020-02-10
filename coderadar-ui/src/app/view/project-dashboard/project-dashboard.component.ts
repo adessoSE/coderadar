@@ -18,6 +18,7 @@ import {CommitType} from '../../city-map/enum/CommitType';
 import {Observable, Subscription, timer} from 'rxjs';
 import {loadAvailableMetrics} from '../../city-map/visualization/visualization.actions';
 import {AppState} from '../../city-map/shared/reducers';
+import {Branch} from '../../model/branch';
 
 @Component({
   selector: 'app-project-dashboard',
@@ -30,6 +31,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
 
   projectId;
   commits: Commit[];
+  branches: Branch[];
   commitsAnalyzed = 0;
   project: Project;
 
@@ -45,6 +47,8 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   // These are needed for the deselection css to work
   prevSelectedCommit1: Commit;
   prevSelectedCommit2: Commit;
+
+  selectedBranch = 'master';
 
   pageSize = 15;
   waiting = false;
@@ -71,6 +75,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         this.waiting = true;
       }
       this.getProject();
+      this.getBranchesInProject();
       // Schedule a task to check if all commits are analyzed and update them if they're not
       this.updateCommitsTimer = timer(4000, 8000).subscribe(() => {
         this.getCommits(false);
@@ -127,7 +132,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
    */
   private getCommits(displayLoadingIndicator: boolean): void {
     this.waiting = displayLoadingIndicator;
-    this.projectService.getCommits(this.projectId)
+    this.projectService.getCommits(this.projectId, this.selectedBranch)
       .then(response => {
         this.commitsAnalyzed = 0;
         let selectedCommit1Id = null;
@@ -238,4 +243,20 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     this.updateCommitsTimer.unsubscribe();
   }
 
+  private getBranchesInProject() {
+    this.projectService.getProjectBranches(this.projectId)
+      .then(response => {
+        if (response.body.length === 0) {
+          this.branches = [];
+        } else {
+          this.branches = response.body;
+          this.selectedBranch = this.branches[0].name ? undefined : 'master';
+        }
+      })
+      .catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh(() => this.getBranchesInProject());
+        }
+      });
+  }
 }

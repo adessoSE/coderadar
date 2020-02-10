@@ -8,11 +8,21 @@
     <br>
     <mat-label style="font-size: 12pt">Analyzed {{commitsAnalyzed}}/{{commits.length}} commits</mat-label>
   </p>
+
+  <mat-form-field class="branchSelector">
+    <mat-label>Branch</mat-label>
+    <mat-select [(value)]="selectedBranch" (valueChange)="getCommits(false)">
+      <mat-option *ngFor="let branch of branches" [value]="branch.name">
+        {{branch.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
   <mat-paginator #paginator1 [showFirstLastButtons]="true" class="paginator" [length]="commits.length"
                  [pageSize]="pageSize"
                  [pageSizeOptions]="pageSizeOptions"
                  (page)="syncPaginators($event)">
   </mat-paginator>
+
   <mat-grid-list cols="1" rowHeight="50px" gutterSize="-2px" >
     <mat-accordion class="example-headers-align" *ngFor="let commit of commits.slice(pageEvent.pageIndex*pageEvent.pageSize, (pageEvent.pageIndex*pageEvent.pageSize) + pageEvent.pageSize)">
       <mat-grid-tile [colspan]="1" [rowspan]="(commit === selectedCommit1 || commit === selectedCommit2) ? 4 : 1">

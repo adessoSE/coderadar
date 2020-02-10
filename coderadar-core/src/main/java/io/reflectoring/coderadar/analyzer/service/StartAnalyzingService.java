@@ -125,7 +125,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
               getAnalyzersForProject(analyzerConfigurations);
           List<Commit> commitsToBeAnalyzed =
               getCommitsInProjectPort.getNonAnalyzedSortedByTimestampAscWithNoParents(
-                  project.getId(), filePatterns);
+                  project.getId(), filePatterns, "master");
           long[] commitIds = new long[commitsToBeAnalyzed.size()];
           setAnalyzingStatusPort.setStatus(project.getId(), true);
           int counter = 0;
