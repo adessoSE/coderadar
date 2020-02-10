@@ -7,7 +7,6 @@ import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.port.driven.ResetAnalysisPort;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
@@ -36,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
 
@@ -58,6 +58,7 @@ public class ScanProjectScheduler {
   private final ResetAnalysisPort resetAnalysisPort;
   private final UpdateProjectPort updateProjectPort;
   private final ListBranchesPort listBranchesPort;
+  private final TaskExecutor taskExecutor;
 
   private final Logger logger = LoggerFactory.getLogger(ScanProjectScheduler.class);
 
@@ -79,7 +80,8 @@ public class ScanProjectScheduler {
       SaveCommitPort saveCommitPort,
       ResetAnalysisPort resetAnalysisPort,
       UpdateProjectPort updateProjectPort,
-      ListBranchesPort listBranchesPort) {
+      ListBranchesPort listBranchesPort,
+      TaskExecutor taskExecutor) {
     this.updateRepositoryUseCase = updateRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
@@ -96,6 +98,7 @@ public class ScanProjectScheduler {
     this.resetAnalysisPort = resetAnalysisPort;
     this.updateProjectPort = updateProjectPort;
     this.listBranchesPort = listBranchesPort;
+    this.taskExecutor = taskExecutor;
   }
 
   /** Starts the scheduleCheckTask tasks upon application start */
@@ -122,21 +125,28 @@ public class ScanProjectScheduler {
    * @param projectId the project id
    */
   private void scheduleUpdateTask(Long projectId) {
+    projectStatusPort.setBeingProcessed(projectId, false);
     tasks.put(
         projectId,
         taskScheduler.scheduleAtFixedRate(
-            () -> {
-              try {
-                Project currentProject = getProjectPort.get(projectId);
-                if (!projectStatusPort.isBeingProcessed(projectId)
-                    && !checkProjectDate(currentProject)) {
-                  logger.info("Scanning project {} for new commits!", currentProject.getName());
-                  checkForNewCommits(currentProject);
-                }
-              } catch (ProjectNotFoundException e) {
-                stopUpdateTask(projectId);
-              }
-            },
+            () ->
+                taskExecutor.execute(
+                    () -> {
+                      try {
+                        Project currentProject = getProjectPort.get(projectId);
+                        if (!projectStatusPort.isBeingProcessed(projectId)
+                            && !checkProjectDate(currentProject)) {
+                          projectStatusPort.setBeingProcessed(projectId, true);
+                          logger.info(
+                              "Scanning project {} for new commits!", currentProject.getName());
+                          checkForNewCommits(currentProject);
+                          projectStatusPort.setBeingProcessed(projectId, false);
+                        }
+                      } catch (Exception e) {
+                        projectStatusPort.setBeingProcessed(projectId, false);
+                        stopUpdateTask(projectId);
+                      }
+                    }),
             coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000L));
   }
 

@@ -28,8 +28,7 @@ public class GetCommitsInProjectController {
     List<Commit> commits = getCommitsInProjectUseCase.get(projectId, branchName);
     int commitsSize = commits.size();
     List<GetCommitResponse> responses = new ArrayList<>(commitsSize);
-    for(int i = 0; i < commitsSize; ++i){
-      Commit commit = commits.get(i);
+    for (Commit commit : commits) {
       responses.add(new GetCommitResponse()
               .setName(commit.getName())
               .setAnalyzed(commit.isAnalyzed())

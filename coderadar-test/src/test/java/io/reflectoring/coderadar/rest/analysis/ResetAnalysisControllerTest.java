@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Objects;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,7 +65,13 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         CreateAnalyzerConfigurationCommand createAnalyzerConfigurationCommand = new CreateAnalyzerConfigurationCommand("io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
         mvc().perform(post("/projects/" + projectId + "/analyzers").content(toJson(createAnalyzerConfigurationCommand)).contentType(MediaType.APPLICATION_JSON));
 
-        mvc().perform(post("/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON));
+        mvc().perform(post("/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON))
+                .andDo(document("analysis/start"));
+
+        mvc().perform(get("/projects/" + projectId + "/analyzingStatus"))
+                .andDo(document("analysis/status",
+                        responseFields(fieldWithPath("status").description("Whether the Analyzing Job is started or not."))
+                ));
 
         session.clear();
 
@@ -73,7 +82,8 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         List<MetricValueEntity> metricValues = metricRepository.findByProjectId(projectId);
         Assertions.assertEquals(40, metricValues.size());
 
-        mvc().perform(post("/projects/" + projectId + "/analyze/reset"));
+        mvc().perform(post("/projects/" + projectId + "/analyze/reset"))
+                .andDo(document("analysis/reset"));
 
         session.clear();
 

@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
-import io.reflectoring.coderadar.rest.LoadUserResponse;
+import io.reflectoring.coderadar.rest.domain.LoadUserResponse;
 import io.reflectoring.coderadar.rest.user.LoadUserController;
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driver.load.LoadUserUseCase;

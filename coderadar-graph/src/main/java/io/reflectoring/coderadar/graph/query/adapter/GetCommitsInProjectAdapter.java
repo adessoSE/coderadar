@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.branch.repository.BranchRepository;
-import io.reflectoring.coderadar.graph.projectadministration.domain.BranchEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommitRelationshipEntity;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   private final CommitRepository commitRepository;
   private final BranchRepository branchRepository;
+  private final CommitBaseDataMapper commitBaseDataMapper = new CommitBaseDataMapper();
 
   public GetCommitsInProjectAdapter(
       CommitRepository commitRepository, BranchRepository branchRepository) {
@@ -34,13 +34,13 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     for (CommitEntity commitEntity : commitEntities) {
       Commit commit = walkedCommits.get(commitEntity);
       if (commit == null) {
-        commit = CommitBaseDataMapper.mapCommitEntity(commitEntity);
+        commit = commitBaseDataMapper.mapNodeEntity(commitEntity);
       }
       List<Commit> parents = new ArrayList<>(commitEntity.getParents().size());
       for (CommitEntity parent : commitEntity.getParents()) {
         Commit parentCommit = walkedCommits.get(parent);
         if (parentCommit == null) {
-          parentCommit = CommitBaseDataMapper.mapCommitEntity(parent);
+          parentCommit = commitBaseDataMapper.mapNodeEntity(parent);
           parentCommit.setTouchedFiles(getFiles(parent.getTouchedFiles(), walkedFiles, true));
           result.add(parentCommit);
         }
@@ -90,8 +90,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
         commitRepository.findByProjectIdWithFileAndParentRelationshipsSortedByTimestampAsc(
             projectId, includes, excludes);
 
-    CommitEntity branchCommit =
-        branchRepository.getCommitForBranch(projectId, branch);
+    CommitEntity branchCommit = branchRepository.getCommitForBranch(projectId, branch);
     CommitEntity startCommit =
         commitEntities.stream()
             .filter(commitEntity -> commitEntity.getName().equals(branchCommit.getName()))
@@ -106,7 +105,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     List<Commit> commits = new ArrayList<>(commitEntities.size());
     IdentityHashMap<FileEntity, File> walkedFiles = new IdentityHashMap<>(commitEntities.size());
     for (CommitEntity commitEntity : commitEntities) {
-      Commit commit = CommitBaseDataMapper.mapCommitEntity(commitEntity);
+      Commit commit = commitBaseDataMapper.mapNodeEntity(commitEntity);
       commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), walkedFiles, false));
       commits.add(commit);
     }
@@ -156,7 +155,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
     List<Commit> domainObjects = new ArrayList<>();
     for (CommitEntity commitEntity : result) {
-      domainObjects.add(CommitBaseDataMapper.mapCommitEntity(commitEntity));
+      domainObjects.add(commitBaseDataMapper.mapNodeEntity(commitEntity));
     }
     return domainObjects;
   }

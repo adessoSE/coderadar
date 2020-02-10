@@ -10,7 +10,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GetMetricValuesOfCommitRepository extends Neo4jRepository<CommitEntity, Long> {
+public interface MetricQueryRepository extends Neo4jRepository<CommitEntity, Long> {
 
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c)<-[:CHANGED_IN]-(f) WHERE ID(p) = {0} "
@@ -26,6 +26,10 @@ public interface GetMetricValuesOfCommitRepository extends Neo4jRepository<Commi
   List<MetricValueForCommitQueryResult> getMetricValuesForCommit(
       @NonNull Long projectId, @NonNull List<String> metricNames, @NonNull Long date);
 
+  /*
+   * Metrics for each file are collected as string in the following format: "metricName=value"
+   * The string is then split in the adapter. This greatly reduces HashMap usage.
+   */
   @Query(
       "MATCH (p:ProjectEntity)-[:CONTAINS_COMMIT]->(c)<-[:CHANGED_IN]-(f) WHERE ID(p) = {0} "
           + "AND c.timestamp <= {2} WITH DISTINCT f "
@@ -39,4 +43,9 @@ public interface GetMetricValuesOfCommitRepository extends Neo4jRepository<Commi
   @NonNull
   List<MetricValueForCommitTreeQueryResult> getMetricTreeForCommit(
       @NonNull Long projectId, @NonNull List<String> metricNames, @NonNull Long date);
+
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv) WHERE ID(p) = {0} RETURN DISTINCT mv.name")
+  @NonNull
+  List<String> getAvailableMetricsInProject(@NonNull Long projectId);
 }

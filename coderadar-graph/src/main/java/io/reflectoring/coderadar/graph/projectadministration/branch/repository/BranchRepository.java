@@ -12,7 +12,7 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
   List<BranchEntity> getBranchesInProject(long projectId);
 
   @Query(
-          "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[r:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} RETURN c LIMIT 1")
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[r:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} RETURN c LIMIT 1")
   CommitEntity getCommitForBranch(Long projectId, String branch);
 
   @Query(

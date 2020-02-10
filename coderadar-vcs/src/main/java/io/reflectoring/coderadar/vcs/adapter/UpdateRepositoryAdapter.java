@@ -1,15 +1,19 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
+import io.reflectoring.coderadar.vcs.UnableToCloneRepositoryException;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.UpdateRepositoryPort;
+import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
 import java.io.IOException;
 import java.nio.file.Path;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.JGitInternalException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
@@ -20,6 +24,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
+
+  private final CloneRepositoryAdapter cloneRepositoryAdapter;
+
+  public UpdateRepositoryAdapter(CloneRepositoryAdapter cloneRepositoryAdapter) {
+    this.cloneRepositoryAdapter = cloneRepositoryAdapter;
+  }
 
   @Override
   public boolean updateRepository(UpdateRepositoryCommand command)
@@ -32,10 +42,10 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
       try {
         resetRepository(command.getLocalDir().toPath());
         return updateInternal(command);
-      } catch (IOException | GitAPIException ex) {
+      } catch (IOException | GitAPIException | UnableToCloneRepositoryException ex) {
         throw createException(command.getLocalDir().toPath(), e.getMessage());
       }
-    } catch (IOException | GitAPIException e) {
+    } catch (IOException | GitAPIException | UnableToCloneRepositoryException e) {
       throw createException(command.getLocalDir().toPath(), e.getMessage());
     }
   }
@@ -47,11 +57,16 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
   }
 
   private boolean updateInternal(UpdateRepositoryCommand command)
-      throws GitAPIException, IOException {
+      throws GitAPIException, IOException, UnableToCloneRepositoryException {
     FileRepositoryBuilder builder = new FileRepositoryBuilder();
     Repository repository = builder.setWorkTree(command.getLocalDir()).build();
     Git git = new Git(repository);
     ObjectId oldHead = git.getRepository().resolve(Constants.HEAD);
+    if (oldHead == null) {
+      git.close();
+      deleteAndCloneRepository(command);
+      return true;
+    }
     StoredConfig config = git.getRepository().getConfig();
     config.setString("remote", "origin", "url", command.getRemoteUrl());
     config.save();
@@ -61,12 +76,31 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
           new UsernamePasswordCredentialsProvider(command.getUsername(), command.getPassword()));
     }
     fetchCommand.call();
-    git.checkout().setName("origin/master").setForce(true).call();
+    try {
+      git.checkout().setName("origin/master").setForce(true).call();
+    } catch (JGitInternalException e) {
+      git.close();
+      deleteAndCloneRepository(command);
+      return false;
+    }
     git.reset().setMode(ResetCommand.ResetType.HARD).setRef("origin/master").call();
     ObjectId newHead = git.getRepository().resolve(Constants.HEAD);
     git.getRepository().close();
     git.close();
-    return (oldHead == null && newHead != null) || (oldHead != null && !oldHead.equals(newHead));
+    return !oldHead.equals(newHead);
+  }
+
+  private void deleteAndCloneRepository(UpdateRepositoryCommand command)
+      throws UnableToCloneRepositoryException, IOException {
+    if (command.getLocalDir().exists()) {
+      FileUtils.forceDelete(command.getLocalDir());
+    }
+    cloneRepositoryAdapter.cloneRepository(
+        new CloneRepositoryCommand(
+            command.getRemoteUrl(),
+            command.getLocalDir(),
+            command.getUsername(),
+            command.getPassword()));
   }
 
   private void resetRepository(Path repositoryRoot) throws IOException, GitAPIException {

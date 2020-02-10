@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.rest.LoadUserResponse;
+import io.reflectoring.coderadar.rest.domain.LoadUserResponse;
 import io.reflectoring.coderadar.useradministration.port.driver.load.LoadUserUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

@@ -40,6 +40,6 @@ public class SaveMetricAdapter implements SaveMetricPort {
       commitAndFileRel.put("fileId", metricValues.get(i).getFileId());
       commitAndFileRels.add(commitAndFileRel);
     }
-    metricRepository.createFileAndCommitRelationsips(commitAndFileRels);
+    metricRepository.createFileAndCommitRelationships(commitAndFileRels);
   }
 }

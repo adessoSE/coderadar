@@ -40,4 +40,3 @@ public class GetAvailableBranchesAdapter implements GetAvailableBranchesPort {
     return result;
   }
 }
-

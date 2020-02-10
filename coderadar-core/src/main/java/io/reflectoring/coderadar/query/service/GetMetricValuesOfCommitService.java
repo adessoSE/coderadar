@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driven.GetMetricValuesOfCommitPort;
 import io.reflectoring.coderadar.query.port.driver.GetMetricValuesOfCommitUseCase;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,7 +22,7 @@ public class GetMetricValuesOfCommitService implements GetMetricValuesOfCommitUs
   }
 
   @Override
-  public MetricValueForCommit[] get(GetMetricsForCommitCommand command, Long projectId) {
+  public List<MetricValueForCommit> get(GetMetricsForCommitCommand command, Long projectId) {
     if (getProjectPort.existsById(projectId)) {
       return getMetricValuesOfCommitPort.get(command, projectId);
     } else {

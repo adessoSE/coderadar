@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Transactional
-public class GetMetricsForAllFilesInCommitController {
+public class GetMetricTreeForCommitController {
   private final GetMetricTreeForCommitUseCase getMetricTreeForCommitUseCase;
 
-  public GetMetricsForAllFilesInCommitController(
+  public GetMetricTreeForCommitController(
       GetMetricTreeForCommitUseCase getMetricTreeForCommitUseCase) {
     this.getMetricTreeForCommitUseCase = getMetricTreeForCommitUseCase;
   }

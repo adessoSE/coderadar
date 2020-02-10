@@ -53,7 +53,8 @@ class ListFilePatternsOfProjectControllerIntegrationTest extends ControllerTestT
                   fromJson(
                       result.getResponse().getContentAsString(), GetFilePatternResponse[].class);
               Assertions.assertEquals(2, filePatterns.length);
-            });
+            })
+        .andDo(document("filepatterns/list"));
   }
 
   @Test

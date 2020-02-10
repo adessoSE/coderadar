@@ -24,6 +24,8 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
   private final FileRepository fileRepository;
   private final CommitRepository commitRepository;
   private final BranchRepository branchRepository;
+  private final CommitBaseDataMapper commitBaseDataMapper = new CommitBaseDataMapper();
+  private final FileBaseDataMapper fileBaseDataMapper = new FileBaseDataMapper();
 
   public SaveCommitAdapter(
       CommitRepository commitRepository,
@@ -235,7 +237,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
     for (Commit commit : commits) {
       CommitEntity commitEntity = walkedCommits.get(commit);
       if (commitEntity == null) {
-        commitEntity = CommitBaseDataMapper.mapCommit(commit);
+        commitEntity = commitBaseDataMapper.mapDomainObject(commit);
         walkedCommits.put(commit, commitEntity);
         result.add(commitEntity);
       }
@@ -244,7 +246,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
         for (Commit parent : commit.getParents()) {
           CommitEntity parentCommit = walkedCommits.get(parent);
           if (parentCommit == null) {
-            parentCommit = CommitBaseDataMapper.mapCommit(parent);
+            parentCommit = commitBaseDataMapper.mapDomainObject(parent);
             walkedCommits.put(parent, parentCommit);
             result.add(parentCommit);
           }
@@ -273,7 +275,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
     for (FileToCommitRelationship fileToCommitRelationship : relationships) {
       FileEntity fileEntity = walkedFiles.get(fileToCommitRelationship.getFile());
       if (fileEntity == null) {
-        fileEntity = FileBaseDataMapper.mapFile(fileToCommitRelationship.getFile());
+        fileEntity = fileBaseDataMapper.mapDomainObject(fileToCommitRelationship.getFile());
         walkedFiles.put(fileToCommitRelationship.getFile(), fileEntity);
         List<FileEntity> oldFiles =
             new ArrayList<>(fileToCommitRelationship.getFile().getOldFiles().size());
@@ -310,17 +312,20 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
     }
     IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>();
     for (FileEntity f : fileRepository.findAllinProject(projectId)) {
-      walkedFiles.put(FileBaseDataMapper.mapFileEntity(f), f);
+      walkedFiles.put(fileBaseDataMapper.mapNodeEntity(f), f);
     }
 
     for (Commit commit : commits) {
-      walkedCommits.put(commit.getName(), CommitBaseDataMapper.mapCommit(commit));
+      walkedCommits.put(commit.getName(), commitBaseDataMapper.mapDomainObject(commit));
     }
 
     for (Commit commit : commits) {
       CommitEntity commitEntity = walkedCommits.get(commit.getName());
       // set parents
       for (Commit parent : commit.getParents()) {
+        if (commitEntity.getParents().isEmpty()) {
+          commitEntity.setParents(new ArrayList<>(parent.getParents().size()));
+        }
         commitEntity.getParents().add(walkedCommits.get(parent.getName()));
       }
       // set files

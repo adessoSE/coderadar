@@ -11,7 +11,7 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.*;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.graph.query.repository.GetAvailableMetricsInProjectRepository;
+import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
@@ -61,7 +61,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     @Autowired private FilePatternRepository filePatternRepository;
     @Autowired private AnalyzerConfigurationRepository analyzerConfigurationRepository;
     @Autowired private MetricRepository metricRepository;
-    @Autowired private GetAvailableMetricsInProjectRepository getAvailableMetricsInProjectRepository;
+    @Autowired private MetricQueryRepository metricQueryRepository;
     @Autowired private ModuleRepository moduleRepository;
     @Autowired private Session session;
 
@@ -74,7 +74,6 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
     @AfterAll
     static void cleanUp() throws IOException {
-        FileUtils.deleteDirectory(new File("coderadar-workdir/projects"));
         FileUtils.deleteDirectory(new File("coderadar-workdir/PaySim"));
     }
 
@@ -127,7 +126,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
                 .andReturn();
 
         //Check values for latest (newest) commit
-        List<String> availableMetrics = getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(projectId);
+        List<String> availableMetrics = metricQueryRepository.getAvailableMetricsInProject(projectId);
         GetMetricsForCommitCommand getMetricsForCommitCommand = new GetMetricsForCommitCommand();
         getMetricsForCommitCommand.setMetrics(availableMetrics);
         getMetricsForCommitCommand.setCommit("5d7ba2de71dcce2746a75bc0cf668a129f023c5d");
@@ -179,7 +178,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
     private void testMetricValues(Long projectId) throws Exception {
         //Check values for latest (newest) commit
-        List<String> availableMetrics = getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(projectId);
+        List<String> availableMetrics = metricQueryRepository.getAvailableMetricsInProject(projectId);
         GetMetricsForCommitCommand getMetricsForCommitCommand = new GetMetricsForCommitCommand();
         getMetricsForCommitCommand.setMetrics(availableMetrics);
         getMetricsForCommitCommand.setCommit("5d7ba2de71dcce2746a75bc0cf668a129f023c5d");
@@ -309,7 +308,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         }
 
         //Metrics available?
-        List<String> availableMetrics = getAvailableMetricsInProjectRepository.getAvailableMetricsInProject(projectId);
+        List<String> availableMetrics = metricQueryRepository.getAvailableMetricsInProject(projectId);
         Assertions.assertEquals(4, availableMetrics.size());
         Assertions.assertTrue(availableMetrics.contains("coderadar:size:sloc:java"));
         Assertions.assertTrue(availableMetrics.contains("coderadar:size:loc:java"));

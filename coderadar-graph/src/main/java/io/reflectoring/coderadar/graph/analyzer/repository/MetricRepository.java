@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Long> {
 
-  @Query("MATCH (p)-[:CONTAINS*]->()-[:MEASURED_BY]->(m) " + "WHERE ID(p) = {0} RETURN m")
+  @Query("MATCH (p)-[:CONTAINS*]->()-[:MEASURED_BY]->(m) WHERE ID(p) = {0} RETURN m")
   List<MetricValueEntity> findByProjectId(@NonNull Long projectId);
 
   @Query(
@@ -20,5 +20,5 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
           + "MATCH (f) WHERE ID(f) = x.fileId "
           + "MATCH (c) WHERE ID(c) = x.commitId "
           + "CREATE (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c)")
-  void createFileAndCommitRelationsips(List<HashMap<String, Object>> commitAndFileRels);
+  void createFileAndCommitRelationships(List<HashMap<String, Object>> commitAndFileRels);
 }
