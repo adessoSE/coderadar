@@ -144,12 +144,20 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   private List<Commit> getCommitsInBranch(Long projectId, String branch) {
     List<CommitEntity> commitsWithParents =
         commitRepository.findByProjectIdWithParentRelationships(projectId);
+
     CommitEntity branchCommit = branchRepository.getCommitForBranch(projectId, branch);
-    CommitEntity startCommit =
+
+    List<CommitEntity> startCommitList =
         commitsWithParents.stream()
             .filter(commitEntity -> commitEntity.getName().equals(branchCommit.getName()))
-            .collect(Collectors.toList())
-            .get(0);
+            .collect(Collectors.toList());
+
+    CommitEntity startCommit;
+    if (startCommitList.isEmpty()) {
+      return new ArrayList<>();
+    } else {
+      startCommit = startCommitList.get(0);
+    }
     List<CommitEntity> result = new ArrayList<>();
     setCommitParents(startCommit, result);
 

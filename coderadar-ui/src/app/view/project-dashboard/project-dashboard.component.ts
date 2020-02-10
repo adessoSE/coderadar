@@ -130,7 +130,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   /**
    * Gets all commits for this project from the service and saves them in this.commits.
    */
-  private getCommits(displayLoadingIndicator: boolean): void {
+  public getCommits(displayLoadingIndicator: boolean): void {
     this.waiting = displayLoadingIndicator;
     this.projectService.getCommits(this.projectId, this.selectedBranch)
       .then(response => {
