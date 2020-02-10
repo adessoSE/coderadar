@@ -88,7 +88,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
       }
     }
     List<CommitEntity> commitEntities =
-        commitRepository.findByProjectIdWithFileAndParentRelationshipsSortedByTimestampAsc(
+        commitRepository.findByProjectIdNonAnalyzedWithFileAndParentRelationshipsSortedByTimestampAsc(
             projectId, includes, excludes);
 
     CommitEntity branchCommit = branchRepository.getCommitForBranch(projectId, branch);
