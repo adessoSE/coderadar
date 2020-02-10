@@ -250,7 +250,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
           this.branches = [];
         } else {
           this.branches = response.body;
-          this.selectedBranch = this.branches[0].name ? undefined : 'master';
+          this.selectedBranch = this.branches[0].name === undefined ? this.branches[0].name  : 'master';
         }
       })
       .catch(error => {

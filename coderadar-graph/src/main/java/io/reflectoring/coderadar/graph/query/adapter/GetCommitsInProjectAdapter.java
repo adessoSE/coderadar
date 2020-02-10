@@ -9,6 +9,7 @@ import io.reflectoring.coderadar.graph.projectadministration.project.adapter.Com
 import io.reflectoring.coderadar.projectadministration.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,6 +99,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
             .get(0);
     List<CommitEntity> result = new ArrayList<>();
     setCommitParents(startCommit, result);
+    result.sort(Comparator.comparingLong(CommitEntity::getTimestamp));
     return mapCommitEntitiesNoParents(result);
   }
 
@@ -161,6 +163,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     List<CommitEntity> result = new ArrayList<>();
     setCommitParents(startCommit, result);
 
+    result.sort((t1, t2) -> -Long.compare(t1.getTimestamp(), t2.getTimestamp()));
     List<Commit> domainObjects = new ArrayList<>();
     for (CommitEntity commitEntity : result) {
       domainObjects.add(commitBaseDataMapper.mapNodeEntity(commitEntity));
