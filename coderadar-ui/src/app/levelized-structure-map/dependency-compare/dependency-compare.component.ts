@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild, ViewEncapsulation} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
@@ -11,7 +11,7 @@ import {DependencyBase} from '../dependency-base';
   styleUrls: ['./dependency-compare.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class DependencyCompareComponent extends DependencyBase implements AfterViewInit {
+export class DependencyCompareComponent extends DependencyBase implements OnInit, AfterViewInit {
 
   commitName2: any;
   @ViewChild('3showChanged') showChangedContainer;
@@ -23,21 +23,24 @@ export class DependencyCompareComponent extends DependencyBase implements AfterV
     this.router = router;
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.projectId = params.projectId;
       this.commitName = params.commitName1;
       this.commitName2 = params.commitName2;
       this.getProject();
-      this.getData();
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.getData();
   }
 
   getData(): void {
     this.projectService.getCompareTree(this.projectId, this.commitName, this.commitName2).then(response => {
       this.node = response.body;
       this.checkChanged = false;
-      this.ctx = (this.canvas.nativeElement as HTMLCanvasElement).getContext('2d');
+      this.svg = document.getElementById('3svg');
       this.checkDown = this.checkUp = true;
       setTimeout(() => this.draw(() => this.loadDependencies(this.node, this.checkChanged)), 50);
     })

@@ -5,6 +5,7 @@ import * as jspdf from 'jspdf';
 import {AppComponent} from "../app.component";
 import {Project} from "../model/project";
 import {FORBIDDEN, NOT_FOUND} from "http-status-codes";
+import {EdgeModel} from "./edge.model";
 
 export abstract class DependencyBase {
 
@@ -12,20 +13,10 @@ export abstract class DependencyBase {
   projectService: any;
   userService: any;
   router: any;
-  project: Project = new Project({
-    id: null,
-    name: null,
-    vcsUrl: null,
-    vcsUsername: '',
-    vcsPassword: '',
-    vcsOnline: true,
-    startDate: null,
-    endDate: null
-  });
+  project: Project = new Project();
   node: any;
   projectId: number;
   commitName: any;
-  ctx: any;
   checkDown: boolean;
   checkChanged: boolean;
   checkUp: boolean;
@@ -36,9 +27,12 @@ export abstract class DependencyBase {
     { format: 'application/pdf', value: 'pdf' }
   ];
   selected = 0;
+  svg: any;
+  readonly headLength = 10;
+  drawn: EdgeModel[] = [];
   @ViewChild('3activeDependency') activeDependencyContainer;
-  @ViewChild('3canvas') canvas: ElementRef;
   @ViewChild('3canvasContainer') canvasContainer;
+  @ViewChild('3zoom') zoomElement;
 
   public onShowUpwardChanged(): void {
     this.checkUp = !this.checkUp;
@@ -84,7 +78,7 @@ export abstract class DependencyBase {
   }
 
   checkOnActiveDependency(tmp): boolean {
-    return tmp.id.indexOf(this.activeDependency.id) !== -1;
+    return tmp.id.indexOf(this.activeDependency.id) >= 0;
   }
 
   findLastHTMLElement(node): HTMLElement {
@@ -143,44 +137,69 @@ export abstract class DependencyBase {
   }
 
   draw(callback): void {
-    // set height of canvas to the height of dependencyTree after toggle
-    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    // clear svg
+    $("#3svg").empty();
+    this.drawn = [];
     const rootList = document.getElementById('3list__root');
+    this.svg = document.getElementById('3svg');
     const zoom = document.getElementById('3zoom');
-    const scroll = document.querySelector('drag-scroll[id="3scroll"] > div') as HTMLElement;
-    const canvas = document.getElementById('3canvas');
+    const scroll = document.querySelector('[id="3scroll"] > div') as HTMLElement;
     const drawHeight = rootList.offsetHeight;
     const drawWidth = rootList.offsetWidth + 20;
     const containerHeight = window.innerHeight - document.getElementById('3canvasContainer').offsetTop;
     const containerWidth = window.innerWidth;
+    (document.querySelector('drag-scroll[id="3scroll"] > div > div') as HTMLElement).style.overflow = 'hidden';
 
-    this.ctx.canvas.height = drawHeight;
-    this.ctx.canvas.width = drawWidth;
+    // set dimensions of zoom and scroll element
     zoom.style.height = containerHeight + 'px';
     zoom.style.width = containerWidth + 'px';
-    scroll.style.height = containerHeight + 'px';
-    scroll.style.width = containerWidth + 'px';
-    (document.querySelector('drag-scroll[id="3scroll"] > div > div') as HTMLElement).style.overflow = 'hidden';
-    canvas.style.height = drawHeight + 'px';
-    canvas.style.width = drawWidth + 'px';
-    canvas.style.top = -rootList.offsetHeight + 'px';
-    canvas.style.marginBottom = -rootList.offsetHeight + 10 + 'px';
+    scroll.style.height = (containerHeight < drawHeight ? containerHeight : drawHeight) + 20 + 'px';
+    scroll.style.width = (containerWidth < drawWidth ? containerWidth : drawWidth) + 'px';
+
+    // set styling and dimensions of svg element
+    this.svg.style.height = drawHeight + 'px';
+    this.svg.style.width = drawWidth + 'px';
+    this.svg.style.top = -rootList.offsetHeight + 'px';
+    this.svg.style.marginBottom = -rootList.offsetHeight + 10 + 'px';
+    if (drawWidth > containerWidth && drawHeight > containerHeight) {
+      rootList.style.cursor = 'move';
+      zoom.style.cursor = 'move';
+    } else if (drawWidth > containerWidth && drawHeight <= containerHeight) {
+      rootList.style.cursor = 'ew-resize';
+      zoom.style.cursor = 'ew-resize';
+    } else if (drawWidth <= containerWidth && drawHeight > containerHeight) {
+      rootList.style.cursor = 'ns-resize';
+      zoom.style.cursor = 'ns-resize';
+    }
     callback.call();
   }
 
   listDependencies(currentNode, checkChanged?): void {
-    // draw arrows to my dependencies and call this function for my dependencies
+    // calculate positions for arrows of currentNode and its dependencies
     if (currentNode.dependencies.length > 0) {
+      // find last visible element for currentNode as start
+      let start = this.findLastHTMLElement(currentNode.path) as HTMLElement;
+      let toDraw;
+      if (this.activeDependency !== undefined) {
+        // activeDependency is set is not start
+        toDraw = this.checkOnActiveDependency(start);
+      }
+      // start = start.parentNode as HTMLElement;
+      // use jquery for position calculation because plain js position calculation working with offsets returns
+      // different values for chrome and firefox
+      // (ref: https://stackoverflow.com/questions/1472842/firefox-and-chrome-give-different-values-for-offsettop).
+      const startx = ($(start).offset().left - $(this.svg).offset().left) / this.zoomElement.scale + start.offsetWidth / 2;
+      let starty = ($(start).offset().top - $(this.svg).offset().top) / this.zoomElement.scale + start.offsetHeight + ($(start).css('padding-top') !== '0px' ? 0 : 5);
+      let startTop = starty - start.offsetHeight - ($(start).css('padding-top') !== '0px' ? 0 : 10);
+      console.log(parseFloat($(start).css('padding-top')));
+
       currentNode.dependencies.forEach(dependency => {
         // find last visible element for dependency as end
         let end = this.findLastHTMLElement(dependency.path) as HTMLElement;
-        // find last visible element for currentNode as start
-        let start = this.findLastHTMLElement(currentNode.path) as HTMLElement;
 
         // if activeDependency is set, draw only activeDependency related dependencies
         if (this.activeDependency !== undefined) {
-          // activeDependency is set and neither start or end
-          let toDraw = this.checkOnActiveDependency(start);
+          // activeDependency is set and is not end
           if (!toDraw) {
             toDraw = this.checkOnActiveDependency(end);
           }
@@ -189,51 +208,39 @@ export abstract class DependencyBase {
           }
         }
 
-        start = start.parentNode as HTMLElement;
-        end = end.parentNode as HTMLElement;
-        // use jquery for position calculation because plain js position calculation working with offsets returns
-        // different values for chrome and firefox
-        // (ref: https://stackoverflow.com/questions/1472842/firefox-and-chrome-give-different-values-for-offsettop).
-        const startx = $(start).offset().left + start.offsetWidth / 2 - $(this.ctx.canvas).offset().left;
-        let starty = $(start).offset().top + start.offsetHeight - $(this.ctx.canvas).offset().top;
-        const endx = $(end).offset().left + end.offsetWidth / 2 - $(this.ctx.canvas).offset().left;
-        let endy = $(end).offset().top - $(this.ctx.canvas).offset().top;
+        // end = end.parentNode as HTMLElement;
+        const endx = ($(end).offset().left - $(this.svg).offset().left) / this.zoomElement.scale + end.offsetWidth / 2;
+        let endy = ($(end).offset().top - $(this.svg).offset().top) / this.zoomElement.scale - ($(end).css('padding-bottom') !== '0px' ? 0 : 7);
+        let endBottom = endy + end.offsetHeight + ($(end).css('padding-bottom') !== '0px' ? 0 : 14);
 
-        // ignore all arrows with same start and end node
         if (start !== end) {
           if (dependency.changed === 'ADD') {
             // check if downward dependencies should be shown
             if (this.checkDown && starty < endy) {
-              this.canvasArrow(startx, starty, endx, endy, 'blue', 1, false);
+              this.svgArrow(startx, starty, endx, endy, 'blue', 1, false);
             }
             // check if upward Dependencies should be shown
             if (this.checkUp && starty > endy) {
-              starty -= start.offsetHeight;
-              endy += end.offsetHeight;
-              this.canvasArrow(startx, starty, endx, endy, 'blue', 3, true);
+              this.svgArrow(startx, startTop, endx, endBottom, 'blue', 3, true);
             }
           } else if (dependency.changed === 'DELETE') {
             // check if downward dependencies should be shown
             if (this.checkDown && starty < endy) {
-              this.canvasArrow(startx, starty, endx, endy, 'red', 1, false);
+              this.svgArrow(startx, starty, endx, endy, 'red', 1, false);
             }
             // check if upward Dependencies should be shown
             if (this.checkUp && starty > endy) {
-              starty -= start.offsetHeight;
-              endy += end.offsetHeight;
-              this.canvasArrow(startx, starty, endx, endy, 'red', 3, true);
+              this.svgArrow(startx, startTop, endx, endBottom, 'red', 3, true);
             }
             // TODO add more color codes for more change types?
           } else if (!checkChanged) {
             // check if downward dependencies should be shown
             if (this.checkDown && starty < endy) {
-              this.canvasArrow(startx, starty, endx, endy, 'black', 1, false);
+              this.svgArrow(startx, starty, endx, endy, 'black', 1, false);
             }
             // check if upward Dependencies should be shown
             if (this.checkUp && starty > endy) {
-              starty -= start.offsetHeight;
-              endy += end.offsetHeight;
-              this.canvasArrow(startx, starty, endx, endy, 'black', 3, true);
+              this.svgArrow(startx, startTop, endx, endBottom, 'black', 3, true);
             }
           }
         }
@@ -241,68 +248,69 @@ export abstract class DependencyBase {
     }
   }
 
-  canvasArrow(fromx, fromy, tox, toy, color, width?, dashed?): void {
-    if (width === undefined) {
-      width = 1;
-    }
-    if (dashed === undefined) {
-      dashed = true;
+  svgArrow(startx, starty, endx, endy, color, width?, dashed?) {
+    // reduce number of nodes
+    let edge = new EdgeModel(startx, starty, endx, endy, color, width, dashed);
+    if (this.drawn.filter(existingEdge => existingEdge.equals(edge)).length > 0) {
+      return;
     }
 
-    this.ctx.lineWidth = width;
-    const headlen = 10;
-
-    // draw curved line
-    this.ctx.beginPath();
-    this.ctx.setLineDash((dashed ? [10] : [0]));
-    this.ctx.moveTo(fromx, fromy);
-    this.ctx.strokeStyle = color;
-    // span right triangle with X, Y and Z with X = (fromx, fromy) and Y = (tox, toy) and Z as the point at the right angle
-    // calculate all sides x, y as the sides leading to the right angle
-    const x = Math.abs(fromx - tox);
-    const y = Math.abs(fromy - toy);
-    // calculate z with (zx, zy)
+    // angle of arrowhead in relation to the line
     let angle;
-    // tslint:disable-next-line:radix
-    if (Math.abs(parseInt(fromx) - parseInt(tox)) < 10) {
-      // draw line from X to Y
-      this.ctx.lineTo(tox, toy);
-      this.ctx.stroke();
-      // calculate angle for arrow head in relation to line
-      angle = Math.atan2(toy - fromy, tox - fromx);
+    // definition of teh figure to draw, either a line or a curve
+    let figureDefinition;
+
+    if (Math.abs(parseInt(startx) - parseInt(endx)) < 10) {
+      // draw straight line because there is not enough space for a curve
+      figureDefinition = `M ${startx} ${starty} L ${endx} ${endy}`;
+      angle = Math.atan2(endy - starty, endx - startx);
     } else {
+      // draw a quadratic curve over point Z which builds a right triangle with start and end
+      const x = Math.abs(startx - endx);
+      const y = Math.abs(starty - endy);
       let zx;
       let zy;
 
-      if (fromx <= tox && fromy <= toy) {
-        zx = Math.max(fromx, tox) - x;
-        zy = Math.max(fromy, toy);
-      } else if (fromx <= tox && fromy > toy) {
-        zx = Math.max(fromx, tox);
-        zy = Math.min(fromy, toy) + y;
-      } else if (fromx > tox && fromy <= toy) {
-        zx = Math.min(fromx, tox) + x;
-        zy = Math.max(fromy, toy);
-      } else if (fromx > tox && fromy > toy) {
-        zx = Math.min(fromx, tox);
-        zy = Math.min(fromy, toy) + y;
+      // calculate position of Z
+      if (startx <= endx && starty <= endy) {
+        zx = Math.max(startx, endx) - x;
+        zy = Math.max(starty, endy);
+      } else if (startx <= endx && starty > endy) {
+        zx = Math.max(startx, endx);
+        zy = Math.min(starty, endy) + y;
+      } else if (startx > endx && starty <= endy) {
+        zx = Math.min(startx, endx) + x;
+        zy = Math.max(starty, endy);
+      } else if (startx > endx && starty > endy) {
+        zx = Math.min(startx, endx);
+        zy = Math.min(starty, endy) + y;
       }
-
-      // draw quadratic curve from X over Z to Y
-      this.ctx.quadraticCurveTo(zx, zy, tox, toy);
-      this.ctx.stroke();
-      // calculate angle for arrow head in relation to line
-      angle = Math.atan2(toy - zy, tox - zx);
+      figureDefinition = `M ${startx} ${starty} Q ${zx} ${zy} ${endx} ${endy}`;
+      angle = Math.atan2(endy - zy, endx - zx);
     }
+    this.drawFigure(figureDefinition, width, color, dashed);
+    this.drawArrowHead(endx, endy, angle, width, color);
+    this.drawn.push(edge);
+  }
 
-    // draw arrow head
-    this.ctx.beginPath();
-    this.ctx.moveTo(tox, toy);
-    this.ctx.setLineDash([0]);
-    this.ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
-    this.ctx.moveTo(tox, toy);
-    this.ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
-    this.ctx.stroke();
+  drawArrowHead(endx, endy, angle, width, color) {
+    this.drawFigure('M ' + (endx - this.headLength * Math.cos(angle - Math.PI / 6)) + ' '
+      + (endy - this.headLength * Math.sin(angle - Math.PI / 6)) + ' ' + 'L ' + endx + ' ' + endy + ' ' +
+      (endx - this.headLength * Math.cos(angle + Math.PI / 6)) + ' ' + (endy - this.headLength * Math.sin(angle + Math.PI / 6)),
+      width, color
+    );
+  }
+
+  drawFigure(figureDefinition: string, width: number, color: string, dashed? : boolean) {
+    const figure = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+    figure.setAttribute('d', figureDefinition);
+    figure.style.stroke = color;
+    figure.style.fill = 'transparent';
+    figure.style.strokeWidth = `${width}px`;
+    if (dashed) {
+      figure.style.strokeDasharray = '10';
+    }
+    this.svg.appendChild(figure);
   }
 
   getProject(): void {

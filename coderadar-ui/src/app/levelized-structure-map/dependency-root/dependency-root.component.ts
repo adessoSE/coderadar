@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewEncapsulation} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProjectService} from '../../service/project.service';
 import {FORBIDDEN} from 'http-status-codes';
@@ -11,7 +11,7 @@ import {DependencyBase} from '../dependency-base';
   styleUrls: ['./dependency-root.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class DependencyRootComponent extends DependencyBase implements AfterViewInit {
+export class DependencyRootComponent extends DependencyBase implements OnInit, AfterViewInit {
 
   constructor(router: Router, userService: UserService, projectService: ProjectService, private route: ActivatedRoute) {
     super();
@@ -20,19 +20,22 @@ export class DependencyRootComponent extends DependencyBase implements AfterView
     this.router = router;
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.projectId = params.projectId;
       this.commitName = params.commitName;
       this.getProject();
-      this.getData();
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.getData();
   }
 
   getData(): void {
     this.projectService.getDependencyTree(this.projectId, this.commitName).then(response => {
       this.node = response.body;
-      this.ctx = (this.canvas.nativeElement as HTMLCanvasElement).getContext('2d');
+      this.svg = document.getElementById('3svg');
       this.checkDown = this.checkUp = true;
       setTimeout(() => this.draw(() => this.loadDependencies(this.node)), 50);
     })

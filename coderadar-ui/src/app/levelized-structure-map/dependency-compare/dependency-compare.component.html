@@ -1,7 +1,7 @@
-<app-header id="header" [title]="[{location: '/dependency-map', name: 'Dependency Map'}, {location: '/project/' + project.id, name: appComponent.trimProjectName(project.name)}, {location: '/project/' + projectId + '/' + commitName + '/' + commitName2 + '/dependency-map', name: 'Dependency Map for ' + commitName + ' amd ' + commitName2}]"></app-header>
+<app-header id="header" [title]="[{location: '/dependency-map', name: 'Dependency Map'}, {location: '/project/' + project.id, name: appComponent.trimProjectName(project.name)}, {location: '/project/' + projectId + '/' + commitName + '/' + commitName2 + '/dependency-map', name: 'Dependency Map for ' + commitName + ' and ' + commitName2}]"></app-header>
 
-<mat-checkbox class="margin-left margin-right" #3showUpward [checked]="checkUp" (change)="onShowUpwardChanged()">Show upward Dependencies</mat-checkbox>
-<mat-checkbox class="margin-left margin-right" #3showDownward [checked]="checkDown" (change)="onShowDownwardChanged()">Show downward Dependencies</mat-checkbox>
+<mat-checkbox class="margin-left margin-right" [checked]="checkUp" (change)="onShowUpwardChanged()">Show upward Dependencies</mat-checkbox>
+<mat-checkbox class="margin-left margin-right" [checked]="checkDown" (change)="onShowDownwardChanged()">Show downward Dependencies</mat-checkbox>
 <mat-checkbox class="margin-left margin-right" #3showChanged [checked]="checkChanged" (change)="onShowChangedChanged()">Show only changed Dependencies</mat-checkbox>
 <mat-form-field>
   <mat-select [(value)]="selected">
@@ -11,9 +11,9 @@
 <button mat-button class="margin-left margin-right" #3screenshot (click)="screenshotListener()">Export</button>
 <span #3activeDependency class="margin-left">No active dependency chosen.</span>
 <div #3canvasContainer id="3canvasContainer">
-  <pinch-zoom #3zoom id="3zoom" [disableZoomControl]="'disable'" [backgroundColor]="'transparent'" [limit-zoom]="5">
-    <drag-scroll #3scroll id="3scroll" [scrollbar-hidden]="true">
-      <div id="3dependencyTree" #3dependencyTree class="dependencyTree">
+  <pinch-zoom #3zoom id="3zoom" [disableZoomControl]="'disable'" [backgroundColor]="'transparent'" [draggable]="false" [transition-duration]="50">
+    <drag-scroll id="3scroll" [scrollbar-hidden]="true" [scroll-x-wheel-enabled]="false">
+      <div id="3dependencyTree" class="dependencyTree">
         <div *ngIf="node === undefined">
           <mat-spinner mode="indeterminate" class="spinner-center"></mat-spinner>
         </div>
@@ -25,7 +25,7 @@
           </div>
         </div>
       </div>
-      <canvas id="3canvas" #3canvas class="canvas"></canvas>
+      <svg id="3svg" class="canvas"></svg>
     </drag-scroll>
   </pinch-zoom>
 </div>

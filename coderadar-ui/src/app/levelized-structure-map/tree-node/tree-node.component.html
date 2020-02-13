@@ -1,7 +1,7 @@
 <!-- if node has no siblings but at least one child, add it to parent by just adding it as a path -->
 <ng-container *ngIf="!hasSiblings && node.children.length > 0">
   <span [ngClass]="(node.path === '' || (hasSiblings && node.children.length > 0)) ? (getClassString(node) + (node.path === '' ? ' package__base' : '')) : ''">
-    <span *ngIf="node.children.length > 1" [id]="node.path" class="filename-span" (click)="onClick($event)" (dblclick)="node.children.length === 1 ? stopSingleClick($event) : onDBClick($event)"
+    <span *ngIf="node.children.length > 1" [id]="node.path" [title]="node.path" class="filename-span" (click)="onClick($event)" (dblclick)="node.children.length === 1 ? stopSingleClick($event) : onDBClick($event)"
           [ngClass]="(node.children.length > 1 || node.dependencies.length > 0) && node.packageName !== '' ? 'clickable' : ''">
       {{node.filename}}/
     </span>
@@ -27,7 +27,7 @@
 <!-- if node has siblings, open a new package -->
 <ng-container *ngIf="hasSiblings && node.children.length > 0">
   <span [ngClass]="getClassString(node)">
-    <span [id]="node.path" class="filename-span" (click)="onClick($event)" (dblclick)="node.children.length === 1 ? stopSingleClick($event) : onDBClick($event)"
+    <span [id]="node.path" [title]="node.path" class="filename-span" (click)="onClick($event)" (dblclick)="node.children.length === 1 ? stopSingleClick($event) : onDBClick($event)"
           [ngClass]="(node.children.length > 1 || node.dependencies.length > 0) && node.packageName !== '' ? 'clickable' : ''">
       {{node.filename}}/
     </span>
@@ -51,7 +51,7 @@
 </ng-container>
 <!-- if node is leaf, display it -->
 <span *ngIf="node.children.length === 0">
-  <span [id]="node.path" class="filename-span" (click)="onClick($event)" (dblclick)="onDBClick($event)"
+  <span [id]="node.path" [title]="node.path" class="filename-span" (click)="onClick($event)" (dblclick)="onDBClick($event)"
         [ngClass]="getClassString(node) + (node.dependencies.length > 0 && node.packageName !== '' ? ' clickable' : '')">
     {{node.filename}}
   </span>
