@@ -8,6 +8,8 @@ import {ComparisonPanelService} from '../../service/comparison-panel.service';
 import {VisualizationConfig} from '../../VisualizationConfig';
 import {Subscription} from 'rxjs';
 import {Commit} from '../../../model/commit';
+import {MetricValue} from '../../../model/metric-value';
+import {ElementAnalyzer} from '../../helper/element-analyzer';
 
 @Component({
   selector: 'app-comparison-panel',
@@ -39,7 +41,6 @@ export class ComparisonPanelComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.comparisonPanel = document.querySelector('#comparison-panel') as HTMLElement;
-
     this.subscriptions.push(
       this.comparisonPanelService.showComparisonPanel$.subscribe((params) => {
         this.elementName = params.elementName;
@@ -69,23 +70,19 @@ export class ComparisonPanelComponent implements OnInit, OnDestroy {
     const rows = [];
     for (const key of Object.keys(this.metricMapping)) {
       const metricName = this.metricMapping[key];
-      let leftCommitValue;
-      let rightCommitValue;
 
-      const commit1Element = foundElement.commit1Metrics.find(value => value.metricName === metricName);
-      if (foundElement.commit1Metrics && commit1Element) {
-        leftCommitValue = commit1Element.value;
+      let leftCommitValue;
+      if (foundElement.commit1Metrics && ElementAnalyzer.getValueFromMetric(foundElement.commit1Metrics, metricName)) {
+        leftCommitValue = ElementAnalyzer.getValueFromMetric(foundElement.commit1Metrics, metricName);
       }
 
-      const commit2Element = foundElement.commit2Metrics.find(value => value.metricName === metricName);
-      if (foundElement.commit2Metrics && commit2Element) {
-        rightCommitValue = commit2Element.value;
+      let rightCommitValue;
+      if (foundElement.commit2Metrics && ElementAnalyzer.getValueFromMetric(foundElement.commit2Metrics, metricName)) {
+        rightCommitValue = ElementAnalyzer.getValueFromMetric(foundElement.commit2Metrics, metricName);
       }
 
       let difference = 0;
-      if (leftCommitValue && rightCommitValue) {
-        difference = rightCommitValue - leftCommitValue;
-      }
+      difference = (rightCommitValue || 0) - (leftCommitValue || 0);
 
       rows.push({
         metricName: VisualizationConfig.getShortNameByMetricName(metricName).shortName,

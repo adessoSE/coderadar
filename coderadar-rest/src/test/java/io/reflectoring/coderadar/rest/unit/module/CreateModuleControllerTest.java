@@ -5,7 +5,7 @@ import io.reflectoring.coderadar.projectadministration.ModulePathInvalidExceptio
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
-import io.reflectoring.coderadar.rest.IdResponse;
+import io.reflectoring.coderadar.rest.domain.IdResponse;
 import io.reflectoring.coderadar.rest.module.CreateModuleController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,9 +26,9 @@ class CreateModuleControllerTest {
     CreateModuleCommand command = new CreateModuleCommand("module-path-test");
     Mockito.when(createModuleUseCase.createModule(command, 5L)).thenReturn(1L);
 
-    ResponseEntity<IdResponse> responseEntity = testSubject.createModule(command, 5L);
+    ResponseEntity responseEntity = testSubject.createModule(command, 5L);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-    Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
+    Assertions.assertEquals(1L, ((IdResponse)responseEntity.getBody()).getId());
   }
 }

@@ -42,15 +42,13 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
 
     List<String> analyzers = listAnalyzerService.listAvailableAnalyzers();
     if (analyzers.contains(command.getAnalyzerName())) {
-      if (listAnalyzerConfigurationsFromProjectService
-          .get(projectId)
-          .stream()
+      if (listAnalyzerConfigurationsFromProjectService.get(projectId).stream()
           .noneMatch(
               a ->
                   a.getAnalyzerName().equals(command.getAnalyzerName())
-                      && !a.getId().equals(analyzerConfiguration.getId()))) {
+                      && a.getId() != analyzerConfiguration.getId())) {
         analyzerConfiguration.setAnalyzerName(command.getAnalyzerName());
-        analyzerConfiguration.setEnabled(command.getEnabled());
+        analyzerConfiguration.setEnabled(command.isEnabled());
         updateAnalyzerConfigurationPort.update(analyzerConfiguration);
         logger.info(
             String.format(

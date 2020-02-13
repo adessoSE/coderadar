@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.useradministration.port.driver.load;
 
+import io.reflectoring.coderadar.useradministration.domain.User;
+
 public interface LoadUserUseCase {
 
   /**
@@ -8,5 +10,5 @@ public interface LoadUserUseCase {
    * @param id The id of the user.
    * @return The user with the id.
    */
-  LoadUserResponse loadUser(Long id);
+  User loadUser(Long id);
 }

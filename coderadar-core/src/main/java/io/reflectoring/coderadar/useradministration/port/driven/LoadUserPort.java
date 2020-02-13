@@ -25,4 +25,10 @@ public interface LoadUserPort {
    * @return True if a user with this username exists, false otherwise.
    */
   boolean existsByUsername(String username);
+
+  /**
+   * @param id The id of the user.
+   * @return True if a user with this id exists, false otherwise.
+   */
+  boolean existsById(Long id);
 }

@@ -1,12 +1,10 @@
 package io.reflectoring.coderadar.graph.projectadministration.module.adapter;
 
-import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.ModuleMapper;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.GetModulePort;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,11 +18,7 @@ public class GetModuleAdapter implements GetModulePort {
 
   @Override
   public Module get(Long id) {
-    Optional<ModuleEntity> moduleEntity = moduleRepository.findById(id);
-    if (moduleEntity.isPresent()) {
-      return moduleMapper.mapNodeEntity(moduleEntity.get());
-    } else {
-      throw new ModuleNotFoundException(id);
-    }
+    return moduleMapper.mapNodeEntity(
+        moduleRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException(id)));
   }
 }

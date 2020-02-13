@@ -15,7 +15,6 @@ import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
 import java.io.File;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -69,13 +68,15 @@ public class CreateProjectService implements CreateProjectUseCase {
     Project project = saveProject(command);
     processProjectService.executeTask(
         () -> {
+          File localDir =
+              new File(
+                  coderadarConfigurationProperties.getWorkdir()
+                      + "/projects/"
+                      + project.getWorkdirName());
           CloneRepositoryCommand cloneRepositoryCommand =
               new CloneRepositoryCommand(
                   command.getVcsUrl(),
-                  new File(
-                      coderadarConfigurationProperties.getWorkdir()
-                          + "/projects/"
-                          + project.getWorkdirName()),
+                  localDir,
                   project.getVcsUsername(),
                   project.getVcsPassword());
           try {
@@ -85,12 +86,11 @@ public class CreateProjectService implements CreateProjectUseCase {
                 project.getName(),
                 cloneRepositoryCommand.getRemoteUrl());
             List<Commit> commits =
-                extractProjectCommitsUseCase.getCommits(
-                    Paths.get(project.getWorkdirName()), getProjectDateRange(project));
+                extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
             saveCommitPort.saveCommits(commits, project.getId());
             logger.info("Saved project {}", project.getName());
           } catch (Exception e) {
-            logger.error("Unable to create project: {}", e.getMessage());
+            logger.error("Unable to create project: {}", e.getCause().getMessage());
           }
         },
         project.getId());
@@ -134,7 +134,7 @@ public class CreateProjectService implements CreateProjectUseCase {
     project.setVcsUrl(command.getVcsUrl());
     project.setVcsUsername(command.getVcsUsername());
     project.setVcsPassword(command.getVcsPassword());
-    project.setVcsOnline(command.getVcsOnline());
+    project.setVcsOnline(command.isVcsOnline());
     project.setVcsStart(command.getStartDate());
     project.setVcsEnd(command.getEndDate());
     Long projectId = createProjectPort.createProject(project);

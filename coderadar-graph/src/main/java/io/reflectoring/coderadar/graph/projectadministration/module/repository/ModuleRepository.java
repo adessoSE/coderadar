@@ -20,7 +20,7 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
 
   @Query(
       "CREATE (m:ModuleEntity { path: {1} }) WITH m "
-          + "MATCH (p:ProjectEntity)-[r1:CONTAINS]->(f:FileEntity) WHERE ID(p) = {0} AND f.path STARTS WITH {1} WITH DISTINCT m, p, f, r1 "
+          + "MATCH (p)-[r1:CONTAINS]->(f:FileEntity) WHERE ID(p) = {0} AND f.path STARTS WITH {1} WITH DISTINCT m, p, f, r1 "
           + "CREATE (m)-[r2:CONTAINS]->(f) WITH DISTINCT m,f,p,r1 "
           + "DELETE r1 WITH m, p LIMIT 1 "
           + "CREATE (p)-[r3:CONTAINS]->(m) RETURN m")
@@ -29,7 +29,7 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
 
   @Query(
       "CREATE (m:ModuleEntity { path: {1} }) WITH m "
-          + "MATCH (m2:ModuleEntity)-[r1:CONTAINS]->(f:FileEntity) WHERE ID(m2) = {0} AND f.path STARTS WITH {1} WITH DISTINCT m, m2, f, r1 "
+          + "MATCH (m2)-[r1:CONTAINS]->(f:FileEntity) WHERE ID(m2) = {0} AND f.path STARTS WITH {1} WITH DISTINCT m, m2, f, r1 "
           + "CREATE (m)-[r2:CONTAINS]->(f) WITH DISTINCT m,f,m2,r1 "
           + "DELETE r1 WITH m, m2 LIMIT 1 "
           + "CREATE (m2)-[r3:CONTAINS]->(m) RETURN m")
@@ -37,15 +37,13 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
   ModuleEntity createModuleInModule(@NonNull Long moduleId, @NonNull String modulePath);
 
   @Query(
-      "MATCH (e)-[:CONTAINS]->(f:FileEntity) WHERE ID(e) = {1} AND f.path STARTS WITH {0} return COUNT(f) > 0 ")
+      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {1} AND f.path STARTS WITH {0} RETURN COUNT(f) > 0 ")
   @NonNull
   Boolean fileInPathExists(@NonNull String path, @NonNull Long projectOrModuleId);
 
-  @Query(
-      "MATCH (p:ProjectEntity)-[r:CONTAINS]->(m:ModuleEntity) WHERE ID(p) = {0} AND ID(m) = {1} DELETE r")
+  @Query("MATCH (p)-[r]->(m) WHERE ID(p) = {0} AND ID(m) = {1} DELETE r")
   void detachModuleFromProject(@NonNull Long projectId, @NonNull Long moduleId);
 
-  @Query(
-      "MATCH (m1:ModuleEntity)-[r:CONTAINS]->(m2:ModuleEntity) WHERE ID(m1) = {0} AND ID(m2) = {1} DELETE r")
+  @Query("MATCH (m1)-[r]->(m2) WHERE ID(m1) = {0} AND ID(m2) = {1} DELETE r")
   void detachModuleFromModule(@NonNull Long moduleId1, @NonNull Long moduleId2);
 }

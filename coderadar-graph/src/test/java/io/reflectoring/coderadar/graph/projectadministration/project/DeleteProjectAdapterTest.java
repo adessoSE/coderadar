@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.graph.projectadministration.project;
 
 import static org.mockito.Mockito.*;
 
-import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.DeleteProjectAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
@@ -15,23 +14,20 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Delete project")
 class DeleteProjectAdapterTest {
   private ProjectRepository projectRepository = mock(ProjectRepository.class);
-  private CoderadarConfigurationProperties coderadarConfigurationProperties =
-      mock(CoderadarConfigurationProperties.class);
 
   private DeleteProjectAdapter deleteProjectAdapter;
 
   @BeforeEach
   void setUp() {
     when(projectRepository.findById(anyLong())).thenReturn(Optional.of(new ProjectEntity()));
-    deleteProjectAdapter =
-        new DeleteProjectAdapter(projectRepository, coderadarConfigurationProperties);
+    deleteProjectAdapter = new DeleteProjectAdapter(projectRepository);
   }
 
   @Test
-  @DisplayName("Should delete project when passing a valid project id")
+  @DisplayName("Should delete project when passing a valid project")
   void shouldDeleteProjectWhenPassingAValidProjectId() {
     when(projectRepository.deleteProjectFindings(anyLong())).thenReturn(0L);
-    doNothing().when(projectRepository).deleteProjectFilesAndModules(isA(Long.class));
+    when(projectRepository.deleteProjectFilesAndModules(anyLong())).thenReturn(0L);
     doNothing().when(projectRepository).deleteProjectCommits(isA(Long.class));
     when(projectRepository.deleteProjectMetrics(anyLong())).thenReturn(0L);
     doNothing().when(projectRepository).deleteProjectConfiguration(isA(Long.class));

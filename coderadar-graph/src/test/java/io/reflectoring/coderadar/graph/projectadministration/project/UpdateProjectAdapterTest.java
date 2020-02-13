@@ -5,7 +5,6 @@ import static org.mockito.Mockito.*;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.UpdateProjectAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -22,13 +21,6 @@ class UpdateProjectAdapterTest {
   @BeforeEach
   void setUp() {
     updateProjectAdapter = new UpdateProjectAdapter(projectRepository);
-  }
-
-  @Test
-  @DisplayName("Should throw exception when a project with the passing ID doesn't exists")
-  void shouldThrowExceptionWhenAProjectWithThePassingIdDoesntExists() {
-    Assertions.assertThrows(
-        ProjectNotFoundException.class, () -> updateProjectAdapter.update(new Project()));
   }
 
   @Test

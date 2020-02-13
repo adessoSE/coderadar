@@ -24,7 +24,7 @@ public class UpdateProjectController {
   }
 
   @PostMapping(path = "/projects/{projectId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity updateProject(
+  public ResponseEntity<HttpStatus> updateProject(
       @RequestBody @Validated UpdateProjectCommand command,
       @PathVariable(name = "projectId") Long projectId)
           throws MalformedURLException {

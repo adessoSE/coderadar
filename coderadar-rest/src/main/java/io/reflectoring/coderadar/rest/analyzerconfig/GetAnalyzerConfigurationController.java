@@ -1,6 +1,8 @@
 package io.reflectoring.coderadar.rest.analyzerconfig;
 
+import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationUseCase;
+import io.reflectoring.coderadar.rest.domain.GetAnalyzerConfigurationResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +22,10 @@ public class GetAnalyzerConfigurationController {
   }
 
   @GetMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity getAnalyzerConfiguration(@PathVariable Long analyzerConfigurationId) {
-      return new ResponseEntity<>(
-          getAnalyzerConfigurationUseCase.getAnalyzerConfiguration(analyzerConfigurationId),
-          HttpStatus.OK);
+  public ResponseEntity<GetAnalyzerConfigurationResponse> getAnalyzerConfiguration(@PathVariable Long analyzerConfigurationId) {
+    AnalyzerConfiguration analyzerConfiguration = getAnalyzerConfigurationUseCase.getAnalyzerConfiguration(analyzerConfigurationId);
+    return new ResponseEntity<>(
+        new GetAnalyzerConfigurationResponse(analyzerConfiguration.getId(), analyzerConfiguration.getAnalyzerName(), analyzerConfiguration.isEnabled()),
+        HttpStatus.OK);
   }
 }

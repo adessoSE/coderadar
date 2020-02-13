@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.user;
 
+import io.reflectoring.coderadar.rest.domain.LoadUserResponse;
 import io.reflectoring.coderadar.useradministration.port.driver.load.LoadUserUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,7 +20,7 @@ public class LoadUserController {
   }
 
   @GetMapping(path = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity loadUser(@PathVariable Long userId) {
-    return new ResponseEntity<>(loadUserUseCase.loadUser(userId), HttpStatus.OK);
+  public ResponseEntity<LoadUserResponse> loadUser(@PathVariable Long userId) {
+    return new ResponseEntity<>(new LoadUserResponse(userId, loadUserUseCase.loadUser(userId).getUsername()), HttpStatus.OK);
   }
 }

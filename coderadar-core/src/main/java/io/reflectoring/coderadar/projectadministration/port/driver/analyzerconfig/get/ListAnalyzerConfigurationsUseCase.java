@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get;
 
+import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import java.util.List;
 
 public interface ListAnalyzerConfigurationsUseCase {
@@ -10,5 +11,5 @@ public interface ListAnalyzerConfigurationsUseCase {
    * @param projectId The id of the project.
    * @return The analyzer configurations.
    */
-  List<GetAnalyzerConfigurationResponse> get(Long projectId);
+  List<AnalyzerConfiguration> get(Long projectId);
 }

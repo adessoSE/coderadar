@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar.graph.projectadministration.project;
 
-import io.reflectoring.coderadar.graph.AbstractMapper;
+import io.reflectoring.coderadar.graph.Mapper;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 
-public class ProjectMapper extends AbstractMapper<Project, ProjectEntity> {
+public class ProjectMapper implements Mapper<Project, ProjectEntity> {
 
   @Override
   public Project mapNodeEntity(ProjectEntity nodeEntity) {
@@ -24,7 +24,6 @@ public class ProjectMapper extends AbstractMapper<Project, ProjectEntity> {
   @Override
   public ProjectEntity mapDomainObject(Project domainObject) {
     ProjectEntity project = new ProjectEntity();
-    project.setId(domainObject.getId());
     project.setName(domainObject.getName());
     project.setVcsEnd(domainObject.getVcsEnd());
     project.setVcsStart(domainObject.getVcsStart());

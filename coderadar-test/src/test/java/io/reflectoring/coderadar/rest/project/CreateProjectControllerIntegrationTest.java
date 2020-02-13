@@ -8,7 +8,7 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntit
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
-import io.reflectoring.coderadar.rest.IdResponse;
+import io.reflectoring.coderadar.rest.domain.IdResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,26 +66,8 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
             "project", "username", "password", "invalid", true, new Date(), new Date());
     mvc()
         .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
-            /*.andDo(
-                    document(
-                            "projects/create/error400",
-                            responseFields(
-                                    fields
-                                            .withPath("errorMessage")
-                                            .description(
-                                                    "Short message describing what went wrong. In case of validation errors, the detailed validation error messages can be found in the fieldErrors array."),
-                                    fields
-                                            .withPath("fieldErrors")
-                                            .description(
-                                                    "List of fields in the JSON payload of a request that had invalid values. May be empty. In this case, the 'message' field should contain an explanation of what went wrong."),
-                                    fields
-                                            .withPath("fieldErrors[].field")
-                                            .description(
-                                                    "Name of the field in the JSON payload of the request that had an invalid value."),
-                                    fields
-                                            .withPath("fieldErrors[].message")
-                                            .description("Reason why the value is invalid."))));*/
+        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andDo(document("projects/create/error400"));
   }
 
     private ResultHandler documentCreateProject() {
@@ -112,10 +94,12 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
                                         "Set to false if you want no interaction with a remote repository for this project. True by default."),
                         fields
                                 .withPath("startDate")
+                                .type("Date")
                                 .description(
                                         "The start date of the range of commits which should be analyzed by coderadar. Leave empty to start at the first commit."),
                         fields
                                 .withPath("endDate")
+                                .type("Date")
                                 .description(
                                         "The end date of the range of commits which should be analyzed by coderadar. Leave empty to automatically process all new incoming commits.")));
     }

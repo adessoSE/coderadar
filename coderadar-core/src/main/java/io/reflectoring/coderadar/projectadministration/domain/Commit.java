@@ -1,8 +1,6 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
-import io.reflectoring.coderadar.analyzer.domain.MetricValue;
-import java.util.ArrayList;
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import lombok.Data;
 import lombok.ToString;
@@ -10,17 +8,16 @@ import lombok.ToString;
 /** Metadata about a commit to a Git repository. */
 @Data
 public class Commit {
-  private Long id;
+
+  @JsonIgnore private long id;
+
   private String name;
-  private Date timestamp;
+  private long timestamp;
   private String comment;
   private String author;
-  private boolean merged = false;
   private boolean analyzed = false;
 
-  @ToString.Exclude private List<Commit> parents = new ArrayList<>();
+  @JsonIgnore @ToString.Exclude private List<Commit> parents;
 
-  @ToString.Exclude private List<FileToCommitRelationship> touchedFiles = new ArrayList<>();
-
-  private List<MetricValue> metricValues = new ArrayList<>();
+  @JsonIgnore @ToString.Exclude private List<FileToCommitRelationship> touchedFiles;
 }

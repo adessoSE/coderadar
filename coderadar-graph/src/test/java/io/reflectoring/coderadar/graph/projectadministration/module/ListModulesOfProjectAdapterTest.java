@@ -3,11 +3,9 @@ package io.reflectoring.coderadar.graph.projectadministration.module;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
-import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.adapter.ListModulesOfProjectAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import java.util.LinkedList;
 import org.assertj.core.api.Assertions;
@@ -25,22 +23,12 @@ class ListModulesOfProjectAdapterTest {
 
   @BeforeEach
   void setUp() {
-    listModulesOfProjectAdapter =
-        new ListModulesOfProjectAdapter(projectRepository, moduleRepository);
-  }
-
-  @Test
-  @DisplayName("Should throw exception when a project with the passing ID doesn't exists")
-  void shouldThrowExceptionWhenAProjectWithThePassingIdDoesntExists() {
-    org.junit.jupiter.api.Assertions.assertThrows(
-        ProjectNotFoundException.class, () -> listModulesOfProjectAdapter.listModules(1L));
+    listModulesOfProjectAdapter = new ListModulesOfProjectAdapter(moduleRepository);
   }
 
   @Test
   @DisplayName("Should return empty list when no modules in the project exist")
   void shouldReturnEmptyListWhenNoModulesInTheProjectExist() {
-    ProjectEntity mockedProject = new ProjectEntity();
-    when(projectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
     when(moduleRepository.findModulesInProject(1L)).thenReturn(new LinkedList<>());
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);
@@ -52,9 +40,8 @@ class ListModulesOfProjectAdapterTest {
   @DisplayName("Should return list with size of one when one module in the project exists")
   void shouldReturnListWithSizeOfOneWhenOneModuleInTheProjectExists() {
     LinkedList<ModuleEntity> mockedItem = new LinkedList<>();
-    mockedItem.add(new ModuleEntity());
-    ProjectEntity mockedProject = new ProjectEntity();
-    when(projectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
+    mockedItem.add(new ModuleEntity().setId(3L));
+    when(projectRepository.existsById(1L)).thenReturn(true);
     when(moduleRepository.findModulesInProject(1L)).thenReturn(mockedItem);
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);
@@ -66,10 +53,9 @@ class ListModulesOfProjectAdapterTest {
   @DisplayName("Should return list with size of two when two modules in the project exist")
   void shouldReturnListWithSizeOfTwoWhenTwoModulesInTheProjectExist() {
     LinkedList<ModuleEntity> mockedItem = new LinkedList<>();
-    mockedItem.add(new ModuleEntity());
-    mockedItem.add(new ModuleEntity());
-    ProjectEntity mockedProject = new ProjectEntity();
-    when(projectRepository.findById(1L)).thenReturn(java.util.Optional.of(mockedProject));
+    mockedItem.add(new ModuleEntity().setId(3L));
+    mockedItem.add(new ModuleEntity().setId(3L));
+    when(projectRepository.existsById(1L)).thenReturn(true);
     when(moduleRepository.findModulesInProject(1L)).thenReturn(mockedItem);
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);

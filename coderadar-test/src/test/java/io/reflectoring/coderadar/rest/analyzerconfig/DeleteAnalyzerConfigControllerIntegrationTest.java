@@ -27,6 +27,7 @@ class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
     AnalyzerConfigurationEntity analyzerConfiguration = new AnalyzerConfigurationEntity();
     analyzerConfiguration.setProject(testProject);
     analyzerConfiguration.setAnalyzerName("analyzer");
+    analyzerConfiguration.setEnabled(true);
 
     analyzerConfiguration = analyzerConfigurationRepository.save(analyzerConfiguration);
     final Long id = analyzerConfiguration.getId();
@@ -40,7 +41,8 @@ class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             result -> {
               Assertions.assertFalse(
                       analyzerConfigurationRepository.findById(id).isPresent());
-            });
+            })
+        .andDo(document("analyzerConfiguration/delete"));
   }
 
   @Test
@@ -50,8 +52,7 @@ class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
-                .value("AnalyzerConfiguration with id 2 not found."))
-            .andDo(document("analyzerConfiguration/delete"));
+                .value("AnalyzerConfiguration with id 2 not found."));
 
   }
 }

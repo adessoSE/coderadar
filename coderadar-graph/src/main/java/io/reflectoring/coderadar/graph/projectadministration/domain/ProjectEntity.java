@@ -1,13 +1,13 @@
 package io.reflectoring.coderadar.graph.projectadministration.domain;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
-import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzingJobEntity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -15,8 +15,12 @@ import org.neo4j.ogm.annotation.Relationship;
 @NodeEntity
 @Data
 public class ProjectEntity {
-  private Long id;
+
+  @Index private Long id;
+
+  @Index(unique = true)
   private String name;
+
   private String workdirName;
   private String vcsUrl;
   private String vcsUsername;
@@ -25,9 +29,11 @@ public class ProjectEntity {
   private Date vcsStart;
   private Date vcsEnd;
 
-  @EqualsAndHashCode.Exclude private boolean isBeingProcessed;
+  @EqualsAndHashCode.Exclude private boolean isBeingProcessed = false;
 
   @EqualsAndHashCode.Exclude private boolean isBeingDeleted = false;
+
+  @EqualsAndHashCode.Exclude private boolean analyzingStatus = false;
 
   // The graph starts from a project and goes only in one direction.
   // https://en.wikipedia.org/wiki/Directed_acyclic_graph
@@ -54,9 +60,4 @@ public class ProjectEntity {
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   private List<AnalyzerConfigurationEntity> analyzerConfigurations = new ArrayList<>();
-
-  @Relationship(type = "HAS")
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
-  private AnalyzingJobEntity analyzingJob;
 }

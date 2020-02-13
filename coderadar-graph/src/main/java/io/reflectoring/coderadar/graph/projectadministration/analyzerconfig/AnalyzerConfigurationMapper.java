@@ -2,12 +2,12 @@ package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfigurationFile;
-import io.reflectoring.coderadar.graph.AbstractMapper;
+import io.reflectoring.coderadar.graph.Mapper;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationFileEntity;
 
 public class AnalyzerConfigurationMapper
-    extends AbstractMapper<AnalyzerConfiguration, AnalyzerConfigurationEntity> {
+    implements Mapper<AnalyzerConfiguration, AnalyzerConfigurationEntity> {
 
   @Override
   public AnalyzerConfiguration mapNodeEntity(AnalyzerConfigurationEntity nodeEntity) {
@@ -25,9 +25,8 @@ public class AnalyzerConfigurationMapper
   @Override
   public AnalyzerConfigurationEntity mapDomainObject(AnalyzerConfiguration domainObject) {
     AnalyzerConfigurationEntity analyzerConfiguration = new AnalyzerConfigurationEntity();
-    analyzerConfiguration.setId(domainObject.getId());
     analyzerConfiguration.setAnalyzerName(domainObject.getAnalyzerName());
-    analyzerConfiguration.setEnabled(domainObject.getEnabled());
+    analyzerConfiguration.setEnabled(domainObject.isEnabled());
     if (domainObject.getAnalyzerConfigurationFile() != null) {
       analyzerConfiguration.setAnalyzerConfigurationFile(
           mapConfigurationFileDomainObject(domainObject.getAnalyzerConfigurationFile()));

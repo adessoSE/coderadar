@@ -1,8 +1,9 @@
 package io.reflectoring.coderadar.rest.unit.analyzerconfig;
 
-import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationResponse;
+import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationUseCase;
 import io.reflectoring.coderadar.rest.analyzerconfig.GetAnalyzerConfigurationController;
+import io.reflectoring.coderadar.rest.domain.GetAnalyzerConfigurationResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -21,8 +22,8 @@ class GetAnalyzerConfigurationControllerTest {
     GetAnalyzerConfigurationController testSubject =
         new GetAnalyzerConfigurationController(getAnalyzerConfigurationUseCase);
 
-    GetAnalyzerConfigurationResponse analyzerConfiguration =
-        new GetAnalyzerConfigurationResponse(1L, "analyzer", true);
+    AnalyzerConfiguration analyzerConfiguration =
+        new AnalyzerConfiguration(1L, "analyzer", true);
 
     Mockito.when(getAnalyzerConfigurationUseCase.getAnalyzerConfiguration(1L))
         .thenReturn(analyzerConfiguration);
@@ -31,8 +32,8 @@ class GetAnalyzerConfigurationControllerTest {
         testSubject.getAnalyzerConfiguration(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    Assertions.assertEquals(1L, responseEntity.getBody().getId().longValue());
+    Assertions.assertEquals(1L, responseEntity.getBody().getId());
     Assertions.assertEquals("analyzer", responseEntity.getBody().getAnalyzerName());
-    Assertions.assertEquals(true, responseEntity.getBody().getEnabled());
+    Assertions.assertEquals(true, responseEntity.getBody().isEnabled());
   }
 }

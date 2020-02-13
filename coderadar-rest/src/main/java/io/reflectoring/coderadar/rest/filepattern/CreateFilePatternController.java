@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.rest.filepattern;
 
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternUseCase;
-import io.reflectoring.coderadar.rest.IdResponse;
+import io.reflectoring.coderadar.rest.domain.IdResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class CreateFilePatternController {
   }
 
   @PostMapping(path = "/projects/{projectId}/filePatterns", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity createFilePattern(
+  public ResponseEntity<IdResponse> createFilePattern(
       @RequestBody @Validated CreateFilePatternCommand command,
       @PathVariable(name = "projectId") Long projectId) {
       return new ResponseEntity<>(

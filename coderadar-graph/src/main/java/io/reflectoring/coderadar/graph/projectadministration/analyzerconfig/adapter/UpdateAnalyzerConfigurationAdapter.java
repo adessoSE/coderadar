@@ -6,7 +6,6 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.Anal
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.projectadministration.AnalyzerConfigurationNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,22 +21,18 @@ public class UpdateAnalyzerConfigurationAdapter implements UpdateAnalyzerConfigu
 
   @Override
   public void update(AnalyzerConfiguration configuration) {
-    Optional<AnalyzerConfigurationEntity> persistedAnalyzerConfiguration =
-        analyzerConfigurationRepository.findById(configuration.getId());
+    AnalyzerConfigurationEntity analyzerConfigurationEntity =
+        analyzerConfigurationRepository
+            .findById(configuration.getId())
+            .orElseThrow(() -> new AnalyzerConfigurationNotFoundException(configuration.getId()));
 
-    if (persistedAnalyzerConfiguration.isPresent()) {
-      persistedAnalyzerConfiguration.get().setAnalyzerName(configuration.getAnalyzerName());
-      persistedAnalyzerConfiguration.get().setEnabled(configuration.getEnabled());
-      if (configuration.getAnalyzerConfigurationFile() != null) {
-        persistedAnalyzerConfiguration
-            .get()
-            .setAnalyzerConfigurationFile(
-                analyzerConfigurationMapper.mapConfigurationFileDomainObject(
-                    configuration.getAnalyzerConfigurationFile()));
-      }
-      analyzerConfigurationRepository.save(persistedAnalyzerConfiguration.get());
-    } else {
-      throw new AnalyzerConfigurationNotFoundException(configuration.getId());
+    analyzerConfigurationEntity.setAnalyzerName(configuration.getAnalyzerName());
+    analyzerConfigurationEntity.setEnabled(configuration.isEnabled());
+    if (configuration.getAnalyzerConfigurationFile() != null) {
+      analyzerConfigurationEntity.setAnalyzerConfigurationFile(
+          analyzerConfigurationMapper.mapConfigurationFileDomainObject(
+              configuration.getAnalyzerConfigurationFile()));
     }
+    analyzerConfigurationRepository.save(analyzerConfigurationEntity);
   }
 }
