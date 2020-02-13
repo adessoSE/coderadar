@@ -41,19 +41,19 @@ public class ComputeContributorAdapter implements ComputeContributorsPort {
 
       Map<String, Set<String>> contributors = new HashMap<>();
       for (RevCommit rc : revCommits) {
-        String email = rc.getAuthorIdent().getEmailAddress();
         String name = rc.getAuthorIdent().getName();
-        if (contributors.containsKey(email)) {
-          contributors.get(email).add(name);
+        String email = rc.getAuthorIdent().getEmailAddress();
+        if (contributors.containsKey(name)) {
+          contributors.get(name).add(email);
         } else {
-          contributors.put(email, new HashSet<>(Collections.singletonList(name)));
+          contributors.put(name, new HashSet<>(Collections.singletonList(email)));
         }
       }
 
       List<Contributor> contributorsToSave = new ArrayList<>(contributors.size());
       for (Map.Entry<String, Set<String>> entry : contributors.entrySet()) {
         Contributor contributor =
-            new Contributor().setEmail(entry.getKey()).setNames(entry.getValue());
+            new Contributor().setName(entry.getKey()).setEmails(entry.getValue());
         contributorsToSave.add(contributor);
       }
       return contributorsToSave;

@@ -9,10 +9,10 @@ public class ContributorMapper extends AbstractMapper<Contributor, ContributorEn
   public Contributor mapNodeEntity(ContributorEntity nodeEntity) {
     Contributor contributor = new Contributor();
     contributor.setId(nodeEntity.getId());
-    contributor.setEmail(nodeEntity.getEmail());
-    contributor.setNames(nodeEntity.getNames());
+    contributor.setEmails(nodeEntity.getEmails());
+    contributor.setName(nodeEntity.getName());
     // set files
-
+    // set projects
     return contributor;
   }
 
@@ -20,8 +20,8 @@ public class ContributorMapper extends AbstractMapper<Contributor, ContributorEn
   public ContributorEntity mapDomainObject(Contributor domainObject) {
     ContributorEntity contributorEntity = new ContributorEntity();
     contributorEntity.setId(domainObject.getId());
-    contributorEntity.setNames(domainObject.getNames());
-    contributorEntity.setEmail(domainObject.getEmail());
+    contributorEntity.setName(domainObject.getName());
+    contributorEntity.setEmails(domainObject.getEmails());
     // set files
     // set projects
     return contributorEntity;

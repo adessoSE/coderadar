@@ -9,8 +9,8 @@ import lombok.Data;
 @Data
 public class Contributor {
   private Long id;
-  private Set<String> names;
-  private String email;
+  private String name;
+  private Set<String> emails;
   private List<Project> projects;
   private List<File> files;
 }
