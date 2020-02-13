@@ -11,6 +11,7 @@ public class ContributorMapper implements Mapper<Contributor, ContributorEntity>
     contributor.setId(nodeEntity.getId());
     contributor.setEmails(nodeEntity.getEmails());
     contributor.setName(nodeEntity.getName());
+    contributor.setCommitHashes(nodeEntity.getCommitHashes());
     // set files
     // set projects
     return contributor;
@@ -22,6 +23,7 @@ public class ContributorMapper implements Mapper<Contributor, ContributorEntity>
     contributorEntity.setId(domainObject.getId());
     contributorEntity.setName(domainObject.getName());
     contributorEntity.setEmails(domainObject.getEmails());
+    contributorEntity.setCommitHashes(domainObject.getCommitHashes());
     // set files
     // set projects
     return contributorEntity;

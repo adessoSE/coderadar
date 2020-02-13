@@ -1,7 +1,12 @@
 package io.reflectoring.coderadar.contributor.port.driven;
 
 import io.reflectoring.coderadar.contributor.domain.Contributor;
+import java.util.List;
 
 public interface GetContributorPort {
-  Contributor getContributorById(Long id);
+  Contributor findById(Long id);
+
+  List<Contributor> findAll();
+
+  List<Contributor> findAllByProjectId(Long projectId);
 }

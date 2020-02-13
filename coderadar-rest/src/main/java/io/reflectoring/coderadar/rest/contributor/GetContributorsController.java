@@ -21,6 +21,7 @@ public class GetContributorsController {
         this.getContributorsUseCase = getContributorsUseCase;
     }
 
+    // TODO: return GetContributorResponse instead of Contributor
     @GetMapping(path = "/projects/{projectId}/contributors", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Contributor>> getContributors(@PathVariable Long projectId) {
         return new ResponseEntity<>(getContributorsUseCase.getContributors(projectId), HttpStatus.OK);

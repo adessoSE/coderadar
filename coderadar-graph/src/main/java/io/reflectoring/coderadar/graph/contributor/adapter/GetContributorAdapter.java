@@ -6,23 +6,35 @@ import io.reflectoring.coderadar.contributor.port.driven.GetContributorPort;
 import io.reflectoring.coderadar.graph.contributor.ContributorMapper;
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GetContributorAdapter implements GetContributorPort {
   private final ContributorRepository contributorRepository;
+  private final ContributorMapper mapper = new ContributorMapper();
 
   public GetContributorAdapter(ContributorRepository contributorRepository) {
     this.contributorRepository = contributorRepository;
   }
 
   @Override
-  public Contributor getContributorById(Long id) {
+  public Contributor findById(Long id) {
     Optional<ContributorEntity> entity = contributorRepository.findById(id);
-    if (!entity.isPresent()) {
-      throw new ContributorNotFoundException("Contributor with id " + id + " not found.");
+    if (entity.isEmpty()) {
+      throw new ContributorNotFoundException(id);
     }
-    return new ContributorMapper().mapNodeEntity(entity.get());
+    return mapper.mapNodeEntity(entity.get());
+  }
+
+  @Override
+  public List<Contributor> findAll() {
+    return mapper.mapNodeEntities(contributorRepository.findAll());
+  }
+
+  @Override
+  public List<Contributor> findAllByProjectId(Long projectId) {
+    return mapper.mapNodeEntities(contributorRepository.findAllByProjectId(projectId));
   }
 }
