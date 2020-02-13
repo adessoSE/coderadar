@@ -1,10 +1,10 @@
 package io.reflectoring.coderadar.graph.contributor;
 
 import io.reflectoring.coderadar.contributor.domain.Contributor;
-import io.reflectoring.coderadar.graph.AbstractMapper;
+import io.reflectoring.coderadar.graph.Mapper;
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 
-public class ContributorMapper extends AbstractMapper<Contributor, ContributorEntity> {
+public class ContributorMapper implements Mapper<Contributor, ContributorEntity> {
   @Override
   public Contributor mapNodeEntity(ContributorEntity nodeEntity) {
     Contributor contributor = new Contributor();
