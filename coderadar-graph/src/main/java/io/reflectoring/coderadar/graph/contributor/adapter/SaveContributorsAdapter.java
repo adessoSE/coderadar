@@ -31,8 +31,7 @@ public class SaveContributorsAdapter implements SaveContributorsPort {
 
   @Override
   public List<Contributor> save(List<Contributor> contributors, Long projectId) {
-    ProjectEntity projectEntity =
-        projectRepository.findById(projectId).get(); // todo: project MUST exist?
+    ProjectEntity projectEntity = projectRepository.findById(projectId).get(); // project must exist
 
     List<ContributorEntity> contributorEntities =
         new ArrayList<>(new ContributorMapper().mapDomainObjects(contributors));

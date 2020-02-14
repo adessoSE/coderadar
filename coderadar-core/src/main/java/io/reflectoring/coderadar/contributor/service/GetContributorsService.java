@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.contributor.port.driven.GetContributorPort;
 import io.reflectoring.coderadar.contributor.port.driven.SaveContributorsPort;
 import io.reflectoring.coderadar.contributor.port.driver.GetContributorsUseCase;
 import io.reflectoring.coderadar.contributor.port.driver.GetForFilenameCommand;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import java.util.List;
@@ -31,6 +32,9 @@ public class GetContributorsService implements GetContributorsUseCase {
 
   @Override
   public List<Contributor> getContributors(Long projectId) {
+    if (!getProjectPort.existsById(projectId)) {
+      throw new ProjectNotFoundException(projectId);
+    }
     List<Contributor> contributors = getContributorPort.findAllByProjectId(projectId);
 
     // if there are no contributors in project, compute them and save them in the db

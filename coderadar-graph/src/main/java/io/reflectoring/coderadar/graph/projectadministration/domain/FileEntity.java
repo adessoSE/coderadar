@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.domain;
 
+import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,4 +20,8 @@ public class FileEntity {
   @Relationship(type = "RENAMED_FROM")
   @ToString.Exclude
   private List<FileEntity> oldFiles;
+
+  // TODO: this is just experimental for now
+  @Relationship(type = "MODIFIED_BY")
+  private List<ContributorEntity> contributors;
 }
