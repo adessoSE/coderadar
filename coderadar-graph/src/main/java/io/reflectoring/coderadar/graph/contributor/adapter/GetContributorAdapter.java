@@ -40,6 +40,7 @@ public class GetContributorAdapter implements GetContributorPort {
 
   @Override
   public List<Contributor> findAllByProjectIdAndFilename(Long projectId, String filename) {
-    return mapper.mapNodeEntities(contributorRepository.findContributorsForFilenameAndProject(projectId, filename));
+    return mapper.mapNodeEntities(
+        contributorRepository.findContributorsForFilenameAndProject(projectId, filename));
   }
 }

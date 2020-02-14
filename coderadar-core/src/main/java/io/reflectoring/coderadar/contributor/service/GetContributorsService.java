@@ -36,8 +36,7 @@ public class GetContributorsService implements GetContributorsUseCase {
     // if there are no contributors in project, compute them and save them in the db
     if (contributors.isEmpty()) {
       Project project = getProjectPort.get(projectId);
-      contributors =
-          computeContributorsPort.computeContributors(projectId, project.getWorkdirName());
+      contributors = computeContributorsPort.computeContributors(project.getWorkdirName());
       contributors = saveContributorsPort.save(contributors, projectId);
     }
 
@@ -45,7 +44,8 @@ public class GetContributorsService implements GetContributorsUseCase {
   }
 
   @Override
-  public List<Contributor> getContributorsForProjectAndFilename(Long projectId, GetForFilenameCommand command) {
+  public List<Contributor> getContributorsForProjectAndFilename(
+      Long projectId, GetForFilenameCommand command) {
     return getContributorPort.findAllByProjectIdAndFilename(projectId, command.getFilename());
   }
 }
