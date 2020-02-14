@@ -5,4 +5,5 @@ import java.util.List;
 
 public interface GetContributorsUseCase {
   List<Contributor> getContributors(Long projectId);
+  List<Contributor> getContributorsForProjectAndFilename(Long projectId, GetForFilenameCommand command);
 }

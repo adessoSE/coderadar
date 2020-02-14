@@ -9,4 +9,6 @@ public interface GetContributorPort {
   List<Contributor> findAll();
 
   List<Contributor> findAllByProjectId(Long projectId);
+
+  List<Contributor> findAllByProjectIdAndFilename(Long projectId, String filename);
 }

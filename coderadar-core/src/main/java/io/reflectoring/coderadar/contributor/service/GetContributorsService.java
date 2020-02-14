@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort
 import io.reflectoring.coderadar.contributor.port.driven.GetContributorPort;
 import io.reflectoring.coderadar.contributor.port.driven.SaveContributorsPort;
 import io.reflectoring.coderadar.contributor.port.driver.GetContributorsUseCase;
+import io.reflectoring.coderadar.contributor.port.driver.GetForFilenameCommand;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import java.util.List;
@@ -37,9 +38,14 @@ public class GetContributorsService implements GetContributorsUseCase {
       Project project = getProjectPort.get(projectId);
       contributors =
           computeContributorsPort.computeContributors(projectId, project.getWorkdirName());
-      saveContributorsPort.save(contributors, projectId);
+      contributors = saveContributorsPort.save(contributors, projectId);
     }
 
     return contributors;
+  }
+
+  @Override
+  public List<Contributor> getContributorsForProjectAndFilename(Long projectId, GetForFilenameCommand command) {
+    return getContributorPort.findAllByProjectIdAndFilename(projectId, command.getFilename());
   }
 }

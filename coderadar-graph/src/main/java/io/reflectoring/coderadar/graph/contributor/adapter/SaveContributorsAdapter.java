@@ -30,7 +30,7 @@ public class SaveContributorsAdapter implements SaveContributorsPort {
   }
 
   @Override
-  public void save(List<Contributor> contributors, Long projectId) {
+  public List<Contributor> save(List<Contributor> contributors, Long projectId) {
     ProjectEntity projectEntity =
         projectRepository.findById(projectId).get(); // todo: project MUST exist?
 
@@ -44,6 +44,8 @@ public class SaveContributorsAdapter implements SaveContributorsPort {
         optionalCommit.ifPresent(commitEntity -> entity.getCommits().add(commitEntity));
       }
     }
-    contributorRepository.saveAll(contributorEntities);
+    return new ArrayList<>(
+        new ContributorMapper()
+            .mapNodeEntities(contributorRepository.saveAll(contributorEntities)));
   }
 }
