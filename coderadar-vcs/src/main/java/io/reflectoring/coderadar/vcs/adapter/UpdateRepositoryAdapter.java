@@ -65,7 +65,12 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
   private List<Branch> updateInternal(UpdateRepositoryCommand command)
       throws GitAPIException, IOException, UnableToCloneRepositoryException {
     FileRepositoryBuilder builder = new FileRepositoryBuilder();
-    Repository repository = builder.setWorkTree(command.getLocalDir()).setBare().setGitDir(command.getLocalDir()).build();
+    Repository repository =
+        builder
+            .setWorkTree(command.getLocalDir())
+            .setBare()
+            .setGitDir(command.getLocalDir())
+            .build();
     Git git = new Git(repository);
     ObjectId oldHead = git.getRepository().resolve(Constants.HEAD);
     if (oldHead == null) {

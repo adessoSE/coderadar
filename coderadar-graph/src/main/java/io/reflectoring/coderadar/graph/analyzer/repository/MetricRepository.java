@@ -11,9 +11,24 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Long> {
 
+  /**
+   * NOTE: only used in tests. WILL cause an out of memory exception if used on a sufficiently large
+   * project.
+   *
+   * @param projectId The project id.
+   * @return All of the metric values in a project.
+   */
   @Query("MATCH (p)-[:CONTAINS*]->()-[:MEASURED_BY]->(m) WHERE ID(p) = {0} RETURN m")
   List<MetricValueEntity> findByProjectId(@NonNull Long projectId);
 
+  /**
+   * Creates [:MEASURED_BY] relationships between metric values and files and [:VALID_FOR]
+   * relationships between metric values and commits.
+   *
+   * @param commitAndFileRels A list of maps, each containing the id of an existing
+   *     MetricValueEntity ("metricId"), an existing FileEntity ("fileId") and an existing
+   *     CommitEntity ("commitId").
+   */
   @Query(
       "UNWIND {0} as x "
           + "MATCH (m) WHERE ID(m) = x.metricId "

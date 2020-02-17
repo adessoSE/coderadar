@@ -46,27 +46,55 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
       "MATCH (p)-[:CONTAINS*]->(f) WHERE ID(p) = {0} WITH f LIMIT 10000 DETACH DELETE f RETURN COUNT(f)")
   long deleteProjectFilesAndModules(@NonNull Long projectId);
 
+  /**
+   * Deletes all of the commits in a project.
+   *
+   * @param projectId The project id.
+   */
   @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} DETACH DELETE c")
   void deleteProjectCommits(@NonNull Long projectId);
 
+  /**
+   * Deletes all of the FilePatterns and AnalyzerConfigurationEntities in a project.
+   *
+   * @param projectId The project id.
+   */
   @Query("MATCH (p)-[:HAS]->(a) WHERE ID(p) = {0} DETACH DELETE a")
   void deleteProjectConfiguration(@NonNull Long projectId);
 
+  /**
+   * Deletes all of the branches in a project. Must be called before the commits are deleted.
+   *
+   * @param projectId The project id.
+   */
   @Query("MATCH (p)-[:CONTAINS_COMMIT]->()<-[:POINTS_TO]-(b) WHERE ID(p) = {0} DETACH DELETE b")
   void deleteProjectBranches(@NonNull Long projectId);
 
+  /** @return All projects that are not currently being deleted. */
   @Query("MATCH (p:ProjectEntity) WHERE p.isBeingDeleted = FALSE RETURN p")
   @NonNull
   List<ProjectEntity> findAll();
 
+  /**
+   * @param name The name of the project.
+   * @return The project with given name as long as it is not currently being deleted.
+   */
   @Query("MATCH (p:ProjectEntity) WHERE p.name = {0} AND p.isBeingDeleted = FALSE RETURN p LIMIT 1")
   @NonNull
   Optional<ProjectEntity> findByName(@NonNull String name);
 
+  /**
+   * @param id The project id.
+   * @return The project with the given id as long as it is not being deleted.
+   */
   @Query("MATCH (p) WHERE ID(p) = {0} AND p.isBeingDeleted = FALSE RETURN p")
   @NonNull
   Optional<ProjectEntity> findById(@NonNull Long id);
 
+  /**
+   * @param id The project id.
+   * @return The project with the given id with initialized [:CONTAINS] relationships for modules.
+   */
   @Query(
       "MATCH (p) WHERE ID(p) = {0} AND p.isBeingDeleted = FALSE WITH p "
           + "OPTIONAL MATCH (p)-[r:CONTAINS]->(m:ModuleEntity) "
@@ -74,36 +102,84 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   @NonNull
   Optional<ProjectEntity> findByIdWithModules(@NonNull Long id);
 
+  /**
+   * @param id The project id.
+   * @return True if the project is being processed, false otherwise.
+   */
   @Query("MATCH (p) WHERE ID(p) = {0} RETURN p.isBeingProcessed")
   @NonNull
   Boolean isBeingProcessed(@NonNull Long id);
 
+  /**
+   * Sets the isBeingProcessed flag on a project.
+   *
+   * @param id The project id.
+   * @param value The status.
+   */
   @Query("MATCH (p) WHERE ID(p) = {0} SET p.isBeingProcessed = {1}")
   void setBeingProcessed(@NonNull Long id, @NonNull Boolean value);
 
+  /**
+   * @param id The project id.
+   * @return True if a project with the given id exists, false otherwise.
+   */
   @Query("MATCH (p) WHERE ID(p) = {0} RETURN COUNT(*) > 0")
   boolean existsById(@NonNull Long id);
 
+  /**
+   * @param name The name of the project.
+   * @return True if a project with the given name exists and the project is not being deleted.
+   */
   @Query(
       "MATCH (p:ProjectEntity) WHERE p.name = {0} AND p.isBeingDeleted = FALSE RETURN COUNT(*) > 0")
   boolean existsByName(@NonNull String name);
 
+  /**
+   * @param projectId The project id.
+   * @return True if the project is being analyzed, false otherwise.
+   */
   @Query("MATCH (p) WHERE ID(p) = {0} RETURN p.analyzingStatus")
   @NonNull
   Boolean getProjectAnalyzingStatus(@NonNull Long projectId);
 
+  /**
+   * Sets the analyzingStatus flag on a project.
+   *
+   * @param projectId The project id.
+   * @param status The status.
+   */
   @Query("MATCH (p) WHERE ID(p) = {0} SET p.analyzingStatus = {1}")
-  void setAnalyzingStatus(@NonNull Long projectId, @NonNull Boolean b);
+  void setAnalyzingStatus(@NonNull Long projectId, @NonNull Boolean status);
 
+  /**
+   * Sets the isBeingDeleted flag on a project.
+   *
+   * @param id The project id.
+   * @param status The status.
+   */
   @Query("MATCH (p) WHERE ID(p) = {0} SET p.isBeingDeleted = {1}")
-  void setBeingDeleted(@NonNull Long id, @NonNull Boolean value);
+  void setBeingDeleted(@NonNull Long id, @NonNull Boolean status);
 
+  /**
+   * Attaches existing file entities to a project. (Creates [:CONTAINS] relationships with every
+   * file)
+   *
+   * @param projectId The project id.
+   * @param fileIds A list of file ids.
+   */
   @Query(
       "MATCH (p) WHERE ID(p) = {0} "
           + "MATCH (f) WHERE ID(f) IN {1} "
           + "CREATE (p)-[r:CONTAINS]->(f)")
   void attachFilesWithIds(Long projectId, List<Long> fileIds);
 
+  /**
+   * Attaches existing commit entities to a project. (Creates [:CONTAINS_COMMIT] relationships with
+   * every commit)
+   *
+   * @param projectId The project id.
+   * @param commitIds A list of file ids.
+   */
   @Query(
       "MATCH (p) WHERE ID(p) = {0} "
           + "MATCH (c) WHERE ID(c) IN {1} "

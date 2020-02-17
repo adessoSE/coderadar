@@ -11,7 +11,6 @@ import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedEx
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBranchesPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
@@ -21,6 +20,7 @@ import io.reflectoring.coderadar.projectadministration.service.ProcessProjectSer
 import io.reflectoring.coderadar.projectadministration.service.project.UpdateProjectService;
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
+import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
 import java.io.File;
@@ -59,7 +59,7 @@ class UpdateProjectServiceTest {
 
   @Mock private ResetAnalysisPort resetAnalysisPort;
 
-  @Mock private ListBranchesPort listBranchesPort;
+  @Mock private GetAvailableBranchesPort getAvailableBranchesPort;
 
   private UpdateProjectService testSubject;
 
@@ -77,7 +77,7 @@ class UpdateProjectServiceTest {
             listModulesOfProjectUseCase,
             resetAnalysisPort,
             createModulePort,
-            listBranchesPort);
+            getAvailableBranchesPort);
   }
 
   @Test

@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.projectadministration.service.project;
 import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
-import io.reflectoring.coderadar.analyzer.port.driven.ResetAnalysisPort;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
@@ -11,15 +10,11 @@ import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.GetProjectHeadCommitPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBranchesPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ListProjectsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
@@ -52,12 +47,7 @@ public class ScanProjectScheduler {
   private final ListModulesOfProjectUseCase listModulesOfProjectUseCase;
   private final CreateModulePort createModulePort;
   private final AddCommitsPort addCommitsPort;
-  private final GetProjectHeadCommitPort getProjectHeadCommitPort;
   private final DeleteModulePort deleteModulePort;
-  private final SaveCommitPort saveCommitPort;
-  private final ResetAnalysisPort resetAnalysisPort;
-  private final UpdateProjectPort updateProjectPort;
-  private final ListBranchesPort listBranchesPort;
   private final TaskExecutor taskExecutor;
 
   private final Logger logger = LoggerFactory.getLogger(ScanProjectScheduler.class);
@@ -75,12 +65,7 @@ public class ScanProjectScheduler {
       ListModulesOfProjectUseCase listModulesOfProjectUseCase,
       CreateModulePort createModulePort,
       AddCommitsPort addCommitsPort,
-      GetProjectHeadCommitPort getProjectHeadCommitPort,
       DeleteModulePort deleteModulePort,
-      SaveCommitPort saveCommitPort,
-      ResetAnalysisPort resetAnalysisPort,
-      UpdateProjectPort updateProjectPort,
-      ListBranchesPort listBranchesPort,
       TaskExecutor taskExecutor) {
     this.updateRepositoryUseCase = updateRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
@@ -92,12 +77,7 @@ public class ScanProjectScheduler {
     this.listModulesOfProjectUseCase = listModulesOfProjectUseCase;
     this.createModulePort = createModulePort;
     this.addCommitsPort = addCommitsPort;
-    this.getProjectHeadCommitPort = getProjectHeadCommitPort;
     this.deleteModulePort = deleteModulePort;
-    this.saveCommitPort = saveCommitPort;
-    this.resetAnalysisPort = resetAnalysisPort;
-    this.updateProjectPort = updateProjectPort;
-    this.listBranchesPort = listBranchesPort;
     this.taskExecutor = taskExecutor;
   }
 

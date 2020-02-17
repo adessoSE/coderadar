@@ -9,6 +9,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FilePatternRepository extends Neo4jRepository<FilePatternEntity, Long> {
+
+  /**
+   * @param projectId The project id.
+   * @return All file patterns in a project.
+   */
   @Query("MATCH (p)-[:HAS]->(f:FilePatternEntity) WHERE ID(p) = {0} RETURN f")
   @NonNull
   List<FilePatternEntity> findByProjectId(@NonNull Long projectId);

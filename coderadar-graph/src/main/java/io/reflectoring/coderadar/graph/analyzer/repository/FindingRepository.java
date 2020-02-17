@@ -9,6 +9,14 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FindingRepository extends Neo4jRepository<FindingEntity, Long> {
+
+  /**
+   * NOTE: only used in tests. WILL cause an out of memory exception if used on a sufficiently large
+   * project.
+   *
+   * @param projectId The project id.
+   * @return All of the finding entities in a project.
+   */
   @Query(
       "MATCH (p)-[:CONTAINS*]->()-[:MEASURED_BY]->()-[:LOCATED_IN]->(fi) "
           + "WHERE ID(p) = {0} RETURN fi")

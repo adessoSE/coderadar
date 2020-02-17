@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -13,7 +14,7 @@ import org.neo4j.ogm.annotation.Relationship;
 @Data
 @EqualsAndHashCode
 public class ModuleEntity {
-  private Long id;
+  @Index private Long id;
   private String path;
 
   @Relationship(direction = Relationship.INCOMING, type = "CONTAINS")

@@ -54,7 +54,7 @@ class GetDeltaTreeForTwoCommitsControllerTest extends ControllerTestTemplate {
         CreateAnalyzerConfigurationCommand command3 = new CreateAnalyzerConfigurationCommand("io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
         mvc().perform(post("/projects/" + projectId + "/analyzers").content(toJson(command3)).contentType(MediaType.APPLICATION_JSON));
 
-        mvc().perform(post("/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON));
+        mvc().perform(post("/projects/" + projectId + "/master/analyze").contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test

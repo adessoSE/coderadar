@@ -10,6 +10,10 @@ import org.springframework.lang.NonNull;
 
 public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
 
+  /**
+   * @param projectId The project id.
+   * @return All of the files in a project (including those part of modules).
+   */
   @Query("MATCH (p)-[:CONTAINS*]->(f) WHERE ID(p) = {0} RETURN f")
   @NonNull
   List<FileEntity> findAllinProject(@NonNull Long projectId);
@@ -28,29 +32,33 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
   List<String> getFilesModifiedBetweenCommits(
       @NonNull Long commit1Time, @NonNull Long commit2Time, @NonNull Long projectId);
 
-  @Query(
-      "MATCH (p)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN {changeType: \"RENAME\"}]->(c:CommitEntity) WHERE ID(p) = {2} "
-          + "AND c.timestamp <= {1} AND c.timestamp > {0} "
-          + "RETURN collect(DISTINCT r.oldPath) as paths")
-  @NonNull
-  List<String> getFilesRenamedBetweenCommits(
-      @NonNull Long commit1Time, @NonNull Long commit2Time, @NonNull Long projectId);
-
+  /**
+   * Checks if files matching the given paths have been renamed between two points in time.
+   *
+   * @param paths The paths to check.
+   * @param commit1Time The first (older) commit timestamp.
+   * @param commit2Time The second (newer) commit timestamp.
+   * @param projectId The project id.
+   * @return A list of maps that contain two values in the following format: {"oldPath":
+   *     "/src/main/File.java", "newPath": "File.java"}.
+   */
   @Query(
       "MATCH (p)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity) WHERE f.path IN {0} AND c.timestamp <= {2}  "
           + "AND c.timestamp > {1} AND ID(p) = {3} AND r.changeType = \"RENAME\" "
           + "RETURN {oldPath: head(collect(DISTINCT r)).oldPath, newPath: f.path} as rename")
   @NonNull
-  List<Map<String, Object>> findOldpathIfRenamedBetweenCommits(
-      @NonNull List<String> path,
+  List<Map<String, Object>> findOldPathsIfRenamedBetweenCommits(
+      @NonNull List<String> paths,
       @NonNull Long commit1Time,
       @NonNull Long commit2Time,
       @NonNull Long projectId);
 
-  @Query("MATCH (f) WHERE ID(f) IN {0} RETURN f")
-  @NonNull
-  List<FileEntity> findAllById(@NonNull List<Long> fileIds);
-
+  /**
+   * Creates [:RENAMED_FROM] relationships between files.
+   *
+   * @param renameRels A list of maps, each containing two file ids. The file being renamed
+   *     ("fileId1") and the file it being renamed from ("fileId2").
+   */
   @Query(
       "UNWIND {0} as x "
           + "MATCH (f1) WHERE ID(f1) = x.fileId1 "

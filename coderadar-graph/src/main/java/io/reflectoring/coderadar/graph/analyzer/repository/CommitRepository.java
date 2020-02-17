@@ -58,17 +58,6 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   List<CommitEntity> findByProjectIdWithParentRelationships(@NonNull Long projectId);
 
   /**
-   * Returns the Head commit of a project for a branch.
-   *
-   * @param projectId The id of the project.
-   * @param branch The name of the branch.
-   * @return The head commit for the branch or null if nothing is found.
-   */
-  @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} RETURN c")
-  CommitEntity findHeadCommit(@NonNull Long projectId, @NonNull String branch);
-
-  /**
    * Sets all of the commits with the given id to analyzed.
    *
    * @param commitIds The commit ids.

@@ -44,6 +44,10 @@ public interface MetricQueryRepository extends Neo4jRepository<CommitEntity, Lon
   List<MetricValueForCommitTreeQueryResult> getMetricTreeForCommit(
       @NonNull Long projectId, @NonNull List<String> metricNames, @NonNull Long date);
 
+  /**
+   * @param projectId The project id.
+   * @return All of the available metrics in the project/
+   */
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv) WHERE ID(p) = {0} RETURN DISTINCT mv.name")
   @NonNull

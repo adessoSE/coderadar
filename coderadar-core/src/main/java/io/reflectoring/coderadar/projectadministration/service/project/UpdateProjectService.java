@@ -11,7 +11,6 @@ import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBranchesPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
@@ -20,6 +19,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.updat
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
+import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
@@ -43,7 +43,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final ListModulesOfProjectUseCase listModulesOfProjectUseCase;
   private final ResetAnalysisPort resetAnalysisPort;
   private final CreateModulePort createModulePort;
-  private final ListBranchesPort listBranchesPort;
+  private final GetAvailableBranchesPort getAvailableBranchesPort;
 
   private final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
 
@@ -58,7 +58,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       ListModulesOfProjectUseCase listModulesOfProjectUseCase,
       ResetAnalysisPort resetAnalysisPort,
       CreateModulePort createModulePort,
-      ListBranchesPort listBranchesPort) {
+      GetAvailableBranchesPort getAvailableBranchesPort) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
     this.updateRepositoryUseCase = updateRepositoryUseCase;
@@ -69,7 +69,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     this.listModulesOfProjectUseCase = listModulesOfProjectUseCase;
     this.resetAnalysisPort = resetAnalysisPort;
     this.createModulePort = createModulePort;
-    this.listBranchesPort = listBranchesPort;
+    this.getAvailableBranchesPort = getAvailableBranchesPort;
   }
 
   @Override
@@ -125,7 +125,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
               // Save the new commit tree
               saveCommitPort.saveCommits(
-                  commits, listBranchesPort.listBranchesInProject(projectId), projectId);
+                  commits, getAvailableBranchesPort.getAvailableBranches(localDir), projectId);
 
               // Re-create the modules
               for (Module module : modules) {

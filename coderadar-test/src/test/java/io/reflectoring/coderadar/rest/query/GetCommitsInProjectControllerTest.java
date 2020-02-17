@@ -39,7 +39,7 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
 
     @Test
     void returnsAllCommitsInProject() throws Exception {
-        MvcResult result = mvc().perform(get("/projects/" + projectId + "/commits").contentType(MediaType.APPLICATION_JSON))
+        MvcResult result = mvc().perform(get("/projects/" + projectId + "/master/commits").contentType(MediaType.APPLICATION_JSON))
                 .andDo(document(
                         "commit/list",
                         responseFields(
@@ -62,7 +62,7 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
 
     @Test
     void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
-        MvcResult result = mvc().perform(get("/projects/1234/commits").contentType(MediaType.APPLICATION_JSON))
+        MvcResult result = mvc().perform(get("/projects/1234/master/commits").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
 

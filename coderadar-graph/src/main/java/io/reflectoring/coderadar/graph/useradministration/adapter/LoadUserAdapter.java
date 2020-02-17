@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.graph.useradministration.adapter;
 
 import io.reflectoring.coderadar.graph.useradministration.UserMapper;
+import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.domain.User;
@@ -25,10 +26,12 @@ public class LoadUserAdapter implements LoadUserPort {
 
   @Override
   public User loadUserByUsername(String username) {
-    return userMapper.mapNodeEntity(
-        userRepository
-            .findByUsername(username)
-            .orElseThrow(() -> new UserNotFoundException(username)));
+    UserEntity userEntity = userRepository.findByUsername(username);
+    if (userEntity == null) {
+      throw new UserNotFoundException(username);
+    } else {
+      return userMapper.mapNodeEntity(userEntity);
+    }
   }
 
   @Override

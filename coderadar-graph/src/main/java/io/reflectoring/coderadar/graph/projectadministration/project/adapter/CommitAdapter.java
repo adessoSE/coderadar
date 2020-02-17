@@ -19,7 +19,7 @@ import java.util.*;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
+public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
   private final ProjectRepository projectRepository;
   private final FileRepository fileRepository;
   private final CommitRepository commitRepository;
@@ -27,7 +27,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
   private final CommitBaseDataMapper commitBaseDataMapper = new CommitBaseDataMapper();
   private final FileBaseDataMapper fileBaseDataMapper = new FileBaseDataMapper();
 
-  public SaveCommitAdapter(
+  public CommitAdapter(
       CommitRepository commitRepository,
       ProjectRepository projectRepository,
       FileRepository fileRepository,
@@ -38,14 +38,6 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
     this.branchRepository = branchRepository;
   }
 
-  /**
-   * This method should be used for the initial creation of Commits when saving a project. It maps
-   * all of the domain objects to entities and saves them in the DB.
-   *
-   * @param commits The commit tree to save.
-   * @param branches All of the branches in the project
-   * @param projectId The id of the project.
-   */
   @Override
   public void saveCommits(List<Commit> commits, List<Branch> branches, Long projectId) {
     if (!commits.isEmpty()) {
@@ -253,19 +245,20 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
         }
         commitEntity.setParents(parents);
       }
-      getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles);
+      commitEntity.setTouchedFiles(getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles));
     }
     return result;
   }
 
   /**
-   * Sets the files and relationships for a given CommitEntity
+   * Maps FileToCommitRelationships to FileToCommitRelationshipEntities.
    *
    * @param relationships The relationships that we have to map to DB entities.
-   * @param commitEntity The commitEntity
-   * @param walkedFiles Files we have already walked. We need this to prevent endless recursion when
+   * @param commitEntity The target commitEntity
+   * @param walkedFiles Files we have already walked. We need this to prevent endless recursion.
+   * @return A list of FileToCommitRelationshipEntity objects with initialized FileEntity fields.
    */
-  private void getFiles(
+  private List<FileToCommitRelationshipEntity> getFiles(
       List<FileToCommitRelationship> relationships,
       CommitEntity commitEntity,
       IdentityHashMap<File, FileEntity> walkedFiles) {
@@ -291,7 +284,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
       fileToCommitRelationshipEntity.setOldPath(fileToCommitRelationship.getOldPath());
       rels.add(fileToCommitRelationshipEntity);
     }
-    commitEntity.setTouchedFiles(rels);
+    return rels;
   }
 
   @Override
@@ -325,7 +318,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
         commitEntity.getParents().add(walkedCommits.get(parent.getName()));
       }
       // set files
-      getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles);
+      commitEntity.setTouchedFiles(getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles));
       walkedCommits.put(commit.getName(), commitEntity);
     }
     List<FileEntity> allFiles = new ArrayList<>(walkedFiles.values());

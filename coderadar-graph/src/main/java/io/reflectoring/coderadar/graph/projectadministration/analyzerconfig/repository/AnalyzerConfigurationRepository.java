@@ -11,6 +11,10 @@ import org.springframework.stereotype.Repository;
 public interface AnalyzerConfigurationRepository
     extends Neo4jRepository<AnalyzerConfigurationEntity, Long> {
 
+  /**
+   * @param projectId The project id.
+   * @return All analyzer configurations in a project.
+   */
   @Query("MATCH (p)-[:HAS]->(c:AnalyzerConfigurationEntity) WHERE ID(p) = {0} RETURN c")
   @NonNull
   List<AnalyzerConfigurationEntity> findByProjectId(@NonNull Long projectId);
