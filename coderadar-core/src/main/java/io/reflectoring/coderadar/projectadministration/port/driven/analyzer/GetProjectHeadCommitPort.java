@@ -6,7 +6,8 @@ public interface GetProjectHeadCommitPort {
 
   /**
    * @param projectId The id of the project.
-   * @return The HEAD commit of the project.
+   * @param branch The name of the branch
+   * @return The HEAD commit of the branch.
    */
-  Commit getHeadCommit(Long projectId);
+  Commit getHeadCommit(Long projectId, String branch);
 }

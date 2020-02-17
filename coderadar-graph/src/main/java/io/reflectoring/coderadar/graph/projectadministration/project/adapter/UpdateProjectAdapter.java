@@ -33,6 +33,7 @@ public class UpdateProjectAdapter implements UpdateProjectPort {
   @Override
   public void deleteFilesAndCommits(Long projectId) {
     while (projectRepository.deleteProjectFilesAndModules(projectId) > 0) ;
+    projectRepository.deleteProjectBranches(projectId);
     projectRepository.deleteProjectCommits(projectId);
   }
 }

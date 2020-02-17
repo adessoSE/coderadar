@@ -1,7 +1,9 @@
 package io.reflectoring.coderadar.vcs.port.driven;
 
+import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
+import java.util.List;
 
 public interface UpdateRepositoryPort {
 
@@ -11,8 +13,8 @@ public interface UpdateRepositoryPort {
    * @param command The command with the required parameters
    * @throws UnableToUpdateRepositoryException Thrown if there is an error while updating the
    *     repository.
-   * @return Returns true if new commits were added and false otherwise
+   * @return Returns a list of branches that were updated.
    */
-  boolean updateRepository(UpdateRepositoryCommand command)
+  List<Branch> updateRepository(UpdateRepositoryCommand command)
       throws UnableToUpdateRepositoryException;
 }

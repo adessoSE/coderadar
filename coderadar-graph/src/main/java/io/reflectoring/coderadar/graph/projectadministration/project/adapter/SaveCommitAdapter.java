@@ -294,17 +294,13 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
     commitEntity.setTouchedFiles(rels);
   }
 
-  /**
-   * Adds new commits to an existing project.
-   *
-   * @param commits The new commits to add.
-   * @param projectId The project id.
-   */
-  public void addCommits(List<Commit> commits, Long projectId) {
+  @Override
+  public void addCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
     ProjectEntity projectEntity =
         projectRepository
             .findById(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
+
     Map<String, CommitEntity> walkedCommits = new HashMap<>();
     for (CommitEntity c : commitRepository.findByProjectId(projectId)) {
       walkedCommits.put(c.getName(), c);
@@ -313,6 +309,7 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
     for (FileEntity f : fileRepository.findAllinProject(projectId)) {
       walkedFiles.put(fileBaseDataMapper.mapNodeEntity(f), f);
     }
+    commits.removeIf(commit -> walkedCommits.containsKey(commit.getName()));
 
     for (Commit commit : commits) {
       walkedCommits.put(commit.getName(), commitBaseDataMapper.mapDomainObject(commit));
@@ -330,7 +327,6 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
       // set files
       getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles);
       walkedCommits.put(commit.getName(), commitEntity);
-      projectEntity.getCommits().add(commitEntity);
     }
     List<FileEntity> allFiles = new ArrayList<>(walkedFiles.values());
     projectEntity.setFiles(allFiles);
@@ -338,6 +334,13 @@ public class SaveCommitAdapter implements SaveCommitPort, AddCommitsPort {
     projectRepository.save(projectEntity, 1);
     commitRepository.save(walkedCommits.values(), 1);
     fileRepository.save(allFiles, 1);
+    for (Branch branch : updatedBranches) {
+      if (!branchRepository.branchExistsInProject(projectId, branch.getName())) {
+        branchRepository.setBranchOnCommit(projectId, branch.getCommitHash(), branch.getName());
+      } else {
+        branchRepository.moveBranchToCommit(projectId, branch.getName(), branch.getCommitHash());
+      }
+    }
   }
 
   @Override

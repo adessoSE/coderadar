@@ -4,11 +4,11 @@ import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
 import {Commit} from '../../model/commit';
 import {Project} from '../../model/project';
-import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
+import {FORBIDDEN, NOT_FOUND, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import { AppEffects } from 'src/app/city-map/shared/effects';
 import {faClone, faSquare} from '@fortawesome/free-regular-svg-icons';
-import {MatPaginator, PageEvent} from '@angular/material';
+import {MatPaginator, MatSnackBar, PageEvent} from '@angular/material';
 import {AppComponent} from '../../app.component';
 import {Store} from '@ngrx/store';
 import * as fromRoot from '../../city-map/shared/reducers';
@@ -55,7 +55,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
 
   updateCommitsTimer: Subscription;
 
-  constructor(private router: Router, private userService: UserService, private titleService: Title,
+  constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute, private store: Store<fromRoot.AppState>,
               private cityEffects: AppEffects) {
     this.project = new Project();
@@ -84,6 +84,30 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         }
       });
       this.cityEffects.currentProjectId  = this.projectId;
+    });
+  }
+
+  startAnalysis(id: number, branch: string) {
+    this.projectService.startAnalyzingJob(id, branch).then(() => {
+      this.openSnackBar('Analysis started!', '🞩');
+    }).catch(error => {
+      if (error.status && error.status === FORBIDDEN) {
+        this.userService.refresh(() => this.projectService.startAnalyzingJob(id, branch));
+      } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
+        if (error.error.errorMessage === 'Cannot analyze project without analyzers') {
+          this.openSnackBar('Cannot analyze, no analyzers configured for this project!', '🞩');
+        } else if (error.error.errorMessage === 'Cannot analyze project without file patterns') {
+          this.openSnackBar('Cannot analyze, no file patterns configured for this project!', '🞩');
+        } else {
+          this.openSnackBar('Analysis cannot be started! Try again later!', '🞩');
+        }
+      }
+    });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 4000,
     });
   }
 
@@ -167,6 +191,31 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
           this.userService.refresh(() => this.getCommits(true));
         }
       });
+  }
+
+  resetAnalysis(id: number) {
+    this.commitsAnalyzed = 0;
+    this.projectService.resetAnalysis(id).then(() => {
+      this.openSnackBar('Analysis results deleted!', '🞩');
+    }).catch(error => {
+      if (error.status && error.status === FORBIDDEN) {
+        this.userService.refresh(() => this.projectService.resetAnalysis(id));
+      } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
+        this.openSnackBar('Analysis results cannot be deleted! Try again later!', '🞩');
+      }
+    });
+  }
+
+  stopAnalysis(id: number) {
+    this.projectService.stopAnalyzingJob(id).then(() => {
+      this.openSnackBar('Analysis stopped!', '🞩');
+    }).catch(error => {
+      if (error.status && error.status === FORBIDDEN) {
+        this.userService.refresh(() => this.projectService.stopAnalyzingJob(id));
+      } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
+        this.openSnackBar('Analysis stopped!', '🞩');
+      }
+    });
   }
 
   /**

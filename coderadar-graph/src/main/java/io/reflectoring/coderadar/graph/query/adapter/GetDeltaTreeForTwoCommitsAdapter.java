@@ -46,11 +46,11 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
     Long commit1Time =
         commitRepository
-            .findTimeStampByNameAndProjectId(command.getCommit1(), projectId)
+            .findTimestampByNameAndProjectId(command.getCommit1(), projectId)
             .orElseThrow(() -> new CommitNotFoundException(command.getCommit1()));
     Long commit2Time =
         commitRepository
-            .findTimeStampByNameAndProjectId(command.getCommit2(), projectId)
+            .findTimestampByNameAndProjectId(command.getCommit2(), projectId)
             .orElseThrow(() -> new CommitNotFoundException(command.getCommit2()));
 
     MetricTree commit1Tree =

@@ -52,6 +52,9 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   @Query("MATCH (p)-[:HAS]->(a) WHERE ID(p) = {0} DETACH DELETE a")
   void deleteProjectConfiguration(@NonNull Long projectId);
 
+  @Query("MATCH (p)-[:CONTAINS_COMMIT]->()<-[:POINTS_TO]-(b) WHERE ID(p) = {0} DETACH DELETE b")
+  void deleteProjectBranches(@NonNull Long projectId);
+
   @Query("MATCH (p:ProjectEntity) WHERE p.isBeingDeleted = FALSE RETURN p")
   @NonNull
   List<ProjectEntity> findAll();

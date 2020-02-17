@@ -27,53 +27,38 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     this.branchRepository = branchRepository;
   }
 
-  private List<Commit> mapCommitEntities(List<CommitEntity> commitEntities) {
-    IdentityHashMap<CommitEntity, Commit> walkedCommits =
-        new IdentityHashMap<>(commitEntities.size());
-    IdentityHashMap<FileEntity, File> walkedFiles = new IdentityHashMap<>(commitEntities.size());
-    List<Commit> result = new ArrayList<>(commitEntities.size());
-    for (CommitEntity commitEntity : commitEntities) {
-      Commit commit = walkedCommits.get(commitEntity);
-      if (commit == null) {
-        commit = commitBaseDataMapper.mapNodeEntity(commitEntity);
-      }
-      List<Commit> parents = new ArrayList<>(commitEntity.getParents().size());
-      for (CommitEntity parent : commitEntity.getParents()) {
-        Commit parentCommit = walkedCommits.get(parent);
-        if (parentCommit == null) {
-          parentCommit = commitBaseDataMapper.mapNodeEntity(parent);
-          parentCommit.setTouchedFiles(getFiles(parent.getTouchedFiles(), walkedFiles, true));
-          result.add(parentCommit);
-        }
-        parents.add(parentCommit);
-      }
-      commit.setParents(parents);
-      commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), walkedFiles, true));
-      walkedCommits.put(commitEntity, commit);
-      result.add(commit);
-    }
-    return result;
-  }
-
   @Override
   public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(
       Long projectId, String branch) {
-    return getCommitsInBranch(projectId, branch);
+    List<CommitEntity> commitsWithParents =
+        commitRepository.findByProjectIdWithParentRelationships(projectId);
+
+    CommitEntity branchCommit = branchRepository.getCommitForBranch(projectId, branch);
+    if (branchCommit == null) {
+      return new ArrayList<>();
+    }
+
+    List<CommitEntity> startCommitList =
+        commitsWithParents.stream()
+            .filter(commitEntity -> commitEntity.getName().equals(branchCommit.getName()))
+            .collect(Collectors.toList());
+
+    CommitEntity startCommit;
+    if (startCommitList.isEmpty()) {
+      return new ArrayList<>();
+    } else {
+      startCommit = startCommitList.get(0);
+    }
+    List<CommitEntity> result = new ArrayList<>();
+    walkCommitsByParents(startCommit, result);
+    result.sort((t1, t2) -> -Long.compare(t1.getTimestamp(), t2.getTimestamp()));
+    List<Commit> domainObjects = new ArrayList<>();
+    for (CommitEntity commitEntity : result) {
+      domainObjects.add(commitBaseDataMapper.mapNodeEntity(commitEntity));
+    }
+    return domainObjects;
   }
 
-  public List<Commit> getSortedByTimestampAsc(Long projectId) {
-    List<CommitEntity> commitEntities =
-        commitRepository.findByProjectIdWithAllRelationshipsSortedByTimestampAsc(projectId);
-    return mapCommitEntities(commitEntities);
-  }
-
-  /**
-   * Returns all not yet analyzed commits in this project, that match the supplied file patterns
-   *
-   * @param projectId The id of the project.
-   * @param filePatterns The patterns to use.
-   * @return A list of commits with initialized FileToCommitRelationShips and no parents.
-   */
   @Override
   public List<Commit> getNonAnalyzedSortedByTimestampAscWithNoParents(
       Long projectId, List<FilePattern> filePatterns, String branch) {
@@ -87,47 +72,57 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
         excludes.add(PatternUtil.toPattern(filePattern.getPattern()).toString());
       }
     }
+
     List<CommitEntity> commitEntities =
-        commitRepository.findByProjectIdNonAnalyzedWithFileAndParentRelationshipsSortedByTimestampAsc(
+        commitRepository.findByProjectIdNonAnalyzedWithFileAndParentRelationships(
             projectId, includes, excludes);
 
     CommitEntity branchCommit = branchRepository.getCommitForBranch(projectId, branch);
     CommitEntity startCommit =
         commitEntities.stream()
-            .filter(commitEntity -> commitEntity.getName().equals(branchCommit.getName()))
+            .filter(commitEntity -> commitEntity.getId().equals(branchCommit.getId()))
             .collect(Collectors.toList())
             .get(0);
+
     List<CommitEntity> result = new ArrayList<>();
-    setCommitParents(startCommit, result);
+    walkCommitsByParents(startCommit, result);
     result.sort(Comparator.comparingLong(CommitEntity::getTimestamp));
     return mapCommitEntitiesNoParents(result);
   }
 
+  /**
+   * Maps a list of commit entities to Commit domain objects. Does not map parent relationships.
+   *
+   * @param commitEntities The commit entities to map.
+   * @return A list of commit domain objects.
+   */
   private List<Commit> mapCommitEntitiesNoParents(List<CommitEntity> commitEntities) {
     List<Commit> commits = new ArrayList<>(commitEntities.size());
     IdentityHashMap<FileEntity, File> walkedFiles = new IdentityHashMap<>(commitEntities.size());
     for (CommitEntity commitEntity : commitEntities) {
       Commit commit = commitBaseDataMapper.mapNodeEntity(commitEntity);
-      commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), walkedFiles, false));
+      commit.setTouchedFiles(
+          mapFileToCommitRelationships(commitEntity.getTouchedFiles(), walkedFiles));
       commits.add(commit);
     }
     return commits;
   }
 
-  private List<FileToCommitRelationship> getFiles(
-      List<FileToCommitRelationshipEntity> relationships,
-      IdentityHashMap<FileEntity, File> walkedFiles,
-      boolean createRels) {
-    List<FileToCommitRelationship> fileToCommitRelationships =
-        new ArrayList<>(relationships.size());
+  /**
+   * Maps FileToCommitRelationshipEntities to FileToCommitRelationships. Creates a File domain
+   * object for each FileEntity
+   *
+   * @param touchedFiles The files touched in the current commit.
+   * @param walkedFiles A map of all the file entities created so far. (Empty on first method run)
+   * @return A list of FileToCommitRelationships with the accompanying files.
+   */
+  private List<FileToCommitRelationship> mapFileToCommitRelationships(
+      List<FileToCommitRelationshipEntity> touchedFiles,
+      IdentityHashMap<FileEntity, File> walkedFiles) {
+    List<FileToCommitRelationship> fileToCommitRelationships = new ArrayList<>(touchedFiles.size());
 
-    for (FileToCommitRelationshipEntity fileToCommitRelationshipEntity : relationships) {
+    for (FileToCommitRelationshipEntity fileToCommitRelationshipEntity : touchedFiles) {
       FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
-
-      if (createRels) {
-        fileToCommitRelationship.setOldPath(fileToCommitRelationshipEntity.getOldPath());
-        fileToCommitRelationship.setChangeType(fileToCommitRelationshipEntity.getChangeType());
-      }
 
       File file = walkedFiles.get(fileToCommitRelationshipEntity.getFile());
       if (file == null) {
@@ -143,40 +138,18 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     return fileToCommitRelationships;
   }
 
-  private List<Commit> getCommitsInBranch(Long projectId, String branch) {
-    List<CommitEntity> commitsWithParents =
-        commitRepository.findByProjectIdWithParentRelationships(projectId);
-
-    CommitEntity branchCommit = branchRepository.getCommitForBranch(projectId, branch);
-
-    List<CommitEntity> startCommitList =
-        commitsWithParents.stream()
-            .filter(commitEntity -> commitEntity.getName().equals(branchCommit.getName()))
-            .collect(Collectors.toList());
-
-    CommitEntity startCommit;
-    if (startCommitList.isEmpty()) {
-      return new ArrayList<>();
-    } else {
-      startCommit = startCommitList.get(0);
-    }
-    List<CommitEntity> result = new ArrayList<>();
-    setCommitParents(startCommit, result);
-
-    result.sort((t1, t2) -> -Long.compare(t1.getTimestamp(), t2.getTimestamp()));
-    List<Commit> domainObjects = new ArrayList<>();
-    for (CommitEntity commitEntity : result) {
-      domainObjects.add(commitBaseDataMapper.mapNodeEntity(commitEntity));
-    }
-    return domainObjects;
-  }
-
-  private void setCommitParents(CommitEntity startCommit, List<CommitEntity> result) {
+  /**
+   * Recursively adds commits to a result list until a commit with no parents is reached.
+   *
+   * @param startCommit The commit to start at.
+   * @param result A list to add the resulting commits to.
+   */
+  private void walkCommitsByParents(CommitEntity startCommit, List<CommitEntity> result) {
     result.add(startCommit);
     if (!startCommit.getParents().isEmpty()) {
       for (CommitEntity parent : startCommit.getParents()) {
         if (!result.contains(parent)) {
-          setCommitParents(parent, result);
+          walkCommitsByParents(parent, result);
         }
       }
     }

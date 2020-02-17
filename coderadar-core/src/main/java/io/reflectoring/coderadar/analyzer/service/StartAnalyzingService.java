@@ -85,9 +85,10 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
    * Starts the analysis of a project.
    *
    * @param projectId The id of the project to analyze.
+   * @param branchName
    */
   @Override
-  public void start(Long projectId) {
+  public void start(Long projectId, String branchName) {
     Project project = getProjectPort.get(projectId);
     if (projectStatusPort.isBeingProcessed(projectId)) {
       throw new ProjectIsBeingProcessedException(projectId);
@@ -105,18 +106,20 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
         || analyzerConfigurations.stream().noneMatch(AnalyzerConfiguration::isEnabled)) {
       throw new MisconfigurationException("Cannot analyze project without analyzers");
     }
-    startAnalyzingTask(project, filePatterns, analyzerConfigurations);
+    startAnalyzingTask(project, branchName, filePatterns, analyzerConfigurations);
   }
 
   /**
    * Starts a background task using the TaskExecutor. It will perform the analysis of the project.
    *
    * @param project The project to analyze.
+   * @param branchName The branch to analyze.
    * @param filePatterns The patterns to use.
    * @param analyzerConfigurations The analyzer configurations to use.
    */
   private void startAnalyzingTask(
       Project project,
+      String branchName,
       List<FilePattern> filePatterns,
       List<AnalyzerConfiguration> analyzerConfigurations) {
     processProjectService.executeTask(
@@ -125,7 +128,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
               getAnalyzersForProject(analyzerConfigurations);
           List<Commit> commitsToBeAnalyzed =
               getCommitsInProjectPort.getNonAnalyzedSortedByTimestampAscWithNoParents(
-                  project.getId(), filePatterns, "master");
+                  project.getId(), filePatterns, branchName);
           long[] commitIds = new long[commitsToBeAnalyzed.size()];
           setAnalyzingStatusPort.setStatus(project.getId(), true);
           int counter = 0;

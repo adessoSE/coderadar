@@ -111,7 +111,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         Assertions.assertEquals("src/paysim/", modules.get(0).getPath());
 
         //Number of commits correct?
-        List<CommitEntity> commitEntities = commitRepository.findByProjectIdWithFileRelationshipsSortedByTimestampAsc(projectId);
+        List<CommitEntity> commitEntities = commitRepository.findByProjectId(projectId);
         Assertions.assertEquals(99, commitEntities.size());
 
         //Files there?
@@ -162,7 +162,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
                 .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
         //Number of commits correct?
-        List<CommitEntity> commitEntities = commitRepository.findByProjectIdWithFileRelationshipsSortedByTimestampAsc(projectId);
+        List<CommitEntity> commitEntities = commitRepository.findByProjectId(projectId);
         Assertions.assertEquals(5, commitEntities.size());
 
         //Metric values deleted?
@@ -301,7 +301,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         //Commits analyzed?
         session.clear();
 
-        Collection<CommitEntity> commits = commitRepository.findByProjectIdWithAllRelationshipsSortedByTimestampAsc(projectId);
+        Collection<CommitEntity> commits = commitRepository.findByProjectId(projectId);
 
         for (CommitEntity commit : commits) {
             Assertions.assertTrue(commit.isAnalyzed());
@@ -379,7 +379,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         session.clear();
 
         //Number of commits correct?
-        List<CommitEntity> commitEntities = commitRepository.findByProjectIdWithFileRelationshipsSortedByTimestampAsc(projectId);
+        List<CommitEntity> commitEntities = commitRepository.findByProjectId(projectId);
         Assertions.assertEquals(99, commitEntities.size());
 
         //Files there?

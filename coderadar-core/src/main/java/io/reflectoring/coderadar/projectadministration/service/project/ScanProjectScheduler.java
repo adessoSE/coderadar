@@ -2,11 +2,11 @@ package io.reflectoring.coderadar.projectadministration.service.project;
 
 import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
 
-import com.google.common.collect.Iterables;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.analyzer.port.driven.ResetAnalysisPort;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
+import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
@@ -170,21 +170,10 @@ public class ScanProjectScheduler {
    * @param project The project to check
    * @param localDir The project workdir
    */
-  private void saveCommits(Project project, File localDir) {
+  private void saveCommits(Project project, File localDir, List<Branch> updatedBranches) {
     List<Commit> commits =
         extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
-
-    Commit head = getProjectHeadCommitPort.getHeadCommit(project.getId());
-    if (head.getTimestamp() > Iterables.getLast(commits).getTimestamp()) {
-      resetAnalysisPort.resetAnalysis(project.getId());
-      updateProjectPort.deleteFilesAndCommits(project.getId());
-      saveCommitPort.saveCommits(
-          commits, listBranchesPort.listBranchesInProject(project.getId()), project.getId());
-    } else {
-      // Save the new commit tree
-      commits.removeIf(commit -> commit.getTimestamp() <= head.getTimestamp());
-      addCommitsPort.addCommits(commits, project.getId());
-    }
+    addCommitsPort.addCommits(project.getId(), commits, updatedBranches);
   }
 
   private void checkForNewCommits(Project project) {
@@ -194,12 +183,14 @@ public class ScanProjectScheduler {
               coderadarConfigurationProperties.getWorkdir()
                   + "/projects/"
                   + project.getWorkdirName());
-      if (updateRepositoryUseCase.updateRepository(
-          new UpdateRepositoryCommand()
-              .setLocalDir(localDir)
-              .setPassword(project.getVcsPassword())
-              .setUsername(project.getVcsUsername())
-              .setRemoteUrl(project.getVcsUrl()))) {
+      List<Branch> updatedBranches =
+          updateRepositoryUseCase.updateRepository(
+              new UpdateRepositoryCommand()
+                  .setLocalDir(localDir)
+                  .setPassword(project.getVcsPassword())
+                  .setUsername(project.getVcsUsername())
+                  .setRemoteUrl(project.getVcsUrl()));
+      if (!updatedBranches.isEmpty()) {
         projectStatusPort.setBeingProcessed(project.getId(), true);
 
         try {
@@ -210,7 +201,7 @@ public class ScanProjectScheduler {
             deleteModulePort.delete(module.getId(), project.getId());
           }
 
-          saveCommits(project, localDir);
+          saveCommits(project, localDir, updatedBranches);
 
           // Re-create the modules
           for (Module module : modules) {

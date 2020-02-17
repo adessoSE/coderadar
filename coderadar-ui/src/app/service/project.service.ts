@@ -179,10 +179,10 @@ export class ProjectService {
    * Start a new analyzing for a project.
    * Sends a POST request to /projects/{id}/analyzingJob
    * @param id The id of the project.
-   * @param rescanProject Rescan all commits if true.
+   * @param branch The branch to analyze.
    */
-  public startAnalyzingJob(id: number, rescanProject: boolean): Promise<HttpResponse<any>> {
-    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze', {},
+  public startAnalyzingJob(id: number, branch: string): Promise<HttpResponse<any>> {
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/' + branch + '/analyze', {},
       {observe: 'response'}).toPromise();
   }
 

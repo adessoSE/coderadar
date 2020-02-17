@@ -18,10 +18,10 @@ public class StartAnalyzingController {
     this.startAnalyzingUseCase = startAnalyzingUseCase;
   }
 
-  @PostMapping(path = "projects/{projectId}/analyze", consumes = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(path = "projects/{projectId}/{branchName}/analyze", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<HttpStatus> startAnalyzing(
-      @PathVariable("projectId") Long projectId) {
-    startAnalyzingUseCase.start(projectId);
+      @PathVariable("projectId") Long projectId, @PathVariable("branchName") String branchName) {
+    startAnalyzingUseCase.start(projectId, branchName);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }

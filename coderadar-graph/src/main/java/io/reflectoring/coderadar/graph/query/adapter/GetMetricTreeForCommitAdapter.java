@@ -60,7 +60,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
     Long commitTimestamp =
         commitRepository
-            .findTimeStampByNameAndProjectId(command.getCommit(), projectId)
+            .findTimestampByNameAndProjectId(command.getCommit(), projectId)
             .orElseThrow(() -> new CommitNotFoundException(command.getCommit()));
     return get(commitTimestamp, command.getMetrics(), projectEntity);
   }

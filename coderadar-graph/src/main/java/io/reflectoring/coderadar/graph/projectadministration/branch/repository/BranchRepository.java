@@ -12,7 +12,7 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
   List<BranchEntity> getBranchesInProject(long projectId);
 
   @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[r:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} RETURN c LIMIT 1")
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[r:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} RETURN c")
   CommitEntity getCommitForBranch(Long projectId, String branch);
 
   @Query(
@@ -21,6 +21,15 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
   void setBranchOnCommit(Long projectId, String commitHash, String branchName);
 
   @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[r:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} RETURN b, r, c LIMIT 1")
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[r:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} RETURN b, r, c")
   BranchEntity findBranchInProjectByName(Long projectId, String branch);
+
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[r:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} RETURN COUNT(b) > 0")
+  boolean branchExistsInProject(Long projectId, String name);
+
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->()<-[r:POINTS_TO]-(b)  WHERE ID(p) = {0} AND b.name = {1} DELETE r WITH p, b"
+          + " MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE c.name = {2} CREATE (b)-[r1:POINTS_TO]->(c)")
+  void moveBranchToCommit(Long projectId, String branchName, String commitHash);
 }

@@ -16,7 +16,7 @@ public class GetProjectHeadCommitAdapter implements GetProjectHeadCommitPort {
   }
 
   @Override
-  public Commit getHeadCommit(Long projectId) {
-    return commitBaseDataMapper.mapNodeEntity(commitRepository.findHeadCommit(projectId));
+  public Commit getHeadCommit(Long projectId, String branch) {
+    return commitBaseDataMapper.mapNodeEntity(commitRepository.findHeadCommit(projectId, branch));
   }
 }
