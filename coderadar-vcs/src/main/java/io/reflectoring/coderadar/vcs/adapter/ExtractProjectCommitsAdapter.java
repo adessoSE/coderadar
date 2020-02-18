@@ -48,24 +48,9 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   }
 
   private List<Commit> getCommits(Git git, DateRange range) throws GitAPIException, IOException {
-    List<RevCommit> revCommits = new ArrayList<>();
-    RevWalk revWalk = new RevWalk(git.getRepository());
-    for (Ref ref : git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call()) {
-      revWalk.markStart(revWalk.parseCommit(ref.getObjectId()));
-      revWalk
-          .iterator()
-          .forEachRemaining(
-              revCommit -> {
-                if (revCommits.stream()
-                    .noneMatch(revCommit1 -> revCommit1.getId().equals(revCommit.getId()))) {
-                  revCommits.add(revCommit);
-                }
-              });
-      revWalk.reset();
-    }
+    List<RevCommit> revCommits = getAllRevCommits(git);
 
     int revCommitsSize = revCommits.size();
-    revCommits.sort(Comparator.comparingLong(RevCommit::getCommitTime));
     HashMap<String, Commit> map = new HashMap<>(revCommitsSize);
     for (RevCommit rc : revCommits) {
       if (isInDateRange(range, rc)) {
@@ -92,6 +77,26 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       }
     }
     return new ArrayList<>(map.values());
+  }
+
+  private List<RevCommit> getAllRevCommits(Git git) throws GitAPIException, IOException {
+    List<RevCommit> revCommits = new ArrayList<>();
+    RevWalk revWalk = new RevWalk(git.getRepository());
+    for (Ref ref : git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call()) {
+      revWalk.markStart(revWalk.parseCommit(ref.getObjectId()));
+      revWalk
+          .iterator()
+          .forEachRemaining(
+              revCommit -> {
+                if (revCommits.stream()
+                    .noneMatch(revCommit1 -> revCommit1.getId().equals(revCommit.getId()))) {
+                  revCommits.add(revCommit);
+                }
+              });
+      revWalk.reset();
+    }
+    revCommits.sort(Comparator.comparingLong(RevCommit::getCommitTime));
+    return revCommits;
   }
 
   private Commit mapRevCommitToCommit(RevCommit rc) {

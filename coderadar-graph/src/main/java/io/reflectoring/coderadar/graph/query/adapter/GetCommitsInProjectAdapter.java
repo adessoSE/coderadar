@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
-import io.reflectoring.coderadar.graph.projectadministration.branch.repository.BranchRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommitRelationshipEntity;
@@ -9,51 +8,25 @@ import io.reflectoring.coderadar.graph.projectadministration.project.adapter.Com
 import io.reflectoring.coderadar.projectadministration.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   private final CommitRepository commitRepository;
-  private final BranchRepository branchRepository;
   private final CommitBaseDataMapper commitBaseDataMapper = new CommitBaseDataMapper();
 
-  public GetCommitsInProjectAdapter(
-      CommitRepository commitRepository, BranchRepository branchRepository) {
+  public GetCommitsInProjectAdapter(CommitRepository commitRepository) {
     this.commitRepository = commitRepository;
-    this.branchRepository = branchRepository;
   }
 
   @Override
   public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(
       Long projectId, String branch) {
-    List<CommitEntity> commitsWithParents =
-        commitRepository.findByProjectIdWithParentRelationships(projectId);
-
-    CommitEntity branchCommit = branchRepository.getCommitForBranch(projectId, branch);
-    if (branchCommit == null) {
-      return new ArrayList<>();
-    }
-
-    List<CommitEntity> startCommitList =
-        commitsWithParents.stream()
-            .filter(commitEntity -> commitEntity.getName().equals(branchCommit.getName()))
-            .collect(Collectors.toList());
-
-    CommitEntity startCommit;
-    if (startCommitList.isEmpty()) {
-      return new ArrayList<>();
-    } else {
-      startCommit = startCommitList.get(0);
-    }
-    List<CommitEntity> result = new ArrayList<>();
-    walkCommitsByParents(startCommit, result);
-    result.sort((t1, t2) -> -Long.compare(t1.getTimestamp(), t2.getTimestamp()));
     List<Commit> domainObjects = new ArrayList<>();
-    for (CommitEntity commitEntity : result) {
+    for (CommitEntity commitEntity :
+        commitRepository.findByProjectIdAndBranchName(projectId, branch)) {
       domainObjects.add(commitBaseDataMapper.mapNodeEntity(commitEntity));
     }
     return domainObjects;
@@ -73,21 +46,9 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
       }
     }
 
-    List<CommitEntity> commitEntities =
+    return mapCommitEntitiesNoParents(
         commitRepository.findByProjectIdNonAnalyzedWithFileAndParentRelationships(
-            projectId, includes, excludes);
-
-    CommitEntity branchCommit = branchRepository.getCommitForBranch(projectId, branch);
-    CommitEntity startCommit =
-        commitEntities.stream()
-            .filter(commitEntity -> commitEntity.getId().equals(branchCommit.getId()))
-            .collect(Collectors.toList())
-            .get(0);
-
-    List<CommitEntity> result = new ArrayList<>();
-    walkCommitsByParents(startCommit, result);
-    result.sort(Comparator.comparingLong(CommitEntity::getTimestamp));
-    return mapCommitEntitiesNoParents(result);
+            projectId, branch, includes, excludes));
   }
 
   /**
@@ -136,22 +97,5 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
       fileToCommitRelationships.add(fileToCommitRelationship);
     }
     return fileToCommitRelationships;
-  }
-
-  /**
-   * Recursively adds commits to a result list until a commit with no parents is reached.
-   *
-   * @param startCommit The commit to start at.
-   * @param result A list to add the resulting commits to.
-   */
-  private void walkCommitsByParents(CommitEntity startCommit, List<CommitEntity> result) {
-    result.add(startCommit);
-    if (!startCommit.getParents().isEmpty()) {
-      for (CommitEntity parent : startCommit.getParents()) {
-        if (!result.contains(parent)) {
-          walkCommitsByParents(parent, result);
-        }
-      }
-    }
   }
 }
