@@ -84,6 +84,9 @@ public class ScanProjectScheduler {
   /** Starts the scheduleCheckTask tasks upon application start */
   @EventListener({ContextRefreshedEvent.class})
   public void onApplicationEvent() {
+    for (Project project : listProjectsPort.getProjects()) {
+      projectStatusPort.setBeingProcessed(project.getId(), false);
+    }
     taskScheduler.scheduleAtFixedRate(
         this::scheduleCheckTask,
         coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000);
@@ -105,7 +108,6 @@ public class ScanProjectScheduler {
    * @param projectId the project id
    */
   private void scheduleUpdateTask(Long projectId) {
-    projectStatusPort.setBeingProcessed(projectId, false);
     tasks.put(
         projectId,
         taskScheduler.scheduleAtFixedRate(
