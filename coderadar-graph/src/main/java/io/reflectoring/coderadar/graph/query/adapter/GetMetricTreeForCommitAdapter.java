@@ -7,7 +7,6 @@ import io.reflectoring.coderadar.graph.projectadministration.module.repository.M
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.query.domain.MetricValueForCommitTreeQueryResult;
 import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
-import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.query.domain.MetricTree;
@@ -40,9 +39,9 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
     this.commitRepository = commitRepository;
   }
 
-  MetricTree get(long commitTimestamp, List<String> metrics, ProjectEntity project) {
+  MetricTree get(ProjectEntity project, String commitHash, List<String> metrics) {
     List<MetricValueForCommitTreeQueryResult> result =
-        metricQueryRepository.getMetricTreeForCommit(project.getId(), metrics, commitTimestamp);
+        metricQueryRepository.getMetricTreeForCommit(project.getId(), commitHash, metrics);
     List<ModuleEntity> moduleEntities =
         moduleRepository.findModulesInProjectSortedDesc(project.getId());
     List<MetricTree> moduleChildren = processModules(moduleEntities, result);
@@ -58,11 +57,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
         projectRepository
             .findByIdWithModules(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
-    Long commitTimestamp =
-        commitRepository
-            .findTimestampByNameAndProjectId(command.getCommit(), projectId)
-            .orElseThrow(() -> new CommitNotFoundException(command.getCommit()));
-    return get(commitTimestamp, command.getMetrics(), projectEntity);
+    return get(projectEntity, command.getCommit(), command.getMetrics());
   }
 
   /**

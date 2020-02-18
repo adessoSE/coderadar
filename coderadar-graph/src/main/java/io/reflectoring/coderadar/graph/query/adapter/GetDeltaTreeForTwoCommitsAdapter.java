@@ -54,9 +54,11 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
             .orElseThrow(() -> new CommitNotFoundException(command.getCommit2()));
 
     MetricTree commit1Tree =
-        getMetricsForAllFilesInCommitAdapter.get(commit1Time, command.getMetrics(), projectEntity);
+        getMetricsForAllFilesInCommitAdapter.get(
+            projectEntity, command.getCommit1(), command.getMetrics());
     MetricTree commit2Tree =
-        getMetricsForAllFilesInCommitAdapter.get(commit2Time, command.getMetrics(), projectEntity);
+        getMetricsForAllFilesInCommitAdapter.get(
+            projectEntity, command.getCommit2(), command.getMetrics());
 
     if (commit1Time > commit2Time) {
       MetricTree temp = commit1Tree;

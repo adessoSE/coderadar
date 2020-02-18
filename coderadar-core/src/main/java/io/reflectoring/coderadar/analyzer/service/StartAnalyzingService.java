@@ -8,10 +8,7 @@ import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
-import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
-import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.projectadministration.domain.*;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.ListAnalyzerConfigurationsPort;
@@ -21,8 +18,7 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.Proje
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.query.port.driven.GetAvailableMetricsInProjectPort;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
@@ -85,7 +81,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
    * Starts the analysis of a project.
    *
    * @param projectId The id of the project to analyze.
-   * @param branchName
+   * @param branchName The name of the branch to analyze
    */
   @Override
   public void start(Long projectId, String branchName) {
@@ -134,6 +130,9 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           int counter = 0;
           ListenableFuture<?> saveTask = null;
           AtomicBoolean running = new AtomicBoolean(true);
+
+          HashMap<Long, List<MetricValue>> fileMetrics = new HashMap<>();
+
           for (Commit commit : commitsToBeAnalyzed) {
             if (!running.get()) {
               break;
@@ -141,6 +140,9 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
             List<MetricValue> metrics =
                 analyzeCommitUseCase.analyzeCommit(commit, project, sourceCodeFileAnalyzerPlugins);
             if (!metrics.isEmpty()) {
+
+              zeroOutMissingMetrics(commit, metrics, fileMetrics);
+
               waitForTask(saveTask);
               saveTask =
                   taskExecutor.submitListenable(
@@ -161,6 +163,51 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           logger.info("Analysis complete for project {}", project.getName());
         },
         project.getId());
+  }
+
+  /**
+   * Checks if the files that have been changed in the current commit are missing metrics that
+   * existed in previous commits. If so, sets them to zero.
+   *
+   * @param commit The currently analyzed commit.
+   * @param metrics The metrics for the current commit.
+   * @param fileMetrics All of the metrics gather for each file up until now.
+   */
+  private void zeroOutMissingMetrics(
+      Commit commit, List<MetricValue> metrics, HashMap<Long, List<MetricValue>> fileMetrics) {
+    List<MetricValue> tempMetrics = new ArrayList<>(metrics);
+
+    for (FileToCommitRelationship relationship : commit.getTouchedFiles()) {
+      List<MetricValue> values = fileMetrics.get(relationship.getFile().getId());
+      if (values != null) {
+        for (MetricValue value : values) {
+          if (metrics.stream()
+              .noneMatch(
+                  metricValue ->
+                      metricValue.getName().equals(value.getName())
+                          && metricValue.getFileId() == value.getFileId())) {
+            metrics.add(
+                new MetricValue(
+                    value.getName(),
+                    0,
+                    commit.getId(),
+                    relationship.getFile().getId(),
+                    Collections.emptyList()));
+          }
+        }
+      }
+    }
+
+    long fileId = tempMetrics.get(0).getFileId();
+    List<MetricValue> metricsForFile = new ArrayList<>();
+    for (MetricValue metricValue : tempMetrics) {
+      if (metricValue.getFileId() != fileId) {
+        fileMetrics.put(fileId, new ArrayList<>(metricsForFile));
+        fileId = metricValue.getFileId();
+        metricsForFile.clear();
+      }
+      metricsForFile.add(metricValue);
+    }
   }
 
   /**

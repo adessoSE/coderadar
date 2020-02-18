@@ -30,15 +30,28 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    */
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} WITH c "
-          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node ORDER BY node.timestamp ASC "
-          + "OPTIONAL MATCH (node)<-[r:CHANGED_IN]-(f:FileEntity) WHERE r.changeType <> \"DELETE\" AND any(x IN {2} WHERE f.path =~ x) "
-          + "AND none(x IN {3} WHERE f.path =~ x) RETURN DISTINCT node, r, f")
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c WHERE NOT c.analyzed WITH c ORDER BY c.timestamp ASC "
+          + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f:FileEntity) WHERE NOT c.analyzed AND r.changeType <> \"DELETE\" AND any(x IN {2} WHERE f.path =~ x) "
+          + "AND none(x IN {3} WHERE f.path =~ x) RETURN DISTINCT c, r, f")
   @NonNull
   List<CommitEntity> findByProjectIdNonAnalyzedWithFileAndParentRelationships(
       @NonNull Long projectId,
       @NonNull String branchName,
       @NonNull List<String> includes,
       List<String> excludes);
+
+  /**
+   * NOTE: uses APOC
+   *
+   * @param projectId The project id.
+   * @param branch The branch name.
+   * @return All commits in the given project for the given branch.
+   */
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} WITH c "
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node "
+          + "RETURN node ORDER BY node.timestamp DESC")
+  List<CommitEntity> findByProjectIdAndBranchName(Long projectId, String branch);
 
   /**
    * Returns all commits in a project. (FileToCommitRelationships and parents are not initialized).
@@ -92,17 +105,4 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "MATCH (f) WHERE ID(f) = x.fileId "
           + "CREATE (f)-[:CHANGED_IN {changeType: x.changeType, oldPath: x.oldPath}]->(c)")
   void createFileRelationships(List<HashMap<String, Object>> fileRels);
-
-  /**
-   * NOTE: uses APOC
-   *
-   * @param projectId The project id.
-   * @param branch The branch name.
-   * @return All commits in the given project for the given branch.
-   */
-  @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} WITH c "
-          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node "
-          + "RETURN node ORDER BY node.timestamp DESC")
-  List<CommitEntity> findByProjectIdAndBranchName(Long projectId, String branch);
 }
