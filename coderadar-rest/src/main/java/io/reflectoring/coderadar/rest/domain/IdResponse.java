@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * A resource class used to return JSON Responses in the following format:
- * { "id": 1}
- */
+/** A resource class used to return JSON Responses in the following format: { "id": 1} */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

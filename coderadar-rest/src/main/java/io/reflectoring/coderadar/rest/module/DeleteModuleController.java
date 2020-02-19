@@ -17,10 +17,10 @@ public class DeleteModuleController {
     this.deleteModuleUseCase = deleteModuleUseCase;
   }
 
-  @DeleteMapping(
-    path = "/projects/{projectId}/modules/{moduleId}"
-  )
-  public ResponseEntity<HttpStatus> deleteModule(@PathVariable(name = "moduleId") Long moduleId, @PathVariable(name = "projectId") Long projectId) {
+  @DeleteMapping(path = "/projects/{projectId}/modules/{moduleId}")
+  public ResponseEntity<HttpStatus> deleteModule(
+      @PathVariable(name = "moduleId") Long moduleId,
+      @PathVariable(name = "projectId") Long projectId) {
     deleteModuleUseCase.delete(moduleId, projectId);
     return new ResponseEntity<>(HttpStatus.OK);
   }

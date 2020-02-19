@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class CoderadarTestApplication {
 
   @Bean
-  public AsyncListenableTaskExecutor taskExecutor(){
+  public AsyncListenableTaskExecutor taskExecutor() {
     return new ConcurrentTaskExecutor(Runnable::run);
   }
 

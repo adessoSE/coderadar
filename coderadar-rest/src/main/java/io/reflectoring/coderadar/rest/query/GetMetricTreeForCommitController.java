@@ -23,8 +23,14 @@ public class GetMetricTreeForCommitController {
     this.getMetricTreeForCommitUseCase = getMetricTreeForCommitUseCase;
   }
 
-  @GetMapping(path = "/projects/{projectId}/metricvalues/tree", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<MetricTree> getMetricValues(@Validated @RequestBody GetMetricsForCommitCommand command, @PathVariable("projectId") Long projectId){
-    return new ResponseEntity<>(getMetricTreeForCommitUseCase.get(command, projectId), HttpStatus.OK);
+  @GetMapping(
+      path = "/projects/{projectId}/metricvalues/tree",
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<MetricTree> getMetricValues(
+      @Validated @RequestBody GetMetricsForCommitCommand command,
+      @PathVariable("projectId") Long projectId) {
+    return new ResponseEntity<>(
+        getMetricTreeForCommitUseCase.get(command, projectId), HttpStatus.OK);
   }
 }
