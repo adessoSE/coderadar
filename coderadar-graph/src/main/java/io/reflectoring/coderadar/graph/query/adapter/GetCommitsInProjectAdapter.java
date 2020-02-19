@@ -24,12 +24,8 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   @Override
   public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(
       Long projectId, String branch) {
-    List<Commit> domainObjects = new ArrayList<>();
-    for (CommitEntity commitEntity :
-        commitRepository.findByProjectIdAndBranchName(projectId, branch)) {
-      domainObjects.add(commitBaseDataMapper.mapNodeEntity(commitEntity));
-    }
-    return domainObjects;
+    return commitBaseDataMapper.mapNodeEntities(
+        commitRepository.findByProjectIdAndBranchName(projectId, branch));
   }
 
   @Override
@@ -93,7 +89,6 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
         walkedFiles.put(fileToCommitRelationshipEntity.getFile(), file);
       }
       fileToCommitRelationship.setFile(file);
-
       fileToCommitRelationships.add(fileToCommitRelationship);
     }
     return fileToCommitRelationships;

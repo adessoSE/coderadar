@@ -5,6 +5,7 @@ import static io.reflectoring.coderadar.projectadministration.service.project.Cr
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
@@ -114,26 +115,30 @@ public class ScanProjectScheduler {
             () ->
                 taskExecutor.execute(
                     () -> {
+                      Project currentProject;
                       try {
-                        Project currentProject = getProjectPort.get(projectId);
-                        if (!projectStatusPort.isBeingProcessed(projectId)
-                            && !checkProjectDate(currentProject)) {
-                          projectStatusPort.setBeingProcessed(projectId, true);
-                          logger.info(
-                              "Scanning project {} for new commits!", currentProject.getName());
+                        currentProject = getProjectPort.get(projectId);
+                      } catch (ProjectNotFoundException e) {
+                        stopUpdateTask(projectId);
+                        return;
+                      }
+                      if (!projectStatusPort.isBeingProcessed(projectId)
+                          && !checkProjectDate(currentProject)) {
+                        projectStatusPort.setBeingProcessed(projectId, true);
+                        logger.info(
+                            "Scanning project {} for new commits!", currentProject.getName());
+                        try {
                           checkForNewCommits(currentProject);
+                        } finally {
                           projectStatusPort.setBeingProcessed(projectId, false);
                         }
-                      } catch (Exception e) {
-                        projectStatusPort.setBeingProcessed(projectId, false);
-                        stopUpdateTask(projectId);
                       }
                     }),
             coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000L));
   }
 
   private void stopUpdateTask(Long projectId) {
-    ScheduledFuture f = tasks.get(projectId);
+    ScheduledFuture<?> f = tasks.get(projectId);
     if (f != null) {
       f.cancel(false);
     }
@@ -146,16 +151,6 @@ public class ScanProjectScheduler {
    */
   private boolean checkProjectDate(Project project) {
     return project.getVcsEnd() != null && project.getVcsEnd().before(new Date());
-  }
-
-  /**
-   * @param project The project to check
-   * @param localDir The project workdir
-   */
-  private void saveCommits(Project project, File localDir, List<Branch> updatedBranches) {
-    List<Commit> commits =
-        extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
-    addCommitsPort.addCommits(project.getId(), commits, updatedBranches);
   }
 
   private void checkForNewCommits(Project project) {
@@ -173,24 +168,21 @@ public class ScanProjectScheduler {
                   .setUsername(project.getVcsUsername())
                   .setRemoteUrl(project.getVcsUrl()));
       if (!updatedBranches.isEmpty()) {
-        projectStatusPort.setBeingProcessed(project.getId(), true);
+        // Check what modules where previously in the project
+        List<Module> modules = listModulesOfProjectUseCase.listModules(project.getId());
 
-        try {
-          // Check what modules where previously in the project
-          List<Module> modules = listModulesOfProjectUseCase.listModules(project.getId());
+        // Delete modules
+        for (Module module : modules) {
+          deleteModulePort.delete(module.getId(), project.getId());
+        }
 
-          for (Module module : modules) {
-            deleteModulePort.delete(module.getId(), project.getId());
-          }
+        List<Commit> commits =
+            extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
+        addCommitsPort.addCommits(project.getId(), commits, updatedBranches);
 
-          saveCommits(project, localDir, updatedBranches);
-
-          // Re-create the modules
-          for (Module module : modules) {
-            createModulePort.createModule(module.getPath(), project.getId());
-          }
-        } finally {
-          projectStatusPort.setBeingProcessed(project.getId(), false);
+        // Re-create the modules
+        for (Module module : modules) {
+          createModulePort.createModule(module.getPath(), project.getId());
         }
       }
     } catch (UnableToUpdateRepositoryException

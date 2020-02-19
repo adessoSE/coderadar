@@ -19,13 +19,10 @@ import io.reflectoring.coderadar.projectadministration.service.ProcessProjectSer
 import io.reflectoring.coderadar.query.port.driven.GetAvailableMetricsInProjectPort;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
 
 @Service
 public class StartAnalyzingService implements StartAnalyzingUseCase {
@@ -39,7 +36,6 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final SaveCommitPort saveCommitPort;
   private final ProcessProjectService processProjectService;
   private final SetAnalyzingStatusPort setAnalyzingStatusPort;
-  private final AsyncListenableTaskExecutor taskExecutor;
   private final GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort;
   private final ProjectStatusPort projectStatusPort;
   private final GetAnalyzingStatusService getAnalyzingStatusService;
@@ -57,7 +53,6 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       SaveCommitPort saveCommitPort,
       ProcessProjectService processProjectService,
       SetAnalyzingStatusPort setAnalyzingStatusPort,
-      AsyncListenableTaskExecutor taskExecutor,
       GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort,
       ProjectStatusPort projectStatusPort,
       GetAnalyzingStatusService getAnalyzingStatusService) {
@@ -71,7 +66,6 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     this.saveCommitPort = saveCommitPort;
     this.processProjectService = processProjectService;
     this.setAnalyzingStatusPort = setAnalyzingStatusPort;
-    this.taskExecutor = taskExecutor;
     this.getAvailableMetricsInProjectPort = getAvailableMetricsInProjectPort;
     this.projectStatusPort = projectStatusPort;
     this.getAnalyzingStatusService = getAnalyzingStatusService;
@@ -86,9 +80,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   @Override
   public void start(Long projectId, String branchName) {
     Project project = getProjectPort.get(projectId);
-    if (projectStatusPort.isBeingProcessed(projectId)) {
-      throw new ProjectIsBeingProcessedException(projectId);
-    }
+
     List<FilePattern> filePatterns = listFilePatternsOfProjectPort.listFilePatterns(projectId);
     List<AnalyzerConfiguration> analyzerConfigurations =
         listAnalyzerConfigurationsPort.listAnalyzerConfigurations(projectId);
@@ -101,6 +93,9 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     } else if (analyzerConfigurations.isEmpty()
         || analyzerConfigurations.stream().noneMatch(AnalyzerConfiguration::isEnabled)) {
       throw new MisconfigurationException("Cannot analyze project without analyzers");
+    }
+    if (projectStatusPort.isBeingProcessed(projectId)) {
+      throw new ProjectIsBeingProcessedException(projectId);
     }
     startAnalyzingTask(project, branchName, filePatterns, analyzerConfigurations);
   }
@@ -128,34 +123,24 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           long[] commitIds = new long[commitsToBeAnalyzed.size()];
           setAnalyzingStatusPort.setStatus(project.getId(), true);
           int counter = 0;
-          ListenableFuture<?> saveTask = null;
           AtomicBoolean running = new AtomicBoolean(true);
-
           HashMap<Long, List<MetricValue>> fileMetrics = new HashMap<>();
-
           for (Commit commit : commitsToBeAnalyzed) {
             if (!running.get()) {
               break;
             }
             List<MetricValue> metrics =
                 analyzeCommitUseCase.analyzeCommit(commit, project, sourceCodeFileAnalyzerPlugins);
+
+            zeroOutMissingMetrics(commit, metrics, fileMetrics);
             if (!metrics.isEmpty()) {
-
-              zeroOutMissingMetrics(commit, metrics, fileMetrics);
-
-              waitForTask(saveTask);
-              saveTask =
-                  taskExecutor.submitListenable(
-                      () -> {
-                        saveMetricPort.saveMetricValues(metrics);
-                        saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
-                        running.set(getAnalyzingStatusService.getStatus(project.getId()));
-                      });
+              saveMetricPort.saveMetricValues(metrics);
+              saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
+              running.set(getAnalyzingStatusService.getStatus(project.getId()));
             }
             commitIds[counter++] = commit.getId();
             log(commit, counter);
           }
-          waitForTask(saveTask);
           setAnalyzingStatusPort.setStatus(project.getId(), false);
           if (!getAvailableMetricsInProjectPort.get(project.getId()).isEmpty()) {
             saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
@@ -175,17 +160,20 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
    */
   private void zeroOutMissingMetrics(
       Commit commit, List<MetricValue> metrics, HashMap<Long, List<MetricValue>> fileMetrics) {
+
+    metrics.sort(Comparator.comparingLong(MetricValue::getFileId));
     List<MetricValue> tempMetrics = new ArrayList<>(metrics);
 
     for (FileToCommitRelationship relationship : commit.getTouchedFiles()) {
       List<MetricValue> values = fileMetrics.get(relationship.getFile().getId());
       if (values != null) {
         for (MetricValue value : values) {
-          if (metrics.stream()
-              .noneMatch(
-                  metricValue ->
-                      metricValue.getName().equals(value.getName())
-                          && metricValue.getFileId() == value.getFileId())) {
+          if (value.getValue() != 0
+              && tempMetrics.stream()
+                  .noneMatch(
+                      metricValue ->
+                          metricValue.getName().equals(value.getName())
+                              && metricValue.getFileId() == value.getFileId())) {
             metrics.add(
                 new MetricValue(
                     value.getName(),
@@ -198,15 +186,17 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       }
     }
 
-    long fileId = tempMetrics.get(0).getFileId();
-    List<MetricValue> metricsForFile = new ArrayList<>();
-    for (MetricValue metricValue : tempMetrics) {
-      if (metricValue.getFileId() != fileId) {
-        fileMetrics.put(fileId, new ArrayList<>(metricsForFile));
-        fileId = metricValue.getFileId();
-        metricsForFile.clear();
+    if (!tempMetrics.isEmpty()) {
+      long fileId = tempMetrics.get(0).getFileId();
+      List<MetricValue> metricsForFile = new ArrayList<>();
+      for (MetricValue metricValue : tempMetrics) {
+        if (metricValue.getFileId() != fileId) {
+          fileMetrics.put(fileId, new ArrayList<>(metricsForFile));
+          fileId = metricValue.getFileId();
+          metricsForFile.clear();
+        }
+        metricsForFile.add(metricValue);
       }
-      metricsForFile.add(metricValue);
     }
   }
 
@@ -222,20 +212,6 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
         commit.getComment(),
         commit.getName(),
         counter);
-  }
-
-  /**
-   * Waits for the save task to complete.
-   *
-   * @param saveTask The saveTask object.
-   */
-  private void waitForTask(ListenableFuture<?> saveTask) {
-    if (saveTask != null) {
-      try {
-        saveTask.get();
-      } catch (InterruptedException | ExecutionException ignored) {
-      }
-    }
   }
 
   /**

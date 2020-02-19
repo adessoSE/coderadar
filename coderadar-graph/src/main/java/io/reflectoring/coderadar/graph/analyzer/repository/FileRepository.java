@@ -19,45 +19,50 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
   List<FileEntity> findAllinProject(@NonNull Long projectId);
 
   /**
-   * @param commit1Time The time of the first commit
-   * @param commit2Time The time of the second commit
    * @param projectId The project id
-   * @return The paths of the files that have been modified
+   * @param commit1Hash The hash of the first commit
+   * @param commit2Hash The hash of the second commit
    */
   @Query(
-      "MATCH (p)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN {changeType: \"MODIFY\"}]->(c:CommitEntity) WHERE ID(p) = {2} "
-          + "AND c.timestamp <= {1} AND c.timestamp > {0} "
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {2}  WITH c, p "
+          + "MATCH (p)-[:CONTAINS_COMMIT]->(c2) WHERE c2.name = {1} WITH c, c2 "
+          + "CALL apoc.path.spanningTree(c, {relationshipFilter:'IS_CHILD_OF>', terminatorNodes: [c2]}) "
+          + "YIELD path WITH nodes(path) as commits UNWIND commits as c "
+          + "MATCH (c)<-[:CHANGED_IN {changeType: \"MODIFY\"}]-(f) "
           + "RETURN DISTINCT f.path")
   @NonNull
   List<String> getFilesModifiedBetweenCommits(
-      @NonNull Long commit1Time, @NonNull Long commit2Time, @NonNull Long projectId);
+      @NonNull Long projectId, @NonNull String commit1Hash, @NonNull String commit2Hash);
 
   /**
    * Checks if files matching the given paths have been renamed between two points in time.
    *
    * @param paths The paths to check.
-   * @param commit1Time The first (older) commit timestamp.
-   * @param commit2Time The second (newer) commit timestamp.
+   * @param commit1Hash The first (older) commit hash.
+   * @param commit2hash The second (newer) commit hash.
    * @param projectId The project id.
    * @return A list of maps that contain two values in the following format: {"oldPath":
    *     "/src/main/File.java", "newPath": "File.java"}.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS*]->(f:FileEntity)-[r:CHANGED_IN]->(c:CommitEntity) WHERE f.path IN {0} AND c.timestamp <= {2}  "
-          + "AND c.timestamp > {1} AND ID(p) = {3} AND r.changeType = \"RENAME\" "
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {3}  WITH c, p "
+          + "MATCH (p)-[:CONTAINS_COMMIT]->(c2) WHERE c2.name = {2} WITH c, c2 "
+          + "CALL apoc.path.spanningTree(c, {relationshipFilter:'IS_CHILD_OF>', terminatorNodes: [c2]}) "
+          + "YIELD path WITH nodes(path) as commits UNWIND commits as c "
+          + "MATCH (c)<-[r:CHANGED_IN {changeType: \"RENAME\"}]-(f) WHERE f.path IN {1} "
           + "RETURN {oldPath: head(collect(DISTINCT r)).oldPath, newPath: f.path} as rename")
   @NonNull
   List<Map<String, Object>> findOldPathsIfRenamedBetweenCommits(
+      @NonNull Long projectId,
       @NonNull List<String> paths,
-      @NonNull Long commit1Time,
-      @NonNull Long commit2Time,
-      @NonNull Long projectId);
+      @NonNull String commit1Hash,
+      @NonNull String commit2hash);
 
   /**
    * Creates [:RENAMED_FROM] relationships between files.
    *
    * @param renameRels A list of maps, each containing two file ids. The file being renamed
-   *     ("fileId1") and the file it being renamed from ("fileId2").
+   *     ("fileId1") and the file its being renamed from ("fileId2").
    */
   @Query(
       "UNWIND {0} as x "

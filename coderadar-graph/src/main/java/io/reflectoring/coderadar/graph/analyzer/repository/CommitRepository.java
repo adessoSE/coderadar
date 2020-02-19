@@ -30,9 +30,9 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    */
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} WITH c "
-          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c WHERE NOT c.analyzed WITH c ORDER BY c.timestamp ASC "
-          + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f:FileEntity) WHERE NOT c.analyzed AND r.changeType <> \"DELETE\" AND any(x IN {2} WHERE f.path =~ x) "
-          + "AND none(x IN {3} WHERE f.path =~ x) RETURN DISTINCT c, r, f")
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c WHERE NOT c.analyzed WITH c "
+          + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f:FileEntity) WHERE r.changeType <> \"DELETE\" AND any(x IN {2} WHERE f.path =~ x) "
+          + "AND none(x IN {3} WHERE f.path =~ x) RETURN DISTINCT c, r, f ORDER BY c.timestamp ASC")
   @NonNull
   List<CommitEntity> findByProjectIdNonAnalyzedWithFileAndParentRelationships(
       @NonNull Long projectId,
