@@ -9,7 +9,7 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
-import io.reflectoring.coderadar.vcs.port.driven.DeleteRepositoryPort;
+import io.reflectoring.coderadar.vcs.port.driven.DeleteLocalRepositoryPort;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +37,7 @@ public class TreeTest extends ControllerTestTemplate {
     private final Logger logger = LoggerFactory.getLogger(TreeTest.class);
 
     @Autowired private DependencyTreeAdapter dependencyTree;
-    @Autowired private DeleteRepositoryPort deleteRepositoryPort;
+    @Autowired private DeleteLocalRepositoryPort deleteRepositoryPort;
     @Autowired private CoderadarConfigurationProperties coderadarConfigurationProperties;
     @Autowired private CreateProjectUseCase createProjectUseCase;
     @Autowired private GetProjectPort getProjectPort;

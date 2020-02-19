@@ -1,12 +1,14 @@
 package io.reflectoring.coderadar.dependencymap.domain;
 
 import io.reflectoring.coderadar.plugin.api.ChangeType;
+import lombok.Data;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+@Data
 public class CompareNode {
 
     private String filename;
@@ -273,65 +275,5 @@ public class CompareNode {
                 "path='" + path + '\'' +
                 ", changed=" + changed +
                 '}';
-    }
-
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     *                      Getter & Setter                    *
-     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getPackageName() {
-        return packageName;
-    }
-
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public List<CompareNode> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<CompareNode> children) {
-        this.children = children;
-    }
-
-    public List<CompareNodeDTO> getDependencies() {
-        return dependencies;
-    }
-
-    public void setDependencies(List<CompareNodeDTO> dependencies) {
-        this.dependencies = dependencies;
-    }
-
-    public ChangeType getChanged() {
-        return changed;
-    }
-
-    public void setChanged(ChangeType changed) {
-        this.changed = changed;
     }
 }

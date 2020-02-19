@@ -1,5 +1,8 @@
 package io.reflectoring.coderadar.dependencymap.domain;
 
+import lombok.Data;
+
+@Data
 public class NodeDTO {
 
     private String path;
@@ -9,14 +12,6 @@ public class NodeDTO {
     }
 
     public NodeDTO() {
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     @Override

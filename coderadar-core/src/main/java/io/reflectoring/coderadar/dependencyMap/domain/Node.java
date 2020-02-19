@@ -1,10 +1,13 @@
 package io.reflectoring.coderadar.dependencymap.domain;
 
+import lombok.Data;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+@Data
 public class Node {
 
     private String filename;
@@ -235,57 +238,5 @@ public class Node {
             stack.addAll(root.children);
             traverseInterface.traverseMethod(root);
         }
-    }
-
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     *                      Getter & Setter                    *
-     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getPackageName() {
-        return packageName;
-    }
-
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public List<Node> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<Node> children) {
-        this.children = children;
-    }
-
-    public List<NodeDTO> getDependencies() {
-        return dependencies;
-    }
-
-    public void setDependencies(List<NodeDTO> dependencies) {
-        this.dependencies = dependencies;
     }
 }

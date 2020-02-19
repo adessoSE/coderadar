@@ -1,7 +1,9 @@
 package io.reflectoring.coderadar.dependencymap.domain;
 
 import io.reflectoring.coderadar.plugin.api.ChangeType;
+import lombok.Data;
 
+@Data
 public class CompareNodeDTO {
 
     private String path;
@@ -22,22 +24,6 @@ public class CompareNodeDTO {
      */
     public CompareNodeDTO(CompareNode node) {
         this(node.getPath(), node.getChanged());
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public ChangeType getChanged() {
-        return changed;
-    }
-
-    public void setChanged(ChangeType changed) {
-        this.changed = changed;
     }
 
     @Override
