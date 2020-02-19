@@ -1,9 +1,11 @@
 package io.reflectoring.coderadar.dependencymap.domain;
 
 import io.reflectoring.coderadar.plugin.api.ChangeType;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class CompareNodeDTO {
 
   private String path;
@@ -31,6 +33,13 @@ public class CompareNodeDTO {
       return ((CompareNodeDTO) obj).getPath().equals(this.getPath());
     }
     return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 31 * hash + (path == null ? 0 : path.hashCode());
+    return hash;
   }
 
   @Override

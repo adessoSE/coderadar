@@ -10,7 +10,7 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
-import io.reflectoring.coderadar.vcs.port.driven.DeleteRepositoryPort;
+import io.reflectoring.coderadar.vcs.port.driven.DeleteLocalRepositoryPort;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +39,7 @@ public class CompareTreeTest extends ControllerTestTemplate {
     private final Logger logger = LoggerFactory.getLogger(CompareTreeTest.class);
 
     @Autowired private DependencyCompareTreeAdapter dependencyTree;
-    @Autowired private DeleteRepositoryPort deleteRepositoryPort;
+    @Autowired private DeleteLocalRepositoryPort deleteRepositoryPort;
     @Autowired private CoderadarConfigurationProperties coderadarConfigurationProperties;
     @Autowired private CreateProjectUseCase createProjectUseCase;
     @Autowired private GetProjectPort getProjectPort;
@@ -65,6 +65,7 @@ public class CompareTreeTest extends ControllerTestTemplate {
             command.setName("testSrc");
             command.setVcsOnline(true);
             Project testProject = getProjectPort.get(createProjectUseCase.createProject(command));
+            System.out.println(testProject.getId());
 
             String commitName = "44f0adc62806ecbb34cb4a6fa2d9c24d6a85b0e1";
             String commitName2 = "d823c8d85b6f28e67ec21b832dd19f1687125041";

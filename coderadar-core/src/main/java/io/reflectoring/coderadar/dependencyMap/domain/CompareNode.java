@@ -5,9 +5,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.CopyOnWriteArrayList;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class CompareNode {
 
   private String filename;
@@ -282,6 +284,13 @@ public class CompareNode {
       return ((CompareNode) obj).getPath().equals(this.path);
     }
     return false;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 31 * hash + (path == null ? 0 : path.hashCode());
+    return hash;
   }
 
   @Override
