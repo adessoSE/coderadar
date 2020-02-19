@@ -6,39 +6,35 @@ import lombok.Data;
 @Data
 public class CompareNodeDTO {
 
-    private String path;
-    private ChangeType changed;
+  private String path;
+  private ChangeType changed;
 
-    public CompareNodeDTO(String path, ChangeType changeType) {
-        this.path = path;
-        this.changed = changeType;
-    }
+  public CompareNodeDTO(String path, ChangeType changeType) {
+    this.path = path;
+    this.changed = changeType;
+  }
 
-    public CompareNodeDTO() {
-    }
+  public CompareNodeDTO() {}
 
-    /**
-     * Create a CompareNodeDTO-object from a given CompareNode-object.
-     *
-     * @param node CompareNode-object to 'copy'.
-     */
-    public CompareNodeDTO(CompareNode node) {
-        this(node.getPath(), node.getChanged());
-    }
+  /**
+   * Create a CompareNodeDTO-object from a given CompareNode-object.
+   *
+   * @param node CompareNode-object to 'copy'.
+   */
+  public CompareNodeDTO(CompareNode node) {
+    this(node.getPath(), node.getChanged());
+  }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof CompareNodeDTO) {
-            return ((CompareNodeDTO) obj).getPath().equals(this.getPath());
-        }
-        return false;
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof CompareNodeDTO) {
+      return ((CompareNodeDTO) obj).getPath().equals(this.getPath());
     }
+    return false;
+  }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "path='" + path + '\'' +
-                ", changeType=" + changed +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "{" + "path='" + path + '\'' + ", changeType=" + changed + '}';
+  }
 }

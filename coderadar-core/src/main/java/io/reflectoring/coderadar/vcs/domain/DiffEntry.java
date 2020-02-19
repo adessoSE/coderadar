@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DiffEntry {
-    private String oldPath;
-    private String newPath;
-    private int changeType;
+  private String oldPath;
+  private String newPath;
+  private int changeType;
 }

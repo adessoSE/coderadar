@@ -11,21 +11,25 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GetCompareTreeService implements GetCompareTreeUseCase {
-    private final GetCompareTreePort getCompareTreePort;
-    private final GetProjectPort getProjectPort;
-    private final CoderadarConfigurationProperties coderadarConfigurationProperties;
+  private final GetCompareTreePort getCompareTreePort;
+  private final GetProjectPort getProjectPort;
+  private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
-    @Autowired
-    public GetCompareTreeService(GetCompareTreePort getCompareTreePort, GetProjectPort getProjectPort, CoderadarConfigurationProperties coderadarConfigurationProperties) {
-        this.getCompareTreePort = getCompareTreePort;
-        this.getProjectPort = getProjectPort;
-        this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-    }
+  @Autowired
+  public GetCompareTreeService(
+      GetCompareTreePort getCompareTreePort,
+      GetProjectPort getProjectPort,
+      CoderadarConfigurationProperties coderadarConfigurationProperties) {
+    this.getCompareTreePort = getCompareTreePort;
+    this.getProjectPort = getProjectPort;
+    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
+  }
 
-    @Override
-    public CompareNode getDependencyTree(Long projectId, String commitName, String secondCommit) {
-        Project project = getProjectPort.get(projectId);
-        String projectRoot = coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName();
-        return getCompareTreePort.getRoot(projectRoot, commitName, project.getName(), secondCommit);
-    }
+  @Override
+  public CompareNode getDependencyTree(Long projectId, String commitName, String secondCommit) {
+    Project project = getProjectPort.get(projectId);
+    String projectRoot =
+        coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName();
+    return getCompareTreePort.getRoot(projectRoot, commitName, project.getName(), secondCommit);
+  }
 }

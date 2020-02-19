@@ -12,21 +12,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class GetDependencyTreeService implements GetDependencyTreeUseCase {
 
-    private final GetDependencyTreePort getDependencyTreePort;
-    private final GetProjectPort getProjectPort;
-    private final CoderadarConfigurationProperties coderadarConfigurationProperties;
+  private final GetDependencyTreePort getDependencyTreePort;
+  private final GetProjectPort getProjectPort;
+  private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
-    @Autowired
-    public GetDependencyTreeService(GetDependencyTreePort getDependencyTreePort, GetProjectPort getProjectPort, CoderadarConfigurationProperties coderadarConfigurationProperties) {
-        this.getDependencyTreePort = getDependencyTreePort;
-        this.getProjectPort = getProjectPort;
-        this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-    }
+  @Autowired
+  public GetDependencyTreeService(
+      GetDependencyTreePort getDependencyTreePort,
+      GetProjectPort getProjectPort,
+      CoderadarConfigurationProperties coderadarConfigurationProperties) {
+    this.getDependencyTreePort = getDependencyTreePort;
+    this.getProjectPort = getProjectPort;
+    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
+  }
 
-    @Override
-    public Node getDependencyTree(Long projectId, String commitName) {
-        Project project = getProjectPort.get(projectId);
-        String projectRoot = coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName();
-        return getDependencyTreePort.getRoot(projectRoot, commitName, project.getName());
-    }
+  @Override
+  public Node getDependencyTree(Long projectId, String commitName) {
+    Project project = getProjectPort.get(projectId);
+    String projectRoot =
+        coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName();
+    return getDependencyTreePort.getRoot(projectRoot, commitName, project.getName());
+  }
 }
