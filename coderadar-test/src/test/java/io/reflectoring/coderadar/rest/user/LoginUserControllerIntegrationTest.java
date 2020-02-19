@@ -1,5 +1,9 @@
 package io.reflectoring.coderadar.rest.user;
 
+import static org.hamcrest.Matchers.any;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
@@ -10,10 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static org.hamcrest.Matchers.any;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private UserRepository userRepository;
@@ -33,7 +33,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("accessToken").value(any(String.class)))
         .andExpect(MockMvcResultMatchers.jsonPath("refreshToken").value(any(String.class)))
-            .andDo(documentLogin());
+        .andDo(documentLogin());
   }
 
   @Test
@@ -73,9 +73,9 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
   private ResultHandler documentLogin() {
     ConstrainedFields fields = fields(LoginUserCommand.class);
     return document(
-            "user/auth",
-            requestFields(
-                    fields.withPath("username").description("The name of the user to be logged in."),
-                    fields.withPath("password").description("The password of the user as plaintext")));
+        "user/auth",
+        requestFields(
+            fields.withPath("username").description("The name of the user to be logged in."),
+            fields.withPath("password").description("The password of the user as plaintext")));
   }
 }

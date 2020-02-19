@@ -1,5 +1,9 @@
 package io.reflectoring.coderadar.rest.project;
 
+import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
@@ -14,10 +18,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -57,19 +57,18 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
     testProject = projectRepository.save(testProject);
     final Long id = testProject.getId();
 
-    mvc().perform(delete("/projects/" + id))
-            .andExpect(status().isOk());
+    mvc().perform(delete("/projects/" + id)).andExpect(status().isOk());
 
     Assertions.assertFalse(projectRepository.findById(id).isPresent());
   }
 
   @Test
   void deleteProjectReturnsErrorWhenProjectNotFound() throws Exception {
-    MvcResult result = mvc().perform(delete("/projects/1"))
-        .andExpect(status().isNotFound())
-        .andReturn();
+    MvcResult result =
+        mvc().perform(delete("/projects/1")).andExpect(status().isNotFound()).andReturn();
 
-    ErrorMessageResponse response = fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class);
+    ErrorMessageResponse response =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class);
 
     Assertions.assertEquals("Project with id 1 not found.", response.getErrorMessage());
   }

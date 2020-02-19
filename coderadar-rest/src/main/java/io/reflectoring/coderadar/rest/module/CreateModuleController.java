@@ -24,7 +24,10 @@ public class CreateModuleController {
     this.createModuleUseCase = createModuleUseCase;
   }
 
-  @PostMapping(path = "/projects/{projectId}/modules", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(
+      path = "/projects/{projectId}/modules",
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Object> createModule(
       @RequestBody @Validated CreateModuleCommand command,
       @PathVariable(name = "projectId") Long projectId) {
@@ -32,7 +35,8 @@ public class CreateModuleController {
       return new ResponseEntity<>(
           new IdResponse(createModuleUseCase.createModule(command, projectId)), HttpStatus.CREATED);
     } catch (ModulePathInvalidException e) {
-      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+      return new ResponseEntity<>(
+          new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
     }
   }
 }

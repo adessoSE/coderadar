@@ -23,15 +23,17 @@ public class CreateAnalyzerConfigurationController {
     this.createAnalyzerConfigurationUseCase = addAnalyzerConfigurationUseCase;
   }
 
-  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Object> addAnalyzerConfiguration(
       @RequestBody @Validated CreateAnalyzerConfigurationCommand command,
       @PathVariable Long projectId) {
     try {
       return new ResponseEntity<>(
-              new IdResponse(createAnalyzerConfigurationUseCase.create(command, projectId)),
-              HttpStatus.CREATED);
-    } catch (AnalyzerConfigurationException e){
+          new IdResponse(createAnalyzerConfigurationUseCase.create(command, projectId)),
+          HttpStatus.CREATED);
+    } catch (AnalyzerConfigurationException e) {
       return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.CONFLICT);
     }
   }

@@ -1,5 +1,9 @@
 package io.reflectoring.coderadar.rest.module;
 
+import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
@@ -8,18 +12,13 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -53,14 +52,14 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
               ModuleEntity module = moduleRepository.findById(id).get();
               Assertions.assertEquals("module-path/", module.getPath());
             })
-            .andDo(
-                    document(
-                            "modules/create",
-                            requestFields(
-                                    fields
-                                            .withPath("path")
-                                            .description(
-                                                    "The path of this module starting at the VCS root. All files below that path are considered to be part of the module."))));
+        .andDo(
+            document(
+                "modules/create",
+                requestFields(
+                    fields
+                        .withPath("path")
+                        .description(
+                            "The path of this module starting at the VCS root. All files below that path are considered to be part of the module."))));
   }
 
   @Test
@@ -76,23 +75,24 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
     // Test
     CreateModuleCommand command = new CreateModuleCommand("module-path1");
     mvc()
-            .perform(
-                    post("/projects/" + testProject.getId() + "/modules")
-                            .content(toJson(command))
-                            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isCreated())
-            .andDo(
-                    result -> {
-                      Long id =
-                              fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
-                      ModuleEntity module = moduleRepository.findById(id).get();
-                      Assertions.assertEquals("module-path1/", module.getPath());
-                    }).andReturn();
+        .perform(
+            post("/projects/" + testProject.getId() + "/modules")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andDo(
+            result -> {
+              Long id =
+                  fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
+              ModuleEntity module = moduleRepository.findById(id).get();
+              Assertions.assertEquals("module-path1/", module.getPath());
+            })
+        .andReturn();
 
     Assertions.assertEquals(1L, moduleRepository.findModulesInProject(testProject.getId()).size());
 
     List<ModuleEntity> allModules = new ArrayList<>();
-    for(ModuleEntity m : moduleRepository.findAll()){
+    for (ModuleEntity m : moduleRepository.findAll()) {
       allModules.add(m);
     }
     Assertions.assertEquals(1L, allModules.size());
