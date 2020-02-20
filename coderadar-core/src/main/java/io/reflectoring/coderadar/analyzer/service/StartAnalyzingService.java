@@ -19,7 +19,6 @@ import io.reflectoring.coderadar.projectadministration.service.ProcessProjectSer
 import io.reflectoring.coderadar.query.port.driven.GetAvailableMetricsInProjectPort;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -123,10 +122,11 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
           long[] commitIds = new long[commitsToBeAnalyzed.size()];
           setAnalyzingStatusPort.setStatus(project.getId(), true);
           int counter = 0;
-          AtomicBoolean running = new AtomicBoolean(true);
-          HashMap<Long, List<MetricValue>> fileMetrics = new HashMap<>();
+          boolean running = true;
+          Map<Long, List<MetricValue>> fileMetrics =
+              saveMetricPort.getMetricsForFiles(project.getId(), branchName);
           for (Commit commit : commitsToBeAnalyzed) {
-            if (!running.get()) {
+            if (!running) {
               break;
             }
             List<MetricValue> metrics =
@@ -136,7 +136,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
             if (!metrics.isEmpty()) {
               saveMetricPort.saveMetricValues(metrics);
               saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
-              running.set(getAnalyzingStatusService.getStatus(project.getId()));
+              running = getAnalyzingStatusService.getStatus(project.getId());
             }
             commitIds[counter++] = commit.getId();
             log(commit, counter);
@@ -159,43 +159,43 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
    * @param fileMetrics All of the metrics gather for each file up until now.
    */
   private void zeroOutMissingMetrics(
-      Commit commit, List<MetricValue> metrics, HashMap<Long, List<MetricValue>> fileMetrics) {
-
+          Commit commit, List<MetricValue> metrics, Map<Long, List<MetricValue>> fileMetrics) {
     metrics.sort(Comparator.comparingLong(MetricValue::getFileId));
-    List<MetricValue> tempMetrics = new ArrayList<>(metrics);
 
     for (FileToCommitRelationship relationship : commit.getTouchedFiles()) {
       List<MetricValue> values = fileMetrics.get(relationship.getFile().getId());
       if (values != null) {
         for (MetricValue value : values) {
           if (value.getValue() != 0
-              && tempMetrics.stream()
+                  && metrics.stream()
                   .noneMatch(
-                      metricValue ->
-                          metricValue.getName().equals(value.getName())
-                              && metricValue.getFileId() == value.getFileId())) {
+                          metricValue ->
+                                  metricValue.getName().equals(value.getName())
+                                          && metricValue.getFileId() == value.getFileId())) {
             metrics.add(
-                new MetricValue(
-                    value.getName(),
-                    0,
-                    commit.getId(),
-                    relationship.getFile().getId(),
-                    Collections.emptyList()));
+                    new MetricValue(
+                            value.getName(),
+                            0,
+                            commit.getId(),
+                            relationship.getFile().getId(),
+                            Collections.emptyList()));
           }
         }
       }
     }
 
-    if (!tempMetrics.isEmpty()) {
-      long fileId = tempMetrics.get(0).getFileId();
+    if (!metrics.isEmpty()) {
+      long fileId = metrics.get(0).getFileId();
       List<MetricValue> metricsForFile = new ArrayList<>();
-      for (MetricValue metricValue : tempMetrics) {
-        if (metricValue.getFileId() != fileId) {
-          fileMetrics.put(fileId, new ArrayList<>(metricsForFile));
-          fileId = metricValue.getFileId();
-          metricsForFile.clear();
+      for (MetricValue metricValue : metrics) {
+        if(metricValue.getValue() != 0) {
+          if (metricValue.getFileId() != fileId) {
+            fileMetrics.put(fileId, new ArrayList<>(metricsForFile));
+            fileId = metricValue.getFileId();
+            metricsForFile.clear();
+          }
+          metricsForFile.add(metricValue);
         }
-        metricsForFile.add(metricValue);
       }
     }
   }

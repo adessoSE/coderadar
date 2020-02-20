@@ -11,7 +11,8 @@ import org.neo4j.ogm.annotation.Relationship;
 @NoArgsConstructor
 @NodeEntity
 public class BranchEntity {
-  @Index private Long id;
+
+  private Long id;
   @Index private String name;
 
   @Relationship(type = "POINTS_TO")

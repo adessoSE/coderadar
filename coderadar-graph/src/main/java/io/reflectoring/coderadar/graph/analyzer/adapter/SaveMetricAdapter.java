@@ -5,9 +5,7 @@ import io.reflectoring.coderadar.graph.analyzer.FindingsMapper;
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,5 +39,24 @@ public class SaveMetricAdapter implements SaveMetricPort {
       commitAndFileRels.add(commitAndFileRel);
     }
     metricRepository.createFileAndCommitRelationships(commitAndFileRels);
+  }
+
+  @Override
+  public Map<Long, List<MetricValue>> getMetricsForFiles(long projectId, String branch) {
+    List<LinkedHashMap<Object, Object>> metrics =
+        metricRepository.getLastMetricsForFiles(projectId, branch);
+    Map<Long, List<MetricValue>> filesMetrics = new HashMap<>();
+    for (LinkedHashMap<Object, Object> i : metrics) {
+      Long fileId = (Long) i.get("id");
+      List<MetricValueEntity> fileMetrics = (List<MetricValueEntity>) i.get("metrics");
+      List<MetricValue> mapped = new ArrayList<>();
+      for (MetricValueEntity entity : fileMetrics) {
+        mapped.add(
+            new MetricValue(
+                entity.getName(), entity.getValue(), 0L, fileId, Collections.emptyList()));
+      }
+      filesMetrics.put(fileId, mapped);
+    }
+    return filesMetrics;
   }
 }

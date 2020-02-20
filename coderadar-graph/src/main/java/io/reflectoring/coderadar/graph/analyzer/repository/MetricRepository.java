@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.graph.analyzer.repository;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -36,4 +37,24 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
           + "MATCH (c) WHERE ID(c) = x.commitId "
           + "CREATE (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c)")
   void createFileAndCommitRelationships(List<HashMap<String, Object>> commitAndFileRels);
+
+  /**
+   * Uses APOC.
+   *
+   * @param projectId The project id.
+   * @param branchName The branch name.
+   * @return All files and their corresponding metrics for the head commit of the given branch
+   */
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} WITH c "
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp DESC WITH collect(c) as commits "
+          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)<-[:RENAMED_FROM]-()-[:CHANGED_IN {changeType: \"RENAME\"}]->(c) RETURN collect(f) as renames', {commits: commits}) "
+          + "YIELD value WITH commits, value.renames as renames "
+          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: \"DELETE\"}]->(c) "
+          + "RETURN collect(f) as deletes', {commits: commits}) YIELD value WITH commits, renames, value.deletes as deletes "
+          + "UNWIND commits as c "
+          + "MATCH (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c) WHERE "
+          + "NOT(f IN deletes OR f IN renames) AND m.value <> 0 WITH ID(f) as id, m.name as name, head(collect(m)) as metric "
+          + "RETURN  id, collect(metric) as metrics")
+  List<LinkedHashMap<Object, Object>> getLastMetricsForFiles(Long projectId, String branchName);
 }
