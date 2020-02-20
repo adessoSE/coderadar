@@ -1,5 +1,8 @@
 package io.reflectoring.coderadar.rest.user;
 
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import io.reflectoring.coderadar.graph.useradministration.domain.RefreshTokenEntity;
@@ -12,17 +15,13 @@ import io.reflectoring.coderadar.useradministration.service.security.PasswordUti
 import io.reflectoring.coderadar.useradministration.service.security.SecretKeyService;
 import io.reflectoring.coderadar.useradministration.service.security.TokenService;
 import io.reflectoring.coderadar.useradministration.service.security.TokenType;
+import java.util.Date;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.Date;
-
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -55,7 +54,7 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
             post("/user/refresh").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("token").exists())
-            .andDo(documentRefresh());
+        .andDo(documentRefresh());
   }
 
   @Test
@@ -116,9 +115,9 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
   private ResultHandler documentRefresh() {
     ConstrainedFields fields = fields(RefreshTokenCommand.class);
     return document(
-            "user/refresh",
-            requestFields(
-                    fields.withPath("accessToken").description("The expired access token"),
-                    fields.withPath("refreshToken").description("The valid refresh token")));
+        "user/refresh",
+        requestFields(
+            fields.withPath("accessToken").description("The expired access token"),
+            fields.withPath("refreshToken").description("The valid refresh token")));
   }
 }

@@ -25,16 +25,19 @@ public class RefreshTokenController {
     this.refreshTokenUseCase = refreshTokenUseCase;
   }
 
-  @PostMapping(path = "/user/refresh", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(
+      path = "/user/refresh",
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity refreshToken(@RequestBody @Validated RefreshTokenCommand command) {
     try {
-        return new ResponseEntity<>(
-        new RefreshTokenResponse(refreshTokenUseCase.refreshToken(command)), HttpStatus.OK);
-        } catch (RefreshTokenNotFoundException | UserNotFoundException e) {
-        return new ResponseEntity<>(
-        new ErrorMessageResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
-        } catch (AccessTokenNotExpiredException e) {
-        return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(
+          new RefreshTokenResponse(refreshTokenUseCase.refreshToken(command)), HttpStatus.OK);
+    } catch (RefreshTokenNotFoundException | UserNotFoundException e) {
+      return new ResponseEntity<>(
+          new ErrorMessageResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
+    } catch (AccessTokenNotExpiredException e) {
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
   }
 }

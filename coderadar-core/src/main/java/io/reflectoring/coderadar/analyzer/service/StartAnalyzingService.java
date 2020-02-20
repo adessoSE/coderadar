@@ -159,7 +159,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
    * @param fileMetrics All of the metrics gather for each file up until now.
    */
   private void zeroOutMissingMetrics(
-          Commit commit, List<MetricValue> metrics, Map<Long, List<MetricValue>> fileMetrics) {
+      Commit commit, List<MetricValue> metrics, Map<Long, List<MetricValue>> fileMetrics) {
     metrics.sort(Comparator.comparingLong(MetricValue::getFileId));
 
     for (FileToCommitRelationship relationship : commit.getTouchedFiles()) {
@@ -167,18 +167,18 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       if (values != null) {
         for (MetricValue value : values) {
           if (value.getValue() != 0
-                  && metrics.stream()
+              && metrics.stream()
                   .noneMatch(
-                          metricValue ->
-                                  metricValue.getName().equals(value.getName())
-                                          && metricValue.getFileId() == value.getFileId())) {
+                      metricValue ->
+                          metricValue.getName().equals(value.getName())
+                              && metricValue.getFileId() == value.getFileId())) {
             metrics.add(
-                    new MetricValue(
-                            value.getName(),
-                            0,
-                            commit.getId(),
-                            relationship.getFile().getId(),
-                            Collections.emptyList()));
+                new MetricValue(
+                    value.getName(),
+                    0,
+                    commit.getId(),
+                    relationship.getFile().getId(),
+                    Collections.emptyList()));
           }
         }
       }
@@ -188,7 +188,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       long fileId = metrics.get(0).getFileId();
       List<MetricValue> metricsForFile = new ArrayList<>();
       for (MetricValue metricValue : metrics) {
-        if(metricValue.getValue() != 0) {
+        if (metricValue.getValue() != 0) {
           if (metricValue.getFileId() != fileId) {
             fileMetrics.put(fileId, new ArrayList<>(metricsForFile));
             fileId = metricValue.getFileId();

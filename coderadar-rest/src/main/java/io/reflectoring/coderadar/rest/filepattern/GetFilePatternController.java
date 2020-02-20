@@ -20,9 +20,15 @@ public class GetFilePatternController {
     this.getFilePatternUseCase = getFilePatternUseCase;
   }
 
-  @GetMapping(path = "/projects/{projectId}/filePatterns/{filePatternId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<GetFilePatternResponse> getFilePattern(@PathVariable(name = "filePatternId") Long filePatternId) {
-    FilePattern filePattern  = getFilePatternUseCase.get(filePatternId);
-    return new ResponseEntity<>(new GetFilePatternResponse(filePatternId, filePattern.getPattern(), filePattern.getInclusionType()), HttpStatus.OK);
+  @GetMapping(
+      path = "/projects/{projectId}/filePatterns/{filePatternId}",
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<GetFilePatternResponse> getFilePattern(
+      @PathVariable(name = "filePatternId") Long filePatternId) {
+    FilePattern filePattern = getFilePatternUseCase.get(filePatternId);
+    return new ResponseEntity<>(
+        new GetFilePatternResponse(
+            filePatternId, filePattern.getPattern(), filePattern.getInclusionType()),
+        HttpStatus.OK);
   }
 }

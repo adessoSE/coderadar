@@ -22,12 +22,15 @@ public class CreateFilePatternController {
     this.createFilePatternUseCase = createFilePatternUseCase;
   }
 
-  @PostMapping(path = "/projects/{projectId}/filePatterns", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(
+      path = "/projects/{projectId}/filePatterns",
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<IdResponse> createFilePattern(
       @RequestBody @Validated CreateFilePatternCommand command,
       @PathVariable(name = "projectId") Long projectId) {
-      return new ResponseEntity<>(
-          new IdResponse(createFilePatternUseCase.createFilePattern(command, projectId)),
-          HttpStatus.CREATED);
+    return new ResponseEntity<>(
+        new IdResponse(createFilePatternUseCase.createFilePattern(command, projectId)),
+        HttpStatus.CREATED);
   }
 }

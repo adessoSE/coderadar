@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.analyzerconfig;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationUseCase;
 import io.reflectoring.coderadar.rest.analyzerconfig.CreateAnalyzerConfigurationController;
@@ -9,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import static org.mockito.Mockito.mock;
 
 class CreateAnalyzerConfigurationControllerTest {
 
@@ -29,6 +29,6 @@ class CreateAnalyzerConfigurationControllerTest {
     ResponseEntity<Object> responseEntity = testSubject.addAnalyzerConfiguration(command, 5L);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-    Assertions.assertEquals(1L, ((IdResponse)responseEntity.getBody()).getId());
+    Assertions.assertEquals(1L, ((IdResponse) responseEntity.getBody()).getId());
   }
 }
