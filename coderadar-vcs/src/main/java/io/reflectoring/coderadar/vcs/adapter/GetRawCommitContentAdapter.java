@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
+
   @Override
   public byte[] getCommitContent(String projectRoot, String filepath, String name)
       throws UnableToGetCommitContentException {

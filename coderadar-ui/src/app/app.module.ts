@@ -47,6 +47,12 @@ import {environment} from '../environments/environment';
 import {CityViewComponent} from './view/city-view/city-view.component';
 import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {DependencyRootComponent} from './levelized-structure-map/dependency-root/dependency-root.component';
+import {DependencyCompareComponent} from './levelized-structure-map/dependency-compare/dependency-compare.component';
+import {TreeNodeComponent} from './levelized-structure-map/tree-node/tree-node.component';
+import {MatSelectModule} from '@angular/material/select';
+import {DragScrollModule} from "ngx-drag-scroll";
+import {PinchZoomModule} from "ngx-pinch-zoom";
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -59,6 +65,8 @@ const appRoutes: Routes = [
   {path: 'project-edit/:id', component: EditProjectComponent},
   {path: 'project/:id', component: ProjectDashboardComponent},
   {path: 'project/:id/:name', component: ViewCommitComponent},
+  {path: 'project/:projectId/:commitName/dependency-map', component: DependencyRootComponent},
+  {path: 'project/:projectId/:commitName1/:commitName2/dependency-map', component: DependencyCompareComponent},
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
 
@@ -77,7 +85,10 @@ const appRoutes: Routes = [
     ProjectDashboardComponent,
     ViewCommitComponent,
     CityViewComponent,
-    CityViewHeaderComponent,
+    DependencyRootComponent,
+    DependencyCompareComponent,
+    TreeNodeComponent,
+    CityViewHeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -88,6 +99,7 @@ const appRoutes: Routes = [
     BrowserModule,
     FontAwesomeModule,
     BrowserAnimationsModule,
+    DragScrollModule,
     FlexLayoutModule,
     MatFormFieldModule,
     MatInputModule,
@@ -114,6 +126,8 @@ const appRoutes: Routes = [
     environment.production ? [] : StoreDevtoolsModule.instrument({maxAge: 50}),
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
+    PinchZoomModule,
     MatExpansionModule
   ],
   providers: [

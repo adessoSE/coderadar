@@ -1,0 +1,27 @@
+[id='3svg'] {
+  position: relative;
+  z-index: -1;
+}
+
+[id='3list__root'] {
+  padding-left: 0;
+  margin: 0;
+  width: max-content;
+  text-align: center;
+}
+
+.filename-span {
+  width: min-content;
+}
+
+.margin-right {
+  margin-right: 10px;
+}
+
+.margin-left {
+  margin-left: 10px;
+}
+
+.spinner-center {
+  margin: 0 auto;
+}
