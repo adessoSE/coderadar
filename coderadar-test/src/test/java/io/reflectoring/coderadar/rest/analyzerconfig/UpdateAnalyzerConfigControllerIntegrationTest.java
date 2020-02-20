@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.analyzerconfig;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
@@ -11,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -28,14 +28,17 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
 
     AnalyzerConfigurationEntity analyzerConfiguration = new AnalyzerConfigurationEntity();
     analyzerConfiguration.setProject(testProject);
-    analyzerConfiguration.setAnalyzerName("io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin");
+    analyzerConfiguration.setAnalyzerName(
+        "io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin");
     analyzerConfiguration.setEnabled(true);
 
     analyzerConfiguration = analyzerConfigurationRepository.save(analyzerConfiguration);
     final Long id = analyzerConfiguration.getId();
 
     UpdateAnalyzerConfigurationCommand command =
-        new UpdateAnalyzerConfigurationCommand("io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin", false);
+        new UpdateAnalyzerConfigurationCommand(
+            "io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin",
+            false);
     mvc()
         .perform(
             post("/projects/" + testProject.getId() + "/analyzers/" + analyzerConfiguration.getId())
@@ -45,27 +48,28 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
         .andDo(
             result -> {
               AnalyzerConfigurationEntity configuration =
-                      analyzerConfigurationRepository.findById(id).get();
-              Assertions.assertEquals("io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin", configuration.getAnalyzerName());
+                  analyzerConfigurationRepository.findById(id).get();
+              Assertions.assertEquals(
+                  "io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin",
+                  configuration.getAnalyzerName());
               Assertions.assertFalse(configuration.getEnabled());
             })
-            .andDo(document("analyzerConfiguration/update"));
-
+        .andDo(document("analyzerConfiguration/update"));
   }
 
   @Test
   void updateAnalyzerConfigurationReturnsErrorWhenAnalyzerDoesNotExist() throws Exception {
     UpdateAnalyzerConfigurationCommand command =
-            new UpdateAnalyzerConfigurationCommand("noanalyzer", false);
+        new UpdateAnalyzerConfigurationCommand("noanalyzer", false);
     mvc()
-            .perform(
-                    post("/projects/0/analyzers/2")
-                            .content(toJson(command))
-                            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isNotFound())
-            .andExpect(
-                    MockMvcResultMatchers.jsonPath("errorMessage")
-                            .value("AnalyzerConfiguration with id 2 not found."));
+        .perform(
+            post("/projects/0/analyzers/2")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("errorMessage")
+                .value("AnalyzerConfiguration with id 2 not found."));
   }
 
   @Test
@@ -76,14 +80,16 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
 
     AnalyzerConfigurationEntity analyzerConfiguration = new AnalyzerConfigurationEntity();
     analyzerConfiguration.setProject(testProject);
-    analyzerConfiguration.setAnalyzerName("io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin");
+    analyzerConfiguration.setAnalyzerName(
+        "io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin");
     analyzerConfiguration.setEnabled(true);
 
     analyzerConfiguration = analyzerConfigurationRepository.save(analyzerConfiguration);
 
     AnalyzerConfigurationEntity analyzerConfiguration2 = new AnalyzerConfigurationEntity();
     analyzerConfiguration2.setProject(testProject);
-    analyzerConfiguration2.setAnalyzerName("io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin");
+    analyzerConfiguration2.setAnalyzerName(
+        "io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin");
     analyzerConfiguration2.setEnabled(true);
 
     analyzerConfigurationRepository.save(analyzerConfiguration2);
@@ -91,30 +97,34 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
     final Long id = analyzerConfiguration.getId();
 
     UpdateAnalyzerConfigurationCommand command =
-            new UpdateAnalyzerConfigurationCommand("io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin", false);
+        new UpdateAnalyzerConfigurationCommand(
+            "io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin",
+            false);
     mvc()
-            .perform(
-                    post("/projects/" + testProject.getId() + "/analyzers/"+id)
-                            .content(toJson(command))
-                            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isConflict())
-            .andExpect(
-                    MockMvcResultMatchers.jsonPath("errorMessage").value("An analyzer with this name is already configured for the project!"));
+        .perform(
+            post("/projects/" + testProject.getId() + "/analyzers/" + id)
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isConflict())
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("errorMessage")
+                .value("An analyzer with this name is already configured for the project!"));
   }
 
   @Test
   void updateAnalyzerConfigurationReturnsErrorWhenNotFound() throws Exception {
     UpdateAnalyzerConfigurationCommand command =
-            new UpdateAnalyzerConfigurationCommand("io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", false);
+        new UpdateAnalyzerConfigurationCommand(
+            "io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", false);
     mvc()
-            .perform(
-                    post("/projects/0/analyzers/2")
-                            .content(toJson(command))
-                            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isNotFound())
-            .andExpect(
-                    MockMvcResultMatchers.jsonPath("errorMessage")
-                            .value("AnalyzerConfiguration with id 2 not found."));
+        .perform(
+            post("/projects/0/analyzers/2")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("errorMessage")
+                .value("AnalyzerConfiguration with id 2 not found."));
   }
 
   @Test

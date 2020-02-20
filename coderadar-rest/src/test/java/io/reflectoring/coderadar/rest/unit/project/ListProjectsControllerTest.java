@@ -1,19 +1,18 @@
 package io.reflectoring.coderadar.rest.unit.project;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.ListProjectsUseCase;
 import io.reflectoring.coderadar.rest.domain.GetProjectResponse;
 import io.reflectoring.coderadar.rest.project.ListProjectsController;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.mock;
 
 class ListProjectsControllerTest {
 

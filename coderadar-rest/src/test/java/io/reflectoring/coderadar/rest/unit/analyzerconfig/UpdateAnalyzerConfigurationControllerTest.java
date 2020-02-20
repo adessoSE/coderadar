@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.analyzerconfig;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
 import io.reflectoring.coderadar.rest.analyzerconfig.UpdateAnalyzerConfigurationController;
@@ -8,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import static org.mockito.Mockito.mock;
 
 class UpdateAnalyzerConfigurationControllerTest {
 
@@ -23,7 +23,8 @@ class UpdateAnalyzerConfigurationControllerTest {
 
     UpdateAnalyzerConfigurationCommand command =
         new UpdateAnalyzerConfigurationCommand("analyzer", true);
-    ResponseEntity<Object> responseEntity = testSubject.updateAnalyzerConfiguration(command, 1L, 2L);
+    ResponseEntity<Object> responseEntity =
+        testSubject.updateAnalyzerConfiguration(command, 1L, 2L);
 
     Mockito.verify(updateAnalyzerConfigurationUseCase, Mockito.times(1)).update(command, 1L, 2L);
 

@@ -22,7 +22,10 @@ public class LoginUserController {
     this.loginUserUseCase = loginUserUseCase;
   }
 
-  @PostMapping(path = "/user/auth", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(
+      path = "/user/auth",
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity login(@RequestBody @Validated LoginUserCommand command) {
     try {
       return new ResponseEntity<>(loginUserUseCase.login(command), HttpStatus.OK);

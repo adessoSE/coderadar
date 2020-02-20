@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.user;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.rest.domain.LoadUserResponse;
 import io.reflectoring.coderadar.rest.user.LoadUserController;
 import io.reflectoring.coderadar.useradministration.domain.User;
@@ -10,8 +12,6 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static org.mockito.Mockito.mock;
-
 class LoadUserControllerTest {
 
   private LoadUserUseCase loadUserUseCase = mock(LoadUserUseCase.class);
@@ -20,7 +20,8 @@ class LoadUserControllerTest {
   void loadUserWithIdOne() {
     LoadUserController testSubject = new LoadUserController(loadUserUseCase);
 
-    Mockito.when(loadUserUseCase.loadUser(1L)).thenReturn(new User().setUsername("username").setId(1L));
+    Mockito.when(loadUserUseCase.loadUser(1L))
+        .thenReturn(new User().setUsername("username").setId(1L));
 
     ResponseEntity<LoadUserResponse> responseEntity = testSubject.loadUser(1L);
 

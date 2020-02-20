@@ -21,11 +21,18 @@ public class GetAnalyzerConfigurationController {
     this.getAnalyzerConfigurationUseCase = getAnalyzerConfigurationUseCase;
   }
 
-  @GetMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<GetAnalyzerConfigurationResponse> getAnalyzerConfiguration(@PathVariable Long analyzerConfigurationId) {
-    AnalyzerConfiguration analyzerConfiguration = getAnalyzerConfigurationUseCase.getAnalyzerConfiguration(analyzerConfigurationId);
+  @GetMapping(
+      path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}",
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<GetAnalyzerConfigurationResponse> getAnalyzerConfiguration(
+      @PathVariable Long analyzerConfigurationId) {
+    AnalyzerConfiguration analyzerConfiguration =
+        getAnalyzerConfigurationUseCase.getAnalyzerConfiguration(analyzerConfigurationId);
     return new ResponseEntity<>(
-        new GetAnalyzerConfigurationResponse(analyzerConfiguration.getId(), analyzerConfiguration.getAnalyzerName(), analyzerConfiguration.isEnabled()),
+        new GetAnalyzerConfigurationResponse(
+            analyzerConfiguration.getId(),
+            analyzerConfiguration.getAnalyzerName(),
+            analyzerConfiguration.isEnabled()),
         HttpStatus.OK);
   }
 }
