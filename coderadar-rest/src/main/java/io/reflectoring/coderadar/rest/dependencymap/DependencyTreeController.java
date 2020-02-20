@@ -11,15 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DependencyTreeController {
 
-    private final GetDependencyTreeUseCase getDependencyTreeUseCase;
+  private final GetDependencyTreeUseCase getDependencyTreeUseCase;
 
-    @Autowired
-    public DependencyTreeController(GetDependencyTreeUseCase getDependencyTreeUseCase) {
-        this.getDependencyTreeUseCase = getDependencyTreeUseCase;
-    }
+  @Autowired
+  public DependencyTreeController(GetDependencyTreeUseCase getDependencyTreeUseCase) {
+    this.getDependencyTreeUseCase = getDependencyTreeUseCase;
+  }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/analyzers/{projectId}/structureMap/{commitName}")
-    public ResponseEntity<Object> getDependencyTree(@PathVariable("projectId") Long projectId, @PathVariable("commitName") String commitName) {
-        return ResponseEntity.ok(getDependencyTreeUseCase.getDependencyTree(projectId, commitName));
-    }
+  @GetMapping(
+      produces = MediaType.APPLICATION_JSON_VALUE,
+      value = "/analyzers/{projectId}/structureMap/{commitName}")
+  public ResponseEntity<Object> getDependencyTree(
+      @PathVariable("projectId") Long projectId, @PathVariable("commitName") String commitName) {
+    return ResponseEntity.ok(getDependencyTreeUseCase.getDependencyTree(projectId, commitName));
+  }
 }

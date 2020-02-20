@@ -11,17 +11,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DependencyCompareTreeController {
 
-    private final GetCompareTreeUseCase getCompareTreeUseCase;
+  private final GetCompareTreeUseCase getCompareTreeUseCase;
 
-    @Autowired
-    public DependencyCompareTreeController(GetCompareTreeUseCase getCompareTreeUseCase) {
-        this.getCompareTreeUseCase = getCompareTreeUseCase;
-    }
+  @Autowired
+  public DependencyCompareTreeController(GetCompareTreeUseCase getCompareTreeUseCase) {
+    this.getCompareTreeUseCase = getCompareTreeUseCase;
+  }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/analyzers/{projectId}/structureMap/{commitName}/{secondCommit}")
-    public ResponseEntity<Object> getDependencyTree(@PathVariable("projectId") Long projectId,
-                                                    @PathVariable("commitName") String commitName,
-                                                    @PathVariable("secondCommit") String secondCommit) {
-        return ResponseEntity.ok(getCompareTreeUseCase.getDependencyTree(projectId, commitName, secondCommit));
-    }
+  @GetMapping(
+      produces = MediaType.APPLICATION_JSON_VALUE,
+      value = "/analyzers/{projectId}/structureMap/{commitName}/{secondCommit}")
+  public ResponseEntity<Object> getDependencyTree(
+      @PathVariable("projectId") Long projectId,
+      @PathVariable("commitName") String commitName,
+      @PathVariable("secondCommit") String secondCommit) {
+    return ResponseEntity.ok(
+        getCompareTreeUseCase.getDependencyTree(projectId, commitName, secondCommit));
+  }
 }
