@@ -56,10 +56,10 @@
               {{timestampToDate(commit.timestamp)}}
             </mat-panel-description>
           </mat-expansion-panel-header>
-          <mat-label>Analyzed: <b>{{booleanToString(commit.analyzed)}}</b></mat-label>
+          <mat-label>Analyzed: <strong>{{booleanToString(commit.analyzed)}}</strong></mat-label>
           <mat-action-row>
             <button mat-button routerLink="/project/{{project.id}}/{{commit.name}}/dependency-map/">Dependency Map</button>
-            <button [disabled]="!commit.analyzed" mat-button routerLink="/project/{{project.id}}/{{commit.name}}"><b>Raw metrics</b></button><br>
+            <button [disabled]="!commit.analyzed" mat-button routerLink="/project/{{project.id}}/{{commit.name}}">Raw metrics</button><br>
           </mat-action-row>
         </mat-expansion-panel>
       </mat-grid-tile>

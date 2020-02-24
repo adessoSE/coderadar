@@ -56,7 +56,7 @@ public interface MetricQueryRepository extends Neo4jRepository<CommitEntity, Lon
           + "UNWIND commits as c "
           + "MATCH (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c) WHERE "
           + "NOT(f IN deletes OR f IN renames) AND m.name in {2} WITH f.path as path, m.name as name, head(collect(m.value)) as value ORDER BY path, name WHERE value <> 0 "
-          + "RETURN path, collect(name + \"=\" + value) AS metrics")
+          + "RETURN path, collect(name + \"=\" + value) AS metrics ORDER BY path")
   @NonNull
   List<MetricValueForCommitTreeQueryResult> getMetricTreeForCommit(
       @NonNull Long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);

@@ -102,14 +102,13 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
   private void testCreatingModule(Long projectId) throws Exception {
     CreateModuleCommand command = new CreateModuleCommand("src/paysim");
-    MvcResult result =
-        mvc()
-            .perform(
-                post("/projects/" + projectId + "/modules")
-                    .content(toJson(command))
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isCreated())
-            .andReturn();
+    mvc()
+        .perform(
+            post("/projects/" + projectId + "/modules")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andReturn();
 
     List<ModuleEntity> modules = moduleRepository.findModulesInProject(projectId);
     Assertions.assertEquals("src/paysim/", modules.get(0).getPath());
@@ -317,10 +316,10 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     DeltaTree secondChangedFile = firstChild.getChildren().get(11);
     Assertions.assertEquals("src/paysim/output/KafkaOutput.java", secondChangedFile.getName());
     Assertions.assertEquals(MetricTreeNodeType.FILE, firstChangedFile.getType());
-    Assertions.assertEquals(4, secondChangedFile.getCommit1Metrics().size());
+    Assertions.assertEquals(3, secondChangedFile.getCommit1Metrics().size());
     Assertions.assertEquals(
-        secondChangedFile.getCommit2Metrics().get(2).getValue(),
-        secondChangedFile.getCommit1Metrics().get(2).getValue() - 1L);
+        secondChangedFile.getCommit2Metrics().get(1).getValue(),
+        secondChangedFile.getCommit1Metrics().get(1).getValue() - 1L);
     Assertions.assertTrue(secondChangedFile.getChanges().isModified());
 
     for (int i = 1; i < 19; i++) {
@@ -329,8 +328,14 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
       }
       DeltaTree file = firstChild.getChildren().get(i);
       Assertions.assertEquals(MetricTreeNodeType.FILE, file.getType());
-      Assertions.assertEquals(4, file.getCommit1Metrics().size());
-      Assertions.assertEquals(file.getCommit2Metrics().get(2), file.getCommit1Metrics().get(2));
+      if (file.getCommit1Metrics().stream()
+          .anyMatch(m -> m.getMetricName().equals("coderadar:size:cloc:java"))) {
+        Assertions.assertEquals(4, file.getCommit1Metrics().size());
+        Assertions.assertEquals(file.getCommit2Metrics().get(2), file.getCommit1Metrics().get(2));
+      } else {
+        Assertions.assertEquals(3, file.getCommit1Metrics().size());
+        Assertions.assertEquals(file.getCommit2Metrics().get(1), file.getCommit1Metrics().get(1));
+      }
       Assertions.assertFalse(file.getChanges().isModified());
       Assertions.assertFalse(file.getChanges().isAdded());
       Assertions.assertFalse(file.getChanges().isRenamed());

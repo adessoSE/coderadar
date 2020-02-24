@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
+import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
@@ -21,16 +22,19 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
   private final FileRepository fileRepository;
   private final GetMetricTreeForCommitAdapter getMetricsForAllFilesInCommitAdapter;
   private final ProjectRepository projectRepository;
+  private final CommitRepository commitRepository;
 
   private static final String PROCESSING_ERROR = "Cannot calculate delta tree!";
 
   public GetDeltaTreeForTwoCommitsAdapter(
       FileRepository fileRepository,
       GetMetricTreeForCommitAdapter getMetricsForAllFilesInCommitAdapter,
-      ProjectRepository projectRepository) {
+      ProjectRepository projectRepository,
+      CommitRepository commitRepository) {
     this.fileRepository = fileRepository;
     this.getMetricsForAllFilesInCommitAdapter = getMetricsForAllFilesInCommitAdapter;
     this.projectRepository = projectRepository;
+    this.commitRepository = commitRepository;
   }
 
   @Override
@@ -39,6 +43,12 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
         projectRepository
             .findByIdWithModules(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
+
+    if (commitRepository.commitIsNewer(projectId, command.getCommit1(), command.getCommit2())) {
+      String temp = command.getCommit1();
+      command.setCommit1(command.getCommit2());
+      command.setCommit2(temp);
+    }
 
     MetricTree commit1Tree =
         getMetricsForAllFilesInCommitAdapter.get(

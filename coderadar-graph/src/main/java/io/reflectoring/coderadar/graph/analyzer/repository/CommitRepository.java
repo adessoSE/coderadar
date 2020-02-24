@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.graph.analyzer.repository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
@@ -72,15 +71,6 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   void setCommitsWithIDsAsAnalyzed(@NonNull long[] commitIds);
 
   /**
-   * @param commitHash The commit hash.
-   * @param projectId The project id.
-   * @return The timestamp of the commit given its hash value.
-   */
-  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE c.name = {0} AND ID(p) = {1} RETURN c.timestamp")
-  @NonNull
-  Optional<Long> findTimestampByNameAndProjectId(String commitHash, Long projectId);
-
-  /**
    * Creates [:IS_CHILD_OF] Relationships between commits.
    *
    * @param parentRels A list of maps, each containing the ids of the child (id1) and parent (id2)
@@ -105,4 +95,15 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "MATCH (f) WHERE ID(f) = x.fileId "
           + "CREATE (f)-[:CHANGED_IN {changeType: x.changeType, oldPath: x.oldPath}]->(c)")
   void createFileRelationships(List<HashMap<String, Object>> fileRels);
+
+  /**
+   * @param projectId The project id.
+   * @param commit1 The full hash of the first commit.
+   * @param commit2 The full hash of the second commit.
+   * @return True if commit1 was made after commit 2, false otherwise
+   */
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {1} WITH c, p "
+          + "MATCH (p)-[:CONTAINS_COMMIT]->(c1) WHERE c1.name = {2} RETURN c.timestamp > c1.timestamp")
+  boolean commitIsNewer(@NonNull Long projectId, @NonNull String commit1, @NonNull String commit2);
 }
