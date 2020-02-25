@@ -33,8 +33,6 @@ public class ProjectEntity {
 
   @EqualsAndHashCode.Exclude private boolean isBeingDeleted = false;
 
-  @EqualsAndHashCode.Exclude private boolean analyzingStatus = false;
-
   // The graph starts from a project and goes only in one direction.
   // https://en.wikipedia.org/wiki/Directed_acyclic_graph
   @Relationship(type = "CONTAINS")

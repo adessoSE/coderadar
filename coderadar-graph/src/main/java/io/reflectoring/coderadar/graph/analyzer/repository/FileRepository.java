@@ -23,11 +23,11 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    * @param commit1Hash The hash of the first commit
    * @param commit2Hash The hash of the second commit
    */
-  @Query(
+  @Query( // TODO: This query should also filter deletes
       "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {2}  WITH c, p "
           + "MATCH (p)-[:CONTAINS_COMMIT]->(c2) WHERE c2.name = {1} WITH c, c2 "
           + "CALL apoc.path.spanningTree(c, {relationshipFilter:'IS_CHILD_OF>', terminatorNodes: [c2]}) "
-          + "YIELD path WITH nodes(path) as commits UNWIND commits as c "
+          + "YIELD path WITH nodes(path) as commits, c2 UNWIND commits as c WITH c WHERE c <> c2 "
           + "MATCH (c)<-[:CHANGED_IN {changeType: \"MODIFY\"}]-(f) "
           + "RETURN DISTINCT f.path")
   @NonNull

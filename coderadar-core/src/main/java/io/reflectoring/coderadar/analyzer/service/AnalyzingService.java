@@ -3,28 +3,29 @@ package io.reflectoring.coderadar.analyzer.service;
 import io.reflectoring.coderadar.analyzer.MisconfigurationException;
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
-import io.reflectoring.coderadar.analyzer.port.driven.SetAnalyzingStatusPort;
 import io.reflectoring.coderadar.analyzer.port.driver.AnalyzeCommitUseCase;
+import io.reflectoring.coderadar.analyzer.port.driver.GetAnalyzingStatusUseCase;
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
+import io.reflectoring.coderadar.analyzer.port.driver.StopAnalyzingUseCase;
 import io.reflectoring.coderadar.plugin.api.SourceCodeFileAnalyzerPlugin;
-import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.domain.*;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveMetricPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.ListAnalyzerConfigurationsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.query.port.driven.GetAvailableMetricsInProjectPort;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StartAnalyzingService implements StartAnalyzingUseCase {
+public class AnalyzingService
+    implements StartAnalyzingUseCase, StopAnalyzingUseCase, GetAnalyzingStatusUseCase {
   private final GetProjectPort getProjectPort;
   private final AnalyzeCommitUseCase analyzeCommitUseCase;
   private final AnalyzerPluginService analyzerPluginService;
@@ -34,14 +35,13 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
   private final SaveMetricPort saveMetricPort;
   private final SaveCommitPort saveCommitPort;
   private final ProcessProjectService processProjectService;
-  private final SetAnalyzingStatusPort setAnalyzingStatusPort;
   private final GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort;
-  private final ProjectStatusPort projectStatusPort;
-  private final GetAnalyzingStatusService getAnalyzingStatusService;
 
-  private final Logger logger = LoggerFactory.getLogger(StartAnalyzingService.class);
+  private final Map<Long, Boolean> activeAnalysis = new ConcurrentHashMap<>();
 
-  public StartAnalyzingService(
+  private final Logger logger = LoggerFactory.getLogger(AnalyzingService.class);
+
+  public AnalyzingService(
       GetProjectPort getProjectPort,
       AnalyzeCommitUseCase analyzeCommitUseCase,
       AnalyzerPluginService analyzerPluginService,
@@ -51,10 +51,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       SaveMetricPort saveMetricPort,
       SaveCommitPort saveCommitPort,
       ProcessProjectService processProjectService,
-      SetAnalyzingStatusPort setAnalyzingStatusPort,
-      GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort,
-      ProjectStatusPort projectStatusPort,
-      GetAnalyzingStatusService getAnalyzingStatusService) {
+      GetAvailableMetricsInProjectPort getAvailableMetricsInProjectPort) {
     this.getProjectPort = getProjectPort;
     this.analyzeCommitUseCase = analyzeCommitUseCase;
     this.analyzerPluginService = analyzerPluginService;
@@ -64,10 +61,7 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
     this.saveMetricPort = saveMetricPort;
     this.saveCommitPort = saveCommitPort;
     this.processProjectService = processProjectService;
-    this.setAnalyzingStatusPort = setAnalyzingStatusPort;
     this.getAvailableMetricsInProjectPort = getAvailableMetricsInProjectPort;
-    this.projectStatusPort = projectStatusPort;
-    this.getAnalyzingStatusService = getAnalyzingStatusService;
   }
 
   /**
@@ -93,9 +87,6 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
         || analyzerConfigurations.stream().noneMatch(AnalyzerConfiguration::isEnabled)) {
       throw new MisconfigurationException("Cannot analyze project without analyzers");
     }
-    if (projectStatusPort.isBeingProcessed(projectId)) {
-      throw new ProjectIsBeingProcessedException(projectId);
-    }
     startAnalyzingTask(project, branchName, filePatterns, analyzerConfigurations);
   }
 
@@ -114,37 +105,33 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       List<AnalyzerConfiguration> analyzerConfigurations) {
     processProjectService.executeTask(
         () -> {
+          Long projectId = project.getId();
+          activeAnalysis.put(project.getId(), true);
           List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
               getAnalyzersForProject(analyzerConfigurations);
-          List<Commit> commitsToBeAnalyzed =
+          List<Commit> commits =
               getCommitsInProjectPort.getNonAnalyzedSortedByTimestampAscWithNoParents(
                   project.getId(), filePatterns, branchName);
-          long[] commitIds = new long[commitsToBeAnalyzed.size()];
-          setAnalyzingStatusPort.setStatus(project.getId(), true);
-          int counter = 0;
-          boolean running = true;
+          List<Long> commitIds = new ArrayList<>();
           Map<Long, List<MetricValue>> fileMetrics =
-              saveMetricPort.getMetricsForFiles(project.getId(), branchName);
-          for (Commit commit : commitsToBeAnalyzed) {
-            if (!running) {
-              break;
-            }
+              saveMetricPort.getMetricsForFiles(projectId, branchName);
+          for (int i = 0; i < commits.size() && activeAnalysis.get(projectId); i++) {
             List<MetricValue> metrics =
-                analyzeCommitUseCase.analyzeCommit(commit, project, sourceCodeFileAnalyzerPlugins);
-
-            zeroOutMissingMetrics(commit, metrics, fileMetrics);
+                analyzeCommitUseCase.analyzeCommit(
+                    commits.get(i), project, sourceCodeFileAnalyzerPlugins);
+            zeroOutMissingMetrics(commits.get(i), metrics, fileMetrics);
             if (!metrics.isEmpty()) {
               saveMetricPort.saveMetricValues(metrics);
               saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
-              running = getAnalyzingStatusService.getStatus(project.getId());
+              commitIds.clear();
             }
-            commitIds[counter++] = commit.getId();
-            log(commit, counter);
+            commitIds.add(commits.get(i).getId());
+            log(commits.get(i));
           }
-          setAnalyzingStatusPort.setStatus(project.getId(), false);
-          if (!getAvailableMetricsInProjectPort.get(project.getId()).isEmpty()) {
+          if (!getAvailableMetricsInProjectPort.get(projectId).isEmpty()) {
             saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
           }
+          activeAnalysis.remove(project.getId());
           logger.info("Analysis complete for project {}", project.getName());
         },
         project.getId());
@@ -204,14 +191,9 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
    * Logs the successful analysis of a commit.
    *
    * @param commit The commit that was analyzed.
-   * @param counter The number of the commit.
    */
-  private void log(Commit commit, int counter) {
-    logger.info(
-        "Analyzed commit: {} {}, total analyzed: {}",
-        commit.getComment(),
-        commit.getName(),
-        counter);
+  private void log(Commit commit) {
+    logger.info("Analyzed commit: {} {}", commit.getComment(), commit.getName());
   }
 
   /**
@@ -230,5 +212,15 @@ public class StartAnalyzingService implements StartAnalyzingUseCase {
       }
     }
     return analyzers;
+  }
+
+  @Override
+  public void stop(Long projectId) {
+    activeAnalysis.put(projectId, false);
+  }
+
+  @Override
+  public Boolean getStatus(Long projectId) {
+    return activeAnalysis.get(projectId) != null;
   }
 }
