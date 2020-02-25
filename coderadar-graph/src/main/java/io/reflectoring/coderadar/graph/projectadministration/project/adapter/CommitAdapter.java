@@ -6,9 +6,8 @@ import io.reflectoring.coderadar.graph.projectadministration.branch.repository.B
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommitRelationshipEntity;
-import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
+import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
@@ -16,6 +15,8 @@ import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelati
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -289,25 +290,27 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
 
   @Override
   public void addCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
-    ProjectEntity projectEntity =
-        projectRepository
-            .findById(projectId)
-            .orElseThrow(() -> new ProjectNotFoundException(projectId));
-
     Map<String, CommitEntity> walkedCommits = new HashMap<>();
-    for (CommitEntity c : commitRepository.findByProjectId(projectId)) {
+    for (CommitEntity c : commitRepository.findByProjectIdFileRelationships(projectId)) {
       walkedCommits.put(c.getName(), c);
     }
     IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>();
-    for (FileEntity f : fileRepository.findAllinProject(projectId)) {
-      walkedFiles.put(fileBaseDataMapper.mapNodeEntity(f), f);
+    List<CommitEntity> commitEntities = new ArrayList<>(walkedCommits.values());
+    for(int i = 0; i < commitEntities.size(); i++) {
+      for(int j = 0; j < commitEntities.get(i).getTouchedFiles().size(); j++){
+        commits.get(i).getTouchedFiles().sort(Comparator.comparing(t -> t.getFile().getPath()));
+        walkedFiles.put(commits.get(i).getTouchedFiles().get(j).getFile(), commitEntities.get(i).getTouchedFiles().get(j).getFile());
+      }
+    }
+    for(FileEntity fileEntity : walkedFiles.values()) {
+      if(fileEntity.getOldFiles() == null) {
+        fileEntity.setOldFiles(Collections.emptyList());
+      }
     }
     commits.removeIf(commit -> walkedCommits.containsKey(commit.getName()));
-
     for (Commit commit : commits) {
       walkedCommits.put(commit.getName(), commitBaseDataMapper.mapDomainObject(commit));
     }
-
     for (Commit commit : commits) {
       CommitEntity commitEntity = walkedCommits.get(commit.getName());
       // set parents
@@ -321,12 +324,34 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
       commitEntity.setTouchedFiles(getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles));
       walkedCommits.put(commit.getName(), commitEntity);
     }
-    List<FileEntity> allFiles = new ArrayList<>(walkedFiles.values());
-    projectEntity.setFiles(allFiles);
-    projectEntity.setCommits(new ArrayList<>(walkedCommits.values()));
-    projectRepository.save(projectEntity, 1);
-    commitRepository.save(walkedCommits.values(), 1);
-    fileRepository.save(allFiles, 1);
+    List<CommitEntity> newCommitEntities = walkedCommits.values().stream().filter(commitEntity -> commits.stream().anyMatch(commit -> commit.getName().equals(commitEntity.getName()))).collect(Collectors.toList());
+    List<FileEntity> newFileEntities = new ArrayList<>();
+    for(CommitEntity commitEntity : newCommitEntities){
+      for(FileToCommitRelationshipEntity rel : commitEntity.getTouchedFiles()){
+        if(rel.getChangeType().equals(ChangeType.ADD)) {
+          newFileEntities.add(rel.getFile());
+        }
+      }
+    }
+
+    int commitBulkSaveChunk = 5000;
+    if (newCommitEntities.size() < 5000) {
+      commitBulkSaveChunk = newCommitEntities.size();
+    }
+
+    int fileBulkSaveChunk = 5000;
+    if (newFileEntities.size() < 5000) {
+      fileBulkSaveChunk = newFileEntities.size();
+    }
+
+    saveCommitsWithDepthZero(newCommitEntities, commitBulkSaveChunk);
+    saveFilesWithDepthZero(newFileEntities, fileBulkSaveChunk);
+    attachCommitsAndFilesToProject(
+        projectId, newCommitEntities, newFileEntities, commitBulkSaveChunk, fileBulkSaveChunk);
+    saveCommitParentsRelationships(newCommitEntities, commitBulkSaveChunk);
+    saveFileToCommitRelationships(newCommitEntities, fileBulkSaveChunk);
+    saveFileRenameRelationships(newFileEntities, fileBulkSaveChunk);
+
     for (Branch branch : updatedBranches) {
       if (!branchRepository.branchExistsInProject(projectId, branch.getName())) {
         branchRepository.setBranchOnCommit(projectId, branch.getCommitHash(), branch.getName());

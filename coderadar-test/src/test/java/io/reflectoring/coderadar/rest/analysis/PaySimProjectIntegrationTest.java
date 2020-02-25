@@ -118,7 +118,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     Assertions.assertEquals(99, commitEntities.size());
 
     // Files there?
-    List<FileEntity> fileEntities = fileRepository.findAllinProject(projectId);
+    List<FileEntity> fileEntities = fileRepository.findAllinProjectWithRenamedFromRelationships(projectId);
     Assertions.assertFalse(fileEntities.isEmpty());
     session.clear();
   }
@@ -445,7 +445,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     Assertions.assertEquals(99, commitEntities.size());
 
     // Files there?
-    List<FileEntity> fileEntities = fileRepository.findAllinProject(projectId);
+    List<FileEntity> fileEntities = fileRepository.findAllinProjectWithRenamedFromRelationships(projectId);
     Assertions.assertFalse(fileEntities.isEmpty());
     session.clear();
     return projectId;

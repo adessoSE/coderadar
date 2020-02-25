@@ -23,7 +23,7 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
    * @param branchName The name of the branch.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {1} "
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {1} WITH c "
           + "CREATE (b:BranchEntity {name: {2} })-[:POINTS_TO]->(c) ")
   void setBranchOnCommit(Long projectId, String commitHash, String branchName);
 
@@ -33,7 +33,7 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
    * @return True if a branch with the name exists in the project.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[r:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} RETURN COUNT(b) > 0")
+      "MATCH (p)-[:CONTAINS_COMMIT]->()<-[r:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} RETURN COUNT(b) > 0")
   boolean branchExistsInProject(Long projectId, String branchName);
 
   /**

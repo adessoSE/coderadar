@@ -14,9 +14,11 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    * @param projectId The project id.
    * @return All of the files in a project (including those part of modules).
    */
-  @Query("MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} RETURN f")
+  @Query("MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} WITH f " +
+          "OPTIONAL MATCH (f)-[r:RENAMED_FROM]->(f2) " +
+          "RETURN f, r, f2")
   @NonNull
-  List<FileEntity> findAllinProject(@NonNull Long projectId);
+  List<FileEntity> findAllinProjectWithRenamedFromRelationships(@NonNull Long projectId);
 
   /**
    * @param projectId The project id

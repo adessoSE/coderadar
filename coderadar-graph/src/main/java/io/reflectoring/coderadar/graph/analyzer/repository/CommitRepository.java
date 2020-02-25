@@ -33,7 +33,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f) WHERE r.changeType <> \"DELETE\" AND any(x IN {2} WHERE f.path =~ x) "
           + "AND none(x IN {3} WHERE f.path =~ x) RETURN c, r, f")
   @NonNull
-  List<CommitEntity> findByProjectIdNonAnalyzedWithFileAndParentRelationships(
+  List<CommitEntity> findByProjectIdNonAnalyzedWithFileRelationships(
       @NonNull Long projectId,
       @NonNull String branchName,
       @NonNull List<String> includes,
@@ -106,4 +106,20 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
       "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {1} WITH c, p "
           + "MATCH (p)-[:CONTAINS_COMMIT]->(c1) WHERE c1.name = {2} RETURN c.timestamp > c1.timestamp")
   boolean commitIsNewer(@NonNull Long projectId, @NonNull String commit1, @NonNull String commit2);
+
+
+
+  /**
+   * Returns all commits in a project with FileToCommitRelationships and parent relationships where
+   * the file paths match the given include and exclude regular expressions and where the change
+   * type is not "DELETED". NOTE: uses APOC
+   *
+   * @param projectId The id of the project.
+   * @return A list of commit entities with initialized FileToCommitRelationships.
+   */
+  @Query(
+          "MATCH (p)-[:CONTAINS_COMMIT]->(c)  WHERE ID(p) = {0} WITH c "
+                  + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f) RETURN c, r, f ORDER BY c.timestamp, f.path")
+  @NonNull
+  List<CommitEntity> findByProjectIdFileRelationships(@NonNull Long projectId);
 }

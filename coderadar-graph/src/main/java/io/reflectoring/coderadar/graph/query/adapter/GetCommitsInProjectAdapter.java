@@ -43,7 +43,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     }
 
     return mapCommitEntitiesNoParents(
-        commitRepository.findByProjectIdNonAnalyzedWithFileAndParentRelationships(
+        commitRepository.findByProjectIdNonAnalyzedWithFileRelationships(
             projectId, branch, includes, excludes));
   }
 
