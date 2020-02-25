@@ -110,10 +110,6 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
 
 
   /**
-   * Returns all commits in a project with FileToCommitRelationships and parent relationships where
-   * the file paths match the given include and exclude regular expressions and where the change
-   * type is not "DELETED". NOTE: uses APOC
-   *
    * @param projectId The id of the project.
    * @return A list of commit entities with initialized FileToCommitRelationships.
    */

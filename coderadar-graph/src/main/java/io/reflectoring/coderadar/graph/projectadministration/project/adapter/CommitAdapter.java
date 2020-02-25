@@ -45,35 +45,22 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
       IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>(commits.size() * 2);
       List<CommitEntity> commitEntities = mapCommitTree(commits, walkedFiles);
       List<FileEntity> fileEntities = new ArrayList<>(walkedFiles.values());
-
       commits.clear();
       walkedFiles.clear();
-
-      int commitBulkSaveChunk = 5000;
-      if (commitEntities.size() < 5000) {
-        commitBulkSaveChunk = commitEntities.size();
-      }
-
-      int fileBulkSaveChunk = 5000;
-      if (fileEntities.size() < 5000) {
-        fileBulkSaveChunk = fileEntities.size();
-      }
-
-      saveCommitsWithDepthZero(commitEntities, commitBulkSaveChunk);
-      saveFilesWithDepthZero(fileEntities, fileBulkSaveChunk);
-      attachCommitsAndFilesToProject(
-          projectId, commitEntities, fileEntities, commitBulkSaveChunk, fileBulkSaveChunk);
-      saveCommitParentsRelationships(commitEntities, commitBulkSaveChunk);
-      saveFileToCommitRelationships(commitEntities, fileBulkSaveChunk);
-      saveFileRenameRelationships(fileEntities, fileBulkSaveChunk);
+      saveCommitAndFileEntities(projectId, commitEntities, fileEntities);
       setBranchPointers(projectId, branches);
     }
   }
 
   private void setBranchPointers(Long projectId, List<Branch> branches) {
     for (Branch branch : branches) {
-      branchRepository.setBranchOnCommit(projectId, branch.getCommitHash(), branch.getName());
+      if (!branchRepository.branchExistsInProject(projectId, branch.getName())) {
+        branchRepository.setBranchOnCommit(projectId, branch.getCommitHash(), branch.getName());
+      } else {
+        branchRepository.moveBranchToCommit(projectId, branch.getName(), branch.getCommitHash());
+      }
     }
+
   }
 
   private void saveFilesWithDepthZero(List<FileEntity> fileEntities, int fileBulkSaveChunk) {
@@ -291,74 +278,75 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
   @Override
   public void addCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
     Map<String, CommitEntity> walkedCommits = new HashMap<>();
-    for (CommitEntity c : commitRepository.findByProjectIdFileRelationships(projectId)) {
+    IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>();
+    for (CommitEntity c : commitRepository.findByProjectId(projectId)) {
       walkedCommits.put(c.getName(), c);
     }
-    IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>();
-    List<CommitEntity> commitEntities = new ArrayList<>(walkedCommits.values());
-    for(int i = 0; i < commitEntities.size(); i++) {
-      for(int j = 0; j < commitEntities.get(i).getTouchedFiles().size(); j++){
-        commits.get(i).getTouchedFiles().sort(Comparator.comparing(t -> t.getFile().getPath()));
-        walkedFiles.put(commits.get(i).getTouchedFiles().get(j).getFile(), commitEntities.get(i).getTouchedFiles().get(j).getFile());
-      }
-    }
-    for(FileEntity fileEntity : walkedFiles.values()) {
-      if(fileEntity.getOldFiles() == null) {
-        fileEntity.setOldFiles(Collections.emptyList());
-      }
-    }
     commits.removeIf(commit -> walkedCommits.containsKey(commit.getName()));
-    for (Commit commit : commits) {
-      walkedCommits.put(commit.getName(), commitBaseDataMapper.mapDomainObject(commit));
-    }
-    for (Commit commit : commits) {
-      CommitEntity commitEntity = walkedCommits.get(commit.getName());
-      // set parents
-      for (Commit parent : commit.getParents()) {
-        if (commitEntity.getParents().isEmpty()) {
-          commitEntity.setParents(new ArrayList<>(parent.getParents().size()));
-        }
-        commitEntity.getParents().add(walkedCommits.get(parent.getName()));
-      }
-      // set files
-      commitEntity.setTouchedFiles(getFiles(commit.getTouchedFiles(), commitEntity, walkedFiles));
-      walkedCommits.put(commit.getName(), commitEntity);
-    }
-    List<CommitEntity> newCommitEntities = walkedCommits.values().stream().filter(commitEntity -> commits.stream().anyMatch(commit -> commit.getName().equals(commitEntity.getName()))).collect(Collectors.toList());
-    List<FileEntity> newFileEntities = new ArrayList<>();
-    for(CommitEntity commitEntity : newCommitEntities){
-      for(FileToCommitRelationshipEntity rel : commitEntity.getTouchedFiles()){
-        if(rel.getChangeType().equals(ChangeType.ADD)) {
-          newFileEntities.add(rel.getFile());
-        }
-      }
-    }
+    List<CommitEntity> newCommitEntities = new ArrayList<>();
 
+    for(Commit commit : commits) {
+      CommitEntity commitEntity = commitBaseDataMapper.mapDomainObject(commit);
+      int parentsSize = commit.getParents().size();
+      if (parentsSize > 0) {
+        List<CommitEntity> parents = new ArrayList<>(parentsSize);
+        for (Commit parent : commit.getParents()) {
+          parents.add(walkedCommits.get(parent.getName()));
+        }
+        commitEntity.setParents(parents);
+      }
+
+      int filesSize = commit.getTouchedFiles().size();
+      if(filesSize > 0){
+        List<FileToCommitRelationshipEntity> fileToCommitRelationships = new ArrayList<>(filesSize);
+        for(FileToCommitRelationship rel : commit.getTouchedFiles()){
+          FileToCommitRelationshipEntity newRel = new FileToCommitRelationshipEntity();
+          newRel.setChangeType(rel.getChangeType());
+          newRel.setOldPath(rel.getOldPath());
+          newRel.setCommit(commitEntity);
+          FileEntity fileEntity = fileRepository.getFileInProjectBySequenceId(projectId, rel.getFile().getSequenceId());
+          if(fileEntity == null){
+            fileEntity = fileBaseDataMapper.mapDomainObject(rel.getFile());
+            fileEntity.setOldFiles(new ArrayList<>(rel.getFile().getOldFiles().size()));
+            for(File oldFile : rel.getFile().getOldFiles()){
+              FileEntity oldFileEntity = fileRepository.getFileInProjectBySequenceId(projectId, rel.getFile().getSequenceId());
+              if(oldFileEntity == null){
+                oldFileEntity = walkedFiles.get(oldFile);
+              }
+              fileEntity.getOldFiles().add(oldFileEntity);
+            }
+            walkedFiles.put(rel.getFile(), fileEntity);
+          }
+          newRel.setFile(fileEntity);
+          fileToCommitRelationships.add(newRel);
+        }
+        commitEntity.setTouchedFiles(fileToCommitRelationships);
+      }
+      newCommitEntities.add(commitEntity);
+    }
+    List<FileEntity> newFileEntities = new ArrayList<>(walkedFiles.values());
+    saveCommitAndFileEntities(projectId, newCommitEntities, newFileEntities);
+    setBranchPointers(projectId, updatedBranches);
+  }
+
+  private void saveCommitAndFileEntities(long projectId, List<CommitEntity> commitEntities, List<FileEntity> fileEntities) {
     int commitBulkSaveChunk = 5000;
-    if (newCommitEntities.size() < 5000) {
-      commitBulkSaveChunk = newCommitEntities.size();
+    if (commitEntities.size() < 5000) {
+      commitBulkSaveChunk = commitEntities.size();
     }
 
     int fileBulkSaveChunk = 5000;
-    if (newFileEntities.size() < 5000) {
-      fileBulkSaveChunk = newFileEntities.size();
+    if (fileEntities.size() < 5000) {
+      fileBulkSaveChunk = fileEntities.size();
     }
 
-    saveCommitsWithDepthZero(newCommitEntities, commitBulkSaveChunk);
-    saveFilesWithDepthZero(newFileEntities, fileBulkSaveChunk);
+    saveCommitsWithDepthZero(commitEntities, commitBulkSaveChunk);
+    saveFilesWithDepthZero(fileEntities, fileBulkSaveChunk);
     attachCommitsAndFilesToProject(
-        projectId, newCommitEntities, newFileEntities, commitBulkSaveChunk, fileBulkSaveChunk);
-    saveCommitParentsRelationships(newCommitEntities, commitBulkSaveChunk);
-    saveFileToCommitRelationships(newCommitEntities, fileBulkSaveChunk);
-    saveFileRenameRelationships(newFileEntities, fileBulkSaveChunk);
-
-    for (Branch branch : updatedBranches) {
-      if (!branchRepository.branchExistsInProject(projectId, branch.getName())) {
-        branchRepository.setBranchOnCommit(projectId, branch.getCommitHash(), branch.getName());
-      } else {
-        branchRepository.moveBranchToCommit(projectId, branch.getName(), branch.getCommitHash());
-      }
-    }
+            projectId, commitEntities, fileEntities, commitBulkSaveChunk, fileBulkSaveChunk);
+    saveCommitParentsRelationships(commitEntities, commitBulkSaveChunk);
+    saveFileToCommitRelationships(commitEntities, fileBulkSaveChunk);
+    saveFileRenameRelationships(fileEntities, fileBulkSaveChunk);
   }
 
   @Override

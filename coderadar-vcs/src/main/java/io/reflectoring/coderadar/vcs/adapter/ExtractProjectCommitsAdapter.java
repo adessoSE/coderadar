@@ -112,9 +112,10 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    * @param git The git API object.
    * @param firstCommit The firstCommit of the repository.
    * @param files A HashMap containing files already created for the project.
+   * @param seqeunceId
    * @throws IOException Thrown if the commit tree cannot be walked.
    */
-  private void setFirstCommitFiles(Git git, Commit firstCommit, HashMap<String, List<File>> files)
+  private void setFirstCommitFiles(Git git, Commit firstCommit, HashMap<String, List<File>> files, long[] seqeunceId)
       throws IOException {
     RevCommit gitCommit = findCommit(git, firstCommit.getName());
     try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
@@ -123,6 +124,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       treeWalk.addTree(gitCommit.getTree());
       while (treeWalk.next()) {
         File file = new File();
+        file.setSequenceId(seqeunceId[0]++);
         file.setPath(treeWalk.getPathString());
 
         FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
@@ -148,7 +150,8 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     int commitsSize = commits.size();
     HashMap<String, List<File>> files = new HashMap<>((int) (commitsSize / 0.75) + 1);
     commits.get(0).setTouchedFiles(new ArrayList<>(commitsSize));
-    setFirstCommitFiles(git, commits.get(0), files);
+    long[] seqeunceId = new long[1];
+    setFirstCommitFiles(git, commits.get(0), files, seqeunceId);
     DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
     diffFormatter.setRepository(git.getRepository());
     diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
@@ -173,9 +176,9 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
             }
           }
         }
-        commits.get(i).setTouchedFiles(new ArrayList<>(diffs.size() + 2));
+        commits.get(i).setTouchedFiles(new ArrayList<>(diffs.size()));
         for (DiffEntry diff : diffs) {
-          processDiffEntry(diff, files, commits.get(i));
+          processDiffEntry(diff, files, commits.get(i), seqeunceId);
         }
       } else {
         commits.get(i).setTouchedFiles(Collections.emptyList());
@@ -190,12 +193,12 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    * @param files All of the files walked so far
    * @param commit The current commit
    */
-  private void processDiffEntry(DiffEntry diff, HashMap<String, List<File>> files, Commit commit) {
+  private void processDiffEntry(DiffEntry diff, HashMap<String, List<File>> files, Commit commit, long[] seqeunceId) {
     ChangeType changeType = ChangeTypeMapper.jgitToCoderadar(diff.getChangeType());
     if (changeType == ChangeType.UNCHANGED) {
       return;
     }
-    List<File> filesWithPath = computeFilesToSave(diff, files);
+    List<File> filesWithPath = computeFilesToSave(diff, files, seqeunceId);
     for (File file : filesWithPath) {
       FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
       fileToCommitRelationship.setOldPath(diff.getOldPath());
@@ -211,13 +214,15 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    *
    * @param diff The current diff entry.
    * @param files The list of walked files.
+   * @param seqeunceId
    * @return List of files to save.
    */
-  private List<File> computeFilesToSave(DiffEntry diff, HashMap<String, List<File>> files) {
+  private List<File> computeFilesToSave(DiffEntry diff, HashMap<String, List<File>> files, long[] seqeunceId) {
     String path = getFilepathFromDiffEntry(diff);
     List<File> existingFilesWithPath = files.get(path);
     List<File> filesToSave;
     File file = new File();
+    file.setSequenceId(seqeunceId[0]++);
     file.setPath(path);
     if (existingFilesWithPath == null) {
       if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {

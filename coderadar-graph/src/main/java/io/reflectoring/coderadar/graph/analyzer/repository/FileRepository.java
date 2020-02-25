@@ -72,4 +72,11 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
           + "MATCH (f2) WHERE ID(f2) = x.fileId2 "
           + "CREATE (f1)-[:RENAMED_FROM]->(f2)")
   void createRenameRelationships(List<HashMap<String, Object>> renameRels);
+
+  /**
+   * @param projectId The project id.
+   * @return The file with the given sequence id or null if it does not exist.
+   */
+  @Query("MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND f.sequenceId = {1} RETURN f")
+  FileEntity getFileInProjectBySequenceId(@NonNull Long projectId, @NonNull Long sequenceId);
 }
