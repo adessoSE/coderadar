@@ -7,7 +7,6 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommitRelationshipEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
@@ -15,8 +14,6 @@ import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelati
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import java.util.*;
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -60,7 +57,6 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
         branchRepository.moveBranchToCommit(projectId, branch.getName(), branch.getCommitHash());
       }
     }
-
   }
 
   private void saveFilesWithDepthZero(List<FileEntity> fileEntities, int fileBulkSaveChunk) {
@@ -283,9 +279,10 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
       walkedCommits.put(c.getName(), c);
     }
     commits.removeIf(commit -> walkedCommits.containsKey(commit.getName()));
+    commits.sort(Comparator.comparingLong(Commit::getTimestamp));
     List<CommitEntity> newCommitEntities = new ArrayList<>();
 
-    for(Commit commit : commits) {
+    for (Commit commit : commits) {
       CommitEntity commitEntity = commitBaseDataMapper.mapDomainObject(commit);
       int parentsSize = commit.getParents().size();
       if (parentsSize > 0) {
@@ -294,23 +291,27 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
           parents.add(walkedCommits.get(parent.getName()));
         }
         commitEntity.setParents(parents);
+        walkedCommits.put(commitEntity.getName(), commitEntity);
       }
 
       int filesSize = commit.getTouchedFiles().size();
-      if(filesSize > 0){
+      if (filesSize > 0) {
         List<FileToCommitRelationshipEntity> fileToCommitRelationships = new ArrayList<>(filesSize);
-        for(FileToCommitRelationship rel : commit.getTouchedFiles()){
+        for (FileToCommitRelationship rel : commit.getTouchedFiles()) {
           FileToCommitRelationshipEntity newRel = new FileToCommitRelationshipEntity();
           newRel.setChangeType(rel.getChangeType());
           newRel.setOldPath(rel.getOldPath());
           newRel.setCommit(commitEntity);
-          FileEntity fileEntity = fileRepository.getFileInProjectBySequenceId(projectId, rel.getFile().getSequenceId());
-          if(fileEntity == null){
+          FileEntity fileEntity =
+              fileRepository.getFileInProjectBySequenceId(projectId, rel.getFile().getSequenceId());
+          if (fileEntity == null) {
             fileEntity = fileBaseDataMapper.mapDomainObject(rel.getFile());
             fileEntity.setOldFiles(new ArrayList<>(rel.getFile().getOldFiles().size()));
-            for(File oldFile : rel.getFile().getOldFiles()){
-              FileEntity oldFileEntity = fileRepository.getFileInProjectBySequenceId(projectId, rel.getFile().getSequenceId());
-              if(oldFileEntity == null){
+            for (File oldFile : rel.getFile().getOldFiles()) {
+              FileEntity oldFileEntity =
+                  fileRepository.getFileInProjectBySequenceId(
+                      projectId, rel.getFile().getSequenceId());
+              if (oldFileEntity == null) {
                 oldFileEntity = walkedFiles.get(oldFile);
               }
               fileEntity.getOldFiles().add(oldFileEntity);
@@ -329,7 +330,8 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
     setBranchPointers(projectId, updatedBranches);
   }
 
-  private void saveCommitAndFileEntities(long projectId, List<CommitEntity> commitEntities, List<FileEntity> fileEntities) {
+  private void saveCommitAndFileEntities(
+      long projectId, List<CommitEntity> commitEntities, List<FileEntity> fileEntities) {
     int commitBulkSaveChunk = 5000;
     if (commitEntities.size() < 5000) {
       commitBulkSaveChunk = commitEntities.size();
@@ -343,7 +345,7 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
     saveCommitsWithDepthZero(commitEntities, commitBulkSaveChunk);
     saveFilesWithDepthZero(fileEntities, fileBulkSaveChunk);
     attachCommitsAndFilesToProject(
-            projectId, commitEntities, fileEntities, commitBulkSaveChunk, fileBulkSaveChunk);
+        projectId, commitEntities, fileEntities, commitBulkSaveChunk, fileBulkSaveChunk);
     saveCommitParentsRelationships(commitEntities, commitBulkSaveChunk);
     saveFileToCommitRelationships(commitEntities, fileBulkSaveChunk);
     saveFileRenameRelationships(fileEntities, fileBulkSaveChunk);

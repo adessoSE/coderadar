@@ -50,7 +50,8 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
               List<CommitEntity> commits =
                   commitRepository.findByProjectIdAndBranchName(id, "master");
               Assertions.assertEquals(13, commits.size());
-              List<FileEntity> files = fileRepository.findAllinProjectWithRenamedFromRelationships(id);
+              List<FileEntity> files =
+                  fileRepository.findAllinProjectWithRenamedFromRelationships(id);
               Assertions.assertEquals(9, files.size());
             })
         .andDo(documentCreateProject());

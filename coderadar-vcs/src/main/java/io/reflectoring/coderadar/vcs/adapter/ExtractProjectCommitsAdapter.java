@@ -115,7 +115,8 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    * @param seqeunceId
    * @throws IOException Thrown if the commit tree cannot be walked.
    */
-  private void setFirstCommitFiles(Git git, Commit firstCommit, HashMap<String, List<File>> files, long[] seqeunceId)
+  private void setFirstCommitFiles(
+      Git git, Commit firstCommit, HashMap<String, List<File>> files, long[] seqeunceId)
       throws IOException {
     RevCommit gitCommit = findCommit(git, firstCommit.getName());
     try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
@@ -193,7 +194,8 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    * @param files All of the files walked so far
    * @param commit The current commit
    */
-  private void processDiffEntry(DiffEntry diff, HashMap<String, List<File>> files, Commit commit, long[] seqeunceId) {
+  private void processDiffEntry(
+      DiffEntry diff, HashMap<String, List<File>> files, Commit commit, long[] seqeunceId) {
     ChangeType changeType = ChangeTypeMapper.jgitToCoderadar(diff.getChangeType());
     if (changeType == ChangeType.UNCHANGED) {
       return;
@@ -217,7 +219,8 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    * @param seqeunceId
    * @return List of files to save.
    */
-  private List<File> computeFilesToSave(DiffEntry diff, HashMap<String, List<File>> files, long[] seqeunceId) {
+  private List<File> computeFilesToSave(
+      DiffEntry diff, HashMap<String, List<File>> files, long[] seqeunceId) {
     String path = getFilepathFromDiffEntry(diff);
     List<File> existingFilesWithPath = files.get(path);
     List<File> filesToSave;
