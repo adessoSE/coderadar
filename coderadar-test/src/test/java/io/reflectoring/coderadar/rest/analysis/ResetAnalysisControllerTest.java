@@ -99,7 +99,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
 
     session.clear();
 
-    List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
+    List<CommitEntity> commits = commitRepository.findByProjectIdAndBranchName(projectId, "master");
     for (CommitEntity commit : commits) {
       Assertions.assertTrue(commit.isAnalyzed());
     }
@@ -146,7 +146,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
     List<FindingEntity> findings = findingRepository.findByProjectId(projectId);
     Assertions.assertFalse(findings.isEmpty());
 
-    List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
+    List<CommitEntity> commits = commitRepository.findByProjectIdAndBranchName(projectId, "master");
     for (CommitEntity commit : commits) {
       Assertions.assertTrue(commit.isAnalyzed());
     }

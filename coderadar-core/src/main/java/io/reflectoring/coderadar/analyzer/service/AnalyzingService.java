@@ -64,13 +64,6 @@ public class AnalyzingService
     this.getAvailableMetricsInProjectPort = getAvailableMetricsInProjectPort;
   }
 
-  /**
-   * Starts the analysis of a project.
-   *
-   * @param projectId The id of the project to analyze.
-   * @param branchName The name of the branch to analyze
-   */
-  @Override
   public void start(Long projectId, String branchName) {
     Project project = getProjectPort.get(projectId);
 
@@ -214,12 +207,10 @@ public class AnalyzingService
     return analyzers;
   }
 
-  @Override
   public void stop(Long projectId) {
     activeAnalysis.put(projectId, false);
   }
 
-  @Override
   public Boolean getStatus(Long projectId) {
     return activeAnalysis.get(projectId) != null;
   }
