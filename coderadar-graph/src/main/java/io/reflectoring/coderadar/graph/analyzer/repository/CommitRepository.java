@@ -106,14 +106,4 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
       "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {1} WITH c, p "
           + "MATCH (p)-[:CONTAINS_COMMIT]->(c1) WHERE c1.name = {2} RETURN c.timestamp > c1.timestamp")
   boolean commitIsNewer(@NonNull Long projectId, @NonNull String commit1, @NonNull String commit2);
-
-  /**
-   * @param projectId The id of the project.
-   * @return A list of commit entities with initialized FileToCommitRelationships.
-   */
-  @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c)  WHERE ID(p) = {0} WITH c "
-          + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f) RETURN c, r, f ORDER BY c.timestamp, f.path")
-  @NonNull
-  List<CommitEntity> findByProjectIdFileRelationships(@NonNull Long projectId);
 }

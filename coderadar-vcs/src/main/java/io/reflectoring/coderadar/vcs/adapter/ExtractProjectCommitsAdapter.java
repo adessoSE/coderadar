@@ -112,7 +112,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    * @param git The git API object.
    * @param firstCommit The firstCommit of the repository.
    * @param files A HashMap containing files already created for the project.
-   * @param seqeunceId
+   * @param seqeunceId One element array with the current file sequence number.
    * @throws IOException Thrown if the commit tree cannot be walked.
    */
   private void setFirstCommitFiles(
@@ -162,21 +162,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       if (gitCommit != null && gitCommit.getParentCount() > 0) {
         List<DiffEntry> diffs =
             new ArrayList<>(diffFormatter.scan(gitCommit.getParent(0), gitCommit));
-        for (int j = 1; j < gitCommit.getParentCount(); ++j) {
-          List<DiffEntry> diffEntries = diffFormatter.scan(gitCommit.getParent(j), gitCommit);
-          for (DiffEntry diff : diffEntries) {
-            if ((diff.getChangeType().equals(DiffEntry.ChangeType.DELETE)
-                    || diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))
-                && diffs.stream()
-                    .noneMatch(
-                        diffEntry ->
-                            diffEntry.getChangeType().equals(diff.getChangeType())
-                                && diffEntry.getOldPath().equals(diff.getOldPath())
-                                && diffEntry.getNewPath().equals(diff.getNewPath()))) {
-              diffs.add(diff);
-            }
-          }
-        }
         commits.get(i).setTouchedFiles(new ArrayList<>(diffs.size()));
         for (DiffEntry diff : diffs) {
           processDiffEntry(diff, files, commits.get(i), seqeunceId);
@@ -190,9 +175,10 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   /**
    * Processes a single diff entry. Sets the correct file to commit relationships for each commit
    *
-   * @param diff The diff entry to process
-   * @param files All of the files walked so far
-   * @param commit The current commit
+   * @param diff The diff entry to process.
+   * @param files All of the files walked so far.
+   * @param seqeunceId One element array with the current file sequence number.
+   * @param commit The current commit.
    */
   private void processDiffEntry(
       DiffEntry diff, HashMap<String, List<File>> files, Commit commit, long[] seqeunceId) {
@@ -216,7 +202,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    *
    * @param diff The current diff entry.
    * @param files The list of walked files.
-   * @param seqeunceId
+   * @param seqeunceId One element array with the current file sequence number.
    * @return List of files to save.
    */
   private List<File> computeFilesToSave(

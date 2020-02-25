@@ -284,45 +284,40 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
 
     for (Commit commit : commits) {
       CommitEntity commitEntity = commitBaseDataMapper.mapDomainObject(commit);
-      int parentsSize = commit.getParents().size();
-      if (parentsSize > 0) {
-        List<CommitEntity> parents = new ArrayList<>(parentsSize);
-        for (Commit parent : commit.getParents()) {
-          parents.add(walkedCommits.get(parent.getName()));
-        }
-        commitEntity.setParents(parents);
-        walkedCommits.put(commitEntity.getName(), commitEntity);
+      List<CommitEntity> parents = new ArrayList<>(commit.getParents().size());
+      for (Commit parent : commit.getParents()) {
+        parents.add(walkedCommits.get(parent.getName()));
       }
+      commitEntity.setParents(parents);
+      walkedCommits.put(commitEntity.getName(), commitEntity);
 
-      int filesSize = commit.getTouchedFiles().size();
-      if (filesSize > 0) {
-        List<FileToCommitRelationshipEntity> fileToCommitRelationships = new ArrayList<>(filesSize);
-        for (FileToCommitRelationship rel : commit.getTouchedFiles()) {
-          FileToCommitRelationshipEntity newRel = new FileToCommitRelationshipEntity();
-          newRel.setChangeType(rel.getChangeType());
-          newRel.setOldPath(rel.getOldPath());
-          newRel.setCommit(commitEntity);
-          FileEntity fileEntity =
-              fileRepository.getFileInProjectBySequenceId(projectId, rel.getFile().getSequenceId());
-          if (fileEntity == null) {
-            fileEntity = fileBaseDataMapper.mapDomainObject(rel.getFile());
-            fileEntity.setOldFiles(new ArrayList<>(rel.getFile().getOldFiles().size()));
-            for (File oldFile : rel.getFile().getOldFiles()) {
-              FileEntity oldFileEntity =
-                  fileRepository.getFileInProjectBySequenceId(
-                      projectId, rel.getFile().getSequenceId());
-              if (oldFileEntity == null) {
-                oldFileEntity = walkedFiles.get(oldFile);
-              }
-              fileEntity.getOldFiles().add(oldFileEntity);
+      List<FileToCommitRelationshipEntity> fileToCommitRelationships =
+          new ArrayList<>(commit.getTouchedFiles().size());
+      for (FileToCommitRelationship rel : commit.getTouchedFiles()) {
+        FileToCommitRelationshipEntity newRel = new FileToCommitRelationshipEntity();
+        newRel.setChangeType(rel.getChangeType());
+        newRel.setOldPath(rel.getOldPath());
+        newRel.setCommit(commitEntity);
+        FileEntity fileEntity =
+            fileRepository.getFileInProjectBySequenceId(projectId, rel.getFile().getSequenceId());
+        if (fileEntity == null) {
+          fileEntity = fileBaseDataMapper.mapDomainObject(rel.getFile());
+          fileEntity.setOldFiles(new ArrayList<>(rel.getFile().getOldFiles().size()));
+          for (File oldFile : rel.getFile().getOldFiles()) {
+            FileEntity oldFileEntity =
+                fileRepository.getFileInProjectBySequenceId(
+                    projectId, rel.getFile().getSequenceId());
+            if (oldFileEntity == null) {
+              oldFileEntity = walkedFiles.get(oldFile);
             }
-            walkedFiles.put(rel.getFile(), fileEntity);
+            fileEntity.getOldFiles().add(oldFileEntity);
           }
-          newRel.setFile(fileEntity);
-          fileToCommitRelationships.add(newRel);
+          walkedFiles.put(rel.getFile(), fileEntity);
         }
-        commitEntity.setTouchedFiles(fileToCommitRelationships);
+        newRel.setFile(fileEntity);
+        fileToCommitRelationships.add(newRel);
       }
+      commitEntity.setTouchedFiles(fileToCommitRelationships);
       newCommitEntities.add(commitEntity);
     }
     List<FileEntity> newFileEntities = new ArrayList<>(walkedFiles.values());
