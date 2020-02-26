@@ -27,7 +27,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
       "MATCH (c2)<-[:CONTAINS_COMMIT]-(p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {2} "
           + " AND c2.name = {1} WITH c, c2 LIMIT 1 "
           + "CALL apoc.path.spanningTree(c, {relationshipFilter:'IS_CHILD_OF>', terminatorNodes: [c2]}) "
-          + "YIELD path WITH nodes(path) as commits, c2 UNWIND commits as c WITH c WHERE c <> c2 WITH collect(c) as commits "
+          + "YIELD path WITH tail(reverse(nodes(path))) as commits "
           + "CALL apoc.cypher.run('UNWIND commits as c MATCH (c)<-[:CHANGED_IN {changeType: \"DELETE\"}]-(f) RETURN collect(f) as deletes', {commits: commits}) YIELD value WITH value.deletes as deletes, commits "
           + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)<-[:RENAMED_FROM]-()-[:CHANGED_IN {changeType: \"RENAME\"}]->(c) RETURN collect(f) as renames', {commits: commits}) "
           + "YIELD value WITH value.renames as renames, commits, deletes "
@@ -51,7 +51,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
   @Query(
       "MATCH (c2)<-[:CONTAINS_COMMIT]-(p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {3} AND c2.name = {2} WITH c, c2 LIMIT 1 "
           + "CALL apoc.path.spanningTree(c, {relationshipFilter:'IS_CHILD_OF>', terminatorNodes: [c2]}) "
-          + "YIELD path WITH nodes(path) as commits, c2 UNWIND commits as c WITH c WHERE c <> c2 WITH collect(c) as commits "
+          + "YIELD path WITH tail(reverse(nodes(path))) as commits "
           + "CALL apoc.cypher.run('UNWIND commits as c MATCH (c)<-[:CHANGED_IN {changeType: \"DELETE\"}]-(f) RETURN collect(f) as deletes', {commits: commits}) "
           + "YIELD value WITH value.deletes as deletes, commits "
           + "UNWIND commits as c "

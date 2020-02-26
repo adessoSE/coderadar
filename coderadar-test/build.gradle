@@ -35,10 +35,10 @@ dependencies {
     testCompile group: 'net.lingala.zip4j', name: 'zip4j', version: '2.2.4'
 
 
-    testCompile ('org.neo4j.test:neo4j-harness:3.1.6') {
+    testCompile ('org.neo4j.test:neo4j-harness:3.2.9') {
         exclude group: 'org.eclipse.jetty', module: 'jetty-webapp'
     }
-    testCompile 'org.neo4j:neo4j-ogm-embedded-driver:3.2.8'
+    testCompile 'org.neo4j:neo4j-ogm-embedded-driver:3.2.9'
     testCompile group: 'org.neo4j.procedure', name: 'apoc', version: "3.5.0.7"
 }
 
