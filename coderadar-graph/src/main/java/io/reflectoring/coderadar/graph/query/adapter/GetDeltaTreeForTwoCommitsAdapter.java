@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 @Service
 public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommitsPort {
@@ -23,8 +22,6 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
   private final GetMetricTreeForCommitAdapter getMetricsForAllFilesInCommitAdapter;
   private final ProjectRepository projectRepository;
   private final CommitRepository commitRepository;
-
-  private static final String PROCESSING_ERROR = "Cannot calculate delta tree!";
 
   public GetDeltaTreeForTwoCommitsAdapter(
       FileRepository fileRepository,
@@ -138,8 +135,6 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
               : null;
 
       if (getChangeType(metricTree1, metricTree2).equals(ChangeType.MODIFY)) {
-        Assert.notNull(metricTree1, PROCESSING_ERROR);
-        Assert.notNull(metricTree2, PROCESSING_ERROR);
         if (metricTree1.getType().equals(MetricTreeNodeType.MODULE)
             && metricTree2.getType().equals(MetricTreeNodeType.MODULE)) {
           deltaTree
@@ -153,12 +148,10 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
         tree1Counter++;
         tree2Counter++;
       } else if (getChangeType(metricTree1, metricTree2).equals(ChangeType.DELETE)) {
-        Assert.notNull(metricTree1, PROCESSING_ERROR);
         deltaTree.getChildren().add(createDeletedFileNode(metricTree1));
         removedFiles.add(metricTree1.getName());
         tree1Counter++;
       } else {
-        Assert.notNull(metricTree2, PROCESSING_ERROR);
         deltaTree.getChildren().add(createAddedFileNode(metricTree2));
         addedFiles.add(metricTree2.getName());
         tree2Counter++;

@@ -23,12 +23,17 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    * @param commit1Hash The hash of the first commit
    * @param commit2Hash The hash of the second commit
    */
-  @Query( // TODO: This query should also filter deletes
-      "MATCH (c2)<-[:CONTAINS_COMMIT]-(p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {2} AND c2.name = {1} WITH c, c2 LIMIT 1 "
+  @Query(
+      "MATCH (c2)<-[:CONTAINS_COMMIT]-(p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {2} "
+          + " AND c2.name = {1} WITH c, c2 LIMIT 1 "
           + "CALL apoc.path.spanningTree(c, {relationshipFilter:'IS_CHILD_OF>', terminatorNodes: [c2]}) "
-          + "YIELD path WITH nodes(path) as commits, c2 UNWIND commits as c WITH c WHERE c <> c2 "
-          + "MATCH (c)<-[:CHANGED_IN {changeType: \"MODIFY\"}]-(f) "
-          + "RETURN DISTINCT f.path")
+          + "YIELD path WITH nodes(path) as commits, c2 UNWIND commits as c WITH c WHERE c <> c2 WITH collect(c) as commits "
+          + "CALL apoc.cypher.run('UNWIND commits as c MATCH (c)<-[:CHANGED_IN {changeType: \"DELETE\"}]-(f) RETURN collect(f) as deletes', {commits: commits}) YIELD value WITH value.deletes as deletes, commits "
+          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)<-[:RENAMED_FROM]-()-[:CHANGED_IN {changeType: \"RENAME\"}]->(c) RETURN collect(f) as renames', {commits: commits}) "
+          + "YIELD value WITH value.renames as renames, commits, deletes "
+          + "UNWIND commits as c "
+          + "MATCH (c)<-[:CHANGED_IN {changeType: \"MODIFY\"}]-(f) WHERE NOT (f IN deletes OR f IN renames) "
+          + "RETURN DISTINCT f.path ORDER BY f.path")
   @NonNull
   List<String> getFilesModifiedBetweenCommits(
       @NonNull Long projectId, @NonNull String commit1Hash, @NonNull String commit2Hash);
@@ -44,10 +49,13 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    *     "/src/main/File.java", "newPath": "File.java"}.
    */
   @Query(
-      "MATCH (c2)<-[:CONTAINS_COMMIT]-(p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {2} AND c2.name = {1} WITH c, c2 LIMIT 1 "
+      "MATCH (c2)<-[:CONTAINS_COMMIT]-(p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {3} AND c2.name = {2} WITH c, c2 LIMIT 1 "
           + "CALL apoc.path.spanningTree(c, {relationshipFilter:'IS_CHILD_OF>', terminatorNodes: [c2]}) "
-          + "YIELD path WITH nodes(path) as commits UNWIND commits as c "
-          + "MATCH (c)<-[r:CHANGED_IN {changeType: \"RENAME\"}]-(f) WHERE f.path IN {1} "
+          + "YIELD path WITH nodes(path) as commits, c2 UNWIND commits as c WITH c WHERE c <> c2 WITH collect(c) as commits "
+          + "CALL apoc.cypher.run('UNWIND commits as c MATCH (c)<-[:CHANGED_IN {changeType: \"DELETE\"}]-(f) RETURN collect(f) as deletes', {commits: commits}) "
+          + "YIELD value WITH value.deletes as deletes, commits "
+          + "UNWIND commits as c "
+          + "MATCH (c)<-[r:CHANGED_IN {changeType: \"RENAME\"}]-(f) WHERE NOT f IN deletes AND f.path IN {1} "
           + "RETURN {oldPath: head(collect(DISTINCT r)).oldPath, newPath: f.path} as rename")
   @NonNull
   List<Map<String, Object>> findOldPathsIfRenamedBetweenCommits(
@@ -67,7 +75,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
           + "MATCH (f1) WHERE ID(f1) = x.fileId1 "
           + "MATCH (f2) WHERE ID(f2) = x.fileId2 "
           + "CREATE (f1)-[:RENAMED_FROM]->(f2)")
-  void createRenameRelationships(List<HashMap<String, Object>> renameRels);
+  void createRenameRelationships(@NonNull List<HashMap<String, Object>> renameRels);
 
   /**
    * @param projectId The project id.
