@@ -131,25 +131,8 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @return True if a project with the given name exists and the project is not being deleted.
    */
   @Query(
-      "MATCH (p:ProjectEntity) WHERE p.name = {0} AND p.isBeingDeleted = FALSE RETURN COUNT(*) > 0")
+      "MATCH (p:ProjectEntity) WHERE p.name = {0} AND p.isBeingDeleted = FALSE WITH p LIMIT 1 RETURN COUNT(*) > 0")
   boolean existsByName(@NonNull String name);
-
-  /**
-   * @param projectId The project id.
-   * @return True if the project is being analyzed, false otherwise.
-   */
-  @Query("MATCH (p) WHERE ID(p) = {0} RETURN p.analyzingStatus")
-  @NonNull
-  Boolean getProjectAnalyzingStatus(@NonNull Long projectId);
-
-  /**
-   * Sets the analyzingStatus flag on a project.
-   *
-   * @param projectId The project id.
-   * @param status The status.
-   */
-  @Query("MATCH (p) WHERE ID(p) = {0} SET p.analyzingStatus = {1}")
-  void setAnalyzingStatus(@NonNull Long projectId, @NonNull Boolean status);
 
   /**
    * Sets the isBeingDeleted flag on a project.

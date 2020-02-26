@@ -46,7 +46,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
    * @return All files and their corresponding metrics for the head commit of the given branch
    */
   @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} WITH c "
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp DESC WITH collect(c) as commits "
           + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)<-[:RENAMED_FROM]-()-[:CHANGED_IN {changeType: \"RENAME\"}]->(c) RETURN collect(f) as renames', {commits: commits}) "
           + "YIELD value WITH commits, value.renames as renames "

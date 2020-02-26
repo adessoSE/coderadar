@@ -112,8 +112,8 @@ public class AnalyzingService
             List<MetricValue> metrics =
                 analyzeCommitUseCase.analyzeCommit(
                     commits.get(i), project, sourceCodeFileAnalyzerPlugins);
+            zeroOutMissingMetrics(commits.get(i), metrics, fileMetrics);
             if (!metrics.isEmpty()) {
-              zeroOutMissingMetrics(commits.get(i), metrics, fileMetrics);
               saveMetricPort.saveMetricValues(metrics);
               saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
               commitIds.clear();
@@ -163,16 +163,18 @@ public class AnalyzingService
         }
       }
     }
-    long fileId = metrics.get(0).getFileId();
-    List<MetricValue> metricsForFile = new ArrayList<>();
-    for (MetricValue metricValue : metrics) {
-      if (metricValue.getValue() != 0) {
-        if (metricValue.getFileId() != fileId) {
-          fileMetrics.put(fileId, new ArrayList<>(metricsForFile));
-          fileId = metricValue.getFileId();
-          metricsForFile.clear();
+    if (!metrics.isEmpty()) {
+      long fileId = metrics.get(0).getFileId();
+      List<MetricValue> metricsForFile = new ArrayList<>();
+      for (MetricValue metricValue : metrics) {
+        if (metricValue.getValue() != 0) {
+          if (metricValue.getFileId() != fileId) {
+            fileMetrics.put(fileId, new ArrayList<>(metricsForFile));
+            fileId = metricValue.getFileId();
+            metricsForFile.clear();
+          }
+          metricsForFile.add(metricValue);
         }
-        metricsForFile.add(metricValue);
       }
     }
   }

@@ -14,7 +14,7 @@ import org.neo4j.ogm.annotation.Relationship;
 public class FileEntity {
   private Long id;
   private String path;
-  private Long sequenceId;
+  private long sequenceId;
 
   @EqualsAndHashCode.Exclude
   @Relationship(type = "RENAMED_FROM")

@@ -14,12 +14,9 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    * @param projectId The project id.
    * @return All of the files in a project (including those part of modules).
    */
-  @Query(
-      "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} WITH f "
-          + "OPTIONAL MATCH (f)-[r:RENAMED_FROM]->(f2) "
-          + "RETURN f, r, f2")
+  @Query("MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} RETURN f")
   @NonNull
-  List<FileEntity> findAllinProjectWithRenamedFromRelationships(@NonNull Long projectId);
+  List<FileEntity> findAllinProject(@NonNull Long projectId);
 
   /**
    * @param projectId The project id
@@ -27,8 +24,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    * @param commit2Hash The hash of the second commit
    */
   @Query( // TODO: This query should also filter deletes
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {2}  WITH c, p "
-          + "MATCH (p)-[:CONTAINS_COMMIT]->(c2) WHERE c2.name = {1} WITH c, c2 "
+      "MATCH (c2)<-[:CONTAINS_COMMIT]-(p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {2} AND c2.name = {1} WITH c, c2 LIMIT 1 "
           + "CALL apoc.path.spanningTree(c, {relationshipFilter:'IS_CHILD_OF>', terminatorNodes: [c2]}) "
           + "YIELD path WITH nodes(path) as commits, c2 UNWIND commits as c WITH c WHERE c <> c2 "
           + "MATCH (c)<-[:CHANGED_IN {changeType: \"MODIFY\"}]-(f) "
@@ -48,8 +44,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    *     "/src/main/File.java", "newPath": "File.java"}.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {3}  WITH c, p "
-          + "MATCH (p)-[:CONTAINS_COMMIT]->(c2) WHERE c2.name = {2} WITH c, c2 "
+      "MATCH (c2)<-[:CONTAINS_COMMIT]-(p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {2} AND c2.name = {1} WITH c, c2 LIMIT 1 "
           + "CALL apoc.path.spanningTree(c, {relationshipFilter:'IS_CHILD_OF>', terminatorNodes: [c2]}) "
           + "YIELD path WITH nodes(path) as commits UNWIND commits as c "
           + "MATCH (c)<-[r:CHANGED_IN {changeType: \"RENAME\"}]-(f) WHERE f.path IN {1} "
@@ -78,6 +73,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    * @param projectId The project id.
    * @return The file with the given sequence id or null if it does not exist.
    */
-  @Query("MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND f.sequenceId = {1} RETURN f")
+  @Query(
+      "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND f.sequenceId = {1} RETURN f LIMIT 1 ")
   FileEntity getFileInProjectBySequenceId(@NonNull Long projectId, @NonNull Long sequenceId);
 }

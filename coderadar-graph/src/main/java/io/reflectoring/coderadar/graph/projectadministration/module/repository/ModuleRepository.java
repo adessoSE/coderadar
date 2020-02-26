@@ -67,7 +67,7 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
    * @return True if any file falls under the given path, false otherwise.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {1} AND f.path STARTS WITH {0} RETURN COUNT(f) > 0 ")
+      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {1} AND f.path STARTS WITH {0} WITH f LIMIT 1 RETURN COUNT(f) > 0 ")
   @NonNull
   Boolean fileInPathExists(@NonNull String path, @NonNull Long projectOrModuleId);
 

@@ -13,21 +13,21 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
    * @param username The username to search for.
    * @return The UserEntity with the given username or null if nothing is found.
    */
-  @Query("MATCH (u:UserEntity) WHERE u.username = {0} RETURN u")
+  @Query("MATCH (u:UserEntity) WHERE u.username = {0} RETURN u LIMIT 1")
   UserEntity findByUsername(@NonNull String username);
 
   /**
    * @param token The refresh token to look for.
    * @return The UserEntity with the given refresh token or null if nothing is found.
    */
-  @Query("MATCH (r:RefreshTokenEntity)<-[:HAS]-(u) WHERE r.token = {0} RETURN u")
+  @Query("MATCH (r:RefreshTokenEntity)<-[:HAS]-(u) WHERE r.token = {0} RETURN u LIMIT 1")
   UserEntity findUserByRefreshToken(@NonNull String token);
 
   /**
    * @param username The username to search for.
    * @return True if a user with the given username exists.
    */
-  @Query("MATCH (u:UserEntity) WHERE u.username = {0} RETURN COUNT(u) > 0")
+  @Query("MATCH (u:UserEntity) WHERE u.username = {0} RETURN COUNT(u) > 0 LIMIT 1")
   boolean existsByUsername(@NonNull String username);
 
   /**
