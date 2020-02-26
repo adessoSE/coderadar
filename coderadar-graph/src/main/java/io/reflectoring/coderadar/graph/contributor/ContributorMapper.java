@@ -9,11 +9,9 @@ public class ContributorMapper implements Mapper<Contributor, ContributorEntity>
   public Contributor mapNodeEntity(ContributorEntity nodeEntity) {
     Contributor contributor = new Contributor();
     contributor.setId(nodeEntity.getId());
-    contributor.setEmails(nodeEntity.getEmails());
-    contributor.setName(nodeEntity.getName());
-    contributor.setCommitHashes(nodeEntity.getCommitHashes());
-    // set files
-    // set projects
+    contributor.setDisplayName(nodeEntity.getDisplayName());
+    contributor.setEmailAddresses(nodeEntity.getEmails());
+    contributor.setNames(nodeEntity.getNames());
     return contributor;
   }
 
@@ -21,11 +19,9 @@ public class ContributorMapper implements Mapper<Contributor, ContributorEntity>
   public ContributorEntity mapDomainObject(Contributor domainObject) {
     ContributorEntity contributorEntity = new ContributorEntity();
     contributorEntity.setId(domainObject.getId());
-    contributorEntity.setName(domainObject.getName());
-    contributorEntity.setEmails(domainObject.getEmails());
-    contributorEntity.setCommitHashes(domainObject.getCommitHashes());
-    // set files
-    // set projects
+    contributorEntity.setDisplayName(domainObject.getDisplayName());
+    contributorEntity.setEmails(domainObject.getEmailAddresses());
+    contributorEntity.setNames(domainObject.getNames());
     return contributorEntity;
   }
 }

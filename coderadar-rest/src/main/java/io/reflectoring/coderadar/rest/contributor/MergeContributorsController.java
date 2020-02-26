@@ -21,8 +21,8 @@ public class MergeContributorsController {
         this.mergeContributorsUseCase = mergeContributorsUseCase;
     }
 
-    @PostMapping(path = "/projects/{projectId}/contributors/merge", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HttpStatus> mergeContributors(@PathVariable Long projectId, @RequestBody @Validated MergeContributorsCommand command) {
+    @PostMapping(path = "/contributors/merge", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<HttpStatus> mergeContributors(@RequestBody @Validated MergeContributorsCommand command) {
         mergeContributorsUseCase.mergeContributors(command);
         return new ResponseEntity<>(HttpStatus.OK);
     }

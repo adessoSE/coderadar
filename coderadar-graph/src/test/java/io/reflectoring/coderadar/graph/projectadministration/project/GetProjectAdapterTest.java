@@ -36,6 +36,6 @@ class GetProjectAdapterTest {
     verify(projectRepository, times(1)).findById(1L);
     verifyNoMoreInteractions(projectRepository);
     Assertions.assertNotNull(returned);
-    Assertions.assertEquals(new Long(1L), returned.getId());
+    Assertions.assertEquals(Long.valueOf(1L), returned.getId());
   }
 }

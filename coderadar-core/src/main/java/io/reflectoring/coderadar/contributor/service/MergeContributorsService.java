@@ -16,6 +16,8 @@ public class MergeContributorsService implements MergeContributorsUseCase {
   @Override
   public void mergeContributors(MergeContributorsCommand command) {
     mergeContributorsPort.mergeContributors(
-        command.getFirstContributorId(), command.getSecondContributorId());
+        command.getFirstContributorId(),
+        command.getSecondContributorId(),
+        command.getDisplayName());
   }
 }

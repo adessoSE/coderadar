@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.vcs;
 
-import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -9,21 +8,15 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.springframework.stereotype.Component;
 
-@Component
 public class RevCommitHelper {
-  private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
-  public RevCommitHelper(CoderadarConfigurationProperties coderadarConfigurationProperties) {
-    this.coderadarConfigurationProperties = coderadarConfigurationProperties;
-  }
+  private RevCommitHelper() {}
 
-  public List<RevCommit> getRevCommits(String repositoryRoot) {
+  public static List<RevCommit> getRevCommits(String repositoryRoot) {
     Git git;
     try {
-      Path actualPath =
-          Paths.get(coderadarConfigurationProperties.getWorkdir() + "/projects/" + repositoryRoot);
+      Path actualPath = Paths.get(repositoryRoot);
 
       FileRepositoryBuilder builder = new FileRepositoryBuilder();
       Repository repository =

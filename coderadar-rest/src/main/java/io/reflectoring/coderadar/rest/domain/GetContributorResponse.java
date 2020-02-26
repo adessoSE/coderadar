@@ -11,6 +11,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class GetContributorResponse {
     private long id;
-    private String name;
+    private String displayName;
+    private Set<String> names;
     private Set<String> emailAddresses;
 }
