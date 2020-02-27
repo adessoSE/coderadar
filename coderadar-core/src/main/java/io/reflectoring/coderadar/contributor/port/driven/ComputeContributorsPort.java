@@ -4,5 +4,6 @@ import io.reflectoring.coderadar.contributor.domain.Contributor;
 import java.util.List;
 
 public interface ComputeContributorsPort {
-  List<Contributor> computeContributors(String repositoryRoot);
+  List<Contributor> computeContributors(
+      String repositoryRoot, List<Contributor> existingContributors);
 }

@@ -21,6 +21,8 @@ public class CommitEntity {
   private String author;
   private boolean analyzed = false;
 
+  private String authorEmail;
+
   @Relationship(type = "IS_CHILD_OF")
   @EqualsAndHashCode.Exclude
   @ToString.Exclude

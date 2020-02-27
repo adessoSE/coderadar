@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.graph.contributor.adapter;
 
 import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.SaveContributorsPort;
-import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.contributor.ContributorMapper;
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
@@ -16,15 +15,11 @@ import org.springframework.stereotype.Service;
 public class SaveContributorsAdapter implements SaveContributorsPort {
   private final ContributorRepository contributorRepository;
   private final ProjectRepository projectRepository;
-  private final CommitRepository commitRepository;
 
   public SaveContributorsAdapter(
-      ContributorRepository contributorRepository,
-      ProjectRepository projectRepository,
-      CommitRepository commitRepository) {
+      ContributorRepository contributorRepository, ProjectRepository projectRepository) {
     this.contributorRepository = contributorRepository;
     this.projectRepository = projectRepository;
-    this.commitRepository = commitRepository;
   }
 
   @Override
@@ -36,8 +31,7 @@ public class SaveContributorsAdapter implements SaveContributorsPort {
     for (ContributorEntity entity : contributorEntities) {
       entity.getProjects().add(projectEntity);
     }
-    return new ArrayList<>(
-        new ContributorMapper()
-            .mapNodeEntities(contributorRepository.saveAll(contributorEntities)));
+    contributorRepository.save(contributorEntities, 1);
+    return new ArrayList<>(new ContributorMapper().mapNodeEntities(contributorEntities));
   }
 }

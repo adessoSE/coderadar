@@ -6,9 +6,8 @@ import io.reflectoring.coderadar.contributor.port.driver.GetContributorsUseCase;
 import io.reflectoring.coderadar.contributor.port.driver.GetForFilenameCommand;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GetContributorsService implements GetContributorsUseCase {
@@ -16,8 +15,7 @@ public class GetContributorsService implements GetContributorsUseCase {
   private final GetContributorPort getContributorPort;
 
   public GetContributorsService(
-      GetProjectPort getProjectPort,
-      GetContributorPort getContributorPort) {
+      GetProjectPort getProjectPort, GetContributorPort getContributorPort) {
     this.getProjectPort = getProjectPort;
     this.getContributorPort = getContributorPort;
   }
@@ -33,7 +31,7 @@ public class GetContributorsService implements GetContributorsUseCase {
   @Override
   public List<Contributor> getContributorsForProjectAndFilename(
       Long projectId, GetForFilenameCommand command) {
-    if(!getProjectPort.existsById(projectId)) {
+    if (!getProjectPort.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }
     return getContributorPort.findAllByProjectIdAndFilename(projectId, command.getFilename());

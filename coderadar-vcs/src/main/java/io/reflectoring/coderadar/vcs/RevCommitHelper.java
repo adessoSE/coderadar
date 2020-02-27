@@ -28,6 +28,7 @@ public class RevCommitHelper {
 
       List<RevCommit> revCommits = new ArrayList<>();
       git.log().call().forEach(revCommits::add);
+      git.getRepository().close();
       return revCommits;
     } catch (Exception e) {
       throw new IllegalStateException(

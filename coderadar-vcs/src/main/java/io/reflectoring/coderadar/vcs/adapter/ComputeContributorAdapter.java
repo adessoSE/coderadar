@@ -4,57 +4,54 @@ import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort;
 import io.reflectoring.coderadar.vcs.RevCommitHelper;
 import java.util.*;
-import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ComputeContributorAdapter implements ComputeContributorsPort {
   @Override
-  public List<Contributor> computeContributors(String repositoryRoot) {
+  public List<Contributor> computeContributors(
+      String repositoryRoot, List<Contributor> existingContributors) {
     List<RevCommit> revCommits = RevCommitHelper.getRevCommits(repositoryRoot);
 
-    // key: contributor display name
-    // left value: email addresses of this contributor
-    // right value: all names
-    Map<String, Pair<Set<String>, Set<String>>> contributors = new HashMap<>();
-
-    Map<String, String> emails = new HashMap<>();
+    Map<String, Set<String>> newContributors = new HashMap<>();
 
     for (RevCommit rc : revCommits) {
       String name = rc.getAuthorIdent().getName();
-      String email = rc.getAuthorIdent().getEmailAddress();
+      String email = rc.getAuthorIdent().getEmailAddress().toLowerCase();
 
-      if (emails.containsKey(email)) {
-        String contributorName = emails.get(email);
-        contributors.get(contributorName).getLeft().add(email);
-        contributors.get(contributorName).getRight().add(name);
+      if (newContributors.containsKey(email)) {
+        newContributors.get(email).add(name);
+      } else {
+        newContributors.put(email, new HashSet<>(Collections.singletonList(name)));
+      }
+    }
+
+    return mergeExistingContributors(existingContributors, newContributors);
+  }
+
+  private List<Contributor> mergeExistingContributors(
+      List<Contributor> existingContributors, Map<String, Set<String>> newContributors) {
+    Set<Contributor> contributors = new HashSet<>();
+    for (Map.Entry<String, Set<String>> entry : newContributors.entrySet()) {
+      boolean alreadyAdded = false;
+      for (Contributor c : existingContributors) {
+        if (c.getEmailAddresses().contains(entry.getKey())) {
+          c.getNames().addAll(entry.getValue());
+          contributors.add(c);
+          alreadyAdded = true;
+          break;
+        }
+      }
+      if (alreadyAdded) {
         continue;
-      } else {
-        emails.put(email, name);
       }
-
-      if (contributors.containsKey(name)) {
-        contributors.get(name).getLeft().add(email);
-      } else {
-        contributors.put(
-            name,
-            Pair.of(
-                new HashSet<>(Collections.singletonList(email)),
-                new HashSet<>(Collections.singletonList(name))));
-      }
+      Contributor contributor = new Contributor();
+      contributor.setDisplayName(entry.getValue().iterator().next());
+      contributor.setNames(entry.getValue());
+      contributor.setEmailAddresses(new HashSet<>(Collections.singletonList(entry.getKey())));
+      contributors.add(contributor);
     }
-
-    // construct a list of contributors from the map
-    List<Contributor> contributorsToSave = new ArrayList<>(contributors.size());
-    for (Map.Entry<String, Pair<Set<String>, Set<String>>> entry : contributors.entrySet()) {
-      Contributor contributor =
-          new Contributor()
-              .setDisplayName(entry.getKey())
-              .setEmailAddresses(entry.getValue().getLeft())
-              .setNames(entry.getValue().getRight());
-      contributorsToSave.add(contributor);
-    }
-    return contributorsToSave;
+    return new ArrayList<>(contributors);
   }
 }

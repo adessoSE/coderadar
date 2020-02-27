@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.projectadministration.service.project;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort;
+import io.reflectoring.coderadar.contributor.port.driven.GetContributorPort;
 import io.reflectoring.coderadar.contributor.port.driven.SaveContributorsPort;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
@@ -48,6 +49,8 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   private final SaveContributorsPort saveContributorsPort;
 
+  private final GetContributorPort getContributorPort;
+
   private final Logger logger = LoggerFactory.getLogger(CreateProjectService.class);
 
   public CreateProjectService(
@@ -59,7 +62,8 @@ public class CreateProjectService implements CreateProjectUseCase {
       ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
       SaveCommitPort saveCommitPort,
       ComputeContributorsPort computeContributorsPort,
-      SaveContributorsPort saveContributorsPort) {
+      SaveContributorsPort saveContributorsPort,
+      GetContributorPort getContributorPort) {
     this.createProjectPort = createProjectPort;
     this.getProjectPort = getProjectPort;
     this.cloneRepositoryUseCase = cloneRepositoryUseCase;
@@ -69,6 +73,7 @@ public class CreateProjectService implements CreateProjectUseCase {
     this.saveCommitPort = saveCommitPort;
     this.computeContributorsPort = computeContributorsPort;
     this.saveContributorsPort = saveContributorsPort;
+    this.getContributorPort = getContributorPort;
   }
 
   @Override
@@ -99,12 +104,16 @@ public class CreateProjectService implements CreateProjectUseCase {
             List<Commit> commits =
                 extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
             saveCommitPort.saveCommits(commits, project.getId());
-            List<Contributor> contributors =
+
+            List<Contributor> contributors = getContributorPort.findAll();
+            contributors =
                 computeContributorsPort.computeContributors(
                     coderadarConfigurationProperties.getWorkdir()
                         + "/projects/"
-                        + project.getWorkdirName());
+                        + project.getWorkdirName(),
+                    contributors);
             saveContributorsPort.save(contributors, project.getId());
+
             logger.info("Saved project {}", project.getName());
           } catch (Exception e) {
             logger.error("Unable to create project: {}", e.getCause().getMessage());
