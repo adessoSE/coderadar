@@ -18,6 +18,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
   @NonNull
   List<FileEntity> findAllinProject(@NonNull Long projectId);
 
+  // This might be useful for some queries in the future
   /**
    * @param projectId The project id
    * @param commit1Hash The hash of the first commit
@@ -38,6 +39,11 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
   List<String> getFilesModifiedBetweenCommits(
       @NonNull Long projectId, @NonNull String commit1Hash, @NonNull String commit2Hash);
 
+  // TODO: This might be useful for some queries in the future
+  // The query doesn't do exactly what we need for the delta tree when
+  // for example a file was renamed before the master branch was merged into a dev branch but not
+  // the other way around
+  // In that case the file won't show as renamed.
   /**
    * Checks if files matching the given paths have been renamed between two points in time.
    *
