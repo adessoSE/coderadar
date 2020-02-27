@@ -61,7 +61,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(co)<-[:CHANGED_IN {changeType: \"DELETE\"}]-(f) WHERE ID(p) = {0} WITH collect(DISTINCT f) AS deletes "
           + "MATCH (c)-[:WORKS_ON]->(p)-[:CONTAINS*]->(f)-[:CHANGED_IN]->(co) WHERE ID(p) = {0} AND f.path ENDS WITH \".java\" "
-          + "AND NOT f IN deletes AND co.author IN c.names AND NOT ()-[:RENAMED_FROM]->(f) "
+          + "AND NOT f IN deletes AND co.authorEmail IN c.emails AND NOT ()-[:RENAMED_FROM]->(f) "
           + "WITH f.path as path, collect(DISTINCT c) AS contributors "
           + "WHERE size(contributors) = 1 RETURN path")
   List<String> getCriticalFiles(@NonNull Long projectId);

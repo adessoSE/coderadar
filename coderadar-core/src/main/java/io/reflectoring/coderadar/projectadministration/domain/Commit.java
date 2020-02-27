@@ -15,6 +15,7 @@ public class Commit {
   private long timestamp;
   private String comment;
   private String author;
+  private String authorEmail;
   private boolean analyzed = false;
 
   @JsonIgnore @ToString.Exclude private List<Commit> parents;
