@@ -33,4 +33,9 @@ public class GetContributorsController {
     public ResponseEntity<List<Contributor>> getContributorsForFile(@PathVariable Long projectId, @RequestBody @Validated GetForFilenameCommand command) {
         return new ResponseEntity<>(getContributorsUseCase.getContributorsForProjectAndFilename(projectId, command), HttpStatus.OK);
     }
+
+    @GetMapping(path = "/contributors/{id}")
+    public ResponseEntity<Contributor> getById(@PathVariable Long id) {
+        return new ResponseEntity<>(getContributorsUseCase.getById(id), HttpStatus.OK);
+    }
 }

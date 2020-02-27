@@ -8,4 +8,6 @@ public interface GetContributorsUseCase {
 
   List<Contributor> getContributorsForProjectAndFilename(
       Long projectId, GetForFilenameCommand command);
+
+  Contributor getById(Long id);
 }

@@ -36,4 +36,9 @@ public class GetContributorsService implements GetContributorsUseCase {
     }
     return getContributorPort.findAllByProjectIdAndFilename(projectId, command.getFilename());
   }
+
+  @Override
+  public Contributor getById(Long id) {
+    return getContributorPort.findById(id);
+  }
 }
