@@ -29,7 +29,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
           + "CALL apoc.path.spanningTree(c, {relationshipFilter:'IS_CHILD_OF>', terminatorNodes: [c2]}) "
           + "YIELD path WITH tail(reverse(nodes(path))) as commits "
           + "CALL apoc.cypher.run('UNWIND commits as c MATCH (c)<-[:CHANGED_IN {changeType: \"DELETE\"}]-(f) RETURN collect(f) as deletes', {commits: commits}) YIELD value WITH value.deletes as deletes, commits "
-          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)<-[:RENAMED_FROM]-()-[:CHANGED_IN {changeType: \"RENAME\"}]->(c) RETURN collect(f) as renames', {commits: commits}) "
+          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)<-[:RENAMED_FROM]-()-[:CHANGED_IN]->(c) RETURN collect(f) as renames', {commits: commits}) "
           + "YIELD value WITH value.renames as renames, commits, deletes "
           + "UNWIND commits as c "
           + "MATCH (c)<-[:CHANGED_IN {changeType: \"MODIFY\"}]-(f) WHERE NOT (f IN deletes OR f IN renames) "
