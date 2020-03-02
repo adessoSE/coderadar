@@ -22,7 +22,9 @@ public class Neo4jIndexesConfiguration {
     session.query("CREATE INDEX ON :CommitEntity(name)", Collections.emptyMap());
     session.query("CREATE INDEX ON :BranchEntity(name)", Collections.emptyMap());
 
-    session.query("CREATE CONSTRAINT ON (r:RefreshTokenEntity) ASSERT r.token IS UNIQUE", Collections.emptyMap());
+    session.query(
+        "CREATE CONSTRAINT ON (r:RefreshTokenEntity) ASSERT r.token IS UNIQUE",
+        Collections.emptyMap());
     session.query(
         "CREATE CONSTRAINT ON (p:ProjectEntity) ASSERT p.name IS UNIQUE", Collections.emptyMap());
     session.query(
