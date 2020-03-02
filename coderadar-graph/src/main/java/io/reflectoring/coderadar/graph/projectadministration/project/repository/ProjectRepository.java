@@ -67,7 +67,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    *
    * @param projectId The project id.
    */
-  @Query("MATCH (p)-[:CONTAINS_COMMIT]->()<-[:POINTS_TO]-(b) WHERE ID(p) = {0} DETACH DELETE b")
+  @Query("MATCH (p)-[:HAS_BRANCH]->(b) WHERE ID(p) = {0} DETACH DELETE b")
   void deleteProjectBranches(@NonNull Long projectId);
 
   /** @return All projects that are not currently being deleted. */
@@ -97,7 +97,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    */
   @Query(
       "MATCH (p) WHERE ID(p) = {0} AND p.isBeingDeleted = FALSE WITH p "
-          + "OPTIONAL MATCH (p)-[r:CONTAINS]->(m:ModuleEntity) "
+          + "OPTIONAL MATCH (p)-[r:CONTAINS*0..]->(m:ModuleEntity) USING SCAN m:ModuleEntity "
           + "RETURN p, r, m")
   @NonNull
   Optional<ProjectEntity> findByIdWithModules(@NonNull Long id);

@@ -76,7 +76,9 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         map.put(rc.getName(), commit);
       }
     }
-    return new ArrayList<>(map.values());
+    List<Commit> result = new ArrayList<>(map.values());
+    result.sort(Comparator.comparingLong(Commit::getTimestamp));
+    return result;
   }
 
   private List<RevCommit> getAllRevCommits(Git git) throws GitAPIException, IOException {

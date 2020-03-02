@@ -16,9 +16,7 @@ import org.neo4j.ogm.annotation.Relationship;
 @Data
 public class ProjectEntity {
 
-  @Index private Long id;
-
-  @Index(unique = true)
+  private Long id;
   private String name;
 
   private String workdirName;
@@ -58,4 +56,9 @@ public class ProjectEntity {
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   private List<AnalyzerConfigurationEntity> analyzerConfigurations = new ArrayList<>();
+
+  @Relationship(type = "HAS_BRANCH")
+  @ToString.Exclude
+  @EqualsAndHashCode.Exclude
+  private List<BranchEntity> branches = new ArrayList<>();
 }

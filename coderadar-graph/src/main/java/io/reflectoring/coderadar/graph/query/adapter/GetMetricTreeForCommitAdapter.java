@@ -6,7 +6,6 @@ import io.reflectoring.coderadar.graph.projectadministration.module.repository.M
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.query.domain.MetricValueForCommitTreeQueryResult;
 import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
-import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.query.domain.MetricTree;
 import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
@@ -183,11 +182,6 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
     for (ModuleEntity moduleEntity : moduleEntities) {
       for (MetricTree metricTree : metricTrees) {
         if (metricTree.getName().equals(moduleEntity.getPath())) {
-          Long moduleId = moduleEntity.getId();
-          moduleEntity =
-              moduleRepository
-                  .findById(moduleEntity.getId())
-                  .orElseThrow(() -> new ModuleNotFoundException(moduleId));
           metricTree
               .getChildren()
               .addAll(findChildModules(moduleEntity.getChildModules(), metricTrees));

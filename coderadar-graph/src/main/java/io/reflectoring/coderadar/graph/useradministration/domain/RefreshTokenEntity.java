@@ -13,8 +13,6 @@ import org.neo4j.ogm.annotation.Relationship;
 @Data
 public class RefreshTokenEntity {
   private Long id;
-
-  @Index(unique = true)
   private String token;
 
   @Relationship(value = "HAS", direction = INCOMING)

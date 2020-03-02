@@ -15,7 +15,7 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
    * @return All of the modules in a project sorted by the path in descending order.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS*1..]->(m:ModuleEntity) WHERE ID(p) = {0} RETURN m ORDER BY m.path DESC")
+      "MATCH (p)-[:CONTAINS*1..]->(m:ModuleEntity) USING SCAN m:ModuleEntity WHERE ID(p) = {0} RETURN m ORDER BY m.path DESC")
   @NonNull
   List<ModuleEntity> findModulesInProjectSortedDesc(@NonNull Long projectId);
 
@@ -23,7 +23,8 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
    * @param projectId The project id.
    * @return All of the modules in a project.
    */
-  @Query("MATCH (p)-[:CONTAINS*1..]->(m:ModuleEntity) WHERE ID(p) = {0} RETURN m")
+  @Query(
+      "MATCH (p)-[:CONTAINS*1..]->(m:ModuleEntity) USING SCAN m:ModuleEntity WHERE ID(p) = {0} RETURN m")
   @NonNull
   List<ModuleEntity> findModulesInProject(@NonNull Long projectId);
 

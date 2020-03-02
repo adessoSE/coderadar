@@ -11,7 +11,6 @@ import org.neo4j.ogm.annotation.Relationship;
 @NoArgsConstructor
 @NodeEntity
 public class BranchEntity {
-
   private Long id;
   @Index private String name;
 

@@ -28,7 +28,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @return A list of commit entities with initialized FileToCommitRelationships.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
+      "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp ASC WHERE NOT c.analyzed "
           + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f) WHERE r.changeType <> \"DELETE\" AND any(x IN {2} WHERE f.path =~ x) "
           + "AND none(x IN {3} WHERE f.path =~ x) RETURN c, r, f")
@@ -47,7 +47,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @return All commits in the given project for the given branch.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c)<-[:POINTS_TO]-(b) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
+      "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node "
           + "RETURN node ORDER BY node.timestamp DESC")
   List<CommitEntity> findByProjectIdAndBranchName(Long projectId, String branch);
@@ -103,7 +103,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @return True if commit1 was made after commit 2, false otherwise
    */
   @Query(
-      "MATCH (c1)<-[:CONTAINS_COMMIT]-(p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {1} AND c1.name = {2} WITH c, c1 LIMIT 1 "
-          + "RETURN c.timestamp > c1.timestamp")
+      "PROFILE MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH p, c "
+          + "MATCH (p)-[:CONTAINS_COMMIT]->(c1:CommitEntity) WHERE c1.name = {2} WITH c, c1 LIMIT 1 RETURN c.timestamp > c1.timestamp")
   boolean commitIsNewer(@NonNull Long projectId, @NonNull String commit1, @NonNull String commit2);
 }
