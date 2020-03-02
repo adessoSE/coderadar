@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest;
 
+import io.reflectoring.coderadar.graph.Neo4jIndexesConfiguration;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.kernel.api.exceptions.KernelException;
 import org.neo4j.kernel.impl.proc.Procedures;
@@ -12,6 +13,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -22,7 +25,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAsync(proxyTargetClass = true)
 @EnableTransactionManagement(proxyTargetClass = true)
 @EnableConfigurationProperties
-@SpringBootApplication(scanBasePackages = "io.reflectoring.coderadar")
+@ComponentScan(
+    basePackages = "io.reflectoring.coderadar",
+    excludeFilters = {
+      @ComponentScan.Filter(
+          type = FilterType.ASSIGNABLE_TYPE,
+          value = {Neo4jIndexesConfiguration.class})
+    })
+@SpringBootApplication
 @EntityScan(basePackages = "io.reflectoring.coderadar")
 public class CoderadarTestApplication {
 

@@ -36,7 +36,7 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
             .findByIdWithModules(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
-    if (commitRepository.commitIsNewer(projectId, command.getCommit1(), command.getCommit2())) {
+    if (commitRepository.commitIsNewer(command.getCommit1(), command.getCommit2())) {
       String temp = command.getCommit1();
       command.setCommit1(command.getCommit2());
       command.setCommit2(temp);

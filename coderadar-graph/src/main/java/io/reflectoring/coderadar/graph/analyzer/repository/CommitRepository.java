@@ -97,13 +97,13 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   void createFileRelationships(List<HashMap<String, Object>> fileRels);
 
   /**
-   * @param projectId The project id.
    * @param commit1 The full hash of the first commit.
    * @param commit2 The full hash of the second commit.
    * @return True if commit1 was made after commit 2, false otherwise
    */
   @Query(
-      "PROFILE MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH p, c "
-          + "MATCH (p)-[:CONTAINS_COMMIT]->(c1:CommitEntity) WHERE c1.name = {2} WITH c, c1 LIMIT 1 RETURN c.timestamp > c1.timestamp")
-  boolean commitIsNewer(@NonNull Long projectId, @NonNull String commit1, @NonNull String commit2);
+      "MATCH (c1:CommitEntity) WHERE c1.name = {0} WITH c1 LIMIT 1 "
+          + "MATCH (c2:CommitEntity) WHERE c2.name = {1} WITH c1, c2 LIMIT 1 "
+          + "RETURN c1.timestamp > c2.timestamp")
+  boolean commitIsNewer(@NonNull String commit1, @NonNull String commit2);
 }

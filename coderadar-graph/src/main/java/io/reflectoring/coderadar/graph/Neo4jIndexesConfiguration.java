@@ -6,10 +6,8 @@ import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile({"prod"}) // Do not use this in tests
 public class Neo4jIndexesConfiguration {
 
   @Autowired private SessionFactory sessionFactory;
