@@ -127,6 +127,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         File file = new File();
         file.setSequenceId(seqeunceId[0]++);
         file.setPath(treeWalk.getPathString());
+        file.setObjectHash(treeWalk.getObjectId(0).getName());
 
         FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
         fileToCommitRelationship.setOldPath("/dev/null");
@@ -221,6 +222,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     List<File> filesToSave;
     File file = new File();
     file.setSequenceId(seqeunceId[0]++);
+    file.setObjectHash(diff.getNewId().name());
     file.setPath(path);
     if (existingFilesWithPath == null) {
       if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {

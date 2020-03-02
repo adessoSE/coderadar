@@ -146,17 +146,18 @@ public class AnalyzingService
       List<MetricValue> values = fileMetrics.get(relationship.getFile().getId());
       if (values != null) {
         for (MetricValue value : values) {
-          if (metrics.stream()
-              .noneMatch(
-                  metricValue ->
-                      metricValue.getName().equals(value.getName())
-                          && metricValue.getFileId() == value.getFileId())) {
+          if (value.getValue() != 0
+              && metrics.stream()
+                  .noneMatch(
+                      metricValue ->
+                          metricValue.getName().equals(value.getName())
+                              && metricValue.getFileId() == value.getFileId())) {
             metrics.add(
                 new MetricValue(
                     value.getName(),
                     0,
                     commit.getId(),
-                    relationship.getFile().getId(),
+                    value.getFileId(),
                     Collections.emptyList()));
           }
         }

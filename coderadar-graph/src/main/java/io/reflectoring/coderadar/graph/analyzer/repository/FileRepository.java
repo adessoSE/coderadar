@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.graph.analyzer.repository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
@@ -17,58 +16,6 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
   @Query("MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} RETURN f")
   @NonNull
   List<FileEntity> findAllinProject(@NonNull Long projectId);
-
-  // This might be useful for some queries in the future
-  /**
-   * @param projectId The project id
-   * @param commit1Hash The hash of the first commit
-   * @param commit2Hash The hash of the second commit
-   */
-  @Query(
-      "MATCH (c2)<-[:CONTAINS_COMMIT]-(p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {2} "
-          + " AND c2.name = {1} WITH c, c2 LIMIT 1 "
-          + "CALL apoc.path.spanningTree(c, {relationshipFilter:'IS_CHILD_OF>', terminatorNodes: [c2]}) "
-          + "YIELD path WITH tail(reverse(nodes(path))) as commits "
-          + "CALL apoc.cypher.run('UNWIND commits as c MATCH (c)<-[:CHANGED_IN {changeType: \"DELETE\"}]-(f) RETURN collect(f) as deletes', {commits: commits}) YIELD value WITH value.deletes as deletes, commits "
-          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)<-[:RENAMED_FROM]-()-[:CHANGED_IN]->(c) RETURN collect(f) as renames', {commits: commits}) "
-          + "YIELD value WITH value.renames as renames, commits, deletes "
-          + "UNWIND commits as c "
-          + "MATCH (c)<-[:CHANGED_IN {changeType: \"MODIFY\"}]-(f) WHERE NOT (f IN deletes OR f IN renames) "
-          + "RETURN DISTINCT f.path ORDER BY f.path")
-  @NonNull
-  List<String> getFilesModifiedBetweenCommits(
-      @NonNull Long projectId, @NonNull String commit1Hash, @NonNull String commit2Hash);
-
-  // TODO: This might be useful for some queries in the future
-  // The query doesn't do exactly what we need for the delta tree when
-  // for example a file was renamed before the master branch was merged into a dev branch but not
-  // the other way around
-  // In that case the file won't show as renamed.
-  /**
-   * Checks if files matching the given paths have been renamed between two points in time.
-   *
-   * @param paths The paths to check.
-   * @param commit1Hash The first (older) commit hash.
-   * @param commit2hash The second (newer) commit hash.
-   * @param projectId The project id.
-   * @return A list of maps that contain two values in the following format: {"oldPath":
-   *     "/src/main/File.java", "newPath": "File.java"}.
-   */
-  @Query(
-      "MATCH (c2)<-[:CONTAINS_COMMIT]-(p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} AND c.name = {3} AND c2.name = {2} WITH c, c2 LIMIT 1 "
-          + "CALL apoc.path.spanningTree(c, {relationshipFilter:'IS_CHILD_OF>', terminatorNodes: [c2]}) "
-          + "YIELD path WITH tail(reverse(nodes(path))) as commits "
-          + "CALL apoc.cypher.run('UNWIND commits as c MATCH (c)<-[:CHANGED_IN {changeType: \"DELETE\"}]-(f) RETURN collect(f) as deletes', {commits: commits}) "
-          + "YIELD value WITH value.deletes as deletes, commits "
-          + "UNWIND commits as c "
-          + "MATCH (c)<-[r:CHANGED_IN {changeType: \"RENAME\"}]-(f) WHERE NOT f IN deletes AND f.path IN {1} "
-          + "RETURN {oldPath: head(collect(DISTINCT r)).oldPath, newPath: f.path} as rename")
-  @NonNull
-  List<Map<String, Object>> findOldPathsIfRenamedBetweenCommits(
-      @NonNull Long projectId,
-      @NonNull List<String> paths,
-      @NonNull String commit1Hash,
-      @NonNull String commit2hash);
 
   /**
    * Creates [:RENAMED_FROM] relationships between files.

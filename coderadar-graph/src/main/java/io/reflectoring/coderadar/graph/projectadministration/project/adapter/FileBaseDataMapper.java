@@ -11,6 +11,7 @@ public class FileBaseDataMapper implements Mapper<File, FileEntity> {
     file.setId(entity.getId());
     file.setPath(entity.getPath());
     file.setSequenceId(entity.getSequenceId());
+    file.setObjectHash(entity.getObjectHash());
     return file;
   }
 
@@ -18,6 +19,7 @@ public class FileBaseDataMapper implements Mapper<File, FileEntity> {
     FileEntity fileEntity = new FileEntity();
     fileEntity.setPath(file.getPath());
     fileEntity.setSequenceId(file.getSequenceId());
+    fileEntity.setObjectHash(file.getObjectHash());
     return fileEntity;
   }
 }

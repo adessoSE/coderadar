@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
-import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
@@ -26,22 +25,26 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
   private final MetricQueryRepository metricQueryRepository;
   private final ProjectRepository projectRepository;
   private final ModuleRepository moduleRepository;
-  private final CommitRepository commitRepository;
 
   public GetMetricTreeForCommitAdapter(
       MetricQueryRepository metricQueryRepository,
       ProjectRepository projectRepository,
-      ModuleRepository moduleRepository,
-      CommitRepository commitRepository) {
+      ModuleRepository moduleRepository) {
     this.metricQueryRepository = metricQueryRepository;
     this.projectRepository = projectRepository;
     this.moduleRepository = moduleRepository;
-    this.commitRepository = commitRepository;
   }
 
-  MetricTree get(ProjectEntity project, String commitHash, List<String> metrics) {
-    List<MetricValueForCommitTreeQueryResult> result =
-        metricQueryRepository.getMetricTreeForCommit(project.getId(), commitHash, metrics);
+  MetricTree get(
+      ProjectEntity project, String commitHash, List<String> metrics, boolean includeFileHashes) {
+    List<MetricValueForCommitTreeQueryResult> result;
+    if (includeFileHashes) {
+      result =
+          metricQueryRepository.getMetricTreeForCommitWithFileHashes(
+              project.getId(), commitHash, metrics);
+    } else {
+      result = metricQueryRepository.getMetricTreeForCommit(project.getId(), commitHash, metrics);
+    }
     List<ModuleEntity> moduleEntities =
         moduleRepository.findModulesInProjectSortedDesc(project.getId());
     List<MetricTree> moduleChildren = processModules(moduleEntities, result);
@@ -57,7 +60,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
         projectRepository
             .findByIdWithModules(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
-    return get(projectEntity, command.getCommit(), command.getMetrics());
+    return get(projectEntity, command.getCommit(), command.getMetrics(), false);
   }
 
   /**

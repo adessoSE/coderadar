@@ -273,13 +273,19 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
 
   @Override
   public void addCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
+
+    //Get all of the existing commits and save them in a map
     Map<String, CommitEntity> walkedCommits = new HashMap<>();
     IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>();
     for (CommitEntity c : commitRepository.findByProjectId(projectId)) {
       walkedCommits.put(c.getName(), c);
     }
+
+    //Remove any already existing commits from the new commits passed into this method
     commits.removeIf(commit -> walkedCommits.containsKey(commit.getName()));
     commits.sort(Comparator.comparingLong(Commit::getTimestamp));
+
+    //We'll save the newly added commits in this list
     List<CommitEntity> newCommitEntities = new ArrayList<>();
 
     for (Commit commit : commits) {

@@ -336,7 +336,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         Assertions.assertEquals(3, file.getCommit1Metrics().size());
         Assertions.assertEquals(file.getCommit2Metrics().get(1), file.getCommit1Metrics().get(1));
       }
-      Assertions.assertTrue(file.getChanges().isModified());
+      Assertions.assertFalse(file.getChanges().isModified());
       Assertions.assertFalse(file.getChanges().isAdded());
       Assertions.assertFalse(file.getChanges().isRenamed());
       Assertions.assertFalse(file.getChanges().isDeleted());
