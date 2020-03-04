@@ -16,6 +16,7 @@ public class Neo4jIndexesConfiguration {
   public void createIndexesAndConstraints() {
     Session session = sessionFactory.openSession();
     session.query("CREATE INDEX ON :ProjectEntity(id)", Collections.emptyMap());
+    session.query("CREATE INDEX ON :ProjectEntity(name)", Collections.emptyMap());
     session.query("CREATE INDEX ON :ModuleEntity(id)", Collections.emptyMap());
     session.query("CREATE INDEX ON :CommitEntity(name)", Collections.emptyMap());
     session.query("CREATE INDEX ON :BranchEntity(name)", Collections.emptyMap());
@@ -23,8 +24,6 @@ public class Neo4jIndexesConfiguration {
     session.query(
         "CREATE CONSTRAINT ON (r:RefreshTokenEntity) ASSERT r.token IS UNIQUE",
         Collections.emptyMap());
-    session.query(
-        "CREATE CONSTRAINT ON (p:ProjectEntity) ASSERT p.name IS UNIQUE", Collections.emptyMap());
     session.query(
         "CREATE CONSTRAINT ON (u:UserEntity) ASSERT u.username IS UNIQUE", Collections.emptyMap());
   }
