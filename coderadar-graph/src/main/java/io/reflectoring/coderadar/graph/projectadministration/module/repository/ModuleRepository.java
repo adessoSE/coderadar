@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.graph.projectadministration.module.repository;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
@@ -90,4 +91,7 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
    */
   @Query("MATCH (m1)-[r]->(m2) WHERE ID(m1) = {0} AND ID(m2) = {1} DELETE r")
   void detachModuleFromModule(@NonNull Long parentId, @NonNull Long childId);
+
+  @Query("MATCH (m) WHERE ID(m) = {0} RETURN m")
+  Optional<ModuleEntity> findByIdWithChildModules(Long id);
 }
