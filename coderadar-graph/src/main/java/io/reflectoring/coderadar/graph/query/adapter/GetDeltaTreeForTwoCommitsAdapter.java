@@ -89,7 +89,7 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
       Long projectId) {
 
     List<Map<String, Object>> oldPaths =
-        fileRepository.findOldpathIfRenamedBetweenCommits(
+        fileRepository.findOldPathIfRenamedBetweenCommits(
             addedFiles, commit1Time, commit2Time, projectId);
     for (Map<String, Object> rename : oldPaths) {
       String oldPath = (String) rename.get("oldPath");

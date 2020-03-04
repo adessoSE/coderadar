@@ -45,6 +45,7 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
                                 fieldWithPath("[]").description("Array of all the commits in this project."),
                                 fieldWithPath("[].name").description("The name of the commit."),
                                 fieldWithPath("[].author").description("The author of the commit"),
+                                fieldWithPath("[].authorEmail").description("The email of the author"),
                                 fieldWithPath("[].comment").description("The comment of this commit"),
                                 fieldWithPath("[].timestamp").description("The timestamp of this commit"),
                                 fieldWithPath("[].analyzed").description("Whether this commit is already analyzed or not.")

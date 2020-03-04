@@ -32,6 +32,7 @@ public class GetCommitsInProjectController {
               .setName(commit.getName())
               .setAnalyzed(commit.isAnalyzed())
               .setAuthor(commit.getAuthor())
+              .setAuthorEmail(commit.getAuthorEmail())
               .setComment(commit.getComment())
               .setTimestamp(commit.getTimestamp()));
     }

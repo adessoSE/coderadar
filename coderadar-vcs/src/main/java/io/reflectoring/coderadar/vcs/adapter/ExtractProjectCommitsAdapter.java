@@ -8,11 +8,6 @@ import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelati
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
 import io.reflectoring.coderadar.vcs.port.driven.ExtractProjectCommitsPort;
-import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -24,6 +19,12 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 
 @Service
 public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
@@ -81,8 +82,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     Commit commit = new Commit();
     commit.setName(rc.getName());
     commit.setAuthor(rc.getAuthorIdent().getName());
-    commit.setAuthorEmail(
-        rc.getAuthorIdent().getEmailAddress().toLowerCase()); // TODO: we have to change this
+    commit.setAuthorEmail(rc.getAuthorIdent().getEmailAddress());
     commit.setComment(rc.getShortMessage());
     commit.setTimestamp(rc.getAuthorIdent().getWhen().getTime());
     return commit;

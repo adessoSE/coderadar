@@ -1,20 +1,48 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
-import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
+import io.reflectoring.coderadar.graph.query.domain.ContributorsForFileQueryResult;
+import io.reflectoring.coderadar.graph.query.repository.ContributorQueryRepository;
+import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
+import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
+import io.reflectoring.coderadar.query.domain.ContributorsForFile;
 import io.reflectoring.coderadar.query.port.driven.GetCriticalFilesPort;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GetCriticalFilesAdapter implements GetCriticalFilesPort {
-  private final FileRepository fileRepository;
+  private final ContributorQueryRepository contributorQueryRepository;
 
-  public GetCriticalFilesAdapter(FileRepository fileRepository) {
-    this.fileRepository = fileRepository;
+  public GetCriticalFilesAdapter(ContributorQueryRepository contributorQueryRepository) {
+    this.contributorQueryRepository = contributorQueryRepository;
   }
 
   @Override
-  public List<String> getCriticalFiles(Long projectId) {
-    return fileRepository.getCriticalFiles(projectId);
+  public List<ContributorsForFile> getCriticalFiles(
+      Long projectId, int numberOfContributors, List<FilePattern> filePatterns) {
+
+    // Map Ant-Patterns to RegEx
+    List<String> includes = new ArrayList<>();
+    List<String> excludes = new ArrayList<>();
+    for (FilePattern filePattern : filePatterns) {
+      if (filePattern.getInclusionType().equals(InclusionType.INCLUDE)) {
+        includes.add(PatternUtil.toPattern(filePattern.getPattern()).toString());
+      } else {
+        excludes.add(PatternUtil.toPattern(filePattern.getPattern()).toString());
+      }
+    }
+    return mapQueryResults(contributorQueryRepository
+            .getCriticalFiles(projectId, numberOfContributors, includes, excludes));
   }
+
+  private List<ContributorsForFile> mapQueryResults(List<ContributorsForFileQueryResult> criticalFiles) {
+    List<ContributorsForFile> result = new ArrayList<>(criticalFiles.size());
+    for(ContributorsForFileQueryResult qr : criticalFiles){
+      result.add(new ContributorsForFile(qr.getPath(), qr.getContributors()));
+    }
+    return result;
+  }
+
 }

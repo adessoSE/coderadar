@@ -41,7 +41,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
           + "AND c.timestamp > {1} AND ID(p) = {3} AND r.changeType = \"RENAME\" "
           + "RETURN {oldPath: head(collect(DISTINCT r)).oldPath, newPath: f.path} as rename")
   @NonNull
-  List<Map<String, Object>> findOldpathIfRenamedBetweenCommits(
+  List<Map<String, Object>> findOldPathIfRenamedBetweenCommits(
       @NonNull List<String> path,
       @NonNull Long commit1Time,
       @NonNull Long commit2Time,
@@ -57,12 +57,4 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
           + "MATCH (f2) WHERE ID(f2) = x.fileId2 "
           + "CREATE (f1)-[:RENAMED_FROM]->(f2)")
   void createRenameRelationships(List<HashMap<String, Object>> renameRels);
-
-  @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(co)<-[:CHANGED_IN {changeType: \"DELETE\"}]-(f) WHERE ID(p) = {0} WITH collect(DISTINCT f) AS deletes "
-          + "MATCH (c)-[:WORKS_ON]->(p)-[:CONTAINS*]->(f)-[:CHANGED_IN]->(co) WHERE ID(p) = {0} AND f.path ENDS WITH \".java\" "
-          + "AND NOT f IN deletes AND co.authorEmail IN c.emails AND NOT ()-[:RENAMED_FROM]->(f) "
-          + "WITH f.path as path, collect(DISTINCT c) AS contributors "
-          + "WHERE size(contributors) = 1 RETURN path")
-  List<String> getCriticalFiles(@NonNull Long projectId);
 }

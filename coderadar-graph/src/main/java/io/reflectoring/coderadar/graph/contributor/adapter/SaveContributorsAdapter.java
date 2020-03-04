@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class SaveContributorsAdapter implements SaveContributorsPort {
   private final ContributorRepository contributorRepository;
   private final ProjectRepository projectRepository;
+  private final ContributorMapper contributorMapper = new ContributorMapper();
 
   public SaveContributorsAdapter(
       ContributorRepository contributorRepository, ProjectRepository projectRepository) {
@@ -27,7 +28,7 @@ public class SaveContributorsAdapter implements SaveContributorsPort {
     ProjectEntity projectEntity = projectRepository.findById(projectId).get(); // project must exist
 
     List<ContributorEntity> contributorEntities =
-        new ArrayList<>(new ContributorMapper().mapDomainObjects(contributors));
+        new ArrayList<>(contributorMapper.mapDomainObjects(contributors));
     for (ContributorEntity entity : contributorEntities) {
       entity.getProjects().add(projectEntity);
     }
