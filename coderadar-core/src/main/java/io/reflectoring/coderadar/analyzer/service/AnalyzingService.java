@@ -131,7 +131,7 @@ public class AnalyzingService
   }
 
   /**
-   * Checks if the files that have been changed in the current commit are missing metrics that
+   * Checks if the files that have been changed in the current commit have missing metrics that
    * existed in previous commits. If so, sets them to zero.
    *
    * @param commit The currently analyzed commit.
