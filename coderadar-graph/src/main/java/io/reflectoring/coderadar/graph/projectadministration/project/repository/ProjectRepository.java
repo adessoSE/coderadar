@@ -94,11 +94,13 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   /**
    * @param id The project id.
    * @return The project with the given id with initialized [:CONTAINS] relationships for modules.
+   *     <p>This query is possible without apoc and likely performs better, however the
+   *     GraphEntityMapper complains about unsaturated relationships for some reason.
    */
   @Query(
       "MATCH (p) WHERE ID(p) = {0} AND p.isBeingDeleted = FALSE WITH p "
-          + "OPTIONAL MATCH (p)-[r:CONTAINS*0..]->(m:ModuleEntity) USING SCAN m:ModuleEntity "
-          + "RETURN p, r, m")
+          + "CALL apoc.path.subgraphAll(p, {relationshipFilter:'CONTAINS>', labelFilter: '+ModuleEntity'}) "
+          + "YIELD nodes, relationships RETURN p, nodes, relationships")
   @NonNull
   Optional<ProjectEntity> findByIdWithModules(@NonNull Long id);
 

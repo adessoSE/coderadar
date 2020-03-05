@@ -44,7 +44,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
     } else {
       result = metricQueryRepository.getMetricTreeForCommit(project.getId(), commitHash, metrics);
     }
-    List<ModuleEntity> moduleEntities =
+    List<ModuleEntity> moduleEntities = // project already has the modules??
         moduleRepository.findModulesInProjectSortedDesc(project.getId());
     List<MetricTree> moduleChildren = processModules(moduleEntities, result);
     MetricTree rootModule = processRootModule(result);
@@ -78,9 +78,6 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
       metricTree.setName(moduleEntity.getPath());
 
       Map<String, Long> aggregatedMetrics = new LinkedHashMap<>();
-      if (metricValues.isEmpty()) {
-        break;
-      }
       List<MetricValueForCommitTreeQueryResult> processedFiles = new ArrayList<>();
       for (MetricValueForCommitTreeQueryResult commitTreeQueryResult : metricValues) {
         if (commitTreeQueryResult.getPath().startsWith(moduleEntity.getPath())) {
