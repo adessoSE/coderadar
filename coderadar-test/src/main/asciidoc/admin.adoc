@@ -30,7 +30,7 @@ Adjusting this value will change how often projects are checked for new commits/
 
 ==== Configuring the working directory
 
-This is the directory project will be cloned to. It's path can be adjusted by changing the following property:
+This is the directory projects will be cloned to. It's path can be adjusted by changing the following property:
 
 `coderadar.workdir=coderadar-workdir`
 
@@ -66,7 +66,7 @@ The log file's path can be adjusted with the following property:
 
 `logging.file=coderadar.log`
 
-==== Configuration the database connection
+==== Configuring the database connection
 
 The credentials for the Neo4j database instance can be configured with the following properties:
 
@@ -86,7 +86,7 @@ https://reflectoring.github.io/coderadar/current/docs/restapi.html
 
 === Starting the Coderadar UI
 
-To start the Coderadar UI, you must first build it. This requires having NPM installed, going to the `coderadar-ui` directory and
+To start the Coderadar UI, you have to build it first. This requires having NPM installed, going to the `coderadar-ui` directory and
 installing the dependencies by running `npm install` and running the UI-server with `npm start`.
 The UI will be available on port 4200.
 
