@@ -1,0 +1,58 @@
+<!-- if node has no siblings but at least one child, add it to parent by just adding it as a path -->
+<ng-container *ngIf="!hasSiblings && node.children.length > 0">
+  <span [ngClass]="(node.path === '' || (hasSiblings && node.children.length > 0)) ? (getClassString(node) + (node.path === '' ? ' package__base' : '')) : ''">
+    <span *ngIf="node.children.length > 1" [id]="node.path" [title]="node.path" class="filename-span" (click)="onClick($event)" (dblclick)="node.children.length === 1 ? stopSingleClick($event) : onDBClick($event)"
+          [ngClass]="(node.children.length > 1 || node.dependencies.length > 0) && node.packageName !== '' ? 'clickable' : ''">
+      {{node.filename}}/
+    </span>
+    <span *ngIf="node.children.length === 1" [id]="node.path">.</span>
+
+    <!-- display children in 'body as list' -->
+    <div *ngIf="node.children.length > 1" class="list" [ngClass]="(node.packageName !== '' ? 'nested' : '') + (node.path === '' ? ' list__root' : '')">
+      <ng-container>{{setLevel(0)}}</ng-container>
+      <span *ngFor="let child of node.children; let i = index">
+        <ng-container *ngIf="child.level > level && i !== 0">{{setLevel(child.level)}}<br></ng-container>
+        <app-tree-node [node]="child" [root]="root" [hasSiblings]="true"></app-tree-node>
+      </span>
+    </div>
+
+    <!-- display child in path -->
+    <span *ngIf="node.children.length === 1">
+      <span>
+        <app-tree-node [node]="node.children[0]" [root]="root" [hasSiblings]="false"></app-tree-node>
+      </span>
+    </span>
+  </span>
+</ng-container>
+<!-- if node has siblings, open a new package -->
+<ng-container *ngIf="hasSiblings && node.children.length > 0">
+  <span [ngClass]="getClassString(node)">
+    <span [id]="node.path" [title]="node.path" class="filename-span" (click)="onClick($event)" (dblclick)="node.children.length === 1 ? stopSingleClick($event) : onDBClick($event)"
+          [ngClass]="(node.children.length > 1 || node.dependencies.length > 0) && node.packageName !== '' ? 'clickable' : ''">
+      {{node.filename}}/
+    </span>
+
+    <!-- display children in 'body as list' -->
+    <div *ngIf="node.children.length > 1" class="list" [ngClass]="(node.packageName !== '' ? 'nested' : '') + (node.path === '' ? ' list__root' : '')">
+      <ng-container>{{setLevel(0)}}</ng-container>
+      <span *ngFor="let child of node.children; let i = index">
+        <ng-container *ngIf="child.level > level && i !== 0">{{setLevel(child.level)}}<br></ng-container>
+        <app-tree-node [node]="child" [root]="root" [hasSiblings]="true"></app-tree-node>
+      </span>
+    </div>
+
+    <!-- display child in path -->
+    <span *ngIf="node.children.length === 1">
+      <span>
+        <app-tree-node [node]="node.children[0]" [root]="root" [hasSiblings]="false"></app-tree-node>
+      </span>
+    </span>
+  </span>
+</ng-container>
+<!-- if node is leaf, display it -->
+<span *ngIf="node.children.length === 0">
+  <span [id]="node.path" [title]="node.path" class="filename-span" (click)="onClick($event)" (dblclick)="onDBClick($event)"
+        [ngClass]="getClassString(node) + (node.dependencies.length > 0 && node.packageName !== '' ? ' clickable' : '')">
+    {{node.filename}}
+  </span>
+</span>

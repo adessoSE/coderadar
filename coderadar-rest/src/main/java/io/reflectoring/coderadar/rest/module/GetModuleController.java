@@ -19,8 +19,12 @@ public class GetModuleController {
     this.getModuleUseCase = getModuleUseCase;
   }
 
-  @GetMapping(path = "/projects/{projectId}/modules/{moduleId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<GetModuleResponse> getModule(@PathVariable(name = "moduleId") Long moduleId) {
-    return new ResponseEntity<>(new GetModuleResponse(moduleId, getModuleUseCase.get(moduleId).getPath()), HttpStatus.OK);
+  @GetMapping(
+      path = "/projects/{projectId}/modules/{moduleId}",
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<GetModuleResponse> getModule(
+      @PathVariable(name = "moduleId") Long moduleId) {
+    return new ResponseEntity<>(
+        new GetModuleResponse(moduleId, getModuleUseCase.get(moduleId).getPath()), HttpStatus.OK);
   }
 }

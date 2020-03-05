@@ -1,5 +1,11 @@
 apply plugin: "com.diffplug.gradle.spotless"
 
+spotless {
+    java {
+        googleJavaFormat()
+    }
+}
+
 dependencies {
     compile group: 'org.springframework', name: 'spring-tx', version: '5.1.9.RELEASE'
 

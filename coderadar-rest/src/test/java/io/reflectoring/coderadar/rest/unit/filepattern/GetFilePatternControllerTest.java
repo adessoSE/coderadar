@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.filepattern;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.GetFilePatternUseCase;
@@ -11,8 +13,6 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static org.mockito.Mockito.mock;
-
 class GetFilePatternControllerTest {
 
   private GetFilePatternUseCase getFilePatternUseCase = mock(GetFilePatternUseCase.class);
@@ -21,8 +21,7 @@ class GetFilePatternControllerTest {
   void returnsFilePatternWithIdOne() {
     GetFilePatternController testSubject = new GetFilePatternController(getFilePatternUseCase);
 
-    FilePattern filePattern =
-        new FilePattern(1L, "**/*.java", InclusionType.INCLUDE);
+    FilePattern filePattern = new FilePattern(1L, "**/*.java", InclusionType.INCLUDE);
 
     Mockito.when(getFilePatternUseCase.get(1L)).thenReturn(filePattern);
     ResponseEntity<GetFilePatternResponse> responseEntity = testSubject.getFilePattern(1L);

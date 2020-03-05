@@ -25,7 +25,9 @@ public class RegisterUserController {
     this.registerUserUseCase = registerUserUseCase;
   }
 
-  @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity register(@RequestBody @Validated RegisterUserCommand command) {
     try {
       return new ResponseEntity<>(

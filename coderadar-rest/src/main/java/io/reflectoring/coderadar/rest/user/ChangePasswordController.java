@@ -23,7 +23,10 @@ public class ChangePasswordController {
     this.changePasswordUseCase = changePasswordUseCase;
   }
 
-  @PostMapping(path = "/user/password/change", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(
+      path = "/user/password/change",
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity changePassword(@RequestBody @Validated ChangePasswordCommand command) {
     try {
       changePasswordUseCase.changePassword(command);

@@ -1,5 +1,8 @@
 package io.reflectoring.coderadar.rest.user;
 
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
@@ -9,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -26,7 +26,7 @@ class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isCreated())
-            .andDo(documentRegistration());
+        .andDo(documentRegistration());
   }
 
   @Test
@@ -71,11 +71,11 @@ class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
   private ResultHandler documentRegistration() {
     ConstrainedFields fields = fields(RegisterUserCommand.class);
     return document(
-            "user/registration",
-            requestFields(
-                    fields.withPath("username").description("The name of the user to be registered."),
-                    fields
-                            .withCustomPath("password")
-                            .description("The password of the user as plaintext")));
+        "user/registration",
+        requestFields(
+            fields.withPath("username").description("The name of the user to be registered."),
+            fields
+                .withCustomPath("password")
+                .description("The password of the user as plaintext")));
   }
 }

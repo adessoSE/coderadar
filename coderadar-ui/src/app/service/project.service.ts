@@ -254,5 +254,26 @@ export class ProjectService {
 
   getContributorsForProject(projectId: number) : Promise<HttpResponse<Contributor[]>> {
     return this.httpClient.get<Contributor[]>(this.apiURL + 'projects/' + projectId + '/contributors', {observe: 'response'}).toPromise();
+
+  /**
+   * Get the dependencyTree for to build a levelized structure map for a specific commit.
+   * Sends a GET request to /analyzers/{projectId}/structureMap/{commitName}
+   * @param projectId The project id.
+   * @param commitName The name (hash) of the commit.
+   */
+  public getDependencyTree(projectId: number, commitName: string) {
+    return this.httpClient.get(this.apiURL + 'analyzers/' + projectId + '/structureMap/' + commitName, {observe: 'response'}).toPromise();
+  }
+
+  /**
+   * Get the dependencyTree to compare two given commits in a levelized structure map.
+   * Sends GET requerst to /analyzers/{projectId}/structureMap/{commitName1}/{commitName2}
+   * @param projectId The project id.
+   * @param commitName1 The name (hash) of the first commit.
+   * @param commitName2 The name (hash) of the second commit.
+   */
+  public getCompareTree(projectId: number, commitName1: string, commitName2: string) {
+    return this.httpClient.get(this.apiURL + 'analyzers/' + projectId + '/structureMap/' + commitName1 + '/' + commitName2,
+      {observe: 'response'}).toPromise();
   }
 }

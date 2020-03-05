@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,15 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Transactional
 public class MergeContributorsController {
-    private final MergeContributorsUseCase mergeContributorsUseCase;
+  private final MergeContributorsUseCase mergeContributorsUseCase;
 
-    public MergeContributorsController(MergeContributorsUseCase mergeContributorsUseCase) {
-        this.mergeContributorsUseCase = mergeContributorsUseCase;
-    }
+  public MergeContributorsController(MergeContributorsUseCase mergeContributorsUseCase) {
+    this.mergeContributorsUseCase = mergeContributorsUseCase;
+  }
 
-    @PostMapping(path = "/contributors/merge", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HttpStatus> mergeContributors(@RequestBody @Validated MergeContributorsCommand command) {
-        mergeContributorsUseCase.mergeContributors(command);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @PostMapping(
+      path = "/contributors/merge",
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<HttpStatus> mergeContributors(
+      @RequestBody @Validated MergeContributorsCommand command) {
+    mergeContributorsUseCase.mergeContributors(command);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }

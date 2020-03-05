@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Transactional
 public class ResetAnalysisController {
-    private final ResetAnalysisUseCase resetAnalysisUseCase;
+  private final ResetAnalysisUseCase resetAnalysisUseCase;
 
-    public ResetAnalysisController(ResetAnalysisUseCase resetAnalysisUseCase) {
-        this.resetAnalysisUseCase = resetAnalysisUseCase;
-    }
+  public ResetAnalysisController(ResetAnalysisUseCase resetAnalysisUseCase) {
+    this.resetAnalysisUseCase = resetAnalysisUseCase;
+  }
 
-    @PostMapping(path = "projects/{projectId}/analyze/reset")
-    public ResponseEntity<HttpStatus> resetAnalysis(@PathVariable("projectId") Long projectId) {
-        resetAnalysisUseCase.resetAnalysis(projectId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @PostMapping(path = "projects/{projectId}/analyze/reset")
+  public ResponseEntity<HttpStatus> resetAnalysis(@PathVariable("projectId") Long projectId) {
+    resetAnalysisUseCase.resetAnalysis(projectId);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }

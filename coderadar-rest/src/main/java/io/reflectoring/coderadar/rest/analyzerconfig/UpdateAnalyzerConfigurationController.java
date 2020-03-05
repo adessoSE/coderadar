@@ -24,15 +24,19 @@ public class UpdateAnalyzerConfigurationController {
     this.updateAnalyzerConfigurationUseCase = updateAnalyzerConfigurationUseCase;
   }
 
-  @PostMapping(path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(
+      path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}",
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Object> updateAnalyzerConfiguration(
       @RequestBody @Validated UpdateAnalyzerConfigurationCommand command,
-      @PathVariable(name = "analyzerConfigurationId") Long analyzerConfigurationId, @PathVariable(name = "projectId") Long projectId) {
-      try {
-          updateAnalyzerConfigurationUseCase.update(command, analyzerConfigurationId, projectId);
-          return new ResponseEntity<>(HttpStatus.OK);
-      } catch (AnalyzerConfigurationException e){
-          return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.CONFLICT);
-      }
+      @PathVariable(name = "analyzerConfigurationId") Long analyzerConfigurationId,
+      @PathVariable(name = "projectId") Long projectId) {
+    try {
+      updateAnalyzerConfigurationUseCase.update(command, analyzerConfigurationId, projectId);
+      return new ResponseEntity<>(HttpStatus.OK);
+    } catch (AnalyzerConfigurationException e) {
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.CONFLICT);
+    }
   }
 }

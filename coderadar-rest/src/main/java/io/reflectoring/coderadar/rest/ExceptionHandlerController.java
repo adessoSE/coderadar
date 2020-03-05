@@ -13,23 +13,28 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHandlerController {
 
-    @ExceptionHandler(ProjectIsBeingProcessedException.class)
-    public ResponseEntity<ErrorMessageResponse> projectProcessingException(ProjectIsBeingProcessedException e) {
-        return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
-    }
+  @ExceptionHandler(ProjectIsBeingProcessedException.class)
+  public ResponseEntity<ErrorMessageResponse> projectProcessingException(
+      ProjectIsBeingProcessedException e) {
+    return new ResponseEntity<>(
+        new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+  }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ErrorMessageResponse> entityNotFoundException(EntityNotFoundException e) {
-        return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
-    }
+  @ExceptionHandler(EntityNotFoundException.class)
+  public ResponseEntity<ErrorMessageResponse> entityNotFoundException(EntityNotFoundException e) {
+    return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.NOT_FOUND);
+  }
 
-    @ExceptionHandler(EntityAlreadyExistsException.class)
-    public ResponseEntity<ErrorMessageResponse> entityAlreadyExistsException(EntityAlreadyExistsException e) {
-        return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.CONFLICT);
-    }
+  @ExceptionHandler(EntityAlreadyExistsException.class)
+  public ResponseEntity<ErrorMessageResponse> entityAlreadyExistsException(
+      EntityAlreadyExistsException e) {
+    return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.CONFLICT);
+  }
 
-    @ExceptionHandler(MisconfigurationException.class)
-    public ResponseEntity<ErrorMessageResponse> misconfigurationException(MisconfigurationException e) {
-        return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
-    }
+  @ExceptionHandler(MisconfigurationException.class)
+  public ResponseEntity<ErrorMessageResponse> misconfigurationException(
+      MisconfigurationException e) {
+    return new ResponseEntity<>(
+        new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+  }
 }

@@ -1,19 +1,18 @@
 package io.reflectoring.coderadar.rest.project;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import java.util.Date;
+import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.Date;
-import java.util.UUID;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -22,7 +21,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void updateProjectWithId() throws Exception {
     // Set up
-      ProjectEntity testProject = new ProjectEntity();
+    ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
     testProject.setVcsEnd(new Date());
@@ -36,7 +35,13 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(
-            "new-project-name", "username", "password", "http://valid.url", true, new Date(), new Date());
+            "new-project-name",
+            "username",
+            "password",
+            "http://valid.url",
+            true,
+            new Date(),
+            new Date());
     mvc()
         .perform(
             post("/projects/" + testProject.getId())
@@ -45,14 +50,14 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(
             result -> {
-                ProjectEntity project = projectRepository.findById(id).get();
+              ProjectEntity project = projectRepository.findById(id).get();
               Assertions.assertEquals("new-project-name", project.getName());
               Assertions.assertEquals("username", project.getVcsUsername());
               Assertions.assertEquals("password", project.getVcsPassword());
               Assertions.assertEquals("http://valid.url", project.getVcsUrl());
               Assertions.assertTrue(project.isVcsOnline());
             })
-            .andDo(document("projects/update"));
+        .andDo(document("projects/update"));
   }
 
   @Test

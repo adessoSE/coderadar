@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetAnalyzingStatusResponse {
-    private boolean status;
+  private boolean status;
 }

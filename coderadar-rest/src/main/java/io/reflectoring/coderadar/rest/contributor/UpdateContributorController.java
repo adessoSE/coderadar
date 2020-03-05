@@ -12,15 +12,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Transactional
 public class UpdateContributorController {
-    private final UpdateContributorUseCase updateContributorUseCase;
+  private final UpdateContributorUseCase updateContributorUseCase;
 
-    public UpdateContributorController(UpdateContributorUseCase updateContributorUseCase) {
-        this.updateContributorUseCase = updateContributorUseCase;
-    }
+  public UpdateContributorController(UpdateContributorUseCase updateContributorUseCase) {
+    this.updateContributorUseCase = updateContributorUseCase;
+  }
 
-    @PostMapping(path = "/contributors/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<HttpStatus> updateContributor(@PathVariable Long id, @RequestBody @Validated UpdateContributorCommand command) {
-        updateContributorUseCase.updateContributor(id, command);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @PostMapping(
+      path = "/contributors/{id}",
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<HttpStatus> updateContributor(
+      @PathVariable Long id, @RequestBody @Validated UpdateContributorCommand command) {
+    updateContributorUseCase.updateContributor(id, command);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }

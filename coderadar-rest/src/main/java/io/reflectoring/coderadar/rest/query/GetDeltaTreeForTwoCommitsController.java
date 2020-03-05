@@ -14,14 +14,22 @@ import org.springframework.web.bind.annotation.*;
 @Transactional
 public class GetDeltaTreeForTwoCommitsController {
 
-    private final GetDeltaTreeForTwoCommitsUseCase getDeltaTreeForTwoCommitsUseCase;
+  private final GetDeltaTreeForTwoCommitsUseCase getDeltaTreeForTwoCommitsUseCase;
 
-    public GetDeltaTreeForTwoCommitsController(GetDeltaTreeForTwoCommitsUseCase getDeltaTreeForTwoCommitsUseCase) {
-        this.getDeltaTreeForTwoCommitsUseCase = getDeltaTreeForTwoCommitsUseCase;
-    }
+  public GetDeltaTreeForTwoCommitsController(
+      GetDeltaTreeForTwoCommitsUseCase getDeltaTreeForTwoCommitsUseCase) {
+    this.getDeltaTreeForTwoCommitsUseCase = getDeltaTreeForTwoCommitsUseCase;
+  }
 
-    @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET}, path = "/projects/{projectId}/metricvalues/deltaTree", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<DeltaTree> getMetricValuesForTwoCommits(@Validated @RequestBody GetDeltaTreeForTwoCommitsCommand command, @PathVariable("projectId") Long projectId){
-        return new ResponseEntity<>(getDeltaTreeForTwoCommitsUseCase.get(command, projectId), HttpStatus.OK);
-    }
+  @RequestMapping(
+      method = {RequestMethod.POST, RequestMethod.GET},
+      path = "/projects/{projectId}/metricvalues/deltaTree",
+      consumes = MediaType.APPLICATION_JSON_VALUE,
+      produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<DeltaTree> getMetricValuesForTwoCommits(
+      @Validated @RequestBody GetDeltaTreeForTwoCommitsCommand command,
+      @PathVariable("projectId") Long projectId) {
+    return new ResponseEntity<>(
+        getDeltaTreeForTwoCommitsUseCase.get(command, projectId), HttpStatus.OK);
+  }
 }
