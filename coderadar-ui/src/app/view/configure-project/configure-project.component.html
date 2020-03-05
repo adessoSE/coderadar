@@ -88,6 +88,17 @@
               </div>
               <mat-error *ngIf="moduleExists">A module with this name already exists!</mat-error>
             </div>
+
+            <!--Project contributors-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Project contributors:</mat-label>
+              </div>
+              <div *ngFor="let c of contributors">
+                <span>{{c.displayName}}</span>
+              </div>
+            </div>
+
           </mat-card-content>
 
           <!--Cancel and submit buttons-->

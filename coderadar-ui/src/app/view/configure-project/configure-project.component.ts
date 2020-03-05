@@ -8,6 +8,7 @@ import {CONFLICT, FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Module} from '../../model/module';
 import {Title} from '@angular/platform-browser';
 import {MatSnackBar} from '@angular/material';
+import {Contributor} from '../../model/contributor'
 
 @Component({
   selector: 'app-configure-project',
@@ -20,6 +21,7 @@ export class ConfigureProjectComponent implements OnInit {
   projectName: string;
   analyzers: AnalyzerConfiguration[];
   filePatterns: FilePattern[];
+  contributors: Contributor[];
 
   // Fields for input binding
   filePatternIncludeInput;
@@ -40,6 +42,7 @@ export class ConfigureProjectComponent implements OnInit {
     this.modules = [];
     this.analyzers = [];
     this.filePatterns = [];
+    this.contributors = [];
   }
 
   ngOnInit(): void {
@@ -49,6 +52,7 @@ export class ConfigureProjectComponent implements OnInit {
       this.getModulesForProject();
       this.getProjectName();
       this.getProjectFilePatterns();
+      this.getProjectContributors();
     });
   }
 
@@ -126,6 +130,27 @@ export class ConfigureProjectComponent implements OnInit {
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh(() => this.getProjectFilePatterns());
+        }
+      });
+  }
+
+
+  /**
+   * Gets all of the configured file patterns for the current project and saves them in this.filePatterns.
+   * Sends the refresh token if access is denied and repeats the request.
+   */
+  private getProjectContributors(): void {
+    this.projectService.getContributorsForProject(this.projectId)
+      .then(response => {
+        if (response.body.length === 0) {
+          this.contributors = [];
+        } else {
+          this.contributors = response.body;
+        }
+      })
+      .catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh(() => this.getProjectContributors());
         }
       });
   }

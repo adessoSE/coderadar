@@ -11,6 +11,7 @@ import {AppComponent} from '../app.component';
 import {IMetricMapping} from '../city-map/interfaces/IMetricMapping';
 import {INode} from '../city-map/interfaces/INode';
 import {MetricValue} from '../model/metric-value';
+import {Contributor} from '../model/contributor'
 
 @Injectable({
   providedIn: 'root'
@@ -249,5 +250,9 @@ export class ProjectService {
 
   resetAnalysis(id: number, b: boolean) {
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze/reset', {}, {observe: 'response'}).toPromise();
+  }
+
+  getContributorsForProject(projectId: number) : Promise<HttpResponse<Contributor[]>> {
+    return this.httpClient.get<Contributor[]>(this.apiURL + 'projects/' + projectId + '/contributors', {observe: 'response'}).toPromise();
   }
 }
