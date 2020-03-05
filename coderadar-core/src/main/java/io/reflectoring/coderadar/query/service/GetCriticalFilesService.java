@@ -35,7 +35,6 @@ public class GetCriticalFilesService implements GetCriticalFilesUseCase {
     if (filePatterns.isEmpty()) {
       throw new MisconfigurationException("No file patterns defined for this project");
     }
-    return getCriticalFilesPort.getCriticalFiles(
-        projectId, numberOfContributors, filePatterns);
+    return getCriticalFilesPort.getCriticalFiles(projectId, numberOfContributors, filePatterns);
   }
 }

@@ -8,7 +8,6 @@ import io.reflectoring.coderadar.query.domain.ContributorsForFile;
 import io.reflectoring.coderadar.query.port.driven.GetCriticalFilesPort;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,16 +32,17 @@ public class GetCriticalFilesAdapter implements GetCriticalFilesPort {
         excludes.add(PatternUtil.toPattern(filePattern.getPattern()).toString());
       }
     }
-    return mapQueryResults(contributorQueryRepository
-            .getCriticalFiles(projectId, numberOfContributors, includes, excludes));
+    return mapQueryResults(
+        contributorQueryRepository.getCriticalFiles(
+            projectId, numberOfContributors, includes, excludes));
   }
 
-  private List<ContributorsForFile> mapQueryResults(List<ContributorsForFileQueryResult> criticalFiles) {
+  private List<ContributorsForFile> mapQueryResults(
+      List<ContributorsForFileQueryResult> criticalFiles) {
     List<ContributorsForFile> result = new ArrayList<>(criticalFiles.size());
-    for(ContributorsForFileQueryResult qr : criticalFiles){
+    for (ContributorsForFileQueryResult qr : criticalFiles) {
       result.add(new ContributorsForFile(qr.getPath(), qr.getContributors()));
     }
     return result;
   }
-
 }
