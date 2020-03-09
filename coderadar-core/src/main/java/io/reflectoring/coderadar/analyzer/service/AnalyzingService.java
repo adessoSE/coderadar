@@ -140,8 +140,6 @@ public class AnalyzingService
    */
   private void zeroOutMissingMetrics(
       Commit commit, List<MetricValue> metrics, Map<Long, List<MetricValue>> fileMetrics) {
-    metrics.sort(Comparator.comparingLong(MetricValue::getFileId));
-
     for (FileToCommitRelationship relationship : commit.getTouchedFiles()) {
       List<MetricValue> values = fileMetrics.get(relationship.getFile().getId());
       if (values != null) {
@@ -155,7 +153,7 @@ public class AnalyzingService
             metrics.add(
                 new MetricValue(
                     value.getName(),
-                    0,
+                    0L,
                     commit.getId(),
                     value.getFileId(),
                     Collections.emptyList()));
@@ -163,6 +161,8 @@ public class AnalyzingService
         }
       }
     }
+
+    metrics.sort(Comparator.comparingLong(MetricValue::getFileId));
     if (!metrics.isEmpty()) {
       long fileId = metrics.get(0).getFileId();
       List<MetricValue> metricsForFile = new ArrayList<>();
@@ -176,6 +176,7 @@ public class AnalyzingService
           metricsForFile.add(metricValue);
         }
       }
+      fileMetrics.put(fileId, metricsForFile);
     }
   }
 

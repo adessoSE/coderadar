@@ -104,7 +104,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
       Assertions.assertTrue(commit.isAnalyzed());
     }
     List<MetricValueEntity> metricValues = metricRepository.findByProjectId(projectId);
-    Assertions.assertEquals(40, metricValues.size());
+    Assertions.assertEquals(52, metricValues.size());
 
     mvc()
         .perform(post("/projects/" + projectId + "/analyze/reset"))
