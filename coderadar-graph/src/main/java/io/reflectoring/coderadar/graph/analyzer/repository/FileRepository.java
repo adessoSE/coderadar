@@ -36,5 +36,5 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    */
   @Query(
       "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND f.sequenceId = {1} RETURN f LIMIT 1 ")
-  FileEntity getFileInProjectBySequenceId(long projectId, @NonNull Long sequenceId);
+  FileEntity getFileInProjectBySequenceId(long projectId, long sequenceId);
 }

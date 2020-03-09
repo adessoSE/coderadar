@@ -6,5 +6,5 @@ public interface GetAnalyzingStatusUseCase {
    * @param projectId The id of the project to check.
    * @return True if the project is being analyzed, false otherwise
    */
-  Boolean getStatus(long projectId);
+  boolean getStatus(long projectId);
 }

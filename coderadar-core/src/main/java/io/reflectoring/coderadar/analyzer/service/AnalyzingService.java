@@ -210,7 +210,7 @@ public class AnalyzingService
     activeAnalysis.put(projectId, false);
   }
 
-  public Boolean getStatus(long projectId) {
-    return activeAnalysis.get(projectId) != null;
+  public boolean getStatus(long projectId) {
+    return activeAnalysis.containsKey(projectId);
   }
 }
