@@ -17,16 +17,7 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
   @Query(
       "MATCH (p)-[:CONTAINS*1..]->(m:ModuleEntity) USING SCAN m:ModuleEntity WHERE ID(p) = {0} RETURN m ORDER BY m.path DESC")
   @NonNull
-  List<ModuleEntity> findModulesInProjectSortedDesc(@NonNull Long projectId);
-
-  /**
-   * @param projectId The project id.
-   * @return All of the modules in a project.
-   */
-  @Query(
-      "MATCH (p)-[:CONTAINS*1..]->(m:ModuleEntity) USING SCAN m:ModuleEntity WHERE ID(p) = {0} RETURN m")
-  @NonNull
-  List<ModuleEntity> findModulesInProject(@NonNull Long projectId);
+  List<ModuleEntity> findModulesInProjectSortedDesc(long projectId);
 
   /**
    * Detaches all files that fall inside the modulePath from the project/module, creates a new
@@ -54,7 +45,7 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
   @Query(
       "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {1} AND f.path STARTS WITH {0} WITH f LIMIT 1 RETURN COUNT(f) > 0 ")
   @NonNull
-  Boolean fileInPathExists(@NonNull String path, @NonNull Long projectOrModuleId);
+  Boolean fileInPathExists(@NonNull String path, long projectOrModuleId);
 
   /**
    * Detaches a module from a project while keeping all of it's files still attached to it.
@@ -63,7 +54,7 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
    * @param moduleId The id of the module to detach.
    */
   @Query("MATCH (p)-[r]->(m) WHERE ID(p) = {0} AND ID(m) = {1} DELETE r")
-  void detachModuleFromProject(@NonNull Long projectId, @NonNull Long moduleId);
+  void detachModuleFromProject(long projectId, long moduleId);
 
   /**
    * Detaches a module from it's parent module while keeping all of it's files still attached to the
@@ -73,5 +64,5 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
    * @param childId The id of the module to detach.
    */
   @Query("MATCH (m1)-[r]->(m2) WHERE ID(m1) = {0} AND ID(m2) = {1} DELETE r")
-  void detachModuleFromModule(@NonNull Long parentId, @NonNull Long childId);
+  void detachModuleFromModule(long parentId, long childId);
 }

@@ -8,7 +8,7 @@ public interface GetProjectPort {
    * @param id The id of the project.
    * @return The project with the supplied id.
    */
-  Project get(Long id);
+  Project get(long id);
 
   /**
    * @param name The name of the project.
@@ -26,5 +26,5 @@ public interface GetProjectPort {
    * @param projectId id to check
    * @return True if a project with the given id exists, false otherwise
    */
-  boolean existsById(Long projectId);
+  boolean existsById(long projectId);
 }

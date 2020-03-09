@@ -33,7 +33,7 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
           + "RETURN name, SUM(value) AS value ORDER BY name")
   @NonNull
   List<MetricValueForCommitQueryResult> getMetricValuesForCommit(
-      @NonNull Long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);
+      long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);
 
   /**
    * Metrics for each file are collected as string in the following format: "metricName=value" The
@@ -59,7 +59,7 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
           + "RETURN path, collect(name + \"=\" + value) AS metrics ORDER BY path")
   @NonNull
   List<MetricValueForCommitTreeQueryResult> getMetricTreeForCommit(
-      @NonNull Long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);
+      long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);
 
   /**
    * @param projectId The project id.
@@ -68,7 +68,7 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv) WHERE ID(p) = {0} RETURN DISTINCT mv.name")
   @NonNull
-  List<String> getAvailableMetricsInProject(@NonNull Long projectId);
+  List<String> getAvailableMetricsInProject(long projectId);
 
   /**
    * Metrics for each file are collected as string in the following format: "metricName=value" The
@@ -97,5 +97,5 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
           + "RETURN path + head(collect(hash)) as path, collect(name + \"=\" + value) as metrics ORDER BY path")
   @NonNull
   List<MetricValueForCommitTreeQueryResult> getMetricTreeForCommitWithFileHashes(
-      @NonNull Long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);
+      long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);
 }

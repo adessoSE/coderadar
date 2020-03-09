@@ -17,5 +17,8 @@ public interface AnalyzerConfigurationRepository
    */
   @Query("MATCH (p)-[:HAS]->(c:AnalyzerConfigurationEntity) WHERE ID(p) = {0} RETURN c")
   @NonNull
-  List<AnalyzerConfigurationEntity> findByProjectId(@NonNull Long projectId);
+  List<AnalyzerConfigurationEntity> findByProjectId(long projectId);
+
+  @Query("MATCH (a) WHERE ID(a) = {0} RETURN COUNT(a) > 0")
+  boolean existsById(long id);
 }

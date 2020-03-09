@@ -23,11 +23,11 @@ public class ListBranchesController {
   }
 
   @GetMapping(path = "/projects/{projectId}/branches", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<GetBranchResponse>> listBranches(@PathVariable Long projectId) {
+  public ResponseEntity<List<GetBranchResponse>> listBranches(@PathVariable long projectId) {
     List<Branch> branches = listBranchesUseCase.listBranchesInProject(projectId);
     List<GetBranchResponse> responses = new ArrayList<>(branches.size());
     for (Branch branch : branches) {
-      responses.add(new GetBranchResponse(branch.getId(), branch.getName()));
+      responses.add(new GetBranchResponse(branch.getName(), branch.getCommitHash()));
     }
     return new ResponseEntity<>(responses, HttpStatus.OK);
   }

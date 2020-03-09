@@ -20,7 +20,7 @@ public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {
   }
 
   @Override
-  public List<Commit> get(Long projectId, String branch) {
+  public List<Commit> get(long projectId, String branch) {
     if (getProjectPort.existsById(projectId)) {
       return getCommitsInProjectPort.getCommitsSortedByTimestampDescWithNoRelationships(
           projectId, branch);

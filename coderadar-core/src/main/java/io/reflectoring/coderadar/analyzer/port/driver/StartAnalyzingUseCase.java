@@ -8,5 +8,5 @@ public interface StartAnalyzingUseCase {
    * @param projectId The id of the project to analyze.
    * @param branchName The branch to analyze.
    */
-  void start(Long projectId, String branchName);
+  void start(long projectId, String branchName);
 }

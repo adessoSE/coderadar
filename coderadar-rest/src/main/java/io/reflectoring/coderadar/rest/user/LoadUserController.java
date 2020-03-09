@@ -20,7 +20,7 @@ public class LoadUserController {
   }
 
   @GetMapping(path = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<LoadUserResponse> loadUser(@PathVariable Long userId) {
+  public ResponseEntity<LoadUserResponse> loadUser(@PathVariable long userId) {
     return new ResponseEntity<>(
         new LoadUserResponse(userId, loadUserUseCase.loadUser(userId).getUsername()),
         HttpStatus.OK);

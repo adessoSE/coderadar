@@ -7,5 +7,5 @@ public interface DeleteProjectUseCase {
    *
    * @param id The id of the project.
    */
-  void delete(Long id);
+  void delete(long id);
 }

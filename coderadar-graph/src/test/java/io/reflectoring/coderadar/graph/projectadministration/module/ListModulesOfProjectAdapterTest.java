@@ -29,7 +29,7 @@ class ListModulesOfProjectAdapterTest {
   @Test
   @DisplayName("Should return empty list when no modules in the project exist")
   void shouldReturnEmptyListWhenNoModulesInTheProjectExist() {
-    when(moduleRepository.findModulesInProject(1L)).thenReturn(new LinkedList<>());
+    when(moduleRepository.findModulesInProjectSortedDesc(1L)).thenReturn(new LinkedList<>());
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);
     verify(moduleRepository, times(1)).findModulesInProjectSortedDesc(1L);

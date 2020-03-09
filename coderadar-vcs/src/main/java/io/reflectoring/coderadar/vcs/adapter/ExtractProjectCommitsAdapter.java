@@ -95,7 +95,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
               });
       revWalk.reset();
     }
-    revCommits.sort(Comparator.comparingLong(RevCommit::getCommitTime));
     return revCommits;
   }
 
@@ -112,12 +111,12 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    * @param git The git API object.
    * @param firstCommit The firstCommit of the repository.
    * @param files A HashMap containing files already created for the project.
-   * @param seqeunceId One element array with the current file sequence number.
    * @throws IOException Thrown if the commit tree cannot be walked.
+   * @return The current sequence id.
    */
-  private void setFirstCommitFiles(
-      Git git, Commit firstCommit, HashMap<String, List<File>> files, long[] seqeunceId)
+  private long setFirstCommitFiles(Git git, Commit firstCommit, HashMap<String, List<File>> files)
       throws IOException {
+    long sequenceId = 0;
     RevCommit gitCommit = findCommit(git, firstCommit.getName());
     try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
       assert gitCommit != null;
@@ -125,7 +124,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       treeWalk.addTree(gitCommit.getTree());
       while (treeWalk.next()) {
         File file = new File();
-        file.setSequenceId(seqeunceId[0]++);
+        file.setSequenceId(sequenceId++);
         file.setPath(treeWalk.getPathString());
         file.setObjectHash(treeWalk.getObjectId(0).getName());
 
@@ -140,6 +139,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         files.put(file.getPath(), fileList);
       }
     }
+    return sequenceId;
   }
 
   /**
@@ -152,8 +152,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     int commitsSize = commits.size();
     HashMap<String, List<File>> files = new HashMap<>((int) (commitsSize / 0.75) + 1);
     commits.get(0).setTouchedFiles(new ArrayList<>(commitsSize));
-    long[] seqeunceId = new long[1];
-    setFirstCommitFiles(git, commits.get(0), files, seqeunceId);
+    long sequenceId = setFirstCommitFiles(git, commits.get(0), files);
     DiffFormatter diffFormatter = new DiffFormatter(DisabledOutputStream.INSTANCE);
     diffFormatter.setRepository(git.getRepository());
     diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
@@ -174,7 +173,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         }
         commits.get(i).setTouchedFiles(new ArrayList<>(diffs.size()));
         for (DiffEntry diff : diffs) {
-          processDiffEntry(diff, files, commits.get(i), seqeunceId);
+          processDiffEntry(diff, files, commits.get(i), sequenceId++);
         }
       } else {
         commits.get(i).setTouchedFiles(Collections.emptyList());
@@ -187,16 +186,16 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    *
    * @param diff The diff entry to process.
    * @param files All of the files walked so far.
-   * @param seqeunceId One element array with the current file sequence number.
+   * @param sequenceId One element array with the current file sequence number.
    * @param commit The current commit.
    */
   private void processDiffEntry(
-      DiffEntry diff, HashMap<String, List<File>> files, Commit commit, long[] seqeunceId) {
+      DiffEntry diff, HashMap<String, List<File>> files, Commit commit, long sequenceId) {
     ChangeType changeType = ChangeTypeMapper.jgitToCoderadar(diff.getChangeType());
     if (changeType == ChangeType.UNCHANGED) {
       return;
     }
-    List<File> filesWithPath = computeFilesToSave(diff, files, seqeunceId);
+    List<File> filesWithPath = computeFilesToSave(diff, files, sequenceId);
     for (File file : filesWithPath) {
       FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
       fileToCommitRelationship.setOldPath(diff.getOldPath());
@@ -212,16 +211,16 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    *
    * @param diff The current diff entry.
    * @param files The list of walked files.
-   * @param seqeunceId One element array with the current file sequence number.
+   * @param sequenceId One element array with the current file sequence number.
    * @return List of files to save.
    */
   private List<File> computeFilesToSave(
-      DiffEntry diff, HashMap<String, List<File>> files, long[] seqeunceId) {
+      DiffEntry diff, HashMap<String, List<File>> files, long sequenceId) {
     String path = getFilepathFromDiffEntry(diff);
     List<File> existingFilesWithPath = files.get(path);
     List<File> filesToSave;
     File file = new File();
-    file.setSequenceId(seqeunceId[0]++);
+    file.setSequenceId(sequenceId);
     file.setObjectHash(diff.getNewId().name());
     file.setPath(path);
     if (existingFilesWithPath == null) {

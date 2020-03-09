@@ -64,7 +64,7 @@ public class AnalyzingService
     this.getAvailableMetricsInProjectPort = getAvailableMetricsInProjectPort;
   }
 
-  public void start(Long projectId, String branchName) {
+  public void start(long projectId, String branchName) {
     Project project = getProjectPort.get(projectId);
 
     List<FilePattern> filePatterns = listFilePatternsOfProjectPort.listFilePatterns(projectId);
@@ -98,13 +98,13 @@ public class AnalyzingService
       List<AnalyzerConfiguration> analyzerConfigurations) {
     processProjectService.executeTask(
         () -> {
-          Long projectId = project.getId();
-          activeAnalysis.put(project.getId(), true);
+          long projectId = project.getId();
+          activeAnalysis.put(projectId, true);
           List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
               getAnalyzersForProject(analyzerConfigurations);
           List<Commit> commits =
               getCommitsInProjectPort.getNonAnalyzedSortedByTimestampAscWithNoParents(
-                  project.getId(), filePatterns, branchName);
+                  projectId, filePatterns, branchName);
           List<Long> commitIds = new ArrayList<>();
           Map<Long, List<MetricValue>> fileMetrics =
               saveMetricPort.getMetricsForFiles(projectId, branchName);
@@ -124,7 +124,7 @@ public class AnalyzingService
           if (!getAvailableMetricsInProjectPort.get(projectId).isEmpty()) {
             saveCommitPort.setCommitsWithIDsAsAnalyzed(commitIds);
           }
-          activeAnalysis.remove(project.getId());
+          activeAnalysis.remove(projectId);
           logger.info("Analysis complete for project {}", project.getName());
         },
         project.getId());
@@ -206,11 +206,11 @@ public class AnalyzingService
     return analyzers;
   }
 
-  public void stop(Long projectId) {
+  public void stop(long projectId) {
     activeAnalysis.put(projectId, false);
   }
 
-  public Boolean getStatus(Long projectId) {
+  public Boolean getStatus(long projectId) {
     return activeAnalysis.get(projectId) != null;
   }
 }

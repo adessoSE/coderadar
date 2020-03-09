@@ -30,8 +30,8 @@ public class UpdateAnalyzerConfigurationController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Object> updateAnalyzerConfiguration(
       @RequestBody @Validated UpdateAnalyzerConfigurationCommand command,
-      @PathVariable(name = "analyzerConfigurationId") Long analyzerConfigurationId,
-      @PathVariable(name = "projectId") Long projectId) {
+      @PathVariable(name = "analyzerConfigurationId") long analyzerConfigurationId,
+      @PathVariable(name = "projectId") long projectId) {
     try {
       updateAnalyzerConfigurationUseCase.update(command, analyzerConfigurationId, projectId);
       return new ResponseEntity<>(HttpStatus.OK);

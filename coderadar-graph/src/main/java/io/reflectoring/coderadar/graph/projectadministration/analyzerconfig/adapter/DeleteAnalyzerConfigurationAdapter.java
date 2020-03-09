@@ -15,7 +15,7 @@ public class DeleteAnalyzerConfigurationAdapter implements DeleteAnalyzerConfigu
   }
 
   @Override
-  public void deleteAnalyzerConfiguration(Long id) {
+  public void deleteAnalyzerConfiguration(long id) {
     if (!analyzerConfigurationRepository.existsById(id)) {
       throw new AnalyzerConfigurationNotFoundException(id);
     }

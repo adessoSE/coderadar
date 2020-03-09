@@ -28,7 +28,7 @@ public class GetDeltaTreeForTwoCommitsController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<DeltaTree> getMetricValuesForTwoCommits(
       @Validated @RequestBody GetDeltaTreeForTwoCommitsCommand command,
-      @PathVariable("projectId") Long projectId) {
+      @PathVariable("projectId") long projectId) {
     return new ResponseEntity<>(
         getDeltaTreeForTwoCommitsUseCase.get(command, projectId), HttpStatus.OK);
   }

@@ -17,7 +17,7 @@ public class ListModulesOfProjectAdapter implements ListModulesOfProjectPort {
   }
 
   @Override
-  public List<Module> listModules(Long projectId) {
+  public List<Module> listModules(long projectId) {
     return moduleMapper.mapNodeEntities(moduleRepository.findModulesInProjectSortedDesc(projectId));
   }
 }

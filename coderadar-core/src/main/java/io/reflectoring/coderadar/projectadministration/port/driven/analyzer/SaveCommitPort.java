@@ -14,7 +14,7 @@ public interface SaveCommitPort {
    * @param branches All of the branches in the project
    * @param projectId The id of the project.
    */
-  void saveCommits(List<Commit> commits, List<Branch> branches, Long projectId);
+  void saveCommits(List<Commit> commits, List<Branch> branches, long projectId);
 
   /**
    * Marks the commits with the given ids as analyzed.

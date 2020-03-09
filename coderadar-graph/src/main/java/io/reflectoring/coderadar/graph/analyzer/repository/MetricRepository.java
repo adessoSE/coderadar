@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.graph.analyzer.repository;
 
+import io.reflectoring.coderadar.graph.analyzer.domain.FileIdAndMetricQueryResult;
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -20,7 +20,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
    * @return All of the metric values in a project.
    */
   @Query("MATCH (p)-[:CONTAINS*]->()-[:MEASURED_BY]->(m) WHERE ID(p) = {0} RETURN m")
-  List<MetricValueEntity> findByProjectId(@NonNull Long projectId);
+  List<MetricValueEntity> findByProjectId(long projectId);
 
   /**
    * Creates [:MEASURED_BY] relationships between metric values and files and [:VALID_FOR]
@@ -36,7 +36,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
           + "MATCH (f) WHERE ID(f) = x.fileId "
           + "MATCH (c) WHERE ID(c) = x.commitId "
           + "CREATE (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c)")
-  void createFileAndCommitRelationships(List<HashMap<String, Object>> commitAndFileRels);
+  void createFileAndCommitRelationships(@NonNull List<HashMap<String, Object>> commitAndFileRels);
 
   /**
    * Uses APOC.
@@ -56,5 +56,6 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
           + "MATCH (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c) WHERE "
           + "NOT(f IN deletes OR f IN renames) AND m.value <> 0 WITH ID(f) as id, m.name as name, head(collect(m)) as metric "
           + "RETURN  id, collect(metric) as metrics")
-  List<LinkedHashMap<Object, Object>> getLastMetricsForFiles(Long projectId, String branchName);
+  List<FileIdAndMetricQueryResult> getLastMetricsForFiles(
+      long projectId, @NonNull String branchName);
 }

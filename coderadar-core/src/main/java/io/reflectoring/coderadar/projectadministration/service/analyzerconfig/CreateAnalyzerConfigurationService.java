@@ -32,7 +32,7 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
   }
 
   @Override
-  public Long create(CreateAnalyzerConfigurationCommand command, Long projectId) {
+  public Long create(CreateAnalyzerConfigurationCommand command, long projectId) {
     List<String> analyzers = listAnalyzerService.listAvailableAnalyzers();
     if (analyzers.contains(command.getAnalyzerName())) {
       if (listAnalyzerConfigurationsFromProjectService.get(projectId).stream()

@@ -28,7 +28,7 @@ public class GetMetricValuesOfCommitController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<MetricValueForCommit>> getMetricValues(
       @Validated @RequestBody GetMetricsForCommitCommand command,
-      @PathVariable("projectId") Long projectId) {
+      @PathVariable("projectId") long projectId) {
     return new ResponseEntity<>(
         getMetricValuesOfCommitUseCase.get(command, projectId), HttpStatus.OK);
   }

@@ -24,7 +24,7 @@ public class CreateFilePatternAdapter implements CreateFilePatternPort {
   }
 
   @Override
-  public Long createFilePattern(FilePattern filePattern, Long projectId) {
+  public Long createFilePattern(FilePattern filePattern, long projectId) {
     FilePatternEntity filePatternEntity = filePatternMapper.mapDomainObject(filePattern);
     ProjectEntity projectEntity =
         projectRepository

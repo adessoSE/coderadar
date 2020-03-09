@@ -14,7 +14,7 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
   }
 
   @Override
-  public void delete(Long projectId) {
+  public void delete(long projectId) {
     projectRepository.setBeingDeleted(projectId, true);
 
     /*

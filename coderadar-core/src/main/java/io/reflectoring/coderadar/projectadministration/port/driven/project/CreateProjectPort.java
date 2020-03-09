@@ -10,5 +10,5 @@ public interface CreateProjectPort {
    * @param project The project to save.
    * @return The DB id of the project.
    */
-  Long createProject(Project project);
+  long createProject(Project project);
 }

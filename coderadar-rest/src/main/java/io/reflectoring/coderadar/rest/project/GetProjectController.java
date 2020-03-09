@@ -21,7 +21,7 @@ public class GetProjectController {
   }
 
   @GetMapping(path = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<GetProjectResponse> getProject(@PathVariable Long projectId) {
+  public ResponseEntity<GetProjectResponse> getProject(@PathVariable long projectId) {
     Project project = getProjectUseCase.get(projectId);
     GetProjectResponse getProjectResponse = new GetProjectResponse();
     getProjectResponse.setName(project.getName());

@@ -13,7 +13,7 @@ public interface GetCommitsInProjectPort {
    * @param branch The branch name.
    * @return A list of commit domain objects with no relationships.
    */
-  List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(Long projectId, String branch);
+  List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(long projectId, String branch);
 
   /**
    * Returns all not yet analyzed commits in this project, that match the supplied file patterns and
@@ -24,5 +24,5 @@ public interface GetCommitsInProjectPort {
    * @return A list of commits with initialized FileToCommitRelationShips and no parents.
    */
   List<Commit> getNonAnalyzedSortedByTimestampAscWithNoParents(
-      Long projectId, List<FilePattern> filePatterns, String branch);
+      long projectId, List<FilePattern> filePatterns, String branch);
 }

@@ -8,5 +8,5 @@ public interface GetAvailableMetricsInProjectPort {
    * @param projectId The project id.
    * @return All of the available metrics in the current project.
    */
-  List<String> get(Long projectId);
+  List<String> get(long projectId);
 }

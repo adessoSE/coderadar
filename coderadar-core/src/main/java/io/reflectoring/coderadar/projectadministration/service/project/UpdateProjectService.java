@@ -21,8 +21,8 @@ import io.reflectoring.coderadar.projectadministration.service.ProcessProjectSer
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
-import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
 import java.io.File;
 import java.util.List;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final GetProjectPort getProjectPort;
   private final UpdateProjectPort updateProjectPort;
 
-  private final UpdateRepositoryUseCase updateRepositoryUseCase;
+  private final UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
   private final ProcessProjectService processProjectService;
   private final ExtractProjectCommitsUseCase extractProjectCommitsUseCase;
@@ -50,7 +50,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   public UpdateProjectService(
       GetProjectPort getProjectPort,
       UpdateProjectPort updateProjectPort,
-      UpdateRepositoryUseCase updateRepositoryUseCase,
+      UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase,
       CoderadarConfigurationProperties coderadarConfigurationProperties,
       ProcessProjectService processProjectService,
       ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
@@ -61,7 +61,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       GetAvailableBranchesPort getAvailableBranchesPort) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
-    this.updateRepositoryUseCase = updateRepositoryUseCase;
+    this.updateLocalRepositoryUseCase = updateLocalRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.processProjectService = processProjectService;
     this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
@@ -73,7 +73,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   }
 
   @Override
-  public void update(UpdateProjectCommand command, Long projectId) {
+  public void update(UpdateProjectCommand command, long projectId) {
     Project project = getProjectPort.get(projectId);
 
     if (getProjectPort.existsByName(command.getName())
@@ -112,7 +112,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
                       coderadarConfigurationProperties.getWorkdir()
                           + "/projects/"
                           + project.getWorkdirName());
-              updateRepositoryUseCase.updateRepository(
+              updateLocalRepositoryUseCase.updateRepository(
                   new UpdateRepositoryCommand()
                       .setLocalDir(localDir)
                       .setPassword(project.getVcsPassword())

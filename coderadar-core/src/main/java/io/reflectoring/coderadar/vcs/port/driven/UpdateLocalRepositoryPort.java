@@ -5,7 +5,7 @@ import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
 import java.util.List;
 
-public interface UpdateRepositoryPort {
+public interface UpdateLocalRepositoryPort {
 
   /**
    * Updates a local git repository (git pull against remote)

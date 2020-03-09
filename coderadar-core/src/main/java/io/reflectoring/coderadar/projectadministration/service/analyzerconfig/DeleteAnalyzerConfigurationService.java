@@ -23,7 +23,7 @@ public class DeleteAnalyzerConfigurationService implements DeleteAnalyzerConfigu
   }
 
   @Override
-  public void deleteAnalyzerConfiguration(Long id, Long projectId) {
+  public void deleteAnalyzerConfiguration(long id, long projectId) {
     AnalyzerConfiguration analyzerConfiguration =
         getAnalyzerConfigurationPort.getAnalyzerConfiguration(id);
     port.deleteAnalyzerConfiguration(id);

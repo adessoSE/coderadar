@@ -32,7 +32,7 @@ public class CreateModuleAdapter implements CreateModulePort {
    * @return The id of the newly created module
    */
   @Override
-  public Long createModule(String modulePath, Long projectId) throws ModulePathInvalidException {
+  public Long createModule(String modulePath, long projectId) throws ModulePathInvalidException {
     ProjectEntity projectEntity =
         projectRepository
             .findByIdWithModules(projectId)
@@ -189,7 +189,8 @@ public class CreateModuleAdapter implements CreateModulePort {
     }
 
     // Check if a module with the same path already exists.
-    for (ModuleEntity entity : moduleRepository.findModulesInProject(projectEntity.getId())) {
+    for (ModuleEntity entity :
+        moduleRepository.findModulesInProjectSortedDesc(projectEntity.getId())) {
       if (entity.getPath().equals(path)) {
         throw new ModuleAlreadyExistsException(path);
       }

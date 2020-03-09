@@ -22,5 +22,5 @@ public interface RefreshTokenRepository extends Neo4jRepository<RefreshTokenEnti
    * @param userId The user id.
    */
   @Query("MATCH (r:RefreshTokenEntity)<-[:HAS]-(u) WHERE ID(u) = {0} DETACH DELETE r")
-  void deleteByUser(@NonNull Long userId);
+  void deleteByUser(long userId);
 }

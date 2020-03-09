@@ -10,7 +10,7 @@ public interface LoadUserPort {
    * @param id The id of the user.
    * @return The user with the id.
    */
-  User loadUser(Long id);
+  User loadUser(long id);
 
   /**
    * Retrieves a user given their username.
@@ -30,5 +30,5 @@ public interface LoadUserPort {
    * @param id The id of the user.
    * @return True if a user with this id exists, false otherwise.
    */
-  boolean existsById(Long id);
+  boolean existsById(long id);
 }

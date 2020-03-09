@@ -22,7 +22,8 @@ public class LoadUserAdapterTest {
   void shouldReturnUserWhenPassingValidArgument() {
     LoadUserAdapter loadUserAdapter = new LoadUserAdapter(userRepository);
 
-    Mockito.when(userRepository.findById(anyLong())).thenReturn(Optional.of(new UserEntity()));
+    Mockito.when(userRepository.findById(anyLong()))
+        .thenReturn(Optional.of(new UserEntity().setId(1L)));
     User returnedUser = loadUserAdapter.loadUser(1L);
     Assertions.assertThat(returnedUser).isNotNull();
   }

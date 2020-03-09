@@ -23,14 +23,14 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
 
   @Override
   public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(
-      Long projectId, String branch) {
+      long projectId, String branch) {
     return commitBaseDataMapper.mapNodeEntities(
         commitRepository.findByProjectIdAndBranchName(projectId, branch));
   }
 
   @Override
   public List<Commit> getNonAnalyzedSortedByTimestampAscWithNoParents(
-      Long projectId, List<FilePattern> filePatterns, String branch) {
+      long projectId, List<FilePattern> filePatterns, String branch) {
     // Map Ant-Patterns to RegEx
     List<String> includes = new ArrayList<>();
     List<String> excludes = new ArrayList<>();

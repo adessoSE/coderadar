@@ -10,5 +10,5 @@ public interface UpdateProjectUseCase {
    * @param command The updated project.
    * @param projectId The id of the project.
    */
-  void update(UpdateProjectCommand command, Long projectId) throws MalformedURLException;
+  void update(UpdateProjectCommand command, long projectId) throws MalformedURLException;
 }

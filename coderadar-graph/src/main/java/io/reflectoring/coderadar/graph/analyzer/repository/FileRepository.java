@@ -15,7 +15,7 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    */
   @Query("MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} RETURN f")
   @NonNull
-  List<FileEntity> findAllinProject(@NonNull Long projectId);
+  List<FileEntity> findAllinProject(long projectId);
 
   /**
    * Creates [:RENAMED_FROM] relationships between files.
@@ -36,5 +36,5 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
    */
   @Query(
       "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND f.sequenceId = {1} RETURN f LIMIT 1 ")
-  FileEntity getFileInProjectBySequenceId(@NonNull Long projectId, @NonNull Long sequenceId);
+  FileEntity getFileInProjectBySequenceId(long projectId, @NonNull Long sequenceId);
 }

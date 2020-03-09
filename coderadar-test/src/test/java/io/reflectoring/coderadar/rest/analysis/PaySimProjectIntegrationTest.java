@@ -110,7 +110,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         .andExpect(MockMvcResultMatchers.status().isCreated())
         .andReturn();
 
-    List<ModuleEntity> modules = moduleRepository.findModulesInProject(projectId);
+    List<ModuleEntity> modules = moduleRepository.findModulesInProjectSortedDesc(projectId);
     Assertions.assertEquals("src/paysim/", modules.get(0).getPath());
 
     // Number of commits correct?
@@ -190,7 +190,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     Assertions.assertEquals(0, metricValues.size());
 
     // Module still there?
-    List<ModuleEntity> modules = moduleRepository.findModulesInProject(projectId);
+    List<ModuleEntity> modules = moduleRepository.findModulesInProjectSortedDesc(projectId);
     Assertions.assertEquals("src/paysim/", modules.get(0).getPath());
 
     session.clear();

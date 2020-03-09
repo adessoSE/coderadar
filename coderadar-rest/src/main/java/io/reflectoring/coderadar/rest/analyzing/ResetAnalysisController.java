@@ -18,7 +18,7 @@ public class ResetAnalysisController {
   }
 
   @PostMapping(path = "projects/{projectId}/analyze/reset")
-  public ResponseEntity<HttpStatus> resetAnalysis(@PathVariable("projectId") Long projectId) {
+  public ResponseEntity<HttpStatus> resetAnalysis(@PathVariable("projectId") long projectId) {
     resetAnalysisUseCase.resetAnalysis(projectId);
     return new ResponseEntity<>(HttpStatus.OK);
   }

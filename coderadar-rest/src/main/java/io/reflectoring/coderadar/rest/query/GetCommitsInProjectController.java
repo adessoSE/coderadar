@@ -24,7 +24,7 @@ public class GetCommitsInProjectController {
       path = "/projects/{projectId}/{branchName}/commits",
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<Commit>> listCommits(
-      @PathVariable("projectId") Long projectId, @PathVariable("branchName") String branchName) {
+      @PathVariable("projectId") long projectId, @PathVariable("branchName") String branchName) {
     return new ResponseEntity<>(
         getCommitsInProjectUseCase.get(projectId, branchName), HttpStatus.OK);
   }

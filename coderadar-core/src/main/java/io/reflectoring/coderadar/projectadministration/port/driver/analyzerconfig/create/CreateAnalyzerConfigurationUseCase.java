@@ -9,5 +9,5 @@ public interface CreateAnalyzerConfigurationUseCase {
    * @param projectId The project id.
    * @return The id of the new configuration.
    */
-  Long create(CreateAnalyzerConfigurationCommand command, Long projectId);
+  Long create(CreateAnalyzerConfigurationCommand command, long projectId);
 }

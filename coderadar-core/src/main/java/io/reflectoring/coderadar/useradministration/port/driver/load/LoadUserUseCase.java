@@ -10,5 +10,5 @@ public interface LoadUserUseCase {
    * @param id The id of the user.
    * @return The user with the id.
    */
-  User loadUser(Long id);
+  User loadUser(long id);
 }

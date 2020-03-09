@@ -19,7 +19,7 @@ public class LoadUserAdapter implements LoadUserPort {
   }
 
   @Override
-  public User loadUser(Long id) {
+  public User loadUser(long id) {
     return userMapper.mapNodeEntity(
         userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id)));
   }
@@ -40,7 +40,7 @@ public class LoadUserAdapter implements LoadUserPort {
   }
 
   @Override
-  public boolean existsById(Long id) {
+  public boolean existsById(long id) {
     return userRepository.existsById(id);
   }
 }

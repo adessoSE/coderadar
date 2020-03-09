@@ -10,5 +10,5 @@ public interface CreateFilePatternPort {
    * @param projectId The id of the project.
    * @return The DB id of the file pattern.
    */
-  Long createFilePattern(FilePattern filePattern, Long projectId);
+  Long createFilePattern(FilePattern filePattern, long projectId);
 }

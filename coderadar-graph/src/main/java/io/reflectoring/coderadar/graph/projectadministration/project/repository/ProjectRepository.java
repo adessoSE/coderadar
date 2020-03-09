@@ -21,7 +21,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-()-[:LOCATED_IN]->(fi) "
           + "WHERE ID(p) = {0} WITH fi LIMIT 10000 DETACH DELETE fi RETURN COUNT(fi)")
-  long deleteProjectFindings(@NonNull Long projectId);
+  long deleteProjectFindings(long projectId);
 
   /**
    * Deletes a maximum of 10000 metrics in a project. This value can be adjusted as required by your
@@ -33,7 +33,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv) WHERE ID(p) = {0} "
           + "WITH mv LIMIT 10000 DETACH DELETE mv RETURN COUNT(mv)")
-  long deleteProjectMetrics(@NonNull Long projectId);
+  long deleteProjectMetrics(long projectId);
 
   /**
    * Deletes a maximum of 10000 metrics in a project. This value can be adjusted as required by your
@@ -44,7 +44,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    */
   @Query(
       "MATCH (p)-[:CONTAINS*]->(f) WHERE ID(p) = {0} WITH f LIMIT 10000 DETACH DELETE f RETURN COUNT(f)")
-  long deleteProjectFilesAndModules(@NonNull Long projectId);
+  long deleteProjectFilesAndModules(long projectId);
 
   /**
    * Deletes all of the commits in a project.
@@ -52,7 +52,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param projectId The project id.
    */
   @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} DETACH DELETE c")
-  void deleteProjectCommits(@NonNull Long projectId);
+  void deleteProjectCommits(long projectId);
 
   /**
    * Deletes all of the FilePatterns and AnalyzerConfigurationEntities in a project.
@@ -60,7 +60,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param projectId The project id.
    */
   @Query("MATCH (p)-[:HAS]->(a) WHERE ID(p) = {0} DETACH DELETE a")
-  void deleteProjectConfiguration(@NonNull Long projectId);
+  void deleteProjectConfiguration(long projectId);
 
   /**
    * Deletes all of the branches in a project. Must be called before the commits are deleted.
@@ -68,7 +68,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param projectId The project id.
    */
   @Query("MATCH (p)-[:HAS_BRANCH]->(b) WHERE ID(p) = {0} DETACH DELETE b")
-  void deleteProjectBranches(@NonNull Long projectId);
+  void deleteProjectBranches(long projectId);
 
   /** @return All projects that are not currently being deleted. */
   @Query("MATCH (p:ProjectEntity) WHERE p.isBeingDeleted = FALSE RETURN p")
@@ -89,7 +89,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    */
   @Query("MATCH (p) WHERE ID(p) = {0} AND p.isBeingDeleted = FALSE RETURN p")
   @NonNull
-  Optional<ProjectEntity> findById(@NonNull Long id);
+  Optional<ProjectEntity> findById(long id);
 
   /**
    * @param id The project id.
@@ -102,7 +102,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
           + "CALL apoc.path.subgraphAll(p, {relationshipFilter:'CONTAINS>', labelFilter: '+ModuleEntity'}) "
           + "YIELD nodes, relationships RETURN p, nodes, relationships")
   @NonNull
-  Optional<ProjectEntity> findByIdWithModules(@NonNull Long id);
+  Optional<ProjectEntity> findByIdWithModules(long id);
 
   /**
    * @param id The project id.
@@ -110,7 +110,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    */
   @Query("MATCH (p) WHERE ID(p) = {0} RETURN p.isBeingProcessed")
   @NonNull
-  Boolean isBeingProcessed(@NonNull Long id);
+  Boolean isBeingProcessed(long id);
 
   /**
    * Sets the isBeingProcessed flag on a project.
@@ -119,14 +119,14 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param value The status.
    */
   @Query("MATCH (p) WHERE ID(p) = {0} SET p.isBeingProcessed = {1}")
-  void setBeingProcessed(@NonNull Long id, @NonNull Boolean value);
+  void setBeingProcessed(long id, @NonNull Boolean value);
 
   /**
    * @param id The project id.
    * @return True if a project with the given id exists, false otherwise.
    */
   @Query("MATCH (p) WHERE ID(p) = {0} RETURN COUNT(*) > 0")
-  boolean existsById(@NonNull Long id);
+  boolean existsById(long id);
 
   /**
    * @param name The name of the project.
@@ -143,7 +143,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param status The status.
    */
   @Query("MATCH (p) WHERE ID(p) = {0} SET p.isBeingDeleted = {1}")
-  void setBeingDeleted(@NonNull Long id, @NonNull Boolean status);
+  void setBeingDeleted(long id, @NonNull Boolean status);
 
   /**
    * Attaches existing file entities to a project. (Creates [:CONTAINS] relationships with every
@@ -156,7 +156,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
       "MATCH (p) WHERE ID(p) = {0} "
           + "MATCH (f) WHERE ID(f) IN {1} "
           + "CREATE (p)-[r:CONTAINS]->(f)")
-  void attachFilesWithIds(Long projectId, List<Long> fileIds);
+  void attachFilesWithIds(long projectId, @NonNull List<Long> fileIds);
 
   /**
    * Attaches existing commit entities to a project. (Creates [:CONTAINS_COMMIT] relationships with
@@ -169,5 +169,5 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
       "MATCH (p) WHERE ID(p) = {0} "
           + "MATCH (c) WHERE ID(c) IN {1} "
           + "CREATE (p)-[r:CONTAINS_COMMIT]->(c)")
-  void attachCommitsWithIds(Long projectId, List<Long> commitIds);
+  void attachCommitsWithIds(long projectId, @NonNull List<Long> commitIds);
 }

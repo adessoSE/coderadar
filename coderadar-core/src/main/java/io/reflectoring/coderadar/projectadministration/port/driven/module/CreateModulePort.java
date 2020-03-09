@@ -14,6 +14,6 @@ public interface CreateModulePort {
    * @throws ModuleAlreadyExistsException Thrown if a module with the given path already exists.
    * @throws ModulePathInvalidException Thrown if the supplied path is invalid.
    */
-  Long createModule(String modulePath, Long projectId)
+  Long createModule(String modulePath, long projectId)
       throws ModuleAlreadyExistsException, ModulePathInvalidException;
 }

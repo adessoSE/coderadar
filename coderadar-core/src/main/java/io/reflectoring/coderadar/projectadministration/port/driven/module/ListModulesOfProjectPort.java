@@ -11,5 +11,5 @@ public interface ListModulesOfProjectPort {
    * @param projectId The id of the project.
    * @return All modules in the project.
    */
-  List<Module> listModules(Long projectId);
+  List<Module> listModules(long projectId);
 }

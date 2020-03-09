@@ -4,5 +4,5 @@ import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import java.util.List;
 
 public interface GetCommitsInProjectUseCase {
-  List<Commit> get(Long projectId, String branch);
+  List<Commit> get(long projectId, String branch);
 }

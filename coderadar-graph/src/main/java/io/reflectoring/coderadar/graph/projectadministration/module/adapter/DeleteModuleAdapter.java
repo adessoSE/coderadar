@@ -20,8 +20,11 @@ public class DeleteModuleAdapter implements DeleteModulePort {
   }
 
   @Override
-  public void delete(Long id, Long projectId) {
-    delete(moduleRepository.findById(id, 1).orElseThrow(() -> new ModuleNotFoundException(id)));
+  public void delete(long moduleId, long projectId) {
+    delete(
+        moduleRepository
+            .findById(moduleId, 1)
+            .orElseThrow(() -> new ModuleNotFoundException(moduleId)));
   }
 
   /**

@@ -21,7 +21,7 @@ public class ListFilePatternsOfProjectService implements ListFilePatternsOfProje
   }
 
   @Override
-  public List<FilePattern> listFilePatterns(Long projectId) {
+  public List<FilePattern> listFilePatterns(long projectId) {
     if (getProjectPort.existsById(projectId)) {
       return port.listFilePatterns(projectId);
     } else {

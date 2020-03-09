@@ -37,7 +37,7 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
   }
 
   @Override
-  public void saveCommits(List<Commit> commits, List<Branch> branches, Long projectId) {
+  public void saveCommits(List<Commit> commits, List<Branch> branches, long projectId) {
     if (!commits.isEmpty()) {
       IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>(commits.size() * 2);
       List<CommitEntity> commitEntities = mapCommitTree(commits, walkedFiles);
@@ -49,7 +49,7 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
     }
   }
 
-  private void setBranchPointers(Long projectId, List<Branch> branches) {
+  private void setBranchPointers(long projectId, List<Branch> branches) {
     for (Branch branch : branches) {
       if (!branchRepository.branchExistsInProject(projectId, branch.getName())) {
         branchRepository.setBranchOnCommit(projectId, branch.getCommitHash(), branch.getName());
@@ -94,7 +94,7 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
    * @param fileBulkSaveChunk The amount of files to save at once.
    */
   private void attachCommitsAndFilesToProject(
-      Long projectId,
+      long projectId,
       List<CommitEntity> commitEntities,
       List<FileEntity> fileEntities,
       int commitBulkSaveChunk,

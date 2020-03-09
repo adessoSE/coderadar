@@ -11,5 +11,5 @@ public interface ListFilePatternsOfProjectUseCase {
    * @param projectId The project id.
    * @return All file patterns in the project.
    */
-  List<FilePattern> listFilePatterns(Long projectId);
+  List<FilePattern> listFilePatterns(long projectId);
 }

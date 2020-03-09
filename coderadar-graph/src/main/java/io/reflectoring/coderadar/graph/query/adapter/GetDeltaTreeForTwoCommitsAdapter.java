@@ -30,7 +30,7 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
   }
 
   @Override
-  public DeltaTree get(GetDeltaTreeForTwoCommitsCommand command, Long projectId) {
+  public DeltaTree get(GetDeltaTreeForTwoCommitsCommand command, long projectId) {
     ProjectEntity projectEntity =
         projectRepository
             .findByIdWithModules(projectId)

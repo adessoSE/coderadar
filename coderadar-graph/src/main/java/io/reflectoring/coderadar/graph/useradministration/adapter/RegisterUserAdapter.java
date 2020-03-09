@@ -17,7 +17,7 @@ public class RegisterUserAdapter implements RegisterUserPort {
   }
 
   @Override
-  public Long register(User user) {
+  public long register(User user) {
     return userRepository.save(userMapper.mapDomainObject(user)).getId();
   }
 }

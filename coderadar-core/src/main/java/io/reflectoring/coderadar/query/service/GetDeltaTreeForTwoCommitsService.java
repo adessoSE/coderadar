@@ -17,7 +17,7 @@ public class GetDeltaTreeForTwoCommitsService implements GetDeltaTreeForTwoCommi
   }
 
   @Override
-  public DeltaTree get(GetDeltaTreeForTwoCommitsCommand command, Long projectId) {
+  public DeltaTree get(GetDeltaTreeForTwoCommitsCommand command, long projectId) {
     return getDeltaTreeForTwoCommitsPort.get(command, projectId);
   }
 }

@@ -15,7 +15,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @param projectId The project id.
    */
   @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} SET c.analyzed = false")
-  void resetAnalyzedStatus(@NonNull Long projectId);
+  void resetAnalyzedStatus(long projectId);
 
   /**
    * Returns all commits in a project with FileToCommitRelationships and parent relationships where
@@ -34,10 +34,10 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "AND none(x IN {3} WHERE f.path =~ x) RETURN c, r, f")
   @NonNull
   List<CommitEntity> findByProjectIdNonAnalyzedWithFileRelationships(
-      @NonNull Long projectId,
+      long projectId,
       @NonNull String branchName,
       @NonNull List<String> includes,
-      List<String> excludes);
+      @NonNull List<String> excludes);
 
   /**
    * NOTE: uses APOC
@@ -50,7 +50,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
       "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node "
           + "RETURN node ORDER BY node.timestamp DESC")
-  List<CommitEntity> findByProjectIdAndBranchName(Long projectId, String branch);
+  List<CommitEntity> findByProjectIdAndBranchName(long projectId, String branch);
 
   /**
    * Returns all commits in a project. (FileToCommitRelationships and parents are not initialized).
@@ -60,7 +60,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    */
   @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} RETURN c")
   @NonNull
-  List<CommitEntity> findByProjectId(@NonNull Long projectId);
+  List<CommitEntity> findByProjectId(long projectId);
 
   /**
    * Sets all of the commits with the given id to analyzed.

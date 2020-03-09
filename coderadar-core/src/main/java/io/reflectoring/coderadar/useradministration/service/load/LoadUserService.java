@@ -16,7 +16,7 @@ public class LoadUserService implements LoadUserUseCase {
   }
 
   @Override
-  public User loadUser(Long id) {
+  public User loadUser(long id) {
     if (port.existsById(id)) {
       return port.loadUser(id);
     } else {

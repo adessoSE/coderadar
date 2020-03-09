@@ -8,7 +8,6 @@ public class BranchMapper implements Mapper<Branch, BranchEntity> {
   @Override
   public Branch mapNodeEntity(BranchEntity nodeEntity) {
     Branch branch = new Branch();
-    branch.setId(nodeEntity.getId());
     branch.setName(nodeEntity.getName());
     branch.setCommitHash(nodeEntity.getCommitHash());
     return branch;

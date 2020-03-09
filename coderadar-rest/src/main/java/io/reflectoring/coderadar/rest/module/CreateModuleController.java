@@ -30,7 +30,7 @@ public class CreateModuleController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Object> createModule(
       @RequestBody @Validated CreateModuleCommand command,
-      @PathVariable(name = "projectId") Long projectId) {
+      @PathVariable(name = "projectId") long projectId) {
     try {
       return new ResponseEntity<>(
           new IdResponse(createModuleUseCase.createModule(command, projectId)), HttpStatus.CREATED);

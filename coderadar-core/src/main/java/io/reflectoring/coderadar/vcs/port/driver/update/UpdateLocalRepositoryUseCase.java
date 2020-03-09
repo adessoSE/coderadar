@@ -4,7 +4,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import java.util.List;
 
-public interface UpdateRepositoryUseCase {
+public interface UpdateLocalRepositoryUseCase {
 
   /**
    * Updates a local git repository (git pull against remote)

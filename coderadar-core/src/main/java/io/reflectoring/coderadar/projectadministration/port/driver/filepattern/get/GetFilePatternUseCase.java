@@ -10,5 +10,5 @@ public interface GetFilePatternUseCase {
    * @param filePatternId The id of the pattern
    * @return The FilePattern
    */
-  FilePattern get(Long filePatternId);
+  FilePattern get(long filePatternId);
 }

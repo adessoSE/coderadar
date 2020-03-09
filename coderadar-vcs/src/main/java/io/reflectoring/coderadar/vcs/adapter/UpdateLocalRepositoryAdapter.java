@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.vcs.adapter;
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.vcs.UnableToCloneRepositoryException;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
-import io.reflectoring.coderadar.vcs.port.driven.UpdateRepositoryPort;
+import io.reflectoring.coderadar.vcs.port.driven.UpdateLocalRepositoryPort;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
 import java.io.IOException;
@@ -25,12 +25,12 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
+public class UpdateLocalRepositoryAdapter implements UpdateLocalRepositoryPort {
 
   private final CloneRepositoryAdapter cloneRepositoryAdapter;
   private final GetAvailableBranchesAdapter getAvailableBranchesAdapter;
 
-  public UpdateRepositoryAdapter(
+  public UpdateLocalRepositoryAdapter(
       CloneRepositoryAdapter cloneRepositoryAdapter,
       GetAvailableBranchesAdapter getAvailableBranchesAdapter) {
     this.cloneRepositoryAdapter = cloneRepositoryAdapter;

@@ -19,8 +19,8 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.Proje
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
-import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
 import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScanProjectScheduler {
 
-  private final UpdateRepositoryUseCase updateRepositoryUseCase;
+  private final UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
   private final ExtractProjectCommitsUseCase extractProjectCommitsUseCase;
   private final ListProjectsPort listProjectsPort;
@@ -56,7 +56,7 @@ public class ScanProjectScheduler {
   private Map<Long, ScheduledFuture<?>> tasks = new HashMap<>();
 
   public ScanProjectScheduler(
-      UpdateRepositoryUseCase updateRepositoryUseCase,
+      UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase,
       CoderadarConfigurationProperties coderadarConfigurationProperties,
       ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
       ListProjectsPort listProjectsPort,
@@ -68,7 +68,7 @@ public class ScanProjectScheduler {
       AddCommitsPort addCommitsPort,
       DeleteModulePort deleteModulePort,
       TaskExecutor taskExecutor) {
-    this.updateRepositoryUseCase = updateRepositoryUseCase;
+    this.updateLocalRepositoryUseCase = updateLocalRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
     this.listProjectsPort = listProjectsPort;
@@ -108,7 +108,7 @@ public class ScanProjectScheduler {
    *
    * @param projectId the project id
    */
-  private void scheduleUpdateTask(Long projectId) {
+  private void scheduleUpdateTask(long projectId) {
     tasks.put(
         projectId,
         taskScheduler.scheduleAtFixedRate(
@@ -137,7 +137,7 @@ public class ScanProjectScheduler {
             coderadarConfigurationProperties.getScanIntervalInSeconds() * 1000L));
   }
 
-  private void stopUpdateTask(Long projectId) {
+  private void stopUpdateTask(long projectId) {
     ScheduledFuture<?> f = tasks.get(projectId);
     if (f != null) {
       f.cancel(false);
@@ -161,7 +161,7 @@ public class ScanProjectScheduler {
                   + "/projects/"
                   + project.getWorkdirName());
       List<Branch> updatedBranches =
-          updateRepositoryUseCase.updateRepository(
+          updateLocalRepositoryUseCase.updateRepository(
               new UpdateRepositoryCommand()
                   .setLocalDir(localDir)
                   .setPassword(project.getVcsPassword())

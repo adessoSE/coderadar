@@ -17,7 +17,7 @@ public class CreateProjectAdapter implements CreateProjectPort {
   }
 
   @Override
-  public Long createProject(Project project) {
+  public long createProject(Project project) {
     return projectRepository.save(projectMapper.mapDomainObject(project)).getId();
   }
 }

@@ -26,9 +26,8 @@ public class ProjectEntity {
   private Date vcsStart;
   private Date vcsEnd;
 
-  @EqualsAndHashCode.Exclude private boolean isBeingProcessed = false;
-
-  @EqualsAndHashCode.Exclude private boolean isBeingDeleted = false;
+  private boolean isBeingProcessed = false;
+  private boolean isBeingDeleted = false;
 
   // The graph starts from a project and goes only in one direction.
   // https://en.wikipedia.org/wiki/Directed_acyclic_graph
@@ -39,7 +38,6 @@ public class ProjectEntity {
 
   @Relationship(type = "CONTAINS")
   @ToString.Exclude
-  @EqualsAndHashCode.Exclude
   private List<FileEntity> files = new ArrayList<>();
 
   @Relationship(type = "CONTAINS_COMMIT")
@@ -47,8 +45,6 @@ public class ProjectEntity {
   private List<CommitEntity> commits = new ArrayList<>();
 
   @Relationship(type = "HAS")
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
   private List<FilePatternEntity> filePatterns = new ArrayList<>();
 
   @Relationship(type = "HAS")
@@ -57,7 +53,5 @@ public class ProjectEntity {
   private List<AnalyzerConfigurationEntity> analyzerConfigurations = new ArrayList<>();
 
   @Relationship(type = "HAS_BRANCH")
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
   private List<BranchEntity> branches = new ArrayList<>();
 }

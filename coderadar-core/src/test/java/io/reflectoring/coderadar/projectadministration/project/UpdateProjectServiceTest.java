@@ -22,7 +22,7 @@ import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
-import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import java.io.File;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ class UpdateProjectServiceTest {
 
   @Mock private UpdateProjectPort updateProjectPortMock;
 
-  @Mock private UpdateRepositoryUseCase updateRepositoryUseCaseMock;
+  @Mock private UpdateLocalRepositoryUseCase updateLocalRepositoryUseCaseMock;
 
   @Mock private CoderadarConfigurationProperties configurationPropertiesMock;
 
@@ -69,7 +69,7 @@ class UpdateProjectServiceTest {
         new UpdateProjectService(
             getProjectPortMock,
             updateProjectPortMock,
-            updateRepositoryUseCaseMock,
+            updateLocalRepositoryUseCaseMock,
             configurationPropertiesMock,
             processProjectServiceMock,
             extractProjectCommitsUseCaseMock,
@@ -182,7 +182,7 @@ class UpdateProjectServiceTest {
     Assert.assertEquals(testProject.getVcsEnd(), newEndDate);
     Assert.assertEquals(testProject.getVcsUrl(), newVcsUrl);
 
-    verify(updateRepositoryUseCaseMock).updateRepository(any());
+    verify(updateLocalRepositoryUseCaseMock).updateRepository(any());
     verify(saveCommitPortMock)
         .saveCommits(Collections.singletonList(commitMock), new ArrayList<>(), projectId);
   }

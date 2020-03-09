@@ -36,7 +36,7 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
 
   @Override
   public void update(
-      UpdateAnalyzerConfigurationCommand command, Long configurationId, Long projectId) {
+      UpdateAnalyzerConfigurationCommand command, long configurationId, long projectId) {
     AnalyzerConfiguration analyzerConfiguration =
         getAnalyzerConfigurationPort.getAnalyzerConfiguration(configurationId);
 

@@ -14,7 +14,7 @@ public class DeleteFilePatternAdapter implements DeleteFilePatternPort {
   }
 
   @Override
-  public void delete(Long id) {
+  public void delete(long id) {
     if (!filePatternRepository.existsById(id)) {
       throw new FilePatternNotFoundException(id);
     }
