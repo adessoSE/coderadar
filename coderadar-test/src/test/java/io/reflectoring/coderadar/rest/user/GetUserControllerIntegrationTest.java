@@ -7,13 +7,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
-import io.reflectoring.coderadar.rest.domain.LoadUserResponse;
+import io.reflectoring.coderadar.rest.domain.GetUserResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-class LoadUserControllerIntegrationTest extends ControllerTestTemplate {
+class GetUserControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private UserRepository userRepository;
 
@@ -29,11 +29,11 @@ class LoadUserControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(get("/user/" + userId))
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(containsResource(LoadUserResponse.class))
+        .andExpect(containsResource(GetUserResponse.class))
         .andDo(
             result -> {
               String a = result.getResponse().getContentAsString();
-              LoadUserResponse response = fromJson(a, LoadUserResponse.class);
+              GetUserResponse response = fromJson(a, GetUserResponse.class);
               Assertions.assertEquals("username2", response.getUsername());
               Assertions.assertEquals(userId, response.getId());
             })

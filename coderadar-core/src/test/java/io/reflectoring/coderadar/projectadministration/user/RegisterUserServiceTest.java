@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.useradministration.UsernameAlreadyInUseException;
 import io.reflectoring.coderadar.useradministration.domain.User;
-import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
+import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RegisterUserPort;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserCommand;
 import io.reflectoring.coderadar.useradministration.service.register.RegisterUserService;
@@ -25,7 +25,7 @@ class RegisterUserServiceTest {
 
   @Mock private RegisterUserPort registerUserPortMock;
 
-  @Mock private LoadUserPort loadUserPortMock;
+  @Mock private GetUserPort getUserPortMock;
 
   @Captor private ArgumentCaptor<User> userArgumentCaptor;
 
@@ -33,7 +33,7 @@ class RegisterUserServiceTest {
 
   @BeforeEach
   void setUp() {
-    this.testSubject = new RegisterUserService(registerUserPortMock, loadUserPortMock);
+    this.testSubject = new RegisterUserService(registerUserPortMock, getUserPortMock);
   }
 
   @Test
@@ -45,7 +45,7 @@ class RegisterUserServiceTest {
 
     RegisterUserCommand registerUserCommand = new RegisterUserCommand(username, password);
 
-    when(loadUserPortMock.existsByUsername(username)).thenReturn(false);
+    when(getUserPortMock.existsByUsername(username)).thenReturn(false);
     when(registerUserPortMock.register(any())).thenReturn(expectedUserId);
 
     // when
@@ -66,7 +66,7 @@ class RegisterUserServiceTest {
 
     RegisterUserCommand registerUserCommand = new RegisterUserCommand(username, password);
 
-    when(loadUserPortMock.existsByUsername(username)).thenReturn(true);
+    when(getUserPortMock.existsByUsername(username)).thenReturn(true);
 
     // when / then
     assertThatThrownBy(() -> testSubject.register(registerUserCommand))

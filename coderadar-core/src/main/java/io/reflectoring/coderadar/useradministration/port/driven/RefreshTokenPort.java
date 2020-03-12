@@ -22,6 +22,7 @@ public interface RefreshTokenPort {
    * Saves a new refresh token in the DB.
    *
    * @param refreshToken The token to save.
+   * @param id
    */
-  void saveToken(RefreshToken refreshToken);
+  void saveToken(RefreshToken refreshToken, long id);
 }

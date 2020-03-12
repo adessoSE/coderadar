@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.user;
 
-import io.reflectoring.coderadar.rest.domain.LoadUserResponse;
-import io.reflectoring.coderadar.useradministration.port.driver.load.LoadUserUseCase;
+import io.reflectoring.coderadar.rest.domain.GetUserResponse;
+import io.reflectoring.coderadar.useradministration.port.driver.load.GetUserUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,17 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Transactional
-public class LoadUserController {
-  private final LoadUserUseCase loadUserUseCase;
+public class GetUserController {
+  private final GetUserUseCase getUserUseCase;
 
-  public LoadUserController(LoadUserUseCase loadUserUseCase) {
-    this.loadUserUseCase = loadUserUseCase;
+  public GetUserController(GetUserUseCase getUserUseCase) {
+    this.getUserUseCase = getUserUseCase;
   }
 
   @GetMapping(path = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<LoadUserResponse> loadUser(@PathVariable long userId) {
+  public ResponseEntity<GetUserResponse> loadUser(@PathVariable long userId) {
     return new ResponseEntity<>(
-        new LoadUserResponse(userId, loadUserUseCase.loadUser(userId).getUsername()),
-        HttpStatus.OK);
+        new GetUserResponse(userId, getUserUseCase.getUser(userId).getUsername()), HttpStatus.OK);
   }
 }

@@ -40,7 +40,7 @@ public class RefreshTokenAdapter implements RefreshTokenPort {
   }
 
   @Override
-  public void saveToken(RefreshToken refreshToken) {
-    refreshTokenRepository.save(refreshTokenMapper.mapDomainObject(refreshToken));
+  public void saveToken(RefreshToken refreshToken, long userId) {
+    refreshTokenRepository.saveToken(refreshToken.getToken(), userId);
   }
 }

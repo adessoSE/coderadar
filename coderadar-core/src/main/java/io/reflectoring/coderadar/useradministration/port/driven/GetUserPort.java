@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.useradministration.port.driven;
 
 import io.reflectoring.coderadar.useradministration.domain.User;
 
-public interface LoadUserPort {
+public interface GetUserPort {
 
   /**
    * Retrieves a user given their id.
@@ -10,7 +10,7 @@ public interface LoadUserPort {
    * @param id The id of the user.
    * @return The user with the id.
    */
-  User loadUser(long id);
+  User getUser(long id);
 
   /**
    * Retrieves a user given their username.
@@ -18,7 +18,7 @@ public interface LoadUserPort {
    * @param username The username of the user.
    * @return The user with the username.
    */
-  User loadUserByUsername(String username);
+  User getUserByUsername(String username);
 
   /**
    * @param username The username of the user.

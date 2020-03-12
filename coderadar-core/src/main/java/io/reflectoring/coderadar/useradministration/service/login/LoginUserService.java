@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.useradministration.service.login;
 
 import io.reflectoring.coderadar.useradministration.domain.RefreshToken;
 import io.reflectoring.coderadar.useradministration.domain.User;
-import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
+import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RefreshTokenPort;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserResponse;
@@ -17,17 +17,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginUserService implements LoginUserUseCase {
 
-  private final LoadUserPort loadUserPort;
+  private final GetUserPort getUserPort;
   private final RefreshTokenPort refreshTokenPort;
   private final AuthenticationManager authenticationManager;
   private final TokenService tokenService;
 
   public LoginUserService(
-      LoadUserPort loadUserPort,
+      GetUserPort getUserPort,
       RefreshTokenPort refreshTokenPort,
       AuthenticationManager authenticationManager,
       TokenService tokenService) {
-    this.loadUserPort = loadUserPort;
+    this.getUserPort = getUserPort;
     this.refreshTokenPort = refreshTokenPort;
     this.authenticationManager = authenticationManager;
     this.tokenService = tokenService;
@@ -35,7 +35,7 @@ public class LoginUserService implements LoginUserUseCase {
 
   @Override
   public LoginUserResponse login(LoginUserCommand command) {
-    User user = loadUserPort.loadUserByUsername(command.getUsername());
+    User user = getUserPort.getUserByUsername(command.getUsername());
     Authentication authentication =
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(command.getUsername(), command.getPassword()));
@@ -57,8 +57,7 @@ public class LoginUserService implements LoginUserUseCase {
   private void saveRefreshToken(User user, String refreshToken) {
     RefreshToken refreshTokenEntity = new RefreshToken();
     refreshTokenEntity.setToken(refreshToken);
-    refreshTokenEntity.setUser(user);
     refreshTokenPort.deleteByUser(user);
-    refreshTokenPort.saveToken(refreshTokenEntity);
+    refreshTokenPort.saveToken(refreshTokenEntity, user.getId());
   }
 }
