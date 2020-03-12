@@ -311,8 +311,7 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
           fileEntity.setOldFiles(new ArrayList<>(rel.getFile().getOldFiles().size()));
           for (File oldFile : rel.getFile().getOldFiles()) {
             FileEntity oldFileEntity =
-                fileRepository.getFileInProjectBySequenceId(
-                    projectId, rel.getFile().getSequenceId());
+                fileRepository.getFileInProjectBySequenceId(projectId, oldFile.getSequenceId());
             if (oldFileEntity == null) {
               oldFileEntity = walkedFiles.get(oldFile);
             }
