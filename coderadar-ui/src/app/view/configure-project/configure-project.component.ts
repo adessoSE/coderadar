@@ -136,7 +136,7 @@ export class ConfigureProjectComponent implements OnInit {
 
 
   /**
-   * Gets all of the configured file patterns for the current project and saves them in this.filePatterns.
+   * Gets all of the contributors for the current project and saves them in this.contributors.
    * Sends the refresh token if access is denied and repeats the request.
    */
   private getProjectContributors(): void {

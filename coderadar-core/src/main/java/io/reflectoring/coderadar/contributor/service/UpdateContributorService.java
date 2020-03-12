@@ -14,7 +14,7 @@ public class UpdateContributorService implements UpdateContributorUseCase {
   }
 
   @Override
-  public void updateContributor(Long id, UpdateContributorCommand command) {
+  public void updateContributor(long id, UpdateContributorCommand command) {
     updateContributorPort.updateContributor(id, command);
   }
 }

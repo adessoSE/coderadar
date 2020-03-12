@@ -23,7 +23,7 @@ public class UpdateContributorController {
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<HttpStatus> updateContributor(
-      @PathVariable Long id, @RequestBody @Validated UpdateContributorCommand command) {
+      @PathVariable long id, @RequestBody @Validated UpdateContributorCommand command) {
     updateContributorUseCase.updateContributor(id, command);
     return new ResponseEntity<>(HttpStatus.OK);
   }

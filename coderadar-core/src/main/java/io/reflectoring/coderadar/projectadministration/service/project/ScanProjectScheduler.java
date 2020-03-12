@@ -24,7 +24,6 @@ import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
-import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -166,7 +165,7 @@ public class ScanProjectScheduler {
    * @param project The project to check
    * @param localDir The project workdir
    */
-  private void saveCommits(Project project, File localDir) {
+  private void saveCommits(Project project, String localDir) {
     List<Commit> commits =
         extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
 
@@ -184,11 +183,8 @@ public class ScanProjectScheduler {
 
   private void checkForNewCommits(Project project) {
     try {
-      File localDir =
-          new File(
-              coderadarConfigurationProperties.getWorkdir()
-                  + "/projects/"
-                  + project.getWorkdirName());
+      String localDir =
+          coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName();
       if (updateRepositoryUseCase.updateRepository(
           new UpdateRepositoryCommand()
               .setLocalDir(localDir)

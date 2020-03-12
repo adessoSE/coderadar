@@ -1,11 +1,11 @@
-package io.reflectoring.coderadar.contributor.port.driven;
+package io.reflectoring.coderadar.contributor.port.driver;
 
 import io.reflectoring.coderadar.contributor.domain.Contributor;
 
-public interface GetContributorPort {
+public interface GetContributorUseCase {
   /**
    * @param id of the contributor.
    * @return Contributor with the supplied id.
    */
-  Contributor get(long id);
+  Contributor getById(long id);
 }

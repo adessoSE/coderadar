@@ -25,8 +25,8 @@ public class GetCriticalFilesController {
       path = "/projects/{projectId}/files/critical",
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<ContributorsForFile>> getCriticalFiles(
-      @PathVariable Long projectId, @RequestParam(defaultValue = "1") Long numOfContr) {
+      @PathVariable Long projectId, @RequestParam(defaultValue = "1") int numOfContr) {
     return new ResponseEntity<>(
-        getCriticalFilesUseCase.getCriticalFiles(projectId, numOfContr.intValue()), HttpStatus.OK);
+        getCriticalFilesUseCase.getCriticalFiles(projectId, numOfContr), HttpStatus.OK);
   }
 }

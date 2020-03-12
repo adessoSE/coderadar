@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
+import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,11 @@ public class SaveContributorsAdapter implements SaveContributorsPort {
   }
 
   @Override
-  public List<Contributor> save(List<Contributor> contributors, Long projectId) {
-    ProjectEntity projectEntity = projectRepository.findById(projectId).get(); // project must exist
+  public void save(List<Contributor> contributors, long projectId) {
+    ProjectEntity projectEntity =
+        projectRepository
+            .findById(projectId)
+            .orElseThrow(() -> new ProjectNotFoundException(projectId));
 
     List<ContributorEntity> contributorEntities =
         new ArrayList<>(contributorMapper.mapDomainObjects(contributors));
@@ -33,6 +37,5 @@ public class SaveContributorsAdapter implements SaveContributorsPort {
       entity.getProjects().add(projectEntity);
     }
     contributorRepository.save(contributorEntities, 1);
-    return new ArrayList<>(new ContributorMapper().mapNodeEntities(contributorEntities));
   }
 }

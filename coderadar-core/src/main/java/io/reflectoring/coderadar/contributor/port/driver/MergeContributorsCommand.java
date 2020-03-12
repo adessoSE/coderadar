@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MergeContributorsCommand {
-  private Long firstContributorId; // validation annotation?
-  private Long secondContributorId; // validation annotation?
+  private long firstContributorId;
+  private long secondContributorId;
   @NotBlank private String displayName;
 }

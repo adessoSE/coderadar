@@ -5,8 +5,8 @@ import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.UpdateRepositoryPort;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.eclipse.jgit.api.FetchCommand;
 import org.eclipse.jgit.api.Git;
@@ -40,17 +40,17 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
       // When having a checkout conflict, someone or something fiddled with the working directory.
       // Since the working directory is designed to be read only, we just revert it and try again.
       try {
-        resetRepository(command.getLocalDir().toPath());
+        resetRepository(command.getLocalDir());
         return updateInternal(command);
       } catch (IOException | GitAPIException | UnableToCloneRepositoryException ex) {
-        throw createException(command.getLocalDir().toPath(), e.getMessage());
+        throw createException(command.getLocalDir(), e.getMessage());
       }
     } catch (IOException | GitAPIException | UnableToCloneRepositoryException e) {
-      throw createException(command.getLocalDir().toPath(), e.getMessage());
+      throw createException(command.getLocalDir(), e.getMessage());
     }
   }
 
-  private UnableToUpdateRepositoryException createException(Path repositoryRoot, String error) {
+  private UnableToUpdateRepositoryException createException(String repositoryRoot, String error) {
     return new UnableToUpdateRepositoryException(
         String.format(
             "Error updating local GIT repository at %s. Reason: %s", repositoryRoot, error));
@@ -59,7 +59,7 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
   private boolean updateInternal(UpdateRepositoryCommand command)
       throws GitAPIException, IOException, UnableToCloneRepositoryException {
     FileRepositoryBuilder builder = new FileRepositoryBuilder();
-    Repository repository = builder.setWorkTree(command.getLocalDir()).build();
+    Repository repository = builder.setWorkTree(new File(command.getLocalDir())).build();
     Git git = new Git(repository);
     ObjectId oldHead = git.getRepository().resolve(Constants.HEAD);
     if (oldHead == null) {
@@ -92,8 +92,9 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
 
   private void deleteAndCloneRepository(UpdateRepositoryCommand command)
       throws UnableToCloneRepositoryException, IOException {
-    if (command.getLocalDir().exists()) {
-      FileUtils.forceDelete(command.getLocalDir());
+    File localDir = new File(command.getLocalDir());
+    if (localDir.exists()) {
+      FileUtils.forceDelete(localDir);
     }
     cloneRepositoryAdapter.cloneRepository(
         new CloneRepositoryCommand(
@@ -103,10 +104,10 @@ public class UpdateRepositoryAdapter implements UpdateRepositoryPort {
             command.getPassword()));
   }
 
-  private void resetRepository(Path repositoryRoot) throws IOException, GitAPIException {
+  private void resetRepository(String repositoryRoot) throws IOException, GitAPIException {
     FileRepositoryBuilder builder = new FileRepositoryBuilder();
     Repository repository;
-    repository = builder.setWorkTree(repositoryRoot.toFile()).build();
+    repository = builder.setWorkTree(new File(repositoryRoot)).build();
     Git git = new Git(repository);
     git.reset().setMode(ResetCommand.ResetType.HARD).call();
     git.getRepository().close();

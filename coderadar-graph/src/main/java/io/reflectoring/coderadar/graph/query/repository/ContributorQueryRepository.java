@@ -16,7 +16,7 @@ public interface ContributorQueryRepository extends Neo4jRepository<ContributorE
           + "WITH f.path as path, collect(DISTINCT c.displayName) AS contributors "
           + "WHERE size(contributors) = {1} RETURN path, contributors")
   List<ContributorsForFileQueryResult> getCriticalFiles(
-      @NonNull Long projectId,
+      long projectId,
       int numberOfContributors,
       @NonNull List<String> includes,
       @NonNull List<String> excludes);

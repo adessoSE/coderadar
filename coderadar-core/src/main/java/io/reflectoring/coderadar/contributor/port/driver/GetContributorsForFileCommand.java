@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetForFilenameCommand {
+public class GetContributorsForFileCommand {
   @NotBlank private String filename;
 }

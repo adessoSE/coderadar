@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.ChangeTypeMapper;
+import io.reflectoring.coderadar.vcs.RevCommitHelper;
 import io.reflectoring.coderadar.vcs.port.driven.ExtractProjectCommitsPort;
 import java.io.IOException;
 import java.time.Instant;
@@ -14,12 +15,12 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
@@ -34,9 +35,9 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    * @return A list of fully initialized Commit objects (containing files and fileToCommit
    *     relationships).
    */
-  public List<Commit> extractCommits(java.io.File repositoryRoot, DateRange range) {
-    try (Git git = Git.open(repositoryRoot)) {
-      List<Commit> result = getCommits(git, range);
+  public List<Commit> extractCommits(String repositoryRoot, DateRange range) {
+    try (Git git = Git.open(new java.io.File(repositoryRoot))) {
+      List<Commit> result = getCommits(range, repositoryRoot);
       setCommitsFiles(git, result);
       return result;
     } catch (Exception e) {
@@ -45,9 +46,8 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     }
   }
 
-  private List<Commit> getCommits(Git git, DateRange range) throws GitAPIException {
-    List<RevCommit> revCommits = new ArrayList<>();
-    git.log().call().iterator().forEachRemaining(revCommits::add);
+  private List<Commit> getCommits(DateRange range, String repositoryRoot) {
+    List<RevCommit> revCommits = RevCommitHelper.getRevCommits(repositoryRoot);
     int revCommitsSize = revCommits.size();
     List<Commit> result = new ArrayList<>(revCommitsSize);
     IdentityHashMap<RevCommit, Commit> map = new IdentityHashMap<>(revCommitsSize);
@@ -80,10 +80,11 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   private Commit mapRevCommitToCommit(RevCommit rc) {
     Commit commit = new Commit();
     commit.setName(rc.getName());
-    commit.setAuthor(rc.getAuthorIdent().getName());
-    commit.setAuthorEmail(rc.getAuthorIdent().getEmailAddress());
+    PersonIdent personIdent = rc.getAuthorIdent();
+    commit.setAuthor(personIdent.getName());
+    commit.setAuthorEmail(personIdent.getEmailAddress());
     commit.setComment(rc.getShortMessage());
-    commit.setTimestamp(rc.getAuthorIdent().getWhen().getTime());
+    commit.setTimestamp(personIdent.getWhen().getTime());
     return commit;
   }
 

@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.vcs.port.driver.clone;
 
-import java.io.File;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class CloneRepositoryCommand {
   private String remoteUrl;
-  private File localDir;
+  private String localDir;
   private String username;
   private String password;
 }

@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.graph;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public interface Mapper<T, E> {
@@ -18,7 +17,7 @@ public interface Mapper<T, E> {
     return domainObjects;
   }
 
-  default List<E> mapDomainObjects(Collection<T> domainObjects) {
+  default List<E> mapDomainObjects(List<T> domainObjects) {
     List<E> nodeEntities = new ArrayList<>(domainObjects.size());
     for (T t : domainObjects) {
       nodeEntities.add(mapDomainObject(t));

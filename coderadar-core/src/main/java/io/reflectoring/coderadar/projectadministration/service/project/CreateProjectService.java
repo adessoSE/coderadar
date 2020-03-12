@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.projectadministration.service.project;
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort;
-import io.reflectoring.coderadar.contributor.port.driven.GetContributorPort;
+import io.reflectoring.coderadar.contributor.port.driven.ListContributorsPort;
 import io.reflectoring.coderadar.contributor.port.driven.SaveContributorsPort;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
@@ -18,7 +18,6 @@ import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
-import java.io.File;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -49,7 +48,7 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   private final SaveContributorsPort saveContributorsPort;
 
-  private final GetContributorPort getContributorPort;
+  private final ListContributorsPort listContributorsPort;
 
   private final Logger logger = LoggerFactory.getLogger(CreateProjectService.class);
 
@@ -63,7 +62,7 @@ public class CreateProjectService implements CreateProjectUseCase {
       SaveCommitPort saveCommitPort,
       ComputeContributorsPort computeContributorsPort,
       SaveContributorsPort saveContributorsPort,
-      GetContributorPort getContributorPort) {
+      ListContributorsPort listContributorsPort) {
     this.createProjectPort = createProjectPort;
     this.getProjectPort = getProjectPort;
     this.cloneRepositoryUseCase = cloneRepositoryUseCase;
@@ -73,7 +72,7 @@ public class CreateProjectService implements CreateProjectUseCase {
     this.saveCommitPort = saveCommitPort;
     this.computeContributorsPort = computeContributorsPort;
     this.saveContributorsPort = saveContributorsPort;
-    this.getContributorPort = getContributorPort;
+    this.listContributorsPort = listContributorsPort;
   }
 
   @Override
@@ -84,11 +83,10 @@ public class CreateProjectService implements CreateProjectUseCase {
     Project project = saveProject(command);
     processProjectService.executeTask(
         () -> {
-          File localDir =
-              new File(
-                  coderadarConfigurationProperties.getWorkdir()
-                      + "/projects/"
-                      + project.getWorkdirName());
+          String localDir =
+              coderadarConfigurationProperties.getWorkdir()
+                  + "/projects/"
+                  + project.getWorkdirName();
           CloneRepositoryCommand cloneRepositoryCommand =
               new CloneRepositoryCommand(
                   command.getVcsUrl(),
@@ -105,7 +103,7 @@ public class CreateProjectService implements CreateProjectUseCase {
                 extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
             saveCommitPort.saveCommits(commits, project.getId());
 
-            List<Contributor> contributors = getContributorPort.findAll();
+            List<Contributor> contributors = listContributorsPort.listAll();
             contributors =
                 computeContributorsPort.computeContributors(
                     coderadarConfigurationProperties.getWorkdir()

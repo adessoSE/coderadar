@@ -29,6 +29,6 @@ public class GetContributorAdapterTest {
     when(contributorRepository.findById(10L)).thenReturn(Optional.empty());
 
     Assertions.assertThrows(
-        ContributorNotFoundException.class, () -> getContributorAdapter.findById(10L));
+        ContributorNotFoundException.class, () -> getContributorAdapter.get(10L));
   }
 }

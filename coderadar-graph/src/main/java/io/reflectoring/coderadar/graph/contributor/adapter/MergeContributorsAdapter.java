@@ -16,7 +16,7 @@ public class MergeContributorsAdapter implements MergeContributorsPort {
   }
 
   @Override
-  public void mergeContributors(Long firstId, Long secondId, String displayName) {
+  public void mergeContributors(long firstId, long secondId, String displayName) {
     Optional<ContributorEntity> firstOptional = contributorRepository.findById(firstId);
     Optional<ContributorEntity> secondOptional = contributorRepository.findById(secondId);
     if (firstOptional.isEmpty()) {
@@ -33,7 +33,7 @@ public class MergeContributorsAdapter implements MergeContributorsPort {
     firstEntity.getNames().addAll(secondEntity.getNames());
     firstEntity.getEmails().addAll(secondEntity.getEmails());
     firstEntity.getProjects().addAll(secondEntity.getProjects());
-    contributorRepository.save(firstEntity);
+    contributorRepository.save(firstEntity, 0);
     contributorRepository.deleteById(secondEntity.getId());
   }
 }

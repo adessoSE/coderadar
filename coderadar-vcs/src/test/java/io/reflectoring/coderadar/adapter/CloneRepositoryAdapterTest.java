@@ -23,7 +23,7 @@ public class CloneRepositoryAdapterTest {
 
     CloneRepositoryAdapter cloneRepositoryAdapter = new CloneRepositoryAdapter();
     cloneRepositoryAdapter.cloneRepository(
-        new CloneRepositoryCommand(testRepoURL.toString(), folder, "", ""));
+        new CloneRepositoryCommand(testRepoURL.toString(), folder.toString(), "", ""));
 
     Assertions.assertEquals(3, folder.list().length);
     Assertions.assertTrue(Arrays.asList(folder.list()).contains(".git"));

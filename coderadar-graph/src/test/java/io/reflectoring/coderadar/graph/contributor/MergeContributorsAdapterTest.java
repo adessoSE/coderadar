@@ -43,7 +43,7 @@ public class MergeContributorsAdapterTest {
 
     when(contributorRepository.findById(1L)).thenReturn(Optional.of(contributor1));
     when(contributorRepository.findById(2L)).thenReturn(Optional.of(contributor2));
-    when(contributorRepository.save(contributor1)).thenReturn(contributor1);
+    when(contributorRepository.save(contributor1, 0)).thenReturn(contributor1);
 
     mergeContributorsAdapter.mergeContributors(1L, 2L, "Max Mustermann");
 
