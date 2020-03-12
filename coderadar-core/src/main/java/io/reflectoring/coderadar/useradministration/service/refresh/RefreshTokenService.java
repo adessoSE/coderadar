@@ -5,7 +5,7 @@ import io.reflectoring.coderadar.useradministration.RefreshTokenNotFoundExceptio
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.domain.RefreshToken;
 import io.reflectoring.coderadar.useradministration.domain.User;
-import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
+import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RefreshTokenPort;
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenUseCase;
@@ -16,15 +16,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class RefreshTokenService implements RefreshTokenUseCase {
 
-  private final LoadUserPort loadUserPort;
+  private final GetUserPort getUserPort;
 
   private final RefreshTokenPort refreshTokenPort;
 
   private final TokenService tokenService;
 
   public RefreshTokenService(
-      LoadUserPort loadUserPort, RefreshTokenPort refreshTokenPort, TokenService tokenService) {
-    this.loadUserPort = loadUserPort;
+          GetUserPort getUserPort, RefreshTokenPort refreshTokenPort, TokenService tokenService) {
+    this.getUserPort = getUserPort;
     this.refreshTokenPort = refreshTokenPort;
     this.tokenService = tokenService;
   }
@@ -81,6 +81,6 @@ public class RefreshTokenService implements RefreshTokenUseCase {
    */
   public User getUser(String refreshToken) {
     String username = tokenService.getUsername(refreshToken);
-    return loadUserPort.loadUserByUsername(username);
+    return getUserPort.getUserByUsername(username);
   }
 }

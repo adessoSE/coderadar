@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.useradministration.service.register;
 
 import io.reflectoring.coderadar.useradministration.UsernameAlreadyInUseException;
 import io.reflectoring.coderadar.useradministration.domain.User;
-import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
+import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RegisterUserPort;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserUseCase;
@@ -15,17 +15,17 @@ import org.springframework.stereotype.Service;
 public class RegisterUserService implements RegisterUserUseCase {
 
   private final RegisterUserPort port;
-  private final LoadUserPort loadUserPort;
+  private final GetUserPort getUserPort;
   private final Logger logger = LoggerFactory.getLogger(RegisterUserService.class);
 
-  public RegisterUserService(RegisterUserPort port, LoadUserPort loadUserPort) {
+  public RegisterUserService(RegisterUserPort port, GetUserPort getUserPort) {
     this.port = port;
-    this.loadUserPort = loadUserPort;
+    this.getUserPort = getUserPort;
   }
 
   @Override
   public Long register(RegisterUserCommand command) {
-    if (loadUserPort.existsByUsername(command.getUsername())) {
+    if (getUserPort.existsByUsername(command.getUsername())) {
       throw new UsernameAlreadyInUseException(command.getUsername());
     }
     User user = new User();

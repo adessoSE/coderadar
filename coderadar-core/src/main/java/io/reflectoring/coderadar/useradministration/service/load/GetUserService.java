@@ -2,23 +2,23 @@ package io.reflectoring.coderadar.useradministration.service.load;
 
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.domain.User;
-import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
-import io.reflectoring.coderadar.useradministration.port.driver.load.LoadUserUseCase;
+import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
+import io.reflectoring.coderadar.useradministration.port.driver.load.GetUserUseCase;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LoadUserService implements LoadUserUseCase {
+public class GetUserService implements GetUserUseCase {
 
-  private final LoadUserPort port;
+  private final GetUserPort port;
 
-  public LoadUserService(LoadUserPort port) {
+  public GetUserService(GetUserPort port) {
     this.port = port;
   }
 
   @Override
-  public User loadUser(long id) {
+  public User getUser(long id) {
     if (port.existsById(id)) {
-      return port.loadUser(id);
+      return port.getUser(id);
     } else {
       throw new UserNotFoundException(id);
     }

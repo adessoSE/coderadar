@@ -5,27 +5,27 @@ import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.domain.User;
-import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
+import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LoadUserAdapter implements LoadUserPort {
+public class GetUserAdapter implements GetUserPort {
 
   private final UserRepository userRepository;
   private final UserMapper userMapper = new UserMapper();
 
-  public LoadUserAdapter(UserRepository userRepository) {
+  public GetUserAdapter(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
   @Override
-  public User loadUser(long id) {
+  public User getUser(long id) {
     return userMapper.mapNodeEntity(
         userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id)));
   }
 
   @Override
-  public User loadUserByUsername(String username) {
+  public User getUserByUsername(String username) {
     UserEntity userEntity = userRepository.findByUsername(username);
     if (userEntity == null) {
       throw new UserNotFoundException(username);

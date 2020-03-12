@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.useradministration.domain.User;
-import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
-import io.reflectoring.coderadar.useradministration.service.load.LoadUserService;
+import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
+import io.reflectoring.coderadar.useradministration.service.load.GetUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,15 +13,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class LoadUserServiceTest {
+class GetUserServiceTest {
 
-  @Mock private LoadUserPort loadUserPortMock;
+  @Mock private GetUserPort getUserPortMock;
 
-  private LoadUserService testSubject;
+  private GetUserService testSubject;
 
   @BeforeEach
   void setUp() {
-    this.testSubject = new LoadUserService(loadUserPortMock);
+    this.testSubject = new GetUserService(getUserPortMock);
   }
 
   @Test
@@ -31,11 +31,11 @@ class LoadUserServiceTest {
     String username = "username";
     User user = new User().setId(userId).setUsername(username);
 
-    when(loadUserPortMock.loadUser(userId)).thenReturn(user);
-    when(loadUserPortMock.existsById(userId)).thenReturn(true);
+    when(getUserPortMock.getUser(userId)).thenReturn(user);
+    when(getUserPortMock.existsById(userId)).thenReturn(true);
 
     // when
-    User actualResponse = testSubject.loadUser(userId);
+    User actualResponse = testSubject.getUser(userId);
 
     // then
     assertThat(actualResponse).isEqualTo(user);
