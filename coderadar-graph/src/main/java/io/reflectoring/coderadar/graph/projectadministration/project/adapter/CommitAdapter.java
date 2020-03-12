@@ -44,8 +44,7 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
       List<FileEntity> fileEntities = new ArrayList<>(walkedFiles.values());
       commits.clear();
       walkedFiles.clear();
-      saveCommitAndFileEntities(projectId, commitEntities, fileEntities);
-      setBranchPointers(projectId, branches);
+      saveCommitAndFileEntities(projectId, commitEntities, fileEntities, branches);
     }
   }
 
@@ -326,12 +325,14 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
       newCommitEntities.add(commitEntity);
     }
     List<FileEntity> newFileEntities = new ArrayList<>(walkedFiles.values());
-    saveCommitAndFileEntities(projectId, newCommitEntities, newFileEntities);
-    setBranchPointers(projectId, updatedBranches);
+    saveCommitAndFileEntities(projectId, newCommitEntities, newFileEntities, updatedBranches);
   }
 
   private void saveCommitAndFileEntities(
-      long projectId, List<CommitEntity> commitEntities, List<FileEntity> fileEntities) {
+      long projectId,
+      List<CommitEntity> commitEntities,
+      List<FileEntity> fileEntities,
+      List<Branch> branches) {
     int commitBulkSaveChunk = 5000;
     if (commitEntities.size() < 5000) {
       commitBulkSaveChunk = commitEntities.size();
@@ -346,6 +347,7 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
     saveFilesWithDepthZero(fileEntities, fileBulkSaveChunk);
     attachCommitsAndFilesToProject(
         projectId, commitEntities, fileEntities, commitBulkSaveChunk, fileBulkSaveChunk);
+    setBranchPointers(projectId, branches);
     saveCommitParentsRelationships(commitEntities, commitBulkSaveChunk);
     saveFileToCommitRelationships(commitEntities, fileBulkSaveChunk);
     saveFileRenameRelationships(fileEntities, fileBulkSaveChunk);
