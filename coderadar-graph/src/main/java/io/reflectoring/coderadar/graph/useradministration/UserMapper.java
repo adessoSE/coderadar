@@ -18,7 +18,6 @@ public class UserMapper implements Mapper<User, UserEntity> {
   @Override
   public UserEntity mapDomainObject(User domainObject) {
     UserEntity userEntity = new UserEntity();
-    userEntity.setId(domainObject.getId());
     userEntity.setPassword(domainObject.getPassword());
     userEntity.setUsername(domainObject.getUsername());
     return userEntity;

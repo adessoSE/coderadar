@@ -57,8 +57,7 @@ public class LoginUserService implements LoginUserUseCase {
   private void saveRefreshToken(User user, String refreshToken) {
     RefreshToken refreshTokenEntity = new RefreshToken();
     refreshTokenEntity.setToken(refreshToken);
-    refreshTokenEntity.setUser(user);
     refreshTokenPort.deleteByUser(user);
-    refreshTokenPort.saveToken(refreshTokenEntity);
+    refreshTokenPort.saveToken(refreshTokenEntity, user.getId());
   }
 }

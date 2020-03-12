@@ -55,7 +55,7 @@ class LoginUserServiceTest {
     LoginUserResponse expectedResponse =
         new LoginUserResponse(expectedAccessToken, expectedRefreshToken);
     RefreshToken expectedRefreshTokenEntity =
-        new RefreshToken().setToken(expectedRefreshToken).setUser(user);
+        new RefreshToken().setToken(expectedRefreshToken);
 
     LoginUserCommand command = new LoginUserCommand(username, password);
 
@@ -71,6 +71,6 @@ class LoginUserServiceTest {
     assertThat(actualResponse).isEqualTo(expectedResponse);
 
     verify(authenticationManagerMock).authenticate(expectedToken);
-    verify(refreshTokenPortMock).saveToken(expectedRefreshTokenEntity);
+    verify(refreshTokenPortMock).saveToken(expectedRefreshTokenEntity, user.getId());
   }
 }
