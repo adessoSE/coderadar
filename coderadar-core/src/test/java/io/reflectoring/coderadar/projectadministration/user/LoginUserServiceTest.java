@@ -37,7 +37,7 @@ class LoginUserServiceTest {
   void setUp() {
     this.testSubject =
         new LoginUserService(
-                getUserPortMock, refreshTokenPortMock, authenticationManagerMock, tokenServiceMock);
+            getUserPortMock, refreshTokenPortMock, authenticationManagerMock, tokenServiceMock);
   }
 
   @Test
@@ -54,8 +54,7 @@ class LoginUserServiceTest {
         new UsernamePasswordAuthenticationToken(username, password);
     LoginUserResponse expectedResponse =
         new LoginUserResponse(expectedAccessToken, expectedRefreshToken);
-    RefreshToken expectedRefreshTokenEntity =
-        new RefreshToken().setToken(expectedRefreshToken);
+    RefreshToken expectedRefreshTokenEntity = new RefreshToken().setToken(expectedRefreshToken);
 
     LoginUserCommand command = new LoginUserCommand(username, password);
 

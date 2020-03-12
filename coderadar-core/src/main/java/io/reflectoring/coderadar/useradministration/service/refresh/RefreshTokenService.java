@@ -23,7 +23,7 @@ public class RefreshTokenService implements RefreshTokenUseCase {
   private final TokenService tokenService;
 
   public RefreshTokenService(
-          GetUserPort getUserPort, RefreshTokenPort refreshTokenPort, TokenService tokenService) {
+      GetUserPort getUserPort, RefreshTokenPort refreshTokenPort, TokenService tokenService) {
     this.getUserPort = getUserPort;
     this.refreshTokenPort = refreshTokenPort;
     this.tokenService = tokenService;
