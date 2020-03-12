@@ -74,7 +74,7 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
    * Metrics for each file are collected as string in the following format: "metricName=value" The
    * string is then split in the adapter. This greatly reduces HashMap usage. File paths are
    * returned along with their corresponding git hashes in the following format:
-   * "filePathObjectHash".
+   * "filePath=ObjectHash".
    *
    * <p>NOTE: uses APOC.
    *
@@ -94,7 +94,7 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
           + "MATCH (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c) WHERE "
           + "NOT(f IN deletes OR f IN renames)  AND m.name IN {2} WITH f.path as path, head(collect(f.objectHash)) as hash, m.name as name, "
           + "head(collect(m.value)) as value ORDER BY path, name WHERE value <> 0 "
-          + "RETURN path + head(collect(hash)) as path, collect(name + \"=\" + value) as metrics ORDER BY path")
+          + "RETURN path + \"=\" + head(collect(hash)) as path, collect(name + \"=\" + value) as metrics ORDER BY path")
   @NonNull
   List<MetricValueForCommitTreeQueryResult> getMetricTreeForCommitWithFileHashes(
       long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);

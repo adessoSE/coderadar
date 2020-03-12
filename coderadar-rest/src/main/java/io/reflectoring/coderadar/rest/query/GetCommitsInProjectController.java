@@ -2,6 +2,8 @@ package io.reflectoring.coderadar.rest.query;
 
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.query.port.driver.GetCommitsInProjectUseCase;
+import io.reflectoring.coderadar.rest.domain.GetCommitResponse;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,9 +25,19 @@ public class GetCommitsInProjectController {
   @GetMapping(
       path = "/projects/{projectId}/{branchName}/commits",
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<Commit>> listCommits(
+  public ResponseEntity<List<GetCommitResponse>> listCommits(
       @PathVariable("projectId") long projectId, @PathVariable("branchName") String branchName) {
-    return new ResponseEntity<>(
-        getCommitsInProjectUseCase.get(projectId, branchName), HttpStatus.OK);
+    List<Commit> commits = getCommitsInProjectUseCase.get(projectId, branchName);
+    List<GetCommitResponse> result = new ArrayList<>(commits.size());
+    for (Commit commit : commits) {
+      result.add(
+          new GetCommitResponse()
+              .setName(commit.getName())
+              .setAnalyzed(commit.isAnalyzed())
+              .setAuthor(commit.getAuthor())
+              .setComment(commit.getComment())
+              .setTimestamp(commit.getTimestamp()));
+    }
+    return new ResponseEntity<>(result, HttpStatus.OK);
   }
 }

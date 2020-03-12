@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 import lombok.Data;
 import lombok.ToString;
@@ -9,15 +8,14 @@ import lombok.ToString;
 @Data
 public class Commit {
 
-  @JsonIgnore private long id;
-
+  private long id;
   private String name;
   private long timestamp;
   private String comment;
   private String author;
-  private boolean analyzed = false;
+  private boolean analyzed;
 
-  @JsonIgnore @ToString.Exclude private List<Commit> parents;
+  @ToString.Exclude private List<Commit> parents;
 
-  @JsonIgnore @ToString.Exclude private List<FileToCommitRelationship> touchedFiles;
+  @ToString.Exclude private List<FileToCommitRelationship> touchedFiles;
 }

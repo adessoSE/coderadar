@@ -18,7 +18,6 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
   private final GetMetricTreeForCommitAdapter getMetricsForAllFilesInCommitAdapter;
   private final ProjectRepository projectRepository;
   private final CommitRepository commitRepository;
-  private static final int SHA1_LENGTH = 40;
 
   public GetDeltaTreeForTwoCommitsAdapter(
       GetMetricTreeForCommitAdapter getMetricsForAllFilesInCommitAdapter,
@@ -60,8 +59,7 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
 
   private void trimHashesFromTree(DeltaTree deltaTree) {
     if (deltaTree.getType().equals(MetricTreeNodeType.FILE)) {
-      deltaTree.setName(
-          deltaTree.getName().substring(0, deltaTree.getName().length() - SHA1_LENGTH));
+      deltaTree.setName(deltaTree.getName().split("=")[0]);
     }
     if (!deltaTree.getChildren().isEmpty()) {
       deltaTree.getChildren().forEach(this::trimHashesFromTree);
@@ -72,11 +70,11 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
       DeltaTree deltaTree, List<String> removedFiles, List<String> addedFiles) {
 
     for (String addedFile : addedFiles) {
-      String newHash = addedFile.substring(addedFile.length() - SHA1_LENGTH);
+      String newHash = addedFile.split("=")[1];
 
       for (int i = 0; i < removedFiles.size(); ++i) {
         String removedFile = removedFiles.get(i);
-        String oldHash = removedFile.substring(removedFile.length() - SHA1_LENGTH);
+        String oldHash = removedFile.split("=")[1];
         if (oldHash.equals(newHash)) {
           DeltaTree oldEntry = findChildInDeltaTree(deltaTree, removedFile);
           DeltaTree newEntry = findChildInDeltaTree(deltaTree, addedFile);
@@ -85,11 +83,11 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
 
             newEntry.getChanges().setAdded(false);
             newEntry.getChanges().setRenamed(true);
-            newEntry.setRenamedFrom(removedFile.substring(0, removedFile.length() - SHA1_LENGTH));
+            newEntry.setRenamedFrom(removedFile.split("=")[0]);
 
             oldEntry.getChanges().setRenamed(true);
             oldEntry.getChanges().setDeleted(false);
-            oldEntry.setRenamedTo(addedFile.substring(0, addedFile.length() - SHA1_LENGTH));
+            oldEntry.setRenamedTo(addedFile.split("=")[0]);
             removedFiles.remove(removedFile);
             break;
           }
@@ -166,7 +164,10 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
   private ChangeType getChangeType(MetricTree metricTree1, MetricTree metricTree2) {
     if (metricTree1 != null
         && metricTree2 != null
-        && metricTree1.getName().equals(metricTree2.getName())) { // File exists in both trees
+        && metricTree1
+            .getName()
+            .split("=")[0]
+            .equals(metricTree2.getName().split("=")[0])) { // File exists in both trees
       return ChangeType.MODIFY;
     } else if (metricTree1 != null // File deleted in new tree
         && (metricTree2 == null || metricTree1.getName().compareTo(metricTree2.getName()) < 0)) {
