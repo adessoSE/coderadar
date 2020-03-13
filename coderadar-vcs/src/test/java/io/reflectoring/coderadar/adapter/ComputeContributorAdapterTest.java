@@ -2,6 +2,11 @@ package io.reflectoring.coderadar.adapter;
 
 import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.vcs.adapter.ComputeContributorAdapter;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.assertj.core.api.Assertions;
 import org.eclipse.jgit.api.Git;
@@ -11,41 +16,37 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 public class ComputeContributorAdapterTest {
-    private URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
-    @TempDir
-    public File folder;
+  private URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
+  @TempDir public File folder;
 
-    @BeforeEach
-    public void setup() throws GitAPIException {
-        Git git = Git.cloneRepository().setURI(testRepoURL.toString()).setDirectory(folder).call();
-        git.close();
-    }
+  @BeforeEach
+  public void setup() throws GitAPIException {
+    Git git = Git.cloneRepository().setURI(testRepoURL.toString()).setDirectory(folder).call();
+    git.close();
+  }
 
-    @Test
-    public void test() {
-        ComputeContributorAdapter computeContributorAdapter = new ComputeContributorAdapter();
+  @Test
+  public void test() {
+    ComputeContributorAdapter computeContributorAdapter = new ComputeContributorAdapter();
 
-        List<Contributor> contributors = computeContributorAdapter.computeContributors(folder.getAbsolutePath(), new ArrayList<>());
+    List<Contributor> contributors =
+        computeContributorAdapter.computeContributors(folder.getAbsolutePath(), new ArrayList<>());
 
-        Assertions.assertThat(contributors.size()).isEqualTo(2);
-        Assertions.assertThat(contributors.get(1).getDisplayName()).isEqualTo("maximAtanasov");
-        Assertions.assertThat(contributors.get(1).getNames()).containsExactly("maximAtanasov");
-        Assertions.assertThat(contributors.get(1).getEmailAddresses()).containsExactly("maksim.atanasov@adesso.de");
+    Assertions.assertThat(contributors.size()).isEqualTo(2);
+    Assertions.assertThat(contributors.get(1).getDisplayName()).isEqualTo("maximAtanasov");
+    Assertions.assertThat(contributors.get(1).getNames()).containsExactly("maximAtanasov");
+    Assertions.assertThat(contributors.get(1).getEmailAddresses())
+        .containsExactly("maksim.atanasov@adesso.de");
 
-        Assertions.assertThat(contributors.get(0).getDisplayName()).isEqualTo("Krause");
-        Assertions.assertThat(contributors.get(0).getNames()).containsExactly("Krause");
-        Assertions.assertThat(contributors.get(0).getEmailAddresses()).containsExactly("kilian.krause@adesso.de");
-    }
+    Assertions.assertThat(contributors.get(0).getDisplayName()).isEqualTo("Krause");
+    Assertions.assertThat(contributors.get(0).getNames()).containsExactly("Krause");
+    Assertions.assertThat(contributors.get(0).getEmailAddresses())
+        .containsExactly("kilian.krause@adesso.de");
+  }
 
-    @AfterEach
-    public void tearDown() throws IOException {
-        FileUtils.deleteDirectory(folder);
-    }
+  @AfterEach
+  public void tearDown() throws IOException {
+    FileUtils.deleteDirectory(folder);
+  }
 }

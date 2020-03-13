@@ -638,8 +638,30 @@ include::{snippets}/metrics/deltaTree/http-request.adoc[]
 include::{snippets}/metrics/deltaTree/http-response.adoc[]
 
 
+=== Contributors
+
+==== Structure
+
+include::{snippets}/contributors/get/response-fields.adoc[]
 
 
+==== List all contributors of a project
 
+include::{snippets}/contributors/list/http-response.adoc[]
+
+==== Response Structure
+
+include::{snippets}/contributors/list/response-fields.adoc[]
+
+
+==== Merge two contributors
+
+===== Example Request
+
+include::{snippets}/contributors/merge/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/contributors/merge/http-response.adoc[]
 
 

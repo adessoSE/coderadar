@@ -49,7 +49,7 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
               Assertions.assertEquals(testRepoURL.toString(), project.getVcsUrl());
               Assertions.assertFalse(project.isVcsOnline());
               List<CommitEntity> commits = commitRepository.findByProjectIdAndTimestampDesc(id);
-              Assertions.assertEquals(13, commits.size());
+              Assertions.assertEquals(14, commits.size());
               List<FileEntity> files = fileRepository.findAllinProject(id);
               Assertions.assertEquals(8, files.size());
             })
@@ -70,7 +70,7 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
   }
 
   private ResultHandler documentCreateProject() {
-    ConstrainedFields fields = fields(CreateProjectCommand.class);
+    ConstrainedFields<CreateProjectCommand> fields = fields(CreateProjectCommand.class);
     return document(
         "projects/create",
         requestFields(
