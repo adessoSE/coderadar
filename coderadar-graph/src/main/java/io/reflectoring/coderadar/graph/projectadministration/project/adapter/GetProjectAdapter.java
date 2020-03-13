@@ -19,7 +19,7 @@ public class GetProjectAdapter implements GetProjectPort {
   }
 
   @Override
-  public Project get(Long id) {
+  public Project get(long id) {
     Optional<ProjectEntity> projectEntity = projectRepository.findById(id);
     if (projectEntity.isPresent()) {
       return projectMapper.mapNodeEntity(projectEntity.get());
@@ -44,7 +44,7 @@ public class GetProjectAdapter implements GetProjectPort {
   }
 
   @Override
-  public boolean existsById(Long projectId) {
+  public boolean existsById(long projectId) {
     return projectRepository.existsById(projectId);
   }
 }

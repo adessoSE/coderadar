@@ -15,7 +15,7 @@ public class GetMetricTreeForCommitService implements GetMetricTreeForCommitUseC
   }
 
   @Override
-  public MetricTree get(GetMetricsForCommitCommand command, Long projectId) {
+  public MetricTree get(GetMetricsForCommitCommand command, long projectId) {
     return getMetricTreeForCommitPort.get(command, projectId);
   }
 }

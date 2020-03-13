@@ -17,7 +17,7 @@ public class ResetAnalysisAdapter implements ResetAnalysisPort {
   }
 
   @Override
-  public void resetAnalysis(Long projectId) {
+  public void resetAnalysis(long projectId) {
     commitRepository.resetAnalyzedStatus(projectId);
 
     /*

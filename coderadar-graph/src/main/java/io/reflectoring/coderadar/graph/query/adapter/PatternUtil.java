@@ -27,7 +27,8 @@ public class PatternUtil {
       char currentChar = line.charAt(i);
       switch (currentChar) {
         case '*':
-          int j, k;
+          int j;
+          int k;
           if ((i == 0 || isSlashy(previousChar))
               && //
               ((j = i + 1) < strLen && line.charAt(j) == '*')

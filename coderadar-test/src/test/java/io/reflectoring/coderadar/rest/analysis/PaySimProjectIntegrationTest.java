@@ -102,21 +102,19 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
   private void testCreatingModule(Long projectId) throws Exception {
     CreateModuleCommand command = new CreateModuleCommand("src/paysim");
-    MvcResult result =
-        mvc()
-            .perform(
-                post("/projects/" + projectId + "/modules")
-                    .content(toJson(command))
-                    .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isCreated())
-            .andReturn();
+    mvc()
+        .perform(
+            post("/projects/" + projectId + "/modules")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andReturn();
 
-    List<ModuleEntity> modules = moduleRepository.findModulesInProject(projectId);
+    List<ModuleEntity> modules = moduleRepository.findModulesInProjectSortedDesc(projectId);
     Assertions.assertEquals("src/paysim/", modules.get(0).getPath());
 
     // Number of commits correct?
-    List<CommitEntity> commitEntities =
-        commitRepository.findByProjectIdWithFileRelationshipsSortedByTimestampAsc(projectId);
+    List<CommitEntity> commitEntities = commitRepository.findByProjectId(projectId);
     Assertions.assertEquals(99, commitEntities.size());
 
     // Files there?
@@ -129,7 +127,8 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     // Analyze again
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON))
+            post("/projects/" + projectId + "/master/analyze")
+                .contentType(MediaType.APPLICATION_JSON))
         .andReturn();
 
     // Check values for latest (newest) commit
@@ -183,8 +182,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         .andReturn();
 
     // Number of commits correct?
-    List<CommitEntity> commitEntities =
-        commitRepository.findByProjectIdWithFileRelationshipsSortedByTimestampAsc(projectId);
+    List<CommitEntity> commitEntities = commitRepository.findByProjectId(projectId);
     Assertions.assertEquals(5, commitEntities.size());
 
     // Metric values deleted?
@@ -192,7 +190,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     Assertions.assertEquals(0, metricValues.size());
 
     // Module still there?
-    List<ModuleEntity> modules = moduleRepository.findModulesInProject(projectId);
+    List<ModuleEntity> modules = moduleRepository.findModulesInProjectSortedDesc(projectId);
     Assertions.assertEquals("src/paysim/", modules.get(0).getPath());
 
     session.clear();
@@ -318,10 +316,10 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     DeltaTree secondChangedFile = firstChild.getChildren().get(11);
     Assertions.assertEquals("src/paysim/output/KafkaOutput.java", secondChangedFile.getName());
     Assertions.assertEquals(MetricTreeNodeType.FILE, firstChangedFile.getType());
-    Assertions.assertEquals(4, secondChangedFile.getCommit1Metrics().size());
+    Assertions.assertEquals(3, secondChangedFile.getCommit1Metrics().size());
     Assertions.assertEquals(
-        secondChangedFile.getCommit2Metrics().get(2).getValue(),
-        secondChangedFile.getCommit1Metrics().get(2).getValue() - 1L);
+        secondChangedFile.getCommit2Metrics().get(1).getValue(),
+        secondChangedFile.getCommit1Metrics().get(1).getValue() - 1L);
     Assertions.assertTrue(secondChangedFile.getChanges().isModified());
 
     for (int i = 1; i < 19; i++) {
@@ -330,8 +328,14 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
       }
       DeltaTree file = firstChild.getChildren().get(i);
       Assertions.assertEquals(MetricTreeNodeType.FILE, file.getType());
-      Assertions.assertEquals(4, file.getCommit1Metrics().size());
-      Assertions.assertEquals(file.getCommit2Metrics().get(2), file.getCommit1Metrics().get(2));
+      if (file.getCommit1Metrics().stream()
+          .anyMatch(m -> m.getMetricName().equals("coderadar:size:cloc:java"))) {
+        Assertions.assertEquals(4, file.getCommit1Metrics().size());
+        Assertions.assertEquals(file.getCommit2Metrics().get(2), file.getCommit1Metrics().get(2));
+      } else {
+        Assertions.assertEquals(3, file.getCommit1Metrics().size());
+        Assertions.assertEquals(file.getCommit2Metrics().get(1), file.getCommit1Metrics().get(1));
+      }
       Assertions.assertFalse(file.getChanges().isModified());
       Assertions.assertFalse(file.getChanges().isAdded());
       Assertions.assertFalse(file.getChanges().isRenamed());
@@ -344,14 +348,14 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     // Start analysis
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON))
+            post("/projects/" + projectId + "/master/analyze")
+                .contentType(MediaType.APPLICATION_JSON))
         .andReturn();
 
     // Commits analyzed?
     session.clear();
 
-    Collection<CommitEntity> commits =
-        commitRepository.findByProjectIdWithAllRelationshipsSortedByTimestampAsc(projectId);
+    Collection<CommitEntity> commits = commitRepository.findByProjectId(projectId);
 
     for (CommitEntity commit : commits) {
       Assertions.assertTrue(commit.isAnalyzed());
@@ -437,8 +441,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     session.clear();
 
     // Number of commits correct?
-    List<CommitEntity> commitEntities =
-        commitRepository.findByProjectIdWithFileRelationshipsSortedByTimestampAsc(projectId);
+    List<CommitEntity> commitEntities = commitRepository.findByProjectId(projectId);
     Assertions.assertEquals(99, commitEntities.size());
 
     // Files there?

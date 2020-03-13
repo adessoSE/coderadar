@@ -23,7 +23,7 @@ export class AppEffects {
   @Effect()
   loadCommitsEffects$ = this.actions$.pipe(ofType(LOAD_COMMITS),
     switchMap(
-      () => from(this.projectService.getCommits(this.currentProjectId))
+      () => from(this.projectService.getCommits(this.currentProjectId, 'master'))
         .pipe(
           map((result: any) => {
             return actions.loadCommitsSuccess(result.body);

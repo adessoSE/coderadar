@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.projectadministration.service.analyzerconfig;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
-import io.reflectoring.coderadar.analyzer.service.ListAnalyzerService;
+import io.reflectoring.coderadar.analyzer.service.ListAnalyzersService;
 import io.reflectoring.coderadar.plugin.api.AnalyzerConfigurationException;
 import io.reflectoring.coderadar.projectadministration.AnalyzerNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
@@ -18,14 +18,14 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
 
   private final GetAnalyzerConfigurationPort getAnalyzerConfigurationPort;
   private final UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort;
-  private final ListAnalyzerService listAnalyzerService;
+  private final ListAnalyzersService listAnalyzerService;
   private final ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService;
   private final Logger logger = LoggerFactory.getLogger(UpdateAnalyzerConfigurationService.class);
 
   public UpdateAnalyzerConfigurationService(
       UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort,
       GetAnalyzerConfigurationPort getAnalyzerConfigurationPort,
-      ListAnalyzerService listAnalyzerService,
+      ListAnalyzersService listAnalyzerService,
       ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService) {
     this.updateAnalyzerConfigurationPort = updateAnalyzerConfigurationPort;
     this.getAnalyzerConfigurationPort = getAnalyzerConfigurationPort;
@@ -36,7 +36,7 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
 
   @Override
   public void update(
-      UpdateAnalyzerConfigurationCommand command, Long configurationId, Long projectId) {
+      UpdateAnalyzerConfigurationCommand command, long configurationId, long projectId) {
     AnalyzerConfiguration analyzerConfiguration =
         getAnalyzerConfigurationPort.getAnalyzerConfiguration(configurationId);
 

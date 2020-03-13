@@ -7,7 +7,7 @@ import io.reflectoring.coderadar.graph.projectadministration.filepattern.adapter
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
-import java.util.Collection;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class ListFilePatternsOfProjectAdapterTest {
 
     when(projectRepository.existsById(1L)).thenReturn(true);
 
-    Collection<FilePattern> returnedList = listFilePatternsOfProjectAdapter.listFilePatterns(1L);
+    List<FilePattern> returnedList = listFilePatternsOfProjectAdapter.listFilePatterns(1L);
     Assertions.assertThat(returnedList).isNotNull();
   }
 }

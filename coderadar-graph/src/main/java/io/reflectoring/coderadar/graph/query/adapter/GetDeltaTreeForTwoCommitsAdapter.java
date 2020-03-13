@@ -1,109 +1,96 @@
 package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
-import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.plugin.api.ChangeType;
-import io.reflectoring.coderadar.projectadministration.CommitNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.query.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetDeltaTreeForTwoCommitsPort;
 import io.reflectoring.coderadar.query.port.driver.GetDeltaTreeForTwoCommitsCommand;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 @Service
 public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommitsPort {
 
-  private final CommitRepository commitRepository;
-  private final FileRepository fileRepository;
   private final GetMetricTreeForCommitAdapter getMetricsForAllFilesInCommitAdapter;
   private final ProjectRepository projectRepository;
-
-  private static final String PROCESSING_ERROR = "Cannot calculate delta tree!";
+  private final CommitRepository commitRepository;
 
   public GetDeltaTreeForTwoCommitsAdapter(
-      CommitRepository commitRepository,
-      FileRepository fileRepository,
       GetMetricTreeForCommitAdapter getMetricsForAllFilesInCommitAdapter,
-      ProjectRepository projectRepository) {
-    this.commitRepository = commitRepository;
-    this.fileRepository = fileRepository;
+      ProjectRepository projectRepository,
+      CommitRepository commitRepository) {
     this.getMetricsForAllFilesInCommitAdapter = getMetricsForAllFilesInCommitAdapter;
     this.projectRepository = projectRepository;
+    this.commitRepository = commitRepository;
   }
 
   @Override
-  public DeltaTree get(GetDeltaTreeForTwoCommitsCommand command, Long projectId) {
+  public DeltaTree get(GetDeltaTreeForTwoCommitsCommand command, long projectId) {
     ProjectEntity projectEntity =
         projectRepository
             .findByIdWithModules(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
-    Long commit1Time =
-        commitRepository
-            .findTimeStampByNameAndProjectId(command.getCommit1(), projectId)
-            .orElseThrow(() -> new CommitNotFoundException(command.getCommit1()));
-    Long commit2Time =
-        commitRepository
-            .findTimeStampByNameAndProjectId(command.getCommit2(), projectId)
-            .orElseThrow(() -> new CommitNotFoundException(command.getCommit2()));
+
+    if (commitRepository.commitIsNewer(command.getCommit1(), command.getCommit2())) {
+      String temp = command.getCommit1();
+      command.setCommit1(command.getCommit2());
+      command.setCommit2(temp);
+    }
 
     MetricTree commit1Tree =
-        getMetricsForAllFilesInCommitAdapter.get(commit1Time, command.getMetrics(), projectEntity);
+        getMetricsForAllFilesInCommitAdapter.get(
+            projectEntity, command.getCommit1(), command.getMetrics(), true);
     MetricTree commit2Tree =
-        getMetricsForAllFilesInCommitAdapter.get(commit2Time, command.getMetrics(), projectEntity);
-
-    if (commit1Time > commit2Time) {
-      MetricTree temp = commit1Tree;
-      commit1Tree = commit2Tree;
-      commit2Tree = temp;
-
-      Long tempDate = commit1Time;
-      commit1Time = commit2Time;
-      commit2Time = tempDate;
-    }
+        getMetricsForAllFilesInCommitAdapter.get(
+            projectEntity, command.getCommit2(), command.getMetrics(), true);
 
     List<String> addedFiles = new ArrayList<>();
     List<String> removedFiles = new ArrayList<>();
-    List<String> modifiedFiles =
-        fileRepository.getFilesModifiedBetweenCommits(commit1Time, commit2Time, projectId);
 
-    DeltaTree deltaTree =
-        createDeltaTree(commit1Tree, commit2Tree, modifiedFiles, addedFiles, removedFiles);
-
-    processRenames(deltaTree, removedFiles, addedFiles, commit1Time, commit2Time, projectId);
+    DeltaTree deltaTree = createDeltaTree(commit1Tree, commit2Tree, addedFiles, removedFiles);
+    processRenames(deltaTree, removedFiles, addedFiles);
+    trimHashesFromTree(deltaTree);
     return deltaTree;
   }
 
-  private void processRenames(
-      DeltaTree deltaTree,
-      List<String> removedFiles,
-      List<String> addedFiles,
-      Long commit1Time,
-      Long commit2Time,
-      Long projectId) {
+  private void trimHashesFromTree(DeltaTree deltaTree) {
+    if (deltaTree.getType().equals(MetricTreeNodeType.FILE)) {
+      deltaTree.setName(deltaTree.getName().split("=")[0]);
+    }
+    if (!deltaTree.getChildren().isEmpty()) {
+      deltaTree.getChildren().forEach(this::trimHashesFromTree);
+    }
+  }
 
-    List<Map<String, Object>> oldPaths =
-        fileRepository.findOldpathIfRenamedBetweenCommits(
-            addedFiles, commit1Time, commit2Time, projectId);
-    for (Map<String, Object> rename : oldPaths) {
-      String oldPath = (String) rename.get("oldPath");
-      String newPath = (String) rename.get("newPath");
-      if (removedFiles.contains(oldPath)) {
-        DeltaTree oldName = findChildInDeltaTree(deltaTree, oldPath);
-        DeltaTree newName = findChildInDeltaTree(deltaTree, newPath);
-        if (oldName != null && newName != null) {
-          newName.setCommit1Metrics(oldName.getCommit1Metrics());
-          newName.getChanges().setAdded(false);
-          newName.getChanges().setRenamed(true);
-          newName.setRenamedFrom(oldPath);
-          newName.setRenamedTo(newPath);
-          removeChildFromDeltaTree(deltaTree, oldName);
+  private void processRenames(
+      DeltaTree deltaTree, List<String> removedFiles, List<String> addedFiles) {
+
+    for (String addedFile : addedFiles) {
+      String newHash = addedFile.split("=")[1];
+
+      for (int i = 0; i < removedFiles.size(); ++i) {
+        String removedFile = removedFiles.get(i);
+        String oldHash = removedFile.split("=")[1];
+        if (oldHash.equals(newHash)) {
+          DeltaTree oldEntry = findChildInDeltaTree(deltaTree, removedFile);
+          DeltaTree newEntry = findChildInDeltaTree(deltaTree, addedFile);
+          if (oldEntry != null && newEntry != null) {
+            newEntry.setCommit1Metrics(oldEntry.getCommit1Metrics());
+
+            newEntry.getChanges().setAdded(false);
+            newEntry.getChanges().setRenamed(true);
+            newEntry.setRenamedFrom(removedFile.split("=")[0]);
+
+            oldEntry.getChanges().setRenamed(true);
+            oldEntry.getChanges().setDeleted(false);
+            oldEntry.setRenamedTo(addedFile.split("=")[0]);
+            removedFiles.remove(removedFile);
+            break;
+          }
         }
       }
     }
@@ -114,7 +101,6 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
    *
    * @param commit1Tree The metric tree of the first commit.
    * @param commit2Tree The metric tree of the second commit.
-   * @param modifiedFiles A list of file paths that were modified between the two commits
    * @param addedFiles A list, that must be filled with all files added in the newest commit.
    * @param removedFiles A list, that must be filled with all files removed in the newest commit.
    * @return A delta tree, which contains no information about renames. Renames must be processed
@@ -123,7 +109,6 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
   private DeltaTree createDeltaTree(
       MetricTree commit1Tree,
       MetricTree commit2Tree,
-      List<String> modifiedFiles,
       List<String> addedFiles,
       List<String> removedFiles) {
     DeltaTree deltaTree = new DeltaTree();
@@ -147,30 +132,30 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
               : null;
 
       if (getChangeType(metricTree1, metricTree2).equals(ChangeType.MODIFY)) {
-        Assert.notNull(metricTree1, PROCESSING_ERROR);
-        Assert.notNull(metricTree2, PROCESSING_ERROR);
         if (metricTree1.getType().equals(MetricTreeNodeType.MODULE)
             && metricTree2.getType().equals(MetricTreeNodeType.MODULE)) {
           deltaTree
               .getChildren()
-              .add(
-                  createDeltaTree(
-                      metricTree1, metricTree2, modifiedFiles, addedFiles, removedFiles));
+              .add(createDeltaTree(metricTree1, metricTree2, addedFiles, removedFiles));
         } else {
-          deltaTree.getChildren().add(createFileNode(metricTree1, metricTree2, modifiedFiles));
+          deltaTree.getChildren().add(createFileNode(metricTree1, metricTree2));
         }
         tree1Counter++;
         tree2Counter++;
       } else if (getChangeType(metricTree1, metricTree2).equals(ChangeType.DELETE)) {
-        Assert.notNull(metricTree1, PROCESSING_ERROR);
         deltaTree.getChildren().add(createDeletedFileNode(metricTree1));
         removedFiles.add(metricTree1.getName());
         tree1Counter++;
       } else {
-        Assert.notNull(metricTree2, PROCESSING_ERROR);
-        deltaTree.getChildren().add(createAddedFileNode(metricTree2));
-        addedFiles.add(metricTree2.getName());
-        tree2Counter++;
+        if (metricTree2.getType().equals(MetricTreeNodeType.MODULE) && metricTree1 != null) {
+          deltaTree.getChildren().add(createAddedFileNode(metricTree1));
+          addedFiles.add(metricTree1.getName());
+          tree1Counter++;
+        } else {
+          deltaTree.getChildren().add(createAddedFileNode(metricTree2));
+          addedFiles.add(metricTree2.getName());
+          tree2Counter++;
+        }
       }
     }
     return deltaTree;
@@ -179,13 +164,19 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
   private ChangeType getChangeType(MetricTree metricTree1, MetricTree metricTree2) {
     if (metricTree1 != null
         && metricTree2 != null
-        && metricTree1.getName().equals(metricTree2.getName())) { // File exists in both trees
+        && metricTree1
+            .getName()
+            .split("=")[0]
+            .equals(metricTree2.getName().split("=")[0])) { // File exists in both trees
       return ChangeType.MODIFY;
-    } else if (metricTree1 != null // File Deleted in new tree
+    } else if (metricTree1 != null // File deleted in new tree
         && (metricTree2 == null || metricTree1.getName().compareTo(metricTree2.getName()) < 0)) {
       return ChangeType.DELETE;
-    } else {
+    } else if (metricTree2 != null // File added in new tree
+        && (metricTree1 == null || metricTree2.getName().compareTo(metricTree1.getName()) < 0)) {
       return ChangeType.ADD;
+    } else {
+      return ChangeType.UNCHANGED;
     }
   }
 
@@ -213,17 +204,25 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
     return child;
   }
 
-  private DeltaTree createFileNode(
-      MetricTree metricTree1, MetricTree metricTree2, List<String> modifiedFiles) {
+  private DeltaTree createFileNode(MetricTree metricTree1, MetricTree metricTree2) {
     DeltaTree child = new DeltaTree();
     child.setName(metricTree1.getName());
     child.setType(metricTree1.getType());
     child.setCommit1Metrics(metricTree1.getMetrics());
     child.setCommit2Metrics(metricTree2.getMetrics());
 
-    Changes changes = new Changes();
-    changes.setModified(modifiedFiles.contains(metricTree1.getName()));
+    Changes changes = new Changes().setModified(false);
     child.setChanges(changes);
+
+    for (MetricValueForCommit value : metricTree1.getMetrics()) {
+      for (MetricValueForCommit value2 : metricTree2.getMetrics()) {
+        if (value.getMetricName().equals(value2.getMetricName())
+            && value.getValue() != value2.getValue()) {
+          changes.setModified(true);
+          return child;
+        }
+      }
+    }
     return child;
   }
 
@@ -248,55 +247,5 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
       }
     }
     return null;
-  }
-
-  /**
-   * Removes a child from a delta tree.
-   *
-   * @param deltaTree The tree to remove from.
-   * @param childTree The child to remove.
-   */
-  private void removeChildFromDeltaTree(DeltaTree deltaTree, DeltaTree childTree) {
-    for (DeltaTree child : deltaTree.getChildren()) {
-      if (child.getType().equals(MetricTreeNodeType.FILE)) {
-        if (child.getName().equals(childTree.getName())) {
-          deltaTree.getChildren().remove(child);
-          deltaTree.setCommit1Metrics(aggregateChildMetrics(deltaTree.getChildren()));
-          return;
-        }
-      } else {
-        removeChildFromDeltaTree(child, childTree);
-      }
-    }
-  }
-
-  /**
-   * Aggregates all of the metrics in the delta tress.
-   *
-   * @param children The trees whose metrics to aggregate
-   * @return A list of aggregated metric values.
-   */
-  private List<MetricValueForCommit> aggregateChildMetrics(List<DeltaTree> children) {
-    List<MetricValueForCommit> resultList = new ArrayList<>();
-    Map<String, Long> aggregatedMetrics = new HashMap<>();
-    for (DeltaTree deltaTree : children) {
-      for (MetricValueForCommit val : aggregateChildMetrics(deltaTree.getChildren())) {
-        if (deltaTree.getCommit1Metrics().stream()
-            .noneMatch(metric -> metric.getMetricName().equals(val.getMetricName()))) {
-          deltaTree
-              .getCommit1Metrics()
-              .add(new MetricValueForCommit(val.getMetricName(), val.getValue()));
-        }
-      }
-      for (MetricValueForCommit value : deltaTree.getCommit1Metrics()) {
-        aggregatedMetrics.putIfAbsent(value.getMetricName(), 0L);
-        aggregatedMetrics.put(
-            value.getMetricName(), aggregatedMetrics.get(value.getMetricName()) + value.getValue());
-      }
-    }
-    for (Map.Entry<String, Long> metric : aggregatedMetrics.entrySet()) {
-      resultList.add(new MetricValueForCommit(metric.getKey(), metric.getValue()));
-    }
-    return resultList;
   }
 }

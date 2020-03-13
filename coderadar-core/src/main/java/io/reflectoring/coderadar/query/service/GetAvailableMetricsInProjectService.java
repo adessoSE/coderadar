@@ -20,7 +20,7 @@ public class GetAvailableMetricsInProjectService implements GetAvailableMetricsI
   }
 
   @Override
-  public List<String> get(Long projectId) {
+  public List<String> get(long projectId) {
     if (getProjectPort.existsById(projectId)) {
       return getAvailableMetricsInProjectPort.get(projectId);
     } else {

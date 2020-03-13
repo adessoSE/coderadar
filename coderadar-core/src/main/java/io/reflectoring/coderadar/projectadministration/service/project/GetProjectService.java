@@ -15,7 +15,7 @@ public class GetProjectService implements GetProjectUseCase {
   }
 
   @Override
-  public Project get(Long id) {
+  public Project get(long id) {
     return port.get(id);
   }
 }

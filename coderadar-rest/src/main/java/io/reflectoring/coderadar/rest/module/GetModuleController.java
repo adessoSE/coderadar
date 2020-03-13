@@ -23,7 +23,7 @@ public class GetModuleController {
       path = "/projects/{projectId}/modules/{moduleId}",
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<GetModuleResponse> getModule(
-      @PathVariable(name = "moduleId") Long moduleId) {
+      @PathVariable(name = "moduleId") long moduleId) {
     return new ResponseEntity<>(
         new GetModuleResponse(moduleId, getModuleUseCase.get(moduleId).getPath()), HttpStatus.OK);
   }

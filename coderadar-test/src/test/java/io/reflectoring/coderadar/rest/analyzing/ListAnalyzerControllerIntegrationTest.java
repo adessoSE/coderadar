@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.rest.analyzing;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;

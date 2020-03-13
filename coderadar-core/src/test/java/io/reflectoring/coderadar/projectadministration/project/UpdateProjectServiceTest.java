@@ -20,10 +20,12 @@ import io.reflectoring.coderadar.projectadministration.service.ProcessProjectSer
 import io.reflectoring.coderadar.projectadministration.service.project.UpdateProjectService;
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
+import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
-import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import java.io.File;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import org.junit.Assert;
@@ -41,7 +43,7 @@ class UpdateProjectServiceTest {
 
   @Mock private UpdateProjectPort updateProjectPortMock;
 
-  @Mock private UpdateRepositoryUseCase updateRepositoryUseCaseMock;
+  @Mock private UpdateLocalRepositoryUseCase updateLocalRepositoryUseCaseMock;
 
   @Mock private CoderadarConfigurationProperties configurationPropertiesMock;
 
@@ -57,6 +59,8 @@ class UpdateProjectServiceTest {
 
   @Mock private ResetAnalysisPort resetAnalysisPort;
 
+  @Mock private GetAvailableBranchesPort getAvailableBranchesPort;
+
   private UpdateProjectService testSubject;
 
   @BeforeEach
@@ -65,14 +69,15 @@ class UpdateProjectServiceTest {
         new UpdateProjectService(
             getProjectPortMock,
             updateProjectPortMock,
-            updateRepositoryUseCaseMock,
+            updateLocalRepositoryUseCaseMock,
             configurationPropertiesMock,
             processProjectServiceMock,
             extractProjectCommitsUseCaseMock,
             saveCommitPortMock,
             listModulesOfProjectUseCase,
             resetAnalysisPort,
-            createModulePort);
+            createModulePort,
+            getAvailableBranchesPort);
   }
 
   @Test
@@ -177,7 +182,8 @@ class UpdateProjectServiceTest {
     Assert.assertEquals(testProject.getVcsEnd(), newEndDate);
     Assert.assertEquals(testProject.getVcsUrl(), newVcsUrl);
 
-    verify(updateRepositoryUseCaseMock).updateRepository(any());
-    verify(saveCommitPortMock).saveCommits(Collections.singletonList(commitMock), projectId);
+    verify(updateLocalRepositoryUseCaseMock).updateRepository(any());
+    verify(saveCommitPortMock)
+        .saveCommits(Collections.singletonList(commitMock), new ArrayList<>(), projectId);
   }
 }

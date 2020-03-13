@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.projectadministration.analyzerconfig;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
-import io.reflectoring.coderadar.analyzer.service.ListAnalyzerService;
+import io.reflectoring.coderadar.analyzer.service.ListAnalyzersService;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.GetAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.UpdateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
@@ -24,7 +24,7 @@ class UpdateAnalyzerConfigurationServiceTest {
   @Mock private GetAnalyzerConfigurationPort getConfigurationPortMock;
 
   private UpdateAnalyzerConfigurationService testSubject;
-  @Mock private ListAnalyzerService listAnalyzerServiceMock;
+  @Mock private ListAnalyzersService listAnalyzerServiceMock;
 
   @Mock private ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectServiceMock;
 

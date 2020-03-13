@@ -21,7 +21,7 @@ public class GetAvailableMetricsInProjectController {
   }
 
   @GetMapping(path = "/projects/{projectId}/metrics", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<String>> getMetrics(@PathVariable("projectId") Long projectId) {
+  public ResponseEntity<List<String>> getMetrics(@PathVariable("projectId") long projectId) {
     return new ResponseEntity<>(getAvailableMetricsInProjectUseCase.get(projectId), HttpStatus.OK);
   }
 }

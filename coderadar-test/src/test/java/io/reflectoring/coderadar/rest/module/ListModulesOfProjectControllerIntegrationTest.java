@@ -61,7 +61,6 @@ class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTempla
         .perform(get("/projects/" + testProject.getId() + "/modules"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetModuleResponse[].class))
-        .andExpect(containsResource(GetModuleResponse[].class))
         .andExpect(
             result -> {
               GetModuleResponse[] moduleResponses =

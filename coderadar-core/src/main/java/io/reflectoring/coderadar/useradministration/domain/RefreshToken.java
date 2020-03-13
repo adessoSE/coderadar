@@ -11,5 +11,4 @@ import lombok.Data;
 public class RefreshToken {
   private Long id;
   private String token;
-  private User user;
 }

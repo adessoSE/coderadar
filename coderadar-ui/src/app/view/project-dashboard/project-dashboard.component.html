@@ -8,11 +8,34 @@
     <br>
     <mat-label style="font-size: 12pt">Analyzed {{commitsAnalyzed}}/{{commits.length}} commits</mat-label>
   </p>
+
+  <mat-form-field class="branchSelector">
+    <mat-label>Branch</mat-label>
+    <mat-select [(value)]="selectedBranch" (valueChange)="getCommits(false)">
+      <mat-option *ngFor="let branch of branches" [value]="branch.name">
+        {{branch.name}}
+      </mat-option>
+    </mat-select>
+
+  </mat-form-field>
+
+  <div style="float: left; margin-top: 10px">
+    <button title="Start analysis" (click)="startAnalysis(project.id, selectedBranch)" style="float:right" mat-icon-button>
+      <mat-icon>play_arrow</mat-icon>
+    </button>
+    <button title="Stop analysis" (click)="stopAnalysis(project.id)" style="float:right" mat-icon-button>
+      <mat-icon>stop</mat-icon>
+    </button>
+    <button title="Delete analysis results" (click)="resetAnalysis(project.id)" style="float:right" mat-icon-button>
+      <mat-icon>clear</mat-icon>
+    </button>
+  </div>
   <mat-paginator #paginator1 [showFirstLastButtons]="true" class="paginator" [length]="commits.length"
                  [pageSize]="pageSize"
                  [pageSizeOptions]="pageSizeOptions"
                  (page)="syncPaginators($event)">
   </mat-paginator>
+
   <mat-grid-list cols="1" rowHeight="50px" gutterSize="-2px" >
     <mat-accordion class="example-headers-align" *ngFor="let commit of commits.slice(pageEvent.pageIndex*pageEvent.pageSize, (pageEvent.pageIndex*pageEvent.pageSize) + pageEvent.pageSize)">
       <mat-grid-tile [colspan]="1" [rowspan]="(commit === selectedCommit1 || commit === selectedCommit2) ? 4 : 1">
@@ -33,10 +56,10 @@
               {{timestampToDate(commit.timestamp)}}
             </mat-panel-description>
           </mat-expansion-panel-header>
-          <mat-label>Analyzed: <b>{{booleanToString(commit.analyzed)}}</b></mat-label>
+          <mat-label>Analyzed: <strong>{{booleanToString(commit.analyzed)}}</strong></mat-label>
           <mat-action-row>
             <button mat-button routerLink="/project/{{project.id}}/{{commit.name}}/dependency-map/">Dependency Map</button>
-            <button [disabled]="!commit.analyzed" mat-button routerLink="/project/{{project.id}}/{{commit.name}}"><b>Raw metrics</b></button><br>
+            <button [disabled]="!commit.analyzed" mat-button routerLink="/project/{{project.id}}/{{commit.name}}">Raw metrics</button><br>
           </mat-action-row>
         </mat-expansion-panel>
       </mat-grid-tile>

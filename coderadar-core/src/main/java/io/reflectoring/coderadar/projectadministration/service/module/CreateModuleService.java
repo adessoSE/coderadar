@@ -31,7 +31,7 @@ public class CreateModuleService implements CreateModuleUseCase {
   }
 
   @Override
-  public Long createModule(CreateModuleCommand command, Long projectId)
+  public Long createModule(CreateModuleCommand command, long projectId)
       throws ModulePathInvalidException {
 
     if (!getProjectPort.existsById(projectId)) {

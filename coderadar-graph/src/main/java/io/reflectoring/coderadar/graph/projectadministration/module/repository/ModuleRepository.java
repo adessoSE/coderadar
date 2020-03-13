@@ -9,41 +9,60 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
+
+  /**
+   * @param projectId The project id.
+   * @return All of the modules in a project sorted by the path in descending order.
+   */
   @Query(
-      "MATCH (p:ProjectEntity)-[:CONTAINS*1..]->(m:ModuleEntity) WHERE ID(p) = {0} RETURN m ORDER BY m.path DESC")
+      "MATCH (p)-[:CONTAINS*1..]->(m:ModuleEntity) USING SCAN m:ModuleEntity WHERE ID(p) = {0} RETURN m ORDER BY m.path DESC")
   @NonNull
-  List<ModuleEntity> findModulesInProjectSortedDesc(@NonNull Long projectId);
+  List<ModuleEntity> findModulesInProjectSortedDesc(long projectId);
 
-  @Query("MATCH (p:ProjectEntity)-[:CONTAINS*1..]->(m:ModuleEntity) WHERE ID(p) = {0} RETURN m")
-  @NonNull
-  List<ModuleEntity> findModulesInProject(@NonNull Long projectId);
-
+  /**
+   * Detaches all files that fall inside the modulePath from the project/module, creates a new
+   * ModuleEntity and attaches said files to it.
+   *
+   * @param projectOrModuleId The project or module id.
+   * @param modulePath The path of the new module.
+   * @return The id of the newly created module.
+   */
   @Query(
-      "CREATE (m:ModuleEntity { path: {1} }) WITH m "
-          + "MATCH (p)-[r1:CONTAINS]->(f:FileEntity) WHERE ID(p) = {0} AND f.path STARTS WITH {1} WITH DISTINCT m, p, f, r1 "
-          + "CREATE (m)-[r2:CONTAINS]->(f) WITH DISTINCT m,f,p,r1 "
-          + "DELETE r1 WITH m, p LIMIT 1 "
-          + "CREATE (p)-[r3:CONTAINS]->(m) RETURN m")
+      "MATCH (p) WHERE ID(p) = {0} WITH p "
+          + "CREATE (m:ModuleEntity { path: {1}} )<-[:CONTAINS]-(p) WITH m, p LIMIT 1 "
+          + "MATCH (p)-[r1:CONTAINS]->(f:FileEntity) WHERE f.path STARTS WITH {1} WITH DISTINCT m, f, r1 "
+          + "CREATE (m)-[r2:CONTAINS]->(f) WITH DISTINCT m,f,r1 "
+          + "DELETE r1 WITH m "
+          + "RETURN m")
   @NonNull
-  ModuleEntity createModuleInProject(@NonNull Long projectId, @NonNull String modulePath);
+  ModuleEntity createModule(long projectOrModuleId, @NonNull String modulePath);
 
+  /**
+   * @param path The path to search in.
+   * @param projectOrModuleId The id of the project or a module.
+   * @return True if any file falls under the given path, false otherwise.
+   */
   @Query(
-      "CREATE (m:ModuleEntity { path: {1} }) WITH m "
-          + "MATCH (m2)-[r1:CONTAINS]->(f:FileEntity) WHERE ID(m2) = {0} AND f.path STARTS WITH {1} WITH DISTINCT m, m2, f, r1 "
-          + "CREATE (m)-[r2:CONTAINS]->(f) WITH DISTINCT m,f,m2,r1 "
-          + "DELETE r1 WITH m, m2 LIMIT 1 "
-          + "CREATE (m2)-[r3:CONTAINS]->(m) RETURN m")
+      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {1} AND f.path STARTS WITH {0} WITH f LIMIT 1 RETURN COUNT(f) > 0 ")
   @NonNull
-  ModuleEntity createModuleInModule(@NonNull Long moduleId, @NonNull String modulePath);
+  Boolean fileInPathExists(@NonNull String path, long projectOrModuleId);
 
-  @Query(
-      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {1} AND f.path STARTS WITH {0} RETURN COUNT(f) > 0 ")
-  @NonNull
-  Boolean fileInPathExists(@NonNull String path, @NonNull Long projectOrModuleId);
-
+  /**
+   * Detaches a module from a project while keeping all of it's files still attached to it.
+   *
+   * @param projectId The project id.
+   * @param moduleId The id of the module to detach.
+   */
   @Query("MATCH (p)-[r]->(m) WHERE ID(p) = {0} AND ID(m) = {1} DELETE r")
-  void detachModuleFromProject(@NonNull Long projectId, @NonNull Long moduleId);
+  void detachModuleFromProject(long projectId, long moduleId);
 
+  /**
+   * Detaches a module from it's parent module while keeping all of it's files still attached to the
+   * child.
+   *
+   * @param parentId The id of the parent module.
+   * @param childId The id of the module to detach.
+   */
   @Query("MATCH (m1)-[r]->(m2) WHERE ID(m1) = {0} AND ID(m2) = {1} DELETE r")
-  void detachModuleFromModule(@NonNull Long moduleId1, @NonNull Long moduleId2);
+  void detachModuleFromModule(long parentId, long childId);
 }

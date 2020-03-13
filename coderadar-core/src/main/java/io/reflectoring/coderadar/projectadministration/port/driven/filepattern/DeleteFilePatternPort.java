@@ -7,5 +7,5 @@ public interface DeleteFilePatternPort {
    *
    * @param id The id of the file pattern.
    */
-  void delete(Long id);
+  void delete(long id);
 }

@@ -26,12 +26,12 @@ class CreateProjectAdapterTest {
   @DisplayName("Should save project when passing a valid project entity")
   void shouldSaveProjectWhenPassingAValidProjectEntity() {
     Project project = new Project();
-    ProjectEntity projectEntity = new ProjectEntity();
-    when(projectRepository.save(projectEntity)).thenReturn(projectEntity);
+    ProjectEntity projectEntity = new ProjectEntity().setId(1L);
+    when(projectRepository.save(any())).thenReturn(projectEntity);
 
     createProjectAdapter.createProject(project);
 
-    verify(projectRepository, times(1)).save(projectEntity);
+    verify(projectRepository, times(1)).save(any());
   }
 
   @Test

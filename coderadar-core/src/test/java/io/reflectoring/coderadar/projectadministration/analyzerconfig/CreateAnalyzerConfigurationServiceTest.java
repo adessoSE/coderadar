@@ -5,7 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
-import io.reflectoring.coderadar.analyzer.service.ListAnalyzerService;
+import io.reflectoring.coderadar.analyzer.service.ListAnalyzersService;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzerconfig.CreateAnalyzerConfigurationPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.create.CreateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.service.analyzerconfig.CreateAnalyzerConfigurationService;
@@ -26,7 +26,7 @@ class CreateAnalyzerConfigurationServiceTest {
 
   @Mock private ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectServiceMock;
 
-  @Mock private ListAnalyzerService listAnalyzerServiceMock;
+  @Mock private ListAnalyzersService listAnalyzerServiceMock;
 
   @BeforeEach
   void setUp() {

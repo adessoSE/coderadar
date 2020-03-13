@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 public class File {
   private long id;
   private String path;
+  private long sequenceId;
+  private String objectHash;
 
   @EqualsAndHashCode.Exclude private List<File> oldFiles = Collections.emptyList();
 }

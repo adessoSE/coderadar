@@ -19,8 +19,8 @@ public class DeleteModuleController {
 
   @DeleteMapping(path = "/projects/{projectId}/modules/{moduleId}")
   public ResponseEntity<HttpStatus> deleteModule(
-      @PathVariable(name = "moduleId") Long moduleId,
-      @PathVariable(name = "projectId") Long projectId) {
+      @PathVariable(name = "moduleId") long moduleId,
+      @PathVariable(name = "projectId") long projectId) {
     deleteModuleUseCase.delete(moduleId, projectId);
     return new ResponseEntity<>(HttpStatus.OK);
   }

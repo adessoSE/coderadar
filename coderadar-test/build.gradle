@@ -21,10 +21,6 @@ spotless {
 }
 
 dependencies {
-    testRuntime 'org.neo4j:neo4j:3.5.8'
-    testRuntime 'org.neo4j:neo4j-ogm-embedded-driver:3.1.12'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.4.RELEASE'
-
     compile project(":coderadar-plugins:loc-analyzer-plugin")
     compile project(":coderadar-plugins:checkstyle-analyzer-plugin")
     compile project(":coderadar-graph")
@@ -33,11 +29,17 @@ dependencies {
     compile project(":coderadar-vcs")
     compile project(":coderadar-rest")
 
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.4.RELEASE'
+    testCompile "org.springframework.boot:spring-boot-starter-test:${version_spring_boot}"
     testCompile "org.springframework.restdocs:spring-restdocs-mockmvc:${version_spring_restdocs}"
     testCompile "org.springframework.restdocs:spring-restdocs-core:${version_spring_restdocs}"
     testCompile group: 'net.lingala.zip4j', name: 'zip4j', version: '2.2.4'
 
+
+    testCompile ('org.neo4j.test:neo4j-harness:3.2.9') {
+        exclude group: 'org.eclipse.jetty', module: 'jetty-webapp'
+    }
+    testCompile 'org.neo4j:neo4j-ogm-embedded-driver:3.2.9'
+    testCompile group: 'org.neo4j.procedure', name: 'apoc', version: "3.5.0.7"
 }
 
 asciidoctor {

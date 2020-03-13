@@ -28,7 +28,7 @@ public class CreateFilePatternController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<IdResponse> createFilePattern(
       @RequestBody @Validated CreateFilePatternCommand command,
-      @PathVariable(name = "projectId") Long projectId) {
+      @PathVariable(name = "projectId") long projectId) {
     return new ResponseEntity<>(
         new IdResponse(createFilePatternUseCase.createFilePattern(command, projectId)),
         HttpStatus.CREATED);

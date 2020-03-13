@@ -4,7 +4,6 @@ import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -13,8 +12,6 @@ import org.neo4j.ogm.annotation.Relationship;
 @Data
 public class RefreshTokenEntity {
   private Long id;
-
-  @Index(unique = true)
   private String token;
 
   @Relationship(value = "HAS", direction = INCOMING)

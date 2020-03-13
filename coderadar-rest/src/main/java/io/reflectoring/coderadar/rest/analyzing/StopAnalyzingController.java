@@ -19,7 +19,7 @@ public class StopAnalyzingController {
   }
 
   @GetMapping(path = "projects/{projectId}/stopAnalysis")
-  public ResponseEntity<HttpStatus> stopAnalyzing(@PathVariable("projectId") Long projectId) {
+  public ResponseEntity<HttpStatus> stopAnalyzing(@PathVariable("projectId") long projectId) {
     try {
       stopAnalyzingUseCase.stop(projectId);
     } catch (AnalysisNotRunningException e) {

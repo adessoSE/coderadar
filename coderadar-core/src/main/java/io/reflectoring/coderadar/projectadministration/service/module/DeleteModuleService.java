@@ -27,7 +27,7 @@ public class DeleteModuleService implements DeleteModuleUseCase {
   }
 
   @Override
-  public void delete(Long id, Long projectId) {
+  public void delete(long id, long projectId) {
     Module module = getModulePort.get(id);
     processProjectService.executeTask(
         () -> {
