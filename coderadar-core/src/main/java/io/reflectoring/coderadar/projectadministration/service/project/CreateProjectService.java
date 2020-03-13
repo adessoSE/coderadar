@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort
 import io.reflectoring.coderadar.contributor.port.driven.ListContributorsPort;
 import io.reflectoring.coderadar.contributor.port.driven.SaveContributorsPort;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
+import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
@@ -15,6 +16,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.creat
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.query.domain.DateRange;
+import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
@@ -29,6 +31,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CreateProjectService implements CreateProjectUseCase {
+
+  private final GetAvailableBranchesPort getAvailableBranchesPort;
 
   private final CreateProjectPort createProjectPort;
 
@@ -53,6 +57,7 @@ public class CreateProjectService implements CreateProjectUseCase {
   private final Logger logger = LoggerFactory.getLogger(CreateProjectService.class);
 
   public CreateProjectService(
+      GetAvailableBranchesPort getAvailableBranchesPort,
       CreateProjectPort createProjectPort,
       GetProjectPort getProjectPort,
       CloneRepositoryUseCase cloneRepositoryUseCase,
@@ -63,6 +68,7 @@ public class CreateProjectService implements CreateProjectUseCase {
       ComputeContributorsPort computeContributorsPort,
       SaveContributorsPort saveContributorsPort,
       ListContributorsPort listContributorsPort) {
+    this.getAvailableBranchesPort = getAvailableBranchesPort;
     this.createProjectPort = createProjectPort;
     this.getProjectPort = getProjectPort;
     this.cloneRepositoryUseCase = cloneRepositoryUseCase;
@@ -101,8 +107,6 @@ public class CreateProjectService implements CreateProjectUseCase {
                 cloneRepositoryCommand.getRemoteUrl());
             List<Commit> commits =
                 extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
-            saveCommitPort.saveCommits(commits, project.getId());
-
             List<Contributor> contributors = listContributorsPort.listAll();
             contributors =
                 computeContributorsPort.computeContributors(
@@ -111,7 +115,8 @@ public class CreateProjectService implements CreateProjectUseCase {
                         + project.getWorkdirName(),
                     contributors);
             saveContributorsPort.save(contributors, project.getId());
-
+            List<Branch> branches = getAvailableBranchesPort.getAvailableBranches(localDir);
+            saveCommitPort.saveCommits(commits, branches, project.getId());
             logger.info("Saved project {}", project.getName());
           } catch (Exception e) {
             logger.error("Unable to create project: {}", e.getCause().getMessage());
@@ -161,7 +166,7 @@ public class CreateProjectService implements CreateProjectUseCase {
     project.setVcsOnline(command.isVcsOnline());
     project.setVcsStart(command.getStartDate());
     project.setVcsEnd(command.getEndDate());
-    Long projectId = createProjectPort.createProject(project);
+    long projectId = createProjectPort.createProject(project);
     project.setId(projectId);
     return project;
   }

@@ -17,8 +17,8 @@ public class GetModuleAdapter implements GetModulePort {
   }
 
   @Override
-  public Module get(Long id) {
+  public Module get(long id) {
     return moduleMapper.mapNodeEntity(
-        moduleRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException(id)));
+        moduleRepository.findById(id, 0).orElseThrow(() -> new ModuleNotFoundException(id)));
   }
 }

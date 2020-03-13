@@ -22,7 +22,7 @@ public class DeleteFilePatternService implements DeleteFilePatternFromProjectUse
   }
 
   @Override
-  public void delete(Long id, Long projectId) {
+  public void delete(long id, long projectId) {
     FilePattern filePattern = getFilePatternPort.get(id);
     deleteFilePatternPort.delete(id);
     logger.info(

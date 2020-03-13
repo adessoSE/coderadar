@@ -11,5 +11,5 @@ public interface CreateAnalyzerConfigurationPort {
    * @param projectId The project id.
    * @return The id of the saved configuration.
    */
-  Long create(AnalyzerConfiguration configuration, Long projectId);
+  Long create(AnalyzerConfiguration configuration, long projectId);
 }

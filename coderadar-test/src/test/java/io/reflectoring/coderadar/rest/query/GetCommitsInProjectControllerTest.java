@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.rest.query;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,7 +45,8 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/commits").contentType(MediaType.APPLICATION_JSON))
+                get("/projects/" + projectId + "/master/commits")
+                    .contentType(MediaType.APPLICATION_JSON))
             .andDo(
                 document(
                     "commit/list",
@@ -74,7 +76,7 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
   void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
     MvcResult result =
         mvc()
-            .perform(get("/projects/1234/commits").contentType(MediaType.APPLICATION_JSON))
+            .perform(get("/projects/1234/master/commits").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn();
 

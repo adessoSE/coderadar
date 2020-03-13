@@ -20,7 +20,7 @@ public class GetAnalyzingStatusController {
 
   @GetMapping(path = "/projects/{projectId}/analyzingStatus")
   public ResponseEntity<GetAnalyzingStatusResponse> getProjectAnalyzingStatus(
-      @PathVariable("projectId") Long projectId) {
+      @PathVariable("projectId") long projectId) {
     return new ResponseEntity<>(
         new GetAnalyzingStatusResponse(getAnalyzingStatusUseCase.getStatus(projectId)),
         HttpStatus.OK);

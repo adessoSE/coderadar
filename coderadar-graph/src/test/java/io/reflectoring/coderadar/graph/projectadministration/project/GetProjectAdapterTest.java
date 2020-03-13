@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.graph.projectadministration.project;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
@@ -29,13 +28,13 @@ class GetProjectAdapterTest {
   void shouldReturnProjectAsOptionalWhenAProjectWithThePassingIdExists() {
     ProjectEntity mockedItem = new ProjectEntity();
     mockedItem.setId(1L);
-    when(projectRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedItem));
+    when(projectRepository.findById(anyLong())).thenReturn(Optional.of(mockedItem));
 
     Project returned = getProjectAdapter.get(1L);
 
     verify(projectRepository, times(1)).findById(1L);
     verifyNoMoreInteractions(projectRepository);
     Assertions.assertNotNull(returned);
-    Assertions.assertEquals(Long.valueOf(1L), returned.getId());
+    Assertions.assertEquals(1L, returned.getId());
   }
 }

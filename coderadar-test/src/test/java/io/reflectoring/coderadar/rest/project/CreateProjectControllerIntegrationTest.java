@@ -39,7 +39,6 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
         .andExpect(MockMvcResultMatchers.status().isCreated())
         .andDo(
             result -> {
-              // FileUtils.deleteDirectory(new File("coderadar-workdir"));
               Long id =
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
               ProjectEntity project = projectRepository.findById(id).get();
@@ -48,18 +47,17 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
               Assertions.assertEquals("password", project.getVcsPassword());
               Assertions.assertEquals(testRepoURL.toString(), project.getVcsUrl());
               Assertions.assertFalse(project.isVcsOnline());
-              List<CommitEntity> commits = commitRepository.findByProjectIdAndTimestampDesc(id);
+              List<CommitEntity> commits =
+                  commitRepository.findByProjectIdAndBranchName(id, "master");
               Assertions.assertEquals(14, commits.size());
               List<FileEntity> files = fileRepository.findAllinProject(id);
-              Assertions.assertEquals(8, files.size());
+              Assertions.assertEquals(9, files.size());
             })
         .andDo(documentCreateProject());
   }
 
   @Test
   void createProjectReturnsErrorOnInvalidData() throws Exception {
-    ConstrainedFields fields = fields(CreateProjectCommand.class);
-
     CreateProjectCommand command =
         new CreateProjectCommand(
             "project", "username", "password", "invalid", true, new Date(), new Date());

@@ -22,7 +22,7 @@ public class GetMetricValuesOfCommitService implements GetMetricValuesOfCommitUs
   }
 
   @Override
-  public List<MetricValueForCommit> get(GetMetricsForCommitCommand command, Long projectId) {
+  public List<MetricValueForCommit> get(GetMetricsForCommitCommand command, long projectId) {
     if (getProjectPort.existsById(projectId)) {
       return getMetricValuesOfCommitPort.get(command, projectId);
     } else {

@@ -57,8 +57,9 @@ public class MergeContributorsControllerIntegrationTest extends ControllerTestTe
     Assertions.assertThat(contributorRepository.findById(secondId)).isEmpty();
     Assertions.assertThat(mergedContributor.getDisplayName()).isEqualTo("Test");
     Assertions.assertThat(mergedContributor.getEmails())
-        .containsExactly("maksim.atanasov@adesso.de", "kilian.krause@adesso.de");
-    Assertions.assertThat(mergedContributor.getNames()).containsExactly("maximAtanasov", "Krause");
+        .containsExactlyInAnyOrder("maksim.atanasov@adesso.de", "kilian.krause@adesso.de");
+    Assertions.assertThat(mergedContributor.getNames())
+        .containsExactlyInAnyOrder("Atanasov", "maximAtanasov", "Krause");
   }
 
   private ResultHandler documentMergeContributors() {

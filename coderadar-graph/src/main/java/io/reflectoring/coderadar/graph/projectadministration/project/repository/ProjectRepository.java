@@ -21,7 +21,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-()-[:LOCATED_IN]->(fi) "
           + "WHERE ID(p) = {0} WITH fi LIMIT 10000 DETACH DELETE fi RETURN COUNT(fi)")
-  long deleteProjectFindings(@NonNull Long projectId);
+  long deleteProjectFindings(long projectId);
 
   /**
    * Deletes a maximum of 10000 metrics in a project. This value can be adjusted as required by your
@@ -33,7 +33,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->()<-[:VALID_FOR]-(mv) WHERE ID(p) = {0} "
           + "WITH mv LIMIT 10000 DETACH DELETE mv RETURN COUNT(mv)")
-  long deleteProjectMetrics(@NonNull Long projectId);
+  long deleteProjectMetrics(long projectId);
 
   /**
    * Deletes a maximum of 10000 metrics in a project. This value can be adjusted as required by your
@@ -44,66 +44,130 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    */
   @Query(
       "MATCH (p)-[:CONTAINS*]->(f) WHERE ID(p) = {0} WITH f LIMIT 10000 DETACH DELETE f RETURN COUNT(f)")
-  long deleteProjectFilesAndModules(@NonNull Long projectId);
+  long deleteProjectFilesAndModules(long projectId);
 
+  /**
+   * Deletes all of the commits in a project.
+   *
+   * @param projectId The project id.
+   */
   @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} DETACH DELETE c")
-  void deleteProjectCommits(@NonNull Long projectId);
+  void deleteProjectCommits(long projectId);
 
+  /**
+   * Deletes all of the FilePatterns and AnalyzerConfigurationEntities in a project.
+   *
+   * @param projectId The project id.
+   */
   @Query("MATCH (p)-[:HAS]->(a) WHERE ID(p) = {0} DETACH DELETE a")
-  void deleteProjectConfiguration(@NonNull Long projectId);
+  void deleteProjectConfiguration(long projectId);
 
+  /**
+   * Deletes all of the branches in a project. Must be called before the commits are deleted.
+   *
+   * @param projectId The project id.
+   */
+  @Query("MATCH (p)-[:HAS_BRANCH]->(b) WHERE ID(p) = {0} DETACH DELETE b")
+  void deleteProjectBranches(long projectId);
+
+  /** @return All projects that are not currently being deleted. */
   @Query("MATCH (p:ProjectEntity) WHERE p.isBeingDeleted = FALSE RETURN p")
   @NonNull
   List<ProjectEntity> findAll();
 
+  /**
+   * @param name The name of the project.
+   * @return The project with given name as long as it is not currently being deleted.
+   */
   @Query("MATCH (p:ProjectEntity) WHERE p.name = {0} AND p.isBeingDeleted = FALSE RETURN p LIMIT 1")
   @NonNull
   Optional<ProjectEntity> findByName(@NonNull String name);
 
+  /**
+   * @param id The project id.
+   * @return The project with the given id as long as it is not being deleted.
+   */
   @Query("MATCH (p) WHERE ID(p) = {0} AND p.isBeingDeleted = FALSE RETURN p")
   @NonNull
-  Optional<ProjectEntity> findById(@NonNull Long id);
+  Optional<ProjectEntity> findById(long id);
 
+  /**
+   * @param id The project id.
+   * @return The project with the given id with initialized [:CONTAINS] relationships for modules.
+   *     <p>This query is possible without apoc and likely performs better, however the
+   *     GraphEntityMapper complains about unsaturated relationships for some reason.
+   */
   @Query(
       "MATCH (p) WHERE ID(p) = {0} AND p.isBeingDeleted = FALSE WITH p "
-          + "OPTIONAL MATCH (p)-[r:CONTAINS]->(m:ModuleEntity) "
-          + "RETURN p, r, m")
+          + "CALL apoc.path.subgraphAll(p, {relationshipFilter:'CONTAINS>', labelFilter: '+ModuleEntity'}) "
+          + "YIELD nodes, relationships RETURN p, nodes, relationships")
   @NonNull
-  Optional<ProjectEntity> findByIdWithModules(@NonNull Long id);
+  Optional<ProjectEntity> findByIdWithModules(long id);
 
+  /**
+   * @param id The project id.
+   * @return True if the project is being processed, false otherwise.
+   */
   @Query("MATCH (p) WHERE ID(p) = {0} RETURN p.isBeingProcessed")
   @NonNull
-  Boolean isBeingProcessed(@NonNull Long id);
+  Boolean isBeingProcessed(long id);
 
+  /**
+   * Sets the isBeingProcessed flag on a project.
+   *
+   * @param id The project id.
+   * @param value The status.
+   */
   @Query("MATCH (p) WHERE ID(p) = {0} SET p.isBeingProcessed = {1}")
-  void setBeingProcessed(@NonNull Long id, @NonNull Boolean value);
+  void setBeingProcessed(long id, @NonNull Boolean value);
 
+  /**
+   * @param id The project id.
+   * @return True if a project with the given id exists, false otherwise.
+   */
   @Query("MATCH (p) WHERE ID(p) = {0} RETURN COUNT(*) > 0")
-  boolean existsById(@NonNull Long id);
+  boolean existsById(long id);
 
+  /**
+   * @param name The name of the project.
+   * @return True if a project with the given name exists and the project is not being deleted.
+   */
   @Query(
-      "MATCH (p:ProjectEntity) WHERE p.name = {0} AND p.isBeingDeleted = FALSE RETURN COUNT(*) > 0")
+      "MATCH (p:ProjectEntity) WHERE p.name = {0} AND p.isBeingDeleted = FALSE WITH p LIMIT 1 RETURN COUNT(*) > 0")
   boolean existsByName(@NonNull String name);
 
-  @Query("MATCH (p) WHERE ID(p) = {0} RETURN p.analyzingStatus")
-  @NonNull
-  Boolean getProjectAnalyzingStatus(@NonNull Long projectId);
-
-  @Query("MATCH (p) WHERE ID(p) = {0} SET p.analyzingStatus = {1}")
-  void setAnalyzingStatus(@NonNull Long projectId, @NonNull Boolean b);
-
+  /**
+   * Sets the isBeingDeleted flag on a project.
+   *
+   * @param id The project id.
+   * @param status The status.
+   */
   @Query("MATCH (p) WHERE ID(p) = {0} SET p.isBeingDeleted = {1}")
-  void setBeingDeleted(@NonNull Long id, @NonNull Boolean value);
+  void setBeingDeleted(long id, @NonNull Boolean status);
 
+  /**
+   * Attaches existing file entities to a project. (Creates [:CONTAINS] relationships with every
+   * file)
+   *
+   * @param projectId The project id.
+   * @param fileIds A list of file ids.
+   */
   @Query(
       "MATCH (p) WHERE ID(p) = {0} "
           + "MATCH (f) WHERE ID(f) IN {1} "
           + "CREATE (p)-[r:CONTAINS]->(f)")
-  void attachFilesWithIds(Long projectId, List<Long> fileIds);
+  void attachFilesWithIds(long projectId, @NonNull List<Long> fileIds);
 
+  /**
+   * Attaches existing commit entities to a project. (Creates [:CONTAINS_COMMIT] relationships with
+   * every commit)
+   *
+   * @param projectId The project id.
+   * @param commitIds A list of file ids.
+   */
   @Query(
       "MATCH (p) WHERE ID(p) = {0} "
           + "MATCH (c) WHERE ID(c) IN {1} "
           + "CREATE (p)-[r:CONTAINS_COMMIT]->(c)")
-  void attachCommitsWithIds(Long projectId, List<Long> commitIds);
+  void attachCommitsWithIds(long projectId, @NonNull List<Long> commitIds);
 }

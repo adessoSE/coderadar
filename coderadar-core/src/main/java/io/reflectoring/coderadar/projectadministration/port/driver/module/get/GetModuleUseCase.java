@@ -10,5 +10,5 @@ public interface GetModuleUseCase {
    * @param id The id of the module.
    * @return The module with the id.
    */
-  Module get(Long id);
+  Module get(long id);
 }

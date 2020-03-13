@@ -10,16 +10,13 @@ public class RefreshTokenMapper implements Mapper<RefreshToken, RefreshTokenEnti
     RefreshToken refreshToken = new RefreshToken();
     refreshToken.setId(nodeEntity.getId());
     refreshToken.setToken(nodeEntity.getToken());
-    refreshToken.setUser(new UserMapper().mapNodeEntity(nodeEntity.getUser()));
     return refreshToken;
   }
 
   @Override
   public RefreshTokenEntity mapDomainObject(RefreshToken domainObject) {
     RefreshTokenEntity refreshToken = new RefreshTokenEntity();
-    refreshToken.setId(domainObject.getId());
     refreshToken.setToken(domainObject.getToken());
-    refreshToken.setUser(new UserMapper().mapDomainObject(domainObject.getUser()));
     return refreshToken;
   }
 }

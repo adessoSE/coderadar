@@ -25,10 +25,13 @@ public class CloneRepositoryAdapterTest {
     cloneRepositoryAdapter.cloneRepository(
         new CloneRepositoryCommand(testRepoURL.toString(), folder.toString(), "", ""));
 
-    Assertions.assertEquals(3, folder.list().length);
-    Assertions.assertTrue(Arrays.asList(folder.list()).contains(".git"));
-    Assertions.assertTrue(Arrays.asList(folder.list()).contains("GetMetricsForCommitCommand.java"));
-    Assertions.assertTrue(Arrays.asList(folder.list()).contains("testModule1"));
+    Assertions.assertEquals(8, folder.list().length);
+    Assertions.assertTrue(Arrays.asList(folder.list()).contains("branches"));
+    Assertions.assertTrue(Arrays.asList(folder.list()).contains("config"));
+    Assertions.assertTrue(Arrays.asList(folder.list()).contains("HEAD"));
+    Assertions.assertTrue(Arrays.asList(folder.list()).contains("hooks"));
+    Assertions.assertTrue(Arrays.asList(folder.list()).contains("logs"));
+    Assertions.assertTrue(Arrays.asList(folder.list()).contains("objects"));
   }
 
   @AfterEach

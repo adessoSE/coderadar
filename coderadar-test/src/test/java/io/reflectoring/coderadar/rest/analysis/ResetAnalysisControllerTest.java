@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.rest.analysis;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -83,7 +84,8 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON))
+            post("/projects/" + projectId + "/master/analyze")
+                .contentType(MediaType.APPLICATION_JSON))
         .andDo(document("analysis/start"));
 
     mvc()
@@ -97,12 +99,12 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
 
     session.clear();
 
-    List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
+    List<CommitEntity> commits = commitRepository.findByProjectIdAndBranchName(projectId, "master");
     for (CommitEntity commit : commits) {
       Assertions.assertTrue(commit.isAnalyzed());
     }
     List<MetricValueEntity> metricValues = metricRepository.findByProjectId(projectId);
-    Assertions.assertEquals(44, metricValues.size());
+    Assertions.assertEquals(56, metricValues.size());
 
     mvc()
         .perform(post("/projects/" + projectId + "/analyze/reset"))
@@ -133,7 +135,8 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON));
+            post("/projects/" + projectId + "/master/analyze")
+                .contentType(MediaType.APPLICATION_JSON));
 
     session.clear();
 
@@ -143,7 +146,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
     List<FindingEntity> findings = findingRepository.findByProjectId(projectId);
     Assertions.assertFalse(findings.isEmpty());
 
-    List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
+    List<CommitEntity> commits = commitRepository.findByProjectIdAndBranchName(projectId, "master");
     for (CommitEntity commit : commits) {
       Assertions.assertTrue(commit.isAnalyzed());
     }

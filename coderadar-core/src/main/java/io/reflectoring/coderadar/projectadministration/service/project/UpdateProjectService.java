@@ -19,9 +19,10 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.updat
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
+import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
+import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
-import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryUseCase;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final GetProjectPort getProjectPort;
   private final UpdateProjectPort updateProjectPort;
 
-  private final UpdateRepositoryUseCase updateRepositoryUseCase;
+  private final UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
   private final ProcessProjectService processProjectService;
   private final ExtractProjectCommitsUseCase extractProjectCommitsUseCase;
@@ -41,23 +42,25 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final ListModulesOfProjectUseCase listModulesOfProjectUseCase;
   private final ResetAnalysisPort resetAnalysisPort;
   private final CreateModulePort createModulePort;
+  private final GetAvailableBranchesPort getAvailableBranchesPort;
 
   private final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
 
   public UpdateProjectService(
       GetProjectPort getProjectPort,
       UpdateProjectPort updateProjectPort,
-      UpdateRepositoryUseCase updateRepositoryUseCase,
+      UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase,
       CoderadarConfigurationProperties coderadarConfigurationProperties,
       ProcessProjectService processProjectService,
       ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
       SaveCommitPort saveCommitPort,
       ListModulesOfProjectUseCase listModulesOfProjectUseCase,
       ResetAnalysisPort resetAnalysisPort,
-      CreateModulePort createModulePort) {
+      CreateModulePort createModulePort,
+      GetAvailableBranchesPort getAvailableBranchesPort) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
-    this.updateRepositoryUseCase = updateRepositoryUseCase;
+    this.updateLocalRepositoryUseCase = updateLocalRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.processProjectService = processProjectService;
     this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
@@ -65,10 +68,11 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     this.listModulesOfProjectUseCase = listModulesOfProjectUseCase;
     this.resetAnalysisPort = resetAnalysisPort;
     this.createModulePort = createModulePort;
+    this.getAvailableBranchesPort = getAvailableBranchesPort;
   }
 
   @Override
-  public void update(UpdateProjectCommand command, Long projectId) {
+  public void update(UpdateProjectCommand command, long projectId) {
     Project project = getProjectPort.get(projectId);
 
     if (getProjectPort.existsByName(command.getName())
@@ -106,7 +110,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
                   coderadarConfigurationProperties.getWorkdir()
                       + "/projects/"
                       + project.getWorkdirName();
-              updateRepositoryUseCase.updateRepository(
+              updateLocalRepositoryUseCase.updateRepository(
                   new UpdateRepositoryCommand()
                       .setLocalDir(localDir)
                       .setPassword(project.getVcsPassword())
@@ -118,7 +122,8 @@ public class UpdateProjectService implements UpdateProjectUseCase {
                   extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
 
               // Save the new commit tree
-              saveCommitPort.saveCommits(commits, projectId);
+              saveCommitPort.saveCommits(
+                  commits, getAvailableBranchesPort.getAvailableBranches(localDir), projectId);
 
               // Re-create the modules
               for (Module module : modules) {

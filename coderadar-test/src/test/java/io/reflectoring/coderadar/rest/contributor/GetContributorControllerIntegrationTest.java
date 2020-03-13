@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.ResultHandler;
 
 public class GetContributorControllerIntegrationTest extends ControllerTestTemplate {
   @Autowired private ContributorRepository contributorRepository;
+  @Autowired private SessionFactory sessionFactory;
 
   @Test
   public void getSingleContributor() throws Exception {

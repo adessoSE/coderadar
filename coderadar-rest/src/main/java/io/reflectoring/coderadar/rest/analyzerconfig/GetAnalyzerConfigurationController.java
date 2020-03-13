@@ -25,7 +25,7 @@ public class GetAnalyzerConfigurationController {
       path = "/projects/{projectId}/analyzers/{analyzerConfigurationId}",
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<GetAnalyzerConfigurationResponse> getAnalyzerConfiguration(
-      @PathVariable Long analyzerConfigurationId) {
+      @PathVariable long analyzerConfigurationId) {
     AnalyzerConfiguration analyzerConfiguration =
         getAnalyzerConfigurationUseCase.getAnalyzerConfiguration(analyzerConfigurationId);
     return new ResponseEntity<>(

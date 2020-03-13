@@ -326,6 +326,18 @@ include::{snippets}/modules/delete/http-request.adoc[]
 
 include::{snippets}/modules/delete/http-response.adoc[]
 
+=== Branches
+
+==== Listing Branches
+
+===== Example Request
+
+include::{snippets}/branches/list/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/branches/list/http-response.adoc[]
+
 === File Patterns
 
 A File Pattern describes a set of files within a Project's code base. Each project can have several file patterns

@@ -17,7 +17,7 @@ public class ListFilePatternsOfProjectAdapter implements ListFilePatternsOfProje
   }
 
   @Override
-  public List<FilePattern> listFilePatterns(Long projectId) {
+  public List<FilePattern> listFilePatterns(long projectId) {
     return filePatternMapper.mapNodeEntities(filePatternRepository.findByProjectId(projectId));
   }
 }

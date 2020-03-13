@@ -8,5 +8,5 @@ public interface DeleteFilePatternFromProjectUseCase {
    * @param filePatternId The id of the file pattern.
    * @param projectId The id of the project.
    */
-  void delete(Long filePatternId, Long projectId);
+  void delete(long filePatternId, long projectId);
 }

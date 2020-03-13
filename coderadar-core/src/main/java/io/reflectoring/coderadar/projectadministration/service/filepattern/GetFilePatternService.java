@@ -16,7 +16,7 @@ public class GetFilePatternService implements GetFilePatternUseCase {
   }
 
   @Override
-  public FilePattern get(Long id) {
+  public FilePattern get(long id) {
     return getFilePatternPort.get(id);
   }
 }

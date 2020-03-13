@@ -83,7 +83,8 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON));
+            post("/projects/" + projectId + "/master/analyze")
+                .contentType(MediaType.APPLICATION_JSON));
 
     MvcResult result =
         mvc()
@@ -115,7 +116,8 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON));
+            post("/projects/" + projectId + "/master/analyze")
+                .contentType(MediaType.APPLICATION_JSON));
 
     MvcResult result =
         mvc()
@@ -186,7 +188,8 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON));
+            post("/projects/" + projectId + "/master/analyze")
+                .contentType(MediaType.APPLICATION_JSON));
 
     MvcResult result =
         mvc()

@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.filepattern;
 
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -22,7 +23,7 @@ public class GetFilePatternAdapterTest {
   void shouldReturnFilePatternWhenPassingAValidArgument() {
     GetFilePatternAdapter getFilePatternAdapter = new GetFilePatternAdapter(filePatternRepository);
 
-    when(filePatternRepository.findById(anyLong()))
+    when(filePatternRepository.findById(anyLong(), anyInt()))
         .thenReturn(Optional.of(new FilePatternEntity()));
     FilePattern returnedFilePattern = getFilePatternAdapter.get(1L);
     Assertions.assertNotNull(returnedFilePattern);

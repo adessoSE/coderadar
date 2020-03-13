@@ -10,7 +10,7 @@ import io.reflectoring.coderadar.useradministration.RefreshTokenNotFoundExceptio
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.domain.RefreshToken;
 import io.reflectoring.coderadar.useradministration.domain.User;
-import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
+import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RefreshTokenPort;
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenCommand;
 import io.reflectoring.coderadar.useradministration.service.refresh.RefreshTokenService;
@@ -28,13 +28,13 @@ class RefreshTokenServiceTest {
 
   @Mock private TokenService tokenService;
 
-  @Mock private LoadUserPort loadUserPort;
+  @Mock private GetUserPort getUserPort;
 
   private RefreshTokenService testSubject;
 
   @BeforeEach
   void setUp() {
-    testSubject = new RefreshTokenService(loadUserPort, refreshTokenPort, tokenService);
+    testSubject = new RefreshTokenService(getUserPort, refreshTokenPort, tokenService);
   }
 
   @Test
@@ -54,7 +54,7 @@ class RefreshTokenServiceTest {
     when(tokenService.isExpired(accessToken)).thenReturn(true);
     when(refreshTokenPort.findByToken(refreshToken)).thenReturn(refreshTokenEntity);
     when(tokenService.getUsername(refreshToken)).thenReturn(username);
-    when(loadUserPort.loadUserByUsername(username)).thenReturn(user);
+    when(getUserPort.getUserByUsername(username)).thenReturn(user);
     when(tokenService.generateAccessToken(userId, username)).thenReturn(expectedAccessToken);
 
     // when
@@ -108,7 +108,7 @@ class RefreshTokenServiceTest {
     when(tokenService.isExpired(accessToken)).thenReturn(true);
     when(refreshTokenPort.findByToken(refreshToken)).thenReturn(refreshTokenEntity);
     when(tokenService.getUsername(refreshToken)).thenReturn(username);
-    when(loadUserPort.loadUserByUsername(username)).thenReturn(null);
+    when(getUserPort.getUserByUsername(username)).thenReturn(null);
 
     // when / then
     assertThatThrownBy(() -> testSubject.refreshToken(refreshTokenCommand))
@@ -128,7 +128,7 @@ class RefreshTokenServiceTest {
 
     when(refreshTokenPort.findByToken(refreshToken)).thenReturn(refreshTokenEntity);
     when(tokenService.getUsername(refreshToken)).thenReturn(username);
-    when(loadUserPort.loadUserByUsername(username)).thenReturn(user);
+    when(getUserPort.getUserByUsername(username)).thenReturn(user);
     when(tokenService.generateAccessToken(userId, username)).thenReturn(expectedAccessToken);
 
     // when
@@ -159,7 +159,7 @@ class RefreshTokenServiceTest {
 
     when(refreshTokenPort.findByToken(refreshToken)).thenReturn(refreshTokenEntity);
     when(tokenService.getUsername(refreshToken)).thenReturn(username);
-    when(loadUserPort.loadUserByUsername(username)).thenReturn(null);
+    when(getUserPort.getUserByUsername(username)).thenReturn(null);
 
     // when / then
     assertThatThrownBy(() -> testSubject.createAccessToken(refreshToken))
@@ -176,7 +176,7 @@ class RefreshTokenServiceTest {
 
     when(refreshTokenPort.findByToken(refreshToken)).thenReturn(refreshTokenEntity);
     when(tokenService.getUsername(refreshToken)).thenReturn(username);
-    when(loadUserPort.loadUserByUsername(username)).thenReturn(expectedUser);
+    when(getUserPort.getUserByUsername(username)).thenReturn(expectedUser);
 
     // when
     User actualUser = testSubject.checkUser(refreshToken);
@@ -207,7 +207,7 @@ class RefreshTokenServiceTest {
     User expectedUser = new User();
 
     when(tokenService.getUsername(refreshToken)).thenReturn(username);
-    when(loadUserPort.loadUserByUsername(username)).thenReturn(expectedUser);
+    when(getUserPort.getUserByUsername(username)).thenReturn(expectedUser);
 
     // when
     User actualUser = testSubject.getUser(refreshToken);

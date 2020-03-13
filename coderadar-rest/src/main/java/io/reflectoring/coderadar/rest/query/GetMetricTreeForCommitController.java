@@ -29,7 +29,7 @@ public class GetMetricTreeForCommitController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<MetricTree> getMetricValues(
       @Validated @RequestBody GetMetricsForCommitCommand command,
-      @PathVariable("projectId") Long projectId) {
+      @PathVariable("projectId") long projectId) {
     return new ResponseEntity<>(
         getMetricTreeForCommitUseCase.get(command, projectId), HttpStatus.OK);
   }

@@ -7,5 +7,5 @@ public interface DeleteAnalyzerConfigurationUseCase {
    *
    * @param id The id of the configuration.
    */
-  void deleteAnalyzerConfiguration(Long id, Long projectId);
+  void deleteAnalyzerConfiguration(long id, long projectId);
 }

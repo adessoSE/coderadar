@@ -20,7 +20,7 @@ public class ListAnalyzerConfigurationsService implements ListAnalyzerConfigurat
   }
 
   @Override
-  public List<AnalyzerConfiguration> get(Long projectId) {
+  public List<AnalyzerConfiguration> get(long projectId) {
     if (getProjectPort.existsById(projectId)) {
       return port.listAnalyzerConfigurations(projectId);
     } else {

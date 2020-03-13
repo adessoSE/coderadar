@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.useradministration.domain.RefreshToken;
 import io.reflectoring.coderadar.useradministration.domain.User;
-import io.reflectoring.coderadar.useradministration.port.driven.LoadUserPort;
+import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RefreshTokenPort;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserResponse;
@@ -23,7 +23,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 @ExtendWith(MockitoExtension.class)
 class LoginUserServiceTest {
 
-  @Mock private LoadUserPort loadUserPortMock;
+  @Mock private GetUserPort getUserPortMock;
 
   @Mock private RefreshTokenPort refreshTokenPortMock;
 
@@ -37,7 +37,7 @@ class LoginUserServiceTest {
   void setUp() {
     this.testSubject =
         new LoginUserService(
-            loadUserPortMock, refreshTokenPortMock, authenticationManagerMock, tokenServiceMock);
+            getUserPortMock, refreshTokenPortMock, authenticationManagerMock, tokenServiceMock);
   }
 
   @Test
@@ -54,12 +54,11 @@ class LoginUserServiceTest {
         new UsernamePasswordAuthenticationToken(username, password);
     LoginUserResponse expectedResponse =
         new LoginUserResponse(expectedAccessToken, expectedRefreshToken);
-    RefreshToken expectedRefreshTokenEntity =
-        new RefreshToken().setToken(expectedRefreshToken).setUser(user);
+    RefreshToken expectedRefreshTokenEntity = new RefreshToken().setToken(expectedRefreshToken);
 
     LoginUserCommand command = new LoginUserCommand(username, password);
 
-    when(loadUserPortMock.loadUserByUsername(user.getUsername())).thenReturn(user);
+    when(getUserPortMock.getUserByUsername(user.getUsername())).thenReturn(user);
 
     when(tokenServiceMock.generateAccessToken(userId, username)).thenReturn(expectedAccessToken);
     when(tokenServiceMock.generateRefreshToken(userId, username)).thenReturn(expectedRefreshToken);
@@ -71,6 +70,6 @@ class LoginUserServiceTest {
     assertThat(actualResponse).isEqualTo(expectedResponse);
 
     verify(authenticationManagerMock).authenticate(expectedToken);
-    verify(refreshTokenPortMock).saveToken(expectedRefreshTokenEntity);
+    verify(refreshTokenPortMock).saveToken(expectedRefreshTokenEntity, user.getId());
   }
 }

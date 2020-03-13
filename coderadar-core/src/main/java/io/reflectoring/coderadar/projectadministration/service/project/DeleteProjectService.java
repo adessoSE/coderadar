@@ -37,7 +37,7 @@ public class DeleteProjectService implements DeleteProjectUseCase {
   }
 
   @Override
-  public void delete(Long id) {
+  public void delete(long id) {
     Project project = getProjectPort.get(id);
     processProjectService.executeTask(
         () -> {

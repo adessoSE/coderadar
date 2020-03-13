@@ -29,10 +29,10 @@ class ListModulesOfProjectAdapterTest {
   @Test
   @DisplayName("Should return empty list when no modules in the project exist")
   void shouldReturnEmptyListWhenNoModulesInTheProjectExist() {
-    when(moduleRepository.findModulesInProject(1L)).thenReturn(new LinkedList<>());
+    when(moduleRepository.findModulesInProjectSortedDesc(1L)).thenReturn(new LinkedList<>());
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);
-    verify(moduleRepository, times(1)).findModulesInProject(1L);
+    verify(moduleRepository, times(1)).findModulesInProjectSortedDesc(1L);
     Assertions.assertThat(modules).hasSize(0);
   }
 
@@ -42,10 +42,10 @@ class ListModulesOfProjectAdapterTest {
     LinkedList<ModuleEntity> mockedItem = new LinkedList<>();
     mockedItem.add(new ModuleEntity().setId(3L));
     when(projectRepository.existsById(1L)).thenReturn(true);
-    when(moduleRepository.findModulesInProject(1L)).thenReturn(mockedItem);
+    when(moduleRepository.findModulesInProjectSortedDesc(1L)).thenReturn(mockedItem);
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);
-    verify(moduleRepository, times(1)).findModulesInProject(1L);
+    verify(moduleRepository, times(1)).findModulesInProjectSortedDesc(1L);
     Assertions.assertThat(modules).hasSize(1);
   }
 
@@ -56,10 +56,10 @@ class ListModulesOfProjectAdapterTest {
     mockedItem.add(new ModuleEntity().setId(3L));
     mockedItem.add(new ModuleEntity().setId(3L));
     when(projectRepository.existsById(1L)).thenReturn(true);
-    when(moduleRepository.findModulesInProject(1L)).thenReturn(mockedItem);
+    when(moduleRepository.findModulesInProjectSortedDesc(1L)).thenReturn(mockedItem);
 
     Iterable<Module> modules = listModulesOfProjectAdapter.listModules(1L);
-    verify(moduleRepository, times(1)).findModulesInProject(1L);
+    verify(moduleRepository, times(1)).findModulesInProjectSortedDesc(1L);
     Assertions.assertThat(modules).hasSize(2);
   }
 }

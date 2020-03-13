@@ -12,6 +12,7 @@ import {IMetricMapping} from '../city-map/interfaces/IMetricMapping';
 import {INode} from '../city-map/interfaces/INode';
 import {MetricValue} from '../model/metric-value';
 import {Contributor} from '../model/contributor';
+import {Branch} from '../model/branch';
 
 @Injectable({
   providedIn: 'root'
@@ -179,10 +180,10 @@ export class ProjectService {
    * Start a new analyzing for a project.
    * Sends a POST request to /projects/{id}/analyzingJob
    * @param id The id of the project.
-   * @param rescanProject Rescan all commits if true.
+   * @param branch The branch to analyze.
    */
-  public startAnalyzingJob(id: number, rescanProject: boolean): Promise<HttpResponse<any>> {
-    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze', {},
+  public startAnalyzingJob(id: number, branch: string): Promise<HttpResponse<any>> {
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/' + branch + '/analyze', {},
       {observe: 'response'}).toPromise();
   }
 
@@ -200,9 +201,10 @@ export class ProjectService {
    * Gets all available commits for a project.
    * Sends a GET request to /projects/{id}/commits
    * @param id The project id.
+   * @param branch The branch to use for getting the commits.
    */
-  public getCommits(id: number): Promise<HttpResponse<Commit[]>> {
-    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/commits', {observe: 'response'}).toPromise();
+  public getCommits(id: number, branch: string): Promise<HttpResponse<Commit[]>> {
+    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/' + branch + '/commits', {observe: 'response'}).toPromise();
   }
 
   /**
@@ -248,12 +250,26 @@ export class ProjectService {
     return this.httpClient.delete(this.apiURL + 'projects/' + projectId + '/filePatterns/' + pattern.id, {observe: 'response'}).toPromise();
   }
 
-  resetAnalysis(id: number, b: boolean) {
+  /**
+   * Reset the analysis results of a project.
+   * Sends a POST request to /projects/{id}/analyze/reset
+   * @param id The id of the project.
+   */
+  resetAnalysis(id: number) {
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze/reset', {}, {observe: 'response'}).toPromise();
   }
 
   getContributorsForProject(projectId: number) : Promise<HttpResponse<Contributor[]>> {
     return this.httpClient.get<Contributor[]>(this.apiURL + 'projects/' + projectId + '/contributors', {observe: 'response'}).toPromise();
+  }
+
+  /**
+   * Returns all of the branches for a project.
+   * Sends a GET request to /projects/{id}/branches
+   * @param id The id of the project.
+   */
+  public getProjectBranches(id: number): Promise<HttpResponse<Branch[]>> {
+    return this.httpClient.get<any>(this.apiURL + 'projects/' + id + '/branches', {observe: 'response'}).toPromise();
   }
 
   /**

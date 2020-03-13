@@ -24,7 +24,7 @@ public class GetFilePatternController {
       path = "/projects/{projectId}/filePatterns/{filePatternId}",
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<GetFilePatternResponse> getFilePattern(
-      @PathVariable(name = "filePatternId") Long filePatternId) {
+      @PathVariable(name = "filePatternId") long filePatternId) {
     FilePattern filePattern = getFilePatternUseCase.get(filePatternId);
     return new ResponseEntity<>(
         new GetFilePatternResponse(

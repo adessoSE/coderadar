@@ -7,5 +7,5 @@ public interface UpdateAnalyzerConfigurationUseCase {
    * @param configurationId The id of the configuration to update.
    * @param projectId The id of the project.
    */
-  void update(UpdateAnalyzerConfigurationCommand command, Long configurationId, Long projectId);
+  void update(UpdateAnalyzerConfigurationCommand command, long configurationId, long projectId);
 }

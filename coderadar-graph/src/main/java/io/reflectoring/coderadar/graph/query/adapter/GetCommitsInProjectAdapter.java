@@ -21,61 +21,16 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     this.commitRepository = commitRepository;
   }
 
-  private List<Commit> mapCommitEntities(List<CommitEntity> commitEntities) {
-    IdentityHashMap<CommitEntity, Commit> walkedCommits =
-        new IdentityHashMap<>(commitEntities.size());
-    IdentityHashMap<FileEntity, File> walkedFiles = new IdentityHashMap<>(commitEntities.size());
-    List<Commit> result = new ArrayList<>(commitEntities.size());
-    for (CommitEntity commitEntity : commitEntities) {
-      Commit commit = walkedCommits.get(commitEntity);
-      if (commit == null) {
-        commit = commitBaseDataMapper.mapNodeEntity(commitEntity);
-      }
-      List<Commit> parents = new ArrayList<>(commitEntity.getParents().size());
-      for (CommitEntity parent : commitEntity.getParents()) {
-        Commit parentCommit = walkedCommits.get(parent);
-        if (parentCommit == null) {
-          parentCommit = commitBaseDataMapper.mapNodeEntity(parent);
-          parentCommit.setTouchedFiles(getFiles(parent.getTouchedFiles(), walkedFiles, true));
-          result.add(parentCommit);
-        }
-        parents.add(parentCommit);
-      }
-      commit.setParents(parents);
-      commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), walkedFiles, true));
-      walkedCommits.put(commitEntity, commit);
-      result.add(commit);
-    }
-    return result;
-  }
-
   @Override
-  public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(Long projectId) {
-    List<CommitEntity> commitEntities = commitRepository.findByProjectIdAndTimestampDesc(projectId);
-    List<Commit> commits = new ArrayList<>(commitEntities.size());
-    for (CommitEntity commitEntity : commitEntities) {
-      commits.add(commitBaseDataMapper.mapNodeEntity(commitEntity));
-    }
-    return commits;
+  public List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(
+      long projectId, String branch) {
+    return commitBaseDataMapper.mapNodeEntities(
+        commitRepository.findByProjectIdAndBranchName(projectId, branch));
   }
 
-  @Override
-  public List<Commit> getSortedByTimestampAsc(Long projectId) {
-    List<CommitEntity> commitEntities =
-        commitRepository.findByProjectIdWithAllRelationshipsSortedByTimestampAsc(projectId);
-    return mapCommitEntities(commitEntities);
-  }
-
-  /**
-   * Returns all not yet analyzed commits in this project, that match the supplied file patterns
-   *
-   * @param projectId The id of the project.
-   * @param filePatterns The patterns to use.
-   * @return A list of commits with initialized FileToCommitRelationShips and no parents.
-   */
   @Override
   public List<Commit> getNonAnalyzedSortedByTimestampAscWithNoParents(
-      Long projectId, List<FilePattern> filePatterns) {
+      long projectId, List<FilePattern> filePatterns, String branch) {
     // Map Ant-Patterns to RegEx
     List<String> includes = new ArrayList<>();
     List<String> excludes = new ArrayList<>();
@@ -87,38 +42,44 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
       }
     }
 
-    List<CommitEntity> commitEntities =
-        commitRepository.findByProjectIdNonAnalyzedWithFileRelationshipsSortedByTimestampAsc(
-            projectId, includes, excludes);
-
-    return mapCommitEntitiesNoParents(commitEntities);
+    return mapCommitEntitiesNoParents(
+        commitRepository.findByProjectIdNonAnalyzedWithFileRelationships(
+            projectId, branch, includes, excludes));
   }
 
+  /**
+   * Maps a list of commit entities to Commit domain objects. Does not map parent relationships.
+   *
+   * @param commitEntities The commit entities to map.
+   * @return A list of commit domain objects.
+   */
   private List<Commit> mapCommitEntitiesNoParents(List<CommitEntity> commitEntities) {
     List<Commit> commits = new ArrayList<>(commitEntities.size());
     IdentityHashMap<FileEntity, File> walkedFiles = new IdentityHashMap<>(commitEntities.size());
     for (CommitEntity commitEntity : commitEntities) {
       Commit commit = commitBaseDataMapper.mapNodeEntity(commitEntity);
-      commit.setTouchedFiles(getFiles(commitEntity.getTouchedFiles(), walkedFiles, false));
+      commit.setTouchedFiles(
+          mapFileToCommitRelationships(commitEntity.getTouchedFiles(), walkedFiles));
       commits.add(commit);
     }
     return commits;
   }
 
-  private List<FileToCommitRelationship> getFiles(
-      List<FileToCommitRelationshipEntity> relationships,
-      IdentityHashMap<FileEntity, File> walkedFiles,
-      boolean createRels) {
-    List<FileToCommitRelationship> fileToCommitRelationships =
-        new ArrayList<>(relationships.size());
+  /**
+   * Maps FileToCommitRelationshipEntities to FileToCommitRelationships. Creates a File domain
+   * object for each FileEntity
+   *
+   * @param touchedFiles The files touched in the current commit.
+   * @param walkedFiles A map of all the file entities created so far. (Empty on first method run)
+   * @return A list of FileToCommitRelationships with the accompanying files.
+   */
+  private List<FileToCommitRelationship> mapFileToCommitRelationships(
+      List<FileToCommitRelationshipEntity> touchedFiles,
+      IdentityHashMap<FileEntity, File> walkedFiles) {
+    List<FileToCommitRelationship> fileToCommitRelationships = new ArrayList<>(touchedFiles.size());
 
-    for (FileToCommitRelationshipEntity fileToCommitRelationshipEntity : relationships) {
+    for (FileToCommitRelationshipEntity fileToCommitRelationshipEntity : touchedFiles) {
       FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
-
-      if (createRels) {
-        fileToCommitRelationship.setOldPath(fileToCommitRelationshipEntity.getOldPath());
-        fileToCommitRelationship.setChangeType(fileToCommitRelationshipEntity.getChangeType());
-      }
 
       File file = walkedFiles.get(fileToCommitRelationshipEntity.getFile());
       if (file == null) {
@@ -128,7 +89,6 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
         walkedFiles.put(fileToCommitRelationshipEntity.getFile(), file);
       }
       fileToCommitRelationship.setFile(file);
-
       fileToCommitRelationships.add(fileToCommitRelationship);
     }
     return fileToCommitRelationships;

@@ -5,5 +5,5 @@ import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
 import java.util.List;
 
 public interface GetMetricValuesOfCommitPort {
-  List<MetricValueForCommit> get(GetMetricsForCommitCommand command, Long projectId);
+  List<MetricValueForCommit> get(GetMetricsForCommitCommand command, long projectId);
 }

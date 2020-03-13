@@ -7,5 +7,5 @@ public interface DeleteProjectPort {
    *
    * @param projectId The id of the project to delete.
    */
-  void delete(Long projectId);
+  void delete(long projectId);
 }

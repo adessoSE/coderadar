@@ -20,7 +20,7 @@ public class ListModulesOfProjectService implements ListModulesOfProjectUseCase 
   }
 
   @Override
-  public List<Module> listModules(Long projectId) {
+  public List<Module> listModules(long projectId) {
     if (getProjectPort.existsById(projectId)) {
       return port.listModules(projectId);
     } else {

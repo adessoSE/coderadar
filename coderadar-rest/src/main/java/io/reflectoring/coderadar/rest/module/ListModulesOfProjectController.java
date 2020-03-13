@@ -23,7 +23,7 @@ public class ListModulesOfProjectController {
   }
 
   @GetMapping(path = "/projects/{projectId}/modules", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<GetModuleResponse>> listModules(@PathVariable Long projectId) {
+  public ResponseEntity<List<GetModuleResponse>> listModules(@PathVariable long projectId) {
     List<Module> modules = listModulesOfProjectUseCase.listModules(projectId);
     List<GetModuleResponse> responses = new ArrayList<>(modules.size());
     for (Module module : modules) {
