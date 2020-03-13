@@ -29,7 +29,7 @@ class UpdateProjectAdapterTest {
     ProjectEntity mockedOldItem = new ProjectEntity();
     mockedOldItem.setId(1L);
     mockedOldItem.setName("Mustermann");
-    when(projectRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedOldItem));
+    when(projectRepository.findById(anyLong())).thenReturn(Optional.of(mockedOldItem));
 
     ProjectEntity mockedItem = new ProjectEntity();
     mockedItem.setId(1L);

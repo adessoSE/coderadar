@@ -33,7 +33,7 @@ public class ResetAnalysisService implements ResetAnalysisUseCase {
    * @param projectId The id of the project.
    */
   @Override
-  public void resetAnalysis(Long projectId) {
+  public void resetAnalysis(long projectId) {
     if (!getProjectPort.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }

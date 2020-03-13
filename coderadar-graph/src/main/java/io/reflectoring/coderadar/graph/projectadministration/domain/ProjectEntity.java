@@ -7,7 +7,6 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.neo4j.ogm.annotation.Index;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
@@ -16,9 +15,7 @@ import org.neo4j.ogm.annotation.Relationship;
 @Data
 public class ProjectEntity {
 
-  @Index private Long id;
-
-  @Index(unique = true)
+  private Long id;
   private String name;
 
   private String workdirName;
@@ -29,11 +26,8 @@ public class ProjectEntity {
   private Date vcsStart;
   private Date vcsEnd;
 
-  @EqualsAndHashCode.Exclude private boolean isBeingProcessed = false;
-
-  @EqualsAndHashCode.Exclude private boolean isBeingDeleted = false;
-
-  @EqualsAndHashCode.Exclude private boolean analyzingStatus = false;
+  private boolean isBeingProcessed = false;
+  private boolean isBeingDeleted = false;
 
   // The graph starts from a project and goes only in one direction.
   // https://en.wikipedia.org/wiki/Directed_acyclic_graph
@@ -44,7 +38,6 @@ public class ProjectEntity {
 
   @Relationship(type = "CONTAINS")
   @ToString.Exclude
-  @EqualsAndHashCode.Exclude
   private List<FileEntity> files = new ArrayList<>();
 
   @Relationship(type = "CONTAINS_COMMIT")
@@ -52,12 +45,13 @@ public class ProjectEntity {
   private List<CommitEntity> commits = new ArrayList<>();
 
   @Relationship(type = "HAS")
-  @ToString.Exclude
-  @EqualsAndHashCode.Exclude
   private List<FilePatternEntity> filePatterns = new ArrayList<>();
 
   @Relationship(type = "HAS")
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
   private List<AnalyzerConfigurationEntity> analyzerConfigurations = new ArrayList<>();
+
+  @Relationship(type = "HAS_BRANCH")
+  private List<BranchEntity> branches = new ArrayList<>();
 }

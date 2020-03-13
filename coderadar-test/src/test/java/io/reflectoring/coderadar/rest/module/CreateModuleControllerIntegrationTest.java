@@ -89,7 +89,8 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
             })
         .andReturn();
 
-    Assertions.assertEquals(1L, moduleRepository.findModulesInProject(testProject.getId()).size());
+    Assertions.assertEquals(
+        1L, moduleRepository.findModulesInProjectSortedDesc(testProject.getId()).size());
 
     List<ModuleEntity> allModules = new ArrayList<>();
     for (ModuleEntity m : moduleRepository.findAll()) {

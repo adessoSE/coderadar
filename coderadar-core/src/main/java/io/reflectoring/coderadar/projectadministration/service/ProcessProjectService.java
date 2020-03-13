@@ -32,7 +32,7 @@ public class ProcessProjectService {
    * @param projectId The id of the project.
    * @return A ListenableFuture object for the started task.
    */
-  public ListenableFuture<?> executeTask(Runnable runnable, Long projectId) {
+  public ListenableFuture<?> executeTask(Runnable runnable, long projectId) {
     if (!getProjectPort.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }

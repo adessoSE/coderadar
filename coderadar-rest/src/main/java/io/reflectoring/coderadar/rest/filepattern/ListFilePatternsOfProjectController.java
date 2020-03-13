@@ -27,7 +27,7 @@ public class ListFilePatternsOfProjectController {
       path = "/projects/{projectId}/filePatterns",
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetFilePatternResponse>> listFilePatterns(
-      @PathVariable Long projectId) {
+      @PathVariable long projectId) {
     List<FilePattern> filePatterns = listFilePatternsOfProjectUseCase.listFilePatterns(projectId);
     List<GetFilePatternResponse> responses = new ArrayList<>(filePatterns.size());
     for (FilePattern filePattern : filePatterns) {

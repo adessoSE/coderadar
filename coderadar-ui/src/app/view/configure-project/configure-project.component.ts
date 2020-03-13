@@ -8,6 +8,7 @@ import {CONFLICT, FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Module} from '../../model/module';
 import {Title} from '@angular/platform-browser';
 import {MatSnackBar} from '@angular/material';
+import {Branch} from '../../model/branch';
 
 @Component({
   selector: 'app-configure-project',
@@ -20,6 +21,7 @@ export class ConfigureProjectComponent implements OnInit {
   projectName: string;
   analyzers: AnalyzerConfiguration[];
   filePatterns: FilePattern[];
+  branches: Branch[];
 
   // Fields for input binding
   filePatternIncludeInput;
@@ -49,6 +51,7 @@ export class ConfigureProjectComponent implements OnInit {
       this.getModulesForProject();
       this.getProjectName();
       this.getProjectFilePatterns();
+      this.getBranchesInProject();
     });
   }
 
@@ -284,6 +287,22 @@ export class ConfigureProjectComponent implements OnInit {
         this.processing = false;
         if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh(() => this.submitFilePattern(type));
+        }
+      });
+  }
+
+  private getBranchesInProject() {
+    this.projectService.getProjectBranches(this.projectId)
+      .then(response => {
+        if (response.body.length === 0) {
+          this.branches = [];
+        } else {
+          this.branches = response.body;
+        }
+      })
+      .catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh(() => this.getBranchesInProject());
         }
       });
   }

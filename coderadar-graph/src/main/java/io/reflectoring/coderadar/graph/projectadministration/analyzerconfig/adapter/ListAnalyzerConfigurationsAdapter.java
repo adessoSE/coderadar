@@ -19,7 +19,7 @@ public class ListAnalyzerConfigurationsAdapter implements ListAnalyzerConfigurat
   }
 
   @Override
-  public List<AnalyzerConfiguration> listAnalyzerConfigurations(Long projectId) {
+  public List<AnalyzerConfiguration> listAnalyzerConfigurations(long projectId) {
     return analyzerConfigurationMapper.mapNodeEntities(
         analyzerConfigurationRepository.findByProjectId(projectId));
   }

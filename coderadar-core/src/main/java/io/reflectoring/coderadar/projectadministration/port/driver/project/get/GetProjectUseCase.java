@@ -8,5 +8,5 @@ public interface GetProjectUseCase {
    * @param projectId The id of the project.
    * @return The project with the supplied id.
    */
-  Project get(Long projectId);
+  Project get(long projectId);
 }

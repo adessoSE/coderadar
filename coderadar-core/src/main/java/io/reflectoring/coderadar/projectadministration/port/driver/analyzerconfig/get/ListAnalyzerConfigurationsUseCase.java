@@ -11,5 +11,5 @@ public interface ListAnalyzerConfigurationsUseCase {
    * @param projectId The id of the project.
    * @return The analyzer configurations.
    */
-  List<AnalyzerConfiguration> get(Long projectId);
+  List<AnalyzerConfiguration> get(long projectId);
 }

@@ -10,5 +10,5 @@ public interface GetFilePatternPort {
    * @param id The id of the pattern
    * @return The FilePattern
    */
-  FilePattern get(Long id);
+  FilePattern get(long id);
 }

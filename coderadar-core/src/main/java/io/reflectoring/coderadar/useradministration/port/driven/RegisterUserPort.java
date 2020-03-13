@@ -10,5 +10,5 @@ public interface RegisterUserPort {
    * @param user The user to save.
    * @return The DB id of the user.
    */
-  Long register(User user);
+  long register(User user);
 }

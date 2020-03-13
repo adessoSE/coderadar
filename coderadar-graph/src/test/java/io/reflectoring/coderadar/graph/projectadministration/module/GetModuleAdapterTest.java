@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.module;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
@@ -30,14 +30,14 @@ class GetModuleAdapterTest {
   void shouldReturnModuleAsOptionalWhenAModuleWithThePassingIdExists() {
     ModuleEntity mockedItem = new ModuleEntity();
     mockedItem.setId(1L);
-    when(moduleRepository.findById(any(Long.class))).thenReturn(Optional.of(mockedItem));
+    when(moduleRepository.findById(anyLong(), anyInt())).thenReturn(Optional.of(mockedItem));
 
     Module returned = getModuleAdapter.get(1L);
 
-    verify(moduleRepository, times(1)).findById(1L);
+    verify(moduleRepository, times(1)).findById(1L, 0);
     verifyNoMoreInteractions(moduleRepository);
     Assertions.assertNotNull(returned);
-    Assertions.assertEquals(new Long(1L), returned.getId());
+    Assertions.assertEquals(1L, returned.getId());
   }
 
   @Test
@@ -45,10 +45,10 @@ class GetModuleAdapterTest {
       "Should return module as empty optional when a module with the passing ID doesn't exists")
   void shouldReturnModuleAsEmptyOptionalWhenAModuleWithThePassingIdDoesntExists() {
     Optional<ModuleEntity> mockedItem = Optional.empty();
-    when(moduleRepository.findById(any(Long.class))).thenReturn(mockedItem);
+    when(moduleRepository.findById(anyLong())).thenReturn(mockedItem);
 
     Assertions.assertThrows(ModuleNotFoundException.class, () -> getModuleAdapter.get(1L));
-    verify(moduleRepository, times(1)).findById(1L);
+    verify(moduleRepository, times(1)).findById(1L, 0);
     verifyNoMoreInteractions(moduleRepository);
   }
 }

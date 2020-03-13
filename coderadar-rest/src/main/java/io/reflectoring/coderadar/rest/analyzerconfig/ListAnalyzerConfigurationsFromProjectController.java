@@ -24,7 +24,7 @@ public class ListAnalyzerConfigurationsFromProjectController {
 
   @GetMapping(path = "/projects/{projectId}/analyzers", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetAnalyzerConfigurationResponse>>
-      getAnalyzerConfigurationsFromProject(@PathVariable Long projectId) {
+      getAnalyzerConfigurationsFromProject(@PathVariable long projectId) {
     return new ResponseEntity<>(
         listAnalyzerConfigurationsUseCase.get(projectId).stream()
             .map(

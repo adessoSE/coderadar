@@ -14,7 +14,7 @@ public class GetAvailableMetricsInProjectAdapter implements GetAvailableMetricsI
   }
 
   @Override
-  public List<String> get(Long projectId) {
+  public List<String> get(long projectId) {
     return metricQueryRepository.getAvailableMetricsInProject(projectId);
   }
 }

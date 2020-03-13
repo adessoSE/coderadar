@@ -19,7 +19,7 @@ public class CreateFilePatternService implements CreateFilePatternUseCase {
   }
 
   @Override
-  public Long createFilePattern(CreateFilePatternCommand command, Long projectId) {
+  public Long createFilePattern(CreateFilePatternCommand command, long projectId) {
     FilePattern filePattern = new FilePattern();
     filePattern.setPattern(command.getPattern());
     filePattern.setInclusionType(command.getInclusionType());

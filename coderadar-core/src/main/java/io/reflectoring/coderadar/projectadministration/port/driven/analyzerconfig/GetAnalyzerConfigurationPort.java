@@ -10,5 +10,5 @@ public interface GetAnalyzerConfigurationPort {
    * @param id The id of the configuration.
    * @return The configuration.
    */
-  AnalyzerConfiguration getAnalyzerConfiguration(Long id);
+  AnalyzerConfiguration getAnalyzerConfiguration(long id);
 }

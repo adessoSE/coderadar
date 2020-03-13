@@ -19,7 +19,7 @@ public class DeleteProjectController {
 
   @DeleteMapping(path = "/projects/{projectId}")
   public ResponseEntity<HttpStatus> deleteProject(
-      @PathVariable(name = "projectId") Long projectId) {
+      @PathVariable(name = "projectId") long projectId) {
     deleteProjectUseCase.delete(projectId);
     return new ResponseEntity<>(HttpStatus.OK);
   }

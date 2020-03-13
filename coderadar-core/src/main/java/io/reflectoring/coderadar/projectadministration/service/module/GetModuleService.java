@@ -14,7 +14,7 @@ public class GetModuleService implements GetModuleUseCase {
   }
 
   @Override
-  public Module get(Long id) {
+  public Module get(long id) {
     return getModulePort.get(id);
   }
 }

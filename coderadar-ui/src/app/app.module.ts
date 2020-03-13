@@ -20,18 +20,18 @@ import {UserSettingsComponent} from './view/user-settings/user-settings.componen
 import {ProjectDashboardComponent} from './view/project-dashboard/project-dashboard.component';
 import {ViewCommitComponent} from './view/view-commit/view-commit.component';
 import {
-  MatButtonModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatFormFieldModule,
-  MatGridListModule,
-  MatIconModule,
-  MatInputModule,
-  MatSnackBarModule,
-  MatListModule,
-  MatMenuModule, MatPaginatorModule,
-  MatSidenavModule,
-  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule,
+    MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatSnackBarModule,
+    MatListModule,
+    MatMenuModule, MatPaginatorModule,
+    MatSidenavModule,
+    MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule,
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
@@ -51,8 +51,8 @@ import {DependencyRootComponent} from './levelized-structure-map/dependency-root
 import {DependencyCompareComponent} from './levelized-structure-map/dependency-compare/dependency-compare.component';
 import {TreeNodeComponent} from './levelized-structure-map/tree-node/tree-node.component';
 import {MatSelectModule} from '@angular/material/select';
-import {DragScrollModule} from "ngx-drag-scroll";
-import {PinchZoomModule} from "ngx-pinch-zoom";
+import {DragScrollModule} from 'ngx-drag-scroll';
+import {PinchZoomModule} from 'ngx-pinch-zoom';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},

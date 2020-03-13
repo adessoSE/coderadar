@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.rest.query;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.subsectionWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -72,7 +71,8 @@ class GetDeltaTreeForTwoCommitsControllerTest extends ControllerTestTemplate {
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON));
+            post("/projects/" + projectId + "/master/analyze")
+                .contentType(MediaType.APPLICATION_JSON));
   }
 
   @Test
@@ -134,20 +134,18 @@ class GetDeltaTreeForTwoCommitsControllerTest extends ControllerTestTemplate {
     List<MetricValueForCommit> commit1Metrics = deltaTree.getCommit1Metrics();
     List<MetricValueForCommit> commit2Metrics = deltaTree.getCommit2Metrics();
 
-    Assertions.assertEquals(0L, commit1Metrics.get(0).getValue());
-    Assertions.assertEquals(8L, commit1Metrics.get(1).getValue());
-    Assertions.assertEquals(12L, commit1Metrics.get(2).getValue());
-    Assertions.assertEquals(10L, commit1Metrics.get(3).getValue());
+    Assertions.assertEquals(8L, commit1Metrics.get(0).getValue());
+    Assertions.assertEquals(12L, commit1Metrics.get(1).getValue());
+    Assertions.assertEquals(10L, commit1Metrics.get(2).getValue());
 
-    Assertions.assertEquals(0L, commit2Metrics.get(0).getValue());
-    Assertions.assertEquals(8L, commit2Metrics.get(1).getValue());
-    Assertions.assertEquals(18L, commit2Metrics.get(2).getValue());
-    Assertions.assertEquals(15L, commit2Metrics.get(3).getValue());
+    Assertions.assertEquals(8L, commit2Metrics.get(0).getValue());
+    Assertions.assertEquals(18L, commit2Metrics.get(1).getValue());
+    Assertions.assertEquals(15L, commit2Metrics.get(2).getValue());
 
     DeltaTree firstChild = deltaTree.getChildren().get(0); // Finding.java
     Assertions.assertEquals("Finding.java", firstChild.getName());
     Assertions.assertEquals(MetricTreeNodeType.FILE, firstChild.getType());
-    Assertions.assertEquals(4, firstChild.getCommit1Metrics().size());
+    Assertions.assertEquals(3, firstChild.getCommit1Metrics().size());
     Assertions.assertTrue(firstChild.getCommit2Metrics().isEmpty());
     Assertions.assertTrue(firstChild.getChanges().isDeleted());
 
@@ -155,14 +153,14 @@ class GetDeltaTreeForTwoCommitsControllerTest extends ControllerTestTemplate {
     Assertions.assertEquals("GetMetricsForCommitCommand.java", secondChild.getName());
     Assertions.assertEquals(MetricTreeNodeType.FILE, secondChild.getType());
     Assertions.assertTrue(secondChild.getCommit1Metrics().isEmpty());
-    Assertions.assertEquals(4, secondChild.getCommit2Metrics().size());
+    Assertions.assertEquals(3, secondChild.getCommit2Metrics().size());
     Assertions.assertTrue(secondChild.getChanges().isAdded());
 
     DeltaTree thirdChild = deltaTree.getChildren().get(2); // testModule1/NewRandomFile.java
     Assertions.assertEquals("testModule1/NewRandomFile.java", thirdChild.getName());
     Assertions.assertEquals(MetricTreeNodeType.FILE, thirdChild.getType());
     Assertions.assertTrue(thirdChild.getCommit1Metrics().isEmpty());
-    Assertions.assertEquals(4, thirdChild.getCommit2Metrics().size());
+    Assertions.assertEquals(3, thirdChild.getCommit2Metrics().size());
     Assertions.assertTrue(thirdChild.getChanges().isAdded());
   }
 
@@ -197,20 +195,18 @@ class GetDeltaTreeForTwoCommitsControllerTest extends ControllerTestTemplate {
     commit1Metrics.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
     commit2Metrics.sort(Comparator.comparing(MetricValueForCommit::getMetricName));
 
-    Assertions.assertEquals(0L, commit1Metrics.get(0).getValue());
-    Assertions.assertEquals(8L, commit1Metrics.get(1).getValue());
-    Assertions.assertEquals(12L, commit1Metrics.get(2).getValue());
-    Assertions.assertEquals(10L, commit1Metrics.get(3).getValue());
+    Assertions.assertEquals(8L, commit1Metrics.get(0).getValue());
+    Assertions.assertEquals(12L, commit1Metrics.get(1).getValue());
+    Assertions.assertEquals(10L, commit1Metrics.get(2).getValue());
 
-    Assertions.assertEquals(0L, commit2Metrics.get(0).getValue());
-    Assertions.assertEquals(8L, commit2Metrics.get(1).getValue());
-    Assertions.assertEquals(18L, commit2Metrics.get(2).getValue());
-    Assertions.assertEquals(15L, commit2Metrics.get(3).getValue());
+    Assertions.assertEquals(8L, commit2Metrics.get(0).getValue());
+    Assertions.assertEquals(18L, commit2Metrics.get(1).getValue());
+    Assertions.assertEquals(15L, commit2Metrics.get(2).getValue());
 
     DeltaTree firstChild = deltaTree.getChildren().get(0); // Finding.java
     Assertions.assertEquals("Finding.java", firstChild.getName());
     Assertions.assertEquals(MetricTreeNodeType.FILE, firstChild.getType());
-    Assertions.assertEquals(4, firstChild.getCommit1Metrics().size());
+    Assertions.assertEquals(3, firstChild.getCommit1Metrics().size());
     Assertions.assertTrue(firstChild.getCommit2Metrics().isEmpty());
     Assertions.assertTrue(firstChild.getChanges().isDeleted());
 
@@ -218,14 +214,14 @@ class GetDeltaTreeForTwoCommitsControllerTest extends ControllerTestTemplate {
     Assertions.assertEquals("GetMetricsForCommitCommand.java", secondChild.getName());
     Assertions.assertEquals(MetricTreeNodeType.FILE, secondChild.getType());
     Assertions.assertTrue(secondChild.getCommit1Metrics().isEmpty());
-    Assertions.assertEquals(4, secondChild.getCommit2Metrics().size());
+    Assertions.assertEquals(3, secondChild.getCommit2Metrics().size());
     Assertions.assertTrue(secondChild.getChanges().isAdded());
 
     DeltaTree thirdChild = deltaTree.getChildren().get(2); // testModule1/NewRandomFile.java
     Assertions.assertEquals("testModule1/NewRandomFile.java", thirdChild.getName());
     Assertions.assertEquals(MetricTreeNodeType.FILE, thirdChild.getType());
     Assertions.assertTrue(thirdChild.getCommit1Metrics().isEmpty());
-    Assertions.assertEquals(4, thirdChild.getCommit2Metrics().size());
+    Assertions.assertEquals(3, thirdChild.getCommit2Metrics().size());
     Assertions.assertTrue(thirdChild.getChanges().isAdded());
   }
 

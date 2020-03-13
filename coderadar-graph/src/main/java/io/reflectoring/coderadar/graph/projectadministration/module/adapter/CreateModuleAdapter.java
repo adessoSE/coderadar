@@ -5,7 +5,6 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntit
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
-import io.reflectoring.coderadar.projectadministration.ModuleNotFoundException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
@@ -33,7 +32,7 @@ public class CreateModuleAdapter implements CreateModulePort {
    * @return The id of the newly created module
    */
   @Override
-  public Long createModule(String modulePath, Long projectId) throws ModulePathInvalidException {
+  public Long createModule(String modulePath, long projectId) throws ModulePathInvalidException {
     ProjectEntity projectEntity =
         projectRepository
             .findByIdWithModules(projectId)
@@ -58,7 +57,7 @@ public class CreateModuleAdapter implements CreateModulePort {
     ModuleEntity childModule;
 
     if (moduleRepository.fileInPathExists(childModulePath, parentModule.getId())) {
-      childModule = moduleRepository.createModuleInModule(parentModule.getId(), childModulePath);
+      childModule = moduleRepository.createModule(parentModule.getId(), childModulePath);
     } else {
       childModule = new ModuleEntity();
       childModule.setPath(childModulePath);
@@ -87,7 +86,7 @@ public class CreateModuleAdapter implements CreateModulePort {
     ModuleEntity moduleEntity;
 
     if (moduleRepository.fileInPathExists(modulePath, projectEntity.getId())) {
-      moduleEntity = moduleRepository.createModuleInProject(projectEntity.getId(), modulePath);
+      moduleEntity = moduleRepository.createModule(projectEntity.getId(), modulePath);
     } else {
       moduleEntity = new ModuleEntity();
       moduleEntity.setPath(modulePath);
@@ -133,8 +132,6 @@ public class CreateModuleAdapter implements CreateModulePort {
    * @return The parent module or null if nothing is found.
    */
   private ModuleEntity findModule(ModuleEntity entity, String path) {
-    long id = entity.getId();
-    entity = moduleRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException(id));
     if (path.startsWith(entity.getPath())) {
       if (entity.getChildModules().isEmpty()) {
         return entity;
@@ -163,10 +160,7 @@ public class CreateModuleAdapter implements CreateModulePort {
     List<ModuleEntity> childModules = new ArrayList<>();
     for (ModuleEntity m : modules) {
       if (m.getPath().startsWith(path)) {
-        childModules.add(
-            moduleRepository
-                .findById(m.getId())
-                .orElseThrow(() -> new ModuleNotFoundException(m.getId())));
+        childModules.add(m);
       }
     }
     return childModules;
@@ -195,7 +189,8 @@ public class CreateModuleAdapter implements CreateModulePort {
     }
 
     // Check if a module with the same path already exists.
-    for (ModuleEntity entity : moduleRepository.findModulesInProject(projectEntity.getId())) {
+    for (ModuleEntity entity :
+        moduleRepository.findModulesInProjectSortedDesc(projectEntity.getId())) {
       if (entity.getPath().equals(path)) {
         throw new ModuleAlreadyExistsException(path);
       }

@@ -73,7 +73,7 @@
             <!--Project modules-->
             <div class="list">
               <div class="list-title">
-                <mat-label>Project modules:</mat-label>
+                <mat-label>Modules:</mat-label>
               </div>
               <div *ngFor="let module of modules">
                 <span>{{module.path}}</span>
@@ -87,6 +87,16 @@
                 <button (click)="submitModule()" mat-button style="float:right" type="button">+</button>
               </div>
               <mat-error *ngIf="moduleExists">A module with this name already exists!</mat-error>
+            </div>
+
+            <!--Project branches-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Branches:</mat-label>
+              </div>
+              <div *ngFor="let branch of branches">
+                <span>{{branch.name}}</span>
+              </div>
             </div>
           </mat-card-content>
 

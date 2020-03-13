@@ -36,7 +36,8 @@ class DeleteModuleAdapterTest {
   @DisplayName("Should delete module when passing a valid module id")
   void shouldDeleteModuleWhenPassingAValidModuleId() throws ProjectIsBeingProcessedException {
     doNothing().when(moduleRepository).deleteById(isA(Long.class));
-    when(moduleRepository.findById(anyLong())).thenReturn(java.util.Optional.of(moduleEntity));
+    when(moduleRepository.findById(anyLong(), anyInt()))
+        .thenReturn(java.util.Optional.of(moduleEntity));
     deleteModuleAdapter.delete(1L, 2L);
     verify(moduleRepository, times(1)).deleteById(any(Long.class));
   }

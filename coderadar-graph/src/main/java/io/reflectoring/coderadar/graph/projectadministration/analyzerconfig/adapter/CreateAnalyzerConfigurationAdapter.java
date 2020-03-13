@@ -25,7 +25,7 @@ public class CreateAnalyzerConfigurationAdapter implements CreateAnalyzerConfigu
   }
 
   @Override
-  public Long create(AnalyzerConfiguration entity, Long projectId) {
+  public Long create(AnalyzerConfiguration entity, long projectId) {
     AnalyzerConfigurationEntity analyzerConfigurationEntity =
         analyzerConfigurationMapper.mapDomainObject(entity);
     ProjectEntity projectEntity =

@@ -14,12 +14,12 @@ public class ProjectStatusAdapter implements ProjectStatusPort {
   }
 
   @Override
-  public boolean isBeingProcessed(Long projectId) {
+  public boolean isBeingProcessed(long projectId) {
     return projectRepository.isBeingProcessed(projectId);
   }
 
   @Override
-  public void setBeingProcessed(Long projectId, boolean isBeingProcessed) {
+  public void setBeingProcessed(long projectId, boolean isBeingProcessed) {
     projectRepository.setBeingProcessed(projectId, isBeingProcessed);
   }
 }

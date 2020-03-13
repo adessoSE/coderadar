@@ -9,5 +9,5 @@ public interface CreateFilePatternUseCase {
    * @param projectId The id of the project.
    * @return The id of the file pattern.
    */
-  Long createFilePattern(CreateFilePatternCommand command, Long projectId);
+  Long createFilePattern(CreateFilePatternCommand command, long projectId);
 }

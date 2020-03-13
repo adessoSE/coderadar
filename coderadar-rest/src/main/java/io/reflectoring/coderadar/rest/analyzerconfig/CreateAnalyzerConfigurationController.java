@@ -28,7 +28,7 @@ public class CreateAnalyzerConfigurationController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Object> addAnalyzerConfiguration(
       @RequestBody @Validated CreateAnalyzerConfigurationCommand command,
-      @PathVariable Long projectId) {
+      @PathVariable long projectId) {
     try {
       return new ResponseEntity<>(
           new IdResponse(createAnalyzerConfigurationUseCase.create(command, projectId)),

@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.graph.projectadministration.analyzerconfig;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
@@ -35,15 +34,15 @@ class GetAnalyzerConfigurationAdapterTest {
     AnalyzerConfigurationEntity mockedItem = new AnalyzerConfigurationEntity();
     mockedItem.setEnabled(true);
     mockedItem.setId(1L);
-    when(analyzerConfigurationRepository.findById(any(Long.class)))
+    when(analyzerConfigurationRepository.findById(anyLong(), anyInt()))
         .thenReturn(Optional.of(mockedItem));
 
     AnalyzerConfiguration returned = getAnalyzerConfigurationAdapter.getAnalyzerConfiguration(1L);
 
-    verify(analyzerConfigurationRepository, times(1)).findById(1L);
+    verify(analyzerConfigurationRepository, times(1)).findById(1L, 0);
     verifyNoMoreInteractions(analyzerConfigurationRepository);
     Assertions.assertNotNull(returned);
-    Assertions.assertEquals(new Long(1L), returned.getId());
+    Assertions.assertEquals(1L, returned.getId());
   }
 
   @Test
@@ -52,12 +51,12 @@ class GetAnalyzerConfigurationAdapterTest {
   void
       shouldReturnAnalyzerConfigurationAsEmptyOptionalWhenAAnalyzerConfigurationWithThePassingIdDoesntExists() {
     Optional<AnalyzerConfigurationEntity> mockedItem = Optional.empty();
-    when(analyzerConfigurationRepository.findById(any(Long.class))).thenReturn(mockedItem);
+    when(analyzerConfigurationRepository.findById(anyLong())).thenReturn(mockedItem);
 
     Assertions.assertThrows(
         AnalyzerConfigurationNotFoundException.class,
         () -> getAnalyzerConfigurationAdapter.getAnalyzerConfiguration(1L));
-    verify(analyzerConfigurationRepository, times(1)).findById(1L);
+    verify(analyzerConfigurationRepository, times(1)).findById(1L, 0);
     verifyNoMoreInteractions(analyzerConfigurationRepository);
   }
 }

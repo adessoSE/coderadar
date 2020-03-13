@@ -11,5 +11,5 @@ public interface ListAnalyzerConfigurationsPort {
    * @param projectId The id of the project.
    * @return The analyzer configurations.
    */
-  List<AnalyzerConfiguration> listAnalyzerConfigurations(Long projectId);
+  List<AnalyzerConfiguration> listAnalyzerConfigurations(long projectId);
 }

@@ -19,7 +19,7 @@ public class CommitEntity {
   private long timestamp;
   private String comment;
   private String author;
-  private boolean analyzed = false;
+  private boolean analyzed;
 
   @Relationship(type = "IS_CHILD_OF")
   @EqualsAndHashCode.Exclude

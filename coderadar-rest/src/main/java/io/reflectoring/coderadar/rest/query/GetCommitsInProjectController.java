@@ -22,13 +22,15 @@ public class GetCommitsInProjectController {
     this.getCommitsInProjectUseCase = getCommitsInProjectUseCase;
   }
 
-  @GetMapping(path = "/projects/{projectId}/commits", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(
+      path = "/projects/{projectId}/{branchName}/commits",
+      produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetCommitResponse>> listCommits(
-      @PathVariable("projectId") Long projectId) {
-    List<Commit> commits = getCommitsInProjectUseCase.get(projectId);
-    List<GetCommitResponse> responses = new ArrayList<>(commits.size());
+      @PathVariable("projectId") long projectId, @PathVariable("branchName") String branchName) {
+    List<Commit> commits = getCommitsInProjectUseCase.get(projectId, branchName);
+    List<GetCommitResponse> result = new ArrayList<>(commits.size());
     for (Commit commit : commits) {
-      responses.add(
+      result.add(
           new GetCommitResponse()
               .setName(commit.getName())
               .setAnalyzed(commit.isAnalyzed())
@@ -36,6 +38,6 @@ public class GetCommitsInProjectController {
               .setComment(commit.getComment())
               .setTimestamp(commit.getTimestamp()));
     }
-    return new ResponseEntity<>(responses, HttpStatus.OK);
+    return new ResponseEntity<>(result, HttpStatus.OK);
   }
 }

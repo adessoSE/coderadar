@@ -28,7 +28,7 @@ public class UpdateProjectController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<HttpStatus> updateProject(
       @RequestBody @Validated UpdateProjectCommand command,
-      @PathVariable(name = "projectId") Long projectId)
+      @PathVariable(name = "projectId") long projectId)
       throws MalformedURLException {
     updateProjectUseCase.update(command, projectId);
     return new ResponseEntity<>(HttpStatus.OK);

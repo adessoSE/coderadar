@@ -7,5 +7,5 @@ public interface ResetAnalysisPort {
    *
    * @param projectId The id of the project.
    */
-  void resetAnalysis(Long projectId);
+  void resetAnalysis(long projectId);
 }

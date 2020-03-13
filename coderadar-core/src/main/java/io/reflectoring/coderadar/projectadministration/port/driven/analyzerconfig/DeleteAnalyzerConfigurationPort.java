@@ -7,5 +7,5 @@ public interface DeleteAnalyzerConfigurationPort {
    *
    * @param id The id of the configuration.
    */
-  void deleteAnalyzerConfiguration(Long id);
+  void deleteAnalyzerConfiguration(long id);
 }
