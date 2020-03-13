@@ -657,7 +657,14 @@ include::{snippets}/metrics/deltaTree/http-response.adoc[]
 include::{snippets}/contributors/get/response-fields.adoc[]
 
 
+
 ==== List all contributors of a project
+
+===== Example Request
+
+include::{snippets}/contributors/list/http-request.adoc[]
+
+===== Example Response
 
 include::{snippets}/contributors/list/http-response.adoc[]
 
@@ -666,7 +673,24 @@ include::{snippets}/contributors/list/http-response.adoc[]
 include::{snippets}/contributors/list/response-fields.adoc[]
 
 
+
+==== Get single contributor
+
+===== Example request
+
+include::{snippets}/contributors/get/http-request.adoc[]
+
+===== Example response
+
+include::{snippets}/contributors/get/http-response.adoc[]
+
+
+
 ==== Merge two contributors
+
+===== Request Structure
+
+include::{snippets}/contributors/merge/request-fields.adoc[]
 
 ===== Example Request
 
@@ -675,5 +699,21 @@ include::{snippets}/contributors/merge/http-request.adoc[]
 ===== Example Response
 
 include::{snippets}/contributors/merge/http-response.adoc[]
+
+
+
+==== Update a Contributor
+
+===== Request Structure
+
+include::{snippets}/contributors/update/request-fields.adoc[]
+
+===== Example Request
+
+include::{snippets}/contributors/update/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/contributors/update/http-response.adoc[]
 
 
