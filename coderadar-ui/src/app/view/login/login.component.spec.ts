@@ -17,10 +17,15 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {AppComponent} from '../../app.component';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {By} from '@angular/platform-browser';
+
+let usernameInput;
+let passwordInput;
+let loginButton;
+let fixture: ComponentFixture<LoginComponent>;
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
   let http;
   let routerSpy;
 
@@ -129,3 +134,71 @@ describe('LoginComponent', () => {
     });
   });
 });
+
+describe('LoginComponent', () => {
+  let component: LoginComponent;
+  let routerSpy;
+  let submitFormSpy;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [LoginComponent],
+      imports: [
+        FormsModule, // ngModel
+        HttpClientTestingModule,
+        RouterTestingModule/*.withRoutes([
+          {path: 'login', component: LoginComponent},
+        ])*/,
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(LoginComponent);
+    component = fixture.componentInstance;
+    routerSpy = spyOn(Router.prototype, 'navigate').and.callFake(() => {});
+    submitFormSpy = spyOn(component, 'submitForm').and.callFake(() => {});
+    fixture.detectChanges();
+    usernameInput = fixture.debugElement.query(By.css('input[name="username"]')).nativeElement;
+    passwordInput = fixture.debugElement.query(By.css('input[name="password"]')).nativeElement;
+    loginButton = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
+    return fixture.whenStable().then(() => {
+      fixture.detectChanges();
+    });
+  });
+
+  it('should login user in HTML', () => {
+    setValues('testUser', 'testPassword');
+    loginButton.click();
+    expect(submitFormSpy).toHaveBeenCalled();
+  });
+
+  it('should login user invlaid user in HTML', () => {
+    setValues('testUser', 'testPassword');
+    loginButton.click();
+    expect(submitFormSpy).toHaveBeenCalled();
+    component.invalidUser = true;
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('mat-error')).nativeElement.innerText)
+      .toEqual('The user does not exist\nor the password is incorrect!');
+  });
+
+  it('should login user invlaid password in HTML', () => {
+    setValues('testUser', 'testPassword');
+    loginButton.click();
+    expect(submitFormSpy).toHaveBeenCalled();
+    component.validPassword = false;
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('mat-error')).nativeElement.innerText)
+      .toEqual('The user does not exist\nor the password is incorrect!');
+  });
+});
+
+function setValues(username, password) {
+  usernameInput.value = username;
+  passwordInput.value = password;
+
+  usernameInput.dispatchEvent(new Event('input'));
+  passwordInput.dispatchEvent(new Event('input'));
+  fixture.detectChanges();
+}

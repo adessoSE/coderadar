@@ -9,7 +9,7 @@ describe('TooltipService', () => {
     });
   });
 
-  it('should ...', inject([TooltipService], (service: TooltipService) => {
+  it('should', inject([TooltipService], (service: TooltipService) => {
     expect(service).toBeTruthy();
   }));
 });

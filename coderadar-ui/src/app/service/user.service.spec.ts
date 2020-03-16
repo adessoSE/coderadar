@@ -103,7 +103,6 @@ describe('UserService', () => {
 
   // TODO response on login fail?
   /*it('should login fail', () => {
-    console.log('should login fail');
     service.login('test', 'password123');
     http.expectOne(`${AppComponent.getApiUrl()}user/auth`).flush({
       status: 403,
@@ -116,7 +115,6 @@ describe('UserService', () => {
       url: '/user/auth',
     });
     expect(localStorage.getItem('currentUser')).toBe(undefined);
-    console.log('should login fail complete');
   });*/
 
   it('should refresh', () => {

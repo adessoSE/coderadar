@@ -1,8 +1,8 @@
 import {ComponentFixture, inject, TestBed} from '@angular/core/testing';
 
 import {AddProjectComponent} from './add-project.component';
-import {BrowserModule} from '@angular/platform-browser';
-import {HttpClientModule} from '@angular/common/http';
+import {BrowserModule, By} from '@angular/platform-browser';
+import {HttpClientModule, HttpResponse} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -14,7 +14,7 @@ import {VisualizationModule} from '../../city-map/visualization/visualization.mo
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatCardModule} from '@angular/material/card';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatListModule} from '@angular/material/list';
@@ -32,6 +32,7 @@ import {HttpClientTestingModule, HttpTestingController} from '@angular/common/ht
 import {RouterTestingModule} from '@angular/router/testing';
 import {ConfigureProjectComponent} from '../configure-project/configure-project.component';
 import {AppComponent} from '../../app.component';
+import {EditProjectComponent} from '../edit-project/edit-project.component';
 
 const project = {
   id: null,
@@ -43,12 +44,19 @@ const project = {
   startDate: null,
   endDate: null
 };
+let routerSpy;
+let nameInput;
+let vcsUrlInput;
+let vcsUserInput;
+let vcsPasswordInput;
+let startDateInput;
+let endDateInput;
+let button;
+let fixture: ComponentFixture<AddProjectComponent>;
 
 describe('AddProjectComponent', () => {
   let component: AddProjectComponent;
-  let fixture: ComponentFixture<AddProjectComponent>;
   let http;
-  let routerSpy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -128,6 +136,7 @@ describe('AddProjectComponent', () => {
       });
       fixture.whenStable().then(() => {
         expect(refreshSpy).toHaveBeenCalled();
+        http.verify();
       });
     })
   );
@@ -206,7 +215,7 @@ describe('AddProjectComponent', () => {
   });
 
   // TODO fix url validation
-  /*it('should fail validation of new project data because of url', () => {
+  xit('should fail validation of new project data because of url', () => {
     component.project = {
       id: 1,
       name: 'test',
@@ -221,5 +230,98 @@ describe('AddProjectComponent', () => {
     fixture.whenStable().then(() => {
       expect(component.incorrectURL).toBeTruthy();
     });
-  });*/
+  });
 });
+
+describe('EditProjectComponent', () => {
+  let component: AddProjectComponent;
+  let submitSpy;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [AddProjectComponent],
+      imports: [
+        FormsModule, // ngModel
+        HttpClientTestingModule,
+        RouterTestingModule
+      ],
+      providers: [
+        {provide: MatSnackBar}
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(AddProjectComponent);
+    component = fixture.componentInstance;
+    submitSpy = spyOn(component, 'submitForm').and.callFake(() => {});
+    fixture.detectChanges();
+    nameInput = fixture.debugElement.query(By.css('input[name="name"]')).nativeElement;
+    vcsUrlInput = fixture.debugElement.query(By.css('input[name="vcsUrl"]')).nativeElement;
+    vcsUserInput = fixture.debugElement.query(By.css('input[name="vcsUser"]')).nativeElement;
+    vcsPasswordInput = fixture.debugElement.query(By.css('input[name="vcsPassword"]')).nativeElement;
+    startDateInput = fixture.debugElement.query(By.css('input[name="startDate"]')).nativeElement;
+    endDateInput = fixture.debugElement.query(By.css('input[name="endDate"]')).nativeElement;
+    button = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
+    return fixture.whenStable().then(() => {
+      fixture.detectChanges();
+    });
+  });
+
+  it('should create component in HTML', () => {
+    fixture.whenStable().then(() => {
+      setValues('test', 'https://github.com/reflectoring/coderadar', undefined, '', null, null);
+      expect(component.project.name).toBe('test');
+      button.click();
+      expect(submitSpy).toHaveBeenCalled();
+    });
+  });
+
+  it('should create component name empty in HTML', () => {
+    setValues('', 'https://github.com/reflectoring/coderadar', undefined, '', null, null);
+    button.click();
+    expect(submitSpy).toHaveBeenCalled();
+    component.nameEmpty = true;
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('mat-error')).nativeElement.innerText)
+      .toBe('The project name must not be empty!');
+  });
+
+  // TODO fix url validation
+  xit('should create component invalid url in HTML', () => {
+    setValues('test', 'fsdfsfsdf', undefined, '', null, null);
+    button.click();
+    expect(submitSpy).toHaveBeenCalled();
+    component.incorrectURL = true;
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('mat-error')).nativeElement.innerText)
+      .toEqual('The VCS URL is invalid!');
+  });
+
+  it('should create component name already exists in HTML', () => {
+    setValues('test', 'https://github.com/reflectoring/coderadar', undefined, '', null, null);
+    button.click();
+    expect(submitSpy).toHaveBeenCalled();
+    component.projectExists = true;
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('mat-error')).nativeElement.innerText)
+      .toEqual('A project with this name already exists! Please choose another name.');
+  });
+});
+
+function setValues(name, vcsUrl, vcsUser, vcsPassword, startDate, endDate) {
+  nameInput.value = name;
+  vcsUrlInput.value = vcsUrl;
+  vcsUserInput.value = vcsUser;
+  vcsPasswordInput.value = vcsPassword;
+  startDateInput.value = startDate;
+  endDateInput.value = endDate;
+
+  nameInput.dispatchEvent(new Event('input'));
+  vcsUrlInput.dispatchEvent(new Event('input'));
+  vcsUserInput.dispatchEvent(new Event('input'));
+  vcsPasswordInput.dispatchEvent(new Event('input'));
+  startDateInput.dispatchEvent(new Event('input'));
+  endDateInput.dispatchEvent(new Event('input'));
+  fixture.detectChanges();
+}

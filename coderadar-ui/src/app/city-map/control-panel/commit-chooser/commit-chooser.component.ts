@@ -56,7 +56,8 @@ export class CommitChooserComponent implements OnInit{
         if (optionAny.author.toLowerCase().includes(lowercaseValue)) {score += 25; }
         if (optionAny.name.startsWith(value)) {score += 1000; }
         if (optionAny.name.includes(lowercaseValue)) {score += 500; }
-        if (option.displayValue.substring(option.value.author.length+CommitChooserComponent.COMMIT_HASH_LENGTH).toLowerCase().includes(lowercaseValue)){score+=1000}
+        // TODO last two characters of author name are ignored due to ', ' in displayValue
+        if (option.displayValue.substring(option.value.author.length + CommitChooserComponent.COMMIT_HASH_LENGTH).toLowerCase().includes(lowercaseValue)){score+=1000}
         if (score > 0||value==="") {
           optionAny.score = score;
           return option;

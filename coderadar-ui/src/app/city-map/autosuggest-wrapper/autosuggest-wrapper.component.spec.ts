@@ -4,6 +4,10 @@ import {AutosuggestWrapperComponent} from './autosuggest-wrapper.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatAutocompleteModule, MatFormFieldModule, MatInputModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {HighlightSearchPipe} from "../control-panel/pipes/highlight-search.pipe";
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
+import {of} from "rxjs";
+import {DatePipe} from "@angular/common";
 
 describe('AutosuggestWrapperComponent', () => {
   let component: AutosuggestWrapperComponent;
@@ -13,12 +17,14 @@ describe('AutosuggestWrapperComponent', () => {
     TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, MatInputModule, MatAutocompleteModule, MatFormFieldModule, FormsModule,
         BrowserAnimationsModule],
-      declarations: [AutosuggestWrapperComponent]
+      declarations: [AutosuggestWrapperComponent, HighlightSearchPipe],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
       .compileComponents();
 
     fixture = TestBed.createComponent(AutosuggestWrapperComponent);
     component = fixture.componentInstance;
+    component.source$ = of(['item a', 'item b', 'item c', 'item d']);
     fixture.detectChanges();
   });
 
@@ -26,40 +32,14 @@ describe('AutosuggestWrapperComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should format value', () => {
-    expect(component.formatValue(null)).toBe('');
-    expect(component.formatValue(undefined)).toBe('');
-    expect(component.formatValue('')).toBe('');
-    expect(component.formatValue('test')).toBe('test');
+  it('should display function', () => {
+    expect(component.displayFunction({
+      value: 'test',
+      displayValue: 'displayTest'
+    })).toBe('displayTest');
   });
 
-  it('should format value', () => {
-    const value = {
-      timestamp: '2020-01-01T08:00:00.000Z',
-      name: 'test',
-      author: 'testAuthor'
-    };
-    expect(component.formatValue(value)).toBe('Wed, 01 Jan 2020 08:00:00 GMT,  test, testAuthor');
+  it('should display function no option', () => {
+    expect(component.displayFunction(undefined)).toBe('');
   });
-
-  it('should format value has only property name', () => {
-    const value = {name: 'test'};
-    // TODO 2 whitespaces?
-    expect(component.formatValue(value)).toBe('Invalid Date,  test, undefined');
-  });
-
-  it('should format value has property not name', () => {
-    const value = {notName: 'test'};
-    expect(component.formatValue(value)).toEqual({notName: 'test'});
-  });
-
-  // TODO
-  //  _filter
-  //  _filter source undefined
-  //  _filter value undefined
-  //  _filter value has property name
-  //  _filter value has property not name
-  //  _filter value has no property
-
-
 });

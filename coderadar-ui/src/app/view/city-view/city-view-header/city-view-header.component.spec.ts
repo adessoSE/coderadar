@@ -82,6 +82,12 @@ describe('CityViewHeaderComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+    component.project = project;
+    fixture.detectChanges();
+    expect(component.project.id).toBe(1);
+    const dom = fixture.debugElement.nativeElement;
+    expect(dom.querySelectorAll('a[mat-button]')[1].href).toContain('/project/1');
+    expect(dom.querySelector('mat-label').innerText).toBe(' test');
   });
 
   it('should get logged in user without user', () => {

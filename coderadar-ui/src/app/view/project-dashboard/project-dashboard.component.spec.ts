@@ -17,9 +17,9 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {HttpClientModule} from '@angular/common/http';
 import {Actions} from '@ngrx/effects';
 import {CityViewComponent} from '../city-view/city-view.component';
-import {AppComponent} from "../../app.component";
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {Title} from "@angular/platform-browser";
+import {AppComponent} from '../../app.component';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {By, Title} from '@angular/platform-browser';
 
 describe('ProjectDashboardComponent', () => {
   let component: ProjectDashboardComponent;
@@ -78,7 +78,8 @@ describe('ProjectDashboardComponent', () => {
     fixture = TestBed.createComponent(ProjectDashboardComponent);
     http = TestBed.get(HttpTestingController);
     component = fixture.componentInstance;
-    routerSpy = spyOn(Router.prototype, 'navigate').and.callFake((url) => {});
+    routerSpy = spyOn(Router.prototype, 'navigate').and.callFake((url) => {
+    });
     component.commits = commits;
     fixture.detectChanges();
   });
@@ -401,7 +402,8 @@ describe('ProjectDashboardComponent', () => {
       component.projectId = 1;
       component.selectedCommit1 = commits[0];
       component.selectedCommit2 = commits[1];
-      const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {});
+      const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {
+      });
       (component as any).getCommits();
       http.expectOne(`${AppComponent.getApiUrl()}projects/1/commits`).flush({
         status: 403,
@@ -429,7 +431,8 @@ describe('ProjectDashboardComponent', () => {
     });
     fixture.whenStable().then(() => {
       component.projectId = 1;
-      const titleSpy = spyOn(titleService, 'setTitle').and.callFake(callback => {});
+      const titleSpy = spyOn(titleService, 'setTitle').and.callFake(callback => {
+      });
       (component as any).getProject();
       http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
         id: 1,
@@ -461,7 +464,8 @@ describe('ProjectDashboardComponent', () => {
     });
     fixture.whenStable().then(() => {
       component.projectId = 1;
-      const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {});
+      const refreshSpy = spyOn(userService, 'refresh').and.callFake(callback => {
+      });
       (component as any).getProject();
       http.expectOne(`${AppComponent.getApiUrl()}projects/1`).flush({
         status: 403,
@@ -554,5 +558,121 @@ describe('ProjectDashboardComponent', () => {
     const selectedCommit = commits[1];
     component.selectCard(selectedCommit);
     expect(component.selectedCommit2).toBe(selectedCommit);
+  });
+});
+
+describe('ProjectDashboardComponent', () => {
+  let component: ProjectDashboardComponent;
+  let fixture: ComponentFixture<ProjectDashboardComponent>;
+  const commits = [
+    {
+      name: 'init',
+      author: 'testUser',
+      comment: 'initial commit',
+      timestamp: 1576832400000,
+      analyzed: true
+    },
+    {
+      name: 'second',
+      author: 'testUser',
+      comment: 'second commit',
+      timestamp: 1576832800000,
+      analyzed: true
+    }
+  ];
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [ProjectDashboardComponent],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule
+      ],
+      providers: [
+        {
+          provide: ActivatedRoute, useValue: {
+            params: of({id: 1})
+          }
+        },
+        {provide: StateObservable},
+        Actions,
+        ActionsSubject,
+        AppEffects,
+        {provide: ReducerManager},
+        ReducerManagerDispatcher,
+        ScannedActionsSubject,
+        Store
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(ProjectDashboardComponent);
+    component = fixture.componentInstance;
+    component.commits = commits;
+    fixture.detectChanges();
+    return fixture.whenStable().then(() => {
+      fixture.detectChanges();
+    })
+  });
+
+  it('should display two commits', () => {
+    expect(fixture.debugElement.queryAll(By.css('mat-accordion')).length).toBe(2);
+    const commit1 = fixture.debugElement.queryAll(By.css('mat-accordion'))[0].nativeElement;
+    const commit2 = fixture.debugElement.queryAll(By.css('mat-accordion'))[1].nativeElement;
+    expect(commit1.querySelectorAll('mat-panel-description')[0].innerText).toBe('init');
+    expect(commit1.querySelectorAll('mat-panel-description')[1].innerText).toBe('testUser');
+    expect(commit1.querySelectorAll('mat-panel-description')[2].innerText).toBe('initial commit');
+    expect(commit1.querySelectorAll('mat-panel-description')[3].innerText).toBe(1576832400000);
+
+    expect(commit2.querySelectorAll('mat-panel-description')[0].innerText).toBe('second');
+    expect(commit2.querySelectorAll('mat-panel-description')[1].innerText).toBe('testUser');
+    expect(commit2.querySelectorAll('mat-panel-description')[2].innerText).toBe('second commit');
+    expect(commit2.querySelectorAll('mat-panel-description')[3].innerText).toBe(1576832800000);
+  });
+
+  it('should display complexity analysis button', () => {
+    component.selectedCommit1 = commits[0];
+    component.selectedCommit2 = commits[1];
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('mat-icon')).nativeElement).toBeTruthy();
+  });
+
+  it('should display complexity analysis button only selectedCommit1', () => {
+    component.selectedCommit1 = commits[0];
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('mat-icon')).nativeElement).toBeFalsy();
+  });
+
+  it('should display complexity analysis button  only selectedCommit2', () => {
+    component.selectedCommit2 = commits[1];
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('mat-icon')).nativeElement).toBeFalsy();
+  });
+
+  it('should display complexity analysis button selectedCommit1 not analyzed', () => {
+    component.selectedCommit1 = {
+      name: 'init',
+      author: 'testUser',
+      comment: 'initial commit',
+      timestamp: 1576832400000,
+      analyzed: false
+    };
+    component.selectedCommit2 = commits[1];
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('mat-icon')).nativeElement).toBeFalsy();
+  });
+
+  it('should display complexity analysis button selectedCommit2 not analyzed', () => {
+    component.selectedCommit1 = commits[0];
+    component.selectedCommit2 = {
+      name: 'second',
+      author: 'testUser',
+      comment: 'second commit',
+      timestamp: 1576832400000,
+      analyzed: false
+    };
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('mat-icon')).nativeElement).toBeFalsy();
   });
 });

@@ -18,6 +18,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatIconModule} from '@angular/material/icon';
 import {LoginComponent} from '../login/login.component';
 import {FormsModule} from '@angular/forms';
+import {By} from '@angular/platform-browser';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -43,13 +45,12 @@ describe('HeaderComponent', () => {
         MatIconModule,
         MatMenuModule,
         FormsModule,
+        HttpClientTestingModule,
         RouterTestingModule.withRoutes([
           {path: 'login', component: LoginComponent},
         ]),
       ],
       providers: [
-        HttpClient,
-        HttpHandler,
         {provide: UserService, useClass: MockUserService},
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -88,7 +89,68 @@ describe('HeaderComponent', () => {
   });
 });
 
+describe('HeaderComponent', () => {
+  let component: HeaderComponent;
+  let fixture: ComponentFixture<HeaderComponent>;
+  let getUsernameSpy;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [HeaderComponent],
+      imports: [
+        MatMenuModule, // matMenuTriggerFor
+        RouterTestingModule,
+        HttpClientTestingModule
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(HeaderComponent);
+    component = fixture.componentInstance;
+    getUsernameSpy = spyOn(component, 'getUsername').and.callFake(() => {
+      return 'testUser';
+    });
+    fixture.detectChanges();
+    return fixture.whenStable().then(() => {
+      fixture.detectChanges();
+    });
+  });
+
+  it('should display username', () => {
+    expect(getUsernameSpy).toHaveBeenCalled();
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('button[mat-button]')).nativeElement.innerText).toContain('testUser');
+  });
+
+  it('should display breadcrumb', () => {
+    component.title = [
+      {location: '/dashboard', name: 'Dashboard'},
+      {location: '/project/1', name: 'Project 1'},
+      {location: '/project/1/commit1', name: 'Commit 1'}
+    ];
+    fixture.detectChanges();
+    const breadcrumb = fixture.debugElement.queryAll(By.css('mat-toolbar'))[1].nativeElement;
+    expect(breadcrumb.children.length).toBe(3);
+    expect(breadcrumb.children[0].children[0].innerText).toBe('Dashboard');
+    expect((breadcrumb.children[0].children[0] as HTMLAnchorElement).href).toContain('/dashboard');
+    expect(breadcrumb.children[1].children[0].innerText).toBe('Project 1');
+    expect((breadcrumb.children[1].children[0] as HTMLAnchorElement).href).toContain('/project/1');
+    expect(breadcrumb.children[2].children[0].innerText).toBe('Commit 1');
+    expect((breadcrumb.children[2].children[0] as HTMLAnchorElement).href).toBeUndefined();
+  });
+});
+
 class MockUserService extends UserService {
+
+  static getLoggedInUser() {
+    return of ({
+      username: 'testUser',
+      accessToken: 'accessToken',
+      refreshToken: 'refreshToken'
+    }).toPromise();
+  }
+
   login(usernameValue: string, passwordValue: string) {
     const user = {
       username: usernameValue,

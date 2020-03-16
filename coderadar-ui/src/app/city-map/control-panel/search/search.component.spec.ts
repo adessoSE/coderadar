@@ -30,6 +30,15 @@ import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 describe('SearchComponent', () => {
   let component: SearchComponent;
   let fixture: ComponentFixture<SearchComponent>;
+  const file0 = {value: 'root', displayValue: 'root'};
+  const file1 = {value: 'root/src/main/java/FirstTestFile.java', displayValue: 'FirstTestFile.java'};
+  const file2 = {value: 'root/src/main/java/SecondTestFile.java', displayValue: 'SecondTestFile.java'};
+  const file3 = {value: 'root/src/main/java/ThirdTestFile.java', displayValue: 'ThirdTestFile.java'};
+  const file4 = {value: 'root/src/main/java/FourthTestFile.java', displayValue: 'FourthTestFile.java'};
+  const file5 = {value: 'root/src/main/java/FifthTestFile.java', displayValue: 'FifthTestFile.java'};
+  const file6 = {value: 'root/src/main/java/SixthTestFile.java', displayValue: 'SixthTestFile.java'};
+  const file7 = {value: 'root/src/main/java/FileOfFirstTest.java', displayValue: 'FileOfFirstTest.java'};
+  const source = [file0, file7, file1, file2, file3, file4, file5, file6];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -79,5 +88,53 @@ describe('SearchComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should format file options', () => {
+    expect(component.formatFileOptions('test')).toBe('test');
+    expect(component.formatFileOptions(undefined)).toBe('');
+    expect(component.formatFileOptions(null)).toBe('');
+  });
+
+  it('should filter file options', () => {
+    expect(component.filterFileOptions('test', undefined).length).toBe(0);
+    expect(component.filterFileOptions(undefined, source).length).toBe(0);
+    expect(component.filterFileOptions('test', []).length).toBe(0);
+  });
+
+  it('should filter file options value th', () => {
+    const filtered = component.filterFileOptions('th', source);
+    expect(filtered.length).toBe(4);
+    expect(filtered[0].displayValue).toBe('ThirdTestFile.java');
+    expect(filtered[1].displayValue).toBe('FourthTestFile.java');
+    expect(filtered[2].displayValue).toBe('FifthTestFile.java');
+    expect(filtered[3].displayValue).toBe('SixthTestFile.java');
+  });
+
+  it('should filter file options value thTest', () => {
+    const filtered = component.filterFileOptions('thTest', source);
+    expect(filtered.length).toBe(3);
+    expect(filtered[0].displayValue).toBe('FourthTestFile.java');
+    expect(filtered[1].displayValue).toBe('FifthTestFile.java');
+    expect(filtered[2].displayValue).toBe('SixthTestFile.java');
+  });
+
+  it('should filter file options empty value', () => {
+    const filtered = component.filterFileOptions('', source);
+    expect(filtered.length).toBe(7);
+    expect(filtered[0].displayValue).toBe('FileOfFirstTest.java');
+    expect(filtered[1].displayValue).toBe('FirstTestFile.java');
+    expect(filtered[2].displayValue).toBe('SecondTestFile.java');
+    expect(filtered[3].displayValue).toBe('ThirdTestFile.java');
+    expect(filtered[4].displayValue).toBe('FourthTestFile.java');
+    expect(filtered[5].displayValue).toBe('FifthTestFile.java');
+    expect(filtered[6].displayValue).toBe('SixthTestFile.java');
+  });
+
+  it('should filter file options difference between starts with and includes', () => {
+    const filtered = component.filterFileOptions('First', source);
+    expect(filtered.length).toBe(2);
+    expect(filtered[0].displayValue).toBe('FirstTestFile.java');
+    expect(filtered[1].displayValue).toBe('FileOfFirstTest.java');
   });
 });

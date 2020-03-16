@@ -73,6 +73,9 @@ export abstract class AbstractView {
       return b.packerInfo.w - a.packerInfo.w;
     });
 
+    console.log('type:');
+    console.log(this.packer);
+    console.log({});
     this.packer.fit(nodes.map(node => node.packerInfo));
     return {
       packer: this.packer.root,
