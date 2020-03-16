@@ -191,3 +191,39 @@ xdescribe('ScreenComponent', () => {
     expect((component as any).getCentralCoordinates()).toBe({x: 0, y: 0, z: 0});
   });
 });
+
+@Component({
+  selector: 'app-test-component-wrapper',
+  template: '<app-screen [activeFilter]="activeFilter" [screenType]="screenType" [activeViewType]="activeViewType" [metricTree]="metricTree" [metricMapping]="metricMapping"></app-screen>'
+})
+class TestComponentWrapperComponent {
+  activeFilter: IFilter = {
+    unmodified: false,
+    modified: false,
+    deleted: false,
+    added: false,
+    renamed: false,
+  };
+  screenType: ScreenType = ScreenType.LEFT;
+  activeViewType: ViewType = ViewType.SPLIT;
+  metricTree: INode = {
+    name: '',
+    type: NodeType.FILE,
+    commit1Metrics: [
+      {
+        metricName: '',
+        value: ''
+      }
+    ],
+    commit2Metrics: [
+      {
+        metricName: '',
+        value: ''
+      }
+    ],
+    renamedFrom: null,
+    renamedTo: null,
+    changes: null
+  };
+  metricMapping: IMetricMapping;
+}

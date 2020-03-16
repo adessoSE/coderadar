@@ -12,7 +12,7 @@ import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 describe('ControlPanelComponent', () => {
   let component: ControlPanelComponent;
-  let fixture: ComponentFixture<ControlPanelComponent>;
+  let fixture: ComponentFixture<TestComponentWrapperComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -47,3 +47,17 @@ describe('ControlPanelComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
+@Component({
+  selector: 'app-test-component-wrapper',
+  template: '<app-filter [activeFilter]="activeFilter"></app-filter>'
+})
+class TestComponentWrapperComponent {
+  activeFilter: IFilter = {
+    unmodified: false,
+    modified: false,
+    deleted: false,
+    added: false,
+    renamed: false,
+  };
+}
