@@ -27,8 +27,10 @@ public class ListContributorsAdapter implements ListContributorsPort {
   }
 
   @Override
-  public List<Contributor> listAllByProjectIdAndFilename(long projectId, String filename) {
+  public List<Contributor> listAllByProjectIdAndFilepathInCommit(
+      long projectId, String commitHash, String filename) {
     return mapper.mapNodeEntities(
-        contributorRepository.findAllByProjectIdAndFilename(projectId, filename));
+        contributorRepository.findAllByProjectIdAndFilepathInCommit(
+            projectId, commitHash, filename));
   }
 }

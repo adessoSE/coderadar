@@ -6,7 +6,6 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
 
 @Service
 public class ProcessProjectService {
@@ -30,9 +29,8 @@ public class ProcessProjectService {
    *
    * @param runnable The task to execute
    * @param projectId The id of the project.
-   * @return A ListenableFuture object for the started task.
    */
-  public ListenableFuture<?> executeTask(Runnable runnable, long projectId) {
+  public void executeTask(Runnable runnable, long projectId) {
     if (!getProjectPort.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }
@@ -45,14 +43,10 @@ public class ProcessProjectService {
             try {
               runnable.run();
             } finally { // No matter what happens, reset the flag
-              if (getProjectPort.existsById(
-                  projectId)) { // check if the project still exists, this prevents exceptions if
-                // the project was deleted.
-                projectStatusPort.setBeingProcessed(projectId, false);
-              }
+              projectStatusPort.setBeingProcessed(projectId, false);
             }
           };
-      return taskExecutor.submitListenable(task);
+      taskExecutor.submitListenable(task);
     }
   }
 }

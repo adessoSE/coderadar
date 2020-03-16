@@ -37,7 +37,7 @@ public class ListContributorsController {
   public ResponseEntity<List<Contributor>> listContributorsForFile(
       @PathVariable long projectId, @RequestBody @Validated GetContributorsForFileCommand command) {
     return new ResponseEntity<>(
-        listContributorsUseCase.listContributorsForProjectAndFilename(projectId, command),
+        listContributorsUseCase.listContributorsForProjectAndFilepathInCommit(projectId, command),
         HttpStatus.OK);
   }
 }

@@ -18,5 +18,6 @@ public interface ListContributorsPort {
    * @param filename The filename we are looking for.
    * @return list of contributors that have made changes to the file with the given filename
    */
-  List<Contributor> listAllByProjectIdAndFilename(long projectId, String filename);
+  List<Contributor> listAllByProjectIdAndFilepathInCommit(
+      long projectId, String commitHash, String filename);
 }

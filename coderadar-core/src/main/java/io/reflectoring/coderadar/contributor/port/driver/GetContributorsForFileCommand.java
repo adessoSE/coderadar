@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetContributorsForFileCommand {
   @NotBlank private String filename;
+  @NotBlank private String commitHash;
 }

@@ -15,6 +15,6 @@ public interface ListContributorsUseCase {
    * @param command Contains the filename we are looking for.
    * @return list of contributors that have made changes to the file with the given filename
    */
-  List<Contributor> listContributorsForProjectAndFilename(
+  List<Contributor> listContributorsForProjectAndFilepathInCommit(
       long projectId, GetContributorsForFileCommand command);
 }

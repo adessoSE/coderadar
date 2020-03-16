@@ -29,11 +29,12 @@ public class ListContributorsService implements ListContributorsUseCase {
   }
 
   @Override
-  public List<Contributor> listContributorsForProjectAndFilename(
+  public List<Contributor> listContributorsForProjectAndFilepathInCommit(
       long projectId, GetContributorsForFileCommand command) {
     if (!getProjectPort.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }
-    return listContributorsPort.listAllByProjectIdAndFilename(projectId, command.getFilename());
+    return listContributorsPort.listAllByProjectIdAndFilepathInCommit(
+        projectId, command.getCommitHash(), command.getFilename());
   }
 }
