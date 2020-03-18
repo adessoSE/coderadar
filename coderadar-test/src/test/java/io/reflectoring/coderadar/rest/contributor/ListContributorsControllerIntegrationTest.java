@@ -1,14 +1,14 @@
 package io.reflectoring.coderadar.rest.contributor;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.reflectoring.coderadar.contributor.domain.Contributor;
+import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForFileCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -23,8 +24,10 @@ import org.springframework.test.web.servlet.ResultHandler;
 
 public class ListContributorsControllerIntegrationTest extends ControllerTestTemplate {
 
-  @Test
-  public void listContributors() throws Exception {
+  private long projectId;
+
+  @BeforeEach
+  public void setUp() throws Exception {
     URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
     CreateProjectCommand command1 =
         new CreateProjectCommand(
@@ -41,9 +44,12 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
                 post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
             .andReturn();
 
-    long projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
+    projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
+  }
 
-    result =
+  @Test
+  public void listContributors() throws Exception {
+    MvcResult result =
         mvc()
             .perform(
                 get("/projects/" + projectId + "/contributors")
@@ -59,6 +65,35 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
     Assertions.assertThat(contributors.size()).isEqualTo(2);
   }
 
+  @Test
+  public void listContributorsForFile() throws Exception {
+    GetContributorsForFileCommand command =
+        new GetContributorsForFileCommand(
+            "GetMetricsForCommitCommand.java", "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382");
+
+    MvcResult result =
+        mvc()
+            .perform(
+                get("/projects/" + projectId + "/contributors/file")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(command)))
+            .andExpect(status().isOk())
+            .andDo(documentListContributorsForFile())
+            .andReturn();
+
+    List<Contributor> contributors =
+        fromJson(
+            new TypeReference<List<Contributor>>() {}, result.getResponse().getContentAsString());
+    Contributor contributor = contributors.get(0);
+
+    Assertions.assertThat(contributors.size()).isEqualTo(1);
+    Assertions.assertThat(contributor.getDisplayName()).isEqualTo("maximAtanasov");
+    Assertions.assertThat(contributor.getNames())
+        .containsExactlyInAnyOrder("maximAtanasov", "Atanasov");
+    Assertions.assertThat(contributor.getEmailAddresses())
+        .containsExactly("maksim.atanasov@adesso.de");
+  }
+
   private ResultHandler documentListContributors() {
     return document(
         "contributors/list",
@@ -70,5 +105,18 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
                 .description("Set of names that the contributor has used in git commits"),
             fieldWithPath("[].emailAddresses")
                 .description("Set of email addresses of the contributor")));
+  }
+
+  private ResultHandler documentListContributorsForFile() {
+    ConstrainedFields<GetContributorsForFileCommand> fields =
+        fields(GetContributorsForFileCommand.class);
+
+    return document(
+        "contributors/list/file",
+        requestFields(
+            fields.withPath("filename").description("The specified filename to search for."),
+            fields
+                .withPath("commitHash")
+                .description("Get the critical file only if it belongs to this commit tree.")));
   }
 }

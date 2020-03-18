@@ -17,10 +17,11 @@ public interface ContributorQueryRepository extends Neo4jRepository<ContributorE
           + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: \"DELETE\"}]->(c) RETURN collect(f) as deletes', {commits: commits}) "
           + "YIELD value WITH commits, renames, value.deletes as deletes "
           + "UNWIND commits as c "
-          + "MATCH (f)-[:CHANGED_IN]->(c) WHERE NOT(f IN deletes OR f IN renames) AND AND any(x IN {3} WHERE f.path =~ x) AND none(x IN {4} WHERE f.path =~ x) "
+          + "MATCH (f)-[:CHANGED_IN]->(c) WHERE NOT(f IN deletes OR f IN renames) AND any(x IN {3} WHERE f.path =~ x) AND none(x IN {4} WHERE f.path =~ x) "
           + "WITH f.path as path, collect(DISTINCT c.authorEmail) AS emails "
           + "UNWIND emails as email "
-          + "MATCH (co:ContributorEntity) WHERE toLower(email) IN co.emails WITH path, collect(DISTINCT co.displayName) as contr WHERE size(contr) = 3 RETURN path, contr")
+          + "MATCH (co:ContributorEntity) WHERE toLower(email) IN co.emails WITH path, collect(DISTINCT co.displayName) as contributors "
+          + "WHERE size(contributors) = {1} RETURN path, contributors")
   List<ContributorsForFileQueryResult> getCriticalFiles(
       long projectId,
       int numberOfContributors,

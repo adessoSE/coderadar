@@ -650,70 +650,102 @@ include::{snippets}/metrics/deltaTree/http-request.adoc[]
 include::{snippets}/metrics/deltaTree/http-response.adoc[]
 
 
-=== Contributors
 
-==== Structure
+== Contributors
+
+=== Structure
 
 include::{snippets}/contributors/get/response-fields.adoc[]
 
 
 
-==== List all contributors of a project
+=== List all contributors of a project
 
-===== Example Request
+==== Example Request
 
 include::{snippets}/contributors/list/http-request.adoc[]
 
-===== Example Response
+==== Example Response
 
 include::{snippets}/contributors/list/http-response.adoc[]
 
-==== Response Structure
+=== Response Structure
 
 include::{snippets}/contributors/list/response-fields.adoc[]
 
 
 
-==== Get single contributor
+=== List all contributors for a single File
 
-===== Example request
+==== Example Request
+
+include::{snippets}/contributors/list/file/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/contributors/list/file/http-response.adoc[]
+
+
+
+=== Get single contributor
+
+==== Example request
 
 include::{snippets}/contributors/get/http-request.adoc[]
 
-===== Example response
+==== Example response
 
 include::{snippets}/contributors/get/http-response.adoc[]
 
 
 
-==== Merge two contributors
+=== Merge two contributors
 
-===== Request Structure
+==== Request Structure
 
 include::{snippets}/contributors/merge/request-fields.adoc[]
 
-===== Example Request
+==== Example Request
 
 include::{snippets}/contributors/merge/http-request.adoc[]
 
-===== Example Response
+==== Example Response
 
 include::{snippets}/contributors/merge/http-response.adoc[]
 
 
 
-==== Update a Contributor
+=== Update a Contributor
 
-===== Request Structure
+==== Request Structure
 
 include::{snippets}/contributors/update/request-fields.adoc[]
 
-===== Example Request
+==== Example Request
 
 include::{snippets}/contributors/update/http-request.adoc[]
 
-===== Example Response
+==== Example Response
 
 include::{snippets}/contributors/update/http-response.adoc[]
+
+
+
+
+== Coderadar Core Metrics
+
+=== Get Critical Files of a Project
+
+==== Request Structure
+
+include::{snippets}/metrics/criticalFiles/request-fields.adoc[]
+
+==== Example Request
+
+include::{snippets}/metrics/criticalFiles/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/metrics/criticalFiles/http-response.adoc[]
 
 
