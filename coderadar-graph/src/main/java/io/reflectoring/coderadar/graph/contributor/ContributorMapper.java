@@ -18,6 +18,7 @@ public class ContributorMapper implements Mapper<Contributor, ContributorEntity>
   @Override
   public ContributorEntity mapDomainObject(Contributor domainObject) {
     ContributorEntity contributorEntity = new ContributorEntity();
+    contributorEntity.setId(domainObject.getId());
     contributorEntity.setDisplayName(domainObject.getDisplayName());
     contributorEntity.setEmails(domainObject.getEmailAddresses());
     contributorEntity.setNames(domainObject.getNames());
