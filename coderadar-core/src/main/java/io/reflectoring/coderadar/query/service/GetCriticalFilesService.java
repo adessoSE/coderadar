@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.query.service;
 
 import io.reflectoring.coderadar.analyzer.MisconfigurationException;
+import io.reflectoring.coderadar.contributor.port.driver.GetCriticalFilesCommand;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
@@ -27,7 +28,8 @@ public class GetCriticalFilesService implements GetCriticalFilesUseCase {
   }
 
   @Override
-  public List<ContributorsForFile> getCriticalFiles(Long projectId, int numberOfContributors) {
+  public List<ContributorsForFile> getCriticalFiles(
+      Long projectId, GetCriticalFilesCommand command) {
     if (!getProjectPort.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }
@@ -35,6 +37,7 @@ public class GetCriticalFilesService implements GetCriticalFilesUseCase {
     if (filePatterns.isEmpty()) {
       throw new MisconfigurationException("No file patterns defined for this project");
     }
-    return getCriticalFilesPort.getCriticalFiles(projectId, numberOfContributors, filePatterns);
+    return getCriticalFilesPort.getCriticalFiles(
+        projectId, command.getNumberOfContributors(), command.getCommitHash(), filePatterns);
   }
 }

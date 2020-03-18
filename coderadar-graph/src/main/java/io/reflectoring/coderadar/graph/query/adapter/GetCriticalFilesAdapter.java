@@ -20,7 +20,7 @@ public class GetCriticalFilesAdapter implements GetCriticalFilesPort {
 
   @Override
   public List<ContributorsForFile> getCriticalFiles(
-      Long projectId, int numberOfContributors, List<FilePattern> filePatterns) {
+      Long projectId, int numberOfContributors, String commitHash, List<FilePattern> filePatterns) {
 
     // Map Ant-Patterns to RegEx
     List<String> includes = new ArrayList<>();
@@ -34,7 +34,7 @@ public class GetCriticalFilesAdapter implements GetCriticalFilesPort {
     }
     return mapQueryResults(
         contributorQueryRepository.getCriticalFiles(
-            projectId, numberOfContributors, includes, excludes));
+            projectId, numberOfContributors, commitHash, includes, excludes));
   }
 
   private List<ContributorsForFile> mapQueryResults(

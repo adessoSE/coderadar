@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface GetCriticalFilesPort {
   List<ContributorsForFile> getCriticalFiles(
-      Long projectId, int numberOfContributors, List<FilePattern> filePatterns);
+      Long projectId, int numberOfContributors, String commitHash, List<FilePattern> filePatterns);
 }
