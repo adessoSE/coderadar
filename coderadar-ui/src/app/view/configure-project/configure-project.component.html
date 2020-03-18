@@ -5,21 +5,16 @@
 
 <main class="mat-card-form ">
   <div class="grid-container" id="cardContainer">
-    <div>
+    <div fxLayoutAlign="center center">
       <form>
-        <mat-card class="configureCard">
-
+        <mat-card>
           <!--Card title-->
           <mat-card-header>
             <mat-card-title>
               <span>Configure {{(projectName)}}</span>
             </mat-card-title>
           </mat-card-header>
-
-            <mat-grid-list cols="2" rowHeight="800px">
-              <mat-grid-tile>
                 <mat-card-content>
-
                 <!--Analyzers-->
             <div class="list">
               <div class="list-title">
@@ -91,33 +86,27 @@
               <mat-error *ngIf="moduleExists">A module with this name already exists!</mat-error>
             </div>
                 </mat-card-content>
-              </mat-grid-tile>
-
-              <mat-grid-tile>
             <!--Project contributors-->
             <div class="list">
               <div class="list-title">
                 <mat-label>Project contributors:</mat-label>
               </div>
               <div *ngFor="let c of contributors">
-                <mat-checkbox name="{{c.displayName}}">
+                <mat-checkbox (change)="updateSelectedContributors(c)" name="{{c.displayName}}">
                   {{c.displayName}}
-                  {{c.id}}
                 </mat-checkbox>
               </div>
+              <button *ngIf="selectedContributors.length > 1" mat-raised-button style="margin: 10px" (click)="openDialog()">Merge</button>
             </div>
-
             <!--Project branches-->
             <div class="list">
               <div class="list-title">
                 <mat-label>Branches:</mat-label>
               </div>
               <div *ngFor="let branch of branches">
-                <span>{{branch.name}}</span>
+                <span><strong>{{branch.name}}</strong></span>
               </div>
             </div>
-              </mat-grid-tile>
-            </mat-grid-list>
 
           <!--Cancel and submit buttons-->
           <div align="center" id="cardButtons">

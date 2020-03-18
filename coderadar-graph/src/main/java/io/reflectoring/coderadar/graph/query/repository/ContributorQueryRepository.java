@@ -27,4 +27,17 @@ public interface ContributorQueryRepository extends Neo4jRepository<ContributorE
       String commitHash,
       @NonNull List<String> includes,
       @NonNull List<String> excludes);
+
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp DESC WITH collect(c) as commits "
+          + "CALL apoc.cypher.run('UNWIND commits as c MATCH (c)<-[:CHANGED_IN]-(f) WHERE f.path = {2} RETURN f', {commits:commits}) YIELD value "
+          + "WITH value.f as f, commits WITH commits, f "
+          + "OPTIONAL MATCH (f)-[:RENAMED_FROM*0..]->(f2) WITH collect(f) + collect(f2) as files, commits "
+          + "UNWIND commits as c "
+          + "UNWIND files as f "
+          + "MATCH (c)<-[:CHANGED_IN]-(f) WITH DISTINCT c.authorEmail as email "
+          + "MATCH (co:ContributorEntity) WHERE toLower(email) IN co.emails RETURN co ORDER BY co.displayName")
+  List<ContributorEntity> findAllByProjectIdAndFilepathInCommit(
+      long projectId, String commitHash, String filepath);
 }

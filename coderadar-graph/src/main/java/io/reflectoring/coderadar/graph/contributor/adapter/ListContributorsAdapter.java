@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ListContributorsPort;
 import io.reflectoring.coderadar.graph.contributor.ContributorMapper;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
+import io.reflectoring.coderadar.graph.query.repository.ContributorQueryRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,13 @@ import org.springframework.stereotype.Service;
 public class ListContributorsAdapter implements ListContributorsPort {
   private final ContributorMapper mapper = new ContributorMapper();
   private final ContributorRepository contributorRepository;
+  private final ContributorQueryRepository contributorQueryRepository;
 
-  public ListContributorsAdapter(ContributorRepository contributorRepository) {
+  public ListContributorsAdapter(
+      ContributorRepository contributorRepository,
+      ContributorQueryRepository contributorQueryRepository) {
     this.contributorRepository = contributorRepository;
+    this.contributorQueryRepository = contributorQueryRepository;
   }
 
   @Override
@@ -30,7 +35,7 @@ public class ListContributorsAdapter implements ListContributorsPort {
   public List<Contributor> listAllByProjectIdAndFilepathInCommit(
       long projectId, String commitHash, String filename) {
     return mapper.mapNodeEntities(
-        contributorRepository.findAllByProjectIdAndFilepathInCommit(
+        contributorQueryRepository.findAllByProjectIdAndFilepathInCommit(
             projectId, commitHash, filename));
   }
 }

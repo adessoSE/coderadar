@@ -21,7 +21,7 @@ export class ProjectService {
 
   private apiURL = AppComponent.getApiUrl();
 
-  constructor(private userService: UserService, private router: Router, private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient) {
   }
 
   /**
@@ -259,9 +259,7 @@ export class ProjectService {
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze/reset', {}, {observe: 'response'}).toPromise();
   }
 
-  getContributorsForProject(projectId: number) : Promise<HttpResponse<Contributor[]>> {
-    return this.httpClient.get<Contributor[]>(this.apiURL + 'projects/' + projectId + '/contributors', {observe: 'response'}).toPromise();
-  }
+
 
   /**
    * Returns all of the branches for a project.

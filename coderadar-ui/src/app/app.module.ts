@@ -12,7 +12,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MainDashboardComponent} from './view/main-dashboard/main-dashboard.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {AuthInterceptor} from './auth.interceptor';
-import {ConfigureProjectComponent} from './view/configure-project/configure-project.component';
+import {ConfigureProjectComponent, DialogOverviewExampleDialogComponent} from './view/configure-project/configure-project.component';
 import {EditProjectComponent} from './view/edit-project/edit-project.component';
 import {HeaderComponent} from './view/header/header.component';
 import {FooterComponent} from './view/footer/footer.component';
@@ -20,18 +20,18 @@ import {UserSettingsComponent} from './view/user-settings/user-settings.componen
 import {ProjectDashboardComponent} from './view/project-dashboard/project-dashboard.component';
 import {ViewCommitComponent} from './view/view-commit/view-commit.component';
 import {
-    MatButtonModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatSnackBarModule,
-    MatListModule,
-    MatMenuModule, MatPaginatorModule,
-    MatSidenavModule,
-    MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule,
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatFormFieldModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatSnackBarModule,
+  MatListModule,
+  MatMenuModule, MatPaginatorModule,
+  MatSidenavModule,
+  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatDialogModule,
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
@@ -86,12 +86,14 @@ const appRoutes: Routes = [
     ViewCommitComponent,
     CityViewComponent,
     DependencyRootComponent,
+    DialogOverviewExampleDialogComponent,
     DependencyCompareComponent,
     TreeNodeComponent,
     CityViewHeaderComponent
   ],
   imports: [
     BrowserModule,
+    MatDialogModule,
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot(appRoutes, {scrollPositionRestoration: 'enabled'}),
@@ -143,7 +145,8 @@ const appRoutes: Routes = [
       provide: REDUCER_TOKEN,
       useFactory: getReducers,
     }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [DialogOverviewExampleDialogComponent]
 })
 export class AppModule {
 }

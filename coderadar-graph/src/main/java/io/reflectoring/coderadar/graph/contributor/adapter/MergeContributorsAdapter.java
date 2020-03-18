@@ -18,7 +18,8 @@ public class MergeContributorsAdapter implements MergeContributorsPort {
 
   @Override
   public void mergeContributors(List<Long> contributorIds, String displayName) {
-    List<ContributorEntity> contributors = contributorRepository.findAllByIds(contributorIds);
+    List<ContributorEntity> contributors =
+        contributorRepository.findAllByIdsWithProjects(contributorIds);
     contributors.sort(Ordering.explicit(contributorIds).onResultOf(ContributorEntity::getId));
     contributorIds.forEach(
         id -> {
@@ -28,11 +29,11 @@ public class MergeContributorsAdapter implements MergeContributorsPort {
         });
     ContributorEntity firstEntity = contributors.get(0);
     for (int i = 1; i < contributors.size(); i++) {
-      ContributorEntity secondEntity = contributors.get(i);
-      firstEntity.getNames().addAll(secondEntity.getNames());
-      firstEntity.getEmails().addAll(secondEntity.getEmails());
-      firstEntity.getProjects().addAll(secondEntity.getProjects());
-      contributorRepository.deleteById(secondEntity.getId());
+      ContributorEntity contributorEntity = contributors.get(i);
+      firstEntity.getNames().addAll(contributorEntity.getNames());
+      firstEntity.getEmails().addAll(contributorEntity.getEmails());
+      firstEntity.getProjects().addAll(contributorEntity.getProjects());
+      contributorRepository.deleteById(contributorEntity.getId());
     }
     firstEntity.setDisplayName(displayName);
     contributorRepository.save(firstEntity, 1);

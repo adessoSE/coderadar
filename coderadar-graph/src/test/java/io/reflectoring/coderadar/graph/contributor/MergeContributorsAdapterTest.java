@@ -39,7 +39,7 @@ public class MergeContributorsAdapterTest {
     contributor2.setNames(new HashSet<>(Arrays.asList("Max Mustermann", "Mustermann")));
     contributor2.setEmails(new HashSet<>(Collections.singletonList("max.mustermann@def.de")));
 
-    when(contributorRepository.findAllByIds(anyList()))
+    when(contributorRepository.findAllByIdsWithProjects(anyList()))
         .thenReturn(Arrays.asList(contributor1, contributor2));
     when(contributorRepository.save(contributor1, 1)).thenReturn(contributor1);
 

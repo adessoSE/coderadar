@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
@@ -7,9 +7,15 @@ import {FilePattern} from '../../model/file-pattern';
 import {CONFLICT, FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Module} from '../../model/module';
 import {Title} from '@angular/platform-browser';
-import {MatSnackBar} from '@angular/material';
-import {Contributor} from '../../model/contributor'
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
+import {Contributor} from '../../model/contributor';
 import {Branch} from '../../model/branch';
+import {ContributorService} from '../../service/contributor.service';
+
+export interface DialogData {
+  selected: string;
+  displayNames: string[];
+}
 
 @Component({
   selector: 'app-configure-project',
@@ -24,6 +30,7 @@ export class ConfigureProjectComponent implements OnInit {
   filePatterns: FilePattern[];
   contributors: Contributor[];
   branches: Branch[];
+  selectedContributors: Contributor[] = [];
 
   // Fields for input binding
   filePatternIncludeInput;
@@ -35,8 +42,8 @@ export class ConfigureProjectComponent implements OnInit {
   projectId: any;
   moduleExists = false;
 
-  constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService,  private titleService: Title,
-              private projectService: ProjectService, private route: ActivatedRoute) {
+  constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService, private titleService: Title,
+              private projectService: ProjectService, private contributorService: ContributorService, private route: ActivatedRoute, public dialog: MatDialog) {
     this.projectName = '';
     this.filePatternIncludeInput = '';
     this.filePatternExcludeInput = '';
@@ -143,7 +150,7 @@ export class ConfigureProjectComponent implements OnInit {
    * Sends the refresh token if access is denied and repeats the request.
    */
   private getProjectContributors(): void {
-    this.projectService.getContributorsForProject(this.projectId)
+    this.contributorService.getContributorsForProject(this.projectId)
       .then(response => {
         if (response.body.length === 0) {
           this.contributors = [];
@@ -331,4 +338,54 @@ export class ConfigureProjectComponent implements OnInit {
         }
       });
   }
+
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
+      width: '250px',
+      data: {displayNames: this.selectedContributors.map(value => value.displayName), selected: this.selectedContributors[0].displayName}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.mergeContributors(result);
+      }
+    });
+  }
+
+  mergeContributors(displayName: string): void {
+      this.contributorService.mergeContributors(this.selectedContributors, displayName).then(value => {
+        this.selectedContributors = [];
+        this.contributors = [];
+        this.getProjectContributors();
+      }).catch(error => {
+          if (error.status && error.status === FORBIDDEN) {
+            this.userService.refresh(() => this.mergeContributors(displayName));
+          }
+        });
+  }
+
+  updateSelectedContributors(c: Contributor) {
+    if ( this.selectedContributors.filter(value => value === c).length > 0) {
+      this.selectedContributors = this.selectedContributors.filter(value => value !== c);
+    } else {
+      this.selectedContributors.push(c);
+    }
+  }
+}
+
+@Component({
+  selector: 'app-dialog-overview-example-dialog',
+  templateUrl: 'app-dialog-overview-example-dialog.html',
+})
+export class DialogOverviewExampleDialogComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
 }
