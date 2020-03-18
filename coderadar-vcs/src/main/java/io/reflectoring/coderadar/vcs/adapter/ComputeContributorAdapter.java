@@ -52,6 +52,8 @@ public class ComputeContributorAdapter implements ComputeContributorsPort {
       contributor.setEmailAddresses(new HashSet<>(Collections.singletonList(entry.getKey())));
       contributors.add(contributor);
     }
-    return new ArrayList<>(contributors);
+    List<Contributor> result = new ArrayList<>(contributors);
+    result.sort(Comparator.comparing(Contributor::getDisplayName));
+    return result;
   }
 }

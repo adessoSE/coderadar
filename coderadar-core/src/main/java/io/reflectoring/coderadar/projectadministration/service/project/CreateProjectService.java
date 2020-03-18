@@ -107,14 +107,9 @@ public class CreateProjectService implements CreateProjectUseCase {
                 cloneRepositoryCommand.getRemoteUrl());
             List<Commit> commits =
                 extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
-            List<Contributor> contributors = listContributorsPort.listAll();
-            contributors =
-                computeContributorsPort.computeContributors(
-                    coderadarConfigurationProperties.getWorkdir()
-                        + "/projects/"
-                        + project.getWorkdirName(),
-                    contributors);
-            saveContributorsPort.save(contributors, project.getId());
+
+            saveContributors(project);
+
             List<Branch> branches = getAvailableBranchesPort.getAvailableBranches(localDir);
             saveCommitPort.saveCommits(commits, branches, project.getId());
             logger.info("Saved project {}", project.getName());
@@ -124,6 +119,15 @@ public class CreateProjectService implements CreateProjectUseCase {
         },
         project.getId());
     return project.getId();
+  }
+
+  private synchronized void saveContributors(Project project) {
+    List<Contributor> contributors = listContributorsPort.listAll();
+    contributors =
+        computeContributorsPort.computeContributors(
+            coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName(),
+            contributors);
+    saveContributorsPort.save(contributors, project.getId());
   }
 
   /**

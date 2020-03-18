@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class Contributor {
-  private long id;
+  private Long id;
   private String displayName;
   private Set<String> names;
   private Set<String> emailAddresses;

@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.graph.projectadministration.project;
 
 import static org.mockito.Mockito.*;
 
+import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.DeleteProjectAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
@@ -14,13 +15,14 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Delete project")
 class DeleteProjectAdapterTest {
   private ProjectRepository projectRepository = mock(ProjectRepository.class);
+  private ContributorRepository contributorRepository = mock(ContributorRepository.class);
 
   private DeleteProjectAdapter deleteProjectAdapter;
 
   @BeforeEach
   void setUp() {
     when(projectRepository.findById(anyLong())).thenReturn(Optional.of(new ProjectEntity()));
-    deleteProjectAdapter = new DeleteProjectAdapter(projectRepository);
+    deleteProjectAdapter = new DeleteProjectAdapter(projectRepository, contributorRepository);
   }
 
   @Test
@@ -41,5 +43,7 @@ class DeleteProjectAdapterTest {
     verify(projectRepository, times(1)).deleteProjectCommits(anyLong());
     verify(projectRepository, times(1)).deleteProjectConfiguration(anyLong());
     verify(projectRepository, times(1)).deleteProjectMetrics(anyLong());
+    verify(projectRepository, times(1)).deleteContributorRelationships(anyLong());
+    verify(contributorRepository, times(1)).deleteContributorsWithoutProjects();
   }
 }

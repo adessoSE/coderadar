@@ -1,14 +1,12 @@
 package io.reflectoring.coderadar.graph.contributor;
 
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.graph.contributor.adapter.MergeContributorsAdapter;
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,11 +39,11 @@ public class MergeContributorsAdapterTest {
     contributor2.setNames(new HashSet<>(Arrays.asList("Max Mustermann", "Mustermann")));
     contributor2.setEmails(new HashSet<>(Collections.singletonList("max.mustermann@def.de")));
 
-    when(contributorRepository.findById(1L)).thenReturn(Optional.of(contributor1));
-    when(contributorRepository.findById(2L)).thenReturn(Optional.of(contributor2));
-    when(contributorRepository.save(contributor1, 0)).thenReturn(contributor1);
+    when(contributorRepository.findAllByIds(anyList()))
+        .thenReturn(Arrays.asList(contributor1, contributor2));
+    when(contributorRepository.save(contributor1, 1)).thenReturn(contributor1);
 
-    mergeContributorsAdapter.mergeContributors(1L, 2L, "Max Mustermann");
+    mergeContributorsAdapter.mergeContributors(Arrays.asList(1L, 2L), "Max Mustermann");
 
     Assertions.assertThat(contributor1.getId()).isEqualTo(1L);
     Assertions.assertThat(contributor1.getDisplayName()).isEqualTo("Max Mustermann");

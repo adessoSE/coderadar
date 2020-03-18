@@ -5,9 +5,9 @@
 
 <main class="mat-card-form ">
   <div class="grid-container" id="cardContainer">
-    <div fxLayoutAlign="center center">
+    <div>
       <form>
-        <mat-card>
+        <mat-card class="configureCard">
 
           <!--Card title-->
           <mat-card-header>
@@ -16,9 +16,11 @@
             </mat-card-title>
           </mat-card-header>
 
-          <mat-card-content>
+            <mat-grid-list cols="2" rowHeight="800px">
+              <mat-grid-tile>
+                <mat-card-content>
 
-            <!--Analyzers-->
+                <!--Analyzers-->
             <div class="list">
               <div class="list-title">
                 <mat-label>Select analyzers:</mat-label>
@@ -66,7 +68,7 @@
                   <input [(ngModel)]="filePatternExcludeInput" matInput maxlength="100" name="excludePatterns" placeholder="Pattern"
                          type="text">
                 </mat-form-field>
-                <button (click)="submitFilePattern('EXCLUDE')" mat-button style="float:right" type="button">+</button>
+                <button (click)="submitFilePattern('EXCLUDE')" mat-button type="button">+</button>
               </div>
             </div>
 
@@ -84,18 +86,24 @@
                   <input [(ngModel)]="modulesInput" matInput maxlength="100" name="modules" placeholder="Module"
                          type="text">
                 </mat-form-field>
-                <button (click)="submitModule()" mat-button style="float:right" type="button">+</button>
+                <button (click)="submitModule()" mat-button type="button">+</button>
               </div>
               <mat-error *ngIf="moduleExists">A module with this name already exists!</mat-error>
             </div>
+                </mat-card-content>
+              </mat-grid-tile>
 
+              <mat-grid-tile>
             <!--Project contributors-->
             <div class="list">
               <div class="list-title">
                 <mat-label>Project contributors:</mat-label>
               </div>
               <div *ngFor="let c of contributors">
-                <span>{{c.displayName}}</span>
+                <mat-checkbox name="{{c.displayName}}">
+                  {{c.displayName}}
+                  {{c.id}}
+                </mat-checkbox>
               </div>
             </div>
 
@@ -108,7 +116,8 @@
                 <span>{{branch.name}}</span>
               </div>
             </div>
-          </mat-card-content>
+              </mat-grid-tile>
+            </mat-grid-list>
 
           <!--Cancel and submit buttons-->
           <div align="center" id="cardButtons">
