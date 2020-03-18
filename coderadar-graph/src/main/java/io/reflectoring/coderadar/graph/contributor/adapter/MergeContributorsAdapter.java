@@ -1,10 +1,11 @@
 package io.reflectoring.coderadar.graph.contributor.adapter;
 
+import com.google.common.collect.Ordering;
 import io.reflectoring.coderadar.contributor.ContributorNotFoundException;
 import io.reflectoring.coderadar.contributor.port.driven.MergeContributorsPort;
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
-import java.util.Optional;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,24 +17,24 @@ public class MergeContributorsAdapter implements MergeContributorsPort {
   }
 
   @Override
-  public void mergeContributors(long firstId, long secondId, String displayName) {
-    Optional<ContributorEntity> firstOptional = contributorRepository.findById(firstId);
-    Optional<ContributorEntity> secondOptional = contributorRepository.findById(secondId);
-    if (firstOptional.isEmpty()) {
-      throw new ContributorNotFoundException(firstId);
+  public void mergeContributors(List<Long> contributorIds, String displayName) {
+    List<ContributorEntity> contributors = contributorRepository.findAllByIds(contributorIds);
+    contributors.sort(Ordering.explicit(contributorIds).onResultOf(ContributorEntity::getId));
+    contributorIds.forEach(
+        id -> {
+          if (contributors.stream().noneMatch(c -> c.getId().equals(id))) {
+            throw new ContributorNotFoundException(id);
+          }
+        });
+    ContributorEntity firstEntity = contributors.get(0);
+    for (int i = 1; i < contributors.size(); i++) {
+      ContributorEntity secondEntity = contributors.get(i);
+      firstEntity.getNames().addAll(secondEntity.getNames());
+      firstEntity.getEmails().addAll(secondEntity.getEmails());
+      firstEntity.getProjects().addAll(secondEntity.getProjects());
+      contributorRepository.deleteById(secondEntity.getId());
     }
-    if (secondOptional.isEmpty()) {
-      throw new ContributorNotFoundException(secondId);
-    }
-
-    ContributorEntity firstEntity = firstOptional.get();
-    ContributorEntity secondEntity = secondOptional.get();
-
     firstEntity.setDisplayName(displayName);
-    firstEntity.getNames().addAll(secondEntity.getNames());
-    firstEntity.getEmails().addAll(secondEntity.getEmails());
-    firstEntity.getProjects().addAll(secondEntity.getProjects());
-    contributorRepository.save(firstEntity, 0);
-    contributorRepository.deleteById(secondEntity.getId());
+    contributorRepository.save(firstEntity, 1);
   }
 }

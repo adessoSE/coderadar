@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Transactional
+@Validated
 public class MergeContributorsController {
   private final MergeContributorsUseCase mergeContributorsUseCase;
 

@@ -34,15 +34,15 @@ public class ComputeContributorAdapterTest {
         computeContributorAdapter.computeContributors(folder.getAbsolutePath(), new ArrayList<>());
 
     Assertions.assertThat(contributors.size()).isEqualTo(2);
-    Assertions.assertThat(contributors.get(1).getDisplayName()).isEqualTo("maximAtanasov");
-    Assertions.assertThat(contributors.get(1).getNames()).containsExactly("maximAtanasov");
-    Assertions.assertThat(contributors.get(1).getEmailAddresses())
-        .containsExactly("maksim.atanasov@adesso.de");
-
     Assertions.assertThat(contributors.get(0).getDisplayName()).isEqualTo("Krause");
     Assertions.assertThat(contributors.get(0).getNames()).containsExactly("Krause");
     Assertions.assertThat(contributors.get(0).getEmailAddresses())
         .containsExactly("kilian.krause@adesso.de");
+
+    Assertions.assertThat(contributors.get(1).getDisplayName()).isEqualTo("maximAtanasov");
+    Assertions.assertThat(contributors.get(1).getNames()).containsExactly("maximAtanasov");
+    Assertions.assertThat(contributors.get(1).getEmailAddresses())
+        .containsExactly("maksim.atanasov@adesso.de");
   }
 
   @AfterEach

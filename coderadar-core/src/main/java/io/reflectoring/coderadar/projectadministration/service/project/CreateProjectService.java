@@ -121,15 +121,12 @@ public class CreateProjectService implements CreateProjectUseCase {
     return project.getId();
   }
 
-
   private synchronized void saveContributors(Project project) {
     List<Contributor> contributors = listContributorsPort.listAll();
     contributors =
-            computeContributorsPort.computeContributors(
-                    coderadarConfigurationProperties.getWorkdir()
-                            + "/projects/"
-                            + project.getWorkdirName(),
-                    contributors);
+        computeContributorsPort.computeContributors(
+            coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName(),
+            contributors);
     saveContributorsPort.save(contributors, project.getId());
   }
 

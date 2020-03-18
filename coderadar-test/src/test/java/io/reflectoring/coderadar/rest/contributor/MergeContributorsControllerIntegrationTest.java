@@ -10,6 +10,7 @@ import io.reflectoring.coderadar.graph.contributor.repository.ContributorReposit
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
@@ -41,7 +42,8 @@ public class MergeContributorsControllerIntegrationTest extends ControllerTestTe
     List<ContributorEntity> contributors = contributorRepository.findAll();
     long firstId = contributors.get(0).getId();
     long secondId = contributors.get(1).getId();
-    MergeContributorsCommand command2 = new MergeContributorsCommand(firstId, secondId, "Test");
+    MergeContributorsCommand command2 =
+        new MergeContributorsCommand(Arrays.asList(firstId, secondId), "Test");
 
     mvc()
         .perform(
@@ -68,11 +70,11 @@ public class MergeContributorsControllerIntegrationTest extends ControllerTestTe
         "contributors/merge",
         requestFields(
             fields
-                .withPath("firstContributorId")
-                .description("The id of the first contributor to merge."),
-            fields
-                .withPath("secondContributorId")
-                .description("The id of the second contributor to merge."),
+                .withPath("contributorIds")
+                .description(
+                    "The IDs of the contributors to merge. "
+                        + "The ID of the first contributor in the list will be the ID of the merged contributor. "
+                        + "All other IDs become invalid."),
             fields
                 .withPath("displayName")
                 .description("The new display name of the merged contributor.")));

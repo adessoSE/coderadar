@@ -12,6 +12,9 @@ public interface ContributorRepository extends Neo4jRepository<ContributorEntity
   @Query("MATCH (c) WHERE ID(c) = {0} RETURN c")
   Optional<ContributorEntity> findById(long id);
 
+  @Query("MATCH (c) WHERE ID(c) IN {0} RETURN c")
+  List<ContributorEntity> findAllByIds(List<Long> ids);
+
   @Query("MATCH (c)-[:WORKS_ON]->(p) WHERE ID(p) = {0} RETURN c ORDER BY c.displayName")
   List<ContributorEntity> findAllByProjectId(long projectId);
 
