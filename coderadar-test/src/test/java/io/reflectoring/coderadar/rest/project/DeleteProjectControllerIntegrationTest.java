@@ -4,6 +4,8 @@ import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
+import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
@@ -11,6 +13,9 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private ProjectRepository projectRepository;
+  @Autowired private ContributorRepository contributorRepository;
   @Autowired private FilePatternRepository filePatternRepository;
 
   // This test has to be annotated with @DirtiesContext because custom Neo4j queries
@@ -41,12 +47,54 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
     filePatternEntity.setPattern("**/*.java");
     filePatternRepository.save(filePatternEntity);
 
+    ContributorEntity contributorEntity =
+        new ContributorEntity()
+            .setDisplayName("test")
+            .setEmails(new HashSet<>())
+            .setProjects(Collections.singletonList(testProject));
+    contributorRepository.save(contributorEntity, 1);
+
     mvc()
         .perform(delete("/projects/" + id))
         .andExpect(status().isOk())
         .andDo(document("projects/delete"));
 
     Assertions.assertFalse(projectRepository.findById(id).isPresent());
+    Assertions.assertTrue(contributorRepository.findAll().isEmpty());
+  }
+
+  @Test
+  @DirtiesContext
+  @Transactional(propagation = Propagation.NOT_SUPPORTED)
+  void testContributorsNotDeletedIfWorkingOnProject() throws Exception {
+    ProjectEntity testProject = new ProjectEntity();
+    testProject.setVcsUrl("https://valid.url");
+    testProject = projectRepository.save(testProject);
+    final Long id = testProject.getId();
+
+    ProjectEntity testProject2 = new ProjectEntity();
+    testProject2.setVcsUrl("https://valid.url");
+    testProject2 = projectRepository.save(testProject2);
+
+    FilePatternEntity filePatternEntity = new FilePatternEntity();
+    filePatternEntity.setInclusionType(InclusionType.INCLUDE);
+    filePatternEntity.setPattern("**/*.java");
+    filePatternRepository.save(filePatternEntity);
+
+    ContributorEntity contributorEntity =
+        new ContributorEntity()
+            .setDisplayName("test")
+            .setEmails(new HashSet<>())
+            .setProjects(Arrays.asList(testProject, testProject2));
+    contributorRepository.save(contributorEntity, 1);
+
+    mvc()
+        .perform(delete("/projects/" + id))
+        .andExpect(status().isOk())
+        .andDo(document("projects/delete"));
+
+    Assertions.assertFalse(projectRepository.findById(id).isPresent());
+    Assertions.assertEquals("test", contributorRepository.findAll().get(0).getDisplayName());
   }
 
   @Test
