@@ -15,17 +15,13 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.ListBranchCommand;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
-import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.springframework.stereotype.Service;
@@ -79,25 +75,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
       }
     }
     return new ArrayList<>(map.values());
-  }
-
-  private List<RevCommit> getAllRevCommits(Git git) throws GitAPIException, IOException {
-    List<RevCommit> revCommits = new ArrayList<>();
-    RevWalk revWalk = new RevWalk(git.getRepository());
-    for (Ref ref : git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call()) {
-      revWalk.markStart(revWalk.parseCommit(ref.getObjectId()));
-      revWalk
-          .iterator()
-          .forEachRemaining(
-              revCommit -> {
-                if (revCommits.stream()
-                    .noneMatch(revCommit1 -> revCommit1.getId().equals(revCommit.getId()))) {
-                  revCommits.add(revCommit);
-                }
-              });
-      revWalk.reset();
-    }
-    return revCommits;
   }
 
   private Commit mapRevCommitToCommit(RevCommit rc) {
