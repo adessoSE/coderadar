@@ -20,18 +20,18 @@ import {UserSettingsComponent} from './view/user-settings/user-settings.componen
 import {ProjectDashboardComponent} from './view/project-dashboard/project-dashboard.component';
 import {ViewCommitComponent} from './view/view-commit/view-commit.component';
 import {
-    MatButtonModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatSnackBarModule,
-    MatListModule,
-    MatMenuModule, MatPaginatorModule,
-    MatSidenavModule,
-    MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule,
+  MatButtonModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatFormFieldModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatSnackBarModule,
+  MatListModule,
+  MatMenuModule, MatPaginatorModule,
+  MatSidenavModule,
+  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatTabsModule,
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
@@ -53,6 +53,9 @@ import {TreeNodeComponent} from './levelized-structure-map/tree-node/tree-node.c
 import {MatSelectModule} from '@angular/material/select';
 import {DragScrollModule} from 'ngx-drag-scroll';
 import {PinchZoomModule} from 'ngx-pinch-zoom';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import { CommitListComponent } from './view/project-dashboard/commit-list/commit-list.component';
+import { CompareBranchesComponent } from './view/project-dashboard/compare-branches/compare-branches.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -88,7 +91,9 @@ const appRoutes: Routes = [
     DependencyRootComponent,
     DependencyCompareComponent,
     TreeNodeComponent,
-    CityViewHeaderComponent
+    CityViewHeaderComponent,
+    CommitListComponent,
+    CompareBranchesComponent
   ],
   imports: [
     BrowserModule,
@@ -114,6 +119,8 @@ const appRoutes: Routes = [
     RouterModule,
     LayoutModule,
     MatToolbarModule,
+    MatTabsModule,
+    ScrollingModule,
     MatSidenavModule,
     MatCheckboxModule,
     BrowserModule,

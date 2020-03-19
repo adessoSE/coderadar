@@ -1,0 +1,84 @@
+
+<main class="card-list">
+  <p>{{getTitleText()}}
+    <br>
+    <mat-label style="font-size: 12pt">Analyzed {{commitsAnalyzed}}/{{commits.length}} commits</mat-label>
+  </p>
+
+  <mat-form-field class="branchSelector">
+    <mat-label>Branch</mat-label>
+    <mat-select [(value)]="selectedBranch">
+      <mat-option *ngFor="let branch of branches" [value]="branch.name" (onSelectionChange)="branchOutput.emit(branch.name)">
+        {{branch.name}}
+      </mat-option>
+    </mat-select>
+
+  </mat-form-field>
+
+  <div style="float: left; margin-top: 10px">
+    <button title="Start analysis" (click)="startAnalysis(project.id, selectedBranch)" style="float:right" mat-icon-button>
+      <mat-icon>play_arrow</mat-icon>
+    </button>
+    <button title="Stop analysis" (click)="stopAnalysis(project.id)" style="float:right" mat-icon-button>
+      <mat-icon>stop</mat-icon>
+    </button>
+    <button title="Delete analysis results" (click)="resetAnalysis(project.id)" style="float:right" mat-icon-button>
+      <mat-icon>clear</mat-icon>
+    </button>
+  </div>
+  <mat-paginator #paginator1 [showFirstLastButtons]="true" class="paginator" [length]="commits.length"
+                 [pageSize]="pageSize"
+                 [pageSizeOptions]="pageSizeOptions"
+                 (page)="syncPaginators($event)">
+  </mat-paginator>
+
+  <mat-grid-list cols="1" rowHeight="50px" gutterSize="-2px" >
+    <mat-accordion class="example-headers-align" *ngFor="let commit of commits.slice(pageEvent.pageIndex*pageEvent.pageSize, (pageEvent.pageIndex*pageEvent.pageSize) + pageEvent.pageSize)">
+      <mat-grid-tile [colspan]="1" [rowspan]="(commit === selectedCommit1 || commit === selectedCommit2) ? 4 : 1">
+        <mat-expansion-panel [expanded]="(commit === selectedCommit1 || commit === selectedCommit2)"
+                             [ngClass]="{'dashboard-card-selected' : commit === selectedCommit1 || commit === selectedCommit2}"
+                             class="dashboard-card" style=" border-radius: 0;" (click)="selectCard(commit)">
+          <mat-expansion-panel-header>
+            <mat-panel-description>
+              {{commit.name.substr(0, 7)}}
+            </mat-panel-description>
+            <mat-panel-description style="position: absolute; left: 13%;">
+              {{commit.author}}
+            </mat-panel-description>
+            <mat-panel-description style="position: absolute; left: 33%;">
+              {{commit.comment.substr(0, 50)}}
+            </mat-panel-description>
+            <mat-panel-description style="position: absolute; left: 78%;">
+              {{timestampToDate(commit.timestamp)}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <mat-label>Analyzed: <strong>{{booleanToString(commit.analyzed)}}</strong></mat-label>
+          <mat-action-row>
+            <button mat-button routerLink="/project/{{project.id}}/{{commit.name}}/dependency-map/">Dependency Map</button>
+            <button [disabled]="!commit.analyzed" mat-button routerLink="/project/{{project.id}}/{{commit.name}}">Raw metrics</button><br>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-grid-tile>
+    </mat-accordion>
+
+    <a *ngIf="selectedCommit1 !== null && selectedCommit2 != null && selectedCommit1.analyzed && selectedCommit2.analyzed"
+       class="compare-button" color="accent" mat-fab (click)="startComplexityAnalysis()">
+      <div>
+        <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">3d_rotation</mat-icon>
+      </div>
+    </a>
+
+    <a *ngIf="selectedCommit1 !== null && selectedCommit2 != null" class="compare-button-2" color="accent" mat-fab
+       routerLink="/project/{{project.id}}/{{selectedCommit1.name}}/{{selectedCommit2.name}}/dependency-map">
+      <div>
+        <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">library_books</mat-icon>
+      </div>
+    </a>
+  </mat-grid-list>
+</main>
+
+<mat-paginator #paginator2 [showFirstLastButtons]="true" class="paginator" [length]="commits.length"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="pageSizeOptions"
+               (page)="syncPaginators($event)">
+</mat-paginator>

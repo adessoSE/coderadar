@@ -1,0 +1,68 @@
+.dashboard-card {
+  position: absolute;
+  left: 15px;
+  right: 15px;
+}
+
+.card-list p {
+  font-size: 15pt;
+  width: 60%;
+  top: 15px;
+  float: right;
+  margin-right: 15%;
+}
+
+.card-list mat-grid-list {
+  margin-right: 10%;
+  margin-bottom: 50px;
+  width: 70%;
+  top: 15px;
+  float: right
+}
+
+.dashboard-card-selected {
+  background-color: #fadab3;
+}
+
+.compare-button-2 {
+  right: 14%;
+  bottom: 8%;
+  position: fixed;
+  animation: show 0.2s;
+  z-index: 3;
+  transform: scale(1.5, 1.5);
+}
+
+.paginator {
+  position: static;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  float: right;
+  background-color: ghostwhite;
+  width: 37%;
+  margin-right: 11%;
+  margin-bottom: 30px;
+}
+
+
+.branchSelector {
+  position: static;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  float: left;
+  background-color: ghostwhite;
+  width: 17%;
+  margin-left: 22%;
+  margin-bottom: 30px;
+}
+
+.compare-button {
+  right: 7%;
+  bottom: 8%;
+  position: fixed;
+  animation: show 0.2s;
+  z-index: 3;
+  transform: scale(1.5, 1.5);
+}
