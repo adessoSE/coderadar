@@ -19,7 +19,7 @@ coderadar aims to be a continuous source code analysis tool that **automatically
 
 ## Documentation
 * [REST API documentation](https://reflectoring.github.io/coderadar/current/docs/restapi.html).
-* [Administration Guide](https://cdn.rawgit.com/reflectoring/coderadar/gh-pages/current/docs/admin.html)
+* [Administration Guide](https://reflectoring.github.io/coderadar/current/docs/admin.html)
 
 ## Want to contribute?
 See the [contribution guide](https://github.com/reflectoring/coderadar/blob/master/CONTRIBUTING.md).
