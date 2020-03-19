@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v0.2.3.null, 2020-03-13">
+<meta name="author" content="v0.2.3.null, 2020-03-19">
 <title>coderadar Administration Guide</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar Administration Guide</h1>
 <div class="details">
-<span id="author" class="author">v0.2.3.null, 2020-03-13</span><br>
+<span id="author" class="author">v0.2.3.null, 2020-03-19</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2116,15 +2116,21 @@ table.tableblock.grid-all {
 <li><a href="#_introduction">1. Introduction</a></li>
 <li><a href="#_getting_coderadar_up_and_running">2. Getting coderadar up and running</a>
 <ul class="sectlevel2">
-<li><a href="#_configuration_parameters">2.1. Configuration Parameters</a></li>
-<li><a href="#_starting_coderadar_standalone">2.2. Starting coderadar standalone</a></li>
-<li><a href="#_deploying_coderadar_on_an_application_server">2.3. Deploying coderadar on an application server</a></li>
+<li><a href="#_configuration_parameters">2.1. Configuration Parameters</a>
+<ul class="sectlevel3">
+<li><a href="#_configuring_the_scan_interval">2.1.1. Configuring the scan interval</a></li>
+<li><a href="#_configuring_the_working_directory">2.1.2. Configuring the working directory</a></li>
+<li><a href="#_configuring_the_access_refresh_token_validity_duration">2.1.3. Configuring the access/refresh token validity duration</a></li>
+<li><a href="#_configuring_authentication">2.1.4. Configuring authentication</a></li>
+<li><a href="#_configuring_cors">2.1.5. Configuring CORS</a></li>
+<li><a href="#_configuring_logging_levels">2.1.6. Configuring logging levels</a></li>
+<li><a href="#_configuring_the_log_file">2.1.7. Configuring the log file</a></li>
+<li><a href="#_configuring_the_database_connection">2.1.8. Configuring the database connection</a></li>
 </ul>
 </li>
-<li><a href="#_clustering">3. Clustering</a></li>
-<li><a href="#_monitoring">4. Monitoring</a>
-<ul class="sectlevel2">
-<li><a href="#_coderadar_specific_monitoring_metrics">4.1. Coderadar-specific Monitoring Metrics</a></li>
+<li><a href="#_starting_coderadar">2.2. Starting Coderadar</a></li>
+<li><a href="#_starting_the_coderadar_ui">2.3. Starting the Coderadar UI</a></li>
+<li><a href="#_coderadar_system_requirements">2.4. Coderadar system requirements</a></li>
 </ul>
 </li>
 </ul>
@@ -2135,7 +2141,7 @@ table.tableblock.grid-all {
 <h2 id="_introduction"><a class="link" href="#_introduction">1. Introduction</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This guide is intended for administrators and developers who want to get a coderadar server up and running.</p>
+<p>This guide is intended for administrators and developers who want to get a Coderadar server up and running.</p>
 </div>
 </div>
 </div>
@@ -2143,170 +2149,126 @@ table.tableblock.grid-all {
 <h2 id="_getting_coderadar_up_and_running"><a class="link" href="#_getting_coderadar_up_and_running">2. Getting coderadar up and running</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>A coderadar distribution contains a WAR (Java Web Archive) file and a properties
+<p>A Coderadar distribution contains a WAR (Java Web Archive) file and a properties
 file that contains the default configuration.</p>
 </div>
 <div class="sect2">
 <h3 id="_configuration_parameters"><a class="link" href="#_configuration_parameters">2.1. Configuration Parameters</a></h3>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-This documentation is work in progress. If you want to contribute, have a look at this task in the
- issue tracker: <a href="https://github.com/reflectoring/coderadar/issues/146" class="bare">https://github.com/reflectoring/coderadar/issues/146</a>.
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>Coderadar can be configured by adjusting the parameters in the local.application.properties file (either before jar-packaging or by supplying the file alongside the jar).</p>
+</div>
+<div class="sect3">
+<h4 id="_configuring_the_scan_interval"><a class="link" href="#_configuring_the_scan_interval">2.1.1. Configuring the scan interval</a></h4>
+<div class="paragraph">
+<p><code>coderadar.scanIntervalInSeconds=30</code></p>
+</div>
+<div class="paragraph">
+<p>Adjusting this value will change how often projects are checked for new commits/branches.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_the_working_directory"><a class="link" href="#_configuring_the_working_directory">2.1.2. Configuring the working directory</a></h4>
+<div class="paragraph">
+<p>This is the directory projects will be cloned to. It&#8217;s path can be adjusted by changing the following property:</p>
+</div>
+<div class="paragraph">
+<p><code>coderadar.workdir=coderadar-workdir</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_the_access_refresh_token_validity_duration"><a class="link" href="#_configuring_the_access_refresh_token_validity_duration">2.1.3. Configuring the access/refresh token validity duration</a></h4>
+<div class="paragraph">
+<p>The following properties control how long a access/refresh token is valid:</p>
+</div>
+<div class="paragraph">
+<p><code>coderadar.authentication.accessToken.durationInMinutes=15</code>
+<code>coderadar.authentication.refreshToken.durationInMinutes=86400</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_authentication"><a class="link" href="#_configuring_authentication">2.1.4. Configuring authentication</a></h4>
+<div class="paragraph">
+<p>Authentication can be enabled or disabled with the following property:</p>
+</div>
+<div class="paragraph">
+<p><code>coderadar.authentication.enabled=true</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_cors"><a class="link" href="#_configuring_cors">2.1.5. Configuring CORS</a></h4>
+<div class="paragraph">
+<p>CORS can be enabled or disabled with the following property:</p>
+</div>
+<div class="paragraph">
+<p><code>coderadar.cors.enabled=true</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_logging_levels"><a class="link" href="#_configuring_logging_levels">2.1.6. Configuring logging levels</a></h4>
+<div class="paragraph">
+<p>The logging levels can be adjusting with the following properties:</p>
+</div>
+<div class="paragraph">
+<p><code>logging.level.io.reflectoring.coderadar=DEBUG</code>
+<code>logging.level.org.reflections=ERROR</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_the_log_file"><a class="link" href="#_configuring_the_log_file">2.1.7. Configuring the log file</a></h4>
+<div class="paragraph">
+<p>The log file&#8217;s path can be adjusted with the following property:</p>
+</div>
+<div class="paragraph">
+<p><code>logging.file=coderadar.log</code></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuring_the_database_connection"><a class="link" href="#_configuring_the_database_connection">2.1.8. Configuring the database connection</a></h4>
+<div class="paragraph">
+<p>The credentials for the Neo4j database instance can be configured with the following properties:</p>
+</div>
+<div class="paragraph">
+<p><code>spring.data.neo4j.username=neo4j</code>
+<code>spring.data.neo4j.password=neo3j</code></p>
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_starting_coderadar_standalone"><a class="link" href="#_starting_coderadar_standalone">2.2. Starting coderadar standalone</a></h3>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-This documentation is work in progress. If you want to contribute, have a look at this task in the
- issue tracker: <a href="https://github.com/reflectoring/coderadar/issues/147" class="bare">https://github.com/reflectoring/coderadar/issues/147</a>.
-</td>
-</tr>
-</table>
+<h3 id="_starting_coderadar"><a class="link" href="#_starting_coderadar">2.2. Starting Coderadar</a></h3>
+<div class="paragraph">
+<p>Starting Coderadar requires a running Neo4j instance on port 7687.
+Coderadar works with Neo4j version 3.5.* and requires the APOC plugin to be installed.
+The easiest way to quickly configure a local Neo4j instance is by using Neo4j Desktop.</p>
+</div>
+<div class="paragraph">
+<p>Once started, the Coderadar REST-API will be available on port 8080.
+For more information on it, have a look at the REST-API documentation:</p>
+</div>
+<div class="paragraph">
+<p><a href="https://reflectoring.github.io/coderadar/current/docs/restapi.html" class="bare">https://reflectoring.github.io/coderadar/current/docs/restapi.html</a></p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_deploying_coderadar_on_an_application_server"><a class="link" href="#_deploying_coderadar_on_an_application_server">2.3. Deploying coderadar on an application server</a></h3>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-This documentation is work in progress. If you want to contribute, have a look at this task in the
- issue tracker: <a href="https://github.com/reflectoring/coderadar/issues/148" class="bare">https://github.com/reflectoring/coderadar/issues/148</a>.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_clustering"><a class="link" href="#_clustering">3. Clustering</a></h2>
-<div class="sectionbody">
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-This documentation is work in progress. If you want to contribute, have a look at this task in the
- issue tracker: <a href="https://github.com/reflectoring/coderadar/issues/149" class="bare">https://github.com/reflectoring/coderadar/issues/149</a>.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_monitoring"><a class="link" href="#_monitoring">4. Monitoring</a></h2>
-<div class="sectionbody">
+<h3 id="_starting_the_coderadar_ui"><a class="link" href="#_starting_the_coderadar_ui">2.3. Starting the Coderadar UI</a></h3>
 <div class="paragraph">
-<p>Coderadar makes use of <a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready">Spring Boot Actuator</a>,
-which provides a mechanism to expose certain metrics via HTTP. A list of the monitoring endpoints can by default be accessed via
-"/actuator" on each server node in a coderadar cluster.</p>
+<p>To start the Coderadar UI, you have to build it first. This requires having NPM installed, going to the <code>coderadar-ui</code> directory and
+installing the dependencies by running <code>npm install</code> and running the UI-server with <code>npm start</code>.
+The UI will be available on port 4200.</p>
 </div>
-<div class="paragraph">
-<p>For an explanation of the endpoints and monitoring metrics provided by Spring Boot Actuator, please
-consult the manual.</p>
 </div>
 <div class="sect2">
-<h3 id="_coderadar_specific_monitoring_metrics"><a class="link" href="#_coderadar_specific_monitoring_metrics">4.1. Coderadar-specific Monitoring Metrics</a></h3>
+<h3 id="_coderadar_system_requirements"><a class="link" href="#_coderadar_system_requirements">2.4. Coderadar system requirements</a></h3>
 <div class="paragraph">
-<p>Coderadar exposes the following monitoring metrics as a JSON object via the "/metrics" endpoint.
-All metrics starting with the prefix <code>coderadar.</code> are coderadar-specific metrics.</p>
+<p>For comfortable development, Coderadar itself requires about 5GB of System memory. Note that this largely depends on how large
+the projects you&#8217;re working with are and how many of them are. In order to save and analyze very large projects, Neo4j should be configured with at least 10GB of available heap memeory.</p>
 </div>
-<table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 1. Coderadar Monitoring Metrics</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Metric name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.CommitAnalyzer.commits.*</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of commits having been analyzed.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.CommitAnalyzer.files.*</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of files having been analyzed.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.CommitMetaDataScanner.commits.*</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of commits having been scanned for metadata.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.CommitToFileAssociator.commits.*</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of commits whose files have been associated with it.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.CommitToFileAssociator.files.*</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of files having been associated with a commit.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.FileMetadataScanner.commits.count.*</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of commits whose files have been scanned for metadata.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.FileMetadataScanner.files.*</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of files having been scanned for metadata.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.jobs.acquisitionConflicts.*</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Count and rate of conflicts between server nodes who tried to acquire the same
-  job for processing. It&#8217;s OK if this happens and the <code>coderadar.jobs.inProgress</code>
-  counter stays at approximately the number of coderadar slaves in the cluster.
-  If the <code>coderadar.jobs.inProgress</code> counter falls significantly below the number
-  of coderadar slaved in the cluster, they are probably contesting too much for
-  the jobs waiting in queue.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.jobs.failed.*</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Count and rate of failed jobs.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.jobs.finished.*</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Count and throughput of successfully finished jobs.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.jobs.inProgress</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Current number of jobs that are in progress over all coderadar servers in the cluster.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">coderadar.jobs.waiting</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Current number of jobs that are waiting for processing over all coderadar servers in the cluster.</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-13 08:31:31 +00:00
+Last updated 2020-03-19 10:17:00 +00:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
