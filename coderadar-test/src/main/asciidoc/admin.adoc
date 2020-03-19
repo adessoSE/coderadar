@@ -12,89 +12,85 @@ v{version}, {date}
 [introduction]
 == Introduction
 
-This guide is intended for administrators and developers who want to get a coderadar server up and running.
+This guide is intended for administrators and developers who want to get a Coderadar server up and running.
 
 == Getting coderadar up and running
-A coderadar distribution contains a WAR (Java Web Archive) file and a properties
+A Coderadar distribution contains a WAR (Java Web Archive) file and a properties
 file that contains the default configuration.
 
 === Configuration Parameters
 
-WARNING: This documentation is work in progress. If you want to contribute, have a look at this task in the
- issue tracker: https://github.com/reflectoring/coderadar/issues/146.
+Coderadar can be configured by adjusting the parameters in the local.application.properties file (either before jar-packaging or by supplying the file alongside the jar).
 
-=== Starting coderadar standalone
+==== Configuring the scan interval
 
-WARNING: This documentation is work in progress. If you want to contribute, have a look at this task in the
- issue tracker: https://github.com/reflectoring/coderadar/issues/147.
+`coderadar.scanIntervalInSeconds=30`
 
-=== Deploying coderadar on an application server
+Adjusting this value will change how often projects are checked for new commits/branches.
 
-WARNING: This documentation is work in progress. If you want to contribute, have a look at this task in the
- issue tracker: https://github.com/reflectoring/coderadar/issues/148.
+==== Configuring the working directory
 
-== Clustering
+This is the directory projects will be cloned to. It's path can be adjusted by changing the following property:
 
-WARNING: This documentation is work in progress. If you want to contribute, have a look at this task in the
- issue tracker: https://github.com/reflectoring/coderadar/issues/149.
+`coderadar.workdir=coderadar-workdir`
 
-== Monitoring
+==== Configuring the access/refresh token validity duration
 
-Coderadar makes use of http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#production-ready[Spring Boot Actuator],
-which provides a mechanism to expose certain metrics via HTTP. A list of the monitoring endpoints can by default be accessed via
-"/actuator" on each server node in a coderadar cluster.
+The following properties control how long a access/refresh token is valid:
 
-For an explanation of the endpoints and monitoring metrics provided by Spring Boot Actuator, please
-consult the manual.
+`coderadar.authentication.accessToken.durationInMinutes=15`
+`coderadar.authentication.refreshToken.durationInMinutes=86400`
 
-=== Coderadar-specific Monitoring Metrics
+==== Configuring authentication
 
-Coderadar exposes the following monitoring metrics as a JSON object via the "/metrics" endpoint.
-All metrics starting with the prefix `coderadar.` are coderadar-specific metrics.
+Authentication can be enabled or disabled with the following property:
 
-.Coderadar Monitoring Metrics
-|===
-|Metric name |Description
+`coderadar.authentication.enabled=true`
 
-| coderadar.CommitAnalyzer.commits.*
-| Count and throughput of commits having been analyzed.
+==== Configuring CORS
 
-| coderadar.CommitAnalyzer.files.*
-| Count and throughput of files having been analyzed.
+CORS can be enabled or disabled with the following property:
 
-| coderadar.CommitMetaDataScanner.commits.*
-| Count and throughput of commits having been scanned for metadata.
+`coderadar.cors.enabled=true`
 
-| coderadar.CommitToFileAssociator.commits.*
-| Count and throughput of commits whose files have been associated with it.
+==== Configuring logging levels
 
-| coderadar.CommitToFileAssociator.files.*
-| Count and throughput of files having been associated with a commit.
+The logging levels can be adjusting with the following properties:
 
-| coderadar.FileMetadataScanner.commits.count.*
-| Count and throughput of commits whose files have been scanned for metadata.
+`logging.level.io.reflectoring.coderadar=DEBUG`
+`logging.level.org.reflections=ERROR`
 
-| coderadar.FileMetadataScanner.files.*
-| Count and throughput of files having been scanned for metadata.
+==== Configuring the log file
 
-| coderadar.jobs.acquisitionConflicts.*
-| Count and rate of conflicts between server nodes who tried to acquire the same
-  job for processing. It's OK if this happens and the `coderadar.jobs.inProgress`
-  counter stays at approximately the number of coderadar slaves in the cluster.
-  If the `coderadar.jobs.inProgress` counter falls significantly below the number
-  of coderadar slaved in the cluster, they are probably contesting too much for
-  the jobs waiting in queue.
+The log file's path can be adjusted with the following property:
 
-| coderadar.jobs.failed.*
-| Count and rate of failed jobs.
+`logging.file=coderadar.log`
 
-| coderadar.jobs.finished.*
-| Count and throughput of successfully finished jobs.
+==== Configuring the database connection
 
-| coderadar.jobs.inProgress
-| Current number of jobs that are in progress over all coderadar servers in the cluster.
+The credentials for the Neo4j database instance can be configured with the following properties:
 
-| coderadar.jobs.waiting
-| Current number of jobs that are waiting for processing over all coderadar servers in the cluster.
+`spring.data.neo4j.username=neo4j`
+`spring.data.neo4j.password=neo3j`
 
-|===
+=== Starting Coderadar
+
+Starting Coderadar requires a running Neo4j instance on port 7687.
+Coderadar works with Neo4j version 3.5.* and requires the APOC plugin to be installed.
+The easiest way to quickly configure a local Neo4j instance is by using Neo4j Desktop.
+
+Once started, the Coderadar REST-API will be available on port 8080.
+For more information on it, have a look at the REST-API documentation:
+
+https://reflectoring.github.io/coderadar/current/docs/restapi.html
+
+=== Starting the Coderadar UI
+
+To start the Coderadar UI, you have to build it first. This requires having NPM installed, going to the `coderadar-ui` directory and
+installing the dependencies by running `npm install` and running the UI-server with `npm start`.
+The UI will be available on port 4200.
+
+=== Coderadar system requirements
+
+For comfortable development, Coderadar itself requires about 5GB of System memory. Note that this largely depends on how large
+the projects you're working with are and how many of them are. In order to save and analyze very large projects, Neo4j should be configured with at least 10GB of available heap memeory.
