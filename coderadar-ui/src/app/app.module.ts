@@ -12,7 +12,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MainDashboardComponent} from './view/main-dashboard/main-dashboard.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {AuthInterceptor} from './auth.interceptor';
-import {ConfigureProjectComponent, DialogOverviewExampleDialogComponent} from './view/configure-project/configure-project.component';
+import {ConfigureProjectComponent, MergeDialogComponent} from './view/configure-project/configure-project.component';
 import {EditProjectComponent} from './view/edit-project/edit-project.component';
 import {HeaderComponent} from './view/header/header.component';
 import {FooterComponent} from './view/footer/footer.component';
@@ -86,7 +86,7 @@ const appRoutes: Routes = [
     ViewCommitComponent,
     CityViewComponent,
     DependencyRootComponent,
-    DialogOverviewExampleDialogComponent,
+    MergeDialogComponent,
     DependencyCompareComponent,
     TreeNodeComponent,
     CityViewHeaderComponent
@@ -146,7 +146,7 @@ const appRoutes: Routes = [
       useFactory: getReducers,
     }],
   bootstrap: [AppComponent],
-  entryComponents: [DialogOverviewExampleDialogComponent]
+  entryComponents: [MergeDialogComponent]
 })
 export class AppModule {
 }

@@ -341,9 +341,11 @@ export class ConfigureProjectComponent implements OnInit {
 
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
+    const dialogRef = this.dialog.open(MergeDialogComponent, {
       width: '250px',
-      data: {displayNames: this.selectedContributors.map(value => value.displayName), selected: this.selectedContributors[0].displayName}
+      data: {displayNames: this.selectedContributors.map(value => value.displayName).filter(
+          (j, i, arr) => arr.findIndex(t => t === j) === i
+        ), selected: this.selectedContributors[0].displayName}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -376,12 +378,12 @@ export class ConfigureProjectComponent implements OnInit {
 
 @Component({
   selector: 'app-dialog-overview-example-dialog',
-  templateUrl: 'app-dialog-overview-example-dialog.html',
+  templateUrl: 'app-merge-dialog.html',
 })
-export class DialogOverviewExampleDialogComponent {
+export class MergeDialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<DialogOverviewExampleDialogComponent>,
+    public dialogRef: MatDialogRef<MergeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
   onNoClick(): void {
