@@ -35,8 +35,7 @@
                  [pageSizeOptions]="pageSizeOptions"
                  (page)="syncPaginators($event)">
   </mat-paginator>
-
-  <mat-grid-list cols="1" rowHeight="50px" gutterSize="-2px" >
+  <mat-grid-list cols="1" rowHeight="50px" gutterSize="-2px">
     <mat-accordion class="example-headers-align" *ngFor="let commit of commits.slice(pageEvent.pageIndex*pageEvent.pageSize, (pageEvent.pageIndex*pageEvent.pageSize) + pageEvent.pageSize)">
       <mat-grid-tile [colspan]="1" [rowspan]="(commit === selectedCommit1 || commit === selectedCommit2) ? 4 : 1">
         <mat-expansion-panel [expanded]="(commit === selectedCommit1 || commit === selectedCommit2)"
@@ -57,6 +56,7 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
           <mat-label>Analyzed: <strong>{{booleanToString(commit.analyzed)}}</strong></mat-label>
+          <mat-label style="margin-left: 65px">Email: {{commit.authorEmail}}</mat-label>
           <mat-action-row>
             <button mat-button routerLink="/project/{{project.id}}/{{commit.name}}/dependency-map/">Dependency Map</button>
             <button [disabled]="!commit.analyzed" mat-button routerLink="/project/{{project.id}}/{{commit.name}}">Raw metrics</button><br>

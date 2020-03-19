@@ -4,7 +4,6 @@ import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.port.driven.ExtractProjectCommitsPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
-import java.io.File;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ public class ExtractProjectCommitsService implements ExtractProjectCommitsUseCas
   }
 
   @Override
-  public List<Commit> getCommits(File repositoryRoot, DateRange range) {
+  public List<Commit> getCommits(String repositoryRoot, DateRange range) {
     return extractProjectCommitsPort.extractCommits(repositoryRoot, range);
   }
 }

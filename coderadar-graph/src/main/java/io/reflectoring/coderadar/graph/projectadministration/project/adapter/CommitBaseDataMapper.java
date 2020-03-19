@@ -14,6 +14,7 @@ public class CommitBaseDataMapper implements Mapper<Commit, CommitEntity> {
     commit.setAuthor(entity.getAuthor());
     commit.setComment(entity.getComment());
     commit.setTimestamp(entity.getTimestamp());
+    commit.setAuthorEmail(entity.getAuthorEmail());
     return commit;
   }
 
@@ -24,6 +25,7 @@ public class CommitBaseDataMapper implements Mapper<Commit, CommitEntity> {
     commitEntity.setAuthor(commit.getAuthor());
     commitEntity.setComment(commit.getComment());
     commitEntity.setTimestamp(commit.getTimestamp());
+    commitEntity.setAuthorEmail(commit.getAuthorEmail());
     return commitEntity;
   }
 }

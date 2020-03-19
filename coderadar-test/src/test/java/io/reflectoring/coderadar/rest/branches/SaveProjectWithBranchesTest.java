@@ -48,7 +48,7 @@ public class SaveProjectWithBranchesTest extends ControllerTestTemplate {
               List<CommitEntity> commitsOnTestBranch2 =
                   commitRepository.findByProjectIdAndBranchName(id, "testBranch2");
 
-              Assertions.assertEquals(13L, commitsOnMaster.size());
+              Assertions.assertEquals(14L, commitsOnMaster.size());
               Assertions.assertEquals(13L, commitsOnTestBranch1.size());
               Assertions.assertEquals(14L, commitsOnTestBranch2.size());
             });

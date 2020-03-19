@@ -40,6 +40,7 @@ public class Neo4jConfiguration {
         "io.reflectoring.coderadar.graph.projectadministration.domain",
         "io.reflectoring.coderadar.graph.analyzer.domain",
         "io.reflectoring.coderadar.graph.query.domain",
-        "io.reflectoring.coderadar.graph.useradministration.domain");
+        "io.reflectoring.coderadar.graph.useradministration.domain",
+        "io.reflectoring.coderadar.graph.contributor.domain");
   }
 }

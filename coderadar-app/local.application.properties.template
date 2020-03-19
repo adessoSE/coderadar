@@ -1,8 +1,6 @@
 # Copy this file into a file named "local.application.properties", edit the properties for your
 # local environment and then call "gradlew bootrun"' to start up the application.
 
-coderadar.master=true
-coderadar.slave=true
 coderadar.scanIntervalInSeconds=30
 coderadar.workdir=coderadar-workdir
 coderadar.dateLocale=de_DE
@@ -11,10 +9,7 @@ coderadar.authentication.refreshToken.durationInMinutes=86400
 coderadar.authentication.enabled=true
 coderadar.cors.enabled=true
 
-logging.level.org.wickedsource.coderadar=DEBUG
-logging.level.org.wickedsource.coderadar.job.JobLogger=INFO
-logging.level.org.hibernate.SQL=ERROR
-logging.level.org.hibernate.type=ERROR
+logging.level.io.reflectoring.coderadar=DEBUG
 logging.level.org.reflections=ERROR
 logging.file=coderadar.log
 

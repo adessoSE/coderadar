@@ -8,17 +8,14 @@
     <div fxLayoutAlign="center center">
       <form>
         <mat-card>
-
           <!--Card title-->
           <mat-card-header>
             <mat-card-title>
               <span>Configure {{(projectName)}}</span>
             </mat-card-title>
           </mat-card-header>
-
-          <mat-card-content>
-
-            <!--Analyzers-->
+                <mat-card-content>
+                <!--Analyzers-->
             <div class="list">
               <div class="list-title">
                 <mat-label>Select analyzers:</mat-label>
@@ -66,7 +63,7 @@
                   <input [(ngModel)]="filePatternExcludeInput" matInput maxlength="100" name="excludePatterns" placeholder="Pattern"
                          type="text">
                 </mat-form-field>
-                <button (click)="submitFilePattern('EXCLUDE')" mat-button style="float:right" type="button">+</button>
+                <button (click)="submitFilePattern('EXCLUDE')" mat-button type="button">+</button>
               </div>
             </div>
 
@@ -84,21 +81,32 @@
                   <input [(ngModel)]="modulesInput" matInput maxlength="100" name="modules" placeholder="Module"
                          type="text">
                 </mat-form-field>
-                <button (click)="submitModule()" mat-button style="float:right" type="button">+</button>
+                <button (click)="submitModule()" mat-button type="button">+</button>
               </div>
               <mat-error *ngIf="moduleExists">A module with this name already exists!</mat-error>
             </div>
-
+                </mat-card-content>
+            <!--Project contributors-->
+            <div class="list">
+              <div class="list-title">
+                <mat-label>Project contributors:</mat-label>
+              </div>
+              <div *ngFor="let c of contributors">
+                <mat-checkbox (change)="updateSelectedContributors(c)" name="{{c.displayName}}">
+                  {{c.displayName}}
+                </mat-checkbox>
+              </div>
+              <button *ngIf="selectedContributors.length > 1" mat-raised-button style="margin: 10px" (click)="openDialog()">Merge</button>
+            </div>
             <!--Project branches-->
             <div class="list">
               <div class="list-title">
                 <mat-label>Branches:</mat-label>
               </div>
               <div *ngFor="let branch of branches">
-                <span>{{branch.name}}</span>
+                <span><strong>{{branch.name}}</strong></span>
               </div>
             </div>
-          </mat-card-content>
 
           <!--Cancel and submit buttons-->
           <div align="center" id="cardButtons">

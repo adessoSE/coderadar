@@ -11,6 +11,7 @@ import {AppComponent} from '../app.component';
 import {IMetricMapping} from '../city-map/interfaces/IMetricMapping';
 import {INode} from '../city-map/interfaces/INode';
 import {MetricValue} from '../model/metric-value';
+import {Contributor} from '../model/contributor';
 import {Branch} from '../model/branch';
 
 @Injectable({
@@ -20,7 +21,7 @@ export class ProjectService {
 
   private apiURL = AppComponent.getApiUrl();
 
-  constructor(private userService: UserService, private router: Router, private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient) {
   }
 
   /**
@@ -257,6 +258,8 @@ export class ProjectService {
   resetAnalysis(id: number) {
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze/reset', {}, {observe: 'response'}).toPromise();
   }
+
+
 
   /**
    * Returns all of the branches for a project.
