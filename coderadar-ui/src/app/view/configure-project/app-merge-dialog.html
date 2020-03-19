@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Select display name</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Display name</mat-label>
+    <mat-select [(value)]="data.selected">
+      <mat-option *ngFor="let name of data.displayNames" [value]="name">
+        {{name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data.selected" cdkFocusInitial>Merge</button>
+</div>

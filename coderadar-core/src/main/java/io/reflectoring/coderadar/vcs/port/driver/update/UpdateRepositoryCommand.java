@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.vcs.port.driver.update;
 
-import java.io.File;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateRepositoryCommand {
   private String remoteUrl;
-  private File localDir;
+  private String localDir;
   private String username;
   private String password;
 }

@@ -12,7 +12,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MainDashboardComponent} from './view/main-dashboard/main-dashboard.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {AuthInterceptor} from './auth.interceptor';
-import {ConfigureProjectComponent} from './view/configure-project/configure-project.component';
+import {ConfigureProjectComponent, MergeDialogComponent} from './view/configure-project/configure-project.component';
 import {EditProjectComponent} from './view/edit-project/edit-project.component';
 import {HeaderComponent} from './view/header/header.component';
 import {FooterComponent} from './view/footer/footer.component';
@@ -31,7 +31,7 @@ import {
   MatListModule,
   MatMenuModule, MatPaginatorModule,
   MatSidenavModule,
-  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatTabsModule,
+  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatTabsModule, MatDialogModule,
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
@@ -89,6 +89,7 @@ const appRoutes: Routes = [
     ViewCommitComponent,
     CityViewComponent,
     DependencyRootComponent,
+    MergeDialogComponent,
     DependencyCompareComponent,
     TreeNodeComponent,
     CityViewHeaderComponent,
@@ -97,6 +98,7 @@ const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule,
+    MatDialogModule,
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot(appRoutes, {scrollPositionRestoration: 'enabled'}),
@@ -150,7 +152,8 @@ const appRoutes: Routes = [
       provide: REDUCER_TOKEN,
       useFactory: getReducers,
     }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [MergeDialogComponent]
 })
 export class AppModule {
 }

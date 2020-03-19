@@ -55,6 +55,7 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
                             .description("Array of all the commits in this project."),
                         fieldWithPath("[].name").description("The name of the commit."),
                         fieldWithPath("[].author").description("The author of the commit"),
+                        fieldWithPath("[].authorEmail").description("The email of the author"),
                         fieldWithPath("[].comment").description("The comment of this commit"),
                         fieldWithPath("[].timestamp").description("The timestamp of this commit"),
                         fieldWithPath("[].analyzed")
@@ -66,9 +67,9 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
             new TypeReference<List<GetCommitResponse>>() {},
             result.getResponse().getContentAsString());
 
-    Assertions.assertEquals(13, commits.size());
+    Assertions.assertEquals(14, commits.size());
     Assertions.assertEquals("add Finding.java", commits.get(commits.size() - 1).getComment());
-    Assertions.assertEquals("testCommit", commits.get(0).getComment());
+    Assertions.assertEquals("modify testModule1/NewRandomFile.java", commits.get(0).getComment());
   }
 
   @Test
