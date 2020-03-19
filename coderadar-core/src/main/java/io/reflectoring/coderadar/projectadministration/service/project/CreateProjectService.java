@@ -1,6 +1,10 @@
 package io.reflectoring.coderadar.projectadministration.service.project;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.contributor.domain.Contributor;
+import io.reflectoring.coderadar.contributor.port.driven.ComputeContributorsPort;
+import io.reflectoring.coderadar.contributor.port.driven.ListContributorsPort;
+import io.reflectoring.coderadar.contributor.port.driven.SaveContributorsPort;
 import io.reflectoring.coderadar.projectadministration.ProjectAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
@@ -16,7 +20,6 @@ import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryCommand;
 import io.reflectoring.coderadar.vcs.port.driver.clone.CloneRepositoryUseCase;
-import java.io.File;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -45,6 +48,12 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   private final SaveCommitPort saveCommitPort;
 
+  private final ComputeContributorsPort computeContributorsPort;
+
+  private final SaveContributorsPort saveContributorsPort;
+
+  private final ListContributorsPort listContributorsPort;
+
   private final Logger logger = LoggerFactory.getLogger(CreateProjectService.class);
 
   public CreateProjectService(
@@ -55,7 +64,10 @@ public class CreateProjectService implements CreateProjectUseCase {
       CoderadarConfigurationProperties coderadarConfigurationProperties,
       ProcessProjectService processProjectService,
       ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
-      SaveCommitPort saveCommitPort) {
+      SaveCommitPort saveCommitPort,
+      ComputeContributorsPort computeContributorsPort,
+      SaveContributorsPort saveContributorsPort,
+      ListContributorsPort listContributorsPort) {
     this.getAvailableBranchesPort = getAvailableBranchesPort;
     this.createProjectPort = createProjectPort;
     this.getProjectPort = getProjectPort;
@@ -64,6 +76,9 @@ public class CreateProjectService implements CreateProjectUseCase {
     this.processProjectService = processProjectService;
     this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
     this.saveCommitPort = saveCommitPort;
+    this.computeContributorsPort = computeContributorsPort;
+    this.saveContributorsPort = saveContributorsPort;
+    this.listContributorsPort = listContributorsPort;
   }
 
   @Override
@@ -74,11 +89,10 @@ public class CreateProjectService implements CreateProjectUseCase {
     Project project = saveProject(command);
     processProjectService.executeTask(
         () -> {
-          File localDir =
-              new File(
-                  coderadarConfigurationProperties.getWorkdir()
-                      + "/projects/"
-                      + project.getWorkdirName());
+          String localDir =
+              coderadarConfigurationProperties.getWorkdir()
+                  + "/projects/"
+                  + project.getWorkdirName();
           CloneRepositoryCommand cloneRepositoryCommand =
               new CloneRepositoryCommand(
                   command.getVcsUrl(),
@@ -94,6 +108,8 @@ public class CreateProjectService implements CreateProjectUseCase {
             List<Commit> commits =
                 extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
 
+            saveContributors(project);
+
             List<Branch> branches = getAvailableBranchesPort.getAvailableBranches(localDir);
             saveCommitPort.saveCommits(commits, branches, project.getId());
             logger.info("Saved project {}", project.getName());
@@ -103,6 +119,15 @@ public class CreateProjectService implements CreateProjectUseCase {
         },
         project.getId());
     return project.getId();
+  }
+
+  private synchronized void saveContributors(Project project) {
+    List<Contributor> contributors = listContributorsPort.listAll();
+    contributors =
+        computeContributorsPort.computeContributors(
+            coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName(),
+            contributors);
+    saveContributorsPort.save(contributors, project.getId());
   }
 
   /**

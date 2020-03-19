@@ -21,7 +21,6 @@ import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
-import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -155,11 +154,8 @@ public class ScanProjectScheduler {
 
   private void checkForNewCommits(Project project) {
     try {
-      File localDir =
-          new File(
-              coderadarConfigurationProperties.getWorkdir()
-                  + "/projects/"
-                  + project.getWorkdirName());
+      String localDir =
+          coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName();
       List<Branch> updatedBranches =
           updateLocalRepositoryUseCase.updateRepository(
               new UpdateRepositoryCommand()

@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 public class GetAvailableBranchesAdapter implements GetAvailableBranchesPort {
 
   @Override
-  public List<Branch> getAvailableBranches(File repositoryRoot) {
-    try (Git git = Git.open(repositoryRoot)) {
+  public List<Branch> getAvailableBranches(String repositoryRoot) {
+    try (Git git = Git.open(new File(repositoryRoot))) {
       return getBranches(git);
     } catch (Exception e) {
       throw new IllegalStateException(

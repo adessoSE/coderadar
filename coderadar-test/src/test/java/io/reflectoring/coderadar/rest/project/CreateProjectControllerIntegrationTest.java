@@ -49,7 +49,7 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
               Assertions.assertFalse(project.isVcsOnline());
               List<CommitEntity> commits =
                   commitRepository.findByProjectIdAndBranchName(id, "master");
-              Assertions.assertEquals(13, commits.size());
+              Assertions.assertEquals(14, commits.size());
               List<FileEntity> files = fileRepository.findAllinProject(id);
               Assertions.assertEquals(9, files.size());
             })
@@ -58,8 +58,6 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void createProjectReturnsErrorOnInvalidData() throws Exception {
-    ConstrainedFields fields = fields(CreateProjectCommand.class);
-
     CreateProjectCommand command =
         new CreateProjectCommand(
             "project", "username", "password", "invalid", true, new Date(), new Date());
@@ -70,7 +68,7 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
   }
 
   private ResultHandler documentCreateProject() {
-    ConstrainedFields fields = fields(CreateProjectCommand.class);
+    ConstrainedFields<CreateProjectCommand> fields = fields(CreateProjectCommand.class);
     return document(
         "projects/create",
         requestFields(

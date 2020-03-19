@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -112,9 +113,10 @@ public class TreeTest extends ControllerTestTemplate {
     List<NodeDTO> dtos;
     // all children of dependencytree
     {
-      Assertions.assertEquals("somepackage", dependencytreeNode.getChildren().get(0).getFilename());
+      dependencytreeNode.getChildren().sort(Comparator.comparing(Node::getFilename));
       Assertions.assertEquals(
-          "CoreTest.java", dependencytreeNode.getChildren().get(1).getFilename());
+          "CoreTest.java", dependencytreeNode.getChildren().get(0).getFilename());
+      Assertions.assertEquals("somepackage", dependencytreeNode.getChildren().get(1).getFilename());
       Assertions.assertEquals(
           "wildcardpackage", dependencytreeNode.getChildren().get(2).getFilename());
 
