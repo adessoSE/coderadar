@@ -1,10 +1,9 @@
-import {Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {createGitgraph, Orientation} from '@gitgraph/js';
 import {Commit} from '../../../model/commit';
 import {AppEffects} from '../../../city-map/shared/effects';
 import {Project} from '../../../model/project';
-import {BranchUserApi, GitgraphUserApi} from '@gitgraph/core';
-import {Commit as GitGraphCommit} from '@gitgraph/core';
+import {BranchUserApi, Commit as GitGraphCommit, GitgraphUserApi} from '@gitgraph/core';
 import {changeActiveFilter, setMetricMapping} from '../../../city-map/control-panel/settings/settings.actions';
 import {changeCommit, setCommits} from '../../../city-map/control-panel/control-panel.actions';
 import {CommitType} from '../../../city-map/enum/CommitType';
@@ -12,6 +11,10 @@ import {Store} from '@ngrx/store';
 import * as fromRoot from '../../../city-map/shared/reducers';
 import {Router} from '@angular/router';
 import {Branch} from '../../../model/branch';
+import {CommitLog} from '../../../model/commit-log';
+import {ProjectService} from '../../../service/project.service';
+import {FORBIDDEN} from 'http-status-codes';
+import {UserService} from '../../../service/user.service';
 
 @Component({
   selector: 'app-compare-branches',
@@ -20,24 +23,26 @@ import {Branch} from '../../../model/branch';
 })
 export class CompareBranchesComponent implements OnInit {
 
-  constructor(private cityEffects: AppEffects, private store: Store<fromRoot.AppState>, private router: Router) {
+  constructor(private cityEffects: AppEffects, private store: Store<fromRoot.AppState>, private router: Router,
+              private projectService: ProjectService, private userService: UserService) {
     this.selectedCommit1 = null;
     this.selectedCommit2 = null;
   }
 
   @ViewChild('graph', {read: ElementRef})graph: ElementRef;
 
-  @Input() commits: Commit[];
+  public commits: CommitLog[] = [];
+
   @Input() project: Project;
   @Input() branches: Branch[];
 
-  public selectedCommit1: Commit;
-  public selectedCommit2: Commit;
+  public selectedCommit1: CommitLog;
+  public selectedCommit2: CommitLog;
 
   private selectedCommit1Element: GitGraphCommit;
   private selectedCommit2Element: GitGraphCommit;
 
-  private loadIndex = 15;
+  private loadIndex = 50;
   private windowHeight = window.screen.availHeight;
 
   private gitgraph: GitgraphUserApi<SVGElement>;
@@ -48,47 +53,14 @@ export class CompareBranchesComponent implements OnInit {
   public startDate: string = null;
   public endDate: string = null;
 
-  master: BranchUserApi<SVGElement>;
 
   ngOnInit() {
-    //this.commits = this.commits.filter(commit => commit.analyzed);
-    if (this.commits.length === 0) {
-      return;
-    }
-    this.gitgraph = createGitgraph(this.graph.nativeElement, {orientation: Orientation.VerticalReverse});
-    this.master = this.gitgraph.branch( 'master');
-
-    for (let i = 0; i < this.loadIndex && i < this.commits.length; i++) {
-/*      if (i === 7) { // dummy commits
-        const newFeature = this.gitgraph.branch('new-feature');
-        newFeature.commit('Implemented an awesome feature');
-        newFeature.commit('Fix tests');
-
-        const newBranch = this.gitgraph.branch('fixes');
-        newBranch.commit('Implemented something');
-        newBranch.commit('Fix something');
-
-        this.master.merge(newFeature, 'Release new version');
-        this.master.merge(newBranch, 'Release new version');
-      }*/
-      const value = this.commits[i];
-      this.master.commit({
-        hash: value.name,
-        subject: new Date(value.timestamp).toDateString(),
-        author: value.author,
-        onClick: commit => {
-          this.handleClickEvent(commit);
-        },
-        onMessageClick: commit => {
-          this.handleClickEvent(commit);
-        }
-      });
-    }
+    this.getCommitTree();
   }
 
   public handleClickEvent(commitElement: GitGraphCommit): void {
 
-    const selectedCommit = this.commits.find(value1 => value1.name === commitElement.hash);
+    const selectedCommit = this.commits.find(value1 => value1.hash === commitElement.hash);
 
     if (this.selectedCommit1 === null && this.selectedCommit2 !== selectedCommit) {
       this.selectedCommit1 = selectedCommit;
@@ -137,14 +109,15 @@ export class CompareBranchesComponent implements OnInit {
     this.gitgraph._onGraphUpdate();
   }
 
-  @HostListener('window:scroll', ['$event'])
+/*
+  // @HostListener('window:scroll', ['$event'])
   handleScroll() {
     if (window.pageYOffset > (this.windowHeight + window.screenY - 700)) {
       for (let i = this.loadIndex; i < this.loadIndex + 15 && i < this.commits.length; i++) {
         const value = this.commits[i];
-        this.master.commit({
+        this.gitgraph.commit({
           hash: value.name,
-          subject: new Date(value.timestamp).toDateString(),
+          subject: new Date(value.timestamp).toDateString() + ' ' + value.comment.substr(0, 40),
           author: value.author,
           onClick: commit => {
             this.handleClickEvent(commit);
@@ -158,8 +131,9 @@ export class CompareBranchesComponent implements OnInit {
       this.windowHeight = window.pageYOffset + window.screen.height * 1.5;
     }
   }
+*/
 
-  showCommitsInRange() {
+/*  showCommitsInRange() {
 
     let endDate: Date;
     if (this.endDate === null) {
@@ -179,10 +153,9 @@ export class CompareBranchesComponent implements OnInit {
       value.timestamp >= startDate.getTime() && value.timestamp <= endDate.getTime());
 
     this.gitgraph.clear();
-    this.master = this.gitgraph.branch( 'master');
 
     filteredCommits.forEach(value => {
-      this.master.commit({
+      this.gitgraph.commit({
         hash: value.name,
         subject: new Date(value.timestamp).toDateString(),
         author: value.author,
@@ -195,9 +168,9 @@ export class CompareBranchesComponent implements OnInit {
       });
     });
     this.loadIndex = this.commits.length;
-  }
+  }*/
 
-  startCityView() {
+/*  startCityView() {
     this.store.dispatch(setMetricMapping({
       colorMetricName: 'checkstyle:com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck',
       groundAreaMetricName: 'coderadar:size:sloc:java',
@@ -221,6 +194,25 @@ export class CompareBranchesComponent implements OnInit {
 
     this.cityEffects.isLoaded = true;
     this.router.navigate(['/city/' + this.project.id]);
+  }*/
+
+  private getCommitTree() {
+    this.projectService.getCommitLog(this.project.id).then(value => {
+      this.commits = value.body;
+      this.initTree();
+    }).catch(error => {
+      if (error.status && error.status === FORBIDDEN) {
+        this.userService.refresh(() => this.getCommitTree());
+      }
+    });
+  }
+
+  private initTree() {
+    if (this.commits.length === 0) {
+      return;
+    }
+    this.gitgraph = createGitgraph(this.graph.nativeElement);
+    this.gitgraph.import(this.commits);
   }
 }
 

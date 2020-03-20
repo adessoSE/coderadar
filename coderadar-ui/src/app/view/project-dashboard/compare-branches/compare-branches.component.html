@@ -4,20 +4,20 @@
       <input matInput type="text" placeholder="Search for commits or branches">
     </mat-form-field>
     <mat-form-field>
-      <input type="date" [(ngModel)]="startDate" (ngModelChange)="showCommitsInRange()" matInput placeholder="Start date">
+      <input type="date" [(ngModel)]="startDate"  matInput placeholder="Start date">
     </mat-form-field>
     <mat-form-field>
-      <input type="date" [(ngModel)]="endDate" (ngModelChange)="showCommitsInRange()" matInput placeholder="End date">
+      <input type="date" [(ngModel)]="endDate" matInput placeholder="End date">
     </mat-form-field>
   </div>
 </span>
-<span style="align-content: center; margin-left: 27%; cursor: pointer;" #graph></span>
-<a *ngIf="selectedCommit1 !== null && selectedCommit2 != null && selectedCommit1.analyzed && selectedCommit2.analyzed"
+<span style="align-content: center; cursor: pointer;" #graph></span>
+<!--<a *ngIf="selectedCommit1 !== null && selectedCommit2 != null && selectedCommit1.analyzed && selectedCommit2.analyzed"
    class="compare-button" color="accent" (click)="startCityView()" mat-fab>
   <div>
     <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">library_books</mat-icon>
   </div>
-</a>
+</a>-->
 <div *ngIf="commits.length == 0" >
   <p class="no-commits-message">No commits</p>
 </div>
