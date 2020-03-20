@@ -7,11 +7,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.rest.domain.GetContributorResponse;
 import java.net.URL;
 import java.util.List;
 import java.util.Objects;
@@ -54,8 +54,8 @@ public class GetContributorControllerIntegrationTest extends ControllerTestTempl
             .andDo(documentContributor())
             .andReturn();
 
-    Contributor contributor =
-        fromJson(result.getResponse().getContentAsString(), Contributor.class);
+    GetContributorResponse contributor =
+        fromJson(result.getResponse().getContentAsString(), GetContributorResponse.class);
 
     Assertions.assertThat(contributor.getId()).isEqualTo(contributorId);
     Assertions.assertThat(contributor.getDisplayName()).isEqualTo("Krause");

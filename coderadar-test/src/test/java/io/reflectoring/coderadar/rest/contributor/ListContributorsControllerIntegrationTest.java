@@ -7,10 +7,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForFileCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.rest.domain.GetContributorResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import java.net.URL;
 import java.util.List;
@@ -58,9 +58,10 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
             .andDo(documentListContributors())
             .andReturn();
 
-    List<Contributor> contributors =
+    List<GetContributorResponse> contributors =
         fromJson(
-            new TypeReference<List<Contributor>>() {}, result.getResponse().getContentAsString());
+            new TypeReference<List<GetContributorResponse>>() {},
+            result.getResponse().getContentAsString());
 
     Assertions.assertThat(contributors.size()).isEqualTo(2);
   }
@@ -81,10 +82,11 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
             .andDo(documentListContributorsForFile())
             .andReturn();
 
-    List<Contributor> contributors =
+    List<GetContributorResponse> contributors =
         fromJson(
-            new TypeReference<List<Contributor>>() {}, result.getResponse().getContentAsString());
-    Contributor contributor = contributors.get(0);
+            new TypeReference<List<GetContributorResponse>>() {},
+            result.getResponse().getContentAsString());
+    GetContributorResponse contributor = contributors.get(0);
 
     Assertions.assertThat(contributors.size()).isEqualTo(1);
     Assertions.assertThat(contributor.getDisplayName()).isEqualTo("maximAtanasov");
