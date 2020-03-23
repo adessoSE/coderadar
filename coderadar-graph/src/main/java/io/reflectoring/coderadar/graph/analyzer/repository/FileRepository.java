@@ -1,12 +1,11 @@
 package io.reflectoring.coderadar.graph.analyzer.repository;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
+import java.util.HashMap;
+import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
-
-import java.util.HashMap;
-import java.util.List;
 
 public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
 

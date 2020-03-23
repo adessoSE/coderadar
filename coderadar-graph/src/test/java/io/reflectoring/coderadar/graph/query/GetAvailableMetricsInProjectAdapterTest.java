@@ -1,19 +1,18 @@
 package io.reflectoring.coderadar.graph.query;
 
-import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.graph.query.adapter.GetAvailableMetricsInProjectAdapter;
-import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
+import io.reflectoring.coderadar.graph.query.adapter.GetAvailableMetricsInProjectAdapter;
+import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
+import java.util.LinkedList;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 @DisplayName("Get available metrics in project")
 class GetAvailableMetricsInProjectAdapterTest {

@@ -1,13 +1,12 @@
 package io.reflectoring.coderadar.graph.contributor.domain;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import lombok.Data;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Relationship;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import lombok.Data;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
 
 @NodeEntity
 @Data

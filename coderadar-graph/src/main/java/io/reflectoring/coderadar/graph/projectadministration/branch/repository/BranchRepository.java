@@ -1,11 +1,10 @@
 package io.reflectoring.coderadar.graph.projectadministration.branch.repository;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.BranchEntity;
+import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
-
-import java.util.List;
 
 public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
 

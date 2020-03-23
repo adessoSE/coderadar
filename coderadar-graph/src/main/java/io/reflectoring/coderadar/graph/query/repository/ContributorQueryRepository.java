@@ -2,11 +2,10 @@ package io.reflectoring.coderadar.graph.query.repository;
 
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import io.reflectoring.coderadar.graph.query.domain.ContributorsForFileQueryResult;
+import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
-
-import java.util.List;
 
 public interface ContributorQueryRepository extends Neo4jRepository<ContributorEntity, Long> {
 

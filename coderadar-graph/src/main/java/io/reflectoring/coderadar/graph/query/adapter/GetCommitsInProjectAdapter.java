@@ -7,11 +7,10 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.FileToCommit
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.CommitBaseDataMapper;
 import io.reflectoring.coderadar.projectadministration.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {

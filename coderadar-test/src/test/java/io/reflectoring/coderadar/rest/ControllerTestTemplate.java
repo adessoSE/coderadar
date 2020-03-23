@@ -2,6 +2,10 @@ package io.reflectoring.coderadar.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.Properties;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,11 +27,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.Properties;
 
 @ExtendWith(RestDocumentationExtension.class)
 @Tag(ControllerTestTemplate.TAG)
