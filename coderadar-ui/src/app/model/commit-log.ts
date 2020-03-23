@@ -4,4 +4,5 @@ export class CommitLog {
   parents: string[];
   author: any;
   subject: string;
+  analyzed: boolean;
 }

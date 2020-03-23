@@ -4,6 +4,12 @@ import io.reflectoring.coderadar.query.domain.CommitLog;
 import io.reflectoring.coderadar.query.domain.CommitLogAuthor;
 import io.reflectoring.coderadar.query.port.driven.GetCommitLogPort;
 import io.reflectoring.coderadar.vcs.RevCommitHelper;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
@@ -11,13 +17,6 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class GetCommitLogAdapter implements GetCommitLogPort {

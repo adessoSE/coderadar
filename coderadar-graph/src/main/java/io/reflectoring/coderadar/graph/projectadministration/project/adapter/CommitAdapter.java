@@ -13,8 +13,9 @@ import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
-import java.util.*;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 @Service
 public class CommitAdapter implements SaveCommitPort, AddCommitsPort {

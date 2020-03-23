@@ -1,11 +1,12 @@
 package io.reflectoring.coderadar.graph.analyzer.repository;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
-import java.util.HashMap;
-import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
+
+import java.util.HashMap;
+import java.util.List;
 
 public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
 
@@ -51,19 +52,6 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node "
           + "RETURN node ORDER BY node.timestamp DESC")
   List<CommitEntity> findByProjectIdAndBranchName(long projectId, String branch);
-
-  /*  */
-  /**
-   * @param projectId The project id.
-   * @param branchName The name of the branch.
-   * @return All commits in the given project with parent relationships
-   */
-  /*
-  @Query(
-      "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
-          + "CALL apoc.path.subgraphAll(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD nodes, relationships "
-          + "RETURN nodes, relationships")
-  List<CommitEntity> findByProjectIdAndBranchNameWithParents(long projectId, String branchName);*/
 
   /**
    * Returns all commits in a project. (FileToCommitRelationships and parents are not initialized).

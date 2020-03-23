@@ -1,11 +1,12 @@
 package io.reflectoring.coderadar.graph;
 
-import java.util.Collections;
-import javax.annotation.PostConstruct;
 import org.neo4j.ogm.session.Session;
 import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.PostConstruct;
+import java.util.Collections;
 
 @Configuration
 public class Neo4jIndexesConfiguration {

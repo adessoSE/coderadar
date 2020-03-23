@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
@@ -45,15 +45,16 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       this.projectId = params.id;
       this.getCommits(true);
+      this.getCommitTree();
       if (this.commits.length === 0) {
         this.waiting = true;
       }
       this.getProject();
-      this.getCommitTree();
       this.getBranchesInProject();
       // Schedule a task to check if all commits are analyzed and update them if they're not
       this.updateCommitsTimer = timer(4000, 8000).subscribe(() => {
         this.getCommits(false);
+        this.getCommitTree();
         if (this.commits.length === 0) {
           this.getCommits(true);
         }

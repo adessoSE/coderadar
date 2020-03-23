@@ -1,8 +1,5 @@
 package io.reflectoring.coderadar.rest.branches;
 
-import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.branch.repository.BranchRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.BranchEntity;
@@ -10,13 +7,17 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
-import java.net.URL;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.net.URL;
+import java.util.List;
+
+import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 public class SaveProjectWithBranchesTest extends ControllerTestTemplate {
   @Autowired private CommitRepository commitRepository;

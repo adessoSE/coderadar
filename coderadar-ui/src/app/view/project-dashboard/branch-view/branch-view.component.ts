@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
 import {createGitgraph, templateExtend, TemplateName} from '@gitgraph/js';
 import {AppEffects} from '../../../city-map/shared/effects';
 import {Project} from '../../../model/project';
@@ -8,13 +8,17 @@ import * as fromRoot from '../../../city-map/shared/reducers';
 import {Router} from '@angular/router';
 import {Branch} from '../../../model/branch';
 import {CommitLog} from '../../../model/commit-log';
+import {changeActiveFilter, setMetricMapping} from '../../../city-map/control-panel/settings/settings.actions';
+import {changeCommit, setCommits} from '../../../city-map/control-panel/control-panel.actions';
+import {CommitType} from '../../../city-map/enum/CommitType';
+import {loadAvailableMetrics} from '../../../city-map/visualization/visualization.actions';
 
 @Component({
   selector: 'app-compare-branches',
-  templateUrl: './compare-branches.component.html',
-  styleUrls: ['./compare-branches.component.scss']
+  templateUrl: './branch-view.component.html',
+  styleUrls: ['./branch-view.component.scss']
 })
-export class CompareBranchesComponent implements OnInit {
+export class BranchViewComponent implements OnInit, OnChanges {
 
   constructor(private cityEffects: AppEffects, private store: Store<fromRoot.AppState>, private router: Router) {
   }
@@ -113,6 +117,7 @@ export class CompareBranchesComponent implements OnInit {
     }
     const filtered = JSON.parse(JSON.stringify(this.commitLog.filter(value =>
       value.author.timestamp >= startDate.getTime() && value.author.timestamp <= (endDate.getTime() + 24 * 60 * 60 * 1000))));
+    filtered.forEach(value => value.author.name = '');
     filtered.forEach(value => value.parents.forEach(parent => {
       if (filtered.find(value1 => value1.hash.localeCompare(parent) === 0) === undefined) {
         value.parents = value.parents.filter(value1 => value1.localeCompare(parent));
@@ -122,33 +127,73 @@ export class CompareBranchesComponent implements OnInit {
     filtered.forEach(commit => {
       commit.onClick = (val) => this.handleClickEvent(val);
       commit.onMessageClick = (val) => this.handleClickEvent(val);
+      commit.onMouseOver = () => document.body.style.cursor = 'pointer';
+      commit.onMouseOut = () => document.body.style.cursor = 'default';
     });
     this.gitGraph.import(filtered);
-    // @ts-ignore
-    this.gitGraph._graph.commits.forEach(val => console.log(val));
-/*
-    filteredCommits.forEach(value => {
-      this.gitgraph.commit({
-        hash: value.hash,
-        subject: new Date(value.timestamp).toDateString(),
-        author: value.author,
-        onClick: commit => {
-          this.handleClickEvent(commit);
-        },
-        onMessageClick: commit =>
-      });
-    });*/
   }
 
   private initTree() {
     if (this.commitLog.length === 0) {
       return;
     }
-    this.commitLog.forEach(value => value.author.name = '');
     this.gitGraph = createGitgraph(this.graph.nativeElement, {template: templateExtend(TemplateName.Metro,
         {
-          colors: ['#979797', '#008fb5', '#f1c109', '#bf5249', '#b87bbf', '#86bf56', '#7ab8be']
+          colors: ['#979797', '#008fb5', '#f1c109', '#bf6356', '#b87bbf', '#86bf56', '#7ab8be']
         })});
+  }
+
+  /**
+   * Opens the 3D city-map with the complexity preset (LOC+LOC+Complexity, without unmodified) for the selected commits.
+   * Switches the commit positions if the first one is newer than the second one.
+   */
+  startComplexityAnalysis(): void {
+    this.store.dispatch(setMetricMapping({
+      colorMetricName: 'checkstyle:com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck',
+      groundAreaMetricName: 'coderadar:size:sloc:java',
+      heightMetricName: 'coderadar:size:sloc:java',
+    }));
+    if (this.selectedCommit1.author.timestamp > this.selectedCommit2.author.timestamp) {
+      const temp = this.selectedCommit1;
+      this.selectedCommit1 = this.selectedCommit2;
+      this.selectedCommit2 = temp;
+    }
+    const commits = this.commitLog.map(value => {
+      return {name: value.hash, author: value.author.name,
+        authorEmail: value.author.email, comment: value.subject, analyzed: value.analyzed,
+        timestamp: value.author.timestamp};
+    });
+    this.store.dispatch(loadAvailableMetrics());
+    this.store.dispatch(setCommits(commits));
+    this.store.dispatch(changeCommit(CommitType.LEFT, commits.find(value => value.name.localeCompare(this.selectedCommit1.hash) === 0)));
+    this.store.dispatch(changeCommit(CommitType.RIGHT, commits.find(value => value.name.localeCompare(this.selectedCommit2.hash) === 0)));
+    this.store.dispatch(changeActiveFilter({
+      added: true,
+      deleted: true,
+      modified: true,
+      renamed: true,
+      unmodified: false
+    }));
+
+    this.cityEffects.isLoaded = true;
+    this.router.navigate(['/city/' + this.project.id]);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    let selectedCommit1Id = null;
+    if (this.selectedCommit1 !== null) {
+      selectedCommit1Id = this.selectedCommit1.hash;
+    }
+    let selectedCommit2Id = null;
+    if (this.selectedCommit2 !== null) {
+      selectedCommit2Id = this.selectedCommit2.hash;
+    }
+    if (selectedCommit1Id != null) {
+      this.selectedCommit1 = this.commitLog.find(value => value.hash === selectedCommit1Id);
+    }
+    if (selectedCommit2Id != null) {
+      this.selectedCommit2 = this.commitLog.find(value => value.hash === selectedCommit2Id);
+    }
   }
 }
 

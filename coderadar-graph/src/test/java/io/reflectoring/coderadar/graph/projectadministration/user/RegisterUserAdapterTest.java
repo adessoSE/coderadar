@@ -1,8 +1,5 @@
 package io.reflectoring.coderadar.graph.projectadministration.user;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.graph.useradministration.adapter.RegisterUserAdapter;
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
@@ -11,6 +8,9 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 
 class RegisterUserAdapterTest {
   private UserRepository userRepository = mock(UserRepository.class);

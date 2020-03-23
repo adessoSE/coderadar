@@ -5,8 +5,9 @@ import io.reflectoring.coderadar.contributor.port.driven.ListContributorsPort;
 import io.reflectoring.coderadar.graph.contributor.ContributorMapper;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
 import io.reflectoring.coderadar.graph.query.repository.ContributorQueryRepository;
-import java.util.List;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ListContributorsAdapter implements ListContributorsPort {

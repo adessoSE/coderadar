@@ -19,10 +19,10 @@ import {loadAvailableMetrics} from '../../../city-map/visualization/visualizatio
 
 @Component({
   selector: 'app-commit-list',
-  templateUrl: './commit-list.component.html',
-  styleUrls: ['./commit-list.component.scss']
+  templateUrl: './list-view.component.html',
+  styleUrls: ['./list-view.component.scss']
 })
-export class CommitListComponent implements OnInit, OnChanges {
+export class ListViewComponent implements OnInit, OnChanges {
 
   @Input() project: Project;
   @Input() commits: Commit[];

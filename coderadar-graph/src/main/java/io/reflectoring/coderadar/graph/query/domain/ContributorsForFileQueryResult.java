@@ -1,8 +1,9 @@
 package io.reflectoring.coderadar.graph.query.domain;
 
-import java.util.Set;
 import lombok.Data;
 import org.springframework.data.neo4j.annotation.QueryResult;
+
+import java.util.Set;
 
 @QueryResult
 @Data

@@ -5,8 +5,9 @@ import io.reflectoring.coderadar.contributor.ContributorNotFoundException;
 import io.reflectoring.coderadar.contributor.port.driven.MergeContributorsPort;
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
-import java.util.List;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MergeContributorsAdapter implements MergeContributorsPort {

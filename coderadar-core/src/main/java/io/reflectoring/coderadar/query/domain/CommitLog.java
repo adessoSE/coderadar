@@ -11,4 +11,5 @@ public class CommitLog {
   private List<String> parents = new ArrayList<>();
   private CommitLogAuthor author;
   private String subject;
+  private boolean analyzed;
 }

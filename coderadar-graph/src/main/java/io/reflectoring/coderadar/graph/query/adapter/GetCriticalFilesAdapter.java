@@ -6,9 +6,10 @@ import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.query.domain.ContributorsForFile;
 import io.reflectoring.coderadar.query.port.driven.GetCriticalFilesPort;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
 @Service
 public class GetCriticalFilesAdapter implements GetCriticalFilesPort {

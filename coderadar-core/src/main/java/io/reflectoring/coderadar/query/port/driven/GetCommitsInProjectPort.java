@@ -16,6 +16,14 @@ public interface GetCommitsInProjectPort {
   List<Commit> getCommitsSortedByTimestampDescWithNoRelationships(long projectId, String branch);
 
   /**
+   * Returns all commits in a project without initializing any relationships.
+   *
+   * @param projectId The project id.
+   * @return A list of commit domain objects with no relationships.
+   */
+  List<Commit> getAllCommitsWithNoRelationships(long projectId);
+
+  /**
    * Returns all not yet analyzed commits in this project, that match the supplied file patterns and
    * are in the specified branch.
    *

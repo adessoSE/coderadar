@@ -24,3 +24,12 @@
   float: right;
   margin-right: 15%;
 }
+
+.compare-button-2 {
+  right: 14%;
+  bottom: 8%;
+  position: fixed;
+  animation: show 0.2s;
+  z-index: 3;
+  transform: scale(1.5, 1.5);
+}

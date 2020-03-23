@@ -1,12 +1,13 @@
 package io.reflectoring.coderadar.graph.projectadministration.project.repository;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> {

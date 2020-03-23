@@ -1,11 +1,11 @@
 package io.reflectoring.coderadar.graph.useradministration.domain;
 
-import static org.neo4j.ogm.annotation.Relationship.INCOMING;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+
+import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
 /** @see io.reflectoring.coderadar.useradministration.domain.RefreshToken */
 @NodeEntity

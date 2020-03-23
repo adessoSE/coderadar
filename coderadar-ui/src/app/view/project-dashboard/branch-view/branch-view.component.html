@@ -8,13 +8,19 @@
     </mat-form-field>
   </div>
 </span>
-<span style="align-content: center; cursor: pointer;" #graph></span>
-<!--<a *ngIf="selectedCommit1 !== null && selectedCommit2 != null && selectedCommit1.analyzed && selectedCommit2.analyzed"
-   class="compare-button" color="accent" (click)="startCityView()" mat-fab>
+<span style="align-content: center;" #graph></span>
+<a *ngIf="selectedCommit1 !== null && selectedCommit2 != null && selectedCommit1.analyzed && selectedCommit2.analyzed"
+     class="compare-button" color="accent" (click)="startComplexityAnalysis()" mat-fab>
+    <div>
+      <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">3d_rotation</mat-icon>
+    </div>
+</a>
+<a *ngIf="selectedCommit1 !== null && selectedCommit2 != null" class="compare-button-2" color="accent" mat-fab
+   routerLink="/project/{{project.id}}/{{selectedCommit1.hash}}/{{selectedCommit2.hash}}/dependency-map">
   <div>
     <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">library_books</mat-icon>
   </div>
-</a>-->
+</a>
 <div *ngIf="commitLog.length == 0" >
   <p class="no-commits-message">No commits</p>
 </div>

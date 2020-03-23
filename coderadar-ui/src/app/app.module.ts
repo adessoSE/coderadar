@@ -54,8 +54,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {DragScrollModule} from 'ngx-drag-scroll';
 import {PinchZoomModule} from 'ngx-pinch-zoom';
 import {ScrollingModule} from '@angular/cdk/scrolling';
-import { CommitListComponent } from './view/project-dashboard/commit-list/commit-list.component';
-import { CompareBranchesComponent } from './view/project-dashboard/compare-branches/compare-branches.component';
+import { ListViewComponent } from './view/project-dashboard/list-view/list-view.component';
+import { BranchViewComponent } from './view/project-dashboard/branch-view/branch-view.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -93,8 +93,8 @@ const appRoutes: Routes = [
     DependencyCompareComponent,
     TreeNodeComponent,
     CityViewHeaderComponent,
-    CommitListComponent,
-    CompareBranchesComponent
+    ListViewComponent,
+    BranchViewComponent
   ],
   imports: [
     BrowserModule,
