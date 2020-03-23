@@ -3,6 +3,8 @@ package io.reflectoring.coderadar.rest.contributor;
 import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForFileCommand;
 import io.reflectoring.coderadar.contributor.port.driver.ListContributorsUseCase;
+import io.reflectoring.coderadar.rest.domain.GetContributorResponse;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,18 +28,35 @@ public class ListContributorsController {
   @GetMapping(
       path = "/projects/{projectId}/contributors",
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<Contributor>> listContributors(@PathVariable long projectId) {
-    return new ResponseEntity<>(listContributorsUseCase.listContributors(projectId), HttpStatus.OK);
+  public ResponseEntity<List<GetContributorResponse>> listContributors(
+      @PathVariable long projectId) {
+    return new ResponseEntity<>(
+        map(listContributorsUseCase.listContributors(projectId)), HttpStatus.OK);
   }
 
   @GetMapping(
       path = "/projects/{projectId}/contributors/file",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<Contributor>> listContributorsForFile(
+  public ResponseEntity<List<GetContributorResponse>> listContributorsForFile(
       @PathVariable long projectId, @RequestBody @Validated GetContributorsForFileCommand command) {
     return new ResponseEntity<>(
-        listContributorsUseCase.listContributorsForProjectAndFilepathInCommit(projectId, command),
+        map(
+            listContributorsUseCase.listContributorsForProjectAndFilepathInCommit(
+                projectId, command)),
         HttpStatus.OK);
+  }
+
+  private List<GetContributorResponse> map(List<Contributor> contributors) {
+    List<GetContributorResponse> result = new ArrayList<>(contributors.size());
+    for (Contributor c : contributors) {
+      GetContributorResponse responseItem = new GetContributorResponse();
+      responseItem.setId(c.getId());
+      responseItem.setDisplayName(c.getDisplayName());
+      responseItem.setNames(c.getNames());
+      responseItem.setEmailAddresses(c.getEmailAddresses());
+      result.add(responseItem);
+    }
+    return result;
   }
 }
