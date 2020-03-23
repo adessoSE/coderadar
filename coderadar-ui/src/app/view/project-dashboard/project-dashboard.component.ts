@@ -13,6 +13,7 @@ import {AppEffects} from '../../city-map/shared/effects';
 import * as fromRoot from '../../city-map/shared/reducers';
 import {Store} from '@ngrx/store';
 import {loadAvailableMetrics} from '../../city-map/visualization/visualization.actions';
+import {CommitLog} from '../../model/commit-log';
 
 @Component({
   selector: 'app-project-dashboard',
@@ -25,6 +26,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
 
   projectId;
   commits: Commit[];
+  commitLog: CommitLog[];
   branches: Branch[];
   commitsAnalyzed = 0;
   project: Project;
@@ -47,6 +49,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         this.waiting = true;
       }
       this.getProject();
+      this.getCommitTree();
       this.getBranchesInProject();
       // Schedule a task to check if all commits are analyzed and update them if they're not
       this.updateCommitsTimer = timer(4000, 8000).subscribe(() => {
@@ -130,5 +133,21 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   handleBranchChange($event: any) {
     this.selectedBranch = $event;
     this.getCommits(false);
+  }
+
+  private getCommitTree() {
+    this.projectService.getCommitLog(this.projectId).then(value => {
+      this.commitLog = value.body;
+    }).catch(error => {
+      if (error.status && error.status === FORBIDDEN) {
+        this.userService.refresh(() => this.getCommitTree());
+      }
+    });
+  }
+
+  public getDefaultStartDate(): string {
+    const date = new Date(this.commitLog[0].author.timestamp);
+    date.setDate(date.getDate() - 30);
+    return date.toISOString().split('T')[0];
   }
 }

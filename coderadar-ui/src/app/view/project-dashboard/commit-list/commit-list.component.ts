@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {Commit} from '../../../model/commit';
 import {AppComponent} from '../../../app.component';
 import {MatPaginator, MatSnackBar, PageEvent} from '@angular/material';
@@ -15,13 +15,14 @@ import {Title} from '@angular/platform-browser';
 import {ProjectService} from '../../../service/project.service';
 import {Store} from '@ngrx/store';
 import {Branch} from '../../../model/branch';
+import {loadAvailableMetrics} from '../../../city-map/visualization/visualization.actions';
 
 @Component({
   selector: 'app-commit-list',
   templateUrl: './commit-list.component.html',
   styleUrls: ['./commit-list.component.scss']
 })
-export class CommitListComponent implements OnInit {
+export class CommitListComponent implements OnInit, OnChanges {
 
   @Input() project: Project;
   @Input() commits: Commit[];
@@ -206,5 +207,25 @@ export class CommitListComponent implements OnInit {
 
     this.cityEffects.isLoaded = true;
     this.router.navigate(['/city/' + this.projectId]);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    let selectedCommit1Id = null;
+    if (this.selectedCommit1 !== null) {
+      selectedCommit1Id = this.selectedCommit1.name;
+    }
+    let selectedCommit2Id = null;
+    if (this.selectedCommit2 !== null) {
+      selectedCommit2Id = this.selectedCommit2.name;
+    }
+    if (this.commitsAnalyzed > 0) {
+      this.store.dispatch(loadAvailableMetrics());
+    }
+    if (selectedCommit1Id != null) {
+      this.selectedCommit1 = this.commits.find(value => value.name === selectedCommit1Id);
+    }
+    if (selectedCommit2Id != null) {
+      this.selectedCommit2 = this.commits.find(value => value.name === selectedCommit2Id);
+    }
   }
 }

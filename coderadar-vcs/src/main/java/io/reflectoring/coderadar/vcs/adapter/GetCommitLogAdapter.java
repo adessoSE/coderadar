@@ -4,21 +4,25 @@ import io.reflectoring.coderadar.query.domain.CommitLog;
 import io.reflectoring.coderadar.query.domain.CommitLogAuthor;
 import io.reflectoring.coderadar.query.port.driven.GetCommitLogPort;
 import io.reflectoring.coderadar.vcs.RevCommitHelper;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.lib.PersonIdent;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.PersonIdent;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.springframework.stereotype.Service;
 
 @Service
 public class GetCommitLogAdapter implements GetCommitLogPort {
+
+  private final Logger logger = LoggerFactory.getLogger(GetCommitLogAdapter.class);
 
   @Override
   public List<CommitLog> getCommitLog(String path) {
@@ -32,10 +36,7 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
         String commitName = ref.getObjectId().name();
         List<String> refNames = commitToRefMap.computeIfAbsent(commitName, k -> new ArrayList<>());
         String[] split = ref.getName().split("/");
-        String name = split[split.length - 1];
-        if (!name.equals(Constants.HEAD)) {
-          refNames.add(split[split.length - 1]);
-        }
+        refNames.add(split[split.length - 1]);
       }
       for (RevCommit commit : commits) {
 
@@ -68,7 +69,7 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
       }
       return log;
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.error(String.format("Cannot create commit log: %s", e.getMessage()));
     }
     return new ArrayList<>();
   }

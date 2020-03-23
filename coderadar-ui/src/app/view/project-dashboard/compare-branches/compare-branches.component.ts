@@ -1,20 +1,13 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {createGitgraph, Orientation} from '@gitgraph/js';
-import {Commit} from '../../../model/commit';
+import {createGitgraph, templateExtend, TemplateName} from '@gitgraph/js';
 import {AppEffects} from '../../../city-map/shared/effects';
 import {Project} from '../../../model/project';
-import {BranchUserApi, Commit as GitGraphCommit, GitgraphUserApi} from '@gitgraph/core';
-import {changeActiveFilter, setMetricMapping} from '../../../city-map/control-panel/settings/settings.actions';
-import {changeCommit, setCommits} from '../../../city-map/control-panel/control-panel.actions';
-import {CommitType} from '../../../city-map/enum/CommitType';
+import {Commit as GitGraphCommit, GitgraphUserApi} from '@gitgraph/core';
 import {Store} from '@ngrx/store';
 import * as fromRoot from '../../../city-map/shared/reducers';
 import {Router} from '@angular/router';
 import {Branch} from '../../../model/branch';
 import {CommitLog} from '../../../model/commit-log';
-import {ProjectService} from '../../../service/project.service';
-import {FORBIDDEN} from 'http-status-codes';
-import {UserService} from '../../../service/user.service';
 
 @Component({
   selector: 'app-compare-branches',
@@ -23,56 +16,46 @@ import {UserService} from '../../../service/user.service';
 })
 export class CompareBranchesComponent implements OnInit {
 
-  constructor(private cityEffects: AppEffects, private store: Store<fromRoot.AppState>, private router: Router,
-              private projectService: ProjectService, private userService: UserService) {
-    this.selectedCommit1 = null;
-    this.selectedCommit2 = null;
+  constructor(private cityEffects: AppEffects, private store: Store<fromRoot.AppState>, private router: Router) {
   }
 
   @ViewChild('graph', {read: ElementRef})graph: ElementRef;
 
-  public commits: CommitLog[] = [];
+  @Input() public commitLog: CommitLog[] = [];
+
+  @Input() public startDate: string;
+  public endDate: string = null;
 
   @Input() project: Project;
   @Input() branches: Branch[];
 
   public selectedCommit1: CommitLog;
   public selectedCommit2: CommitLog;
-
   private selectedCommit1Element: GitGraphCommit;
   private selectedCommit2Element: GitGraphCommit;
-
-  private loadIndex = 50;
-  private windowHeight = window.screen.availHeight;
-
-  private gitgraph: GitgraphUserApi<SVGElement>;
+  private gitGraph: GitgraphUserApi<SVGElement>;
 
   private selectedCommitColor = '#f60';
-  private deselectedCommitColor = '#979797';
-
-  public startDate: string = null;
-  public endDate: string = null;
-
 
   ngOnInit() {
-    this.getCommitTree();
+    this.initTree();
+    this.showCommitsInRange();
   }
 
-  public handleClickEvent(commitElement: GitGraphCommit): void {
-
-    const selectedCommit = this.commits.find(value1 => value1.hash === commitElement.hash);
-
+  public handleClickEvent(commitElement: any): void {
+    const selectedCommit = this.commitLog.find(value1 => value1.hash === commitElement.hash);
     if (this.selectedCommit1 === null && this.selectedCommit2 !== selectedCommit) {
       this.selectedCommit1 = selectedCommit;
 
       if (this.selectedCommit1Element !== undefined) {
-        this.selectedCommit1Element.style.message.color = this.deselectedCommitColor;
-        this.selectedCommit1Element.style.color = this.deselectedCommitColor;
-        this.selectedCommit1Element.style.dot.color = this.deselectedCommitColor;
+        this.selectedCommit1Element.style.message.color = commitElement.color;
+        this.selectedCommit1Element.style.color = commitElement.color;
+        this.selectedCommit1Element.style.dot.color = commitElement.color;
       }
 
       this.selectedCommit1Element = commitElement;
 
+      commitElement.prevColor = commitElement.style.color;
       commitElement.style.message.color = this.selectedCommitColor;
       commitElement.style.color = this.selectedCommitColor;
       commitElement.style.dot.color = this.selectedCommitColor;
@@ -80,23 +63,26 @@ export class CompareBranchesComponent implements OnInit {
     } else if (this.selectedCommit1 === selectedCommit) {
       this.selectedCommit1 = null;
 
-      commitElement.style.message.color = this.deselectedCommitColor;
-      commitElement.style.color = this.deselectedCommitColor;
-      commitElement.style.dot.color = this.deselectedCommitColor;
+      commitElement.prevColor = commitElement.style.color;
+      commitElement.style.message.color = commitElement.color;
+      commitElement.style.color = commitElement.color;
+      commitElement.style.dot.color = commitElement.color;
 
     } else if (this.selectedCommit2 === selectedCommit) {
       this.selectedCommit2 = null;
 
-      commitElement.style.message.color = this.deselectedCommitColor;
-      commitElement.style.color = this.deselectedCommitColor;
-      commitElement.style.dot.color = this.deselectedCommitColor;
+      commitElement.prevColor = commitElement.style.color;
+      commitElement.style.message.color = commitElement.color;
+      commitElement.style.color = commitElement.color;
+      commitElement.style.dot.color = commitElement.color;
     } else {
       this.selectedCommit2 = selectedCommit;
 
       if (this.selectedCommit2Element !== undefined) {
-        this.selectedCommit2Element.style.message.color = this.deselectedCommitColor;
-        this.selectedCommit2Element.style.color = this.deselectedCommitColor;
-        this.selectedCommit2Element.style.dot.color = this.deselectedCommitColor;
+        commitElement.prevColor = commitElement.style.color;
+        this.selectedCommit2Element.style.message.color = commitElement.color;
+        this.selectedCommit2Element.style.color = commitElement.color;
+        this.selectedCommit2Element.style.dot.color = commitElement.color;
       }
 
       this.selectedCommit2Element = commitElement;
@@ -104,115 +90,65 @@ export class CompareBranchesComponent implements OnInit {
       commitElement.style.message.color = this.selectedCommitColor;
       commitElement.style.color = this.selectedCommitColor;
       commitElement.style.dot.color = this.selectedCommitColor;
+
     }
     // @ts-ignore
-    this.gitgraph._onGraphUpdate();
+    this.gitGraph._onGraphUpdate();
   }
 
-/*
-  // @HostListener('window:scroll', ['$event'])
-  handleScroll() {
-    if (window.pageYOffset > (this.windowHeight + window.screenY - 700)) {
-      for (let i = this.loadIndex; i < this.loadIndex + 15 && i < this.commits.length; i++) {
-        const value = this.commits[i];
-        this.gitgraph.commit({
-          hash: value.name,
-          subject: new Date(value.timestamp).toDateString() + ' ' + value.comment.substr(0, 40),
-          author: value.author,
-          onClick: commit => {
-            this.handleClickEvent(commit);
-          },
-          onMessageClick: commit => {
-            this.handleClickEvent(commit);
-          }
-        });
-      }
-      this.loadIndex += 15;
-      this.windowHeight = window.pageYOffset + window.screen.height * 1.5;
-    }
-  }
-*/
-
-/*  showCommitsInRange() {
-
+  showCommitsInRange() {
+    this.selectedCommit1 = null;
+    this.selectedCommit2 = null;
     let endDate: Date;
-    if (this.endDate === null) {
-      endDate = new Date(this.commits[0].timestamp);
+    if (this.endDate === null || this.endDate.length === 0) {
+      endDate = new Date(this.commitLog[0].author.timestamp);
     } else {
       endDate = new Date(this.endDate);
     }
-
     let startDate: Date;
-    if (this.startDate === null) {
-      startDate = new Date(this.commits[this.commits.length - 1].timestamp);
+    if (this.startDate === null || this.startDate.length === 0) {
+      startDate = new Date(this.commitLog[this.commitLog.length - 1].author.timestamp);
     } else {
       startDate = new Date(this.startDate);
     }
-
-    const filteredCommits: Commit[] = this.commits.filter(value =>
-      value.timestamp >= startDate.getTime() && value.timestamp <= endDate.getTime());
-
-    this.gitgraph.clear();
-
+    const filtered = JSON.parse(JSON.stringify(this.commitLog.filter(value =>
+      value.author.timestamp >= startDate.getTime() && value.author.timestamp <= (endDate.getTime() + 24 * 60 * 60 * 1000))));
+    filtered.forEach(value => value.parents.forEach(parent => {
+      if (filtered.find(value1 => value1.hash.localeCompare(parent) === 0) === undefined) {
+        value.parents = value.parents.filter(value1 => value1.localeCompare(parent));
+      }
+    }));
+    this.gitGraph.clear();
+    filtered.forEach(commit => {
+      commit.onClick = (val) => this.handleClickEvent(val);
+      commit.onMessageClick = (val) => this.handleClickEvent(val);
+    });
+    this.gitGraph.import(filtered);
+    // @ts-ignore
+    this.gitGraph._graph.commits.forEach(val => console.log(val));
+/*
     filteredCommits.forEach(value => {
       this.gitgraph.commit({
-        hash: value.name,
+        hash: value.hash,
         subject: new Date(value.timestamp).toDateString(),
         author: value.author,
         onClick: commit => {
           this.handleClickEvent(commit);
         },
-        onMessageClick: commit => {
-          this.handleClickEvent(commit);
-        }
+        onMessageClick: commit =>
       });
-    });
-    this.loadIndex = this.commits.length;
-  }*/
-
-/*  startCityView() {
-    this.store.dispatch(setMetricMapping({
-      colorMetricName: 'checkstyle:com.puppycrawl.tools.checkstyle.checks.metrics.CyclomaticComplexityCheck',
-      groundAreaMetricName: 'coderadar:size:sloc:java',
-      heightMetricName: 'coderadar:size:sloc:java',
-    }));
-    if (this.selectedCommit1.timestamp > this.selectedCommit2.timestamp) {
-      const temp = this.selectedCommit1;
-      this.selectedCommit1 = this.selectedCommit2;
-      this.selectedCommit2 = temp;
-    }
-    this.store.dispatch(setCommits(this.commits));
-    this.store.dispatch(changeCommit(CommitType.LEFT, this.selectedCommit1));
-    this.store.dispatch(changeCommit(CommitType.RIGHT, this.selectedCommit2));
-    this.store.dispatch(changeActiveFilter({
-      added: true,
-      deleted: true,
-      modified: true,
-      renamed: true,
-      unmodified: false
-    }));
-
-    this.cityEffects.isLoaded = true;
-    this.router.navigate(['/city/' + this.project.id]);
-  }*/
-
-  private getCommitTree() {
-    this.projectService.getCommitLog(this.project.id).then(value => {
-      this.commits = value.body;
-      this.initTree();
-    }).catch(error => {
-      if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh(() => this.getCommitTree());
-      }
-    });
+    });*/
   }
 
   private initTree() {
-    if (this.commits.length === 0) {
+    if (this.commitLog.length === 0) {
       return;
     }
-    this.gitgraph = createGitgraph(this.graph.nativeElement);
-    this.gitgraph.import(this.commits);
+    this.commitLog.forEach(value => value.author.name = '');
+    this.gitGraph = createGitgraph(this.graph.nativeElement, {template: templateExtend(TemplateName.Metro,
+        {
+          colors: ['#979797', '#008fb5', '#f1c109', '#bf5249', '#b87bbf', '#86bf56', '#7ab8be']
+        })});
   }
 }
 

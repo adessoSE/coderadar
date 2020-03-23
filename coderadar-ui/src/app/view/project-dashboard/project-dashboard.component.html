@@ -1,13 +1,16 @@
-<app-header [title]="[{location: '/dashboard', name: 'Dashboard'}, {location: '/project/' + project.id, name: appComponent.trimProjectName(project.name)}]"></app-header>
+<app-header [title]="[{location: '/dashboard', name: 'Dashboard'},
+{location: '/project/' + project.id, name: appComponent.trimProjectName(project.name)}]"></app-header>
 <main>
   <mat-tab-group mat-align-tabs="center">
-    <mat-tab label="All commits">
-      <app-commit-list (branchOutput)="handleBranchChange($event)" [commits]="commits" [branches]="branches" [project]="project" [commitsAnalyzed]="commitsAnalyzed">
+    <mat-tab label="List view">
+      <app-commit-list (branchOutput)="handleBranchChange($event)"
+                       [commits]="commits" [branches]="branches" [project]="project" [commitsAnalyzed]="commitsAnalyzed">
       </app-commit-list>
     </mat-tab>
     <mat-tab label="Graph view">
       <ng-template matTabContent>
-        <app-compare-branches [branches]="branches" [project]="project"></app-compare-branches>
+        <app-compare-branches [startDate]="getDefaultStartDate()"
+                              [commitLog]="commitLog" [branches]="branches" [project]="project"></app-compare-branches>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

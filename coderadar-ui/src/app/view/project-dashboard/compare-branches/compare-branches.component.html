@@ -1,13 +1,10 @@
-<span *ngIf="commits.length > 0">
-  <div  style="align-content: center; margin-left: 27%">
-    <mat-form-field style="margin-left: 0; width: 40%; margin-top: 10px">
-      <input matInput type="text" placeholder="Search for commits or branches">
+<span>
+  <div style="align-content: center; margin-left: 40%; margin-top: 10px">
+    <mat-form-field>
+      <input type="date" [(ngModel)]="startDate" max="{{endDate}}" (ngModelChange)="showCommitsInRange()" matInput placeholder="Start date">
     </mat-form-field>
     <mat-form-field>
-      <input type="date" [(ngModel)]="startDate"  matInput placeholder="Start date">
-    </mat-form-field>
-    <mat-form-field>
-      <input type="date" [(ngModel)]="endDate" matInput placeholder="End date">
+      <input type="date" [(ngModel)]="endDate" min="{{startDate}}" (ngModelChange)="showCommitsInRange()" matInput placeholder="End date">
     </mat-form-field>
   </div>
 </span>
@@ -18,6 +15,6 @@
     <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">library_books</mat-icon>
   </div>
 </a>-->
-<div *ngIf="commits.length == 0" >
+<div *ngIf="commitLog.length == 0" >
   <p class="no-commits-message">No commits</p>
 </div>
