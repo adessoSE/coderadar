@@ -56,7 +56,10 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
         CommitLog commitLog =
             new CommitLog()
                 .setHash(commit.name())
-                .setSubject(commit.getShortMessage())
+                .setSubject(
+                    commit
+                        .getShortMessage()
+                        .substring(0, Math.min(100, commit.getShortMessage().length())))
                 .setAuthor(author)
                 .setParents(parents);
 
