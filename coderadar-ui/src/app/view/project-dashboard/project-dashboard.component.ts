@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
@@ -44,8 +44,8 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.projectId = params.id;
-      this.getCommits(true);
       this.getCommitTree();
+      this.getCommits(true);
       if (this.commits.length === 0) {
         this.waiting = true;
       }

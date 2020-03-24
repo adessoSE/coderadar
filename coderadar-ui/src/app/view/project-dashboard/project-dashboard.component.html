@@ -1,5 +1,8 @@
 <app-header [title]="[{location: '/dashboard', name: 'Dashboard'},
 {location: '/project/' + project.id, name: appComponent.trimProjectName(project.name)}]"></app-header>
+<div *ngIf="waiting">
+  <mat-spinner [diameter]="100"  class="waitingIndicator"></mat-spinner>
+</div>
 <main>
   <mat-tab-group mat-align-tabs="center">
     <mat-tab label="List view">

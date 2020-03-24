@@ -12,6 +12,7 @@ import {changeActiveFilter, setMetricMapping} from '../../../city-map/control-pa
 import {changeCommit, setCommits} from '../../../city-map/control-panel/control-panel.actions';
 import {CommitType} from '../../../city-map/enum/CommitType';
 import {loadAvailableMetrics} from '../../../city-map/visualization/visualization.actions';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-compare-branches',
@@ -115,8 +116,8 @@ export class BranchViewComponent implements OnInit, OnChanges {
     } else {
       startDate = new Date(this.startDate);
     }
-    const filtered = JSON.parse(JSON.stringify(this.commitLog.filter(value =>
-      value.author.timestamp >= startDate.getTime() && value.author.timestamp <= (endDate.getTime() + 24 * 60 * 60 * 1000))));
+    const filtered: any = _.cloneDeep(this.commitLog.filter(value =>
+      value.author.timestamp >= startDate.getTime() && value.author.timestamp <= (endDate.getTime() + 24 * 60 * 60 * 1000)));
     filtered.forEach(value => value.author.name = '');
     filtered.forEach(value => value.parents.forEach(parent => {
       if (filtered.find(value1 => value1.hash.localeCompare(parent) === 0) === undefined) {
