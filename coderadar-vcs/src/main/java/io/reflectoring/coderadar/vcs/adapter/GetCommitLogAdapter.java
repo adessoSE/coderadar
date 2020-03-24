@@ -35,7 +35,10 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
         String commitName = ref.getObjectId().name();
         List<String> refNames = commitToRefMap.computeIfAbsent(commitName, k -> new ArrayList<>());
         String[] split = ref.getName().split("/");
-        refNames.add(split[split.length - 1]);
+        String refName = split[split.length - 1];
+        if (!refNames.contains(refName)) {
+          refNames.add(split[split.length - 1]);
+        }
       }
       for (RevCommit commit : commits) {
 
@@ -46,7 +49,7 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
         }
 
         // author
-        PersonIdent authorIdent = commit.getAuthorIdent();
+        PersonIdent authorIdent = commit.getCommitterIdent();
         CommitLogAuthor author =
             new CommitLogAuthor()
                 .setName(authorIdent.getName())

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 public class RevCommitHelper {
@@ -15,6 +16,8 @@ public class RevCommitHelper {
       List<RevCommit> revCommits = new ArrayList<>();
       git.log().all().call().forEach(revCommits::add);
       return revCommits;
+    } catch (NoHeadException e) {
+      return new ArrayList<>();
     } catch (Exception e) {
       throw new IllegalStateException(
           String.format("Error accessing git repository at %s", repositoryRoot), e);

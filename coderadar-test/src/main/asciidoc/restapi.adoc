@@ -566,6 +566,16 @@ include::{snippets}/commit/list/http-request.adoc[]
 
 include::{snippets}/commit/list/http-response.adoc[]
 
+==== Listing a Project's Commits as a Git log
+
+===== Example Request
+
+include::{snippets}/commit/log/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/commit/log/http-response.adoc[]
+
 === Commit Metric Values
 
 You can access the metric values aggregated for each commit using this operation. You have to specify a query object
