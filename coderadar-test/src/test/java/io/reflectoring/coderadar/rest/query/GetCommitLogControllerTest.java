@@ -55,15 +55,15 @@ public class GetCommitLogControllerTest extends ControllerTestTemplate {
                                 "Array of the commits in this project in a git log similar format."),
                         fieldWithPath("[].refs")
                             .description("Array of strings with the refs pointing to the commit"),
-                        fieldWithPath("[].parents")
+                            fieldWithPath("[].hash").description("The hash of the commit."),
+                            fieldWithPath("[].parents")
                             .description("Array of strings with the parents of the commit"),
-                        fieldWithPath("[].hash").description("The hash of the commit."),
+                            fieldWithPath("[].author")
+                                    .description("Object containing author information about the commit."),
                         fieldWithPath("[].author.name").description("The name of the author"),
                         fieldWithPath("[].author.email").description("The email of the author"),
                         fieldWithPath("[].author.timestamp")
                             .description("The timestamp of the commit"),
-                        fieldWithPath("[].author")
-                            .description("Object containing author information about the commit."),
                         fieldWithPath("[].subject")
                             .description(
                                 "The comment of this commit truncated to the first 100 characters."),
