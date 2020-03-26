@@ -8,7 +8,7 @@ import lombok.Data;
 public class CommitLog {
   private List<String> refs = Collections.emptyList();
   private String hash;
-  private String[] parents = new String[0];
+  private String[] parents;
   private CommitLogAuthor author;
   private String subject;
   private boolean analyzed;

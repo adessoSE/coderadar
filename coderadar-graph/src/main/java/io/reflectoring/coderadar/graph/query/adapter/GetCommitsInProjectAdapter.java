@@ -29,11 +29,6 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   }
 
   @Override
-  public List<Commit> getAllCommitsWithNoRelationships(long projectId) {
-    return commitBaseDataMapper.mapNodeEntities(commitRepository.findByProjectId(projectId));
-  }
-
-  @Override
   public List<Commit> getNonAnalyzedSortedByTimestampAscWithNoParents(
       long projectId, List<FilePattern> filePatterns, String branch) {
     // Map Ant-Patterns to RegEx

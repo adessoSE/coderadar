@@ -56,6 +56,8 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
       Object[] parents = (Object[]) commitWithParents.get("parents");
       if (parents.length > 0) {
         commitLog.setParents((String[]) parents);
+      } else {
+        commitLog.setParents(new String[0]);
       }
 
       List<String> refsOnCommit = commitToRefMap.get(commit.getName());

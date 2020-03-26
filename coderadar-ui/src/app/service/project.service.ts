@@ -210,7 +210,7 @@ export class ProjectService {
 
   /**
    * Gets the commit log
-   * Sends a GET request to /projects/{id}/commitTree
+   * Sends a GET request to /projects/{id}/commitLog
    * @param id The project id.
    */
   public getCommitLog(id: number): Promise<HttpResponse<CommitLog[]>> {

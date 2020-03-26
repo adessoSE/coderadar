@@ -59,7 +59,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @param projectId The project id.
    * @return A list of commits in the project.
    */
-  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} RETURN c ORDER BY c.timestamp DESC")
+  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} RETURN c")
   @NonNull
   List<CommitEntity> findByProjectId(long projectId);
 
