@@ -568,6 +568,10 @@ include::{snippets}/commit/list/http-response.adoc[]
 
 ==== Listing a Project's Commits as a Git log
 
+===== Response Structure
+
+include::{snippets}/commit/log/response-fields.adoc[]
+
 ===== Example Request
 
 include::{snippets}/commit/log/http-request.adoc[]

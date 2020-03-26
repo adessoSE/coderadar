@@ -10,9 +10,16 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
 
   /**
    * @param projectId The project id.
-   * @return A list of the branches in the project (with initialized [:POINTS_TO] relationships).
+   * @return A list of the branches in the project sorted by name.
    */
   @Query("MATCH (p)-[:HAS_BRANCH]->(b) WHERE ID(p) = {0} RETURN b ORDER BY b.name")
+  List<BranchEntity> getBranchesInProjectSortedByName(long projectId);
+
+  /**
+   * @param projectId The project id.
+   * @return A list of the branches in the project.
+   */
+  @Query("MATCH (p)-[:HAS_BRANCH]->(b) WHERE ID(p) = {0} RETURN b")
   List<BranchEntity> getBranchesInProject(long projectId);
 
   /**

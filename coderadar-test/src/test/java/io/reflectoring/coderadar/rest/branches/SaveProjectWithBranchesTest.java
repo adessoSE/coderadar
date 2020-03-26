@@ -35,7 +35,7 @@ public class SaveProjectWithBranchesTest extends ControllerTestTemplate {
             result -> {
               Long id =
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
-              List<BranchEntity> branches = branchRepository.getBranchesInProject(id);
+              List<BranchEntity> branches = branchRepository.getBranchesInProjectSortedByName(id);
               Assertions.assertEquals(3L, branches.size());
               Assertions.assertEquals("master", branches.get(0).getName());
               Assertions.assertEquals("testBranch1", branches.get(1).getName());

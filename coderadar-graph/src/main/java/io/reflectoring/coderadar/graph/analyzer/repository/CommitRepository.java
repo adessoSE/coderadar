@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.graph.analyzer.repository;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -58,9 +59,23 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @param projectId The project id.
    * @return A list of commits in the project.
    */
-  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} RETURN c")
+  @Query("MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} RETURN c ORDER BY c.timestamp DESC")
   @NonNull
   List<CommitEntity> findByProjectId(long projectId);
+
+  /**
+   * Returns all commits in a project with hashes of their parents.
+   *
+   * @param projectId The project id.
+   * @return A list of commits in the project.
+   */
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} WITH c "
+          + "OPTIONAL MATCH (c)-[:IS_CHILD_OF]->(c1) "
+          + "RETURN c as commit, collect(c1.name) as parents "
+          + "ORDER BY c.timestamp DESC")
+  @NonNull
+  List<LinkedHashMap<String, Object>> findByProjectIdWithParents(long projectId);
 
   /**
    * Sets all of the commits with the given id to analyzed.

@@ -12,6 +12,7 @@ import io.reflectoring.coderadar.query.domain.CommitLog;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import java.net.URL;
+import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +40,7 @@ public class GetCommitLogControllerTest extends ControllerTestTemplate {
   }
 
   @Test
-  void returnsAllCommitsInProject() throws Exception {
+  void returnsCommitLog() throws Exception {
     MvcResult result =
         mvc()
             .perform(
@@ -75,7 +76,24 @@ public class GetCommitLogControllerTest extends ControllerTestTemplate {
             new TypeReference<List<CommitLog>>() {}, result.getResponse().getContentAsString());
 
     Assertions.assertEquals(15, commits.size());
-    Assertions.assertEquals("add Finding.java", commits.get(commits.size() - 1).getSubject());
-    Assertions.assertEquals("modify testModule1/NewRandomFile.java", commits.get(0).getSubject());
+    CommitLog last = commits.get(0);
+    Assertions.assertEquals("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", last.getHash());
+    Assertions.assertEquals("modify testModule1/NewRandomFile.java", last.getSubject());
+    Assertions.assertEquals(Collections.singletonList("master"), last.getRefs());
+    Assertions.assertArrayEquals(
+        new String[] {"d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df"}, last.getParents());
+    Assertions.assertEquals("Kilian.Krause@adesso.de", last.getAuthor().getEmail());
+    Assertions.assertEquals("Krause", last.getAuthor().getName());
+    Assertions.assertEquals(1584013941000L, last.getAuthor().getTimestamp());
+
+    CommitLog secondToLast = commits.get(1);
+    Assertions.assertEquals("fcd9a0e7c34086fdb0aedc82497f8ddfa142e961", secondToLast.getHash());
+    Assertions.assertEquals("added TestFile.java", secondToLast.getSubject());
+    Assertions.assertEquals(Collections.singletonList("testBranch2"), secondToLast.getRefs());
+    Assertions.assertArrayEquals(
+        new String[] {"d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df"}, secondToLast.getParents());
+    Assertions.assertEquals("Maksim.Atanasov@adesso.de", secondToLast.getAuthor().getEmail());
+    Assertions.assertEquals("Atanasov", secondToLast.getAuthor().getName());
+    Assertions.assertEquals(1582619029000L, secondToLast.getAuthor().getTimestamp());
   }
 }
