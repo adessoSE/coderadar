@@ -11,9 +11,10 @@ import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driven.GetMetricTreeForCommitPort;
 import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
-
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,7 +35,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
 
   MetricTree get(
       ProjectEntity project, String commitHash, List<String> metrics, boolean includeFileHashes) {
-    Iterable<HashMap<String, Object>> result;
+    List<Map<String, Object>> result;
     if (includeFileHashes) {
       result =
           metricQueryRepository.getMetricTreeForCommitWithFileHashes(
@@ -44,7 +45,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
     }
     List<ModuleEntity> moduleEntities = // project already has the modules??
         moduleRepository.findModulesInProjectSortedDesc(project.getId());
-    List<MetricTree> moduleChildren = processModules(moduleEntities, (List<HashMap<String, Object>>) result);
+    List<MetricTree> moduleChildren = processModules(moduleEntities, result);
     MetricTree rootModule = processRootModule(result);
     rootModule.getChildren().addAll(findChildModules(project.getModules(), moduleChildren));
     rootModule.setMetrics(aggregateChildMetrics(rootModule.getChildren()));
@@ -68,7 +69,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
    * @return A list of metric trees with aggregated metrics for each module.
    */
   private List<MetricTree> processModules(
-          List<ModuleEntity> moduleEntities, List<HashMap<String, Object>> metricValues) {
+      List<ModuleEntity> moduleEntities, List<Map<String, Object>> metricValues) {
     List<MetricTree> moduleChildren = new ArrayList<>();
     for (ModuleEntity moduleEntity : moduleEntities) {
       MetricTree metricTree = new MetricTree();
@@ -76,8 +77,8 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
       metricTree.setName(moduleEntity.getPath());
 
       Map<String, Long> aggregatedMetrics = new LinkedHashMap<>();
-      List<HashMap<String, Object>> processedFiles = new ArrayList<>();
-      for (HashMap<String, Object> commitTreeQueryResult : metricValues) {
+      List<Map<String, Object>> processedFiles = new ArrayList<>();
+      for (Map<String, Object> commitTreeQueryResult : metricValues) {
         String path = (String) commitTreeQueryResult.get("path");
         String[] metrics = (String[]) commitTreeQueryResult.get("metrics");
         if (path.startsWith(moduleEntity.getPath())) {
@@ -114,12 +115,12 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
    * @param metricValues The metric values that belong to the root module.
    * @return A MetricTree for the root module.
    */
-  private MetricTree processRootModule(Iterable<HashMap<String, Object>> metricValues) {
+  private MetricTree processRootModule(Iterable<Map<String, Object>> metricValues) {
     MetricTree rootModule = new MetricTree();
     rootModule.setType(MetricTreeNodeType.MODULE);
     rootModule.setName("root");
 
-    for (HashMap<String, Object> value : metricValues) {
+    for (Map<String, Object> value : metricValues) {
       String path = (String) value.get("path");
       String[] metrics = (String[]) value.get("metrics");
 
