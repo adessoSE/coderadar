@@ -115,7 +115,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
    * @param metricValues The metric values that belong to the root module.
    * @return A MetricTree for the root module.
    */
-  private MetricTree processRootModule(Iterable<Map<String, Object>> metricValues) {
+  private MetricTree processRootModule(List<Map<String, Object>> metricValues) {
     MetricTree rootModule = new MetricTree();
     rootModule.setType(MetricTreeNodeType.MODULE);
     rootModule.setName("root");

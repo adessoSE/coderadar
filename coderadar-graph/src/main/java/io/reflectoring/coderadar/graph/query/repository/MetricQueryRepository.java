@@ -11,6 +11,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity, Long> {
 
+  /**
+   * NOTE: uses APOC.
+   *
+   * @param projectId The project id.
+   * @param commitHash The hash of the commit.
+   * @param metricNames The names of the metrics needed.
+   * @return All metric values aggregated for the entire file tree in a single commit.
+   */
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp DESC WITH collect(c) as commits "
