@@ -59,12 +59,12 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
       commit.setTouchedFiles(new ArrayList<>(files.length));
       for (var val : files) {
         var filePathAndId = (Map) val;
-        FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
         var fileId = (Long) filePathAndId.get("id");
         var filepath = (String) filePathAndId.get("path");
         if (fileId == null || filepath == null) {
           continue;
         }
+        FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
         File file = walkedFiles.get(fileId);
         if (file == null) {
           file = new File();
