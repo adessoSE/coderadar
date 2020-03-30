@@ -157,7 +157,7 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
 
     GetFrequentlyChangedFilesCommand command1 =
         new GetFrequentlyChangedFilesCommand(
-            "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", new Date(1582588800L), 2);
+            "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", new Date(1582588800000L) /*2020-02-25*/, 1);
 
     MvcResult mvcResult =
         mvc()
@@ -174,14 +174,13 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
             new TypeReference<List<FileAndCommitsForTimePeriod>>() {},
             mvcResult.getResponse().getContentAsString());
 
-    FileAndCommitsForTimePeriod first = result.get(0);
-    FileAndCommitsForTimePeriod second = result.get(1);
+    FileAndCommitsForTimePeriod resultItem = result.get(0);
 
-    Assertions.assertThat(result.size()).isEqualTo(2);
-    Assertions.assertThat(first.getPath()).isEqualTo("GetMetricsForCommitCommand.java");
-    Assertions.assertThat(first.getCommits().size()).isEqualTo(2);
-    Assertions.assertThat(second.getPath()).isEqualTo("testModule1/NewRandomFile.java");
-    Assertions.assertThat(second.getCommits().size()).isEqualTo(2);
+    Assertions.assertThat(result.size()).isEqualTo(1);
+    Assertions.assertThat(resultItem.getPath()).isEqualTo("testModule1/NewRandomFile.java");
+    Assertions.assertThat(resultItem.getCommits().size()).isEqualTo(1);
+    Assertions.assertThat(resultItem.getCommits().get(0).getComment())
+        .isEqualTo("modify testModule1/NewRandomFile.java");
   }
 
   private ResultHandler documentGetFilesWithManyContributors() {
