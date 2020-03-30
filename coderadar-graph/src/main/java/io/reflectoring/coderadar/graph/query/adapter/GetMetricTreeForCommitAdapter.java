@@ -4,7 +4,6 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
-import io.reflectoring.coderadar.graph.query.domain.MetricValueForCommitTreeQueryResult;
 import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.query.domain.MetricTree;
@@ -36,7 +35,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
 
   MetricTree get(
       ProjectEntity project, String commitHash, List<String> metrics, boolean includeFileHashes) {
-    List<MetricValueForCommitTreeQueryResult> result;
+    List<Map<String, Object>> result;
     if (includeFileHashes) {
       result =
           metricQueryRepository.getMetricTreeForCommitWithFileHashes(
@@ -70,7 +69,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
    * @return A list of metric trees with aggregated metrics for each module.
    */
   private List<MetricTree> processModules(
-      List<ModuleEntity> moduleEntities, List<MetricValueForCommitTreeQueryResult> metricValues) {
+      List<ModuleEntity> moduleEntities, List<Map<String, Object>> metricValues) {
     List<MetricTree> moduleChildren = new ArrayList<>();
     for (ModuleEntity moduleEntity : moduleEntities) {
       MetricTree metricTree = new MetricTree();
@@ -78,13 +77,15 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
       metricTree.setName(moduleEntity.getPath());
 
       Map<String, Long> aggregatedMetrics = new LinkedHashMap<>();
-      List<MetricValueForCommitTreeQueryResult> processedFiles = new ArrayList<>();
-      for (MetricValueForCommitTreeQueryResult commitTreeQueryResult : metricValues) {
-        if (commitTreeQueryResult.getPath().startsWith(moduleEntity.getPath())) {
+      List<Map<String, Object>> processedFiles = new ArrayList<>();
+      for (Map<String, Object> commitTreeQueryResult : metricValues) {
+        String path = (String) commitTreeQueryResult.get("path");
+        String[] metrics = (String[]) commitTreeQueryResult.get("metrics");
+        if (path.startsWith(moduleEntity.getPath())) {
           MetricTree metricTreeFile = new MetricTree();
-          metricTreeFile.setName(commitTreeQueryResult.getPath());
+          metricTreeFile.setName(path);
           metricTreeFile.setType(MetricTreeNodeType.FILE);
-          for (String metric : commitTreeQueryResult.getMetrics()) {
+          for (String metric : metrics) {
             String[] temp = metric.split("=");
             MetricValueForCommit metricValueForCommit =
                 new MetricValueForCommit(temp[0], Long.parseLong(temp[1]));
@@ -114,18 +115,21 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
    * @param metricValues The metric values that belong to the root module.
    * @return A MetricTree for the root module.
    */
-  private MetricTree processRootModule(List<MetricValueForCommitTreeQueryResult> metricValues) {
+  private MetricTree processRootModule(List<Map<String, Object>> metricValues) {
     MetricTree rootModule = new MetricTree();
     rootModule.setType(MetricTreeNodeType.MODULE);
     rootModule.setName("root");
 
-    for (MetricValueForCommitTreeQueryResult value : metricValues) {
+    for (Map<String, Object> value : metricValues) {
+      String path = (String) value.get("path");
+      String[] metrics = (String[]) value.get("metrics");
+
       MetricTree metricTreeFile = new MetricTree();
 
-      metricTreeFile.setName(value.getPath());
+      metricTreeFile.setName(path);
       metricTreeFile.setType(MetricTreeNodeType.FILE);
 
-      for (String metric : value.getMetrics()) {
+      for (String metric : metrics) {
         String[] temp = metric.split("=");
         MetricValueForCommit metricValueForCommit =
             new MetricValueForCommit(temp[0], Long.parseLong(temp[1]));

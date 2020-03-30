@@ -56,7 +56,8 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
         .perform(
             post("/projects/" + projectId + "/filePatterns")
                 .content(toJson(command2))
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON))
+        .andReturn();
 
     CreateAnalyzerConfigurationCommand command3 =
         new CreateAnalyzerConfigurationCommand(
@@ -65,12 +66,14 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
         .perform(
             post("/projects/" + projectId + "/analyzers")
                 .content(toJson(command3))
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON))
+        .andReturn();
 
     mvc()
         .perform(
             post("/projects/" + projectId + "/master/analyze")
-                .contentType(MediaType.APPLICATION_JSON));
+                .contentType(MediaType.APPLICATION_JSON))
+        .andReturn();
   }
 
   @Test
