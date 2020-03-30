@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -36,7 +35,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
           + "MATCH (f) WHERE ID(f) = x.fileId "
           + "MATCH (c) WHERE ID(c) = x.commitId "
           + "CREATE (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c)")
-  void createFileAndCommitRelationships(@NonNull List<HashMap<String, Object>> commitAndFileRels);
+  void createFileAndCommitRelationships(List<HashMap<String, Object>> commitAndFileRels);
 
   /**
    * Uses APOC.
@@ -56,6 +55,5 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
           + "MATCH (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c) WHERE "
           + "NOT(f IN deletes OR f IN renames) AND m.value <> 0 WITH ID(f) as id, m.name as name, head(collect(m)) as metric "
           + "RETURN  id, collect(metric) as metrics")
-  List<FileIdAndMetricQueryResult> getLastMetricsForFiles(
-      long projectId, @NonNull String branchName);
+  List<FileIdAndMetricQueryResult> getLastMetricsForFiles(long projectId, String branchName);
 }
