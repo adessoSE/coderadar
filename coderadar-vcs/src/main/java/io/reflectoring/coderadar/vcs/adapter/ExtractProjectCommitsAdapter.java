@@ -217,9 +217,17 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     } else {
       if ((diff.getChangeType().equals(DiffEntry.ChangeType.ADD))) {
         filesToSave = new ArrayList<>(1);
-        filesToSave.add(file);
-        existingFilesWithPath.add(file);
-        files.put(file.getPath(), existingFilesWithPath);
+        Optional<File> existingWithSameHash =
+            existingFilesWithPath.stream()
+                .filter(file1 -> file1.getObjectHash().equals(file.getObjectHash()))
+                .findFirst();
+        if (existingWithSameHash.isPresent()) {
+          filesToSave.add(existingWithSameHash.get());
+        } else {
+          filesToSave.add(file);
+          existingFilesWithPath.add(file);
+          files.put(file.getPath(), existingFilesWithPath);
+        }
       } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.DELETE))) {
         filesToSave = new ArrayList<>(existingFilesWithPath);
       } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {

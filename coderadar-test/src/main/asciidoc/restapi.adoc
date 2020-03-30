@@ -736,16 +736,31 @@ include::{snippets}/contributors/update/http-response.adoc[]
 
 === Get Critical Files of a Project
 
-==== Request Structure
+==== Files With Many Contributors
 
-include::{snippets}/metrics/criticalFiles/request-fields.adoc[]
+===== Request Structure
 
-==== Example Request
+include::{snippets}/metrics/criticalFiles/numberOfContributors/request-fields.adoc[]
 
-include::{snippets}/metrics/criticalFiles/http-request.adoc[]
+===== Example Request
 
-==== Example Response
+include::{snippets}/metrics/criticalFiles/numberOfContributors/http-request.adoc[]
 
-include::{snippets}/metrics/criticalFiles/http-response.adoc[]
+===== Example Response
+
+include::{snippets}/metrics/criticalFiles/numberOfContributors/http-response.adoc[]
 
 
+==== Frequently Changed Files
+
+===== Request Structure
+
+include::{snippets}/metrics/criticalFiles/modificationFrequency/request-fields.adoc[]
+
+===== Example Request
+
+include::{snippets}/metrics/criticalFiles/modificationFrequency/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/metrics/criticalFiles/modificationFrequency/http-response.adoc[]

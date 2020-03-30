@@ -1,14 +1,16 @@
 package io.reflectoring.coderadar.query.service;
 
 import io.reflectoring.coderadar.analyzer.MisconfigurationException;
-import io.reflectoring.coderadar.contributor.port.driver.GetCriticalFilesCommand;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driven.filepattern.ListFilePatternsOfProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.query.domain.ContributorsForFile;
+import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
 import io.reflectoring.coderadar.query.port.driven.GetCriticalFilesPort;
 import io.reflectoring.coderadar.query.port.driver.GetCriticalFilesUseCase;
+import io.reflectoring.coderadar.query.port.driver.GetFilesWithManyContributorsCommand;
+import io.reflectoring.coderadar.query.port.driver.GetFrequentlyChangedFilesCommand;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +30,26 @@ public class GetCriticalFilesService implements GetCriticalFilesUseCase {
   }
 
   @Override
-  public List<ContributorsForFile> getCriticalFiles(
-      Long projectId, GetCriticalFilesCommand command) {
+  public List<ContributorsForFile> getFilesWithManyContributors(
+      long projectId, GetFilesWithManyContributorsCommand command) {
+    List<FilePattern> filePatterns = checkProjectExistsAndGetFilePatterns(projectId);
+    return getCriticalFilesPort.getFilesWithManyContributors(
+        projectId, command.getNumberOfContributors(), command.getCommitHash(), filePatterns);
+  }
+
+  @Override
+  public List<FileAndCommitsForTimePeriod> getFrequentlyChangedFiles(
+      long projectId, GetFrequentlyChangedFilesCommand command) {
+    List<FilePattern> filePatterns = checkProjectExistsAndGetFilePatterns(projectId);
+    return getCriticalFilesPort.getFrequentlyChangedFiles(
+        projectId,
+        command.getCommitHash(),
+        command.getStartDate(),
+        command.getFrequency(),
+        filePatterns);
+  }
+
+  private List<FilePattern> checkProjectExistsAndGetFilePatterns(long projectId) {
     if (!getProjectPort.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }
@@ -37,7 +57,6 @@ public class GetCriticalFilesService implements GetCriticalFilesUseCase {
     if (filePatterns.isEmpty()) {
       throw new MisconfigurationException("No file patterns defined for this project");
     }
-    return getCriticalFilesPort.getCriticalFiles(
-        projectId, command.getNumberOfContributors(), command.getCommitHash(), filePatterns);
+    return filePatterns;
   }
 }
