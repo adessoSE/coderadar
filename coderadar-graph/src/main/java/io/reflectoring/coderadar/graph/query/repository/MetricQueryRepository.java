@@ -1,9 +1,8 @@
 package io.reflectoring.coderadar.graph.query.repository;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
-import io.reflectoring.coderadar.graph.query.domain.MetricValueForCommitQueryResult;
-import io.reflectoring.coderadar.graph.query.domain.MetricValueForCommitTreeQueryResult;
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
@@ -30,9 +29,9 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
           + "UNWIND commits as c "
           + "MATCH (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c) WHERE "
           + "NOT(f IN deletes OR f IN renames) AND m.name in {2} WITH f.path as path, m.name as name, head(collect(m.value)) as value WHERE value <> 0 "
-          + "RETURN name, SUM(value) AS value ORDER BY name")
+          + "RETURN name, SUM(value) AS value ORDER BY name ")
   @NonNull
-  List<MetricValueForCommitQueryResult> getMetricValuesForCommit(
+  List<Map<String, Object>> getMetricValuesForCommit(
       long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);
 
   /**
@@ -58,7 +57,7 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
           + "NOT(f IN deletes OR f IN renames) AND m.name in {2} WITH f.path as path, m.name as name, head(collect(m.value)) as value ORDER BY path, name WHERE value <> 0 "
           + "RETURN path, collect(name + \"=\" + value) AS metrics ORDER BY path")
   @NonNull
-  List<MetricValueForCommitTreeQueryResult> getMetricTreeForCommit(
+  List<Map<String, Object>> getMetricTreeForCommit(
       long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);
 
   /**
@@ -96,6 +95,6 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
           + "head(collect(m.value)) as value ORDER BY path, name WHERE value <> 0 "
           + "RETURN path + \"=\" + head(collect(hash)) as path, collect(name + \"=\" + value) as metrics ORDER BY path")
   @NonNull
-  List<MetricValueForCommitTreeQueryResult> getMetricTreeForCommitWithFileHashes(
+  List<Map<String, Object>> getMetricTreeForCommitWithFileHashes(
       long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);
 }
