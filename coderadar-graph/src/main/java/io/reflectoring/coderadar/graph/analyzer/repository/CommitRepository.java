@@ -4,6 +4,7 @@ import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
@@ -30,11 +31,12 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    */
   @Query(
       "MATCH (p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE ID(p) = {0} AND b.name = {1} WITH c LIMIT 1 "
-          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp ASC WHERE NOT c.analyzed "
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c WHERE NOT c.analyzed "
           + "OPTIONAL MATCH (c)<-[r:CHANGED_IN]-(f) WHERE r.changeType <> \"DELETE\" AND any(x IN {2} WHERE f.path =~ x) "
-          + "AND none(x IN {3} WHERE f.path =~ x) RETURN c, r, f")
+          + "AND none(x IN {3} WHERE f.path =~ x) RETURN c as commit, collect({path: f.path, id: ID(f)}) as files "
+          + "ORDER BY c.timestamp ASC")
   @NonNull
-  List<CommitEntity> findByProjectIdNonAnalyzedWithFileRelationships(
+  List<Map<String, Object>> findByProjectIdNonAnalyzedWithFiles(
       long projectId,
       @NonNull String branchName,
       @NonNull List<String> includes,
