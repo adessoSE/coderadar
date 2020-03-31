@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetFilesWithManyContributorsCommand {
+public class GetFilesWithContributorsCommand {
   @NotBlank private String commitHash;
 
   @Min(1)

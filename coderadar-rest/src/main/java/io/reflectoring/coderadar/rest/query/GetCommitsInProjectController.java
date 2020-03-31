@@ -28,6 +28,11 @@ public class GetCommitsInProjectController {
   public ResponseEntity<List<GetCommitResponse>> listCommits(
       @PathVariable("projectId") long projectId, @PathVariable("branchName") String branchName) {
     List<Commit> commits = getCommitsInProjectUseCase.get(projectId, branchName);
+    List<GetCommitResponse> result = mapCommits(commits);
+    return new ResponseEntity<>(result, HttpStatus.OK);
+  }
+
+  private List<GetCommitResponse> mapCommits(List<Commit> commits) {
     List<GetCommitResponse> result = new ArrayList<>(commits.size());
     for (Commit commit : commits) {
       result.add(
@@ -39,6 +44,6 @@ public class GetCommitsInProjectController {
               .setComment(commit.getComment())
               .setTimestamp(commit.getTimestamp()));
     }
-    return new ResponseEntity<>(result, HttpStatus.OK);
+    return result;
   }
 }

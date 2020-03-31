@@ -6,7 +6,6 @@ import io.reflectoring.coderadar.graph.query.domain.ContributorsForFileQueryResu
 import io.reflectoring.coderadar.graph.query.domain.FileAndCommitsForTimePeriodQueryResult;
 import io.reflectoring.coderadar.graph.query.repository.ContributorQueryRepository;
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
-import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.query.domain.ContributorsForFile;
 import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
 import io.reflectoring.coderadar.query.port.driven.GetCriticalFilesPort;
@@ -29,11 +28,12 @@ public class GetCriticalFilesAdapter implements GetCriticalFilesPort {
   }
 
   @Override
-  public List<ContributorsForFile> getFilesWithManyContributors(
+  public List<ContributorsForFile> getFilesWithContributors(
       long projectId, int numberOfContributors, String commitHash, List<FilePattern> filePatterns) {
-    Pair<List<String>, List<String>> includesAndExcludes = mapPatternsToRegex(filePatterns);
+    Pair<List<String>, List<String>> includesAndExcludes =
+        PatternUtil.mapPatternsToRegex(filePatterns);
     return mapContributorsForFileResult(
-        contributorQueryRepository.getFilesWithManyContributors(
+        contributorQueryRepository.getFilesWithContributors(
             projectId,
             numberOfContributors,
             commitHash,
@@ -48,7 +48,8 @@ public class GetCriticalFilesAdapter implements GetCriticalFilesPort {
       Date startDate,
       int frequency,
       List<FilePattern> filePatterns) {
-    Pair<List<String>, List<String>> includesAndExcludes = mapPatternsToRegex(filePatterns);
+    Pair<List<String>, List<String>> includesAndExcludes =
+        PatternUtil.mapPatternsToRegex(filePatterns);
     return mapFileAndCommitsForTimePeriodResult(
         fileRepository.getFrequentlyChangedFiles(
             projectId,
@@ -57,19 +58,6 @@ public class GetCriticalFilesAdapter implements GetCriticalFilesPort {
             frequency,
             includesAndExcludes.getFirst(),
             includesAndExcludes.getSecond()));
-  }
-
-  private Pair<List<String>, List<String>> mapPatternsToRegex(List<FilePattern> filePatterns) {
-    List<String> includes = new ArrayList<>();
-    List<String> excludes = new ArrayList<>();
-    for (FilePattern filePattern : filePatterns) {
-      if (filePattern.getInclusionType().equals(InclusionType.INCLUDE)) {
-        includes.add(PatternUtil.toPattern(filePattern.getPattern()).toString());
-      } else {
-        excludes.add(PatternUtil.toPattern(filePattern.getPattern()).toString());
-      }
-    }
-    return Pair.of(includes, excludes);
   }
 
   private List<ContributorsForFile> mapContributorsForFileResult(

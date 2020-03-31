@@ -12,7 +12,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.c
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.query.domain.ContributorsForFile;
 import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
-import io.reflectoring.coderadar.query.port.driver.GetFilesWithManyContributorsCommand;
+import io.reflectoring.coderadar.query.port.driver.GetFilesWithContributorsCommand;
 import io.reflectoring.coderadar.query.port.driver.GetFrequentlyChangedFilesCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
@@ -54,8 +54,8 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
 
   @Test
   public void throwsExceptionWhenNoFilePatternsAreDefined() throws Exception {
-    GetFilesWithManyContributorsCommand command =
-        new GetFilesWithManyContributorsCommand("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", 1);
+    GetFilesWithContributorsCommand command =
+        new GetFilesWithContributorsCommand("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", 1);
     MvcResult result =
         mvc()
             .perform(
@@ -84,8 +84,8 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
         .andExpect(status().isCreated())
         .andReturn();
 
-    GetFilesWithManyContributorsCommand command1 =
-        new GetFilesWithManyContributorsCommand("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", 1);
+    GetFilesWithContributorsCommand command1 =
+        new GetFilesWithContributorsCommand("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", 1);
 
     MvcResult result =
         mvc()
@@ -118,8 +118,8 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
         .andExpect(status().isCreated())
         .andReturn();
 
-    GetFilesWithManyContributorsCommand command1 =
-        new GetFilesWithManyContributorsCommand("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", 2);
+    GetFilesWithContributorsCommand command1 =
+        new GetFilesWithContributorsCommand("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", 2);
 
     MvcResult result =
         mvc()
@@ -128,7 +128,7 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command1)))
             .andExpect(status().isOk())
-            .andDo(documentGetFilesWithManyContributors())
+            .andDo(documentGetFilesWithContributors())
             .andReturn();
 
     List<ContributorsForFile> response =
@@ -183,9 +183,9 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
         .isEqualTo("modify testModule1/NewRandomFile.java");
   }
 
-  private ResultHandler documentGetFilesWithManyContributors() {
-    ConstrainedFields<GetFilesWithManyContributorsCommand> fields =
-        fields(GetFilesWithManyContributorsCommand.class);
+  private ResultHandler documentGetFilesWithContributors() {
+    ConstrainedFields<GetFilesWithContributorsCommand> fields =
+        fields(GetFilesWithContributorsCommand.class);
 
     return document(
         "metrics/criticalFiles/numberOfContributors",

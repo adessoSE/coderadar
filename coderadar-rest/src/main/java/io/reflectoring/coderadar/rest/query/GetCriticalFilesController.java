@@ -1,10 +1,14 @@
 package io.reflectoring.coderadar.rest.query;
 
+import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.query.domain.ContributorsForFile;
 import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
 import io.reflectoring.coderadar.query.port.driver.GetCriticalFilesUseCase;
-import io.reflectoring.coderadar.query.port.driver.GetFilesWithManyContributorsCommand;
+import io.reflectoring.coderadar.query.port.driver.GetFilesWithContributorsCommand;
 import io.reflectoring.coderadar.query.port.driver.GetFrequentlyChangedFilesCommand;
+import io.reflectoring.coderadar.rest.domain.FileAndCommitsForTimePeriodResponse;
+import io.reflectoring.coderadar.rest.domain.GetCommitResponse;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,21 +26,52 @@ public class GetCriticalFilesController {
     this.getCriticalFilesUseCase = getCriticalFilesUseCase;
   }
 
-  @GetMapping(
+  @RequestMapping(
+      method = {RequestMethod.POST, RequestMethod.GET},
       path = "/projects/{projectId}/files/critical",
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<ContributorsForFile>> getFilesWithManyContributors(
+  public ResponseEntity<List<ContributorsForFile>> getFilesWithContributors(
       @PathVariable Long projectId,
-      @RequestBody @Validated GetFilesWithManyContributorsCommand command) {
+      @RequestBody @Validated GetFilesWithContributorsCommand command) {
     return new ResponseEntity<>(
-        getCriticalFilesUseCase.getFilesWithManyContributors(projectId, command), HttpStatus.OK);
+        getCriticalFilesUseCase.getFilesWithContributors(projectId, command), HttpStatus.OK);
   }
 
-  @GetMapping(path = "/projects/{projectId}/files/modification/frequency")
-  public ResponseEntity<List<FileAndCommitsForTimePeriod>> getFrequentlyChangedFiles(
+  @RequestMapping(
+      method = {RequestMethod.POST, RequestMethod.GET},
+      path = "/projects/{projectId}/files/modification/frequency")
+  public ResponseEntity<List<FileAndCommitsForTimePeriodResponse>> getFrequentlyChangedFiles(
       @PathVariable long projectId,
       @RequestBody @Validated GetFrequentlyChangedFilesCommand command) {
     return new ResponseEntity<>(
-        getCriticalFilesUseCase.getFrequentlyChangedFiles(projectId, command), HttpStatus.OK);
+        mapResponse(getCriticalFilesUseCase.getFrequentlyChangedFiles(projectId, command)),
+        HttpStatus.OK);
+  }
+
+  private List<FileAndCommitsForTimePeriodResponse> mapResponse(
+      List<FileAndCommitsForTimePeriod> files) {
+    List<FileAndCommitsForTimePeriodResponse> result = new ArrayList<>(files.size());
+    for (FileAndCommitsForTimePeriod f : files) {
+      FileAndCommitsForTimePeriodResponse resultItem = new FileAndCommitsForTimePeriodResponse();
+      resultItem.setPath(f.getPath());
+      resultItem.setCommits(mapCommits(f.getCommits()));
+      result.add(resultItem);
+    }
+    return result;
+  }
+
+  private List<GetCommitResponse> mapCommits(List<Commit> commits) {
+    List<GetCommitResponse> result = new ArrayList<>(commits.size());
+    for (Commit commit : commits) {
+      result.add(
+          new GetCommitResponse()
+              .setName(commit.getName())
+              .setAnalyzed(commit.isAnalyzed())
+              .setAuthor(commit.getAuthor())
+              .setAuthorEmail(commit.getAuthorEmail())
+              .setComment(commit.getComment())
+              .setTimestamp(commit.getTimestamp()));
+    }
+    return result;
   }
 }
