@@ -10,9 +10,16 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
 
   /**
    * @param projectId The project id.
-   * @return A list of the branches in the project (with initialized [:POINTS_TO] relationships).
+   * @return A list of the branches in the project sorted by name.
    */
   @Query("MATCH (p)-[:HAS_BRANCH]->(b) WHERE ID(p) = {0} RETURN b ORDER BY b.name")
+  List<BranchEntity> getBranchesInProjectSortedByName(long projectId);
+
+  /**
+   * @param projectId The project id.
+   * @return A list of the branches in the project.
+   */
+  @Query("MATCH (p)-[:HAS_BRANCH]->(b) WHERE ID(p) = {0} RETURN b")
   List<BranchEntity> getBranchesInProject(long projectId);
 
   /**
@@ -24,7 +31,7 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
    */
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c, p LIMIT 1 "
-          + "CREATE (b:BranchEntity {name: {2} })-[:POINTS_TO]->(c) WITH b, p "
+          + "CREATE (b:BranchEntity {name: {2}, commitHash: {1}})-[:POINTS_TO]->(c) WITH b, p "
           + "CREATE (p)-[:HAS_BRANCH]->(b)")
   void setBranchOnCommit(long projectId, @NonNull String commitHash, @NonNull String branchName);
 
@@ -46,6 +53,6 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
    */
   @Query(
       "MATCH (p)-[:HAS_BRANCH]->(b)-[r:POINTS_TO]->() WHERE ID(p) = {0} AND b.name = {1} WITH p, b, r LIMIT 1 DELETE r WITH p, b "
-          + "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE c.name = {2} WITH c, b LIMIT 1 CREATE (b)-[r1:POINTS_TO]->(c)")
+          + "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE c.name = {2} WITH c, b LIMIT 1 CREATE (b)-[r1:POINTS_TO]->(c) SET b.commitHash = c.name")
   void moveBranchToCommit(long projectId, @NonNull String branchName, @NonNull String commitHash);
 }
