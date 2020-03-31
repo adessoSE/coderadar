@@ -7,15 +7,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.reflectoring.coderadar.contributor.port.driver.GetCriticalFilesCommand;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.query.domain.ContributorsForFile;
+import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
+import io.reflectoring.coderadar.query.port.driver.GetFilesWithContributorsCommand;
+import io.reflectoring.coderadar.query.port.driver.GetFrequentlyChangedFilesCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import org.assertj.core.api.Assertions;
@@ -51,8 +54,8 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
 
   @Test
   public void throwsExceptionWhenNoFilePatternsAreDefined() throws Exception {
-    GetCriticalFilesCommand command =
-        new GetCriticalFilesCommand("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", 1);
+    GetFilesWithContributorsCommand command =
+        new GetFilesWithContributorsCommand("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", 1);
     MvcResult result =
         mvc()
             .perform(
@@ -81,8 +84,8 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
         .andExpect(status().isCreated())
         .andReturn();
 
-    GetCriticalFilesCommand command1 =
-        new GetCriticalFilesCommand("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", 1);
+    GetFilesWithContributorsCommand command1 =
+        new GetFilesWithContributorsCommand("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", 1);
 
     MvcResult result =
         mvc()
@@ -91,7 +94,6 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command1)))
             .andExpect(status().isOk())
-            .andDo(documentGetCriticalFiles())
             .andReturn();
 
     List<ContributorsForFile> response =
@@ -116,8 +118,8 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
         .andExpect(status().isCreated())
         .andReturn();
 
-    GetCriticalFilesCommand command1 =
-        new GetCriticalFilesCommand("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", 2);
+    GetFilesWithContributorsCommand command1 =
+        new GetFilesWithContributorsCommand("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", 2);
 
     MvcResult result =
         mvc()
@@ -126,6 +128,7 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command1)))
             .andExpect(status().isOk())
+            .andDo(documentGetFilesWithContributors())
             .andReturn();
 
     List<ContributorsForFile> response =
@@ -140,11 +143,52 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
         .containsExactlyInAnyOrder("maximAtanasov", "Krause");
   }
 
-  private ResultHandler documentGetCriticalFiles() {
-    ConstrainedFields<GetCriticalFilesCommand> fields = fields(GetCriticalFilesCommand.class);
+  @Test
+  public void getFrequentlyChangedFiles() throws Exception {
+    CreateFilePatternCommand command =
+        new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
+    mvc()
+        .perform(
+            post("/projects/" + projectId + "/filePatterns")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(command)))
+        .andExpect(status().isCreated())
+        .andReturn();
+
+    GetFrequentlyChangedFilesCommand command1 =
+        new GetFrequentlyChangedFilesCommand(
+            "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", new Date(1582588800000L) /*2020-02-25*/, 1);
+
+    MvcResult mvcResult =
+        mvc()
+            .perform(
+                get("/projects/" + projectId + "/files/modification/frequency")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(command1)))
+            .andExpect(status().isOk())
+            .andDo(documentGetFrequentlyChangedFiles())
+            .andReturn();
+
+    List<FileAndCommitsForTimePeriod> result =
+        fromJson(
+            new TypeReference<List<FileAndCommitsForTimePeriod>>() {},
+            mvcResult.getResponse().getContentAsString());
+
+    FileAndCommitsForTimePeriod resultItem = result.get(0);
+
+    Assertions.assertThat(result.size()).isEqualTo(1);
+    Assertions.assertThat(resultItem.getPath()).isEqualTo("testModule1/NewRandomFile.java");
+    Assertions.assertThat(resultItem.getCommits().size()).isEqualTo(1);
+    Assertions.assertThat(resultItem.getCommits().get(0).getComment())
+        .isEqualTo("modify testModule1/NewRandomFile.java");
+  }
+
+  private ResultHandler documentGetFilesWithContributors() {
+    ConstrainedFields<GetFilesWithContributorsCommand> fields =
+        fields(GetFilesWithContributorsCommand.class);
 
     return document(
-        "metrics/criticalFiles",
+        "metrics/criticalFiles/numberOfContributors",
         requestFields(
             fields
                 .withPath("commitHash")
@@ -154,5 +198,23 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
                 .withPath("numberOfContributors")
                 .description(
                     "The amount of contributors for which a file is considered critical.")));
+  }
+
+  private ResultHandler documentGetFrequentlyChangedFiles() {
+    ConstrainedFields<GetFrequentlyChangedFilesCommand> fields =
+        fields(GetFrequentlyChangedFilesCommand.class);
+
+    return document(
+        "metrics/criticalFiles/modificationFrequency",
+        requestFields(
+            fields
+                .withPath("commitHash")
+                .description(
+                    "Only search for critical files in the file tree of the given commit."),
+            fields.withPath("startDate").description("Start date of the time period."),
+            fields
+                .withPath("frequency")
+                .description(
+                    "How often a file needs to be changed in the time period to be declared as critical.")));
   }
 }
