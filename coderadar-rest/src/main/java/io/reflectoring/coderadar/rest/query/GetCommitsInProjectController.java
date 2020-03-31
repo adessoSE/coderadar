@@ -1,9 +1,10 @@
 package io.reflectoring.coderadar.rest.query;
 
+import static io.reflectoring.coderadar.rest.GetCommitResponseMapper.mapCommits;
+
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.query.port.driver.GetCommitsInProjectUseCase;
 import io.reflectoring.coderadar.rest.domain.GetCommitResponse;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,17 +29,7 @@ public class GetCommitsInProjectController {
   public ResponseEntity<List<GetCommitResponse>> listCommits(
       @PathVariable("projectId") long projectId, @PathVariable("branchName") String branchName) {
     List<Commit> commits = getCommitsInProjectUseCase.get(projectId, branchName);
-    List<GetCommitResponse> result = new ArrayList<>(commits.size());
-    for (Commit commit : commits) {
-      result.add(
-          new GetCommitResponse()
-              .setName(commit.getName())
-              .setAnalyzed(commit.isAnalyzed())
-              .setAuthor(commit.getAuthor())
-              .setAuthorEmail(commit.getAuthorEmail())
-              .setComment(commit.getComment())
-              .setTimestamp(commit.getTimestamp()));
-    }
+    List<GetCommitResponse> result = mapCommits(commits);
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 }

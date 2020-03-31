@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.contributor.port.driver;
+package io.reflectoring.coderadar.query.port.driver;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetCriticalFilesCommand {
+public class GetFilesWithContributorsCommand {
   @NotBlank private String commitHash;
 
   @Min(1)

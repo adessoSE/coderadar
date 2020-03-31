@@ -7,7 +7,6 @@ import lombok.ToString;
 /** Metadata about a commit to a Git repository. */
 @Data
 public class Commit {
-
   private long id;
   private String name;
   private long timestamp;
