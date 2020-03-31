@@ -2272,9 +2272,8 @@ table.tableblock.grid-all {
 <ul class="sectlevel2">
 <li><a href="#_get_critical_files_of_a_project">7.1. Get Critical Files of a Project</a>
 <ul class="sectlevel3">
-<li><a href="#_request_structure_5">7.1.1. Request Structure</a></li>
-<li><a href="#_example_request_41">7.1.2. Example Request</a></li>
-<li><a href="#_example_response_41">7.1.3. Example Response</a></li>
+<li><a href="#_files_with_many_contributors">7.1.1. Files With Many Contributors</a></li>
+<li><a href="#_frequently_changed_files">7.1.2. Frequently Changed Files</a></li>
 </ul>
 </li>
 </ul>
@@ -2575,8 +2574,8 @@ Content-Type: application/json
 Content-Length: 459
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODU2NTA0OTgsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1ODU2NDk1OTgsInVzZXJJZCI6IjEwIiwidXNlcm5hbWUiOiJ1c2VybmFtZSJ9.wb354wucIXlVBzQ7Lmv7dvJvl0Vck-SV70qJgLEExqc",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTA4MzM1OTgsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTg1NjQ5NTk4LCJ1c2VySWQiOiIxMCIsInVzZXJuYW1lIjoidXNlcm5hbWUifQ.-VWD2jJo6y1f1aU5xtaIK3EmutkbQlyGrb-jF2dpgqU"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODU2NTcyNjAsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1ODU2NTYzNjAsInVzZXJJZCI6IjEwIiwidXNlcm5hbWUiOiJ1c2VybmFtZSJ9.LWFS4o8l03nBXBGUiqyNG0Vf6edKDtvAT3g74j1Z0Yk",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTA4NDAzNjAsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTg1NjU2MzYwLCJ1c2VySWQiOiIxMCIsInVzZXJuYW1lIjoidXNlcm5hbWUifQ.KiF4zj4QMQfqAvLsh-p9nf4hzO8nZ-6sR3mZLLP4e9g"
 }</code></pre>
 </div>
 </div>
@@ -2628,8 +2627,8 @@ Content-Length: 445
 Host: localhost:8080
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODU2NDg3NTcsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1ODU2NDc4NTcsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.aj8sTMzc_ubnosU9VQUG_Y-NuN49dVTKQaDsl31eGn8",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTA4MzM1OTcsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTg1NjQ5NTk3LCJ1c2VySWQiOiIxIiwidXNlcm5hbWUiOiJyYWRhciJ9.6joMeRRwpHFtLxFq7ViQcnLMewmd43lafzfm82PnV9E"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODU2NTU1MTksInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1ODU2NTQ2MTksInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.V2JjmAxtyrzc3M665QFIBWmJYMlAcQxGPH-t_nLy5U4",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTA4NDAzNTksInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTg1NjU2MzU5LCJ1c2VySWQiOiIxIiwidXNlcm5hbWUiOiJyYWRhciJ9.CQKJdolvRP9bgDL2BLuVLcI4jyqlAxtHxqgfpCme50Y"
 }</code></pre>
 </div>
 </div>
@@ -2643,7 +2642,7 @@ Content-Type: application/json
 Content-Length: 218
 
 {
-  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODU2NTA0OTcsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1ODU2NDk1OTcsInVzZXJJZCI6IjEiLCJ1c2VybmFtZSI6InJhZGFyIn0.rsiKyNKwA4iGWTTQMjJdXAnod6W72ZKkUP-9kaxQrZw"
+  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODU2NTcyNTksInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1ODU2NTYzNTksInVzZXJJZCI6IjEiLCJ1c2VybmFtZSI6InJhZGFyIn0.C1oR3ElmOgOHAdS-C2Tu4_9TUm3WvhFBZU7h_S1ZCFI"
 }</code></pre>
 </div>
 </div>
@@ -2696,7 +2695,7 @@ Content-Length: 264
 Host: localhost:8080
 
 {
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTA4MzM1OTcsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTg1NjQ5NTk3LCJ1c2VySWQiOiI1IiwidXNlcm5hbWUiOiJ1c2VybmFtZSJ9.u5RB-o3yaY5Re6LkxDVRxsta9Nc5G8H8ku_27e_CccQ",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTA4NDAzNTksInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTg1NjU2MzU5LCJ1c2VySWQiOiI1IiwidXNlcm5hbWUiOiJ1c2VybmFtZSJ9.3bVxrsvixJjDvM7O92KJ6wOqSumWkJ75hhNQPduWeMk",
   "newPassword" : "newPassword1"
 }</code></pre>
 </div>
@@ -2940,8 +2939,8 @@ Content-Length: 488
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
   "vcsOnline" : true,
-  "startDate" : "2020-03-31T10:13:19.338+0000",
-  "endDate" : "2020-03-31T10:13:19.338+0000"
+  "startDate" : "2020-03-31T12:06:00.981+0000",
+  "endDate" : "2020-03-31T12:06:00.981+0000"
 }, {
   "id" : 15,
   "name" : "project",
@@ -2949,8 +2948,8 @@ Content-Length: 488
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
   "vcsOnline" : true,
-  "startDate" : "2020-03-31T10:13:19.338+0000",
-  "endDate" : "2020-03-31T10:13:19.338+0000"
+  "startDate" : "2020-03-31T12:06:00.981+0000",
+  "endDate" : "2020-03-31T12:06:00.981+0000"
 } ]</code></pre>
 </div>
 </div>
@@ -2973,8 +2972,8 @@ Host: localhost:8080
   "vcsPassword" : "password",
   "vcsUrl" : "http://valid.url",
   "vcsOnline" : true,
-  "startDate" : 1585649607418,
-  "endDate" : 1585649607418
+  "startDate" : 1585656369325,
+  "endDate" : 1585656369325
 }</code></pre>
 </div>
 </div>
@@ -3014,8 +3013,8 @@ Content-Length: 241
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
   "vcsOnline" : true,
-  "startDate" : "2020-03-31T10:13:20.209+0000",
-  "endDate" : "2020-03-31T10:13:20.209+0000"
+  "startDate" : "2020-03-31T12:06:01.908+0000",
+  "endDate" : "2020-03-31T12:06:01.908+0000"
 }</code></pre>
 </div>
 </div>
@@ -4040,7 +4039,7 @@ Content-Length: 3243
 <h5 id="_example_request_32"><a class="link" href="#_example_request_32">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/3193/commitLog HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/3224/commitLog HTTP/1.1
 Content-Type: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -4425,7 +4424,7 @@ time of a specified commit.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/3299/metricvalues/tree HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/3330/metricvalues/tree HTTP/1.1
 Content-Type: application/json
 Content-Length: 188
 Host: localhost:8080
@@ -4611,7 +4610,7 @@ commits.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/3041/metricvalues/deltaTree HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/3072/metricvalues/deltaTree HTTP/1.1
 Content-Type: application/json
 Content-Length: 247
 Host: localhost:8080
@@ -5037,7 +5036,9 @@ Host: localhost:8080
 <div class="sect2">
 <h3 id="_get_critical_files_of_a_project"><a class="link" href="#_get_critical_files_of_a_project">7.1. Get Critical Files of a Project</a></h3>
 <div class="sect3">
-<h4 id="_request_structure_5"><a class="link" href="#_request_structure_5">7.1.1. Request Structure</a></h4>
+<h4 id="_files_with_many_contributors"><a class="link" href="#_files_with_many_contributors">7.1.1. Files With Many Contributors</a></h4>
+<div class="sect4">
+<h5 id="_request_structure_5"><a class="link" href="#_request_structure_5">Request Structure</a></h5>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -5065,34 +5066,111 @@ Host: localhost:8080
 </tbody>
 </table>
 </div>
-<div class="sect3">
-<h4 id="_example_request_41"><a class="link" href="#_example_request_41">7.1.2. Example Request</a></h4>
+<div class="sect4">
+<h5 id="_example_request_41"><a class="link" href="#_example_request_41">Example Request</a></h5>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/2873/files/critical HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/2904/files/critical?numOfContr=2 HTTP/1.1
 Content-Type: application/json
 Content-Length: 93
 Host: localhost:8080
 
 {
   "commitHash" : "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382",
-  "numberOfContributors" : 1
+  "numberOfContributors" : 2
 }</code></pre>
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_example_response_41"><a class="link" href="#_example_response_41">7.1.3. Example Response</a></h4>
+<div class="sect4">
+<h5 id="_example_response_41"><a class="link" href="#_example_response_41">Example Response</a></h5>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 92
+Content-Length: 101
 
 [ {
-  "path" : "GetMetricsForCommitCommand.java",
-  "contributors" : [ "maximAtanasov" ]
+  "path" : "testModule1/NewRandomFile.java",
+  "contributors" : [ "maximAtanasov", "Krause" ]
 } ]</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_frequently_changed_files"><a class="link" href="#_frequently_changed_files">7.1.2. Frequently Changed Files</a></h4>
+<div class="sect4">
+<h5 id="_request_structure_6"><a class="link" href="#_request_structure_6">Request Structure</a></h5>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>commitHash</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Only search for critical files in the file tree of the given commit.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>startDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Start date of the time period.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>frequency</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">How often a file needs to be changed in the time period to be declared as critical.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_example_request_42"><a class="link" href="#_example_request_42">Example Request</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /projects/2965/files/modification/frequency HTTP/1.1
+Content-Type: application/json
+Content-Length: 113
+Host: localhost:8080
+
+{
+  "commitHash" : "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382",
+  "startDate" : 1582588800000,
+  "frequency" : 1
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_example_response_42"><a class="link" href="#_example_response_42">Example Response</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 318
+
+[ {
+  "path" : "testModule1/NewRandomFile.java",
+  "commits" : [ {
+    "name" : "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382",
+    "author" : "Krause",
+    "authorEmail" : "Kilian.Krause@adesso.de",
+    "comment" : "modify testModule1/NewRandomFile.java",
+    "timestamp" : 1584013941000,
+    "analyzed" : false
+  } ]
+} ]</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -5102,7 +5180,7 @@ Content-Length: 92
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-03-31 10:09:59 +00:00
+Last updated 2020-03-31 12:02:32 +00:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
