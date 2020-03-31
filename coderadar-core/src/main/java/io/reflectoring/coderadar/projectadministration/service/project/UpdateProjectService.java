@@ -33,7 +33,6 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
   private final GetProjectPort getProjectPort;
   private final UpdateProjectPort updateProjectPort;
-
   private final UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
   private final ProcessProjectService processProjectService;
@@ -103,7 +102,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
               // Delete all files, commits and modules as they have to be re-created
               resetAnalysisPort.resetAnalysis(projectId);
-              updateProjectPort.deleteFilesAndCommits(projectId);
+              updateProjectPort.deleteBranchesFilesAndCommits(projectId);
 
               // Perform a git pull on the remote repository
               String localDir =

@@ -15,5 +15,5 @@ public interface UpdateProjectPort {
    *
    * @param projectId The id of the project.
    */
-  void deleteFilesAndCommits(long projectId);
+  void deleteBranchesFilesAndCommits(long projectId);
 }

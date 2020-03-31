@@ -73,9 +73,10 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    */
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} WITH c "
-          + "OPTIONAL MATCH (c)-[:IS_CHILD_OF]->(c1) "
-          + "RETURN c as commit, collect(c1.name) as parents "
-          + "ORDER BY c.timestamp DESC")
+          + "OPTIONAL MATCH (c)-[r:IS_CHILD_OF]->(c1) "
+          + "WITH c as commit, c1.name as parent ORDER BY r.parentOrder "
+          + "RETURN commit, collect(parent) as parents "
+          + "ORDER BY commit.timestamp DESC")
   @NonNull
   List<LinkedHashMap<String, Object>> findByProjectIdWithParents(long projectId);
 
@@ -97,7 +98,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
       "UNWIND {0} as c "
           + "MATCH (c1) WHERE ID(c1) = c.id1 "
           + "MATCH (c2) WHERE ID(c2) = c.id2 "
-          + "CREATE (c1)-[:IS_CHILD_OF]->(c2)")
+          + "CREATE (c1)-[:IS_CHILD_OF {parentOrder: c.parentOrder}]->(c2)")
   void createParentRelationships(List<HashMap<String, Object>> parentRels);
 
   /**

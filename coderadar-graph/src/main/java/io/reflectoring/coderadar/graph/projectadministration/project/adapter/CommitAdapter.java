@@ -127,17 +127,25 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
    */
   private void saveCommitParentsRelationships(
       List<CommitEntity> commitEntities, int commitBulkSaveChunk) {
-    commitBulkSaveChunk = commitBulkSaveChunk / 2 + commitBulkSaveChunk;
     List<HashMap<String, Object>> parentRels = new ArrayList<>(commitBulkSaveChunk);
+    List<HashMap<String, Object>> maps = new ArrayList<>(commitBulkSaveChunk);
+    for (int i = 0; i < commitBulkSaveChunk; i++) {
+      maps.add(new HashMap<>(4));
+    }
+
+    int i = 0;
     for (CommitEntity commitEntity : commitEntities) {
+      int parentOrder = 0;
       for (CommitEntity parent : commitEntity.getParents()) {
-        HashMap<String, Object> parents = new HashMap<>(4);
+        HashMap<String, Object> parents = maps.get(i++);
         parents.put("id1", commitEntity.getId());
+        parents.put("parentOrder", parentOrder++);
         parents.put("id2", parent.getId());
         parentRels.add(parents);
-        if (parentRels.size() == commitBulkSaveChunk) {
+        if (i == commitBulkSaveChunk) {
           commitRepository.createParentRelationships(parentRels);
           parentRels.clear();
+          i = 0;
         }
       }
     }
@@ -152,16 +160,23 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
    */
   private void saveFileRenameRelationships(List<FileEntity> fileEntities, int fileBulkSaveChunk) {
     List<HashMap<String, Object>> renameRels = new ArrayList<>(fileBulkSaveChunk);
+    List<HashMap<String, Object>> maps = new ArrayList<>(fileBulkSaveChunk);
+    for (int i = 0; i < fileBulkSaveChunk; i++) {
+      maps.add(new HashMap<>(4));
+    }
+
+    int i = 0;
     for (FileEntity fileEntity : fileEntities) {
       for (FileEntity oldFile : fileEntity.getOldFiles()) {
-        HashMap<String, Object> rename = new HashMap<>(4);
+        HashMap<String, Object> rename = maps.get(i++);
         rename.put("fileId1", fileEntity.getId());
         rename.put("fileId2", oldFile.getId());
         renameRels.add(rename);
-      }
-      if (renameRels.size() == fileBulkSaveChunk) {
-        fileRepository.createRenameRelationships(renameRels);
-        renameRels.clear();
+        if (i == fileBulkSaveChunk) {
+          fileRepository.createRenameRelationships(renameRels);
+          renameRels.clear();
+          i = 0;
+        }
       }
     }
     fileRepository.createRenameRelationships(renameRels);
@@ -176,20 +191,26 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
   private void saveFileToCommitRelationships(
       List<CommitEntity> commitEntities, int fileBulkSaveChunk) {
     List<HashMap<String, Object>> fileRels = new ArrayList<>(fileBulkSaveChunk);
+    List<HashMap<String, Object>> maps = new ArrayList<>(fileBulkSaveChunk);
+    for (int i = 0; i < fileBulkSaveChunk; i++) {
+      maps.add(new HashMap<>(6));
+    }
+    int j = 0;
     int entitiesAmount = commitEntities.size();
     for (int i = 0; i < entitiesAmount; i++) {
       CommitEntity commitEntity = commitEntities.get(i);
       for (FileToCommitRelationshipEntity fileToCommitRelationship :
           commitEntity.getTouchedFiles()) {
-        HashMap<String, Object> files = new HashMap<>(8);
+        HashMap<String, Object> files = maps.get(j++);
         files.put("commitId", commitEntity.getId());
         files.put("fileId", fileToCommitRelationship.getFile().getId());
         files.put("changeType", fileToCommitRelationship.getChangeType());
         files.put("oldPath", fileToCommitRelationship.getOldPath());
         fileRels.add(files);
-        if (fileRels.size() == fileBulkSaveChunk) {
+        if (j == fileBulkSaveChunk) {
           commitRepository.createFileRelationships(fileRels);
           fileRels.clear();
+          j = 0;
         }
         commitEntities.set(i, null);
       }
