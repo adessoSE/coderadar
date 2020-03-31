@@ -1,13 +1,13 @@
 package io.reflectoring.coderadar.rest.query;
 
-import io.reflectoring.coderadar.projectadministration.domain.Commit;
+import static io.reflectoring.coderadar.rest.GetCommitResponseMapper.mapCommits;
+
 import io.reflectoring.coderadar.query.domain.ContributorsForFile;
 import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
 import io.reflectoring.coderadar.query.port.driver.GetCriticalFilesUseCase;
 import io.reflectoring.coderadar.query.port.driver.GetFilesWithContributorsCommand;
 import io.reflectoring.coderadar.query.port.driver.GetFrequentlyChangedFilesCommand;
 import io.reflectoring.coderadar.rest.domain.FileAndCommitsForTimePeriodResponse;
-import io.reflectoring.coderadar.rest.domain.GetCommitResponse;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -56,21 +56,6 @@ public class GetCriticalFilesController {
       resultItem.setPath(f.getPath());
       resultItem.setCommits(mapCommits(f.getCommits()));
       result.add(resultItem);
-    }
-    return result;
-  }
-
-  private List<GetCommitResponse> mapCommits(List<Commit> commits) {
-    List<GetCommitResponse> result = new ArrayList<>(commits.size());
-    for (Commit commit : commits) {
-      result.add(
-          new GetCommitResponse()
-              .setName(commit.getName())
-              .setAnalyzed(commit.isAnalyzed())
-              .setAuthor(commit.getAuthor())
-              .setAuthorEmail(commit.getAuthorEmail())
-              .setComment(commit.getComment())
-              .setTimestamp(commit.getTimestamp()));
     }
     return result;
   }
