@@ -20,6 +20,7 @@ public class ListBranchesAdapter implements ListBranchesPort {
 
   @Override
   public List<Branch> listBranchesInProject(long projectId) {
-    return branchMapper.mapNodeEntities(branchRepository.getBranchesInProject(projectId));
+    return branchMapper.mapNodeEntities(
+        branchRepository.getBranchesInProjectSortedByName(projectId));
   }
 }

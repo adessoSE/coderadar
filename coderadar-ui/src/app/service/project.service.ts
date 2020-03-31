@@ -13,6 +13,7 @@ import {INode} from '../city-map/interfaces/INode';
 import {MetricValue} from '../model/metric-value';
 import {Contributor} from '../model/contributor';
 import {Branch} from '../model/branch';
+import {CommitLog} from '../model/commit-log';
 
 @Injectable({
   providedIn: 'root'
@@ -199,12 +200,21 @@ export class ProjectService {
 
   /**
    * Gets all available commits for a project.
-   * Sends a GET request to /projects/{id}/commits
+   * Sends a GET request to /projects/{id}/{branchName}/commits
    * @param id The project id.
    * @param branch The branch to use for getting the commits.
    */
   public getCommits(id: number, branch: string): Promise<HttpResponse<Commit[]>> {
     return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/' + branch + '/commits', {observe: 'response'}).toPromise();
+  }
+
+  /**
+   * Gets the commit log
+   * Sends a GET request to /projects/{id}/commitLog
+   * @param id The project id.
+   */
+  public getCommitLog(id: number): Promise<HttpResponse<CommitLog[]>> {
+    return this.httpClient.get<CommitLog[]>(this.apiURL + 'projects/' + id + '/commitLog', {observe: 'response'}).toPromise();
   }
 
   /**

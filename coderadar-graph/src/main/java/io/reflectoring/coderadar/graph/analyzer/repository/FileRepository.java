@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.graph.analyzer.repository;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
+import io.reflectoring.coderadar.graph.query.domain.FileAndCommitsForTimePeriodQueryResult;
 import java.util.HashMap;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
@@ -37,4 +38,28 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
   @Query(
       "MATCH (p)-[:CONTAINS*]->(f:FileEntity) WHERE ID(p) = {0} AND f.sequenceId = {1} RETURN f LIMIT 1 ")
   FileEntity getFileInProjectBySequenceId(long projectId, long sequenceId);
+
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND "
+          + "c.name = {1} WITH c LIMIT 1 "
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c "
+          + "WHERE c.timestamp >= {2} WITH c ORDER BY c.timestamp DESC WITH collect(c) as commits "
+          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: \"DELETE\"}]->(c) RETURN collect(f) as deletes', {commits: commits}) "
+          + "YIELD value WITH commits, value.deletes as deletes "
+          + "CALL apoc.cypher.run('UNWIND commits as c MATCH (c)<-[:CHANGED_IN]-(f) WHERE NOT(f IN {deletes}) "
+          + "AND any(x IN includes WHERE f.path =~ x) AND none(x IN excludes WHERE f.path =~ x) "
+          + "RETURN f', {commits:commits, deletes: deletes, includes: {4}, excludes: {5}}) YIELD value "
+          + "WITH value.f as f, commits WITH commits, f "
+          + "OPTIONAL MATCH (f)-[:RENAMED_FROM*0..]->(f2) WITH collect(f) + collect(f2) as files, commits "
+          + "UNWIND files AS f "
+          + "UNWIND commits as c "
+          + "MATCH (c)<-[:CHANGED_IN]-(f) WITH collect(DISTINCT c) as commits, f "
+          + "WHERE size(commits) >= {3} RETURN f.path AS path, commits ORDER BY f.path")
+  List<FileAndCommitsForTimePeriodQueryResult> getFrequentlyChangedFiles(
+      long projectId,
+      String commitHash,
+      long dateTime,
+      int frequency,
+      @NonNull List<String> includes,
+      @NonNull List<String> excludes);
 }

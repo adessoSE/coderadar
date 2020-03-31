@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.graph.projectadministration.project.adapter.Com
 import io.reflectoring.coderadar.projectadministration.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
 import java.util.*;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,18 +29,11 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
   public List<Commit> getNonAnalyzedSortedByTimestampAscWithNoParents(
       long projectId, List<FilePattern> filePatterns, String branch) {
     // Map Ant-Patterns to RegEx
-    List<String> includes = new ArrayList<>();
-    List<String> excludes = new ArrayList<>();
-    for (FilePattern filePattern : filePatterns) {
-      if (filePattern.getInclusionType().equals(InclusionType.INCLUDE)) {
-        includes.add(PatternUtil.toPattern(filePattern.getPattern()).toString());
-      } else {
-        excludes.add(PatternUtil.toPattern(filePattern.getPattern()).toString());
-      }
-    }
+    Pair<List<String>, List<String>> includesAndExcludes =
+        PatternUtil.mapPatternsToRegex(filePatterns);
     return mapCommitEntitiesNoParents(
         commitRepository.findByProjectIdNonAnalyzedWithFiles(
-            projectId, branch, includes, excludes));
+            projectId, branch, includesAndExcludes.getFirst(), includesAndExcludes.getSecond()));
   }
 
   /**

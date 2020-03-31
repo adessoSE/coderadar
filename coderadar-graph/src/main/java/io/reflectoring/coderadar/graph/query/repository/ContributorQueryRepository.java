@@ -22,7 +22,7 @@ public interface ContributorQueryRepository extends Neo4jRepository<ContributorE
           + "UNWIND emails as email "
           + "MATCH (co:ContributorEntity) WHERE toLower(email) IN co.emails WITH path, collect(DISTINCT co.displayName) as contributors "
           + "WHERE size(contributors) = {1} RETURN path, contributors")
-  List<ContributorsForFileQueryResult> getCriticalFiles(
+  List<ContributorsForFileQueryResult> getFilesWithContributors(
       long projectId,
       int numberOfContributors,
       String commitHash,

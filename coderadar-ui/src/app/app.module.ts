@@ -31,7 +31,7 @@ import {
   MatListModule,
   MatMenuModule, MatPaginatorModule,
   MatSidenavModule,
-  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatDialogModule,
+  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatTabsModule, MatDialogModule,
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
@@ -53,6 +53,9 @@ import {TreeNodeComponent} from './levelized-structure-map/tree-node/tree-node.c
 import {MatSelectModule} from '@angular/material/select';
 import {DragScrollModule} from 'ngx-drag-scroll';
 import {PinchZoomModule} from 'ngx-pinch-zoom';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import { ListViewComponent } from './view/project-dashboard/list-view/list-view.component';
+import { BranchViewComponent } from './view/project-dashboard/branch-view/branch-view.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -89,7 +92,9 @@ const appRoutes: Routes = [
     MergeDialogComponent,
     DependencyCompareComponent,
     TreeNodeComponent,
-    CityViewHeaderComponent
+    CityViewHeaderComponent,
+    ListViewComponent,
+    BranchViewComponent
   ],
   imports: [
     BrowserModule,
@@ -116,6 +121,8 @@ const appRoutes: Routes = [
     RouterModule,
     LayoutModule,
     MatToolbarModule,
+    MatTabsModule,
+    ScrollingModule,
     MatSidenavModule,
     MatCheckboxModule,
     BrowserModule,
