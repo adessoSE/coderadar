@@ -9,11 +9,4 @@ public interface UpdateProjectPort {
    * @param project The updated project.
    */
   void update(Project project);
-
-  /**
-   * Deletes all files and commits for the given project
-   *
-   * @param projectId The id of the project.
-   */
-  void deleteBranchesFilesAndCommits(long projectId);
 }

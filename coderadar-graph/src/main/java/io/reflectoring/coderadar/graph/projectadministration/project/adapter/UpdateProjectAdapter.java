@@ -29,11 +29,4 @@ public class UpdateProjectAdapter implements UpdateProjectPort {
             .setVcsUrl(project.getVcsUrl())
             .setWorkdirName(project.getWorkdirName()));
   }
-
-  @Override
-  public void deleteBranchesFilesAndCommits(long projectId) {
-    while (projectRepository.deleteProjectFilesAndModules(projectId) > 0) ;
-    projectRepository.deleteProjectBranches(projectId);
-    projectRepository.deleteProjectCommits(projectId);
-  }
 }
