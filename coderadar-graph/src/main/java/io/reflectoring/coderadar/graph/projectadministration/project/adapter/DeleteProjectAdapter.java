@@ -37,4 +37,11 @@ public class DeleteProjectAdapter implements DeleteProjectPort {
     contributorRepository.deleteContributorsWithoutProjects();
     projectRepository.deleteById(projectId);
   }
+
+  @Override
+  public void deleteBranchesFilesAndCommits(long projectId) {
+    while (projectRepository.deleteProjectFilesAndModules(projectId) > 0) ;
+    projectRepository.deleteProjectBranches(projectId);
+    projectRepository.deleteProjectCommits(projectId);
+  }
 }

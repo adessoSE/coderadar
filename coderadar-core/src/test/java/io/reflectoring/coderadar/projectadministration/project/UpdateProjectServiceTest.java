@@ -12,6 +12,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.DeleteProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
@@ -61,6 +62,8 @@ class UpdateProjectServiceTest {
 
   @Mock private GetAvailableBranchesPort getAvailableBranchesPort;
 
+  @Mock private DeleteProjectPort deleteProjectPort;
+
   private UpdateProjectService testSubject;
 
   @BeforeEach
@@ -77,7 +80,8 @@ class UpdateProjectServiceTest {
             listModulesOfProjectUseCase,
             resetAnalysisPort,
             createModulePort,
-            getAvailableBranchesPort);
+            getAvailableBranchesPort,
+            deleteProjectPort);
   }
 
   @Test
