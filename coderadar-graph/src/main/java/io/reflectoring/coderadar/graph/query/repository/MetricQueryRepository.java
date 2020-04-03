@@ -91,10 +91,45 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
           + "RETURN collect(f) as deletes', {commits: commits}) YIELD value WITH commits, renames, value.deletes as deletes "
           + "UNWIND commits as c "
           + "MATCH (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c) WHERE "
-          + "NOT(f IN deletes OR f IN renames)  AND m.name IN {2} WITH f.path as path, head(collect(f.objectHash)) as hash, m.name as name, "
+          + "NOT(f IN deletes OR f IN renames) AND m.name IN {2} WITH f.path as path, head(collect(f.objectHash)) as hash, m.name as name, "
           + "head(collect(m.value)) as value ORDER BY path, name WHERE value <> 0 "
           + "RETURN path + \"=\" + head(collect(hash)) as path, collect(name + \"=\" + value) as metrics ORDER BY path")
   @NonNull
   List<Map<String, Object>> getMetricTreeForCommitWithFileHashes(
       long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);
+
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp DESC WITH collect(c) as commits "
+          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)<-[:RENAMED_FROM]-()-[:CHANGED_IN]->(c) RETURN collect(f) as renames', {commits: commits}) "
+          + "YIELD value WITH commits, value.renames as renames "
+          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: \"DELETE\"}]->(c) RETURN collect(f) as deletes', {commits: commits}) "
+          + "YIELD value WITH commits, renames, value.deletes as deletes"
+          + "UNWIND commits as c "
+          + "MATCH (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c) WHERE "
+          + "NOT(f IN deletes OR f IN renames) AND m.name IN {2} WITH  f.path as path, m.name as name, head(collect(m.value)) as value, "
+          + "head(collect(m.findings)) as location ORDER BY path, name WHERE value <> 0 "
+          + "RETURN path, collect(name + \"=\" + value + location) as metrics ORDER BY path")
+  List<Map<String, Object>> getMetricTreeForCommitWithFindings(
+      long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);
+
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp DESC WITH collect(c) as commits "
+          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)<-[:RENAMED_FROM]-()-[:CHANGED_IN]->(c) RETURN collect(f) as renames', {commits: commits}) "
+          + "YIELD value WITH commits, value.renames as renames "
+          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: \"DELETE\"}]->(c) RETURN collect(f) as deletes', {commits: commits}) "
+          + "YIELD value WITH commits, renames, value.deletes as deletes "
+          + "UNWIND commits as c "
+          + "MATCH (f)-[:CHANGED_IN]->(c) WHERE NOT(f IN deletes OR f IN renames) RETURN DISTINCT f.path as path")
+  List<Map<String, Object>> getFileTreeForCommit(long projectId, @NonNull String commitHash);
+
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp DESC "
+          + "MATCH (f)-[r:CHANGED_IN]->(c) WHERE f.path = {2} WITH f, c LIMIT 1 "
+          + "MATCH (f)-[:MEASURED_BY]->(m)-[:VALID_FOR]->(c) "
+          + "RETURN m.name as name, m.value as value, m.findings as findings")
+  List<Map<String, Object>> getMetricsAndFindingsForCommitAndFilepath(
+      long projectId, @NonNull String commitHash, String filepath);
 }

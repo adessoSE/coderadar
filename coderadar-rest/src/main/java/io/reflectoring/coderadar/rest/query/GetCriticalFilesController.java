@@ -9,10 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Transactional
@@ -23,7 +20,8 @@ public class GetCriticalFilesController {
     this.getCriticalFilesUseCase = getCriticalFilesUseCase;
   }
 
-  @GetMapping(
+  @RequestMapping(
+      method = {RequestMethod.GET, RequestMethod.POST},
       path = "/projects/{projectId}/files/critical",
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<ContributorsForFile>> getCriticalFiles(
