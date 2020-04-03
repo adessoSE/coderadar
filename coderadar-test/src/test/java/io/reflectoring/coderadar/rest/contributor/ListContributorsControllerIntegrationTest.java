@@ -108,6 +108,7 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
                 get("/projects/" + projectId + "/contributors/path")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command)))
+            .andDo(documentListContributorsForModule())
             .andExpect(status().isOk())
             .andReturn();
 
@@ -141,7 +142,22 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
         fields(GetContributorsForPathCommand.class);
 
     return document(
-        "contributors/list/path",
+        "contributors/list/path/file",
+        requestFields(
+            fields
+                .withPath("path")
+                .description("The path for. Either it is a filepath or a module path."),
+            fields
+                .withPath("commitHash")
+                .description("Get the critical file only if it belongs to this commit tree.")));
+  }
+
+  private ResultHandler documentListContributorsForModule() {
+    ConstrainedFields<GetContributorsForPathCommand> fields =
+        fields(GetContributorsForPathCommand.class);
+
+    return document(
+        "contributors/list/path/module",
         requestFields(
             fields
                 .withPath("path")
