@@ -693,11 +693,11 @@ include::{snippets}/contributors/list/response-fields.adoc[]
 
 ==== Example Request
 
-include::{snippets}/contributors/list/file/http-request.adoc[]
+include::{snippets}/contributors/list/path/http-request.adoc[]
 
 ==== Example Response
 
-include::{snippets}/contributors/list/file/http-response.adoc[]
+include::{snippets}/contributors/list/path/http-response.adoc[]
 
 
 

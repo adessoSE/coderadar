@@ -62,4 +62,14 @@ public interface FileRepository extends Neo4jRepository<FileEntity, Long> {
       int frequency,
       @NonNull List<String> includes,
       @NonNull List<String> excludes);
+
+  /**
+   * @param projectId The id of the project.
+   * @param path The filepath to search for.
+   * @return True if any file with the given path exists.
+   */
+  @Query(
+      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {0} AND f.path = {1} WITH f LIMIT 1 RETURN COUNT(f) > 0 ")
+  @NonNull
+  Boolean fileExistsByPath(long projectId, @NonNull String path);
 }

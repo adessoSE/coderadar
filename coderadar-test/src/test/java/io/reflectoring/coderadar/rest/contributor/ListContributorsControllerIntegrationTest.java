@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForFileCommand;
+import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForPathCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.GetContributorResponse;
@@ -68,14 +68,14 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
 
   @Test
   public void listContributorsForFile() throws Exception {
-    GetContributorsForFileCommand command =
-        new GetContributorsForFileCommand(
+    GetContributorsForPathCommand command =
+        new GetContributorsForPathCommand(
             "GetMetricsForCommitCommand.java", "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382");
 
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/contributors/file")
+                get("/projects/" + projectId + "/contributors/path")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command)))
             .andExpect(status().isOk())
@@ -96,6 +96,33 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
         .containsExactly("maksim.atanasov@adesso.de");
   }
 
+  @Test
+  public void listContributorsForModule() throws Exception {
+    GetContributorsForPathCommand command =
+        new GetContributorsForPathCommand(
+            "testModule1", "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382");
+
+    MvcResult result =
+        mvc()
+            .perform(
+                get("/projects/" + projectId + "/contributors/path")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(command)))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    List<GetContributorResponse> contributors =
+        fromJson(
+            new TypeReference<List<GetContributorResponse>>() {},
+            result.getResponse().getContentAsString());
+    GetContributorResponse first = contributors.get(0);
+    GetContributorResponse second = contributors.get(1);
+
+    Assertions.assertThat(contributors.size()).isEqualTo(2);
+    Assertions.assertThat(first.getDisplayName()).isEqualTo("Krause");
+    Assertions.assertThat(second.getDisplayName()).isEqualTo("maximAtanasov");
+  }
+
   private ResultHandler documentListContributors() {
     return document(
         "contributors/list",
@@ -110,13 +137,15 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
   }
 
   private ResultHandler documentListContributorsForFile() {
-    ConstrainedFields<GetContributorsForFileCommand> fields =
-        fields(GetContributorsForFileCommand.class);
+    ConstrainedFields<GetContributorsForPathCommand> fields =
+        fields(GetContributorsForPathCommand.class);
 
     return document(
-        "contributors/list/file",
+        "contributors/list/path",
         requestFields(
-            fields.withPath("filename").description("The specified filename to search for."),
+            fields
+                .withPath("path")
+                .description("The path for. Either it is a filepath or a module path."),
             fields
                 .withPath("commitHash")
                 .description("Get the critical file only if it belongs to this commit tree.")));
