@@ -12,6 +12,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
+import io.reflectoring.coderadar.projectadministration.port.driven.project.DeleteProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.UpdateProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
@@ -33,7 +34,6 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
   private final GetProjectPort getProjectPort;
   private final UpdateProjectPort updateProjectPort;
-
   private final UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
   private final ProcessProjectService processProjectService;
@@ -43,6 +43,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final ResetAnalysisPort resetAnalysisPort;
   private final CreateModulePort createModulePort;
   private final GetAvailableBranchesPort getAvailableBranchesPort;
+  private final DeleteProjectPort deleteProjectPort;
 
   private final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
 
@@ -57,7 +58,8 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       ListModulesOfProjectUseCase listModulesOfProjectUseCase,
       ResetAnalysisPort resetAnalysisPort,
       CreateModulePort createModulePort,
-      GetAvailableBranchesPort getAvailableBranchesPort) {
+      GetAvailableBranchesPort getAvailableBranchesPort,
+      DeleteProjectPort deleteProjectPort) {
     this.getProjectPort = getProjectPort;
     this.updateProjectPort = updateProjectPort;
     this.updateLocalRepositoryUseCase = updateLocalRepositoryUseCase;
@@ -69,6 +71,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     this.resetAnalysisPort = resetAnalysisPort;
     this.createModulePort = createModulePort;
     this.getAvailableBranchesPort = getAvailableBranchesPort;
+    this.deleteProjectPort = deleteProjectPort;
   }
 
   @Override
@@ -103,7 +106,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
 
               // Delete all files, commits and modules as they have to be re-created
               resetAnalysisPort.resetAnalysis(projectId);
-              updateProjectPort.deleteFilesAndCommits(projectId);
+              deleteProjectPort.deleteBranchesFilesAndCommits(projectId);
 
               // Perform a git pull on the remote repository
               String localDir =

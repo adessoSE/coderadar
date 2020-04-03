@@ -71,7 +71,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
   void deleteProjectBranches(long projectId);
 
   /** @return All projects that are not currently being deleted. */
-  @Query("MATCH (p:ProjectEntity) WHERE p.isBeingDeleted = FALSE RETURN p")
+  @Query("MATCH (p:ProjectEntity) WHERE p.isBeingDeleted = FALSE RETURN p ORDER BY p.name")
   @NonNull
   List<ProjectEntity> findAll();
 
