@@ -32,7 +32,7 @@ public interface ContributorQueryRepository extends Neo4jRepository<ContributorE
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp DESC WITH collect(c) as commits "
-          + "CALL apoc.cypher.run('UNWIND commits as c MATCH (c)<-[:CHANGED_IN]-(f) WHERE f.path = {path} RETURN f', {commits:commits, path: {2}}) YIELD value "
+          + "CALL apoc.cypher.run('UNWIND commits as c MATCH (c)<-[:CHANGED_IN]-(f) WHERE f.path = path RETURN f', {commits:commits, path: {2}}) YIELD value "
           + "WITH value.f as f, commits WITH commits, f "
           + "OPTIONAL MATCH (f)-[:RENAMED_FROM*0..]->(f2) WITH collect(f) + collect(f2) as files, commits "
           + "UNWIND commits as c "
@@ -41,4 +41,18 @@ public interface ContributorQueryRepository extends Neo4jRepository<ContributorE
           + "MATCH (co:ContributorEntity) WHERE toLower(email) IN co.emails RETURN co ORDER BY co.displayName")
   List<ContributorEntity> findAllByProjectIdAndFilepathInCommit(
       long projectId, String commitHash, String filepath);
+
+  @Query(
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c "
+          + "ORDER BY c.timestamp DESC WITH collect(c) as commits "
+          + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: \"DELETE\"}]->(c) "
+          + "RETURN collect(f) as deletes', {commits: commits}) YIELD value WITH commits, value.deletes as deletes "
+          + "MATCH (p)-[:CONTAINS*1..]->(f)-[:RENAMED_FROM*0..]->(f2) WHERE ID(p) = {0} AND NOT f IN deletes "
+          + "AND f.path STARTS WITH {2} WITH collect(f) + collect(f2) as files, commits "
+          + "UNWIND commits as c "
+          + "MATCH (c)<-[:CHANGED_IN]-(f) WHERE f IN files WITH DISTINCT c.authorEmail as email "
+          + "MATCH (co:ContributorEntity)-[:WORKS_ON]->(p) WHERE ID(p) = {0} AND toLower(email) IN co.emails RETURN co ORDER BY co.displayName")
+  List<ContributorEntity> findAllByProjectIdAndModulePathInCommit(
+      long projectId, String commitHash, String modulePath);
 }

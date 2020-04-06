@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetContributorsForFileCommand {
-  @NotBlank private String filename;
+public class GetContributorsForPathCommand {
+  @NotBlank private String path;
   @NotBlank private String commitHash;
 }

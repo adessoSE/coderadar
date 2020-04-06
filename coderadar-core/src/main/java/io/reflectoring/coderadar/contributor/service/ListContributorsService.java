@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.contributor.service;
 
 import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ListContributorsPort;
-import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForFileCommand;
+import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForPathCommand;
 import io.reflectoring.coderadar.contributor.port.driver.ListContributorsUseCase;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
@@ -22,19 +22,21 @@ public class ListContributorsService implements ListContributorsUseCase {
 
   @Override
   public List<Contributor> listContributors(long projectId) {
-    if (!getProjectPort.existsById(projectId)) {
-      throw new ProjectNotFoundException(projectId);
-    }
+    checkProjectExists(projectId);
     return listContributorsPort.listAllByProjectId(projectId);
   }
 
   @Override
-  public List<Contributor> listContributorsForProjectAndFilepathInCommit(
-      long projectId, GetContributorsForFileCommand command) {
+  public List<Contributor> listContributorsForProjectAndPathInCommit(
+      long projectId, GetContributorsForPathCommand command) {
+    checkProjectExists(projectId);
+    return listContributorsPort.listAllByProjectIdAndPathInCommit(
+        projectId, command.getCommitHash(), command.getPath());
+  }
+
+  private void checkProjectExists(long projectId) {
     if (!getProjectPort.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }
-    return listContributorsPort.listAllByProjectIdAndFilepathInCommit(
-        projectId, command.getCommitHash(), command.getFilename());
   }
 }
