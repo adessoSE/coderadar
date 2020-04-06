@@ -122,11 +122,8 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
           + "YIELD value WITH commits, renames, value.deletes as deletes "
           + "UNWIND commits as c "
           + "MATCH (f)-[:CHANGED_IN]->(c) WHERE NOT(f IN deletes OR f IN renames) "
-          + "RETURN DISTINCT f.path as path "
-          + "ORDER BY path")
-  List<String> getFileTreeForCommit(
-      long projectId,
-      @NonNull String commitHash);
+          + "RETURN DISTINCT f.path as path")
+  List<String> getFileTreeForCommit(long projectId, @NonNull String commitHash);
 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "

@@ -16,7 +16,7 @@ export class FileViewComponent implements OnInit {
 
   treeControl = new NestedTreeControl<FileTreeNode>(node => node.children);
   dataSource = new MatTreeNestedDataSource<FileTreeNode>();
-  private projectId: any;
+  public projectId: any;
   public commitHash: any;
   public tree: FileTreeNode;
 

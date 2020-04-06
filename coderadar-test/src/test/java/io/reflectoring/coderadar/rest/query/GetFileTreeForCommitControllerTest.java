@@ -12,7 +12,6 @@ import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.c
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.query.domain.FileTree;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
-import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import java.net.URL;
 import java.util.Objects;
@@ -85,28 +84,8 @@ public class GetFileTreeForCommitControllerTest extends ControllerTestTemplate {
     Assertions.assertEquals(
         "GetMetricsForCommitCommand.java", fileTree.getChildren().get(0).getPath());
     Assertions.assertNull(fileTree.getChildren().get(0).getChildren());
-    Assertions.assertEquals("testModule1", fileTree.getChildren().get(1).getPath());
-    Assertions.assertEquals(1, fileTree.getChildren().get(1).getChildren().size());
     Assertions.assertEquals(
-        "NewRandomFile.java", fileTree.getChildren().get(1).getChildren().get(0).getPath());
-    Assertions.assertNull(fileTree.getChildren().get(1).getChildren().get(0).getChildren());
-  }
-
-  @Test
-  void testGetFileTreeReturnErrorWhenNoFilePatternsAreConfigured() throws Exception {
-    MvcResult result =
-        mvc()
-            .perform(
-                get(
-                    "/projects/"
-                        + projectId
-                        + "/files/tree/d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df"))
-            .andReturn();
-
-    ErrorMessageResponse response =
-        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class);
-
-    Assertions.assertEquals(
-        "No file patterns configured for this project.", response.getErrorMessage());
+        "testModule1/NewRandomFile.java", fileTree.getChildren().get(1).getPath());
+    Assertions.assertNull(fileTree.getChildren().get(1).getChildren());
   }
 }
