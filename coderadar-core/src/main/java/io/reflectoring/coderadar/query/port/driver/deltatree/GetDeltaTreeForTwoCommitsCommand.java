@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.query.port.driver;
+package io.reflectoring.coderadar.query.port.driver.deltatree;
 
 import java.util.List;
 import javax.validation.constraints.NotEmpty;
@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetMetricsForCommitCommand {
-  @NotNull @NotEmpty String commit;
+public class GetDeltaTreeForTwoCommitsCommand {
+  @NotNull @NotEmpty String commit1;
+  @NotNull @NotEmpty String commit2;
   @NotNull List<String> metrics;
 }

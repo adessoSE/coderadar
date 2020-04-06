@@ -12,7 +12,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfi
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
-import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
+import io.reflectoring.coderadar.query.port.driver.commitmetrics.GetMetricValuesOfCommitCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
@@ -78,8 +78,8 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
   @Test
   void checkMetricsAreCalculatedCorrectlyForCommit() throws Exception {
-    ConstrainedFields fields = fields(GetMetricsForCommitCommand.class);
-    GetMetricsForCommitCommand command = new GetMetricsForCommitCommand();
+    ConstrainedFields fields = fields(GetMetricValuesOfCommitCommand.class);
+    GetMetricValuesOfCommitCommand command = new GetMetricValuesOfCommitCommand();
     command.setMetrics(
         Arrays.asList(
             "coderadar:size:loc:java",
@@ -120,7 +120,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
   @Test
   void checkMetricsAreCalculatedCorrectlyForFirstCommit() throws Exception {
-    GetMetricsForCommitCommand command = new GetMetricsForCommitCommand();
+    GetMetricValuesOfCommitCommand command = new GetMetricValuesOfCommitCommand();
     command.setMetrics(
         Arrays.asList(
             "coderadar:size:loc:java",
@@ -150,7 +150,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
   @Test
   void checkMetricsAreCalculatedCorrectlyForSecondCommit() throws Exception {
-    GetMetricsForCommitCommand command = new GetMetricsForCommitCommand();
+    GetMetricValuesOfCommitCommand command = new GetMetricValuesOfCommitCommand();
     command.setMetrics(
         Arrays.asList(
             "coderadar:size:loc:java",
@@ -180,7 +180,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
   @Test
   void checkMetricsAreCalculatedCorrectlyForThirdCommit() throws Exception {
-    GetMetricsForCommitCommand command = new GetMetricsForCommitCommand();
+    GetMetricValuesOfCommitCommand command = new GetMetricValuesOfCommitCommand();
     command.setMetrics(
         Arrays.asList(
             "coderadar:size:loc:java",
@@ -210,7 +210,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
   @Test
   void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
-    GetMetricsForCommitCommand command = new GetMetricsForCommitCommand();
+    GetMetricValuesOfCommitCommand command = new GetMetricValuesOfCommitCommand();
     command.setMetrics(
         Arrays.asList(
             "coderadar:size:loc:java",

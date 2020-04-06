@@ -17,7 +17,7 @@ import org.neo4j.ogm.annotation.Relationship;
 public class MetricValueEntity {
   private Long id;
   private String name;
-  private int value;
+  private long value;
   private List<String> findings;
 
   @Relationship(type = "VALID_FOR")

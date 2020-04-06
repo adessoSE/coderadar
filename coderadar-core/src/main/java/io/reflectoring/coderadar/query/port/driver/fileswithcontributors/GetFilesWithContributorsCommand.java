@@ -1,6 +1,6 @@
-package io.reflectoring.coderadar.query.port.driver;
+package io.reflectoring.coderadar.query.port.driver.fileswithcontributors;
 
-import java.util.Date;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetFrequentlyChangedFilesCommand {
+public class GetFilesWithContributorsCommand {
   @NotBlank private String commitHash;
-  private Date startDate;
-  private int frequency;
+
+  @Min(1)
+  private int numberOfContributors;
 }

@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.query.service;
 
 import io.reflectoring.coderadar.query.domain.MetricTree;
 import io.reflectoring.coderadar.query.port.driven.GetMetricTreeForCommitPort;
-import io.reflectoring.coderadar.query.port.driver.GetMetricTreeForCommitUseCase;
-import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
+import io.reflectoring.coderadar.query.port.driver.metrictree.GetMetricTreeForCommitCommand;
+import io.reflectoring.coderadar.query.port.driver.metrictree.GetMetricTreeForCommitUseCase;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,7 +15,7 @@ public class GetMetricTreeForCommitService implements GetMetricTreeForCommitUseC
   }
 
   @Override
-  public MetricTree get(GetMetricsForCommitCommand command, long projectId) {
+  public MetricTree get(GetMetricTreeForCommitCommand command, long projectId) {
     return getMetricTreeForCommitPort.get(command, projectId);
   }
 }

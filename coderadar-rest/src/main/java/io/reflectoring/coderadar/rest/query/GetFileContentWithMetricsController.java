@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.query;
 
 import io.reflectoring.coderadar.query.domain.FileContentWithMetrics;
-import io.reflectoring.coderadar.query.port.driver.GetFileContentWithMetricsCommand;
-import io.reflectoring.coderadar.query.port.driver.GetFileContentWithMetricsUseCase;
+import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsCommand;
+import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

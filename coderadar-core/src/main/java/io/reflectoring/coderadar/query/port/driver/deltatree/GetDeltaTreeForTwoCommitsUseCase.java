@@ -1,9 +1,8 @@
-package io.reflectoring.coderadar.query.port.driven;
+package io.reflectoring.coderadar.query.port.driver.deltatree;
 
 import io.reflectoring.coderadar.query.domain.DeltaTree;
-import io.reflectoring.coderadar.query.port.driver.deltatree.GetDeltaTreeForTwoCommitsCommand;
 
-public interface GetDeltaTreeForTwoCommitsPort {
+public interface GetDeltaTreeForTwoCommitsUseCase {
 
   /**
    * @param command The command containing the commit hashes.

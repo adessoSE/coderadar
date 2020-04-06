@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MetricWithFindings {
   private String name;
-  private int value;
+  private long value;
   private List<Finding> findings;
 }

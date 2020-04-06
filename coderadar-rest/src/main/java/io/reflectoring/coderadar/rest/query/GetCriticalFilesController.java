@@ -4,9 +4,9 @@ import static io.reflectoring.coderadar.rest.GetCommitResponseMapper.mapCommits;
 
 import io.reflectoring.coderadar.query.domain.ContributorsForFile;
 import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
-import io.reflectoring.coderadar.query.port.driver.GetCriticalFilesUseCase;
-import io.reflectoring.coderadar.query.port.driver.GetFilesWithContributorsCommand;
-import io.reflectoring.coderadar.query.port.driver.GetFrequentlyChangedFilesCommand;
+import io.reflectoring.coderadar.query.port.driver.fileswithcontributors.GetCriticalFilesUseCase;
+import io.reflectoring.coderadar.query.port.driver.fileswithcontributors.GetFilesWithContributorsCommand;
+import io.reflectoring.coderadar.query.port.driver.fileswithcontributors.GetFrequentlyChangedFilesCommand;
 import io.reflectoring.coderadar.rest.domain.FileAndCommitsForTimePeriodResponse;
 import java.util.ArrayList;
 import java.util.List;

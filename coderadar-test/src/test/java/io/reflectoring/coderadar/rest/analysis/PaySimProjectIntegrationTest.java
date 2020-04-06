@@ -25,8 +25,8 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.updat
 import io.reflectoring.coderadar.query.domain.DeltaTree;
 import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
-import io.reflectoring.coderadar.query.port.driver.GetDeltaTreeForTwoCommitsCommand;
-import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
+import io.reflectoring.coderadar.query.port.driver.commitmetrics.GetMetricValuesOfCommitCommand;
+import io.reflectoring.coderadar.query.port.driver.deltatree.GetDeltaTreeForTwoCommitsCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import java.io.File;
 import java.io.IOException;
@@ -133,16 +133,17 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
 
     // Check values for latest (newest) commit
     List<String> availableMetrics = metricQueryRepository.getAvailableMetricsInProject(projectId);
-    GetMetricsForCommitCommand getMetricsForCommitCommand = new GetMetricsForCommitCommand();
-    getMetricsForCommitCommand.setMetrics(availableMetrics);
-    getMetricsForCommitCommand.setCommit("5d7ba2de71dcce2746a75bc0cf668a129f023c5d");
+    GetMetricValuesOfCommitCommand getMetricValuesOfCommitCommand =
+        new GetMetricValuesOfCommitCommand();
+    getMetricValuesOfCommitCommand.setMetrics(availableMetrics);
+    getMetricValuesOfCommitCommand.setCommit("5d7ba2de71dcce2746a75bc0cf668a129f023c5d");
 
     MvcResult result =
         mvc()
             .perform(
                 get("/projects/" + projectId + "/metricvalues/perCommit")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(toJson(getMetricsForCommitCommand)))
+                    .content(toJson(getMetricValuesOfCommitCommand)))
             .andReturn();
 
     List<MetricValueForCommit> metricValuesForCommit =
@@ -199,16 +200,17 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
   private void testMetricValues(Long projectId) throws Exception {
     // Check values for latest (newest) commit
     List<String> availableMetrics = metricQueryRepository.getAvailableMetricsInProject(projectId);
-    GetMetricsForCommitCommand getMetricsForCommitCommand = new GetMetricsForCommitCommand();
-    getMetricsForCommitCommand.setMetrics(availableMetrics);
-    getMetricsForCommitCommand.setCommit("5d7ba2de71dcce2746a75bc0cf668a129f023c5d");
+    GetMetricValuesOfCommitCommand getMetricValuesOfCommitCommand =
+        new GetMetricValuesOfCommitCommand();
+    getMetricValuesOfCommitCommand.setMetrics(availableMetrics);
+    getMetricValuesOfCommitCommand.setCommit("5d7ba2de71dcce2746a75bc0cf668a129f023c5d");
 
     MvcResult result =
         mvc()
             .perform(
                 get("/projects/" + projectId + "/metricvalues/perCommit")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(toJson(getMetricsForCommitCommand)))
+                    .content(toJson(getMetricValuesOfCommitCommand)))
             .andReturn();
 
     List<MetricValueForCommit> metricValuesForCommit =
@@ -226,16 +228,17 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     Assertions.assertEquals(1362L, metricValuesForCommit.get(3).getValue());
 
     // Check values for second commit
-    GetMetricsForCommitCommand getMetricsForCommitCommand2 = new GetMetricsForCommitCommand();
-    getMetricsForCommitCommand2.setMetrics(availableMetrics);
-    getMetricsForCommitCommand2.setCommit("f87b286a50fe303bda94203b216d302f8854d42b");
+    GetMetricValuesOfCommitCommand getMetricValuesOfCommitCommand2 =
+        new GetMetricValuesOfCommitCommand();
+    getMetricValuesOfCommitCommand2.setMetrics(availableMetrics);
+    getMetricValuesOfCommitCommand2.setCommit("f87b286a50fe303bda94203b216d302f8854d42b");
 
     MvcResult result2 =
         mvc()
             .perform(
                 get("/projects/" + projectId + "/metricvalues/perCommit")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(toJson(getMetricsForCommitCommand2)))
+                    .content(toJson(getMetricValuesOfCommitCommand2)))
             .andReturn();
 
     List<MetricValueForCommit> metricValuesForCommit2 =

@@ -1,9 +1,8 @@
-package io.reflectoring.coderadar.query.port.driven;
+package io.reflectoring.coderadar.query.port.driver.metrictree;
 
 import io.reflectoring.coderadar.query.domain.MetricTree;
-import io.reflectoring.coderadar.query.port.driver.metrictree.GetMetricTreeForCommitCommand;
 
-public interface GetMetricTreeForCommitPort {
+public interface GetMetricTreeForCommitUseCase {
 
   /**
    * @param command The command containing the commit hash and the metrics we are interested in.

@@ -2,8 +2,8 @@ package io.reflectoring.coderadar.query.service;
 
 import io.reflectoring.coderadar.query.domain.DeltaTree;
 import io.reflectoring.coderadar.query.port.driven.GetDeltaTreeForTwoCommitsPort;
-import io.reflectoring.coderadar.query.port.driver.GetDeltaTreeForTwoCommitsCommand;
-import io.reflectoring.coderadar.query.port.driver.GetDeltaTreeForTwoCommitsUseCase;
+import io.reflectoring.coderadar.query.port.driver.deltatree.GetDeltaTreeForTwoCommitsCommand;
+import io.reflectoring.coderadar.query.port.driver.deltatree.GetDeltaTreeForTwoCommitsUseCase;
 import org.springframework.stereotype.Service;
 
 @Service

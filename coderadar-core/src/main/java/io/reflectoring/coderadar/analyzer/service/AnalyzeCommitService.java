@@ -114,12 +114,8 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
                 finding.getCharEnd()));
       }
       metricValues.add(
-          new MetricValue( // TODO: intValue()...
-              metric.getId(),
-              fileMetrics.getMetricCount(metric).intValue(),
-              commitId,
-              fileId,
-              findings));
+          new MetricValue(
+              metric.getId(), fileMetrics.getMetricCount(metric), commitId, fileId, findings));
     }
     return metricValues;
   }

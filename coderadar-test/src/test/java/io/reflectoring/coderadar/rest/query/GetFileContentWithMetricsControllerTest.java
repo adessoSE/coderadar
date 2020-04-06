@@ -10,7 +10,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfi
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.query.domain.FileContentWithMetrics;
-import io.reflectoring.coderadar.query.port.driver.GetFileContentWithMetricsCommand;
+import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import java.net.URL;
@@ -83,6 +83,10 @@ public class GetFileContentWithMetricsControllerTest extends ControllerTestTempl
             .andDo(
                 document(
                     "files/content",
+                    requestFields(
+                        fieldWithPath("commitHash")
+                            .description("The commit whose file tree to search in."),
+                        fieldWithPath("filepath").description("The path of the file")),
                     responseFields(
                         fieldWithPath("content").description("The content of the file as a string"),
                         subsectionWithPath("metrics")

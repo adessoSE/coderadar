@@ -7,7 +7,7 @@ import io.reflectoring.coderadar.plugin.api.ChangeType;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.query.domain.*;
 import io.reflectoring.coderadar.query.port.driven.GetDeltaTreeForTwoCommitsPort;
-import io.reflectoring.coderadar.query.port.driver.GetDeltaTreeForTwoCommitsCommand;
+import io.reflectoring.coderadar.query.port.driver.deltatree.GetDeltaTreeForTwoCommitsCommand;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;

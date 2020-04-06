@@ -6,8 +6,8 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.query.domain.FileContentWithMetrics;
 import io.reflectoring.coderadar.query.domain.MetricWithFindings;
 import io.reflectoring.coderadar.query.port.driven.GetMetricsAndFindingsForFilePort;
-import io.reflectoring.coderadar.query.port.driver.GetFileContentWithMetricsCommand;
-import io.reflectoring.coderadar.query.port.driver.GetFileContentWithMetricsUseCase;
+import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsCommand;
+import io.reflectoring.coderadar.query.port.driver.filecontent.GetFileContentWithMetricsUseCase;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import java.util.List;
 import org.springframework.stereotype.Service;
