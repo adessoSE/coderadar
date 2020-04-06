@@ -121,14 +121,12 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
           + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: \"DELETE\"}]->(c) RETURN collect(f) as deletes', {commits: commits}) "
           + "YIELD value WITH commits, renames, value.deletes as deletes "
           + "UNWIND commits as c "
-          + "MATCH (f)-[:CHANGED_IN]->(c) WHERE NOT(f IN deletes OR f IN renames) AND any(x IN {2} WHERE f.path =~ x) AND none(x IN {3} WHERE f.path =~ x) "
+          + "MATCH (f)-[:CHANGED_IN]->(c) WHERE NOT(f IN deletes OR f IN renames) "
           + "RETURN DISTINCT f.path as path "
           + "ORDER BY path")
   List<String> getFileTreeForCommit(
       long projectId,
-      @NonNull String commitHash,
-      @NonNull List<String> includes,
-      @NonNull List<String> excludes);
+      @NonNull String commitHash);
 
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "

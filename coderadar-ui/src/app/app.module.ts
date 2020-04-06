@@ -31,7 +31,7 @@ import {
   MatListModule,
   MatMenuModule, MatPaginatorModule,
   MatSidenavModule,
-  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatTabsModule, MatDialogModule,
+  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatTabsModule, MatDialogModule, MatTreeModule,
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
@@ -56,6 +56,7 @@ import {PinchZoomModule} from 'ngx-pinch-zoom';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ListViewComponent } from './view/project-dashboard/list-view/list-view.component';
 import { BranchViewComponent } from './view/project-dashboard/branch-view/branch-view.component';
+import { FileViewComponent } from './view/file-view/file-view.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -70,6 +71,7 @@ const appRoutes: Routes = [
   {path: 'project/:id/:name', component: ViewCommitComponent},
   {path: 'project/:projectId/:commitName/dependency-map', component: DependencyRootComponent},
   {path: 'project/:projectId/:commitName1/:commitName2/dependency-map', component: DependencyCompareComponent},
+  {path: 'project/:projectId/:commitHash/files', component: FileViewComponent},
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
 
@@ -94,11 +96,13 @@ const appRoutes: Routes = [
     TreeNodeComponent,
     CityViewHeaderComponent,
     ListViewComponent,
-    BranchViewComponent
+    BranchViewComponent,
+    FileViewComponent
   ],
   imports: [
     BrowserModule,
     MatDialogModule,
+    MatTreeModule,
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot(appRoutes, {scrollPositionRestoration: 'enabled'}),

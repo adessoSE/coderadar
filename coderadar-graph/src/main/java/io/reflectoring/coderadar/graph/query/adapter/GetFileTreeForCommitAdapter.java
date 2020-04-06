@@ -26,12 +26,25 @@ public class GetFileTreeForCommitAdapter implements GetFileTreeForCommitPort {
         PatternUtil.mapPatternsToRegex(filePatterns);
     List<String> filepaths =
         metricQueryRepository.getFileTreeForCommit(
-            projectId, commitHash, includesAndExcludes.getFirst(), includesAndExcludes.getSecond());
+            projectId, commitHash);
     FileTree fileTree = new FileTree("/", new ArrayList<>());
     for (String filepath : filepaths) {
       addToTree(fileTree, Arrays.asList(filepath.split("/")));
     }
+    mergeSinglePaths(fileTree);
     return fileTree;
+  }
+
+  private void mergeSinglePaths(FileTree fileTree) {
+    if(fileTree.getChildren() != null) {
+      for (FileTree child : fileTree.getChildren()) {
+        mergeSinglePaths(child);
+        while (child.getChildren() != null && child.getChildren().size() == 1) {
+          child.setPath(child.getPath() + "/" + child.getChildren().get(0).getPath());
+          child.setChildren(child.getChildren().get(0).getChildren());
+        }
+      }
+    }
   }
 
   private void addToTree(FileTree tree, List<String> path) {
