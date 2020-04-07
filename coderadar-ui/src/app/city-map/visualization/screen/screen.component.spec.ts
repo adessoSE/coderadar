@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {ScreenComponent} from './screen.component';
-import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {FocusService} from '../../service/focus.service';
 import {TooltipService} from '../../service/tooltip.service';
 import {ComparisonPanelService} from '../../service/comparison-panel.service';
@@ -11,6 +11,9 @@ import {MergedView} from "../view/merged-view";
 import {ScreenType} from "../../enum/ScreenType";
 import {type} from "os";
 import {SplitView} from "../view/split-view";
+import {ViewType} from "../../enum/ViewType";
+import {IFilter} from "../../interfaces/IFilter";
+import {IMetricMapping} from "../../interfaces/IMetricMapping";
 
 // TODO fix component, test not working, instantiation fails
 xdescribe('ScreenComponent', () => {

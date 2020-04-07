@@ -20,6 +20,8 @@ import {CityViewComponent} from '../city-view/city-view.component';
 import {AppComponent} from '../../app.component';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {By, Title} from '@angular/platform-browser';
+import {detectChanges} from "@angular/core/src/render3";
+import {PageEvent} from "@angular/material/paginator";
 
 describe('ProjectDashboardComponent', () => {
   let component: ProjectDashboardComponent;
@@ -609,29 +611,27 @@ describe('ProjectDashboardComponent', () => {
 
     fixture = TestBed.createComponent(ProjectDashboardComponent);
     component = fixture.componentInstance;
-    component.commits = commits;
-    fixture.detectChanges();
-    return fixture.whenStable().then(() => {
-      fixture.detectChanges();
-    })
   });
 
   it('should display two commits', () => {
+    component.commits = commits;
+    fixture.detectChanges();
     expect(fixture.debugElement.queryAll(By.css('mat-accordion')).length).toBe(2);
     const commit1 = fixture.debugElement.queryAll(By.css('mat-accordion'))[0].nativeElement;
     const commit2 = fixture.debugElement.queryAll(By.css('mat-accordion'))[1].nativeElement;
-    expect(commit1.querySelectorAll('mat-panel-description')[0].innerText).toBe('init');
+    expect(commit1.querySelectorAll('mat-panel-description')[0].innerText).toBe('init ');
     expect(commit1.querySelectorAll('mat-panel-description')[1].innerText).toBe('testUser');
     expect(commit1.querySelectorAll('mat-panel-description')[2].innerText).toBe('initial commit');
-    expect(commit1.querySelectorAll('mat-panel-description')[3].innerText).toBe(1576832400000);
+    expect(commit1.querySelectorAll('mat-panel-description')[3].innerText).toBe('20.12.2019');
 
-    expect(commit2.querySelectorAll('mat-panel-description')[0].innerText).toBe('second');
+    expect(commit2.querySelectorAll('mat-panel-description')[0].innerText).toBe('second ');
     expect(commit2.querySelectorAll('mat-panel-description')[1].innerText).toBe('testUser');
     expect(commit2.querySelectorAll('mat-panel-description')[2].innerText).toBe('second commit');
-    expect(commit2.querySelectorAll('mat-panel-description')[3].innerText).toBe(1576832800000);
+    expect(commit2.querySelectorAll('mat-panel-description')[3].innerText).toBe('20.12.2019');
   });
 
   it('should display complexity analysis button', () => {
+    component.commits = commits;
     component.selectedCommit1 = commits[0];
     component.selectedCommit2 = commits[1];
     fixture.detectChanges();
@@ -639,18 +639,21 @@ describe('ProjectDashboardComponent', () => {
   });
 
   it('should display complexity analysis button only selectedCommit1', () => {
+    component.commits = commits;
     component.selectedCommit1 = commits[0];
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('mat-icon')).nativeElement).toBeFalsy();
+    expect(fixture.debugElement.query(By.css('mat-icon'))).toBeFalsy();
   });
 
   it('should display complexity analysis button  only selectedCommit2', () => {
+    component.commits = commits;
     component.selectedCommit2 = commits[1];
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('mat-icon')).nativeElement).toBeFalsy();
+    expect(fixture.debugElement.query(By.css('mat-icon'))).toBeFalsy();
   });
 
   it('should display complexity analysis button selectedCommit1 not analyzed', () => {
+    component.commits = commits;
     component.selectedCommit1 = {
       name: 'init',
       author: 'testUser',
@@ -660,10 +663,11 @@ describe('ProjectDashboardComponent', () => {
     };
     component.selectedCommit2 = commits[1];
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('mat-icon')).nativeElement).toBeFalsy();
+    expect(fixture.debugElement.query(By.css('mat-icon'))).toBeFalsy();
   });
 
   it('should display complexity analysis button selectedCommit2 not analyzed', () => {
+    component.commits = commits;
     component.selectedCommit1 = commits[0];
     component.selectedCommit2 = {
       name: 'second',
@@ -673,6 +677,39 @@ describe('ProjectDashboardComponent', () => {
       analyzed: false
     };
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.css('mat-icon')).nativeElement).toBeFalsy();
+    expect(fixture.debugElement.query(By.css('mat-icon'))).toBeFalsy();
+  });
+
+  it('should handle paginators', () => {
+    component.commits = [];
+    for (let i = 0; i < 20; i++) {
+      component.commits.push({
+        name: `c ${i}`,
+        author: 'testUser',
+        comment: `commit ${i}`,
+        timestamp: 1576832400000 + (i * 86400000),
+        analyzed: false
+      });
+    }
+    expect(component.commits.length).toBe(20);
+    fixture.detectChanges();
+    expect(fixture.debugElement.queryAll(By.css('mat-accordion')).length).toBe(15);
+    const commit1 = fixture.debugElement.queryAll(By.css('mat-accordion'))[0].nativeElement;
+    expect(commit1.querySelectorAll('mat-panel-description')[0].innerText).toBe('c 0 ');
+    expect(commit1.querySelectorAll('mat-panel-description')[1].innerText).toBe('testUser');
+    expect(commit1.querySelectorAll('mat-panel-description')[2].innerText).toBe('commit 0');
+    expect(commit1.querySelectorAll('mat-panel-description')[3].innerText).toBe('20.12.2019');
+    const pageEvent = new PageEvent();
+    pageEvent.pageIndex = 1;
+    pageEvent.length = 20;
+    pageEvent.previousPageIndex = 0;
+    pageEvent.pageSize = 15;
+    component.syncPaginators(pageEvent);
+    fixture.detectChanges();
+    const commit15 = fixture.debugElement.queryAll(By.css('mat-accordion'))[0].nativeElement;
+    expect(commit15.querySelectorAll('mat-panel-description')[0].innerText).toBe('c 15 ');
+    expect(commit15.querySelectorAll('mat-panel-description')[1].innerText).toBe('testUser');
+    expect(commit15.querySelectorAll('mat-panel-description')[2].innerText).toBe('commit 15');
+    expect(commit15.querySelectorAll('mat-panel-description')[3].innerText).toBe('4.1.2020');
   });
 });

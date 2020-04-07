@@ -8,11 +8,12 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {AppEffects} from '../shared/effects';
 import {Actions} from '@ngrx/effects';
 import {RouterTestingModule} from '@angular/router/testing';
-import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {IFilter} from "../interfaces/IFilter";
 
 describe('ControlPanelComponent', () => {
   let component: ControlPanelComponent;
-  let fixture: ComponentFixture<TestComponentWrapperComponent>;
+  let fixture: ComponentFixture<ControlPanelComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

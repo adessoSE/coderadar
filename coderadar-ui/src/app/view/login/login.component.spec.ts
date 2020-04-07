@@ -146,9 +146,7 @@ describe('LoginComponent', () => {
       imports: [
         FormsModule, // ngModel
         HttpClientTestingModule,
-        RouterTestingModule/*.withRoutes([
-          {path: 'login', component: LoginComponent},
-        ])*/,
+        RouterTestingModule,
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })

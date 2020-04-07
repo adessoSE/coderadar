@@ -449,12 +449,12 @@ describe('EditProjectComponent', () => {
   });
 
   it('should edit component in HTML', () => {
-    fixture.whenStable().then(() => {
+    // fixture.whenStable().then(() => {
       setValues('test2', 'https://github.com/reflectoring/coderadar', undefined, '', null, null);
       expect(component.project.name).toBe('test2');
       button.click();
       expect(submitSpy).toHaveBeenCalled();
-    });
+    // });
   });
 
   it('should edit component name empty in HTML', () => {

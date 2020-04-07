@@ -9,6 +9,14 @@ import {HttpClientModule} from '@angular/common/http';
 import {RouterTestingModule} from '@angular/router/testing';
 import {AppComponent} from '../../app.component';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {LoginComponent} from "../login/login.component";
+import {By} from "@angular/platform-browser";
+
+let registerButton;
+let fixture;
+let usernameInput;
+let passwordInput;
+let passwordConfirmInput;
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -104,3 +112,82 @@ describe('RegisterComponent', () => {
     });
   });
 });
+
+describe('RegisterComponent', () => {
+  let component: RegisterComponent;
+  let routerSpy;
+  let submitFormSpy;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [RegisterComponent],
+      imports: [
+        FormsModule, // ngModel
+        HttpClientTestingModule,
+        RouterTestingModule,
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(RegisterComponent);
+    component = fixture.componentInstance;
+    routerSpy = spyOn(Router.prototype, 'navigate').and.callFake(() => {});
+    submitFormSpy = spyOn(component, 'submitForm').and.callFake(() => {});
+    fixture.detectChanges();
+    usernameInput = fixture.debugElement.query(By.css('input[name="username"]')).nativeElement;
+    passwordInput = fixture.debugElement.query(By.css('input[name="password"]')).nativeElement;
+    passwordConfirmInput = fixture.debugElement.query(By.css('input[name="confirmPassword"]')).nativeElement;
+    registerButton = fixture.debugElement.query(By.css('button[type="submit"]')).nativeElement;
+    return fixture.whenStable().then(() => {
+      fixture.detectChanges();
+    });
+  });
+
+  it('should register user in HTML', () => {
+    setValues('testUser', 'testPassword', 'testPassword');
+    registerButton.click();
+    expect(submitFormSpy).toHaveBeenCalled();
+  });
+
+  it('should register user user already exists in HTML', () => {
+    setValues('testUser', 'testPassword', 'testPassword');
+    registerButton.click();
+    expect(submitFormSpy).toHaveBeenCalled();
+    component.invalidUser = true;
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('mat-error')).nativeElement.innerText)
+      .toBe('The chosen username is already in use!');
+  });
+
+  it('should register user passwords do not match in HTML', () => {
+    setValues('testUser', 'testPassword', 'test');
+    registerButton.click();
+    expect(submitFormSpy).toHaveBeenCalled();
+    component.passwordsDoNotMatch = true;
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('mat-error')).nativeElement.innerText)
+      .toEqual('Passwords do not match!');
+  });
+
+  it('should login user invalid password in HTML', () => {
+    setValues('testUser', 'test', 'test');
+    registerButton.click();
+    expect(submitFormSpy).toHaveBeenCalled();
+    component.validPassword = false;
+    fixture.detectChanges();
+    expect(fixture.debugElement.query(By.css('mat-error')).nativeElement.innerText)
+      .toEqual('Password must be at least\n8 symbols long and contain a character and a digit!');
+  });
+});
+
+function setValues(username, password, confirmPassword) {
+  usernameInput.value = username;
+  passwordInput.value = password;
+  passwordConfirmInput.value = confirmPassword;
+
+  usernameInput.dispatchEvent(new Event('input'));
+  passwordInput.dispatchEvent(new Event('input'));
+  passwordConfirmInput.dispatchEvent(new Event('input'));
+  fixture.detectChanges();
+}
