@@ -134,11 +134,9 @@ public class DependencyTreeAdapter implements GetDependencyTreePort {
     } else {
       javaAnalyzer
           .getValidImports(new String(commitContents.get(node.getPath())))
-          .parallelStream()
           .forEach(
               importString ->
                   getNodeFromImport(importString)
-                      .parallelStream()
                       .forEach(node::addToDependencies));
     }
   }
