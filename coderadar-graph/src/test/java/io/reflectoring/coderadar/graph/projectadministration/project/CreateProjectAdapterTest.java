@@ -46,6 +46,6 @@ class CreateProjectAdapterTest {
 
     verify(projectRepository, times(1)).save(any());
     verifyNoMoreInteractions(projectRepository);
-    Assertions.assertEquals(new Long(1L), returnedId);
+    Assertions.assertEquals(Long.valueOf(1L), returnedId);
   }
 }
