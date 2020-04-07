@@ -12,8 +12,8 @@ public interface ListContributorsUseCase {
 
   /**
    * @param projectId The project id.
-   * @param command Contains the filepath/module path we are looking for.
-   * @return list of contributors that have made changes to the given file or module.
+   * @param command Contains the filepath/directory path we are looking for.
+   * @return list of contributors that have made changes to the given file or directory.
    */
   List<Contributor> listContributorsForProjectAndPathInCommit(
       long projectId, GetContributorsForPathCommand command);

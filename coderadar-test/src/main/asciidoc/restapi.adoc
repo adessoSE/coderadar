@@ -736,11 +736,11 @@ include::{snippets}/contributors/list/path/file/http-response.adoc[]
 
 ==== Example Request for a Directory
 
-include::{snippets}/contributors/list/path/module/http-request.adoc[]
+include::{snippets}/contributors/list/path/directory/http-request.adoc[]
 
 ==== Example Response
 
-include::{snippets}/contributors/list/path/module/http-response.adoc[]
+include::{snippets}/contributors/list/path/directory/http-response.adoc[]
 
 
 
