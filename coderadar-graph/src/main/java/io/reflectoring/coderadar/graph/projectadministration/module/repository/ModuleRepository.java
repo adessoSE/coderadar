@@ -38,16 +38,6 @@ public interface ModuleRepository extends Neo4jRepository<ModuleEntity, Long> {
   ModuleEntity createModule(long projectOrModuleId, @NonNull String modulePath);
 
   /**
-   * @param path The path to search in.
-   * @param projectOrModuleId The id of the project or a module.
-   * @return True if any file falls under the given path, false otherwise.
-   */
-  @Query(
-      "MATCH (p)-[:CONTAINS]->(f:FileEntity) WHERE ID(p) = {1} AND f.path STARTS WITH {0} WITH f LIMIT 1 RETURN COUNT(f) > 0 ")
-  @NonNull
-  Boolean fileInPathExists(@NonNull String path, long projectOrModuleId);
-
-  /**
    * Detaches a module from a project while keeping all of it's files still attached to it.
    *
    * @param projectId The project id.

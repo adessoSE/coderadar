@@ -689,15 +689,23 @@ include::{snippets}/contributors/list/response-fields.adoc[]
 
 
 
-=== List all contributors for a single File
+=== List all contributors for a given path
 
-==== Example Request
+==== Example Request for a File
 
-include::{snippets}/contributors/list/file/http-request.adoc[]
+include::{snippets}/contributors/list/path/file/http-request.adoc[]
 
 ==== Example Response
 
-include::{snippets}/contributors/list/file/http-response.adoc[]
+include::{snippets}/contributors/list/path/file/http-response.adoc[]
+
+==== Example Request for a Directory
+
+include::{snippets}/contributors/list/path/directory/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/contributors/list/path/directory/http-response.adoc[]
 
 
 

@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.graph.contributor.adapter;
 
 import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driven.ListContributorsPort;
+import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import io.reflectoring.coderadar.graph.contributor.ContributorMapper;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
 import io.reflectoring.coderadar.graph.query.repository.ContributorQueryRepository;
@@ -12,12 +13,15 @@ import org.springframework.stereotype.Service;
 public class ListContributorsAdapter implements ListContributorsPort {
   private final ContributorMapper mapper = new ContributorMapper();
   private final ContributorRepository contributorRepository;
+  private final FileRepository fileRepository;
   private final ContributorQueryRepository contributorQueryRepository;
 
   public ListContributorsAdapter(
       ContributorRepository contributorRepository,
+      FileRepository fileRepository,
       ContributorQueryRepository contributorQueryRepository) {
     this.contributorRepository = contributorRepository;
+    this.fileRepository = fileRepository;
     this.contributorQueryRepository = contributorQueryRepository;
   }
 
@@ -32,10 +36,16 @@ public class ListContributorsAdapter implements ListContributorsPort {
   }
 
   @Override
-  public List<Contributor> listAllByProjectIdAndFilepathInCommit(
-      long projectId, String commitHash, String filename) {
-    return mapper.mapNodeEntities(
-        contributorQueryRepository.findAllByProjectIdAndFilepathInCommit(
-            projectId, commitHash, filename));
+  public List<Contributor> listAllByProjectIdAndPathInCommit(
+      long projectId, String commitHash, String path) {
+    if (fileRepository.fileWithPathExists(projectId, path)) {
+      return mapper.mapNodeEntities(
+          contributorQueryRepository.findAllByProjectIdAndFilepathInCommit(
+              projectId, commitHash, path));
+    } else {
+      return mapper.mapNodeEntities(
+          contributorQueryRepository.findAllByProjectIdAndDirectoryInCommit(
+              projectId, commitHash, path));
+    }
   }
 }

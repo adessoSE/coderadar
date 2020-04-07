@@ -15,9 +15,10 @@ public interface ListContributorsPort {
 
   /**
    * @param projectId The project id.
-   * @param filename The filename we are looking for.
-   * @return list of contributors that have made changes to the file with the given filename
+   * @param commitHash Only search for critical files in the file tree of the given commit.
+   * @param path The path to look for. It can be a directory or a filepath.
+   * @return The list of contributors that worked on the given file/directory.
    */
-  List<Contributor> listAllByProjectIdAndFilepathInCommit(
-      long projectId, String commitHash, String filename);
+  List<Contributor> listAllByProjectIdAndPathInCommit(
+      long projectId, String commitHash, String path);
 }

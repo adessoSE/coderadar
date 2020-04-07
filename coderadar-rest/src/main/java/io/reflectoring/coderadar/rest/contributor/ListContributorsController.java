@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.contributor;
 
 import io.reflectoring.coderadar.contributor.domain.Contributor;
-import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForFileCommand;
+import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForPathCommand;
 import io.reflectoring.coderadar.contributor.port.driver.ListContributorsUseCase;
 import io.reflectoring.coderadar.rest.domain.GetContributorResponse;
 import java.util.ArrayList;
@@ -35,15 +35,13 @@ public class ListContributorsController {
   }
 
   @GetMapping(
-      path = "/projects/{projectId}/contributors/file",
+      path = "/projects/{projectId}/contributors/path",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetContributorResponse>> listContributorsForFile(
-      @PathVariable long projectId, @RequestBody @Validated GetContributorsForFileCommand command) {
+      @PathVariable long projectId, @RequestBody @Validated GetContributorsForPathCommand command) {
     return new ResponseEntity<>(
-        map(
-            listContributorsUseCase.listContributorsForProjectAndFilepathInCommit(
-                projectId, command)),
+        map(listContributorsUseCase.listContributorsForProjectAndPathInCommit(projectId, command)),
         HttpStatus.OK);
   }
 
