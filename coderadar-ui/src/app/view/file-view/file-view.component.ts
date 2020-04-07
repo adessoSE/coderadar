@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatTreeNestedDataSource} from '@angular/material';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {FileTreeNode} from '../../model/file-tree-node';
@@ -6,19 +6,31 @@ import {ProjectService} from '../../service/project.service';
 import {UserService} from '../../service/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
+import {MetricWithFindings} from '../../model/metric-with-findings';
+import * as Prism from 'prismjs';
+import 'prismjs/components/prism-java';
+import 'prismjs/plugins/line-numbers/prism-line-numbers';
+
 
 @Component({
   selector: 'app-file-view',
   templateUrl: './file-view.component.html',
   styleUrls: ['./file-view.component.css']
 })
-export class FileViewComponent implements OnInit {
+export class FileViewComponent implements OnInit, AfterViewChecked {
+
+  @ViewChild('fileView', {read: ElementRef})fileView: ElementRef;
+
 
   treeControl = new NestedTreeControl<FileTreeNode>(node => node.children);
   dataSource = new MatTreeNestedDataSource<FileTreeNode>();
   public projectId: any;
   public commitHash: any;
   public tree: FileTreeNode;
+  public currentFileContent = '';
+  public fileContentHtml = '';
+  public currentFileMetrics: MetricWithFindings[];
+  public currentSelectedFilepath: string;
 
   constructor(private projectService: ProjectService,
               private router: Router,
@@ -47,5 +59,45 @@ export class FileViewComponent implements OnInit {
         this.router.navigate(['/dashboard']);
       }
     });
+  }
+
+  public updateSelectedFile(node: any): void {
+    this.currentSelectedFilepath = this.getFullPath(this.tree.children, node, '');
+    this.currentSelectedFilepath = this.currentSelectedFilepath.substr(1, this.currentSelectedFilepath.length);
+    this.projectService.getFileContentWithMetrics(this.projectId, this.commitHash, this.currentSelectedFilepath)
+      .then(value => {
+        this.currentFileContent = value.body.content;
+        this.currentFileMetrics = value.body.metrics;
+        // this.fileContentHtml = Prism.highlight(this.currentFileContent, Prism.languages.java, 'java');
+
+      }).catch(err => {
+      if (err.status && err.status === FORBIDDEN) {
+        this.userService.refresh(() => this.updateSelectedFile(node));
+      } else if (err.status && err.status === NOT_FOUND) {
+        this.router.navigate(['/dashboard']);
+      }
+    });
+  }
+
+
+  private getFullPath(children: FileTreeNode[], node: any, path: string): string {
+    if (children === null) {
+      return '';
+    }
+    for (const value of children) {
+      if (value === node) {
+        return path += '/' + value.path;
+      } else {
+        const newPath = this.getFullPath(value.children, node, path + '/' + value.path);
+        if (newPath !== '') {
+          return newPath;
+        }
+      }
+    }
+    return '';
+  }
+
+  ngAfterViewChecked(): void {
+    Prism.highlightElement(this.fileView.nativeElement);
   }
 }

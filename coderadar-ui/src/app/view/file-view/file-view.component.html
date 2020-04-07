@@ -3,16 +3,15 @@
 {location: '/project/'+projectId+'/'+commitHash+'/files',
 name: 'File tree for commit ' + commitHash}]"></app-header>
 
-<div class="main">
+<div class="main" style="background-color: rgb(245, 242, 240)">
   <div fxFlex="0 0 25%" fxLayout="row" style="overflow: scroll">
     <mat-tree fxFlex="auto" [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
       <!-- This is the tree node template for leaf nodes -->
       <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
         <li class="mat-tree-node">
-          <!-- use a disabled button to provide padding for tree leaf -->
-          <span style="margin-left: 20px;">
+          <button mat-button style="font-weight:normal; margin-left: 0;" (click)="updateSelectedFile(node)">
               {{node.path}}
-          </span>
+          </button>
         </li>
       </mat-tree-node>
       <!-- This is the tree node template for expandable nodes -->
@@ -34,6 +33,9 @@ name: 'File tree for commit ' + commitHash}]"></app-header>
       </mat-nested-tree-node>
     </mat-tree>
   </div>
+  <pre class="line-numbers" style="width: 100%; height: 100%; font-size: small">
+<code class="language-java" #fileView [textContent]="currentFileContent"></code>
+  </pre>
 </div>
 
 <app-footer></app-footer>

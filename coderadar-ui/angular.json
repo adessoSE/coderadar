@@ -24,10 +24,14 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/prismjs/themes/prism.css",
+              "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css"
             ],
             "scripts": ["node_modules/binpacking/js/packer.growing.js",
-              "node_modules/chroma-js/chroma.min.js"
+              "node_modules/chroma-js/chroma.min.js",
+              "node_modules/prismjs/prism.js",
+              "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js"
             ],
             "es5BrowserSupport": true
           },

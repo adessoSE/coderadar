@@ -12,6 +12,7 @@ import {MetricValue} from '../model/metric-value';
 import {Branch} from '../model/branch';
 import {CommitLog} from '../model/commit-log';
 import {FileTreeNode} from '../model/file-tree-node';
+import {FileContentWithMetrics} from '../model/file-content-with-metrics';
 
 @Injectable({
   providedIn: 'root'
@@ -303,5 +304,10 @@ export class ProjectService {
   public getFileTree(projectId: number, commitHash: string): Promise<HttpResponse<FileTreeNode>> {
     return this.httpClient.get<FileTreeNode>(this.apiURL + 'projects/' + projectId + '/files/tree/' + commitHash,
       {observe: 'response'}).toPromise();
+  }
+
+  getFileContentWithMetrics(projectId: any, commitHash: any, filepath: string): Promise<HttpResponse<FileContentWithMetrics>> {
+    return this.httpClient.post<FileContentWithMetrics>(this.apiURL + 'projects/' + projectId + '/files/content',
+      {commitHash, filepath}, {observe: 'response'}).toPromise();
   }
 }
