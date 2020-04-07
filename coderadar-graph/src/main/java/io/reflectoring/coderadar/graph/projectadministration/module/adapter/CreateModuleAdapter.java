@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.module.adapter;
 
+import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
@@ -16,11 +17,15 @@ import org.springframework.stereotype.Service;
 public class CreateModuleAdapter implements CreateModulePort {
   private final ModuleRepository moduleRepository;
   private final ProjectRepository projectRepository;
+  private final FileRepository fileRepository;
 
   public CreateModuleAdapter(
-      ModuleRepository moduleRepository, ProjectRepository projectRepository) {
+      ModuleRepository moduleRepository,
+      ProjectRepository projectRepository,
+      FileRepository fileRepository) {
     this.moduleRepository = moduleRepository;
     this.projectRepository = projectRepository;
+    this.fileRepository = fileRepository;
   }
 
   /**
@@ -56,7 +61,7 @@ public class CreateModuleAdapter implements CreateModulePort {
   private Long attachModuleToModule(ModuleEntity parentModule, String childModulePath) {
     ModuleEntity childModule;
 
-    if (moduleRepository.fileInPathExists(childModulePath, parentModule.getId())) {
+    if (fileRepository.fileInPathExists(childModulePath, parentModule.getId())) {
       childModule = moduleRepository.createModule(parentModule.getId(), childModulePath);
     } else {
       childModule = new ModuleEntity();
@@ -85,7 +90,7 @@ public class CreateModuleAdapter implements CreateModulePort {
   private Long attachModuleToProject(ProjectEntity projectEntity, String modulePath) {
     ModuleEntity moduleEntity;
 
-    if (moduleRepository.fileInPathExists(modulePath, projectEntity.getId())) {
+    if (fileRepository.fileInPathExists(modulePath, projectEntity.getId())) {
       moduleEntity = moduleRepository.createModule(projectEntity.getId(), modulePath);
     } else {
       moduleEntity = new ModuleEntity();

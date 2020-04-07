@@ -53,6 +53,6 @@ public interface ContributorQueryRepository extends Neo4jRepository<ContributorE
           + "UNWIND commits as c "
           + "MATCH (c)<-[:CHANGED_IN]-(f) WHERE f IN files WITH DISTINCT c.authorEmail as email "
           + "MATCH (co:ContributorEntity)-[:WORKS_ON]->(p) WHERE ID(p) = {0} AND toLower(email) IN co.emails RETURN co ORDER BY co.displayName")
-  List<ContributorEntity> findAllByProjectIdAndModulePathInCommit(
-      long projectId, String commitHash, String modulePath);
+  List<ContributorEntity> findAllByProjectIdAndDirectoryInCommit(
+      long projectId, String commitHash, String directory);
 }

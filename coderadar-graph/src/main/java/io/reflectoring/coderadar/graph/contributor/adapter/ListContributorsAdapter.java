@@ -38,13 +38,13 @@ public class ListContributorsAdapter implements ListContributorsPort {
   @Override
   public List<Contributor> listAllByProjectIdAndPathInCommit(
       long projectId, String commitHash, String path) {
-    if (fileRepository.fileExistsByPath(projectId, path)) {
+    if (fileRepository.fileWithPathExists(projectId, path)) {
       return mapper.mapNodeEntities(
           contributorQueryRepository.findAllByProjectIdAndFilepathInCommit(
               projectId, commitHash, path));
     } else {
       return mapper.mapNodeEntities(
-          contributorQueryRepository.findAllByProjectIdAndModulePathInCommit(
+          contributorQueryRepository.findAllByProjectIdAndDirectoryInCommit(
               projectId, commitHash, path));
     }
   }

@@ -97,7 +97,7 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
   }
 
   @Test
-  public void listContributorsForModule() throws Exception {
+  public void listContributorsForDirectory() throws Exception {
     GetContributorsForPathCommand command =
         new GetContributorsForPathCommand(
             "testModule1", "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382");
@@ -108,7 +108,7 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
                 get("/projects/" + projectId + "/contributors/path")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command)))
-            .andDo(documentListContributorsForModule())
+            .andDo(documentListContributorsForDirectory())
             .andExpect(status().isOk())
             .andReturn();
 
@@ -146,22 +146,22 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
         requestFields(
             fields
                 .withPath("path")
-                .description("The path for. Either it is a filepath or a module path."),
+                .description("The path for. Either it is a filepath or a directory."),
             fields
                 .withPath("commitHash")
                 .description("Get the critical file only if it belongs to this commit tree.")));
   }
 
-  private ResultHandler documentListContributorsForModule() {
+  private ResultHandler documentListContributorsForDirectory() {
     ConstrainedFields<GetContributorsForPathCommand> fields =
         fields(GetContributorsForPathCommand.class);
 
     return document(
-        "contributors/list/path/module",
+        "contributors/list/path/directory",
         requestFields(
             fields
                 .withPath("path")
-                .description("The path for. Either it is a filepath or a module path."),
+                .description("The path for. Either it is a filepath or a directory."),
             fields
                 .withPath("commitHash")
                 .description("Get the critical file only if it belongs to this commit tree.")));
