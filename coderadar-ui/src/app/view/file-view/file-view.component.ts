@@ -1,4 +1,4 @@
-import {AfterViewChecked, AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatTreeNestedDataSource} from '@angular/material';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {FileTreeNode} from '../../model/file-tree-node';
@@ -18,7 +18,11 @@ import 'prismjs/components/prism-scss';
 import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-groovy';
 import 'prismjs/plugins/line-numbers/prism-line-numbers';
-
+import 'prismjs/plugins/line-highlight/prism-line-highlight';
+import {Project} from '../../model/project';
+import {AppComponent} from '../../app.component';
+import {Title} from '@angular/platform-browser';
+import {element} from 'protractor';
 
 @Component({
   selector: 'app-file-view',
@@ -32,23 +36,30 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
 
   treeControl = new NestedTreeControl<FileTreeNode>(node => node.children);
   dataSource = new MatTreeNestedDataSource<FileTreeNode>();
-  public projectId: any;
-  public commitHash: any;
+  public projectId: number;
+  public commitHash: string;
+  public commitHashAbbrev: string;
   public tree: FileTreeNode;
   public currentFileContent = '';
-  public currentFileMetrics: MetricWithFindings[];
+  public currentFileMetrics: MetricWithFindings[] = [];
   public currentSelectedFilepath = '';
+  public findingsString = '';
+  public project: Project = new Project();
 
   constructor(private projectService: ProjectService,
               private router: Router,
               private userService: UserService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private titleService: Title) {
   }
 
   ngOnInit() {
+    this.project.name = '';
     this.route.params.subscribe(params => {
       this.projectId = params.projectId;
       this.commitHash = params.commitHash;
+      this.commitHashAbbrev = this.commitHash.substr(0, 7);
+      this.getProject();
       this.getFileTree();
     });
   }
@@ -75,7 +86,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
       .then(value => {
         this.currentFileContent = value.body.content;
         this.currentFileMetrics = value.body.metrics;
-
+        this.findingsString = this.getAllFindings(this.currentFileMetrics);
       }).catch(err => {
       if (err.status && err.status === FORBIDDEN) {
         this.userService.refresh(() => this.updateSelectedFile(node));
@@ -104,15 +115,41 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-      Prism.highlightElement(this.fileView.nativeElement);
+      Prism.highlightAllUnder(this.fileView.nativeElement);
   }
 
   getLanguageClass() {
     const temp = this.currentSelectedFilepath.split('.');
-    const fileExtention = temp[temp.length - 1];
-    if (fileExtention === 'gradle') {
+    const fileExtension = temp[temp.length - 1];
+    if (fileExtension === 'gradle') {
       return 'language-groovy';
     }
-    return 'language-' + fileExtention;
+    return 'language-' + fileExtension;
+  }
+
+  getAllFindings(metrics: MetricWithFindings[]) {
+    let result = '';
+    for (const m of metrics) {
+      const findings = [];
+      m.findings.forEach(value => result += value.lineStart + '-' + value.lineEnd + ',');
+    }
+    result.substr(0, result.length - 2);
+    return result.length === 0 ? '0' : result;
+  }
+
+
+  private getProject(): void {
+    this.projectService.getProject(this.projectId)
+      .then(response => {
+        this.project = new Project(response.body);
+        this.titleService.setTitle('Coderadar - ' + AppComponent.trimProjectName(this.project.name));
+      })
+      .catch(error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh(() => this.getProject());
+        } else if (error.status && error.status === NOT_FOUND) {
+          this.router.navigate(['/dashboard']);
+        }
+      });
   }
 }
