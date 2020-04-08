@@ -33,8 +33,8 @@ name: 'File tree for commit ' + commitHash}]"></app-header>
       </mat-nested-tree-node>
     </mat-tree>
   </div>
-  <pre class="line-numbers" style="width: 100%; height: 100%; font-size: small">
-<code class="language-java" #fileView [textContent]="currentFileContent"></code>
+  <pre class="line-numbers file-content">
+<code [className]="getLanguageClass()" #fileView [textContent]="currentFileContent"></code>
   </pre>
 </div>
 

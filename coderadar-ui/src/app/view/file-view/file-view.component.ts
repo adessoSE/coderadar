@@ -9,6 +9,14 @@ import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {MetricWithFindings} from '../../model/metric-with-findings';
 import * as Prism from 'prismjs';
 import 'prismjs/components/prism-java';
+import 'prismjs/components/prism-markdown';
+import 'prismjs/components/prism-asciidoc';
+import 'prismjs/components/prism-bash';
+import 'prismjs/components/prism-css';
+import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-scss';
+import 'prismjs/components/prism-json';
+import 'prismjs/components/prism-groovy';
 import 'prismjs/plugins/line-numbers/prism-line-numbers';
 
 
@@ -28,9 +36,8 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   public commitHash: any;
   public tree: FileTreeNode;
   public currentFileContent = '';
-  public fileContentHtml = '';
   public currentFileMetrics: MetricWithFindings[];
-  public currentSelectedFilepath: string;
+  public currentSelectedFilepath = '';
 
   constructor(private projectService: ProjectService,
               private router: Router,
@@ -68,7 +75,6 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
       .then(value => {
         this.currentFileContent = value.body.content;
         this.currentFileMetrics = value.body.metrics;
-        // this.fileContentHtml = Prism.highlight(this.currentFileContent, Prism.languages.java, 'java');
 
       }).catch(err => {
       if (err.status && err.status === FORBIDDEN) {
@@ -98,6 +104,15 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    Prism.highlightElement(this.fileView.nativeElement);
+      Prism.highlightElement(this.fileView.nativeElement);
+  }
+
+  getLanguageClass() {
+    const temp = this.currentSelectedFilepath.split('.');
+    const fileExtention = temp[temp.length - 1];
+    if (fileExtention === 'gradle') {
+      return 'language-groovy';
+    }
+    return 'language-' + fileExtention;
   }
 }
