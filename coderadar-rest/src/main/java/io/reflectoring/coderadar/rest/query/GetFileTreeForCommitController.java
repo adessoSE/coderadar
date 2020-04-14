@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,8 +25,9 @@ public class GetFileTreeForCommitController {
       path = "/projects/{projectId}/files/tree/{commitHash}",
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<FileTree> getMetricValues(
-      @PathVariable("projectId") long projectId, @PathVariable("commitHash") String commitHash) {
+          @PathVariable("projectId") long projectId, @PathVariable("commitHash") String commitHash,
+          @RequestParam("changedOnly") boolean changedFilesOnly) {
     return new ResponseEntity<>(
-        getFileTreeForCommitUseCase.getFileTreeForCommit(projectId, commitHash), HttpStatus.OK);
+        getFileTreeForCommitUseCase.getFileTreeForCommit(projectId, commitHash, changedFilesOnly), HttpStatus.OK);
   }
 }

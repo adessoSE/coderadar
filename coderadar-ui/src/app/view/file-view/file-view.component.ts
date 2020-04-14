@@ -46,6 +46,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   public findingsString = '';
   public project: Project = new Project();
   public highlighted = false;
+  public showOnlyChangedFiles = false;
 
   constructor(private projectService: ProjectService,
               private router: Router,
@@ -68,7 +69,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   hasChild = (_: number, node: FileTreeNode) => node.children !== null;
 
   private getFileTree() {
-    this.projectService.getFileTree(this.projectId, this.commitHash).then(result => {
+    this.projectService.getFileTree(this.projectId, this.commitHash, this.showOnlyChangedFiles).then(result => {
       this.tree = result.body;
       this.dataSource.data = result.body.children;
     }).catch(err => {

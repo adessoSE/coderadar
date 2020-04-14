@@ -301,8 +301,9 @@ export class ProjectService {
       {observe: 'response'}).toPromise();
   }
 
-  public getFileTree(projectId: number, commitHash: string): Promise<HttpResponse<FileTreeNode>> {
-    return this.httpClient.get<FileTreeNode>(this.apiURL + 'projects/' + projectId + '/files/tree/' + commitHash,
+  public getFileTree(projectId: number, commitHash: string, changedOnly: boolean): Promise<HttpResponse<FileTreeNode>> {
+    return this.httpClient.get<FileTreeNode>(this.apiURL + 'projects/' + projectId + '/files/tree/' +
+      commitHash + '?changedOnly=' + changedOnly,
       {observe: 'response'}).toPromise();
   }
 

@@ -18,8 +18,13 @@ public class GetFileTreeForCommitAdapter implements GetFileTreeForCommitPort {
   }
 
   @Override
-  public FileTree getFileTreeForCommit(long projectId, String commitHash) {
-    List<String> filepaths = metricQueryRepository.getFileTreeForCommit(projectId, commitHash);
+  public FileTree getFileTreeForCommit(long projectId, String commitHash, boolean changeFilesOnly) {
+    List<String> filepaths;
+    if(changeFilesOnly){
+      filepaths = metricQueryRepository.getFilesChangedInCommit(projectId, commitHash);
+    } else {
+      filepaths = metricQueryRepository.getFileTreeForCommit(projectId, commitHash);
+    }
     FileTree fileTree = new FileTree("/", new ArrayList<>());
     for (String filepath : filepaths) {
       addToTree(fileTree, Arrays.asList(filepath.split("/")));

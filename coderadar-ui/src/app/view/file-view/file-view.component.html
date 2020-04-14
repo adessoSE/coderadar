@@ -4,6 +4,9 @@
 name: 'File tree for commit ' + commitHashAbbrev}]"></app-header>
 
 <div #tooltip="matTooltip" matTooltip="{{tooltipMessage}}"></div>
+<mat-checkbox style="margin-left: 2%;" [(ngModel)]="showOnlyChangedFiles" (change)="getFileTree()">
+  Show only files changed in this commit
+</mat-checkbox>
 <div class="main" style="background-color: rgb(245, 242, 240)">
   <div fxFlex="0 0 25%" fxLayout="row" style="overflow: scroll">
     <mat-tree fxFlex="auto" [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
