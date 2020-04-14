@@ -31,7 +31,7 @@ import {
   MatListModule,
   MatMenuModule, MatPaginatorModule,
   MatSidenavModule,
-  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatTabsModule, MatDialogModule, MatTreeModule,
+  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatTabsModule, MatDialogModule, MatTreeModule, MatTooltipModule,
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
@@ -113,6 +113,7 @@ const appRoutes: Routes = [
     DragScrollModule,
     FlexLayoutModule,
     MatFormFieldModule,
+    MatToolbarModule,
     MatInputModule,
     MatCardModule,
     MatSnackBarModule,
@@ -141,7 +142,8 @@ const appRoutes: Routes = [
     MatProgressSpinnerModule,
     MatSelectModule,
     PinchZoomModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTooltipModule
   ],
   providers: [
     {

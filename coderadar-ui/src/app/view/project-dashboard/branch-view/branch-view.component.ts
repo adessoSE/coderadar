@@ -186,11 +186,11 @@ export class BranchViewComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     let selectedCommit1Id = null;
-    if (this.selectedCommit1 !== null) {
+    if (this.selectedCommit1 !== null && this.selectedCommit1 !== undefined) {
       selectedCommit1Id = this.selectedCommit1.hash;
     }
     let selectedCommit2Id = null;
-    if (this.selectedCommit2 !== null) {
+    if (this.selectedCommit2 !== null && this.selectedCommit2 !== undefined) {
       selectedCommit2Id = this.selectedCommit2.hash;
     }
     if (selectedCommit1Id != null) {

@@ -1,5 +1,5 @@
 import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MatTreeNestedDataSource} from '@angular/material';
+import {MatTooltip, MatTreeNestedDataSource} from '@angular/material';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {FileTreeNode} from '../../model/file-tree-node';
 import {ProjectService} from '../../service/project.service';
@@ -31,6 +31,8 @@ import {Title} from '@angular/platform-browser';
 export class FileViewComponent implements OnInit, AfterViewChecked {
 
   @ViewChild('fileView', {read: ElementRef})fileView: ElementRef;
+  @ViewChild('tooltip') tooltip: MatTooltip;
+  tooltipMessage = '';
 
   treeControl = new NestedTreeControl<FileTreeNode>(node => node.children);
   dataSource = new MatTreeNestedDataSource<FileTreeNode>();
@@ -118,10 +120,50 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
 
   ngAfterViewChecked(): void {
     if (!this.highlighted && this.currentFileContent !== '') {
-      console.log(this.fileView.nativeElement);
       Prism.highlightAllUnder(this.fileView.nativeElement);
+      this.fileView.nativeElement.children.item(1).remove();
+      const elements: HTMLElement[] = Array.from(this.fileView.nativeElement.children)
+        .slice(1, this.fileView.nativeElement.children.length) as HTMLElement[];
       this.highlighted = true;
+      elements.forEach(value => {
+        value.style.pointerEvents = 'auto';
+        value.onmouseover = (event: MouseEvent) => {
+          this.tooltipMessage = this.getTooltipForRange(value.attributes['data-range']);
+          this.tooltip.disabled = false;
+          this.tooltip.show();
+          if (this.tooltip._overlayRef) {
+            const tip = this.tooltip._overlayRef.overlayElement;
+            if (tip) {
+              setTimeout(() => {
+                tip.style.left = event.clientX + 'px';
+                tip.style.top = event.clientY + 'px';
+              });
+            }
+          }
+        };
+        value.onmouseleave = () => {
+          this.tooltip.hide();
+        };
+      });
     }
+  }
+
+  private getTooltipForRange(range: Attr): string {
+    const lineStart = range.value.split('-')[0];
+    let findings = '';
+    this.currentFileMetrics.forEach(value => {
+      let found = false;
+      for (const finding of value.findings) {
+        if (finding.lineStart === +lineStart) {
+          found = true;
+        }
+      }
+      if (found) {
+        const temp = value.name.split('.');
+        findings += temp[temp.length - 1] + '\n';
+      }
+    });
+    return findings;
   }
 
   getLanguageClass() {
@@ -138,7 +180,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
     for (const m of metrics) {
       m.findings.forEach(value => result += value.lineStart + '-' + value.lineEnd + ',');
     }
-    return result.length === 0 ? '0' : result.substr(0, result.length - 2);
+    return result.length === 0 ? '0' : result.substr(0, result.length - 1);
   }
 
 

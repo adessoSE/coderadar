@@ -3,6 +3,7 @@
 {location: '/project/'+projectId+'/'+commitHash+'/files',
 name: 'File tree for commit ' + commitHashAbbrev}]"></app-header>
 
+<div #tooltip="matTooltip" matTooltip="{{tooltipMessage}}"></div>
 <div class="main" style="background-color: rgb(245, 242, 240)">
   <div fxFlex="0 0 25%" fxLayout="row" style="overflow: scroll">
     <mat-tree fxFlex="auto" [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
