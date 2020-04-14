@@ -18,3 +18,17 @@
 /deep/ .mat-tooltip {
   font-size: 15px;
 }
+
+.checkbox {
+  margin-left: 2%;
+}
+
+.filepath {
+  font-weight: bold;
+  margin-left: 2%;
+}
+
+.authors {
+  float: right;
+  margin-right: 20px
+}

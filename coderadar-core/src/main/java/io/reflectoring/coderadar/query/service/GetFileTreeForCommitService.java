@@ -19,7 +19,8 @@ public class GetFileTreeForCommitService implements GetFileTreeForCommitUseCase 
   }
 
   @Override
-  public FileTree getFileTreeForCommit(long projectId, String commitHash, boolean changedFilesOnly) {
+  public FileTree getFileTreeForCommit(
+      long projectId, String commitHash, boolean changedFilesOnly) {
     if (getProjectPort.existsById(projectId)) {
       return getFileTreeForCommitPort.getFileTreeForCommit(projectId, commitHash, changedFilesOnly);
     } else {

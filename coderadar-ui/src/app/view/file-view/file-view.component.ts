@@ -22,6 +22,8 @@ import 'prismjs/plugins/line-highlight/prism-line-highlight';
 import {Project} from '../../model/project';
 import {AppComponent} from '../../app.component';
 import {Title} from '@angular/platform-browser';
+import {ContributorService} from '../../service/contributor.service';
+import {Contributor} from '../../model/contributor';
 
 @Component({
   selector: 'app-file-view',
@@ -39,7 +41,8 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   public projectId: number;
   public commitHash: string;
   public commitHashAbbrev: string;
-  public tree: FileTreeNode;
+  public tree: FileTreeNode = null;
+  public prevTree: FileTreeNode = null;
   public currentFileContent = '';
   public currentFileMetrics: MetricWithFindings[] = [];
   public currentSelectedFilepath = '';
@@ -47,8 +50,10 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   public project: Project = new Project();
   public highlighted = false;
   public showOnlyChangedFiles = false;
+  public fileAuthors: Contributor[] = [];
 
   constructor(private projectService: ProjectService,
+              private contributorService: ContributorService,
               private router: Router,
               private userService: UserService,
               private route: ActivatedRoute,
@@ -68,8 +73,16 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
 
   hasChild = (_: number, node: FileTreeNode) => node.children !== null;
 
-  private getFileTree() {
+  public getFileTree() {
+    if (this.tree != null && this.prevTree != null) {
+      const temp = this.tree;
+      this.tree = this.prevTree;
+      this.prevTree = temp;
+      this.dataSource.data = this.tree.children;
+      return;
+    }
     this.projectService.getFileTree(this.projectId, this.commitHash, this.showOnlyChangedFiles).then(result => {
+      this.prevTree = this.tree;
       this.tree = result.body;
       this.dataSource.data = result.body.children;
     }).catch(err => {
@@ -99,6 +112,18 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
         this.router.navigate(['/dashboard']);
       }
     });
+
+    this.contributorService.getContributorsForFile(this.projectId, this.currentSelectedFilepath, this.commitHash)
+      .then(value => {
+        this.fileAuthors = value.body;
+      })
+      .catch(err => {
+        if (err.status && err.status === FORBIDDEN) {
+          this.userService.refresh(() => this.updateSelectedFile(node));
+        } else if (err.status && err.status === NOT_FOUND) {
+          this.router.navigate(['/dashboard']);
+        }
+      });
   }
 
 

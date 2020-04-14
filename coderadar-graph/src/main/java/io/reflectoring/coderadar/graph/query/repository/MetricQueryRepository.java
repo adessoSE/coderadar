@@ -160,8 +160,8 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
    * @return A list of all the files in the given commit.
    */
   @Query(
-          "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "
-                  + "MATCH (f)-[r:CHANGED_IN]->(c) WHERE r.changeType <> \"DELETE\" "
-                  + "RETURN DISTINCT f.path as path")
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "
+          + "MATCH (f)-[r:CHANGED_IN]->(c) WHERE r.changeType <> \"DELETE\" "
+          + "RETURN DISTINCT f.path as path")
   List<String> getFilesChangedInCommit(long projectId, @NonNull String commitHash);
 }

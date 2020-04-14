@@ -65,7 +65,7 @@ public class GetFileTreeForCommitControllerTest extends ControllerTestTemplate {
                 get(
                     "/projects/"
                         + projectId
-                        + "/files/tree/d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df"))
+                        + "/files/tree/d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df?changedOnly=false"))
             .andDo(
                 document(
                     "files/tree",
@@ -87,5 +87,35 @@ public class GetFileTreeForCommitControllerTest extends ControllerTestTemplate {
     Assertions.assertEquals(
         "testModule1/NewRandomFile.java", fileTree.getChildren().get(1).getPath());
     Assertions.assertNull(fileTree.getChildren().get(1).getChildren());
+  }
+
+  @Test
+  void testGetOnlyFilesChangedInCommit() throws Exception {
+    CreateFilePatternCommand command =
+        new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
+    mvc()
+        .perform(
+            post("/projects/" + projectId + "/filePatterns")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(command)))
+        .andExpect(status().isCreated())
+        .andReturn();
+
+    MvcResult result =
+        mvc()
+            .perform(
+                get(
+                    "/projects/"
+                        + projectId
+                        + "/files/tree/d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df?changedOnly=true"))
+            .andReturn();
+
+    FileTree fileTree = fromJson(result.getResponse().getContentAsString(), FileTree.class);
+
+    Assertions.assertEquals("/", fileTree.getPath());
+    Assertions.assertEquals(1, fileTree.getChildren().size());
+    Assertions.assertEquals(
+        "testModule1/NewRandomFile.java", fileTree.getChildren().get(0).getPath());
+    Assertions.assertNull(fileTree.getChildren().get(0).getChildren());
   }
 }
