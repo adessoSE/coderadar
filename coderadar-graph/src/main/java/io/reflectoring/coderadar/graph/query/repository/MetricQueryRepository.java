@@ -98,6 +98,14 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
   List<Map<String, Object>> getMetricTreeForCommitWithFileHashes(
       long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);
 
+  /**
+   * NOTE: This query is currently unused, but I believe it might be useful in the future.
+   *
+   * @param projectId The project id.
+   * @param commitHash The hash of the commit.
+   * @param metricNames The names of the metrics needed.
+   * @return Metrics and their corresponding findings for each file in the given commit.
+   */
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp DESC WITH collect(c) as commits "
@@ -113,6 +121,11 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
   List<Map<String, Object>> getMetricTreeForCommitWithFindings(
       long projectId, @NonNull String commitHash, @NonNull List<String> metricNames);
 
+  /**
+   * @param projectId The project id.
+   * @param commitHash The hash of the commit.
+   * @return A list of all the files in the given commit.
+   */
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp DESC WITH collect(c) as commits "
@@ -125,6 +138,12 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
           + "RETURN DISTINCT f.path as path")
   List<String> getFileTreeForCommit(long projectId, @NonNull String commitHash);
 
+  /**
+   * @param projectId The project id.
+   * @param commitHash The hash of the commit.
+   * @param filepath The full path of the file.
+   * @return The metrics and their corresponding files for the given file.
+   */
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c ORDER BY c.timestamp DESC "
