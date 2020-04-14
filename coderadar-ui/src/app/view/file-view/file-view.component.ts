@@ -22,7 +22,6 @@ import 'prismjs/plugins/line-highlight/prism-line-highlight';
 import {Project} from '../../model/project';
 import {AppComponent} from '../../app.component';
 import {Title} from '@angular/platform-browser';
-import {element} from 'protractor';
 
 @Component({
   selector: 'app-file-view',
@@ -32,7 +31,6 @@ import {element} from 'protractor';
 export class FileViewComponent implements OnInit, AfterViewChecked {
 
   @ViewChild('fileView', {read: ElementRef})fileView: ElementRef;
-
 
   treeControl = new NestedTreeControl<FileTreeNode>(node => node.children);
   dataSource = new MatTreeNestedDataSource<FileTreeNode>();
@@ -45,6 +43,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   public currentSelectedFilepath = '';
   public findingsString = '';
   public project: Project = new Project();
+  public highlighted = false;
 
   constructor(private projectService: ProjectService,
               private router: Router,
@@ -80,6 +79,9 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   }
 
   public updateSelectedFile(node: any): void {
+    this.highlighted = false;
+    this.currentFileContent = '';
+
     this.currentSelectedFilepath = this.getFullPath(this.tree.children, node, '');
     this.currentSelectedFilepath = this.currentSelectedFilepath.substr(1, this.currentSelectedFilepath.length);
     this.projectService.getFileContentWithMetrics(this.projectId, this.commitHash, this.currentSelectedFilepath)
@@ -103,7 +105,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
     }
     for (const value of children) {
       if (value === node) {
-        return path += '/' + value.path;
+        return path + '/' + value.path;
       } else {
         const newPath = this.getFullPath(value.children, node, path + '/' + value.path);
         if (newPath !== '') {
@@ -115,7 +117,11 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
+    if (!this.highlighted && this.currentFileContent !== '') {
+      console.log(this.fileView.nativeElement);
       Prism.highlightAllUnder(this.fileView.nativeElement);
+      this.highlighted = true;
+    }
   }
 
   getLanguageClass() {
@@ -130,11 +136,9 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   getAllFindings(metrics: MetricWithFindings[]) {
     let result = '';
     for (const m of metrics) {
-      const findings = [];
       m.findings.forEach(value => result += value.lineStart + '-' + value.lineEnd + ',');
     }
-    result.substr(0, result.length - 2);
-    return result.length === 0 ? '0' : result;
+    return result.length === 0 ? '0' : result.substr(0, result.length - 2);
   }
 
 
