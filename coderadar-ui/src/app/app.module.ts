@@ -31,8 +31,9 @@ import {
   MatListModule,
   MatMenuModule, MatPaginatorModule,
   MatSidenavModule,
-  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatTabsModule, MatDialogModule,
+  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatTabsModule, MatTooltipModule
 } from '@angular/material';
+import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogConfig, MatDialogModule} from '@angular/material/dialog';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
 import {getReducers, REDUCER_TOKEN} from './city-map/shared/reducers';
@@ -56,6 +57,7 @@ import {PinchZoomModule} from 'ngx-pinch-zoom';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ListViewComponent } from './view/project-dashboard/list-view/list-view.component';
 import { BranchViewComponent } from './view/project-dashboard/branch-view/branch-view.component';
+import {ContributorCardComponent, ContributorDialogComponent} from './components/contributor-card/contributor-card.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -94,7 +96,10 @@ const appRoutes: Routes = [
     TreeNodeComponent,
     CityViewHeaderComponent,
     ListViewComponent,
-    BranchViewComponent
+    BranchViewComponent,
+    ContributorListComponent,
+    ContributorDialogComponent,
+    ContributorCardComponent
   ],
   imports: [
     BrowserModule,
@@ -137,7 +142,8 @@ const appRoutes: Routes = [
     MatProgressSpinnerModule,
     MatSelectModule,
     PinchZoomModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTooltipModule
   ],
   providers: [
     {
@@ -151,9 +157,17 @@ const appRoutes: Routes = [
     {
       provide: REDUCER_TOKEN,
       useFactory: getReducers,
-    }],
+    },
+    {
+      provide:MatDialogConfig,
+      useFactory:MAT_DIALOG_DEFAULT_OPTIONS
+    }
+  ],
   bootstrap: [AppComponent],
-  entryComponents: [MergeDialogComponent]
+  entryComponents: [
+    MergeDialogComponent,
+    ContributorDialogComponent
+  ]
 })
 export class AppModule {
 }

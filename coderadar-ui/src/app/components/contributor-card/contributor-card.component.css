@@ -1,0 +1,21 @@
+button{
+  border: transparent;
+  background-color: transparent;
+}
+
+.contributor-avatar {
+  margin: 2px;
+  background: blue;
+  width: 20px;
+  height: 20px;
+}
+
+.contributor-name {
+  font-size: small;
+  margin: 0px;
+  display: flex;
+}
+
+.contributor-name:hover{
+  text-decoration: underline;
+}
