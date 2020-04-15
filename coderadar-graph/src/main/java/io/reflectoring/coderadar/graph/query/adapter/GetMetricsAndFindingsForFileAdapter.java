@@ -29,7 +29,7 @@ public class GetMetricsAndFindingsForFileAdapter implements GetMetricsAndFinding
     for (Map<String, Object> metric : metrics) {
       String name = (String) metric.get("name");
       long value = (long) metric.get("value");
-      var findingsTemp = Object[].class.cast(metric.get("findings"));
+      var findingsTemp = (Object[]) metric.get("findings");
       List<String> strings = new ArrayList<>();
       for (Object f : findingsTemp) {
         strings.add((String) f);

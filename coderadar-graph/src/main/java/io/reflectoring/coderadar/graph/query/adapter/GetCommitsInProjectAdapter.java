@@ -48,7 +48,7 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
     Map<Long, File> walkedFiles = new HashMap<>(commitEntities.size());
     for (Map<String, Object> result : commitEntities) {
       var commitEntity = (CommitEntity) result.get("commit");
-      var files = Object[].class.cast(result.get("files"));
+      var files = (Object[]) result.get("files");
       Commit commit = commitBaseDataMapper.mapGraphObject(commitEntity);
       commit.setTouchedFiles(new ArrayList<>(files.length));
       for (var val : files) {
