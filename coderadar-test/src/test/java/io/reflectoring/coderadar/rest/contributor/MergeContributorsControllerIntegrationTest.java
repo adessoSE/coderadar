@@ -32,7 +32,6 @@ public class MergeContributorsControllerIntegrationTest extends ControllerTestTe
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null,
             null);
     mvc()
         .perform(

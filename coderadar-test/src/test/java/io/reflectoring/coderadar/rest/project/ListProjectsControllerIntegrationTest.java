@@ -26,7 +26,6 @@ class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
-    testProject.setVcsEnd(new Date());
     testProject.setVcsStart(new Date());
     testProject.setVcsOnline(true);
     testProject.setVcsPassword("testPassword");
@@ -35,7 +34,6 @@ class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
     ProjectEntity testProject2 = new ProjectEntity();
     testProject2.setVcsUrl("https://valid.url");
     testProject2.setName("project");
-    testProject2.setVcsEnd(new Date());
     testProject2.setVcsStart(new Date());
     testProject2.setVcsOnline(true);
     testProject2.setVcsPassword("testPassword");

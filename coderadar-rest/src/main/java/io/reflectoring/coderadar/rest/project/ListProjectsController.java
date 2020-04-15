@@ -31,7 +31,6 @@ public class ListProjectsController {
               .setName(project.getName())
               .setId(project.getId())
               .setStartDate(project.getVcsStart())
-              .setEndDate(project.getVcsEnd())
               .setVcsOnline(project.isVcsOnline())
               .setVcsUrl(project.getVcsUrl())
               .setVcsUsername(project.getVcsUsername()));

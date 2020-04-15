@@ -36,7 +36,6 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null,
             null);
     MvcResult result =
         mvc()

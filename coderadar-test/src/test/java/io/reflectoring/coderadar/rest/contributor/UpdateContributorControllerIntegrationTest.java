@@ -30,7 +30,6 @@ public class UpdateContributorControllerIntegrationTest extends ControllerTestTe
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null,
             null);
 
     mvc()

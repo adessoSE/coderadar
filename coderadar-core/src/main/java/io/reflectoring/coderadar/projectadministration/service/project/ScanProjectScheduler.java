@@ -21,7 +21,6 @@ import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,8 +120,7 @@ public class ScanProjectScheduler {
                         stopUpdateTask(projectId);
                         return;
                       }
-                      if (!projectStatusPort.isBeingProcessed(projectId)
-                          && !checkProjectDate(currentProject)) {
+                      if (!projectStatusPort.isBeingProcessed(projectId)) {
                         projectStatusPort.setBeingProcessed(projectId, true);
                         logger.info(
                             "Scanning project {} for new commits!", currentProject.getName());
@@ -142,14 +140,6 @@ public class ScanProjectScheduler {
       f.cancel(false);
     }
     tasks.remove(projectId);
-  }
-
-  /**
-   * @param project The project to check.
-   * @return True if the project should be scanned for new commits, false otherwise.
-   */
-  private boolean checkProjectDate(Project project) {
-    return project.getVcsEnd() != null && project.getVcsEnd().before(new Date());
   }
 
   private void checkForNewCommits(Project project) {

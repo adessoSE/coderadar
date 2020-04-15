@@ -24,7 +24,6 @@ class GetProjectControllerIntegrationTest extends ControllerTestTemplate {
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
-    testProject.setVcsEnd(new Date());
     testProject.setVcsStart(new Date());
     testProject.setVcsOnline(true);
     testProject.setVcsPassword("testPassword");

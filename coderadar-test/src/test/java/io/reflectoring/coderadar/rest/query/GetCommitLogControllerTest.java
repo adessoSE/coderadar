@@ -29,7 +29,7 @@ public class GetCommitLogControllerTest extends ControllerTestTemplate {
     URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
     CreateProjectCommand command1 =
         new CreateProjectCommand(
-            "test-project", "username", "password", testRepoURL.toString(), false, null, null);
+            "test-project", "username", "password", testRepoURL.toString(), false, null);
     MvcResult result =
         mvc()
             .perform(

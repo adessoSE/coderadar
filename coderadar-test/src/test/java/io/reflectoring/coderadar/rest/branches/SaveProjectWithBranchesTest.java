@@ -27,7 +27,7 @@ public class SaveProjectWithBranchesTest extends ControllerTestTemplate {
     URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
     CreateProjectCommand command =
         new CreateProjectCommand(
-            "project", "username", "password", testRepoURL.toString(), false, null, null);
+            "project", "username", "password", testRepoURL.toString(), false, null);
     mvc()
         .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
         .andExpect(MockMvcResultMatchers.status().isCreated())

@@ -119,10 +119,6 @@ export class EditProjectComponent implements OnInit {
       this.project.startDate = null;
     }
 
-    if (this.project.endDate === 'current') {
-      this.project.endDate = null;
-    }
-
     return this.nameEmpty || this.incorrectURL || this.projectExists;
   }
 

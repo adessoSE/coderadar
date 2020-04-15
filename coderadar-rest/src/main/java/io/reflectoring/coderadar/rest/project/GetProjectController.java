@@ -27,7 +27,6 @@ public class GetProjectController {
     getProjectResponse.setName(project.getName());
     getProjectResponse.setId(project.getId());
     getProjectResponse.setVcsUsername(project.getVcsUsername());
-    getProjectResponse.setEndDate(project.getVcsEnd());
     getProjectResponse.setStartDate(project.getVcsStart());
     getProjectResponse.setVcsUrl(project.getVcsUrl());
     getProjectResponse.setVcsOnline(project.isVcsOnline());
