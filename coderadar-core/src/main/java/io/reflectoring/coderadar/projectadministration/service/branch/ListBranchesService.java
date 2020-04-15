@@ -4,7 +4,7 @@ import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBranchesPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import io.reflectoring.coderadar.projectadministration.port.driver.branch.get.ListBranchesUseCase;
+import io.reflectoring.coderadar.projectadministration.port.driver.branch.list.ListBranchesUseCase;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
