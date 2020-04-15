@@ -6,7 +6,7 @@ import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 
 public class ContributorMapper implements Mapper<Contributor, ContributorEntity> {
   @Override
-  public Contributor mapNodeEntity(ContributorEntity nodeEntity) {
+  public Contributor mapGraphObject(ContributorEntity nodeEntity) {
     Contributor contributor = new Contributor();
     contributor.setId(nodeEntity.getId());
     contributor.setDisplayName(nodeEntity.getDisplayName());

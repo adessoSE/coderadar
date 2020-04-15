@@ -25,7 +25,6 @@ public class ResetAnalysisAdapter implements ResetAnalysisPort {
      * @see ProjectRepository#deleteProjectFindings(Long)
      * @see ProjectRepository#deleteProjectMetrics(Long)
      */
-    while (projectRepository.deleteProjectFindings(projectId) > 0) ;
     while (projectRepository.deleteProjectMetrics(projectId) > 0) ;
   }
 }

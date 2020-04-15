@@ -22,7 +22,7 @@ public class GetProjectAdapter implements GetProjectPort {
   public Project get(long id) {
     Optional<ProjectEntity> projectEntity = projectRepository.findById(id);
     if (projectEntity.isPresent()) {
-      return projectMapper.mapNodeEntity(projectEntity.get());
+      return projectMapper.mapGraphObject(projectEntity.get());
     } else {
       throw new ProjectNotFoundException(id);
     }
@@ -32,7 +32,7 @@ public class GetProjectAdapter implements GetProjectPort {
   public Project get(String name) {
     Optional<ProjectEntity> projectEntity = projectRepository.findByName(name);
     if (projectEntity.isPresent()) {
-      return projectMapper.mapNodeEntity(projectEntity.get());
+      return projectMapper.mapGraphObject(projectEntity.get());
     } else {
       throw new ProjectNotFoundException(name);
     }

@@ -1,8 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Project} from '../model/project';
-import {Router} from '@angular/router';
-import {UserService} from './user.service';
 import {FilePattern} from '../model/file-pattern';
 import {AnalyzerConfiguration} from '../model/analyzer-configuration';
 import {Commit} from '../model/commit';
@@ -11,9 +9,10 @@ import {AppComponent} from '../app.component';
 import {IMetricMapping} from '../city-map/interfaces/IMetricMapping';
 import {INode} from '../city-map/interfaces/INode';
 import {MetricValue} from '../model/metric-value';
-import {Contributor} from '../model/contributor';
 import {Branch} from '../model/branch';
 import {CommitLog} from '../model/commit-log';
+import {FileTreeNode} from '../model/file-tree-node';
+import {FileContentWithMetrics} from '../model/file-content-with-metrics';
 
 @Injectable({
   providedIn: 'root'
@@ -300,5 +299,16 @@ export class ProjectService {
   public getCompareTree(projectId: number, commitName1: string, commitName2: string) {
     return this.httpClient.get(this.apiURL + 'analyzers/' + projectId + '/structureMap/' + commitName1 + '/' + commitName2,
       {observe: 'response'}).toPromise();
+  }
+
+  public getFileTree(projectId: number, commitHash: string, changedOnly: boolean): Promise<HttpResponse<FileTreeNode>> {
+    return this.httpClient.get<FileTreeNode>(this.apiURL + 'projects/' + projectId + '/files/tree/' +
+      commitHash + '?changedOnly=' + changedOnly,
+      {observe: 'response'}).toPromise();
+  }
+
+  getFileContentWithMetrics(projectId: any, commitHash: any, filepath: string): Promise<HttpResponse<FileContentWithMetrics>> {
+    return this.httpClient.post<FileContentWithMetrics>(this.apiURL + 'projects/' + projectId + '/files/content',
+      {commitHash, filepath}, {observe: 'response'}).toPromise();
   }
 }

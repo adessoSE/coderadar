@@ -7,7 +7,7 @@ import io.reflectoring.coderadar.useradministration.domain.User;
 public class UserMapper implements Mapper<User, UserEntity> {
 
   @Override
-  public User mapNodeEntity(UserEntity nodeEntity) {
+  public User mapGraphObject(UserEntity nodeEntity) {
     User user = new User();
     user.setId(nodeEntity.getId());
     user.setUsername(nodeEntity.getUsername());

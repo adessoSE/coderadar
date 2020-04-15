@@ -1,0 +1,34 @@
+.tree-invisible {
+  display: none;
+}
+
+.tree ul,
+.tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+
+.file-content {
+  width: 100%;
+  height: 100%;
+  font-size: small;
+}
+
+/deep/ .mat-tooltip {
+  font-size: 15px;
+}
+
+.checkbox {
+  margin-left: 2%;
+}
+
+.filepath {
+  font-weight: bold;
+  margin-left: 2%;
+}
+
+.authors {
+  float: right;
+  margin-right: 20px
+}

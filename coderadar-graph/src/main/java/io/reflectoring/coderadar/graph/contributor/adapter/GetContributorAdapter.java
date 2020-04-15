@@ -24,6 +24,6 @@ public class GetContributorAdapter implements GetContributorPort {
     if (entity.isEmpty()) {
       throw new ContributorNotFoundException(id);
     }
-    return mapper.mapNodeEntity(entity.get());
+    return mapper.mapGraphObject(entity.get());
   }
 }

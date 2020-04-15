@@ -20,7 +20,7 @@ public class GetAnalyzerConfigurationAdapter implements GetAnalyzerConfiguration
 
   @Override
   public AnalyzerConfiguration getAnalyzerConfiguration(long id) {
-    return analyzerConfigurationMapper.mapNodeEntity(
+    return analyzerConfigurationMapper.mapGraphObject(
         analyzerConfigurationRepository
             .findById(id, 0)
             .orElseThrow(() -> new AnalyzerConfigurationNotFoundException(id)));

@@ -31,7 +31,7 @@ import {
   MatListModule,
   MatMenuModule, MatPaginatorModule,
   MatSidenavModule,
-  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatTabsModule, MatTooltipModule
+  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatTabsModule, MatDialogModule, MatTreeModule, MatTooltipModule
 } from '@angular/material';
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogConfig, MatDialogModule} from '@angular/material/dialog';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
@@ -58,6 +58,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ListViewComponent } from './view/project-dashboard/list-view/list-view.component';
 import { BranchViewComponent } from './view/project-dashboard/branch-view/branch-view.component';
 import {ContributorCardComponent, ContributorDialogComponent} from './components/contributor-card/contributor-card.component';
+import { FileViewComponent } from './view/file-view/file-view.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -72,6 +73,7 @@ const appRoutes: Routes = [
   {path: 'project/:id/:name', component: ViewCommitComponent},
   {path: 'project/:projectId/:commitName/dependency-map', component: DependencyRootComponent},
   {path: 'project/:projectId/:commitName1/:commitName2/dependency-map', component: DependencyCompareComponent},
+  {path: 'project/:projectId/:commitHash/files', component: FileViewComponent},
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'}
 ];
 
@@ -97,13 +99,14 @@ const appRoutes: Routes = [
     CityViewHeaderComponent,
     ListViewComponent,
     BranchViewComponent,
-    ContributorListComponent,
     ContributorDialogComponent,
-    ContributorCardComponent
+    ContributorCardComponent,
+    FileViewComponent
   ],
   imports: [
     BrowserModule,
     MatDialogModule,
+    MatTreeModule,
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot(appRoutes, {scrollPositionRestoration: 'enabled'}),
@@ -114,6 +117,7 @@ const appRoutes: Routes = [
     DragScrollModule,
     FlexLayoutModule,
     MatFormFieldModule,
+    MatToolbarModule,
     MatInputModule,
     MatCardModule,
     MatSnackBarModule,
