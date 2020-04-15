@@ -1,0 +1,7 @@
+<div>
+  <p style="font-size: large">Are you sure you want to delete <b>{{data.project.name}}</b>?</p>
+</div>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-raised-button color="warn" [mat-dialog-close]="data.project">Delete</button>
+</mat-dialog-actions>
