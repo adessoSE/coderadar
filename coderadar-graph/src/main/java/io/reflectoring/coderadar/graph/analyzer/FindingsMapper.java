@@ -3,10 +3,14 @@ package io.reflectoring.coderadar.graph.analyzer;
 import io.reflectoring.coderadar.analyzer.domain.Finding;
 import io.reflectoring.coderadar.graph.Mapper;
 
+/**
+ * Findings are mapped to strings in the following format: "1-2-3-4" where 1 is lineStart, 2 is
+ * lineEnd, 3 is charStart and 4 is charEnd.
+ */
 public class FindingsMapper implements Mapper<Finding, String> {
 
   @Override
-  public Finding mapNodeEntity(String findingsString) {
+  public Finding mapGraphObject(String findingsString) {
     Finding domainObject = new Finding();
     String[] values = findingsString.split("-");
     domainObject.setLineStart(Integer.parseInt(values[0]));

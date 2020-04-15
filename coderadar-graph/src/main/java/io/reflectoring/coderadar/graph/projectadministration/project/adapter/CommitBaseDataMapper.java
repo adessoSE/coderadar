@@ -6,7 +6,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Commit;
 
 public class CommitBaseDataMapper implements Mapper<Commit, CommitEntity> {
 
-  public Commit mapNodeEntity(CommitEntity entity) {
+  public Commit mapGraphObject(CommitEntity entity) {
     Commit commit = new Commit();
     commit.setId(entity.getId());
     commit.setName(entity.getName());

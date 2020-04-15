@@ -19,7 +19,7 @@ public class GetFilePatternAdapter implements GetFilePatternPort {
 
   @Override
   public FilePattern get(long id) {
-    return filePatternMapper.mapNodeEntity(
+    return filePatternMapper.mapGraphObject(
         filePatternRepository
             .findById(id, 0)
             .orElseThrow(() -> new FilePatternNotFoundException(id)));

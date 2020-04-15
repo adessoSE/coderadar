@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.query.port.driver.fileswithcontributors;
+package io.reflectoring.coderadar.query.port.driver.criticalfiles;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;

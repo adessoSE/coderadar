@@ -19,7 +19,7 @@ public class GetMetricValuesOfCommitAdapter implements GetMetricValuesOfCommitPo
   }
 
   @Override
-  public List<MetricValueForCommit> get(GetMetricValuesOfCommitCommand command, long projectId) {
+  public List<MetricValueForCommit> get(long projectId, GetMetricValuesOfCommitCommand command) {
     List<Map<String, Object>> result =
         metricQueryRepository.getMetricValuesForCommit(
             projectId, command.getCommit(), command.getMetrics());

@@ -30,6 +30,6 @@ public class GetMetricValuesOfCommitController {
       @Validated @RequestBody GetMetricValuesOfCommitCommand command,
       @PathVariable("projectId") long projectId) {
     return new ResponseEntity<>(
-        getMetricValuesOfCommitUseCase.get(command, projectId), HttpStatus.OK);
+        getMetricValuesOfCommitUseCase.get(projectId, command), HttpStatus.OK);
   }
 }

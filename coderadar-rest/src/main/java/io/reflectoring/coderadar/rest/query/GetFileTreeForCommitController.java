@@ -24,7 +24,7 @@ public class GetFileTreeForCommitController {
   @GetMapping(
       path = "/projects/{projectId}/files/tree/{commitHash}",
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<FileTree> getMetricValues(
+  public ResponseEntity<FileTree> getFileTreeForCommit(
       @PathVariable("projectId") long projectId,
       @PathVariable("commitHash") String commitHash,
       @RequestParam("changedOnly") boolean changedFilesOnly) {

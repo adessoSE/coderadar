@@ -153,7 +153,7 @@ public class AnalyzingService
             metrics.add(
                 new MetricValue(
                     value.getName(),
-                    0,
+                    0L,
                     commit.getId(),
                     value.getFileId(),
                     Collections.emptyList()));

@@ -6,9 +6,9 @@ import java.util.List;
 public interface GetMetricValuesOfCommitUseCase {
 
   /**
-   * @param command The command containing the commit hash and the metrics we are interested in.
    * @param projectId The id of the project.
+   * @param command The command containing the commit hash and the metrics we are interested in.
    * @return Aggregated metrics for all files in the given commit.
    */
-  List<MetricValueForCommit> get(GetMetricValuesOfCommitCommand command, long projectId);
+  List<MetricValueForCommit> get(long projectId, GetMetricValuesOfCommitCommand command);
 }

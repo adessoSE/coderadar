@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.query.port.driver.metrictree;
 
 import java.util.List;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetMetricTreeForCommitCommand {
-  @NotNull @NotEmpty String commit;
+  @NotBlank String commit;
   @NotNull List<String> metrics;
 }

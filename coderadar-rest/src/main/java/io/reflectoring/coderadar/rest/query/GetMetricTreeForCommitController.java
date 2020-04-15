@@ -31,6 +31,6 @@ public class GetMetricTreeForCommitController {
       @Validated @RequestBody GetMetricTreeForCommitCommand command,
       @PathVariable("projectId") long projectId) {
     return new ResponseEntity<>(
-        getMetricTreeForCommitUseCase.get(command, projectId), HttpStatus.OK);
+        getMetricTreeForCommitUseCase.get(projectId, command), HttpStatus.OK);
   }
 }

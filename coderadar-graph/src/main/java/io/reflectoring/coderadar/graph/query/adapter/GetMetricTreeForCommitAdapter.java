@@ -53,7 +53,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
   }
 
   @Override
-  public MetricTree get(GetMetricTreeForCommitCommand command, long projectId) {
+  public MetricTree get(long projectId, GetMetricTreeForCommitCommand command) {
     ProjectEntity projectEntity =
         projectRepository
             .findByIdWithModules(projectId)
