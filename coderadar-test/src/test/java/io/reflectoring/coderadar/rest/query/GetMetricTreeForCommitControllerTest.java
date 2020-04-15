@@ -13,7 +13,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.create
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.query.domain.MetricTree;
 import io.reflectoring.coderadar.query.domain.MetricTreeNodeType;
-import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
+import io.reflectoring.coderadar.query.port.driver.commitmetrics.GetMetricValuesOfCommitCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
@@ -75,7 +75,7 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
 
   @Test
   void returnsMetricTree() throws Exception {
-    GetMetricsForCommitCommand command = new GetMetricsForCommitCommand();
+    GetMetricValuesOfCommitCommand command = new GetMetricValuesOfCommitCommand();
     ConstrainedFields fields = fields(MetricTree.class);
     command.setMetrics(
         Arrays.asList(
@@ -152,7 +152,7 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(createModuleCommand)));
 
-    GetMetricsForCommitCommand command = new GetMetricsForCommitCommand();
+    GetMetricValuesOfCommitCommand command = new GetMetricValuesOfCommitCommand();
     command.setMetrics(
         Arrays.asList(
             "coderadar:size:loc:java",
@@ -208,7 +208,7 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
 
   @Test
   void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
-    GetMetricsForCommitCommand command = new GetMetricsForCommitCommand();
+    GetMetricValuesOfCommitCommand command = new GetMetricValuesOfCommitCommand();
     command.setMetrics(
         Arrays.asList(
             "coderadar:size:loc:java",

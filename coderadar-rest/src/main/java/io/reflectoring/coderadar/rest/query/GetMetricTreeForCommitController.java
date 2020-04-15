@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.rest.query;
 
 import io.reflectoring.coderadar.query.domain.MetricTree;
-import io.reflectoring.coderadar.query.port.driver.GetMetricTreeForCommitUseCase;
-import io.reflectoring.coderadar.query.port.driver.GetMetricsForCommitCommand;
+import io.reflectoring.coderadar.query.port.driver.metrictree.GetMetricTreeForCommitCommand;
+import io.reflectoring.coderadar.query.port.driver.metrictree.GetMetricTreeForCommitUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +28,9 @@ public class GetMetricTreeForCommitController {
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<MetricTree> getMetricValues(
-      @Validated @RequestBody GetMetricsForCommitCommand command,
+      @Validated @RequestBody GetMetricTreeForCommitCommand command,
       @PathVariable("projectId") long projectId) {
     return new ResponseEntity<>(
-        getMetricTreeForCommitUseCase.get(command, projectId), HttpStatus.OK);
+        getMetricTreeForCommitUseCase.get(projectId, command), HttpStatus.OK);
   }
 }

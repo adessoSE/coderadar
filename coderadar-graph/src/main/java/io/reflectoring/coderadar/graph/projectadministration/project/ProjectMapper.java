@@ -7,7 +7,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Project;
 public class ProjectMapper implements Mapper<Project, ProjectEntity> {
 
   @Override
-  public Project mapNodeEntity(ProjectEntity nodeEntity) {
+  public Project mapGraphObject(ProjectEntity nodeEntity) {
     Project project = new Project();
     project.setId(nodeEntity.getId());
     project.setName(nodeEntity.getName());

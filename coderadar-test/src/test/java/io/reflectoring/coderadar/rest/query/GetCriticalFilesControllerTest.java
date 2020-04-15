@@ -12,8 +12,8 @@ import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.c
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.query.domain.ContributorsForFile;
 import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
-import io.reflectoring.coderadar.query.port.driver.GetFilesWithContributorsCommand;
-import io.reflectoring.coderadar.query.port.driver.GetFrequentlyChangedFilesCommand;
+import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFilesWithContributorsCommand;
+import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFrequentlyChangedFilesCommand;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;

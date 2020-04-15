@@ -7,10 +7,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import io.reflectoring.coderadar.graph.analyzer.domain.FindingEntity;
 import io.reflectoring.coderadar.graph.analyzer.domain.MetricValueEntity;
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
-import io.reflectoring.coderadar.graph.analyzer.repository.FindingRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
@@ -35,7 +33,6 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
 
   @Autowired private CommitRepository commitRepository;
   @Autowired private MetricRepository metricRepository;
-  @Autowired private FindingRepository findingRepository;
   @Autowired private Session session;
 
   private Long projectId;
@@ -142,9 +139,6 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
     List<MetricValueEntity> metricValues = metricRepository.findByProjectId(projectId);
     Assertions.assertFalse(metricValues.isEmpty());
 
-    List<FindingEntity> findings = findingRepository.findByProjectId(projectId);
-    Assertions.assertFalse(findings.isEmpty());
-
     List<CommitEntity> commits = commitRepository.findByProjectIdAndBranchName(projectId, "master");
     for (CommitEntity commit : commits) {
       Assertions.assertTrue(commit.isAnalyzed());
@@ -156,9 +150,6 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
 
     metricValues = metricRepository.findByProjectId(projectId);
     Assertions.assertEquals(0, metricValues.size());
-
-    findings = findingRepository.findByProjectId(projectId);
-    Assertions.assertEquals(0, findings.size());
 
     commits = commitRepository.findByProjectId(projectId);
     for (CommitEntity commit : commits) {

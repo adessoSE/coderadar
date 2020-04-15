@@ -7,7 +7,7 @@ import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 public class FilePatternMapper implements Mapper<FilePattern, FilePatternEntity> {
 
   @Override
-  public FilePattern mapNodeEntity(FilePatternEntity nodeEntity) {
+  public FilePattern mapGraphObject(FilePatternEntity nodeEntity) {
     FilePattern filePattern = new FilePattern();
     filePattern.setId(nodeEntity.getId());
     filePattern.setInclusionType(nodeEntity.getInclusionType());

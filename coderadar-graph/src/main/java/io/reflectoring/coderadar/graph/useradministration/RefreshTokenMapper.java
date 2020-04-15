@@ -6,7 +6,7 @@ import io.reflectoring.coderadar.useradministration.domain.RefreshToken;
 
 public class RefreshTokenMapper implements Mapper<RefreshToken, RefreshTokenEntity> {
   @Override
-  public RefreshToken mapNodeEntity(RefreshTokenEntity nodeEntity) {
+  public RefreshToken mapGraphObject(RefreshTokenEntity nodeEntity) {
     RefreshToken refreshToken = new RefreshToken();
     refreshToken.setId(nodeEntity.getId());
     refreshToken.setToken(nodeEntity.getToken());

@@ -610,6 +610,29 @@ include::{snippets}/metrics/commit/metrics/http-request.adoc[]
 
 include::{snippets}/metrics/commit/metrics/http-response.adoc[]
 
+==== Querying File content, metric values and findings of a file in a commit.
+
+===== Request Structure
+
+include::{snippets}/files/content/request-fields.adoc[]
+
+===== Response Structure
+
+include::{snippets}/files/content/response-fields.adoc[]
+
+===== Example Request
+
+[NOTE]
+=====
+This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
+
+=====
+include::{snippets}/files/content/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/files/content/http-response.adoc[]
+
 === Metrics Trees
 
 ==== Querying Metrics for all Files in a Single Commit
@@ -663,15 +686,27 @@ include::{snippets}/metrics/deltaTree/http-request.adoc[]
 
 include::{snippets}/metrics/deltaTree/http-response.adoc[]
 
+=== Files
 
+==== Querying the file tree of a particular commit.
+
+===== Response Structure
+
+include::{snippets}/files/tree/response-fields.adoc[]
+
+===== Example Request
+
+include::{snippets}/files/tree/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/files/tree/http-response.adoc[]
 
 == Contributors
 
 === Structure
 
 include::{snippets}/contributors/get/response-fields.adoc[]
-
-
 
 === List all contributors of a project
 

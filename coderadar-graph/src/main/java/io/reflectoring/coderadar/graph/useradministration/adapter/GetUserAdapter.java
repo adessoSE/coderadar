@@ -20,7 +20,7 @@ public class GetUserAdapter implements GetUserPort {
 
   @Override
   public User getUser(long id) {
-    return userMapper.mapNodeEntity(
+    return userMapper.mapGraphObject(
         userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id)));
   }
 
@@ -30,7 +30,7 @@ public class GetUserAdapter implements GetUserPort {
     if (userEntity == null) {
       throw new UserNotFoundException(username);
     } else {
-      return userMapper.mapNodeEntity(userEntity);
+      return userMapper.mapGraphObject(userEntity);
     }
   }
 

@@ -30,7 +30,7 @@ public class SaveMetricAdapter implements SaveMetricPort {
       metricValueEntity.setFindings(findingsMapper.mapDomainObjects(metricValue.getFindings()));
       metricValueEntities.add(metricValueEntity);
     }
-    metricRepository.save(metricValueEntities, 1);
+    metricRepository.save(metricValueEntities, 0);
     List<HashMap<String, Object>> commitAndFileRels = new ArrayList<>(metricValuesSize);
     for (int i = 0; i < metricValuesSize; i++) {
       HashMap<String, Object> commitAndFileRel = new HashMap<>(6);

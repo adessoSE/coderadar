@@ -10,7 +10,7 @@ public class AnalyzerConfigurationMapper
     implements Mapper<AnalyzerConfiguration, AnalyzerConfigurationEntity> {
 
   @Override
-  public AnalyzerConfiguration mapNodeEntity(AnalyzerConfigurationEntity nodeEntity) {
+  public AnalyzerConfiguration mapGraphObject(AnalyzerConfigurationEntity nodeEntity) {
     AnalyzerConfiguration analyzerConfiguration = new AnalyzerConfiguration();
     analyzerConfiguration.setId(nodeEntity.getId());
     analyzerConfiguration.setAnalyzerName(nodeEntity.getAnalyzerName());

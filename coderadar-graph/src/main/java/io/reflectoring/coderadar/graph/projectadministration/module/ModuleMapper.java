@@ -7,7 +7,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Module;
 public class ModuleMapper implements Mapper<Module, ModuleEntity> {
 
   @Override
-  public Module mapNodeEntity(ModuleEntity nodeEntity) {
+  public Module mapGraphObject(ModuleEntity nodeEntity) {
     Module module = new Module();
     module.setId(nodeEntity.getId());
     module.setPath(nodeEntity.getPath());
