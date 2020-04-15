@@ -8,9 +8,9 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.query.domain.ContributorsForFile;
 import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
 import io.reflectoring.coderadar.query.port.driven.GetCriticalFilesPort;
-import io.reflectoring.coderadar.query.port.driver.GetCriticalFilesUseCase;
-import io.reflectoring.coderadar.query.port.driver.GetFilesWithContributorsCommand;
-import io.reflectoring.coderadar.query.port.driver.GetFrequentlyChangedFilesCommand;
+import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetCriticalFilesUseCase;
+import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFilesWithContributorsCommand;
+import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFrequentlyChangedFilesCommand;
 import java.util.List;
 import org.springframework.stereotype.Service;
 

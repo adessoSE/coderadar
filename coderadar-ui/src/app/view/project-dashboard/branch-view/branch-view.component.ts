@@ -138,7 +138,11 @@ export class BranchViewComponent implements OnInit, OnChanges {
     if (this.commitLog.length === 0) {
       return;
     }
-    this.gitGraph = createGitgraph(this.graph.nativeElement, {template: templateExtend(TemplateName.Metro,
+    this.gitGraph = createGitgraph(this.graph.nativeElement, {
+/*      compareBranchesOrder: ((branchNameA, branchNameB) => {
+        return branchNameA === 'master' ? -1 : 1;
+      }),*/ // Always show the master branch on the left??
+      template: templateExtend(TemplateName.Metro,
         {
           colors: ['#979797', '#008fb5', '#f1c109', '#bf6356', '#b87bbf', '#86bf56', '#7ab8be']
         })});
@@ -182,11 +186,11 @@ export class BranchViewComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     let selectedCommit1Id = null;
-    if (this.selectedCommit1 !== null) {
+    if (this.selectedCommit1 !== null && this.selectedCommit1 !== undefined) {
       selectedCommit1Id = this.selectedCommit1.hash;
     }
     let selectedCommit2Id = null;
-    if (this.selectedCommit2 !== null) {
+    if (this.selectedCommit2 !== null && this.selectedCommit2 !== undefined) {
       selectedCommit2Id = this.selectedCommit2.hash;
     }
     if (selectedCommit1Id != null) {
