@@ -9,7 +9,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AddProjectComponent} from './view/add-project/add-project.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {MainDashboardComponent} from './view/main-dashboard/main-dashboard.component';
+import {MainDashboardComponent, ConfirmDeleteProjectDialogComponent} from './view/main-dashboard/main-dashboard.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {AuthInterceptor} from './auth.interceptor';
 import {ConfigureProjectComponent, MergeDialogComponent} from './view/configure-project/configure-project.component';
@@ -29,9 +29,17 @@ import {
   MatInputModule,
   MatSnackBarModule,
   MatListModule,
-  MatMenuModule, MatPaginatorModule,
+  MatMenuModule,
+  MatPaginatorModule,
   MatSidenavModule,
-  MatToolbarModule, MatProgressSpinnerModule, MatExpansionModule, MatTabsModule, MatDialogModule, MatTreeModule, MatTooltipModule,
+  MatToolbarModule,
+  MatProgressSpinnerModule,
+  MatExpansionModule,
+  MatTabsModule,
+  MatDialogModule,
+  MatTreeModule,
+  MatTooltipModule,
+  MAT_DIALOG_DEFAULT_OPTIONS, MatDialogConfig,
 } from '@angular/material';
 import {ControlPanelModule} from './city-map/control-panel/control-panel.module';
 import {VisualizationModule} from './city-map/visualization/visualization.module';
@@ -82,6 +90,7 @@ const appRoutes: Routes = [
     RegisterComponent,
     AddProjectComponent,
     MainDashboardComponent,
+    ConfirmDeleteProjectDialogComponent,
     ConfigureProjectComponent,
     EditProjectComponent,
     HeaderComponent,
@@ -157,9 +166,17 @@ const appRoutes: Routes = [
     {
       provide: REDUCER_TOKEN,
       useFactory: getReducers,
-    }],
+    },
+    {
+      provide: MatDialogConfig,
+      useFactory: MAT_DIALOG_DEFAULT_OPTIONS
+    }
+  ],
   bootstrap: [AppComponent],
-  entryComponents: [MergeDialogComponent]
+  entryComponents: [
+    MergeDialogComponent,
+    ConfirmDeleteProjectDialogComponent
+  ]
 })
 export class AppModule {
 }
