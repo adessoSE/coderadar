@@ -12,7 +12,6 @@ import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.branch.DeleteBranchPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBranchesPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
@@ -20,7 +19,6 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.ListP
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
-import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
@@ -52,8 +50,6 @@ public class ScanProjectScheduler {
   private final AddCommitsPort addCommitsPort;
   private final DeleteModulePort deleteModulePort;
   private final TaskExecutor taskExecutor;
-  private final GetAvailableBranchesPort getAvailableBranchesPort;
-  private final ListBranchesPort listBranchesPort;
   private final DeleteBranchPort deleteBranchPort;
 
   private final Logger logger = LoggerFactory.getLogger(ScanProjectScheduler.class);
@@ -73,8 +69,6 @@ public class ScanProjectScheduler {
       AddCommitsPort addCommitsPort,
       DeleteModulePort deleteModulePort,
       TaskExecutor taskExecutor,
-      GetAvailableBranchesPort getAvailableBranchesPort,
-      ListBranchesPort listBranchesPort,
       DeleteBranchPort deleteBranchPort) {
     this.updateLocalRepositoryUseCase = updateLocalRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
@@ -88,8 +82,6 @@ public class ScanProjectScheduler {
     this.addCommitsPort = addCommitsPort;
     this.deleteModulePort = deleteModulePort;
     this.taskExecutor = taskExecutor;
-    this.getAvailableBranchesPort = getAvailableBranchesPort;
-    this.listBranchesPort = listBranchesPort;
     this.deleteBranchPort = deleteBranchPort;
   }
 

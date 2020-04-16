@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 public class ListBranchesControllerTest extends ControllerTestTemplate {
 
-  @Autowired CreateProjectService createProjectService;
+  @Autowired private CreateProjectService createProjectService;
 
   private Long projectId;
 
