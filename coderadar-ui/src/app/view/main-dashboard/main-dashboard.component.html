@@ -34,7 +34,7 @@
               <mat-menu #menu="matMenu" xPosition="before">
                 <button mat-menu-item routerLink="/project-edit/{{project.id}}">Edit</button>
                 <button mat-menu-item routerLink="/project-configure/{{project.id}}">Configure</button>
-                <button (click)="deleteProject(project)" mat-menu-item>Remove</button>
+                <button (click)="openProjectDeletionDialog(project)" mat-menu-item>Remove</button>
               </mat-menu>
             </mat-card-title>
           </mat-card-header>
