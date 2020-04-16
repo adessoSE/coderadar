@@ -61,7 +61,6 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
         mvc()
             .perform(
                 get("/projects/" + projectId + "/metrics").contentType(MediaType.APPLICATION_JSON))
-            .andDo(document("metrics/list"))
             .andReturn();
 
     List<String> metrics =
@@ -90,6 +89,7 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
         mvc()
             .perform(
                 get("/projects/" + projectId + "/metrics").contentType(MediaType.APPLICATION_JSON))
+            .andDo(document("metrics/list"))
             .andReturn();
 
     List<String> metrics =
