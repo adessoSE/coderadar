@@ -36,6 +36,18 @@ public class DeleteBranchAdapter implements DeleteBranchPort {
     deleteCommits(branchCommit, branchesInProject);
   }
 
+  /**
+   * Recursive method that walks the parents of the head of the branch and deletes them if: The
+   * commit has no children. There is no branch pointer on the commit.
+   *
+   * <p>Also deletes any files that have been added or renamed as those are the only change types
+   * for which new nodes are created and would therefore be no longer needed.
+   *
+   * <p>Metrics attached to the commit are also deleted if they exist.
+   *
+   * @param commit The commit to delete.
+   * @param branchesInProject The currently available branches in the project.
+   */
   private void deleteCommits(CommitEntity commit, List<BranchEntity> branchesInProject) {
     List<CommitEntity> children = commitRepository.getCommitChildren(commit.getId());
     if (children != null

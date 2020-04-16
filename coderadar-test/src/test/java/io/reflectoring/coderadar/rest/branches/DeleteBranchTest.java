@@ -24,6 +24,11 @@ public class DeleteBranchTest extends ControllerTestTemplate {
   @Autowired private DeleteBranchPort deleteBranchPort;
 
   private Long projectId;
+  private final Branch master = new Branch("master", "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382");
+  private final Branch testBranch1 =
+      new Branch("testBranch1", "d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df");
+  private final Branch testBranch2 =
+      new Branch("testBranch2", "fcd9a0e7c34086fdb0aedc82497f8ddfa142e961");
 
   @BeforeEach
   void setUp() {
@@ -36,13 +41,10 @@ public class DeleteBranchTest extends ControllerTestTemplate {
 
   @Test
   void testDeleteBranch() {
-    deleteBranchPort.delete(
-        projectId, new Branch("testBranch2", "fcd9a0e7c34086fdb0aedc82497f8ddfa142e961"));
+    deleteBranchPort.delete(projectId, testBranch2);
 
     Assertions.assertThat(listBranchesPort.listBranchesInProject(projectId))
-        .containsExactlyInAnyOrder(
-            new Branch("testBranch1", "d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df"),
-            new Branch("master", "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382"));
+        .containsExactlyInAnyOrder(testBranch1, master);
 
     Assertions.assertThat(commitRepository.findByProjectId(projectId)).hasSize(14);
     Assertions.assertThat(fileRepository.findAllinProject(projectId)).hasSize(8);
@@ -50,13 +52,10 @@ public class DeleteBranchTest extends ControllerTestTemplate {
 
   @Test
   void testDeleteBranchThatHasChildren() {
-    deleteBranchPort.delete(
-        projectId, new Branch("testBranch1", "d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df"));
+    deleteBranchPort.delete(projectId, testBranch1);
 
     Assertions.assertThat(listBranchesPort.listBranchesInProject(projectId))
-        .containsExactlyInAnyOrder(
-            new Branch("testBranch2", "fcd9a0e7c34086fdb0aedc82497f8ddfa142e961"),
-            new Branch("master", "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382"));
+        .containsExactlyInAnyOrder(testBranch2, master);
 
     Assertions.assertThat(commitRepository.findByProjectId(projectId)).hasSize(15);
     Assertions.assertThat(fileRepository.findAllinProject(projectId)).hasSize(9);
@@ -64,13 +63,10 @@ public class DeleteBranchTest extends ControllerTestTemplate {
 
   @Test
   void testDeleteBranchWithFileOnlyModified() {
-    deleteBranchPort.delete(
-        projectId, new Branch("master", "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382"));
+    deleteBranchPort.delete(projectId, master);
 
     Assertions.assertThat(listBranchesPort.listBranchesInProject(projectId))
-        .containsExactlyInAnyOrder(
-            new Branch("testBranch2", "fcd9a0e7c34086fdb0aedc82497f8ddfa142e961"),
-            new Branch("testBranch1", "d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df"));
+        .containsExactlyInAnyOrder(testBranch2, testBranch1);
 
     Assertions.assertThat(commitRepository.findByProjectId(projectId)).hasSize(14);
     Assertions.assertThat(fileRepository.findAllinProject(projectId)).hasSize(9);
