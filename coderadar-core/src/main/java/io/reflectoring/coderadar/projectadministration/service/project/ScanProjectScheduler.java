@@ -11,6 +11,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.branch.DeleteBranchPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
@@ -49,6 +50,7 @@ public class ScanProjectScheduler {
   private final AddCommitsPort addCommitsPort;
   private final DeleteModulePort deleteModulePort;
   private final TaskExecutor taskExecutor;
+  private final DeleteBranchPort deleteBranchPort;
 
   private final Logger logger = LoggerFactory.getLogger(ScanProjectScheduler.class);
 
@@ -66,7 +68,8 @@ public class ScanProjectScheduler {
       CreateModulePort createModulePort,
       AddCommitsPort addCommitsPort,
       DeleteModulePort deleteModulePort,
-      TaskExecutor taskExecutor) {
+      TaskExecutor taskExecutor,
+      DeleteBranchPort deleteBranchPort) {
     this.updateLocalRepositoryUseCase = updateLocalRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
@@ -79,6 +82,7 @@ public class ScanProjectScheduler {
     this.addCommitsPort = addCommitsPort;
     this.deleteModulePort = deleteModulePort;
     this.taskExecutor = taskExecutor;
+    this.deleteBranchPort = deleteBranchPort;
   }
 
   /** Starts the scheduleCheckTask tasks upon application start */
@@ -164,6 +168,12 @@ public class ScanProjectScheduler {
                   .setUsername(project.getVcsUsername())
                   .setRemoteUrl(project.getVcsUrl()));
       if (!updatedBranches.isEmpty()) {
+        for (Branch branch : updatedBranches) {
+          if (branch.getCommitHash().equals("0000000000000000000000000000000000000000")) {
+            deleteBranchPort.delete(project.getId(), branch);
+          }
+        }
+
         // Check what modules where previously in the project
         List<Module> modules = listModulesOfProjectUseCase.listModules(project.getId());
 
