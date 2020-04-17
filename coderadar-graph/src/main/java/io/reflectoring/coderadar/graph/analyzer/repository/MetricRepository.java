@@ -56,4 +56,7 @@ public interface MetricRepository extends Neo4jRepository<MetricValueEntity, Lon
           + "NOT(f IN deletes OR f IN renames) AND m.value <> 0 WITH ID(f) as id, m.name as name, head(collect(m)) as metric "
           + "RETURN  id, collect(metric) as metrics")
   List<FileIdAndMetricQueryResult> getLastMetricsForFiles(long projectId, String branchName);
+
+  @Query("MATCH (c)<-[:VALID_FOR]-(m) WHERE ID(c) = {0} DETACH DELETE m")
+  void deleteMetricsForCommit(Long id);
 }

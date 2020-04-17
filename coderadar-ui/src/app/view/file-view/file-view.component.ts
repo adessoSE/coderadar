@@ -182,6 +182,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
       for (const finding of value.findings) {
         if (finding.lineStart === +lineStart) {
           found = true;
+          break;
         }
       }
       if (found) {
