@@ -16,6 +16,10 @@ public interface GetRawCommitContentPort {
   byte[] getCommitContent(String projectRoot, String filepath, String name)
       throws UnableToGetCommitContentException;
 
+
+  byte[] getFileDiff(String projectRoot, String filepath, String name)
+          throws UnableToGetCommitContentException;
+
   /**
    * Returns the raw content of a list of files in a commit.
    *

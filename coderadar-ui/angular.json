@@ -27,13 +27,15 @@
               "src/styles.scss",
               "node_modules/prismjs/themes/prism.css",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
-              "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css"
+              "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css",
+              "node_modules/prismjs/plugins/diff-highlight/prism-diff-highlight.css"
             ],
             "scripts": ["node_modules/binpacking/js/packer.growing.js",
               "node_modules/chroma-js/chroma.min.js",
               "node_modules/prismjs/prism.js",
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js",
-              "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.js"
+              "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.js",
+              "node_modules/prismjs/plugins/diff-highlight/prism-diff-highlight.js"
             ],
             "es5BrowserSupport": true
           },

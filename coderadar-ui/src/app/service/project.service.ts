@@ -311,4 +311,9 @@ export class ProjectService {
     return this.httpClient.post<FileContentWithMetrics>(this.apiURL + 'projects/' + projectId + '/files/content',
       {commitHash, filepath}, {observe: 'response'}).toPromise();
   }
+
+  getFileDiff(projectId: any, commitHash: any, filepath: string): Promise<HttpResponse<FileContentWithMetrics>> {
+    return this.httpClient.post<FileContentWithMetrics>(this.apiURL + 'projects/' + projectId + '/files/diff',
+      {commitHash, filepath}, {observe: 'response'}).toPromise();
+  }
 }

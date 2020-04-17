@@ -6,6 +6,10 @@ name: 'File tree for commit ' + commitHashAbbrev}]"></app-header>
   <mat-checkbox class="checkbox" [(ngModel)]="showOnlyChangedFiles" (change)="getFileTree()">
     Show only files changed in this commit
   </mat-checkbox>
+  <mat-checkbox class="checkbox" *ngIf="this.showOnlyChangedFiles" [(ngModel)]="showDiff"
+                (change)="updateSelectedFile(null, this.currentSelectedFilepath)">
+    Show diff
+  </mat-checkbox>
   <span class="filepath">
     {{currentSelectedFilepath}}
   </span>
@@ -27,7 +31,7 @@ name: 'File tree for commit ' + commitHashAbbrev}]"></app-header>
         <!-- This is the tree node template for leaf nodes -->
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
           <li class="mat-tree-node">
-            <button mat-button style="font-weight:normal; margin-left: 0;" (click)="updateSelectedFile(node)">
+            <button mat-button style="font-weight:normal; margin-left: 0;" (click)="updateSelectedFile(node, null)">
               {{node.path}}
             </button>
           </li>
