@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.graph.projectadministration.branch.repository;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.BranchEntity;
+import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -55,4 +56,13 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
       "MATCH (p)-[:HAS_BRANCH]->(b)-[r:POINTS_TO]->() WHERE ID(p) = {0} AND b.name = {1} WITH p, b, r LIMIT 1 DELETE r WITH p, b "
           + "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE c.name = {2} WITH c, b LIMIT 1 CREATE (b)-[r1:POINTS_TO]->(c) SET b.commitHash = c.name")
   void moveBranchToCommit(long projectId, @NonNull String branchName, @NonNull String commitHash);
+
+  @Query(
+      "MATCH (p)-[:HAS_BRANCH]->(b) WHERE ID(p) = {0} "
+          + "AND b.name = {1} WITH b LIMIT 1 "
+          + "MATCH (b)-[:POINTS_TO]->(c) RETURN c LIMIT 1")
+  CommitEntity getBranchCommit(long projectId, String branchName);
+
+  @Query("MATCH (p)-[:HAS_BRANCH]->(b) WHERE ID(p) = {0} AND b.name = {1} RETURN b LIMIT 1")
+  BranchEntity findBranchInProjectByName(long projectId, String name);
 }
