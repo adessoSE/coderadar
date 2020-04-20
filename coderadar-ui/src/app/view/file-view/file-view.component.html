@@ -55,8 +55,8 @@ name: 'File tree for commit ' + commitHashAbbrev}]"></app-header>
         </mat-nested-tree-node>
       </mat-tree>
     </div>
-    <pre class="line-numbers file-content" [attr.data-line]="findingsString" #fileView>
-<code [className]="getLanguageClass()" [textContent]="currentFileContent"></code>
+    <pre [class]="getPreClass()" [attr.data-line]="findingsString" #fileView>
+<code [className]="getCodeClass()" [textContent]="currentFileContent"></code>
     </pre>
   </div>
 </main>

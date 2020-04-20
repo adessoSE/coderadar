@@ -4,6 +4,8 @@ import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedEx
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.task.AsyncListenableTaskExecutor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ public class ProcessProjectService {
   private final AsyncListenableTaskExecutor taskExecutor;
   private final ProjectStatusPort projectStatusPort;
   private final GetProjectPort getProjectPort;
+  private final Logger logger = LoggerFactory.getLogger(ProcessProjectService.class);
 
   public ProcessProjectService(
       AsyncListenableTaskExecutor taskExecutor,
@@ -42,6 +45,8 @@ public class ProcessProjectService {
           () -> {
             try {
               runnable.run();
+            } catch (Exception e) {
+              logger.error(String.format("Project ID:%d, %s", projectId, e.getMessage()));
             } finally { // No matter what happens, reset the flag
               projectStatusPort.setBeingProcessed(projectId, false);
             }

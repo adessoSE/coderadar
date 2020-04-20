@@ -168,29 +168,33 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   ngAfterViewChecked(): void {
     if (!this.highlighted && this.currentFileContent !== '') {
       Prism.highlightAllUnder(this.fileView.nativeElement);
+      if(this.showDiff){
+        this.fileView.nativeElement.children.item(0).lastChild.remove();
+      } else {
         this.fileView.nativeElement.children.item(1).remove();
-        const elements: HTMLElement[] = Array.from(this.fileView.nativeElement.children)
+      }
+      const elements: HTMLElement[] = Array.from(this.fileView.nativeElement.children)
           .slice(1, this.fileView.nativeElement.children.length) as HTMLElement[];
-        elements.forEach(value => {
-          value.style.pointerEvents = 'auto';
-          value.onmouseover = (event: MouseEvent) => {
-            this.tooltipMessage = this.getTooltipForRange(value.attributes['data-range']);
-            this.tooltip.disabled = false;
-            this.tooltip.show();
-            if (this.tooltip._overlayRef) {
-              const tip = this.tooltip._overlayRef.overlayElement;
-              if (tip) {
-                setTimeout(() => {
-                  tip.style.left = event.clientX + 'px';
-                  tip.style.top = event.clientY + 'px';
-                });
-              }
+      elements.forEach(value => {
+        value.style.pointerEvents = 'auto';
+        value.onmouseover = (event: MouseEvent) => {
+          this.tooltipMessage = this.getTooltipForRange(value.attributes['data-range']);
+          this.tooltip.disabled = false;
+          this.tooltip.show();
+          if (this.tooltip._overlayRef) {
+            const tip = this.tooltip._overlayRef.overlayElement;
+            if (tip) {
+              setTimeout(() => {
+                tip.style.left = event.clientX + 'px';
+                tip.style.top = event.clientY + 'px';
+              });
             }
-          };
-          value.onmouseleave = () => {
-            this.tooltip.hide();
-          };
-        });
+           }
+        };
+        value.onmouseleave = () => {
+          this.tooltip.hide();
+        };
+      });
       this.highlighted = true;
     }
   }
@@ -214,7 +218,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
     return findings;
   }
 
-  getLanguageClass() {
+  getCodeClass() {
     const temp = this.currentSelectedFilepath.split('.');
     const fileExtension = temp[temp.length - 1];
     if(this.showDiff) {
@@ -224,7 +228,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
       return 'language-diff-'+ fileExtension + ' diff-highlight';
     } else {
       if (fileExtension === 'gradle') {
-        return 'language-groovy';
+        return 'line-numbers language-groovy';
       }
       return 'language-' + fileExtension;
     }
@@ -255,5 +259,13 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
           this.router.navigate(['/dashboard']);
         }
       });
+  }
+
+  getPreClass() {
+    if(!this.showDiff){
+      return 'line-numbers file-content';
+    }  else {
+      return 'file-content';
+    }
   }
 }
