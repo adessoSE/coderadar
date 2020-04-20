@@ -196,12 +196,12 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   }
 
   private getTooltipForRange(range: Attr): string {
-    const lineStart = range.value.split('-')[0];
+    const lineStart = +range.value.split('-')[0];
     let findings = '';
     this.currentFileMetrics.forEach(value => {
       let found = false;
       for (const finding of value.findings) {
-        if (finding.lineStart === +lineStart) {
+        if (finding.lineStart === lineStart) {
           found = true;
           break;
         }
@@ -228,7 +228,6 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
       }
       return 'language-' + fileExtension;
     }
-
   }
 
   getAllFindings(metrics: MetricWithFindings[]) {

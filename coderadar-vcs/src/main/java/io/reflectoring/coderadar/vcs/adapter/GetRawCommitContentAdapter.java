@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.vcs.adapter;
 
+import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import org.eclipse.jgit.api.Git;
@@ -14,7 +15,6 @@ import org.gitective.core.BlobUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -26,13 +26,12 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
   @Override
   public byte[] getCommitContent(String projectRoot, String filepath, String name)
       throws UnableToGetCommitContentException {
-    try (Git git = Git.open(new File(projectRoot))) {
-      if(filepath.isEmpty()){
-        return new byte[0];
-      } else {
-        ObjectId commitId = git.getRepository().resolve(name);
-        return BlobUtils.getRawContent(git.getRepository(), commitId, filepath);
-      }
+    if(filepath.isEmpty()){
+      return new byte[0];
+    }
+    try (Git git = Git.open(new java.io.File(projectRoot))) {
+      ObjectId commitId = git.getRepository().resolve(name);
+      return BlobUtils.getRawContent(git.getRepository(), commitId, filepath);
     } catch (IOException e) {
       throw new UnableToGetCommitContentException(e.getMessage());
     }
@@ -40,7 +39,10 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
 
   @Override
   public byte[] getFileDiff(String projectRoot, String filepath, String name) throws UnableToGetCommitContentException {
-    try (Git git = Git.open(new File(projectRoot))) {
+    if(filepath.isEmpty()){
+      return new byte[0];
+    }
+    try (Git git = Git.open(new java.io.File(projectRoot))) {
       ObjectId commitId = ObjectId.fromString(name);
       RevCommit commit;
       try (RevWalk revWalk = new RevWalk(git.getRepository())) {
@@ -67,7 +69,7 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
   public HashMap<String, byte[]> getCommitContentBulk(
       String projectRoot, List<String> filepaths, String name)
       throws UnableToGetCommitContentException {
-    try (Git git = Git.open(new File(projectRoot))) {
+    try (Git git = Git.open(new java.io.File(projectRoot))) {
       ObjectId commitId = git.getRepository().resolve(name);
       HashMap<String, byte[]> bulkContent = new LinkedHashMap<>();
       for (String filepath : filepaths) {
@@ -80,17 +82,17 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
   }
 
   @Override
-  public HashMap<io.reflectoring.coderadar.projectadministration.domain.File, byte[]>
+  public HashMap<File, byte[]>
       getCommitContentBulkWithFiles(
           String projectRoot,
           List<io.reflectoring.coderadar.projectadministration.domain.File> files,
           String name)
           throws UnableToGetCommitContentException {
-    try (Git git = Git.open(new File(projectRoot))) {
+    try (Git git = Git.open(new java.io.File(projectRoot))) {
       ObjectId commitId = git.getRepository().resolve(name);
-      HashMap<io.reflectoring.coderadar.projectadministration.domain.File, byte[]> bulkContent =
+      HashMap<File, byte[]> bulkContent =
           new LinkedHashMap<>();
-      for (io.reflectoring.coderadar.projectadministration.domain.File file : files) {
+      for (File file : files) {
         bulkContent.put(
             file, BlobUtils.getRawContent(git.getRepository(), commitId, file.getPath()));
       }
