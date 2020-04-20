@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {MatTooltip, MatTreeNestedDataSource} from '@angular/material';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {FileTreeNode} from '../../model/file-tree-node';
@@ -147,6 +147,15 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
       });
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if(this.showDiff){
+      this.fileView.nativeElement.children.item(0).lastChild.remove();
+    } else {
+      this.fileView.nativeElement.children.item(1).remove();
+    }
+  }
+
 
   private getFullPath(children: FileTreeNode[], node: any, path: string): string {
     if (children === null) {
@@ -168,11 +177,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   ngAfterViewChecked(): void {
     if (!this.highlighted && this.currentFileContent !== '') {
       Prism.highlightAllUnder(this.fileView.nativeElement);
-      if(this.showDiff){
-        this.fileView.nativeElement.children.item(0).lastChild.remove();
-      } else {
-        this.fileView.nativeElement.children.item(1).remove();
-      }
+      this.onResize(null);
       const elements: HTMLElement[] = Array.from(this.fileView.nativeElement.children)
           .slice(1, this.fileView.nativeElement.children.length) as HTMLElement[];
       elements.forEach(value => {
