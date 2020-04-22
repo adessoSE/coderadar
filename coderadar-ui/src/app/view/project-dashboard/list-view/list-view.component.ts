@@ -117,18 +117,11 @@ export class ListViewComponent implements OnInit, OnChanges {
    */
   getTitleText(): string {
     const projectName = this.appComponent.trimProjectName(this.project.name);
-    if (this.project.startDate === 'first commit' && this.project.endDate === 'current') {
+    if (this.project.startDate === 'first commit') {
       return 'Showing commits for project ' + projectName + ' (' + this.commits.length + ')';
-    } else if (this.project.startDate !== 'first commit' && this.project.endDate === 'current') {
+    } else {
       return 'Showing commits for project ' + projectName + ' from ' + this.project.startDate + ' up until today'
         + ' (' + this.commits.length + ')';
-    } else if (this.project.startDate === 'first commit' && this.project.endDate !== 'current') {
-      return 'Showing commits for project ' + projectName + ' from '
-        + new Date(this.commits[this.commits.length - 1].timestamp).toLocaleDateString() + ' up until ' + this.project.endDate
-        + ' (' + this.commits.length + ')';
-    } else {
-      return 'Showing commits for project ' + projectName + ' from '
-        + this.project.startDate + ' up until ' + this.project.endDate + ' (' + this.commits.length + ')';
     }
   }
 

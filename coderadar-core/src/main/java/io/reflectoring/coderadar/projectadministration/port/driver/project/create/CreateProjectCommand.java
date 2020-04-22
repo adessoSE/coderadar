@@ -19,5 +19,4 @@ public class CreateProjectCommand {
   @NotNull @URL private String vcsUrl;
   private boolean vcsOnline;
   private @Past Date startDate;
-  private Date endDate;
 }

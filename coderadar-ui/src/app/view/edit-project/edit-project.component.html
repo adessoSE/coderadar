@@ -38,10 +38,6 @@
               <input [(ngModel)]="project.startDate" matInput name="startDate"
                      placeholder="Start date - leave empty to start with first commit" type="date">
             </mat-form-field>
-            <mat-form-field>
-              <input [(ngModel)]="project.endDate" matInput name="endDate" placeholder="End date - leave empty to scan incoming commits"
-                     type="date">
-            </mat-form-field>
             <mat-error *ngIf="nameEmpty">The project name must not be empty!</mat-error>
             <mat-error *ngIf="projectExists">A project with this name already exists! Please choose another name.
             </mat-error>

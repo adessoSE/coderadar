@@ -27,7 +27,7 @@ public class ListBranchesControllerTest extends ControllerTestTemplate {
     projectId =
         createProjectService.createProject(
             new CreateProjectCommand(
-                "testProject", null, null, testRepoURL.toString(), false, null, null));
+                "testProject", null, null, testRepoURL.toString(), false, null));
   }
 
   @Test

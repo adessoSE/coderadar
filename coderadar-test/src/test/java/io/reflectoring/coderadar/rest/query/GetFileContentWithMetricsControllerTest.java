@@ -35,7 +35,6 @@ public class GetFileContentWithMetricsControllerTest extends ControllerTestTempl
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null,
             null);
     MvcResult result =
         mvc()

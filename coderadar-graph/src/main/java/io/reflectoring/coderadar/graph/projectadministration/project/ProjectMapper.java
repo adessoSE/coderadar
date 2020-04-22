@@ -11,7 +11,6 @@ public class ProjectMapper implements Mapper<Project, ProjectEntity> {
     Project project = new Project();
     project.setId(nodeEntity.getId());
     project.setName(nodeEntity.getName());
-    project.setVcsEnd(nodeEntity.getVcsEnd());
     project.setVcsStart(nodeEntity.getVcsStart());
     project.setVcsOnline(nodeEntity.isVcsOnline());
     project.setVcsUsername(nodeEntity.getVcsUsername());
@@ -25,7 +24,6 @@ public class ProjectMapper implements Mapper<Project, ProjectEntity> {
   public ProjectEntity mapDomainObject(Project domainObject) {
     ProjectEntity project = new ProjectEntity();
     project.setName(domainObject.getName());
-    project.setVcsEnd(domainObject.getVcsEnd());
     project.setVcsStart(domainObject.getVcsStart());
     project.setVcsOnline(domainObject.isVcsOnline());
     project.setVcsUsername(domainObject.getVcsUsername());

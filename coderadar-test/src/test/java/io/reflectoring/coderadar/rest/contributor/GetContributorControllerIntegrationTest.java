@@ -37,7 +37,6 @@ public class GetContributorControllerIntegrationTest extends ControllerTestTempl
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null,
             null);
     mvc()
         .perform(

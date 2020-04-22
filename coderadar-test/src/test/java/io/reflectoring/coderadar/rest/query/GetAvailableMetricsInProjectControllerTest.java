@@ -36,7 +36,6 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null,
             null);
     MvcResult result =
         mvc()

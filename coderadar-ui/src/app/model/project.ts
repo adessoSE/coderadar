@@ -6,7 +6,6 @@ export class Project {
   public vcsPassword: string;
   public vcsOnline = true; // always online
   public startDate: string;
-  public endDate: string;
 
   /**
    * Construct a new project from the object delivered by the server.
@@ -27,14 +26,6 @@ export class Project {
         this.startDate = startDate.toISOString().split('T')[0];
       } else {
         this.startDate = 'first commit';
-      }
-
-      if (project.endDate !== null) {
-        const endDate = new Date(project.endDate);
-        endDate.setDate(endDate.getDate());
-        this.endDate = endDate.toISOString().split('T')[0];
-      } else {
-        this.endDate = 'current';
       }
     }
   }

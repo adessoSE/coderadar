@@ -24,7 +24,6 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
-    testProject.setVcsEnd(new Date());
     testProject.setVcsStart(new Date());
     testProject.setVcsOnline(true);
     testProject.setVcsPassword("testPassword");
@@ -35,13 +34,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(
-            "new-project-name",
-            "username",
-            "password",
-            "http://valid.url",
-            true,
-            new Date(),
-            new Date());
+            "new-project-name", "username", "password", "http://valid.url", true, new Date());
     mvc()
         .perform(
             post("/projects/" + testProject.getId())
@@ -64,7 +57,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
   void updateProjectReturnsErrorWhenProjectDoesNotExist() throws Exception {
     UpdateProjectCommand command =
         new UpdateProjectCommand(
-            "name", "username", "password", "http://valid.url", true, new Date(), new Date());
+            "name", "username", "password", "http://valid.url", true, new Date());
     mvc()
         .perform(
             post("/projects/1").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
@@ -76,8 +69,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void updateProjectReturnsErrorWhenRequestIsInvalid() throws Exception {
     UpdateProjectCommand command =
-        new UpdateProjectCommand(
-            "", "username", "password", "http://valid.url", true, new Date(), new Date());
+        new UpdateProjectCommand("", "username", "password", "http://valid.url", true, new Date());
     mvc()
         .perform(
             post("/projects/0").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))

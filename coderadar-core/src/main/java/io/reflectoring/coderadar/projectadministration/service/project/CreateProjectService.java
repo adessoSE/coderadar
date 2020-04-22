@@ -136,20 +136,13 @@ public class CreateProjectService implements CreateProjectUseCase {
    */
   static DateRange getProjectDateRange(Project project) {
     LocalDate projectStart;
-    LocalDate projectEnd;
-
     if (project.getVcsStart() == null) {
       projectStart = LocalDate.of(1970, 1, 1);
     } else {
       projectStart = project.getVcsStart().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
-
-    if (project.getVcsEnd() == null) {
-      projectEnd = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    } else {
-      projectEnd = project.getVcsEnd().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    }
-    return new DateRange(projectStart, projectEnd);
+    return new DateRange(
+        projectStart, new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
   }
 
   /**
@@ -169,7 +162,6 @@ public class CreateProjectService implements CreateProjectUseCase {
     project.setVcsPassword(command.getVcsPassword());
     project.setVcsOnline(command.isVcsOnline());
     project.setVcsStart(command.getStartDate());
-    project.setVcsEnd(command.getEndDate());
     long projectId = createProjectPort.createProject(project);
     project.setId(projectId);
     return project;

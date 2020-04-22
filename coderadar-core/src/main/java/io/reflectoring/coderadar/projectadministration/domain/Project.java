@@ -14,5 +14,4 @@ public class Project {
   private String vcsPassword;
   private boolean vcsOnline;
   private Date vcsStart;
-  private Date vcsEnd;
 }
