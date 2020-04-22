@@ -633,6 +633,29 @@ include::{snippets}/files/content/http-request.adoc[]
 
 include::{snippets}/files/content/http-response.adoc[]
 
+==== Querying the file diff against the same file in the first commit parent.
+
+===== Request Structure
+
+include::{snippets}/files/diff/request-fields.adoc[]
+
+===== Response Structure
+
+include::{snippets}/files/diff/response-fields.adoc[]
+
+===== Example Request
+
+[NOTE]
+=====
+This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
+
+=====
+include::{snippets}/files/diff/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/files/diff/http-response.adoc[]
+
 === Metrics Trees
 
 ==== Querying Metrics for all Files in a Single Commit

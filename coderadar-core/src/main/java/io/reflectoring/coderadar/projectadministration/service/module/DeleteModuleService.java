@@ -15,7 +15,7 @@ public class DeleteModuleService implements DeleteModuleUseCase {
   private final DeleteModulePort deleteModulePort;
   private final ProcessProjectService processProjectService;
   private final GetModulePort getModulePort;
-  private final Logger logger = LoggerFactory.getLogger(DeleteModuleService.class);
+  private static final Logger logger = LoggerFactory.getLogger(DeleteModuleService.class);
 
   public DeleteModuleService(
       DeleteModulePort deleteModulePort,

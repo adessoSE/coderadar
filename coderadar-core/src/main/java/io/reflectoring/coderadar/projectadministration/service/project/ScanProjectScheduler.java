@@ -51,7 +51,7 @@ public class ScanProjectScheduler {
   private final TaskExecutor taskExecutor;
   private final DeleteBranchPort deleteBranchPort;
 
-  private final Logger logger = LoggerFactory.getLogger(ScanProjectScheduler.class);
+  private static final Logger logger = LoggerFactory.getLogger(ScanProjectScheduler.class);
 
   private Map<Long, ScheduledFuture<?>> tasks = new HashMap<>();
 

@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.analyzer.checkstyle;
 
+import com.google.common.io.Files;
 import com.puppycrawl.tools.checkstyle.Checker;
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
@@ -52,10 +53,10 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin
   }
 
   @Override
-  public FileMetrics analyzeFile(String filename, byte[] fileContent) throws AnalyzerException {
+  public FileMetrics analyzeFile(String filepath, byte[] fileContent) throws AnalyzerException {
     File fileToAnalyze = null;
     try {
-      fileToAnalyze = createTempFile(fileContent);
+      fileToAnalyze = createTempFile(fileContent, filepath);
       auditListener.reset();
       checker.process(Collections.singletonList(fileToAnalyze));
       return auditListener.getMetrics();
@@ -68,8 +69,9 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin
     }
   }
 
-  private File createTempFile(byte[] fileContent) throws IOException {
-    File file = File.createTempFile("coderadar-", ".java");
+  private File createTempFile(byte[] fileContent, String filename) throws IOException {
+    String[] temp = filename.split("/");
+    File file = new File(Files.createTempDir(), temp[temp.length - 1]);
     file.deleteOnExit();
     FileOutputStream out = new FileOutputStream(file);
     out.write(fileContent);

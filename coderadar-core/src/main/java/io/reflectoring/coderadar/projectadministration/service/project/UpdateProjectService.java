@@ -45,7 +45,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final GetAvailableBranchesPort getAvailableBranchesPort;
   private final DeleteProjectPort deleteProjectPort;
 
-  private final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
+  private static final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
 
   public UpdateProjectService(
       GetProjectPort getProjectPort,

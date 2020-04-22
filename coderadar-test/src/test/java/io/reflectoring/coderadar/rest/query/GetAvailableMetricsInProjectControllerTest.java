@@ -132,9 +132,6 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
             "checkstyle:com.puppycrawl.tools.checkstyle.checks.coding.PackageDeclarationCheck"));
     Assertions.assertTrue(
         metrics.contains(
-            "checkstyle:com.puppycrawl.tools.checkstyle.checks.OuterTypeFilenameCheck"));
-    Assertions.assertTrue(
-        metrics.contains(
             "checkstyle:com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"));
     Assertions.assertTrue(
         metrics.contains(
@@ -206,9 +203,6 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
     Assertions.assertTrue(
         metrics.contains(
             "checkstyle:com.puppycrawl.tools.checkstyle.checks.coding.PackageDeclarationCheck"));
-    Assertions.assertTrue(
-        metrics.contains(
-            "checkstyle:com.puppycrawl.tools.checkstyle.checks.OuterTypeFilenameCheck"));
     Assertions.assertTrue(
         metrics.contains(
             "checkstyle:com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"));

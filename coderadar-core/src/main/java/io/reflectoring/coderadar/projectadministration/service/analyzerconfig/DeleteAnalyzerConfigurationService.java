@@ -13,7 +13,8 @@ public class DeleteAnalyzerConfigurationService implements DeleteAnalyzerConfigu
 
   private final DeleteAnalyzerConfigurationPort port;
   private final GetAnalyzerConfigurationPort getAnalyzerConfigurationPort;
-  private final Logger logger = LoggerFactory.getLogger(DeleteAnalyzerConfigurationService.class);
+  private static final Logger logger =
+      LoggerFactory.getLogger(DeleteAnalyzerConfigurationService.class);
 
   public DeleteAnalyzerConfigurationService(
       DeleteAnalyzerConfigurationPort port,

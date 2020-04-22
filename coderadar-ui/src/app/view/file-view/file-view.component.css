@@ -17,10 +17,11 @@
 
 /deep/ .mat-tooltip {
   font-size: 15px;
+  white-space: pre-line;
 }
 
 .checkbox {
-  margin-left: 2%;
+  margin-left: 1%;
 }
 
 .filepath {

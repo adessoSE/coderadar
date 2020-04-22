@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UpdateContributorService implements UpdateContributorUseCase {
   private final UpdateContributorPort updateContributorPort;
-  private final Logger logger = LoggerFactory.getLogger(UpdateContributorService.class);
+  private static final Logger logger = LoggerFactory.getLogger(UpdateContributorService.class);
 
   public UpdateContributorService(UpdateContributorPort updateContributorPort) {
     this.updateContributorPort = updateContributorPort;

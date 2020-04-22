@@ -21,7 +21,7 @@ public class DeleteProjectService implements DeleteProjectUseCase {
   private final DeleteLocalRepositoryPort deleteLocalRepositoryPort;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
-  private final Logger logger = LoggerFactory.getLogger(DeleteProjectService.class);
+  private static final Logger logger = LoggerFactory.getLogger(DeleteProjectService.class);
 
   public DeleteProjectService(
       DeleteProjectPort deleteProjectPort,
