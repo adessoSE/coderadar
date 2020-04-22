@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MergeContributorsService implements MergeContributorsUseCase {
   private final MergeContributorsPort mergeContributorsPort;
-  private final Logger logger = LoggerFactory.getLogger(MergeContributorsService.class);
+  private static final Logger logger = LoggerFactory.getLogger(MergeContributorsService.class);
 
   public MergeContributorsService(MergeContributorsPort mergeContributorsPort) {
     this.mergeContributorsPort = mergeContributorsPort;

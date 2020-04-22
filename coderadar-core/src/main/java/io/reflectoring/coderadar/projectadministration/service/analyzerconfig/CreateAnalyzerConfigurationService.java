@@ -18,7 +18,8 @@ public class CreateAnalyzerConfigurationService implements CreateAnalyzerConfigu
   private final CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort;
   private final ListAnalyzersService listAnalyzerService;
   private final ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService;
-  private final Logger logger = LoggerFactory.getLogger(CreateAnalyzerConfigurationService.class);
+  private static final Logger logger =
+      LoggerFactory.getLogger(CreateAnalyzerConfigurationService.class);
 
   public CreateAnalyzerConfigurationService(
       CreateAnalyzerConfigurationPort createAnalyzerConfigurationPort,

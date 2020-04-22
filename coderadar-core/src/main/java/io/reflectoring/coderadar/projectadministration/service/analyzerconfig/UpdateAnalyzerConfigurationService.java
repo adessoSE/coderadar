@@ -20,7 +20,8 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
   private final UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort;
   private final ListAnalyzersService listAnalyzerService;
   private final ListAnalyzerConfigurationsService listAnalyzerConfigurationsFromProjectService;
-  private final Logger logger = LoggerFactory.getLogger(UpdateAnalyzerConfigurationService.class);
+  private static final Logger logger =
+      LoggerFactory.getLogger(UpdateAnalyzerConfigurationService.class);
 
   public UpdateAnalyzerConfigurationService(
       UpdateAnalyzerConfigurationPort updateAnalyzerConfigurationPort,

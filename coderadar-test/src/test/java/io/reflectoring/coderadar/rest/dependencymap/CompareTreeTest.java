@@ -35,7 +35,7 @@ public class CompareTreeTest extends ControllerTestTemplate {
   private CompareNode root;
   private File f;
 
-  private final Logger logger = LoggerFactory.getLogger(CompareTreeTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(CompareTreeTest.class);
 
   @Autowired private DependencyCompareTreeAdapter dependencyTree;
   @Autowired private DeleteLocalRepositoryPort deleteRepositoryPort;

@@ -15,7 +15,7 @@ public class ResetAnalysisService implements ResetAnalysisUseCase {
   private final ResetAnalysisPort resetAnalysisPort;
   private final GetProjectPort getProjectPort;
   private final ProcessProjectService processProjectService;
-  private final Logger logger = LoggerFactory.getLogger(ResetAnalysisService.class);
+  private static final Logger logger = LoggerFactory.getLogger(ResetAnalysisService.class);
 
   @Autowired
   public ResetAnalysisService(

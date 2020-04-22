@@ -34,7 +34,7 @@ public class TreeTest extends ControllerTestTemplate {
 
   private Node root;
   private File f;
-  private final Logger logger = LoggerFactory.getLogger(TreeTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(TreeTest.class);
 
   @Autowired private DependencyTreeAdapter dependencyTree;
   @Autowired private DeleteLocalRepositoryPort deleteRepositoryPort;
