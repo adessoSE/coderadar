@@ -24,7 +24,7 @@ public class GetFileDiffController {
       method = {RequestMethod.GET, RequestMethod.POST},
       path = "/projects/{projectId}/files/diff",
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<FileContentWithMetrics> getFileContentWithMetrics(
+  public ResponseEntity<FileContentWithMetrics> getFileDiff(
       @PathVariable Long projectId, @RequestBody @Validated GetFileDiffCommand command) {
     return new ResponseEntity<>(useCase.getFileDiff(projectId, command), HttpStatus.OK);
   }

@@ -16,7 +16,7 @@ public class RegisterUserService implements RegisterUserUseCase {
 
   private final RegisterUserPort port;
   private final GetUserPort getUserPort;
-  private final Logger logger = LoggerFactory.getLogger(RegisterUserService.class);
+  private static final Logger logger = LoggerFactory.getLogger(RegisterUserService.class);
 
   public RegisterUserService(RegisterUserPort port, GetUserPort getUserPort) {
     this.port = port;

@@ -54,7 +54,7 @@ public class CreateProjectService implements CreateProjectUseCase {
 
   private final ListContributorsPort listContributorsPort;
 
-  private final Logger logger = LoggerFactory.getLogger(CreateProjectService.class);
+  private static final Logger logger = LoggerFactory.getLogger(CreateProjectService.class);
 
   public CreateProjectService(
       GetAvailableBranchesPort getAvailableBranchesPort,

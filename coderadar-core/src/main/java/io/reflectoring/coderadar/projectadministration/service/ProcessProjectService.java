@@ -15,7 +15,7 @@ public class ProcessProjectService {
   private final AsyncListenableTaskExecutor taskExecutor;
   private final ProjectStatusPort projectStatusPort;
   private final GetProjectPort getProjectPort;
-  private final Logger logger = LoggerFactory.getLogger(ProcessProjectService.class);
+  private static final Logger logger = LoggerFactory.getLogger(ProcessProjectService.class);
 
   public ProcessProjectService(
       AsyncListenableTaskExecutor taskExecutor,
