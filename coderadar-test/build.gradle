@@ -54,7 +54,7 @@ asciidoctor {
 }
 
 gitPublish {
-    repoUri = "https://github.com/reflectoring/coderadar.git"
+    repoUri = "https://github.com/adessoAG/coderadar.git"
     branch = "gh-pages"
     contents {
         from "build/pages"
