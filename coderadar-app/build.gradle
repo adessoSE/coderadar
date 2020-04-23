@@ -55,8 +55,6 @@ processResources {
 }
 
 dependencies {
-    compile(project(':coderadar-ui'))
-
     compile "org.springframework.boot:spring-boot-starter-web:${version_spring_boot}"
     compile "org.springframework.boot:spring-boot-starter-actuator:${version_spring_boot}"
     compile "org.springframework.boot:spring-boot-devtools:${version_spring_boot}"
