@@ -1,7 +1,7 @@
 # coderadar
 
-[![Build Status](https://travis-ci.org/reflectoring/coderadar.svg?branch=master)](https://travis-ci.org/reflectoring/coderadar)
-[![Gradle Status](https://gradleupdate.appspot.com/reflectoring/coderadar/status.svg)](https://gradleupdate.appspot.com/reflectoring/coderadar/status) [ ![Download](https://api.bintray.com/packages/reflectoring/releases/coderadar/images/download.svg) ](https://bintray.com/reflectoring/releases/coderadar/_latestVersion)
+[![Build Status](https://travis-ci.org/adessoAG/coderadar.svg?branch=master)](https://travis-ci.org/adessoAG/coderadar)
+[![Gradle Status](https://gradleupdate.appspot.com/adessoAG/coderadar/status.svg)](https://gradleupdate.appspot.com/adessoAG/coderadar/status)
 
 coderadar aims to be a continuous source code analysis tool that **automatically runs code analyzers on your version control system** that provide you with the metrics that are most important to you and your team. coderadar provides **per-commit code metrics** and even allows viewing **the history of code metrics** in legacy projects. 
 
@@ -18,8 +18,8 @@ coderadar aims to be a continuous source code analysis tool that **automatically
 * coderadar is a tool for **gamification**. It provides mechanisms to gamify code quality and to improve motivation for developers to produce quality code.
 
 ## Documentation
-* [REST API documentation](https://reflectoring.github.io/coderadar/current/docs/restapi.html).
-* [Administration Guide](https://reflectoring.github.io/coderadar/current/docs/admin.html)
+* [REST API documentation](https://adessoAG.github.io/coderadar/current/docs/restapi.html).
+* [Administration Guide](https://adessoAG.github.io/coderadar/current/docs/admin.html)
 
 ## Want to contribute?
-See the [contribution guide](https://github.com/reflectoring/coderadar/blob/master/CONTRIBUTING.md).
+See the [contribution guide](https://github.com/adessoAG/coderadar/blob/master/CONTRIBUTING.md).
