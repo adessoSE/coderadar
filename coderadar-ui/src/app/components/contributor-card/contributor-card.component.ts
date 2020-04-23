@@ -41,10 +41,6 @@ export class ContributorCardComponent implements OnInit {
 
       this.dialogRef.afterOpened().subscribe(()=>{
         this.clickoutHandler = this.closeDialogFromClickout;
-      })
-
-      this.dialogRef.afterClosed().subscribe(result => {
-        // console.log("Dialog closed");
       });
     });
   }
@@ -84,7 +80,11 @@ export class ContributorDialogComponent implements OnInit {
   }
 
   getAliasTooltipText(): string {
-    return this.contributor.names.filter(value => value !== this.contributor.displayName).join('\n');
+    return this.getAliases().join('\n');
+  }
+
+  getAliases(): string[]{
+    return this.contributor.names.filter(value => value !== this.contributor.displayName);
   }
 
   ngOnInit() {

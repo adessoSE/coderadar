@@ -1,10 +1,17 @@
-<div mat-dialog-title [matTooltipClass]="'alias-tooltip'" matTooltip="{{getAliasTooltipText()}}">
+<div mat-dialog-title>
   <p class="contributor-name">{{contributor.displayName}}</p>
 </div>
 <div mat-dialog-content>
   <div>
-    <img class="contributor-avatar"*ngIf="avatarUrl" src="assets/account.png" align="center">
-    <p><b>Contact:</b></p>
+    <div *ngIf="getAliases().length>0">
+    <p><b>Alias{{getAliases().length>1?'es':''}}</b></p>
+    <ul style ="padding: 0px 16px">
+      <li *ngFor="let alias of getAliases()">
+        {{alias}}
+      </li>
+    </ul>
+    </div>
+    <p><b>Email{{contributor.emailAddresses.length>1?'s':''}}:</b></p>
     <ul style="padding: 0px 16px">
       <li *ngFor="let email of contributor.emailAddresses">
         <a href = "mailto: {{email}}">{{email}}</a>
