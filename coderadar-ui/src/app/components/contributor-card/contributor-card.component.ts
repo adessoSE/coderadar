@@ -79,10 +79,6 @@ export class ContributorDialogComponent implements OnInit {
     this.contributor = data.contributor;
   }
 
-  getAliasTooltipText(): string {
-    return this.getAliases().join('\n');
-  }
-
   getAliases(): string[]{
     return this.contributor.names.filter(value => value !== this.contributor.displayName);
   }
