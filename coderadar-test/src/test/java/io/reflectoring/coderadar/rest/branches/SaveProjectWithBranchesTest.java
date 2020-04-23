@@ -29,7 +29,8 @@ public class SaveProjectWithBranchesTest extends ControllerTestTemplate {
         new CreateProjectCommand(
             "project", "username", "password", testRepoURL.toString(), false, null);
     mvc()
-        .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
+        .perform(
+            post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
         .andExpect(MockMvcResultMatchers.status().isCreated())
         .andDo(
             result -> {

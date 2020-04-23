@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.module;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.create.CreateModuleUseCase;
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import org.springframework.http.HttpStatus;
@@ -15,9 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Transactional
-public class CreateModuleController {
+@RestController
+public class CreateModuleController extends AbstractBaseController {
   private final CreateModuleUseCase createModuleUseCase;
 
   public CreateModuleController(CreateModuleUseCase createModuleUseCase) {

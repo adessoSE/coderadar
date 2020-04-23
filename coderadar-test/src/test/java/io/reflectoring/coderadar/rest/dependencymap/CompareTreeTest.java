@@ -83,7 +83,7 @@ public class CompareTreeTest extends ControllerTestTemplate {
       mvc()
           .perform(
               get(
-                  "/analyzers/"
+                  "/api/analyzers/"
                       + testProject.getId()
                       + "/structureMap/"
                       + commitName

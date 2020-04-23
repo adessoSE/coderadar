@@ -36,7 +36,11 @@ class GetAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate 
 
     mvc()
         .perform(
-            get("/projects/" + testProject.getId() + "/analyzers/" + analyzerConfiguration.getId()))
+            get(
+                "/api/projects/"
+                    + testProject.getId()
+                    + "/analyzers/"
+                    + analyzerConfiguration.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetAnalyzerConfigurationResponse.class))
         .andDo(
@@ -54,7 +58,7 @@ class GetAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate 
   @Test
   void getAnalyzerConfigurationReturnsErrorWhenNotFound() throws Exception {
     mvc()
-        .perform(get("/projects/0/analyzers/2"))
+        .perform(get("/api/projects/0/analyzers/2"))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")

@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.analyzerconfig;
 import io.reflectoring.coderadar.plugin.api.AnalyzerConfigurationException;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,9 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Transactional
-public class UpdateAnalyzerConfigurationController {
+@RestController
+public class UpdateAnalyzerConfigurationController extends AbstractBaseController {
   private final UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase;
 
   public UpdateAnalyzerConfigurationController(

@@ -55,7 +55,7 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
     contributorRepository.save(contributorEntity, 1);
 
     mvc()
-        .perform(delete("/projects/" + id))
+        .perform(delete("/api/projects/" + id))
         .andExpect(status().isOk())
         .andDo(document("projects/delete"));
 
@@ -89,7 +89,7 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
     contributorRepository.save(contributorEntity, 1);
 
     mvc()
-        .perform(delete("/projects/" + id))
+        .perform(delete("/api/projects/" + id))
         .andExpect(status().isOk())
         .andDo(document("projects/delete"));
 
@@ -105,7 +105,7 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
     testProject = projectRepository.save(testProject);
     final Long id = testProject.getId();
 
-    mvc().perform(delete("/projects/" + id)).andExpect(status().isOk());
+    mvc().perform(delete("/api/projects/" + id)).andExpect(status().isOk());
 
     Assertions.assertFalse(projectRepository.findById(id).isPresent());
   }
@@ -113,7 +113,7 @@ class DeleteProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void deleteProjectReturnsErrorWhenProjectNotFound() throws Exception {
     MvcResult result =
-        mvc().perform(delete("/projects/1")).andExpect(status().isNotFound()).andReturn();
+        mvc().perform(delete("/api/projects/1")).andExpect(status().isNotFound()).andReturn();
 
     ErrorMessageResponse response =
         fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class);

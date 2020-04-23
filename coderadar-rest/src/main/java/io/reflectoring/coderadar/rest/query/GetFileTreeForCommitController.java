@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.query;
 
 import io.reflectoring.coderadar.query.domain.FileTree;
 import io.reflectoring.coderadar.query.port.driver.GetFileTreeForCommitUseCase;
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Transactional
-public class GetFileTreeForCommitController {
+@RestController
+public class GetFileTreeForCommitController extends AbstractBaseController {
 
   private final GetFileTreeForCommitUseCase getFileTreeForCommitUseCase;
 

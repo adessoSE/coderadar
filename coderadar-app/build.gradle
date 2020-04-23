@@ -3,7 +3,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 apply plugin: "org.springframework.boot"
 apply plugin: "com.diffplug.gradle.spotless"
 apply plugin: "com.jfrog.bintray"
-apply plugin: "war"
+apply plugin: "java"
 
 sourceSets {
     test {
@@ -17,12 +17,6 @@ spotless {
     java {
         googleJavaFormat()
     }
-}
-
-processResources {
-    filter ReplaceTokens, tokens: [
-            "coderadar.version": version
-    ]
 }
 
 test {
@@ -44,12 +38,25 @@ task controllerTest(type: Test) {
     }
 }
 
-war {
+jar {
     baseName = "coderadar"
     version = project.version
 }
 
+processResources {
+    filesNotMatching("**/*.png") {
+        filter ReplaceTokens, tokens: [
+                "coderadar.version": version
+        ]
+    }
+    from ('../coderadar-ui/dist/coderadar') {
+        into 'static'
+    }
+}
+
 dependencies {
+    compile(project(':coderadar-ui'))
+
     compile "org.springframework.boot:spring-boot-starter-web:${version_spring_boot}"
     compile "org.springframework.boot:spring-boot-starter-actuator:${version_spring_boot}"
     compile "org.springframework.boot:spring-boot-devtools:${version_spring_boot}"
@@ -69,7 +76,7 @@ dependencies {
     compile project(":coderadar-rest")
     compile project(":coderadar-dependency-map")
 
-    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat:${version_spring_boot}"
+    compile "org.springframework.boot:spring-boot-starter-tomcat:${version_spring_boot}"
 
     testCompile "org.springframework.boot:spring-boot-starter-test:${version_spring_boot}"
 
@@ -87,7 +94,7 @@ dependencies {
 
 Properties localBootRunProperties() {
     Properties p = new Properties();
-    p.load(new FileInputStream(file(project.projectDir).absolutePath + "/local.application.properties"))
+    p.load(new FileInputStream(file(project.projectDir).absolutePath + "/src/main/resources/application.properties"))
     return p;
 }
 

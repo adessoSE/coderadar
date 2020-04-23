@@ -35,7 +35,7 @@ class GetModuleControllerIntegrationTest extends ControllerTestTemplate {
 
     // Test
     mvc()
-        .perform(get("/projects/" + testProject.getId() + "/modules/" + module.getId()))
+        .perform(get("/api/projects/" + testProject.getId() + "/modules/" + module.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetModuleResponse.class))
         .andDo(
@@ -50,7 +50,7 @@ class GetModuleControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void getModuleReturnsErrorWhenModuleNotFound() throws Exception {
     mvc()
-        .perform(get("/projects/0/modules/0"))
+        .perform(get("/api/projects/0/modules/0"))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Module with id 0 not found."));

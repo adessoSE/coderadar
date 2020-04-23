@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.project;
 
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import java.net.MalformedURLException;
 import org.springframework.http.HttpStatus;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Transactional
-public class CreateProjectController {
+@RestController
+public class CreateProjectController extends AbstractBaseController {
   private final CreateProjectUseCase createProjectUseCase;
 
   public CreateProjectController(CreateProjectUseCase createProjectUseCase) {

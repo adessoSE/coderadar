@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.query;
 import io.reflectoring.coderadar.query.domain.MetricTree;
 import io.reflectoring.coderadar.query.port.driver.metrictree.GetMetricTreeForCommitCommand;
 import io.reflectoring.coderadar.query.port.driver.metrictree.GetMetricTreeForCommitUseCase;
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Transactional
-public class GetMetricTreeForCommitController {
+@RestController
+public class GetMetricTreeForCommitController extends AbstractBaseController {
   private final GetMetricTreeForCommitUseCase getMetricTreeForCommitUseCase;
 
   public GetMetricTreeForCommitController(

@@ -34,7 +34,7 @@ class DeleteFilePatternControllerIntegrationTest extends ControllerTestTemplate 
 
     mvc()
         .perform(
-            delete("/projects/" + testProject.getId() + "/filePatterns/" + filePattern.getId()))
+            delete("/api/projects/" + testProject.getId() + "/filePatterns/" + filePattern.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(result -> Assertions.assertFalse(filePatternRepository.findById(id).isPresent()))
         .andDo(document("filepatterns/delete"));
@@ -43,7 +43,7 @@ class DeleteFilePatternControllerIntegrationTest extends ControllerTestTemplate 
   @Test
   void deleteFilePatternReturnsErrorWhenNotFound() throws Exception {
     mvc()
-        .perform(delete("/projects/0/filePatterns/2"))
+        .perform(delete("/api/projects/0/filePatterns/2"))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")

@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.module;
 
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetModuleResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Transactional
-public class ListModulesOfProjectController {
+@RestController
+public class ListModulesOfProjectController extends AbstractBaseController {
   private final ListModulesOfProjectUseCase listModulesOfProjectUseCase;
 
   public ListModulesOfProjectController(ListModulesOfProjectUseCase listModulesOfProjectUseCase) {

@@ -1,0 +1,12 @@
+plugins {
+  id 'java'
+  id("com.github.node-gradle.node") version "2.2.0"
+}
+
+node {
+  version = '12.13.1'
+  npmVersion = '6.12.1'
+  download = true
+}
+
+jar.dependsOn 'npm_run_build'

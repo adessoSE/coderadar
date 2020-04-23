@@ -22,7 +22,7 @@ class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
     RegisterUserCommand command = new RegisterUserCommand("username", "password1");
     mvc()
         .perform(
-            post("/user/registration")
+            post("/api/user/registration")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -34,7 +34,7 @@ class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
     RegisterUserCommand command = new RegisterUserCommand("", null);
     mvc()
         .perform(
-            post("/user/registration")
+            post("/api/user/registration")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -45,7 +45,7 @@ class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
     RegisterUserCommand command = new RegisterUserCommand("username", "short");
     mvc()
         .perform(
-            post("/user/registration")
+            post("/api/user/registration")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -62,7 +62,7 @@ class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
     RegisterUserCommand command = new RegisterUserCommand("username2", "password1");
     mvc()
         .perform(
-            post("/user/registration")
+            post("/api/user/registration")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isConflict());

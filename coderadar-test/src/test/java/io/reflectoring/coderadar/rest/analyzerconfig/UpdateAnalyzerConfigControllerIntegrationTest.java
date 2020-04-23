@@ -41,7 +41,10 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             false);
     mvc()
         .perform(
-            post("/projects/" + testProject.getId() + "/analyzers/" + analyzerConfiguration.getId())
+            post("/api/projects/"
+                    + testProject.getId()
+                    + "/analyzers/"
+                    + analyzerConfiguration.getId())
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
@@ -63,7 +66,7 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
         new UpdateAnalyzerConfigurationCommand("noanalyzer", false);
     mvc()
         .perform(
-            post("/projects/0/analyzers/2")
+            post("/api/projects/0/analyzers/2")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -102,7 +105,7 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             false);
     mvc()
         .perform(
-            post("/projects/" + testProject.getId() + "/analyzers/" + id)
+            post("/api/projects/" + testProject.getId() + "/analyzers/" + id)
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isConflict())
@@ -118,7 +121,7 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             "io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", false);
     mvc()
         .perform(
-            post("/projects/0/analyzers/2")
+            post("/api/projects/0/analyzers/2")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -132,7 +135,7 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
     UpdateAnalyzerConfigurationCommand command = new UpdateAnalyzerConfigurationCommand("", false);
     mvc()
         .perform(
-            post("/projects/0/analyzers/1")
+            post("/api/projects/0/analyzers/1")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest());

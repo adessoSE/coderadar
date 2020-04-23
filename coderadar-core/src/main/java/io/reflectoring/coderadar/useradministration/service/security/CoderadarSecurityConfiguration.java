@@ -62,19 +62,37 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable();
-
     if (coderadarConfiguration.getAuthentication().getEnabled()) {
       http.sessionManagement()
           .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
           .and()
           .authorizeRequests()
-
           // only these endpoints can be called without authentication
-          .antMatchers("/actuator", "/user/auth", "/user/registration", "/user/refresh")
+          .antMatchers(
+              "/actuator",
+              "/api/user/auth",
+              "/api/user/registration",
+              "/api/user/refresh",
+              "/login",
+              "/**/*.js",
+              "/**/*.css",
+              "/**/*.map",
+              "/**/*.png",
+              "/register",
+              "/dashboard",
+              "/user-settings",
+              "/add-project",
+              "/project-configure/*",
+              "/city/*",
+              "/project-edit/*",
+              "/project/*",
+              "/project/*/*",
+              "/project/*/*/dependency-map",
+              "/project/*/*/*/dependency-map",
+              "/project/*/*/files")
           .permitAll()
           .anyRequest()
           .authenticated();
-
       // put JSON Web Token authentication before other ones
       http.addFilterBefore(
           new AuthenticationTokenFilter(tokenService), UsernamePasswordAuthenticationFilter.class);

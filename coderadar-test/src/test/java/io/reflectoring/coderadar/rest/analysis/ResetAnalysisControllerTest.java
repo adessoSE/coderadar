@@ -51,7 +51,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                post("/projects")
+                post("/api/projects")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(createProjectCommand)))
             .andReturn();
@@ -62,7 +62,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/filePatterns")
+            post("/api/projects/" + projectId + "/filePatterns")
                 .content(toJson(createFilePatternCommand))
                 .contentType(MediaType.APPLICATION_JSON));
   }
@@ -74,18 +74,18 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
             "io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyzers")
+            post("/api/projects/" + projectId + "/analyzers")
                 .content(toJson(createAnalyzerConfigurationCommand))
                 .contentType(MediaType.APPLICATION_JSON));
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/master/analyze")
+            post("/api/projects/" + projectId + "/master/analyze")
                 .contentType(MediaType.APPLICATION_JSON))
         .andDo(document("analysis/start"));
 
     mvc()
-        .perform(get("/projects/" + projectId + "/analyzingStatus"))
+        .perform(get("/api/projects/" + projectId + "/analyzingStatus"))
         .andDo(
             document(
                 "analysis/status",
@@ -103,7 +103,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
     Assertions.assertEquals(44, metricValues.size());
 
     mvc()
-        .perform(post("/projects/" + projectId + "/analyze/reset"))
+        .perform(post("/api/projects/" + projectId + "/analyze/reset"))
         .andDo(document("analysis/reset"));
 
     session.clear();
@@ -125,13 +125,13 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
             true);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyzers")
+            post("/api/projects/" + projectId + "/analyzers")
                 .content(toJson(createAnalyzerConfigurationCommand))
                 .contentType(MediaType.APPLICATION_JSON));
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/master/analyze")
+            post("/api/projects/" + projectId + "/master/analyze")
                 .contentType(MediaType.APPLICATION_JSON));
 
     session.clear();
@@ -144,7 +144,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
       Assertions.assertTrue(commit.isAnalyzed());
     }
 
-    mvc().perform(post("/projects/" + projectId + "/analyze/reset"));
+    mvc().perform(post("/api/projects/" + projectId + "/analyze/reset"));
 
     session.clear();
 
@@ -161,7 +161,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
   void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
     MvcResult result =
         mvc()
-            .perform(post("/projects/123/analyze/reset"))
+            .perform(post("/api/projects/123/analyze/reset"))
             .andExpect(status().isNotFound())
             .andReturn();
 

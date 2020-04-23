@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.contributor;
 
 import io.reflectoring.coderadar.contributor.port.driver.MergeContributorsCommand;
 import io.reflectoring.coderadar.contributor.port.driver.MergeContributorsUseCase;
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Transactional
-@Validated
-public class MergeContributorsController {
+@RestController
+public class MergeContributorsController extends AbstractBaseController {
   private final MergeContributorsUseCase mergeContributorsUseCase;
 
   public MergeContributorsController(MergeContributorsUseCase mergeContributorsUseCase) {

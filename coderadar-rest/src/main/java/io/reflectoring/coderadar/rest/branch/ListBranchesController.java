@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.branch;
 
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.port.driver.branch.list.ListBranchesUseCase;
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetBranchResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Transactional
-public class ListBranchesController {
+@RestController
+public class ListBranchesController extends AbstractBaseController {
   private final ListBranchesUseCase listBranchesUseCase;
 
   public ListBranchesController(ListBranchesUseCase listBranchesUseCase) {

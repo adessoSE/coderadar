@@ -29,7 +29,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
     LoginUserCommand command = new LoginUserCommand("username", "password1");
     mvc()
         .perform(
-            post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+            post("/api/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("accessToken").value(any(String.class)))
         .andExpect(MockMvcResultMatchers.jsonPath("refreshToken").value(any(String.class)))
@@ -41,7 +41,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
     LoginUserCommand command = new LoginUserCommand("username", "pass");
     mvc()
         .perform(
-            post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+            post("/api/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 
@@ -50,7 +50,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
     LoginUserCommand command = new LoginUserCommand("username", "password");
     mvc()
         .perform(
-            post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+            post("/api/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 
@@ -65,7 +65,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
     LoginUserCommand command = new LoginUserCommand("username2", "password3");
     mvc()
         .perform(
-            post("/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+            post("/api/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.jsonPath("errorMessage").value("Bad credentials"))
         .andExpect(MockMvcResultMatchers.status().isForbidden());
   }

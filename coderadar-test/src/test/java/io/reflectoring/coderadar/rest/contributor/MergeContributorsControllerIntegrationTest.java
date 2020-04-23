@@ -35,7 +35,7 @@ public class MergeContributorsControllerIntegrationTest extends ControllerTestTe
             null);
     mvc()
         .perform(
-            post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
+            post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
         .andReturn();
 
     List<ContributorEntity> contributors = contributorRepository.findAll();
@@ -46,7 +46,7 @@ public class MergeContributorsControllerIntegrationTest extends ControllerTestTe
 
     mvc()
         .perform(
-            post("/contributors/merge")
+            post("/api/contributors/merge")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(command2)))
         .andExpect(status().isOk())

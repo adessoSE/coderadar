@@ -33,7 +33,9 @@ public class GetCommitLogControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
+                post("/api/projects")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(command1)))
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
@@ -44,7 +46,7 @@ public class GetCommitLogControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/commitLog")
+                get("/api/projects/" + projectId + "/commitLog")
                     .contentType(MediaType.APPLICATION_JSON))
             .andDo(
                 document(

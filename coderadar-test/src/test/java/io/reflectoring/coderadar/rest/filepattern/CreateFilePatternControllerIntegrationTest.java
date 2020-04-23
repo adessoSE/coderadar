@@ -32,7 +32,7 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/" + testProject.getId() + "/filePatterns")
+            post("/api/projects/" + testProject.getId() + "/filePatterns")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -62,7 +62,7 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/1/filePatterns")
+            post("/api/projects/1/filePatterns")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -75,7 +75,7 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
     CreateFilePatternCommand command = new CreateFilePatternCommand("", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/1/filePatterns")
+            post("/api/projects/1/filePatterns")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest());
