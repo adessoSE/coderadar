@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class GetFilePatternController extends AbstractBaseController {
+public class GetFilePatternController implements AbstractBaseController {
   private final GetFilePatternUseCase getFilePatternUseCase;
 
   public GetFilePatternController(GetFilePatternUseCase getFilePatternUseCase) {

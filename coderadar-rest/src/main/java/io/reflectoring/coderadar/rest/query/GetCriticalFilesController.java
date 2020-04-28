@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Transactional
 @RestController
-public class GetCriticalFilesController extends AbstractBaseController {
+public class GetCriticalFilesController implements AbstractBaseController {
   private final GetCriticalFilesUseCase getCriticalFilesUseCase;
 
   public GetCriticalFilesController(GetCriticalFilesUseCase getCriticalFilesUseCase) {

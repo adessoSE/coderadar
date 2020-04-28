@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class DeleteAnalyzerConfigurationController extends AbstractBaseController {
+public class DeleteAnalyzerConfigurationController implements AbstractBaseController {
   private final DeleteAnalyzerConfigurationUseCase deleteAnalyzerConfigurationUseCase;
 
   public DeleteAnalyzerConfigurationController(

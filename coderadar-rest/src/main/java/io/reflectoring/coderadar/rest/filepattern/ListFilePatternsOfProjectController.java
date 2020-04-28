@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class ListFilePatternsOfProjectController extends AbstractBaseController {
+public class ListFilePatternsOfProjectController implements AbstractBaseController {
   private final ListFilePatternsOfProjectUseCase listFilePatternsOfProjectUseCase;
 
   public ListFilePatternsOfProjectController(

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class CreateModuleController extends AbstractBaseController {
+public class CreateModuleController implements AbstractBaseController {
   private final CreateModuleUseCase createModuleUseCase;
 
   public CreateModuleController(CreateModuleUseCase createModuleUseCase) {

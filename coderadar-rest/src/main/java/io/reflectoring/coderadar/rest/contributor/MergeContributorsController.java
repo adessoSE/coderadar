@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class MergeContributorsController extends AbstractBaseController {
+public class MergeContributorsController implements AbstractBaseController {
   private final MergeContributorsUseCase mergeContributorsUseCase;
 
   public MergeContributorsController(MergeContributorsUseCase mergeContributorsUseCase) {

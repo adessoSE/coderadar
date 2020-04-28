@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class DeleteFilePatternController extends AbstractBaseController {
+public class DeleteFilePatternController implements AbstractBaseController {
   private final DeleteFilePatternFromProjectUseCase deleteFilePatternFromProjectUseCase;
 
   public DeleteFilePatternController(

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class LoginUserController extends AbstractBaseController {
+public class LoginUserController implements AbstractBaseController {
   private final LoginUserUseCase loginUserUseCase;
 
   public LoginUserController(LoginUserUseCase loginUserUseCase) {

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class RegisterUserController extends AbstractBaseController {
+public class RegisterUserController implements AbstractBaseController {
   private final RegisterUserUseCase registerUserUseCase;
 
   public RegisterUserController(RegisterUserUseCase registerUserUseCase) {

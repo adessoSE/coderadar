@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Transactional
 @RestController
-public class GetFileDiffController extends AbstractBaseController {
+public class GetFileDiffController implements AbstractBaseController {
 
   private final GetFileDiffUseCase useCase;
 

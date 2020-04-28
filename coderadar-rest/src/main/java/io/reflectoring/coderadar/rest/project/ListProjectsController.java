@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class ListProjectsController extends AbstractBaseController {
+public class ListProjectsController implements AbstractBaseController {
   private final ListProjectsUseCase listProjectsUseCase;
 
   public ListProjectsController(ListProjectsUseCase listProjectsUseCase) {

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class GetAnalyzingStatusController extends AbstractBaseController {
+public class GetAnalyzingStatusController implements AbstractBaseController {
   private final GetAnalyzingStatusUseCase getAnalyzingStatusUseCase;
 
   public GetAnalyzingStatusController(GetAnalyzingStatusUseCase getAnalyzingStatusUseCase) {

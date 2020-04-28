@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Transactional
 @RestController
-public class GetFileContentWithMetricsController extends AbstractBaseController {
+public class GetFileContentWithMetricsController implements AbstractBaseController {
 
   private final GetFileContentWithMetricsUseCase useCase;
 

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class GetMetricTreeForCommitController extends AbstractBaseController {
+public class GetMetricTreeForCommitController implements AbstractBaseController {
   private final GetMetricTreeForCommitUseCase getMetricTreeForCommitUseCase;
 
   public GetMetricTreeForCommitController(

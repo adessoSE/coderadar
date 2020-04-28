@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class ResetAnalysisController extends AbstractBaseController {
+public class ResetAnalysisController implements AbstractBaseController {
   private final ResetAnalysisUseCase resetAnalysisUseCase;
 
   public ResetAnalysisController(ResetAnalysisUseCase resetAnalysisUseCase) {

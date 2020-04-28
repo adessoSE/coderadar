@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class ListAnalyzersController extends AbstractBaseController {
+public class ListAnalyzersController implements AbstractBaseController {
   private final ListAnalyzersUseCase listAnalyzersUseCase;
 
   public ListAnalyzersController(ListAnalyzersUseCase listAnalyzersUseCase) {

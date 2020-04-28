@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class GetAvailableMetricsInProjectController extends AbstractBaseController {
+public class GetAvailableMetricsInProjectController implements AbstractBaseController {
   private final GetAvailableMetricsInProjectUseCase getAvailableMetricsInProjectUseCase;
 
   public GetAvailableMetricsInProjectController(
