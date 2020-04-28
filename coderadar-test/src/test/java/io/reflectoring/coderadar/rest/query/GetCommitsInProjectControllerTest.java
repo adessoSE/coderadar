@@ -34,7 +34,9 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
+                post("/api/projects")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(command1)))
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
@@ -45,7 +47,7 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/master/commits")
+                get("/api/projects/" + projectId + "/master/commits")
                     .contentType(MediaType.APPLICATION_JSON))
             .andDo(
                 document(
@@ -76,7 +78,8 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
   void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
     MvcResult result =
         mvc()
-            .perform(get("/projects/1234/master/commits").contentType(MediaType.APPLICATION_JSON))
+            .perform(
+                get("/api/projects/1234/master/commits").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn();
 

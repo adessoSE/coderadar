@@ -51,7 +51,9 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
     mvc()
         .perform(
-            post("/user/refresh").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+            post("/api/user/refresh")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("token").exists())
         .andDo(documentRefresh());
@@ -69,7 +71,9 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
     mvc()
         .perform(
-            post("/user/refresh").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+            post("/api/user/refresh")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isUnauthorized());
   }
 
@@ -93,7 +97,9 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
 
     mvc()
         .perform(
-            post("/user/refresh").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+            post("/api/user/refresh")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 

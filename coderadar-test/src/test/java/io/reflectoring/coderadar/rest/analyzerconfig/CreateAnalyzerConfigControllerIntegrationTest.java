@@ -38,7 +38,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             true);
     mvc()
         .perform(
-            post("/projects/" + testProject.getId() + "/analyzers")
+            post("/api/projects/" + testProject.getId() + "/analyzers")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -76,7 +76,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             true);
     mvc()
         .perform(
-            post("/projects/1/analyzers")
+            post("/api/projects/1/analyzers")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -90,7 +90,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
         new CreateAnalyzerConfigurationCommand("analyzer", true);
     mvc()
         .perform(
-            post("/projects/1/analyzers")
+            post("/api/projects/1/analyzers")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -116,7 +116,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             true);
     mvc()
         .perform(
-            post("/projects/" + testProject.getId() + "/analyzers")
+            post("/api/projects/" + testProject.getId() + "/analyzers")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isConflict())
@@ -130,7 +130,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
     CreateAnalyzerConfigurationCommand command = new CreateAnalyzerConfigurationCommand("", true);
     mvc()
         .perform(
-            post("/projects/1/analyzers")
+            post("/api/projects/1/analyzers")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest());

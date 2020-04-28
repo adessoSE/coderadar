@@ -27,7 +27,7 @@ class GetUserControllerIntegrationTest extends ControllerTestTemplate {
     final Long userId = testUser.getId();
 
     mvc()
-        .perform(get("/user/" + userId))
+        .perform(get("/api/user/" + userId))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetUserResponse.class))
         .andDo(
@@ -43,7 +43,7 @@ class GetUserControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void loadUserWithIdOneReturnsErrorWhenUserNotFound() throws Exception {
     mvc()
-        .perform(get("/user/1"))
+        .perform(get("/api/user/1"))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("User with id 1 not found."));

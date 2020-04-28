@@ -46,7 +46,7 @@ class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void listAllProjects() throws Exception {
     mvc()
-        .perform(get("/projects"))
+        .perform(get("/api/projects"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetProjectResponse[].class))
         .andExpect(

@@ -15,7 +15,7 @@ public class ListAnalyzerControllerIntegrationTest extends ControllerTestTemplat
   @Test
   void getAvailableAnalyzers() throws Exception {
     mvc()
-        .perform(get("/analyzers"))
+        .perform(get("/api/analyzers"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(
             result -> {

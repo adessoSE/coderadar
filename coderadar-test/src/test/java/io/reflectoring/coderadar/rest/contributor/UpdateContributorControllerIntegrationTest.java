@@ -34,7 +34,7 @@ public class UpdateContributorControllerIntegrationTest extends ControllerTestTe
 
     mvc()
         .perform(
-            post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
+            post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
         .andExpect(status().isCreated())
         .andReturn();
 
@@ -42,7 +42,7 @@ public class UpdateContributorControllerIntegrationTest extends ControllerTestTe
     UpdateContributorCommand command = new UpdateContributorCommand("New DisplayName");
     mvc()
         .perform(
-            post("/contributors/" + contributorId)
+            post("/api/contributors/" + contributorId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(command)))
         .andExpect(status().isOk())

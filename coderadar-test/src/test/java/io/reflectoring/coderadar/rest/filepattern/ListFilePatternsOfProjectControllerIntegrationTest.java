@@ -43,7 +43,7 @@ class ListFilePatternsOfProjectControllerIntegrationTest extends ControllerTestT
 
     // Test
     mvc()
-        .perform(get("/projects/" + testProject.getId() + "/filePatterns"))
+        .perform(get("/api/projects/" + testProject.getId() + "/filePatterns"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetFilePatternResponse[].class))
         .andExpect(
@@ -59,7 +59,7 @@ class ListFilePatternsOfProjectControllerIntegrationTest extends ControllerTestT
   @Test
   void listAllFilePatternsReturnsErrorWhenProjectNotFound() throws Exception {
     mvc()
-        .perform(get("/projects/1/filePatterns"))
+        .perform(get("/api/projects/1/filePatterns"))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
