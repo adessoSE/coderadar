@@ -1,7 +1,7 @@
 <main class="card-list">
   <p>{{getTitleText()}}
     <br>
-    <mat-label style="font-size: 12pt">Analyzed {{commitsAnalyzed}}/{{commits.length}} commits</mat-label>
+    <mat-label style="font-size: 12pt">Analyzed {{commitsAnalyzed}}/{{commitsFiltered.length}} commits</mat-label>
   </p>
 
   <mat-form-field class="branchSelector">
@@ -23,25 +23,39 @@
     </mat-select>
   </mat-form-field>
 
-  <div style="float: left; margin-top: 10px">
-    <button title="Start analysis" (click)="startAnalysis(project.id, selectedBranch)" style="float:right" mat-icon-button>
+  <span>
+    <div class="dateFilter">
+      <mat-form-field>
+        <input type="date" [(ngModel)]="startDate" max="{{endDate}}" (ngModelChange)="showCommitsInRange()" matInput placeholder="Start date">
+      </mat-form-field>
+      <mat-form-field>
+        <input type="date" [(ngModel)]="endDate" min="{{startDate}}" (ngModelChange)="showCommitsInRange()" matInput placeholder="End date">
+      </mat-form-field>
+    </div>
+  </span>
+
+  <div class="analysisButtons">
+    <button title="Start analysis for the chosen branch" (click)="startAnalysis(project.id, selectedBranch)" style="float:right" mat-icon-button>
       <mat-icon>play_arrow</mat-icon>
     </button>
     <button title="Stop analysis" (click)="stopAnalysis(project.id)" style="float:right" mat-icon-button>
       <mat-icon>stop</mat-icon>
     </button>
-    <button title="Delete analysis results" (click)="resetAnalysis(project.id)" style="float:right" mat-icon-button>
+    <button title="Delete analysis results for all branches" (click)="resetAnalysis(project.id)" style="float:right" mat-icon-button>
       <mat-icon>clear</mat-icon>
     </button>
   </div>
-  <mat-paginator #paginator1 [showFirstLastButtons]="true" class="paginator" [length]="commits.length"
+  <mat-paginator #paginator1 [showFirstLastButtons]="true" class="paginator" [length]="commitsFiltered.length"
                  [pageSize]="pageSize"
                  [pageSizeOptions]="pageSizeOptions"
                  (page)="syncPaginators($event)">
   </mat-paginator>
 
+  <div *ngIf="!contributorHasCommits">No commits for this contributor</div>
+
   <mat-grid-list cols="1" rowHeight="50px" gutterSize="-2px" >
-    <mat-accordion class="example-headers-align" *ngFor="let commit of commits.slice(pageEvent.pageIndex*pageEvent.pageSize, (pageEvent.pageIndex*pageEvent.pageSize) + pageEvent.pageSize)">
+    <mat-accordion class="example-headers-align" *ngFor="let commit of commitsFiltered.slice(pageEvent.pageIndex*pageEvent.pageSize,
+    (pageEvent.pageIndex*pageEvent.pageSize) + pageEvent.pageSize)">
       <mat-grid-tile [colspan]="1" [rowspan]="(commit === selectedCommit1 || commit === selectedCommit2) ? 4 : 1">
         <mat-expansion-panel [expanded]="(commit === selectedCommit1 || commit === selectedCommit2)"
                              [ngClass]="{'dashboard-card-selected' : commit === selectedCommit1 || commit === selectedCommit2}"
@@ -86,7 +100,7 @@
   </mat-grid-list>
 </main>
 
-<mat-paginator #paginator2 [showFirstLastButtons]="true" class="paginator" [length]="commits.length"
+<mat-paginator #paginator2 [showFirstLastButtons]="true" class="paginator" [length]="commitsFiltered.length"
                [pageSize]="pageSize"
                [pageSizeOptions]="pageSizeOptions"
                (page)="syncPaginators($event)">

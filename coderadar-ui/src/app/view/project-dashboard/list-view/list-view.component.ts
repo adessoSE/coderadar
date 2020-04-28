@@ -27,7 +27,8 @@ export class ListViewComponent implements OnInit, OnChanges {
 
   @Input() project: Project;
   @Input() commits: Commit[];
-  @Input() commitsAnalyzed;
+  commitsFiltered: Commit[];
+  commitsAnalyzed;
   @Input() branches: Branch[];
   @Input() contributors: Contributor[];
   @Output() branchOutput = new EventEmitter();
@@ -51,13 +52,18 @@ export class ListViewComponent implements OnInit, OnChanges {
   prevSelectedCommit1: Commit;
   prevSelectedCommit2: Commit;
 
+  contributorHasCommits = true;
+
   pageSize = 15;
+  public startDate: string = null;
+  public endDate: string = null;
 
   constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute, private store: Store<fromRoot.AppState>,
               private cityEffects: AppEffects) {
     this.project = new Project();
     this.commits = [];
+    this.commitsFiltered = [];
     this.selectedCommit1 = null;
     this.selectedCommit2 = null;
     this.pageEvent = new PageEvent();
@@ -69,6 +75,7 @@ export class ListViewComponent implements OnInit, OnChanges {
     this.route.params.subscribe(params => {
       this.projectId = params.id;
       this.cityEffects.currentProjectId  = this.projectId;
+      this.showCommitsInRange();
     });
   }
 
@@ -224,5 +231,32 @@ export class ListViewComponent implements OnInit, OnChanges {
     if (selectedCommit2Id != null) {
       this.selectedCommit2 = this.commits.find(value => value.name === selectedCommit2Id);
     }
+    this.showCommitsInRange();
+  }
+
+  showCommitsInRange() {
+    this.selectedCommit1 = null;
+    this.selectedCommit2 = null;
+    if(this.commits.length > 0) {
+      let endDate: Date;
+      if (this.endDate === null || this.endDate.length === 0) {
+        endDate = new Date(this.commits[0].timestamp);
+      } else {
+        endDate = new Date(this.endDate);
+      }
+      let startDate: Date;
+      if (this.startDate === null || this.startDate.length === 0) {
+        startDate = new Date(this.commits[this.commits.length - 1].timestamp);
+      } else {
+        startDate = new Date(this.startDate);
+      }
+      this.commitsFiltered = this.commits.filter(value =>
+        value.timestamp >= startDate.getTime() && value.timestamp <= (endDate.getTime() + 24 * 60 * 60 * 1000));
+      this.contributorHasCommits = true;
+    } else {
+      this.commitsFiltered = [];
+      this.contributorHasCommits = false;
+    }
+    this.commitsAnalyzed = this.commitsFiltered.filter(value => value.analyzed).length;
   }
 }

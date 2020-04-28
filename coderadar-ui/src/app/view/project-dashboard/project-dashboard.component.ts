@@ -86,7 +86,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         if (this.commitsAnalyzed > 0) {
           this.store.dispatch(loadAvailableMetrics());
         }
-        if (this.commits.length !== 0) {
+        if (this.commits.length !== 0 || this.selectedContributor.displayName !== null) {
           this.waiting = false;
         }
       })
