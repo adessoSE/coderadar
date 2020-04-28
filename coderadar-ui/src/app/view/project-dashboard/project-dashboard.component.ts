@@ -14,6 +14,8 @@ import * as fromRoot from '../../city-map/shared/reducers';
 import {Store} from '@ngrx/store';
 import {loadAvailableMetrics} from '../../city-map/visualization/visualization.actions';
 import {CommitLog} from '../../model/commit-log';
+import {Contributor} from "../../model/contributor";
+import {ContributorService} from "../../service/contributor.service";
 
 @Component({
   selector: 'app-project-dashboard',
@@ -28,17 +30,20 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   commits: Commit[];
   commitLog: CommitLog[];
   branches: Branch[];
+  contributors: Contributor[];
   commitsAnalyzed = 0;
   project: Project;
   selectedBranch = 'master';
+  selectedContributor: Contributor = new Contributor();
   waiting = false;
   updateCommitsTimer: Subscription;
 
   constructor(private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute, private cityEffects: AppEffects,
-              private store: Store<fromRoot.AppState>) {
+              private store: Store<fromRoot.AppState>, private contributorService: ContributorService) {
     this.project = new Project();
     this.commits = [];
+    this.selectedContributor.emailAddresses = [''];
   }
 
   ngOnInit(): void {
@@ -51,6 +56,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
       }
       this.getProject();
       this.getBranchesInProject();
+      this.getContributors();
       // Schedule a task to check if all commits are analyzed and update them if they're not
       this.updateCommitsTimer = timer(4000, 8000).subscribe(() => {
         this.getCommits(false);
@@ -68,7 +74,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
    */
   public getCommits(displayLoadingIndicator: boolean): void {
     this.waiting = displayLoadingIndicator;
-    this.projectService.getCommits(this.projectId, this.selectedBranch)
+    this.projectService.getCommitsForContributor(this.projectId, this.selectedBranch, this.selectedContributor.emailAddresses[0])
       .then(response => {
         this.commitsAnalyzed = 0;
         this.commits = response.body;
@@ -150,5 +156,27 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
     const date = new Date(this.commitLog[0].author.timestamp);
     date.setDate(date.getDate() - 30);
     return date.toISOString().split('T')[0];
+  }
+
+  private getContributors() {
+    this.contributorService.getContributorsForProject(this.projectId)
+      .then(value => {
+        this.contributors = value.body;
+      })
+      .catch( error => {
+        if (error.status && error.status === FORBIDDEN) {
+          this.userService.refresh(() => this.getContributors());
+        }
+      })
+  }
+
+  handleContributorChange($event: any) {
+    if($event == undefined) {
+      this.selectedContributor = new Contributor();
+      this.selectedContributor.emailAddresses = [''];
+    } else {
+      this.selectedContributor = $event;
+    }
+    this.getCommits(false);
   }
 }

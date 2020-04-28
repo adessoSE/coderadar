@@ -136,4 +136,13 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "OPTIONAL MATCH (f)-[r:CHANGED_IN]->(c) "
           + "WHERE r.changeType = \"ADD\" OR r.changeType = \"RENAME\" DETACH DELETE c, f")
   void deleteCommitAndAddedOrRenamedFiles(long commitId);
+
+  @Query(
+      "MATCH (co)-[:WORKS_ON]->(p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE toLower({2}) IN co.emails "
+          + "AND ID(p) = {0} AND b.name = {1} WITH co.emails as emails, c LIMIT 1 "
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c "
+          + "WHERE toLower(c.authorEmail) IN emails "
+          + "RETURN c ORDER BY c.timestamp DESC")
+  List<CommitEntity> findByProjectIdBranchNameAndContributor(
+      long projectId, String branchName, String email);
 }

@@ -16,6 +16,7 @@ import {ProjectService} from '../../../service/project.service';
 import {Store} from '@ngrx/store';
 import {Branch} from '../../../model/branch';
 import {loadAvailableMetrics} from '../../../city-map/visualization/visualization.actions';
+import {Contributor} from "../../../model/contributor";
 
 @Component({
   selector: 'app-commit-list',
@@ -28,7 +29,9 @@ export class ListViewComponent implements OnInit, OnChanges {
   @Input() commits: Commit[];
   @Input() commitsAnalyzed;
   @Input() branches: Branch[];
+  @Input() contributors: Contributor[];
   @Output() branchOutput = new EventEmitter();
+  @Output() contributorOutput = new EventEmitter();
 
   appComponent = AppComponent;
   projectId;
@@ -42,6 +45,7 @@ export class ListViewComponent implements OnInit, OnChanges {
   selectedCommit1: Commit;
   selectedCommit2: Commit;
   selectedBranch = 'master';
+  selectedContributor: Contributor = null;
 
   // These are needed for the deselection css to work
   prevSelectedCommit1: Commit;

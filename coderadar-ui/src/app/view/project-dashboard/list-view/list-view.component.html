@@ -11,8 +11,18 @@
         {{branch.name}}
       </mat-option>
     </mat-select>
-
   </mat-form-field>
+
+  <mat-form-field class="contributorSelector">
+    <mat-label>Contributor</mat-label>
+    <mat-select (valueChange)="contributorOutput.emit($event)" [(value)]="selectedContributor">
+      <mat-option>None</mat-option>
+      <mat-option *ngFor="let contributor of contributors" [value]="contributor">
+        {{contributor.displayName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <div style="float: left; margin-top: 10px">
     <button title="Start analysis" (click)="startAnalysis(project.id, selectedBranch)" style="float:right" mat-icon-button>
       <mat-icon>play_arrow</mat-icon>
