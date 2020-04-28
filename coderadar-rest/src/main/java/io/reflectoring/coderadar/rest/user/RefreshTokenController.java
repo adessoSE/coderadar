@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class RefreshTokenController extends AbstractBaseController {
+public class RefreshTokenController implements AbstractBaseController {
   private final RefreshTokenUseCase refreshTokenUseCase;
 
   public RefreshTokenController(RefreshTokenUseCase refreshTokenUseCase) {

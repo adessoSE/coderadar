@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class GetContributorController extends AbstractBaseController {
+public class GetContributorController implements AbstractBaseController {
   private final GetContributorUseCase getContributorUseCase;
 
   public GetContributorController(GetContributorUseCase getContributorUseCase) {

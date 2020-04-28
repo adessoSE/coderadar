@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class GetCommitLogController extends AbstractBaseController {
+public class GetCommitLogController implements AbstractBaseController {
 
   private final GetCommitLogUseCase getCommitLogUseCase;
 

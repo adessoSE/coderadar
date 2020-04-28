@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Transactional
 @RestController
-public class ListContributorsController extends AbstractBaseController {
+public class ListContributorsController implements AbstractBaseController {
   private final ListContributorsUseCase listContributorsUseCase;
 
   public ListContributorsController(ListContributorsUseCase listContributorsUseCase) {

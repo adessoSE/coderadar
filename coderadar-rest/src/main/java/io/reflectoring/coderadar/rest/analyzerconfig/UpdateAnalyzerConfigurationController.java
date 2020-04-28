@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class UpdateAnalyzerConfigurationController extends AbstractBaseController {
+public class UpdateAnalyzerConfigurationController implements AbstractBaseController {
   private final UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase;
 
   public UpdateAnalyzerConfigurationController(

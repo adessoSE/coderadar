@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class ChangePasswordController extends AbstractBaseController {
+public class ChangePasswordController implements AbstractBaseController {
   private final ChangePasswordUseCase changePasswordUseCase;
 
   public ChangePasswordController(ChangePasswordUseCase changePasswordUseCase) {

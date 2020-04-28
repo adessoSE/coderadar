@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class CreateProjectController extends AbstractBaseController {
+public class CreateProjectController implements AbstractBaseController {
   private final CreateProjectUseCase createProjectUseCase;
 
   public CreateProjectController(CreateProjectUseCase createProjectUseCase) {

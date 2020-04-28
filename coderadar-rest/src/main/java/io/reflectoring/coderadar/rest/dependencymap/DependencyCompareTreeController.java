@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class DependencyCompareTreeController extends AbstractBaseController {
+public class DependencyCompareTreeController implements AbstractBaseController {
 
   private final GetCompareTreeUseCase getCompareTreeUseCase;
 

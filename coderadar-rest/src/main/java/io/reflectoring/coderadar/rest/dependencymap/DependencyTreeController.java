@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class DependencyTreeController extends AbstractBaseController {
+public class DependencyTreeController implements AbstractBaseController {
 
   private final GetDependencyTreeUseCase getDependencyTreeUseCase;
 

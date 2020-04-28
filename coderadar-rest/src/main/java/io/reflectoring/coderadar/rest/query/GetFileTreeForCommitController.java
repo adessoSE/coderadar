@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class GetFileTreeForCommitController extends AbstractBaseController {
+public class GetFileTreeForCommitController implements AbstractBaseController {
 
   private final GetFileTreeForCommitUseCase getFileTreeForCommitUseCase;
 

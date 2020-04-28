@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class DeleteModuleController extends AbstractBaseController {
+public class DeleteModuleController implements AbstractBaseController {
   private final DeleteModuleUseCase deleteModuleUseCase;
 
   public DeleteModuleController(DeleteModuleUseCase deleteModuleUseCase) {

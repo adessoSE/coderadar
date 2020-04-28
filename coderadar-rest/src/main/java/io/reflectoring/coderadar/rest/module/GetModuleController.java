@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Transactional
 @RestController
-public class GetModuleController extends AbstractBaseController {
+public class GetModuleController implements AbstractBaseController {
   private final GetModuleUseCase getModuleUseCase;
 
   public GetModuleController(GetModuleUseCase getModuleUseCase) {

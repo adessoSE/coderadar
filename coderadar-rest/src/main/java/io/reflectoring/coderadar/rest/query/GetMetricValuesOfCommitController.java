@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Transactional
 @RestController
-public class GetMetricValuesOfCommitController extends AbstractBaseController {
+public class GetMetricValuesOfCommitController implements AbstractBaseController {
   private final GetMetricValuesOfCommitUseCase getMetricValuesOfCommitUseCase;
 
   public GetMetricValuesOfCommitController(

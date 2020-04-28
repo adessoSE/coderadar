@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Transactional
 @RestController
-public class GetDeltaTreeForTwoCommitsController extends AbstractBaseController {
+public class GetDeltaTreeForTwoCommitsController implements AbstractBaseController {
 
   private final GetDeltaTreeForTwoCommitsUseCase getDeltaTreeForTwoCommitsUseCase;
 
