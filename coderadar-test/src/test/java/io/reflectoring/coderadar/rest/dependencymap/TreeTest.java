@@ -60,7 +60,7 @@ public class TreeTest extends ControllerTestTemplate {
                   + testProject.getWorkdirName());
 
       mvc()
-          .perform(get("/analyzers/" + testProject.getId() + "/structureMap/" + commitName))
+          .perform(get("/api/analyzers/" + testProject.getId() + "/structureMap/" + commitName))
           .andExpect(MockMvcResultMatchers.status().isOk())
           .andExpect(containsResource(Node.class))
           .andDo(result -> root = fromJson(result.getResponse().getContentAsString(), Node.class));

@@ -104,7 +104,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     CreateModuleCommand command = new CreateModuleCommand("src/paysim");
     mvc()
         .perform(
-            post("/projects/" + projectId + "/modules")
+            post("/api/projects/" + projectId + "/modules")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -127,7 +127,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     // Analyze again
     mvc()
         .perform(
-            post("/projects/" + projectId + "/master/analyze")
+            post("/api/projects/" + projectId + "/master/analyze")
                 .contentType(MediaType.APPLICATION_JSON))
         .andReturn();
 
@@ -141,7 +141,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/metricvalues/perCommit")
+                get("/api/projects/" + projectId + "/metricvalues/perCommit")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(getMetricValuesOfCommitCommand)))
             .andReturn();
@@ -175,7 +175,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             new SimpleDateFormat("dd/MM/yyyy").parse("01/05/2019"));
     mvc()
         .perform(
-            post("/projects/" + projectId)
+            post("/api/projects/" + projectId)
                 .content(toJson(updateProjectCommand))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
@@ -207,7 +207,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/metricvalues/perCommit")
+                get("/api/projects/" + projectId + "/metricvalues/perCommit")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(getMetricValuesOfCommitCommand)))
             .andReturn();
@@ -235,7 +235,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     MvcResult result2 =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/metricvalues/perCommit")
+                get("/api/projects/" + projectId + "/metricvalues/perCommit")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(getMetricValuesOfCommitCommand2)))
             .andReturn();
@@ -271,7 +271,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     MvcResult deltaTreeResult =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/metricvalues/deltaTree")
+                get("/api/projects/" + projectId + "/metricvalues/deltaTree")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(deltaTreeCommand)))
             .andReturn();
@@ -350,7 +350,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     // Start analysis
     mvc()
         .perform(
-            post("/projects/" + projectId + "/master/analyze")
+            post("/api/projects/" + projectId + "/master/analyze")
                 .contentType(MediaType.APPLICATION_JSON))
         .andReturn();
 
@@ -384,7 +384,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             "io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyzers")
+            post("/api/projects/" + projectId + "/analyzers")
                 .content(toJson(analyzerConfigurationCommand))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -408,7 +408,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/filePatterns")
+            post("/api/projects/" + projectId + "/filePatterns")
                 .content(toJson(filePatternCommand))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -430,7 +430,8 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             "PaySim", "username", "password", testRepoURL.toString(), false, null);
 
     mvc()
-        .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
+        .perform(
+            post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
         .andExpect(MockMvcResultMatchers.status().isCreated())
         .andReturn();
 

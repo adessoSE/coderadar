@@ -40,7 +40,9 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
     MvcResult result =
         mvc()
             .perform(
-                post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
+                post("/api/projects")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(command1)))
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
@@ -51,7 +53,7 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/contributors")
+                get("/api/projects/" + projectId + "/contributors")
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(documentListContributors())
@@ -74,7 +76,7 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/contributors/path")
+                get("/api/projects/" + projectId + "/contributors/path")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command)))
             .andExpect(status().isOk())
@@ -104,7 +106,7 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/contributors/path")
+                get("/api/projects/" + projectId + "/contributors/path")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command)))
             .andDo(documentListContributorsForDirectory())

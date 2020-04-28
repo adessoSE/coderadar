@@ -34,7 +34,7 @@ public class ListBranchesControllerTest extends ControllerTestTemplate {
   void listAllBranchesOfProjectWithId() throws Exception {
     // Test
     mvc()
-        .perform(get("/projects/" + projectId + "/branches"))
+        .perform(get("/api/projects/" + projectId + "/branches"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetBranchResponse[].class))
         .andExpect(
@@ -52,7 +52,7 @@ public class ListBranchesControllerTest extends ControllerTestTemplate {
   @Test
   void listAllBranchesOfProjectReturnsErrorWhenProjectNotFound() throws Exception {
     mvc()
-        .perform(get("/projects/100/branches"))
+        .perform(get("/api/projects/100/branches"))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 100 not found."));

@@ -40,7 +40,9 @@ public class GetFileTreeForCommitControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
+                post("/api/projects")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(command1)))
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
@@ -52,7 +54,7 @@ public class GetFileTreeForCommitControllerTest extends ControllerTestTemplate {
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/filePatterns")
+            post("/api/projects/" + projectId + "/filePatterns")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(command)))
         .andExpect(status().isCreated())
@@ -62,7 +64,7 @@ public class GetFileTreeForCommitControllerTest extends ControllerTestTemplate {
         mvc()
             .perform(
                 get(
-                    "/projects/"
+                    "/api/projects/"
                         + projectId
                         + "/files/tree/d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df?changedOnly=false"))
             .andDo(
@@ -94,7 +96,7 @@ public class GetFileTreeForCommitControllerTest extends ControllerTestTemplate {
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/filePatterns")
+            post("/api/projects/" + projectId + "/filePatterns")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(command)))
         .andExpect(status().isCreated())
@@ -104,7 +106,7 @@ public class GetFileTreeForCommitControllerTest extends ControllerTestTemplate {
         mvc()
             .perform(
                 get(
-                    "/projects/"
+                    "/api/projects/"
                         + projectId
                         + "/files/tree/d3272b3793bc4b2bc36a1a3a7c8293fcf8fe27df?changedOnly=true"))
             .andReturn();

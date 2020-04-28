@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.user;
 
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetUserResponse;
 import io.reflectoring.coderadar.useradministration.port.driver.load.GetUserUseCase;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Transactional
-public class GetUserController {
+public class GetUserController implements AbstractBaseController {
   private final GetUserUseCase getUserUseCase;
 
   public GetUserController(GetUserUseCase getUserUseCase) {

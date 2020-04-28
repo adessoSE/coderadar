@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.user;
 
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserUseCase;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Transactional
-public class LoginUserController {
+@RestController
+public class LoginUserController implements AbstractBaseController {
   private final LoginUserUseCase loginUserUseCase;
 
   public LoginUserController(LoginUserUseCase loginUserUseCase) {

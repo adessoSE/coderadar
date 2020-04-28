@@ -40,7 +40,7 @@ public class GetContributorControllerIntegrationTest extends ControllerTestTempl
             null);
     mvc()
         .perform(
-            post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
+            post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
         .andReturn();
 
     List<ContributorEntity> contributors = contributorRepository.findAll();
@@ -48,7 +48,8 @@ public class GetContributorControllerIntegrationTest extends ControllerTestTempl
 
     MvcResult result =
         mvc()
-            .perform(get("/contributors/" + contributorId).contentType(MediaType.APPLICATION_JSON))
+            .perform(
+                get("/api/contributors/" + contributorId).contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(documentContributor())
             .andReturn();

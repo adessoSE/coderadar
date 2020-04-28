@@ -35,7 +35,8 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
         new CreateProjectCommand(
             "project", "username", "password", testRepoURL.toString(), false, null);
     mvc()
-        .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
+        .perform(
+            post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
         .andExpect(MockMvcResultMatchers.status().isCreated())
         .andDo(
             result -> {
@@ -61,7 +62,8 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
     CreateProjectCommand command =
         new CreateProjectCommand("project", "username", "password", "invalid", true, new Date());
     mvc()
-        .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
+        .perform(
+            post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())
         .andDo(document("projects/create/error400"));
   }

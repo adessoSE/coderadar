@@ -45,7 +45,9 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
+                post("/api/projects")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(command1)))
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
@@ -58,7 +60,7 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/files/critical")
+                get("/api/projects/" + projectId + "/files/critical")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command)))
             .andExpect(status().isUnprocessableEntity())
@@ -77,7 +79,7 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/filePatterns")
+            post("/api/projects/" + projectId + "/filePatterns")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(command)))
         .andExpect(status().isCreated())
@@ -89,7 +91,7 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/files/critical")
+                get("/api/projects/" + projectId + "/files/critical")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command1)))
             .andExpect(status().isOk())
@@ -111,7 +113,7 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/filePatterns")
+            post("/api/projects/" + projectId + "/filePatterns")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(command)))
         .andExpect(status().isCreated())
@@ -123,7 +125,7 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/files/critical?numOfContr=2")
+                get("/api/projects/" + projectId + "/files/critical?numOfContr=2")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command1)))
             .andExpect(status().isOk())
@@ -148,7 +150,7 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/filePatterns")
+            post("/api/projects/" + projectId + "/filePatterns")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(command)))
         .andExpect(status().isCreated())
@@ -161,7 +163,7 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
     MvcResult mvcResult =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/files/modification/frequency")
+                get("/api/projects/" + projectId + "/files/modification/frequency")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command1)))
             .andExpect(status().isOk())

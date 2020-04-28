@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.filepattern;
 
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.create.CreateFilePatternUseCase;
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Transactional
-public class CreateFilePatternController {
+@RestController
+public class CreateFilePatternController implements AbstractBaseController {
   private final CreateFilePatternUseCase createFilePatternUseCase;
 
   public CreateFilePatternController(CreateFilePatternUseCase createFilePatternUseCase) {

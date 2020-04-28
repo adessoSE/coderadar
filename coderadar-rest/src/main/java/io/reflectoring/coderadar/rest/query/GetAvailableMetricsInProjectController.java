@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.query;
 
 import io.reflectoring.coderadar.query.port.driver.GetAvailableMetricsInProjectUseCase;
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,9 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Transactional
-public class GetAvailableMetricsInProjectController {
+@RestController
+public class GetAvailableMetricsInProjectController implements AbstractBaseController {
   private final GetAvailableMetricsInProjectUseCase getAvailableMetricsInProjectUseCase;
 
   public GetAvailableMetricsInProjectController(

@@ -37,7 +37,7 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
             "new-project-name", "username", "password", "http://valid.url", true, new Date());
     mvc()
         .perform(
-            post("/projects/" + testProject.getId())
+            post("/api/projects/" + testProject.getId())
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
@@ -60,7 +60,9 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
             "name", "username", "password", "http://valid.url", true, new Date());
     mvc()
         .perform(
-            post("/projects/1").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+            post("/api/projects/1")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
@@ -72,7 +74,9 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
         new UpdateProjectCommand("", "username", "password", "http://valid.url", true, new Date());
     mvc()
         .perform(
-            post("/projects/0").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+            post("/api/projects/0")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 }
