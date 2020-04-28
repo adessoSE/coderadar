@@ -211,13 +211,9 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
       let found = false;
       for (const finding of value.findings) {
         if (finding.lineStart === lineStart) {
-          found = true;
+          findings += finding.message + '\n';
           break;
         }
-      }
-      if (found) {
-        const temp = value.name.split('.');
-        findings += temp[temp.length - 1] + '\n';
       }
     });
     return findings;

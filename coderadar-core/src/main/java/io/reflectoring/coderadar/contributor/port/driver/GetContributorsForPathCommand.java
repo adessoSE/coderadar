@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetContributorsForPathCommand {
-  @NotBlank private String path;
+  private String path;
   @NotBlank private String commitHash;
 }

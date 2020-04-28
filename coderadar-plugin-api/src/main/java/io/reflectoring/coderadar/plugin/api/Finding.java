@@ -16,13 +16,16 @@ public class Finding {
 
     private Integer charEnd = null;
 
+    private String message = null;
+
     /**
      * Marks a finding over multiple complete lines.
      *
      * @param lineStart the line number where the finding starts.
      * @param lineEnd   the line number where the finding ends.
+     * @param message the message of the metric.
      */
-    public Finding(Integer lineStart, Integer lineEnd) {
+    public Finding(Integer lineStart, Integer lineEnd, String message) {
         this.lineStart = lineStart;
         this.lineEnd = lineEnd;
     }
@@ -35,11 +38,13 @@ public class Finding {
      *                  the first character of the line.
      * @param charEnd   the position of the character where the finding ends, starting with 1 for the
      *                  first character of the line.
+     * @param message the message of the metric.
      */
-    public Finding(Integer lineStart, Integer charStart, Integer charEnd) {
+    public Finding(Integer lineStart, Integer charStart, Integer charEnd, String message) {
         this.lineStart = lineStart;
         this.charStart = charStart;
         this.charEnd = charEnd;
+        this.message = message;
     }
 
     /**
@@ -51,12 +56,14 @@ public class Finding {
      *                  the first character of the line.
      * @param charEnd   the position of the character where the finding ends, starting with 1 for the
      *                  first character of the line.
+     * @param message   the message of the metric.
      */
-    public Finding(Integer lineStart, Integer lineEnd, Integer charStart, Integer charEnd) {
+    public Finding(Integer lineStart, Integer lineEnd, Integer charStart, Integer charEnd, String message) {
         this.lineStart = lineStart;
         this.lineEnd = lineEnd;
         this.charStart = charStart;
         this.charEnd = charEnd;
+        this.message = message;
     }
 
     public Integer getLineStart() {
@@ -73,5 +80,9 @@ public class Finding {
 
     public Integer getCharEnd() {
         return charEnd;
+    }
+
+    public String getMessage() {
+        return message;
     }
 }
