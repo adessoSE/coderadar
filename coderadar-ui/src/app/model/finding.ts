@@ -3,4 +3,5 @@ export class Finding {
   public lineEnd: number;
   public charStart: number;
   public charEnd: number;
+  public message: string;
 }

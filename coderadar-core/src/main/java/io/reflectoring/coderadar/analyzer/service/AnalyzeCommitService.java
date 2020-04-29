@@ -111,7 +111,8 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
                 finding.getLineStart(),
                 finding.getLineEnd(),
                 finding.getCharStart(),
-                finding.getCharEnd()));
+                finding.getCharEnd(),
+                finding.getMessage()));
       }
       metricValues.add(
           new MetricValue(
