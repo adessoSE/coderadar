@@ -47,14 +47,29 @@
 
 
 .branchSelector {
-  position: static;
-  right: 0;
-  bottom: 0;
-  left: 0;
   float: left;
   background-color: ghostwhite;
   width: 17%;
   margin-left: 22%;
+}
+
+.contributorSelector{
+  float: left;
+  background-color: ghostwhite;
+  width: 17%;
+  margin-left: 10px;
+}
+
+.dateFilter {
+  float: left;
+  margin-left: 10px;
+}
+
+.analysisButtons {
+  float: left;
+  background-color: ghostwhite;
+  width: 17%;
+  margin-left: 12%;
   margin-bottom: 30px;
 }
 

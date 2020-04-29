@@ -42,7 +42,9 @@ export class UserService {
    */
   public register(usernameValue: string, passwordValue: string) {
     return this.httpClient.post(this.apiURL + 'user/registration', {username: usernameValue, password: passwordValue},
-      {observe: 'response'}).toPromise();
+      {observe: 'response', headers: {
+          'Content-Type': 'application/json'
+        }}).toPromise();
   }
 
   /**
@@ -54,7 +56,9 @@ export class UserService {
    */
   public login(usernameValue: string, passwordValue: string) {
     return this.httpClient.post<any>(this.apiURL + 'user/auth',
-      {username: usernameValue, password: passwordValue}).toPromise()
+      {username: usernameValue, password: passwordValue}, {headers: {
+          'Content-Type': 'application/json'
+        }}).toPromise()
       .then(user => {
         if (user && user.accessToken && user.refreshToken) {
           user.username = usernameValue;

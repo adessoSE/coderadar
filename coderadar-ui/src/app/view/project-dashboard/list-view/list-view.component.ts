@@ -16,6 +16,7 @@ import {ProjectService} from '../../../service/project.service';
 import {Store} from '@ngrx/store';
 import {Branch} from '../../../model/branch';
 import {loadAvailableMetrics} from '../../../city-map/visualization/visualization.actions';
+import {Contributor} from "../../../model/contributor";
 
 @Component({
   selector: 'app-commit-list',
@@ -26,9 +27,13 @@ export class ListViewComponent implements OnInit, OnChanges {
 
   @Input() project: Project;
   @Input() commits: Commit[];
-  @Input() commitsAnalyzed;
+  commitsFiltered: Commit[];
+  commitsAnalyzed;
   @Input() branches: Branch[];
+  @Input() waiting: boolean;
+  @Input() contributors: Contributor[];
   @Output() branchOutput = new EventEmitter();
+  @Output() contributorOutput = new EventEmitter();
 
   appComponent = AppComponent;
   projectId;
@@ -42,18 +47,22 @@ export class ListViewComponent implements OnInit, OnChanges {
   selectedCommit1: Commit;
   selectedCommit2: Commit;
   selectedBranch = 'master';
+  selectedContributor: Contributor = null;
 
   // These are needed for the deselection css to work
   prevSelectedCommit1: Commit;
   prevSelectedCommit2: Commit;
 
   pageSize = 15;
+  public startDate: string = null;
+  public endDate: string = null;
 
   constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute, private store: Store<fromRoot.AppState>,
               private cityEffects: AppEffects) {
     this.project = new Project();
     this.commits = [];
+    this.commitsFiltered = [];
     this.selectedCommit1 = null;
     this.selectedCommit2 = null;
     this.pageEvent = new PageEvent();
@@ -65,6 +74,7 @@ export class ListViewComponent implements OnInit, OnChanges {
     this.route.params.subscribe(params => {
       this.projectId = params.id;
       this.cityEffects.currentProjectId  = this.projectId;
+      this.showCommitsInRange();
     });
   }
 
@@ -151,7 +161,8 @@ export class ListViewComponent implements OnInit, OnChanges {
   }
 
   selectCard(selectedCommit: Commit): void {
-    if (this.selectedCommit1 === null && this.selectedCommit2 !== selectedCommit) {
+    if ((this.selectedCommit1 === null || this.selectedCommit1 === undefined)
+      && this.selectedCommit2 !== selectedCommit) {
       this.selectedCommit1 = selectedCommit;
     } else if (this.selectedCommit1 === selectedCommit) {
       this.selectedCommit1 = null;
@@ -203,22 +214,45 @@ export class ListViewComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.showCommitsInRange();
     let selectedCommit1Id = null;
-    if (this.selectedCommit1 !== null) {
+    if (this.selectedCommit1 !== null && this.selectedCommit1 !== undefined) {
       selectedCommit1Id = this.selectedCommit1.name;
     }
     let selectedCommit2Id = null;
-    if (this.selectedCommit2 !== null) {
+    if (this.selectedCommit2 !== null && this.selectedCommit2 !== undefined) {
       selectedCommit2Id = this.selectedCommit2.name;
     }
     if (this.commitsAnalyzed > 0) {
       this.store.dispatch(loadAvailableMetrics());
     }
     if (selectedCommit1Id != null) {
-      this.selectedCommit1 = this.commits.find(value => value.name === selectedCommit1Id);
-    }
+      this.selectedCommit1 = this.commitsFiltered.find(value => value.name === selectedCommit1Id);
+    }``
     if (selectedCommit2Id != null) {
-      this.selectedCommit2 = this.commits.find(value => value.name === selectedCommit2Id);
+      this.selectedCommit2 = this.commitsFiltered.find(value => value.name === selectedCommit2Id);
     }
+  }
+
+  showCommitsInRange() {
+    if(this.commits.length > 0) {
+      let endDate: Date;
+      if (this.endDate === null || this.endDate.length === 0) {
+        endDate = new Date(this.commits[0].timestamp);
+      } else {
+        endDate = new Date(this.endDate);
+      }
+      let startDate: Date;
+      if (this.startDate === null || this.startDate.length === 0) {
+        startDate = new Date(this.commits[this.commits.length - 1].timestamp);
+      } else {
+        startDate = new Date(this.startDate);
+      }
+      this.commitsFiltered = this.commits.filter(value =>
+        value.timestamp >= startDate.getTime() && value.timestamp <= (endDate.getTime() + 24 * 60 * 60 * 1000));
+    } else {
+      this.commitsFiltered = [];
+    }
+    this.commitsAnalyzed = this.commitsFiltered.filter(value => value.analyzed).length;
   }
 }
