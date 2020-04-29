@@ -79,10 +79,9 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/api/projects/"
-                        + projectId
-                        + "/master/commits?email=Maksim.Atanasov@adesso.de")
+                get("/api/projects/" + projectId + "/master/commits?email=Kilian.Krause@adesso.de")
                     .contentType(MediaType.APPLICATION_JSON))
+            .andDo(document("commit/list/email"))
             .andReturn();
 
     List<GetCommitResponse> commits =
@@ -90,9 +89,8 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
             new TypeReference<List<GetCommitResponse>>() {},
             result.getResponse().getContentAsString());
 
-    Assertions.assertEquals(13, commits.size());
-    Assertions.assertEquals("add Finding.java", commits.get(commits.size() - 1).getComment());
-    Assertions.assertEquals("testCommit", commits.get(0).getComment());
+    Assertions.assertEquals(1, commits.size());
+    Assertions.assertEquals("modify testModule1/NewRandomFile.java", commits.get(0).getComment());
   }
 
   @Test

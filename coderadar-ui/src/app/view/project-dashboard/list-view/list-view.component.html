@@ -16,7 +16,7 @@
   <mat-form-field class="contributorSelector">
     <mat-label>Contributor</mat-label>
     <mat-select (valueChange)="contributorOutput.emit($event)" [(value)]="selectedContributor">
-      <mat-option>None</mat-option>
+      <mat-option>All</mat-option>
       <mat-option *ngFor="let contributor of contributors" [value]="contributor">
         {{contributor.displayName}}
       </mat-option>

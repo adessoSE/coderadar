@@ -562,11 +562,21 @@ include::{snippets}/commit/list/response-fields.adoc[]
 
 include::{snippets}/commit/list/http-request.adoc[]
 
-NOTE: An additional "email" parameter may be supplied to this request to only return the commits authored by the matching contributor.
-
 ===== Example Response
 
 include::{snippets}/commit/list/http-response.adoc[]
+
+==== Listing commits for a given contributor
+
+An additional email parameter may be supplied to this request to only return the commits authored by the matching contributor.
+
+===== Example Request
+
+include::{snippets}/commit/list/email/http-request.adoc[]
+
+
+include::{snippets}/commit/list/email/http-response.adoc[]
+
 
 ==== Listing a Project's Commits as a Git log
 
