@@ -116,6 +116,9 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
     } else {
       this.currentSelectedFilepath = path;
     }
+    if(this.currentSelectedFilepath === ''){
+      return;
+    }
     let promise: Promise<HttpResponse<FileContentWithMetrics>> ;
     if(this.showDiff){
       promise = this.projectService.getFileDiff(this.projectId, this.commitHash, this.currentSelectedFilepath)
@@ -133,6 +136,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
         this.router.navigate(['/dashboard']);
       }
     });
+
 
     this.contributorService.getContributorsForFile(this.projectId, this.currentSelectedFilepath, this.commitHash)
       .then(value => {
