@@ -574,6 +574,7 @@ An additional email parameter may be supplied to this request to only return the
 
 include::{snippets}/commit/list/email/http-request.adoc[]
 
+===== Example Response
 
 include::{snippets}/commit/list/email/http-response.adoc[]
 
