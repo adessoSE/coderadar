@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.app;
 
+import java.util.Locale;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class CoderadarApplication implements ErrorController {
   public static void main(String[] args) {
+    Locale.setDefault(Locale.US);
     SpringApplication.run(CoderadarApplication.class, args);
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "coderadar",
-  "version": "0.2.3",
+  "version": "0.5.0",
   "scripts": {
     "ng": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng",
     "start": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng serve",

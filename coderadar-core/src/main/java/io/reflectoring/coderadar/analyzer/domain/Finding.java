@@ -13,4 +13,5 @@ public class Finding {
   private Integer lineEnd;
   private Integer charStart;
   private Integer charEnd;
+  private String message;
 }
