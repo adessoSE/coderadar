@@ -86,9 +86,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         if (this.commitsAnalyzed > 0) {
           this.store.dispatch(loadAvailableMetrics());
         }
-        if (this.commits.length !== 0 || this.selectedContributor.displayName !== null) {
-          this.waiting = false;
-        }
+        this.waiting = false;
       })
       .catch(e => {
         if (e.status && e.status === FORBIDDEN) {
@@ -96,7 +94,6 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         }
       });
   }
-
 
   private getBranchesInProject() {
     this.projectService.getProjectBranches(this.projectId)

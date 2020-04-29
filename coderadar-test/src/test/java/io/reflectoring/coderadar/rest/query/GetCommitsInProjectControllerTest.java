@@ -75,6 +75,27 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
   }
 
   @Test
+  void returnsAllCommitsInProjectForContributor() throws Exception {
+    MvcResult result =
+        mvc()
+            .perform(
+                get("/api/projects/"
+                        + projectId
+                        + "/master/commits?email=Maksim.Atanasov@adesso.de")
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andReturn();
+
+    List<GetCommitResponse> commits =
+        fromJson(
+            new TypeReference<List<GetCommitResponse>>() {},
+            result.getResponse().getContentAsString());
+
+    Assertions.assertEquals(13, commits.size());
+    Assertions.assertEquals("add Finding.java", commits.get(commits.size() - 1).getComment());
+    Assertions.assertEquals("testCommit", commits.get(0).getComment());
+  }
+
+  @Test
   void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
     MvcResult result =
         mvc()

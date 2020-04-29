@@ -562,6 +562,8 @@ include::{snippets}/commit/list/response-fields.adoc[]
 
 include::{snippets}/commit/list/http-request.adoc[]
 
+NOTE: An additional "email" parameter may be supplied to this request to only return the commits authored by the matching contributor.
+
 ===== Example Response
 
 include::{snippets}/commit/list/http-response.adoc[]

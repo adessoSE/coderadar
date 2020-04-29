@@ -1,10 +1,9 @@
 package io.reflectoring.coderadar.rest.query;
 
-import static io.reflectoring.coderadar.rest.GetCommitResponseMapper.mapCommits;
-
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.query.port.driver.GetCommitsInProjectUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
+import io.reflectoring.coderadar.rest.GetCommitResponseMapper;
 import io.reflectoring.coderadar.rest.domain.GetCommitResponse;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -31,14 +30,14 @@ public class GetCommitsInProjectController implements AbstractBaseController {
   public ResponseEntity<List<GetCommitResponse>> listCommitsForBranch(
       @PathVariable("projectId") long projectId,
       @PathVariable("branchName") String branchName,
-      @RequestParam("email") String email) {
+      @RequestParam(value = "email", required = false) String email) {
     List<Commit> commits;
     if (email == null || email.isEmpty()) {
       commits = getCommitsInProjectUseCase.get(projectId, branchName);
     } else {
       commits = getCommitsInProjectUseCase.getForContributor(projectId, branchName, email);
     }
-    List<GetCommitResponse> result = mapCommits(commits);
+    List<GetCommitResponse> result = GetCommitResponseMapper.mapCommits(commits);
     return new ResponseEntity<>(result, HttpStatus.OK);
   }
 }

@@ -30,6 +30,7 @@ export class ListViewComponent implements OnInit, OnChanges {
   commitsFiltered: Commit[];
   commitsAnalyzed;
   @Input() branches: Branch[];
+  @Input() waiting: boolean;
   @Input() contributors: Contributor[];
   @Output() branchOutput = new EventEmitter();
   @Output() contributorOutput = new EventEmitter();
@@ -51,8 +52,6 @@ export class ListViewComponent implements OnInit, OnChanges {
   // These are needed for the deselection css to work
   prevSelectedCommit1: Commit;
   prevSelectedCommit2: Commit;
-
-  contributorHasCommits = true;
 
   pageSize = 15;
   public startDate: string = null;
@@ -162,7 +161,8 @@ export class ListViewComponent implements OnInit, OnChanges {
   }
 
   selectCard(selectedCommit: Commit): void {
-    if (this.selectedCommit1 === null && this.selectedCommit2 !== selectedCommit) {
+    if ((this.selectedCommit1 === null || this.selectedCommit1 === undefined)
+      && this.selectedCommit2 !== selectedCommit) {
       this.selectedCommit1 = selectedCommit;
     } else if (this.selectedCommit1 === selectedCommit) {
       this.selectedCommit1 = null;
@@ -214,29 +214,27 @@ export class ListViewComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.showCommitsInRange();
     let selectedCommit1Id = null;
-    if (this.selectedCommit1 !== null) {
+    if (this.selectedCommit1 !== null && this.selectedCommit1 !== undefined) {
       selectedCommit1Id = this.selectedCommit1.name;
     }
     let selectedCommit2Id = null;
-    if (this.selectedCommit2 !== null) {
+    if (this.selectedCommit2 !== null && this.selectedCommit2 !== undefined) {
       selectedCommit2Id = this.selectedCommit2.name;
     }
     if (this.commitsAnalyzed > 0) {
       this.store.dispatch(loadAvailableMetrics());
     }
     if (selectedCommit1Id != null) {
-      this.selectedCommit1 = this.commits.find(value => value.name === selectedCommit1Id);
-    }
+      this.selectedCommit1 = this.commitsFiltered.find(value => value.name === selectedCommit1Id);
+    }``
     if (selectedCommit2Id != null) {
-      this.selectedCommit2 = this.commits.find(value => value.name === selectedCommit2Id);
+      this.selectedCommit2 = this.commitsFiltered.find(value => value.name === selectedCommit2Id);
     }
-    this.showCommitsInRange();
   }
 
   showCommitsInRange() {
-    this.selectedCommit1 = null;
-    this.selectedCommit2 = null;
     if(this.commits.length > 0) {
       let endDate: Date;
       if (this.endDate === null || this.endDate.length === 0) {
@@ -252,10 +250,8 @@ export class ListViewComponent implements OnInit, OnChanges {
       }
       this.commitsFiltered = this.commits.filter(value =>
         value.timestamp >= startDate.getTime() && value.timestamp <= (endDate.getTime() + 24 * 60 * 60 * 1000));
-      this.contributorHasCommits = true;
     } else {
       this.commitsFiltered = [];
-      this.contributorHasCommits = false;
     }
     this.commitsAnalyzed = this.commitsFiltered.filter(value => value.analyzed).length;
   }

@@ -45,13 +45,12 @@
       <mat-icon>clear</mat-icon>
     </button>
   </div>
+  <div *ngIf="commitsFiltered.length === 0 && !waiting " class="waitingIndicator" style="font-size: xx-large">No commits</div>
   <mat-paginator #paginator1 [showFirstLastButtons]="true" class="paginator" [length]="commitsFiltered.length"
                  [pageSize]="pageSize"
                  [pageSizeOptions]="pageSizeOptions"
                  (page)="syncPaginators($event)">
   </mat-paginator>
-
-  <div *ngIf="!contributorHasCommits">No commits for this contributor</div>
 
   <mat-grid-list cols="1" rowHeight="50px" gutterSize="-2px" >
     <mat-accordion class="example-headers-align" *ngFor="let commit of commitsFiltered.slice(pageEvent.pageIndex*pageEvent.pageSize,
@@ -84,14 +83,15 @@
       </mat-grid-tile>
     </mat-accordion>
 
-    <a *ngIf="selectedCommit1 !== null && selectedCommit2 != null && selectedCommit1.analyzed && selectedCommit2.analyzed"
+    <a *ngIf="selectedCommit1?.analyzed && selectedCommit2?.analyzed"
        class="compare-button" color="accent" mat-fab (click)="startComplexityAnalysis()">
       <div>
         <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">3d_rotation</mat-icon>
       </div>
     </a>
 
-    <a *ngIf="selectedCommit1 !== null && selectedCommit2 != null" class="compare-button-2" color="accent" mat-fab
+    <a *ngIf="selectedCommit1 !== null && selectedCommit2 !== null
+    && selectedCommit1 !== undefined && selectedCommit2 !== undefined" class="compare-button-2" color="accent" mat-fab
        routerLink="/project/{{project.id}}/{{selectedCommit1.name}}/{{selectedCommit2.name}}/dependency-map">
       <div>
         <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">library_books</mat-icon>
