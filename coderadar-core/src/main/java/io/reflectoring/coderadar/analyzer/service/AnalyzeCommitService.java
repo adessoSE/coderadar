@@ -12,7 +12,7 @@ import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
-import io.reflectoring.coderadar.vcs.port.driver.GetCommitRawContentUseCase;
+import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -24,15 +24,15 @@ import org.springframework.stereotype.Service;
 public class AnalyzeCommitService implements AnalyzeCommitUseCase {
 
   private final AnalyzeFileService analyzeFileService;
-  private final GetCommitRawContentUseCase getCommitRawContentUseCase;
+  private final GetRawCommitContentPort getRawCommitContentPort;
   private final CoderadarConfigurationProperties coderadarConfigurationProperties;
 
   public AnalyzeCommitService(
       AnalyzeFileService analyzeFileService,
-      GetCommitRawContentUseCase getCommitRawContentUseCase,
+      GetRawCommitContentPort getRawCommitContentPort,
       CoderadarConfigurationProperties coderadarConfigurationProperties) {
     this.analyzeFileService = analyzeFileService;
-    this.getCommitRawContentUseCase = getCommitRawContentUseCase;
+    this.getRawCommitContentPort = getRawCommitContentPort;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
   }
 
@@ -77,7 +77,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
     HashMap<File, FileMetrics> fileMetricsMap = new LinkedHashMap<>();
     try {
       HashMap<File, byte[]> fileContents =
-          getCommitRawContentUseCase.getCommitContentBulkWithFiles(
+          getRawCommitContentPort.getCommitContentBulkWithFiles(
               coderadarConfigurationProperties.getWorkdir()
                   + "/projects/"
                   + project.getWorkdirName(),
@@ -111,7 +111,8 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
                 finding.getLineStart(),
                 finding.getLineEnd(),
                 finding.getCharStart(),
-                finding.getCharEnd()));
+                finding.getCharEnd(),
+                finding.getMessage()));
       }
       metricValues.add(
           new MetricValue(

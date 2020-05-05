@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {MatTooltip, MatTreeNestedDataSource} from '@angular/material';
 import {NestedTreeControl} from '@angular/cdk/tree';
 import {FileTreeNode} from '../../model/file-tree-node';
@@ -8,6 +8,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 import {MetricWithFindings} from '../../model/metric-with-findings';
 import * as Prism from 'prismjs';
+
 import 'prismjs/components/prism-java';
 import 'prismjs/components/prism-markdown';
 import 'prismjs/components/prism-asciidoc';
@@ -17,6 +18,8 @@ import 'prismjs/components/prism-typescript';
 import 'prismjs/components/prism-scss';
 import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-groovy';
+import 'prismjs/components/prism-diff';
+import 'prismjs/plugins/diff-highlight/prism-diff-highlight';
 import 'prismjs/plugins/line-numbers/prism-line-numbers';
 import 'prismjs/plugins/line-highlight/prism-line-highlight';
 import {Project} from '../../model/project';
@@ -24,6 +27,8 @@ import {AppComponent} from '../../app.component';
 import {Title} from '@angular/platform-browser';
 import {ContributorService} from '../../service/contributor.service';
 import {Contributor} from '../../model/contributor';
+import {HttpResponse} from "@angular/common/http";
+import {FileContentWithMetrics} from "../../model/file-content-with-metrics";
 
 @Component({
   selector: 'app-file-view',
@@ -50,6 +55,7 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   public project: Project = new Project();
   public highlighted = false;
   public showOnlyChangedFiles = false;
+  public showDiff = false;
   public fileAuthors: Contributor[] = [];
 
   constructor(private projectService: ProjectService,
@@ -74,6 +80,10 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   hasChild = (_: number, node: FileTreeNode) => node.children !== null;
 
   public getFileTree() {
+    if(!this.showOnlyChangedFiles){
+      this.showDiff = false;
+      this.updateSelectedFile(null, this.currentSelectedFilepath);
+    }
     if (this.tree != null && this.prevTree != null) {
       const temp = this.tree;
       this.tree = this.prevTree;
@@ -94,24 +104,39 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  public updateSelectedFile(node: any): void {
+  public updateSelectedFile(node: any, path: string): void {
     this.highlighted = false;
     this.currentFileContent = '';
-
-    this.currentSelectedFilepath = this.getFullPath(this.tree.children, node, '');
-    this.currentSelectedFilepath = this.currentSelectedFilepath.substr(1, this.currentSelectedFilepath.length);
-    this.projectService.getFileContentWithMetrics(this.projectId, this.commitHash, this.currentSelectedFilepath)
-      .then(value => {
+    if(node === null && path === null){
+      return;
+    }
+    if(path === null) {
+      this.currentSelectedFilepath = this.getFullPath(this.tree.children, node, '');
+      this.currentSelectedFilepath = this.currentSelectedFilepath.substr(1, this.currentSelectedFilepath.length);
+    } else {
+      this.currentSelectedFilepath = path;
+    }
+    if(this.currentSelectedFilepath === ''){
+      return;
+    }
+    let promise: Promise<HttpResponse<FileContentWithMetrics>> ;
+    if(this.showDiff){
+      promise = this.projectService.getFileDiff(this.projectId, this.commitHash, this.currentSelectedFilepath)
+    } else {
+      promise = this.projectService.getFileContentWithMetrics(this.projectId, this.commitHash, this.currentSelectedFilepath)
+    }
+    promise.then(value => {
         this.currentFileContent = value.body.content;
         this.currentFileMetrics = value.body.metrics;
         this.findingsString = this.getAllFindings(this.currentFileMetrics);
       }).catch(err => {
       if (err.status && err.status === FORBIDDEN) {
-        this.userService.refresh(() => this.updateSelectedFile(node));
+        this.userService.refresh(() => this.updateSelectedFile(node, path));
       } else if (err.status && err.status === NOT_FOUND) {
         this.router.navigate(['/dashboard']);
       }
     });
+
 
     this.contributorService.getContributorsForFile(this.projectId, this.currentSelectedFilepath, this.commitHash)
       .then(value => {
@@ -119,11 +144,20 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
       })
       .catch(err => {
         if (err.status && err.status === FORBIDDEN) {
-          this.userService.refresh(() => this.updateSelectedFile(node));
+          this.userService.refresh(() => this.updateSelectedFile(node, path));
         } else if (err.status && err.status === NOT_FOUND) {
           this.router.navigate(['/dashboard']);
         }
       });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    if(this.showDiff){
+      this.fileView.nativeElement.children.item(0).lastChild.remove();
+    } else {
+      this.fileView.nativeElement.children.item(1).remove();
+    }
   }
 
 
@@ -147,10 +181,9 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
   ngAfterViewChecked(): void {
     if (!this.highlighted && this.currentFileContent !== '') {
       Prism.highlightAllUnder(this.fileView.nativeElement);
-      this.fileView.nativeElement.children.item(1).remove();
+      this.onResize(null);
       const elements: HTMLElement[] = Array.from(this.fileView.nativeElement.children)
-        .slice(1, this.fileView.nativeElement.children.length) as HTMLElement[];
-      this.highlighted = true;
+          .slice(1, this.fileView.nativeElement.children.length) as HTMLElement[];
       elements.forEach(value => {
         value.style.pointerEvents = 'auto';
         value.onmouseover = (event: MouseEvent) => {
@@ -165,43 +198,51 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
                 tip.style.top = event.clientY + 'px';
               });
             }
-          }
+           }
         };
         value.onmouseleave = () => {
           this.tooltip.hide();
         };
       });
+      this.highlighted = true;
     }
   }
 
   private getTooltipForRange(range: Attr): string {
-    const lineStart = range.value.split('-')[0];
+    const lineStart = +range.value.split('-')[0];
     let findings = '';
     this.currentFileMetrics.forEach(value => {
       let found = false;
       for (const finding of value.findings) {
-        if (finding.lineStart === +lineStart) {
-          found = true;
+        if (finding.lineStart === lineStart) {
+          findings += finding.message + '\n';
+          break;
         }
-      }
-      if (found) {
-        const temp = value.name.split('.');
-        findings += temp[temp.length - 1] + '\n';
       }
     });
     return findings;
   }
 
-  getLanguageClass() {
+  getCodeClass() {
     const temp = this.currentSelectedFilepath.split('.');
     const fileExtension = temp[temp.length - 1];
-    if (fileExtension === 'gradle') {
-      return 'language-groovy';
+    if(this.showDiff) {
+      if (fileExtension === 'gradle') {
+        return 'language-diff-groovy diff-highlight';
+      }
+      return 'language-diff-'+ fileExtension + ' diff-highlight';
+    } else {
+      if (fileExtension === 'gradle') {
+        return 'line-numbers language-groovy';
+      }
+      return 'language-' + fileExtension;
     }
-    return 'language-' + fileExtension;
   }
 
   getAllFindings(metrics: MetricWithFindings[]) {
+    if(metrics === null){
+      return '0';
+    }
     let result = '';
     for (const m of metrics) {
       m.findings.forEach(value => result += value.lineStart + '-' + value.lineEnd + ',');
@@ -223,5 +264,13 @@ export class FileViewComponent implements OnInit, AfterViewChecked {
           this.router.navigate(['/dashboard']);
         }
       });
+  }
+
+  getPreClass() {
+    if(!this.showDiff){
+      return 'line-numbers file-content';
+    }  else {
+      return 'file-content';
+    }
   }
 }

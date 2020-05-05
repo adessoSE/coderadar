@@ -58,7 +58,7 @@ class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTempla
 
     // Test
     mvc()
-        .perform(get("/projects/" + testProject.getId() + "/modules"))
+        .perform(get("/api/projects/" + testProject.getId() + "/modules"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetModuleResponse[].class))
         .andExpect(
@@ -73,7 +73,7 @@ class ListModulesOfProjectControllerIntegrationTest extends ControllerTestTempla
   @Test
   void listAllModulesOfProjectReturnsErrorWhenProjectNotFound() throws Exception {
     mvc()
-        .perform(get("/projects/1/modules"))
+        .perform(get("/api/projects/1/modules"))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));

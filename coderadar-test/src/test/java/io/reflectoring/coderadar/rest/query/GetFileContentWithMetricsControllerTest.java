@@ -35,12 +35,13 @@ public class GetFileContentWithMetricsControllerTest extends ControllerTestTempl
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null,
             null);
     MvcResult result =
         mvc()
             .perform(
-                post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
+                post("/api/projects")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(command1)))
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
@@ -49,7 +50,7 @@ public class GetFileContentWithMetricsControllerTest extends ControllerTestTempl
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/filePatterns")
+            post("/api/projects/" + projectId + "/filePatterns")
                 .content(toJson(command2))
                 .contentType(MediaType.APPLICATION_JSON));
 
@@ -58,13 +59,13 @@ public class GetFileContentWithMetricsControllerTest extends ControllerTestTempl
             "io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyzers")
+            post("/api/projects/" + projectId + "/analyzers")
                 .content(toJson(command3))
                 .contentType(MediaType.APPLICATION_JSON));
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/master/analyze")
+            post("/api/projects/" + projectId + "/master/analyze")
                 .contentType(MediaType.APPLICATION_JSON));
   }
 
@@ -77,7 +78,7 @@ public class GetFileContentWithMetricsControllerTest extends ControllerTestTempl
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/files/content")
+                get("/api/projects/" + projectId + "/files/content")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(getFileContentWithMetricsCommand)))
             .andDo(

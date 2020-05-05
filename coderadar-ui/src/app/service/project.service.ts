@@ -208,6 +208,18 @@ export class ProjectService {
   }
 
   /**
+   * Gets all available commits in a project for a given contributor.
+   * Sends a GET request to /projects/{id}/{branchName}/commits
+   * @param id The project id.
+   * @param email The email of the contributor.
+   * @param branch The branch to use for getting the commits.
+   */
+  public getCommitsForContributor(id: number, branch: string, email: string): Promise<HttpResponse<Commit[]>> {
+    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/' + branch + '/commits?email='+email,
+      {observe: 'response'}).toPromise();
+  }
+
+  /**
    * Gets the commit log
    * Sends a GET request to /projects/{id}/commitLog
    * @param id The project id.
@@ -309,6 +321,11 @@ export class ProjectService {
 
   getFileContentWithMetrics(projectId: any, commitHash: any, filepath: string): Promise<HttpResponse<FileContentWithMetrics>> {
     return this.httpClient.post<FileContentWithMetrics>(this.apiURL + 'projects/' + projectId + '/files/content',
+      {commitHash, filepath}, {observe: 'response'}).toPromise();
+  }
+
+  getFileDiff(projectId: any, commitHash: any, filepath: string): Promise<HttpResponse<FileContentWithMetrics>> {
+    return this.httpClient.post<FileContentWithMetrics>(this.apiURL + 'projects/' + projectId + '/files/diff',
       {commitHash, filepath}, {observe: 'response'}).toPromise();
   }
 }

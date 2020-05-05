@@ -19,13 +19,11 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.get.Li
 import io.reflectoring.coderadar.projectadministration.port.driver.project.update.UpdateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.projectadministration.service.project.UpdateProjectService;
-import io.reflectoring.coderadar.query.domain.DateRange;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import java.io.File;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -93,20 +91,12 @@ class UpdateProjectServiceTest {
     String newUsername = "newUsername";
     String newPassword = "newPassword";
     Date newStartDate = new Date();
-    Date newEndDate = new Date();
 
     newStartDate.setTime(newStartDate.getTime() + 10000);
-    newEndDate.setTime(newEndDate.getTime() + 20000);
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(
-            newProjectName,
-            newUsername,
-            newPassword,
-            "http://valid.url",
-            true,
-            newStartDate,
-            newEndDate);
+            newProjectName, newUsername, newPassword, "http://valid.url", true, newStartDate);
 
     Project projectWithCollidingName = new Project().setId(2L).setName(newProjectName);
 
@@ -139,20 +129,14 @@ class UpdateProjectServiceTest {
     String projectWorkdirName = "project-workdir";
     String globalWorkdirName = "coderadar-workdir";
 
-    DateRange expectedDateRange =
-        new DateRange(
-            newStartDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
-            newEndDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-
     UpdateProjectCommand command =
         new UpdateProjectCommand(
-            newProjectName, newUsername, newPassword, newVcsUrl, false, newStartDate, newEndDate);
+            newProjectName, newUsername, newPassword, newVcsUrl, false, newStartDate);
 
     Project testProject = new Project();
     testProject.setId(1L);
     testProject.setWorkdirName(projectWorkdirName);
     testProject.setVcsStart(new Date());
-    testProject.setVcsEnd(new Date());
     testProject.setVcsUrl("");
 
     when(getProjectPortMock.get(projectId)).thenReturn(testProject);
@@ -183,7 +167,6 @@ class UpdateProjectServiceTest {
     Assert.assertEquals(testProject.getVcsUsername(), newUsername);
     Assert.assertEquals(testProject.getVcsPassword(), newPassword);
     Assert.assertEquals(testProject.getVcsStart(), newStartDate);
-    Assert.assertEquals(testProject.getVcsEnd(), newEndDate);
     Assert.assertEquals(testProject.getVcsUrl(), newVcsUrl);
 
     verify(updateLocalRepositoryUseCaseMock).updateRepository(any());

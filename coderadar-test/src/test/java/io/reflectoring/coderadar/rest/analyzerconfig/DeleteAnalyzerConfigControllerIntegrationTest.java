@@ -35,7 +35,10 @@ class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
     mvc()
         .perform(
             delete(
-                "/projects/" + testProject.getId() + "/analyzers/" + analyzerConfiguration.getId()))
+                "/api/projects/"
+                    + testProject.getId()
+                    + "/analyzers/"
+                    + analyzerConfiguration.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(
             result -> {
@@ -47,7 +50,7 @@ class DeleteAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
   @Test
   void deleteAnalyzerConfigurationReturnsErrorWhenAnalyzerNotFound() throws Exception {
     mvc()
-        .perform(delete("/projects/0/analyzers/2"))
+        .perform(delete("/api/projects/0/analyzers/2"))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")

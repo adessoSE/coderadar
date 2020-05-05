@@ -19,7 +19,7 @@ public class CreateModuleService implements CreateModuleUseCase {
   private final ProjectStatusPort projectStatusPort;
   private final GetProjectPort getProjectPort;
 
-  private final Logger logger = LoggerFactory.getLogger(CreateModuleService.class);
+  private static final Logger logger = LoggerFactory.getLogger(CreateModuleService.class);
 
   public CreateModuleService(
       CreateModulePort createModulePort,

@@ -45,7 +45,7 @@ public class UpdateProjectService implements UpdateProjectUseCase {
   private final GetAvailableBranchesPort getAvailableBranchesPort;
   private final DeleteProjectPort deleteProjectPort;
 
-  private final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
+  private static final Logger logger = LoggerFactory.getLogger(UpdateProjectService.class);
 
   public UpdateProjectService(
       GetProjectPort getProjectPort,
@@ -94,9 +94,8 @@ public class UpdateProjectService implements UpdateProjectUseCase {
       urlChanged = true;
     }
 
-    if (projectDatesHaveChanged(project, command) || urlChanged) {
+    if (projectDateHasChanged(project, command) || urlChanged) {
       project.setVcsStart(command.getStartDate());
-      project.setVcsEnd(command.getEndDate());
 
       this.processProjectService.executeTask(
           () -> {
@@ -145,15 +144,11 @@ public class UpdateProjectService implements UpdateProjectUseCase {
     logger.info("Updated project {} with id {}", project.getName(), project.getId());
   }
 
-  private boolean projectDatesHaveChanged(Project project, UpdateProjectCommand command) {
+  private boolean projectDateHasChanged(Project project, UpdateProjectCommand command) {
     boolean datesChanged = false;
     if ((project.getVcsStart() == null && command.getStartDate() != null)
         || (project.getVcsStart() != null
             && !project.getVcsStart().equals(command.getStartDate()))) {
-      datesChanged = true;
-    }
-    if ((project.getVcsEnd() == null && command.getEndDate() != null)
-        || (project.getVcsEnd() != null && !project.getVcsEnd().equals(command.getEndDate()))) {
       datesChanged = true;
     }
     return datesChanged;

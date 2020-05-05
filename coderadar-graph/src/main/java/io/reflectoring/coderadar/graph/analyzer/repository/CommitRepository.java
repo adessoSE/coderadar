@@ -124,4 +124,25 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
           + "MATCH (c2:CommitEntity) WHERE c2.name = {1} WITH c1, c2 LIMIT 1 "
           + "RETURN c1.timestamp > c2.timestamp")
   boolean commitIsNewer(@NonNull String commit1, @NonNull String commit2);
+
+  @Query("MATCH (c)-[:IS_CHILD_OF]->(c2) WHERE ID(c) = {0} RETURN c2")
+  List<CommitEntity> getCommitParents(long commitId);
+
+  @Query("MATCH (c2)-[:IS_CHILD_OF]->(c) WHERE ID(c) = {0} RETURN c2")
+  List<CommitEntity> getCommitChildren(long commitId);
+
+  @Query(
+      "MATCH (c) WHERE ID(c) = {0} WITH c "
+          + "OPTIONAL MATCH (f)-[r:CHANGED_IN]->(c) "
+          + "WHERE r.changeType = \"ADD\" OR r.changeType = \"RENAME\" DETACH DELETE c, f")
+  void deleteCommitAndAddedOrRenamedFiles(long commitId);
+
+  @Query(
+      "MATCH (co)-[:WORKS_ON]->(p)-[:HAS_BRANCH]->(b:BranchEntity)-[:POINTS_TO]->(c) WHERE toLower({2}) IN co.emails "
+          + "AND ID(p) = {0} AND b.name = {1} WITH co.emails as emails, c LIMIT 1 "
+          + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c "
+          + "WHERE toLower(c.authorEmail) IN emails "
+          + "RETURN c ORDER BY c.timestamp DESC")
+  List<CommitEntity> findByProjectIdBranchNameAndContributor(
+      long projectId, String branchName, String email);
 }

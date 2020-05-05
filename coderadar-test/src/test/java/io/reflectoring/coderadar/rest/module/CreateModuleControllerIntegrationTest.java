@@ -41,7 +41,7 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
     CreateModuleCommand command = new CreateModuleCommand("module-path");
     mvc()
         .perform(
-            post("/projects/" + testProject.getId() + "/modules")
+            post("/api/projects/" + testProject.getId() + "/modules")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -76,7 +76,7 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
     CreateModuleCommand command = new CreateModuleCommand("module-path1");
     mvc()
         .perform(
-            post("/projects/" + testProject.getId() + "/modules")
+            post("/api/projects/" + testProject.getId() + "/modules")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -104,7 +104,7 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
     CreateModuleCommand command = new CreateModuleCommand("module-path");
     mvc()
         .perform(
-            post("/projects/1/modules")
+            post("/api/projects/1/modules")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -117,7 +117,7 @@ class CreateModuleControllerIntegrationTest extends ControllerTestTemplate {
     CreateModuleCommand command = new CreateModuleCommand("");
     mvc()
         .perform(
-            post("/projects/0/modules")
+            post("/api/projects/0/modules")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest());

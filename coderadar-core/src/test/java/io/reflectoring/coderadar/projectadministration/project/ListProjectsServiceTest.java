@@ -41,8 +41,8 @@ class ListProjectsServiceTest {
             .setVcsUsername("username1")
             .setVcsPassword("password1")
             .setVcsOnline(true)
-            .setVcsStart(startDate)
-            .setVcsEnd(endDate);
+            .setVcsStart(startDate);
+
     Project expectedResponse2 =
         new Project()
             .setId(2L)
@@ -51,8 +51,7 @@ class ListProjectsServiceTest {
             .setVcsUsername("username2")
             .setVcsPassword("password2")
             .setVcsOnline(false)
-            .setVcsStart(startDate)
-            .setVcsEnd(endDate);
+            .setVcsStart(startDate);
 
     Mockito.when(listProjectsPort.getProjects())
         .thenReturn(Arrays.asList(expectedResponse1, expectedResponse2));

@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 public class ListBranchesControllerTest extends ControllerTestTemplate {
 
-  @Autowired CreateProjectService createProjectService;
+  @Autowired private CreateProjectService createProjectService;
 
   private Long projectId;
 
@@ -27,14 +27,14 @@ public class ListBranchesControllerTest extends ControllerTestTemplate {
     projectId =
         createProjectService.createProject(
             new CreateProjectCommand(
-                "testProject", null, null, testRepoURL.toString(), false, null, null));
+                "testProject", null, null, testRepoURL.toString(), false, null));
   }
 
   @Test
   void listAllBranchesOfProjectWithId() throws Exception {
     // Test
     mvc()
-        .perform(get("/projects/" + projectId + "/branches"))
+        .perform(get("/api/projects/" + projectId + "/branches"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetBranchResponse[].class))
         .andExpect(
@@ -52,7 +52,7 @@ public class ListBranchesControllerTest extends ControllerTestTemplate {
   @Test
   void listAllBranchesOfProjectReturnsErrorWhenProjectNotFound() throws Exception {
     mvc()
-        .perform(get("/projects/100/branches"))
+        .perform(get("/api/projects/100/branches"))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 100 not found."));

@@ -566,6 +566,19 @@ include::{snippets}/commit/list/http-request.adoc[]
 
 include::{snippets}/commit/list/http-response.adoc[]
 
+==== Listing commits for a given contributor
+
+An additional email parameter may be supplied to this request to only return the commits authored by the matching contributor.
+
+===== Example Request
+
+include::{snippets}/commit/list/email/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/commit/list/email/http-response.adoc[]
+
+
 ==== Listing a Project's Commits as a Git log
 
 ===== Response Structure
@@ -632,6 +645,29 @@ include::{snippets}/files/content/http-request.adoc[]
 ===== Example Response
 
 include::{snippets}/files/content/http-response.adoc[]
+
+==== Querying the file diff against the same file in the first commit parent.
+
+===== Request Structure
+
+include::{snippets}/files/diff/request-fields.adoc[]
+
+===== Response Structure
+
+include::{snippets}/files/diff/response-fields.adoc[]
+
+===== Example Request
+
+[NOTE]
+=====
+This request can be sent using either the GET or the POST method. See <<usage-of-get, Usage of GET>>.
+
+=====
+include::{snippets}/files/diff/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/files/diff/http-response.adoc[]
 
 === Metrics Trees
 

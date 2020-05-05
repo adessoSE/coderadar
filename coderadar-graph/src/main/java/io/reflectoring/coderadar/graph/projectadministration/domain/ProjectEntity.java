@@ -17,14 +17,12 @@ public class ProjectEntity {
 
   private Long id;
   private String name;
-
   private String workdirName;
   private String vcsUrl;
   private String vcsUsername;
   private String vcsPassword;
   private boolean vcsOnline;
   private Date vcsStart;
-  private Date vcsEnd;
 
   private boolean isBeingProcessed = false;
   private boolean isBeingDeleted = false;

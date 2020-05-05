@@ -21,7 +21,6 @@ public class UpdateProjectAdapter implements UpdateProjectPort {
             .findById(project.getId())
             .orElseThrow(() -> new ProjectNotFoundException(project.getId()))
             .setName(project.getName())
-            .setVcsEnd(project.getVcsEnd())
             .setVcsStart(project.getVcsStart())
             .setVcsOnline(project.isVcsOnline())
             .setVcsUsername(project.getVcsUsername())

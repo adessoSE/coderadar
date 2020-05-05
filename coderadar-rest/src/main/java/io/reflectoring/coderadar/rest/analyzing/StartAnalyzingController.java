@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.analyzing;
 
 import io.reflectoring.coderadar.analyzer.port.driver.StartAnalyzingUseCase;
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,9 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Transactional
-public class StartAnalyzingController {
+@RestController
+public class StartAnalyzingController implements AbstractBaseController {
   private final StartAnalyzingUseCase startAnalyzingUseCase;
 
   public StartAnalyzingController(StartAnalyzingUseCase startAnalyzingUseCase) {

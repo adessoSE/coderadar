@@ -17,7 +17,7 @@ public class CheckstyleSourceCodeFileAnalyzerPluginTest {
         IOUtils.toByteArray(getClass().getResourceAsStream("/CheckstyleAnalyzer.java.txt"));
 
     CheckstyleSourceCodeFileAnalyzerPlugin analyzer = new CheckstyleSourceCodeFileAnalyzerPlugin();
-    FileMetrics metrics = analyzer.analyzeFile("abc", fileContent);
+    FileMetrics metrics = analyzer.analyzeFile("abc.java", fileContent);
 
     Assertions.assertEquals(
         Long.valueOf(11L),
@@ -32,7 +32,7 @@ public class CheckstyleSourceCodeFileAnalyzerPluginTest {
         IOUtils.toByteArray(getClass().getResourceAsStream("/AntPathMatcher.java.txt"));
 
     CheckstyleSourceCodeFileAnalyzerPlugin analyzer = new CheckstyleSourceCodeFileAnalyzerPlugin();
-    FileMetrics metrics = analyzer.analyzeFile("abc", fileContent);
+    FileMetrics metrics = analyzer.analyzeFile("abc.java", fileContent);
 
     Assertions.assertEquals(
         Long.valueOf(78L),

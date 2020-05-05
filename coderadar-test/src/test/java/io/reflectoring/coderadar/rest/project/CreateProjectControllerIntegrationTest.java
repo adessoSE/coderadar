@@ -33,9 +33,10 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
     URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
     CreateProjectCommand command =
         new CreateProjectCommand(
-            "project", "username", "password", testRepoURL.toString(), false, null, null);
+            "project", "username", "password", testRepoURL.toString(), false, null);
     mvc()
-        .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
+        .perform(
+            post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
         .andExpect(MockMvcResultMatchers.status().isCreated())
         .andDo(
             result -> {
@@ -59,10 +60,10 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void createProjectReturnsErrorOnInvalidData() throws Exception {
     CreateProjectCommand command =
-        new CreateProjectCommand(
-            "project", "username", "password", "invalid", true, new Date(), new Date());
+        new CreateProjectCommand("project", "username", "password", "invalid", true, new Date());
     mvc()
-        .perform(post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
+        .perform(
+            post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
         .andExpect(MockMvcResultMatchers.status().isBadRequest())
         .andDo(document("projects/create/error400"));
   }
@@ -93,11 +94,6 @@ class CreateProjectControllerIntegrationTest extends ControllerTestTemplate {
                 .withPath("startDate")
                 .type("Date")
                 .description(
-                    "The start date of the range of commits which should be analyzed by coderadar. Leave empty to start at the first commit."),
-            fields
-                .withPath("endDate")
-                .type("Date")
-                .description(
-                    "The end date of the range of commits which should be analyzed by coderadar. Leave empty to automatically process all new incoming commits.")));
+                    "The start date of the range of commits which should be analyzed by coderadar. Leave empty to start at the first commit.")));
   }
 }

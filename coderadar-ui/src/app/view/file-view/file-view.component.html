@@ -2,9 +2,13 @@
 {location: '/project/' + projectId, name: project.name},
 {location: '/project/'+projectId+'/'+commitHash+'/files',
 name: 'File tree for commit ' + commitHashAbbrev}]"></app-header>
-<div style="background-color: rgb(245, 242, 240)">
+<main style="background-color: rgb(245, 242, 240);">
   <mat-checkbox class="checkbox" [(ngModel)]="showOnlyChangedFiles" (change)="getFileTree()">
     Show only files changed in this commit
+  </mat-checkbox>
+  <mat-checkbox class="checkbox" *ngIf="this.showOnlyChangedFiles" [(ngModel)]="showDiff"
+                (change)="updateSelectedFile(null, this.currentSelectedFilepath)">
+    Show diff
   </mat-checkbox>
   <span class="filepath">
     {{currentSelectedFilepath}}
@@ -21,13 +25,13 @@ name: 'File tree for commit ' + commitHashAbbrev}]"></app-header>
     </div>
   </div>
   <div #tooltip="matTooltip" matTooltip="{{tooltipMessage}}"></div>
-  <div class="main">
+  <div>
     <div fxFlex="0 0 25%" fxLayout="row" style="overflow: scroll">
       <mat-tree fxFlex="auto" [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
         <!-- This is the tree node template for leaf nodes -->
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
           <li class="mat-tree-node">
-            <button mat-button style="font-weight:normal; margin-left: 0;" (click)="updateSelectedFile(node)">
+            <button mat-button style="font-weight:normal; margin-left: 0;" (click)="updateSelectedFile(node, null)">
               {{node.path}}
             </button>
           </li>
@@ -51,10 +55,9 @@ name: 'File tree for commit ' + commitHashAbbrev}]"></app-header>
         </mat-nested-tree-node>
       </mat-tree>
     </div>
-    <pre class="line-numbers file-content" [attr.data-line]="findingsString" #fileView>
-<code [className]="getLanguageClass()" [textContent]="currentFileContent"></code>
+    <pre [class]="getPreClass()" [attr.data-line]="findingsString" #fileView>
+<code [className]="getCodeClass()" [textContent]="currentFileContent"></code>
     </pre>
   </div>
-</div>
-
+</main>
 <app-footer></app-footer>

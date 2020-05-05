@@ -24,7 +24,6 @@ class GetProjectControllerIntegrationTest extends ControllerTestTemplate {
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
-    testProject.setVcsEnd(new Date());
     testProject.setVcsStart(new Date());
     testProject.setVcsOnline(true);
     testProject.setVcsPassword("testPassword");
@@ -32,7 +31,7 @@ class GetProjectControllerIntegrationTest extends ControllerTestTemplate {
     testProject = projectRepository.save(testProject);
 
     mvc()
-        .perform(get("/projects/" + testProject.getId()))
+        .perform(get("/api/projects/" + testProject.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetProjectResponse.class))
         .andDo(
@@ -47,7 +46,7 @@ class GetProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void getProjectWithIdThrowsErrorWhenProjectDoesNotExist() throws Exception {
     mvc()
-        .perform(get("/projects/1"))
+        .perform(get("/api/projects/1"))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));

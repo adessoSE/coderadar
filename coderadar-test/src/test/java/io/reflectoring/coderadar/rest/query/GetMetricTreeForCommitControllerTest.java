@@ -41,12 +41,13 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null,
             null);
     MvcResult result =
         mvc()
             .perform(
-                post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
+                post("/api/projects")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(command1)))
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
@@ -55,7 +56,7 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/filePatterns")
+            post("/api/projects/" + projectId + "/filePatterns")
                 .content(toJson(command2))
                 .contentType(MediaType.APPLICATION_JSON));
 
@@ -64,13 +65,13 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
             "io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyzers")
+            post("/api/projects/" + projectId + "/analyzers")
                 .content(toJson(command3))
                 .contentType(MediaType.APPLICATION_JSON));
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/master/analyze")
+            post("/api/projects/" + projectId + "/master/analyze")
                 .contentType(MediaType.APPLICATION_JSON));
   }
 
@@ -89,7 +90,7 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/metricvalues/tree")
+                get("/api/projects/" + projectId + "/metricvalues/tree")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command)))
             .andDo(
@@ -149,7 +150,7 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/modules")
+            post("/api/projects/" + projectId + "/modules")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(createModuleCommand)));
 
@@ -165,7 +166,7 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/metricvalues/tree")
+                get("/api/projects/" + projectId + "/metricvalues/tree")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command)))
             .andReturn();
@@ -221,7 +222,7 @@ class GetMetricTreeForCommitControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/1234/metricvalues/tree")
+                get("/api/projects/1234/metricvalues/tree")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command)))
             .andExpect(status().isNotFound())

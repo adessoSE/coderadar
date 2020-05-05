@@ -26,13 +26,7 @@ class CreateProjectControllerTest {
 
     CreateProjectCommand command =
         new CreateProjectCommand(
-            "test",
-            "testUsername",
-            "testPassword",
-            "http://valid.url",
-            true,
-            new Date(),
-            new Date());
+            "test", "testUsername", "testPassword", "http://valid.url", true, new Date());
 
     Mockito.when(createProjectUseCase.createProject(command)).thenReturn(1L);
 

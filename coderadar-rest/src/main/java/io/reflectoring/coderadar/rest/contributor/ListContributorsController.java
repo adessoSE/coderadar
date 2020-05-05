@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.contributor;
 import io.reflectoring.coderadar.contributor.domain.Contributor;
 import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForPathCommand;
 import io.reflectoring.coderadar.contributor.port.driver.ListContributorsUseCase;
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetContributorResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
 @Transactional
-public class ListContributorsController {
+@RestController
+public class ListContributorsController implements AbstractBaseController {
   private final ListContributorsUseCase listContributorsUseCase;
 
   public ListContributorsController(ListContributorsUseCase listContributorsUseCase) {

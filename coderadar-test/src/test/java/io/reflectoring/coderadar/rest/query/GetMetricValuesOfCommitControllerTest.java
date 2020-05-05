@@ -40,12 +40,13 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null,
             null);
     MvcResult result =
         mvc()
             .perform(
-                post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
+                post("/api/projects")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(command1)))
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
@@ -54,7 +55,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/filePatterns")
+            post("/api/projects/" + projectId + "/filePatterns")
                 .content(toJson(command2))
                 .contentType(MediaType.APPLICATION_JSON))
         .andReturn();
@@ -64,14 +65,14 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
             "io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyzers")
+            post("/api/projects/" + projectId + "/analyzers")
                 .content(toJson(command3))
                 .contentType(MediaType.APPLICATION_JSON))
         .andReturn();
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/master/analyze")
+            post("/api/projects/" + projectId + "/master/analyze")
                 .contentType(MediaType.APPLICATION_JSON))
         .andReturn();
   }
@@ -91,7 +92,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/metricvalues/perCommit")
+                get("/api/projects/" + projectId + "/metricvalues/perCommit")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command)))
             .andDo(
@@ -132,7 +133,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/metricvalues/perCommit")
+                get("/api/projects/" + projectId + "/metricvalues/perCommit")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command)))
             .andReturn();
@@ -162,7 +163,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/metricvalues/perCommit")
+                get("/api/projects/" + projectId + "/metricvalues/perCommit")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command)))
             .andReturn();
@@ -192,7 +193,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/metricvalues/perCommit")
+                get("/api/projects/" + projectId + "/metricvalues/perCommit")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command)))
             .andReturn();
@@ -222,7 +223,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/1234/metricvalues/perCommit")
+                get("/api/projects/1234/metricvalues/perCommit")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(toJson(command)))
             .andExpect(status().isNotFound())

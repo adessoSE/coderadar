@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.query;
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
 import io.reflectoring.coderadar.query.port.driver.commitmetrics.GetMetricValuesOfCommitCommand;
 import io.reflectoring.coderadar.query.port.driver.commitmetrics.GetMetricValuesOfCommitUseCase;
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
 @Transactional
-public class GetMetricValuesOfCommitController {
+@RestController
+public class GetMetricValuesOfCommitController implements AbstractBaseController {
   private final GetMetricValuesOfCommitUseCase getMetricValuesOfCommitUseCase;
 
   public GetMetricValuesOfCommitController(

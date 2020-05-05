@@ -35,7 +35,7 @@ public class CompareTreeTest extends ControllerTestTemplate {
   private CompareNode root;
   private File f;
 
-  private final Logger logger = LoggerFactory.getLogger(CompareTreeTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(CompareTreeTest.class);
 
   @Autowired private DependencyCompareTreeAdapter dependencyTree;
   @Autowired private DeleteLocalRepositoryPort deleteRepositoryPort;
@@ -83,7 +83,7 @@ public class CompareTreeTest extends ControllerTestTemplate {
       mvc()
           .perform(
               get(
-                  "/analyzers/"
+                  "/api/analyzers/"
                       + testProject.getId()
                       + "/structureMap/"
                       + commitName

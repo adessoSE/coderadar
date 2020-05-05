@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class CreateFilePatternService implements CreateFilePatternUseCase {
 
   private final CreateFilePatternPort createFilePatternPort;
-  private final Logger logger = LoggerFactory.getLogger(CreateFilePatternService.class);
+  private static final Logger logger = LoggerFactory.getLogger(CreateFilePatternService.class);
 
   public CreateFilePatternService(CreateFilePatternPort createFilePatternPort) {
     this.createFilePatternPort = createFilePatternPort;

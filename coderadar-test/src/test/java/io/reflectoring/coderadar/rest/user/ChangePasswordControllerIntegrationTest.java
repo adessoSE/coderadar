@@ -44,7 +44,7 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
         new ChangePasswordCommand(refreshToken.getToken(), "newPassword1");
     mvc()
         .perform(
-            post("/user/password/change")
+            post("/api/user/password/change")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
@@ -72,7 +72,7 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
     ChangePasswordCommand command = new ChangePasswordCommand("a", "newPassword1");
     mvc()
         .perform(
-            post("/user/password/change")
+            post("/api/user/password/change")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isUnauthorized());

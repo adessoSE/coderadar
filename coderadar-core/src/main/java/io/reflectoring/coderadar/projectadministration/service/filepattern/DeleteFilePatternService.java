@@ -13,7 +13,7 @@ public class DeleteFilePatternService implements DeleteFilePatternFromProjectUse
 
   private final DeleteFilePatternPort deleteFilePatternPort;
   private final GetFilePatternPort getFilePatternPort;
-  private final Logger logger = LoggerFactory.getLogger(DeleteFilePatternService.class);
+  private static final Logger logger = LoggerFactory.getLogger(DeleteFilePatternService.class);
 
   public DeleteFilePatternService(
       DeleteFilePatternPort deleteFilePatternPort, GetFilePatternPort getFilePatternPort) {

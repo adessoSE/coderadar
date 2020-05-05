@@ -13,7 +13,7 @@
     </div>
 
     <!--Project card list-->
-    <mat-grid-list cols="2" rowHeight="200px">
+    <mat-grid-list cols="2" rowHeight="170px">
       <mat-grid-tile *ngFor="let project of projects" [colspan]="2" [rowspan]="1">
         <mat-card class="dashboard-card">
           <mat-card-header>
@@ -41,7 +41,6 @@
           <mat-card-content class="mat-card-content">
             <div style="padding-bottom: 0">Project URL: <a href="{{project.vcsUrl}}" target="_blank" mat-flat-button>{{project.vcsUrl}}</a></div>
             <div>Project start date: <b>&nbsp;&nbsp;{{project.startDate}}</b></div>
-            <div>Project end date: <b>&nbsp;&nbsp;{{project.endDate}}</b></div>
           </mat-card-content>
         </mat-card>
       </mat-grid-tile>

@@ -30,11 +30,13 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
     URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
     CreateProjectCommand command1 =
         new CreateProjectCommand(
-            "test-project", "username", "password", testRepoURL.toString(), false, null, null);
+            "test-project", "username", "password", testRepoURL.toString(), false, null);
     MvcResult result =
         mvc()
             .perform(
-                post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
+                post("/api/projects")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(command1)))
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
@@ -45,7 +47,7 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/master/commits")
+                get("/api/projects/" + projectId + "/master/commits")
                     .contentType(MediaType.APPLICATION_JSON))
             .andDo(
                 document(
@@ -73,10 +75,30 @@ class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
   }
 
   @Test
+  void returnsAllCommitsInProjectForContributor() throws Exception {
+    MvcResult result =
+        mvc()
+            .perform(
+                get("/api/projects/" + projectId + "/master/commits?email=Kilian.Krause@adesso.de")
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andDo(document("commit/list/email"))
+            .andReturn();
+
+    List<GetCommitResponse> commits =
+        fromJson(
+            new TypeReference<List<GetCommitResponse>>() {},
+            result.getResponse().getContentAsString());
+
+    Assertions.assertEquals(1, commits.size());
+    Assertions.assertEquals("modify testModule1/NewRandomFile.java", commits.get(0).getComment());
+  }
+
+  @Test
   void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
     MvcResult result =
         mvc()
-            .perform(get("/projects/1234/master/commits").contentType(MediaType.APPLICATION_JSON))
+            .perform(
+                get("/api/projects/1234/master/commits").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn();
 

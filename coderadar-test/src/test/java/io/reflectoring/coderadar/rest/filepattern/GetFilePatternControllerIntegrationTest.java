@@ -40,7 +40,8 @@ class GetFilePatternControllerIntegrationTest extends ControllerTestTemplate {
 
     // Test
     mvc()
-        .perform(get("/projects/" + testProject.getId() + "/filePatterns/" + filePattern.getId()))
+        .perform(
+            get("/api/projects/" + testProject.getId() + "/filePatterns/" + filePattern.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetFilePatternResponse.class))
         .andDo(
@@ -56,7 +57,7 @@ class GetFilePatternControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void getFilePatternReturnsErrorWhenNotFound() throws Exception {
     mvc()
-        .perform(get("/projects/0/filePatterns/2"))
+        .perform(get("/api/projects/0/filePatterns/2"))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")

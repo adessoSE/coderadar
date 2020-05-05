@@ -39,7 +39,7 @@ public class AnalyzingService
 
   private final Map<Long, Boolean> activeAnalysis = new ConcurrentHashMap<>();
 
-  private final Logger logger = LoggerFactory.getLogger(AnalyzingService.class);
+  private static final Logger logger = LoggerFactory.getLogger(AnalyzingService.class);
 
   public AnalyzingService(
       GetProjectPort getProjectPort,

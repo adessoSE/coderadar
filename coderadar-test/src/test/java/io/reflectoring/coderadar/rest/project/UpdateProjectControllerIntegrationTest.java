@@ -24,7 +24,6 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
-    testProject.setVcsEnd(new Date());
     testProject.setVcsStart(new Date());
     testProject.setVcsOnline(true);
     testProject.setVcsPassword("testPassword");
@@ -35,16 +34,10 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
 
     UpdateProjectCommand command =
         new UpdateProjectCommand(
-            "new-project-name",
-            "username",
-            "password",
-            "http://valid.url",
-            true,
-            new Date(),
-            new Date());
+            "new-project-name", "username", "password", "http://valid.url", true, new Date());
     mvc()
         .perform(
-            post("/projects/" + testProject.getId())
+            post("/api/projects/" + testProject.getId())
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
@@ -64,10 +57,12 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
   void updateProjectReturnsErrorWhenProjectDoesNotExist() throws Exception {
     UpdateProjectCommand command =
         new UpdateProjectCommand(
-            "name", "username", "password", "http://valid.url", true, new Date(), new Date());
+            "name", "username", "password", "http://valid.url", true, new Date());
     mvc()
         .perform(
-            post("/projects/1").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+            post("/api/projects/1")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
@@ -76,11 +71,12 @@ class UpdateProjectControllerIntegrationTest extends ControllerTestTemplate {
   @Test
   void updateProjectReturnsErrorWhenRequestIsInvalid() throws Exception {
     UpdateProjectCommand command =
-        new UpdateProjectCommand(
-            "", "username", "password", "http://valid.url", true, new Date(), new Date());
+        new UpdateProjectCommand("", "username", "password", "http://valid.url", true, new Date());
     mvc()
         .perform(
-            post("/projects/0").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
+            post("/api/projects/0")
+                .content(toJson(command))
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isBadRequest());
   }
 }

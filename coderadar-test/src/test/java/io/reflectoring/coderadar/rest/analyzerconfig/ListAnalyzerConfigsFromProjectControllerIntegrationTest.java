@@ -49,7 +49,7 @@ class ListAnalyzerConfigsFromProjectControllerIntegrationTest extends Controller
 
     // Test
     mvc()
-        .perform(get("/projects/" + testProject.getId() + "/analyzers"))
+        .perform(get("/api/projects/" + testProject.getId() + "/analyzers"))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(containsResource(GetAnalyzerConfigurationResponse[].class))
         .andExpect(
@@ -66,7 +66,7 @@ class ListAnalyzerConfigsFromProjectControllerIntegrationTest extends Controller
   @Test
   void listAnalyzerConfigurationsReturnsErrorWhenProjectNotFound() throws Exception {
     mvc()
-        .perform(get("/projects/1/analyzers"))
+        .perform(get("/api/projects/1/analyzers"))
         .andExpect(MockMvcResultMatchers.status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));

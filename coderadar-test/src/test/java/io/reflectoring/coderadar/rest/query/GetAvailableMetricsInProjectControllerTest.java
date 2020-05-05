@@ -36,12 +36,13 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
             "password",
             Objects.requireNonNull(testRepoURL).toString(),
             false,
-            null,
             null);
     MvcResult result =
         mvc()
             .perform(
-                post("/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command1)))
+                post("/api/projects")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(toJson(command1)))
             .andReturn();
 
     projectId = fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
@@ -50,7 +51,7 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/filePatterns")
+            post("/api/projects/" + projectId + "/filePatterns")
                 .content(toJson(command2))
                 .contentType(MediaType.APPLICATION_JSON));
   }
@@ -60,8 +61,8 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/metrics").contentType(MediaType.APPLICATION_JSON))
-            .andDo(document("metrics/list"))
+                get("/api/projects/" + projectId + "/metrics")
+                    .contentType(MediaType.APPLICATION_JSON))
             .andReturn();
 
     List<String> metrics =
@@ -77,19 +78,21 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
             "io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyzers")
+            post("/api/projects/" + projectId + "/analyzers")
                 .content(toJson(command3))
                 .contentType(MediaType.APPLICATION_JSON));
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/master/analyze")
+            post("/api/projects/" + projectId + "/master/analyze")
                 .contentType(MediaType.APPLICATION_JSON));
 
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/metrics").contentType(MediaType.APPLICATION_JSON))
+                get("/api/projects/" + projectId + "/metrics")
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andDo(document("metrics/list"))
             .andReturn();
 
     List<String> metrics =
@@ -110,19 +113,20 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
             true);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyzers")
+            post("/api/projects/" + projectId + "/analyzers")
                 .content(toJson(command3))
                 .contentType(MediaType.APPLICATION_JSON));
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/master/analyze")
+            post("/api/projects/" + projectId + "/master/analyze")
                 .contentType(MediaType.APPLICATION_JSON));
 
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/metrics").contentType(MediaType.APPLICATION_JSON))
+                get("/api/projects/" + projectId + "/metrics")
+                    .contentType(MediaType.APPLICATION_JSON))
             .andReturn();
 
     List<String> metrics =
@@ -131,9 +135,6 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
     Assertions.assertTrue(
         metrics.contains(
             "checkstyle:com.puppycrawl.tools.checkstyle.checks.coding.PackageDeclarationCheck"));
-    Assertions.assertTrue(
-        metrics.contains(
-            "checkstyle:com.puppycrawl.tools.checkstyle.checks.OuterTypeFilenameCheck"));
     Assertions.assertTrue(
         metrics.contains(
             "checkstyle:com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"));
@@ -173,7 +174,7 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
             true);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyzers")
+            post("/api/projects/" + projectId + "/analyzers")
                 .content(toJson(createAnalyzerConfigurationCommand))
                 .contentType(MediaType.APPLICATION_JSON));
 
@@ -182,19 +183,20 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
             "io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
     mvc()
         .perform(
-            post("/projects/" + projectId + "/analyzers")
+            post("/api/projects/" + projectId + "/analyzers")
                 .content(toJson(createAnalyzerConfigurationCommand1))
                 .contentType(MediaType.APPLICATION_JSON));
 
     mvc()
         .perform(
-            post("/projects/" + projectId + "/master/analyze")
+            post("/api/projects/" + projectId + "/master/analyze")
                 .contentType(MediaType.APPLICATION_JSON));
 
     MvcResult result =
         mvc()
             .perform(
-                get("/projects/" + projectId + "/metrics").contentType(MediaType.APPLICATION_JSON))
+                get("/api/projects/" + projectId + "/metrics")
+                    .contentType(MediaType.APPLICATION_JSON))
             .andReturn();
 
     List<String> metrics =
@@ -207,9 +209,6 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
     Assertions.assertTrue(
         metrics.contains(
             "checkstyle:com.puppycrawl.tools.checkstyle.checks.coding.PackageDeclarationCheck"));
-    Assertions.assertTrue(
-        metrics.contains(
-            "checkstyle:com.puppycrawl.tools.checkstyle.checks.OuterTypeFilenameCheck"));
     Assertions.assertTrue(
         metrics.contains(
             "checkstyle:com.puppycrawl.tools.checkstyle.checks.imports.ImportOrderCheck"));
@@ -245,7 +244,7 @@ class GetAvailableMetricsInProjectControllerTest extends ControllerTestTemplate 
   void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
     MvcResult result =
         mvc()
-            .perform(get("/projects/1234/metrics").contentType(MediaType.APPLICATION_JSON))
+            .perform(get("/api/projects/1234/metrics").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound())
             .andReturn();
 

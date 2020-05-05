@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.analyzing;
 
 import io.reflectoring.coderadar.analyzer.port.driver.ResetAnalysisUseCase;
+import io.reflectoring.coderadar.rest.AbstractBaseController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,9 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Transactional
-public class ResetAnalysisController {
+@RestController
+public class ResetAnalysisController implements AbstractBaseController {
   private final ResetAnalysisUseCase resetAnalysisUseCase;
 
   public ResetAnalysisController(ResetAnalysisUseCase resetAnalysisUseCase) {

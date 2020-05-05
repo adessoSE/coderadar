@@ -34,7 +34,7 @@ public class TreeTest extends ControllerTestTemplate {
 
   private Node root;
   private File f;
-  private final Logger logger = LoggerFactory.getLogger(TreeTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(TreeTest.class);
 
   @Autowired private DependencyTreeAdapter dependencyTree;
   @Autowired private DeleteLocalRepositoryPort deleteRepositoryPort;
@@ -60,7 +60,7 @@ public class TreeTest extends ControllerTestTemplate {
                   + testProject.getWorkdirName());
 
       mvc()
-          .perform(get("/analyzers/" + testProject.getId() + "/structureMap/" + commitName))
+          .perform(get("/api/analyzers/" + testProject.getId() + "/structureMap/" + commitName))
           .andExpect(MockMvcResultMatchers.status().isOk())
           .andExpect(containsResource(Node.class))
           .andDo(result -> root = fromJson(result.getResponse().getContentAsString(), Node.class));
