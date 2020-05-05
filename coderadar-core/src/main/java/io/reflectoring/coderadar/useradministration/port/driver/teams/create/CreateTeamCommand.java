@@ -13,10 +13,7 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
-public class CreateTeamForProjectCommand {
+public class CreateTeamCommand {
     @NotBlank private String name;
     private List<Long> userIds;
-
-    @NotNull
-    private ProjectRole role;
 }

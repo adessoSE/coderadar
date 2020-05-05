@@ -23,7 +23,7 @@ public class ListTeamsForUserService implements ListTeamsForUserUseCase {
     @Override
     public List<Team> listTeamsForUser(long userId) {
         if(getUserPort.existsById(userId)){
-            listTeamsForUserPort.listTeamsForUser(userId);
+            return listTeamsForUserPort.listTeamsForUser(userId);
         } else {
             throw new UserNotFoundException(userId);
         }
