@@ -8,8 +8,15 @@ import java.util.List;
 
 @Service
 public class ListUsersService implements ListUsersUseCase {
+
+    private final ListUsersService listUsersService;
+
+    public ListUsersService(ListUsersService listUsersService) {
+        this.listUsersService = listUsersService;
+    }
+
     @Override
     public List<User> listUsers() {
-        return null;
+        return listUsersService.listUsers();
     }
 }
