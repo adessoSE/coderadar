@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.rest.unit.user;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.rest.user.LoginUserController;
+import io.reflectoring.coderadar.rest.useradministration.LoginUserController;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserResponse;
 import io.reflectoring.coderadar.useradministration.port.driver.login.LoginUserUseCase;
