@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.useradministration;
 
+import static io.reflectoring.coderadar.rest.GetUserResponseMapper.mapUser;
+
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetUserResponse;
 import io.reflectoring.coderadar.useradministration.domain.User;
@@ -11,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-
-import static io.reflectoring.coderadar.rest.GetUserResponseMapper.mapUser;
 
 @RestController
 @Transactional

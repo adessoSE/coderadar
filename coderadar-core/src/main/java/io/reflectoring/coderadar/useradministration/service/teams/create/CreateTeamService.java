@@ -6,14 +6,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CreateTeamService implements CreateTeamPort {
-    private final CreateTeamPort createTeamPort;
+  private final CreateTeamPort createTeamPort;
 
-    public CreateTeamService(CreateTeamPort createTeamPort) {
-        this.createTeamPort = createTeamPort;
-    }
+  public CreateTeamService(CreateTeamPort createTeamPort) {
+    this.createTeamPort = createTeamPort;
+  }
 
-    @Override
-    public Long createTeam(CreateTeamCommand createTeamCommand) {
-        return createTeamPort.createTeam(createTeamCommand);
-    }
+  @Override
+  public Long createTeam(CreateTeamCommand createTeamCommand) {
+    return createTeamPort.createTeam(createTeamCommand);
+  }
 }

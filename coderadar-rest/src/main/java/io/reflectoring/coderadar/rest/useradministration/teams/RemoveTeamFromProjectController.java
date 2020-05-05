@@ -12,16 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Transactional
 public class RemoveTeamFromProjectController implements AbstractBaseController {
-    private final RemoveTeamFromProjectUseCase removeTeamFromProjectUseCase;
+  private final RemoveTeamFromProjectUseCase removeTeamFromProjectUseCase;
 
-    public RemoveTeamFromProjectController(RemoveTeamFromProjectUseCase removeTeamFromProjectUseCase) {
-        this.removeTeamFromProjectUseCase = removeTeamFromProjectUseCase;
-    }
+  public RemoveTeamFromProjectController(
+      RemoveTeamFromProjectUseCase removeTeamFromProjectUseCase) {
+    this.removeTeamFromProjectUseCase = removeTeamFromProjectUseCase;
+  }
 
-    // TODO: which http method should be used here?
-    @PostMapping(path = "/project/{projectId}/teams/{teamId}")
-    public ResponseEntity<HttpStatus> removeTeamFromProject(@PathVariable long projectId, @PathVariable long teamId) {
-        removeTeamFromProjectUseCase.removeTeam(teamId); // TODO: change signature of this method
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  // TODO: which http method should be used here?
+  @PostMapping(path = "/project/{projectId}/teams/{teamId}")
+  public ResponseEntity<HttpStatus> removeTeamFromProject(
+      @PathVariable long projectId, @PathVariable long teamId) {
+    removeTeamFromProjectUseCase.removeTeam(teamId); // TODO: change signature of this method
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }

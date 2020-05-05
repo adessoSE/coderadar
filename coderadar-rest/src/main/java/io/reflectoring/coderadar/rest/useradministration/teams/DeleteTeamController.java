@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Transactional
 public class DeleteTeamController implements AbstractBaseController {
-    private final DeleteTeamUseCase deleteTeamUseCase;
+  private final DeleteTeamUseCase deleteTeamUseCase;
 
-    public DeleteTeamController(DeleteTeamUseCase deleteTeamUseCase) {
-        this.deleteTeamUseCase = deleteTeamUseCase;
-    }
+  public DeleteTeamController(DeleteTeamUseCase deleteTeamUseCase) {
+    this.deleteTeamUseCase = deleteTeamUseCase;
+  }
 
-    @DeleteMapping(path = "/teams/{teamId}")
-    public ResponseEntity<HttpStatus> deleteTeam(@PathVariable long teamId) {
-        deleteTeamUseCase.deleteTeam(teamId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @DeleteMapping(path = "/teams/{teamId}")
+  public ResponseEntity<HttpStatus> deleteTeam(@PathVariable long teamId) {
+    deleteTeamUseCase.deleteTeam(teamId);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }

@@ -12,15 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Transactional
 public class AddTeamToProjectController implements AbstractBaseController {
-    private final AddTeamToProjectUseCase addTeamToProjectUseCase;
+  private final AddTeamToProjectUseCase addTeamToProjectUseCase;
 
-    public AddTeamToProjectController(AddTeamToProjectUseCase addTeamToProjectUseCase) {
-        this.addTeamToProjectUseCase = addTeamToProjectUseCase;
-    }
+  public AddTeamToProjectController(AddTeamToProjectUseCase addTeamToProjectUseCase) {
+    this.addTeamToProjectUseCase = addTeamToProjectUseCase;
+  }
 
-    @PostMapping(path = "/projects/{projectId}/teams/{teamId}")
-    public ResponseEntity<HttpStatus> addTeamToProject(@PathVariable long projectId, @PathVariable long teamId) {
-        addTeamToProjectUseCase.addTeamToProject(projectId, teamId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+  @PostMapping(path = "/projects/{projectId}/teams/{teamId}")
+  public ResponseEntity<HttpStatus> addTeamToProject(
+      @PathVariable long projectId, @PathVariable long teamId) {
+    addTeamToProjectUseCase.addTeamToProject(projectId, teamId);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }
