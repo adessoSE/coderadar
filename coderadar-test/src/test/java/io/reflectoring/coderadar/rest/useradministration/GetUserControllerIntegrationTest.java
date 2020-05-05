@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.user;
+package io.reflectoring.coderadar.rest.useradministration;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;

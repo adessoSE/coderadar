@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.user;
+package io.reflectoring.coderadar.rest.useradministration;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

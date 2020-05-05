@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.user;
+package io.reflectoring.coderadar.rest.useradministration;
 
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;

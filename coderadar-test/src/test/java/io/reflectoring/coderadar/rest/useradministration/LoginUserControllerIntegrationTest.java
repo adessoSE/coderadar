@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.user;
+package io.reflectoring.coderadar.rest.useradministration;
 
 import static org.hamcrest.Matchers.any;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;

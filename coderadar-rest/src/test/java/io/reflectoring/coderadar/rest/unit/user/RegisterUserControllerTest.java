@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.rest.unit.user;
 import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.rest.domain.IdResponse;
-import io.reflectoring.coderadar.rest.user.RegisterUserController;
+import io.reflectoring.coderadar.rest.useradministration.RegisterUserController;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.register.RegisterUserUseCase;
 import org.junit.jupiter.api.Assertions;
