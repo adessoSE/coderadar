@@ -7,4 +7,6 @@ public interface ListProjectsUseCase {
 
   /** @return All project currently saved in the database. */
   List<Project> listProjects();
+
+  List<Project> listProjectsForUser(long userId);
 }

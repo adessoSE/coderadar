@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.useradministration.port.driver.load;
+package io.reflectoring.coderadar.useradministration.port.driver.get;
 
 import io.reflectoring.coderadar.useradministration.domain.User;
 

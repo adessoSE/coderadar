@@ -5,7 +5,7 @@ import static org.mockito.Mockito.when;
 
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
-import io.reflectoring.coderadar.useradministration.service.load.GetUserService;
+import io.reflectoring.coderadar.useradministration.service.get.GetUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

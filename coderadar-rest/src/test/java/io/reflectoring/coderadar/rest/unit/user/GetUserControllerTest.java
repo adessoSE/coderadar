@@ -5,7 +5,7 @@ import static org.mockito.Mockito.mock;
 import io.reflectoring.coderadar.rest.domain.GetUserResponse;
 import io.reflectoring.coderadar.rest.user.GetUserController;
 import io.reflectoring.coderadar.useradministration.domain.User;
-import io.reflectoring.coderadar.useradministration.port.driver.load.GetUserUseCase;
+import io.reflectoring.coderadar.useradministration.port.driver.get.GetUserUseCase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

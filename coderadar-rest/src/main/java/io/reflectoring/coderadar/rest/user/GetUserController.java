@@ -2,7 +2,7 @@ package io.reflectoring.coderadar.rest.user;
 
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetUserResponse;
-import io.reflectoring.coderadar.useradministration.port.driver.load.GetUserUseCase;
+import io.reflectoring.coderadar.useradministration.port.driver.get.GetUserUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
