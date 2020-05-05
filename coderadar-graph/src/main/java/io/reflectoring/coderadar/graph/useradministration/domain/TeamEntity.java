@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.graph.useradministration.domain;
 
-import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +15,4 @@ public class TeamEntity {
 
   @Relationship(value = "IS_IN", direction = Relationship.INCOMING)
   private List<UserEntity> members;
-
-  private ProjectRole role;
 }

@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.graph.useradministration.repository;
 
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
+import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.lang.NonNull;
@@ -36,4 +37,11 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
    */
   @Query("MATCH (u) WHERE ID(u) = {0} RETURN COUNT(u) > 0")
   boolean existsById(long id);
+
+  /**
+   * @param userIds The user ids.
+   * @return All users matching the given ids.
+   */
+  @Query("MATCH (u) WHERE ID(u) IN {0} RETURN DISTINCT u")
+  List<UserEntity> findAllByIds(List<Long> userIds);
 }
