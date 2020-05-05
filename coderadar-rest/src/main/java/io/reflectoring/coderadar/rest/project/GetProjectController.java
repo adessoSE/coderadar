@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import static io.reflectoring.coderadar.rest.GetProjectResponseMapper.mapProject;
+
 @Transactional
 @RestController
 public class GetProjectController implements AbstractBaseController {
@@ -24,13 +26,7 @@ public class GetProjectController implements AbstractBaseController {
   @GetMapping(path = "/projects/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<GetProjectResponse> getProject(@PathVariable long projectId) {
     Project project = getProjectUseCase.get(projectId);
-    GetProjectResponse getProjectResponse = new GetProjectResponse();
-    getProjectResponse.setName(project.getName());
-    getProjectResponse.setId(project.getId());
-    getProjectResponse.setVcsUsername(project.getVcsUsername());
-    getProjectResponse.setStartDate(project.getVcsStart());
-    getProjectResponse.setVcsUrl(project.getVcsUrl());
-    getProjectResponse.setVcsOnline(project.isVcsOnline());
+    GetProjectResponse getProjectResponse = mapProject(project);
     return new ResponseEntity<>(getProjectResponse, HttpStatus.OK);
   }
 }

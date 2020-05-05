@@ -23,7 +23,7 @@ class GetUserControllerTest {
     Mockito.when(getUserUseCase.getUser(1L))
         .thenReturn(new User().setUsername("username").setId(1L));
 
-    ResponseEntity<GetUserResponse> responseEntity = testSubject.loadUser(1L);
+    ResponseEntity<GetUserResponse> responseEntity = testSubject.getUser(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     Assertions.assertEquals("username", responseEntity.getBody().getUsername());

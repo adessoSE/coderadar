@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static io.reflectoring.coderadar.rest.GetProjectResponseMapper.mapProjects;
+
 @Transactional
 @RestController
 public class ListProjectsController implements AbstractBaseController {
@@ -25,17 +27,6 @@ public class ListProjectsController implements AbstractBaseController {
   @GetMapping(path = "/projects", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetProjectResponse>> listProjects() {
     List<Project> projects = listProjectsUseCase.listProjects();
-    List<GetProjectResponse> responses = new ArrayList<>(projects.size());
-    for (Project project : projects) {
-      responses.add(
-          new GetProjectResponse()
-              .setName(project.getName())
-              .setId(project.getId())
-              .setStartDate(project.getVcsStart())
-              .setVcsOnline(project.isVcsOnline())
-              .setVcsUrl(project.getVcsUrl())
-              .setVcsUsername(project.getVcsUsername()));
-    }
-    return new ResponseEntity<>(responses, HttpStatus.OK);
+    return new ResponseEntity<>(mapProjects(projects), HttpStatus.OK);
   }
 }
