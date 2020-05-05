@@ -1,9 +1,8 @@
 package io.reflectoring.coderadar.projectadministration.domain;
 
+import io.reflectoring.coderadar.useradministration.domain.Team;
 import java.util.Date;
 import java.util.List;
-
-import io.reflectoring.coderadar.useradministration.domain.Team;
 import lombok.Data;
 
 /** A Coderadar project that defines the source of files that are to be analyzed. */

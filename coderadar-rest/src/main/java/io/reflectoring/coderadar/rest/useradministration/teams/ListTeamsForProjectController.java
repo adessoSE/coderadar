@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Transactional
 public class ListTeamsForProjectController implements AbstractBaseController {
-    private final ListTeamsForProjectUseCase listTeamsForProjectUseCase;
+  private final ListTeamsForProjectUseCase listTeamsForProjectUseCase;
 
-    public ListTeamsForProjectController(ListTeamsForProjectUseCase listTeamsForProjectUseCase) {
-        this.listTeamsForProjectUseCase = listTeamsForProjectUseCase;
-    }
+  public ListTeamsForProjectController(ListTeamsForProjectUseCase listTeamsForProjectUseCase) {
+    this.listTeamsForProjectUseCase = listTeamsForProjectUseCase;
+  }
 }

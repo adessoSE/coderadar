@@ -12,24 +12,27 @@ import org.springframework.stereotype.Service;
 @Service
 public class SetUserRoleForProjectService implements SetUserRoleForProjectUseCase {
 
-    private final GetProjectPort getProjectPort;
-    private final GetUserPort getUserPort;
-    private final SetUserRoleForProjectPort setUserRoleForProjectPort;
+  private final GetProjectPort getProjectPort;
+  private final GetUserPort getUserPort;
+  private final SetUserRoleForProjectPort setUserRoleForProjectPort;
 
-    public SetUserRoleForProjectService(GetProjectPort getProjectPort, GetUserPort getUserPort, SetUserRoleForProjectPort setUserRoleForProjectPort) {
-        this.getProjectPort = getProjectPort;
-        this.getUserPort = getUserPort;
-        this.setUserRoleForProjectPort = setUserRoleForProjectPort;
-    }
+  public SetUserRoleForProjectService(
+      GetProjectPort getProjectPort,
+      GetUserPort getUserPort,
+      SetUserRoleForProjectPort setUserRoleForProjectPort) {
+    this.getProjectPort = getProjectPort;
+    this.getUserPort = getUserPort;
+    this.setUserRoleForProjectPort = setUserRoleForProjectPort;
+  }
 
-    @Override
-    public void setRole(long projectId, long userId, ProjectRole role) {
-        if(!getProjectPort.existsById(projectId)){
-            throw new ProjectNotFoundException(projectId);
-        }
-        if(!getUserPort.existsById(userId)) {
-            throw new UserNotFoundException(userId);
-        }
-        setUserRoleForProjectPort.setRole(projectId, userId, role);
+  @Override
+  public void setRole(long projectId, long userId, ProjectRole role) {
+    if (!getProjectPort.existsById(projectId)) {
+      throw new ProjectNotFoundException(projectId);
     }
+    if (!getUserPort.existsById(userId)) {
+      throw new UserNotFoundException(userId);
+    }
+    setUserRoleForProjectPort.setRole(projectId, userId, role);
+  }
 }

@@ -4,9 +4,9 @@ import io.reflectoring.coderadar.useradministration.domain.Team;
 
 public interface GetTeamUseCase {
 
-    /**
-     * @param teamId The team id.
-     * @return The team with the given id.
-     */
-    Team get(long teamId);
+  /**
+   * @param teamId The team id.
+   * @return The team with the given id.
+   */
+  Team get(long teamId);
 }

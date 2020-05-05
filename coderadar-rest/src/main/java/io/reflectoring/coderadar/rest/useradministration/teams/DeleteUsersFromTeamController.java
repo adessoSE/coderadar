@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Transactional
-public class DeleteUsersFromTeamController  implements AbstractBaseController {
-    private final DeleteUsersFromTeamUseCase deleteUsersFromTeamUseCase;
+public class DeleteUsersFromTeamController implements AbstractBaseController {
+  private final DeleteUsersFromTeamUseCase deleteUsersFromTeamUseCase;
 
-    public DeleteUsersFromTeamController(DeleteUsersFromTeamUseCase deleteUsersFromTeamUseCase) {
-        this.deleteUsersFromTeamUseCase = deleteUsersFromTeamUseCase;
-    }
+  public DeleteUsersFromTeamController(DeleteUsersFromTeamUseCase deleteUsersFromTeamUseCase) {
+    this.deleteUsersFromTeamUseCase = deleteUsersFromTeamUseCase;
+  }
 }

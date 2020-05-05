@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Transactional
 public class ListProjectsForUserController implements AbstractBaseController {
-    private final ListProjectsForUserUseCase listProjectsForUserUseCase;
+  private final ListProjectsForUserUseCase listProjectsForUserUseCase;
 
-    public ListProjectsForUserController(ListProjectsForUserUseCase listProjectsForUserUseCase) {
-        this.listProjectsForUserUseCase = listProjectsForUserUseCase;
-    }
+  public ListProjectsForUserController(ListProjectsForUserUseCase listProjectsForUserUseCase) {
+    this.listProjectsForUserUseCase = listProjectsForUserUseCase;
+  }
 }

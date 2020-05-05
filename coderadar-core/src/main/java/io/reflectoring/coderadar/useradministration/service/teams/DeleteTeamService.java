@@ -9,20 +9,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeleteTeamService implements DeleteTeamUseCase {
 
-    private final GetTeamPort getTeamPort;
-    private final DeleteTeamPort deleteTeamPort;
+  private final GetTeamPort getTeamPort;
+  private final DeleteTeamPort deleteTeamPort;
 
-    public DeleteTeamService(GetTeamPort getTeamPort, DeleteTeamPort deleteTeamPort) {
-        this.getTeamPort = getTeamPort;
-        this.deleteTeamPort = deleteTeamPort;
-    }
+  public DeleteTeamService(GetTeamPort getTeamPort, DeleteTeamPort deleteTeamPort) {
+    this.getTeamPort = getTeamPort;
+    this.deleteTeamPort = deleteTeamPort;
+  }
 
-    @Override
-    public void deleteTeam(long teamId) {
-        if(getTeamPort.existsById(teamId)){
-            deleteTeamPort.deleteTeam(teamId);
-        } else {
-            throw new TeamNotFoundException(teamId);
-        }
+  @Override
+  public void deleteTeam(long teamId) {
+    if (getTeamPort.existsById(teamId)) {
+      deleteTeamPort.deleteTeam(teamId);
+    } else {
+      throw new TeamNotFoundException(teamId);
     }
+  }
 }

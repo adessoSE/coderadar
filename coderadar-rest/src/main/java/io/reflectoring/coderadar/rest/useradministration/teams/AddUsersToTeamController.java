@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Transactional
 public class AddUsersToTeamController implements AbstractBaseController {
-    private final AddUsersToTeamUseCase addUsersToTeamUseCase;
+  private final AddUsersToTeamUseCase addUsersToTeamUseCase;
 
-    public AddUsersToTeamController(AddUsersToTeamUseCase addUsersToTeamUseCase) {
-        this.addUsersToTeamUseCase = addUsersToTeamUseCase;
-    }
+  public AddUsersToTeamController(AddUsersToTeamUseCase addUsersToTeamUseCase) {
+    this.addUsersToTeamUseCase = addUsersToTeamUseCase;
+  }
 }

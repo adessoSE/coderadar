@@ -11,24 +11,27 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeleteUserRoleForProjectService implements DeleteUserRoleForProjectUseCase {
 
-    private final GetProjectPort getProjectPort;
-    private final GetUserPort getUserPort;
-    private final DeleteUserRoleForProjectPort deleteUserRoleForProjectPort;
+  private final GetProjectPort getProjectPort;
+  private final GetUserPort getUserPort;
+  private final DeleteUserRoleForProjectPort deleteUserRoleForProjectPort;
 
-    public DeleteUserRoleForProjectService(GetProjectPort getProjectPort, GetUserPort getUserPort, DeleteUserRoleForProjectPort deleteUserRoleForProjectPort) {
-        this.getProjectPort = getProjectPort;
-        this.getUserPort = getUserPort;
-        this.deleteUserRoleForProjectPort = deleteUserRoleForProjectPort;
-    }
+  public DeleteUserRoleForProjectService(
+      GetProjectPort getProjectPort,
+      GetUserPort getUserPort,
+      DeleteUserRoleForProjectPort deleteUserRoleForProjectPort) {
+    this.getProjectPort = getProjectPort;
+    this.getUserPort = getUserPort;
+    this.deleteUserRoleForProjectPort = deleteUserRoleForProjectPort;
+  }
 
-    @Override
-    public void deleteRole(long projectId, long userId) {
-        if(!getProjectPort.existsById(projectId)){
-            throw new ProjectNotFoundException(projectId);
-        }
-        if(!getUserPort.existsById(userId)) {
-            throw new UserNotFoundException(userId);
-        }
-        deleteUserRoleForProjectPort.deleteRole(projectId, userId);
+  @Override
+  public void deleteRole(long projectId, long userId) {
+    if (!getProjectPort.existsById(projectId)) {
+      throw new ProjectNotFoundException(projectId);
     }
+    if (!getUserPort.existsById(userId)) {
+      throw new UserNotFoundException(userId);
+    }
+    deleteUserRoleForProjectPort.deleteRole(projectId, userId);
+  }
 }

@@ -2,15 +2,14 @@ package io.reflectoring.coderadar.graph.projectadministration.domain;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /** @see io.reflectoring.coderadar.projectadministration.domain.Project */
 @NodeEntity

@@ -9,19 +9,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class AddTeamToProjectService implements AddTeamToProjectUseCase {
 
-    private final GetProjectPort getProjectPort;
-    private final AddTeamToProjectPort addTeamToProjectPort;
+  private final GetProjectPort getProjectPort;
+  private final AddTeamToProjectPort addTeamToProjectPort;
 
-    public AddTeamToProjectService(GetProjectPort getProjectPort, AddTeamToProjectPort addTeamToProjectPort) {
-        this.getProjectPort = getProjectPort;
-        this.addTeamToProjectPort = addTeamToProjectPort;
-    }
+  public AddTeamToProjectService(
+      GetProjectPort getProjectPort, AddTeamToProjectPort addTeamToProjectPort) {
+    this.getProjectPort = getProjectPort;
+    this.addTeamToProjectPort = addTeamToProjectPort;
+  }
 
-    @Override
-    public void addTeamToProject(long projectId, long teamId) {
-        if(!getProjectPort.existsById(projectId)){
-            throw new ProjectNotFoundException(projectId);
-        }
-        addTeamToProjectPort.addTeamToProject(projectId, teamId);
+  @Override
+  public void addTeamToProject(long projectId, long teamId) {
+    if (!getProjectPort.existsById(projectId)) {
+      throw new ProjectNotFoundException(projectId);
     }
+    addTeamToProjectPort.addTeamToProject(projectId, teamId);
+  }
 }
