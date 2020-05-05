@@ -36,6 +36,13 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
             projectId, branch, includesAndExcludes.getFirst(), includesAndExcludes.getSecond()));
   }
 
+  @Override
+  public List<Commit> getCommitsForContributorSortedByTimestampDescWithNoRelationships(
+      long projectId, String branchName, String email) {
+    return commitBaseDataMapper.mapNodeEntities(
+        commitRepository.findByProjectIdBranchNameAndContributor(projectId, branchName, email));
+  }
+
   /**
    * Maps a list of commit entities to Commit domain objects. Does not map parent relationships and
    * does not set attributes on FileToCommitRelationships.

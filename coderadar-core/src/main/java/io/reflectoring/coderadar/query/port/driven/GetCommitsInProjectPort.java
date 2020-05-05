@@ -25,4 +25,16 @@ public interface GetCommitsInProjectPort {
    */
   List<Commit> getNonAnalyzedSortedByTimestampAscWithNoParents(
       long projectId, List<FilePattern> filePatterns, String branch);
+
+  /**
+   * Returns all commits in a project/branch for a contributor without initializing any
+   * relationships.
+   *
+   * @param projectId The project id.
+   * @param branchName The branch name.
+   * @param email The email of the contributor.
+   * @return A list of commit domain objects with no relationships.
+   */
+  List<Commit> getCommitsForContributorSortedByTimestampDescWithNoRelationships(
+      long projectId, String branchName, String email);
 }

@@ -15,12 +15,12 @@ v{version}, {date}
 This guide is intended for administrators and developers who want to get a Coderadar server up and running.
 
 == Getting coderadar up and running
-A Coderadar distribution contains a WAR (Java Web Archive) file and a properties
+A Coderadar distribution contains a JAR file and a properties
 file that contains the default configuration.
 
 === Configuration Parameters
 
-Coderadar can be configured by adjusting the parameters in the local.application.properties file (either before jar-packaging or by supplying the file alongside the jar).
+Coderadar can be configured by adjusting the parameters in the application.properties file (either before jar-packaging or by supplying the file alongside the jar).
 
 ==== Configuring the scan interval
 
@@ -68,6 +68,9 @@ The log file's path can be adjusted with the following property:
 
 ==== Configuring the database connection
 
+Coderadar works with Neo4j version 3.5.* and requires the APOC plugin to be installed.
+The easiest way to quickly configure a local Neo4j instance is by using Neo4j Desktop.
+
 The credentials for the Neo4j database instance can be configured with the following properties:
 
 `spring.data.neo4j.username=neo4j`
@@ -76,13 +79,11 @@ The credentials for the Neo4j database instance can be configured with the follo
 === Starting Coderadar
 
 Starting Coderadar requires a running Neo4j instance on port 7687.
-Coderadar works with Neo4j version 3.5.* and requires the APOC plugin to be installed.
-The easiest way to quickly configure a local Neo4j instance is by using Neo4j Desktop.
-
 Once started, the Coderadar REST-API will be available on port 8080.
+If the jar contains the coderadar UI, it will also be available on port 8080.
 For more information on it, have a look at the REST-API documentation:
 
-https://reflectoring.github.io/coderadar/current/docs/restapi.html
+https://adessoag.github.io/coderadar/current/docs/restapi.html
 
 === Starting the Coderadar UI
 

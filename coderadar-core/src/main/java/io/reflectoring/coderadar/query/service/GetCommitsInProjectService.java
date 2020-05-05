@@ -28,4 +28,15 @@ public class GetCommitsInProjectService implements GetCommitsInProjectUseCase {
       throw new ProjectNotFoundException(projectId);
     }
   }
+
+  @Override
+  public List<Commit> getForContributor(long projectId, String branchName, String email) {
+    if (getProjectPort.existsById(projectId)) {
+      return getCommitsInProjectPort
+          .getCommitsForContributorSortedByTimestampDescWithNoRelationships(
+              projectId, branchName, email);
+    } else {
+      throw new ProjectNotFoundException(projectId);
+    }
+  }
 }
