@@ -1,8 +1,9 @@
 package io.reflectoring.coderadar.rest.useradministration.teams;
 
 import io.reflectoring.coderadar.rest.AbstractBaseController;
+import io.reflectoring.coderadar.rest.JsonListWrapper;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.DeleteUsersFromTeamUseCase;
-import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,8 @@ public class DeleteUsersFromTeamController implements AbstractBaseController {
 
   @DeleteMapping(path = "/teams/{teamId}/users", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<HttpStatus> deleteUsersFromTeam(
-      @PathVariable long teamId, @RequestBody List<Long> userIds) {
-    deleteUsersFromTeamUseCase.deleteUsersFromTeam(teamId, userIds);
+      @PathVariable long teamId, @RequestBody JsonListWrapper<Long> userIds) {
+    deleteUsersFromTeamUseCase.deleteUsersFromTeam(teamId, userIds.getElements());
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }
