@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectRoleJsonWrapper {
+public class ProjectRoleJsonWrapper { // TODO: create validator for input validation in controllers
   private ProjectRole role;
 }
