@@ -1,6 +1,6 @@
-package io.reflectoring.coderadar.useradministration.port.driven;
+package io.reflectoring.coderadar.useradministration.port.driver.permissions;
 
-public interface DeleteUserRoleForProjectPort {
+public interface RemoveUserFromProjectUseCase {
 
   /**
    * Removes the role a given user has to a project. If the user is not in any team with access to
@@ -9,5 +9,5 @@ public interface DeleteUserRoleForProjectPort {
    * @param projectId The id of the project.
    * @param userId The id of the user.
    */
-  void deleteRole(long projectId, long userId);
+  void removeUserFromProject(long projectId, long userId);
 }
