@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.analyzerconfig;
 
+import static io.reflectoring.coderadar.rest.GetAnalyzerConfigurationResponseMapper.mapAnalyzerConfiguration;
+
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.GetAnalyzerConfigurationUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
@@ -29,11 +31,6 @@ public class GetAnalyzerConfigurationController implements AbstractBaseControlle
       @PathVariable long analyzerConfigurationId) {
     AnalyzerConfiguration analyzerConfiguration =
         getAnalyzerConfigurationUseCase.getAnalyzerConfiguration(analyzerConfigurationId);
-    return new ResponseEntity<>(
-        new GetAnalyzerConfigurationResponse(
-            analyzerConfiguration.getId(),
-            analyzerConfiguration.getAnalyzerName(),
-            analyzerConfiguration.isEnabled()),
-        HttpStatus.OK);
+    return new ResponseEntity<>(mapAnalyzerConfiguration(analyzerConfiguration), HttpStatus.OK);
   }
 }

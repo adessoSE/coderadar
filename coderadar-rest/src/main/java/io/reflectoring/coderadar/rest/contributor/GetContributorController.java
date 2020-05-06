@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.contributor;
 
-import io.reflectoring.coderadar.contributor.domain.Contributor;
+import static io.reflectoring.coderadar.rest.GetContributorResponseMapper.mapContributor;
+
 import io.reflectoring.coderadar.contributor.port.driver.GetContributorUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetContributorResponse;
@@ -22,14 +23,6 @@ public class GetContributorController implements AbstractBaseController {
 
   @GetMapping(path = "/contributors/{id}")
   public ResponseEntity<GetContributorResponse> getById(@PathVariable long id) {
-    return new ResponseEntity<>(map(getContributorUseCase.getById(id)), HttpStatus.OK);
-  }
-
-  private GetContributorResponse map(Contributor contributor) {
-    return new GetContributorResponse(
-        contributor.getId(),
-        contributor.getDisplayName(),
-        contributor.getNames(),
-        contributor.getEmailAddresses());
+    return new ResponseEntity<>(mapContributor(getContributorUseCase.getById(id)), HttpStatus.OK);
   }
 }

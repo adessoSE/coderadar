@@ -1,10 +1,11 @@
 package io.reflectoring.coderadar.rest.branch;
 
+import static io.reflectoring.coderadar.rest.GetBranchResponseMapper.mapBranches;
+
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.port.driver.branch.list.ListBranchesUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetBranchResponse;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,10 +27,6 @@ public class ListBranchesController implements AbstractBaseController {
   @GetMapping(path = "/projects/{projectId}/branches", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetBranchResponse>> listBranches(@PathVariable long projectId) {
     List<Branch> branches = listBranchesUseCase.listBranchesInProject(projectId);
-    List<GetBranchResponse> responses = new ArrayList<>(branches.size());
-    for (Branch branch : branches) {
-      responses.add(new GetBranchResponse(branch.getName(), branch.getCommitHash()));
-    }
-    return new ResponseEntity<>(responses, HttpStatus.OK);
+    return new ResponseEntity<>(mapBranches(branches), HttpStatus.OK);
   }
 }
