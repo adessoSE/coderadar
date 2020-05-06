@@ -3,35 +3,35 @@ package io.reflectoring.coderadar.useradministration.service.permissions;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
-import io.reflectoring.coderadar.useradministration.port.driven.DeleteUserRoleForProjectPort;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
-import io.reflectoring.coderadar.useradministration.port.driver.permissions.DeleteUserRoleForProjectUseCase;
+import io.reflectoring.coderadar.useradministration.port.driven.RemoveUserFromProjectPort;
+import io.reflectoring.coderadar.useradministration.port.driver.permissions.RemoveUserFromProjectUseCase;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DeleteUserRoleForProjectService implements DeleteUserRoleForProjectUseCase {
+public class RemoveUserFromProjectService implements RemoveUserFromProjectUseCase {
 
   private final GetProjectPort getProjectPort;
   private final GetUserPort getUserPort;
-  private final DeleteUserRoleForProjectPort deleteUserRoleForProjectPort;
+  private final RemoveUserFromProjectPort removeUserFromProjectPort;
 
-  public DeleteUserRoleForProjectService(
+  public RemoveUserFromProjectService(
       GetProjectPort getProjectPort,
       GetUserPort getUserPort,
-      DeleteUserRoleForProjectPort deleteUserRoleForProjectPort) {
+      RemoveUserFromProjectPort removeUserFromProjectPort) {
     this.getProjectPort = getProjectPort;
     this.getUserPort = getUserPort;
-    this.deleteUserRoleForProjectPort = deleteUserRoleForProjectPort;
+    this.removeUserFromProjectPort = removeUserFromProjectPort;
   }
 
   @Override
-  public void deleteRole(long projectId, long userId) {
+  public void removeUserFromProject(long projectId, long userId) {
     if (!getProjectPort.existsById(projectId)) {
       throw new ProjectNotFoundException(projectId);
     }
     if (!getUserPort.existsById(userId)) {
       throw new UserNotFoundException(userId);
     }
-    deleteUserRoleForProjectPort.deleteRole(projectId, userId);
+    removeUserFromProjectPort.removeUserFromProject(projectId, userId);
   }
 }

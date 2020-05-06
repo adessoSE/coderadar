@@ -1,20 +1,20 @@
 package io.reflectoring.coderadar.graph.useradministration.adapter.permissions;
 
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
-import io.reflectoring.coderadar.useradministration.port.driven.DeleteUserRoleForProjectPort;
+import io.reflectoring.coderadar.useradministration.port.driven.RemoveUserFromProjectPort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DeleteUserRoleForProjectAdapter implements DeleteUserRoleForProjectPort {
+public class RemoveUserFromProjectAdapter implements RemoveUserFromProjectPort {
 
   private final UserRepository userRepository;
 
-  public DeleteUserRoleForProjectAdapter(UserRepository userRepository) {
+  public RemoveUserFromProjectAdapter(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
   @Override
-  public void deleteRole(long projectId, long userId) {
+  public void removeUserFromProject(long projectId, long userId) {
     userRepository.removeUserRoleFromProject(projectId, userId);
   }
 }

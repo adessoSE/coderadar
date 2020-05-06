@@ -103,11 +103,11 @@ include::{snippets}/user/registration/http-response.adoc[]
 
 ===== Example Request
 
-include::{snippets}/user/get/http-request.adoc[]
+include::{snippets}/users/get/http-request.adoc[]
 
 ===== Example Response
 
-include::{snippets}/user/get/http-response.adoc[]
+include::{snippets}/users/get/http-response.adoc[]
 
 ==== Login
 anchor:login[]
