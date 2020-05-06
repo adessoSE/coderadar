@@ -2187,9 +2187,9 @@ table.tableblock.grid-all {
 </li>
 <li><a href="#_analyzing_job">3.6. Analyzing Job</a>
 <ul class="sectlevel3">
-<li><a href="#_starting_an_analyzing_job">3.6.1. Starting an Analyzing Job</a></li>
-<li><a href="#_retrieving_an_analyzing_job_status">3.6.2. Retrieving an Analyzing Job status</a></li>
-<li><a href="#_resetting_an_analyzing_job">3.6.3. Resetting an Analyzing Job</a></li>
+<li><a href="#_starting_an_analysis">3.6.1. Starting an Analysis</a></li>
+<li><a href="#_retrieving_an_analysis_status">3.6.2. Retrieving an Analysis status</a></li>
+<li><a href="#_resetting_an_analysis_deleting_analysis_results">3.6.3. Resetting an Analysis/Deleting Analysis results</a></li>
 </ul>
 </li>
 </ul>
@@ -2584,8 +2584,8 @@ Content-Type: application/json
 Content-Length: 462
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODg3NTQ2MTEsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1ODg3NTM3MTEsInVzZXJJZCI6IjE0OCIsInVzZXJuYW1lIjoidXNlcm5hbWUifQ.5S0H05X6S5pVtn6rBEli9n2Us3DmXNcPtvvdZukZ2tQ",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTM5Mzc3MTEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTg4NzUzNzExLCJ1c2VySWQiOiIxNDgiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.127SWEU444wNB1Rulwuffz-1kkr5DMNixhkuNoDRjL4"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODg3NTUzMDAsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1ODg3NTQ0MDAsInVzZXJJZCI6IjE0OCIsInVzZXJuYW1lIjoidXNlcm5hbWUifQ.aJjZOXpIlHRfAkUfFJ5fM0cD6ErEfatsFAqxGHSgms8",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTM5Mzg0MDAsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTg4NzU0NDAwLCJ1c2VySWQiOiIxNDgiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.EOG4h0NTvq_c7yNJmkpaXwnQO6Oe2y9VxMtH5k8Fgp4"
 }</code></pre>
 </div>
 </div>
@@ -2637,8 +2637,8 @@ Content-Length: 448
 Host: localhost:8080
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODg3NTI4NzAsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1ODg3NTE5NzAsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.MSFWQG4EElD8OYYfZLlB-31LaGpLNjmvq9q22ygJ7lg",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTM5Mzc3MTAsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTg4NzUzNzEwLCJ1c2VySWQiOiIxMzkiLCJ1c2VybmFtZSI6InJhZGFyIn0.ogE9n7NOol7Zr62NMMNRjtqehH0sDUNYqFtHc7_ktII"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODg3NTM1NTksInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1ODg3NTI2NTksInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.JV77feQ1iB-CAeabXQALZyn9bbn00IykTp_KH68R8fg",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTM5MzgzOTksInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTg4NzU0Mzk5LCJ1c2VySWQiOiIxMzkiLCJ1c2VybmFtZSI6InJhZGFyIn0.ww4Pvn_ckTFXTKhmV8Azd7iJKuztgFSmyycuaiBk_60"
 }</code></pre>
 </div>
 </div>
@@ -2652,7 +2652,7 @@ Content-Type: application/json
 Content-Length: 221
 
 {
-  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODg3NTQ2MTAsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1ODg3NTM3MTAsInVzZXJJZCI6IjEzOSIsInVzZXJuYW1lIjoicmFkYXIifQ.zFu1aZPlnGxmC3EpGg5l7KSEIxsPtAGNr7YhwTBboOw"
+  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1ODg3NTUyOTksInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1ODg3NTQzOTksInVzZXJJZCI6IjEzOSIsInVzZXJuYW1lIjoicmFkYXIifQ.A4fsmL_2dw3RO6mXccUAolOK9CJbWIdivvk8saCmAtQ"
 }</code></pre>
 </div>
 </div>
@@ -2705,7 +2705,7 @@ Content-Length: 267
 Host: localhost:8080
 
 {
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTM5Mzc3MTEsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTg4NzUzNzExLCJ1c2VySWQiOiIxNDMiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.8SQQVL7gYCYbJacbi7VHwElreJKCJEWsdCg2Fg-GoxU",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTM5Mzg0MDAsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTg4NzU0NDAwLCJ1c2VySWQiOiIxNDMiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.1i-hz6BkW_7ySAgi6csxnIFliE0RPABQ8r9-m1Zmskc",
   "newPassword" : "newPassword1"
 }</code></pre>
 </div>
@@ -2943,7 +2943,7 @@ Content-Length: 438
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
   "vcsOnline" : true,
-  "startDate" : "2020-05-06T08:28:32.465+0000",
+  "startDate" : "2020-05-06T08:40:01.390+0000",
   "endDate" : null
 }, {
   "id" : 154,
@@ -2952,7 +2952,7 @@ Content-Length: 438
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
   "vcsOnline" : true,
-  "startDate" : "2020-05-06T08:28:32.465+0000",
+  "startDate" : "2020-05-06T08:40:01.390+0000",
   "endDate" : null
 } ]</code></pre>
 </div>
@@ -2976,7 +2976,7 @@ Host: localhost:8080
   "vcsPassword" : "password",
   "vcsUrl" : "http://valid.url",
   "vcsOnline" : true,
-  "startDate" : 1588753720850
+  "startDate" : 1588754408872
 }</code></pre>
 </div>
 </div>
@@ -3016,7 +3016,7 @@ Content-Length: 216
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
   "vcsOnline" : true,
-  "startDate" : "2020-05-06T08:28:32.857+0000",
+  "startDate" : "2020-05-06T08:40:01.738+0000",
   "endDate" : null
 }</code></pre>
 </div>
@@ -3605,10 +3605,10 @@ Content-Length: 65
 <h3 id="_analyzing_job"><a class="link" href="#_analyzing_job">3.6. Analyzing Job</a></h3>
 <div class="paragraph">
 <p>An analysis can be started for a project in coderadar. By default a Project&#8217;s codebase is not analyzed.
-To analyze the codebase an Analyzing Job has to be executed.</p>
+To analyze the codebase an analysis has to be triggered.</p>
 </div>
 <div class="sect3">
-<h4 id="_starting_an_analyzing_job"><a class="link" href="#_starting_an_analyzing_job">3.6.1. Starting an Analyzing Job</a></h4>
+<h4 id="_starting_an_analysis"><a class="link" href="#_starting_an_analysis">3.6.1. Starting an Analysis</a></h4>
 <div class="paragraph">
 <p><a id="start-analysis"></a></p>
 </div>
@@ -3632,7 +3632,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_retrieving_an_analyzing_job_status"><a class="link" href="#_retrieving_an_analyzing_job_status">3.6.2. Retrieving an Analyzing Job status</a></h4>
+<h4 id="_retrieving_an_analysis_status"><a class="link" href="#_retrieving_an_analysis_status">3.6.2. Retrieving an Analysis status</a></h4>
 <div class="sect4">
 <h5 id="_example_request_27"><a class="link" href="#_example_request_27">Example Request</a></h5>
 <div class="listingblock">
@@ -3658,7 +3658,7 @@ Content-Length: 22
 </div>
 </div>
 <div class="sect3">
-<h4 id="_resetting_an_analyzing_job"><a class="link" href="#_resetting_an_analyzing_job">3.6.3. Resetting an Analyzing Job</a></h4>
+<h4 id="_resetting_an_analysis_deleting_analysis_results"><a class="link" href="#_resetting_an_analysis_deleting_analysis_results">3.6.3. Resetting an Analysis/Deleting Analysis results</a></h4>
 <div class="sect4">
 <h5 id="_example_request_28"><a class="link" href="#_example_request_28">Example Request</a></h5>
 <div class="listingblock">
@@ -5545,7 +5545,7 @@ Content-Length: 318
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-05-06 08:24:35 +00:00
+Last updated 2020-05-06 08:36:14 +00:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
