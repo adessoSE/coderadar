@@ -23,7 +23,7 @@ public class GetUserController implements AbstractBaseController {
     this.getUserUseCase = getUserUseCase;
   }
 
-  @GetMapping(path = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @GetMapping(path = "/users/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<GetUserResponse> getUser(@PathVariable long userId) {
     User user = getUserUseCase.getUser(userId);
     return new ResponseEntity<>(mapUser(user), HttpStatus.OK);

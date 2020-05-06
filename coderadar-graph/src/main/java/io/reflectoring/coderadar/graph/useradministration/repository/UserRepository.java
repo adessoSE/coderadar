@@ -56,7 +56,7 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
   @Query(
       "MATCH (p), (u) WHERE ID(p) = {0} AND ID(u) = {1} WITH p, u "
           + "OPTIONAL MATCH (p)<-[r:ASSIGNED_TO]-(u) DELETE r "
-          + "CREATE (p)<-[r:ASSIGNED_TO {role: {2}}]-(u)")
+          + "CREATE (p)<-[r1:ASSIGNED_TO {role: {2}}]-(u)")
   void setUserRoleForProject(long projectId, long userId, String role);
 
   /**

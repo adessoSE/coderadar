@@ -26,7 +26,7 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
       "MATCH (p) WHERE ID(p) = {0} "
           + "MATCH (t) WHERE ID(t) = {1} WITH p, t "
           + "OPTIONAL MATCH (t)-[r:ASSIGNED_TO]->(p) DELETE r "
-          + "CREATE (t)-[r:ASSIGNED_TO {role: {2}}]->(p)")
+          + "CREATE (t)-[r1:ASSIGNED_TO {role: {2}}]->(p)")
   void addTeamToProject(long projectId, long teamId, String role);
 
   @Query(
