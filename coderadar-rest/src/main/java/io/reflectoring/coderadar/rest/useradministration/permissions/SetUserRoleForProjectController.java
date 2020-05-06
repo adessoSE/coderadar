@@ -1,7 +1,7 @@
 package io.reflectoring.coderadar.rest.useradministration.permissions;
 
 import io.reflectoring.coderadar.rest.AbstractBaseController;
-import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
+import io.reflectoring.coderadar.rest.ProjectRoleJsonWrapper;
 import io.reflectoring.coderadar.useradministration.port.driver.permissions.SetUserRoleForProjectUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,8 +26,10 @@ public class SetUserRoleForProjectController implements AbstractBaseController {
       path = "/projects/{projectId}/users/{userId}",
       consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<HttpStatus> setUserRoleForProject(
-      @PathVariable long projectId, @PathVariable long userId, @RequestBody ProjectRole role) {
-    setUserRoleForProjectUseCase.setRole(projectId, userId, role);
+      @PathVariable long projectId,
+      @PathVariable long userId,
+      @RequestBody ProjectRoleJsonWrapper role) {
+    setUserRoleForProjectUseCase.setRole(projectId, userId, role.getRole());
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }
