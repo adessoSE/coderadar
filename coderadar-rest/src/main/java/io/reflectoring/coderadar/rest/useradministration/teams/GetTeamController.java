@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.rest.domain.GetTeamResponse;
 import io.reflectoring.coderadar.useradministration.domain.Team;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.GetTeamUseCase;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ public class GetTeamController implements AbstractBaseController {
     this.getTeamUseCase = getTeamUseCase;
   }
 
-  @GetMapping(path = "/teams/{teamId}")
+  @GetMapping(path = "/teams/{teamId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<GetTeamResponse> getTeam(@PathVariable long teamId) {
     Team team = getTeamUseCase.get(teamId);
     return new ResponseEntity<>(mapTeam(team), HttpStatus.OK);
