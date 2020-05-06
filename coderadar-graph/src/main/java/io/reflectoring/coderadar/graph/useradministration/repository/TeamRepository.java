@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.graph.useradministration.repository;
 
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
-import io.reflectoring.coderadar.useradministration.domain.Team;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -12,7 +11,9 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
    * @param userId The user id.
    * @return All teams the user is in.
    */
-  @Query("MATCH (u)-[:IS_IN]->(t) WHERE ID(u) = {0} RETURN t")
+  @Query(
+      "MATCH (u)-[:IS_IN]->(t) WHERE ID(u) = {0} WITH t "
+          + "OPTIONAL MATCH (t)<-[r:IS_IN]-(u) RETURN t, r, u")
   List<TeamEntity> listTeamsByUserId(long userId);
 
   /**
@@ -37,7 +38,7 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
   void addUsersToTeam(long teamId, List<Long> userIds);
 
   @Query(
-      "MATCH (t) WHERE ID(t) = {0} WITH t"
+      "MATCH (t) WHERE ID(t) = {0} WITH t "
           + "UNWIND {1} as x "
           + "MATCH (u)-[r:IS_IN]->(t) WHERE ID(u) = x "
           + "DELETE r")
@@ -73,6 +74,6 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
   void removeTeamFromProject(long projectId, long teamId);
 
   /** @return All teams in the database along with their members. */
-  @Query("MATCH (t:TeamEntity)<-[r:IS_IN]-(u) RETURN t, r, u")
-  List<Team> findAllWithMembers();
+  @Query("MATCH (t:TeamEntity)<-[r:IS_IN*0..1]-(u) RETURN t, r, u")
+  List<TeamEntity> findAllWithMembers();
 }

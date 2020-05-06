@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.graph.useradministration.domain;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
+import java.util.Collections;
 import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ public class TeamEntity {
   private String name;
 
   @Relationship(value = "IS_IN", direction = Relationship.INCOMING)
-  private List<UserEntity> members;
+  private List<UserEntity> members = Collections.emptyList();
 
   @Relationship(type = "ASSIGNED_TO")
   private List<ProjectEntity> projects;
