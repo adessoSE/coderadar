@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.graph.useradministration.repository;
 
+import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import java.util.List;
 import org.springframework.data.neo4j.annotation.Query;

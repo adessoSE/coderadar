@@ -53,7 +53,4 @@ public class ProjectEntity {
 
   @Relationship(type = "HAS_BRANCH")
   private List<BranchEntity> branches = new ArrayList<>();
-
-  @Relationship(type = "HAS_TEAM")
-  private List<TeamEntity> teams;
 }

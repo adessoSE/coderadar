@@ -159,6 +159,24 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
           + "CREATE (p)-[r:CONTAINS_COMMIT]->(c)")
   void attachCommitsWithIds(long projectId, @NonNull List<Long> commitIds);
 
+  /**
+   *
+   * @param projectId
+   */
   @Query("MATCH (p)<-[r:WORKS_ON]-() WHERE ID(p) = {0} DELETE r")
   void deleteContributorRelationships(long projectId);
+
+  /**
+   * @param userId The user id.
+   * @return All the project a user is assigned to.
+   */
+  @Query("MATCH (u)-[:ASSIGNED_TO]->(p) WHERE ID(u) = {0} RETURN p")
+  List<ProjectEntity> findProjectsByUsedId(long userId);
+
+  /**
+   * @param teamId The team id.
+   * @return All the project a team is assigned to.
+   */
+  @Query("MATCH (t)-[:ASSIGNED_TO]->(p) WHERE ID(t) = {0} RETURN p")
+  List<ProjectEntity> listProjectByTeamId(long teamId);
 }

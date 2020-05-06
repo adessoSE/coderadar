@@ -25,13 +25,6 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
   @Query(
       "MATCH (p) WHERE ID(p) = {0} "
           + "MATCH (t) WHERE ID(t) = {1} WITH p, t "
-          + "CREATE (p)-[r:HAS_TEAM {role: {2}}]->(t)")
+          + "CREATE (t)-[r:ASSIGNED_TO {role: {2}}]->(p)")
   void addTeamToProject(long projectId, long teamId, String role);
-
-  /**
-   * @param teamId The team id.
-   * @return All the project a team is assigned to.
-   */
-  @Query("MATCH (t)<-[:HAS_TEAM]-(p) WHERE ID(t) = {0} RETURN p")
-  List<ProjectEntity> listProjectByTeamId(long teamId);
 }
