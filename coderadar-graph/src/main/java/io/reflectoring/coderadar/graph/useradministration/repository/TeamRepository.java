@@ -45,10 +45,10 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
    * @param teamId The team id.
    * @return The team along with all of its members;
    */
-  @Query("MATCH (u)-[r:IS_IN]->(t) WHERE ID(t) = {0} RETURN t, r, u")
+  @Query("MATCH (u)-[r:IS_IN*0..1]->(t) WHERE ID(t) = {0} RETURN t, r, u")
   TeamEntity findByIdWithMembers(long teamId);
 
-  @Query("MATCH (t) WHERE ID(t) = {0} RETURN COUNT(t) > 0")
+  @Query("MATCH (t:TeamEntity) WHERE ID(t) = {0} RETURN COUNT(t) > 0")
   boolean existsById(long teamId);
 
   @Query("MATCH (t:TeamEntity) WHERE t.name = {0} RETURN COUNT(t) > 0")

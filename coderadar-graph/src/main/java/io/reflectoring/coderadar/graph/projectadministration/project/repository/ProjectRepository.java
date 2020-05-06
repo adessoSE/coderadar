@@ -113,7 +113,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @param id The project id.
    * @return True if a project with the given id exists, false otherwise.
    */
-  @Query("MATCH (p) WHERE ID(p) = {0} RETURN COUNT(*) > 0")
+  @Query("MATCH (p:ProjectRepository) WHERE ID(p) = {0} RETURN COUNT(*) > 0")
   boolean existsById(long id);
 
   /**

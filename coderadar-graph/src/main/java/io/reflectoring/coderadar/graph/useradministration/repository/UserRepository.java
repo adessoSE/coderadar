@@ -35,7 +35,7 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
    * @param id The user id.
    * @return True if a user with the given id exists.
    */
-  @Query("MATCH (u) WHERE ID(u) = {0} RETURN COUNT(u) > 0")
+  @Query("MATCH (u:UserEntity) WHERE ID(u) = {0} RETURN COUNT(u) > 0")
   boolean existsById(long id);
 
   /**

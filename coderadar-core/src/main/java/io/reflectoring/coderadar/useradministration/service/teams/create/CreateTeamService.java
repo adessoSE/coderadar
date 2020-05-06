@@ -15,7 +15,8 @@ public class CreateTeamService implements CreateTeamUseCase {
   private final GetTeamPort getTeamPort;
   private final GetUserPort getUserPort;
 
-  public CreateTeamService(CreateTeamPort createTeamPort, GetTeamPort getTeamPort, GetUserPort getUserPort) {
+  public CreateTeamService(
+      CreateTeamPort createTeamPort, GetTeamPort getTeamPort, GetUserPort getUserPort) {
     this.createTeamPort = createTeamPort;
     this.getTeamPort = getTeamPort;
     this.getUserPort = getUserPort;
