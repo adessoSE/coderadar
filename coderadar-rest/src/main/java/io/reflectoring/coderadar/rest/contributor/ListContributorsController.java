@@ -1,11 +1,11 @@
 package io.reflectoring.coderadar.rest.contributor;
 
-import io.reflectoring.coderadar.contributor.domain.Contributor;
+import static io.reflectoring.coderadar.rest.GetContributorResponseMapper.mapContributors;
+
 import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForPathCommand;
 import io.reflectoring.coderadar.contributor.port.driver.ListContributorsUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetContributorResponse;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,7 +29,7 @@ public class ListContributorsController implements AbstractBaseController {
   public ResponseEntity<List<GetContributorResponse>> listContributors(
       @PathVariable long projectId) {
     return new ResponseEntity<>(
-        map(listContributorsUseCase.listContributors(projectId)), HttpStatus.OK);
+        mapContributors(listContributorsUseCase.listContributors(projectId)), HttpStatus.OK);
   }
 
   @RequestMapping(
@@ -40,20 +40,8 @@ public class ListContributorsController implements AbstractBaseController {
   public ResponseEntity<List<GetContributorResponse>> listContributorsForFile(
       @PathVariable long projectId, @RequestBody @Validated GetContributorsForPathCommand command) {
     return new ResponseEntity<>(
-        map(listContributorsUseCase.listContributorsForProjectAndPathInCommit(projectId, command)),
+        mapContributors(
+            listContributorsUseCase.listContributorsForProjectAndPathInCommit(projectId, command)),
         HttpStatus.OK);
-  }
-
-  private List<GetContributorResponse> map(List<Contributor> contributors) {
-    List<GetContributorResponse> result = new ArrayList<>(contributors.size());
-    for (Contributor c : contributors) {
-      GetContributorResponse responseItem = new GetContributorResponse();
-      responseItem.setId(c.getId());
-      responseItem.setDisplayName(c.getDisplayName());
-      responseItem.setNames(c.getNames());
-      responseItem.setEmailAddresses(c.getEmailAddresses());
-      result.add(responseItem);
-    }
-    return result;
   }
 }

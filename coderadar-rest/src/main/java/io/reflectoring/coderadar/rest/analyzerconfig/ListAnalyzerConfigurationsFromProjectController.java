@@ -1,10 +1,12 @@
 package io.reflectoring.coderadar.rest.analyzerconfig;
 
+import static io.reflectoring.coderadar.rest.GetAnalyzerConfigurationResponseMapper.mapAnalyzerConfigurations;
+
+import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.get.ListAnalyzerConfigurationsUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetAnalyzerConfigurationResponse;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +28,8 @@ public class ListAnalyzerConfigurationsFromProjectController implements Abstract
   @GetMapping(path = "/projects/{projectId}/analyzers", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetAnalyzerConfigurationResponse>>
       getAnalyzerConfigurationsFromProject(@PathVariable long projectId) {
-    return new ResponseEntity<>(
-        listAnalyzerConfigurationsUseCase.get(projectId).stream()
-            .map(
-                analyzerConfiguration ->
-                    new GetAnalyzerConfigurationResponse(
-                        analyzerConfiguration.getId(),
-                        analyzerConfiguration.getAnalyzerName(),
-                        analyzerConfiguration.isEnabled()))
-            .collect(Collectors.toList()),
-        HttpStatus.OK);
+    List<AnalyzerConfiguration> analyzerConfigurations =
+        listAnalyzerConfigurationsUseCase.get(projectId);
+    return new ResponseEntity<>(mapAnalyzerConfigurations(analyzerConfigurations), HttpStatus.OK);
   }
 }
