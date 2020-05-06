@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.graph.projectadministration.domain;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
-import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

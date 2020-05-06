@@ -23,7 +23,7 @@ public class RemoveTeamFromProjectController implements AbstractBaseController {
   @PostMapping(path = "/project/{projectId}/teams/{teamId}")
   public ResponseEntity<HttpStatus> removeTeamFromProject(
       @PathVariable long projectId, @PathVariable long teamId) {
-    removeTeamFromProjectUseCase.removeTeam(teamId); // TODO: change signature of this method
+    removeTeamFromProjectUseCase.removeTeam(projectId, teamId);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }

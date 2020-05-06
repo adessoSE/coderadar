@@ -19,9 +19,9 @@ public class RemoveTeamFromProjectService implements RemoveTeamFromProjectUseCas
   }
 
   @Override
-  public void removeTeam(long teamId) {
+  public void removeTeam(long projectId, long teamId) {
     if (getTeamPort.existsById(teamId)) {
-      removeTeamFromProjectPort.deleteTeam(teamId);
+      removeTeamFromProjectPort.removeTeam(projectId, teamId);
     } else {
       throw new TeamNotFoundException(teamId);
     }

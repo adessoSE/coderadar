@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.graph.useradministration.domain;
 
-import java.util.List;
-
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
+import java.util.List;
 import lombok.Data;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
