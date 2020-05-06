@@ -464,9 +464,9 @@ include::{snippets}/analyzerConfiguration/getSingle/http-response.adoc[]
 === Analyzing Job
 
 An analysis can be started for a project in coderadar. By default a Project's codebase is not analyzed.
-To analyze the codebase an Analyzing Job has to be executed.
+To analyze the codebase an analysis has to be triggered.
 
-==== Starting an Analyzing Job
+==== Starting an Analysis
 anchor:start-analysis[]
 
 ===== Example Request
@@ -477,7 +477,7 @@ include::{snippets}/analysis/start/http-request.adoc[]
 
 include::{snippets}/analysis/start/http-response.adoc[]
 
-==== Retrieving an Analyzing Job status
+==== Retrieving an Analysis status
 
 ===== Example Request
 
@@ -487,7 +487,7 @@ include::{snippets}/analysis/status/http-request.adoc[]
 
 include::{snippets}/analysis/status/http-response.adoc[]
 
-==== Resetting an Analyzing Job
+==== Resetting an Analysis/Deleting Analysis results
 
 ===== Example Request
 
