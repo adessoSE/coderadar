@@ -21,9 +21,11 @@ public class AddTeamToProjectController implements AbstractBaseController {
     this.addTeamToProjectUseCase = addTeamToProjectUseCase;
   }
 
-  @PostMapping(path = "/projects/{projectId}/teams/{teamId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(
+      path = "/projects/{projectId}/teams/{teamId}",
+      consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<HttpStatus> addTeamToProject(
-          @PathVariable long projectId, @PathVariable long teamId, @RequestBody ProjectRole role) {
+      @PathVariable long projectId, @PathVariable long teamId, @RequestBody ProjectRole role) {
     addTeamToProjectUseCase.addTeamToProject(projectId, teamId, role);
     return new ResponseEntity<>(HttpStatus.OK);
   }
