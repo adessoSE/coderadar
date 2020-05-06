@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.useradministration.domain.Team;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListTeamsForProjectUseCase;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,7 @@ public class ListTeamsForProjectController implements AbstractBaseController {
     this.listTeamsForProjectUseCase = listTeamsForProjectUseCase;
   }
 
-  @GetMapping(path = "/projects/{projectId/teams")
+  @GetMapping(path = "/projects/{projectId}/teams", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetTeamResponse>> listTeamsForProject(@PathVariable long projectId) {
     List<Team> teams = listTeamsForProjectUseCase.listTeamsForProject(projectId);
     return new ResponseEntity<>(mapTeams(teams), HttpStatus.OK);

@@ -4,10 +4,11 @@ import io.reflectoring.coderadar.useradministration.TeamAlreadyExistsException;
 import io.reflectoring.coderadar.useradministration.port.driven.CreateTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driven.GetTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.create.CreateTeamCommand;
+import io.reflectoring.coderadar.useradministration.port.driver.teams.create.CreateTeamUseCase;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CreateTeamService implements CreateTeamPort {
+public class CreateTeamService implements CreateTeamUseCase {
   private final CreateTeamPort createTeamPort;
   private final GetTeamPort getTeamPort;
 
