@@ -1,6 +1,8 @@
 package io.reflectoring.coderadar.rest.useradministration.teams;
 
 import io.reflectoring.coderadar.rest.AbstractBaseController;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
+import io.reflectoring.coderadar.useradministration.TeamNotAssignedException;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.RemoveTeamFromProjectUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +22,13 @@ public class RemoveTeamFromProjectController implements AbstractBaseController {
   }
 
   @PostMapping(path = "/projects/{projectId}/teams/{teamId}")
-  public ResponseEntity<HttpStatus> removeTeamFromProject(
+  public ResponseEntity<ErrorMessageResponse> removeTeamFromProject(
       @PathVariable long projectId, @PathVariable long teamId) {
-    removeTeamFromProjectUseCase.removeTeam(projectId, teamId);
-    return new ResponseEntity<>(HttpStatus.OK);
+    try {
+      removeTeamFromProjectUseCase.removeTeam(projectId, teamId);
+      return new ResponseEntity<>(HttpStatus.OK);
+    } catch (TeamNotAssignedException e) {
+      return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
   }
 }

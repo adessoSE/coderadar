@@ -30,7 +30,7 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
   void addTeamToProject(long projectId, long teamId, String role);
 
   @Query(
-      "MATCH (t) WHERE ID(t) = {0} WITH t"
+      "MATCH (t) WHERE ID(t) = {0} WITH t "
           + "UNWIND {1} as x "
           + "MATCH (u) WHERE ID(u) = x "
           + "CREATE (u)-[r:IS_IN]->(t)")

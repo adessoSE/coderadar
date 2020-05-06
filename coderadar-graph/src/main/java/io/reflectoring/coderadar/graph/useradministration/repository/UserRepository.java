@@ -65,6 +65,11 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
    * @param projectId The project id.
    * @param userId The user id.
    */
-  @Query("MATCH (p)<-[r:ASSIGNED_TO]-(u) WHERE ID(p) = {0} AND ID(u) = {1} DELETE r")
+  @Query("MATCH (p)<-[r:ASSIGNED_TO]-(u:UserEntity) WHERE ID(p) = {0} AND ID(u) = {1} DELETE r")
   void removeUserRoleFromProject(long projectId, long userId);
+
+  @Query(
+      "OPTIONAL MATCH (p)<-[:ASSIGNED_TO]-(u:UserEntity) WHERE ID(p) = {0} WITH p, collect(u) as users "
+          + "OPTIONAL MATCH (p)<-[:ASSIGNED_TO]-(t:TeamEntity)<-[:IS_IN]-(u) RETURN collect(u) + users as users")
+  List<UserEntity> listUsersForProject(long projectId);
 }
