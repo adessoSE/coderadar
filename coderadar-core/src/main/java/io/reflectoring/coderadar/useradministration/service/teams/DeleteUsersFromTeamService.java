@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.useradministration.service.teams;
 
 import io.reflectoring.coderadar.useradministration.TeamNotFoundException;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
+import io.reflectoring.coderadar.useradministration.port.driven.DeleteUsersFromTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driven.GetTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.DeleteUsersFromTeamUseCase;
@@ -13,15 +14,15 @@ public class DeleteUsersFromTeamService implements DeleteUsersFromTeamUseCase {
 
   private final GetTeamPort getTeamPort;
   private final GetUserPort getUserPort;
-  private final DeleteUsersFromTeamService deleteUsersFromTeamService;
+  private final DeleteUsersFromTeamPort deleteUsersFromTeamPort;
 
   public DeleteUsersFromTeamService(
       GetTeamPort getTeamPort,
       GetUserPort getUserPort,
-      DeleteUsersFromTeamService deleteUsersFromTeamService) {
+      DeleteUsersFromTeamPort deleteUsersFromTeamPort) {
     this.getTeamPort = getTeamPort;
     this.getUserPort = getUserPort;
-    this.deleteUsersFromTeamService = deleteUsersFromTeamService;
+    this.deleteUsersFromTeamPort = deleteUsersFromTeamPort;
   }
 
   @Override
@@ -34,6 +35,6 @@ public class DeleteUsersFromTeamService implements DeleteUsersFromTeamUseCase {
         throw new UserNotFoundException(userId);
       }
     }
-    deleteUsersFromTeamService.deleteUsersFromTeam(teamId, userIds);
+    deleteUsersFromTeamPort.deleteUsersFromTeam(teamId, userIds);
   }
 }

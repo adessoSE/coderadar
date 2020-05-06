@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.useradministration.teams;
 
 import io.reflectoring.coderadar.rest.AbstractBaseController;
+import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.AddTeamToProjectUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class AddTeamToProjectController implements AbstractBaseController {
   @PostMapping(path = "/projects/{projectId}/teams/{teamId}")
   public ResponseEntity<HttpStatus> addTeamToProject(
       @PathVariable long projectId, @PathVariable long teamId) {
-    addTeamToProjectUseCase.addTeamToProject(projectId, teamId);
+    addTeamToProjectUseCase.addTeamToProject(projectId, teamId, ProjectRole.ADMIN); // TODO
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }

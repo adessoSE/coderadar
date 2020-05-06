@@ -6,7 +6,9 @@ import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.ListProjectsForUserPort;
 import io.reflectoring.coderadar.useradministration.port.driver.get.ListProjectsForUserUseCase;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ListProjectsForUserService implements ListProjectsForUserUseCase {
 
   private final ListProjectsForUserPort listProjectsForUserPort;
