@@ -23,7 +23,7 @@ public class ListTeamsForProjectController implements AbstractBaseController {
     this.listTeamsForProjectUseCase = listTeamsForProjectUseCase;
   }
 
-  @GetMapping(path = "/projects/{projectId/teams")
+  @GetMapping(path = "/projects/{projectId}/teams")
   public ResponseEntity<List<GetTeamResponse>> listTeamsForProject(@PathVariable long projectId) {
     List<Team> teams = listTeamsForProjectUseCase.listTeamsForProject(projectId);
     return new ResponseEntity<>(mapTeams(teams), HttpStatus.OK);
