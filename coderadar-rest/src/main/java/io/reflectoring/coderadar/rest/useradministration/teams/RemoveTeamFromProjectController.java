@@ -19,8 +19,7 @@ public class RemoveTeamFromProjectController implements AbstractBaseController {
     this.removeTeamFromProjectUseCase = removeTeamFromProjectUseCase;
   }
 
-  // TODO: which http method should be used here?
-  @PostMapping(path = "/project/{projectId}/teams/{teamId}")
+  @PostMapping(path = "/projects/{projectId}/teams/{teamId}")
   public ResponseEntity<HttpStatus> removeTeamFromProject(
       @PathVariable long projectId, @PathVariable long teamId) {
     removeTeamFromProjectUseCase.removeTeam(projectId, teamId);
