@@ -15,10 +15,10 @@ import org.springframework.http.ResponseEntity;
 
 class GetFilePatternControllerTest {
 
-  private GetFilePatternUseCase getFilePatternUseCase = mock(GetFilePatternUseCase.class);
+  private final GetFilePatternUseCase getFilePatternUseCase = mock(GetFilePatternUseCase.class);
 
   @Test
-  void returnsFilePatternWithIdOne() {
+  void testDeleteFilePattern() {
     GetFilePatternController testSubject = new GetFilePatternController(getFilePatternUseCase);
 
     FilePattern filePattern = new FilePattern(1L, "**/*.java", InclusionType.INCLUDE);
@@ -27,6 +27,7 @@ class GetFilePatternControllerTest {
     ResponseEntity<GetFilePatternResponse> responseEntity = testSubject.getFilePattern(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(filePattern.getId(), responseEntity.getBody().getId());
     Assertions.assertEquals(filePattern.getPattern(), responseEntity.getBody().getPattern());
     Assertions.assertEquals(

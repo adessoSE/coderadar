@@ -14,11 +14,11 @@ import org.springframework.http.ResponseEntity;
 
 class GetAnalyzerConfigurationControllerTest {
 
-  private GetAnalyzerConfigurationUseCase getAnalyzerConfigurationUseCase =
+  private final GetAnalyzerConfigurationUseCase getAnalyzerConfigurationUseCase =
       mock(GetAnalyzerConfigurationUseCase.class);
 
   @Test
-  void returnsAnalyzerConfigurationWithIdOne() {
+  void testGetAnalyzerConfiguration() {
     GetAnalyzerConfigurationController testSubject =
         new GetAnalyzerConfigurationController(getAnalyzerConfigurationUseCase);
 
@@ -31,8 +31,9 @@ class GetAnalyzerConfigurationControllerTest {
         testSubject.getAnalyzerConfiguration(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(1L, responseEntity.getBody().getId());
     Assertions.assertEquals("analyzer", responseEntity.getBody().getAnalyzerName());
-    Assertions.assertEquals(true, responseEntity.getBody().isEnabled());
+    Assertions.assertTrue(responseEntity.getBody().isEnabled());
   }
 }

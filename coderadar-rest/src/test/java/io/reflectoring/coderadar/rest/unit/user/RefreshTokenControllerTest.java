@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 class RefreshTokenControllerTest {
 
-  private RefreshTokenUseCase refreshTokenUseCase = mock(RefreshTokenUseCase.class);
+  private final RefreshTokenUseCase refreshTokenUseCase = mock(RefreshTokenUseCase.class);
 
   @Test
   void refreshTokenSuccessfully() {

@@ -12,11 +12,11 @@ import org.springframework.http.ResponseEntity;
 
 class DeleteAnalyzerConfigurationControllerTest {
 
-  private DeleteAnalyzerConfigurationUseCase deleteAnalyzerConfigurationUseCase =
+  private final DeleteAnalyzerConfigurationUseCase deleteAnalyzerConfigurationUseCase =
       mock(DeleteAnalyzerConfigurationUseCase.class);
 
   @Test
-  void deleteAnalyzerConfigurationWithIdOne() {
+  void testDeleteAnalyzerConfiguration() {
     DeleteAnalyzerConfigurationController testSubject =
         new DeleteAnalyzerConfigurationController(deleteAnalyzerConfigurationUseCase);
 

@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.rest.unit.project;
 
 import static org.mockito.Mockito.mock;
 
-import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
@@ -17,11 +16,10 @@ import org.springframework.http.ResponseEntity;
 
 class CreateProjectControllerTest {
 
-  private CreateProjectUseCase createProjectUseCase = mock(CreateProjectUseCase.class);
+  private final CreateProjectUseCase createProjectUseCase = mock(CreateProjectUseCase.class);
 
   @Test
-  void createNewProjectSuccessfully()
-      throws MalformedURLException, ProjectIsBeingProcessedException {
+  void createNewProjectSuccessfully() throws MalformedURLException {
     CreateProjectController testSubject = new CreateProjectController(createProjectUseCase);
 
     CreateProjectCommand command =
@@ -33,6 +31,7 @@ class CreateProjectControllerTest {
     ResponseEntity<IdResponse> responseEntity = testSubject.createProject(command);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(1L, responseEntity.getBody().getId());
   }
 }

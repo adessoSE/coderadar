@@ -14,11 +14,11 @@ import org.springframework.http.ResponseEntity;
 
 class CreateAnalyzerConfigurationControllerTest {
 
-  private CreateAnalyzerConfigurationUseCase createAnalyzerConfigurationUseCase =
+  private final CreateAnalyzerConfigurationUseCase createAnalyzerConfigurationUseCase =
       mock(CreateAnalyzerConfigurationUseCase.class);
 
   @Test
-  void returnsIdOneForNewAnalyzerConfiguration() {
+  void testCreateAnalyzer() {
     CreateAnalyzerConfigurationController testSubject =
         new CreateAnalyzerConfigurationController(createAnalyzerConfigurationUseCase);
 
@@ -29,6 +29,7 @@ class CreateAnalyzerConfigurationControllerTest {
     ResponseEntity<Object> responseEntity = testSubject.addAnalyzerConfiguration(command, 5L);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(1L, ((IdResponse) responseEntity.getBody()).getId());
   }
 }

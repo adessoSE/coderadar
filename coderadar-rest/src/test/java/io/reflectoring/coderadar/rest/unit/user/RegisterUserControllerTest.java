@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 class RegisterUserControllerTest {
 
-  private RegisterUserUseCase registerUserUseCase = mock(RegisterUserUseCase.class);
+  private final RegisterUserUseCase registerUserUseCase = mock(RegisterUserUseCase.class);
 
   @Test
   void registerUserWithIdOne() {

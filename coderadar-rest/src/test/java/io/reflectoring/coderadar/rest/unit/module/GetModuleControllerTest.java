@@ -14,10 +14,10 @@ import org.springframework.http.ResponseEntity;
 
 class GetModuleControllerTest {
 
-  private GetModuleUseCase getModuleUseCase = mock(GetModuleUseCase.class);
+  private final GetModuleUseCase getModuleUseCase = mock(GetModuleUseCase.class);
 
   @Test
-  void returnsModuleWithIdOne() {
+  void testGetModule() {
     GetModuleController testSubject = new GetModuleController(getModuleUseCase);
 
     Module module = new Module(1L, "module-path");
@@ -26,6 +26,7 @@ class GetModuleControllerTest {
     ResponseEntity<GetModuleResponse> responseEntity = testSubject.getModule(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(1L, responseEntity.getBody().getId());
     Assertions.assertEquals("module-path", responseEntity.getBody().getPath());
   }

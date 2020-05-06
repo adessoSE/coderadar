@@ -16,11 +16,11 @@ import org.springframework.http.ResponseEntity;
 
 class ListModulesOfProjectControllerTest {
 
-  private ListModulesOfProjectUseCase listModulesOfProjectUseCase =
+  private final ListModulesOfProjectUseCase listModulesOfProjectUseCase =
       mock(ListModulesOfProjectUseCase.class);
 
   @Test
-  void returnsModulesForProjectWithIdOne() {
+  void testListModulesOfProject() {
     ListModulesOfProjectController testSubject =
         new ListModulesOfProjectController(listModulesOfProjectUseCase);
 
@@ -35,6 +35,7 @@ class ListModulesOfProjectControllerTest {
     ResponseEntity<List<GetModuleResponse>> responseEntity = testSubject.listModules(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(responses.size(), responseEntity.getBody().size());
     Assertions.assertEquals(response1.getId(), responseEntity.getBody().get(0).getId());
     Assertions.assertEquals(response1.getPath(), responseEntity.getBody().get(0).getPath());

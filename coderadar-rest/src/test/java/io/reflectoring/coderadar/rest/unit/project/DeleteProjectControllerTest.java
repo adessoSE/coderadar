@@ -2,8 +2,6 @@ package io.reflectoring.coderadar.rest.unit.project;
 
 import static org.mockito.Mockito.mock;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.delete.DeleteProjectUseCase;
 import io.reflectoring.coderadar.rest.project.DeleteProjectController;
 import org.junit.jupiter.api.Assertions;
@@ -14,10 +12,10 @@ import org.springframework.http.ResponseEntity;
 
 class DeleteProjectControllerTest {
 
-  private DeleteProjectUseCase deleteProjectUseCase = mock(DeleteProjectUseCase.class);
+  private final DeleteProjectUseCase deleteProjectUseCase = mock(DeleteProjectUseCase.class);
 
   @Test
-  void deleteProjectWithIdOne() throws JsonProcessingException, ProjectIsBeingProcessedException {
+  void deleteProjectWithIdOne() {
     DeleteProjectController testSubject = new DeleteProjectController(deleteProjectUseCase);
 
     ResponseEntity<HttpStatus> responseEntity = testSubject.deleteProject(1L);

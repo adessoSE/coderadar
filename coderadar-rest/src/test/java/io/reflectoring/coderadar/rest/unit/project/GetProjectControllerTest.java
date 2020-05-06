@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 class GetProjectControllerTest {
 
-  private GetProjectUseCase getProjectUseCase = mock(GetProjectUseCase.class);
+  private final GetProjectUseCase getProjectUseCase = mock(GetProjectUseCase.class);
 
   @Test
   void returnsProjectWithIdOne() {
@@ -28,6 +28,7 @@ class GetProjectControllerTest {
     ResponseEntity<GetProjectResponse> responseEntity = testSubject.getProject(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(project.getId(), responseEntity.getBody().getId());
   }
 }

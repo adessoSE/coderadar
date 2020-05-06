@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 class GetUserControllerTest {
 
-  private GetUserUseCase getUserUseCase = mock(GetUserUseCase.class);
+  private final GetUserUseCase getUserUseCase = mock(GetUserUseCase.class);
 
   @Test
   void loadUserWithIdOne() {

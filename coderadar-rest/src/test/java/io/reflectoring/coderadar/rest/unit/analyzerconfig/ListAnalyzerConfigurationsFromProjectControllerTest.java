@@ -16,11 +16,11 @@ import org.springframework.http.ResponseEntity;
 
 class ListAnalyzerConfigurationsFromProjectControllerTest {
 
-  private ListAnalyzerConfigurationsUseCase listAnalyzerConfigurationsUseCase =
+  private final ListAnalyzerConfigurationsUseCase listAnalyzerConfigurationsUseCase =
       mock(ListAnalyzerConfigurationsUseCase.class);
 
   @Test
-  void returnsTwoGetAnalyzerConfigurationResponsesFromProject() {
+  void testListAnalyzerConfigurationsFromProject() {
     ListAnalyzerConfigurationsFromProjectController testSubject =
         new ListAnalyzerConfigurationsFromProjectController(listAnalyzerConfigurationsUseCase);
 
@@ -37,6 +37,7 @@ class ListAnalyzerConfigurationsFromProjectControllerTest {
         testSubject.getAnalyzerConfigurationsFromProject(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(responses.size(), responseEntity.getBody().size());
     Assertions.assertEquals(response1.getId(), responseEntity.getBody().get(0).getId());
     Assertions.assertEquals(

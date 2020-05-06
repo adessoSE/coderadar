@@ -13,10 +13,10 @@ import org.springframework.http.ResponseEntity;
 
 class DeleteModuleControllerTest {
 
-  private DeleteModuleUseCase deleteModuleUseCase = mock(DeleteModuleUseCase.class);
+  private final DeleteModuleUseCase deleteModuleUseCase = mock(DeleteModuleUseCase.class);
 
   @Test
-  void deleteModuleWithIdOne() throws ProjectIsBeingProcessedException {
+  void testDeleteModule() throws ProjectIsBeingProcessedException {
     DeleteModuleController testSubject = new DeleteModuleController(deleteModuleUseCase);
 
     ResponseEntity<HttpStatus> responseEntity = testSubject.deleteModule(1L, 2L);

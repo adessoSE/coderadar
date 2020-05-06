@@ -15,10 +15,11 @@ import org.springframework.http.ResponseEntity;
 
 class CreateFilePatternControllerTest {
 
-  private CreateFilePatternUseCase createFilePatternUseCase = mock(CreateFilePatternUseCase.class);
+  private final CreateFilePatternUseCase createFilePatternUseCase =
+      mock(CreateFilePatternUseCase.class);
 
   @Test
-  void createFilePatternSuccessfully() {
+  void testCreateFilePattern() {
     CreateFilePatternController testSubject =
         new CreateFilePatternController(createFilePatternUseCase);
 
@@ -29,6 +30,7 @@ class CreateFilePatternControllerTest {
     ResponseEntity<IdResponse> responseEntity = testSubject.createFilePattern(command, 5L);
 
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(1L, responseEntity.getBody().getId());
   }
 }

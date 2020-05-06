@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 class LoginUserControllerTest {
 
-  private LoginUserUseCase loginUserUseCase = mock(LoginUserUseCase.class);
+  private final LoginUserUseCase loginUserUseCase = mock(LoginUserUseCase.class);
 
   @Test
   void loginUserWithUsernameAndPassword() {

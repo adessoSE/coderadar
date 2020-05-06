@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 
 class ChangePasswordControllerTest {
 
-  private ChangePasswordUseCase changePasswordUseCase = mock(ChangePasswordUseCase.class);
+  private final ChangePasswordUseCase changePasswordUseCase = mock(ChangePasswordUseCase.class);
 
   @Test
   void changePasswordSuccessfully() {

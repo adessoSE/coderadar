@@ -13,11 +13,11 @@ import org.springframework.http.ResponseEntity;
 
 class UpdateAnalyzerConfigurationControllerTest {
 
-  private UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase =
+  private final UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase =
       mock(UpdateAnalyzerConfigurationUseCase.class);
 
   @Test
-  void updateAnalyzerConfigurationWithIdOne() {
+  void testUpdateAnalyzerConfiguration() {
     UpdateAnalyzerConfigurationController testSubject =
         new UpdateAnalyzerConfigurationController(updateAnalyzerConfigurationUseCase);
 

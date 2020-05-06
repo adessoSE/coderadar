@@ -17,11 +17,11 @@ import org.springframework.http.ResponseEntity;
 
 class ListFilePatternsOfProjectControllerTest {
 
-  private ListFilePatternsOfProjectUseCase listFilePatternsOfProjectUseCase =
+  private final ListFilePatternsOfProjectUseCase listFilePatternsOfProjectUseCase =
       mock(ListFilePatternsOfProjectUseCase.class);
 
   @Test
-  void returnsModulesForProjectWithIdOne() {
+  void testListFilePatternsOfProject() {
     ListFilePatternsOfProjectController testSubject =
         new ListFilePatternsOfProjectController(listFilePatternsOfProjectUseCase);
 
@@ -36,6 +36,7 @@ class ListFilePatternsOfProjectControllerTest {
     ResponseEntity<List<GetFilePatternResponse>> responseEntity = testSubject.listFilePatterns(1L);
 
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(responses.size(), responseEntity.getBody().size());
   }
 }

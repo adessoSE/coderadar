@@ -12,11 +12,11 @@ import org.springframework.http.ResponseEntity;
 
 class DeleteFilePatternControllerTest {
 
-  private DeleteFilePatternFromProjectUseCase deleteFilePatternFromProjectUseCase =
+  private final DeleteFilePatternFromProjectUseCase deleteFilePatternFromProjectUseCase =
       mock(DeleteFilePatternFromProjectUseCase.class);
 
   @Test
-  void deleteFilePatternWithIdOne() {
+  void testDeleteFilePattern() {
     DeleteFilePatternController testSubject =
         new DeleteFilePatternController(deleteFilePatternFromProjectUseCase);
 

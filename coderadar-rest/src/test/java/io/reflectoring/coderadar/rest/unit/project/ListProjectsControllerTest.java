@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 
 class ListProjectsControllerTest {
 
-  private ListProjectsUseCase listProjectsUseCase = mock(ListProjectsUseCase.class);
+  private final ListProjectsUseCase listProjectsUseCase = mock(ListProjectsUseCase.class);
 
   @Test
   void listAllProjects() {
@@ -34,7 +34,7 @@ class ListProjectsControllerTest {
     Mockito.when(listProjectsUseCase.listProjects()).thenReturn(projects);
 
     ResponseEntity<List<GetProjectResponse>> responseEntity = testSubject.listProjects();
-
+    Assertions.assertNotNull(responseEntity.getBody());
     Assertions.assertEquals(3L, responseEntity.getBody().size());
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
   }

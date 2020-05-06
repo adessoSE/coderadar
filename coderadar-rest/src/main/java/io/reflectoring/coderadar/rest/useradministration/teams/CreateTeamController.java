@@ -27,6 +27,6 @@ public class CreateTeamController implements AbstractBaseController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<IdResponse> createTeam(@RequestBody CreateTeamCommand command) {
     Long teamId = createTeamUseCase.createTeam(command);
-    return new ResponseEntity<>(new IdResponse(teamId), HttpStatus.OK);
+    return new ResponseEntity<>(new IdResponse(teamId), HttpStatus.CREATED);
   }
 }
