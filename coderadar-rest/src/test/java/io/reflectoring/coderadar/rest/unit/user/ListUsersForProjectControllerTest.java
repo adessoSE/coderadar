@@ -1,10 +1,10 @@
-package io.reflectoring.coderadar.rest.unit.user.teams;
+package io.reflectoring.coderadar.rest.unit.user;
 
 import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.rest.domain.GetUserResponse;
-import io.reflectoring.coderadar.rest.useradministration.teams.ListUsersForProjectController;
+import io.reflectoring.coderadar.rest.useradministration.ListUsersForProjectController;
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListUsersForProjectUseCase;
 import java.util.Arrays;

@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {AppComponent} from '../app.component';
+import {Project} from "../model/project";
+import {User} from "../model/user";
 
 
 @Injectable({
@@ -67,7 +69,6 @@ export class UserService {
       });
   }
 
-
   /**
    * Sends a POST request to /user/refresh with the current access and refresh tokens.
    * Upon receiving a successful response from the server, the new access token is saved in the localStorage.
@@ -111,5 +112,20 @@ export class UserService {
   public changeUserPassword(password: string) {
     return this.httpClient.post(this.apiURL + 'user/password/change',
       {refreshToken: UserService.getLoggedInUser().refreshToken, newPassword: password}, {observe: 'response'}).toPromise();
+  }
+
+  public listProjectsForUser(userId: number): Promise<HttpResponse<Project[]>> {
+    return this.httpClient.get<Project[]>(this.apiURL + 'users/'+userId+'/projects',
+      {observe: 'response'}).toPromise();
+  }
+
+  public listUsersForProject(projectId: number): Promise<HttpResponse<User[]>>{
+    return this.httpClient.get<User[]>(this.apiURL + 'projects/'+projectId+'/users',
+  {observe: 'response'}).toPromise();
+  }
+
+  public listUsers(): Promise<HttpResponse<User[]>>{
+    return this.httpClient.get<User[]>(this.apiURL + 'users',
+      {observe: 'response'}).toPromise();
   }
 }

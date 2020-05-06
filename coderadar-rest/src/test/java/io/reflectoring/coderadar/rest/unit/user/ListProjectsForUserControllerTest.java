@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.unit.user.teams;
+package io.reflectoring.coderadar.rest.unit.user;
 
 import static org.mockito.Mockito.mock;
 

@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.useradministration.teams;
+package io.reflectoring.coderadar.rest.useradministration;
 
 import static io.reflectoring.coderadar.rest.GetUserResponseMapper.mapUsers;
 

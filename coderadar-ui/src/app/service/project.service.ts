@@ -19,6 +19,7 @@ import {FileContentWithMetrics} from '../model/file-content-with-metrics';
 })
 export class ProjectService {
 
+
   private apiURL = AppComponent.getApiUrl();
 
   constructor(private httpClient: HttpClient) {
@@ -105,17 +106,6 @@ export class ProjectService {
    */
   public addProjectModule(id: number, module: Module): Promise<HttpResponse<any>> {
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/modules', {path: module.path},
-      {observe: 'response'}).toPromise();
-  }
-
-  /**
-   * Edits a module of a project.
-   * Sends a POST request to /projects/{id}/modules/{moduleId}
-   * @param id The id of the project.
-   * @param module The name (path) of the module.
-   */
-  public editProjectModule(id: number, module: Module): Promise<HttpResponse<any>> {
-    return this.httpClient.post(this.apiURL + 'projects/' + id + '/modules/' + module.id, JSON.stringify(module),
       {observe: 'response'}).toPromise();
   }
 
@@ -249,7 +239,7 @@ export class ProjectService {
   }
 
   /**
-   * Returnsthe delta three of a project given two commits and a metric mapping
+   * Returns the delta three of a project given two commits and a metric mapping
    * @param firstCommit The first commit
    * @param secondCommit The second commit
    * @param metricMapping The metric mapping

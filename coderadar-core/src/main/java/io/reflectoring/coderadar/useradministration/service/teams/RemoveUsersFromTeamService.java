@@ -2,31 +2,31 @@ package io.reflectoring.coderadar.useradministration.service.teams;
 
 import io.reflectoring.coderadar.useradministration.TeamNotFoundException;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
-import io.reflectoring.coderadar.useradministration.port.driven.DeleteUsersFromTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driven.GetTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
-import io.reflectoring.coderadar.useradministration.port.driver.teams.DeleteUsersFromTeamUseCase;
+import io.reflectoring.coderadar.useradministration.port.driven.RemoveUsersFromTeamPort;
+import io.reflectoring.coderadar.useradministration.port.driver.teams.RemoveUsersFromTeamUseCase;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DeleteUsersFromTeamService implements DeleteUsersFromTeamUseCase {
+public class RemoveUsersFromTeamService implements RemoveUsersFromTeamUseCase {
 
   private final GetTeamPort getTeamPort;
   private final GetUserPort getUserPort;
-  private final DeleteUsersFromTeamPort deleteUsersFromTeamPort;
+  private final RemoveUsersFromTeamPort removeUsersFromTeamPort;
 
-  public DeleteUsersFromTeamService(
+  public RemoveUsersFromTeamService(
       GetTeamPort getTeamPort,
       GetUserPort getUserPort,
-      DeleteUsersFromTeamPort deleteUsersFromTeamPort) {
+      RemoveUsersFromTeamPort removeUsersFromTeamPort) {
     this.getTeamPort = getTeamPort;
     this.getUserPort = getUserPort;
-    this.deleteUsersFromTeamPort = deleteUsersFromTeamPort;
+    this.removeUsersFromTeamPort = removeUsersFromTeamPort;
   }
 
   @Override
-  public void deleteUsersFromTeam(long teamId, List<Long> userIds) {
+  public void removeUsersFromTeam(long teamId, List<Long> userIds) {
     if (!getTeamPort.existsById(teamId)) {
       throw new TeamNotFoundException(teamId);
     }
@@ -35,6 +35,6 @@ public class DeleteUsersFromTeamService implements DeleteUsersFromTeamUseCase {
         throw new UserNotFoundException(userId);
       }
     }
-    deleteUsersFromTeamPort.deleteUsersFromTeam(teamId, userIds);
+    removeUsersFromTeamPort.removeUsersFromTeam(teamId, userIds);
   }
 }
