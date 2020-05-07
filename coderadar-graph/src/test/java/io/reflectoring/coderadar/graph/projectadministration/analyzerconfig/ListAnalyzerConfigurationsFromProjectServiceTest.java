@@ -15,10 +15,10 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("Get analyzer configurations from project")
 class ListAnalyzerConfigurationsFromProjectServiceTest {
-  private AnalyzerConfigurationRepository analyzerConfigurationRepository =
+  private final AnalyzerConfigurationRepository analyzerConfigurationRepository =
       mock(AnalyzerConfigurationRepository.class);
 
-  private ProjectRepository projectRepository = mock(ProjectRepository.class);
+  private final ProjectRepository projectRepository = mock(ProjectRepository.class);
 
   private ListAnalyzerConfigurationsAdapter getAnalyzerConfigurationsFromProjectAdapter;
 

@@ -15,7 +15,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class GetTeamTest {
+public class GetTeamControllerTest {
   private final GetTeamUseCase getTeamUseCase = mock(GetTeamUseCase.class);
   private final GetTeamController testController = new GetTeamController(getTeamUseCase);
 

@@ -15,7 +15,7 @@ public class GetUserResponseMapper {
   public static List<GetUserResponse> mapUsers(List<User> users) {
     List<GetUserResponse> result = new ArrayList<>(users.size());
     for (User user : users) {
-      result.add(new GetUserResponse(user.getId(), user.getUsername()));
+      result.add(mapUser(user));
     }
     return result;
   }

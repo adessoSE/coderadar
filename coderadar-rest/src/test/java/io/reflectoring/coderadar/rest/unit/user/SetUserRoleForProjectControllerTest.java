@@ -14,7 +14,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class SetUserRoleForProjectTest {
+public class SetUserRoleForProjectControllerTest {
   private final SetUserRoleForProjectUseCase setUserRoleForProjectUseCase =
       mock(SetUserRoleForProjectUseCase.class);
   private final SetUserRoleForProjectController testController =

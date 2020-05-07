@@ -17,7 +17,7 @@ public class GetTeamResponseMapper {
   public static List<GetTeamResponse> mapTeams(List<Team> teams) {
     List<GetTeamResponse> result = new ArrayList<>(teams.size());
     for (Team team : teams) {
-      result.add(new GetTeamResponse(team.getId(), team.getName(), mapUsers(team.getMembers())));
+      result.add(mapTeam(team));
     }
     return result;
   }

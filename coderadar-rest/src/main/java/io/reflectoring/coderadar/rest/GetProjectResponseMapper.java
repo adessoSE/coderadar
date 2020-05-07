@@ -21,14 +21,7 @@ public class GetProjectResponseMapper {
   public static List<GetProjectResponse> mapProjects(List<Project> projects) {
     List<GetProjectResponse> responses = new ArrayList<>(projects.size());
     for (Project project : projects) {
-      responses.add(
-          new GetProjectResponse()
-              .setName(project.getName())
-              .setId(project.getId())
-              .setStartDate(project.getVcsStart())
-              .setVcsOnline(project.isVcsOnline())
-              .setVcsUrl(project.getVcsUrl())
-              .setVcsUsername(project.getVcsUsername()));
+      responses.add(mapProject(project));
     }
     return responses;
   }
