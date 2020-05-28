@@ -1,20 +1,23 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@2.0.2
+  node: circleci/node@2.1.1
 
 jobs:
-  build:
+  analyse-sonar:
     docker:
       - image: 'circleci/openjdk:11-jdk'
     steps:
       - checkout
-      - run:
-          name: node test
-          command: node --version
-      - run:
-          name: npm test
-          command: npm --version
+      - node/install:
+          install-yarn: false
+          node-version: latest
+      - run: node --version
       - run:
           name: Analyze on SonarCloud
           command: gradle build sonarqube -Dsonar.login=${SONAR_TOKEN}
+
+workflows:
+  execute_sonar:
+    jobs:
+      - analyse-sonar
