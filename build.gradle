@@ -33,6 +33,9 @@ sonarqube {
         property "sonar.projectKey", "adessoAG_coderadar"
         property "sonar.organization", "adesso-ag"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.sources", "src/main/java, coderadar-ui/src"
+        property "sonar.tests", "src/test/java"
+        property "sonar.exclusions", "coderadar-app/workdir"
     }
 }
 

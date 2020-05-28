@@ -7,7 +7,8 @@
     "build": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng build --prod",
     "test": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng test",
     "lint": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng lint",
-    "e2e": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng e2e"
+    "e2e": "node --max_old_space_size=5048 ./node_modules/@angular/cli/bin/ng e2e",
+    "sonar": "sonar-scanner"
   },
   "private": true,
   "dependencies": {
@@ -76,6 +77,7 @@
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.4.2",
+    "sonar-scanner": "^3.1.0",
     "ts-node": "~8.0.3",
     "tslint": "~5.14.0",
     "tween.js": "^16.6.0",
