@@ -39,5 +39,5 @@ jobs:
       with:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: ./current/docs # The folder the action should deploy.
+          FOLDER: current/docs # The folder the action should deploy.
           COMMIT_MESSAGE: Update documentation [ci skip]
