@@ -1,7 +1,10 @@
+name: analyze on sonarcloud
+
 on:
-  pull-request:
+  pull_request:
     branches:
       - master
+
 jobs:
   analyze-sonar:
     runs-on: ubuntu-latest
