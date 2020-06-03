@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import static io.reflectoring.coderadar.rest.GetFilePatternResponseMapper.mapFilePattern;
+
 @Transactional
 @RestController
 public class GetFilePatternController implements AbstractBaseController {
@@ -27,9 +29,7 @@ public class GetFilePatternController implements AbstractBaseController {
   public ResponseEntity<GetFilePatternResponse> getFilePattern(
       @PathVariable(name = "filePatternId") long filePatternId) {
     FilePattern filePattern = getFilePatternUseCase.get(filePatternId);
-    return new ResponseEntity<>(
-        new GetFilePatternResponse(
-            filePatternId, filePattern.getPattern(), filePattern.getInclusionType()),
+    return new ResponseEntity<>(mapFilePattern(filePattern),
         HttpStatus.OK);
   }
 }

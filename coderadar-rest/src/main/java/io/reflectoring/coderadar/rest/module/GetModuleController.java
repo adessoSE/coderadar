@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import static io.reflectoring.coderadar.rest.GetModuleResponseMapper.mapModule;
+
 @Transactional
 @RestController
 public class GetModuleController implements AbstractBaseController {
@@ -25,7 +27,6 @@ public class GetModuleController implements AbstractBaseController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<GetModuleResponse> getModule(
       @PathVariable(name = "moduleId") long moduleId) {
-    return new ResponseEntity<>(
-        new GetModuleResponse(moduleId, getModuleUseCase.get(moduleId).getPath()), HttpStatus.OK);
+    return new ResponseEntity<>(mapModule(getModuleUseCase.get(moduleId)), HttpStatus.OK);
   }
 }
