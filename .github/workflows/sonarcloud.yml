@@ -27,3 +27,5 @@ jobs:
         run: chmod +x gradlew
       - name: analyze on sonarcloud
         run: gradle build sonarqube -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
