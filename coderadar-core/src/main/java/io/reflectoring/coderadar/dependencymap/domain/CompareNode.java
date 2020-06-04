@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.dependencymap.domain;
 
 import io.reflectoring.coderadar.plugin.api.ChangeType;
-
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import lombok.Getter;
