@@ -14,8 +14,7 @@ public interface GetRawCommitContentPort {
    * @param commitHash The commitHash
    * @return The raw commit data.
    */
-  byte[] getCommitContent(String projectRoot, String filepath, String commitHash)
-      throws UnableToGetCommitContentException;
+  byte[] getCommitContent(String projectRoot, String filepath, String commitHash);
 
   /**
    * @param projectRoot The local repository.
@@ -25,9 +24,7 @@ public interface GetRawCommitContentPort {
    *     not exist
    * @throws UnableToGetCommitContentException Thrown if the commit is not found.
    */
-  byte[] getFileDiff(String projectRoot, String filepath, String commitHash)
-      throws UnableToGetCommitContentException;
-
+  byte[] getFileDiff(String projectRoot, String filepath, String commitHash);
   /**
    * Returns the raw content of a list of files in a commit.
    *
@@ -37,8 +34,7 @@ public interface GetRawCommitContentPort {
    * @return The raw commit data grouped by the filepath.
    */
   HashMap<String, byte[]> getCommitContentBulk(
-      String projectRoot, List<String> filepaths, String commitHash)
-      throws UnableToGetCommitContentException;
+      String projectRoot, List<String> filepaths, String commitHash);
 
   /**
    * Returns the raw content of a list of files in a commit.
@@ -52,6 +48,5 @@ public interface GetRawCommitContentPort {
       getCommitContentBulkWithFiles(
           String projectRoot,
           List<io.reflectoring.coderadar.projectadministration.domain.File> files,
-          String commitHash)
-          throws UnableToGetCommitContentException;
+          String commitHash);
 }

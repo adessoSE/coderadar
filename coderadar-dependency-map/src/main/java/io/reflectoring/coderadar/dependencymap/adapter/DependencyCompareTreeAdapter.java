@@ -30,7 +30,6 @@ public class DependencyCompareTreeAdapter implements GetCompareTreePort {
   private String commitName2;
   private HashMap<String, byte[]> commit1Contents;
   private HashMap<String, byte[]> commit2Contents;
-  private CompareNodeComparator nodeComparator;
 
   private final JavaAnalyzer javaAnalyzer;
   private final WalkCommitTreePort walkCommitTreePort;
@@ -47,7 +46,6 @@ public class DependencyCompareTreeAdapter implements GetCompareTreePort {
     this.walkCommitTreePort = walkCommitTreePort;
     this.getDiffEntriesForCommitsPort = getDiffEntriesForCommitsPort;
     this.rawCommitContentPort = rawCommitContentPort;
-    nodeComparator = new CompareNodeComparator();
   }
 
   private void createTree() {
@@ -217,7 +215,7 @@ public class DependencyCompareTreeAdapter implements GetCompareTreePort {
         String childPackage = node.getChildren().get(0).getPackageName();
         node.setPackageName(
             childPackage.contains(".")
-                ? childPackage.substring(0, childPackage.lastIndexOf("."))
+                ? childPackage.substring(0, childPackage.lastIndexOf('.'))
                 : "");
       }
     }

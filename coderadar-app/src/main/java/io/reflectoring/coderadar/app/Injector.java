@@ -1,8 +1,8 @@
 package io.reflectoring.coderadar.app;
 
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,7 +15,7 @@ public class Injector implements ApplicationContextAware {
 
   private static ApplicationContext applicationContext;
 
-  private static Injector INSTANCE = new Injector();
+  private static final Injector INSTANCE = new Injector();
 
   private Injector() {}
 
@@ -34,7 +34,7 @@ public class Injector implements ApplicationContextAware {
   }
 
   @Override
-  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+  public void setApplicationContext(@NonNull ApplicationContext applicationContext) {
     Injector.applicationContext = applicationContext;
   }
 }

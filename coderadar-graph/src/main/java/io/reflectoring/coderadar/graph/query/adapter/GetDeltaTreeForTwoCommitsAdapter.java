@@ -10,6 +10,7 @@ import io.reflectoring.coderadar.query.port.driven.GetDeltaTreeForTwoCommitsPort
 import io.reflectoring.coderadar.query.port.driver.deltatree.GetDeltaTreeForTwoCommitsCommand;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -132,22 +133,25 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
               : null;
 
       if (getChangeType(metricTree1, metricTree2).equals(ChangeType.MODIFY)) {
-        if (metricTree1.getType().equals(MetricTreeNodeType.MODULE)
-            && metricTree2.getType().equals(MetricTreeNodeType.MODULE)) {
+        if (Objects.requireNonNull(metricTree1).getType().equals(MetricTreeNodeType.MODULE)
+            && Objects.requireNonNull(metricTree2).getType().equals(MetricTreeNodeType.MODULE)) {
           deltaTree
               .getChildren()
               .add(createDeltaTree(metricTree1, metricTree2, addedFiles, removedFiles));
         } else {
-          deltaTree.getChildren().add(createFileNode(metricTree1, metricTree2));
+          deltaTree
+              .getChildren()
+              .add(createFileNode(metricTree1, Objects.requireNonNull(metricTree2)));
         }
         tree1Counter++;
         tree2Counter++;
       } else if (getChangeType(metricTree1, metricTree2).equals(ChangeType.DELETE)) {
-        deltaTree.getChildren().add(createDeletedFileNode(metricTree1));
+        deltaTree.getChildren().add(createDeletedFileNode(Objects.requireNonNull(metricTree1)));
         removedFiles.add(metricTree1.getName());
         tree1Counter++;
       } else {
-        if (metricTree2.getType().equals(MetricTreeNodeType.MODULE) && metricTree1 != null) {
+        if (Objects.requireNonNull(metricTree2).getType().equals(MetricTreeNodeType.MODULE)
+            && metricTree1 != null) {
           deltaTree.getChildren().add(createAddedFileNode(metricTree1));
           addedFiles.add(metricTree1.getName());
           tree1Counter++;

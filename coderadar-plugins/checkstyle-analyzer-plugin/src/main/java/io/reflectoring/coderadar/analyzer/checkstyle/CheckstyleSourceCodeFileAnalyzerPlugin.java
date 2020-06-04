@@ -73,9 +73,9 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin
     String[] temp = filename.split("/");
     File file = new File(Files.createTempDir(), temp[temp.length - 1]);
     file.deleteOnExit();
-    FileOutputStream out = new FileOutputStream(file);
-    out.write(fileContent);
-    out.close();
+    try (FileOutputStream out = new FileOutputStream(file)) {
+      out.write(fileContent);
+    }
     return file;
   }
 

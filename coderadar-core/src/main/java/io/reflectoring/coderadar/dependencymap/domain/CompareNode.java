@@ -1,9 +1,8 @@
 package io.reflectoring.coderadar.dependencymap.domain;
 
 import io.reflectoring.coderadar.plugin.api.ChangeType;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Stack;
+
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import lombok.Getter;
 import lombok.Setter;
@@ -106,10 +105,10 @@ public class CompareNode {
     if (nodePath == null || nodePath.equals("")) {
       return null;
     }
-    String[] path = nodePath.split("/");
+    String[] pathString = nodePath.split("/");
     CompareNode tmp = this;
     // iterate over every part of the new path
-    for (String s : path) {
+    for (String s : pathString) {
       // if the Node-object already exists, iterate over it
       if (tmp.getChildByName(s) != null) {
         tmp = tmp.getChildByName(s);
@@ -131,12 +130,12 @@ public class CompareNode {
     if (nodePath == null || nodePath.equals("")) {
       return null;
     }
-    String[] path = nodePath.split("/");
+    String[] pathString = nodePath.split("/");
     CompareNode tmp = this;
     // iterate over every part of the new path
     int i = 0;
-    while (i < path.length) {
-      String s = path[i];
+    while (i < pathString.length) {
+      String s = pathString[i];
       // if the Node-object already exists, iterate over it
       if (tmp.getChildByName(s) != null) {
         tmp = tmp.getChildByName(s);
@@ -193,15 +192,14 @@ public class CompareNode {
         if (dependency.getPath().equals(node.getPath())) {
           return true;
         }
-      } else if (!this.hasChildren() && node.hasChildren()
-          || this.hasChildren() && node.hasChildren()) {
-        if (dependency
-            .getPath()
-            .contains(
-                (node.getPackageName().equals("") ? node.getFilename() : node.getPackageName())
-                    .replaceAll("\\.", "/"))) {
-          return true;
-        }
+      } else if ((!this.hasChildren() && node.hasChildren()
+              || this.hasChildren() && node.hasChildren())
+          && dependency
+              .getPath()
+              .contains(
+                  (node.getPackageName().equals("") ? node.getFilename() : node.getPackageName())
+                      .replaceAll("\\.", "/"))) {
+        return true;
       }
     }
     return false;
@@ -219,7 +217,7 @@ public class CompareNode {
     } else if (!path.contains("/")) {
       return root;
     } else {
-      String parentPath = this.path.substring(0, this.path.lastIndexOf("/"));
+      String parentPath = this.path.substring(0, this.path.lastIndexOf('/'));
       return root.getNodeByPath(parentPath);
     }
   }
@@ -246,16 +244,16 @@ public class CompareNode {
    * @param traverseInterface method to call.
    */
   public void traversePost(CompareTreeTraverseInterface traverseInterface) {
-    Stack<CompareNode> stack = new Stack<>();
+    Deque<CompareNode> stack = new ArrayDeque<>();
     HashSet<CompareNode> hash = new HashSet<>();
     CompareNode root = this;
-    stack.push(root);
+    stack.offer(root);
     while (!stack.isEmpty()) {
-      root = stack.peek();
+      root = stack.peekLast();
       if (root.children.isEmpty() || hash.contains(root)) {
-        traverseInterface.traverseMethod(stack.pop());
+        traverseInterface.traverseMethod(stack.pollLast());
       } else {
-        root.children.forEach(stack::push);
+        root.children.forEach(stack::offer);
         hash.add(root);
       }
     }
@@ -268,11 +266,11 @@ public class CompareNode {
    */
   public void traversePre(CompareTreeTraverseInterface traverseInterface) {
     CompareNode root = this;
-    Stack<CompareNode> stack = new Stack<>();
-    stack.add(root);
+    Deque<CompareNode> stack = new ArrayDeque<>();
+    stack.offer(root);
 
     while (!stack.isEmpty()) {
-      root = stack.pop();
+      root = stack.pollLast();
       stack.addAll(root.children);
       traverseInterface.traverseMethod(root);
     }

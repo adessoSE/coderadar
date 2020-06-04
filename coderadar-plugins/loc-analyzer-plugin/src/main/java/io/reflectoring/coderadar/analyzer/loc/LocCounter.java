@@ -74,6 +74,8 @@ public class LocCounter {
             withinMultiLineComment = false;
           }
           break;
+        default:
+          break;
       }
     }
 
