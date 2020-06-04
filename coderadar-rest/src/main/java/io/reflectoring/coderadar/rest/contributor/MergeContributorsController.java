@@ -21,10 +21,7 @@ public class MergeContributorsController implements AbstractBaseController {
     this.mergeContributorsUseCase = mergeContributorsUseCase;
   }
 
-  @PostMapping(
-      path = "/contributors/merge",
-      consumes = MediaType.APPLICATION_JSON_VALUE,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(path = "/contributors/merge", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<HttpStatus> mergeContributors(
       @RequestBody @Validated MergeContributorsCommand command) {
     mergeContributorsUseCase.mergeContributors(command);

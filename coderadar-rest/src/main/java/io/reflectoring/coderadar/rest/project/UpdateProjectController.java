@@ -23,10 +23,7 @@ public class UpdateProjectController implements AbstractBaseController {
     this.updateProjectUseCase = updateProjectUseCase;
   }
 
-  @PostMapping(
-      path = "/projects/{projectId}",
-      consumes = MediaType.APPLICATION_JSON_VALUE,
-      produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(path = "/projects/{projectId}", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<HttpStatus> updateProject(
       @RequestBody @Validated UpdateProjectCommand command,
       @PathVariable(name = "projectId") long projectId)

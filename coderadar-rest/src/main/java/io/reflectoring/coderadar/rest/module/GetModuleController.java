@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.module;
 
+import static io.reflectoring.coderadar.rest.GetModuleResponseMapper.mapModule;
+
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetModuleResponse;
@@ -25,7 +27,6 @@ public class GetModuleController implements AbstractBaseController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<GetModuleResponse> getModule(
       @PathVariable(name = "moduleId") long moduleId) {
-    return new ResponseEntity<>(
-        new GetModuleResponse(moduleId, getModuleUseCase.get(moduleId).getPath()), HttpStatus.OK);
+    return new ResponseEntity<>(mapModule(getModuleUseCase.get(moduleId)), HttpStatus.OK);
   }
 }

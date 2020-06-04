@@ -1,10 +1,11 @@
 package io.reflectoring.coderadar.rest.filepattern;
 
+import static io.reflectoring.coderadar.rest.GetFilePatternResponseMapper.mapFilePatterns;
+
 import io.reflectoring.coderadar.projectadministration.domain.FilePattern;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetFilePatternResponse;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,12 +31,6 @@ public class ListFilePatternsOfProjectController implements AbstractBaseControll
   public ResponseEntity<List<GetFilePatternResponse>> listFilePatterns(
       @PathVariable long projectId) {
     List<FilePattern> filePatterns = listFilePatternsOfProjectUseCase.listFilePatterns(projectId);
-    List<GetFilePatternResponse> responses = new ArrayList<>(filePatterns.size());
-    for (FilePattern filePattern : filePatterns) {
-      responses.add(
-          new GetFilePatternResponse(
-              filePattern.getId(), filePattern.getPattern(), filePattern.getInclusionType()));
-    }
-    return new ResponseEntity<>(responses, HttpStatus.OK);
+    return new ResponseEntity<>(mapFilePatterns(filePatterns), HttpStatus.OK);
   }
 }
