@@ -32,8 +32,7 @@ export class ContributorCardComponent implements OnInit {
 
   openDialog(): void{
     setTimeout(() => {
-      this.dialogRef = this.dialog.open(ContributorDialogComponent,{
-        hasBackdrop: false,
+      this.dialogRef = this.dialog.open(ContributorDialogComponent, {
         minWidth: '150px',
         data:{contributor: this.contributor}
 
