@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest;
 
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.rest.domain.GetCommitResponse;
+
 import java.util.ArrayList;
 import java.util.List;
 

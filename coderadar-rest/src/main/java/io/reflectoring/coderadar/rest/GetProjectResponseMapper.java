@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest;
 
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.rest.domain.GetProjectResponse;
+
 import java.util.ArrayList;
 import java.util.List;
 

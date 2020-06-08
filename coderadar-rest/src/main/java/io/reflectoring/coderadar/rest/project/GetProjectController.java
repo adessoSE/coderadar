@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.rest.project;
 
-import static io.reflectoring.coderadar.rest.GetProjectResponseMapper.mapProject;
-
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driver.project.get.GetProjectUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
@@ -13,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import static io.reflectoring.coderadar.rest.GetProjectResponseMapper.mapProject;
 
 @Transactional
 @RestController

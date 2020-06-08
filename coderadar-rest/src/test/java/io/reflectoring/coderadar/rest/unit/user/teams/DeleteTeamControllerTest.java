@@ -1,8 +1,5 @@
 package io.reflectoring.coderadar.rest.unit.user.teams;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.rest.useradministration.teams.DeleteTeamController;
 import io.reflectoring.coderadar.useradministration.TeamNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.DeleteTeamUseCase;
@@ -11,6 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 
 public class DeleteTeamControllerTest {
   private final DeleteTeamUseCase deleteTeamUseCase = mock(DeleteTeamUseCase.class);
