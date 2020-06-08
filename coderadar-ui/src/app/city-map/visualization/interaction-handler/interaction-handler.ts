@@ -196,8 +196,8 @@ export class InteractionHandler {
   private worldPositionToScreenPosition(worldPosition: Vector3, camera: Camera): Vector2 {
     const screenCoordinate: Vector3 = worldPosition.project(camera);
     const screenPosition: Vector2 = new Vector2(
-      this.screenOffset.x + (( (screenCoordinate.x + 1) * this.screenDimensions.x / 2)),
-      this.screenOffset.y + ((-(screenCoordinate.y - 1) * this.screenDimensions.y / 2)));
+      this.screenOffset.x + ( (screenCoordinate.x + 1) * this.screenDimensions.x / 2),
+      this.screenOffset.y + (-(screenCoordinate.y - 1) * this.screenDimensions.y / 2));
     return screenPosition;
   }
 

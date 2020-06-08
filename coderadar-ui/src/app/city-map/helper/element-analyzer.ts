@@ -198,7 +198,7 @@ export class ElementAnalyzer {
     }
   }
 
-  static getValueFromMetric(metrics: MetricValue[], metricName: String) {
+  static getValueFromMetric(metrics: MetricValue[], metricName: string) {
     let index = metrics ? Object.values(metrics).findIndex(object => object.metricName === metricName): -1;
     return index >= 0 ? Number(metrics[index].value) : undefined;
   }

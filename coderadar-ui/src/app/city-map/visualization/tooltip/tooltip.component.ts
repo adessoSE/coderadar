@@ -19,7 +19,7 @@ export class TooltipComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.tooltipElement = document.querySelector('#tooltip') as HTMLElement;
+    this.tooltipElement = document.querySelector('#tooltip');
 
     this.content$ = this.tooltipService.tooltipContent$
       .pipe(

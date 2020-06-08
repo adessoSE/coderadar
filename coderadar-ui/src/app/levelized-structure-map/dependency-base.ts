@@ -1,4 +1,4 @@
-import {ElementRef, HostListener, ViewChild} from '@angular/core';
+import {HostListener, ViewChild} from '@angular/core';
 import html2canvas from 'html2canvas';
 import * as $ from 'jquery';
 import * as jspdf from 'jspdf';
@@ -86,7 +86,7 @@ export abstract class DependencyBase {
     while (element.offsetParent === null) {
       element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstElementChild as HTMLElement;
     }
-    return element as HTMLElement;
+    return element;
   }
 
   loadDependencies(node, checkChanged?): void {
@@ -178,7 +178,7 @@ export abstract class DependencyBase {
     // calculate positions for arrows of currentNode and its dependencies
     if (currentNode.dependencies.length > 0) {
       // find last visible element for currentNode as start
-      let start = this.findLastHTMLElement(currentNode.path) as HTMLElement;
+      let start = this.findLastHTMLElement(currentNode.path);
       let toDraw;
       if (this.activeDependency !== undefined) {
         // activeDependency is set is not start
@@ -195,7 +195,7 @@ export abstract class DependencyBase {
 
       currentNode.dependencies.forEach(dependency => {
         // find last visible element for dependency as end
-        let end = this.findLastHTMLElement(dependency.path) as HTMLElement;
+        let end = this.findLastHTMLElement(dependency.path);
 
         // if activeDependency is set, draw only activeDependency related dependencies
         if (this.activeDependency !== undefined) {

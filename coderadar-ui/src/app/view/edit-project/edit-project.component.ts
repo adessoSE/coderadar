@@ -3,7 +3,7 @@ import {Project} from '../../model/project';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
-import {BAD_REQUEST, CONFLICT, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND, UNPROCESSABLE_ENTITY} from 'http-status-codes';
+import {BAD_REQUEST, CONFLICT, FORBIDDEN, NOT_FOUND, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import {MatSnackBar} from '@angular/material';
 
@@ -109,7 +109,7 @@ export class EditProjectComponent implements OnInit {
   private validateInput(): boolean {
     this.incorrectURL = this.project.vcsUrl.trim().length === 0;
     this.nameEmpty = this.project.name.trim().length === 0;
-    
+
     if (this.project.startDate === 'first commit') {
       this.project.startDate = null;
     }

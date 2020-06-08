@@ -3,7 +3,7 @@ import {combineLatest, Observable, Subscription} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import {Store} from '@ngrx/store';
 import * as fromRoot from '../shared/reducers';
-import {loadAvailableMetrics, loadMetricTree} from './visualization.actions';
+import {loadMetricTree} from './visualization.actions';
 import {IFilter} from '../interfaces/IFilter';
 import {INode} from '../interfaces/INode';
 import {IMetricMapping} from '../interfaces/IMetricMapping';
