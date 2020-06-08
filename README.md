@@ -1,6 +1,6 @@
 # coderadar
 
-[![Build Status](https://travis-ci.org/adessoAG/coderadar.svg?branch=master)](https://travis-ci.org/adessoAG/coderadar)
+[![Build Status](https://github.com/adessoAG/coderadar/workflows/Java%20CI%20with%20Gradle/badge.svg)](https://github.com/adessoAG/coderadar)
 [![Gradle Status](https://gradleupdate.appspot.com/adessoAG/coderadar/status.svg)](https://gradleupdate.appspot.com/adessoAG/coderadar/status)
 
 coderadar aims to be a continuous source code analysis tool that **automatically runs code analyzers on your version control system** that provide you with the metrics that are most important to you and your team. coderadar provides **per-commit code metrics** and even allows viewing **the history of code metrics** in legacy projects. 
