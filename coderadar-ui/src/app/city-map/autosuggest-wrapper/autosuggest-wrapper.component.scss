@@ -25,18 +25,4 @@
   button:disabled {
     display: none;
   }
-
-  // allow a greater width for suggestions
-  ngui-auto-complete {
-    min-width: 100%;
-    width: auto !important;
-  }
-
-  // align the suggestion dropdown to the right
-  &.align-right {
-    ngui-auto-complete {
-      left: auto !important;
-      right: 0;
-    }
-  }
 }

@@ -27,7 +27,7 @@ export class TooltipComponent implements OnInit {
           const readableMetrics = {};
 
           if (tooltipObject.metrics) {
-            Object.keys(tooltipObject.metrics).map((key) => {
+            Object.keys(tooltipObject.metrics).forEach((key) => {
               readableMetrics[VisualizationConfig.getShortNameByMetricName(key).shortName] = tooltipObject.metrics[key];
             });
           }

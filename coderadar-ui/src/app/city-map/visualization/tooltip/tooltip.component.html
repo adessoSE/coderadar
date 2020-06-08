@@ -1,6 +1,10 @@
 <div id="tooltip">
   <div class="element-name">{{(content$ | async)?.elementName}}</div>
-  <table>
+  <table aria-label="Metric values for this file.">
+    <tr>
+      <th id="metric">Metric</th>
+      <th id="value">Value</th>
+    </tr>
     <tr *ngFor="let metric of (content$ | async)?.metrics | keyValue">
       <td class="metric-name-column">
         <small>{{metric.key}}</small>
