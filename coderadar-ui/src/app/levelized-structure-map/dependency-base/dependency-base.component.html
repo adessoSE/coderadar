@@ -1,0 +1,20 @@
+<div #3canvasContainer id="3canvasContainer">
+  <pinch-zoom #3zoom id="3zoom" [disableZoomControl]="'disable'" [backgroundColor]="'transparent'" [transition-duration]="50">
+    <drag-scroll id="3scroll" [scrollbar-hidden]="true" [scroll-x-wheel-enabled]="false">
+      <div id="3dependencyTree" class="dependencyTree">
+        <div *ngIf="node === undefined">
+          <mat-spinner mode="indeterminate" class="spinner-center"></mat-spinner>
+        </div>
+        <div *ngIf="node !== undefined">
+          <div [id]="node.path === '' ? '3list__root' : ''">
+<!--          <div [id]="'3list__root'">-->
+            <span>
+<!--              <app-tree-node [node]="node" [root]="this"  [hasSiblings]="false"></app-tree-node>-->
+            </span>
+          </div>
+        </div>
+      </div>
+      <svg id="3svg" class="canvas"></svg>
+    </drag-scroll>
+  </pinch-zoom>
+</div>

@@ -1,13 +1,20 @@
-import {HostListener, ViewChild} from '@angular/core';
-import html2canvas from 'html2canvas';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {AppComponent} from '../../app.component';
+import {Project} from '../../model/project';
+import {EdgeModel} from '../edge.model';
 import * as $ from 'jquery';
 import * as jspdf from 'jspdf';
-import {AppComponent} from "../app.component";
-import {Project} from "../model/project";
-import {FORBIDDEN, NOT_FOUND} from "http-status-codes";
-import {EdgeModel} from "./edge.model";
+import html2canvas from 'html2canvas';
+import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
 
-export abstract class DependencyBase {
+@Component({
+  selector: 'app-dependency-base',
+  templateUrl: './dependency-base.component.html',
+  styleUrls: ['./dependency-base.component.scss']
+})
+export class DependencyBaseComponent {
+
+  constructor() { }
 
   appComponent = AppComponent;
   projectService: any;
@@ -138,9 +145,12 @@ export abstract class DependencyBase {
 
   draw(callback): void {
     // clear svg
-    $("#3svg").empty();
+    $('#3svg').empty();
     this.drawn = [];
+    console.log('start drawing');
+    console.log(this.node ? 'node' : 'null');
     const rootList = document.getElementById('3list__root');
+    console.log(rootList);
     this.svg = document.getElementById('3svg');
     const zoom = document.getElementById('3zoom');
     const scroll = document.querySelector('[id="3scroll"] > div') as HTMLElement;
@@ -178,7 +188,7 @@ export abstract class DependencyBase {
     // calculate positions for arrows of currentNode and its dependencies
     if (currentNode.dependencies.length > 0) {
       // find last visible element for currentNode as start
-      let start = this.findLastHTMLElement(currentNode.path);
+      const start = this.findLastHTMLElement(currentNode.path);
       let toDraw;
       if (this.activeDependency !== undefined) {
         // activeDependency is set is not start
@@ -189,13 +199,13 @@ export abstract class DependencyBase {
       // different values for chrome and firefox
       // (ref: https://stackoverflow.com/questions/1472842/firefox-and-chrome-give-different-values-for-offsettop).
       const startx = ($(start).offset().left - $(this.svg).offset().left) / this.zoomElement.scale + start.offsetWidth / 2;
-      let starty = ($(start).offset().top - $(this.svg).offset().top) / this.zoomElement.scale + start.offsetHeight + ($(start).css('padding-top') !== '0px' ? 0 : 5);
-      let startTop = starty - start.offsetHeight - ($(start).css('padding-top') !== '0px' ? 0 : 10);
+      const starty = ($(start).offset().top - $(this.svg).offset().top) / this.zoomElement.scale + start.offsetHeight + ($(start).css('padding-top') !== '0px' ? 0 : 5);
+      const startTop = starty - start.offsetHeight - ($(start).css('padding-top') !== '0px' ? 0 : 10);
       console.log(parseFloat($(start).css('padding-top')));
 
       currentNode.dependencies.forEach(dependency => {
         // find last visible element for dependency as end
-        let end = this.findLastHTMLElement(dependency.path);
+        const end = this.findLastHTMLElement(dependency.path);
 
         // if activeDependency is set, draw only activeDependency related dependencies
         if (this.activeDependency !== undefined) {
@@ -210,8 +220,8 @@ export abstract class DependencyBase {
 
         // end = end.parentNode as HTMLElement;
         const endx = ($(end).offset().left - $(this.svg).offset().left) / this.zoomElement.scale + end.offsetWidth / 2;
-        let endy = ($(end).offset().top - $(this.svg).offset().top) / this.zoomElement.scale - ($(end).css('padding-bottom') !== '0px' ? 0 : 7);
-        let endBottom = endy + end.offsetHeight + ($(end).css('padding-bottom') !== '0px' ? 0 : 14);
+        const endy = ($(end).offset().top - $(this.svg).offset().top) / this.zoomElement.scale - ($(end).css('padding-bottom') !== '0px' ? 0 : 7);
+        const endBottom = endy + end.offsetHeight + ($(end).css('padding-bottom') !== '0px' ? 0 : 14);
 
         if (start !== end) {
           if (dependency.changed === 'ADD') {
@@ -250,7 +260,7 @@ export abstract class DependencyBase {
 
   svgArrow(startx, starty, endx, endy, color, width?, dashed?) {
     // reduce number of nodes
-    let edge = new EdgeModel(startx, starty, endx, endy, color, width, dashed);
+    const edge = new EdgeModel(startx, starty, endx, endy, color, width, dashed);
     if (this.drawn.filter(existingEdge => existingEdge.equals(edge)).length > 0) {
       return;
     }
@@ -301,8 +311,8 @@ export abstract class DependencyBase {
     );
   }
 
-  drawFigure(figureDefinition: string, width: number, color: string, dashed? : boolean) {
-    const figure = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+  drawFigure(figureDefinition: string, width: number, color: string, dashed?: boolean) {
+    const figure = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     figure.setAttribute('d', figureDefinition);
     figure.style.stroke = color;
     figure.style.fill = 'transparent';
@@ -326,4 +336,5 @@ export abstract class DependencyBase {
         }
       });
   }
+
 }

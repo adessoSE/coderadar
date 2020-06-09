@@ -65,6 +65,7 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ListViewComponent } from './view/project-dashboard/list-view/list-view.component';
 import { BranchViewComponent } from './view/project-dashboard/branch-view/branch-view.component';
 import { FileViewComponent } from './view/file-view/file-view.component';
+import { DependencyBaseComponent } from './levelized-structure-map/dependency-base/dependency-base.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -106,7 +107,8 @@ const appRoutes: Routes = [
     CityViewHeaderComponent,
     ListViewComponent,
     BranchViewComponent,
-    FileViewComponent
+    FileViewComponent,
+    DependencyBaseComponent
   ],
   imports: [
     BrowserModule,

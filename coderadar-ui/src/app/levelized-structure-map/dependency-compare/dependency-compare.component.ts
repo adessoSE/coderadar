@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
 import {FORBIDDEN} from 'http-status-codes';
-import {DependencyBase} from '../dependency-base';
+import {DependencyBaseComponent} from '../dependency-base/dependency-base.component';
 
 @Component({
   selector: 'app-dependency-compare',
@@ -11,7 +11,7 @@ import {DependencyBase} from '../dependency-base';
   styleUrls: ['./dependency-compare.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class DependencyCompareComponent extends DependencyBase implements OnInit, AfterViewInit {
+export class DependencyCompareComponent extends DependencyBaseComponent implements OnInit, AfterViewInit {
 
   commitName2: any;
   @ViewChild('3showChanged') showChangedContainer;

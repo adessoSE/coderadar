@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ProjectService} from '../../service/project.service';
 import {FORBIDDEN} from 'http-status-codes';
 import {UserService} from '../../service/user.service';
-import {DependencyBase} from '../dependency-base';
+import {DependencyBaseComponent} from '../dependency-base/dependency-base.component';
 
 @Component({
   selector: 'app-tree-root',
@@ -11,7 +11,7 @@ import {DependencyBase} from '../dependency-base';
   styleUrls: ['./dependency-root.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class DependencyRootComponent extends DependencyBase implements OnInit, AfterViewInit {
+export class DependencyRootComponent extends DependencyBaseComponent implements OnInit, AfterViewInit {
 
   constructor(router: Router, userService: UserService, projectService: ProjectService, private route: ActivatedRoute) {
     super();
@@ -35,9 +35,11 @@ export class DependencyRootComponent extends DependencyBase implements OnInit, A
   getData(): void {
     this.projectService.getDependencyTree(this.projectId, this.commitName).then(response => {
       this.node = response.body;
+      console.log('got data');
       this.svg = document.getElementById('3svg');
       this.checkDown = this.checkUp = true;
-      setTimeout(() => this.draw(() => this.loadDependencies(this.node)), 50);
+      console.log('wait for rendering');
+      setTimeout(() => this.draw(() => this.loadDependencies(this.node)), 500);
     })
       .catch(e => {
         if (e.status && e.status === FORBIDDEN) {
