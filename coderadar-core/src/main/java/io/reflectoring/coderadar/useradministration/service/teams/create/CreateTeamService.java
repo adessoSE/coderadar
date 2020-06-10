@@ -27,9 +27,11 @@ public class CreateTeamService implements CreateTeamUseCase {
     if (getTeamPort.existsByName(createTeamCommand.getName())) {
       throw new TeamAlreadyExistsException(createTeamCommand.getName());
     } else {
-      for (Long userId : createTeamCommand.getUserIds()) {
-        if (!getUserPort.existsById(userId)) {
-          throw new UserNotFoundException(userId);
+      if (createTeamCommand.getUserIds() != null) {
+        for (Long userId : createTeamCommand.getUserIds()) {
+          if (!getUserPort.existsById(userId)) {
+            throw new UserNotFoundException(userId);
+          }
         }
       }
       return createTeamPort.createTeam(createTeamCommand);

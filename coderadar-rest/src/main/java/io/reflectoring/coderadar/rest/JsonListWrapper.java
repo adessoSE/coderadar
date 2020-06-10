@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest;
 
 import java.util.List;
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JsonListWrapper<T> {
-  private List<T> elements;
+  @NotEmpty private List<T> elements;
 }

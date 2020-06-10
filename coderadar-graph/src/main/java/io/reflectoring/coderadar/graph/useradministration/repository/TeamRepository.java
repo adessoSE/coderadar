@@ -31,9 +31,9 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
   void addTeamToProject(long projectId, long teamId, String role);
 
   @Query(
-      "MATCH (t:TeamEntity) WHERE ID(t) = {0} WITH t "
+      "MATCH (t) WHERE ID(t) = {0} WITH t "
           + "UNWIND {1} as x "
-          + "MATCH (u:UserEntity) WHERE ID(u) = x "
+          + "MATCH (u) WHERE ID(u) = x "
           + "MERGE (u)-[r:IS_IN]->(t)")
   void addUsersToTeam(long teamId, List<Long> userIds);
 
@@ -51,7 +51,7 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
   @Query("MATCH (u)-[r:IS_IN*0..1]->(t) WHERE ID(t) = {0} RETURN t, r, u")
   TeamEntity findByIdWithMembers(long teamId);
 
-  @Query("MATCH (t:TeamEntity) WHERE ID(t) = {0} RETURN COUNT(t) > 0")
+  @Query("MATCH (t) WHERE ID(t) = {0} RETURN COUNT(t) > 0")
   boolean existsById(long teamId);
 
   @Query("MATCH (t:TeamEntity) WHERE t.name = {0} RETURN COUNT(t) > 0")
@@ -61,7 +61,7 @@ public interface TeamRepository extends Neo4jRepository<TeamEntity, Long> {
    * @param projectId The project id.
    * @return All teams assigned to the project along with their members.
    */
-  @Query("MATCH (p)<-[:ASSIGNED_TO]-(t)<-[r:IS_IN]-(u) WHERE ID(p) = {0} RETURN t, r, u")
+  @Query("MATCH (p)<-[:ASSIGNED_TO]-(t)<-[r:IS_IN*0..1]-(u) WHERE ID(p) = {0} RETURN t, r, u")
   List<TeamEntity> listTeamsByProjectIdWithMembers(long projectId);
 
   /**

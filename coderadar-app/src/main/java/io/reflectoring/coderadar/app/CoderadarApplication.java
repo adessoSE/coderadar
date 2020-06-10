@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @EnableScheduling
 @EnableAsync(proxyTargetClass = true)
@@ -25,7 +25,7 @@ public class CoderadarApplication {
     SpringApplication.run(CoderadarApplication.class, args);
   }
 
-  @RequestMapping(value = "/**/{path:[^\\.]*}")
+  @GetMapping(value = "/**/{path:[^.]*}")
   public String redirect() {
     return "forward:/index.html";
   }

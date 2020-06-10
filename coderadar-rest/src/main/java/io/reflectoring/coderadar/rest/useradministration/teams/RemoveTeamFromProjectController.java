@@ -7,8 +7,8 @@ import io.reflectoring.coderadar.useradministration.port.driver.teams.RemoveTeam
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,7 +21,7 @@ public class RemoveTeamFromProjectController implements AbstractBaseController {
     this.removeTeamFromProjectUseCase = removeTeamFromProjectUseCase;
   }
 
-  @PostMapping(path = "/projects/{projectId}/teams/{teamId}")
+  @DeleteMapping(path = "/projects/{projectId}/teams/{teamId}")
   public ResponseEntity<ErrorMessageResponse> removeTeamFromProject(
       @PathVariable long projectId, @PathVariable long teamId) {
     try {

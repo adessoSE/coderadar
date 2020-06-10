@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.useradministration.service.teams;
 
 import io.reflectoring.coderadar.useradministration.TeamNotFoundException;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
+import io.reflectoring.coderadar.useradministration.UserNotInTeamException;
 import io.reflectoring.coderadar.useradministration.port.driven.GetTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.RemoveUsersFromTeamPort;
@@ -33,6 +34,9 @@ public class RemoveUsersFromTeamService implements RemoveUsersFromTeamUseCase {
     for (Long userId : userIds) {
       if (!getUserPort.existsById(userId)) {
         throw new UserNotFoundException(userId);
+      }
+      if (getTeamPort.get(teamId).getMembers().stream().noneMatch(user -> user.getId() == userId)) {
+        throw new UserNotInTeamException(userId, teamId);
       }
     }
     removeUsersFromTeamPort.removeUsersFromTeam(teamId, userIds);
