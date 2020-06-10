@@ -1,20 +1,19 @@
 package io.reflectoring.coderadar.rest.unit.user.teams;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.rest.domain.GetProjectResponse;
 import io.reflectoring.coderadar.rest.useradministration.teams.ListProjectsForTeamController;
 import io.reflectoring.coderadar.useradministration.TeamNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListProjectsForTeamUseCase;
+import java.util.Collections;
+import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.Collections;
-import java.util.List;
-
-import static org.mockito.Mockito.mock;
 
 public class ListProjectsForTeamControllerTest {
   private final ListProjectsForTeamUseCase listProjectsForTeamUseCase =

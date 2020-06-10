@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.rest;
 
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.rest.domain.GetAnalyzerConfigurationResponse;
-
 import java.util.ArrayList;
 import java.util.List;
 
