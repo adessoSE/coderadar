@@ -65,11 +65,13 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ListViewComponent } from './view/project-dashboard/list-view/list-view.component';
 import { BranchViewComponent } from './view/project-dashboard/branch-view/branch-view.component';
 import { FileViewComponent } from './view/file-view/file-view.component';
+import { TeamsDashboardComponent } from './view/teams-dashboard/teams-dashboard.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'dashboard', component: MainDashboardComponent},
+  {path: 'teams', component: TeamsDashboardComponent},
   {path: 'user-settings', component: UserSettingsComponent},
   {path: 'add-project', component: AddProjectComponent},
   {path: 'project-configure/:id', component: ConfigureProjectComponent},
@@ -97,6 +99,7 @@ const appRoutes: Routes = [
     FooterComponent,
     UserSettingsComponent,
     ProjectDashboardComponent,
+    TeamsDashboardComponent,
     ViewCommitComponent,
     CityViewComponent,
     DependencyRootComponent,
@@ -106,7 +109,8 @@ const appRoutes: Routes = [
     CityViewHeaderComponent,
     ListViewComponent,
     BranchViewComponent,
-    FileViewComponent
+    FileViewComponent,
+    TeamsDashboardComponent
   ],
   imports: [
     BrowserModule,

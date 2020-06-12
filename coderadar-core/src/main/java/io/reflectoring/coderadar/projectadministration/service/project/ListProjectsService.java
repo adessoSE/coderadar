@@ -19,9 +19,4 @@ public class ListProjectsService implements ListProjectsUseCase {
   public List<Project> listProjects() {
     return listProjectsPort.getProjects();
   }
-
-  @Override
-  public List<Project> listProjectsForUser(long userId) {
-    return null; // TODO: implement
-  }
 }

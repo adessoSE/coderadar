@@ -21,7 +21,7 @@ class LoginUserControllerTest {
     LoginUserController testSubject = new LoginUserController(loginUserUseCase);
 
     LoginUserCommand command = new LoginUserCommand("username", "password");
-    LoginUserResponse loginUserResponse = new LoginUserResponse("accessToken", "refreshToken");
+    LoginUserResponse loginUserResponse = new LoginUserResponse("accessToken", "refreshToken", 1L);
 
     Mockito.when(loginUserUseCase.login(command)).thenReturn(loginUserResponse);
 
@@ -32,5 +32,7 @@ class LoginUserControllerTest {
         loginUserResponse.getAccessToken(), responseEntity.getBody().getAccessToken());
     Assertions.assertEquals(
         loginUserResponse.getRefreshToken(), responseEntity.getBody().getRefreshToken());
+    Assertions.assertEquals(
+            loginUserResponse.getUserId(), responseEntity.getBody().getUserId());
   }
 }

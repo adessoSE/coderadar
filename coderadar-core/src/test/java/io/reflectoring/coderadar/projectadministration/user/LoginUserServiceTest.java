@@ -53,7 +53,7 @@ class LoginUserServiceTest {
     UsernamePasswordAuthenticationToken expectedToken =
         new UsernamePasswordAuthenticationToken(username, password);
     LoginUserResponse expectedResponse =
-        new LoginUserResponse(expectedAccessToken, expectedRefreshToken);
+        new LoginUserResponse(expectedAccessToken, expectedRefreshToken, userId);
     RefreshToken expectedRefreshTokenEntity = new RefreshToken().setToken(expectedRefreshToken);
 
     LoginUserCommand command = new LoginUserCommand(username, password);
