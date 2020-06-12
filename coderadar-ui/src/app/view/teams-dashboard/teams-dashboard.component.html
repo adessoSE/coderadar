@@ -4,11 +4,7 @@
 </div>
 <mat-sidenav-container class="sidenav">
   <mat-sidenav mode="side" opened style="width: 15%">
-    <mat-nav-list>
-      <a mat-list-item [routerLink]="'/dashboard'"> My projects </a>
-      <a mat-list-item [routerLink]="'/teams'"> My teams </a>
-      <a mat-list-item [routerLink]="'/dashboard'"> Settings </a>
-    </mat-nav-list>
+    <app-sidenav-content></app-sidenav-content>
   </mat-sidenav>
   <mat-sidenav-content>
     <main class="card-list">
@@ -53,7 +49,7 @@
           </mat-grid-tile>
 
           <!--The big plus button-->
-          <a class="add-button" color="accent" mat-fab routerLink="/add-project">
+          <a class="add-button" color="accent" mat-fab routerLink="/add-team">
             <mat-icon class="add-icon">+</mat-icon>
           </a>
 

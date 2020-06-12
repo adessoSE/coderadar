@@ -1,0 +1,48 @@
+<app-header [title]="[{location: '/dashboard', name: 'Dashboard'}]"></app-header>
+<mat-sidenav-container class="sidenav">
+  <mat-sidenav mode="side" opened style="width: 15%">
+    <app-sidenav-content></app-sidenav-content>
+  </mat-sidenav>
+  <div>
+    <main >
+      <div class="grid-container" id="cardContainer">
+        <div fxLayoutAlign="center center" style="margin-top: 100px">
+          <form (ngSubmit)="submitForm()" style="width: 30%">
+            <mat-card>
+
+              <!--Card title-->
+              <mat-card-header>
+                <mat-card-title>
+                  <span>Add team</span>
+                </mat-card-title>
+              </mat-card-header>
+
+              <mat-card-content fxLayout="column">
+                <!--Form fields-->
+                <mat-form-field>
+                  <input [(ngModel)]="team.name" matInput maxlength="100" name="name" placeholder="Team name"
+                         required type="text">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Select users</mat-label>
+                  <mat-select multiple [formControl]="usersFormControl">
+                    <mat-option *ngFor="let user of users" [value]="user.id">{{user.username}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!--Possible errors-->
+                <mat-error *ngIf="nameEmpty">The team name must not be empty!</mat-error>
+                <!--Cancel and submit buttons-->
+                <div align="center" id="cardButtons">
+                  <button mat-stroked-button routerLink="/dashboard" type="button" style="margin: 10px">Cancel</button>
+                  <button color="primary" mat-raised-button type="submit" style="margin: 10px">Add</button>
+                </div>
+
+              </mat-card-content>
+            </mat-card>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+</mat-sidenav-container>
+<app-footer></app-footer>

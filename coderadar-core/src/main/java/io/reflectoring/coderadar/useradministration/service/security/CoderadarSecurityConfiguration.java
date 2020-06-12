@@ -74,6 +74,8 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
               "/api/user/registration",
               "/api/user/refresh",
               "/login",
+              "/teams",
+              "/add-team",
               "/**/*.js",
               "/**/*.css",
               "/**/*.map",

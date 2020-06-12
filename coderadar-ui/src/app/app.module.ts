@@ -66,12 +66,15 @@ import { ListViewComponent } from './view/project-dashboard/list-view/list-view.
 import { BranchViewComponent } from './view/project-dashboard/branch-view/branch-view.component';
 import { FileViewComponent } from './view/file-view/file-view.component';
 import { TeamsDashboardComponent } from './view/teams-dashboard/teams-dashboard.component';
+import { AddTeamComponent } from './view/add-team/add-team.component';
+import { SidenavContentComponent } from './view/sidenav-content/sidenav-content.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'dashboard', component: MainDashboardComponent},
   {path: 'teams', component: TeamsDashboardComponent},
+  {path: 'add-team', component: AddTeamComponent},
   {path: 'user-settings', component: UserSettingsComponent},
   {path: 'add-project', component: AddProjectComponent},
   {path: 'project-configure/:id', component: ConfigureProjectComponent},
@@ -110,7 +113,9 @@ const appRoutes: Routes = [
     ListViewComponent,
     BranchViewComponent,
     FileViewComponent,
-    TeamsDashboardComponent
+    TeamsDashboardComponent,
+    AddTeamComponent,
+    SidenavContentComponent,
   ],
   imports: [
     BrowserModule,
