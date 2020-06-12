@@ -3,11 +3,10 @@ package io.reflectoring.coderadar.rest.unit;
 import io.reflectoring.coderadar.analyzer.domain.AnalyzerConfiguration;
 import io.reflectoring.coderadar.rest.GetAnalyzerConfigurationResponseMapper;
 import io.reflectoring.coderadar.rest.domain.GetAnalyzerConfigurationResponse;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class GetAnalyzerConfigurationResponseMapperTest {
 

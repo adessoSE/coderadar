@@ -1,12 +1,11 @@
 package io.reflectoring.coderadar.rest;
 
+import static io.reflectoring.coderadar.rest.GetUserResponseMapper.mapUsers;
+
 import io.reflectoring.coderadar.rest.domain.GetTeamResponse;
 import io.reflectoring.coderadar.useradministration.domain.Team;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static io.reflectoring.coderadar.rest.GetUserResponseMapper.mapUsers;
 
 public class GetTeamResponseMapper {
   private GetTeamResponseMapper() {}

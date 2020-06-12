@@ -1,5 +1,9 @@
 package io.reflectoring.coderadar.rest.dependencymap;
 
+import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
+import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.dependencymap.adapter.DependencyTreeAdapter;
 import io.reflectoring.coderadar.dependencymap.domain.Node;
@@ -10,6 +14,13 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.creat
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.vcs.port.driven.DeleteLocalRepositoryPort;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,18 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-
-import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
-import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 public class TreeTest extends ControllerTestTemplate {
 

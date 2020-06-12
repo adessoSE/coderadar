@@ -1,19 +1,18 @@
 package io.reflectoring.coderadar.rest.contributor;
 
+import static io.reflectoring.coderadar.rest.GetContributorResponseMapper.mapContributors;
+
 import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForPathCommand;
 import io.reflectoring.coderadar.contributor.port.driver.ListContributorsUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetContributorResponse;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static io.reflectoring.coderadar.rest.GetContributorResponseMapper.mapContributors;
 
 @Transactional
 @RestController

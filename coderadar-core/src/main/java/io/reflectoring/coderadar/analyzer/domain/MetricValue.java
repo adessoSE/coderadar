@@ -1,9 +1,8 @@
 package io.reflectoring.coderadar.analyzer.domain;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
 
 /** A single metric for a given File and Commit. */
 @Data

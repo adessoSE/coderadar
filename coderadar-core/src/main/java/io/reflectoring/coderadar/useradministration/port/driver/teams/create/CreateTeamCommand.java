@@ -1,10 +1,9 @@
 package io.reflectoring.coderadar.useradministration.port.driver.teams.create;
 
+import java.util.List;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
-import java.util.List;
 
 /** DTO class for creating teams. */
 @Data

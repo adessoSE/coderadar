@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.vcs.port.driven;
 
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
-
 import java.util.HashMap;
 import java.util.List;
 

@@ -11,9 +11,8 @@ import io.reflectoring.coderadar.query.port.driven.GetCriticalFilesPort;
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetCriticalFilesUseCase;
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFilesWithContributorsCommand;
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFrequentlyChangedFilesCommand;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GetCriticalFilesService implements GetCriticalFilesUseCase {

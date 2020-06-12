@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.unit.useradministration.teams;
 
+import static org.mockito.Mockito.mock;
+
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.rest.ProjectRoleJsonWrapper;
 import io.reflectoring.coderadar.rest.useradministration.teams.AddTeamToProjectController;
@@ -11,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import static org.mockito.Mockito.mock;
 
 public class AddTeamToProjectControllerTest {
   private final AddTeamToProjectUseCase addTeamToProjectUseCase =

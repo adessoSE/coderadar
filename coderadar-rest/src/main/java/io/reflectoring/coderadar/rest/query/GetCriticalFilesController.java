@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.query;
 
+import static io.reflectoring.coderadar.rest.GetCommitResponseMapper.mapCommits;
+
 import io.reflectoring.coderadar.query.domain.ContributorsForFile;
 import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetCriticalFilesUseCase;
@@ -7,17 +9,14 @@ import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFilesWithCon
 import io.reflectoring.coderadar.query.port.driver.criticalfiles.GetFrequentlyChangedFilesCommand;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.FileAndCommitsForTimePeriodResponse;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static io.reflectoring.coderadar.rest.GetCommitResponseMapper.mapCommits;
 
 @Transactional
 @RestController

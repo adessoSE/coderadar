@@ -3,7 +3,6 @@ package io.reflectoring.coderadar.vcs.port.driven;
 import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
-
 import java.util.List;
 
 public interface UpdateLocalRepositoryPort {

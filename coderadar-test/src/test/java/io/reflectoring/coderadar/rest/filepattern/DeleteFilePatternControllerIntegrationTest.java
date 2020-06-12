@@ -1,5 +1,7 @@
 package io.reflectoring.coderadar.rest.filepattern;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+
 import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.filepattern.repository.FilePatternRepository;
@@ -10,8 +12,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 class DeleteFilePatternControllerIntegrationTest extends ControllerTestTemplate {
 

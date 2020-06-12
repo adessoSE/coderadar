@@ -1,26 +1,25 @@
 package io.reflectoring.coderadar.rest.query;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
-import io.reflectoring.coderadar.rest.ControllerTestTemplate;
-import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
-import io.reflectoring.coderadar.rest.domain.GetCommitResponse;
-import io.reflectoring.coderadar.rest.domain.IdResponse;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
-
-import java.net.URL;
-import java.util.List;
-
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
+import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
+import io.reflectoring.coderadar.rest.domain.GetCommitResponse;
+import io.reflectoring.coderadar.rest.domain.IdResponse;
+import java.net.URL;
+import java.util.List;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 
 class GetCommitsInProjectControllerTest extends ControllerTestTemplate {
 

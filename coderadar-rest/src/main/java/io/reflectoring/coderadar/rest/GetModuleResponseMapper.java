@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.rest;
 
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.rest.domain.GetModuleResponse;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -4,9 +4,8 @@ import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.query.port.driven.GetAvailableMetricsInProjectPort;
 import io.reflectoring.coderadar.query.port.driver.GetAvailableMetricsInProjectUseCase;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GetAvailableMetricsInProjectService implements GetAvailableMetricsInProjectUseCase {

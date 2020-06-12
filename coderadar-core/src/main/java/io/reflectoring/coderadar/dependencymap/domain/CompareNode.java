@@ -1,14 +1,13 @@
 package io.reflectoring.coderadar.dependencymap.domain;
 
 import io.reflectoring.coderadar.plugin.api.ChangeType;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

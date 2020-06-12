@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.projectadministration.port.driven.analyzer;
 
 import io.reflectoring.coderadar.analyzer.domain.MetricValue;
-
 import java.util.List;
 import java.util.Map;
 

@@ -8,12 +8,11 @@ import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBr
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import java.net.URL;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.net.URL;
 
 public class DeleteBranchTest extends ControllerTestTemplate {
 

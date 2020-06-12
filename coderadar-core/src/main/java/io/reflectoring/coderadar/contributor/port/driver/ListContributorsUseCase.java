@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.contributor.port.driver;
 
 import io.reflectoring.coderadar.contributor.domain.Contributor;
-
 import java.util.List;
 
 public interface ListContributorsUseCase {

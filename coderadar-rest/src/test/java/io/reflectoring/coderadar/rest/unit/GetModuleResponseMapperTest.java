@@ -3,11 +3,10 @@ package io.reflectoring.coderadar.rest.unit;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.rest.GetModuleResponseMapper;
 import io.reflectoring.coderadar.rest.domain.GetModuleResponse;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class GetModuleResponseMapperTest {
 

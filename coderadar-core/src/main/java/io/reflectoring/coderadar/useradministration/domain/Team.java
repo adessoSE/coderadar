@@ -1,10 +1,9 @@
 package io.reflectoring.coderadar.useradministration.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.Collections;
 import java.util.List;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor

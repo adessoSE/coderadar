@@ -1,12 +1,11 @@
 package io.reflectoring.coderadar.dependencymap.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.CopyOnWriteArrayList;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

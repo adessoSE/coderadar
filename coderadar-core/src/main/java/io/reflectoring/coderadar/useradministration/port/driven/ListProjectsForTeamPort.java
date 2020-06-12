@@ -1,7 +1,6 @@
 package io.reflectoring.coderadar.useradministration.port.driven;
 
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-
 import java.util.List;
 
 public interface ListProjectsForTeamPort {
