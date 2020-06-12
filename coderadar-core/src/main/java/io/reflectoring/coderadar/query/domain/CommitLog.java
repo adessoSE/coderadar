@@ -1,8 +1,9 @@
 package io.reflectoring.coderadar.query.domain;
 
+import lombok.Data;
+
 import java.util.Collections;
 import java.util.List;
-import lombok.Data;
 
 @Data
 public class CommitLog {

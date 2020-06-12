@@ -6,8 +6,9 @@ import io.reflectoring.coderadar.useradministration.port.driven.AddUsersToTeamPo
 import io.reflectoring.coderadar.useradministration.port.driven.GetTeamPort;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.AddUsersToTeamUseCase;
-import java.util.List;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AddUsersToTeamService implements AddUsersToTeamUseCase {

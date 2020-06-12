@@ -5,8 +5,9 @@ import io.reflectoring.coderadar.useradministration.domain.Team;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.ListTeamsForUserPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListTeamsForUserUseCase;
-import java.util.List;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ListTeamsForUserService implements ListTeamsForUserUseCase {

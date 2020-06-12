@@ -5,8 +5,9 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driven.ListUsersForProjectPort;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListUsersForProjectUseCase;
-import java.util.List;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ListUsersForProjectService implements ListUsersForProjectUseCase {

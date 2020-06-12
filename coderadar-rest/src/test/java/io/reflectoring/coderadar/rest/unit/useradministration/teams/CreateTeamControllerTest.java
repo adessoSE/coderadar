@@ -1,19 +1,20 @@
 package io.reflectoring.coderadar.rest.unit.useradministration.teams;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import io.reflectoring.coderadar.rest.useradministration.teams.CreateTeamController;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.create.CreateTeamCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.create.CreateTeamUseCase;
-import java.util.Collections;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Collections;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 
 public class CreateTeamControllerTest {
   private final CreateTeamUseCase createTeamUseCase = mock(CreateTeamUseCase.class);

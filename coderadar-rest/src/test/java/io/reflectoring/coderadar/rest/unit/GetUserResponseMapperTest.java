@@ -3,10 +3,11 @@ package io.reflectoring.coderadar.rest.unit;
 import io.reflectoring.coderadar.rest.GetUserResponseMapper;
 import io.reflectoring.coderadar.rest.domain.GetUserResponse;
 import io.reflectoring.coderadar.useradministration.domain.User;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GetUserResponseMapperTest {
   @Test

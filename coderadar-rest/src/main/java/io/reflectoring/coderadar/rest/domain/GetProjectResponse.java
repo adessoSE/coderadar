@@ -1,7 +1,8 @@
 package io.reflectoring.coderadar.rest.domain;
 
-import java.util.Date;
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class GetProjectResponse {

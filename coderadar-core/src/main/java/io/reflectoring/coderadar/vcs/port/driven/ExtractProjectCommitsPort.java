@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.vcs.port.driven;
 
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.query.domain.DateRange;
+
 import java.util.List;
 
 public interface ExtractProjectCommitsPort {

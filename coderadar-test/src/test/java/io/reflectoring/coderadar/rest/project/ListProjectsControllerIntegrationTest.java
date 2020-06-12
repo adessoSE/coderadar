@@ -1,19 +1,20 @@
 package io.reflectoring.coderadar.rest.project;
 
-import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
-import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.GetProjectResponse;
-import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Date;
+
+import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
+import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
 

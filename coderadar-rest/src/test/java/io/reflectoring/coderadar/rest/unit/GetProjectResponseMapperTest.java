@@ -3,11 +3,12 @@ package io.reflectoring.coderadar.rest.unit;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.rest.GetProjectResponseMapper;
 import io.reflectoring.coderadar.rest.domain.GetProjectResponse;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 
 public class GetProjectResponseMapperTest {
 

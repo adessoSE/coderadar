@@ -5,8 +5,9 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.query.domain.CommitLog;
 import io.reflectoring.coderadar.query.port.driven.GetCommitLogPort;
 import io.reflectoring.coderadar.query.port.driver.GetCommitLogUseCase;
-import java.util.List;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class GetCommitLogService implements GetCommitLogUseCase {

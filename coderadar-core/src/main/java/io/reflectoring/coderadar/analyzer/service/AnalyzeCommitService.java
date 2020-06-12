@@ -13,11 +13,12 @@ import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelati
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
 /** Performs analysis on a commit. */
 @Service

@@ -7,10 +7,11 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.port.driver.project.delete.DeleteProjectUseCase;
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.vcs.port.driven.DeleteLocalRepositoryPort;
-import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 public class DeleteProjectService implements DeleteProjectUseCase {

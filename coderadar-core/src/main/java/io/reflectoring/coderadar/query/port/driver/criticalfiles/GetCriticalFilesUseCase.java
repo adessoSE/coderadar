@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.query.port.driver.criticalfiles;
 
 import io.reflectoring.coderadar.query.domain.ContributorsForFile;
 import io.reflectoring.coderadar.query.domain.FileAndCommitsForTimePeriod;
+
 import java.util.List;
 
 public interface GetCriticalFilesUseCase {

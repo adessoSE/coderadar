@@ -1,12 +1,12 @@
 package io.reflectoring.coderadar.rest;
 
-import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.web.servlet.ResultMatcher;
+
+import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 
 /** Collection of ResultMatchers to be used in MockMvc's fluent API. */
 public class ResultMatchers {

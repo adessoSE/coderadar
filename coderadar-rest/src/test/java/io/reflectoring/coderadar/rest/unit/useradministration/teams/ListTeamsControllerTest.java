@@ -1,21 +1,22 @@
 package io.reflectoring.coderadar.rest.unit.useradministration.teams;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.rest.domain.GetTeamResponse;
 import io.reflectoring.coderadar.rest.useradministration.teams.ListTeamsController;
 import io.reflectoring.coderadar.useradministration.domain.Team;
 import io.reflectoring.coderadar.useradministration.domain.User;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListTeamsUseCase;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.mockito.Mockito.mock;
 
 public class ListTeamsControllerTest {
   private final ListTeamsUseCase listTeamsUseCase = mock(ListTeamsUseCase.class);

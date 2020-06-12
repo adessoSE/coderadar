@@ -5,8 +5,9 @@ import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.ListProjectsForUserPort;
 import io.reflectoring.coderadar.useradministration.port.driver.get.ListProjectsForUserUseCase;
-import java.util.List;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ListProjectsForUserService implements ListProjectsForUserUseCase {

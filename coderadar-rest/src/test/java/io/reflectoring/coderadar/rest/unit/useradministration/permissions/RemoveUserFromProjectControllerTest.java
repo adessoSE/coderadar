@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.rest.unit.useradministration.permissions;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.rest.useradministration.permissions.RemoveUserFromProjectController;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
@@ -11,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import static org.mockito.Mockito.mock;
 
 public class RemoveUserFromProjectControllerTest {
   private final RemoveUserFromProjectUseCase removeUserFromProjectUseCase =

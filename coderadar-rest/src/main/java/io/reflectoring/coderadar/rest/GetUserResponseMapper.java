@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest;
 
 import io.reflectoring.coderadar.rest.domain.GetUserResponse;
 import io.reflectoring.coderadar.useradministration.domain.User;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -17,11 +17,12 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.GetPr
 import io.reflectoring.coderadar.projectadministration.service.ProcessProjectService;
 import io.reflectoring.coderadar.query.port.driven.GetAvailableMetricsInProjectPort;
 import io.reflectoring.coderadar.query.port.driven.GetCommitsInProjectPort;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class AnalyzingService

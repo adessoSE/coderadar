@@ -1,7 +1,5 @@
 package io.reflectoring.coderadar.rest.unit.module;
 
-import static org.mockito.Mockito.mock;
-
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.GetModuleUseCase;
 import io.reflectoring.coderadar.rest.domain.GetModuleResponse;
@@ -11,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import static org.mockito.Mockito.mock;
 
 class GetModuleControllerTest {
 

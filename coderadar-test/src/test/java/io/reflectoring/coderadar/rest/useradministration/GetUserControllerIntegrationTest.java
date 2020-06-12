@@ -1,9 +1,5 @@
 package io.reflectoring.coderadar.rest.useradministration;
 
-import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
-import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
@@ -12,6 +8,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
+import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 class GetUserControllerIntegrationTest extends ControllerTestTemplate {
 

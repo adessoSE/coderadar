@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.query.port.driver.commitmetrics;
 
 import io.reflectoring.coderadar.query.domain.MetricValueForCommit;
+
 import java.util.List;
 
 public interface GetMetricValuesOfCommitUseCase {

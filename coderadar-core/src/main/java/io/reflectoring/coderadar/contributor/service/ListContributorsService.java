@@ -6,8 +6,9 @@ import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForPathC
 import io.reflectoring.coderadar.contributor.port.driver.ListContributorsUseCase;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
-import java.util.List;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ListContributorsService implements ListContributorsUseCase {
