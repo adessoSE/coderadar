@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.useradministration.teams;
 
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
@@ -42,13 +43,20 @@ public class RemoveUsersFromTeamControllerIntegrationTest extends ControllerTest
 
   @Test
   public void removeUsersFromTeamSuccessfully() throws Exception {
+    ConstrainedFields<JsonListWrapper> fields = fields(JsonListWrapper.class);
+
     mvc()
         .perform(
             delete("/api/teams/" + teamEntity.getId() + "/users")
                 .content(toJson(new JsonListWrapper<>(Collections.singletonList(testUser.getId()))))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andReturn(); // TODO: Document
+        .andDo(
+            document(
+                "teams/remove/user",
+                requestFields(
+                    fields.withPath("elements").description("A list containing user IDs"))))
+        .andReturn();
 
     List<TeamEntity> teams = teamRepository.listTeamsByUserId(testUser.getId());
     Assertions.assertEquals(0, teams.size());

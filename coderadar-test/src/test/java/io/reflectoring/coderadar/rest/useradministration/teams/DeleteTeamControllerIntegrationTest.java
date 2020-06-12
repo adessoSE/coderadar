@@ -46,7 +46,9 @@ public class DeleteTeamControllerIntegrationTest extends ControllerTestTemplate 
 
     mvc()
         .perform(delete("/api/teams/" + teamEntity.getId()))
-        .andExpect(MockMvcResultMatchers.status().isOk()); // TODO: Document
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(document("teams/delete"))
+        .andReturn();
 
     List<TeamEntity> teams = teamRepository.findAllWithMembers();
     Assertions.assertTrue(teams.isEmpty());

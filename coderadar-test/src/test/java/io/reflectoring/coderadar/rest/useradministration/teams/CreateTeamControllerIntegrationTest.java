@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.useradministration.teams;
 
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
@@ -40,13 +41,23 @@ public class CreateTeamControllerIntegrationTest extends ControllerTestTemplate 
     CreateTeamCommand createTeamCommand = new CreateTeamCommand();
     createTeamCommand.setName("testTeam");
     createTeamCommand.setUserIds(Collections.singletonList(testUser.getId()));
+    ConstrainedFields<CreateTeamCommand> fields = fields(CreateTeamCommand.class);
 
     mvc()
         .perform(
             post("/api/teams")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(createTeamCommand)))
-        .andExpect(MockMvcResultMatchers.status().isCreated()); // TODO: Document
+        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andDo(
+            document(
+                "teams/create",
+                requestFields(
+                    fields.withPath("name").description("The name of the team"),
+                    fields
+                        .withPath("userIds")
+                        .description("A list of user IDs to add to the newly created team"))))
+        .andReturn();
 
     List<TeamEntity> teams = teamRepository.findAllWithMembers();
     Assertions.assertEquals(1L, teams.size());
@@ -56,6 +67,7 @@ public class CreateTeamControllerIntegrationTest extends ControllerTestTemplate 
 
   @Test
   public void createTeamWithNoUsersSuccessfully() throws Exception {
+
     CreateTeamCommand createTeamCommand = new CreateTeamCommand();
     createTeamCommand.setName("testTeam");
 
@@ -64,7 +76,8 @@ public class CreateTeamControllerIntegrationTest extends ControllerTestTemplate 
             post("/api/teams")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(createTeamCommand)))
-        .andExpect(MockMvcResultMatchers.status().isCreated()); // TODO: Document
+        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andReturn();
 
     List<TeamEntity> teams = teamRepository.findAllWithMembers();
     Assertions.assertEquals(1L, teams.size());

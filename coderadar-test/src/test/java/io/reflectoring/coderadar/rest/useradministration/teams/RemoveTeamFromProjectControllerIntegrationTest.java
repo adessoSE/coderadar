@@ -47,7 +47,9 @@ public class RemoveTeamFromProjectControllerIntegrationTest extends ControllerTe
   public void removeTeamFromProjectSuccessfully() throws Exception {
     mvc()
         .perform(delete("/api/projects/" + testProject.getId() + "/teams/" + teamEntity.getId()))
-        .andExpect(MockMvcResultMatchers.status().isOk()); // TODO: Document
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(document("teams/remove/project"))
+        .andReturn();
 
     List<TeamEntity> teams = teamRepository.listTeamsByProjectIdWithMembers(testProject.getId());
     Assertions.assertTrue(teams.isEmpty());

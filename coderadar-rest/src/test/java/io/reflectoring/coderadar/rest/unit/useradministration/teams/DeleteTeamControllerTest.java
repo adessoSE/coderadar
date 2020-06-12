@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.unit.user.teams;
+package io.reflectoring.coderadar.rest.unit.useradministration.teams;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;

@@ -45,7 +45,8 @@ public class ListTeamsForUserControllerIntegrationTest extends ControllerTestTem
         mvc()
             .perform(get("/api/users/" + testUser.getId() + "/teams"))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andReturn(); // TODO: Document
+            .andDo(document("teams/list/user"))
+            .andReturn();
 
     GetTeamResponse[] teams =
         fromJson(result.getResponse().getContentAsString(), GetTeamResponse[].class);

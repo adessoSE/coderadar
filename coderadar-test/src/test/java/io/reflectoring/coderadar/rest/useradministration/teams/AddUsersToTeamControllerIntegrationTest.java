@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.useradministration.teams;
 
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
@@ -41,13 +42,21 @@ public class AddUsersToTeamControllerIntegrationTest extends ControllerTestTempl
 
   @Test
   public void addUsersToTeamSuccessfully() throws Exception {
+
+    ConstrainedFields<JsonListWrapper> fields = fields(JsonListWrapper.class);
+
     mvc()
         .perform(
             post("/api/teams/" + teamEntity.getId() + "/users")
                 .content(toJson(new JsonListWrapper<>(Collections.singletonList(testUser.getId()))))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.status().isOk())
-        .andReturn(); // TODO: Document
+        .andDo(
+            document(
+                "teams/add/user",
+                requestFields(
+                    fields.withPath("elements").description("A list containing user IDs"))))
+        .andReturn();
 
     List<TeamEntity> teams = teamRepository.findAllWithMembers();
     Assertions.assertEquals(1L, teams.size());

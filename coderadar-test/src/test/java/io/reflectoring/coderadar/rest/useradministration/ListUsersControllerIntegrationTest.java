@@ -36,7 +36,8 @@ public class ListUsersControllerIntegrationTest extends ControllerTestTemplate {
         mvc()
             .perform(get("/api/users"))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andReturn(); // TODO: Document
+            .andDo(document("users/list"))
+            .andReturn();
 
     GetUserResponse[] users =
         fromJson(result.getResponse().getContentAsString(), GetUserResponse[].class);

@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.rest.unit.user;
+package io.reflectoring.coderadar.rest.unit.useradministration.permissions;
 
 import static org.mockito.Mockito.mock;
 

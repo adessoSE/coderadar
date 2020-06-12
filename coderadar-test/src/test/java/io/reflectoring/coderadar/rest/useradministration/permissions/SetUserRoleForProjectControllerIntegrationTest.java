@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.useradministration.permissions;
 
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
@@ -48,12 +49,24 @@ public class SetUserRoleForProjectControllerIntegrationTest extends ControllerTe
 
   @Test
   void setUserRoleForProjectSuccessfully() throws Exception {
+
+    ConstrainedFields<ProjectRoleJsonWrapper> fields = fields(ProjectRoleJsonWrapper.class);
+
     mvc()
         .perform(
             post("/api/projects/" + testProject.getId() + "/users/" + testUser.getId())
                 .content(toJson(new ProjectRoleJsonWrapper(ProjectRole.ADMIN)))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk()); // TODO: Document
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(
+            document(
+                "user/role/project/set",
+                requestFields(
+                    fields
+                        .withPath("role")
+                        .description(
+                            "The role the user should have for the given project. Can be either ADMIN or MEMBER"))))
+        .andReturn();
 
     Assertions.assertEquals(1, userRepository.listUsersForProject(testProject.getId()).size());
     Assertions.assertEquals(

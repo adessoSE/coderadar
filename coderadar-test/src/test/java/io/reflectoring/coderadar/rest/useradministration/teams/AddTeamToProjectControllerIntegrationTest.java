@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.useradministration.teams;
 
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
@@ -46,12 +47,19 @@ public class AddTeamToProjectControllerIntegrationTest extends ControllerTestTem
 
   @Test
   public void addTeamToProjectSuccessfully() throws Exception {
+    ConstrainedFields<ProjectRoleJsonWrapper> fields = fields(ProjectRoleJsonWrapper.class);
+
     mvc()
         .perform(
             post("/api/projects/" + testProject.getId() + "/teams/" + teamEntity.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(new ProjectRoleJsonWrapper(ProjectRole.ADMIN))))
-        .andExpect(MockMvcResultMatchers.status().isOk()); // TODO: Document
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(
+            document(
+                "teams/add/project",
+                requestFields(
+                    fields.withPath("role").description("The role of the team in the project"))));
 
     List<TeamEntity> teams = teamRepository.listTeamsByProjectIdWithMembers(testProject.getId());
     Assertions.assertEquals(1L, teams.size());

@@ -49,7 +49,9 @@ public class RemoveUserFromProjectControllerIntegrationTest extends ControllerTe
   void removeUserFromProjectSuccessfully() throws Exception {
     mvc()
         .perform(delete("/api/projects/" + testProject.getId() + "/users/" + testUser.getId()))
-        .andExpect(MockMvcResultMatchers.status().isOk()); // TODO: Document
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(document("user/role/project/remove"))
+        .andReturn(); // TODO: Document
 
     Assertions.assertTrue(userRepository.listUsersForProject(testProject.getId()).isEmpty());
   }

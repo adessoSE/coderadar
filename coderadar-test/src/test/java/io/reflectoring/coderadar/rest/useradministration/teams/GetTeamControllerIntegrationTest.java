@@ -33,7 +33,8 @@ public class GetTeamControllerIntegrationTest extends ControllerTestTemplate {
         mvc()
             .perform(get("/api/teams/" + teamEntity.getId()))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andReturn(); // TODO: Document
+            .andDo(document("teams/get"))
+            .andReturn();
 
     GetTeamResponse response =
         fromJson(result.getResponse().getContentAsString(), GetTeamResponse.class);

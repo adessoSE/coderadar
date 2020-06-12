@@ -31,7 +31,8 @@ public class ListTeamsControllerIntegrationTest extends ControllerTestTemplate {
         mvc()
             .perform(get("/api/teams/"))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andReturn(); // TODO: Document
+            .andDo(document("teams/list"))
+            .andReturn();
 
     GetTeamResponse[] response =
         fromJson(result.getResponse().getContentAsString(), GetTeamResponse[].class);

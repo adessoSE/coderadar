@@ -1,13 +1,12 @@
-package io.reflectoring.coderadar.rest.unit.user.teams;
+package io.reflectoring.coderadar.rest.unit.useradministration.teams;
 
 import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.rest.domain.GetTeamResponse;
-import io.reflectoring.coderadar.rest.useradministration.teams.ListTeamsForUserController;
-import io.reflectoring.coderadar.useradministration.UserNotFoundException;
+import io.reflectoring.coderadar.rest.useradministration.teams.ListTeamsController;
 import io.reflectoring.coderadar.useradministration.domain.Team;
 import io.reflectoring.coderadar.useradministration.domain.User;
-import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListTeamsForUserUseCase;
+import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListTeamsUseCase;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -18,16 +17,13 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class ListTeamsForUserControllerTest {
-
-  private final ListTeamsForUserUseCase listTeamsForUserUseCase =
-      mock(ListTeamsForUserUseCase.class);
-  private final ListTeamsForUserController testController =
-      new ListTeamsForUserController(listTeamsForUserUseCase);
+public class ListTeamsControllerTest {
+  private final ListTeamsUseCase listTeamsUseCase = mock(ListTeamsUseCase.class);
+  private final ListTeamsController testController = new ListTeamsController(listTeamsUseCase);
 
   @BeforeEach
   public void setUp() {
-    Mockito.when(listTeamsForUserUseCase.listTeamsForUser(5L))
+    Mockito.when(listTeamsUseCase.listTeams())
         .thenReturn(
             Arrays.asList(
                 new Team().setId(1L).setName("TestTeam1"),
@@ -39,8 +35,8 @@ public class ListTeamsForUserControllerTest {
   }
 
   @Test
-  public void testListTeamsForUser() {
-    ResponseEntity<List<GetTeamResponse>> responseEntity = testController.listTeamsForUser(5L);
+  public void testListTeams() {
+    ResponseEntity<List<GetTeamResponse>> responseEntity = testController.listTeams();
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
     Assertions.assertNotNull(responseEntity.getBody());
@@ -56,12 +52,5 @@ public class ListTeamsForUserControllerTest {
     Assertions.assertEquals(3L, responseEntity.getBody().get(1).getMembers().get(0).getId());
     Assertions.assertEquals(
         "TestUser1", responseEntity.getBody().get(1).getMembers().get(0).getUsername());
-  }
-
-  @Test
-  public void testListProjectsForUserThrowsWhenUserNotFound() {
-    Mockito.when(listTeamsForUserUseCase.listTeamsForUser(8L))
-        .thenThrow(new UserNotFoundException(1L));
-    Assertions.assertThrows(UserNotFoundException.class, () -> testController.listTeamsForUser(8L));
   }
 }

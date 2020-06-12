@@ -51,7 +51,8 @@ public class ListProjectsForTeamControllerIntegrationTest extends ControllerTest
         mvc()
             .perform(get("/api/teams/" + teamEntity.getId() + "/projects"))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andReturn(); // TODO: Document
+            .andDo(document("teams/list/projects"))
+            .andReturn();
 
     GetProjectResponse[] projects =
         fromJson(result.getResponse().getContentAsString(), GetProjectResponse[].class);

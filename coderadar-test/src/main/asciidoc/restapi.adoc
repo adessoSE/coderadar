@@ -81,7 +81,27 @@ If some unexpected error occurs during the processing of a request, the API retu
 anchor:chapter-configure[]
 This section describes the REST endpoints for managing coderadar users.
 
-=== Users
+=== Loading a User
+
+==== Example Request
+
+include::{snippets}/users/get/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/users/get/http-response.adoc[]
+
+=== Listing all Users
+
+===== Example Request
+
+include::{snippets}/users/list/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/users/list/http-response.adoc[]
+
+=== Authentication
 To access the functionality of coderadar you have to register a user.
 You need to define a username and a password. The password will be sent as
 plain text and hashed on server side for persisting.
@@ -98,16 +118,6 @@ include::{snippets}/user/registration/http-request.adoc[]
 ===== Example Response
 
 include::{snippets}/user/registration/http-response.adoc[]
-
-==== Loading a User
-
-===== Example Request
-
-include::{snippets}/users/get/http-request.adoc[]
-
-===== Example Response
-
-include::{snippets}/users/get/http-response.adoc[]
 
 ==== Login
 anchor:login[]
@@ -186,11 +196,48 @@ A typical work flow looks like this:
 . Client requires resources using the access token in each request
 . After 15 minutes client gets a 401-Response
 . Clients tries to get a new access token using refresh token
-. Clients gets a new acess token and can request further resources
+. Clients gets a new access token and can request further resources
 . If the client can't get a new access token using the refresh token, client has to login again with username and password.
 
 See more: https://auth0.com/docs/tokens/refresh-token and https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
 
+=== User Permissions
+
+Users can be assigned to projects with a specific role.
+
+==== Set user role in a project
+
+include::{snippets}/user/role/project/set/request-fields.adoc[]
+
+===== Example Request
+include::{snippets}/user/role/project/set/http-request.adoc[]
+
+===== Example Response
+include::{snippets}/user/role/project/set/http-response.adoc[]
+
+==== Remove user role from a project
+
+===== Example Request
+include::{snippets}/user/role/project/remove/http-request.adoc[]
+
+===== Example Response
+include::{snippets}/user/role/project/remove/http-response.adoc[]
+
+==== List all projects for a user
+
+===== Example Request
+include::{snippets}/user/list/projects/http-request.adoc[]
+
+===== Example Response
+include::{snippets}/user/list/projects/http-response.adoc[]
+
+==== List all users for a project
+
+===== Example Request
+include::{snippets}/project/list/users/http-request.adoc[]
+
+===== Example Response
+include::{snippets}/project/list/users/http-response.adoc[]
 
 == Configuring a Project
 anchor:chapter-configure[]
@@ -824,7 +871,6 @@ include::{snippets}/contributors/update/http-response.adoc[]
 
 
 
-
 == Coderadar Core Metrics
 
 === Get Critical Files of a Project
@@ -857,3 +903,123 @@ include::{snippets}/metrics/criticalFiles/modificationFrequency/http-request.ado
 ===== Example Response
 
 include::{snippets}/metrics/criticalFiles/modificationFrequency/http-response.adoc[]
+
+== Teams
+
+=== Creating a team
+
+include::{snippets}/teams/create/request-fields.adoc[]
+
+==== Example Request
+
+include::{snippets}/teams/create/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/teams/create/http-response.adoc[]
+
+=== Deleting a team
+
+==== Example Request
+
+include::{snippets}/teams/delete/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/teams/delete/http-response.adoc[]
+
+=== Add users to a team
+
+include::{snippets}/teams/add/user/request-fields.adoc[]
+
+==== Example Request
+
+include::{snippets}/teams/add/user/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/teams/add/user/http-response.adoc[]
+
+=== Remove users from a team
+
+include::{snippets}/teams/remove/user/request-fields.adoc[]
+
+==== Example Request
+
+include::{snippets}/teams/remove/user/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/teams/remove/user/http-response.adoc[]
+
+=== Retrieve a single team
+
+==== Example Request
+
+include::{snippets}/teams/get/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/teams/get/http-response.adoc[]
+
+=== List all teams
+
+==== Example Request
+
+include::{snippets}/teams/list/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/teams/list/http-response.adoc[]
+
+=== Assign a team to a project
+
+include::{snippets}/teams/add/project/request-fields.adoc[]
+
+==== Example Request
+
+include::{snippets}/teams/add/project/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/teams/add/project/http-response.adoc[]
+
+=== Remove a team from a project
+
+==== Example Request
+
+include::{snippets}/teams/remove/project/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/teams/remove/project/http-response.adoc[]
+
+=== List teams assigned to a project
+
+==== Example Request
+
+include::{snippets}/teams/list/project/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/teams/list/project/http-response.adoc[]
+
+=== List teams a user is in
+
+==== Example Request
+
+include::{snippets}/teams/list/user/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/teams/list/user/http-response.adoc[]
+
+=== List all projects for a team
+
+==== Example Request
+
+include::{snippets}/teams/list/projects/http-request.adoc[]
+
+==== Example Response
+
+include::{snippets}/teams/list/projects/http-response.adoc[]

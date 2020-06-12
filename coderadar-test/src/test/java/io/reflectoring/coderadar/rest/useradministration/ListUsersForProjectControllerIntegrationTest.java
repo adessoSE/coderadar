@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class ListUsersForProjectsControllerIntegrationTest extends ControllerTestTemplate {
+public class ListUsersForProjectControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private UserRepository userRepository;
 
@@ -54,7 +54,8 @@ public class ListUsersForProjectsControllerIntegrationTest extends ControllerTes
         mvc()
             .perform(get("/api/projects/" + testProject.getId() + "/users/"))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andReturn(); // TODO: Document
+            .andDo(document("project/list/users"))
+            .andReturn();
 
     GetUserResponse[] users =
         fromJson(result.getResponse().getContentAsString(), GetUserResponse[].class);

@@ -54,7 +54,8 @@ public class ListProjectsForUserControllerIntegrationTest extends ControllerTest
         mvc()
             .perform(get("/api/users/" + testUser.getId() + "/projects"))
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andReturn(); // TODO: Document
+            .andDo(document("user/list/projects"))
+            .andReturn();
 
     GetProjectResponse[] projects =
         fromJson(result.getResponse().getContentAsString(), GetProjectResponse[].class);
