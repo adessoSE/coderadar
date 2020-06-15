@@ -35,7 +35,9 @@ export class EditProjectComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.projectId = params.id;
-      this.getProject();
+      if (this.projectId) {
+        this.getProject();
+      }
     });
   }
 
@@ -48,31 +50,55 @@ export class EditProjectComponent implements OnInit {
   submitForm(): void {
     if (!this.validateInput()) {
       this.waiting = true;
-      this.projectService.editProject(this.project)
-        .then(() => {
-          this.router.navigate(['/dashboard']);
-          this.openSnackBar('Project successfully edited!', '🞩');
-          this.waiting = false;
-        })
-        .catch(error => {
-          this.waiting = false;
-          if (error.status && error.status === FORBIDDEN) {
-            this.userService.refresh(() => this.submitForm());
-          } else if (error.status && error.status === BAD_REQUEST) {
-            if (error.error && error.error.errorMessage === 'Validation Error') {
-              error.error.fieldErrors.forEach(field => {
-                if (field.field === 'vcsUrl') {
-                  this.incorrectURL = true;
-                }
-              });
+      if (this.projectId) {
+        this.projectService.editProject(this.project)
+          .then(() => {
+            this.router.navigate(['/dashboard']);
+            this.openSnackBar('Project successfully edited!', '🞩');
+            this.waiting = false;
+          })
+          .catch(error => {
+            this.waiting = false;
+            if (error.status && error.status === FORBIDDEN) {
+              this.userService.refresh(() => this.submitForm());
+            } else if (error.status && error.status === BAD_REQUEST) {
+              if (error.error && error.error.errorMessage === 'Validation Error') {
+                error.error.fieldErrors.forEach(field => {
+                  if (field.field === 'vcsUrl') {
+                    this.incorrectURL = true;
+                  }
+                });
+              }
+            } else if (error.status === CONFLICT &&
+              error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
+              this.projectExists = true;
+            } else if (error.status === UNPROCESSABLE_ENTITY) {
+              this.openSnackBar('Project cannot be edited! Try again later!', '🞩');
             }
-          } else if (error.status === CONFLICT &&
-            error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
-            this.projectExists = true;
-          } else if (error.status === UNPROCESSABLE_ENTITY) {
-            this.openSnackBar('Project cannot be edited! Try again later!', '🞩');
-          }
-        });
+          });
+      } else {
+        this.projectService.addProject(this.project)
+          .then(response => {
+            this.project.id = response.body.id;
+            this.router.navigate(['/project-configure', this.project.id]);
+          })
+          .catch(error => {
+            if (error.status && error.status === FORBIDDEN) { // If access is denied
+              this.userService.refresh(() => this.submitForm());
+            } else if (error.status && error.status === BAD_REQUEST) {   // If there is a field error
+              if (error.error && error.error.errorMessage === 'Validation Error') {
+                error.error.fieldErrors.forEach(field => {  // Check which field
+                  if (field.field === 'vcsUrl') {
+                    this.incorrectURL = true;
+                  }
+                });
+              }
+            } else if (error.status === CONFLICT &&
+              error.error.errorMessage === 'The project ' + this.project.name + ' already exists.') {
+              this.projectExists = true;
+            }
+          });
+      }
     }
   }
 
