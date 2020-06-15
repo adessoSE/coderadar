@@ -55,7 +55,6 @@ import {environment} from '../environments/environment';
 import {CityViewComponent} from './view/city-view/city-view.component';
 import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {DependencyRootComponent} from './levelized-structure-map/dependency-root/dependency-root.component';
 import {DependencyCompareComponent} from './levelized-structure-map/dependency-compare/dependency-compare.component';
 import {TreeNodeComponent} from './levelized-structure-map/tree-node/tree-node.component';
 import {MatSelectModule} from '@angular/material/select';
@@ -65,7 +64,6 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ListViewComponent } from './view/project-dashboard/list-view/list-view.component';
 import { BranchViewComponent } from './view/project-dashboard/branch-view/branch-view.component';
 import { FileViewComponent } from './view/file-view/file-view.component';
-import { DependencyBaseComponent } from './levelized-structure-map/dependency-base/dependency-base.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -78,7 +76,6 @@ const appRoutes: Routes = [
   {path: 'project-edit/:id', component: EditProjectComponent},
   {path: 'project/:id', component: ProjectDashboardComponent},
   {path: 'project/:id/:name', component: ViewCommitComponent},
-  {path: 'project/:projectId/:commitName/dependency-map', component: DependencyRootComponent},
   {path: 'project/:projectId/:commitName1/:commitName2/dependency-map', component: DependencyCompareComponent},
   {path: 'project/:projectId/:commitHash/files', component: FileViewComponent},
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'}
@@ -100,15 +97,13 @@ const appRoutes: Routes = [
     ProjectDashboardComponent,
     ViewCommitComponent,
     CityViewComponent,
-    DependencyRootComponent,
     MergeDialogComponent,
     DependencyCompareComponent,
     TreeNodeComponent,
     CityViewHeaderComponent,
     ListViewComponent,
     BranchViewComponent,
-    FileViewComponent,
-    DependencyBaseComponent
+    FileViewComponent
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DependencyRootComponent} from '../dependency-root/dependency-root.component';
+import {DependencyCompareComponent} from '../dependency-compare/dependency-compare.component';
 
 @Component({
   selector: 'app-tree-node',
@@ -12,7 +12,7 @@ export class TreeNodeComponent implements OnInit {
   timer: any;
   preventSimpleClick: boolean;
   @Input() node: any;
-  @Input() root: DependencyRootComponent;
+  @Input() root: DependencyCompareComponent;
   @Input() hasSiblings: boolean;
 
   constructor() {

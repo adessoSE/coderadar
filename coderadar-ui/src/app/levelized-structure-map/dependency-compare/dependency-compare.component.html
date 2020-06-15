@@ -1,8 +1,14 @@
-<app-header id="header" [title]="[{location: '/dependency-map', name: 'Dependency Map'}, {location: '/project/' + project.id, name: appComponent.trimProjectName(project.name)}, {location: '/project/' + projectId + '/' + commitName + '/' + commitName2 + '/dependency-map', name: 'Dependency Map for ' + commitName + ' and ' + commitName2}]"></app-header>
+<app-header id="header" [title]="[
+  {location: '/dependency-map', name: 'Dependency Map'},
+  {location: '/project/' + project.id, name: appComponent.trimProjectName(project.name)},
+  {
+    location: '/project/' + projectId + '/' + commitName + '/' + commitName2 + '/dependency-map',
+     name: 'Dependency Map for ' + commitName + ((commitName2 && commitName2 !== 'null') ? ' and ' + commitName2 : '')}
+  ]"></app-header>
 
 <mat-checkbox class="margin-left margin-right" [checked]="checkUp" (change)="onShowUpwardChanged()">Show upward Dependencies</mat-checkbox>
 <mat-checkbox class="margin-left margin-right" [checked]="checkDown" (change)="onShowDownwardChanged()">Show downward Dependencies</mat-checkbox>
-<mat-checkbox class="margin-left margin-right" #3showChanged [checked]="checkChanged" (change)="onShowChangedChanged()">Show only changed Dependencies</mat-checkbox>
+<mat-checkbox class="margin-left margin-right" #3showChanged [checked]="checkChanged" (change)="onShowChangedChanged()" *ngIf="commitName2 && commitName2 !== 'null'">Show only changed Dependencies</mat-checkbox>
 <mat-form-field>
   <mat-select [(value)]="selected">
     <mat-option *ngFor="let format of formats; let i = index" [value]="i">{{format.value}}</mat-option>
