@@ -11,12 +11,25 @@
     <div class="grid-container">
 
       <!--Message displayed if no projects are found-->
-      <div *ngIf="projects.length == 0" align="center" id="noProjectsMessage">
+      <div *ngIf="projects.length == 0 && selectedTeam == undefined" align="center" class="noProjectsMessage">
         Hello there, it looks like you haven't added any projects yet. <br>
         Click on the plus button to add one.
       </div>
+      <div *ngIf="projects.length == 0 && selectedTeam != undefined" align="center" class="noProjectsMessage">
+        No projects available in the selected team
+      </div>
 
       <!--Project card list-->
+      <mat-form-field class="contributorSelector">
+        <mat-label>Team</mat-label>
+        <mat-select (selectionChange)="getProjects()" [(value)]="selectedTeam">
+          <mat-option>All</mat-option>
+          <mat-option *ngFor="let team of teams" [value]="team">
+            {{team.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
       <mat-grid-list cols="2" rowHeight="170px">
         <mat-grid-tile *ngFor="let project of projects" [colspan]="2" [rowspan]="1">
           <mat-card class="dashboard-card">
@@ -38,6 +51,7 @@
                 <mat-menu #menu="matMenu" xPosition="before">
                   <button mat-menu-item routerLink="/project-edit/{{project.id}}">Edit</button>
                   <button mat-menu-item routerLink="/project-configure/{{project.id}}">Configure</button>
+                  <button mat-menu-item (click)="openAddToTeamDialog(project)">Add to team</button>
                   <button (click)="openProjectDeletionDialog(project)" mat-menu-item>Remove</button>
                 </mat-menu>
               </mat-card-title>

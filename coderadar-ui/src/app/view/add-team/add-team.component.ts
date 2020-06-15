@@ -4,7 +4,7 @@ import {Team} from "../../model/team";
 import {User} from "../../model/user";
 import {UserService} from "../../service/user.service";
 import {TeamService} from "../../service/team.service";
-import {FORBIDDEN, NOT_FOUND} from "http-status-codes";
+import {CONFLICT, FORBIDDEN, NOT_FOUND} from "http-status-codes";
 import {Router} from "@angular/router";
 
 @Component({
@@ -18,6 +18,7 @@ export class AddTeamComponent implements OnInit {
   team: Team = new Team();
   users: User[] = [];
   nameEmpty = false;
+  teamNameTaken = false;
 
   constructor(private userService: UserService, private teamService: TeamService, private router: Router) { }
 
@@ -45,8 +46,8 @@ export class AddTeamComponent implements OnInit {
           )).catch(error => {
               if (error.status && error.status === FORBIDDEN) {
                 this.userService.refresh(() => this.getAllUsers());
-              } else if (error.status && error.status === NOT_FOUND) {
-                this.router.navigate(['/dashboard']);
+              } else if (error.status && error.status === CONFLICT) {
+                this.teamNameTaken = true;
               }
             }); //TODO: Identical team names
       }

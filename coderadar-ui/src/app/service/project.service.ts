@@ -318,4 +318,9 @@ export class ProjectService {
     return this.httpClient.post<FileContentWithMetrics>(this.apiURL + 'projects/' + projectId + '/files/diff',
       {commitHash, filepath}, {observe: 'response'}).toPromise();
   }
+
+  public listProjectsForUser(userId: number): Promise<HttpResponse<Project[]>> {
+    return this.httpClient.get<Project[]>(this.apiURL + 'users/'+userId+'/projects',
+      {observe: 'response'}).toPromise();
+  }
 }

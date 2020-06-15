@@ -30,4 +30,15 @@ export class TeamsDashboardComponent implements OnInit {
     });
   }
 
+  removeTeam(id: number) {
+    this.teamService.removeTeam(id)
+      .then(() => {
+        this.teams = this.teams.filter(value => value.id != id);
+      })
+      .catch(e => {
+      if (e.status && e.status === FORBIDDEN) { //TODO: UNAUTHORIZED
+        this.userService.refresh(() => this.getTeams());
+      }
+    });
+  }
 }

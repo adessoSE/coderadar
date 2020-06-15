@@ -69,7 +69,12 @@ export class TeamService {
   }
 
   public removeTeamFromProject(projectId:number, teamId: number): Promise<HttpResponse<any>> {
-    return this.httpClient.get<any>(this.apiURL + 'projects/'+projectId+'/teams/'+teamId,
+    return this.httpClient.delete<any>(this.apiURL + 'projects/'+projectId+'/teams/'+teamId,
+      {observe: 'response'}).toPromise();
+  }
+
+  public removeTeam(id: number) {
+    return this.httpClient.delete<any>(this.apiURL + 'teams/'+id,
       {observe: 'response'}).toPromise();
   }
 }

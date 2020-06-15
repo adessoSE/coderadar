@@ -9,7 +9,11 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AddProjectComponent} from './view/add-project/add-project.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {MainDashboardComponent, ConfirmDeleteProjectDialogComponent} from './view/main-dashboard/main-dashboard.component';
+import {
+  MainDashboardComponent,
+  ConfirmDeleteProjectDialogComponent,
+  AddProjectToTeamDialogComponent
+} from './view/main-dashboard/main-dashboard.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {AuthInterceptor} from './auth.interceptor';
 import {ConfigureProjectComponent, MergeDialogComponent} from './view/configure-project/configure-project.component';
@@ -114,6 +118,7 @@ const appRoutes: Routes = [
     BranchViewComponent,
     FileViewComponent,
     TeamsDashboardComponent,
+    AddProjectToTeamDialogComponent,
     AddTeamComponent,
     SidenavContentComponent,
   ],
@@ -184,7 +189,8 @@ const appRoutes: Routes = [
   bootstrap: [AppComponent],
   entryComponents: [
     MergeDialogComponent,
-    ConfirmDeleteProjectDialogComponent
+    ConfirmDeleteProjectDialogComponent,
+    AddProjectToTeamDialogComponent
   ]
 })
 export class AppModule {

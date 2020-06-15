@@ -22,28 +22,21 @@
             <mat-card class="dashboard-card">
               <mat-card-header>
                 <mat-card-title>
-                  <a mat-button routerLink="/project/{{team.id}}">{{team.name}}</a>
-                  <button title="Start analysis" style="float:right" mat-icon-button>
-                    <mat-icon>play_arrow</mat-icon>
-                  </button>
-                  <button title="Stop analysis" style="float:right" mat-icon-button>
-                    <mat-icon>stop</mat-icon>
-                  </button>
-                  <button title="Delete analysis results" style="float:right" mat-icon-button>
-                    <mat-icon>clear</mat-icon>
-                  </button>
+                  <a mat-button>{{team.name}}</a>
                   <button [matMenuTriggerFor]="menu" aria-label="Toggle menu" class="more-button" mat-icon-button>
                     <mat-icon>more_vert</mat-icon>
                   </button>
                   <mat-menu #menu="matMenu" xPosition="before">
-                    <button mat-menu-item routerLink="/project-edit/{{team.id}}">Edit</button>
-                    <button mat-menu-item routerLink="/project-configure/{{team.id}}">Configure</button>
-                    <button mat-menu-item>Remove</button>
+                    <button mat-menu-item>Edit</button>
+                    <button mat-menu-item (click)="removeTeam(team.id)">Remove</button> <!--TODO: Delete modal-->
                   </mat-menu>
                 </mat-card-title>
               </mat-card-header>
               <mat-card-content class="mat-card-content">
-                Content
+                <mat-label>Team members:</mat-label>
+                <span *ngFor="let member of team.members">
+                  <span style="font-weight: bold">{{"  " + member.username}}</span>
+                </span>
               </mat-card-content>
             </mat-card>
           </mat-grid-tile>

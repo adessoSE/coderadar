@@ -114,11 +114,6 @@ export class UserService {
       {refreshToken: UserService.getLoggedInUser().refreshToken, newPassword: password}, {observe: 'response'}).toPromise();
   }
 
-  public listProjectsForUser(userId: number): Promise<HttpResponse<Project[]>> {
-    return this.httpClient.get<Project[]>(this.apiURL + 'users/'+userId+'/projects',
-      {observe: 'response'}).toPromise();
-  }
-
   public listUsersForProject(projectId: number): Promise<HttpResponse<User[]>>{
     return this.httpClient.get<User[]>(this.apiURL + 'projects/'+projectId+'/users',
   {observe: 'response'}).toPromise();
