@@ -27,7 +27,7 @@ public class LoginUserController implements AbstractBaseController {
       path = "/user/auth",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity login(@RequestBody @Validated LoginUserCommand command) {
+  public ResponseEntity<Object> login(@RequestBody @Validated LoginUserCommand command) {
     try {
       return new ResponseEntity<>(loginUserUseCase.login(command), HttpStatus.OK);
     } catch (AuthenticationException e) {

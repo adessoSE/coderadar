@@ -21,9 +21,7 @@ public class TeamMapper implements Mapper<Team, TeamEntity> {
   public TeamEntity mapDomainObject(Team domainObject) {
     TeamEntity teamEntity = new TeamEntity();
     teamEntity.setName(domainObject.getName());
-    teamEntity.setMembers(
-        userMapper.mapDomainObjects(
-            domainObject.getMembers())); // TODO: I don't think we should be doing this.
+    teamEntity.setMembers(userMapper.mapDomainObjects(domainObject.getMembers()));
     return teamEntity;
   }
 }

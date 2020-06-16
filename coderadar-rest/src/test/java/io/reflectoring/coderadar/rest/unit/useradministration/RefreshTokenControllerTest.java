@@ -23,9 +23,11 @@ class RefreshTokenControllerTest extends UnitTestTemplate {
 
     RefreshTokenCommand command = new RefreshTokenCommand("accessToken", "refreshToken");
     Mockito.when(refreshTokenUseCase.refreshToken(command)).thenReturn("newAccessToken");
-    ResponseEntity<RefreshTokenResponse> responseEntity = testSubject.refreshToken(command);
+    ResponseEntity<Object> responseEntity = testSubject.refreshToken(command);
 
+    Assertions.assertTrue(responseEntity.getBody() instanceof RefreshTokenResponse);
+    RefreshTokenResponse responseBody = (RefreshTokenResponse) responseEntity.getBody();
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    Assertions.assertEquals("newAccessToken", responseEntity.getBody().getToken());
+    Assertions.assertEquals("newAccessToken", responseBody.getToken());
   }
 }

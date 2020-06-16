@@ -28,7 +28,7 @@ public class RegisterUserController implements AbstractBaseController {
       path = "/user/registration",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity register(@RequestBody @Validated RegisterUserCommand command) {
+  public ResponseEntity<Object> register(@RequestBody @Validated RegisterUserCommand command) {
     try {
       return new ResponseEntity<>(
           new IdResponse(registerUserUseCase.register(command)), HttpStatus.CREATED);

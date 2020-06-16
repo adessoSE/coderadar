@@ -6,11 +6,11 @@ import io.reflectoring.coderadar.useradministration.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class UserMapperTest {
+class UserMapperTest {
   private final UserMapper userMapper = new UserMapper();
 
   @Test
-  public void testMapDomainObject() {
+  void testMapDomainObject() {
     User testUser = new User().setId(1L).setUsername("testUsername").setPassword("testPassword");
 
     UserEntity result = userMapper.mapDomainObject(testUser);
@@ -20,7 +20,7 @@ public class UserMapperTest {
   }
 
   @Test
-  public void testMapGraphObject() {
+  void testMapGraphObject() {
     UserEntity testUser =
         new UserEntity().setId(1L).setUsername("testUsername").setPassword("testPassword");
 

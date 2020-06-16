@@ -8,11 +8,11 @@ import java.util.Collections;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class TeamMapperTest {
+class TeamMapperTest {
   private final TeamMapper teamMapper = new TeamMapper();
 
   @Test
-  public void testMapDomainObject() {
+  void testMapDomainObject() {
     Team testTeam = new Team().setId(1L).setName("testTeam");
 
     TeamEntity result = teamMapper.mapDomainObject(testTeam);
@@ -21,7 +21,7 @@ public class TeamMapperTest {
   }
 
   @Test
-  public void testMapGraphObject() {
+  void testMapGraphObject() {
     TeamEntity testModule =
         new TeamEntity()
             .setId(1L)

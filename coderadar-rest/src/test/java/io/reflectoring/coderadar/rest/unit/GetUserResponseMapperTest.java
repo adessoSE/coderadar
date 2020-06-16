@@ -8,9 +8,9 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GetUserResponseMapperTest {
+class GetUserResponseMapperTest {
   @Test
-  public void testUserResponseMapper() {
+  void testUserResponseMapper() {
     List<User> users = new ArrayList<>();
     users.add(new User().setUsername("testUser1").setId(1L).setPassword("testPassword1"));
     users.add(new User().setUsername("testUser2").setId(2L).setPassword("testPassword2"));
@@ -25,7 +25,7 @@ public class GetUserResponseMapperTest {
   }
 
   @Test
-  public void testUserResponseSingleMapper() {
+  void testUserResponseSingleMapper() {
     User user = new User().setUsername("testUser1").setId(1L).setPassword("testPassword1");
     GetUserResponse response = GetUserResponseMapper.mapUser(user);
     Assertions.assertEquals("testUser1", response.getUsername());

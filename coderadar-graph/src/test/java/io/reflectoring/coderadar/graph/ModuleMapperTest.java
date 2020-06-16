@@ -6,11 +6,11 @@ import io.reflectoring.coderadar.projectadministration.domain.Module;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ModuleMapperTest {
+class ModuleMapperTest {
   private final ModuleMapper moduleMapper = new ModuleMapper();
 
   @Test
-  public void testMapDomainObject() {
+  void testMapDomainObject() {
     Module testModule = new Module(2L, "testPath");
 
     ModuleEntity result = moduleMapper.mapDomainObject(testModule);
@@ -19,7 +19,7 @@ public class ModuleMapperTest {
   }
 
   @Test
-  public void testMapGraphObject() {
+  void testMapGraphObject() {
     ModuleEntity testModule = new ModuleEntity().setId(1L).setPath("testPath");
 
     Module result = moduleMapper.mapGraphObject(testModule);

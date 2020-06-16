@@ -13,19 +13,19 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class DeleteTeamControllerTest extends UnitTestTemplate {
+class DeleteTeamControllerTest extends UnitTestTemplate {
   private final DeleteTeamUseCase deleteTeamUseCase = mock(DeleteTeamUseCase.class);
 
   private final DeleteTeamController testController = new DeleteTeamController(deleteTeamUseCase);
 
   @Test
-  public void testDeleteTeam() {
+  void testDeleteTeam() {
     ResponseEntity<HttpStatus> response = testController.deleteTeam(1L);
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
   }
 
   @Test
-  public void testDeleteTeamThrowsExceptionIfTeamNotFound() {
+  void testDeleteTeamThrowsExceptionIfTeamNotFound() {
     Mockito.doThrow(TeamNotFoundException.class).when(deleteTeamUseCase).deleteTeam(anyLong());
     Assertions.assertThrows(TeamNotFoundException.class, () -> testController.deleteTeam(1L));
   }

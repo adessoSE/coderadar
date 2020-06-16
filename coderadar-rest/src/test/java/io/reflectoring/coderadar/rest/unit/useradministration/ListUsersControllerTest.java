@@ -15,12 +15,12 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class ListUsersControllerTest extends UnitTestTemplate {
+class ListUsersControllerTest extends UnitTestTemplate {
   private final ListUsersUseCase listUsersUseCase = mock(ListUsersUseCase.class);
   private final ListUsersController testController = new ListUsersController(listUsersUseCase);
 
   @Test
-  public void testListUsers() {
+  void testListUsers() {
     Mockito.when(listUsersUseCase.listUsers())
         .thenReturn(
             Arrays.asList(

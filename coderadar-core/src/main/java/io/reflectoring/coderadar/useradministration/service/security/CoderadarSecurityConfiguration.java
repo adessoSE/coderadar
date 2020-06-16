@@ -62,7 +62,7 @@ public class CoderadarSecurityConfiguration extends WebSecurityConfigurerAdapter
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable();
-    if (coderadarConfiguration.getAuthentication().getEnabled()) {
+    if (coderadarConfiguration.getAuthentication().isEnabled()) {
       http.sessionManagement()
           .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
           .and()

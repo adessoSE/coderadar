@@ -7,11 +7,11 @@ import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ProjectMapperTest {
+class ProjectMapperTest {
   private final ProjectMapper projectMapper = new ProjectMapper();
 
   @Test
-  public void testMapDomainObject() {
+  void testMapDomainObject() {
     Project testProject =
         new Project()
             .setId(1L)
@@ -35,7 +35,7 @@ public class ProjectMapperTest {
   }
 
   @Test
-  public void testMapGraphObject() {
+  void testMapGraphObject() {
     ProjectEntity testProject =
         new ProjectEntity()
             .setId(1L)

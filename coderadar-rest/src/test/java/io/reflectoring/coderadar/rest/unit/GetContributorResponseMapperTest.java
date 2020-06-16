@@ -9,10 +9,10 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GetContributorResponseMapperTest {
+class GetContributorResponseMapperTest {
 
   @Test
-  public void testContributorResponseMapper() {
+  void testContributorResponseMapper() {
     List<Contributor> contributors = new ArrayList<>();
     contributors.add(
         new Contributor()

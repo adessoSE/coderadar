@@ -27,18 +27,16 @@ public class AuthenticationService {
   }
 
   public void authenticateMember(long projectId) {
-    if (coderadarConfigurationProperties.getAuthentication().getEnabled()) {
-      if (getUserRole(projectId) == null) {
-        throw new UserUnauthorizedException();
-      }
+    if (coderadarConfigurationProperties.getAuthentication().isEnabled()
+        && getUserRole(projectId) == null) {
+      throw new UserUnauthorizedException();
     }
   }
 
   public void authenticateAdmin(long projectId) {
-    if (coderadarConfigurationProperties.getAuthentication().getEnabled()) {
-      if (getUserRole(projectId) != ProjectRole.ADMIN) {
-        throw new UserUnauthorizedException();
-      }
+    if (coderadarConfigurationProperties.getAuthentication().isEnabled()
+        && getUserRole(projectId) != ProjectRole.ADMIN) {
+      throw new UserUnauthorizedException();
     }
   }
 

@@ -7,11 +7,11 @@ import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class FilePatternMapperTest {
+class FilePatternMapperTest {
   private final FilePatternMapper filePatternMapper = new FilePatternMapper();
 
   @Test
-  public void testMapDomainObject() {
+  void testMapDomainObject() {
     FilePattern testPattern =
         new FilePattern()
             .setId(1L)
@@ -25,7 +25,7 @@ public class FilePatternMapperTest {
   }
 
   @Test
-  public void testMapGraphObject() {
+  void testMapGraphObject() {
     FilePatternEntity testPattern =
         new FilePatternEntity()
             .setId(1L)

@@ -9,10 +9,10 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GetTeamResponseMapperTest {
+class GetTeamResponseMapperTest {
 
   @Test
-  public void testTeamResponseMapper() {
+  void testTeamResponseMapper() {
     List<User> users = new ArrayList<>();
     users.add(new User().setUsername("testUser1").setId(2L).setPassword("testPassword1"));
 
@@ -30,7 +30,7 @@ public class GetTeamResponseMapperTest {
   }
 
   @Test
-  public void testTeamResponseSingleMapper() {
+  void testTeamResponseSingleMapper() {
     List<User> users = new ArrayList<>();
     users.add(new User().setUsername("testUser1").setId(2L).setPassword("testPassword1"));
     Team team = new Team().setId(1L).setMembers(users).setName("testTeam1");

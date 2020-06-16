@@ -18,12 +18,12 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class ListTeamsControllerTest extends UnitTestTemplate {
+class ListTeamsControllerTest extends UnitTestTemplate {
   private final ListTeamsUseCase listTeamsUseCase = mock(ListTeamsUseCase.class);
   private final ListTeamsController testController = new ListTeamsController(listTeamsUseCase);
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     Mockito.when(listTeamsUseCase.listTeams())
         .thenReturn(
             Arrays.asList(
@@ -36,7 +36,7 @@ public class ListTeamsControllerTest extends UnitTestTemplate {
   }
 
   @Test
-  public void testListTeams() {
+  void testListTeams() {
     ResponseEntity<List<GetTeamResponse>> responseEntity = testController.listTeams();
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 

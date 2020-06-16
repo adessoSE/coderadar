@@ -28,7 +28,8 @@ public class ChangePasswordController implements AbstractBaseController {
       path = "/user/password/change",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity changePassword(@RequestBody @Validated ChangePasswordCommand command) {
+  public ResponseEntity<Object> changePassword(
+      @RequestBody @Validated ChangePasswordCommand command) {
     try {
       changePasswordUseCase.changePassword(command);
       return new ResponseEntity<>(HttpStatus.OK);

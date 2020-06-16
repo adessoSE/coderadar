@@ -30,7 +30,7 @@ public class RefreshTokenController implements AbstractBaseController {
       path = "/user/refresh",
       consumes = MediaType.APPLICATION_JSON_VALUE,
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity refreshToken(@RequestBody @Validated RefreshTokenCommand command) {
+  public ResponseEntity<Object> refreshToken(@RequestBody @Validated RefreshTokenCommand command) {
     try {
       return new ResponseEntity<>(
           new RefreshTokenResponse(refreshTokenUseCase.refreshToken(command)), HttpStatus.OK);

@@ -7,11 +7,11 @@ import java.util.Collections;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ContributorMapperTest {
+class ContributorMapperTest {
   private final ContributorMapper contributorMapper = new ContributorMapper();
 
   @Test
-  public void testMapDomainObject() {
+  void testMapDomainObject() {
     Contributor testContributor =
         new Contributor()
             .setDisplayName("testDisplayName")
@@ -27,7 +27,7 @@ public class ContributorMapperTest {
   }
 
   @Test
-  public void testMapGraphObject() {
+  void testMapGraphObject() {
     ContributorEntity testContributor =
         new ContributorEntity()
             .setDisplayName("testDisplayName")

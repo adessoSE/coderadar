@@ -17,14 +17,14 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class RemoveUsersFromTeamControllerTest extends UnitTestTemplate {
+class RemoveUsersFromTeamControllerTest extends UnitTestTemplate {
   private final RemoveUsersFromTeamUseCase removeUsersFromTeamUseCase =
       mock(RemoveUsersFromTeamUseCase.class);
   private final RemoveUsersFromTeamController testController =
       new RemoveUsersFromTeamController(removeUsersFromTeamUseCase);
 
   @Test
-  public void testRemoveUsersFromTeam() {
+  void testRemoveUsersFromTeam() {
     ResponseEntity<HttpStatus> response =
         testController.removeUsersFromTeam(
             1L, new JsonListWrapper<>(Collections.singletonList(2L)));
@@ -32,26 +32,22 @@ public class RemoveUsersFromTeamControllerTest extends UnitTestTemplate {
   }
 
   @Test
-  public void testRemoveTeamFromProjectThrowsExceptionWhenTeamNotFound() {
+  void testRemoveTeamFromProjectThrowsExceptionWhenTeamNotFound() {
     Mockito.doThrow(TeamNotFoundException.class)
         .when(removeUsersFromTeamUseCase)
         .removeUsersFromTeam(anyLong(), anyList());
+    JsonListWrapper<Long> jsonListWrapper = new JsonListWrapper<>(Collections.singletonList(2L));
     Assertions.assertThrows(
-        TeamNotFoundException.class,
-        () ->
-            testController.removeUsersFromTeam(
-                1L, new JsonListWrapper<>(Collections.singletonList(2L))));
+        TeamNotFoundException.class, () -> testController.removeUsersFromTeam(1L, jsonListWrapper));
   }
 
   @Test
-  public void testRemoveTeamFromProjectThrowsExceptionWhenUserNotFound() {
+  void testRemoveTeamFromProjectThrowsExceptionWhenUserNotFound() {
     Mockito.doThrow(UserNotFoundException.class)
         .when(removeUsersFromTeamUseCase)
         .removeUsersFromTeam(anyLong(), anyList());
+    JsonListWrapper<Long> jsonListWrapper = new JsonListWrapper<>(Collections.singletonList(2L));
     Assertions.assertThrows(
-        UserNotFoundException.class,
-        () ->
-            testController.removeUsersFromTeam(
-                1L, new JsonListWrapper<>(Collections.singletonList(2L))));
+        UserNotFoundException.class, () -> testController.removeUsersFromTeam(1L, jsonListWrapper));
   }
 }

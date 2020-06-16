@@ -6,11 +6,11 @@ import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class BranchMapperTest {
+class BranchMapperTest {
   private final BranchMapper branchMapper = new BranchMapper();
 
   @Test
-  public void testMapDomainObject() {
+  void testMapDomainObject() {
     Branch testBranch = new Branch().setCommitHash("testHash").setName("testName");
 
     BranchEntity result = branchMapper.mapDomainObject(testBranch);
@@ -20,7 +20,7 @@ public class BranchMapperTest {
   }
 
   @Test
-  public void testMapGraphObject() {
+  void testMapGraphObject() {
     BranchEntity testBranch =
         new BranchEntity().setId(1L).setCommitHash("testHash").setName("testName");
 

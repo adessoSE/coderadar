@@ -14,20 +14,20 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class RemoveTeamFromProjectControllerTest extends UnitTestTemplate {
+class RemoveTeamFromProjectControllerTest extends UnitTestTemplate {
   private final RemoveTeamFromProjectUseCase removeTeamFromProjectUseCase =
       mock(RemoveTeamFromProjectUseCase.class);
   private final RemoveTeamFromProjectController testController =
       new RemoveTeamFromProjectController(removeTeamFromProjectUseCase, authenticationService);
 
   @Test
-  public void testRemoveTeamFromProject() {
+  void testRemoveTeamFromProject() {
     ResponseEntity<ErrorMessageResponse> response = testController.removeTeamFromProject(1L, 2L);
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
   }
 
   @Test
-  public void testRemoveTeamFromProjectThrowsExceptionWhenTeamNotFound() {
+  void testRemoveTeamFromProjectThrowsExceptionWhenTeamNotFound() {
     Mockito.doThrow(TeamNotFoundException.class)
         .when(removeTeamFromProjectUseCase)
         .removeTeam(1L, 2L);
@@ -36,7 +36,7 @@ public class RemoveTeamFromProjectControllerTest extends UnitTestTemplate {
   }
 
   @Test
-  public void testRemoveTeamFromProjectThrowsExceptionWhenProjectNotFound() {
+  void testRemoveTeamFromProjectThrowsExceptionWhenProjectNotFound() {
     Mockito.doThrow(ProjectNotFoundException.class)
         .when(removeTeamFromProjectUseCase)
         .removeTeam(1L, 2L);

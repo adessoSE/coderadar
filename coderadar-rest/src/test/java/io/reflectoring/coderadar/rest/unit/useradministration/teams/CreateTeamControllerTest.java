@@ -16,13 +16,13 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class CreateTeamControllerTest extends UnitTestTemplate {
+class CreateTeamControllerTest extends UnitTestTemplate {
   private final CreateTeamUseCase createTeamUseCase = mock(CreateTeamUseCase.class);
 
   private final CreateTeamController testController = new CreateTeamController(createTeamUseCase);
 
   @Test
-  public void testCreateTeam() {
+  void testCreateTeam() {
 
     // Set up
     CreateTeamCommand testCommand = new CreateTeamCommand();
@@ -39,9 +39,9 @@ public class CreateTeamControllerTest extends UnitTestTemplate {
   }
 
   @Test
-  public void testCreateTeamThrowsExceptionWhenUserNotFound() {
+  void testCreateTeamThrowsExceptionWhenUserNotFound() {
     Mockito.when(createTeamUseCase.createTeam(any())).thenThrow(new UserNotFoundException(1L));
-    Assertions.assertThrows(
-        UserNotFoundException.class, () -> testController.createTeam(new CreateTeamCommand()));
+    CreateTeamCommand command = new CreateTeamCommand();
+    Assertions.assertThrows(UserNotFoundException.class, () -> testController.createTeam(command));
   }
 }

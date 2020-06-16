@@ -8,10 +8,10 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GetModuleResponseMapperTest {
+class GetModuleResponseMapperTest {
 
   @Test
-  public void testModuleResponseMapper() {
+  void testModuleResponseMapper() {
     List<Module> modules = new ArrayList<>();
     modules.add(new Module(1L, "testModule1"));
     modules.add(new Module(2L, "testModule2"));
@@ -26,7 +26,7 @@ public class GetModuleResponseMapperTest {
   }
 
   @Test
-  public void testModuleResponseSingleMapper() {
+  void testModuleResponseSingleMapper() {
     Module module = new Module(1L, "testPath1");
     GetModuleResponse response = GetModuleResponseMapper.mapModule(module);
     Assertions.assertEquals("testPath1", response.getPath());

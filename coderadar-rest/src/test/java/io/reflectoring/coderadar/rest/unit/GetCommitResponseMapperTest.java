@@ -8,10 +8,10 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GetCommitResponseMapperTest {
+class GetCommitResponseMapperTest {
 
   @Test
-  public void testCommitResponseMapper() {
+  void testCommitResponseMapper() {
     List<Commit> commits = new ArrayList<>();
     commits.add(
         new Commit()

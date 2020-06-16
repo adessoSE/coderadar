@@ -11,10 +11,10 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GetTeamResponseMapperControllerTest extends UnitTestTemplate {
+class GetTeamResponseMapperControllerTest extends UnitTestTemplate {
 
   @Test
-  public void testTeamResponseMapper() {
+  void testTeamResponseMapper() {
     List<Team> teams = new ArrayList<>();
     teams.add(
         new Team()
@@ -55,7 +55,7 @@ public class GetTeamResponseMapperControllerTest extends UnitTestTemplate {
   }
 
   @Test
-  public void testTeamResponseSingleMapper() {
+  void testTeamResponseSingleMapper() {
     Team team =
         new Team()
             .setName("testTeam1")

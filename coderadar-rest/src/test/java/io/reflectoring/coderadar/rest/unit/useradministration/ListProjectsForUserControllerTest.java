@@ -16,7 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class ListProjectsForUserControllerTest extends UnitTestTemplate {
+class ListProjectsForUserControllerTest extends UnitTestTemplate {
   private final ListProjectsForUserUseCase listProjectsForUserUseCase =
       mock(ListProjectsForUserUseCase.class);
 
@@ -24,7 +24,7 @@ public class ListProjectsForUserControllerTest extends UnitTestTemplate {
       new ListProjectsForUserController(listProjectsForUserUseCase);
 
   @Test
-  public void testListProjectsForUser() {
+  void testListProjectsForUser() {
     // Set up
     Mockito.when(listProjectsForUserUseCase.listProjects(1L))
         .thenReturn(Collections.singletonList(new Project().setName("TestProject1").setId(2L)));
@@ -38,7 +38,7 @@ public class ListProjectsForUserControllerTest extends UnitTestTemplate {
   }
 
   @Test
-  public void testListProjectsForUserThrowsWhenUserNotFound() { // TODO: Exception is caught by the
+  void testListProjectsForUserThrowsWhenUserNotFound() { // TODO: Exception is caught by the
     // ExceptionHandler, is this test needed?
     Mockito.when(listProjectsForUserUseCase.listProjects(1L))
         .thenThrow(new UserNotFoundException(1L));

@@ -25,9 +25,11 @@ class RegisterUserControllerTest extends UnitTestTemplate {
 
     Mockito.when(registerUserUseCase.register(command)).thenReturn(1L);
 
-    ResponseEntity<IdResponse> responseEntity = testSubject.register(command);
+    ResponseEntity<Object> responseEntity = testSubject.register(command);
 
+    Assertions.assertTrue(responseEntity.getBody() instanceof IdResponse);
+    IdResponse responseBody = (IdResponse) responseEntity.getBody();
     Assertions.assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-    Assertions.assertEquals(1L, responseEntity.getBody().getId());
+    Assertions.assertEquals(1L, responseBody.getId());
   }
 }

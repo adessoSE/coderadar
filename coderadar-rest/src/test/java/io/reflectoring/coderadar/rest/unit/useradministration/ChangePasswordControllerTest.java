@@ -21,7 +21,7 @@ class ChangePasswordControllerTest extends UnitTestTemplate {
     ChangePasswordController testSubject = new ChangePasswordController(changePasswordUseCase);
     ChangePasswordCommand command = new ChangePasswordCommand("refreshToken", "newPassword");
 
-    ResponseEntity<String> responseEntity = testSubject.changePassword(command);
+    ResponseEntity<Object> responseEntity = testSubject.changePassword(command);
 
     Mockito.verify(changePasswordUseCase, Mockito.times(1)).changePassword(command);
 

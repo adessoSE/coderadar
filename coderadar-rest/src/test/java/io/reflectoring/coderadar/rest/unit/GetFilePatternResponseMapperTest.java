@@ -9,10 +9,10 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GetFilePatternResponseMapperTest {
+class GetFilePatternResponseMapperTest {
 
   @Test
-  public void testFilePatternResponseMapper() {
+  void testFilePatternResponseMapper() {
     List<FilePattern> filePatterns = new ArrayList<>();
     filePatterns.add(new FilePattern(1L, "testPattern1/**.java", InclusionType.EXCLUDE));
     filePatterns.add(new FilePattern(2L, "testPattern2/**.java", InclusionType.INCLUDE));
@@ -31,7 +31,7 @@ public class GetFilePatternResponseMapperTest {
   }
 
   @Test
-  public void testFilePatternResponseSingleMapper() {
+  void testFilePatternResponseSingleMapper() {
     FilePattern filePattern = new FilePattern(1L, "testPattern1/**.java", InclusionType.EXCLUDE);
     GetFilePatternResponse response = GetFilePatternResponseMapper.mapFilePattern(filePattern);
     Assertions.assertEquals("testPattern1/**.java", response.getPattern());

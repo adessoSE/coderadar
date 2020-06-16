@@ -5,11 +5,11 @@ import io.reflectoring.coderadar.graph.analyzer.FindingsMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class FindingsMapperTest {
+class FindingsMapperTest {
   private final FindingsMapper findingsMapper = new FindingsMapper();
 
   @Test
-  public void testMapFindingDomainWithMessage() {
+  void testMapFindingDomainWithMessage() {
     Finding testFinding = new Finding(1, 2, 3, 4, "message");
 
     String result = findingsMapper.mapDomainObject(testFinding);
@@ -17,7 +17,7 @@ public class FindingsMapperTest {
   }
 
   @Test
-  public void testMapFindingDomainWithMessageDash() {
+  void testMapFindingDomainWithMessageDash() {
     Finding testFinding = new Finding(1, 2, 3, 4, "message-2");
 
     String result = findingsMapper.mapDomainObject(testFinding);
@@ -25,7 +25,7 @@ public class FindingsMapperTest {
   }
 
   @Test
-  public void testMapFindingGraphWithMessage() {
+  void testMapFindingGraphWithMessage() {
     String testFinding = "1-2-3-4-message";
 
     Finding result = findingsMapper.mapGraphObject(testFinding);
@@ -37,7 +37,7 @@ public class FindingsMapperTest {
   }
 
   @Test
-  public void testMapFindingGraphWithMessageDash() {
+  void testMapFindingGraphWithMessageDash() {
     String testFinding = "1-2-3-4-message-2";
 
     Finding result = findingsMapper.mapGraphObject(testFinding);

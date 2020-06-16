@@ -22,31 +22,31 @@ public class AddTeamToProjectControllerTest extends UnitTestTemplate {
       new AddTeamToProjectController(addTeamToProjectUseCase, authenticationService);
 
   @Test
-  public void testAddTeamToProject() {
+  void testAddTeamToProject() {
     ResponseEntity<HttpStatus> response =
         testController.addTeamToProject(1L, 2L, new ProjectRoleJsonWrapper(ProjectRole.ADMIN));
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
   }
 
   @Test
-  public void testRemoveTeamFromProjectThrowsExceptionWhenTeamNotFound() {
+  void testRemoveTeamFromProjectThrowsExceptionWhenTeamNotFound() {
     Mockito.doThrow(TeamNotFoundException.class)
         .when(addTeamToProjectUseCase)
         .addTeamToProject(1L, 2L, ProjectRole.ADMIN);
+    ProjectRoleJsonWrapper jsonWrapper = new ProjectRoleJsonWrapper(ProjectRole.ADMIN);
+
     Assertions.assertThrows(
-        TeamNotFoundException.class,
-        () ->
-            testController.addTeamToProject(1L, 2L, new ProjectRoleJsonWrapper(ProjectRole.ADMIN)));
+        TeamNotFoundException.class, () -> testController.addTeamToProject(1L, 2L, jsonWrapper));
   }
 
   @Test
-  public void testRemoveTeamFromProjectThrowsExceptionWhenProjectNotFound() {
+  void testRemoveTeamFromProjectThrowsExceptionWhenProjectNotFound() {
     Mockito.doThrow(ProjectNotFoundException.class)
         .when(addTeamToProjectUseCase)
         .addTeamToProject(1L, 2L, ProjectRole.ADMIN);
+    ProjectRoleJsonWrapper jsonWrapper = new ProjectRoleJsonWrapper(ProjectRole.ADMIN);
+
     Assertions.assertThrows(
-        ProjectNotFoundException.class,
-        () ->
-            testController.addTeamToProject(1L, 2L, new ProjectRoleJsonWrapper(ProjectRole.ADMIN)));
+        ProjectNotFoundException.class, () -> testController.addTeamToProject(1L, 2L, jsonWrapper));
   }
 }

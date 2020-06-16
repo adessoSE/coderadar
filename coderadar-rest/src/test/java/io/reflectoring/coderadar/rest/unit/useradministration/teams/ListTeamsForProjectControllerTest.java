@@ -19,7 +19,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class ListTeamsForProjectControllerTest extends UnitTestTemplate {
+class ListTeamsForProjectControllerTest extends UnitTestTemplate {
 
   private final ListTeamsForProjectUseCase listTeamsForProjectUseCase =
       mock(ListTeamsForProjectUseCase.class);
@@ -27,7 +27,7 @@ public class ListTeamsForProjectControllerTest extends UnitTestTemplate {
       new ListTeamsForProjectController(listTeamsForProjectUseCase, authenticationService);
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     Mockito.when(listTeamsForProjectUseCase.listTeamsForProject(5L))
         .thenReturn(
             Arrays.asList(
@@ -40,7 +40,7 @@ public class ListTeamsForProjectControllerTest extends UnitTestTemplate {
   }
 
   @Test
-  public void testListTeams() {
+  void testListTeams() {
     ResponseEntity<List<GetTeamResponse>> responseEntity = testController.listTeamsForProject(5L);
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
@@ -60,7 +60,7 @@ public class ListTeamsForProjectControllerTest extends UnitTestTemplate {
   }
 
   @Test
-  public void testListProjectsForUserThrowsWhenProjectNotFound() {
+  void testListProjectsForUserThrowsWhenProjectNotFound() {
     Mockito.when(listTeamsForProjectUseCase.listTeamsForProject(8L))
         .thenThrow(new ProjectNotFoundException(1L));
     Assertions.assertThrows(

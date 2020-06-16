@@ -15,40 +15,38 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class SetUserRoleForProjectControllerTest extends UnitTestTemplate {
+class SetUserRoleForProjectControllerTest extends UnitTestTemplate {
   private final SetUserRoleForProjectUseCase setUserRoleForProjectUseCase =
       mock(SetUserRoleForProjectUseCase.class);
   private final SetUserRoleForProjectController testController =
       new SetUserRoleForProjectController(setUserRoleForProjectUseCase);
 
   @Test
-  public void testSetUserRoleForProject() {
+  void testSetUserRoleForProject() {
     ResponseEntity<HttpStatus> response =
         testController.setUserRoleForProject(1L, 2L, new ProjectRoleJsonWrapper(ProjectRole.ADMIN));
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
   }
 
   @Test
-  public void testSetUserRoleForProjectThrowsExceptionWhenUserNotFound() {
+  void testSetUserRoleForProjectThrowsExceptionWhenUserNotFound() {
     Mockito.doThrow(UserNotFoundException.class)
         .when(setUserRoleForProjectUseCase)
         .setRole(1L, 2L, ProjectRole.ADMIN);
+    ProjectRoleJsonWrapper jsonWrapper = new ProjectRoleJsonWrapper(ProjectRole.ADMIN);
     Assertions.assertThrows(
         UserNotFoundException.class,
-        () ->
-            testController.setUserRoleForProject(
-                1L, 2L, new ProjectRoleJsonWrapper(ProjectRole.ADMIN)));
+        () -> testController.setUserRoleForProject(1L, 2L, jsonWrapper));
   }
 
   @Test
-  public void testSetUserRoleForProjectThrowsExceptionWhenProjectNotFound() {
+  void testSetUserRoleForProjectThrowsExceptionWhenProjectNotFound() {
     Mockito.doThrow(ProjectNotFoundException.class)
         .when(setUserRoleForProjectUseCase)
         .setRole(1L, 2L, ProjectRole.ADMIN);
+    ProjectRoleJsonWrapper jsonWrapper = new ProjectRoleJsonWrapper(ProjectRole.ADMIN);
     Assertions.assertThrows(
         ProjectNotFoundException.class,
-        () ->
-            testController.setUserRoleForProject(
-                1L, 2L, new ProjectRoleJsonWrapper(ProjectRole.ADMIN)));
+        () -> testController.setUserRoleForProject(1L, 2L, jsonWrapper));
   }
 }

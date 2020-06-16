@@ -16,14 +16,14 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class ListProjectsForTeamControllerTest extends UnitTestTemplate {
+class ListProjectsForTeamControllerTest extends UnitTestTemplate {
   private final ListProjectsForTeamUseCase listProjectsForTeamUseCase =
       mock(ListProjectsForTeamUseCase.class);
   private final ListProjectsForTeamController testController =
       new ListProjectsForTeamController(listProjectsForTeamUseCase);
 
   @Test
-  public void testListProjectsForTeam() {
+  void testListProjectsForTeam() {
     // Set up
     Mockito.when(listProjectsForTeamUseCase.listProjects(1L))
         .thenReturn(Collections.singletonList(new Project().setName("TestProject1").setId(2L)));
@@ -37,7 +37,7 @@ public class ListProjectsForTeamControllerTest extends UnitTestTemplate {
   }
 
   @Test
-  public void testRemoveTeamFromProjectThrowsExceptionWhenTeamNotFound() {
+  void testRemoveTeamFromProjectThrowsExceptionWhenTeamNotFound() {
     Mockito.doThrow(TeamNotFoundException.class).when(listProjectsForTeamUseCase).listProjects(1L);
     Assertions.assertThrows(
         TeamNotFoundException.class, () -> testController.listProjectsForTeam(1L));

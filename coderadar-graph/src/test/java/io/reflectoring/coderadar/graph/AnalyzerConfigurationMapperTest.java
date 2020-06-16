@@ -6,11 +6,11 @@ import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.Anal
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class AnalyzerConfigurationMapperTest {
+class AnalyzerConfigurationMapperTest {
   private final AnalyzerConfigurationMapper configurationMapper = new AnalyzerConfigurationMapper();
 
   @Test
-  public void testMapDomainObject() {
+  void testMapDomainObject() {
     AnalyzerConfiguration testBranch =
         new AnalyzerConfiguration().setEnabled(true).setId(1L).setAnalyzerName("testName");
 
@@ -21,7 +21,7 @@ public class AnalyzerConfigurationMapperTest {
   }
 
   @Test
-  public void testMapGraphObject() {
+  void testMapGraphObject() {
     AnalyzerConfigurationEntity testBranch =
         new AnalyzerConfigurationEntity().setEnabled(true).setId(1L).setAnalyzerName("testName");
 

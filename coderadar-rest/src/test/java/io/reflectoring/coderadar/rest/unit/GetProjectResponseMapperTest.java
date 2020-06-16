@@ -9,10 +9,10 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GetProjectResponseMapperTest {
+class GetProjectResponseMapperTest {
 
   @Test
-  public void testProjectResponseMapper() {
+  void testProjectResponseMapper() {
     List<Project> projects = new ArrayList<>();
     projects.add(
         new Project()
@@ -55,7 +55,7 @@ public class GetProjectResponseMapperTest {
   }
 
   @Test
-  public void testSingleProjectResponseMapper() {
+  void testSingleProjectResponseMapper() {
     Project testProject =
         new Project()
             .setName("testProject1")

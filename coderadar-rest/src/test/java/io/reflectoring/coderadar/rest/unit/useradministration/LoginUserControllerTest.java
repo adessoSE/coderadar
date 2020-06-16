@@ -26,13 +26,13 @@ class LoginUserControllerTest extends UnitTestTemplate {
 
     Mockito.when(loginUserUseCase.login(command)).thenReturn(loginUserResponse);
 
-    ResponseEntity<LoginUserResponse> responseEntity = testSubject.login(command);
+    ResponseEntity<Object> responseEntity = testSubject.login(command);
 
+    Assertions.assertTrue(responseEntity.getBody() instanceof LoginUserResponse);
+    LoginUserResponse responseBody = (LoginUserResponse) responseEntity.getBody();
     Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    Assertions.assertEquals(
-        loginUserResponse.getAccessToken(), responseEntity.getBody().getAccessToken());
-    Assertions.assertEquals(
-        loginUserResponse.getRefreshToken(), responseEntity.getBody().getRefreshToken());
-    Assertions.assertEquals(loginUserResponse.getUserId(), responseEntity.getBody().getUserId());
+    Assertions.assertEquals(loginUserResponse.getAccessToken(), responseBody.getAccessToken());
+    Assertions.assertEquals(loginUserResponse.getRefreshToken(), responseBody.getRefreshToken());
+    Assertions.assertEquals(loginUserResponse.getUserId(), responseBody.getUserId());
   }
 }

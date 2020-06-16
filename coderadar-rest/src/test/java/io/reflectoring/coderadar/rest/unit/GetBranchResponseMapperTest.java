@@ -8,10 +8,10 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GetBranchResponseMapperTest {
+class GetBranchResponseMapperTest {
 
   @Test
-  public void testBranchResponseMapper() {
+  void testBranchResponseMapper() {
     List<Branch> branches = new ArrayList<>();
     branches.add(new Branch("testBranch1", "testHash1"));
     branches.add(new Branch("testBranch2", "testHash2"));

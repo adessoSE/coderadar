@@ -16,12 +16,12 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class GetTeamControllerTest extends UnitTestTemplate {
+class GetTeamControllerTest extends UnitTestTemplate {
   private final GetTeamUseCase getTeamUseCase = mock(GetTeamUseCase.class);
   private final GetTeamController testController = new GetTeamController(getTeamUseCase);
 
   @Test
-  public void testGetTeam() {
+  void testGetTeam() {
     // Set up
     Mockito.when(getTeamUseCase.get(1L))
         .thenReturn(
@@ -47,7 +47,7 @@ public class GetTeamControllerTest extends UnitTestTemplate {
   }
 
   @Test
-  public void testGetTeamReturnsErrorWhenTeamNotFound() {
+  void testGetTeamReturnsErrorWhenTeamNotFound() {
     Mockito.when(getTeamUseCase.get(1L)).thenThrow(new TeamNotFoundException(1L));
     Assertions.assertThrows(TeamNotFoundException.class, () -> testController.getTeam(1L));
   }

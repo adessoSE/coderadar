@@ -8,10 +8,10 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class GetAnalyzerConfigurationResponseMapperTest {
+class GetAnalyzerConfigurationResponseMapperTest {
 
   @Test
-  public void testAnalyzerConfigurationResponseMapper() {
+  void testAnalyzerConfigurationResponseMapper() {
     List<AnalyzerConfiguration> analyzerConfigurations = new ArrayList<>();
     analyzerConfigurations.add(new AnalyzerConfiguration(1L, "testAnalyzer1", true));
     analyzerConfigurations.add(new AnalyzerConfiguration(2L, "testAnalyzer2", false));
@@ -29,7 +29,7 @@ public class GetAnalyzerConfigurationResponseMapperTest {
   }
 
   @Test
-  public void testModuleResponseSingleMapper() {
+  void testModuleResponseSingleMapper() {
     AnalyzerConfiguration analyzerConfiguration =
         new AnalyzerConfiguration(1L, "testAnalyzer1", true);
     GetAnalyzerConfigurationResponse response =

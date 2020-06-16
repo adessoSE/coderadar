@@ -16,14 +16,14 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class ListUsersForProjectControllerTest extends UnitTestTemplate {
+class ListUsersForProjectControllerTest extends UnitTestTemplate {
   private final ListUsersForProjectUseCase listUsersForProjectUseCase =
       mock(ListUsersForProjectUseCase.class);
   private final ListUsersForProjectController testController =
       new ListUsersForProjectController(listUsersForProjectUseCase, authenticationService);
 
   @Test
-  public void testListUsersForProject() {
+  void testListUsersForProject() {
     Mockito.when(listUsersForProjectUseCase.listUsers(1L))
         .thenReturn(
             Arrays.asList(
@@ -41,7 +41,7 @@ public class ListUsersForProjectControllerTest extends UnitTestTemplate {
   }
 
   @Test
-  public void testListUsersForProjectThrowsExceptionWhenProjectNotFound() {
+  void testListUsersForProjectThrowsExceptionWhenProjectNotFound() {
     Mockito.doThrow(ProjectNotFoundException.class).when(listUsersForProjectUseCase).listUsers(1L);
     Assertions.assertThrows(
         ProjectNotFoundException.class, () -> testController.listTeamsForUser(1L));

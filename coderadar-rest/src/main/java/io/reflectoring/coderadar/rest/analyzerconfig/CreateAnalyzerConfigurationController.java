@@ -37,6 +37,7 @@ public class CreateAnalyzerConfigurationController implements AbstractBaseContro
   public ResponseEntity<Object> addAnalyzerConfiguration(
       @RequestBody @Validated CreateAnalyzerConfigurationCommand command,
       @PathVariable long projectId) {
+    authenticationService.authenticateAdmin(projectId);
     try {
       return new ResponseEntity<>(
           new IdResponse(createAnalyzerConfigurationUseCase.create(command, projectId)),
