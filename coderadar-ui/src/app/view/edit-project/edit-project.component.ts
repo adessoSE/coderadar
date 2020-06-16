@@ -39,7 +39,6 @@ export class EditProjectComponent implements OnInit {
           this.projectName = project.name;
         });
       } else {
-        console.log('no project id');
         this.projectId = null;
       }
     });

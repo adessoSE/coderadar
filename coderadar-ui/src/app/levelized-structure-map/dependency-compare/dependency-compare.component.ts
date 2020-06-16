@@ -66,7 +66,6 @@ export class DependencyCompareComponent implements OnInit, AfterViewInit {
 
   getData(): void {
     if (this.commitName2 && this.commitName2 !== 'null') {
-      console.log('get compare');
       this.projectService.getCompareTree(this.projectId, this.commitName, this.commitName2).then(response => {
         this.node = response.body;
         this.checkChanged = false;
@@ -80,13 +79,10 @@ export class DependencyCompareComponent implements OnInit, AfterViewInit {
           }
         });
     } else {
-      console.log('get tree');
       this.projectService.getDependencyTree(this.projectId, this.commitName).then(response => {
         this.node = response.body;
         this.svg = document.getElementById('3svg');
         this.checkDown = this.checkUp = true;
-        console.log(this.node);
-        console.log(this.node.path);
         setTimeout(() => this.draw(() => this.loadDependencies(this.node)), 50);
       })
         .catch(e => {
@@ -153,7 +149,7 @@ export class DependencyCompareComponent implements OnInit, AfterViewInit {
     while (element.offsetParent === null) {
       element = element.parentNode.parentNode.parentNode.parentNode.parentNode.firstElementChild as HTMLElement;
     }
-    return element as HTMLElement;
+    return element;
   }
 
   loadDependencies(node, checkChanged?): void {
@@ -245,7 +241,7 @@ export class DependencyCompareComponent implements OnInit, AfterViewInit {
     // calculate positions for arrows of currentNode and its dependencies
     if (currentNode.dependencies.length > 0) {
       // find last visible element for currentNode as start
-      const start = this.findLastHTMLElement(currentNode.path) as HTMLElement;
+      const start = this.findLastHTMLElement(currentNode.path);
       let toDraw;
       if (this.activeDependency !== undefined) {
         // activeDependency is set is not start
@@ -258,11 +254,10 @@ export class DependencyCompareComponent implements OnInit, AfterViewInit {
       const startx = ($(start).offset().left - $(this.svg).offset().left) / this.zoomElement.scale + start.offsetWidth / 2;
       const starty = ($(start).offset().top - $(this.svg).offset().top) / this.zoomElement.scale + start.offsetHeight + ($(start).css('padding-top') !== '0px' ? 0 : 5);
       const startTop = starty - start.offsetHeight - ($(start).css('padding-top') !== '0px' ? 0 : 10);
-      console.log(parseFloat($(start).css('padding-top')));
 
       currentNode.dependencies.forEach(dependency => {
         // find last visible element for dependency as end
-        const end = this.findLastHTMLElement(dependency.path) as HTMLElement;
+        const end = this.findLastHTMLElement(dependency.path);
 
         // if activeDependency is set, draw only activeDependency related dependencies
         if (this.activeDependency !== undefined) {
