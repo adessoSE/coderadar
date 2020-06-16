@@ -6,7 +6,6 @@ import {LoginComponent} from './view/login/login.component';
 import {RegisterComponent} from './view/register/register.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {AddProjectComponent} from './view/add-project/add-project.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MainDashboardComponent, ConfirmDeleteProjectDialogComponent} from './view/main-dashboard/main-dashboard.component';
@@ -70,7 +69,6 @@ const appRoutes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'dashboard', component: MainDashboardComponent},
   {path: 'user-settings', component: UserSettingsComponent},
-  {path: 'add-project', component: AddProjectComponent},
   {path: 'project-configure/:id', component: ConfigureProjectComponent},
   {path: 'city/:id', component: CityViewComponent},
   {path: 'project-edit/:id', component: EditProjectComponent},
@@ -86,7 +84,6 @@ const appRoutes: Routes = [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    AddProjectComponent,
     MainDashboardComponent,
     ConfirmDeleteProjectDialogComponent,
     ConfigureProjectComponent,
