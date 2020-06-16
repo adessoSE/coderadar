@@ -1,15 +1,18 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CommitType} from '../../enum/CommitType';
 import {Commit} from '../../../model/commit';
-import {Observable} from "rxjs";
-import {DatePipe} from "@angular/common";
+import {Observable} from 'rxjs';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-commit-chooser',
-  templateUrl: './commit-chooser.component.html',
-  styleUrls: ['./commit-chooser.component.scss']
+  templateUrl: './commit-chooser.component.html'
 })
-export class CommitChooserComponent implements OnInit{
+export class CommitChooserComponent implements OnInit {
+
+  constructor(public datepipe: DatePipe) {}
+
+  static readonly COMMIT_HASH_LENGTH = 7;
 
   @Input() commitType: CommitType;
   @Input() commits: Observable<Commit[]>;
@@ -20,10 +23,6 @@ export class CommitChooserComponent implements OnInit{
 
   @Output() changeCommit = new EventEmitter();
 
-  static readonly COMMIT_HASH_LENGTH = 7;
-
-  constructor(public datepipe:DatePipe) {}
-
   ngOnInit() {
     this.selected.subscribe(value => this.handleCommitChanged(value));
   }
@@ -31,18 +30,14 @@ export class CommitChooserComponent implements OnInit{
 
   formatCommit(commit: Commit): string {
     if (commit === null || commit === undefined) {
-      return "empty";
+      return 'empty';
     }
     return commit.name.substring(0, CommitChooserComponent.COMMIT_HASH_LENGTH) + ', ' + commit.author + ', ' + new Date(commit.timestamp).toUTCString();
   }
 
-  filterCommitOptions(value: string,source:{value:Commit,displayValue:string}[]): {value:Commit,displayValue:string}[] {
-    if (source === undefined) {
+  filterCommitOptions(value: string, source: {value: Commit, displayValue: string}[]): {value: Commit, displayValue: string}[] {
+    if (source === undefined || typeof value !== 'string') {
       return [];
-    } else if (typeof value !== 'string') {
-      return [];
-    } else if (value === undefined) {
-      return source;
     }
     const lowercaseValue = value.toLowerCase();
 
@@ -56,8 +51,8 @@ export class CommitChooserComponent implements OnInit{
         if (optionAny.author.toLowerCase().includes(lowercaseValue)) {score += 25; }
         if (optionAny.name.startsWith(value)) {score += 1000; }
         if (optionAny.name.includes(lowercaseValue)) {score += 500; }
-        if (option.displayValue.substring(option.value.author.length+CommitChooserComponent.COMMIT_HASH_LENGTH).toLowerCase().includes(lowercaseValue)){score+=1000}
-        if (score > 0||value==="") {
+        if (option.displayValue.substring(option.value.author.length + CommitChooserComponent.COMMIT_HASH_LENGTH).toLowerCase().includes(lowercaseValue)) {score += 1000; }
+        if (score > 0 || value === '') {
           optionAny.score = score;
           return option;
         }

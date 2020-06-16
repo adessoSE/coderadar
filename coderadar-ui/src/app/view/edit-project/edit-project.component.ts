@@ -3,7 +3,7 @@ import {Project} from '../../model/project';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
-import {BAD_REQUEST, CONFLICT, FORBIDDEN, NOT_FOUND, UNPROCESSABLE_ENTITY} from 'http-status-codes';
+import {BAD_REQUEST, CONFLICT, FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import {MatSnackBar} from '@angular/material';
 import {UtilsService} from '../../service/utils.service';

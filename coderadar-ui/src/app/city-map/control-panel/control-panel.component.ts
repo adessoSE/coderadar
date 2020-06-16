@@ -5,7 +5,7 @@ import {changeCommit, loadCommits} from './control-panel.actions';
 import {FocusService} from '../service/focus.service';
 import {ViewType} from '../enum/ViewType';
 import {CommitType} from '../enum/CommitType';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Commit} from '../../model/commit';
 import {map} from 'rxjs/operators';
 import { AppEffects } from '../shared/effects';
@@ -13,8 +13,7 @@ import {loadAvailableMetrics} from '../visualization/visualization.actions';
 
 @Component({
   selector: 'app-control-panel',
-  templateUrl: './control-panel.component.html',
-  styleUrls: ['./control-panel.component.scss']
+  templateUrl: './control-panel.component.html'
 })
 export class ControlPanelComponent implements OnInit {
 
