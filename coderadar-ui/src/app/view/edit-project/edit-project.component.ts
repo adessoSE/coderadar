@@ -6,7 +6,7 @@ import {ProjectService} from '../../service/project.service';
 import {BAD_REQUEST, CONFLICT, FORBIDDEN, NOT_FOUND, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import {MatSnackBar} from '@angular/material';
-import {UtilsService} from "../../service/utils.service";
+import {UtilsService} from '../../service/utils.service';
 
 @Component({
   selector: 'app-edit-project',
@@ -31,14 +31,12 @@ export class EditProjectComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log('call on init');
     this.route.params.subscribe(params => {
       if (params.id && params.id !== 'null') {
         this.projectId = params.id;
-        console.log('get project from utils');
         this.utilsService.getProject('Coderadar - Edit', this.projectId).then(project => {
           this.project = project;
-          this.projectName = this.project.name;
+          this.projectName = project.name;
         });
       } else {
         console.log('no project id');
@@ -113,8 +111,6 @@ export class EditProjectComponent implements OnInit {
       duration: 4000,
     });
   }
-
-
 
   /**
    * Checks for empty form fields.

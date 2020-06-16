@@ -1,13 +1,16 @@
-import {Project} from "../model/project";
-import {FORBIDDEN, NOT_FOUND} from "http-status-codes";
+import { Injectable } from '@angular/core';
 import {ProjectService} from "./project.service";
 import {Title} from "@angular/platform-browser";
 import {UserService} from "./user.service";
 import {Router} from "@angular/router";
+import {Project} from "../model/project";
+import {FORBIDDEN, NOT_FOUND} from "http-status-codes";
+import {AppComponent} from "../app.component";
 
+@Injectable({
+  providedIn: 'root'
+})
 export class UtilsService {
-
-  project: Project;
 
   constructor(private projectService: ProjectService, private titleService: Title, private userService: UserService,
               private router: Router) {
@@ -22,8 +25,7 @@ export class UtilsService {
     return this.projectService.getProject(projectId)
       .then(response => {
         const project = new Project(response.body);
-        this.titleService.setTitle(title + ' ' + this.project.name);
-        console.log('return project');
+        this.titleService.setTitle(title + ' ' + AppComponent.trimProjectName(project.name));
         return project;
       })
       .catch(error => {
