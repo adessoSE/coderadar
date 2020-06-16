@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
 import io.reflectoring.coderadar.rest.ProjectRoleJsonWrapper;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import io.reflectoring.coderadar.rest.useradministration.permissions.SetUserRoleForProjectController;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
@@ -14,7 +15,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class SetUserRoleForProjectControllerTest {
+public class SetUserRoleForProjectControllerTest extends UnitTestTemplate {
   private final SetUserRoleForProjectUseCase setUserRoleForProjectUseCase =
       mock(SetUserRoleForProjectUseCase.class);
   private final SetUserRoleForProjectController testController =

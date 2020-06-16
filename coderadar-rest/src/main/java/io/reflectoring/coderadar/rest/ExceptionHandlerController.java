@@ -5,6 +5,8 @@ import io.reflectoring.coderadar.EntityNotFoundException;
 import io.reflectoring.coderadar.analyzer.MisconfigurationException;
 import io.reflectoring.coderadar.projectadministration.ProjectIsBeingProcessedException;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
+import io.reflectoring.coderadar.useradministration.service.UserUnauthenticatedException;
+import io.reflectoring.coderadar.useradministration.service.UserUnauthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,6 +20,17 @@ public class ExceptionHandlerController {
       ProjectIsBeingProcessedException e) {
     return new ResponseEntity<>(
         new ErrorMessageResponse(e.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+  }
+
+  @ExceptionHandler(UserUnauthenticatedException.class)
+  public ResponseEntity<ErrorMessageResponse> entityNotFoundException(
+      UserUnauthenticatedException e) {
+    return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.FORBIDDEN);
+  }
+
+  @ExceptionHandler(UserUnauthorizedException.class)
+  public ResponseEntity<ErrorMessageResponse> entityNotFoundException(UserUnauthorizedException e) {
+    return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
   }
 
   @ExceptionHandler(EntityNotFoundException.class)

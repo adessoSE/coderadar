@@ -59,6 +59,13 @@ public interface UserRepository extends Neo4jRepository<UserEntity, Long> {
           + "CREATE (p)<-[r1:ASSIGNED_TO {role: {2}}]-(u)")
   void setUserRoleForProject(long projectId, long userId, String role);
 
+  @Query("MATCH (p)<-[r:ASSIGNED_TO]-(u) WHERE ID(p) = {0} AND ID(u) = {1} RETURN r.role LIMIT 1")
+  String getUserRoleForProject(long projectId, long userId);
+
+  @Query(
+      "MATCH (u)-[:IS_IN]->(t)-[r:ASSIGNED_TO]->(p) WHERE ID(p) = {0} AND ID(u) = {1} RETURN r.role")
+  List<String> getUserRolesForProjectInTeams(long projectId, long userId);
+
   /**
    * Deletes the [:ASSIGNED_TO] relationship between a user and a project.
    *

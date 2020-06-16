@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.unit.useradministration.teams;
 import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.rest.domain.GetTeamResponse;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import io.reflectoring.coderadar.rest.useradministration.teams.ListTeamsForUserController;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.domain.Team;
@@ -18,7 +19,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class ListTeamsForUserControllerTest {
+public class ListTeamsForUserControllerTest extends UnitTestTemplate {
 
   private final ListTeamsForUserUseCase listTeamsForUserUseCase =
       mock(ListTeamsForUserUseCase.class);

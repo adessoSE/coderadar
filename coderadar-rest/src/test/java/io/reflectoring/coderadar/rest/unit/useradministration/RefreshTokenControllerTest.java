@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.unit.useradministration;
 
 import static org.mockito.Mockito.mock;
 
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import io.reflectoring.coderadar.rest.useradministration.RefreshTokenController;
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.refresh.RefreshTokenResponse;
@@ -12,7 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-class RefreshTokenControllerTest {
+class RefreshTokenControllerTest extends UnitTestTemplate {
 
   private final RefreshTokenUseCase refreshTokenUseCase = mock(RefreshTokenUseCase.class);
 

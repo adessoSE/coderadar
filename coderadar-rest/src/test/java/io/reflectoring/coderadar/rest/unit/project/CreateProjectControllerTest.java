@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.project.creat
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectUseCase;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import io.reflectoring.coderadar.rest.project.CreateProjectController;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import java.net.MalformedURLException;
 import java.util.Date;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +15,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-class CreateProjectControllerTest {
+class CreateProjectControllerTest extends UnitTestTemplate {
 
   private final CreateProjectUseCase createProjectUseCase = mock(CreateProjectUseCase.class);
 

@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.contributor.port.driver.GetContributorsForPathC
 import io.reflectoring.coderadar.contributor.port.driver.ListContributorsUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.GetContributorResponse;
+import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,9 +19,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ListContributorsController implements AbstractBaseController {
   private final ListContributorsUseCase listContributorsUseCase;
+  private final AuthenticationService authenticationService;
 
-  public ListContributorsController(ListContributorsUseCase listContributorsUseCase) {
+  public ListContributorsController(
+      ListContributorsUseCase listContributorsUseCase,
+      AuthenticationService authenticationService) {
     this.listContributorsUseCase = listContributorsUseCase;
+    this.authenticationService = authenticationService;
   }
 
   @GetMapping(
@@ -28,6 +33,7 @@ public class ListContributorsController implements AbstractBaseController {
       produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<List<GetContributorResponse>> listContributors(
       @PathVariable long projectId) {
+    authenticationService.authenticateMember(projectId);
     return new ResponseEntity<>(
         mapContributors(listContributorsUseCase.listContributors(projectId)), HttpStatus.OK);
   }

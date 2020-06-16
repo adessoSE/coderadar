@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.rest.domain.IdResponse;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import io.reflectoring.coderadar.rest.useradministration.teams.CreateTeamController;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.create.CreateTeamCommand;
@@ -15,7 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class CreateTeamControllerTest {
+public class CreateTeamControllerTest extends UnitTestTemplate {
   private final CreateTeamUseCase createTeamUseCase = mock(CreateTeamUseCase.class);
 
   private final CreateTeamController testController = new CreateTeamController(createTeamUseCase);

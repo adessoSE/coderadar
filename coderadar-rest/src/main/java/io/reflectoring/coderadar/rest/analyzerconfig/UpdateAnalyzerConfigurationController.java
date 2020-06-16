@@ -5,6 +5,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfi
 import io.reflectoring.coderadar.projectadministration.port.driver.analyzerconfig.update.UpdateAnalyzerConfigurationUseCase;
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
+import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UpdateAnalyzerConfigurationController implements AbstractBaseController {
   private final UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase;
+  private final AuthenticationService authenticationService;
 
   public UpdateAnalyzerConfigurationController(
-      UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase) {
+      UpdateAnalyzerConfigurationUseCase updateAnalyzerConfigurationUseCase,
+      AuthenticationService authenticationService) {
     this.updateAnalyzerConfigurationUseCase = updateAnalyzerConfigurationUseCase;
+    this.authenticationService = authenticationService;
   }
 
   @PostMapping(
@@ -33,6 +37,7 @@ public class UpdateAnalyzerConfigurationController implements AbstractBaseContro
       @RequestBody @Validated UpdateAnalyzerConfigurationCommand command,
       @PathVariable(name = "analyzerConfigurationId") long analyzerConfigurationId,
       @PathVariable(name = "projectId") long projectId) {
+    authenticationService.authenticateAdmin(projectId);
     try {
       updateAnalyzerConfigurationUseCase.update(command, analyzerConfigurationId, projectId);
       return new ResponseEntity<>(HttpStatus.OK);

@@ -20,6 +20,7 @@ public class CreateProjectController implements AbstractBaseController {
   private final CreateProjectUseCase createProjectUseCase;
 
   public CreateProjectController(CreateProjectUseCase createProjectUseCase) {
+
     this.createProjectUseCase = createProjectUseCase;
   }
 

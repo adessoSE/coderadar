@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.unit.useradministration;
 
 import static org.mockito.Mockito.mock;
 
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import io.reflectoring.coderadar.rest.useradministration.ChangePasswordController;
 import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordCommand;
 import io.reflectoring.coderadar.useradministration.port.driver.password.ChangePasswordUseCase;
@@ -11,7 +12,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-class ChangePasswordControllerTest {
+class ChangePasswordControllerTest extends UnitTestTemplate {
 
   private final ChangePasswordUseCase changePasswordUseCase = mock(ChangePasswordUseCase.class);
 

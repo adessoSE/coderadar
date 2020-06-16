@@ -1,4 +1,3 @@
 package io.reflectoring.coderadar.useradministration.service;
 
-public class UserUnauthenticatedException extends RuntimeException{
-}
+public class UserUnauthorizedException extends RuntimeException {}

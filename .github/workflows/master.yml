@@ -1,0 +1,32 @@
+name: Master_CI_GH_PAGES
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build documentation
+        run: |
+          ./gradlew asciidoctor
+          mkdir ./docs
+          mkdir ./docs/current
+          mkdir ./docs/current/docs
+          mv ./coderadar-test/build/docs/html5/admin.html ./docs/current/docs
+          mv ./coderadar-test/build/docs/html5/restapi.html ./docs/current/docs
+
+      - name: Deploy to gh-pages
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: docs
+          COMMIT_MESSAGE: Update documentation [ci skip]

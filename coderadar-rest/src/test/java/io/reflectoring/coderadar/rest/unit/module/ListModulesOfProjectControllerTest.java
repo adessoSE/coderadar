@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.rest.domain.GetModuleResponse;
 import io.reflectoring.coderadar.rest.module.ListModulesOfProjectController;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +15,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-class ListModulesOfProjectControllerTest {
+class ListModulesOfProjectControllerTest extends UnitTestTemplate {
 
   private final ListModulesOfProjectUseCase listModulesOfProjectUseCase =
       mock(ListModulesOfProjectUseCase.class);
@@ -22,7 +23,7 @@ class ListModulesOfProjectControllerTest {
   @Test
   void testListModulesOfProject() {
     ListModulesOfProjectController testSubject =
-        new ListModulesOfProjectController(listModulesOfProjectUseCase);
+        new ListModulesOfProjectController(listModulesOfProjectUseCase, authenticationService);
 
     List<Module> responses = new ArrayList<>();
     Module response1 = new Module(1L, "module-path-one");

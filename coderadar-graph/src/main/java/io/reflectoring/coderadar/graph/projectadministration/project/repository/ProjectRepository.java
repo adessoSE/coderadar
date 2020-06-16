@@ -168,7 +168,8 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
    * @return All the project a user is assigned to.
    */
   @Query(
-      "MATCH (u)-[:ASSIGNED_TO*0..1]->(p1:ProjectEntity) WHERE ID(u) = {0} "
+      "MATCH (u:UserEntity) WHERE ID(u) = {0} WITH u "
+          + "OPTIONAL MATCH (u)-[:ASSIGNED_TO*0..1]->(p1:ProjectEntity) "
           + "WITH p1, u "
           + "MATCH (p2:ProjectEntity)<-[:ASSIGNED_TO*0..1]-(t)<-[:IS_IN*0..1]-(u) WITH collect(p1) + collect(p2) as list "
           + "UNWIND list AS p RETURN DISTINCT p ORDER BY p.name")

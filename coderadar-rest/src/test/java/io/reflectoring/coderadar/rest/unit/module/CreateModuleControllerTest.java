@@ -8,19 +8,21 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.create
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
 import io.reflectoring.coderadar.rest.module.CreateModuleController;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-class CreateModuleControllerTest {
+class CreateModuleControllerTest extends UnitTestTemplate {
 
   private final CreateModuleUseCase createModuleUseCase = mock(CreateModuleUseCase.class);
 
   @Test
   void testCreateModule() throws ModulePathInvalidException {
-    CreateModuleController testSubject = new CreateModuleController(createModuleUseCase);
+    CreateModuleController testSubject =
+        new CreateModuleController(createModuleUseCase, authenticationService);
 
     CreateModuleCommand command = new CreateModuleCommand("module-path-test");
     Mockito.when(createModuleUseCase.createModule(command, 5L)).thenReturn(1L);
@@ -35,7 +37,8 @@ class CreateModuleControllerTest {
 
   @Test
   void testCreateModuleReturnsErrorWhenPathInvalid() throws ModulePathInvalidException {
-    CreateModuleController testSubject = new CreateModuleController(createModuleUseCase);
+    CreateModuleController testSubject =
+        new CreateModuleController(createModuleUseCase, authenticationService);
 
     CreateModuleCommand command = new CreateModuleCommand("module-path-test//");
     Mockito.when(createModuleUseCase.createModule(command, 5L))

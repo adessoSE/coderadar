@@ -7,6 +7,7 @@ import io.reflectoring.coderadar.projectadministration.domain.InclusionType;
 import io.reflectoring.coderadar.projectadministration.port.driver.filepattern.get.ListFilePatternsOfProjectUseCase;
 import io.reflectoring.coderadar.rest.domain.GetFilePatternResponse;
 import io.reflectoring.coderadar.rest.filepattern.ListFilePatternsOfProjectController;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
@@ -15,7 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-class ListFilePatternsOfProjectControllerTest {
+class ListFilePatternsOfProjectControllerTest extends UnitTestTemplate {
 
   private final ListFilePatternsOfProjectUseCase listFilePatternsOfProjectUseCase =
       mock(ListFilePatternsOfProjectUseCase.class);
@@ -23,7 +24,8 @@ class ListFilePatternsOfProjectControllerTest {
   @Test
   void testListFilePatternsOfProject() {
     ListFilePatternsOfProjectController testSubject =
-        new ListFilePatternsOfProjectController(listFilePatternsOfProjectUseCase);
+        new ListFilePatternsOfProjectController(
+            listFilePatternsOfProjectUseCase, authenticationService);
 
     FilePattern response1 = new FilePattern(1L, "**/*.java", InclusionType.INCLUDE);
     FilePattern response2 = new FilePattern(2L, "**/*.xml", InclusionType.EXCLUDE);

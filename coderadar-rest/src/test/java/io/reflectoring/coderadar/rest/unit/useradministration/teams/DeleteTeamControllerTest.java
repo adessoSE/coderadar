@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.unit.useradministration.teams;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import io.reflectoring.coderadar.rest.useradministration.teams.DeleteTeamController;
 import io.reflectoring.coderadar.useradministration.TeamNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.DeleteTeamUseCase;
@@ -12,7 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class DeleteTeamControllerTest {
+public class DeleteTeamControllerTest extends UnitTestTemplate {
   private final DeleteTeamUseCase deleteTeamUseCase = mock(DeleteTeamUseCase.class);
 
   private final DeleteTeamController testController = new DeleteTeamController(deleteTeamUseCase);

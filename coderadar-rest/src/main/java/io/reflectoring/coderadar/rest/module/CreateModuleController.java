@@ -6,6 +6,7 @@ import io.reflectoring.coderadar.projectadministration.port.driver.module.create
 import io.reflectoring.coderadar.rest.AbstractBaseController;
 import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.IdResponse;
+import io.reflectoring.coderadar.useradministration.service.security.AuthenticationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CreateModuleController implements AbstractBaseController {
   private final CreateModuleUseCase createModuleUseCase;
+  private final AuthenticationService authenticationService;
 
-  public CreateModuleController(CreateModuleUseCase createModuleUseCase) {
+  public CreateModuleController(
+      CreateModuleUseCase createModuleUseCase, AuthenticationService authenticationService) {
     this.createModuleUseCase = createModuleUseCase;
+    this.authenticationService = authenticationService;
   }
 
   @PostMapping(
@@ -32,6 +36,7 @@ public class CreateModuleController implements AbstractBaseController {
   public ResponseEntity<Object> createModule(
       @RequestBody @Validated CreateModuleCommand command,
       @PathVariable(name = "projectId") long projectId) {
+    authenticationService.authenticateAdmin(projectId);
     try {
       return new ResponseEntity<>(
           new IdResponse(createModuleUseCase.createModule(command, projectId)), HttpStatus.CREATED);

@@ -119,6 +119,16 @@ include::{snippets}/user/registration/http-request.adoc[]
 
 include::{snippets}/user/registration/http-response.adoc[]
 
+==== Loading a User
+
+===== Example Request
+
+include::{snippets}/users/get/http-request.adoc[]
+
+===== Example Response
+
+include::{snippets}/users/get/http-response.adoc[]
+
 ==== Login
 anchor:login[]
 A user has to log in to use other endpoints of coderadar.
@@ -158,7 +168,7 @@ and has to send a new password and thе refresh token to the server. The user wi
 refresh token and his refresh tokens will be revoked so the user has to log in with the username and password
 again after the current access token is expired.
 
-===== Login Data Structure
+===== Data Structure
 include::{snippets}/user/password/change/request-fields.adoc[]
 
 ===== Example Request

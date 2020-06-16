@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.rest.domain.GetProjectResponse;
+import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import io.reflectoring.coderadar.rest.useradministration.teams.ListProjectsForTeamController;
 import io.reflectoring.coderadar.useradministration.TeamNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driver.teams.get.ListProjectsForTeamUseCase;
@@ -15,7 +16,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class ListProjectsForTeamControllerTest {
+public class ListProjectsForTeamControllerTest extends UnitTestTemplate {
   private final ListProjectsForTeamUseCase listProjectsForTeamUseCase =
       mock(ListProjectsForTeamUseCase.class);
   private final ListProjectsForTeamController testController =
