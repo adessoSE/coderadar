@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class ListProjectsForUserControllerIntegrationTest extends ControllerTestTemplate {
+class ListProjectsForUserControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private UserRepository userRepository;
 
@@ -29,7 +29,7 @@ public class ListProjectsForUserControllerIntegrationTest extends ControllerTest
   private UserEntity testUser;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     projectRepository.deleteAll();
     testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");

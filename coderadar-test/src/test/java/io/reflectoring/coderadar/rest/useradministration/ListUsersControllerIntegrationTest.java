@@ -15,14 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class ListUsersControllerIntegrationTest extends ControllerTestTemplate {
+class ListUsersControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private UserRepository userRepository;
 
   private UserEntity testUser;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     userRepository.deleteAll();
     testUser = new UserEntity();
     testUser.setUsername("username");

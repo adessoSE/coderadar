@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class DeleteTeamControllerIntegrationTest extends ControllerTestTemplate {
+class DeleteTeamControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private UserRepository userRepository;
 
@@ -27,7 +27,7 @@ public class DeleteTeamControllerIntegrationTest extends ControllerTestTemplate 
   private TeamEntity teamEntity;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     teamEntity = new TeamEntity();
     teamEntity.setName("testTeam");
     teamRepository.save(teamEntity, 1);
@@ -40,7 +40,7 @@ public class DeleteTeamControllerIntegrationTest extends ControllerTestTemplate 
   }
 
   @Test
-  public void deleteTeamWithUsersSuccessfully() throws Exception {
+  void deleteTeamWithUsersSuccessfully() throws Exception {
     teamEntity.setMembers(Collections.singletonList(testUser));
     teamRepository.save(teamEntity, 1);
 
@@ -55,7 +55,7 @@ public class DeleteTeamControllerIntegrationTest extends ControllerTestTemplate 
   }
 
   @Test
-  public void deleteTeamWithNoUsersSuccessfully() throws Exception {
+  void deleteTeamWithNoUsersSuccessfully() throws Exception {
     mvc()
         .perform(delete("/api/teams/" + teamEntity.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk()); // TODO: Document

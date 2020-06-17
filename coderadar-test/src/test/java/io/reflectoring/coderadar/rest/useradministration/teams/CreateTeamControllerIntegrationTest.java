@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class CreateTeamControllerIntegrationTest extends ControllerTestTemplate {
+class CreateTeamControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private UserRepository userRepository;
 
@@ -28,7 +28,7 @@ public class CreateTeamControllerIntegrationTest extends ControllerTestTemplate 
   private UserEntity testUser;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     userRepository.deleteAll();
     testUser = new UserEntity();
     testUser.setUsername("username");
@@ -37,7 +37,7 @@ public class CreateTeamControllerIntegrationTest extends ControllerTestTemplate 
   }
 
   @Test
-  public void createTeamWithUsersSuccessfully() throws Exception {
+  void createTeamWithUsersSuccessfully() throws Exception {
     CreateTeamCommand createTeamCommand = new CreateTeamCommand();
     createTeamCommand.setName("testTeam");
     createTeamCommand.setUserIds(Collections.singletonList(testUser.getId()));
@@ -66,7 +66,7 @@ public class CreateTeamControllerIntegrationTest extends ControllerTestTemplate 
   }
 
   @Test
-  public void createTeamWithNoUsersSuccessfully() throws Exception {
+  void createTeamWithNoUsersSuccessfully() throws Exception {
 
     CreateTeamCommand createTeamCommand = new CreateTeamCommand();
     createTeamCommand.setName("testTeam");

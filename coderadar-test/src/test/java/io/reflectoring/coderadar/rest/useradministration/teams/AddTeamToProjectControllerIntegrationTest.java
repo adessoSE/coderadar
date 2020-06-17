@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class AddTeamToProjectControllerIntegrationTest extends ControllerTestTemplate {
+class AddTeamToProjectControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private TeamRepository teamRepository;
 
@@ -29,7 +29,7 @@ public class AddTeamToProjectControllerIntegrationTest extends ControllerTestTem
   private ProjectEntity testProject;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     teamEntity = new TeamEntity();
     teamEntity.setName("testTeam");
     teamRepository.save(teamEntity, 1);
@@ -46,7 +46,7 @@ public class AddTeamToProjectControllerIntegrationTest extends ControllerTestTem
   }
 
   @Test
-  public void addTeamToProjectSuccessfully() throws Exception {
+  void addTeamToProjectSuccessfully() throws Exception {
     ConstrainedFields<ProjectRoleJsonWrapper> fields = fields(ProjectRoleJsonWrapper.class);
 
     mvc()

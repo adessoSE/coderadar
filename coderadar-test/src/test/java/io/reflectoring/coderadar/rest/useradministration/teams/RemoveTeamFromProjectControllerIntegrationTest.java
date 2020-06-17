@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class RemoveTeamFromProjectControllerIntegrationTest extends ControllerTestTemplate {
+class RemoveTeamFromProjectControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private TeamRepository teamRepository;
 
@@ -26,7 +26,7 @@ public class RemoveTeamFromProjectControllerIntegrationTest extends ControllerTe
   private ProjectEntity testProject;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     projectRepository.deleteAll();
     testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
@@ -44,7 +44,7 @@ public class RemoveTeamFromProjectControllerIntegrationTest extends ControllerTe
   }
 
   @Test
-  public void removeTeamFromProjectSuccessfully() throws Exception {
+  void removeTeamFromProjectSuccessfully() throws Exception {
     mvc()
         .perform(delete("/api/projects/" + testProject.getId() + "/teams/" + teamEntity.getId()))
         .andExpect(MockMvcResultMatchers.status().isOk())

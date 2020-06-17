@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {AppComponent} from '../app.component';
-import {Project} from "../model/project";
 import {User} from "../model/user";
 
 

@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class AddUsersToTeamControllerIntegrationTest extends ControllerTestTemplate {
+class AddUsersToTeamControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private TeamRepository teamRepository;
 
@@ -28,7 +28,7 @@ public class AddUsersToTeamControllerIntegrationTest extends ControllerTestTempl
   private UserEntity testUser;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     userRepository.deleteAll();
     testUser = new UserEntity();
     testUser.setUsername("username");
@@ -41,7 +41,7 @@ public class AddUsersToTeamControllerIntegrationTest extends ControllerTestTempl
   }
 
   @Test
-  public void addUsersToTeamSuccessfully() throws Exception {
+  void addUsersToTeamSuccessfully() throws Exception {
 
     ConstrainedFields<JsonListWrapper> fields = fields(JsonListWrapper.class);
 

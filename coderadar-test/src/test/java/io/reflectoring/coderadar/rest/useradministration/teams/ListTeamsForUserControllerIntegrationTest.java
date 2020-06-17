@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class ListTeamsForUserControllerIntegrationTest extends ControllerTestTemplate {
+class ListTeamsForUserControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private TeamRepository teamRepository;
 
@@ -27,7 +27,7 @@ public class ListTeamsForUserControllerIntegrationTest extends ControllerTestTem
   private UserEntity testUser;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     userRepository.deleteAll();
     testUser = new UserEntity();
     testUser.setUsername("testUser");
@@ -40,7 +40,7 @@ public class ListTeamsForUserControllerIntegrationTest extends ControllerTestTem
   }
 
   @Test
-  public void listTeamsForProjectSuccessfully() throws Exception {
+  void listTeamsForProjectSuccessfully() throws Exception {
     MvcResult result =
         mvc()
             .perform(get("/api/users/" + testUser.getId() + "/teams"))

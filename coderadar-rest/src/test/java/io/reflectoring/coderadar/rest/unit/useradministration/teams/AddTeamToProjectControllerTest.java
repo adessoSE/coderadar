@@ -15,7 +15,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class AddTeamToProjectControllerTest extends UnitTestTemplate {
+class AddTeamToProjectControllerTest extends UnitTestTemplate {
   private final AddTeamToProjectUseCase addTeamToProjectUseCase =
       mock(AddTeamToProjectUseCase.class);
   private final AddTeamToProjectController testController =

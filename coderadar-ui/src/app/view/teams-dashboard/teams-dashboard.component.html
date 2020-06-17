@@ -11,7 +11,7 @@
       <div class="grid-container">
 
         <!--Message displayed if no projects are found-->
-        <div *ngIf="teams.length == 0" align="center" id="noProjectsMessage">
+        <div *ngIf="teams.length == 0" id="noTeamsMessage">
           You aren't in any team yet. <br>
           Click on the plus button to create a team.
         </div>
@@ -28,7 +28,7 @@
                   </button>
                   <mat-menu #menu="matMenu" xPosition="before">
                     <button mat-menu-item>Edit</button>
-                    <button mat-menu-item (click)="removeTeam(team.id)">Remove</button> <!--TODO: Delete modal-->
+                    <button mat-menu-item (click)="removeTeam(team.id)">Remove</button>
                   </mat-menu>
                 </mat-card-title>
               </mat-card-header>

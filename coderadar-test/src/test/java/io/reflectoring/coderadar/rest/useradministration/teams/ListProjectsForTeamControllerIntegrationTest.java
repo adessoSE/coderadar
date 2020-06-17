@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class ListProjectsForTeamControllerIntegrationTest extends ControllerTestTemplate {
+class ListProjectsForTeamControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private TeamRepository teamRepository;
 
@@ -28,7 +28,7 @@ public class ListProjectsForTeamControllerIntegrationTest extends ControllerTest
   private ProjectEntity testProject;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     projectRepository.deleteAll();
     testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
@@ -46,7 +46,7 @@ public class ListProjectsForTeamControllerIntegrationTest extends ControllerTest
   }
 
   @Test
-  public void listProjectsForTeamSuccessfully() throws Exception {
+  void listProjectsForTeamSuccessfully() throws Exception {
     MvcResult result =
         mvc()
             .perform(get("/api/teams/" + teamEntity.getId() + "/projects"))

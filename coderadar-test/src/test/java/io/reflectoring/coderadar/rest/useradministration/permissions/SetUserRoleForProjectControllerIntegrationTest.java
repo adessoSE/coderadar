@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class SetUserRoleForProjectControllerIntegrationTest extends ControllerTestTemplate {
+class SetUserRoleForProjectControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private UserRepository userRepository;
 
@@ -29,7 +29,7 @@ public class SetUserRoleForProjectControllerIntegrationTest extends ControllerTe
   private UserEntity testUser;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     projectRepository.deleteAll();
     testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");

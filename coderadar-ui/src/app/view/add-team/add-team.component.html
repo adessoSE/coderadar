@@ -4,7 +4,7 @@
     <app-sidenav-content></app-sidenav-content>
   </mat-sidenav>
   <div>
-    <main >
+    <main class="mat-card-form">
       <div class="grid-container" id="cardContainer">
         <div fxLayoutAlign="center center" style="margin-top: 100px">
           <form (ngSubmit)="submitForm()" style="width: 30%">
@@ -33,9 +33,9 @@
                 <mat-error *ngIf="nameEmpty">The team name must not be empty!</mat-error>
                 <mat-error *ngIf="teamNameTaken">A team with this name already exists!</mat-error>
                 <!--Cancel and submit buttons-->
-                <div align="center" id="cardButtons">
-                  <button mat-stroked-button routerLink="/dashboard" type="button" style="margin: 10px">Cancel</button>
-                  <button color="primary" mat-raised-button type="submit" style="margin: 10px">Add</button>
+                <div id="cardButtons">
+                  <button mat-stroked-button routerLink="/dashboard" type="button">Cancel</button>
+                  <button color="primary" mat-raised-button type="submit">Add</button>
                 </div>
 
               </mat-card-content>

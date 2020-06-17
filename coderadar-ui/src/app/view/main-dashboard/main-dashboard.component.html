@@ -11,11 +11,11 @@
     <div class="grid-container">
 
       <!--Message displayed if no projects are found-->
-      <div *ngIf="projects.length == 0 && selectedTeam == undefined" align="center" class="noProjectsMessage">
+      <div *ngIf="projects.length == 0 && selectedTeam == undefined" class="noProjectsMessage">
         Hello there, it looks like you haven't added any projects yet. <br>
         Click on the plus button to add one.
       </div>
-      <div *ngIf="projects.length == 0 && selectedTeam != undefined" align="center" class="noProjectsMessage">
+      <div *ngIf="projects.length == 0 && selectedTeam != undefined" class="noProjectsMessage">
         No projects available in the selected team
       </div>
 

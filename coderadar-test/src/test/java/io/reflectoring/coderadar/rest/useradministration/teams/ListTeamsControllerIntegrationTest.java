@@ -14,19 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class ListTeamsControllerIntegrationTest extends ControllerTestTemplate {
+class ListTeamsControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private TeamRepository teamRepository;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     TeamEntity teamEntity = new TeamEntity();
     teamEntity.setName("testTeam");
     teamRepository.save(teamEntity, 1);
   }
 
   @Test
-  public void listTeamsSuccessfully() throws Exception {
+  void listTeamsSuccessfully() throws Exception {
     MvcResult result =
         mvc()
             .perform(get("/api/teams/"))

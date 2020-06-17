@@ -43,8 +43,9 @@
   padding-left: 30px;
 }
 
-.card-list #noProjectsMessage {
+.card-list #noTeamsMessage {
   font-size: x-large;
+  text-align: center;
 }
 
 .card-list  mat-card-content> div {
