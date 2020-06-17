@@ -17,25 +17,6 @@ apply plugin: 'idea'
 apply plugin: "jacoco"
 apply plugin: "java"
 
-task codeCoverageReport(type: JacocoReport) {
-
-    // Gather execution data from all subprojects
-    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-
-    // Add all relevant sourcesets from the subprojects
-    subprojects.each {
-        sourceSets it.sourceSets.main
-    }
-
-    reports {
-        xml.enabled true
-        html.enabled true
-        csv.enabled false
-    }
-}
-
-
-
 ext {
     majorVersion = '0'
     minorVersion = '5'
@@ -49,8 +30,6 @@ file('gradle.d').listFiles().sort().each {
         apply from: relativePath(it)
     }
 }
-
-
 
 
 subprojects {
@@ -99,7 +78,6 @@ subprojects {
 
     jacocoTestReport {
         dependsOn test
-        finalizedBy codeCoverageReport
     }
 
     jacocoTestReport {
@@ -138,7 +116,6 @@ sonarqube {
     }
 }
 
-
 allprojects {
     repositories {
         mavenLocal()
@@ -153,4 +130,19 @@ allprojects {
     }
 }
 
+task codeCoverageReport(type: JacocoReport) {
 
+    // Gather execution data from all subprojects
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    // Add all relevant sourcesets from the subprojects
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled false
+    }
+}
