@@ -36,12 +36,14 @@ sonarqube {
         property "sonar.sources", "src/main/java, coderadar-ui/src"
         property "sonar.tests", "src/test/java"
         property "sonar.exclusions", "coderadar-app/workdir"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     }
 }
 
 subprojects {
     apply plugin: "idea"
     apply plugin: "java"
+    apply plugin: "jacoco"
 
     buildscript {
         repositories {
@@ -79,7 +81,21 @@ subprojects {
         testLogging {
             events "passed", "skipped", "failed"
         }
+        finalizedBy jacocoTestReport
     }
+
+    jacocoTestReport {
+        dependsOn test
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+            csv.enabled false
+            html.destination file("${buildDir}/jacocoHtml")
+        }
+    }
+
 
     dependencies {
         testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: version_junit
