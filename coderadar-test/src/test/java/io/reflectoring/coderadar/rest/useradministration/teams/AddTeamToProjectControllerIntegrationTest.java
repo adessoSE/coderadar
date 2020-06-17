@@ -59,7 +59,9 @@ class AddTeamToProjectControllerIntegrationTest extends ControllerTestTemplate {
             document(
                 "teams/add/project",
                 requestFields(
-                    fields.withPath("role").description("The role of the team in the project"))));
+                    fields
+                        .withCustomPath("role")
+                        .description("The role of the team in the project"))));
 
     List<TeamEntity> teams = teamRepository.listTeamsByProjectIdWithMembers(testProject.getId());
     Assertions.assertEquals(1L, teams.size());

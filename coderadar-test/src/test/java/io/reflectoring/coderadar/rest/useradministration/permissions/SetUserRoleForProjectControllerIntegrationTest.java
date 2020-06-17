@@ -63,7 +63,7 @@ class SetUserRoleForProjectControllerIntegrationTest extends ControllerTestTempl
                 "user/role/project/set",
                 requestFields(
                     fields
-                        .withPath("role")
+                        .withCustomPath("role")
                         .description(
                             "The role the user should have for the given project. Can be either ADMIN or MEMBER"))))
         .andReturn();

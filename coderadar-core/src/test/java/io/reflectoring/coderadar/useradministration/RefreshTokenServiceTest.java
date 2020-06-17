@@ -1,4 +1,4 @@
-package io.reflectoring.coderadar.projectadministration.user;
+package io.reflectoring.coderadar.useradministration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
