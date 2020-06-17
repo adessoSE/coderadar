@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         mavenLocal()
+        mavenCentral()
         jcenter()
         maven {
             url "https://plugins.gradle.org/m2/"
@@ -13,6 +14,7 @@ plugins {
 }
 
 apply plugin: 'idea'
+apply plugin: "jacoco"
 
 ext {
     majorVersion = '0'
@@ -28,17 +30,6 @@ file('gradle.d').listFiles().sort().each {
     }
 }
 
-sonarqube {
-    properties {
-        property "sonar.projectKey", "adessoAG_coderadar"
-        property "sonar.organization", "adesso-ag"
-        property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.sources", "src/main/java, coderadar-ui/src"
-        property "sonar.tests", "src/test/java"
-        property "sonar.exclusions", "coderadar-app/workdir"
-        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
-    }
-}
 
 subprojects {
     apply plugin: "idea"
@@ -96,13 +87,24 @@ subprojects {
         }
     }
 
-
     dependencies {
         testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: version_junit
         testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: version_mockito_junit
         testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: version_junit
         annotationProcessor("org.projectlombok:lombok:$lombok_version")
         compileOnly("org.projectlombok:lombok:$lombok_version")
+    }
+
+    sonarqube {
+        properties {
+            property "sonar.projectKey", "adessoAG_coderadar"
+            property "sonar.organization", "adesso-ag"
+            property "sonar.host.url", "https://sonarcloud.io"
+            property "sonar.sources", "src/main/java, coderadar-ui/src"
+            property "sonar.tests", "src/test/java"
+            property "sonar.exclusions", "coderadar-app/workdir"
+            property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+        }
     }
 
 }
@@ -112,3 +114,43 @@ idea {
         vcs = 'Git'
     }
 }
+
+
+
+// task to gather code coverage from multiple subprojects
+// NOTE: the `JacocoReport` tasks do *not* depend on the `test` task by default. Meaning you have to ensure
+// that `test` (or other tasks generating code coverage) run before generating the report.
+// You can achieve this by calling the `test` lifecycle task manually
+// $ ./gradlew test codeCoverageReport
+tasks.register("codeCoverageReport", JacocoReport) {
+    // If a subproject applies the 'jacoco' plugin, add the result it to the report
+    subprojects { subproject ->
+        subproject.plugins.withType(JacocoPlugin).configureEach {
+            subproject.tasks.matching({ t -> t.extensions.findByType(JacocoTaskExtension) }).configureEach { testTask ->
+                sourceSets subproject.sourceSets.main
+                executionData(testTask)
+            }
+
+            // To automatically run `test` every time `./gradlew codeCoverageReport` is called,
+            // you may want to set up a task dependency between them as shown below.
+            // Note that this requires the `test` tasks to be resolved eagerly (see `forEach`) which
+            // may have a negative effect on the configuration time of your build.
+            subproject.tasks.matching({ t -> t.extensions.findByType(JacocoTaskExtension) }).forEach {
+                rootProject.tasks.codeCoverageReport.dependsOn(it)
+            }
+        }
+    }
+
+    // enable the different report types (html, xml, csv)
+    reports {
+        // xml is usually used to integrate code coverage with
+        // other tools like SonarQube, Coveralls or Codecov
+        xml.enabled true
+
+        // HTML reports can be used to see code coverage
+        // without any external tools
+        html.enabled true
+    }
+}
+
+
