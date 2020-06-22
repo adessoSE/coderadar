@@ -1,582 +1,167 @@
-import {TestBed} from '@angular/core/testing';
-import {RouterModule, Routes} from '@angular/router';
-import {LoginComponent} from '../../view/login/login.component';
-import {DependencyRootComponent} from '../dependency-root/dependency-root.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {ProjectService} from '../../service/project.service';
-import {HeaderComponent} from '../../view/header/header.component';
-import {FooterComponent} from '../../view/footer/footer.component';
-import {BrowserModule} from '@angular/platform-browser';
-import {
-  MatButtonModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatFormFieldModule, MatGridListModule, MatIconModule,
-  MatInputModule,
-  MatMenuModule, MatProgressSpinnerModule,
-  MatToolbarModule
-} from '@angular/material';
-import {FormsModule} from '@angular/forms';
+import {By} from '@angular/platform-browser';
+import {DependencyCompareComponent} from './dependency-compare.component';
+import testdata from './testdata.json';
+import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {RouterTestingModule} from '@angular/router/testing';
+import {of} from 'rxjs';
+import {TreeNodeComponent} from '../tree-node/tree-node.component';
+import {AppComponent} from '../../app.component';
 
-const appRoutes: Routes = [
-  {path: 'login', component: LoginComponent},
-  {path: 'structure-map/:projectId/:commitName', component: DependencyRootComponent},
-  {path: '', redirectTo: '/dashboard', pathMatch: 'full'}
-];
+let routerSpy;
+let fixture: ComponentFixture<DependencyCompareComponent>;
 
-describe('DependencyRootComponent', () => {
-  let httpTestingController: HttpTestingController;
-  let service: ProjectService;
+describe('DependencyCompareComponent', () => {
+  let component: DependencyCompareComponent;
+  let http;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        HeaderComponent,
-        FooterComponent,
-        LoginComponent,
-        DependencyRootComponent
+        DependencyCompareComponent,
       ],
       imports: [
-        BrowserModule,
-        MatMenuModule,
-        RouterModule.forRoot(appRoutes),
-        MatToolbarModule,
-        MatInputModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatCheckboxModule,
-        FormsModule,
-        MatProgressSpinnerModule,
-        MatButtonModule,
-        MatGridListModule,
-        MatIconModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule
       ],
       providers: [
-        ProjectService
-      ]
+        {provide: Router},
+        {provide: ActivatedRoute, useValue: {
+            params: of({id: 1})
+          }},
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(DependencyCompareComponent);
+    component = fixture.componentInstance;
+    http = TestBed.get(HttpTestingController);
+    routerSpy = spyOn(Router.prototype, 'navigate').and.callFake(() => {});
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+
+describe('DependencyCompareComponent', () => {
+  let component: DependencyCompareComponent;
+  let http;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        DependencyCompareComponent,
+        TreeNodeComponent
+      ],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule
+      ],
+      providers: [
+        {provide: Router},
+        {
+          provide: ActivatedRoute, useValue: {
+            params: of({projectId: 1, commitName1: '1', commitName2: '2'})
+          }
+        },
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    })
+      .compileComponents();
+
+    fixture = TestBed.createComponent(DependencyCompareComponent);
+    component = fixture.componentInstance;
+    http = TestBed.get(HttpTestingController);
+    routerSpy = spyOn(Router.prototype, 'navigate').and.callFake(() => {});
+  });
+
+  it('should return a dependencyTree comparing two commits made from test data', () => {
+    expect(testdata).toBeTruthy();
+    spyOn(component, 'getData').and.callThrough();
+
+    fixture.detectChanges();
+
+    expect(component.getData).toHaveBeenCalled();
+    http.expectOne(`${AppComponent.getApiUrl()}analyzers/1/structureMap/1/2`).flush(testdata, {
+      status: 200,
+      statusText: 'Ok',
+      url: 'api/analyzers/1/structureMap/1/2',
     });
 
-    httpTestingController = TestBed.get(HttpTestingController);
-    service = TestBed.get(ProjectService);
+    fixture.whenStable().then(() => {
+      expect(component.node).toEqual(testdata);
+      expect(fixture.debugElement.query(By.css('[id="3dependencyTree"]'))).toBeTruthy();
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        expect(fixture.debugElement.query(By.css('[id="3list__root"]'))).toBeTruthy();
+        expect(fixture.debugElement.query(By.css('.filename-span'))).toBeTruthy();
+        expect(fixture.debugElement.queryAll(By.css('.filename-span'))[0]).toBeTruthy();
+        expect(fixture.debugElement.queryAll(By.css('.filename-span'))[0].nativeElement.innerText).toEqual(' example/');
+      });
+    });
   });
+});
 
-  afterEach(() => {
-    httpTestingController.verify();
-  });
+describe('DependencyCompareComponent', () => {
+  let component: DependencyCompareComponent;
+  let http;
 
-  // Angular default test added when you generate a service using the CLI
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-
-  describe('getCompareTree()', () => {
-    it('should return a dependencyTree comparing two commits made from test data', () => {
-      const mockResponse = {
-        filename: 'testSrc',
-        path: '',
-        packageName: '',
-        level: 0,
-        changed: null,
-        children: [
-          {
-            filename: 'org',
-            path: 'org',
-            packageName: 'org',
-            level: 0,
-            changed: null,
-            children: [
-              {
-                filename: 'wickedsource',
-                path: 'org/wickedsource',
-                packageName: 'org.wickedsource',
-                level: 0,
-                changed: null,
-                children: [
-                  {
-                    filename: 'dependencytree',
-                    path: 'org/wickedsource/dependencytree',
-                    packageName: 'org.wickedsource.dependencytree',
-                    level: 0,
-                    changed: null,
-                    children: [
-                      {
-                        filename: 'example',
-                        path: 'org/wickedsource/dependencytree/example',
-                        packageName: 'org.wickedsource.dependencytree.example',
-                        level: 0,
-                        changed: null,
-                        children: [
-                          {
-                            filename: 'CoreTest.java',
-                            path: 'org/wickedsource/dependencytree/example/CoreTest.java',
-                            packageName: 'org.wickedsource.dependencytree.example.CoreTest.java',
-                            level: 0,
-                            changed: null,
-                            children: [],
-                            dependencies: [
-                              {
-                                path: 'org/wickedsource/dependencytree/example/somepackage/CoreDependencyTest.java',
-                                changed: null
-                              },
-                              {
-                                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                                changed: null
-                              },
-                              {
-                                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                                changed: null
-                              },
-                              {
-                                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                                changed: null
-                              },
-                              {
-                                path: 'org/wickedsource/dependencytree/example/somepackage/FullyClassifiedDependencyTest.java',
-                                changed: null
-                              },
-                              {
-                                path: 'org/wickedsource/dependencytree/example/somepackage/NotADependencyTest.java',
-                                changed: 'ADD'
-                              }
-                            ]
-                          },
-                          {
-                            filename: 'somepackage',
-                            path: 'org/wickedsource/dependencytree/example/somepackage',
-                            packageName: 'org.wickedsource.dependencytree.example.somepackage',
-                            level: 1,
-                            changed: null,
-                            children: [
-                              {
-                                filename: 'CircularDependencyTest.java',
-                                path: 'org/wickedsource/dependencytree/example/somepackage/CircularDependencyTest.java',
-                                packageName: 'org.wickedsource.dependencytree.example.somepackage.CircularDependencyTest.java',
-                                level: 0,
-                                changed: null,
-                                children: [],
-                                dependencies: []
-                              },
-                              {
-                                filename: 'CoreDependencyTest.java',
-                                path: 'org/wickedsource/dependencytree/example/somepackage/CoreDependencyTest.java',
-                                packageName: 'org.wickedsource.dependencytree.example.somepackage.CoreDependencyTest.java',
-                                level: 0,
-                                changed: null,
-                                children: [],
-                                dependencies: []
-                              },
-                              {
-                                filename: 'DuplicateDependencies2Test.java',
-                                path: 'org/wickedsource/dependencytree/example/somepackage/DuplicateDependencies2Test.java',
-                                packageName: 'org.wickedsource.dependencytree.example.somepackage.DuplicateDependencies2Test.java',
-                                level: 0,
-                                changed: null,
-                                children: [],
-                                dependencies: [
-                                  {
-                                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                                    changed: null
-                                  },
-                                  {
-                                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                                    changed: null
-                                  },
-                                  {
-                                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                                    changed: null
-                                  }
-                                ]
-                              },
-                              {
-                                filename: 'DuplicateDependenciesTest.java',
-                                path: 'org/wickedsource/dependencytree/example/somepackage/DuplicateDependenciesTest.java',
-                                packageName: 'org.wickedsource.dependencytree.example.somepackage.DuplicateDependenciesTest.java',
-                                level: 0,
-                                changed: null,
-                                children: [],
-                                dependencies: [
-                                  {
-                                    path: 'org/wickedsource/dependencytree/example/CoreTest.java',
-                                    changed: null
-                                  },
-                                  {
-                                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                                    changed: null
-                                  },
-                                  {
-                                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                                    changed: null
-                                  },
-                                  {
-                                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                                    changed: null
-                                  }
-                                ]
-                              },
-                              {
-                                filename: 'FullyClassifiedDependencyTest.java',
-                                path: 'org/wickedsource/dependencytree/example/somepackage/FullyClassifiedDependencyTest.java',
-                                packageName: 'org.wickedsource.dependencytree.example.somepackage.FullyClassifiedDependencyTest.java',
-                                level: 0,
-                                changed: null,
-                                children: [],
-                                dependencies: []
-                              },
-                              {
-                                filename: 'InvalidDependencyTest.java',
-                                path: 'org/wickedsource/dependencytree/example/somepackage/InvalidDependencyTest.java',
-                                packageName: 'org.wickedsource.dependencytree.example.somepackage.InvalidDependencyTest.java',
-                                level: 0,
-                                changed: null,
-                                children: [],
-                                dependencies: []
-                              },
-                              {
-                                filename: 'NotADependencyTest.java',
-                                path: 'org/wickedsource/dependencytree/example/somepackage/NotADependencyTest.java',
-                                packageName: 'org.wickedsource.dependencytree.example.somepackage.NotADependencyTest.java',
-                                level: 0,
-                                changed: null,
-                                children: [],
-                                dependencies: []
-                              }
-                            ],
-                            dependencies: [
-                              {
-                                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                                changed: null
-                              },
-                              {
-                                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                                changed: null
-                              },
-                              {
-                                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                                changed: null
-                              },
-                              {
-                                path: 'org/wickedsource/dependencytree/example/CoreTest.java',
-                                changed: null
-                              },
-                              {
-                                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                                changed: null
-                              },
-                              {
-                                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                                changed: null
-                              },
-                              {
-                                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                                changed: null
-                              }
-                            ]
-                          },
-                          {
-                            filename: 'wildcardpackage',
-                            path: 'org/wickedsource/dependencytree/example/wildcardpackage',
-                            packageName: 'org.wickedsource.dependencytree.example.wildcardpackage',
-                            level: 2,
-                            changed: null,
-                            children: [
-                              {
-                                filename: 'WildcardImport1Test.java',
-                                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                                packageName: 'org.wickedsource.dependencytree.example.wildcardpackage.WildcardImport1Test.java',
-                                level: 0,
-                                changed: null,
-                                children: [],
-                                dependencies: []
-                              },
-                              {
-                                filename: 'WildcardImport2Test.java',
-                                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                                packageName: 'org.wickedsource.dependencytree.example.wildcardpackage.WildcardImport2Test.java',
-                                level: 0,
-                                changed: null,
-                                children: [],
-                                dependencies: []
-                              },
-                              {
-                                filename: 'WildcardImportCircularDependencyTest.java',
-                                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                                packageName: 'org.wickedsource.dependencytree.example.wildcardpackage.WildcardImportCircularDependencyTest.java',
-                                level: 0,
-                                changed: null,
-                                children: [],
-                                dependencies: [
-                                  {
-                                    path: 'org/wickedsource/dependencytree/example/CoreTest.java',
-                                    changed: null
-                                  }
-                                ]
-                              }
-                            ],
-                            dependencies: [
-                              {
-                                path: 'org/wickedsource/dependencytree/example/CoreTest.java',
-                                changed: null
-                              }
-                            ]
-                          }
-                        ],
-                        dependencies: [
-                          {
-                            path: 'org/wickedsource/dependencytree/example/somepackage/CoreDependencyTest.java',
-                            changed: null
-                          },
-                          {
-                            path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                            changed: null
-                          },
-                          {
-                            path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                            changed: null
-                          },
-                          {
-                            path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                            changed: null
-                          },
-                          {
-                            path: 'org/wickedsource/dependencytree/example/somepackage/FullyClassifiedDependencyTest.java',
-                            changed: null
-                          },
-                          {
-                            path: 'org/wickedsource/dependencytree/example/somepackage/NotADependencyTest.java',
-                            changed: 'ADD'
-                          },
-                          {
-                            path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                            changed: null
-                          },
-                          {
-                            path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                            changed: null
-                          },
-                          {
-                            path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                            changed: null
-                          },
-                          {
-                            path: 'org/wickedsource/dependencytree/example/CoreTest.java',
-                            changed: null
-                          },
-                          {
-                            path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                            changed: null
-                          },
-                          {
-                            path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                            changed: null
-                          },
-                          {
-                            path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                            changed: null
-                          },
-                          {
-                            path: 'org/wickedsource/dependencytree/example/CoreTest.java',
-                            changed: null
-                          }
-                        ]
-                      }
-                    ],
-                    dependencies: [
-                      {
-                        path: 'org/wickedsource/dependencytree/example/somepackage/CoreDependencyTest.java',
-                        changed: null
-                      },
-                      {
-                        path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                        changed: null
-                      },
-                      {
-                        path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                        changed: null
-                      },
-                      {
-                        path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                        changed: null
-                      },
-                      {
-                        path: 'org/wickedsource/dependencytree/example/somepackage/FullyClassifiedDependencyTest.java',
-                        changed: null
-                      },
-                      {
-                        path: 'org/wickedsource/dependencytree/example/somepackage/NotADependencyTest.java',
-                        changed: 'ADD'
-                      },
-                      {
-                        path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                        changed: null
-                      },
-                      {
-                        path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                        changed: null
-                      },
-                      {
-                        path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                        changed: null
-                      },
-                      {
-                        path: 'org/wickedsource/dependencytree/example/CoreTest.java',
-                        changed: null
-                      },
-                      {
-                        path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                        changed: null
-                      },
-                      {
-                        path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                        changed: null
-                      },
-                      {
-                        path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                        changed: null
-                      },
-                      {
-                        path: 'org/wickedsource/dependencytree/example/CoreTest.java',
-                        changed: null
-                      }
-                    ]
-                  }
-                ],
-                dependencies: [
-                  {
-                    path: 'org/wickedsource/dependencytree/example/somepackage/CoreDependencyTest.java',
-                    changed: null
-                  },
-                  {
-                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                    changed: null
-                  },
-                  {
-                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                    changed: null
-                  },
-                  {
-                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                    changed: null
-                  },
-                  {
-                    path: 'org/wickedsource/dependencytree/example/somepackage/FullyClassifiedDependencyTest.java',
-                    changed: null
-                  },
-                  {
-                    path: 'org/wickedsource/dependencytree/example/somepackage/NotADependencyTest.java',
-                    changed: 'ADD'
-                  },
-                  {
-                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                    changed: null
-                  },
-                  {
-                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                    changed: null
-                  },
-                  {
-                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                    changed: null
-                  },
-                  {
-                    path: 'org/wickedsource/dependencytree/example/CoreTest.java',
-                    changed: null
-                  },
-                  {
-                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                    changed: null
-                  },
-                  {
-                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                    changed: null
-                  },
-                  {
-                    path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                    changed: null
-                  },
-                  {
-                    path: 'org/wickedsource/dependencytree/example/CoreTest.java',
-                    changed: null
-                  }
-                ]
-              }
-            ],
-            dependencies: [
-              {
-                path: 'org/wickedsource/dependencytree/example/somepackage/CoreDependencyTest.java',
-                changed: null
-              },
-              {
-                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                changed: null
-              },
-              {
-                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                changed: null
-              },
-              {
-                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                changed: null
-              },
-              {
-                path: 'org/wickedsource/dependencytree/example/somepackage/FullyClassifiedDependencyTest.java',
-                changed: null
-              },
-              {
-                path: 'org/wickedsource/dependencytree/example/somepackage/NotADependencyTest.java',
-                changed: 'ADD'
-              },
-              {
-                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                changed: null
-              },
-              {
-                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                changed: null
-              },
-              {
-                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                changed: null
-              },
-              {
-                path: 'org/wickedsource/dependencytree/example/CoreTest.java',
-                changed: null
-              },
-              {
-                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport1Test.java',
-                changed: null
-              },
-              {
-                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImport2Test.java',
-                changed: null
-              },
-              {
-                path: 'org/wickedsource/dependencytree/example/wildcardpackage/WildcardImportCircularDependencyTest.java',
-                changed: null
-              },
-              {
-                path: 'org/wickedsource/dependencytree/example/CoreTest.java',
-                changed: null
-              }
-            ]
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        DependencyCompareComponent,
+        TreeNodeComponent
+      ],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule
+      ],
+      providers: [
+        {provide: Router},
+        {
+          provide: ActivatedRoute, useValue: {
+            params: of({projectId: 1, commitName1: '1', commitName2: 'null'})
           }
-        ],
-        dependencies: []
-      };
+        },
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    })
+      .compileComponents();
 
-      service.getCompareTree(1, '0b79780c8e8c8736a8e0ddafc964fc4446f007f2', '643a55c23dce1832b5da07816f068896aef854e6')
-        .then(data => {
-          // @ts-ignore
-          expect(data.body.filename).toEqual('testSrc');
-          // @ts-ignore
-          const dependencyTree = data.body.children[0].children[0].children[0];
-          expect(dependencyTree.children.length).toBe(4);
-          expect(dependencyTree.children[0].changed).toBe('ADD');
-        });
-      const req = httpTestingController.
-      expectOne('http://localhost:8080/analyzers/1/structureMap/0b79780c8e8c8736a8e0ddafc964fc4446f007f2/643a55c23dce1832b5da07816f068896aef854e6');
-      expect(req.request.method).toEqual('GET');
-      req.flush(mockResponse);
+    fixture = TestBed.createComponent(DependencyCompareComponent);
+    component = fixture.componentInstance;
+    http = TestBed.get(HttpTestingController);
+    routerSpy = spyOn(Router.prototype, 'navigate').and.callFake(() => {});
+  });
+
+  it('should return a dependencyTree comparing two commits made from test data', () => {
+    expect(testdata).toBeTruthy();
+    spyOn(component, 'getData').and.callThrough();
+
+    fixture.detectChanges();
+
+    expect(component.getData).toHaveBeenCalled();
+    http.expectOne(`${AppComponent.getApiUrl()}analyzers/1/structureMap/1`).flush(testdata, {
+      status: 200,
+      statusText: 'Ok',
+      url: 'api/analyzers/1/structureMap/1/2',
+    });
+
+    fixture.whenStable().then(() => {
+      expect(component.node).toEqual(testdata);
+      expect(fixture.debugElement.query(By.css('[id="3dependencyTree"]'))).toBeTruthy();
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        expect(fixture.debugElement.query(By.css('[id="3list__root"]'))).toBeTruthy();
+        expect(fixture.debugElement.query(By.css('.filename-span'))).toBeTruthy();
+        expect(fixture.debugElement.queryAll(By.css('.filename-span'))[0]).toBeTruthy();
+        expect(fixture.debugElement.queryAll(By.css('.filename-span'))[0].nativeElement.innerText).toEqual(' example/');
+      });
     });
   });
 });
