@@ -15,7 +15,6 @@ let fixture: ComponentFixture<DependencyCompareComponent>;
 
 describe('DependencyCompareComponent', () => {
   let component: DependencyCompareComponent;
-  let http;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -38,7 +37,6 @@ describe('DependencyCompareComponent', () => {
 
     fixture = TestBed.createComponent(DependencyCompareComponent);
     component = fixture.componentInstance;
-    http = TestBed.get(HttpTestingController);
     routerSpy = spyOn(Router.prototype, 'navigate').and.callFake(() => {});
     fixture.detectChanges();
   });

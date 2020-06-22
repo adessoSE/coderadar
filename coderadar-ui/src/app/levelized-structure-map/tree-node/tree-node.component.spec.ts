@@ -6,7 +6,6 @@ import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 describe('TreeNodeComponent', () => {
   let component: TreeNodeComponent;
   let fixture: ComponentFixture<TreeNodeComponent>;
-  let http;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -23,7 +22,6 @@ describe('TreeNodeComponent', () => {
 
     fixture = TestBed.createComponent(TreeNodeComponent);
     component = fixture.componentInstance;
-    http = TestBed.get(HttpTestingController);
     component.node = {
       filename: 'org',
       path: 'org',
