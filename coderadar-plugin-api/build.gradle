@@ -2,6 +2,8 @@ plugins {
     id 'java'
 }
 
+apply plugin: "jacoco"
+
 version 'unspecified'
 
 sourceCompatibility = 1.8
@@ -12,4 +14,19 @@ repositories {
 
 dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.4.2'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled false
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
 }

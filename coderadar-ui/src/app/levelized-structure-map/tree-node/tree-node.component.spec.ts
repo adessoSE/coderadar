@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TreeNodeComponent } from './tree-node.component';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 
 describe('TreeNodeComponent', () => {

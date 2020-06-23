@@ -1,4 +1,5 @@
 apply plugin: "com.diffplug.gradle.spotless"
+apply plugin: "jacoco"
 
 spotless {
     java {
@@ -10,4 +11,19 @@ dependencies {
     testCompile group: 'commons-io', name: 'commons-io', version: '2.4'
     testCompile 'org.assertj:assertj-core:3.5.1'
     compile project(":coderadar-plugin-api")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled false
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
 }
