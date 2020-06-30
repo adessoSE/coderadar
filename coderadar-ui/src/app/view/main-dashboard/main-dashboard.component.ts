@@ -8,6 +8,7 @@ import {Title} from '@angular/platform-browser';
 import {AppComponent} from '../../app.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {UtilsService} from '../../service/utils.service';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -23,7 +24,8 @@ export class MainDashboardComponent implements OnInit {
   waiting = false;
 
   constructor(private snackBar: MatSnackBar, private titleService: Title, private userService: UserService,
-              private router: Router, private projectService: ProjectService, private dialog: MatDialog) {
+              private router: Router, private projectService: ProjectService, private dialog: MatDialog,
+              private utilsService: UtilsService) {
     titleService.setTitle('Coderadar - Dashboard');
   }
 
@@ -89,33 +91,11 @@ export class MainDashboardComponent implements OnInit {
   }
 
   startAnalysis(id: number) {
-    this.projectService.startAnalyzingJob(id, 'master').then(() => {
-      this.openSnackBar('Analysis started!', '🞩');
-    }).catch(error => {
-      if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh(() => this.projectService.startAnalyzingJob(id, 'master'));
-      } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
-        if (error.error.errorMessage === 'Cannot analyze project without analyzers') {
-          this.openSnackBar('Cannot analyze, no analyzers configured for this project!', '🞩');
-        } else if (error.error.errorMessage === 'Cannot analyze project without file patterns') {
-          this.openSnackBar('Cannot analyze, no file patterns configured for this project!', '🞩');
-        } else {
-          this.openSnackBar('Analysis cannot be started! Try again later!', '🞩');
-        }
-      }
-    });
+    this.utilsService.startAnalysis(id, 'master');
   }
 
   resetAnalysis(id: number) {
-    this.projectService.resetAnalysis(id).then(() => {
-      this.openSnackBar('Analysis results deleted!', '🞩');
-    }).catch(error => {
-      if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh(() => this.projectService.resetAnalysis(id));
-      } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
-        this.openSnackBar('Analysis results cannot be deleted! Try again later!', '🞩');
-      }
-    });
+    this.utilsService.resetAnalysis(id);
   }
 
   openSnackBar(message: string, action: string) {
@@ -125,15 +105,7 @@ export class MainDashboardComponent implements OnInit {
   }
 
   stopAnalysis(id: number) {
-    this.projectService.stopAnalyzingJob(id).then(() => {
-      this.openSnackBar('Analysis stopped!', '🞩');
-    }).catch(error => {
-      if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh(() => this.projectService.stopAnalyzingJob(id));
-      } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
-        this.openSnackBar('Analysis stopped!', '🞩');
-      }
-    });
+    this.utilsService.stopAnalysis(id);
   }
 }
 

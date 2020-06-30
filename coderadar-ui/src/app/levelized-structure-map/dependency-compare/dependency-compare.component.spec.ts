@@ -12,19 +12,16 @@ import {AppComponent} from '../../app.component';
 
 let routerSpy;
 let fixture: ComponentFixture<DependencyCompareComponent>;
+const declarations = [DependencyCompareComponent, TreeNodeComponent];
+const imports = [HttpClientTestingModule, RouterTestingModule];
 
 describe('DependencyCompareComponent', () => {
   let component: DependencyCompareComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        DependencyCompareComponent,
-      ],
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule
-      ],
+      declarations,
+      imports,
       providers: [
         {provide: Router},
         {provide: ActivatedRoute, useValue: {
@@ -52,14 +49,8 @@ describe('DependencyCompareComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        DependencyCompareComponent,
-        TreeNodeComponent
-      ],
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule
-      ],
+      declarations,
+      imports,
       providers: [
         {provide: Router},
         {
@@ -111,14 +102,8 @@ describe('DependencyCompareComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        DependencyCompareComponent,
-        TreeNodeComponent
-      ],
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule
-      ],
+      declarations,
+      imports,
       providers: [
         {provide: Router},
         {
