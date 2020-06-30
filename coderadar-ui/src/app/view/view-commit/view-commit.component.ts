@@ -3,12 +3,13 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
 import {Commit} from '../../model/commit';
-import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
+import {FORBIDDEN} from 'http-status-codes';
 import {HttpResponse} from '@angular/common/http';
 import {Title} from '@angular/platform-browser';
 import {Project} from '../../model/project';
 import {AppComponent} from '../../app.component';
 import {MetricValue} from '../../model/metric-value';
+import {UtilsService} from '../../service/utils.service';
 
 @Component({
   selector: 'app-view-commit',
@@ -27,7 +28,7 @@ export class ViewCommitComponent implements OnInit {
 
 
   constructor(private router: Router, private userService: UserService, private titleService: Title,
-              private projectService: ProjectService, private route: ActivatedRoute) {
+              private projectService: ProjectService, private route: ActivatedRoute, private utilsService: UtilsService) {
     this.project = new Project();
   }
 
@@ -36,7 +37,9 @@ export class ViewCommitComponent implements OnInit {
       this.commit.name = params.name;
       this.projectId = params.id;
       this.getCommitInfo();
-      this.getProject();
+      this.utilsService.getProject('Coderadar - ' + this.commit.name.substring(0, 7) + ' -' , this.projectId).then(project => {
+        this.project = project;
+      });
     });
   }
 
@@ -69,24 +72,5 @@ export class ViewCommitComponent implements OnInit {
    */
   private getMetrics(): Promise<HttpResponse<any>> {
     return this.projectService.getAvailableMetrics(this.projectId);
-  }
-
-  /**
-   * Gets the project from the service and saves it in this.project
-   */
-  private getProject(): void {
-    this.projectService.getProject(this.projectId)
-      .then(response => {
-        this.project = new Project(response.body);
-        this.titleService.setTitle('Coderadar - ' + this.commit.name.substring(0, 7) + ' - ' +
-          AppComponent.trimProjectName(this.project.name));
-      })
-      .catch(error => {
-        if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh(() => this.getProject());
-        } else if (error.status && error.status === NOT_FOUND) {
-          this.router.navigate(['/dashboard']);
-        }
-      });
   }
 }

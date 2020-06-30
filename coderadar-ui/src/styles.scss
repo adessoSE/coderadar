@@ -100,54 +100,54 @@ Styles for the login and register forms
   min-width: 22%;
 }
 
-#stage canvas {
-  position: absolute;
-  cursor: -webkit-grab;
-  transition: all 1s ease
-}
-
-#stage canvas:first-child {
-  left: 0
-}
-
-#stage canvas:last-child {
-  opacity: 0;
-  left: 100%
-}
-
-#stage.split canvas:last-child {
-  opacity: 1;
-  left: 50%
-}
-
-.dropdown-menu {
-  padding: 1.25rem
-}
-
-.ngui-auto-complete > ul {
-  min-width: 100%;
-  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
-  white-space: nowrap;
-  max-height: 250px
-}
-
-.ngui-auto-complete > ul li {
-  cursor: pointer;
-  padding: 10px 15px !important;
-  max-width: 400px;
-  overflow: hidden;
-  text-overflow: ellipsis
-}
-
-.ngui-auto-complete > ul li.selected {
-  color: #000;
-  background-color: #f3f3f3 !important
-}
-
-.ngui-auto-complete > ul li:hover {
-  color: #000;
-  background-color: #f3f3f3 !important
-}
+//#stage canvas {
+//  position: absolute;
+//  cursor: -webkit-grab;
+//  transition: all 1s ease
+//}
+//
+//#stage canvas:first-child {
+//  left: 0
+//}
+//
+//#stage canvas:last-child {
+//  opacity: 0;
+//  left: 100%
+//}
+//
+//#stage.split canvas:last-child {
+//  opacity: 1;
+//  left: 50%
+//}
+//
+//.dropdown-menu {
+//  padding: 1.25rem
+//}
+//
+//.ngui-auto-complete > ul {
+//  min-width: 100%;
+//  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
+//  white-space: nowrap;
+//  max-height: 250px
+//}
+//
+//.ngui-auto-complete > ul li {
+//  cursor: pointer;
+//  padding: 10px 15px !important;
+//  max-width: 400px;
+//  overflow: hidden;
+//  text-overflow: ellipsis
+//}
+//
+//.ngui-auto-complete > ul li.selected {
+//  color: #000;
+//  background-color: #f3f3f3 !important
+//}
+//
+//.ngui-auto-complete > ul li:hover {
+//  color: #000;
+//  background-color: #f3f3f3 !important
+//}
 
 #stage {
   canvas {

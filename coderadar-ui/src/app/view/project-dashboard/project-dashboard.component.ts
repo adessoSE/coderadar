@@ -4,7 +4,7 @@ import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
 import {Commit} from '../../model/commit';
 import {Project} from '../../model/project';
-import {FORBIDDEN, NOT_FOUND} from 'http-status-codes';
+import {FORBIDDEN} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import {AppComponent} from '../../app.component';
 import {Branch} from '../../model/branch';
@@ -14,8 +14,9 @@ import * as fromRoot from '../../city-map/shared/reducers';
 import {Store} from '@ngrx/store';
 import {loadAvailableMetrics} from '../../city-map/visualization/visualization.actions';
 import {CommitLog} from '../../model/commit-log';
-import {Contributor} from "../../model/contributor";
-import {ContributorService} from "../../service/contributor.service";
+import {Contributor} from '../../model/contributor';
+import {ContributorService} from '../../service/contributor.service';
+import {UtilsService} from '../../service/utils.service';
 
 @Component({
   selector: 'app-project-dashboard',
@@ -40,7 +41,8 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute, private cityEffects: AppEffects,
-              private store: Store<fromRoot.AppState>, private contributorService: ContributorService) {
+              private store: Store<fromRoot.AppState>, private contributorService: ContributorService,
+              private utilsService: UtilsService) {
     this.project = new Project();
     this.commits = [];
     this.selectedContributor.emailAddresses = [''];
@@ -54,7 +56,9 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
       if (this.commits.length === 0) {
         this.waiting = true;
       }
-      this.getProject();
+      this.utilsService.getProject('Coderadar -', this.projectId).then(project => {
+        this.project = project;
+      });
       this.getBranchesInProject();
       this.getContributors();
       // Schedule a task to check if all commits are analyzed and update them if they're not
@@ -112,24 +116,6 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  /**
-   * Gets the project from the service and saves it in this.project
-   */
-  private getProject(): void {
-    this.projectService.getProject(this.projectId)
-      .then(response => {
-        this.project = new Project(response.body);
-        this.titleService.setTitle('Coderadar - ' + AppComponent.trimProjectName(this.project.name));
-      })
-      .catch(error => {
-        if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh(() => this.getProject());
-        } else if (error.status && error.status === NOT_FOUND) {
-          this.router.navigate(['/dashboard']);
-        }
-      });
-  }
-
   ngOnDestroy(): void {
     this.updateCommitsTimer.unsubscribe();
   }
@@ -164,11 +150,11 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh(() => this.getContributors());
         }
-      })
+      });
   }
 
   handleContributorChange($event: any) {
-    if($event == undefined) {
+    if ($event === undefined) {
       this.selectedContributor = new Contributor();
       this.selectedContributor.emailAddresses = [''];
     } else {

@@ -76,7 +76,7 @@
           <mat-label>Analyzed: <strong>{{booleanToString(commit.analyzed)}}</strong></mat-label>
           <mat-action-row>
             <button mat-button routerLink="/project/{{project.id}}/{{commit.name}}/files">File tree</button><br>
-            <button mat-button routerLink="/project/{{project.id}}/{{commit.name}}/dependency-map/">Dependency Map</button>
+            <button mat-button routerLink="/project/{{project.id}}/{{commit.name}}/{{'null'}}/dependency-map">Dependency Map</button>
             <button [disabled]="!commit.analyzed" mat-button routerLink="/project/{{project.id}}/{{commit.name}}">Raw metrics</button>
           </mat-action-row>
         </mat-expansion-panel>

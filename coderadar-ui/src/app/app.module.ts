@@ -6,7 +6,6 @@ import {LoginComponent} from './view/login/login.component';
 import {RegisterComponent} from './view/register/register.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {AddProjectComponent} from './view/add-project/add-project.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MainDashboardComponent, ConfirmDeleteProjectDialogComponent} from './view/main-dashboard/main-dashboard.component';
@@ -53,9 +52,7 @@ import {TooltipService} from './city-map/service/tooltip.service';
 import {ComparisonPanelService} from './city-map/service/comparison-panel.service';
 import {environment} from '../environments/environment';
 import {CityViewComponent} from './view/city-view/city-view.component';
-import {CityViewHeaderComponent} from './view/city-view/city-view-header/city-view-header.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {DependencyRootComponent} from './levelized-structure-map/dependency-root/dependency-root.component';
 import {DependencyCompareComponent} from './levelized-structure-map/dependency-compare/dependency-compare.component';
 import {TreeNodeComponent} from './levelized-structure-map/tree-node/tree-node.component';
 import {MatSelectModule} from '@angular/material/select';
@@ -71,13 +68,11 @@ const appRoutes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'dashboard', component: MainDashboardComponent},
   {path: 'user-settings', component: UserSettingsComponent},
-  {path: 'add-project', component: AddProjectComponent},
   {path: 'project-configure/:id', component: ConfigureProjectComponent},
   {path: 'city/:id', component: CityViewComponent},
   {path: 'project-edit/:id', component: EditProjectComponent},
   {path: 'project/:id', component: ProjectDashboardComponent},
   {path: 'project/:id/:name', component: ViewCommitComponent},
-  {path: 'project/:projectId/:commitName/dependency-map', component: DependencyRootComponent},
   {path: 'project/:projectId/:commitName1/:commitName2/dependency-map', component: DependencyCompareComponent},
   {path: 'project/:projectId/:commitHash/files', component: FileViewComponent},
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'}
@@ -88,7 +83,6 @@ const appRoutes: Routes = [
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    AddProjectComponent,
     MainDashboardComponent,
     ConfirmDeleteProjectDialogComponent,
     ConfigureProjectComponent,
@@ -99,11 +93,9 @@ const appRoutes: Routes = [
     ProjectDashboardComponent,
     ViewCommitComponent,
     CityViewComponent,
-    DependencyRootComponent,
     MergeDialogComponent,
     DependencyCompareComponent,
     TreeNodeComponent,
-    CityViewHeaderComponent,
     ListViewComponent,
     BranchViewComponent,
     FileViewComponent

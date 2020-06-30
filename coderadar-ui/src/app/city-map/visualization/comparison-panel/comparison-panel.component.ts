@@ -8,7 +8,6 @@ import {ComparisonPanelService} from '../../service/comparison-panel.service';
 import {VisualizationConfig} from '../../VisualizationConfig';
 import {Subscription} from 'rxjs';
 import {Commit} from '../../../model/commit';
-import {MetricValue} from '../../../model/metric-value';
 import {ElementAnalyzer} from '../../helper/element-analyzer';
 
 @Component({
@@ -40,7 +39,7 @@ export class ComparisonPanelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.comparisonPanel = document.querySelector('#comparison-panel') as HTMLElement;
+    this.comparisonPanel = document.querySelector('#comparison-panel');
     this.subscriptions.push(
       this.comparisonPanelService.showComparisonPanel$.subscribe((params) => {
         this.elementName = params.elementName;

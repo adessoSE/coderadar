@@ -7,7 +7,6 @@ import * as fromRoot from '../../shared/reducers';
 import {IMetricMapping} from '../../interfaces/IMetricMapping';
 import {Observable} from 'rxjs';
 import {ViewType} from '../../enum/ViewType';
-import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-legend',
@@ -65,11 +64,11 @@ export class LegendComponent implements OnInit {
     this.colorDeletedFile = VisualizationConfig.COLOR_DELETED_FILE;
     this.colorUnchangedFile = VisualizationConfig.COLOR_UNCHANGED_FILE;
 
-    this.legendItemCommit1 = document.querySelector('#legend-item-commit-1') as HTMLElement;
-    this.legendItemCommit2 = document.querySelector('#legend-item-commit-2') as HTMLElement;
-    this.legendItemColorCode = document.querySelector('#legend-item-color-code') as HTMLElement;
-    this.legendItemAddedFiles = document.querySelector('#legend-item-added-files') as HTMLElement;
-    this.legendItemDeletedFiles = document.querySelector('#legend-item-deleted-files') as HTMLElement;
-    this.legendItemUnchangedFiles = document.querySelector('#legend-item-unchanged-files') as HTMLElement;
+    this.legendItemCommit1 = document.querySelector('#legend-item-commit-1');
+    this.legendItemCommit2 = document.querySelector('#legend-item-commit-2');
+    this.legendItemColorCode = document.querySelector('#legend-item-color-code');
+    this.legendItemAddedFiles = document.querySelector('#legend-item-added-files');
+    this.legendItemDeletedFiles = document.querySelector('#legend-item-deleted-files');
+    this.legendItemUnchangedFiles = document.querySelector('#legend-item-unchanged-files');
   }
 }

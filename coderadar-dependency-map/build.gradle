@@ -1,4 +1,5 @@
 apply plugin: "com.diffplug.gradle.spotless"
+apply plugin: "jacoco"
 
 spotless {
     java {
@@ -14,9 +15,22 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled false
+    }
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+
 test {
     useJUnitPlatform()
     testLogging {
         events "passed", "skipped", "failed"
     }
+    finalizedBy jacocoTestReport
 }

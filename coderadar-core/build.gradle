@@ -1,4 +1,5 @@
 apply plugin: "com.diffplug.gradle.spotless"
+apply plugin: "jacoco"
 
 dependencies {
     compile project(':coderadar-plugin-api')
@@ -16,6 +17,21 @@ dependencies {
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8"
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
     testCompile "org.springframework.boot:spring-boot-starter-test:${version_spring_boot}"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled false
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
 }
 
 spotless {

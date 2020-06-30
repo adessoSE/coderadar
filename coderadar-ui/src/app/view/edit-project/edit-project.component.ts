@@ -3,9 +3,10 @@ import {Project} from '../../model/project';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
-import {BAD_REQUEST, CONFLICT, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND, UNPROCESSABLE_ENTITY} from 'http-status-codes';
+import {BAD_REQUEST, CONFLICT, FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import {MatSnackBar} from '@angular/material';
+import {UtilsService} from '../../service/utils.service';
 
 @Component({
   selector: 'app-edit-project',
@@ -15,10 +16,7 @@ import {MatSnackBar} from '@angular/material';
 export class EditProjectComponent implements OnInit {
 
   projectName: string;
-
-  // I need all project at the moment,
   project: Project;
-  // Error fields
   incorrectURL = false;
   projectExists = false;
   nameEmpty = false;
@@ -26,7 +24,7 @@ export class EditProjectComponent implements OnInit {
   waiting = false;
 
   constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService,  private titleService: Title,
-              private projectService: ProjectService, private route: ActivatedRoute) {
+              private projectService: ProjectService, private route: ActivatedRoute, private utilsService: UtilsService) {
     this.project = new Project();
     this.projectName = '';
   }
@@ -34,8 +32,15 @@ export class EditProjectComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.projectId = params.id;
-      this.getProject();
+      if (params.id && params.id !== 'null') {
+        this.projectId = params.id;
+        this.utilsService.getProject('Coderadar - Edit', this.projectId).then(project => {
+          this.project = project;
+          this.projectName = project.name;
+        });
+      } else {
+        this.projectId = null;
+      }
     });
   }
 
@@ -48,31 +53,55 @@ export class EditProjectComponent implements OnInit {
   submitForm(): void {
     if (!this.validateInput()) {
       this.waiting = true;
-      this.projectService.editProject(this.project)
-        .then(() => {
-          this.router.navigate(['/dashboard']);
-          this.openSnackBar('Project successfully edited!', '🞩');
-          this.waiting = false;
-        })
-        .catch(error => {
-          this.waiting = false;
-          if (error.status && error.status === FORBIDDEN) {
-            this.userService.refresh(() => this.submitForm());
-          } else if (error.status && error.status === BAD_REQUEST) {
-            if (error.error && error.error.errorMessage === 'Validation Error') {
-              error.error.fieldErrors.forEach(field => {
-                if (field.field === 'vcsUrl') {
-                  this.incorrectURL = true;
-                }
-              });
+      if (this.projectId) {
+        this.projectService.editProject(this.project)
+          .then(() => {
+            this.router.navigate(['/dashboard']);
+            this.openSnackBar('Project successfully edited!', '🞩');
+            this.waiting = false;
+          })
+          .catch(error => {
+            this.waiting = false;
+            if (error.status && error.status === FORBIDDEN) {
+              this.userService.refresh(() => this.submitForm());
+            } else if (error.status && error.status === BAD_REQUEST) {
+              if (error.error && error.error.errorMessage === 'Validation Error') {
+                error.error.fieldErrors.forEach(field => {
+                  if (field.field === 'vcsUrl') {
+                    this.incorrectURL = true;
+                  }
+                });
+              }
+            } else if (error.status === CONFLICT &&
+              error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
+              this.projectExists = true;
+            } else if (error.status === UNPROCESSABLE_ENTITY) {
+              this.openSnackBar('Project cannot be edited! Try again later!', '🞩');
             }
-          } else if (error.status === CONFLICT &&
-            error.errorMessage === 'Project with name \'' + this.project.name + '\' already exists. Please choose another name.') {
-            this.projectExists = true;
-          } else if (error.status === UNPROCESSABLE_ENTITY) {
-            this.openSnackBar('Project cannot be edited! Try again later!', '🞩');
-          }
-        });
+          });
+      } else {
+        this.projectService.addProject(this.project)
+          .then(response => {
+            this.project.id = response.body.id;
+            this.router.navigate(['/project-configure', this.project.id]);
+          })
+          .catch(error => {
+            if (error.status && error.status === FORBIDDEN) { // If access is denied
+              this.userService.refresh(() => this.submitForm());
+            } else if (error.status && error.status === BAD_REQUEST) {   // If there is a field error
+              if (error.error && error.error.errorMessage === 'Validation Error') {
+                error.error.fieldErrors.forEach(field => {  // Check which field
+                  if (field.field === 'vcsUrl') {
+                    this.incorrectURL = true;
+                  }
+                });
+              }
+            } else if (error.status === CONFLICT &&
+              error.error.errorMessage === 'The project ' + this.project.name + ' already exists.') {
+              this.projectExists = true;
+            }
+          });
+      }
     }
   }
 
@@ -83,33 +112,12 @@ export class EditProjectComponent implements OnInit {
   }
 
   /**
-   * Gets the project from the service and saves it this.project.
-   * If access is denied (403) sends the refresh token and tries to submit again.
-   * If the project does not exists (404) redirects to the dashboard.
-   */
-  private getProject(): void {
-    this.projectService.getProject(this.projectId)
-      .then(response => {
-        this.project = new Project(response.body);
-        this.projectName = this.project.name;
-        this.titleService.setTitle('Coderadar - Edit ' + this.projectName);
-      })
-      .catch(error => {
-        if (error.status && error.status === FORBIDDEN) {
-          this.userService.refresh(() => this.getProject());
-        } else if (error.status && error.status === NOT_FOUND) {
-          this.router.navigate(['/dashboard']);
-        }
-      });
-  }
-
-  /**
    * Checks for empty form fields.
    */
   private validateInput(): boolean {
     this.incorrectURL = this.project.vcsUrl.trim().length === 0;
     this.nameEmpty = this.project.name.trim().length === 0;
-    
+
     if (this.project.startDate === 'first commit') {
       this.project.startDate = null;
     }

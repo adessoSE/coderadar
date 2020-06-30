@@ -1,4 +1,5 @@
 apply plugin: "com.diffplug.gradle.spotless"
+apply plugin: "jacoco"
 
 spotless {
     java {
@@ -13,4 +14,19 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.12'
     testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
     compile project(":coderadar-plugin-api")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+        html.enabled false
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
 }

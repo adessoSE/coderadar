@@ -24,8 +24,7 @@ import {ElementAnalyzer} from '../../helper/element-analyzer';
 
 @Component({
   selector: 'app-screen',
-  templateUrl: './screen.component.html',
-  styleUrls: ['./screen.component.scss']
+  templateUrl: './screen.component.html'
 })
 export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -176,7 +175,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   createControls() {
-    this.controls = new OrbitControls(this.camera, document.querySelector('#stage') as HTMLElement);
+    this.controls = new OrbitControls(this.camera, document.querySelector('#stage'));
   }
 
   resetControls() {

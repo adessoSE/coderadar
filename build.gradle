@@ -36,6 +36,8 @@ sonarqube {
         property "sonar.sources", "src/main/java, coderadar-ui/src"
         property "sonar.tests", "src/test/java"
         property "sonar.exclusions", "coderadar-app/workdir"
+        property "sonar.javascript.lcov.reportPaths", "coderadar-ui/coverage/coderadar/lcov.info"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     }
 }
 

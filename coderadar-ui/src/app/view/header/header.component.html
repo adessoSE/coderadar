@@ -14,14 +14,17 @@
     </button>
   </mat-toolbar>
   <div class="spacer"></div>
-  <mat-toolbar class="md-elevation-z5" color="primary">
-    <span *ngFor="let breadcrumb of title; let i=index">
-      <a [disabled]="i === title.length-1" style="color:white; font-size: 16pt; margin: 7px"
-         mat-button routerLink="/{{breadcrumb.location}}">{{breadcrumb.name}}</a>
-      <a mat-button disabled style="min-width: 1px; width: 10px; margin-left: -20px">
-        <mat-icon style="font-size: 16pt; color: white;" *ngIf="i < title.length-1">arrow_forward_ios</mat-icon>
-      </a>
-    </span>
-  </mat-toolbar>
+  <span #ref style="width: 100%"><ng-content></ng-content></span>
+  <span *ngIf="ref.children.length == 0">
+    <mat-toolbar class="md-elevation-z5" style="width: 100%" color="primary">
+      <span *ngFor="let breadcrumb of title; let i=index">
+        <a [disabled]="i === title.length-1" style="color:white; font-size: 16pt; margin: 7px"
+           mat-button routerLink="/{{breadcrumb.location}}">{{breadcrumb.name}}</a>
+        <a mat-button disabled style="min-width: 1px; width: 10px; margin-left: -20px">
+          <mat-icon style="font-size: 16pt; color: white;" *ngIf="i < title.length-1">arrow_forward_ios</mat-icon>
+        </a>
+      </span>
+    </mat-toolbar>
+  </span>
 </header>
 
