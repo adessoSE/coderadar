@@ -6,7 +6,6 @@ import io.reflectoring.coderadar.contributor.port.driven.GetContributorPort;
 import io.reflectoring.coderadar.graph.contributor.ContributorMapper;
 import io.reflectoring.coderadar.graph.contributor.domain.ContributorEntity;
 import io.reflectoring.coderadar.graph.contributor.repository.ContributorRepository;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,10 +19,8 @@ public class GetContributorAdapter implements GetContributorPort {
 
   @Override
   public Contributor get(long id) {
-    Optional<ContributorEntity> entity = contributorRepository.findById(id);
-    if (entity.isEmpty()) {
-      throw new ContributorNotFoundException(id);
-    }
-    return mapper.mapGraphObject(entity.get());
+    ContributorEntity entity =
+        contributorRepository.findById(id).orElseThrow(() -> new ContributorNotFoundException(id));
+    return mapper.mapGraphObject(entity);
   }
 }

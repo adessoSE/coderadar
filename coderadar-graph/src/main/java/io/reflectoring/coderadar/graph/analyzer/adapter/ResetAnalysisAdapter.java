@@ -22,7 +22,6 @@ public class ResetAnalysisAdapter implements ResetAnalysisPort {
 
     /*
      * The empty while loops are necessary because only 10000 entities can be deleted at a time.
-     * @see ProjectRepository#deleteProjectFindings(Long)
      * @see ProjectRepository#deleteProjectMetrics(Long)
      */
     while (projectRepository.deleteProjectMetrics(projectId) > 0) ;
