@@ -11,11 +11,13 @@ buildscript {
 
 plugins {
     id "org.sonarqube" version "2.8"
+    id "jacoco"
 }
 
 apply plugin: 'idea'
 apply plugin: "jacoco"
 apply plugin: "java"
+apply plugin: "org.sonarqube"
 
 ext {
     majorVersion = '0'
@@ -35,7 +37,7 @@ file('gradle.d').listFiles().sort().each {
 subprojects {
     apply plugin: "idea"
     apply plugin: "java"
-    apply plugin: "jacoco"
+    apply plugin: "org.sonarqube"
 
     buildscript {
         repositories {
@@ -84,7 +86,7 @@ subprojects {
         reports {
             xml.enabled true
             csv.enabled false
-            html.destination file("${buildDir}/jacocoHtml")
+            html.enabled true
         }
     }
 
@@ -96,6 +98,8 @@ subprojects {
         compileOnly("org.projectlombok:lombok:$lombok_version")
         testCompile group: 'org.jacoco', name: 'org.jacoco.ant', version: '0.8.5'
     }
+
+
 }
 
 idea {
@@ -112,7 +116,8 @@ sonarqube {
         property "sonar.sources", "src/main/java, coderadar-ui/src"
         property "sonar.tests", "src/test/java"
         property "sonar.exclusions", "coderadar-app/workdir"
-        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/codeCoverageReport/codeCoverageReport.xml"
+        property 'sonar.core.codeCoveragePlugin', 'jacoco'
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/codeCoverageReport/codeCoverageReport.xml"
     }
 }
 
@@ -130,19 +135,35 @@ allprojects {
     }
 }
 
-task codeCoverageReport(type: JacocoReport) {
+tasks.register("codeCoverageReport", JacocoReport) {
+    // If a subproject applies the 'jacoco' plugin, add the result it to the report
+    subprojects { subproject ->
+        subproject.plugins.withType(JacocoPlugin).configureEach {
+            subproject.tasks.matching({ t -> t.extensions.findByType(JacocoTaskExtension) }).configureEach { testTask ->
+                sourceSets subproject.sourceSets.main
+                executionData(testTask)
+            }
 
-    // Gather execution data from all subprojects
-    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-
-    // Add all relevant sourcesets from the subprojects
-    subprojects.each {
-        sourceSets it.sourceSets.main
+            // To automatically run `test` every time `./gradlew codeCoverageReport` is called,
+            // you may want to set up a task dependency between them as shown below.
+            // Note that this requires the `test` tasks to be resolved eagerly (see `forEach`) which
+            // may have a negative effect on the configuration time of your build.
+            subproject.tasks.matching({ t -> t.extensions.findByType(JacocoTaskExtension) }).forEach {
+                rootProject.tasks.codeCoverageReport.dependsOn(it)
+            }
+        }
     }
 
+    // enable the different report types (html, xml, csv)
     reports {
+        // xml is usually used to integrate code coverage with
+        // other tools like SonarQube, Coveralls or Codecov
         xml.enabled true
+
+        // HTML reports can be used to see code coverage
+        // without any external tools
         html.enabled true
-        csv.enabled false
     }
 }
+
+

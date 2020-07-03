@@ -3,6 +3,7 @@ import java.text.SimpleDateFormat
 apply plugin: "com.diffplug.gradle.spotless"
 apply plugin: "org.asciidoctor.convert"
 apply plugin: "org.ajoberstar.git-publish"
+apply plugin: "jacoco"
 
 ext {
     snippetsDir = file("build/generated-snippets")
