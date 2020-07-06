@@ -43,8 +43,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
     } else {
       result = metricQueryRepository.getMetricTreeForCommit(project.getId(), commitHash, metrics);
     }
-    List<ModuleEntity> moduleEntities = // project already has the modules??
-        moduleRepository.findModulesInProjectSortedDesc(project.getId());
+    List<ModuleEntity> moduleEntities = project.getModules();
     List<MetricTree> moduleChildren = processModules(moduleEntities, result);
     MetricTree rootModule = processRootModule(result);
     rootModule.getChildren().addAll(findChildModules(project.getModules(), moduleChildren));
