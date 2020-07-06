@@ -17,6 +17,7 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin
     implements SourceCodeFileAnalyzerPlugin, ConfigurableAnalyzerPlugin {
 
   private Logger logger = LoggerFactory.getLogger(CheckstyleSourceCodeFileAnalyzerPlugin.class);
+  private final File tempDir = Files.createTempDir();
 
   private Checker checker;
 
@@ -71,7 +72,7 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin
 
   private File createTempFile(byte[] fileContent, String filename) throws IOException {
     String[] temp = filename.split("/");
-    File file = new File(Files.createTempDir(), temp[temp.length - 1]);
+    File file = new File(tempDir, temp[temp.length - 1]);
     file.deleteOnExit();
     try (FileOutputStream out = new FileOutputStream(file)) {
       out.write(fileContent);

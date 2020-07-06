@@ -13,6 +13,7 @@ import {Branch} from '../model/branch';
 import {CommitLog} from '../model/commit-log';
 import {FileTreeNode} from '../model/file-tree-node';
 import {FileContentWithMetrics} from '../model/file-content-with-metrics';
+import {ProjectWithRoles} from "../model/project-with-roles";
 
 @Injectable({
   providedIn: 'root'
@@ -319,8 +320,8 @@ export class ProjectService {
       {commitHash, filepath}, {observe: 'response'}).toPromise();
   }
 
-  public listProjectsForUser(userId: number): Promise<HttpResponse<Project[]>> {
-    return this.httpClient.get<Project[]>(this.apiURL + 'users/'+userId+'/projects',
+  public listProjectsForUser(userId: number): Promise<HttpResponse<ProjectWithRoles[]>> {
+    return this.httpClient.get<ProjectWithRoles[]>(this.apiURL + 'users/'+userId+'/projects',
       {observe: 'response'}).toPromise();
   }
 }

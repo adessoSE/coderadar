@@ -1,6 +1,6 @@
 package io.reflectoring.coderadar.useradministration.service.get;
 
-import io.reflectoring.coderadar.projectadministration.domain.Project;
+import io.reflectoring.coderadar.projectadministration.domain.ProjectWithRoles;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import io.reflectoring.coderadar.useradministration.port.driven.ListProjectsForUserPort;
@@ -21,7 +21,7 @@ public class ListProjectsForUserService implements ListProjectsForUserUseCase {
   }
 
   @Override
-  public List<Project> listProjects(long userId) {
+  public List<ProjectWithRoles> listProjects(long userId) {
     if (this.getUserPort.existsById(userId)) {
       return listProjectsForUserPort.listProjects(userId);
     } else {

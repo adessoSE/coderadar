@@ -13,6 +13,7 @@ import {TeamService} from "../../service/team.service";
 import {HttpResponse} from "@angular/common/http";
 import {ProjectRole} from "../../model/project-role";
 import {FormControl} from "@angular/forms";
+import {ProjectWithRoles} from "../../model/project-with-roles";
 
 @Component({
   selector: 'app-main-dashboard',
@@ -21,7 +22,7 @@ import {FormControl} from "@angular/forms";
 })
 export class MainDashboardComponent implements OnInit {
 
-  projects: Project[] = [];
+  projects: ProjectWithRoles[] = [];
   teams: Team[] = [];
 
   dialogRef: MatDialogRef<ConfirmDeleteProjectDialogComponent>;
@@ -47,8 +48,8 @@ export class MainDashboardComponent implements OnInit {
    * Only works if project is not currently being analyzed.
    * @param project The project to delete
    */
-  deleteProject(project: Project): void {
-    this.projectService.deleteProject(project.id)
+  deleteProject(project: ProjectWithRoles): void {
+    this.projectService.deleteProject(project.project.id)
       .then(() => {
         const index = this.projects.indexOf(project, 0);
         if (this.projects.indexOf(project, 0) > -1) {
@@ -99,18 +100,24 @@ export class MainDashboardComponent implements OnInit {
    */
   getProjects(): void {
     this.waiting = true;
-    let promise: Promise<HttpResponse<Project[]>>;
+    let promise: Promise<HttpResponse<ProjectWithRoles[]>>;
     if(this.selectedTeam == undefined) {
       promise = this.projectService.listProjectsForUser(UserService.getLoggedInUser().userId);
     } else {
-      promise = this.teamService.listProjectsForTeam(this.selectedTeam.id);
+      //promise = this.teamService.listProjectsForTeam(this.selectedTeam.id);
     }
     promise
       .then(response => {
         this.projects = [];
         response.body.forEach(project => {
-        const newProject = new Project(project);
-        this.projects.push(newProject);
+          console.log(project);
+
+          const newProject = new Project(project.project);
+
+          const projectWithRoles = new ProjectWithRoles();
+        projectWithRoles.project = newProject;
+        projectWithRoles.roles = project.roles;
+          this.projects.push(projectWithRoles);
         });
                          this.waiting = false;
         }
