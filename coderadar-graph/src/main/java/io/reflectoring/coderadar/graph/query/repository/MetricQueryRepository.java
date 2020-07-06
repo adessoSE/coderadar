@@ -161,7 +161,7 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
    */
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c LIMIT 1 "
-          + "MATCH (f)-[r:CHANGED_IN]->(c) WHERE r.changeType <> \"DELETE\" "
+          + "MATCH (f)-[r:CHANGED_IN]->(c) "
           + "RETURN DISTINCT f.path as path")
   List<String> getFilesChangedInCommit(long projectId, @NonNull String commitHash);
 }

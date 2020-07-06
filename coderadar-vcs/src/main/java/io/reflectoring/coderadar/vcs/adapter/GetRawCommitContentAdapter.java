@@ -56,7 +56,13 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
       } else {
         rt1 = new RawText(new byte[0]);
       }
-      RawText rt2 = new RawText(BlobUtils.getRawContent(git.getRepository(), commit, filepath));
+      byte[] rawContent = BlobUtils.getRawContent(git.getRepository(), commit, filepath);
+      RawText rt2;
+      if (rawContent != null && rawContent.length != 0) {
+        rt2 = new RawText(BlobUtils.getRawContent(git.getRepository(), commit, filepath));
+      } else {
+        rt2 = new RawText(new byte[] {'\n'});
+      }
       ByteArrayOutputStream out = new ByteArrayOutputStream();
       new DiffFormatter(out)
           .format(new HistogramDiff().diff(RawTextComparator.DEFAULT, rt1, rt2), rt1, rt2);

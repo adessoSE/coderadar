@@ -34,7 +34,7 @@ public interface ContributorQueryRepository extends Neo4jRepository<ContributorE
           + "CALL apoc.path.subgraphNodes(c, {relationshipFilter:'IS_CHILD_OF>'}) YIELD node WITH node as c "
           + "ORDER BY c.timestamp DESC WITH collect(c) as commits "
           + "CALL apoc.cypher.run('UNWIND commits as c OPTIONAL MATCH (f)-[:CHANGED_IN {changeType: \"DELETE\"}]->(c) "
-          + "RETURN collect(f) as deletes', {commits: commits}) YIELD value WITH commits, value.deletes as deletes "
+          + "RETURN collect(f) as deletes', {commits: commits, name: {1}}) YIELD value WITH commits, value.deletes as deletes "
           + "MATCH (p)-[:CONTAINS*1..]->(f)-[:RENAMED_FROM*0..]->(f2) WHERE ID(p) = {0} AND NOT f IN deletes "
           + "AND f.path = {2} WITH collect(f) + collect(f2) as files, commits "
           + "UNWIND commits as c "

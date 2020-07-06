@@ -18,6 +18,8 @@ export class ContributorService {
       {observe: 'response'}).toPromise();
   }
 
+
+
   getContributorsForFile(projectId: number, path: string, commitHash: string): Promise<HttpResponse<Contributor[]>> {
     return this.httpClient.post<Contributor[]>(this.apiURL + 'projects/' + projectId + '/contributors/path',
       {path, commitHash}, {observe: 'response'}).toPromise();

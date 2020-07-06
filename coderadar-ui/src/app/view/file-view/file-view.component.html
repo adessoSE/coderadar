@@ -14,7 +14,7 @@ name: 'File tree for commit ' + commitHashAbbrev}]"></app-header>
     {{currentSelectedFilepath}}
   </span>
   <div class="authors">
-    <h4 *ngIf="this.currentFileContent.length > 0">
+    <h4 *ngIf="this.fileAuthors.length > 0 && this.currentFileContent.length > 0">
       Authored by:
     </h4>
     <div *ngFor="let author of fileAuthors">
@@ -26,7 +26,7 @@ name: 'File tree for commit ' + commitHashAbbrev}]"></app-header>
   </div>
   <div #tooltip="matTooltip" matTooltip="{{tooltipMessage}}"></div>
   <div>
-    <div fxFlex="0 0 25%" fxLayout="row" style="overflow: scroll">
+    <div fxFlex="0 0 25%" fxLayout="row" style="overflow: scroll; height: 100%">
       <mat-tree fxFlex="auto" [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
         <!-- This is the tree node template for leaf nodes -->
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
@@ -54,6 +54,9 @@ name: 'File tree for commit ' + commitHashAbbrev}]"></app-header>
           </li>
         </mat-nested-tree-node>
       </mat-tree>
+    </div>
+    <div *ngIf="currentFileContent == '' && currentSelectedFilepath != ''" style="width: 50%;font-size: larger;margin-top: 5%; margin-left: 30%">
+      File was deleted
     </div>
     <pre [class]="getPreClass()" [attr.data-line]="findingsString" #fileView>
 <code [className]="getCodeClass()" [textContent]="currentFileContent"></code>
