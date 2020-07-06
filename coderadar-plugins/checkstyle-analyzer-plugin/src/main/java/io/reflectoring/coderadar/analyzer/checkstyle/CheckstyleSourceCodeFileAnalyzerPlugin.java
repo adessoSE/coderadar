@@ -93,7 +93,7 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin
     return ConfigurationLoader.loadConfiguration(
         new InputSource(in),
         new CheckstylePropertiesResolver(new Properties()), // TODO: pass real properties
-        true);
+        null);
   }
 
   @Override

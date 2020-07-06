@@ -9,7 +9,7 @@ import javax.validation.Validator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ProjectRoleValidatorTest {
+class ProjectRoleValidatorTest {
   private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
   @Test

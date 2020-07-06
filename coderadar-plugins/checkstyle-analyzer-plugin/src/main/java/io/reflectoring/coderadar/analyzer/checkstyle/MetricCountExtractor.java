@@ -30,15 +30,11 @@ public class MetricCountExtractor {
   public Long extractMetricCount(AuditEvent event) {
     try {
 
-      if (event.getSourceName().equals(CyclomaticComplexityCheck.class.getName())) {
-        return extractLongArgument(event, 0);
-      } else if (event.getSourceName().equals(ReturnCountCheck.class.getName())) {
-        return extractLongArgument(event, 0);
-      } else if (event.getSourceName().equals(JavaNCSSCheck.class.getName())) {
-        return extractLongArgument(event, 0);
-      } else if (event.getSourceName().equals(NPathComplexityCheck.class.getName())) {
-        return extractLongArgument(event, 0);
-      } else if (event.getSourceName().equals(ExecutableStatementCountCheck.class.getName())) {
+      if (event.getSourceName().equals(CyclomaticComplexityCheck.class.getName())
+          || event.getSourceName().equals(ReturnCountCheck.class.getName())
+          || event.getSourceName().equals(JavaNCSSCheck.class.getName())
+          || event.getSourceName().equals(NPathComplexityCheck.class.getName())
+          || event.getSourceName().equals(ExecutableStatementCountCheck.class.getName())) {
         return extractLongArgument(event, 0);
       }
 
