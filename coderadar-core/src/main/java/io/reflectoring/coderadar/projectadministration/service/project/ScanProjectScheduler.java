@@ -146,7 +146,7 @@ public class ScanProjectScheduler {
     tasks.remove(projectId);
   }
 
-  private void checkForNewCommits(Project project) {
+  public void checkForNewCommits(Project project) {
     try {
       String localDir =
           coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName();
