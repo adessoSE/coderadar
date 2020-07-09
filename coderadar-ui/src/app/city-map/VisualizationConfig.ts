@@ -4,7 +4,8 @@ export class VisualizationConfig {
 
   // VISUALIZATION SETTINGS
   static EDGE_LENGTH_FACTOR = 2;
-  static HEIGHT_FACTOR = 0.1;
+  static ELEMENT_HEIGHT_FACTOR = 0.1;
+  static ELEMENT_MINIMUM_HEIGHT = 1;
   static ROOT_NAME = "root";
   // static GLOBAL_MAX_GROUND_AREA = 100;
   // static GLOBAL_MIN_GROUND_AREA = 1;
