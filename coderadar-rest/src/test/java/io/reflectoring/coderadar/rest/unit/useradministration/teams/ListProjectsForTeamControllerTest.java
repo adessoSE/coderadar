@@ -31,7 +31,7 @@ class ListProjectsForTeamControllerTest extends UnitTestTemplate {
     ResponseEntity<List<GetProjectResponse>> response = testController.listProjectsForTeam(1L);
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     Assertions.assertNotNull(response.getBody());
-    Assertions.assertEquals(1L, response.getBody().size());
+    Assertions.assertEquals(1, response.getBody().size());
     Assertions.assertEquals(2L, response.getBody().get(0).getId());
     Assertions.assertEquals("TestProject1", response.getBody().get(0).getName());
   }

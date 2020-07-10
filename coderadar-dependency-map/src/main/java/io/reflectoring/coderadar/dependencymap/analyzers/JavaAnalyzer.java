@@ -123,7 +123,7 @@ public class JavaAnalyzer {
    */
   public List<String> getDependenciesFromImportLine(String line) {
     // possibilities for there to be more than one dependency in one line
-    //   import org.somepackage.A a; import org.somepackage.B;
+    //  import org.somepackage.A a; import org.somepackage.B;
     List<String> foundDependencies = new ArrayList<>();
     String lineString = line;
     while (lineString.contains(";")) {
@@ -157,10 +157,9 @@ public class JavaAnalyzer {
     while (separator != null) {
       Matcher fullyClassifiedMatcher = fullyClassifiedPattern.matcher(lineString);
       if (fullyClassifiedMatcher.find()
-          && !JavaUtils.isJavaKeyword(fullyClassifiedMatcher.group())) {
-        if (!foundDependencies.contains(fullyClassifiedMatcher.group())) {
-          foundDependencies.add(fullyClassifiedMatcher.group());
-        }
+          && !JavaUtils.isJavaKeyword(fullyClassifiedMatcher.group())
+          && !foundDependencies.contains(fullyClassifiedMatcher.group())) {
+        foundDependencies.add(fullyClassifiedMatcher.group());
       }
       // split lineString at first found position of found separator
       lineString = lineString.substring(lineString.indexOf(separator) + separator.length());
@@ -184,7 +183,7 @@ public class JavaAnalyzer {
     int index = toCheck.length();
     String separator = null;
     for (Map.Entry<String, Boolean> entry : separators.entrySet()) {
-      if (toCheck.contains("@") && entry.getValue()) {
+      if (toCheck.contains("@") && Boolean.TRUE.equals(entry.getValue())) {
         // entry is a regex
         Matcher matcher = cache.getPattern(entry.getKey()).matcher(toCheck);
         if (matcher.find()) {
@@ -194,14 +193,12 @@ public class JavaAnalyzer {
             index = toCheck.indexOf(separator);
           }
         }
-      } else {
+      } else if (toCheck.contains(entry.getKey())
+          && toCheck.indexOf(entry.getKey()) < index
+          && checkTmpString(entry.getKey(), toCheck)) {
         // entry is not a regex
-        if (toCheck.contains(entry.getKey())
-            && toCheck.indexOf(entry.getKey()) < index
-            && checkTmpString(entry.getKey(), toCheck)) {
-          separator = entry.getKey();
-          index = toCheck.indexOf(separator);
-        }
+        separator = entry.getKey();
+        index = toCheck.indexOf(separator);
       }
     }
     return separator;

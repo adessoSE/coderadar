@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Project} from '../../model/project';
 import {ProjectService} from '../../service/project.service';
 import {Router} from '@angular/router';
@@ -7,12 +7,13 @@ import {FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import {AppComponent} from '../../app.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Team} from "../../model/team";
-import {TeamService} from "../../service/team.service";
-import {HttpResponse} from "@angular/common/http";
-import {ProjectRole} from "../../model/project-role";
-import {FormControl} from "@angular/forms";
+import {MatDialogRef} from '@angular/material/dialog';
+import {Team} from '../../model/team';
+import {TeamService} from '../../service/team.service';
+import {HttpResponse} from '@angular/common/http';
+import {AddProjectToTeamDialogComponent} from './add-project-to-team-dialog.component';
+import {ConfirmDeleteProjectDialogComponent} from "./delete-project-dialog.component";
+
 
 @Component({
   selector: 'app-main-dashboard',
@@ -81,12 +82,12 @@ export class MainDashboardComponent implements OnInit {
   openAddToTeamDialog(project: Project): void {
     const dialogRef = this.dialog.open(AddProjectToTeamDialogComponent, {
       width: '300px',
-      data: {teams: this.teams, project: project}
+      data: {teams: this.teams, project}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        for(let team of result.teams) { //TODO: Check if project is already in team
+        for (const team of result.teams) { // TODO: Check if project is already in team
           this.teamService.addTeamToProject(project.id, team.id, result.role);
         }
       }
@@ -100,7 +101,7 @@ export class MainDashboardComponent implements OnInit {
   getProjects(): void {
     this.waiting = true;
     let promise: Promise<HttpResponse<Project[]>>;
-    if(this.selectedTeam == undefined) {
+    if (this.selectedTeam === undefined) {
       promise = this.projectService.listProjectsForUser(UserService.getLoggedInUser().userId);
     } else {
       promise = this.teamService.listProjectsForTeam(this.selectedTeam.id);
@@ -112,7 +113,7 @@ export class MainDashboardComponent implements OnInit {
         const newProject = new Project(project);
         this.projects.push(newProject);
         });
-                         this.waiting = false;
+        this.waiting = false;
         }
       )
       .catch(e => {
@@ -126,7 +127,7 @@ export class MainDashboardComponent implements OnInit {
     this.teamService.listTeamsForUser(UserService.getLoggedInUser().userId).then(value =>
       this.teams = value.body
     ) .catch(e => {
-      if (e.status && e.status === FORBIDDEN) { //TODO: UNAUTHORIZED
+      if (e.status && e.status === FORBIDDEN) { // TODO: UNAUTHORIZED
         this.userService.refresh(() => this.getTeams());
       }
     });
@@ -179,59 +180,4 @@ export class MainDashboardComponent implements OnInit {
       }
     });
   }
-}
-
-class DeleteProjectDialogData {
-  project: Project;
-}
-
-@Component({
-  selector: 'app-delete-project-dialog',
-  templateUrl: 'delete-project-dialog.html'
-})
-export class ConfirmDeleteProjectDialogComponent{
-
-  constructor(
-    public dialogRef: MatDialogRef<ConfirmDeleteProjectDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DeleteProjectDialogData
-  ) {
-
-  }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
-}
-
-
-class AddProjectToTeamDialogData {
-  project: Project;
-  teams: Team[];
-  role: ProjectRole;
-}
-
-@Component({
-  selector: 'app-add-project-to-team-dialog',
-  templateUrl: 'add-project-to-team-dialog.html'
-})
-export class AddProjectToTeamDialogComponent {
-
-  selectedTeams: FormControl = new FormControl();
-
-  constructor(
-    public dialogRef: MatDialogRef<AddProjectToTeamDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: AddProjectToTeamDialogData
-  ) {
-
-  }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
-  onAddClick(): void {
-    this.data.teams = this.selectedTeams.value;
-  }
-
 }

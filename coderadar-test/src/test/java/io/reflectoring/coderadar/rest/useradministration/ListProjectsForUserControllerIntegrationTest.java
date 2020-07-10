@@ -30,7 +30,6 @@ class ListProjectsForUserControllerIntegrationTest extends ControllerTestTemplat
 
   @BeforeEach
   void setUp() {
-    projectRepository.deleteAll();
     testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");
@@ -40,7 +39,6 @@ class ListProjectsForUserControllerIntegrationTest extends ControllerTestTemplat
     testProject.setVcsUsername("testUser");
     projectRepository.save(testProject);
 
-    userRepository.deleteAll();
     testUser = new UserEntity();
     testUser.setUsername("username");
     testUser.setPassword(PasswordUtil.hash("password1"));

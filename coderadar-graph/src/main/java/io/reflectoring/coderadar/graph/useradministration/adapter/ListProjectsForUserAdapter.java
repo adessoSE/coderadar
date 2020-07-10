@@ -19,6 +19,6 @@ public class ListProjectsForUserAdapter implements ListProjectsForUserPort {
 
   @Override
   public List<Project> listProjects(long userId) {
-    return projectMapper.mapNodeEntities(projectRepository.findProjectsByUsedId(userId));
+    return projectMapper.mapNodeEntities(projectRepository.findProjectsByUserId(userId));
   }
 }

@@ -1,6 +1,5 @@
 package io.reflectoring.coderadar.vcs.port.driven;
 
-import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,7 +21,6 @@ public interface GetRawCommitContentPort {
    * @param commitHash The commit hash
    * @return The diff against the same file in the parent commit or an empty array if the file does
    *     not exist
-   * @throws UnableToGetCommitContentException Thrown if the commit is not found.
    */
   byte[] getFileDiff(String projectRoot, String filepath, String commitHash);
   /**

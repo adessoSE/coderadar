@@ -21,8 +21,6 @@ class ListProjectsControllerIntegrationTest extends ControllerTestTemplate {
 
   @BeforeEach
   public void setUp() {
-    projectRepository.deleteAll();
-
     ProjectEntity testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");

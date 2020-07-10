@@ -34,7 +34,6 @@ class AddTeamToProjectControllerIntegrationTest extends ControllerTestTemplate {
     teamEntity.setName("testTeam");
     teamRepository.save(teamEntity, 1);
 
-    projectRepository.deleteAll();
     testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");

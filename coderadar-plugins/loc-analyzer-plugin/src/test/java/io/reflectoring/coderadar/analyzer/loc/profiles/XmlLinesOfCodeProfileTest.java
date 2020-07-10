@@ -2,17 +2,17 @@ package io.reflectoring.coderadar.analyzer.loc.profiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.reflectoring.coderadar.analyzer.loc.Loc;
+import io.reflectoring.coderadar.analyzer.loc.LinesOfCode;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
-public class XmlLocProfileTest extends AbstractLocProfileTest {
+class XmlLinesOfCodeProfileTest extends AbstractLocProfileTest {
 
-  private LocProfile profile = new XmlLocProfile();
+  private final LocProfile profile = new XmlLocProfile();
 
   @Test
-  public void standard() throws IOException {
-    Loc loc = countLines("/testcode/xml/standard.xml.loctest", profile);
+  void standard() throws IOException {
+    LinesOfCode loc = countLines("/testcode/xml/standard.xml.loctest", profile);
     assertThat(loc.getLoc()).isEqualTo(15);
     assertThat(loc.getSloc()).isEqualTo(10);
     assertThat(loc.getEloc()).isEqualTo(10);
@@ -20,8 +20,8 @@ public class XmlLocProfileTest extends AbstractLocProfileTest {
   }
 
   @Test
-  public void nested() throws IOException {
-    Loc loc = countLines("/testcode/xml/nested.xml.loctest", profile);
+  void nested() throws IOException {
+    LinesOfCode loc = countLines("/testcode/xml/nested.xml.loctest", profile);
     assertThat(loc.getLoc()).isEqualTo(15);
     assertThat(loc.getSloc()).isEqualTo(9);
     assertThat(loc.getEloc()).isEqualTo(9);

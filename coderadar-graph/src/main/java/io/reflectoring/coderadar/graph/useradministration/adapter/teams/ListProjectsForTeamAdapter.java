@@ -19,6 +19,6 @@ public class ListProjectsForTeamAdapter implements ListProjectsForTeamPort {
 
   @Override
   public List<Project> listProjects(long teamId) {
-    return projectMapper.mapNodeEntities(projectRepository.listProjectByTeamId(teamId));
+    return projectMapper.mapNodeEntities(projectRepository.listProjectsByTeamId(teamId));
   }
 }

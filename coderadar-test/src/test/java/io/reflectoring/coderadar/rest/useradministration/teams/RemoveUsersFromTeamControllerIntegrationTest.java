@@ -29,7 +29,6 @@ class RemoveUsersFromTeamControllerIntegrationTest extends ControllerTestTemplat
 
   @BeforeEach
   void setUp() {
-    userRepository.deleteAll();
     testUser = new UserEntity();
     testUser.setUsername("username");
     testUser.setPassword("password1");

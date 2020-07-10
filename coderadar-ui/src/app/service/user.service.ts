@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {AppComponent} from '../app.component';
-import {User} from "../model/user";
+import {User} from '../model/user';
 
 
 @Injectable({
@@ -113,12 +113,12 @@ export class UserService {
       {refreshToken: UserService.getLoggedInUser().refreshToken, newPassword: password}, {observe: 'response'}).toPromise();
   }
 
-  public listUsersForProject(projectId: number): Promise<HttpResponse<User[]>>{
-    return this.httpClient.get<User[]>(this.apiURL + 'projects/'+projectId+'/users',
+  public listUsersForProject(projectId: number): Promise<HttpResponse<User[]>> {
+    return this.httpClient.get<User[]>(this.apiURL + 'projects/' + projectId + '/users',
   {observe: 'response'}).toPromise();
   }
 
-  public listUsers(): Promise<HttpResponse<User[]>>{
+  public listUsers(): Promise<HttpResponse<User[]>> {
     return this.httpClient.get<User[]>(this.apiURL + 'users',
       {observe: 'response'}).toPromise();
   }

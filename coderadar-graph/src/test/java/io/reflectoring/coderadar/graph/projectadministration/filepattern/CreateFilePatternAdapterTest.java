@@ -34,7 +34,6 @@ class CreateFilePatternAdapterTest {
         .thenReturn(java.util.Optional.of(new ProjectEntity()));
     when(filePatternRepository.save(any())).thenReturn(filePatternEntity);
     Long returnedId = createFilePatternAdapter.createFilePattern(filePattern, 1L);
-    Assertions.assertThat(returnedId).isNotNull();
-    Assertions.assertThat(returnedId).isEqualTo(2L);
+    Assertions.assertThat(returnedId).isNotNull().isEqualTo(2L);
   }
 }

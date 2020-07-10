@@ -23,8 +23,7 @@ import org.springframework.stereotype.Service;
 public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
 
   @Override
-  public byte[] getCommitContent(String projectRoot, String filepath, String commitHash)
-      throws UnableToGetCommitContentException {
+  public byte[] getCommitContent(String projectRoot, String filepath, String commitHash) {
     if (filepath.isEmpty()) {
       return new byte[0];
     }
@@ -37,8 +36,7 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
   }
 
   @Override
-  public byte[] getFileDiff(String projectRoot, String filepath, String commitHash)
-      throws UnableToGetCommitContentException {
+  public byte[] getFileDiff(String projectRoot, String filepath, String commitHash) {
     if (filepath.isEmpty()) {
       return new byte[0];
     }
@@ -74,8 +72,7 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
 
   @Override
   public HashMap<String, byte[]> getCommitContentBulk(
-      String projectRoot, List<String> filepaths, String commitHash)
-      throws UnableToGetCommitContentException {
+      String projectRoot, List<String> filepaths, String commitHash) {
     try (Git git = Git.open(new java.io.File(projectRoot))) {
       ObjectId commitId = git.getRepository().resolve(commitHash);
       HashMap<String, byte[]> bulkContent = new LinkedHashMap<>();
@@ -92,8 +89,7 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
   public HashMap<File, byte[]> getCommitContentBulkWithFiles(
       String projectRoot,
       List<io.reflectoring.coderadar.projectadministration.domain.File> files,
-      String commitHash)
-      throws UnableToGetCommitContentException {
+      String commitHash) {
     try (Git git = Git.open(new java.io.File(projectRoot))) {
       ObjectId commitId = git.getRepository().resolve(commitHash);
       HashMap<File, byte[]> bulkContent = new LinkedHashMap<>();

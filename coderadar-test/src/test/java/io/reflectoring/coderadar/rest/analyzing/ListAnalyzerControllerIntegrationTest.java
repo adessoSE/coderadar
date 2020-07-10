@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class ListAnalyzerControllerIntegrationTest extends ControllerTestTemplate {
+class ListAnalyzerControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void getAvailableAnalyzers() throws Exception {
@@ -20,9 +20,7 @@ public class ListAnalyzerControllerIntegrationTest extends ControllerTestTemplat
         .andDo(
             result -> {
               List<String> results =
-                  fromJson(
-                      new TypeReference<List<String>>() {},
-                      result.getResponse().getContentAsString());
+                  fromJson(new TypeReference<>() {}, result.getResponse().getContentAsString());
               Assertions.assertTrue(
                   results.contains("io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin"));
               Assertions.assertTrue(

@@ -31,6 +31,7 @@
                 </mat-form-field>
                 <!--Possible errors-->
                 <mat-error *ngIf="nameEmpty">The team name must not be empty!</mat-error>
+                <mat-error *ngIf="noUsers">The team must have at least one user!</mat-error>
                 <mat-error *ngIf="teamNameTaken">A team with this name already exists!</mat-error>
                 <!--Cancel and submit buttons-->
                 <div id="cardButtons">

@@ -17,7 +17,7 @@ class RemoveUserFromProjectControllerTest extends UnitTestTemplate {
   private final RemoveUserFromProjectUseCase removeUserFromProjectUseCase =
       mock(RemoveUserFromProjectUseCase.class);
   private final RemoveUserFromProjectController testController =
-      new RemoveUserFromProjectController(removeUserFromProjectUseCase);
+      new RemoveUserFromProjectController(removeUserFromProjectUseCase, authenticationService);
 
   @Test
   void testRemoveUserFromProjectController() {

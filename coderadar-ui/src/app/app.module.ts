@@ -9,11 +9,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AddProjectComponent} from './view/add-project/add-project.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {
-  MainDashboardComponent,
-  ConfirmDeleteProjectDialogComponent,
-  AddProjectToTeamDialogComponent
-} from './view/main-dashboard/main-dashboard.component';
+import {MainDashboardComponent} from './view/main-dashboard/main-dashboard.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {AuthInterceptor} from './auth.interceptor';
 import {ConfigureProjectComponent, MergeDialogComponent} from './view/configure-project/configure-project.component';
@@ -72,6 +68,8 @@ import { FileViewComponent } from './view/file-view/file-view.component';
 import { TeamsDashboardComponent } from './view/teams-dashboard/teams-dashboard.component';
 import { AddTeamComponent } from './view/add-team/add-team.component';
 import { SidenavContentComponent } from './view/sidenav-content/sidenav-content.component';
+import {AddProjectToTeamDialogComponent} from "./view/main-dashboard/add-project-to-team-dialog.component";
+import {ConfirmDeleteProjectDialogComponent} from "./view/main-dashboard/delete-project-dialog.component";
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -99,7 +97,6 @@ const appRoutes: Routes = [
     RegisterComponent,
     AddProjectComponent,
     MainDashboardComponent,
-    ConfirmDeleteProjectDialogComponent,
     ConfigureProjectComponent,
     EditProjectComponent,
     HeaderComponent,
@@ -121,6 +118,7 @@ const appRoutes: Routes = [
     AddProjectToTeamDialogComponent,
     AddTeamComponent,
     SidenavContentComponent,
+    ConfirmDeleteProjectDialogComponent
   ],
   imports: [
     BrowserModule,

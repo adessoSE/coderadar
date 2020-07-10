@@ -72,13 +72,8 @@ public class GetCommitsInProjectAdapter implements GetCommitsInProjectPort {
           continue;
         }
         FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
-        File file = walkedFiles.get(fileId);
-        if (file == null) {
-          file = new File();
-          file.setId(fileId);
-          file.setPath(filepath);
-          walkedFiles.put(fileId, file);
-        }
+        File file =
+            walkedFiles.computeIfAbsent(fileId, id -> new File().setId(id).setPath(filepath));
         fileToCommitRelationship.setFile(file);
         commit.getTouchedFiles().add(fileToCommitRelationship);
       }

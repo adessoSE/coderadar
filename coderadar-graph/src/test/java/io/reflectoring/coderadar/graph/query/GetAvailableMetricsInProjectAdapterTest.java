@@ -16,8 +16,8 @@ import org.junit.jupiter.api.Test;
 
 @DisplayName("Get available metrics in project")
 class GetAvailableMetricsInProjectAdapterTest {
-  private ProjectRepository projectRepository = mock(ProjectRepository.class);
-  private MetricQueryRepository metricQueryRepository = mock(MetricQueryRepository.class);
+  private final ProjectRepository projectRepository = mock(ProjectRepository.class);
+  private final MetricQueryRepository metricQueryRepository = mock(MetricQueryRepository.class);
 
   private GetAvailableMetricsInProjectAdapter getAvailableMetricsInProjectAdapter;
 
@@ -37,7 +37,7 @@ class GetAvailableMetricsInProjectAdapterTest {
 
     List<String> returnedMetrics = getAvailableMetricsInProjectAdapter.get(1L);
 
-    assertThat(returnedMetrics).hasSize(0);
+    assertThat(returnedMetrics).isEmpty();
   }
 
   @Test

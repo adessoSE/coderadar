@@ -17,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class MergeContributorsAdapterTest {
+class MergeContributorsAdapterTest {
   private MergeContributorsAdapter mergeContributorsAdapter;
 
   @Mock private ContributorRepository contributorRepository;
@@ -28,7 +28,7 @@ public class MergeContributorsAdapterTest {
   }
 
   @Test
-  public void mergeTwoContributorsSuccessfully() {
+  void mergeTwoContributorsSuccessfully() {
     ContributorEntity contributor1 = new ContributorEntity();
     contributor1.setId(1L);
     contributor1.setDisplayName("Max");

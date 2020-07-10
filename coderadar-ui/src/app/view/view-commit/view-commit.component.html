@@ -11,16 +11,16 @@ name: appComponent.trimProjectName(project.name)}, {location: '/project/' + proj
 
   <mat-card>
     <mat-card-content class="mat-card-content">
-      <mat-label><b>{{commit.name}}</b></mat-label>
+      <mat-label><strong>{{commit.name}}</strong></mat-label>
       <br><br>
-      <mat-label><b>Metrics:</b></mat-label>
+      <mat-label><strong>Metrics:</strong></mat-label>
       <br><br>
       <div *ngIf="metrics.length === 0">
         <mat-label>Not yet analyzed or no metrics are available</mat-label>
       </div>
       <div *ngFor="let metric of metrics">
         <mat-label>{{metric.metricName.split('.').pop() + ' : '}}
-          <b>{{metric.value}}</b>
+          <strong>{{metric.value}}</strong>
         </mat-label>
         <br>
       </div>

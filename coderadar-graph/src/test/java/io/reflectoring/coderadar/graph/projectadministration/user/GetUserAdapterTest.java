@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 @DisplayName("Load user")
-public class GetUserAdapterTest {
-  private UserRepository userRepository = mock(UserRepository.class);
+class GetUserAdapterTest {
+  private final UserRepository userRepository = mock(UserRepository.class);
 
   @Test
   @DisplayName("Should return user when passing valid argument")

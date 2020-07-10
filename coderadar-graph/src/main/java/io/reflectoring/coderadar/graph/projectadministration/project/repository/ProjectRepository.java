@@ -165,7 +165,7 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
 
   /**
    * @param userId The user id.
-   * @return All the project a user is assigned to.
+   * @return All projects a user is assigned to.
    */
   @Query(
       "MATCH (u:UserEntity) WHERE ID(u) = {0} WITH u "
@@ -173,12 +173,12 @@ public interface ProjectRepository extends Neo4jRepository<ProjectEntity, Long> 
           + "WITH p1, u "
           + "MATCH (p2:ProjectEntity)<-[:ASSIGNED_TO*0..1]-(t)<-[:IS_IN*0..1]-(u)  WHERE p2.isBeingDeleted = FALSE WITH collect(p1) + collect(p2) as list "
           + "UNWIND list AS p RETURN DISTINCT p ORDER BY p.name")
-  List<ProjectEntity> findProjectsByUsedId(long userId);
+  List<ProjectEntity> findProjectsByUserId(long userId);
 
   /**
    * @param teamId The team id.
-   * @return All the project a team is assigned to.
+   * @return All projects a team is assigned to.
    */
   @Query("MATCH (t)-[:ASSIGNED_TO]->(p) WHERE ID(t) = {0} AND p.isBeingDeleted = FALSE RETURN p")
-  List<ProjectEntity> listProjectByTeamId(long teamId);
+  List<ProjectEntity> listProjectsByTeamId(long teamId);
 }

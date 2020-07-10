@@ -131,7 +131,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   createRenderer() {
-    this.renderer = new WebGLRenderer({antialias: true, preserveDrawingBuffer: true,logarithmicDepthBuffer:true});
+    this.renderer = new WebGLRenderer({antialias: true, preserveDrawingBuffer: true, logarithmicDepthBuffer: true});
     this.renderer.setClearColor(0xf0f0f0);
     this.renderer.setSize(this.getScreenWidth() - 0, window.innerHeight);
 
@@ -296,7 +296,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     };
   }
 
-  private getRoot():Object3D{
+  private getRoot(): Object3D {
     return this.scene.getObjectByName(VisualizationConfig.ROOT_NAME);
   }
 
@@ -353,35 +353,35 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private createTooltip() {
-    var material = new THREE.MeshBasicMaterial({
-      color:0xff0000
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xff0000
     });
-    var geometry = new THREE.Geometry();
+    const geometry = new THREE.Geometry();
     geometry.vertices.push(
-      new Vector3(0,0,0),
-      new Vector3(0,-1,0)
+      new Vector3(0, 0, 0),
+      new Vector3(0, -1, 0)
     );
-    var tipSize = 0.1;
-    var tipGeometry = new THREE.SphereGeometry(tipSize,16,16);
-    this.tooltipLine = new Line(geometry,material);
-    var tooltipLineTip = new Mesh(tipGeometry,material);
+    const tipSize = 0.1;
+    const tipGeometry = new THREE.SphereGeometry(tipSize, 16, 16);
+    this.tooltipLine = new Line(geometry, material);
+    const tooltipLineTip = new Mesh(tipGeometry, material);
     tooltipLineTip.position.setY(-1);
     this.tooltipLine.add(tooltipLineTip);
-    this.tooltipLine.type = "TooltipLine";
+    this.tooltipLine.type = 'TooltipLine';
     this.tooltipLine.visible = false;
     this.tooltipLine.userData.isHelper = true;
     this.scene.add(this.tooltipLine);
   }
 
-  private createSelectionHighlightBox(){
-    var material = new THREE.MeshBasicMaterial({
-      color:0xffff00,
-      opacity:0.5,
-      transparent:true
+  private createSelectionHighlightBox() {
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xffff00,
+      opacity: 0.5,
+      transparent: true
     });
-    var geometry = new THREE.BoxGeometry(1,1,1);
-    this.highlightBox = new Mesh(geometry,material);
-    this.highlightBox.type = "HighlightBox";
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    this.highlightBox = new Mesh(geometry, material);
+    this.highlightBox.type = 'HighlightBox';
     this.highlightBox.visible = false;
     this.highlightBox.userData.isHelper = true;
     this.scene.add(this.highlightBox);

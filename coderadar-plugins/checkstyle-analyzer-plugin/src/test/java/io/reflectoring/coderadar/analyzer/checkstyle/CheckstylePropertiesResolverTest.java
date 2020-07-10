@@ -4,10 +4,10 @@ import java.util.Properties;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class CheckstylePropertiesResolverTest {
+class CheckstylePropertiesResolverTest {
 
   @Test
-  public void existingPropertiesAreResolved() {
+  void existingPropertiesAreResolved() {
     Properties properties = new Properties();
     properties.put(CheckstyleSourceCodeFileAnalyzerPlugin.class.getName() + ".property1", "value1");
     CheckstylePropertiesResolver resolver = new CheckstylePropertiesResolver(properties);
@@ -15,7 +15,7 @@ public class CheckstylePropertiesResolverTest {
   }
 
   @Test
-  public void missingPropertiesAreNotResolved() {
+  void missingPropertiesAreNotResolved() {
     Properties properties = new Properties();
     properties.put(
         CheckstyleSourceCodeFileAnalyzerPlugin.class.getName() + ".existingProperty",

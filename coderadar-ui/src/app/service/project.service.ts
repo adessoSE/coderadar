@@ -19,7 +19,6 @@ import {FileContentWithMetrics} from '../model/file-content-with-metrics';
 })
 export class ProjectService {
 
-
   private apiURL = AppComponent.getApiUrl();
 
   constructor(private httpClient: HttpClient) {
@@ -205,7 +204,7 @@ export class ProjectService {
    * @param branch The branch to use for getting the commits.
    */
   public getCommitsForContributor(id: number, branch: string, email: string): Promise<HttpResponse<Commit[]>> {
-    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/' + branch + '/commits?email='+email.replace("+", "%2B"),
+    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/' + branch + '/commits?email=' + email.replace('+', '%2B'),
       {observe: 'response'}).toPromise();
   }
 
@@ -320,7 +319,7 @@ export class ProjectService {
   }
 
   public listProjectsForUser(userId: number): Promise<HttpResponse<Project[]>> {
-    return this.httpClient.get<Project[]>(this.apiURL + 'users/'+userId+'/projects',
+    return this.httpClient.get<Project[]>(this.apiURL + 'users/' + userId + '/projects',
       {observe: 'response'}).toPromise();
   }
 }

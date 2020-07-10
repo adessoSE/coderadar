@@ -96,7 +96,7 @@ class JavaAnalyzerTest {
    * <p>missing: RandomClass3, Annotation2, Annotation3
    */
   @Test
-  public void testGetValidImports() {
+  void testGetValidImports() {
     List<String> imports = analyzer.getValidImports(fileContent);
     Assertions.assertEquals(50, imports.size());
     Assertions.assertEquals("java.util.Objects", imports.get(0));
@@ -156,7 +156,7 @@ class JavaAnalyzerTest {
   }
 
   @Test
-  public void testGetFirstSeparator() {
+  void testGetFirstSeparator() {
     String test = "= ((ClassQ.isEmpty() && classR.isEmpty())";
     // should return first '(' after ClassQ.isEmpty, because there is no potential import between
     // begin and all separators before that '('
@@ -164,7 +164,7 @@ class JavaAnalyzerTest {
   }
 
   @Test
-  public void testDependencyStrings() {
+  void testDependencyStrings() {
     String line =
         "import org.wickedsource.dependencytree.sbdfjksbdf; import org.wickedsource.dependencytree.fhzgkobd;";
     // should return first '(' after ClassQ.isEmpty, because there is no potential import between
@@ -176,7 +176,7 @@ class JavaAnalyzerTest {
   }
 
   @Test
-  public void testImportDependencyStrings() {
+  void testImportDependencyStrings() {
     String line =
         "ClassP b = ((ClassQ.isEmpty() && classR.isEmpty()) || classS.isEmpty || ((classT.size > classU.size) && classV.size < classW.size)) ? ClassX.get : classY.get;";
     // should return first '(' after ClassQ.isEmpty, because there is no potential import between

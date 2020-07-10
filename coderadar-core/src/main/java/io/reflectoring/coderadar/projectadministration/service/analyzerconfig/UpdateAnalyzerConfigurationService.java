@@ -52,9 +52,9 @@ public class UpdateAnalyzerConfigurationService implements UpdateAnalyzerConfigu
         analyzerConfiguration.setEnabled(command.isEnabled());
         updateAnalyzerConfigurationPort.update(analyzerConfiguration);
         logger.info(
-            String.format(
-                "Updated analyzerConfiguration with id %d for project with id %d",
-                analyzerConfiguration.getId(), projectId));
+            "Updated analyzerConfiguration with id {} for project with id {}",
+            analyzerConfiguration.getId(),
+            projectId);
       } else {
         throw new AnalyzerConfigurationException(
             "An analyzer with this name is already configured for the project!");

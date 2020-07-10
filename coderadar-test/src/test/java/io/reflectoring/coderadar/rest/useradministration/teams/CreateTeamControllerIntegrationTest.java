@@ -29,7 +29,6 @@ class CreateTeamControllerIntegrationTest extends ControllerTestTemplate {
 
   @BeforeEach
   void setUp() {
-    userRepository.deleteAll();
     testUser = new UserEntity();
     testUser.setUsername("username");
     testUser.setPassword(PasswordUtil.hash("password1"));

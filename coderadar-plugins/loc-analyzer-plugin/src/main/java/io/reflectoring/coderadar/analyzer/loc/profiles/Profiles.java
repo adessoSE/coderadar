@@ -5,11 +5,13 @@ import java.util.Map;
 
 public class Profiles {
 
-  private static final Map<String, LocProfile> PROFILES = new HashMap<>();
+  private Profiles() {}
+
+  private static final Map<String, LocProfile> LOC_PROFILES = new HashMap<>();
 
   static {
-    PROFILES.put(".java", new JavaLocProfile());
-    PROFILES.put(".xml", new XmlLocProfile());
+    LOC_PROFILES.put(".java", new JavaLocProfile());
+    LOC_PROFILES.put(".xml", new XmlLocProfile());
   }
 
   public static LocProfile getForFile(String file) {
@@ -20,6 +22,6 @@ public class Profiles {
     }
 
     String fileEnding = file.substring(lastDotIndex);
-    return PROFILES.get(fileEnding);
+    return LOC_PROFILES.get(fileEnding);
   }
 }

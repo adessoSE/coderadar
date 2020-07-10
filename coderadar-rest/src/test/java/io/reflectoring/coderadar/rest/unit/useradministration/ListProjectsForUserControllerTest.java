@@ -32,14 +32,13 @@ class ListProjectsForUserControllerTest extends UnitTestTemplate {
     ResponseEntity<List<GetProjectResponse>> response = testController.listProjectsForUser(1L);
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     Assertions.assertNotNull(response.getBody());
-    Assertions.assertEquals(1L, response.getBody().size());
+    Assertions.assertEquals(1, response.getBody().size());
     Assertions.assertEquals(2L, response.getBody().get(0).getId());
     Assertions.assertEquals("TestProject1", response.getBody().get(0).getName());
   }
 
   @Test
-  void testListProjectsForUserThrowsWhenUserNotFound() { // TODO: Exception is caught by the
-    // ExceptionHandler, is this test needed?
+  void testListProjectsForUserThrowsWhenUserNotFound() {
     Mockito.when(listProjectsForUserUseCase.listProjects(1L))
         .thenThrow(new UserNotFoundException(1L));
     Assertions.assertThrows(

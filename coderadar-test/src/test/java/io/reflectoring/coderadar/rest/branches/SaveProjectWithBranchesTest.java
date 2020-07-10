@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-public class SaveProjectWithBranchesTest extends ControllerTestTemplate {
+class SaveProjectWithBranchesTest extends ControllerTestTemplate {
   @Autowired private CommitRepository commitRepository;
   @Autowired private BranchRepository branchRepository;
 
@@ -34,7 +34,7 @@ public class SaveProjectWithBranchesTest extends ControllerTestTemplate {
         .andExpect(MockMvcResultMatchers.status().isCreated())
         .andDo(
             result -> {
-              Long id =
+              long id =
                   fromJson(result.getResponse().getContentAsString(), IdResponse.class).getId();
               List<BranchEntity> branches = branchRepository.getBranchesInProjectSortedByName(id);
               Assertions.assertEquals(3L, branches.size());

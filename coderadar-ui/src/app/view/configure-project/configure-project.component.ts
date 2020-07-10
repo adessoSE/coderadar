@@ -18,6 +18,23 @@ export interface DialogData {
 }
 
 @Component({
+  selector: 'app-dialog-overview-example-dialog',
+  templateUrl: 'app-merge-dialog.html',
+})
+export class MergeDialogComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<MergeDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+
+
+@Component({
   selector: 'app-configure-project',
   templateUrl: './configure-project.component.html',
   styleUrls: ['./configure-project.component.scss']
@@ -43,7 +60,8 @@ export class ConfigureProjectComponent implements OnInit {
   moduleExists = false;
 
   constructor(private snackBar: MatSnackBar, private router: Router, private userService: UserService, private titleService: Title,
-              private projectService: ProjectService, private contributorService: ContributorService, private route: ActivatedRoute, public dialog: MatDialog) {
+              private projectService: ProjectService, private contributorService: ContributorService,
+              private route: ActivatedRoute, public dialog: MatDialog) {
     this.projectName = '';
     this.filePatternIncludeInput = '';
     this.filePatternExcludeInput = '';
@@ -374,20 +392,4 @@ export class ConfigureProjectComponent implements OnInit {
       this.selectedContributors.push(c);
     }
   }
-}
-
-@Component({
-  selector: 'app-dialog-overview-example-dialog',
-  templateUrl: 'app-merge-dialog.html',
-})
-export class MergeDialogComponent {
-
-  constructor(
-    public dialogRef: MatDialogRef<MergeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
 }

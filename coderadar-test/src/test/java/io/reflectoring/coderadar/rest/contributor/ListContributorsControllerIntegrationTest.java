@@ -22,7 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultHandler;
 
-public class ListContributorsControllerIntegrationTest extends ControllerTestTemplate {
+class ListContributorsControllerIntegrationTest extends ControllerTestTemplate {
 
   private long projectId;
 
@@ -49,7 +49,7 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
   }
 
   @Test
-  public void listContributors() throws Exception {
+  void listContributors() throws Exception {
     MvcResult result =
         mvc()
             .perform(
@@ -68,7 +68,7 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
   }
 
   @Test
-  public void listContributorsForFile() throws Exception {
+  void listContributorsForFile() throws Exception {
     GetContributorsForPathCommand command =
         new GetContributorsForPathCommand(
             "GetMetricsForCommitCommand.java", "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382");
@@ -98,7 +98,7 @@ public class ListContributorsControllerIntegrationTest extends ControllerTestTem
   }
 
   @Test
-  public void listContributorsForDirectory() throws Exception {
+  void listContributorsForDirectory() throws Exception {
     GetContributorsForPathCommand command =
         new GetContributorsForPathCommand(
             "testModule1", "e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382");

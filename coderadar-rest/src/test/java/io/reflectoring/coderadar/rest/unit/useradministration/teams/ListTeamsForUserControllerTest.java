@@ -31,12 +31,16 @@ class ListTeamsForUserControllerTest extends UnitTestTemplate {
     Mockito.when(listTeamsForUserUseCase.listTeamsForUser(5L))
         .thenReturn(
             Arrays.asList(
-                new Team().setId(1L).setName("TestTeam1"),
+                new Team()
+                    .setId(1L)
+                    .setName("TestTeam1")
+                    .setMembers(
+                        Collections.singletonList(new User().setId(5L).setUsername("TestUser1"))),
                 new Team()
                     .setId(2L)
                     .setName("TestTeam2")
                     .setMembers(
-                        Collections.singletonList(new User().setId(3L).setUsername("TestUser1")))));
+                        Collections.singletonList(new User().setId(5L).setUsername("TestUser1")))));
   }
 
   @Test
@@ -48,13 +52,18 @@ class ListTeamsForUserControllerTest extends UnitTestTemplate {
     Assertions.assertEquals(2, responseEntity.getBody().size());
     Assertions.assertEquals(1L, responseEntity.getBody().get(0).getId());
     Assertions.assertEquals("TestTeam1", responseEntity.getBody().get(0).getName());
+    Assertions.assertNotNull(responseEntity.getBody().get(0).getMembers());
+    Assertions.assertEquals(1, responseEntity.getBody().get(0).getMembers().size());
+    Assertions.assertEquals(5L, responseEntity.getBody().get(0).getMembers().get(0).getId());
+    Assertions.assertEquals(
+        "TestUser1", responseEntity.getBody().get(0).getMembers().get(0).getUsername());
 
     Assertions.assertEquals(2L, responseEntity.getBody().get(1).getId());
     Assertions.assertEquals("TestTeam2", responseEntity.getBody().get(1).getName());
 
     Assertions.assertNotNull(responseEntity.getBody().get(1).getMembers());
     Assertions.assertEquals(1, responseEntity.getBody().get(1).getMembers().size());
-    Assertions.assertEquals(3L, responseEntity.getBody().get(1).getMembers().get(0).getId());
+    Assertions.assertEquals(5L, responseEntity.getBody().get(1).getMembers().get(0).getId());
     Assertions.assertEquals(
         "TestUser1", responseEntity.getBody().get(1).getMembers().get(0).getUsername());
   }
