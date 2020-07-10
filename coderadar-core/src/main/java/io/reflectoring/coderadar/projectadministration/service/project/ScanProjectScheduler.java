@@ -10,8 +10,9 @@ import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.branch.DeleteBranchPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBranchesPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
@@ -19,12 +20,11 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.ListP
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
+import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,29 +46,30 @@ public class ScanProjectScheduler {
   private final GetProjectPort getProjectPort;
   private final ListModulesOfProjectUseCase listModulesOfProjectUseCase;
   private final CreateModulePort createModulePort;
-  private final AddCommitsPort addCommitsPort;
+  private final UpdateCommitsPort updateCommitsPort;
   private final DeleteModulePort deleteModulePort;
   private final TaskExecutor taskExecutor;
   private final DeleteBranchPort deleteBranchPort;
+  private final GetAvailableBranchesPort getAvailableBranchesPort;
 
   private static final Logger logger = LoggerFactory.getLogger(ScanProjectScheduler.class);
 
   private Map<Long, ScheduledFuture<?>> tasks = new HashMap<>();
 
   public ScanProjectScheduler(
-      UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase,
-      CoderadarConfigurationProperties coderadarConfigurationProperties,
-      ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
-      ListProjectsPort listProjectsPort,
-      ProjectStatusPort projectStatusPort,
-      TaskScheduler taskScheduler,
-      GetProjectPort getProjectPort,
-      ListModulesOfProjectUseCase listModulesOfProjectUseCase,
-      CreateModulePort createModulePort,
-      AddCommitsPort addCommitsPort,
-      DeleteModulePort deleteModulePort,
-      TaskExecutor taskExecutor,
-      DeleteBranchPort deleteBranchPort) {
+          UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase,
+          CoderadarConfigurationProperties coderadarConfigurationProperties,
+          ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
+          ListProjectsPort listProjectsPort,
+          ProjectStatusPort projectStatusPort,
+          TaskScheduler taskScheduler,
+          GetProjectPort getProjectPort,
+          ListModulesOfProjectUseCase listModulesOfProjectUseCase,
+          CreateModulePort createModulePort,
+          UpdateCommitsPort updateCommitsPort,
+          DeleteModulePort deleteModulePort,
+          TaskExecutor taskExecutor,
+          DeleteBranchPort deleteBranchPort, GetAvailableBranchesPort getAvailableBranchesPort) {
     this.updateLocalRepositoryUseCase = updateLocalRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
@@ -78,10 +79,11 @@ public class ScanProjectScheduler {
     this.getProjectPort = getProjectPort;
     this.listModulesOfProjectUseCase = listModulesOfProjectUseCase;
     this.createModulePort = createModulePort;
-    this.addCommitsPort = addCommitsPort;
+    this.updateCommitsPort = updateCommitsPort;
     this.deleteModulePort = deleteModulePort;
     this.taskExecutor = taskExecutor;
     this.deleteBranchPort = deleteBranchPort;
+    this.getAvailableBranchesPort = getAvailableBranchesPort;
   }
 
   /** Starts the scheduleCheckTask tasks upon application start */
@@ -174,7 +176,7 @@ public class ScanProjectScheduler {
 
         List<Commit> commits =
             extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
-        addCommitsPort.addCommits(project.getId(), commits, updatedBranches);
+        updateCommitsPort.updateCommits(project.getId(), commits, updatedBranches);
 
         // Re-create the modules
         for (Module module : modules) {

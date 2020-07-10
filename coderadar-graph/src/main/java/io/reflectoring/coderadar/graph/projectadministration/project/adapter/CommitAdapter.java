@@ -2,6 +2,8 @@ package io.reflectoring.coderadar.graph.projectadministration.project.adapter;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.analyzer.repository.FileRepository;
+import io.reflectoring.coderadar.graph.analyzer.repository.MetricRepository;
+import io.reflectoring.coderadar.graph.projectadministration.ForceUpdateChecker;
 import io.reflectoring.coderadar.graph.projectadministration.branch.repository.BranchRepository;
 import io.reflectoring.coderadar.graph.projectadministration.domain.CommitEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.FileEntity;
@@ -11,17 +13,19 @@ import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.File;
 import io.reflectoring.coderadar.projectadministration.domain.FileToCommitRelationship;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.SaveCommitPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import java.util.*;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
+public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   private final ProjectRepository projectRepository;
   private final FileRepository fileRepository;
   private final CommitRepository commitRepository;
   private final BranchRepository branchRepository;
+  private final MetricRepository metricRepository;
+  private final ForceUpdateChecker forceUpdateChecker;
   private final CommitBaseDataMapper commitBaseDataMapper = new CommitBaseDataMapper();
   private final FileBaseDataMapper fileBaseDataMapper = new FileBaseDataMapper();
 
@@ -29,11 +33,15 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
       CommitRepository commitRepository,
       ProjectRepository projectRepository,
       FileRepository fileRepository,
-      BranchRepository branchRepository) {
+      BranchRepository branchRepository,
+      MetricRepository metricRepository,
+      ForceUpdateChecker forceUpdateChecker) {
     this.projectRepository = projectRepository;
     this.fileRepository = fileRepository;
     this.commitRepository = commitRepository;
     this.branchRepository = branchRepository;
+    this.metricRepository = metricRepository;
+    this.forceUpdateChecker = forceUpdateChecker;
   }
 
   @Override
@@ -270,8 +278,7 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
     return rels;
   }
 
-  @Override
-  public void addCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
+  private void addCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
 
     // Get all of the existing commits and save them in a map
     Map<String, CommitEntity> walkedCommits = new HashMap<>();
@@ -356,5 +363,34 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
   @Override
   public void setCommitsWithIDsAsAnalyzed(List<Long> commitIds) {
     commitRepository.setCommitsWithIDsAsAnalyzed(commitIds);
+  }
+
+  @Override
+  public void updateCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
+    Set<String> newCommitHashes = new HashSet<>(commits.size());
+    commits.forEach(c -> newCommitHashes.add(c.getName()));
+
+    List<CommitEntity> unreachableCommits = Collections.emptyList();
+    for (Branch branch : updatedBranches) {
+      if (branchRepository.branchExistsInProject(projectId, branch.getName())) {
+        unreachableCommits = forceUpdateChecker.getUnreachableCommits(projectId, newCommitHashes);
+        break;
+      }
+    }
+    if (!unreachableCommits.isEmpty()) {
+      System.out.println("Force update occured!!!!");
+      deleteCommits(projectId, updatedBranches, unreachableCommits);
+    }
+    addCommits(projectId, commits, updatedBranches);
+  }
+
+  private void deleteCommits(
+      long projectId, List<Branch> updatedBranches, List<CommitEntity> unreachableCommits) {
+    unreachableCommits.forEach(
+        commitEntity -> {
+          metricRepository.deleteMetricsForCommit(commitEntity.getId());
+          commitRepository.deleteCommitAndAddedOrRenamedFiles(commitEntity.getId());
+        });
+    setBranchPointers(projectId, updatedBranches);
   }
 }
