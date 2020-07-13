@@ -12,7 +12,6 @@ import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.branch.DeleteBranchPort;
-import io.reflectoring.coderadar.projectadministration.port.driven.branch.ListBranchesPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
@@ -57,19 +56,20 @@ public class ScanProjectScheduler {
   private Map<Long, ScheduledFuture<?>> tasks = new HashMap<>();
 
   public ScanProjectScheduler(
-          UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase,
-          CoderadarConfigurationProperties coderadarConfigurationProperties,
-          ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
-          ListProjectsPort listProjectsPort,
-          ProjectStatusPort projectStatusPort,
-          TaskScheduler taskScheduler,
-          GetProjectPort getProjectPort,
-          ListModulesOfProjectUseCase listModulesOfProjectUseCase,
-          CreateModulePort createModulePort,
-          UpdateCommitsPort updateCommitsPort,
-          DeleteModulePort deleteModulePort,
-          TaskExecutor taskExecutor,
-          DeleteBranchPort deleteBranchPort, GetAvailableBranchesPort getAvailableBranchesPort) {
+      UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase,
+      CoderadarConfigurationProperties coderadarConfigurationProperties,
+      ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
+      ListProjectsPort listProjectsPort,
+      ProjectStatusPort projectStatusPort,
+      TaskScheduler taskScheduler,
+      GetProjectPort getProjectPort,
+      ListModulesOfProjectUseCase listModulesOfProjectUseCase,
+      CreateModulePort createModulePort,
+      UpdateCommitsPort updateCommitsPort,
+      DeleteModulePort deleteModulePort,
+      TaskExecutor taskExecutor,
+      DeleteBranchPort deleteBranchPort,
+      GetAvailableBranchesPort getAvailableBranchesPort) {
     this.updateLocalRepositoryUseCase = updateLocalRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
@@ -148,7 +148,7 @@ public class ScanProjectScheduler {
     tasks.remove(projectId);
   }
 
-  private void checkForNewCommits(Project project) {
+  public void checkForNewCommits(Project project) {
     try {
       String localDir =
           coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName();
