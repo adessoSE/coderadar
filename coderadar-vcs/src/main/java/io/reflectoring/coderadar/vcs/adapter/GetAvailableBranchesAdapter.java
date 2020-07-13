@@ -26,7 +26,10 @@ public class GetAvailableBranchesAdapter implements GetAvailableBranchesPort {
 
   private List<Branch> getBranches(Git git) throws GitAPIException {
     List<Branch> result = new ArrayList<>();
-    for (Ref ref : git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call()) {
+    List<Ref> refs = new ArrayList<>();
+    refs.addAll(git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call());
+    refs.addAll(git.tagList().call());
+    for (Ref ref : refs) {
       String[] branchName = ref.getName().split("/");
       int length = branchName.length;
       String truncatedName = branchName[length - 1];
@@ -34,6 +37,7 @@ public class GetAvailableBranchesAdapter implements GetAvailableBranchesPort {
         result.add(new Branch().setName(truncatedName).setCommitHash(ref.getObjectId().getName()));
       }
     }
+
     return result;
   }
 }

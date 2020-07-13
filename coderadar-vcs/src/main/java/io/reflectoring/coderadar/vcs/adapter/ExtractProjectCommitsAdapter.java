@@ -36,6 +36,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    */
   public List<Commit> extractCommits(String repositoryRoot, DateRange range) {
     try (Git git = Git.open(new java.io.File(repositoryRoot))) {
+
       List<Commit> result = getCommits(range, repositoryRoot);
       setCommitsFiles(git, result);
       return result;
