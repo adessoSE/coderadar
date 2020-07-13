@@ -378,7 +378,6 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       }
     }
     if (!unreachableCommits.isEmpty()) {
-      System.out.println("Force update occured!!!!");
       deleteCommits(projectId, updatedBranches, unreachableCommits);
     }
     addCommits(projectId, commits, updatedBranches);

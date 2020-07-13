@@ -48,8 +48,13 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
       try (RevWalk revWalk = new RevWalk(git.getRepository())) {
         commit = revWalk.parseCommit(commitId);
       }
-      RevCommit firstParent = commit.getParent(0);
-      byte[] fpRawContent = BlobUtils.getRawContent(git.getRepository(), firstParent, filepath);
+      byte[] fpRawContent;
+      if (commit.getParentCount() > 0) {
+        fpRawContent = BlobUtils.getRawContent(git.getRepository(), commit.getParent(0), filepath);
+      } else {
+        fpRawContent = new byte[] {'\n'};
+      }
+
       RawText rt1;
       if (fpRawContent != null) {
         rt1 = new RawText(fpRawContent);
