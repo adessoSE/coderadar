@@ -217,20 +217,20 @@ export class ListViewComponent implements OnInit, OnChanges {
     this.showCommitsInRange();
     let selectedCommit1Id = null;
     if (this.selectedCommit1 !== null && this.selectedCommit1 !== undefined) {
-      selectedCommit1Id = this.selectedCommit1.name;
+      selectedCommit1Id = this.selectedCommit1.hash;
     }
     let selectedCommit2Id = null;
     if (this.selectedCommit2 !== null && this.selectedCommit2 !== undefined) {
-      selectedCommit2Id = this.selectedCommit2.name;
+      selectedCommit2Id = this.selectedCommit2.hash;
     }
     if (this.commitsAnalyzed > 0) {
       this.store.dispatch(loadAvailableMetrics());
     }
     if (selectedCommit1Id != null) {
-      this.selectedCommit1 = this.commitsFiltered.find(value => value.name === selectedCommit1Id);
+      this.selectedCommit1 = this.commitsFiltered.find(value => value.hash === selectedCommit1Id);
     }``
     if (selectedCommit2Id != null) {
-      this.selectedCommit2 = this.commitsFiltered.find(value => value.name === selectedCommit2Id);
+      this.selectedCommit2 = this.commitsFiltered.find(value => value.hash === selectedCommit2Id);
     }
   }
 

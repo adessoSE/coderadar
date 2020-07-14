@@ -1,6 +1,6 @@
 <app-header [title]="
 [{location: '/dashboard', name: 'Dashboard'}, {location: '/project/' + project.id,
-name: appComponent.trimProjectName(project.name)}, {location: '/project/' + project.id + '/' + commit.name, name: commit.name.substring(0, 7)}]">
+name: appComponent.trimProjectName(project.name)}, {location: '/project/' + project.id + '/' + commit.hash, name: commit.hash.substring(0, 7)}]">
 </app-header>
 
 <div *ngIf="waiting" class="dark-overlay">
@@ -11,7 +11,7 @@ name: appComponent.trimProjectName(project.name)}, {location: '/project/' + proj
 
   <mat-card>
     <mat-card-content class="mat-card-content">
-      <mat-label><b>{{commit.name}}</b></mat-label>
+      <mat-label><b>{{commit.hash}}</b></mat-label>
       <br><br>
       <mat-label><b>Metrics:</b></mat-label>
       <br><br>
