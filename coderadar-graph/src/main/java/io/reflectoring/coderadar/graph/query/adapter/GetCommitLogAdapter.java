@@ -47,7 +47,7 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
 
       CommitLog commitLog =
           new CommitLog()
-              .setHash(commit.getName())
+              .setHash(commit.getHash())
               .setSubject(
                   commit.getComment().substring(0, Math.min(100, commit.getComment().length())))
               .setAuthor(author)
@@ -60,7 +60,7 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
         commitLog.setParents(new String[0]);
       }
 
-      List<String> refsOnCommit = commitToRefMap.get(commit.getName());
+      List<String> refsOnCommit = commitToRefMap.get(commit.getHash());
       if (refsOnCommit != null) {
         commitLog.setRefs(refsOnCommit);
       }

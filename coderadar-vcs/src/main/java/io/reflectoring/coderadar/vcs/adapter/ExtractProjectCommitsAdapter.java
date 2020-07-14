@@ -80,7 +80,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
 
   private Commit mapRevCommitToCommit(RevCommit rc) {
     Commit commit = new Commit();
-    commit.setName(rc.getName());
+    commit.setHash(rc.getName());
     PersonIdent personIdent = rc.getAuthorIdent();
     commit.setAuthor(personIdent.getName());
     commit.setAuthorEmail(personIdent.getEmailAddress());
@@ -99,7 +99,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   private long setFirstCommitFiles(Git git, Commit firstCommit, HashMap<String, List<File>> files)
       throws IOException {
     long sequenceId = 0;
-    RevCommit gitCommit = findCommit(git, firstCommit.getName());
+    RevCommit gitCommit = findCommit(git, firstCommit.getHash());
     try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
       assert gitCommit != null;
       treeWalk.setRecursive(true);
@@ -140,7 +140,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
     diffFormatter.setDetectRenames(true);
     for (int i = 1; i < commitsSize; i++) {
-      RevCommit gitCommit = findCommit(git, commits.get(i).getName());
+      RevCommit gitCommit = findCommit(git, commits.get(i).getHash());
       if (gitCommit != null && gitCommit.getParentCount() > 0) {
         List<DiffEntry> diffs =
             new ArrayList<>(diffFormatter.scan(gitCommit.getParent(0), gitCommit));

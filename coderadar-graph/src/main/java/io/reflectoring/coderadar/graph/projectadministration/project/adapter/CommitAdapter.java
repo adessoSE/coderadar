@@ -284,11 +284,11 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
     Map<String, CommitEntity> walkedCommits = new HashMap<>();
     IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>();
     for (CommitEntity c : commitRepository.findByProjectId(projectId)) {
-      walkedCommits.put(c.getName(), c);
+      walkedCommits.put(c.getHash(), c);
     }
 
     // Remove any already existing commits from the new commits passed into this method
-    commits.removeIf(commit -> walkedCommits.containsKey(commit.getName()));
+    commits.removeIf(commit -> walkedCommits.containsKey(commit.getHash()));
     commits.sort(Comparator.comparingLong(Commit::getTimestamp));
 
     // We'll save the newly added commits in this list
@@ -298,10 +298,10 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
       CommitEntity commitEntity = commitBaseDataMapper.mapDomainObject(commit);
       List<CommitEntity> parents = new ArrayList<>(commit.getParents().size());
       for (Commit parent : commit.getParents()) {
-        parents.add(walkedCommits.get(parent.getName()));
+        parents.add(walkedCommits.get(parent.getHash()));
       }
       commitEntity.setParents(parents);
-      walkedCommits.put(commitEntity.getName(), commitEntity);
+      walkedCommits.put(commitEntity.getHash(), commitEntity);
 
       List<FileToCommitRelationshipEntity> fileToCommitRelationships =
           new ArrayList<>(commit.getTouchedFiles().size());
@@ -368,7 +368,7 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   @Override
   public void updateCommits(long projectId, List<Commit> commits, List<Branch> updatedBranches) {
     Set<String> newCommitHashes = new HashSet<>(commits.size());
-    commits.forEach(c -> newCommitHashes.add(c.getName()));
+    commits.forEach(c -> newCommitHashes.add(c.getHash()));
 
     List<CommitEntity> unreachableCommits = Collections.emptyList();
     for (Branch branch : updatedBranches) {

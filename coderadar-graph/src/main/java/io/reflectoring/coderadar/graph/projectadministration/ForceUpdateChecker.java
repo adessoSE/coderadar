@@ -19,7 +19,7 @@ public class ForceUpdateChecker {
     List<CommitEntity> unreachableCommits = new ArrayList<>();
     List<CommitEntity> commits = commitRepository.findByProjectId(projectId);
     for (CommitEntity commit : commits) {
-      if (!newCommitHashes.contains(commit.getName())) {
+      if (!newCommitHashes.contains(commit.getHash())) {
         unreachableCommits.add(commit);
       }
     }
