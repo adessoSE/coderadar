@@ -59,7 +59,8 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
   private void setBranchPointers(long projectId, List<Branch> branches) {
     for (Branch branch : branches) {
       if (!branchRepository.branchExistsInProject(projectId, branch.getName())) {
-        branchRepository.setBranchOnCommit(projectId, branch.getCommitHash(), branch.getName());
+        branchRepository.setBranchOnCommit(
+            projectId, branch.getCommitHash(), branch.getName(), branch.isTag());
       } else {
         branchRepository.moveBranchToCommit(projectId, branch.getName(), branch.getCommitHash());
       }

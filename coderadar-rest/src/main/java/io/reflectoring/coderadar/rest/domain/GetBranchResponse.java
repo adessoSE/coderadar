@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class GetBranchResponse {
   private String name;
   private String commitHash;
+  private boolean isTag;
 }

@@ -32,9 +32,10 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
    */
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.hash = {1} WITH c, p LIMIT 1 "
-          + "CREATE (b:BranchEntity {name: {2}, commitHash: {1}})-[:POINTS_TO]->(c) WITH b, p "
+          + "CREATE (b:BranchEntity {name: {2}, commitHash: {1}, isTag: {3}})-[:POINTS_TO]->(c) WITH b, p "
           + "CREATE (p)-[:HAS_BRANCH]->(b)")
-  void setBranchOnCommit(long projectId, @NonNull String commitHash, @NonNull String branchName);
+  void setBranchOnCommit(
+      long projectId, @NonNull String commitHash, @NonNull String branchName, boolean isTag);
 
   /**
    * @param projectId The id of the project.

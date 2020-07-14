@@ -34,10 +34,21 @@ public class GetAvailableBranchesAdapter implements GetAvailableBranchesPort {
       int length = branchName.length;
       String truncatedName = branchName[length - 1];
       if (result.stream().noneMatch(branch -> branch.getName().equals(truncatedName))) {
-        result.add(new Branch().setName(truncatedName).setCommitHash(ref.getObjectId().getName()));
+        if (branchName[length - 2].equals("tags")) { // TODO: is this always correct?
+          result.add(
+              new Branch()
+                  .setName(truncatedName)
+                  .setCommitHash(ref.getObjectId().getName())
+                  .setTag(true));
+        } else {
+          result.add(
+              new Branch()
+                  .setName(truncatedName)
+                  .setCommitHash(ref.getObjectId().getName())
+                  .setTag(false));
+        }
       }
     }
-
     return result;
   }
 }

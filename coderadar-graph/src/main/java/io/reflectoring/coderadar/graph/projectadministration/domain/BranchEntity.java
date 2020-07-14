@@ -12,4 +12,5 @@ public class BranchEntity {
   private Long id;
   private String name;
   private String commitHash;
+  private boolean isTag;
 }
