@@ -7,9 +7,20 @@
   <mat-form-field class="branchSelector">
     <mat-label>Branch</mat-label>
     <mat-select (valueChange)="branchOutput.emit($event)" [(value)]="selectedBranch">
-      <mat-option *ngFor="let branch of branches" [value]="branch.name">
-        {{branch.name}}
-      </mat-option>
+      <mat-optgroup label="Branches">
+        <ng-container *ngFor="let branch of branches">
+          <mat-option *ngIf="!branch.isTag"  [value]="branch.name">
+            {{branch.name}}
+          </mat-option>
+        </ng-container>
+      </mat-optgroup>
+      <mat-optgroup label="Tags">
+        <ng-container *ngFor="let branch of branches">
+          <mat-option *ngIf="branch.isTag"  [value]="branch.name">
+            {{branch.name}}
+          </mat-option>
+        </ng-container>
+      </mat-optgroup>
     </mat-select>
   </mat-form-field>
 

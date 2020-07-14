@@ -104,9 +104,19 @@
                 <mat-label>Branches:</mat-label>
               </div>
               <div *ngFor="let branch of branches">
-                <span><strong>{{branch.name}}</strong></span>
+                <span *ngIf="!branch.isTag"><strong>{{branch.name}}</strong></span>
               </div>
             </div>
+
+          <!--Project tags-->
+          <div class="list">
+            <div class="list-title">
+              <mat-label>Tags:</mat-label>
+            </div>
+            <div *ngFor="let branch of branches">
+              <span *ngIf="branch.isTag"><strong>{{branch.name}}</strong></span>
+            </div>
+          </div>
 
           <!--Cancel and submit buttons-->
           <div align="center" id="cardButtons">
