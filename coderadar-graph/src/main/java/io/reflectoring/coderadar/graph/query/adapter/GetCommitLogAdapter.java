@@ -33,7 +33,11 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
       String commitName = ref.getCommitHash();
       List<String> refNames = commitToRefMap.computeIfAbsent(commitName, k -> new ArrayList<>());
       if (!refNames.contains(ref.getName())) {
-        refNames.add(ref.getName());
+        if (ref.isTag()) {
+          refNames.add("tag: " + ref.getName());
+        } else {
+          refNames.add(ref.getName());
+        }
       }
     }
     for (LinkedHashMap<String, Object> commitWithParents : commits) {

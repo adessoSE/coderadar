@@ -255,4 +255,8 @@ export class ListViewComponent implements OnInit, OnChanges {
     }
     this.commitsAnalyzed = this.commitsFiltered.filter(value => value.analyzed).length;
   }
+
+  hasTags() {
+    return this.branches !== undefined && this.branches.filter(b => b.isTag).length > 0;
+  }
 }

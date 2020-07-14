@@ -87,7 +87,7 @@
             </div>
                 </mat-card-content>
             <!--Project contributors-->
-            <div class="list">
+            <div class="list" *ngIf="contributors.length > 0">
               <div class="list-title">
                 <mat-label>Project contributors:</mat-label>
               </div>
@@ -99,7 +99,7 @@
               <button *ngIf="selectedContributors.length > 1" mat-raised-button style="margin: 10px" (click)="openDialog()">Merge</button>
             </div>
             <!--Project branches-->
-            <div class="list">
+            <div class="list" *ngIf="branches.length > 0">
               <div class="list-title">
                 <mat-label>Branches:</mat-label>
               </div>
@@ -109,7 +109,7 @@
             </div>
 
           <!--Project tags-->
-          <div class="list">
+          <div class="list" *ngIf="hasTags()">
             <div class="list-title">
               <mat-label>Tags:</mat-label>
             </div>

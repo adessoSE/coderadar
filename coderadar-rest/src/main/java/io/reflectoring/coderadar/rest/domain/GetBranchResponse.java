@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.rest.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -22,7 +21,7 @@ public class GetBranchResponse {
     return commitHash;
   }
 
-  @JsonProperty(value="isTag")
+  @JsonProperty(value = "isTag")
   public boolean isTag() {
     return isTag;
   }
