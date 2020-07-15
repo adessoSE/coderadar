@@ -19,7 +19,6 @@ import io.reflectoring.coderadar.projectadministration.port.driven.project.ListP
 import io.reflectoring.coderadar.projectadministration.port.driven.project.ProjectStatusPort;
 import io.reflectoring.coderadar.projectadministration.port.driver.module.get.ListModulesOfProjectUseCase;
 import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
-import io.reflectoring.coderadar.vcs.port.driven.GetAvailableBranchesPort;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
@@ -49,7 +48,6 @@ public class ScanProjectScheduler {
   private final DeleteModulePort deleteModulePort;
   private final TaskExecutor taskExecutor;
   private final DeleteBranchPort deleteBranchPort;
-  private final GetAvailableBranchesPort getAvailableBranchesPort;
 
   private static final Logger logger = LoggerFactory.getLogger(ScanProjectScheduler.class);
 
@@ -68,8 +66,7 @@ public class ScanProjectScheduler {
       UpdateCommitsPort updateCommitsPort,
       DeleteModulePort deleteModulePort,
       TaskExecutor taskExecutor,
-      DeleteBranchPort deleteBranchPort,
-      GetAvailableBranchesPort getAvailableBranchesPort) {
+      DeleteBranchPort deleteBranchPort) {
     this.updateLocalRepositoryUseCase = updateLocalRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
@@ -83,7 +80,6 @@ public class ScanProjectScheduler {
     this.deleteModulePort = deleteModulePort;
     this.taskExecutor = taskExecutor;
     this.deleteBranchPort = deleteBranchPort;
-    this.getAvailableBranchesPort = getAvailableBranchesPort;
   }
 
   /** Starts the scheduleCheckTask tasks upon application start */
