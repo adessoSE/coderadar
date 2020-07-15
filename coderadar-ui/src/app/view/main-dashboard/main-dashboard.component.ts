@@ -87,7 +87,7 @@ export class MainDashboardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
-        for (const team of result.teams) { // TODO: Check if project is already in team
+        for (const team of result.teams) {
           this.teamService.addTeamToProject(project.id, team.id, result.role);
         }
       }
@@ -127,7 +127,7 @@ export class MainDashboardComponent implements OnInit {
     this.teamService.listTeamsForUser(UserService.getLoggedInUser().userId).then(value =>
       this.teams = value.body
     ) .catch(e => {
-      if (e.status && e.status === FORBIDDEN) { // TODO: UNAUTHORIZED
+      if (e.status && e.status === FORBIDDEN) {
         this.userService.refresh(() => this.getTeams());
       }
     });
