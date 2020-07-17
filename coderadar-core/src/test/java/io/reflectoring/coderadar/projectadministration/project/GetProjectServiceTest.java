@@ -7,6 +7,8 @@ import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.service.project.GetProjectService;
 import java.util.Date;
+
+import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,11 +20,13 @@ class GetProjectServiceTest {
 
   @Mock private GetProjectPort getProjectPortMock;
 
+  @Mock private GetUserPort getUserPort;
+
   private GetProjectService testSubject;
 
   @BeforeEach
   void setUp() {
-    this.testSubject = new GetProjectService(getProjectPortMock);
+    this.testSubject = new GetProjectService(getProjectPortMock, getUserPort);
   }
 
   @Test

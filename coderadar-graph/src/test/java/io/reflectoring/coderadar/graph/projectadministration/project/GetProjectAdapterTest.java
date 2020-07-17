@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.adapter.GetProjectAdapter;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
+import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -15,12 +16,13 @@ import org.junit.jupiter.api.Test;
 @DisplayName("Get project")
 class GetProjectAdapterTest {
   private ProjectRepository projectRepository = mock(ProjectRepository.class);
+  private UserRepository userRepository = mock(UserRepository.class);
 
   private GetProjectAdapter getProjectAdapter;
 
   @BeforeEach
   void setUp() {
-    getProjectAdapter = new GetProjectAdapter(projectRepository);
+    getProjectAdapter = new GetProjectAdapter(projectRepository, userRepository);
   }
 
   @Test

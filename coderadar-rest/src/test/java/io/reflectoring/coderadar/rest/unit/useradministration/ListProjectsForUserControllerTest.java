@@ -3,10 +3,12 @@ package io.reflectoring.coderadar.rest.unit.useradministration;
 import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-import io.reflectoring.coderadar.rest.domain.GetProjectResponse;
+import io.reflectoring.coderadar.projectadministration.domain.ProjectWithRoles;
+import io.reflectoring.coderadar.rest.domain.ProjectWithRolesResponse;
 import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import io.reflectoring.coderadar.rest.useradministration.ListProjectsForUserController;
 import io.reflectoring.coderadar.useradministration.UserNotFoundException;
+import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.port.driver.get.ListProjectsForUserUseCase;
 import java.util.Collections;
 import java.util.List;
@@ -27,14 +29,20 @@ class ListProjectsForUserControllerTest extends UnitTestTemplate {
   void testListProjectsForUser() {
     // Set up
     Mockito.when(listProjectsForUserUseCase.listProjects(1L))
-        .thenReturn(Collections.singletonList(new Project().setName("TestProject1").setId(2L)));
+        .thenReturn(
+            Collections.singletonList(
+                new ProjectWithRoles()
+                    .setProject(new Project().setName("TestProject1").setId(2L))
+                    .setRoles(Collections.singletonList(ProjectRole.ADMIN))));
 
-    ResponseEntity<List<GetProjectResponse>> response = testController.listProjectsForUser(1L);
+    ResponseEntity<List<ProjectWithRolesResponse>> response =
+        testController.listProjectsForUser(1L);
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
     Assertions.assertNotNull(response.getBody());
     Assertions.assertEquals(1, response.getBody().size());
-    Assertions.assertEquals(2L, response.getBody().get(0).getId());
-    Assertions.assertEquals("TestProject1", response.getBody().get(0).getName());
+    Assertions.assertEquals(2L, response.getBody().get(0).getProject().getId());
+    Assertions.assertEquals("TestProject1", response.getBody().get(0).getProject().getName());
+    Assertions.assertEquals(ProjectRole.ADMIN, response.getBody().get(0).getRoles().get(0));
   }
 
   @Test

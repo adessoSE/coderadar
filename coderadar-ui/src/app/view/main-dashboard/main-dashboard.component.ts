@@ -103,19 +103,17 @@ export class MainDashboardComponent implements OnInit {
   getProjects(): void {
     this.waiting = true;
     let promise: Promise<HttpResponse<ProjectWithRoles[]>>;
-    if (this.selectedTeam == undefined) {
+    if (this.selectedTeam === undefined) {
       promise = this.projectService.listProjectsForUser(UserService.getLoggedInUser().userId);
     } else {
-      //promise = this.teamService.listProjectsForTeam(this.selectedTeam.id);
+      promise = this.teamService.listProjectsForTeamWithRolesForUser(this.selectedTeam.id,
+        UserService.getLoggedInUser().userId);
     }
     promise
       .then(response => {
         this.projects = [];
         response.body.forEach(project => {
-          console.log(project);
-
           const newProject = new Project(project.project);
-
           const projectWithRoles = new ProjectWithRoles();
         projectWithRoles.project = newProject;
         projectWithRoles.roles = project.roles;

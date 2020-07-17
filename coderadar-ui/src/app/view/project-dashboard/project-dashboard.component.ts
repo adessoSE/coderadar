@@ -37,6 +37,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   selectedContributor: Contributor = new Contributor();
   waiting = false;
   updateCommitsTimer: Subscription;
+  roles: string[] = [];
 
   constructor(private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute, private cityEffects: AppEffects,
@@ -116,10 +117,11 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
    * Gets the project from the service and saves it in this.project
    */
   private getProject(): void {
-    this.projectService.getProject(this.projectId)
+    this.projectService.getProjectWithRolesForUser(this.projectId, UserService.getLoggedInUser().userId)
       .then(response => {
-        this.project = new Project(response.body);
+        this.project = new Project(response.body.project);
         this.titleService.setTitle('Coderadar - ' + AppComponent.trimProjectName(this.project.name));
+        this.roles = response.body.roles;
       })
       .catch(error => {
         if (error.status && error.status === FORBIDDEN) {

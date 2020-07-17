@@ -30,6 +30,7 @@ export class ListViewComponent implements OnInit, OnChanges {
   commitsFiltered: Commit[];
   commitsAnalyzed;
   @Input() branches: Branch[];
+  @Input() roles: string[] = [];
   @Input() waiting: boolean;
   @Input() contributors: Contributor[];
   @Output() branchOutput = new EventEmitter();

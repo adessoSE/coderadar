@@ -43,6 +43,17 @@ export class ProjectService {
   }
 
   /**
+   * TODO
+   * Gets a project from the database.
+   * Sends a GET request to /projects/{id}
+   * @param projectId The id of the project.
+   */
+  public getProjectWithRolesForUser(projectId: number, userId: number): Promise<HttpResponse<any>> {
+    return this.httpClient.get<any>(this.apiURL + 'users/' + userId + '/projects/' + projectId,
+      {observe: 'response'}).toPromise();
+  }
+
+  /**
    * Adds a new project.
    * Sends a POST request to /projects.
    * @param project The project to add.
@@ -269,8 +280,6 @@ export class ProjectService {
   resetAnalysis(id: number) {
     return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze/reset', {}, {observe: 'response'}).toPromise();
   }
-
-
 
   /**
    * Returns all of the branches for a project.

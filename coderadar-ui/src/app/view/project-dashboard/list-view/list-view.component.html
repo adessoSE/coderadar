@@ -41,7 +41,8 @@
     <button title="Stop analysis" (click)="stopAnalysis(project.id)" style="float:right" mat-icon-button>
       <mat-icon>stop</mat-icon>
     </button>
-    <button title="Delete analysis results for all branches" (click)="resetAnalysis(project.id)" style="float:right" mat-icon-button>
+    <button title="Delete analysis results for all branches" (click)="resetAnalysis(project.id)" *ngIf="roles.includes('ADMIN')"
+            style="float:right" mat-icon-button>
       <mat-icon>clear</mat-icon>
     </button>
   </div>
