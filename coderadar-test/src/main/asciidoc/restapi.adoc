@@ -803,15 +803,18 @@ include::{snippets}/contributors/get/response-fields.adoc[]
 
 === List all contributors of a project
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/contributors/list/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/contributors/list/http-response.adoc[]
 
-=== Response Structure
+[discrete]
+==== Response Structure
 
 include::{snippets}/contributors/list/response-fields.adoc[]
 
@@ -819,18 +822,22 @@ include::{snippets}/contributors/list/response-fields.adoc[]
 
 === List all contributors for a given path
 
+[discrete]
 ==== Example Request for a File
 
 include::{snippets}/contributors/list/path/file/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/contributors/list/path/file/http-response.adoc[]
 
+[discrete]
 ==== Example Request for a Directory
 
 include::{snippets}/contributors/list/path/directory/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/contributors/list/path/directory/http-response.adoc[]
@@ -839,26 +846,31 @@ include::{snippets}/contributors/list/path/directory/http-response.adoc[]
 
 === Get single contributor
 
+[discrete]
 ==== Example request
 
 include::{snippets}/contributors/get/http-request.adoc[]
 
+[discrete]
 ==== Example response
 
 include::{snippets}/contributors/get/http-response.adoc[]
 
 
 
-=== Merge two contributors
+=== Merge contributors
 
+[discrete]
 ==== Request Structure
 
 include::{snippets}/contributors/merge/request-fields.adoc[]
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/contributors/merge/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/contributors/merge/http-response.adoc[]
@@ -867,14 +879,17 @@ include::{snippets}/contributors/merge/http-response.adoc[]
 
 === Update a Contributor
 
+[discrete]
 ==== Request Structure
 
 include::{snippets}/contributors/update/request-fields.adoc[]
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/contributors/update/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/contributors/update/http-response.adoc[]
