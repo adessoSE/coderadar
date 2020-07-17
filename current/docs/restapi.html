@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
-<meta name="author" content="v0.5.0.null, 2020-07-09">
+<meta name="author" content="v0.5.0.null, 2020-07-17">
 <title>coderadar REST API</title>
 <style>
 /* Derived from the Riak documentation theme developed by Basho Technologies, Inc. | CC BY 3.0 License | http://docs.basho.org */
@@ -2108,7 +2108,7 @@ table.tableblock.grid-all {
 <div id="header">
 <h1>coderadar REST API</h1>
 <div class="details">
-<span id="author" class="author">v0.5.0.null, 2020-07-09</span><br>
+<span id="author" class="author">v0.5.0.null, 2020-07-17</span><br>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2241,41 +2241,11 @@ table.tableblock.grid-all {
 <li><a href="#_contributors">6. Contributors</a>
 <ul class="sectlevel2">
 <li><a href="#_structure_6">6.1. Structure</a></li>
-<li><a href="#_list_all_contributors_of_a_project">6.2. List all contributors of a project</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request_40">6.2.1. Example Request</a></li>
-<li><a href="#_example_response_40">6.2.2. Example Response</a></li>
-</ul>
-</li>
-<li><a href="#_response_structure_7">6.3. Response Structure</a></li>
-<li><a href="#_list_all_contributors_for_a_given_path">6.4. List all contributors for a given path</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request_for_a_file">6.4.1. Example Request for a File</a></li>
-<li><a href="#_example_response_41">6.4.2. Example Response</a></li>
-<li><a href="#_example_request_for_a_directory">6.4.3. Example Request for a Directory</a></li>
-<li><a href="#_example_response_42">6.4.4. Example Response</a></li>
-</ul>
-</li>
-<li><a href="#_get_single_contributor">6.5. Get single contributor</a>
-<ul class="sectlevel3">
-<li><a href="#_example_request_41">6.5.1. Example request</a></li>
-<li><a href="#_example_response_43">6.5.2. Example response</a></li>
-</ul>
-</li>
-<li><a href="#_merge_two_contributors">6.6. Merge two contributors</a>
-<ul class="sectlevel3">
-<li><a href="#_request_structure_5">6.6.1. Request Structure</a></li>
-<li><a href="#_example_request_42">6.6.2. Example Request</a></li>
-<li><a href="#_example_response_44">6.6.3. Example Response</a></li>
-</ul>
-</li>
-<li><a href="#_update_a_contributor">6.7. Update a Contributor</a>
-<ul class="sectlevel3">
-<li><a href="#_request_structure_6">6.7.1. Request Structure</a></li>
-<li><a href="#_example_request_43">6.7.2. Example Request</a></li>
-<li><a href="#_example_response_45">6.7.3. Example Response</a></li>
-</ul>
-</li>
+<li><a href="#_list_all_contributors_of_a_project">6.2. List all contributors of a project</a></li>
+<li><a href="#_list_all_contributors_for_a_given_path">6.3. List all contributors for a given path</a></li>
+<li><a href="#_get_single_contributor">6.4. Get single contributor</a></li>
+<li><a href="#_merge_contributors">6.5. Merge contributors</a></li>
+<li><a href="#_update_a_contributor">6.6. Update a Contributor</a></li>
 </ul>
 </li>
 <li><a href="#_coderadar_core_metrics">7. Coderadar Core Metrics</a>
@@ -2572,8 +2542,8 @@ Content-Type: application/json
 Content-Length: 462
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTQyODMyNzQsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1OTQyODIzNzQsInVzZXJJZCI6IjIyMCIsInVzZXJuYW1lIjoidXNlcm5hbWUifQ.CVN69MvAWP7qNN56n7PvwRsAvJRh4F_JGho7PsX4BdQ",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTk0NjYzNzQsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTk0MjgyMzc0LCJ1c2VySWQiOiIyMjAiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.sC_qm23PJapgJglBOazKDFcTHaRTezSS5oliz_4C3J4"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTQ5NzU5NzcsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1OTQ5NzUwNzcsInVzZXJJZCI6IjIyMCIsInVzZXJuYW1lIjoidXNlcm5hbWUifQ.VDZmt7bhqnIIS0duYJxyBf_ohV0W9lqoJAIe7ZdB8ME",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDAxNTkwNzcsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTk0OTc1MDc3LCJ1c2VySWQiOiIyMjAiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.9lvTppbC7ELL0JViDWrL2i9eiUen0KvUBeG6Pgejygc"
 }</code></pre>
 </div>
 </div>
@@ -2625,8 +2595,8 @@ Content-Length: 448
 Host: localhost:8080
 
 {
-  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTQyODE1MzQsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1OTQyODA2MzQsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.CuELT8AEGCYByvKC1kJqF9nCgCZpinJgEW-lg2Du0_k",
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTk0NjYzNzQsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTk0MjgyMzc0LCJ1c2VySWQiOiIyMTQiLCJ1c2VybmFtZSI6InJhZGFyIn0.TQiPGh3oVR0KzYDL07mkhaPuHZBdFph8_kGnjfMF14c"
+  "accessToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTQ5NzQyMzcsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1OTQ5NzMzMzcsInVzZXJJZCI6MSwidXNlcm5hbWUiOiJyYWRhciJ9.vYJl4FOuq4PccbFplfriKgSggL2rMrA-tu9ZqCp7E2Q",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDAxNTkwNzcsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTk0OTc1MDc3LCJ1c2VySWQiOiIyMTQiLCJ1c2VybmFtZSI6InJhZGFyIn0.bskdGU3ZHEq9ATWNoZanI-mPdlbNY1xZVshDSsNURvg"
 }</code></pre>
 </div>
 </div>
@@ -2640,7 +2610,7 @@ Content-Type: application/json
 Content-Length: 221
 
 {
-  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTQyODMyNzQsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1OTQyODIzNzQsInVzZXJJZCI6IjIxNCIsInVzZXJuYW1lIjoicmFkYXIifQ.KeYqvzn29FI66vdMEUj1rUuDeQzVoLRiLr868DGrFNw"
+  "token" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTQ5NzU5NzcsInR5cGUiOiJBQ0NFU1MiLCJpYXQiOjE1OTQ5NzUwNzcsInVzZXJJZCI6IjIxNCIsInVzZXJuYW1lIjoicmFkYXIifQ.99LiwX4sXoojQ22qz8klPgHK4pSwIROxHkrr-wKH6Qg"
 }</code></pre>
 </div>
 </div>
@@ -2693,7 +2663,7 @@ Content-Length: 267
 Host: localhost:8080
 
 {
-  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE1OTk0NjYzNzUsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTk0MjgyMzc1LCJ1c2VySWQiOiIyMjQiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.b8dAt7kgvJVkSyum5laYKYM7l92YILQn-m5CGzY0g5c",
+  "refreshToken" : "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjb2RlcmFkYXIiLCJleHAiOjE2MDAxNTkwNzgsInR5cGUiOiJSRUZSRVNIIiwiaWF0IjoxNTk0OTc1MDc4LCJ1c2VySWQiOiIyMjQiLCJ1c2VybmFtZSI6InVzZXJuYW1lIn0.r5lR9rZ30ZPrw4-MAtGWOH1bGsk3gOsYxR0nt2NxjAY",
   "newPassword" : "newPassword1"
 }</code></pre>
 </div>
@@ -2931,7 +2901,7 @@ Content-Length: 438
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
   "vcsOnline" : true,
-  "startDate" : "2020-07-09T08:12:45.182+0000",
+  "startDate" : "2020-07-17T08:37:48.497+0000",
   "endDate" : null
 }, {
   "id" : 215,
@@ -2940,7 +2910,7 @@ Content-Length: 438
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
   "vcsOnline" : true,
-  "startDate" : "2020-07-09T08:12:45.182+0000",
+  "startDate" : "2020-07-17T08:37:48.497+0000",
   "endDate" : null
 } ]</code></pre>
 </div>
@@ -2964,7 +2934,7 @@ Host: localhost:8080
   "vcsPassword" : "password",
   "vcsUrl" : "http://valid.url",
   "vcsOnline" : true,
-  "startDate" : 1594282371638
+  "startDate" : 1594975074268
 }</code></pre>
 </div>
 </div>
@@ -3004,7 +2974,7 @@ Content-Length: 216
   "vcsPassword" : null,
   "vcsUrl" : "https://valid.url",
   "vcsOnline" : true,
-  "startDate" : "2020-07-09T08:12:45.508+0000",
+  "startDate" : "2020-07-17T08:37:48.879+0000",
   "endDate" : null
 }</code></pre>
 </div>
@@ -5094,8 +5064,7 @@ Content-Length: 190
 </div>
 <div class="sect2">
 <h3 id="_list_all_contributors_of_a_project"><a class="link" href="#_list_all_contributors_of_a_project">6.2. List all contributors of a project</a></h3>
-<div class="sect3">
-<h4 id="_example_request_40"><a class="link" href="#_example_request_40">6.2.1. Example Request</a></h4>
+<h4 id="_example_request_40" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/1432/contributors HTTP/1.1
@@ -5103,9 +5072,7 @@ Content-Type: application/json
 Host: localhost:8080</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_40"><a class="link" href="#_example_response_40">6.2.2. Example Response</a></h4>
+<h4 id="_example_response_40" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -5125,10 +5092,7 @@ Content-Length: 280
 } ]</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_response_structure_7"><a class="link" href="#_response_structure_7">6.3. Response Structure</a></h3>
+<h4 id="_response_structure_7" class="discrete">Response Structure</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -5172,9 +5136,8 @@ Content-Length: 280
 </table>
 </div>
 <div class="sect2">
-<h3 id="_list_all_contributors_for_a_given_path"><a class="link" href="#_list_all_contributors_for_a_given_path">6.4. List all contributors for a given path</a></h3>
-<div class="sect3">
-<h4 id="_example_request_for_a_file"><a class="link" href="#_example_request_for_a_file">6.4.1. Example Request for a File</a></h4>
+<h3 id="_list_all_contributors_for_a_given_path"><a class="link" href="#_list_all_contributors_for_a_given_path">6.3. List all contributors for a given path</a></h3>
+<h4 id="_example_request_for_a_file" class="discrete">Example Request for a File</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/1402/contributors/path HTTP/1.1
@@ -5188,9 +5151,7 @@ Host: localhost:8080
 }</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_41"><a class="link" href="#_example_response_41">6.4.2. Example Response</a></h4>
+<h4 id="_example_response_41" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -5205,9 +5166,7 @@ Content-Length: 155
 } ]</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_request_for_a_directory"><a class="link" href="#_example_request_for_a_directory">6.4.3. Example Request for a Directory</a></h4>
+<h4 id="_example_request_for_a_directory" class="discrete">Example Request for a Directory</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/projects/1372/contributors/path HTTP/1.1
@@ -5221,9 +5180,7 @@ Host: localhost:8080
 }</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_42"><a class="link" href="#_example_response_42">6.4.4. Example Response</a></h4>
+<h4 id="_example_response_42" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -5244,11 +5201,9 @@ Content-Length: 280
 </div>
 </div>
 </div>
-</div>
 <div class="sect2">
-<h3 id="_get_single_contributor"><a class="link" href="#_get_single_contributor">6.5. Get single contributor</a></h3>
-<div class="sect3">
-<h4 id="_example_request_41"><a class="link" href="#_example_request_41">6.5.1. Example request</a></h4>
+<h3 id="_get_single_contributor"><a class="link" href="#_get_single_contributor">6.4. Get single contributor</a></h3>
+<h4 id="_example_request_41" class="discrete">Example request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">GET /api/contributors/1523 HTTP/1.1
@@ -5256,9 +5211,7 @@ Content-Type: application/json
 Host: localhost:8080</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_43"><a class="link" href="#_example_response_43">6.5.2. Example response</a></h4>
+<h4 id="_example_response_43" class="discrete">Example response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
@@ -5274,11 +5227,9 @@ Content-Length: 123
 </div>
 </div>
 </div>
-</div>
 <div class="sect2">
-<h3 id="_merge_two_contributors"><a class="link" href="#_merge_two_contributors">6.6. Merge two contributors</a></h3>
-<div class="sect3">
-<h4 id="_request_structure_5"><a class="link" href="#_request_structure_5">6.6.1. Request Structure</a></h4>
+<h3 id="_merge_contributors"><a class="link" href="#_merge_contributors">6.5. Merge contributors</a></h3>
+<h4 id="_request_structure_5" class="discrete">Request Structure</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -5305,9 +5256,7 @@ Content-Length: 123
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect3">
-<h4 id="_example_request_42"><a class="link" href="#_example_request_42">6.6.2. Example Request</a></h4>
+<h4 id="_example_request_42" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/contributors/merge HTTP/1.1
@@ -5321,20 +5270,16 @@ Host: localhost:8080
 }</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_44"><a class="link" href="#_example_response_44">6.6.3. Example Response</a></h4>
+<h4 id="_example_response_44" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
 </div>
 </div>
 </div>
-</div>
 <div class="sect2">
-<h3 id="_update_a_contributor"><a class="link" href="#_update_a_contributor">6.7. Update a Contributor</a></h3>
-<div class="sect3">
-<h4 id="_request_structure_6"><a class="link" href="#_request_structure_6">6.7.1. Request Structure</a></h4>
+<h3 id="_update_a_contributor"><a class="link" href="#_update_a_contributor">6.6. Update a Contributor</a></h3>
+<h4 id="_request_structure_6" class="discrete">Request Structure</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -5356,9 +5301,7 @@ Host: localhost:8080
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect3">
-<h4 id="_example_request_43"><a class="link" href="#_example_request_43">6.7.2. Example Request</a></h4>
+<h4 id="_example_request_43" class="discrete">Example Request</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">POST /api/contributors/1464 HTTP/1.1
@@ -5371,13 +5314,10 @@ Host: localhost:8080
 }</code></pre>
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_example_response_45"><a class="link" href="#_example_response_45">6.7.3. Example Response</a></h4>
+<h4 id="_example_response_45" class="discrete">Example Response</h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -5533,7 +5473,7 @@ Content-Length: 318
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-07-09 08:09:13 +00:00
+Last updated 2020-07-17 08:34:14 +00:00
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
