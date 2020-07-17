@@ -80,8 +80,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
 
     mvc()
         .perform(
-            post("/api/projects/" + projectId + "/master/analyze")
-                .contentType(MediaType.APPLICATION_JSON))
+            post("/api/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON))
         .andDo(document("analysis/start"));
 
     mvc()
@@ -100,7 +99,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
       Assertions.assertTrue(commit.isAnalyzed());
     }
     List<MetricValueEntity> metricValues = metricRepository.findByProjectId(projectId);
-    Assertions.assertEquals(44, metricValues.size());
+    Assertions.assertEquals(48, metricValues.size());
 
     mvc()
         .perform(post("/api/projects/" + projectId + "/analyze/reset"))
@@ -131,7 +130,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
 
     mvc()
         .perform(
-            post("/api/projects/" + projectId + "/master/analyze")
+            post("/api/projects/" + projectId + "/analyze")
                 .contentType(MediaType.APPLICATION_JSON));
 
     session.clear();

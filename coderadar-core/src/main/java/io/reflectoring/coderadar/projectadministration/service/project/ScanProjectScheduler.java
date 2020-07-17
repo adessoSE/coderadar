@@ -23,14 +23,12 @@ import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -62,19 +60,20 @@ public class ScanProjectScheduler {
   private Map<Long, ScheduledFuture<?>> tasks = new HashMap<>();
 
   public ScanProjectScheduler(
-          UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase,
-          CoderadarConfigurationProperties coderadarConfigurationProperties,
-          ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
-          ListProjectsPort listProjectsPort,
-          ProjectStatusPort projectStatusPort,
-          TaskScheduler taskScheduler,
-          GetProjectPort getProjectPort,
-          ListModulesOfProjectUseCase listModulesOfProjectUseCase,
-          CreateModulePort createModulePort,
-          AddCommitsPort addCommitsPort,
-          DeleteModulePort deleteModulePort,
-          TaskExecutor taskExecutor,
-          DeleteBranchPort deleteBranchPort, AnalyzingService analyzingService) {
+      UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase,
+      CoderadarConfigurationProperties coderadarConfigurationProperties,
+      ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
+      ListProjectsPort listProjectsPort,
+      ProjectStatusPort projectStatusPort,
+      TaskScheduler taskScheduler,
+      GetProjectPort getProjectPort,
+      ListModulesOfProjectUseCase listModulesOfProjectUseCase,
+      CreateModulePort createModulePort,
+      AddCommitsPort addCommitsPort,
+      DeleteModulePort deleteModulePort,
+      TaskExecutor taskExecutor,
+      DeleteBranchPort deleteBranchPort,
+      AnalyzingService analyzingService) {
     this.updateLocalRepositoryUseCase = updateLocalRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
@@ -140,7 +139,7 @@ public class ScanProjectScheduler {
                           updatedBranches = checkForNewCommits(currentProject);
                         } finally {
                           projectStatusPort.setBeingProcessed(projectId, false);
-                          if(!updatedBranches.isEmpty()) {
+                          if (!updatedBranches.isEmpty()) {
                             analyzingService.start(projectId, updatedBranches);
                           }
                         }
