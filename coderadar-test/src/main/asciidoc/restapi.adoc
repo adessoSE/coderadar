@@ -461,7 +461,7 @@ include::{snippets}/analyzerConfiguration/getSingle/http-request.adoc[]
 
 include::{snippets}/analyzerConfiguration/getSingle/http-response.adoc[]
 
-=== Analyzing Job
+=== Analyzing
 
 An analysis can be started for a project in coderadar. By default a Project's codebase is not analyzed.
 To analyze the codebase an analysis has to be triggered.
@@ -470,6 +470,9 @@ To analyze the codebase an analysis has to be triggered.
 anchor:start-analysis[]
 
 ===== Example Request
+
+The request body consist of a list of branch names and can be empty. In that case
+all branches are analyzed.
 
 include::{snippets}/analysis/start/http-request.adoc[]
 

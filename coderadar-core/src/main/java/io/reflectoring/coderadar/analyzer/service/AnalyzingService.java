@@ -101,8 +101,9 @@ public class AnalyzingService
    * Starts a background task using the TaskExecutor. It will perform the analysis of the project.
    *
    * @param project The project to analyze.
+   * @param branches The branches to analyze.
    * @param filePatterns The patterns to use.
-   * @param analyzerConfigurations The analyzer configurations to use. TODO
+   * @param analyzerConfigurations The analyzer configurations to use.
    */
   private void startAnalyzingTask(
       Project project,
@@ -111,10 +112,12 @@ public class AnalyzingService
       List<AnalyzerConfiguration> analyzerConfigurations) {
     processProjectService.executeTask(
         () -> {
+          List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
+              getAnalyzersForProject(analyzerConfigurations);
           activeAnalysis.put(project.getId(), true);
           for (String branch : branches) {
             if (activeAnalysis.get(project.getId())) {
-              analyzeBranch(project, filePatterns, analyzerConfigurations, branch);
+              analyzeBranch(project, filePatterns, sourceCodeFileAnalyzerPlugins, branch);
             }
           }
           activeAnalysis.remove(project.getId());
@@ -126,17 +129,19 @@ public class AnalyzingService
   public void analyzeBranch(
       Project project,
       List<FilePattern> filePatterns,
-      List<AnalyzerConfiguration> analyzerConfigurations,
+      List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins,
       String branchName) {
     long projectId = project.getId();
-    List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins =
-        getAnalyzersForProject(analyzerConfigurations);
     List<Commit> commits =
         getCommitsInProjectPort.getNonAnalyzedSortedByTimestampAscWithNoParents(
             projectId, filePatterns, branchName);
+    if (commits.isEmpty() || sourceCodeFileAnalyzerPlugins.isEmpty()) {
+      return;
+    }
     List<Long> commitIds = new ArrayList<>();
     Map<Long, List<MetricValue>> fileMetrics =
         saveMetricPort.getMetricsForFiles(projectId, branchName);
+
     for (int i = 0; i < commits.size() && activeAnalysis.get(projectId); i++) {
       List<MetricValue> metrics =
           analyzeCommitUseCase.analyzeCommit(
