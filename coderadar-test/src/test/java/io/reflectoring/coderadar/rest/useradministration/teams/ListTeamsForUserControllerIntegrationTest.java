@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.TeamRepository;
-import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.domain.GetTeamResponse;
 import java.util.Collections;
@@ -21,14 +20,11 @@ class ListTeamsForUserControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private TeamRepository teamRepository;
 
-  @Autowired private UserRepository userRepository;
-
   private TeamEntity teamEntity;
   private UserEntity testUser;
 
   @BeforeEach
   void setUp() {
-    userRepository.deleteAll();
     testUser = new UserEntity();
     testUser.setUsername("testUser");
     testUser.setPassword("password1");
@@ -40,7 +36,7 @@ class ListTeamsForUserControllerIntegrationTest extends ControllerTestTemplate {
   }
 
   @Test
-  void listTeamsForProjectSuccessfully() throws Exception {
+  void listTeamsForUserSuccessfully() throws Exception {
     MvcResult result =
         mvc()
             .perform(get("/api/users/" + testUser.getId() + "/teams"))

@@ -109,7 +109,7 @@ export class EditProjectComponent implements OnInit {
   private validateInput(): boolean {
     this.incorrectURL = this.project.vcsUrl.trim().length === 0;
     this.nameEmpty = this.project.name.trim().length === 0;
-    
+
     if (this.project.startDate === 'first commit') {
       this.project.startDate = null;
     }

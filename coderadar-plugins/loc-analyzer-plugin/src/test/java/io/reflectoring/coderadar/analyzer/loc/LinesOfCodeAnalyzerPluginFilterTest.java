@@ -4,10 +4,10 @@ import io.reflectoring.coderadar.plugin.api.AnalyzerFileFilter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class LocAnalyzerPluginFilterTest {
+class LinesOfCodeAnalyzerPluginFilterTest {
 
   @Test
-  public void filterAcceptsTheCorrectFiles() {
+  void filterAcceptsTheCorrectFiles() {
     AnalyzerFileFilter filter = new LocAnalyzerFileFilter();
 
     Assertions.assertTrue(filter.acceptFilename("Testfile.java"));

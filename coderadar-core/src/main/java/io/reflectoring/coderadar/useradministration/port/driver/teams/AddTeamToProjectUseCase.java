@@ -5,7 +5,8 @@ import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 public interface AddTeamToProjectUseCase {
 
   /**
-   * Creates a team in the given project.
+   * Creates a team in the given project. If the team is already assigned to the project, the
+   * existing role is overwritten.
    *
    * @param projectId The id of the project.
    * @param teamId The id of the team.

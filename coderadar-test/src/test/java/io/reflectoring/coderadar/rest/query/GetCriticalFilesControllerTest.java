@@ -28,11 +28,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultHandler;
 
-public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
+class GetCriticalFilesControllerTest extends ControllerTestTemplate {
   private long projectId;
 
   @BeforeEach
-  public void setUp() throws Exception {
+  void setUp() throws Exception {
     URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
     CreateProjectCommand command1 =
         new CreateProjectCommand(
@@ -54,7 +54,7 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
   }
 
   @Test
-  public void throwsExceptionWhenNoFilePatternsAreDefined() throws Exception {
+  void throwsExceptionWhenNoFilePatternsAreDefined() throws Exception {
     GetFilesWithContributorsCommand command =
         new GetFilesWithContributorsCommand("e9f7ff6fdd8c0863fdb5b24c9ed35a3651e20382", 1);
     MvcResult result =
@@ -74,7 +74,7 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
   }
 
   @Test
-  public void getCriticalFilesSuccessfully() throws Exception {
+  void getCriticalFilesSuccessfully() throws Exception {
     CreateFilePatternCommand command =
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
@@ -108,7 +108,7 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
   }
 
   @Test
-  public void getCriticalFilesWithTwoContributors() throws Exception {
+  void getCriticalFilesWithTwoContributors() throws Exception {
     CreateFilePatternCommand command =
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()
@@ -145,7 +145,7 @@ public class GetCriticalFilesControllerTest extends ControllerTestTemplate {
   }
 
   @Test
-  public void getFrequentlyChangedFiles() throws Exception {
+  void getFrequentlyChangedFiles() throws Exception {
     CreateFilePatternCommand command =
         new CreateFilePatternCommand("**/*.java", InclusionType.INCLUDE);
     mvc()

@@ -17,11 +17,12 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin
     implements SourceCodeFileAnalyzerPlugin, ConfigurableAnalyzerPlugin {
 
   private Logger logger = LoggerFactory.getLogger(CheckstyleSourceCodeFileAnalyzerPlugin.class);
-  private final File tempDir = Files.createTempDir();
 
   private Checker checker;
 
   private CoderadarAuditListener auditListener;
+
+  private final File tempDir = Files.createTempDir();
 
   public CheckstyleSourceCodeFileAnalyzerPlugin() {
     try {
@@ -54,7 +55,7 @@ public class CheckstyleSourceCodeFileAnalyzerPlugin
   }
 
   @Override
-  public FileMetrics analyzeFile(String filepath, byte[] fileContent) throws AnalyzerException {
+  public FileMetrics analyzeFile(String filepath, byte[] fileContent) {
     File fileToAnalyze = null;
     try {
       fileToAnalyze = createTempFile(fileContent, filepath);

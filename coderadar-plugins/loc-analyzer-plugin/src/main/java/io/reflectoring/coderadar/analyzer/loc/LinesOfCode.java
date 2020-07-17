@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.analyzer.loc;
 import lombok.Data;
 
 @Data
-public class Loc {
+public class LinesOfCode {
 
   /** Lines of code. Total lines of code, including comments and empty lines. */
   private int loc;

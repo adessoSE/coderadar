@@ -16,7 +16,7 @@ import {ProjectService} from '../../../service/project.service';
 import {Store} from '@ngrx/store';
 import {Branch} from '../../../model/branch';
 import {loadAvailableMetrics} from '../../../city-map/visualization/visualization.actions';
-import {Contributor} from "../../../model/contributor";
+import {Contributor} from '../../../model/contributor';
 
 @Component({
   selector: 'app-commit-list',
@@ -228,14 +228,14 @@ export class ListViewComponent implements OnInit, OnChanges {
     }
     if (selectedCommit1Id != null) {
       this.selectedCommit1 = this.commitsFiltered.find(value => value.name === selectedCommit1Id);
-    }``
+    }
     if (selectedCommit2Id != null) {
       this.selectedCommit2 = this.commitsFiltered.find(value => value.name === selectedCommit2Id);
     }
   }
 
   showCommitsInRange() {
-    if(this.commits.length > 0) {
+    if (this.commits.length > 0) {
       let endDate: Date;
       if (this.endDate === null || this.endDate.length === 0) {
         endDate = new Date(this.commits[0].timestamp);

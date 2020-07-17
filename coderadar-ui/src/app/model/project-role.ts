@@ -1,4 +1,4 @@
 export enum ProjectRole {
-  ADMIN= "admin",
-  MEMBER = "member"
+  ADMIN= 'admin',
+  MEMBER = 'member'
 }

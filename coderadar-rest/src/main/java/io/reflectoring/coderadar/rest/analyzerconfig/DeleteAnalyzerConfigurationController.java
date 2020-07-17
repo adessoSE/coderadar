@@ -27,9 +27,9 @@ public class DeleteAnalyzerConfigurationController implements AbstractBaseContro
   public ResponseEntity<HttpStatus> deleteAnalyzerConfiguration(
       @PathVariable("analyzerConfigurationId") long analyzerConfigurationId,
       @PathVariable("projectId") long projectId) {
+    authenticationService.authenticateAdmin(projectId);
     deleteAnalyzerConfigurationUseCase.deleteAnalyzerConfiguration(
         analyzerConfigurationId, projectId);
-    authenticationService.authenticateAdmin(projectId);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }

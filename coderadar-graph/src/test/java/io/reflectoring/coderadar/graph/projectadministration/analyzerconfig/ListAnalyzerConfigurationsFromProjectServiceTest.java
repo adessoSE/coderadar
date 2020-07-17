@@ -37,7 +37,7 @@ class ListAnalyzerConfigurationsFromProjectServiceTest {
     Iterable<AnalyzerConfiguration> configurations =
         getAnalyzerConfigurationsFromProjectAdapter.listAnalyzerConfigurations(1L);
     verify(analyzerConfigurationRepository, times(1)).findByProjectId(1L);
-    Assertions.assertThat(configurations).hasSize(0);
+    Assertions.assertThat(configurations).isEmpty();
   }
 
   @Test

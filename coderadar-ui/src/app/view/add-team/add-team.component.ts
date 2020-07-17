@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl} from "@angular/forms";
-import {Team} from "../../model/team";
-import {User} from "../../model/user";
-import {UserService} from "../../service/user.service";
-import {TeamService} from "../../service/team.service";
-import {CONFLICT, FORBIDDEN, NOT_FOUND} from "http-status-codes";
-import {Router} from "@angular/router";
+import {FormControl} from '@angular/forms';
+import {Team} from '../../model/team';
+import {User} from '../../model/user';
+import {UserService} from '../../service/user.service';
+import {TeamService} from '../../service/team.service';
+import {CONFLICT, FORBIDDEN, NOT_FOUND} from 'http-status-codes';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-add-team',
@@ -19,6 +19,7 @@ export class AddTeamComponent implements OnInit {
   users: User[] = [];
   nameEmpty = false;
   teamNameTaken = false;
+  noUsers: boolean;
 
   constructor(private userService: UserService, private teamService: TeamService, private router: Router) { }
 
@@ -39,8 +40,9 @@ export class AddTeamComponent implements OnInit {
   }
 
   submitForm() {
-      this.nameEmpty = this.team.name == undefined || this.team.name.length === 0;
-      if(!this.nameEmpty) {
+      this.nameEmpty = this.team.name === undefined || this.team.name.length === 0;
+      this.noUsers = this.usersFormControl.value.length === 0;
+      if (!this.nameEmpty && !this.noUsers) {
           this.teamService.createTeam(this.team.name, this.usersFormControl.value).then(() =>
             this.router.navigate(['/teams']
           )).catch(error => {
@@ -49,7 +51,7 @@ export class AddTeamComponent implements OnInit {
               } else if (error.status && error.status === CONFLICT) {
                 this.teamNameTaken = true;
               }
-            }); //TODO: Identical team names
+            });
       }
   }
 }

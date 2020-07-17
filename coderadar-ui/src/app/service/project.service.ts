@@ -20,7 +20,6 @@ import {ProjectWithRoles} from "../model/project-with-roles";
 })
 export class ProjectService {
 
-
   private apiURL = AppComponent.getApiUrl();
 
   constructor(private httpClient: HttpClient) {
@@ -206,7 +205,7 @@ export class ProjectService {
    * @param branch The branch to use for getting the commits.
    */
   public getCommitsForContributor(id: number, branch: string, email: string): Promise<HttpResponse<Commit[]>> {
-    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/' + branch + '/commits?email='+email.replace("+", "%2B"),
+    return this.httpClient.get<Commit[]>(this.apiURL + 'projects/' + id + '/' + branch + '/commits?email=' + email.replace('+', '%2B'),
       {observe: 'response'}).toPromise();
   }
 

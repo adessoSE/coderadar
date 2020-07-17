@@ -7,10 +7,10 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class LocAnalyzerPluginTest {
+class LinesOfCodeAnalyzerPluginTest {
 
   @Test
-  public void metricIsCalculatedCorrectly() throws Exception {
+  void metricIsCalculatedCorrectly() throws Exception {
 
     InputStream in = getClass().getResourceAsStream("AcceptedJavaFile.txt");
     byte[] fileContent = IOUtils.toByteArray(in);

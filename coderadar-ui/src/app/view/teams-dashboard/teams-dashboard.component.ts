@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {Team} from "../../model/team";
-import {TeamService} from "../../service/team.service";
-import {UserService} from "../../service/user.service";
-import {FORBIDDEN} from "http-status-codes";
+import {Team} from '../../model/team';
+import {TeamService} from '../../service/team.service';
+import {UserService} from '../../service/user.service';
+import {FORBIDDEN} from 'http-status-codes';
 
 @Component({
   selector: 'app-teams-dashboard',
@@ -24,7 +24,7 @@ export class TeamsDashboardComponent implements OnInit {
     this.teamService.listTeamsForUser(UserService.getLoggedInUser().userId).then(value =>
       this.teams = value.body
     ) .catch(e => {
-      if (e.status && e.status === FORBIDDEN) { //TODO: UNAUTHORIZED
+      if (e.status && e.status === FORBIDDEN) { // TODO: UNAUTHORIZED
         this.userService.refresh(() => this.getTeams());
       }
     });
@@ -33,10 +33,10 @@ export class TeamsDashboardComponent implements OnInit {
   removeTeam(id: number) {
     this.teamService.removeTeam(id)
       .then(() => {
-        this.teams = this.teams.filter(value => value.id != id);
+        this.teams = this.teams.filter(value => value.id !== id);
       })
       .catch(e => {
-      if (e.status && e.status === FORBIDDEN) { //TODO: UNAUTHORIZED
+      if (e.status && e.status === FORBIDDEN) { // TODO: UNAUTHORIZED
         this.userService.refresh(() => this.getTeams());
       }
     });

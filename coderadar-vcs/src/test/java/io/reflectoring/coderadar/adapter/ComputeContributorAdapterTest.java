@@ -16,7 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-public class ComputeContributorAdapterTest {
+class ComputeContributorAdapterTest {
   private URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
   @TempDir public File folder;
 
@@ -27,7 +27,7 @@ public class ComputeContributorAdapterTest {
   }
 
   @Test
-  public void test() {
+  void test() {
     ComputeContributorAdapter computeContributorAdapter = new ComputeContributorAdapter();
 
     List<Contributor> contributors =

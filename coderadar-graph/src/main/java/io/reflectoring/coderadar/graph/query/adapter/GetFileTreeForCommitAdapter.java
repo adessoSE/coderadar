@@ -68,7 +68,7 @@ public class GetFileTreeForCommitAdapter implements GetFileTreeForCommitPort {
 
   private void addToTree(FileTree tree, List<String> path) {
     if (tree.getChildren() == null) {
-      tree.setChildren(new ArrayList<>(8));
+      tree.setChildren(new ArrayList<>());
     }
     for (FileTree child : tree.getChildren()) {
       if (child.getPath().equals(path.get(0))) {

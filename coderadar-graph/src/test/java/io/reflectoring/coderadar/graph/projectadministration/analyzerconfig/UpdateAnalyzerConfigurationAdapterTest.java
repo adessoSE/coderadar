@@ -59,6 +59,5 @@ class UpdateAnalyzerConfigurationAdapterTest {
     updateAnalyzerConfigurationAdapter.update(newItem);
 
     verify(analyzerConfigurationRepository, times(1)).save(mockedItem);
-    Assertions.assertNotEquals(mockedOldItem, newItem);
   }
 }

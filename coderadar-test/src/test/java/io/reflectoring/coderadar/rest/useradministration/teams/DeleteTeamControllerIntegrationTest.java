@@ -32,7 +32,6 @@ class DeleteTeamControllerIntegrationTest extends ControllerTestTemplate {
     teamEntity.setName("testTeam");
     teamRepository.save(teamEntity, 1);
 
-    userRepository.deleteAll();
     testUser = new UserEntity();
     testUser.setUsername("username");
     testUser.setPassword(PasswordUtil.hash("password1"));
@@ -58,7 +57,7 @@ class DeleteTeamControllerIntegrationTest extends ControllerTestTemplate {
   void deleteTeamWithNoUsersSuccessfully() throws Exception {
     mvc()
         .perform(delete("/api/teams/" + teamEntity.getId()))
-        .andExpect(MockMvcResultMatchers.status().isOk()); // TODO: Document
+        .andExpect(MockMvcResultMatchers.status().isOk());
 
     List<TeamEntity> teams = teamRepository.findAllWithMembers();
     Assertions.assertTrue(teams.isEmpty());

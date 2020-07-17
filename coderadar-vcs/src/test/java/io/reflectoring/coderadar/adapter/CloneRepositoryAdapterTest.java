@@ -13,12 +13,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-public class CloneRepositoryAdapterTest {
+class CloneRepositoryAdapterTest {
 
   @TempDir public File folder;
 
   @Test
-  public void test() throws UnableToCloneRepositoryException {
+  void test() throws UnableToCloneRepositoryException {
     URL testRepoURL = this.getClass().getClassLoader().getResource("test-repository");
 
     CloneRepositoryAdapter cloneRepositoryAdapter = new CloneRepositoryAdapter();

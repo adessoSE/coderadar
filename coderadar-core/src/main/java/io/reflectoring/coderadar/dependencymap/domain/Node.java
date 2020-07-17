@@ -1,8 +1,6 @@
 package io.reflectoring.coderadar.dependencymap.domain;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import lombok.Getter;
 import lombok.Setter;
@@ -94,10 +92,10 @@ public class Node {
     if (nodePath == null || nodePath.equals("")) {
       return null;
     }
-    String[] path = nodePath.split("/");
+    String[] pathSplit = nodePath.split("/");
     Node tmp = this;
     // iterate over every part of the new path
-    for (String s : path) {
+    for (String s : pathSplit) {
       // if the Node-object already exists, iterate over it
       if (tmp.getChildByName(s) != null) {
         tmp = tmp.getChildByName(s);
@@ -119,19 +117,16 @@ public class Node {
     if (nodePath == null || nodePath.equals("")) {
       return null;
     }
-    String[] path = nodePath.split("/");
+    String[] pathSplit = nodePath.split("/");
     Node tmp = this;
     // iterate over every part of the new path
     int i = 0;
-    while (i < path.length) {
-      String s = path[i];
+    while (i < pathSplit.length) {
+      String s = pathSplit[i];
       // if the Node-object already exists, iterate over it
       if (tmp.getChildByName(s) != null) {
         tmp = tmp.getChildByName(s);
       } else {
-        // create new Node
-        //                Node node = new Node(new ArrayList<>(), tmp.getPath() + "/" + s, s,
-        // packageName);
         Node node = new Node(s, tmp.getPath().equals("") ? s : tmp.getPath() + "/" + s, "");
         tmp.addToChildren(node);
         tmp = node;
@@ -179,19 +174,16 @@ public class Node {
    */
   public boolean hasDependencyOn(Node node) {
     for (NodeDTO dependency : dependencies) {
-      if (!this.hasChildren() && !node.hasChildren() || this.hasChildren() && !node.hasChildren()) {
-        if (dependency.getPath().equals(node.getPath())) {
-          return true;
-        }
-      } else if (!this.hasChildren() && node.hasChildren()
-          || this.hasChildren() && node.hasChildren()) {
-        if (dependency
-            .getPath()
-            .contains(
-                (node.getPackageName().equals("") ? node.getFilename() : node.getPackageName())
-                    .replaceAll("\\.", "/"))) {
-          return true;
-        }
+      if ((!node.hasChildren() && dependency.getPath().equals(node.getPath()))
+          || (node.hasChildren()
+              && dependency
+                  .getPath()
+                  .contains(
+                      (node.getPackageName().equals("")
+                              ? node.getFilename()
+                              : node.getPackageName())
+                          .replaceAll("\\.", "/")))) {
+        return true;
       }
     }
     return false;
@@ -227,13 +219,13 @@ public class Node {
    * @param traverseInterface method to call.
    */
   public void traversePost(TraverseInterface traverseInterface) {
-    Stack<Node> stack = new Stack<>();
+    Deque<Node> stack = new ArrayDeque<>();
     HashSet<Node> hash = new HashSet<>();
     Node root = this;
     stack.push(root);
     while (!stack.isEmpty()) {
       root = stack.peek();
-      if (root.children.size() == 0 || hash.contains(root)) {
+      if (root.children.isEmpty() || hash.contains(root)) {
         traverseInterface.traverseMethod(stack.pop());
       } else {
         root.children.forEach(stack::push);
@@ -249,11 +241,11 @@ public class Node {
    */
   public void traversePre(TraverseInterface traverseInterface) {
     Node root = this;
-    Stack<Node> stack = new Stack<>();
-    stack.add(root);
+    Deque<Node> stack = new ArrayDeque<>();
+    stack.push(root);
 
     while (!stack.isEmpty()) {
-      root = stack.pop();
+      root = stack.removeLast();
       stack.addAll(root.children);
       traverseInterface.traverseMethod(root);
     }

@@ -20,7 +20,6 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void loginUserSuccessfully() throws Exception {
-    userRepository.deleteAll();
     UserEntity testUser = new UserEntity();
     testUser.setUsername("username");
     testUser.setPassword(PasswordUtil.hash("password1"));

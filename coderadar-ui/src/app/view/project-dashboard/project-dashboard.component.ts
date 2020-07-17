@@ -14,8 +14,8 @@ import * as fromRoot from '../../city-map/shared/reducers';
 import {Store} from '@ngrx/store';
 import {loadAvailableMetrics} from '../../city-map/visualization/visualization.actions';
 import {CommitLog} from '../../model/commit-log';
-import {Contributor} from "../../model/contributor";
-import {ContributorService} from "../../service/contributor.service";
+import {Contributor} from '../../model/contributor';
+import {ContributorService} from '../../service/contributor.service';
 
 @Component({
   selector: 'app-project-dashboard',
@@ -164,11 +164,11 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
         if (error.status && error.status === FORBIDDEN) {
           this.userService.refresh(() => this.getContributors());
         }
-      })
+      });
   }
 
   handleContributorChange($event: any) {
-    if($event == undefined) {
+    if ($event === undefined) {
       this.selectedContributor = new Contributor();
       this.selectedContributor.emailAddresses = [''];
     } else {

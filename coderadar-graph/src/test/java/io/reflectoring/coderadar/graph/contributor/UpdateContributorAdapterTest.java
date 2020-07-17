@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class UpdateContributorAdapterTest {
+class UpdateContributorAdapterTest {
   private UpdateContributorAdapter updateContributorAdapter;
 
   @Mock private ContributorRepository contributorRepository;
@@ -26,7 +26,7 @@ public class UpdateContributorAdapterTest {
   }
 
   @Test
-  public void updateDisplayName() {
+  void updateDisplayName() {
     ContributorEntity contributor = new ContributorEntity();
     contributor.setId(1L);
     contributor.setDisplayName("Test");

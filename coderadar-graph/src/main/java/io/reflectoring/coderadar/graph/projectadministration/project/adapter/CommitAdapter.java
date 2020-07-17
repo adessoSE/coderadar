@@ -276,9 +276,7 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
     // Get all of the existing commits and save them in a map
     Map<String, CommitEntity> walkedCommits = new HashMap<>();
     IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>();
-    for (CommitEntity c : commitRepository.findByProjectId(projectId)) {
-      walkedCommits.put(c.getName(), c);
-    }
+    commitRepository.findByProjectId(projectId).forEach(c -> walkedCommits.put(c.getName(), c));
 
     // Remove any already existing commits from the new commits passed into this method
     commits.removeIf(commit -> walkedCommits.containsKey(commit.getName()));
@@ -290,9 +288,7 @@ public class CommitAdapter implements SaveCommitPort, AddCommitsPort {
     for (Commit commit : commits) {
       CommitEntity commitEntity = commitBaseDataMapper.mapDomainObject(commit);
       List<CommitEntity> parents = new ArrayList<>(commit.getParents().size());
-      for (Commit parent : commit.getParents()) {
-        parents.add(walkedCommits.get(parent.getName()));
-      }
+      commit.getParents().forEach(parent -> parents.add(walkedCommits.get(parent.getName())));
       commitEntity.setParents(parents);
       walkedCommits.put(commitEntity.getName(), commitEntity);
 

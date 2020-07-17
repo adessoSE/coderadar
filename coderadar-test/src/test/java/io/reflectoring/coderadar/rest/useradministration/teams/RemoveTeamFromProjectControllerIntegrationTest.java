@@ -27,7 +27,6 @@ class RemoveTeamFromProjectControllerIntegrationTest extends ControllerTestTempl
 
   @BeforeEach
   void setUp() {
-    projectRepository.deleteAll();
     testProject = new ProjectEntity();
     testProject.setVcsUrl("https://valid.url");
     testProject.setName("project");

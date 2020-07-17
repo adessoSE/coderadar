@@ -15,7 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 @DisplayName("Get file pattern")
-public class GetFilePatternAdapterTest {
+class GetFilePatternAdapterTest {
   private FilePatternRepository filePatternRepository = mock(FilePatternRepository.class);
 
   @Test
