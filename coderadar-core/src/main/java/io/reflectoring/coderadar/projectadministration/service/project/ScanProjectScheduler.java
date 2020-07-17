@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.projectadministration.service.project;
 import static io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService.getProjectDateRange;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
+import io.reflectoring.coderadar.analyzer.service.AnalyzingService;
 import io.reflectoring.coderadar.projectadministration.ModuleAlreadyExistsException;
 import io.reflectoring.coderadar.projectadministration.ModulePathInvalidException;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
@@ -22,10 +23,14 @@ import io.reflectoring.coderadar.vcs.UnableToUpdateRepositoryException;
 import io.reflectoring.coderadar.vcs.port.driver.ExtractProjectCommitsUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateLocalRepositoryUseCase;
 import io.reflectoring.coderadar.vcs.port.driver.update.UpdateRepositoryCommand;
+
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -50,25 +55,26 @@ public class ScanProjectScheduler {
   private final DeleteModulePort deleteModulePort;
   private final TaskExecutor taskExecutor;
   private final DeleteBranchPort deleteBranchPort;
+  private final AnalyzingService analyzingService;
 
   private static final Logger logger = LoggerFactory.getLogger(ScanProjectScheduler.class);
 
   private Map<Long, ScheduledFuture<?>> tasks = new HashMap<>();
 
   public ScanProjectScheduler(
-      UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase,
-      CoderadarConfigurationProperties coderadarConfigurationProperties,
-      ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
-      ListProjectsPort listProjectsPort,
-      ProjectStatusPort projectStatusPort,
-      TaskScheduler taskScheduler,
-      GetProjectPort getProjectPort,
-      ListModulesOfProjectUseCase listModulesOfProjectUseCase,
-      CreateModulePort createModulePort,
-      AddCommitsPort addCommitsPort,
-      DeleteModulePort deleteModulePort,
-      TaskExecutor taskExecutor,
-      DeleteBranchPort deleteBranchPort) {
+          UpdateLocalRepositoryUseCase updateLocalRepositoryUseCase,
+          CoderadarConfigurationProperties coderadarConfigurationProperties,
+          ExtractProjectCommitsUseCase extractProjectCommitsUseCase,
+          ListProjectsPort listProjectsPort,
+          ProjectStatusPort projectStatusPort,
+          TaskScheduler taskScheduler,
+          GetProjectPort getProjectPort,
+          ListModulesOfProjectUseCase listModulesOfProjectUseCase,
+          CreateModulePort createModulePort,
+          AddCommitsPort addCommitsPort,
+          DeleteModulePort deleteModulePort,
+          TaskExecutor taskExecutor,
+          DeleteBranchPort deleteBranchPort, AnalyzingService analyzingService) {
     this.updateLocalRepositoryUseCase = updateLocalRepositoryUseCase;
     this.coderadarConfigurationProperties = coderadarConfigurationProperties;
     this.extractProjectCommitsUseCase = extractProjectCommitsUseCase;
@@ -82,6 +88,7 @@ public class ScanProjectScheduler {
     this.deleteModulePort = deleteModulePort;
     this.taskExecutor = taskExecutor;
     this.deleteBranchPort = deleteBranchPort;
+    this.analyzingService = analyzingService;
   }
 
   /** Starts the scheduleCheckTask tasks upon application start */
@@ -128,10 +135,14 @@ public class ScanProjectScheduler {
                         projectStatusPort.setBeingProcessed(projectId, true);
                         logger.info(
                             "Scanning project {} for new commits!", currentProject.getName());
+                        List<String> updatedBranches = Collections.emptyList();
                         try {
-                          checkForNewCommits(currentProject);
+                          updatedBranches = checkForNewCommits(currentProject);
                         } finally {
                           projectStatusPort.setBeingProcessed(projectId, false);
+                          if(!updatedBranches.isEmpty()) {
+                            analyzingService.start(projectId, updatedBranches);
+                          }
                         }
                       }
                     }),
@@ -146,7 +157,7 @@ public class ScanProjectScheduler {
     tasks.remove(projectId);
   }
 
-  private void checkForNewCommits(Project project) {
+  private List<String> checkForNewCommits(Project project) {
     try {
       String localDir =
           coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName();
@@ -181,10 +192,12 @@ public class ScanProjectScheduler {
           createModulePort.createModule(module.getPath(), project.getId());
         }
       }
+      return updatedBranches.stream().map(Branch::getName).collect(Collectors.toList());
     } catch (UnableToUpdateRepositoryException
         | ModuleAlreadyExistsException
         | ModulePathInvalidException e) {
       logger.error("Unable to update the project: {}", e.getMessage());
     }
+    return Collections.emptyList();
   }
 }
