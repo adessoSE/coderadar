@@ -102,7 +102,7 @@ class StartAnalysisControllerIntegrationTest extends ControllerTestTemplate {
   }
 
   @Test
-  void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
+  void returnsNotFoundWhenProjectWithIdDoesNotExist() throws Exception {
     MvcResult result =
         mvc()
             .perform(post("/api/projects/123/analyze"))
