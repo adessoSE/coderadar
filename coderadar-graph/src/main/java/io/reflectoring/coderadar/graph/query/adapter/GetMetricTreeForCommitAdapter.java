@@ -2,7 +2,6 @@ package io.reflectoring.coderadar.graph.query.adapter;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ModuleEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
-import io.reflectoring.coderadar.graph.projectadministration.module.repository.ModuleRepository;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
 import io.reflectoring.coderadar.graph.query.repository.MetricQueryRepository;
 import io.reflectoring.coderadar.projectadministration.ProjectNotFoundException;
@@ -22,15 +21,11 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
 
   private final MetricQueryRepository metricQueryRepository;
   private final ProjectRepository projectRepository;
-  private final ModuleRepository moduleRepository;
 
   public GetMetricTreeForCommitAdapter(
-      MetricQueryRepository metricQueryRepository,
-      ProjectRepository projectRepository,
-      ModuleRepository moduleRepository) {
+      MetricQueryRepository metricQueryRepository, ProjectRepository projectRepository) {
     this.metricQueryRepository = metricQueryRepository;
     this.projectRepository = projectRepository;
-    this.moduleRepository = moduleRepository;
   }
 
   MetricTree get(ProjectEntity project, String commitHash, List<String> metrics) {

@@ -38,7 +38,7 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
     }
   }
 
-  public List<Pair<String, String>> findRenames(
+  public List<Pair<String, String>> getRenamesBetweenCommits(
       String parentHash, String commitHash, String projectRoot) {
     ObjectId commitId = ObjectId.fromString(commitHash);
     ObjectId parentId = ObjectId.fromString(parentHash);

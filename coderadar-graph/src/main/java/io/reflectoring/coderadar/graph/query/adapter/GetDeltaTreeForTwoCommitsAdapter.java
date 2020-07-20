@@ -59,7 +59,7 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
 
     DeltaTree deltaTree = createDeltaTree(commit1Tree, commit2Tree);
     List<Pair<String, String>> renamedFiles =
-        getRawCommitContentPort.findRenames(
+        getRawCommitContentPort.getRenamesBetweenCommits(
             command.getCommit1(),
             command.getCommit2(),
             coderadarConfigurationProperties.getWorkdir()
@@ -145,10 +145,7 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
   private ChangeType getChangeType(MetricTree metricTree1, MetricTree metricTree2) {
     if (metricTree1 != null
         && metricTree2 != null
-        && metricTree1
-            .getName()
-            .split("=")[0]
-            .equals(metricTree2.getName().split("=")[0])) { // File exists in both trees
+        && metricTree1.getName().equals(metricTree2.getName())) { // File exists in both trees
       return ChangeType.MODIFY;
     } else if (metricTree1 != null // File deleted in new tree
         && (metricTree2 == null || metricTree1.getName().compareTo(metricTree2.getName()) < 0)) {

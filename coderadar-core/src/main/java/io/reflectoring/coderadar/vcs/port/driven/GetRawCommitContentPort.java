@@ -56,5 +56,13 @@ public interface GetRawCommitContentPort {
           String commitHash)
           throws UnableToGetCommitContentException;
 
-  List<Pair<String, String>> findRenames(String parentHash, String commitHash, String projectRoot);
+  /**
+   * @param parentHash The first commit hash.
+   * @param commitHash The second commit hash.
+   * @param projectRoot The local repository.
+   * @return A list of String pairs, where the left element is the old path and the right one is the
+   *     new path.
+   */
+  List<Pair<String, String>> getRenamesBetweenCommits(
+      String parentHash, String commitHash, String projectRoot);
 }
