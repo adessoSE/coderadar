@@ -33,18 +33,10 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
     this.moduleRepository = moduleRepository;
   }
 
-  MetricTree get(
-      ProjectEntity project, String commitHash, List<String> metrics, boolean includeFileHashes) {
-    List<Map<String, Object>> result;
-    if (includeFileHashes) {
-      result =
-          metricQueryRepository.getMetricTreeForCommitWithFileHashes(
-              project.getId(), commitHash, metrics);
-    } else {
-      result = metricQueryRepository.getMetricTreeForCommit(project.getId(), commitHash, metrics);
-    }
-    List<ModuleEntity> moduleEntities = // project already has the modules??
-        moduleRepository.findModulesInProjectSortedDesc(project.getId());
+  MetricTree get(ProjectEntity project, String commitHash, List<String> metrics) {
+    List<Map<String, Object>> result =
+        metricQueryRepository.getMetricTreeForCommit(project.getId(), commitHash, metrics);
+    List<ModuleEntity> moduleEntities = project.getModules();
     List<MetricTree> moduleChildren = processModules(moduleEntities, result);
     MetricTree rootModule = processRootModule(result);
     rootModule.getChildren().addAll(findChildModules(project.getModules(), moduleChildren));
@@ -58,7 +50,7 @@ public class GetMetricTreeForCommitAdapter implements GetMetricTreeForCommitPort
         projectRepository
             .findByIdWithModules(projectId)
             .orElseThrow(() -> new ProjectNotFoundException(projectId));
-    return get(projectEntity, command.getCommit(), command.getMetrics(), false);
+    return get(projectEntity, command.getCommit(), command.getMetrics());
   }
 
   /**

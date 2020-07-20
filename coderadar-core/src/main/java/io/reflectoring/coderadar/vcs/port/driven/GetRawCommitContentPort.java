@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.vcs.port.driven;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import java.util.HashMap;
 import java.util.List;
+import org.apache.commons.lang3.tuple.Pair;
 
 public interface GetRawCommitContentPort {
 
@@ -54,4 +55,6 @@ public interface GetRawCommitContentPort {
           List<io.reflectoring.coderadar.projectadministration.domain.File> files,
           String commitHash)
           throws UnableToGetCommitContentException;
+
+  List<Pair<String, String>> findRenames(String parentHash, String commitHash, String projectRoot);
 }

@@ -16,6 +16,7 @@ dependencies {
     compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.8"
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
     testCompile "org.springframework.boot:spring-boot-starter-test:${version_spring_boot}"
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
 }
 
 spotless {
