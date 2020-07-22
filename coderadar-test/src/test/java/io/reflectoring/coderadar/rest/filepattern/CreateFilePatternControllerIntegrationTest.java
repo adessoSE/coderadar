@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.filepattern;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
@@ -35,7 +36,7 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
             post("/api/projects/" + testProject.getId() + "/filePatterns")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andDo(
             result -> {
               FilePatternEntity filePattern = filePatternRepository.findAll().iterator().next();
@@ -65,7 +66,7 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
             post("/api/projects/1/filePatterns")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }
@@ -78,6 +79,6 @@ class CreateFilePatternControllerIntegrationTest extends ControllerTestTemplate 
             post("/api/projects/1/filePatterns")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .andExpect(status().isBadRequest());
   }
 }

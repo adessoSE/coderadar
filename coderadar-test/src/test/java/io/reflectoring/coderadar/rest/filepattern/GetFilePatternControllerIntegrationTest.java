@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.filepattern;
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.FilePatternEntity;
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
@@ -42,7 +43,7 @@ class GetFilePatternControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(
             get("/api/projects/" + testProject.getId() + "/filePatterns/" + filePattern.getId()))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andExpect(containsResource(GetFilePatternResponse.class))
         .andDo(
             result -> {
@@ -58,7 +59,7 @@ class GetFilePatternControllerIntegrationTest extends ControllerTestTemplate {
   void getFilePatternReturnsErrorWhenNotFound() throws Exception {
     mvc()
         .perform(get("/api/projects/0/filePatterns/2"))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("FilePattern with id 2 not found."));

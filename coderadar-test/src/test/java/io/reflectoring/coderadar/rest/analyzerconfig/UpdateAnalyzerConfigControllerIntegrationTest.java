@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.analyzerconfig;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
@@ -47,7 +48,7 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
                     + analyzerConfiguration.getId())
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andDo(
             result -> {
               AnalyzerConfigurationEntity configuration =
@@ -69,7 +70,7 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             post("/api/projects/0/analyzers/2")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("AnalyzerConfiguration with id 2 not found."));
@@ -108,7 +109,7 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             post("/api/projects/" + testProject.getId() + "/analyzers/" + id)
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isConflict())
+        .andExpect(status().isConflict())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("An analyzer with this name is already configured for the project!"));
@@ -124,7 +125,7 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             post("/api/projects/0/analyzers/2")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("AnalyzerConfiguration with id 2 not found."));
@@ -138,6 +139,6 @@ class UpdateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             post("/api/projects/0/analyzers/1")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .andExpect(status().isBadRequest());
   }
 }

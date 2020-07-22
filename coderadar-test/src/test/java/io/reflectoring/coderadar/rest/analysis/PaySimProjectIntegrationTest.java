@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.analysis;
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
@@ -44,7 +45,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,7 +104,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/" + projectId + "/modules")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andReturn();
 
     List<ModuleEntity> modules = moduleRepository.findModulesInProjectSortedDesc(projectId);
@@ -175,7 +175,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/" + projectId)
                 .content(toJson(updateProjectCommand))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andReturn();
 
     // Number of commits correct?
@@ -384,7 +384,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/" + projectId + "/analyzers")
                 .content(toJson(analyzerConfigurationCommand))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andReturn();
 
     // Configuration saved?
@@ -408,7 +408,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/" + projectId + "/filePatterns")
                 .content(toJson(filePatternCommand))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andReturn();
 
     // Patterns saved?
@@ -429,7 +429,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(
             post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andReturn();
 
     // Is the project saved?

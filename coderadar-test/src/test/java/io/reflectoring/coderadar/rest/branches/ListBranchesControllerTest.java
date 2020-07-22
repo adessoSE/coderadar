@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.branches;
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.projectadministration.port.driver.project.create.CreateProjectCommand;
 import io.reflectoring.coderadar.projectadministration.service.project.CreateProjectService;
@@ -35,7 +36,7 @@ class ListBranchesControllerTest extends ControllerTestTemplate {
     // Test
     mvc()
         .perform(get("/api/projects/" + projectId + "/branches"))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andExpect(containsResource(GetBranchResponse[].class))
         .andExpect(
             result -> {
@@ -53,7 +54,7 @@ class ListBranchesControllerTest extends ControllerTestTemplate {
   void listAllBranchesOfProjectReturnsErrorWhenProjectNotFound() throws Exception {
     mvc()
         .perform(get("/api/projects/100/branches"))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 100 not found."));
   }

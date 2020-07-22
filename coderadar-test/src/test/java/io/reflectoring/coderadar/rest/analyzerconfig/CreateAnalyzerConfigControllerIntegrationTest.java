@@ -4,6 +4,7 @@ import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
@@ -41,7 +42,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             post("/api/projects/" + testProject.getId() + "/analyzers")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andExpect(containsResource(IdResponse.class))
         .andDo(
             result -> {
@@ -79,7 +80,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             post("/api/projects/1/analyzers")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("Project with id 1 not found."));
   }
@@ -93,7 +94,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             post("/api/projects/1/analyzers")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("Analyzer with name analyzer not found"));
@@ -119,7 +120,7 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             post("/api/projects/" + testProject.getId() + "/analyzers")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isConflict())
+        .andExpect(status().isConflict())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("An analyzer with this name is already configured for the project!"));
@@ -133,6 +134,6 @@ class CreateAnalyzerConfigControllerIntegrationTest extends ControllerTestTempla
             post("/api/projects/1/analyzers")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .andExpect(status().isBadRequest());
   }
 }

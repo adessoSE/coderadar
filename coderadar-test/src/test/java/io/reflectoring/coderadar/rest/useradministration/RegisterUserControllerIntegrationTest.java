@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.useradministration;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultHandler;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -25,7 +25,7 @@ class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/user/registration")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andDo(documentRegistration());
   }
 
@@ -37,7 +37,7 @@ class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/user/registration")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -48,7 +48,7 @@ class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/user/registration")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -65,7 +65,7 @@ class RegisterUserControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/user/registration")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isConflict());
+        .andExpect(status().isConflict());
   }
 
   private ResultHandler documentRegistration() {

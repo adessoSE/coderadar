@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.useradministration.permissions;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class RemoveUserFromProjectControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -47,7 +47,7 @@ class RemoveUserFromProjectControllerIntegrationTest extends ControllerTestTempl
   void removeUserFromProjectSuccessfully() throws Exception {
     mvc()
         .perform(delete("/api/projects/" + testProject.getId() + "/users/" + testUser.getId()))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andDo(document("user/role/project/remove"))
         .andReturn(); // TODO: Document
 

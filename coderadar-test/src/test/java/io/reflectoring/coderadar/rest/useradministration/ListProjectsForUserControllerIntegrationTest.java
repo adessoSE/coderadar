@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.useradministration;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class ListProjectsForUserControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -51,7 +51,7 @@ class ListProjectsForUserControllerIntegrationTest extends ControllerTestTemplat
     MvcResult result =
         mvc()
             .perform(get("/api/users/" + testUser.getId() + "/projects"))
-            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(status().isOk())
             .andDo(document("user/list/projects"))
             .andReturn();
 

@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.useradministration;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.useradministration.domain.RefreshTokenEntity;
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
@@ -17,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.ResultHandler;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -47,7 +47,7 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/user/password/change")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andDo(documentPasswordChange());
 
     Assertions.assertTrue(
@@ -75,7 +75,7 @@ class ChangePasswordControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/user/password/change")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+        .andExpect(status().isUnauthorized());
 
     Assertions.assertTrue(
         new BCryptPasswordEncoder()
