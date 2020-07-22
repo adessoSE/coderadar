@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.*;
 import org.eclipse.jgit.lib.ObjectId;
@@ -19,6 +17,7 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.gitective.core.BlobUtils;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,6 +37,7 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
     }
   }
 
+  @Override
   public List<Pair<String, String>> getRenamesBetweenCommits(
       String parentHash, String commitHash, String projectRoot) {
     ObjectId commitId = ObjectId.fromString(commitHash);
@@ -62,7 +62,7 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
         renameDetector.addAll(DiffEntry.scan(treeWalk));
         for (DiffEntry ent : renameDetector.compute()) {
           if (ent.getChangeType() == DiffEntry.ChangeType.RENAME)
-            result.add(new ImmutablePair<>(ent.getOldPath(), ent.getNewPath()));
+            result.add(Pair.of(ent.getOldPath(), ent.getNewPath()));
         }
       }
     } catch (IOException e) {

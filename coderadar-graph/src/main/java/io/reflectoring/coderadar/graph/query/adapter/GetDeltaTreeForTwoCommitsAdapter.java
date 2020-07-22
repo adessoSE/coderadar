@@ -12,7 +12,7 @@ import io.reflectoring.coderadar.query.port.driver.deltatree.GetDeltaTreeForTwoC
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -72,18 +72,18 @@ public class GetDeltaTreeForTwoCommitsAdapter implements GetDeltaTreeForTwoCommi
   private void processRenames(DeltaTree deltaTree, List<Pair<String, String>> renamedFiles) {
 
     for (Pair<String, String> rename : renamedFiles) {
-      DeltaTree oldEntry = findChildInDeltaTree(deltaTree, rename.getLeft());
-      DeltaTree newEntry = findChildInDeltaTree(deltaTree, rename.getRight());
+      DeltaTree oldEntry = findChildInDeltaTree(deltaTree, rename.getFirst());
+      DeltaTree newEntry = findChildInDeltaTree(deltaTree, rename.getSecond());
       if (oldEntry != null && newEntry != null) {
         newEntry.setCommit1Metrics(oldEntry.getCommit1Metrics());
 
         newEntry.getChanges().setAdded(false);
         newEntry.getChanges().setRenamed(true);
-        newEntry.setRenamedFrom(rename.getLeft());
+        newEntry.setRenamedFrom(rename.getFirst());
 
         oldEntry.getChanges().setRenamed(true);
         oldEntry.getChanges().setDeleted(false);
-        oldEntry.setRenamedTo(rename.getRight());
+        oldEntry.setRenamedTo(rename.getSecond());
       }
     }
   }

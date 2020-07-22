@@ -3,7 +3,7 @@ package io.reflectoring.coderadar.vcs.port.driven;
 import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import java.util.HashMap;
 import java.util.List;
-import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.data.util.Pair;
 
 public interface GetRawCommitContentPort {
 
