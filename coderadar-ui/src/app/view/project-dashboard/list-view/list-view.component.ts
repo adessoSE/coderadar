@@ -228,7 +228,7 @@ export class ListViewComponent implements OnInit, OnChanges {
     }
     if (selectedCommit1Id != null) {
       this.selectedCommit1 = this.commitsFiltered.find(value => value.name === selectedCommit1Id);
-    }``
+    }
     if (selectedCommit2Id != null) {
       this.selectedCommit2 = this.commitsFiltered.find(value => value.name === selectedCommit2Id);
     }
