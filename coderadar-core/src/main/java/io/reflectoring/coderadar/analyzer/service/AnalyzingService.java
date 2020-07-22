@@ -116,7 +116,7 @@ public class AnalyzingService
               getAnalyzersForProject(analyzerConfigurations);
           activeAnalysis.put(project.getId(), true);
           for (String branch : branches) {
-            if (activeAnalysis.get(project.getId())) {
+            if (Boolean.TRUE.equals(activeAnalysis.get(project.getId()))) {
               analyzeBranch(project, filePatterns, sourceCodeFileAnalyzerPlugins, branch);
             }
           }
@@ -126,7 +126,7 @@ public class AnalyzingService
         project.getId());
   }
 
-  public void analyzeBranch(
+  private void analyzeBranch(
       Project project,
       List<FilePattern> filePatterns,
       List<SourceCodeFileAnalyzerPlugin> sourceCodeFileAnalyzerPlugins,

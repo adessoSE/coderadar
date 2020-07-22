@@ -471,7 +471,7 @@ anchor:start-analysis[]
 
 ===== Example Request
 
-The request body consist of a list of branch names and can be empty. In that case
+The request body consists of a list of branch names and can be empty. In that case
 all branches are analyzed.
 
 include::{snippets}/analysis/start/http-request.adoc[]
