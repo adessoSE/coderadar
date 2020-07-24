@@ -49,7 +49,7 @@ class RemoveUserFromProjectControllerIntegrationTest extends ControllerTestTempl
         .perform(delete("/api/projects/" + testProject.getId() + "/users/" + testUser.getId()))
         .andExpect(status().isOk())
         .andDo(document("user/role/project/remove"))
-        .andReturn(); // TODO: Document
+        .andReturn();
 
     Assertions.assertTrue(userRepository.listUsersForProject(testProject.getId()).isEmpty());
   }

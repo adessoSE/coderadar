@@ -12,7 +12,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MainDashboardComponent} from './view/main-dashboard/main-dashboard.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {AuthInterceptor} from './auth.interceptor';
-import {ConfigureProjectComponent, MergeDialogComponent} from './view/configure-project/configure-project.component';
+import {ConfigureProjectComponent} from './view/configure-project/configure-project.component';
 import {EditProjectComponent} from './view/edit-project/edit-project.component';
 import {HeaderComponent} from './view/header/header.component';
 import {FooterComponent} from './view/footer/footer.component';
@@ -70,6 +70,7 @@ import { AddTeamComponent } from './view/add-team/add-team.component';
 import { SidenavContentComponent } from './view/sidenav-content/sidenav-content.component';
 import {AddProjectToTeamDialogComponent} from "./view/main-dashboard/add-project-to-team-dialog.component";
 import {ConfirmDeleteProjectDialogComponent} from "./view/main-dashboard/delete-project-dialog.component";
+import {MergeDialogComponent} from "./view/configure-project/merge-dialog/merge-dialog.component";
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
