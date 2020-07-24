@@ -108,7 +108,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         File file = new File();
         file.setSequenceId(sequenceId++);
         file.setPath(treeWalk.getPathString());
-        file.setObjectHash(treeWalk.getObjectId(0).getName());
 
         FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
         fileToCommitRelationship.setOldPath("/dev/null");
@@ -203,7 +202,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     List<File> filesToSave;
     File file = new File();
     file.setSequenceId(sequenceId);
-    file.setObjectHash(diff.getNewId().name());
     file.setPath(path);
     if (existingFilesWithPath == null) {
       if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
@@ -218,17 +216,9 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     } else {
       if ((diff.getChangeType().equals(DiffEntry.ChangeType.ADD))) {
         filesToSave = new ArrayList<>(1);
-        Optional<File> existingWithSameHash =
-            existingFilesWithPath.stream()
-                .filter(file1 -> file1.getObjectHash().equals(file.getObjectHash()))
-                .findFirst();
-        if (existingWithSameHash.isPresent()) {
-          filesToSave.add(existingWithSameHash.get());
-        } else {
-          filesToSave.add(file);
-          existingFilesWithPath.add(file);
-          files.put(file.getPath(), existingFilesWithPath);
-        }
+        filesToSave.add(file);
+        existingFilesWithPath.add(file);
+        files.put(file.getPath(), existingFilesWithPath);
       } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.DELETE))) {
         filesToSave = new ArrayList<>(existingFilesWithPath);
       } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {

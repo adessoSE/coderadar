@@ -5,18 +5,19 @@ import io.reflectoring.coderadar.vcs.UnableToGetCommitContentException;
 import io.reflectoring.coderadar.vcs.port.driven.GetRawCommitContentPort;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.diff.DiffFormatter;
-import org.eclipse.jgit.diff.HistogramDiff;
-import org.eclipse.jgit.diff.RawText;
-import org.eclipse.jgit.diff.RawTextComparator;
+import org.eclipse.jgit.diff.*;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.treewalk.filter.TreeFilter;
 import org.gitective.core.BlobUtils;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,12 +38,47 @@ public class GetRawCommitContentAdapter implements GetRawCommitContentPort {
   }
 
   @Override
+  public List<Pair<String, String>> getRenamesBetweenCommits(
+      String parentHash, String commitHash, String projectRoot) {
+    ObjectId commitId = ObjectId.fromString(commitHash);
+    ObjectId parentId = ObjectId.fromString(parentHash);
+    RevCommit commit;
+    RevCommit parent;
+
+    List<Pair<String, String>> result = new ArrayList<>();
+    try (Git git = Git.open(new java.io.File(projectRoot))) {
+      try (RevWalk revWalk = new RevWalk(git.getRepository())) {
+        commit = revWalk.parseCommit(commitId);
+        parent = revWalk.parseCommit(parentId);
+      }
+
+      RenameDetector renameDetector = new RenameDetector(git.getRepository());
+
+      try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
+        treeWalk.setFilter(TreeFilter.ANY_DIFF);
+        treeWalk.setRecursive(true);
+        treeWalk.reset(parent.getTree(), commit.getTree());
+        renameDetector.reset();
+        renameDetector.addAll(DiffEntry.scan(treeWalk));
+        for (DiffEntry ent : renameDetector.compute()) {
+          if (ent.getChangeType() == DiffEntry.ChangeType.RENAME)
+            result.add(Pair.of(ent.getOldPath(), ent.getNewPath()));
+        }
+      }
+    } catch (IOException e) {
+      throw new UnableToGetCommitContentException(e.getMessage());
+    }
+    return result;
+  }
+
+  @Override
   public byte[] getFileDiff(String projectRoot, String filepath, String commitHash)
       throws UnableToGetCommitContentException {
     if (filepath.isEmpty()) {
       return new byte[0];
     }
     try (Git git = Git.open(new java.io.File(projectRoot))) {
+
       ObjectId commitId = ObjectId.fromString(commitHash);
       RevCommit commit;
       try (RevWalk revWalk = new RevWalk(git.getRepository())) {
