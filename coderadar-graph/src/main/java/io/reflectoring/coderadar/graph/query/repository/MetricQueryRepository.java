@@ -70,7 +70,6 @@ public interface MetricQueryRepository extends Neo4jRepository<MetricValueEntity
   List<String> getAvailableMetricsInProject(long projectId);
 
   /**
-<<<<<<< HEAD
    * Metrics for each file are collected as string in the following format: "metricName=value" The
    * string is then split in the adapter. This greatly reduces HashMap usage. File paths are
    * returned along with their corresponding git hashes in the following format:
