@@ -181,10 +181,9 @@ export class ProjectService {
    * Start a new analyzing for a project.
    * Sends a POST request to /projects/{id}/analyzingJob
    * @param id The id of the project.
-   * @param branch The branch to analyze.
    */
-  public startAnalyzingJob(id: number, branch: string): Promise<HttpResponse<any>> {
-    return this.httpClient.post(this.apiURL + 'projects/' + id + '/' + branch + '/analyze', {},
+  public startAnalyzingJob(id: number): Promise<HttpResponse<any>> {
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze', null,
       {observe: 'response'}).toPromise();
   }
 

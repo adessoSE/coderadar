@@ -79,12 +79,12 @@ export class ListViewComponent implements OnInit, OnChanges {
     });
   }
 
-  startAnalysis(id: number, branch: string) {
-    this.projectService.startAnalyzingJob(id, branch).then(() => {
+  startAnalysis(id: number) {
+    this.projectService.startAnalyzingJob(id).then(() => {
       this.openSnackBar('Analysis started!', '🞩');
     }).catch(error => {
       if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh(() => this.projectService.startAnalyzingJob(id, branch));
+        this.userService.refresh(() => this.projectService.startAnalyzingJob(id));
       } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
         if (error.error.errorMessage === 'Cannot analyze project without analyzers') {
           this.openSnackBar('Cannot analyze, no analyzers configured for this project!', '🞩');

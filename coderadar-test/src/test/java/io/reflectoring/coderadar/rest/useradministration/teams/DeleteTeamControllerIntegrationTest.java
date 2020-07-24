@@ -1,6 +1,7 @@
 package io.reflectoring.coderadar.rest.useradministration.teams;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class DeleteTeamControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -45,7 +45,7 @@ class DeleteTeamControllerIntegrationTest extends ControllerTestTemplate {
 
     mvc()
         .perform(delete("/api/teams/" + teamEntity.getId()))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andDo(document("teams/delete"))
         .andReturn();
 
@@ -55,9 +55,7 @@ class DeleteTeamControllerIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void deleteTeamWithNoUsersSuccessfully() throws Exception {
-    mvc()
-        .perform(delete("/api/teams/" + teamEntity.getId()))
-        .andExpect(MockMvcResultMatchers.status().isOk());
+    mvc().perform(delete("/api/teams/" + teamEntity.getId())).andExpect(status().isOk());
 
     List<TeamEntity> teams = teamRepository.findAllWithMembers();
     Assertions.assertTrue(teams.isEmpty());

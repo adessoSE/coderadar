@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.useradministration;
 import static org.hamcrest.Matchers.any;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
@@ -29,7 +30,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(
             post("/api/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("accessToken").value(any(String.class)))
         .andExpect(MockMvcResultMatchers.jsonPath("refreshToken").value(any(String.class)))
         .andDo(documentLogin());
@@ -41,7 +42,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(
             post("/api/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .andExpect(status().isBadRequest());
   }
 
   @Test
@@ -50,7 +51,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(
             post("/api/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isNotFound());
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -66,7 +67,7 @@ class LoginUserControllerIntegrationTest extends ControllerTestTemplate {
         .perform(
             post("/api/user/auth").content(toJson(command)).contentType(MediaType.APPLICATION_JSON))
         .andExpect(MockMvcResultMatchers.jsonPath("errorMessage").value("Bad credentials"))
-        .andExpect(MockMvcResultMatchers.status().isForbidden());
+        .andExpect(status().isForbidden());
   }
 
   private ResultHandler documentLogin() {

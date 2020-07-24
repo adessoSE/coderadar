@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.dependencymap;
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.CoderadarConfigurationProperties;
 import io.reflectoring.coderadar.dependencymap.adapter.DependencyTreeAdapter;
@@ -28,7 +29,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class TreeTest extends ControllerTestTemplate {
 
@@ -61,7 +61,7 @@ class TreeTest extends ControllerTestTemplate {
 
       mvc()
           .perform(get("/api/analyzers/" + testProject.getId() + "/structureMap/" + commitName))
-          .andExpect(MockMvcResultMatchers.status().isOk())
+          .andExpect(status().isOk())
           .andExpect(containsResource(Node.class))
           .andDo(result -> root = fromJson(result.getResponse().getContentAsString(), Node.class));
       Assertions.assertNotNull(root);

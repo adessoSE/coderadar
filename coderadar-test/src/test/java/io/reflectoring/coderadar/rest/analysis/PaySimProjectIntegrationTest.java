@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.analysis;
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
@@ -38,13 +39,15 @@ import java.util.Comparator;
 import java.util.List;
 import net.lingala.zip4j.ZipFile;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.neo4j.ogm.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,7 +107,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/" + projectId + "/modules")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andReturn();
 
     List<ModuleEntity> modules = moduleRepository.findModulesInProjectSortedDesc(projectId);
@@ -124,8 +127,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     // Analyze again
     mvc()
         .perform(
-            post("/api/projects/" + projectId + "/master/analyze")
-                .contentType(MediaType.APPLICATION_JSON))
+            post("/api/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON))
         .andReturn();
 
     // Check values for latest (newest) commit
@@ -175,7 +177,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/" + projectId)
                 .content(toJson(updateProjectCommand))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andReturn();
 
     // Number of commits correct?
@@ -347,8 +349,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     // Start analysis
     mvc()
         .perform(
-            post("/api/projects/" + projectId + "/master/analyze")
-                .contentType(MediaType.APPLICATION_JSON))
+            post("/api/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON))
         .andReturn();
 
     // Commits analyzed?
@@ -384,7 +385,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/" + projectId + "/analyzers")
                 .content(toJson(analyzerConfigurationCommand))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andReturn();
 
     // Configuration saved?
@@ -408,7 +409,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
             post("/api/projects/" + projectId + "/filePatterns")
                 .content(toJson(filePatternCommand))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andReturn();
 
     // Patterns saved?
@@ -429,7 +430,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     mvc()
         .perform(
             post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andReturn();
 
     // Is the project saved?

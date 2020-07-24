@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.analyzerconfig;
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.analyzer.domain.AnalyzerConfigurationEntity;
 import io.reflectoring.coderadar.graph.projectadministration.analyzerconfig.repository.AnalyzerConfigurationRepository;
@@ -41,7 +42,7 @@ class GetAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate 
                     + testProject.getId()
                     + "/analyzers/"
                     + analyzerConfiguration.getId()))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andExpect(containsResource(GetAnalyzerConfigurationResponse.class))
         .andDo(
             result -> {
@@ -59,7 +60,7 @@ class GetAnalyzerConfigControllerIntegrationTest extends ControllerTestTemplate 
   void getAnalyzerConfigurationReturnsErrorWhenNotFound() throws Exception {
     mvc()
         .perform(get("/api/projects/0/analyzers/2"))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage")
                 .value("AnalyzerConfiguration with id 2 not found."))

@@ -3,6 +3,7 @@ package io.reflectoring.coderadar.rest.useradministration;
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static io.reflectoring.coderadar.rest.ResultMatchers.containsResource;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
@@ -28,7 +29,7 @@ class GetUserControllerIntegrationTest extends ControllerTestTemplate {
 
     mvc()
         .perform(get("/api/users/" + userId))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andExpect(containsResource(GetUserResponse.class))
         .andDo(
             result -> {
@@ -44,7 +45,7 @@ class GetUserControllerIntegrationTest extends ControllerTestTemplate {
   void loadUserWithIdOneReturnsErrorWhenUserNotFound() throws Exception {
     mvc()
         .perform(get("/api/users/1"))
-        .andExpect(MockMvcResultMatchers.status().isNotFound())
+        .andExpect(status().isNotFound())
         .andExpect(
             MockMvcResultMatchers.jsonPath("errorMessage").value("User with id 1 not found."));
   }

@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.vcs.port.driven;
 
 import java.util.HashMap;
 import java.util.List;
+import org.springframework.data.util.Pair;
 
 public interface GetRawCommitContentPort {
 
@@ -23,6 +24,7 @@ public interface GetRawCommitContentPort {
    *     not exist
    */
   byte[] getFileDiff(String projectRoot, String filepath, String commitHash);
+
   /**
    * Returns the raw content of a list of files in a commit.
    *
@@ -47,4 +49,14 @@ public interface GetRawCommitContentPort {
           String projectRoot,
           List<io.reflectoring.coderadar.projectadministration.domain.File> files,
           String commitHash);
+
+  /**
+   * @param parentHash The first commit hash.
+   * @param commitHash The second commit hash.
+   * @param projectRoot The local repository.
+   * @return A list of String pairs, where the left element is the old path and the right one is the
+   *     new path.
+   */
+  List<Pair<String, String>> getRenamesBetweenCommits(
+      String parentHash, String commitHash, String projectRoot);
 }

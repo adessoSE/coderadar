@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.useradministration.teams;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class ListTeamsForUserControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -40,7 +40,7 @@ class ListTeamsForUserControllerIntegrationTest extends ControllerTestTemplate {
     MvcResult result =
         mvc()
             .perform(get("/api/users/" + testUser.getId() + "/teams"))
-            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(status().isOk())
             .andDo(document("teams/list/user"))
             .andReturn();
 

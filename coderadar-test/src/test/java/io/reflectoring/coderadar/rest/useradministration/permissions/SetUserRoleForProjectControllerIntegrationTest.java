@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.useradministration.permissions;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class SetUserRoleForProjectControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -55,7 +55,7 @@ class SetUserRoleForProjectControllerIntegrationTest extends ControllerTestTempl
             post("/api/projects/" + testProject.getId() + "/users/" + testUser.getId())
                 .content(toJson(new ProjectRoleJsonWrapper(ProjectRole.ADMIN)))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andDo(
             document(
                 "user/role/project/set",

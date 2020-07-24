@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.useradministration;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -54,7 +55,7 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/user/refresh")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("token").exists())
         .andDo(documentRefresh());
   }
@@ -74,7 +75,7 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/user/refresh")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+        .andExpect(status().isUnauthorized());
   }
 
   @Test
@@ -100,7 +101,7 @@ class RefreshTokenControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/user/refresh")
                 .content(toJson(command))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        .andExpect(status().isBadRequest());
   }
 
   private String createExpiredAccessToken() {

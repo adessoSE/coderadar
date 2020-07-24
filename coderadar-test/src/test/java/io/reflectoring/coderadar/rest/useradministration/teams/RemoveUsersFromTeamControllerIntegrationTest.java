@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.useradministration.teams;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
@@ -16,7 +17,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class RemoveUsersFromTeamControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -49,7 +49,7 @@ class RemoveUsersFromTeamControllerIntegrationTest extends ControllerTestTemplat
             delete("/api/teams/" + teamEntity.getId() + "/users")
                 .content(toJson(new JsonListWrapper<>(Collections.singletonList(testUser.getId()))))
                 .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(status().isOk())
         .andDo(
             document(
                 "teams/remove/user",

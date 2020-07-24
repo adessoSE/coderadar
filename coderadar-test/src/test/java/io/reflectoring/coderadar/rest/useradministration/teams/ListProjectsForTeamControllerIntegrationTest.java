@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.useradministration.teams;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.projectadministration.domain.ProjectEntity;
 import io.reflectoring.coderadar.graph.projectadministration.project.repository.ProjectRepository;
@@ -16,7 +17,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class ListProjectsForTeamControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -49,7 +49,7 @@ class ListProjectsForTeamControllerIntegrationTest extends ControllerTestTemplat
     MvcResult result =
         mvc()
             .perform(get("/api/teams/" + teamEntity.getId() + "/projects"))
-            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(status().isOk())
             .andDo(document("teams/list/projects"))
             .andReturn();
 

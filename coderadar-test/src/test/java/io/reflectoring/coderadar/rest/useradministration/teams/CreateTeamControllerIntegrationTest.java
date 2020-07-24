@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.useradministration.teams;
 
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
@@ -17,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class CreateTeamControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -47,7 +47,7 @@ class CreateTeamControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/teams")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(createTeamCommand)))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andDo(
             document(
                 "teams/create",
@@ -75,7 +75,7 @@ class CreateTeamControllerIntegrationTest extends ControllerTestTemplate {
             post("/api/teams")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(toJson(createTeamCommand)))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andReturn();
 
     List<TeamEntity> teams = teamRepository.findAllWithMembers();

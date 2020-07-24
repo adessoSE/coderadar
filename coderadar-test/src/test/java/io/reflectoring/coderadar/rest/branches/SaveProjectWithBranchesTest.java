@@ -2,6 +2,7 @@ package io.reflectoring.coderadar.rest.branches;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.reflectoring.coderadar.graph.analyzer.repository.CommitRepository;
 import io.reflectoring.coderadar.graph.projectadministration.branch.repository.BranchRepository;
@@ -16,7 +17,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class SaveProjectWithBranchesTest extends ControllerTestTemplate {
   @Autowired private CommitRepository commitRepository;
@@ -31,7 +31,7 @@ class SaveProjectWithBranchesTest extends ControllerTestTemplate {
     mvc()
         .perform(
             post("/api/projects").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
-        .andExpect(MockMvcResultMatchers.status().isCreated())
+        .andExpect(status().isCreated())
         .andDo(
             result -> {
               long id =
