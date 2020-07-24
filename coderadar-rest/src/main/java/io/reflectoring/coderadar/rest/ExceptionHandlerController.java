@@ -29,7 +29,8 @@ public class ExceptionHandlerController {
   }
 
   @ExceptionHandler(UserUnauthorizedException.class)
-  public ResponseEntity<ErrorMessageResponse> userUnauthorizedException(UserUnauthorizedException e) {
+  public ResponseEntity<ErrorMessageResponse> userUnauthorizedException(
+      UserUnauthorizedException e) {
     return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
   }
 
