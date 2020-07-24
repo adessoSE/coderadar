@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 
 import io.reflectoring.coderadar.rest.JsonListWrapper;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.unit.UnitTestTemplate;
 import io.reflectoring.coderadar.rest.useradministration.teams.RemoveUsersFromTeamController;
 import io.reflectoring.coderadar.useradministration.TeamNotFoundException;
@@ -25,7 +26,7 @@ class RemoveUsersFromTeamControllerTest extends UnitTestTemplate {
 
   @Test
   void testRemoveUsersFromTeam() {
-    ResponseEntity<HttpStatus> response =
+    ResponseEntity<ErrorMessageResponse> response =
         testController.removeUsersFromTeam(
             1L, new JsonListWrapper<>(Collections.singletonList(2L)));
     Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());

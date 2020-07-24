@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.useradministration.teams;
 
+import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -8,6 +9,7 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.TeamRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.MvcResult;
 
 class RemoveTeamFromProjectControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -52,5 +55,29 @@ class RemoveTeamFromProjectControllerIntegrationTest extends ControllerTestTempl
 
     List<TeamEntity> teams = teamRepository.listTeamsByProjectIdWithMembers(testProject.getId());
     Assertions.assertTrue(teams.isEmpty());
+  }
+
+  @Test
+  void throwsExceptionWhenTeamIsNotAssignedToProject() throws Exception {
+    teamEntity.setProjects(Collections.emptyList());
+    teamRepository.save(teamEntity, 1);
+
+    MvcResult result =
+        mvc()
+            .perform(
+                delete("/api/projects/" + testProject.getId() + "/teams/" + teamEntity.getId()))
+            .andExpect(status().isBadRequest())
+            .andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+
+    Assertions.assertEquals(
+        "Team with id "
+            + teamEntity.getId()
+            + " is not assigned to project with id "
+            + testProject.getId(),
+        errorMessage);
   }
 }
