@@ -65,7 +65,7 @@ class GetFileContentWithMetricsControllerTest extends ControllerTestTemplate {
 
     mvc()
         .perform(
-            post("/api/projects/" + projectId + "/master/analyze")
+            post("/api/projects/" + projectId + "/analyze")
                 .contentType(MediaType.APPLICATION_JSON));
   }
 

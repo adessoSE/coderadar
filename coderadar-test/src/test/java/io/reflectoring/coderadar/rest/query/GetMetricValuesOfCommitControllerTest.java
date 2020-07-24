@@ -72,8 +72,7 @@ class GetMetricValuesOfCommitControllerTest extends ControllerTestTemplate {
 
     mvc()
         .perform(
-            post("/api/projects/" + projectId + "/master/analyze")
-                .contentType(MediaType.APPLICATION_JSON))
+            post("/api/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON))
         .andReturn();
   }
 

@@ -124,8 +124,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     // Analyze again
     mvc()
         .perform(
-            post("/api/projects/" + projectId + "/master/analyze")
-                .contentType(MediaType.APPLICATION_JSON))
+            post("/api/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON))
         .andReturn();
 
     // Check values for latest (newest) commit
@@ -347,8 +346,7 @@ class PaySimProjectIntegrationTest extends ControllerTestTemplate {
     // Start analysis
     mvc()
         .perform(
-            post("/api/projects/" + projectId + "/master/analyze")
-                .contentType(MediaType.APPLICATION_JSON))
+            post("/api/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON))
         .andReturn();
 
     // Commits analyzed?
