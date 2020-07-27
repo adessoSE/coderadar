@@ -11,7 +11,7 @@ coderadar.cors.enabled=true
 
 logging.level.io.reflectoring.coderadar=DEBUG
 logging.level.org.reflections=ERROR
-logging.file=coderadar.log
+logging.file.name=coderadar.log
 
 spring.data.neo4j.username=neo4j
 spring.data.neo4j.password=neo3j
