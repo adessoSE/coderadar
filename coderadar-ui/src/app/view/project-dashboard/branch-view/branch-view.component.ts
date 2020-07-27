@@ -176,14 +176,14 @@ export class BranchViewComponent implements OnInit, OnChanges {
       this.selectedCommit2 = temp;
     }
     const commits = this.commitLog.map(value => {
-      return {name: value.hash, author: value.author.name,
+      return {hash: value.hash, author: value.author.name,
         authorEmail: value.author.email, comment: value.subject, analyzed: value.analyzed,
         timestamp: value.author.timestamp};
     });
     this.store.dispatch(loadAvailableMetrics());
     this.store.dispatch(setCommits(commits));
-    this.store.dispatch(changeCommit(CommitType.LEFT, commits.find(value => value.name.localeCompare(this.selectedCommit1.hash) === 0)));
-    this.store.dispatch(changeCommit(CommitType.RIGHT, commits.find(value => value.name.localeCompare(this.selectedCommit2.hash) === 0)));
+    this.store.dispatch(changeCommit(CommitType.LEFT, commits.find(value => value.hash.localeCompare(this.selectedCommit1.hash) === 0)));
+    this.store.dispatch(changeCommit(CommitType.RIGHT, commits.find(value => value.hash.localeCompare(this.selectedCommit2.hash) === 0)));
     this.store.dispatch(changeActiveFilter({
       added: true,
       deleted: true,

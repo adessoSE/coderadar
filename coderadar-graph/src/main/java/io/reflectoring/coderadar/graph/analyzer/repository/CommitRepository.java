@@ -74,7 +74,7 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
   @Query(
       "MATCH (p)-[:CONTAINS_COMMIT]->(c) WHERE ID(p) = {0} WITH c "
           + "OPTIONAL MATCH (c)-[r:IS_CHILD_OF]->(c1) "
-          + "WITH c as commit, c1.name as parent ORDER BY r.parentOrder "
+          + "WITH c as commit, c1.hash as parent ORDER BY r.parentOrder "
           + "RETURN commit, collect(parent) as parents "
           + "ORDER BY commit.timestamp DESC")
   @NonNull
@@ -120,8 +120,8 @@ public interface CommitRepository extends Neo4jRepository<CommitEntity, Long> {
    * @return True if commit1 was made after commit 2, false otherwise
    */
   @Query(
-      "MATCH (c1:CommitEntity) WHERE c1.name = {0} WITH c1 LIMIT 1 "
-          + "MATCH (c2:CommitEntity) WHERE c2.name = {1} WITH c1, c2 LIMIT 1 "
+      "MATCH (c1:CommitEntity) WHERE c1.hash = {0} WITH c1 LIMIT 1 "
+          + "MATCH (c2:CommitEntity) WHERE c2.hash = {1} WITH c1, c2 LIMIT 1 "
           + "RETURN c1.timestamp > c2.timestamp")
   boolean commitIsNewer(@NonNull String commit1, @NonNull String commit2);
 
