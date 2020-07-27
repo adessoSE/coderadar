@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.useradministration.permissions;
 
+import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -8,6 +9,7 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.useradministration.service.security.PasswordUtil;
 import java.util.Collections;
 import java.util.Date;
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.MvcResult;
 
 class RemoveUserFromProjectControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -52,5 +55,33 @@ class RemoveUserFromProjectControllerIntegrationTest extends ControllerTestTempl
         .andReturn();
 
     Assertions.assertTrue(userRepository.listUsersForProject(testProject.getId()).isEmpty());
+  }
+
+  @Test
+  void throwsExceptionWhenProjectDoesNotExist() throws Exception {
+    MvcResult result =
+        mvc()
+            .perform(delete("/api/projects/1000/users/" + testUser.getId()))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+    Assertions.assertEquals("Project with id 1000 not found.", errorMessage);
+  }
+
+  @Test
+  void throwsExceptionWhenUserDoesNotExist() throws Exception {
+    MvcResult result =
+        mvc()
+            .perform(delete("/api/projects/" + testProject.getId() + "/users/1000"))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+    Assertions.assertEquals("User with id 1000 not found.", errorMessage);
   }
 }

@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.TeamRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.GetTeamResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,5 +40,16 @@ class GetTeamControllerIntegrationTest extends ControllerTestTemplate {
     GetTeamResponse response =
         fromJson(result.getResponse().getContentAsString(), GetTeamResponse.class);
     Assertions.assertEquals("testTeam", response.getName());
+  }
+
+  @Test
+  void throwsExceptionWhenTeamDoesNotExist() throws Exception {
+    MvcResult result =
+        mvc().perform(get("/api/teams/1000")).andExpect(status().isNotFound()).andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+    Assertions.assertEquals("Team with id 1000 not found.", errorMessage);
   }
 }

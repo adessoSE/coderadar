@@ -1,5 +1,6 @@
 package io.reflectoring.coderadar.rest.useradministration.permissions;
 
+import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -10,6 +11,7 @@ import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
 import io.reflectoring.coderadar.rest.ProjectRoleJsonWrapper;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.service.security.PasswordUtil;
 import java.util.Date;
@@ -18,6 +20,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 
 class SetUserRoleForProjectControllerIntegrationTest extends ControllerTestTemplate {
 
@@ -69,5 +72,39 @@ class SetUserRoleForProjectControllerIntegrationTest extends ControllerTestTempl
     Assertions.assertEquals(1, userRepository.listUsersForProject(testProject.getId()).size());
     Assertions.assertEquals(
         "username", userRepository.listUsersForProject(testProject.getId()).get(0).getUsername());
+  }
+
+  @Test
+  void throwsExceptionWhenProjectDoesNotExist() throws Exception {
+    MvcResult result =
+        mvc()
+            .perform(
+                post("/api/projects/1000/users/" + testUser.getId())
+                    .content(toJson(new ProjectRoleJsonWrapper(ProjectRole.ADMIN)))
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+    Assertions.assertEquals("Project with id 1000 not found.", errorMessage);
+  }
+
+  @Test
+  void throwsExceptionWhenUserDoesNotExist() throws Exception {
+    MvcResult result =
+        mvc()
+            .perform(
+                post("/api/projects/" + testProject.getId() + "/users/1000")
+                    .content(toJson(new ProjectRoleJsonWrapper(ProjectRole.ADMIN)))
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+    Assertions.assertEquals("User with id 1000 not found.", errorMessage);
   }
 }
