@@ -4,14 +4,14 @@
 <div mat-dialog-content>
   <div>
     <div *ngIf="getAliases().length>0">
-    <p><b>Alias{{getAliases().length>1?'es':''}}</b></p>
+    <p><strong>Alias{{getAliases().length>1?'es':''}}</strong></p>
     <ul style ="padding: 0px 16px">
       <li *ngFor="let alias of getAliases()">
         {{alias}}
       </li>
     </ul>
     </div>
-    <p><b>Email{{contributor.emailAddresses.length>1?'s':''}}:</b></p>
+    <p><strong>Email{{contributor.emailAddresses.length>1?'s':''}}:</strong></p>
     <ul style="padding: 0px 16px">
       <li *ngFor="let email of contributor.emailAddresses">
         <a href = "mailto: {{email}}">{{email}}</a>

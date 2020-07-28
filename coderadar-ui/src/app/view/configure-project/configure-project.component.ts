@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
@@ -7,7 +7,7 @@ import {FilePattern} from '../../model/file-pattern';
 import {CONFLICT, FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Module} from '../../model/module';
 import {Title} from '@angular/platform-browser';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
+import {MatDialog,  MatSnackBar} from '@angular/material';
 import {Contributor} from '../../model/contributor';
 import {Branch} from '../../model/branch';
 import {ContributorService} from '../../service/contributor.service';
