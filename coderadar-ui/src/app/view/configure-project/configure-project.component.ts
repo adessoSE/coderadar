@@ -11,6 +11,7 @@ import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/ma
 import {Contributor} from '../../model/contributor';
 import {Branch} from '../../model/branch';
 import {ContributorService} from '../../service/contributor.service';
+import {ContributorMergeDialogComponent} from '../../components/contributor-merge-dialog/merge-dialog.component';
 
 export interface DialogData {
   selected: string;
@@ -341,7 +342,7 @@ export class ConfigureProjectComponent implements OnInit {
 
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(MergeDialogComponent, {
+    const dialogRef = this.dialog.open(ContributorMergeDialogComponent, {
       width: '250px',
       data: {displayNames: this.selectedContributors.map(value => value.displayName).filter(
           (j, i, arr) => arr.findIndex(t => t === j) === i
@@ -374,20 +375,4 @@ export class ConfigureProjectComponent implements OnInit {
       this.selectedContributors.push(c);
     }
   }
-}
-
-@Component({
-  selector: 'app-dialog-overview-example-dialog',
-  templateUrl: 'app-merge-dialog.html',
-})
-export class MergeDialogComponent {
-
-  constructor(
-    public dialogRef: MatDialogRef<MergeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
 }

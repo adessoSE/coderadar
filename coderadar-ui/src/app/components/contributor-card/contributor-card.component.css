@@ -1,0 +1,13 @@
+button{
+  border: transparent;
+  background-color: transparent;
+}
+
+.contributor-name {
+  margin: 0;
+  display: flex;
+}
+
+.contributor-name:hover{
+  text-decoration: underline;
+}
