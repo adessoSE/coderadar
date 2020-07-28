@@ -1,5 +1,5 @@
 export class Commit {
-  name: string;
+  hash: string;
   author: string;
   authorEmail: string;
   comment: string;

@@ -31,10 +31,11 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
    * @param branchName The name of the branch.
    */
   @Query(
-      "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.name = {1} WITH c, p LIMIT 1 "
-          + "CREATE (b:BranchEntity {name: {2}, commitHash: {1}})-[:POINTS_TO]->(c) WITH b, p "
+      "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE ID(p) = {0} AND c.hash = {1} WITH c, p LIMIT 1 "
+          + "CREATE (b:BranchEntity {name: {2}, commitHash: {1}, isTag: {3}})-[:POINTS_TO]->(c) WITH b, p "
           + "CREATE (p)-[:HAS_BRANCH]->(b)")
-  void setBranchOnCommit(long projectId, @NonNull String commitHash, @NonNull String branchName);
+  void setBranchOnCommit(
+      long projectId, @NonNull String commitHash, @NonNull String branchName, boolean isTag);
 
   /**
    * @param projectId The id of the project.
@@ -53,8 +54,9 @@ public interface BranchRepository extends Neo4jRepository<BranchEntity, Long> {
    * @param commitHash The hash of the commit to move the branch to.
    */
   @Query(
-      "MATCH (p)-[:HAS_BRANCH]->(b)-[r:POINTS_TO]->() WHERE ID(p) = {0} AND b.name = {1} WITH p, b, r LIMIT 1 DELETE r WITH p, b "
-          + "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE c.name = {2} WITH c, b LIMIT 1 CREATE (b)-[r1:POINTS_TO]->(c) SET b.commitHash = c.name")
+      "MATCH (p)-[:HAS_BRANCH]->(b) WHERE b.name = {1} WITH p, b LIMIT 1 "
+          + "OPTIONAL MATCH (b)-[r:POINTS_TO]->() DELETE r WITH p, b "
+          + "MATCH (p)-[:CONTAINS_COMMIT]->(c:CommitEntity) WHERE c.hash = {2} WITH c, b LIMIT 1 CREATE (b)-[r1:POINTS_TO]->(c) SET b.commitHash = c.hash")
   void moveBranchToCommit(long projectId, @NonNull String branchName, @NonNull String commitHash);
 
   @Query(
