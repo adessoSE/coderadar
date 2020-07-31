@@ -11,9 +11,8 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {Team} from '../../model/team';
 import {TeamService} from '../../service/team.service';
 import {HttpResponse} from '@angular/common/http';
-import {AddProjectToTeamDialogComponent} from './add-project-to-team-dialog.component';
-import {ConfirmDeleteProjectDialogComponent} from "./delete-project-dialog.component";
-
+import {DeleteProjectDialogComponent} from '../../components/delete-project-dialog/delete-project-dialog.component';
+import {AddProjectToTeamDialogComponent} from "../../components/add-project-to-team-dialog/add-project-to-team-dialog.component";
 
 @Component({
   selector: 'app-main-dashboard',
@@ -24,10 +23,8 @@ export class MainDashboardComponent implements OnInit {
 
   projects: Project[] = [];
   teams: Team[] = [];
-
-  dialogRef: MatDialogRef<ConfirmDeleteProjectDialogComponent>;
   teamDialogRef: MatDialogRef<AddProjectToTeamDialogComponent>;
-
+  dialogRef: MatDialogRef<DeleteProjectDialogComponent>;
   appComponent = AppComponent;
   waiting = false;
   selectedTeam: Team;
@@ -66,7 +63,7 @@ export class MainDashboardComponent implements OnInit {
   }
 
   openProjectDeletionDialog(projectToBeDeleted: Project) {
-    this.dialogRef = this.dialog.open(ConfirmDeleteProjectDialogComponent, {
+    this.dialogRef = this.dialog.open(DeleteProjectDialogComponent, {
       data: {
         project: projectToBeDeleted
       }
