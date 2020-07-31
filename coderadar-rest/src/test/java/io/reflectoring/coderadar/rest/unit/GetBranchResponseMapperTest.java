@@ -13,9 +13,9 @@ class GetBranchResponseMapperTest {
   @Test
   void testBranchResponseMapper() {
     List<Branch> branches = new ArrayList<>();
-    branches.add(new Branch("testBranch1", "testHash1"));
-    branches.add(new Branch("testBranch2", "testHash2"));
-    branches.add(new Branch("testBranch3", "testHash3"));
+    branches.add(new Branch("testBranch1", "testHash1", false));
+    branches.add(new Branch("testBranch2", "testHash2", false));
+    branches.add(new Branch("testBranch3", "testHash3", false));
 
     List<GetBranchResponse> responses = GetBranchResponseMapper.mapBranches(branches);
     Assertions.assertEquals(3L, responses.size());

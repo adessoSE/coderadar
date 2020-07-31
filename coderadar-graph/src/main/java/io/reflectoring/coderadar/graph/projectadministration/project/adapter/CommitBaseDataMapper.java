@@ -9,7 +9,7 @@ public class CommitBaseDataMapper implements Mapper<Commit, CommitEntity> {
   public Commit mapGraphObject(CommitEntity entity) {
     Commit commit = new Commit();
     commit.setId(entity.getId());
-    commit.setName(entity.getName());
+    commit.setHash(entity.getHash());
     commit.setAnalyzed(entity.isAnalyzed());
     commit.setAuthor(entity.getAuthor());
     commit.setComment(entity.getComment());
@@ -20,7 +20,7 @@ public class CommitBaseDataMapper implements Mapper<Commit, CommitEntity> {
 
   public CommitEntity mapDomainObject(Commit commit) {
     CommitEntity commitEntity = new CommitEntity();
-    commitEntity.setName(commit.getName());
+    commitEntity.setHash(commit.getHash());
     commitEntity.setAnalyzed(commit.isAnalyzed());
     commitEntity.setAuthor(commit.getAuthor());
     commitEntity.setComment(commit.getComment());

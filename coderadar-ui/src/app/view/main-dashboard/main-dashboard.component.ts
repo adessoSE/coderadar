@@ -7,15 +7,13 @@ import {FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import {AppComponent} from '../../app.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Team} from "../../model/team";
-import {TeamService} from "../../service/team.service";
-import {HttpResponse} from "@angular/common/http";
-import {ProjectRole} from "../../model/project-role";
-import {FormControl} from "@angular/forms";
+import {MatDialogRef} from '@angular/material/dialog';
 import {ProjectWithRoles} from "../../model/project-with-roles";
-import {ConfirmDeleteProjectDialogComponent} from "./delete-project-dialog.component";
-import {AddProjectToTeamDialogComponent} from "./add-project-to-team-dialog.component";
+import {Team} from '../../model/team';
+import {TeamService} from '../../service/team.service';
+import {HttpResponse} from '@angular/common/http';
+import {DeleteProjectDialogComponent} from '../../components/delete-project-dialog/delete-project-dialog.component';
+import {AddProjectToTeamDialogComponent} from "../../components/add-project-to-team-dialog/add-project-to-team-dialog.component";
 
 @Component({
   selector: 'app-main-dashboard',
@@ -26,10 +24,8 @@ export class MainDashboardComponent implements OnInit {
 
   projects: ProjectWithRoles[] = [];
   teams: Team[] = [];
-
-  dialogRef: MatDialogRef<ConfirmDeleteProjectDialogComponent>;
   teamDialogRef: MatDialogRef<AddProjectToTeamDialogComponent>;
-
+  dialogRef: MatDialogRef<DeleteProjectDialogComponent>;
   appComponent = AppComponent;
   waiting = false;
   selectedTeam: Team;
@@ -68,7 +64,7 @@ export class MainDashboardComponent implements OnInit {
   }
 
   openProjectDeletionDialog(projectToBeDeleted: Project) {
-    this.dialogRef = this.dialog.open(ConfirmDeleteProjectDialogComponent, {
+    this.dialogRef = this.dialog.open(DeleteProjectDialogComponent, {
       data: {
         project: projectToBeDeleted
       }

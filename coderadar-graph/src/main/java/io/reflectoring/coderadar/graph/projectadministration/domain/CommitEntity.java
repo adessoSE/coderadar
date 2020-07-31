@@ -15,7 +15,7 @@ import org.neo4j.ogm.annotation.Relationship;
 @ToString
 public class CommitEntity {
   private Long id;
-  private String name;
+  private String hash;
   private long timestamp;
   private String comment;
   private String author;

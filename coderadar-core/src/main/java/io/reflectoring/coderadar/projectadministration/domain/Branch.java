@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 public class Branch {
   private String name;
   private String commitHash;
+  private boolean isTag;
 }

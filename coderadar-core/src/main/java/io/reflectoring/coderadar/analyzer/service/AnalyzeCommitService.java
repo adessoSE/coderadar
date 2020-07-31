@@ -53,7 +53,7 @@ public class AnalyzeCommitService implements AnalyzeCommitUseCase {
       files.add(ftr.getFile());
     }
 
-    analyzeBulk(commit.getName(), files, analyzers, project)
+    analyzeBulk(commit.getHash(), files, analyzers, project)
         .forEach(
             (file, fileMetrics) ->
                 metricValues.addAll(getMetrics(fileMetrics, commit.getId(), file.getId())));

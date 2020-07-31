@@ -23,13 +23,14 @@ public class ExceptionHandlerController {
   }
 
   @ExceptionHandler(UserUnauthenticatedException.class)
-  public ResponseEntity<ErrorMessageResponse> entityNotFoundException(
+  public ResponseEntity<ErrorMessageResponse> userUnauthenticatedException(
       UserUnauthenticatedException e) {
     return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.FORBIDDEN);
   }
 
   @ExceptionHandler(UserUnauthorizedException.class)
-  public ResponseEntity<ErrorMessageResponse> entityNotFoundException(UserUnauthorizedException e) {
+  public ResponseEntity<ErrorMessageResponse> userUnauthorizedException(
+      UserUnauthorizedException e) {
     return new ResponseEntity<>(new ErrorMessageResponse(e.getMessage()), HttpStatus.UNAUTHORIZED);
   }
 

@@ -33,7 +33,7 @@ export class ViewCommitComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.commit.name = params.name;
+      this.commit.hash = params.name;
       this.projectId = params.id;
       this.getCommitInfo();
       this.getProject();
@@ -47,7 +47,7 @@ export class ViewCommitComponent implements OnInit {
   private getCommitInfo(): void {
     this.waiting = true;
     this.getMetrics().then(response => {
-      this.projectService.getCommitsMetricValues(this.projectId, this.commit.name, response.body)
+      this.projectService.getCommitsMetricValues(this.projectId, this.commit.hash, response.body)
         .then(res => {
           this.waiting = false;
           this.metrics = res.body;
@@ -78,7 +78,7 @@ export class ViewCommitComponent implements OnInit {
     this.projectService.getProject(this.projectId)
       .then(response => {
         this.project = new Project(response.body);
-        this.titleService.setTitle('Coderadar - ' + this.commit.name.substring(0, 7) + ' - ' +
+        this.titleService.setTitle('Coderadar - ' + this.commit.hash.substring(0, 7) + ' - ' +
           AppComponent.trimProjectName(this.project.name));
       })
       .catch(error => {

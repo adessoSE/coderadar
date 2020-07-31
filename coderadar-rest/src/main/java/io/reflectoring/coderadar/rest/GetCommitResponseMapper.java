@@ -13,7 +13,7 @@ public class GetCommitResponseMapper {
     for (Commit commit : commits) {
       result.add(
           new GetCommitResponse()
-              .setName(commit.getName())
+              .setHash(commit.getHash())
               .setAnalyzed(commit.isAnalyzed())
               .setAuthor(commit.getAuthor())
               .setAuthorEmail(commit.getAuthorEmail())

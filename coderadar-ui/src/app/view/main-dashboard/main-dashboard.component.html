@@ -19,8 +19,7 @@
         No projects available in the selected team
       </div>
 
-      <!--Project card list-->
-      <mat-form-field class="contributorSelector">
+      <mat-form-field *ngIf="projects.length != 0 || selectedTeam != undefined">
         <mat-label>Team</mat-label>
         <mat-select (selectionChange)="getProjects()" [(value)]="selectedTeam">
           <mat-option>All</mat-option>
