@@ -6,14 +6,15 @@
 <main>
   <mat-tab-group mat-align-tabs="center">
     <mat-tab label="List view">
-      <app-commit-list (branchOutput)="handleBranchChange($event)"
+      <app-commit-list (selectedBranchOutput)="handleBranchChange($event)"
                        (contributorOutput)="handleContributorChange($event)"
                        [commits]="commits"
                        [contributors]="contributors"
                        [branches]="branches"
                        [roles]="roles"
                        [project]="project"
-                        [waiting]="waiting">
+                       [waiting]="waiting"
+      >
       </app-commit-list>
     </mat-tab>
     <mat-tab label="Graph view">

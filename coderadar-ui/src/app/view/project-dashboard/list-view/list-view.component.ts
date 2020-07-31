@@ -33,7 +33,8 @@ export class ListViewComponent implements OnInit, OnChanges {
   @Input() roles: string[] = [];
   @Input() waiting: boolean;
   @Input() contributors: Contributor[];
-  @Output() branchOutput = new EventEmitter();
+  selectedBranch: string;
+  @Output() selectedBranchOutput = new EventEmitter<string>();
   @Output() contributorOutput = new EventEmitter();
 
   appComponent = AppComponent;
@@ -47,7 +48,6 @@ export class ListViewComponent implements OnInit, OnChanges {
 
   selectedCommit1: Commit;
   selectedCommit2: Commit;
-  selectedBranch = 'master';
   selectedContributor: Contributor = null;
 
   // These are needed for the deselection css to work
@@ -74,6 +74,7 @@ export class ListViewComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.projectId = params.id;
+      this.selectedBranch = params.branch;
       this.cityEffects.currentProjectId  = this.projectId;
       this.showCommitsInRange();
     });

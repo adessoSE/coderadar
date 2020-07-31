@@ -1,5 +1,5 @@
 <app-header [title]="[{location: '/dashboard', name: 'Dashboard'},
-{location: '/project/' + projectId, name: project.name},
+{location: '/project/' + projectId+'/master', name: project.name},
 {location: '/project/'+projectId+'/'+commitHash+'/files',
 name: 'File tree for commit ' + commitHashAbbrev}]"></app-header>
 <main class="bgColor">

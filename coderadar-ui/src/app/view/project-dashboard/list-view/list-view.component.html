@@ -6,7 +6,7 @@
 
   <mat-form-field class="branchSelector">
     <mat-label>Branch</mat-label>
-    <mat-select (valueChange)="branchOutput.emit($event)" [(value)]="selectedBranch">
+    <mat-select (valueChange)="selectedBranchOutput.emit($event)" [(value)]="selectedBranch">
       <mat-optgroup label="Branches">
         <ng-container *ngFor="let branch of branches">
           <mat-option *ngIf="!branch.isTag"  [value]="branch.name">
@@ -89,7 +89,7 @@
           <mat-action-row>
             <button mat-button routerLink="/project/{{project.id}}/{{commit.hash}}/files">File tree</button><br>
             <button mat-button routerLink="/project/{{project.id}}/{{commit.hash}}/dependency-map/">Dependency Map</button>
-            <button [disabled]="!commit.analyzed" mat-button routerLink="/project/{{project.id}}/{{commit.hash}}">Raw metrics</button>
+            <button [disabled]="!commit.analyzed" mat-button routerLink="/project/{{project.id}}/commit/{{commit.hash}}">Raw metrics</button>
           </mat-action-row>
         </mat-expansion-panel>
       </mat-grid-tile>

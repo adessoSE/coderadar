@@ -13,6 +13,7 @@ import {changeCommit, setCommits} from '../../../city-map/control-panel/control-
 import {CommitType} from '../../../city-map/enum/CommitType';
 import {loadAvailableMetrics} from '../../../city-map/visualization/visualization.actions';
 import * as _ from 'lodash';
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-compare-branches',
@@ -22,7 +23,8 @@ import * as _ from 'lodash';
 export class BranchViewComponent implements OnInit, OnChanges {
   private renderedCommits: any;
 
-  constructor(private cityEffects: AppEffects, private store: Store<fromRoot.AppState>, private router: Router) {
+  constructor(private cityEffects: AppEffects, private store: Store<fromRoot.AppState>, private router: Router,
+              private location: Location) {
   }
 
   @ViewChild('graph', {read: ElementRef})graph: ElementRef;

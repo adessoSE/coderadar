@@ -1,6 +1,6 @@
 <app-header [title]="
-[{location: '/dashboard', name: 'Dashboard'}, {location: '/project/' + project.id,
-name: appComponent.trimProjectName(project.name)}, {location: '/project/' + project.id + '/' + commit.hash, name: commit.hash.substring(0, 7)}]">
+[{location: '/dashboard', name: 'Dashboard'}, {location: '/project/' + project.id + '/master',
+name: appComponent.trimProjectName(project.name)}, {location: '/project/' + project.id + '/commit/' + commit.hash, name: commit.hash.substring(0, 7)}]">
 </app-header>
 
 <div *ngIf="waiting" class="dark-overlay">

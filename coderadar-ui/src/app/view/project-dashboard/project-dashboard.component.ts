@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
@@ -16,6 +16,7 @@ import {loadAvailableMetrics} from '../../city-map/visualization/visualization.a
 import {CommitLog} from '../../model/commit-log';
 import {Contributor} from '../../model/contributor';
 import {ContributorService} from '../../service/contributor.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-project-dashboard',
@@ -33,7 +34,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   contributors: Contributor[];
   commitsAnalyzed = 0;
   project: Project;
-  selectedBranch = 'master';
+  selectedBranch;
   selectedContributor: Contributor = new Contributor();
   waiting = false;
   updateCommitsTimer: Subscription;
@@ -41,7 +42,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router, private userService: UserService, private titleService: Title,
               private projectService: ProjectService, private route: ActivatedRoute, private cityEffects: AppEffects,
-              private store: Store<fromRoot.AppState>, private contributorService: ContributorService) {
+              private store: Store<fromRoot.AppState>, private contributorService: ContributorService, private location: Location) {
     this.project = new Project();
     this.commits = [];
     this.selectedContributor.emailAddresses = [''];
@@ -50,6 +51,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.projectId = params.id;
+      this.selectedBranch = params.branch;
       this.getCommitTree();
       this.getCommits(true);
       if (this.commits.length === 0) {
@@ -103,7 +105,6 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
           this.branches = [];
         } else {
           this.branches = response.body;
-          this.selectedBranch = this.branches[0].name === undefined ? this.branches[0].name  : 'master';
         }
       })
       .catch(error => {
@@ -137,6 +138,7 @@ export class ProjectDashboardComponent implements OnInit, OnDestroy {
   }
 
   handleBranchChange($event: any) {
+    this.location.go(this.location.path(false).replace(this.selectedBranch, $event));
     this.selectedBranch = $event;
     this.getCommits(false);
   }
