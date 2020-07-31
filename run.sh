@@ -12,7 +12,7 @@ exit_func() {
     exit
 }
 
-docker pull neo4j:3.5.11
+docker pull neo4j:3.5.19
 
 docker run --rm -t --publish=7687:7687 \
             --publish=7474:7474 --name neo4j \
@@ -24,6 +24,6 @@ docker run --rm -t --publish=7687:7687 \
 docker pull maxim615/coderadar
 
 
-sleep 20
+sleep 30
 docker run -it --rm --name coderadar --network="host" maxim615/coderadar
 docker kill neo4j &> /dev/null
