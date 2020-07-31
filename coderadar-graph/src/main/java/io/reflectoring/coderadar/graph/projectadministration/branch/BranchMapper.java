@@ -10,6 +10,7 @@ public class BranchMapper implements Mapper<Branch, BranchEntity> {
     Branch branch = new Branch();
     branch.setName(nodeEntity.getName());
     branch.setCommitHash(nodeEntity.getCommitHash());
+    branch.setTag(nodeEntity.isTag());
     return branch;
   }
 
@@ -18,6 +19,7 @@ public class BranchMapper implements Mapper<Branch, BranchEntity> {
     BranchEntity branchEntity = new BranchEntity();
     branchEntity.setName(domainObject.getName());
     branchEntity.setCommitHash(domainObject.getCommitHash());
+    branchEntity.setTag(domainObject.isTag());
     return branchEntity;
   }
 }

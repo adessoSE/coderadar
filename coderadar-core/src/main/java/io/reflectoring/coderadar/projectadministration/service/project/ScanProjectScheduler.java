@@ -11,7 +11,7 @@ import io.reflectoring.coderadar.projectadministration.domain.Branch;
 import io.reflectoring.coderadar.projectadministration.domain.Commit;
 import io.reflectoring.coderadar.projectadministration.domain.Module;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
-import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.AddCommitsPort;
+import io.reflectoring.coderadar.projectadministration.port.driven.analyzer.UpdateCommitsPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.branch.DeleteBranchPort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.CreateModulePort;
 import io.reflectoring.coderadar.projectadministration.port.driven.module.DeleteModulePort;
@@ -49,7 +49,7 @@ public class ScanProjectScheduler {
   private final GetProjectPort getProjectPort;
   private final ListModulesOfProjectUseCase listModulesOfProjectUseCase;
   private final CreateModulePort createModulePort;
-  private final AddCommitsPort addCommitsPort;
+  private final UpdateCommitsPort updateCommitsPort;
   private final DeleteModulePort deleteModulePort;
   private final TaskExecutor taskExecutor;
   private final DeleteBranchPort deleteBranchPort;
@@ -69,7 +69,7 @@ public class ScanProjectScheduler {
       GetProjectPort getProjectPort,
       ListModulesOfProjectUseCase listModulesOfProjectUseCase,
       CreateModulePort createModulePort,
-      AddCommitsPort addCommitsPort,
+      UpdateCommitsPort updateCommitsPort,
       DeleteModulePort deleteModulePort,
       TaskExecutor taskExecutor,
       DeleteBranchPort deleteBranchPort,
@@ -83,7 +83,7 @@ public class ScanProjectScheduler {
     this.getProjectPort = getProjectPort;
     this.listModulesOfProjectUseCase = listModulesOfProjectUseCase;
     this.createModulePort = createModulePort;
-    this.addCommitsPort = addCommitsPort;
+    this.updateCommitsPort = updateCommitsPort;
     this.deleteModulePort = deleteModulePort;
     this.taskExecutor = taskExecutor;
     this.deleteBranchPort = deleteBranchPort;
@@ -156,7 +156,7 @@ public class ScanProjectScheduler {
     tasks.remove(projectId);
   }
 
-  private List<String> checkForNewCommits(Project project) {
+  public List<String> checkForNewCommits(Project project) {
     try {
       String localDir =
           coderadarConfigurationProperties.getWorkdir() + "/projects/" + project.getWorkdirName();
@@ -184,7 +184,7 @@ public class ScanProjectScheduler {
 
         List<Commit> commits =
             extractProjectCommitsUseCase.getCommits(localDir, getProjectDateRange(project));
-        addCommitsPort.addCommits(project.getId(), commits, updatedBranches);
+        updateCommitsPort.updateCommits(project.getId(), commits, updatedBranches);
 
         // Re-create the modules
         for (Module module : modules) {

@@ -8,7 +8,7 @@ import lombok.ToString;
 @Data
 public class Commit {
   private long id;
-  private String name;
+  private String hash;
   private long timestamp;
   private String comment;
   private String author;

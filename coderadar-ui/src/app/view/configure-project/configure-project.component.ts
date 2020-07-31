@@ -24,17 +24,17 @@ export class ConfigureProjectComponent implements OnInit {
 
 
   projectName: string;
-  analyzers: AnalyzerConfiguration[];
-  filePatterns: FilePattern[];
-  contributors: Contributor[];
-  branches: Branch[];
+  analyzers: AnalyzerConfiguration[] = [];
+  filePatterns: FilePattern[] = []
+  contributors: Contributor[] = [];
+  branches: Branch[] = [];
   selectedContributors: Contributor[] = [];
 
   // Fields for input binding
   filePatternIncludeInput;
   filePatternExcludeInput;
   modulesInput;
-  modules: Module[];
+  modules: Module[] = [];
   processing = false;
 
   projectId: any;
@@ -47,10 +47,6 @@ export class ConfigureProjectComponent implements OnInit {
     this.filePatternIncludeInput = '';
     this.filePatternExcludeInput = '';
     this.modulesInput = '';
-    this.modules = [];
-    this.analyzers = [];
-    this.filePatterns = [];
-    this.contributors = [];
   }
 
   ngOnInit(): void {
@@ -371,5 +367,9 @@ export class ConfigureProjectComponent implements OnInit {
     } else {
       this.selectedContributors.push(c);
     }
+  }
+
+  hasTags() {
+    return this.branches !== undefined && this.branches.filter(b => b.isTag).length > 0;
   }
 }

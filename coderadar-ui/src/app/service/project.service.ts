@@ -246,8 +246,8 @@ export class ProjectService {
   public getDeltaTree(firstCommit: Commit, secondCommit: Commit, metricMapping: IMetricMapping, projectId: number):
     Promise<HttpResponse<INode>> {
     const body = {
-      commit1: firstCommit.name,
-      commit2: secondCommit.name,
+      commit1: firstCommit.hash,
+      commit2: secondCommit.hash,
       metrics: [metricMapping.heightMetricName, metricMapping.groundAreaMetricName, metricMapping.colorMetricName]
     };
 
