@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Project} from '../../model/project';
 import {ProjectService} from '../../service/project.service';
 import {Router} from '@angular/router';
@@ -7,7 +7,8 @@ import {FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Title} from '@angular/platform-browser';
 import {AppComponent} from '../../app.component';
 import {MatDialog, MatSnackBar} from '@angular/material';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatDialogRef} from '@angular/material/dialog';
+import {DeleteProjectDialogComponent} from '../../components/delete-project-dialog/delete-project-dialog.component';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -18,7 +19,7 @@ export class MainDashboardComponent implements OnInit {
 
   projects: Project[] = [];
 
-  dialogRef: MatDialogRef<ConfirmDeleteProjectDialogComponent>;
+  dialogRef: MatDialogRef<DeleteProjectDialogComponent>;
   appComponent = AppComponent;
   waiting = false;
 
@@ -54,7 +55,7 @@ export class MainDashboardComponent implements OnInit {
   }
 
   openProjectDeletionDialog(projectToBeDeleted: Project) {
-    this.dialogRef = this.dialog.open(ConfirmDeleteProjectDialogComponent, {
+    this.dialogRef = this.dialog.open(DeleteProjectDialogComponent, {
       data: {
         project: projectToBeDeleted
       }
@@ -135,27 +136,4 @@ export class MainDashboardComponent implements OnInit {
       }
     });
   }
-}
-
-class DeleteProjectDialogData {
-  project: Project;
-}
-
-@Component({
-  selector: 'app-delete-project-dialog',
-  templateUrl: 'delete-project-dialog.html'
-})
-export class ConfirmDeleteProjectDialogComponent{
-
-  constructor(
-    public dialogRef: MatDialogRef<ConfirmDeleteProjectDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DeleteProjectDialogData
-  ) {
-
-  }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
 }

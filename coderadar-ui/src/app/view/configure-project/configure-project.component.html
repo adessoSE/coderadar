@@ -93,7 +93,7 @@
               </div>
               <div *ngFor="let c of contributors">
                 <mat-checkbox (change)="updateSelectedContributors(c)" name="{{c.displayName}}">
-                  {{c.displayName}}
+                  <app-contributor-card [contributor]="c" [noAvatar]="true"></app-contributor-card>
                 </mat-checkbox>
               </div>
               <button *ngIf="selectedContributors.length > 1" mat-raised-button style="margin: 10px" (click)="openDialog()">Merge</button>

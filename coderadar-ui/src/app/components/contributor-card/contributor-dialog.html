@@ -1,0 +1,22 @@
+<div mat-dialog-title>
+  <p class="contributor-name">{{contributor.displayName}}</p>
+</div>
+<div mat-dialog-content>
+  <div>
+    <div *ngIf="getAliases().length>0">
+    <p><strong>Alias{{getAliases().length>1?'es':''}}</strong></p>
+    <ul style ="padding: 0px 16px">
+      <li *ngFor="let alias of getAliases()">
+        {{alias}}
+      </li>
+    </ul>
+    </div>
+    <p><strong>Email{{contributor.emailAddresses.length>1?'s':''}}:</strong></p>
+    <ul style="padding: 0px 16px">
+      <li *ngFor="let email of contributor.emailAddresses">
+        <a href = "mailto: {{email}}">{{email}}</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
