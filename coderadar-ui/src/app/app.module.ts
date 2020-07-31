@@ -9,10 +9,10 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AddProjectComponent} from './view/add-project/add-project.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {MainDashboardComponent, ConfirmDeleteProjectDialogComponent} from './view/main-dashboard/main-dashboard.component';
+import {MainDashboardComponent} from './view/main-dashboard/main-dashboard.component';
 import {LayoutModule} from '@angular/cdk/layout';
 import {AuthInterceptor} from './auth.interceptor';
-import {ConfigureProjectComponent, MergeDialogComponent} from './view/configure-project/configure-project.component';
+import {ConfigureProjectComponent} from './view/configure-project/configure-project.component';
 import {EditProjectComponent} from './view/edit-project/edit-project.component';
 import {HeaderComponent} from './view/header/header.component';
 import {FooterComponent} from './view/footer/footer.component';
@@ -34,10 +34,8 @@ import {
   MatSidenavModule,
   MatToolbarModule,
   MatProgressSpinnerModule,
-  MatExpansionModule,
-  MatTabsModule,
-  MatDialogModule,
-  MatTreeModule,
+  MatExpansionModule, MatTabsModule,
+  MatDialogModule, MatTreeModule,
   MatTooltipModule,
   MAT_DIALOG_DEFAULT_OPTIONS, MatDialogConfig,
 } from '@angular/material';
@@ -64,7 +62,12 @@ import {PinchZoomModule} from 'ngx-pinch-zoom';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ListViewComponent } from './view/project-dashboard/list-view/list-view.component';
 import { BranchViewComponent } from './view/project-dashboard/branch-view/branch-view.component';
+import {ContributorCardComponent, ContributorDialogComponent} from './components/contributor-card/contributor-card.component';
 import { FileViewComponent } from './view/file-view/file-view.component';
+import {ContributorMergeDialogComponent} from './components/contributor-merge-dialog/merge-dialog.component';
+import {
+  DeleteProjectDialogComponent
+} from './components/delete-project-dialog/delete-project-dialog.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -90,7 +93,7 @@ const appRoutes: Routes = [
     RegisterComponent,
     AddProjectComponent,
     MainDashboardComponent,
-    ConfirmDeleteProjectDialogComponent,
+    DeleteProjectDialogComponent,
     ConfigureProjectComponent,
     EditProjectComponent,
     HeaderComponent,
@@ -100,13 +103,16 @@ const appRoutes: Routes = [
     ViewCommitComponent,
     CityViewComponent,
     DependencyRootComponent,
-    MergeDialogComponent,
+    ContributorMergeDialogComponent,
     DependencyCompareComponent,
     TreeNodeComponent,
     CityViewHeaderComponent,
     ListViewComponent,
     BranchViewComponent,
-    FileViewComponent
+    ContributorDialogComponent,
+    ContributorCardComponent,
+    FileViewComponent,
+    DeleteProjectDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -174,8 +180,9 @@ const appRoutes: Routes = [
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    MergeDialogComponent,
-    ConfirmDeleteProjectDialogComponent
+    ContributorMergeDialogComponent,
+    ContributorDialogComponent,
+    DeleteProjectDialogComponent
   ]
 })
 export class AppModule {
