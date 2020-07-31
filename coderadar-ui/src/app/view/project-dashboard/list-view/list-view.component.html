@@ -7,9 +7,20 @@
   <mat-form-field class="branchSelector">
     <mat-label>Branch</mat-label>
     <mat-select (valueChange)="branchOutput.emit($event)" [(value)]="selectedBranch">
-      <mat-option *ngFor="let branch of branches" [value]="branch.name">
-        {{branch.name}}
-      </mat-option>
+      <mat-optgroup label="Branches">
+        <ng-container *ngFor="let branch of branches">
+          <mat-option *ngIf="!branch.isTag"  [value]="branch.name">
+            {{branch.name}}
+          </mat-option>
+        </ng-container>
+      </mat-optgroup>
+      <mat-optgroup label="Tags" *ngIf="hasTags()">
+        <ng-container *ngFor="let branch of branches">
+          <mat-option *ngIf="branch.isTag"  [value]="branch.name">
+            {{branch.name}}
+          </mat-option>
+        </ng-container>
+      </mat-optgroup>
     </mat-select>
   </mat-form-field>
 
@@ -61,7 +72,7 @@
                              class="dashboard-card" style=" border-radius: 0;" (click)="selectCard(commit)">
           <mat-expansion-panel-header>
             <mat-panel-description>
-              {{commit.name.substr(0, 7)}}
+              {{commit.hash.substr(0, 7)}}
             </mat-panel-description>
             <mat-panel-description style="position: absolute; left: 13%;">
               {{commit.author}}
@@ -75,9 +86,9 @@
           </mat-expansion-panel-header>
           <mat-label>Analyzed: <strong>{{booleanToString(commit.analyzed)}}</strong></mat-label>
           <mat-action-row>
-            <button mat-button routerLink="/project/{{project.id}}/{{commit.name}}/files">File tree</button><br>
-            <button mat-button routerLink="/project/{{project.id}}/{{commit.name}}/dependency-map/">Dependency Map</button>
-            <button [disabled]="!commit.analyzed" mat-button routerLink="/project/{{project.id}}/{{commit.name}}">Raw metrics</button>
+            <button mat-button routerLink="/project/{{project.id}}/{{commit.hash}}/files">File tree</button><br>
+            <button mat-button routerLink="/project/{{project.id}}/{{commit.hash}}/dependency-map/">Dependency Map</button>
+            <button [disabled]="!commit.analyzed" mat-button routerLink="/project/{{project.id}}/{{commit.hash}}">Raw metrics</button>
           </mat-action-row>
         </mat-expansion-panel>
       </mat-grid-tile>
@@ -92,7 +103,7 @@
 
     <a *ngIf="selectedCommit1 !== null && selectedCommit2 !== null
     && selectedCommit1 !== undefined && selectedCommit2 !== undefined" class="compare-button-2" color="accent" mat-fab
-       routerLink="/project/{{project.id}}/{{selectedCommit1.name}}/{{selectedCommit2.name}}/dependency-map">
+       routerLink="/project/{{project.id}}/{{selectedCommit1.hash}}/{{selectedCommit2.hash}}/dependency-map">
       <div>
         <mat-icon style="color: white; font-size: 14pt; margin-top: 3px">library_books</mat-icon>
       </div>

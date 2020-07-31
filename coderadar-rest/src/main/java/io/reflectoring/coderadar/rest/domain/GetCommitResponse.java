@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class GetCommitResponse {
-  private String name;
+  private String hash;
   private String author;
   private String authorEmail;
   private String comment;

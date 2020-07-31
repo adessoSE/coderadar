@@ -216,7 +216,7 @@ public class AnalyzingService
    * @param commit The commit that was analyzed.
    */
   private void log(Commit commit) {
-    logger.info("Analyzed commit: {} {}", commit.getComment(), commit.getName());
+    logger.info("Analyzed commit: {} {}", commit.getComment(), commit.getHash());
   }
 
   /**
