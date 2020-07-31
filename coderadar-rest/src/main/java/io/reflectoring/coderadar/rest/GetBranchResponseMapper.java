@@ -11,7 +11,7 @@ public class GetBranchResponseMapper {
   public static List<GetBranchResponse> mapBranches(List<Branch> branches) {
     List<GetBranchResponse> result = new ArrayList<>(branches.size());
     for (Branch branch : branches) {
-      result.add(new GetBranchResponse(branch.getName(), branch.getCommitHash()));
+      result.add(new GetBranchResponse(branch.getName(), branch.getCommitHash(), branch.isTag()));
     }
     return result;
   }

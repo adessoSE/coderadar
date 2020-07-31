@@ -25,7 +25,7 @@ export class ConfigureProjectComponent implements OnInit {
 
   projectName: string;
   analyzers: AnalyzerConfiguration[] = [];
-  filePatterns: FilePattern[] = []
+  filePatterns: FilePattern[] = [];
   contributors: Contributor[] = [];
   branches: Branch[] = [];
   selectedContributors: Contributor[] = [];

@@ -284,7 +284,6 @@ public class CommitAdapter implements SaveCommitPort, UpdateCommitsPort {
     // Get all of the existing commits and save them in a map
     Map<String, CommitEntity> walkedCommits = new HashMap<>();
     IdentityHashMap<File, FileEntity> walkedFiles = new IdentityHashMap<>();
-
     commitRepository.findByProjectId(projectId).forEach(c -> walkedCommits.put(c.getHash(), c));
 
     // Remove any already existing commits from the new commits passed into this method
