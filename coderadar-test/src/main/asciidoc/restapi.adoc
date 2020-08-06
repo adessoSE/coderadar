@@ -221,8 +221,6 @@ include::{snippets}/projects/create/request-fields.adoc[]
 ==== Creating a Project
 anchor:creating-a-project[]
 
-// TODO dates have Null as data type
-
 ===== Example Request
 
 include::{snippets}/projects/create/http-request.adoc[]
@@ -709,7 +707,6 @@ commits.
 include::{snippets}/metrics/deltaTree/request-fields.adoc[]
 
 ===== Response Structure
-// TODO renamedFrom, renamedTo, changes without data type; renamedFrom, renamedTo without description
 
 include::{snippets}/metrics/deltaTree/response-fields.adoc[]
 
