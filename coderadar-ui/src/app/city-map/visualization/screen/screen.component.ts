@@ -1,6 +1,16 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import * as THREE from 'three';
-import {BoxGeometry, Line, Mesh, MeshBasicMaterial, Object3D, Scene, Vector2, Vector3, WebGLRenderer} from 'three';
+import {
+  BoxGeometry,
+  Line,
+  Mesh,
+  MeshBasicMaterial,
+  Object3D,
+  Scene,
+  Vector2,
+  Vector3,
+  WebGLRenderer
+} from 'three';
 import * as TWEEN from '@tweenjs/tween.js';
 
 import {Subscription} from 'rxjs';
@@ -22,6 +32,7 @@ import {BlockConnection} from '../../geometry/block-connection';
 import {NodeType} from '../../enum/NodeType';
 import {ElementAnalyzer} from '../../helper/element-analyzer';
 import {ScreenInteractionService} from "../../service/screen-interaction.service";
+import {ChangetypeSymbols} from "../changetype-symbols/changetype-symbols";
 
 @Component({
   selector: 'app-screen',
@@ -45,6 +56,8 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   spatialCursor: Object3D;
   highlightBoxes: Object3D[] = [];
   interactionHandler: InteractionHandler;
+  changetypeSymbols:ChangetypeSymbols;
+
 
   public displayTooltip = true;
 
@@ -84,7 +97,6 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
         }
         document.querySelector('#stage').classList.add('split');
       }
-
       this.resetScene();
       this.prepareView(this.metricTree);
       this.applyFilter(this.activeFilter);
@@ -117,6 +129,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
     this.create3DCursor();
     this.createSelectionHighlightBox();
     this.createInteractionHandler();
+    this.changetypeSymbols = new ChangetypeSymbols();
 
     this.initializeEventListeners();
 
@@ -212,6 +225,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
 
   resetCamera() {
     const root = this.getRoot();
+    if(!root)return;
     // pythagoras
     const diagonal = Math.sqrt(Math.pow(root.scale.x, 2) + Math.pow(root.scale.z, 2));
     this.camera.position.x = root.scale.x * 2;
@@ -272,11 +286,14 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
       this.scene.add(element);
     });
 
+
     if (this.view instanceof MergedView) {
       this.view.calculateConnections(this.scene);
       this.view.getConnections().forEach((blockConnection: BlockConnection) => {
         this.scene.add(blockConnection.getCurve());
       });
+    }else{
+      this.changetypeSymbols.addChangetypeSymbols(this.scene);
     }
   }
 
