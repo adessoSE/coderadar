@@ -33,7 +33,8 @@ export class CommitChooserComponent implements OnInit {
     if (commit === null || commit === undefined) {
       return 'empty';
     }
-    return commit.hash.substring(0, CommitChooserComponent.COMMIT_HASH_LENGTH) + ', ' + commit.author + ', ' + new Date(commit.timestamp).toUTCString();
+    return commit.hash.substring(0, CommitChooserComponent.COMMIT_HASH_LENGTH) + ', ' +
+      commit.author + ', ' + new Date(commit.timestamp).toUTCString();
   }
 
   filterCommitOptions(value: string, source: {value: Commit, displayValue: string}[]): {value: Commit, displayValue: string}[] {

@@ -16,7 +16,9 @@ export class SearchComponent implements OnInit {
   constructor() {
   }
 
-  filterFileOptions(value: string, source: {value: string, displayValue: string, score: number}[]): {value: string, displayValue: string}[] {
+  filterFileOptions(value: string, source: {value: string, displayValue: string, score: number}[]):
+    {value: string, displayValue: string}[] {
+
     if (source === undefined) {
       return [];
     } else if (typeof value !== 'string') {
