@@ -77,7 +77,7 @@ Simply run `gradlew build`.
 
 ### Starting coderadar
 * install Neo4j
-* copy the file `coderadar-app/src/main/resources/local.application.properties.template` into a file named `local.application.properties`
+* copy the file `coderadar-app/src/main/resources/application.properties.template` into a file named `application.properties`
   in the same folder and edit the configuration parameters in that file for your local environment and database
 * run `gradle build bootRun` from the project directory
 * coderadar will be accessible on `localhost:8080` by default
