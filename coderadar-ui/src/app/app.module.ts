@@ -62,14 +62,15 @@ import {PinchZoomModule} from 'ngx-pinch-zoom';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ListViewComponent } from './view/project-dashboard/list-view/list-view.component';
 import { BranchViewComponent } from './view/project-dashboard/branch-view/branch-view.component';
-import {ContributorCardComponent, ContributorDialogComponent} from './components/contributor-card/contributor-card.component';
+import {ContributorCardComponent} from './components/contributor-card/contributor-card.component';
 import { FileViewComponent } from './view/file-view/file-view.component';
 import { TeamsDashboardComponent } from './view/teams-dashboard/teams-dashboard.component';
 import { AddTeamComponent } from './view/add-team/add-team.component';
 import { SidenavContentComponent } from './view/sidenav-content/sidenav-content.component';
 import {ContributorMergeDialogComponent} from './components/contributor-merge-dialog/contributor-merge-dialog.component';
-import {DeleteProjectDialogComponent} from "./components/delete-project-dialog/delete-project-dialog.component";
-import {AddProjectToTeamDialogComponent} from "./components/add-project-to-team-dialog/add-project-to-team-dialog.component";
+import {DeleteProjectDialogComponent} from './components/delete-project-dialog/delete-project-dialog.component';
+import {AddProjectToTeamDialogComponent} from './components/add-project-to-team-dialog/add-project-to-team-dialog.component';
+import {ContributorDialogComponent} from "./components/contributor-card/contributor-dialog.component";
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},

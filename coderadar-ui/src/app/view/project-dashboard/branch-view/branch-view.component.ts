@@ -20,10 +20,10 @@ import * as _ from 'lodash';
   styleUrls: ['./branch-view.component.scss']
 })
 export class BranchViewComponent implements OnInit, OnChanges {
-  private renderedCommits: any;
 
   constructor(private cityEffects: AppEffects, private store: Store<fromRoot.AppState>, private router: Router) {
   }
+  private renderedCommits: any;
 
   @ViewChild('graph', {read: ElementRef})graph: ElementRef;
 
@@ -43,6 +43,43 @@ export class BranchViewComponent implements OnInit, OnChanges {
   private gitGraph: GitgraphUserApi<SVGElement>;
 
   private selectedCommitColor = '#f60';
+
+  private static setCommitColor(hash: string, selectedCommitColor: string) {
+    const element = document.getElementById(hash);
+
+    // Color the commit dot
+    element.setAttribute('fill', selectedCommitColor);
+
+    const parent = element.parentElement.parentElement.parentElement;
+
+    // Color the text
+    parent.children.item(1)
+      .children.item(0).children.item(0).setAttribute('fill', selectedCommitColor);
+
+    // See if there is a branch (and tag)
+    if (parent.children.item(1).children.item(1) !== null) {
+      const elementToColor = parent.children.item(1)
+        .children.item(1).children.item(0);
+
+      elementToColor.children.item(0).setAttribute('stroke', selectedCommitColor);
+
+      // If there is a tag, color it
+      if (elementToColor.children.item(0).tagName === 'path') {
+        elementToColor.children.item(0).setAttribute('fill', selectedCommitColor);
+      } else {
+        elementToColor.children.item(1).setAttribute('fill', selectedCommitColor);
+      }
+    }
+
+    // Check if there is only a tag
+    if (parent.children.item(1).children.item(2) !== null) {
+      const elementToColor = parent.children.item(1)
+        .children.item(2).children.item(0).children.item(0);
+      elementToColor.setAttribute('stroke', selectedCommitColor);
+      elementToColor.setAttribute('fill', selectedCommitColor);
+    }
+
+  }
 
   ngOnInit() {
     this.initTree();
@@ -66,49 +103,13 @@ export class BranchViewComponent implements OnInit, OnChanges {
       this.prevSelectedCommit2 = selectedCommit;
       BranchViewComponent.setCommitColor(commitElement.hash, commitElement.style.color);
     } else {
-      if(this.selectedCommit2 !== null) {
-        BranchViewComponent.setCommitColor(this.selectedCommit2.hash, this.renderedCommits.find(c => c.hash === this.selectedCommit2.hash).style.color);
+      if (this.selectedCommit2 !== null) {
+        BranchViewComponent.setCommitColor(this.selectedCommit2.hash,
+          this.renderedCommits.find(c => c.hash === this.selectedCommit2.hash).style.color);
       }
       this.selectedCommit2 = selectedCommit;
       BranchViewComponent.setCommitColor(commitElement.hash, this.selectedCommitColor);
     }
-  }
-
-  private static setCommitColor(hash: string, selectedCommitColor: string) {
-    let element = document.getElementById(hash);
-
-    //Color the commit dot
-    element.setAttribute("fill", selectedCommitColor);
-
-    let parent = element.parentElement.parentElement.parentElement;
-
-    //Color the text
-    parent.children.item(1)
-      .children.item(0).children.item(0).setAttribute("fill", selectedCommitColor);
-
-    //See if there is a branch (and tag)
-    if(parent.children.item(1).children.item(1) !== null) {
-      let elementToColor = parent.children.item(1)
-        .children.item(1).children.item(0);
-
-      elementToColor.children.item(0).setAttribute("stroke", selectedCommitColor);
-
-      //If there is a tag, color it
-      if(elementToColor.children.item(0).tagName === "path") {
-        elementToColor.children.item(0).setAttribute("fill", selectedCommitColor);
-      } else {
-        elementToColor.children.item(1).setAttribute("fill", selectedCommitColor);
-      }
-    }
-
-    //Check if there is only a tag
-    if(parent.children.item(1).children.item(2) !== null) {
-      let elementToColor = parent.children.item(1)
-        .children.item(2).children.item(0).children.item(0);
-      elementToColor.setAttribute("stroke", selectedCommitColor);
-      elementToColor.setAttribute("fill", selectedCommitColor);
-    }
-
   }
 
   showCommitsInRange() {
