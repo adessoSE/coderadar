@@ -9,6 +9,7 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.TeamRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.GetProjectResponse;
 import java.util.Collections;
 import java.util.Date;
@@ -57,5 +58,16 @@ class ListProjectsForTeamControllerIntegrationTest extends ControllerTestTemplat
         fromJson(result.getResponse().getContentAsString(), GetProjectResponse[].class);
     Assertions.assertEquals(1L, projects.length);
     Assertions.assertEquals("project", projects[0].getName());
+  }
+
+  @Test
+  void throwsExceptionWhenTeamDoesNotExist() throws Exception {
+    MvcResult result =
+        mvc().perform(get("/api/teams/1000/projects")).andExpect(status().isNotFound()).andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+    Assertions.assertEquals("Team with id 1000 not found.", errorMessage);
   }
 }

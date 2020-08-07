@@ -80,4 +80,32 @@ class RemoveTeamFromProjectControllerIntegrationTest extends ControllerTestTempl
             + testProject.getId(),
         errorMessage);
   }
+
+  @Test
+  void throwsExceptionWhenProjectDoesNotExist() throws Exception {
+    MvcResult result =
+        mvc()
+            .perform(delete("/api/projects/1000/teams/" + teamEntity.getId()))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+    Assertions.assertEquals("Project with id 1000 not found.", errorMessage);
+  }
+
+  @Test
+  void throwsExceptionWhenTeamDoesNotExist() throws Exception {
+    MvcResult result =
+        mvc()
+            .perform(delete("/api/projects/" + testProject.getId() + "/teams/1000"))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+    Assertions.assertEquals("Team with id 1000 not found.", errorMessage);
+  }
 }

@@ -114,4 +114,23 @@ class CreateTeamControllerIntegrationTest extends ControllerTestTemplate {
             .getErrorMessage();
     Assertions.assertEquals("Team with name testTeam already exists!", errorMessage);
   }
+
+  @Test
+  void throwsExceptionWhenUserNotFound() throws Exception {
+    CreateTeamCommand command = new CreateTeamCommand();
+    command.setName("testTeam");
+    command.setUserIds(Collections.singletonList(100L));
+
+    MvcResult result =
+        mvc()
+            .perform(
+                post("/api/teams").contentType(MediaType.APPLICATION_JSON).content(toJson(command)))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+    Assertions.assertEquals("User with id 100 not found.", errorMessage);
+  }
 }

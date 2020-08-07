@@ -8,6 +8,7 @@ import io.reflectoring.coderadar.graph.useradministration.domain.TeamEntity;
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.TeamRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.GetTeamResponse;
 import java.util.Collections;
 import org.junit.jupiter.api.Assertions;
@@ -48,5 +49,16 @@ class ListTeamsForUserControllerIntegrationTest extends ControllerTestTemplate {
         fromJson(result.getResponse().getContentAsString(), GetTeamResponse[].class);
     Assertions.assertEquals(1L, teams.length);
     Assertions.assertEquals("testTeam", teams[0].getName());
+  }
+
+  @Test
+  void throwsExceptionWhenUserDoesNotExist() throws Exception {
+    MvcResult result =
+        mvc().perform(get("/api/users/1000/teams")).andExpect(status().isNotFound()).andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+    Assertions.assertEquals("User with id 1000 not found.", errorMessage);
   }
 }
