@@ -50,7 +50,6 @@ class SetUserRoleForProjectControllerIntegrationTest extends ControllerTestTempl
 
   @Test
   void setUserRoleForProjectSuccessfully() throws Exception {
-
     ConstrainedFields<ProjectRoleJsonWrapper> fields = fields(ProjectRoleJsonWrapper.class);
 
     mvc()

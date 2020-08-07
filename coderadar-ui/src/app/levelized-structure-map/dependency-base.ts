@@ -197,7 +197,7 @@ export abstract class DependencyBase {
 
       currentNode.dependencies.forEach(dependency => {
         // find last visible element for dependency as end
-        const end = this.findLastHTMLElement(dependency.path) as HTMLElement;
+        const end = this.findLastHTMLElement(dependency.path);
 
         // if activeDependency is set, draw only activeDependency related dependencies
         if (this.activeDependency !== undefined) {
