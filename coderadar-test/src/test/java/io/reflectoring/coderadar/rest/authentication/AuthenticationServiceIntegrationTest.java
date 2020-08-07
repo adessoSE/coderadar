@@ -40,6 +40,8 @@ class AuthenticationServiceIntegrationTest extends ControllerTestTemplate {
   private ProjectEntity testProject;
   private UserEntity testUser;
 
+  private Long projectId;
+
   @BeforeEach
   void setUp() {
     coderadarConfigurationProperties.setAuthentication(
@@ -52,7 +54,7 @@ class AuthenticationServiceIntegrationTest extends ControllerTestTemplate {
     testProject.setVcsOnline(true);
     testProject.setVcsPassword("testPassword");
     testProject.setVcsUsername("testUser");
-    projectRepository.save(testProject);
+    projectId = projectRepository.save(testProject).getId();
 
     testUser = new UserEntity();
     testUser.setUsername("username1");
@@ -70,71 +72,62 @@ class AuthenticationServiceIntegrationTest extends ControllerTestTemplate {
 
   @Test
   void testUserIsAuthenticatedAsAdmin() {
+    // Set up
     SecurityContextHolder.getContext()
         .setAuthentication(new UsernamePasswordAuthenticationToken("username1", "password1"));
-
-    // Set up
     setUserRoleForProjectService.setRole(testProject.getId(), testUser.getId(), ProjectRole.ADMIN);
 
     // Test
-    Assertions.assertDoesNotThrow(
-        () -> authenticationService.authenticateAdmin(testProject.getId()));
-    Assertions.assertDoesNotThrow(
-        () -> authenticationService.authenticateMember(testProject.getId()));
+    Assertions.assertDoesNotThrow(() -> authenticationService.authenticateAdmin(projectId));
+    Assertions.assertDoesNotThrow(() -> authenticationService.authenticateMember(projectId));
   }
 
   @Test
   void testUserIsAuthenticatedAsMember() {
+    // Set up
     SecurityContextHolder.getContext()
         .setAuthentication(new UsernamePasswordAuthenticationToken("username1", "password1"));
-
-    // Set up
     setUserRoleForProjectService.setRole(testProject.getId(), testUser.getId(), ProjectRole.MEMBER);
 
     // Test
-    Assertions.assertDoesNotThrow(
-        () -> authenticationService.authenticateMember(testProject.getId()));
+    Assertions.assertDoesNotThrow(() -> authenticationService.authenticateMember(projectId));
     Assertions.assertThrows(
-        UserUnauthorizedException.class,
-        () -> authenticationService.authenticateAdmin(testProject.getId()));
+        UserUnauthorizedException.class, () -> authenticationService.authenticateAdmin(projectId));
   }
 
   @Test
   void testThrowsExceptionWhenUserIsUnauthenticated() {
     Assertions.assertThrows(
         UserUnauthenticatedException.class,
-        () -> authenticationService.authenticateAdmin(testProject.getId()));
+        () -> authenticationService.authenticateAdmin(projectId));
     Assertions.assertThrows(
         UserUnauthenticatedException.class,
-        () -> authenticationService.authenticateMember(testProject.getId()));
+        () -> authenticationService.authenticateMember(projectId));
   }
 
   @Test
   void testThrowsExceptionWhenUserIsNotAdmin() {
+    // Set up
     SecurityContextHolder.getContext()
         .setAuthentication(new UsernamePasswordAuthenticationToken("username1", "password1"));
-
-    // Set up
     setUserRoleForProjectService.setRole(testProject.getId(), testUser.getId(), ProjectRole.MEMBER);
 
     // Test
     Assertions.assertThrows(
-        UserUnauthorizedException.class,
-        () -> authenticationService.authenticateAdmin(testProject.getId()));
-    Assertions.assertDoesNotThrow(
-        () -> authenticationService.authenticateMember(testProject.getId()));
+        UserUnauthorizedException.class, () -> authenticationService.authenticateAdmin(projectId));
+    Assertions.assertDoesNotThrow(() -> authenticationService.authenticateMember(projectId));
   }
 
   @Test
   void testThrowsExceptionWhenUserHasNoRole() {
+    // Set up
     SecurityContextHolder.getContext()
         .setAuthentication(new UsernamePasswordAuthenticationToken("username1", "password1"));
 
+    // Test
     Assertions.assertThrows(
-        UserUnauthorizedException.class,
-        () -> authenticationService.authenticateAdmin(testProject.getId()));
+        UserUnauthorizedException.class, () -> authenticationService.authenticateAdmin(projectId));
     Assertions.assertThrows(
-        UserUnauthorizedException.class,
-        () -> authenticationService.authenticateMember(testProject.getId()));
+        UserUnauthorizedException.class, () -> authenticationService.authenticateMember(projectId));
   }
 }
