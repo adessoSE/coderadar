@@ -125,11 +125,11 @@ class GetDeltaTreeForTwoCommitsControllerTest extends ControllerTestTemplate {
                         fieldWithPath("renamedFrom")
                             .type("String")
                             .description(
-                                "The old name of the file, if it was renamed. Null otherwise."),
+                                "The old path of the file, if it was renamed. Null otherwise. This attribute is only set for the new file."),
                         fieldWithPath("renamedTo")
                             .type("String")
                             .description(
-                                "The new name of the file, if it was renamed. Null otherwise."),
+                                "The new path of the file, if it was renamed. Null otherwise. This attribute is only set for the old file."),
                         fieldWithPath("changes")
                             .type("Changes")
                             .description(
