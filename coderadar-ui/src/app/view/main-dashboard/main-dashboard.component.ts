@@ -13,7 +13,7 @@ import {Team} from '../../model/team';
 import {TeamService} from '../../service/team.service';
 import {HttpResponse} from '@angular/common/http';
 import {DeleteProjectDialogComponent} from '../../components/delete-project-dialog/delete-project-dialog.component';
-import {AddProjectToTeamDialogComponent} from "../../components/add-project-to-team-dialog/add-project-to-team-dialog.component";
+import {AddProjectToTeamDialogComponent} from '../../components/add-project-to-team-dialog/add-project-to-team-dialog.component';
 
 @Component({
   selector: 'app-main-dashboard',

@@ -9,6 +9,7 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.GetUserResponse;
 import io.reflectoring.coderadar.useradministration.service.security.PasswordUtil;
 import java.util.Collections;
@@ -59,5 +60,19 @@ class ListUsersForProjectControllerIntegrationTest extends ControllerTestTemplat
         fromJson(result.getResponse().getContentAsString(), GetUserResponse[].class);
     Assertions.assertEquals(1, users.length);
     Assertions.assertEquals("username", users[0].getUsername());
+  }
+
+  @Test
+  void throwsExceptionWhenProjectDoesNotExist() throws Exception {
+    MvcResult result =
+        mvc()
+            .perform(get("/api/projects/1000/users/"))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+    Assertions.assertEquals("Project with id 1000 not found.", errorMessage);
   }
 }

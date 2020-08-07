@@ -9,6 +9,7 @@ import io.reflectoring.coderadar.graph.projectadministration.project.repository.
 import io.reflectoring.coderadar.graph.useradministration.domain.UserEntity;
 import io.reflectoring.coderadar.graph.useradministration.repository.UserRepository;
 import io.reflectoring.coderadar.rest.ControllerTestTemplate;
+import io.reflectoring.coderadar.rest.domain.ErrorMessageResponse;
 import io.reflectoring.coderadar.rest.domain.ProjectWithRolesResponse;
 import io.reflectoring.coderadar.useradministration.domain.ProjectRole;
 import io.reflectoring.coderadar.useradministration.service.security.PasswordUtil;
@@ -62,5 +63,16 @@ class ListProjectsForUserControllerIntegrationTest extends ControllerTestTemplat
     Assertions.assertEquals(1, projects.length);
     Assertions.assertEquals("project", projects[0].getProject().getName());
     Assertions.assertEquals(testProject.getId(), projects[0].getProject().getId());
+  }
+
+  @Test
+  void throwsExceptionWhenUserDoesNotExist() throws Exception {
+    MvcResult result =
+        mvc().perform(get("/api/users/1000/projects")).andExpect(status().isNotFound()).andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+    Assertions.assertEquals("User with id 1000 not found.", errorMessage);
   }
 }

@@ -249,7 +249,7 @@ export class ProjectService {
   }
 
   /**
-   * Returns the delta three of a project given two commits and a metric mapping
+   * Returns the delta tree of a project given two commits and a metric mapping
    * @param firstCommit The first commit
    * @param secondCommit The second commit
    * @param metricMapping The metric mapping

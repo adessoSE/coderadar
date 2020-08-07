@@ -62,7 +62,7 @@ import {PinchZoomModule} from 'ngx-pinch-zoom';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import { ListViewComponent } from './view/project-dashboard/list-view/list-view.component';
 import { BranchViewComponent } from './view/project-dashboard/branch-view/branch-view.component';
-import {ContributorCardComponent, ContributorDialogComponent} from './components/contributor-card/contributor-card.component';
+import {ContributorCardComponent} from './components/contributor-card/contributor-card.component';
 import { FileViewComponent } from './view/file-view/file-view.component';
 import { TeamsDashboardComponent } from './view/teams-dashboard/teams-dashboard.component';
 import { AddTeamComponent } from './view/add-team/add-team.component';
@@ -71,6 +71,7 @@ import {ContributorMergeDialogComponent} from './components/contributor-merge-di
 import {DeleteProjectDialogComponent} from "./components/delete-project-dialog/delete-project-dialog.component";
 import {AddProjectToTeamDialogComponent} from "./components/add-project-to-team-dialog/add-project-to-team-dialog.component";
 import {DeleteTeamDialogComponent} from "./components/delete-team-dialog/delete-team-dialog.component";
+import {ContributorDialogComponent} from "./components/contributor-card/contributor-dialog.component";
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -119,8 +120,8 @@ const appRoutes: Routes = [
     AddProjectToTeamDialogComponent,
     AddTeamComponent,
     SidenavContentComponent,
-    ContributorDialogComponent,
     ContributorCardComponent,
+    ContributorDialogComponent,
     FileViewComponent,
     DeleteProjectDialogComponent,
     DeleteTeamDialogComponent

@@ -86,4 +86,39 @@ class RemoveUsersFromTeamControllerIntegrationTest extends ControllerTestTemplat
         "User with id " + testUser.getId() + " is not in team with id " + teamEntity.getId(),
         errorMessage);
   }
+
+  @Test
+  void throwsExceptionWhenTeamDoesNotExist() throws Exception {
+    MvcResult result =
+        mvc()
+            .perform(
+                delete("/api/teams/1000/users")
+                    .content(
+                        toJson(new JsonListWrapper<>(Collections.singletonList(testUser.getId()))))
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+    Assertions.assertEquals("Team with id 1000 not found.", errorMessage);
+  }
+
+  @Test
+  void throwsExceptionWhenUserDoesNotExist() throws Exception {
+    MvcResult result =
+        mvc()
+            .perform(
+                delete("/api/teams/" + teamEntity.getId() + "/users")
+                    .content(toJson(new JsonListWrapper<>(Collections.singletonList(1000))))
+                    .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+    String errorMessage =
+        fromJson(result.getResponse().getContentAsString(), ErrorMessageResponse.class)
+            .getErrorMessage();
+    Assertions.assertEquals("User with id 1000 not found.", errorMessage);
+  }
 }

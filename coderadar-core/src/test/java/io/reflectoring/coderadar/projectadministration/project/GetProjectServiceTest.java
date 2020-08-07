@@ -6,9 +6,8 @@ import static org.mockito.Mockito.when;
 import io.reflectoring.coderadar.projectadministration.domain.Project;
 import io.reflectoring.coderadar.projectadministration.port.driven.project.GetProjectPort;
 import io.reflectoring.coderadar.projectadministration.service.project.GetProjectService;
-import java.util.Date;
-
 import io.reflectoring.coderadar.useradministration.port.driven.GetUserPort;
+import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
