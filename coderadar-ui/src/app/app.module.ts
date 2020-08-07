@@ -70,7 +70,7 @@ import { SidenavContentComponent } from './view/sidenav-content/sidenav-content.
 import {ContributorMergeDialogComponent} from './components/contributor-merge-dialog/contributor-merge-dialog.component';
 import {DeleteProjectDialogComponent} from './components/delete-project-dialog/delete-project-dialog.component';
 import {AddProjectToTeamDialogComponent} from './components/add-project-to-team-dialog/add-project-to-team-dialog.component';
-import {ContributorDialogComponent} from "./components/contributor-card/contributor-dialog.component";
+import {ContributorDialogComponent} from './components/contributor-card/contributor-dialog.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
