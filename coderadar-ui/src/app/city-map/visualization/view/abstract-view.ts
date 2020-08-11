@@ -8,6 +8,7 @@ import {NodeType} from '../../enum/NodeType';
 import {CommitReferenceType} from '../../enum/CommitReferenceType';
 import {ElementAnalyzer} from '../../helper/element-analyzer';
 import {MetricValue} from "../../../model/metric-value";
+import {FileChangeType} from "../../../model/filechangetype";
 
 declare var GrowingPacker: any;
 
@@ -91,7 +92,7 @@ export abstract class AbstractView {
     isTransparent: boolean,
     metrics?: any,
     commitType?: CommitReferenceType,
-    changeTypes?: any
+    changeTypes?: FileChangeType
   ) {
     let finalX;
     let finalY;
@@ -146,7 +147,7 @@ export abstract class AbstractView {
     isTransparent: boolean,
     metrics: any,
     commitType?: CommitReferenceType,
-    changeTypes?: any
+    changeTypes?: FileChangeType
   ) {
     return {
       parentName: parent ? parent.name : undefined,
