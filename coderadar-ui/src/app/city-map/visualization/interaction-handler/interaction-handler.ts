@@ -75,10 +75,17 @@ export class InteractionHandler {
             metrics: this.screenInteractionService.getCounterpart(target).userData.metrics
           },this.screenInteractionService.otherType(this.screenType));
         }else{
-          this.tooltipService.setContent({
-            elementName: "Does not exist in this commit",
-            metrics: null
-          },this.screenInteractionService.otherType(this.screenType));
+          if(this.screenType === ScreenType.LEFT){
+            this.tooltipService.setContent({
+              elementName: "This file was removed",
+              metrics: null
+            },this.screenInteractionService.otherType(this.screenType));
+          }else{
+            this.tooltipService.setContent({
+              elementName: "Not yet created here",
+              metrics: null
+            },this.screenInteractionService.otherType(this.screenType));
+          }
         }
         this.hoveredElementUuid = target.uuid;
       }
