@@ -59,6 +59,7 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
   changetypeSymbols:ChangetypeSymbols;
 
 
+
   public displayTooltip = true;
 
   // use THREE.PerspectiveCamera instead of importing PerspectiveCamera to avoid warning for panning and zooming are disabled
@@ -286,14 +287,13 @@ export class ScreenComponent implements OnInit, OnChanges, OnDestroy {
       this.scene.add(element);
     });
 
-
     if (this.view instanceof MergedView) {
       this.view.calculateConnections(this.scene);
       this.view.getConnections().forEach((blockConnection: BlockConnection) => {
         this.scene.add(blockConnection.getCurve());
       });
     }else{
-      this.changetypeSymbols.addChangetypeSymbols(this.scene);
+      this.changetypeSymbols.addChangeTypeSymbols(this.scene);
     }
   }
 
