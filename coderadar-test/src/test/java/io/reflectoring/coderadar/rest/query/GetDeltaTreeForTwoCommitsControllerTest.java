@@ -72,7 +72,7 @@ class GetDeltaTreeForTwoCommitsControllerTest extends ControllerTestTemplate {
 
     mvc()
         .perform(
-            post("/api/projects/" + projectId + "/master/analyze")
+            post("/api/projects/" + projectId + "/analyze")
                 .contentType(MediaType.APPLICATION_JSON));
   }
 
@@ -122,9 +122,18 @@ class GetDeltaTreeForTwoCommitsControllerTest extends ControllerTestTemplate {
                         subsectionWithPath("children")
                             .description(
                                 "If this node describes a MODULE, this field contains the list of child nodes of the same structure, which can be of type MODULE or FILE."),
-                        fieldWithPath("renamedFrom").description(""),
-                        fieldWithPath("renamedTo").description(""),
-                        fieldWithPath("changes").description(""))))
+                        fieldWithPath("renamedFrom")
+                            .type("String")
+                            .description(
+                                "The old path of the file, if it was renamed. Null otherwise. This attribute is only set for the new file."),
+                        fieldWithPath("renamedTo")
+                            .type("String")
+                            .description(
+                                "The new path of the file, if it was renamed. Null otherwise. This attribute is only set for the old file."),
+                        fieldWithPath("changes")
+                            .type("Changes")
+                            .description(
+                                "One of the following changes or none of them: 'renamed', 'modified', 'added', 'deleted'."))))
             .andReturn();
 
     DeltaTree deltaTree = fromJson(result.getResponse().getContentAsString(), DeltaTree.class);

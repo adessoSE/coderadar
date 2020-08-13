@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../service/user.service';
 import {ProjectService} from '../../service/project.service';
@@ -7,10 +7,11 @@ import {FilePattern} from '../../model/file-pattern';
 import {CONFLICT, FORBIDDEN, UNPROCESSABLE_ENTITY} from 'http-status-codes';
 import {Module} from '../../model/module';
 import {Title} from '@angular/platform-browser';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatSnackBar} from '@angular/material';
+import {MatDialog,  MatSnackBar} from '@angular/material';
 import {Contributor} from '../../model/contributor';
 import {Branch} from '../../model/branch';
 import {ContributorService} from '../../service/contributor.service';
+import {ContributorMergeDialogComponent} from '../../components/contributor-merge-dialog/merge-dialog.component';
 
 export interface DialogData {
   selected: string;
@@ -26,17 +27,17 @@ export class ConfigureProjectComponent implements OnInit {
 
 
   projectName: string;
-  analyzers: AnalyzerConfiguration[];
-  filePatterns: FilePattern[];
-  contributors: Contributor[];
-  branches: Branch[];
+  analyzers: AnalyzerConfiguration[] = [];
+  filePatterns: FilePattern[] = []
+  contributors: Contributor[] = [];
+  branches: Branch[] = [];
   selectedContributors: Contributor[] = [];
 
   // Fields for input binding
   filePatternIncludeInput;
   filePatternExcludeInput;
   modulesInput;
-  modules: Module[];
+  modules: Module[] = [];
   processing = false;
 
   projectId: any;
@@ -48,10 +49,6 @@ export class ConfigureProjectComponent implements OnInit {
     this.filePatternIncludeInput = '';
     this.filePatternExcludeInput = '';
     this.modulesInput = '';
-    this.modules = [];
-    this.analyzers = [];
-    this.filePatterns = [];
-    this.contributors = [];
   }
 
   ngOnInit(): void {
@@ -341,7 +338,7 @@ export class ConfigureProjectComponent implements OnInit {
 
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(MergeDialogComponent, {
+    const dialogRef = this.dialog.open(ContributorMergeDialogComponent, {
       width: '250px',
       data: {displayNames: this.selectedContributors.map(value => value.displayName).filter(
           (j, i, arr) => arr.findIndex(t => t === j) === i
@@ -374,20 +371,8 @@ export class ConfigureProjectComponent implements OnInit {
       this.selectedContributors.push(c);
     }
   }
-}
 
-@Component({
-  selector: 'app-dialog-overview-example-dialog',
-  templateUrl: 'app-merge-dialog.html',
-})
-export class MergeDialogComponent {
-
-  constructor(
-    public dialogRef: MatDialogRef<MergeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
-
-  onNoClick(): void {
-    this.dialogRef.close();
+  hasTags() {
+    return this.branches !== undefined && this.branches.filter(b => b.isTag).length > 0;
   }
-
 }

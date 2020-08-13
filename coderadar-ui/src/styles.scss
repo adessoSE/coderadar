@@ -7,27 +7,23 @@
 General styles
  */
 
-html {
-  height: 100%;
-}
-
 body {
   margin: 0;
-  height: 100%;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background-color: ghostwhite;
+  display: grid;
+  grid-template-rows: 1fr 80px;
+  min-height: 100vh;
+  position: relative;
 }
 
 footer {
-  right: 0;
   bottom: 0;
-  left: 0;
-  z-index: 10;
-  height: 60px;
-}
-
-main {
-  min-height: calc(100vh - 220px);
+  color: white;
+  display: flex;
+  grid-row: 2;
+  position: absolute;
+  width: 100%;
 }
 
 /*

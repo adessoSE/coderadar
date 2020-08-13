@@ -28,7 +28,8 @@ public class ListBranchesController implements AbstractBaseController {
     List<Branch> branches = listBranchesUseCase.listBranchesInProject(projectId);
     List<GetBranchResponse> responses = new ArrayList<>(branches.size());
     for (Branch branch : branches) {
-      responses.add(new GetBranchResponse(branch.getName(), branch.getCommitHash()));
+      responses.add(
+          new GetBranchResponse(branch.getName(), branch.getCommitHash(), branch.isTag()));
     }
     return new ResponseEntity<>(responses, HttpStatus.OK);
   }

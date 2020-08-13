@@ -33,7 +33,11 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
       String commitName = ref.getCommitHash();
       List<String> refNames = commitToRefMap.computeIfAbsent(commitName, k -> new ArrayList<>());
       if (!refNames.contains(ref.getName())) {
-        refNames.add(ref.getName());
+        if (ref.isTag()) {
+          refNames.add("tag: " + ref.getName());
+        } else {
+          refNames.add(ref.getName());
+        }
       }
     }
     for (LinkedHashMap<String, Object> commitWithParents : commits) {
@@ -47,7 +51,7 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
 
       CommitLog commitLog =
           new CommitLog()
-              .setHash(commit.getName())
+              .setHash(commit.getHash())
               .setSubject(
                   commit.getComment().substring(0, Math.min(100, commit.getComment().length())))
               .setAuthor(author)
@@ -60,7 +64,7 @@ public class GetCommitLogAdapter implements GetCommitLogPort {
         commitLog.setParents(new String[0]);
       }
 
-      List<String> refsOnCommit = commitToRefMap.get(commit.getName());
+      List<String> refsOnCommit = commitToRefMap.get(commit.getHash());
       if (refsOnCommit != null) {
         commitLog.setRefs(refsOnCommit);
       }

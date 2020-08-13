@@ -2,7 +2,7 @@ import {Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChil
 import {createGitgraph, templateExtend, TemplateName} from '@gitgraph/js';
 import {AppEffects} from '../../../city-map/shared/effects';
 import {Project} from '../../../model/project';
-import {Commit as GitGraphCommit, GitgraphUserApi} from '@gitgraph/core';
+import {GitgraphUserApi} from '@gitgraph/core';
 import {Store} from '@ngrx/store';
 import * as fromRoot from '../../../city-map/shared/reducers';
 import {Router} from '@angular/router';
@@ -20,6 +20,7 @@ import * as _ from 'lodash';
   styleUrls: ['./branch-view.component.scss']
 })
 export class BranchViewComponent implements OnInit, OnChanges {
+  private renderedCommits: any;
 
   constructor(private cityEffects: AppEffects, private store: Store<fromRoot.AppState>, private router: Router) {
   }
@@ -36,8 +37,9 @@ export class BranchViewComponent implements OnInit, OnChanges {
 
   public selectedCommit1: CommitLog;
   public selectedCommit2: CommitLog;
-  private selectedCommit1Element: GitGraphCommit;
-  private selectedCommit2Element: GitGraphCommit;
+  public prevSelectedCommit1: CommitLog;
+  public prevSelectedCommit2: CommitLog;
+
   private gitGraph: GitgraphUserApi<SVGElement>;
 
   private selectedCommitColor = '#f60';
@@ -48,57 +50,65 @@ export class BranchViewComponent implements OnInit, OnChanges {
   }
 
   public handleClickEvent(commitElement: any): void {
+    commitElement = this.renderedCommits.find(c => c.hash === commitElement.hash);
     const selectedCommit = this.commitLog.find(value1 => value1.hash === commitElement.hash);
-    if (this.selectedCommit1 === null && this.selectedCommit2 !== selectedCommit) {
+
+    if ((this.selectedCommit1 === null || this.selectedCommit1 === undefined)
+      && this.selectedCommit2 !== selectedCommit) {
       this.selectedCommit1 = selectedCommit;
-
-      if (this.selectedCommit1Element !== undefined) {
-        this.selectedCommit1Element.style.message.color = commitElement.color;
-        this.selectedCommit1Element.style.color = commitElement.color;
-        this.selectedCommit1Element.style.dot.color = commitElement.color;
-      }
-
-      this.selectedCommit1Element = commitElement;
-
-      commitElement.prevColor = commitElement.style.color;
-      commitElement.style.message.color = this.selectedCommitColor;
-      commitElement.style.color = this.selectedCommitColor;
-      commitElement.style.dot.color = this.selectedCommitColor;
-
+      BranchViewComponent.setCommitColor(commitElement.hash, this.selectedCommitColor);
     } else if (this.selectedCommit1 === selectedCommit) {
       this.selectedCommit1 = null;
-
-      commitElement.prevColor = commitElement.style.color;
-      commitElement.style.message.color = commitElement.color;
-      commitElement.style.color = commitElement.color;
-      commitElement.style.dot.color = commitElement.color;
-
+      this.prevSelectedCommit1 = selectedCommit;
+      BranchViewComponent.setCommitColor(commitElement.hash, commitElement.style.color);
     } else if (this.selectedCommit2 === selectedCommit) {
       this.selectedCommit2 = null;
-
-      commitElement.prevColor = commitElement.style.color;
-      commitElement.style.message.color = commitElement.color;
-      commitElement.style.color = commitElement.color;
-      commitElement.style.dot.color = commitElement.color;
+      this.prevSelectedCommit2 = selectedCommit;
+      BranchViewComponent.setCommitColor(commitElement.hash, commitElement.style.color);
     } else {
-      this.selectedCommit2 = selectedCommit;
-
-      if (this.selectedCommit2Element !== undefined) {
-        commitElement.prevColor = commitElement.style.color;
-        this.selectedCommit2Element.style.message.color = commitElement.color;
-        this.selectedCommit2Element.style.color = commitElement.color;
-        this.selectedCommit2Element.style.dot.color = commitElement.color;
+      if(this.selectedCommit2 !== null) {
+        BranchViewComponent.setCommitColor(this.selectedCommit2.hash, this.renderedCommits.find(c => c.hash === this.selectedCommit2.hash).style.color);
       }
-
-      this.selectedCommit2Element = commitElement;
-
-      commitElement.style.message.color = this.selectedCommitColor;
-      commitElement.style.color = this.selectedCommitColor;
-      commitElement.style.dot.color = this.selectedCommitColor;
-
+      this.selectedCommit2 = selectedCommit;
+      BranchViewComponent.setCommitColor(commitElement.hash, this.selectedCommitColor);
     }
-    // @ts-ignore
-    this.gitGraph._onGraphUpdate();
+  }
+
+  private static setCommitColor(hash: string, selectedCommitColor: string) {
+    let element = document.getElementById(hash);
+
+    //Color the commit dot
+    element.setAttribute("fill", selectedCommitColor);
+
+    let parent = element.parentElement.parentElement.parentElement;
+
+    //Color the text
+    parent.children.item(1)
+      .children.item(0).children.item(0).setAttribute("fill", selectedCommitColor);
+
+    //See if there is a branch (and tag)
+    if(parent.children.item(1).children.item(1) !== null) {
+      let elementToColor = parent.children.item(1)
+        .children.item(1).children.item(0);
+
+      elementToColor.children.item(0).setAttribute("stroke", selectedCommitColor);
+
+      //If there is a tag, color it
+      if(elementToColor.children.item(0).tagName === "path") {
+        elementToColor.children.item(0).setAttribute("fill", selectedCommitColor);
+      } else {
+        elementToColor.children.item(1).setAttribute("fill", selectedCommitColor);
+      }
+    }
+
+    //Check if there is only a tag
+    if(parent.children.item(1).children.item(2) !== null) {
+      let elementToColor = parent.children.item(1)
+        .children.item(2).children.item(0).children.item(0);
+      elementToColor.setAttribute("stroke", selectedCommitColor);
+      elementToColor.setAttribute("fill", selectedCommitColor);
+    }
+
   }
 
   showCommitsInRange() {
@@ -132,6 +142,8 @@ export class BranchViewComponent implements OnInit, OnChanges {
       commit.onMouseOut = () => document.body.style.cursor = 'default';
     });
     this.gitGraph.import(filtered);
+    // @ts-ignore
+    this.renderedCommits = this.gitGraph._graph.computeRenderedCommits();
   }
 
   private initTree() {
@@ -139,9 +151,9 @@ export class BranchViewComponent implements OnInit, OnChanges {
       return;
     }
     this.gitGraph = createGitgraph(this.graph.nativeElement, {
-/*      compareBranchesOrder: ((branchNameA, branchNameB) => {
-        return branchNameA === 'master' ? -1 : 1;
-      }),*/ // Always show the master branch on the left??
+      /*      compareBranchesOrder: ((branchNameA, branchNameB) => {
+              return branchNameA === 'master' ? -1 : 1;
+            }),*/ // Always show the master branch on the left??
       template: templateExtend(TemplateName.Metro,
         {
           colors: ['#979797', '#008fb5', '#f1c109', '#bf6356', '#b87bbf', '#86bf56', '#7ab8be']
@@ -164,14 +176,14 @@ export class BranchViewComponent implements OnInit, OnChanges {
       this.selectedCommit2 = temp;
     }
     const commits = this.commitLog.map(value => {
-      return {name: value.hash, author: value.author.name,
+      return {hash: value.hash, author: value.author.name,
         authorEmail: value.author.email, comment: value.subject, analyzed: value.analyzed,
         timestamp: value.author.timestamp};
     });
     this.store.dispatch(loadAvailableMetrics());
     this.store.dispatch(setCommits(commits));
-    this.store.dispatch(changeCommit(CommitType.LEFT, commits.find(value => value.name.localeCompare(this.selectedCommit1.hash) === 0)));
-    this.store.dispatch(changeCommit(CommitType.RIGHT, commits.find(value => value.name.localeCompare(this.selectedCommit2.hash) === 0)));
+    this.store.dispatch(changeCommit(CommitType.LEFT, commits.find(value => value.hash.localeCompare(this.selectedCommit1.hash) === 0)));
+    this.store.dispatch(changeCommit(CommitType.RIGHT, commits.find(value => value.hash.localeCompare(this.selectedCommit2.hash) === 0)));
     this.store.dispatch(changeActiveFilter({
       added: true,
       deleted: true,

@@ -1,8 +1,7 @@
 package io.reflectoring.coderadar.rest.analysis;
 
 import static io.reflectoring.coderadar.rest.JsonHelper.fromJson;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
-class ResetAnalysisControllerTest extends ControllerTestTemplate {
+class StartAnalysisControllerIntegrationTest extends ControllerTestTemplate {
 
   @Autowired private CommitRepository commitRepository;
   @Autowired private MetricRepository metricRepository;
@@ -68,7 +67,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
   }
 
   @Test
-  void resetAnalyzedFlagAndDeleteMetricValues() throws Exception {
+  void startAnalysisTest() throws Exception {
     CreateAnalyzerConfigurationCommand createAnalyzerConfigurationCommand =
         new CreateAnalyzerConfigurationCommand(
             "io.reflectoring.coderadar.analyzer.loc.LocAnalyzerPlugin", true);
@@ -80,8 +79,7 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
 
     mvc()
         .perform(
-            post("/api/projects/" + projectId + "/master/analyze")
-                .contentType(MediaType.APPLICATION_JSON))
+            post("/api/projects/" + projectId + "/analyze").contentType(MediaType.APPLICATION_JSON))
         .andDo(document("analysis/start"));
 
     mvc()
@@ -100,68 +98,14 @@ class ResetAnalysisControllerTest extends ControllerTestTemplate {
       Assertions.assertTrue(commit.isAnalyzed());
     }
     List<MetricValueEntity> metricValues = metricRepository.findByProjectId(projectId);
-    Assertions.assertEquals(44, metricValues.size());
-
-    mvc()
-        .perform(post("/api/projects/" + projectId + "/analyze/reset"))
-        .andDo(document("analysis/reset"));
-
-    session.clear();
-
-    commits = commitRepository.findByProjectId(projectId);
-    for (CommitEntity commit : commits) {
-      Assertions.assertFalse(commit.isAnalyzed());
-    }
-
-    metricValues = metricRepository.findByProjectId(projectId);
-    Assertions.assertEquals(0, metricValues.size());
+    Assertions.assertEquals(48, metricValues.size());
   }
 
   @Test
-  void resetAnalyzedFlagAndDeleteMetricValuesAndFindings() throws Exception {
-    CreateAnalyzerConfigurationCommand createAnalyzerConfigurationCommand =
-        new CreateAnalyzerConfigurationCommand(
-            "io.reflectoring.coderadar.analyzer.checkstyle.CheckstyleSourceCodeFileAnalyzerPlugin",
-            true);
-    mvc()
-        .perform(
-            post("/api/projects/" + projectId + "/analyzers")
-                .content(toJson(createAnalyzerConfigurationCommand))
-                .contentType(MediaType.APPLICATION_JSON));
-
-    mvc()
-        .perform(
-            post("/api/projects/" + projectId + "/master/analyze")
-                .contentType(MediaType.APPLICATION_JSON));
-
-    session.clear();
-
-    List<MetricValueEntity> metricValues = metricRepository.findByProjectId(projectId);
-    Assertions.assertFalse(metricValues.isEmpty());
-
-    List<CommitEntity> commits = commitRepository.findByProjectIdAndBranchName(projectId, "master");
-    for (CommitEntity commit : commits) {
-      Assertions.assertTrue(commit.isAnalyzed());
-    }
-
-    mvc().perform(post("/api/projects/" + projectId + "/analyze/reset"));
-
-    session.clear();
-
-    metricValues = metricRepository.findByProjectId(projectId);
-    Assertions.assertEquals(0, metricValues.size());
-
-    commits = commitRepository.findByProjectId(projectId);
-    for (CommitEntity commit : commits) {
-      Assertions.assertFalse(commit.isAnalyzed());
-    }
-  }
-
-  @Test
-  void returnsErrorWhenProjectWithIdDoesNotExist() throws Exception {
+  void returnsNotFoundWhenProjectWithIdDoesNotExist() throws Exception {
     MvcResult result =
         mvc()
-            .perform(post("/api/projects/123/analyze/reset"))
+            .perform(post("/api/projects/123/analyze"))
             .andExpect(status().isNotFound())
             .andReturn();
 

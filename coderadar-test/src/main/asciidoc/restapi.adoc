@@ -221,8 +221,6 @@ include::{snippets}/projects/create/request-fields.adoc[]
 ==== Creating a Project
 anchor:creating-a-project[]
 
-// TODO dates have Null as data type
-
 ===== Example Request
 
 include::{snippets}/projects/create/http-request.adoc[]
@@ -461,7 +459,7 @@ include::{snippets}/analyzerConfiguration/getSingle/http-request.adoc[]
 
 include::{snippets}/analyzerConfiguration/getSingle/http-response.adoc[]
 
-=== Analyzing Job
+=== Analyzing
 
 An analysis can be started for a project in coderadar. By default a Project's codebase is not analyzed.
 To analyze the codebase an analysis has to be triggered.
@@ -470,6 +468,9 @@ To analyze the codebase an analysis has to be triggered.
 anchor:start-analysis[]
 
 ===== Example Request
+
+The request body consists of a list of branch names and can be empty. In that case
+all branches are analyzed.
 
 include::{snippets}/analysis/start/http-request.adoc[]
 
@@ -706,7 +707,6 @@ commits.
 include::{snippets}/metrics/deltaTree/request-fields.adoc[]
 
 ===== Response Structure
-// TODO renamedFrom, renamedTo, changes without data type; renamedFrom, renamedTo without description
 
 include::{snippets}/metrics/deltaTree/response-fields.adoc[]
 
@@ -746,15 +746,18 @@ include::{snippets}/contributors/get/response-fields.adoc[]
 
 === List all contributors of a project
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/contributors/list/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/contributors/list/http-response.adoc[]
 
-=== Response Structure
+[discrete]
+==== Response Structure
 
 include::{snippets}/contributors/list/response-fields.adoc[]
 
@@ -762,18 +765,22 @@ include::{snippets}/contributors/list/response-fields.adoc[]
 
 === List all contributors for a given path
 
+[discrete]
 ==== Example Request for a File
 
 include::{snippets}/contributors/list/path/file/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/contributors/list/path/file/http-response.adoc[]
 
+[discrete]
 ==== Example Request for a Directory
 
 include::{snippets}/contributors/list/path/directory/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/contributors/list/path/directory/http-response.adoc[]
@@ -782,26 +789,31 @@ include::{snippets}/contributors/list/path/directory/http-response.adoc[]
 
 === Get single contributor
 
+[discrete]
 ==== Example request
 
 include::{snippets}/contributors/get/http-request.adoc[]
 
+[discrete]
 ==== Example response
 
 include::{snippets}/contributors/get/http-response.adoc[]
 
 
 
-=== Merge two contributors
+=== Merge contributors
 
+[discrete]
 ==== Request Structure
 
 include::{snippets}/contributors/merge/request-fields.adoc[]
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/contributors/merge/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/contributors/merge/http-response.adoc[]
@@ -810,14 +822,17 @@ include::{snippets}/contributors/merge/http-response.adoc[]
 
 === Update a Contributor
 
+[discrete]
 ==== Request Structure
 
 include::{snippets}/contributors/update/request-fields.adoc[]
 
+[discrete]
 ==== Example Request
 
 include::{snippets}/contributors/update/http-request.adoc[]
 
+[discrete]
 ==== Example Response
 
 include::{snippets}/contributors/update/http-response.adoc[]
