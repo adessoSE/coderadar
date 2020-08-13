@@ -180,10 +180,9 @@ export class ProjectService {
    * Start a new analyzing for a project.
    * Sends a POST request to /projects/{id}/analyzingJob
    * @param id The id of the project.
-   * @param branch The branch to analyze.
    */
-  public startAnalyzingJob(id: number, branch: string): Promise<HttpResponse<any>> {
-    return this.httpClient.post(this.apiURL + 'projects/' + id + '/' + branch + '/analyze', {},
+  public startAnalyzingJob(id: number): Promise<HttpResponse<any>> {
+    return this.httpClient.post(this.apiURL + 'projects/' + id + '/analyze', null,
       {observe: 'response'}).toPromise();
   }
 
@@ -258,8 +257,8 @@ export class ProjectService {
   public getDeltaTree(firstCommit: Commit, secondCommit: Commit, metricMapping: IMetricMapping, projectId: number):
     Promise<HttpResponse<INode>> {
     const body = {
-      commit1: firstCommit.name,
-      commit2: secondCommit.name,
+      commit1: firstCommit.hash,
+      commit2: secondCommit.hash,
       metrics: [metricMapping.heightMetricName, metricMapping.groundAreaMetricName, metricMapping.colorMetricName]
     };
 

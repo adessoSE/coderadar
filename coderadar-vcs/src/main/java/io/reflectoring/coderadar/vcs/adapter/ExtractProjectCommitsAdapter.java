@@ -36,6 +36,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
    */
   public List<Commit> extractCommits(String repositoryRoot, DateRange range) {
     try (Git git = Git.open(new java.io.File(repositoryRoot))) {
+
       List<Commit> result = getCommits(range, repositoryRoot);
       setCommitsFiles(git, result);
       return result;
@@ -79,7 +80,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
 
   private Commit mapRevCommitToCommit(RevCommit rc) {
     Commit commit = new Commit();
-    commit.setName(rc.getName());
+    commit.setHash(rc.getName());
     PersonIdent personIdent = rc.getAuthorIdent();
     commit.setAuthor(personIdent.getName());
     commit.setAuthorEmail(personIdent.getEmailAddress());
@@ -98,7 +99,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
   private long setFirstCommitFiles(Git git, Commit firstCommit, HashMap<String, List<File>> files)
       throws IOException {
     long sequenceId = 0;
-    RevCommit gitCommit = findCommit(git, firstCommit.getName());
+    RevCommit gitCommit = findCommit(git, firstCommit.getHash());
     try (TreeWalk treeWalk = new TreeWalk(git.getRepository())) {
       assert gitCommit != null;
       treeWalk.setRecursive(true);
@@ -107,7 +108,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
         File file = new File();
         file.setSequenceId(sequenceId++);
         file.setPath(treeWalk.getPathString());
-        file.setObjectHash(treeWalk.getObjectId(0).getName());
 
         FileToCommitRelationship fileToCommitRelationship = new FileToCommitRelationship();
         fileToCommitRelationship.setOldPath("/dev/null");
@@ -139,7 +139,7 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     diffFormatter.setDiffComparator(RawTextComparator.DEFAULT);
     diffFormatter.setDetectRenames(true);
     for (int i = 1; i < commitsSize; i++) {
-      RevCommit gitCommit = findCommit(git, commits.get(i).getName());
+      RevCommit gitCommit = findCommit(git, commits.get(i).getHash());
       if (gitCommit != null && gitCommit.getParentCount() > 0) {
         List<DiffEntry> diffs =
             new ArrayList<>(diffFormatter.scan(gitCommit.getParent(0), gitCommit));
@@ -202,7 +202,6 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     List<File> filesToSave;
     File file = new File();
     file.setSequenceId(sequenceId);
-    file.setObjectHash(diff.getNewId().name());
     file.setPath(path);
     if (existingFilesWithPath == null) {
       if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {
@@ -217,17 +216,9 @@ public class ExtractProjectCommitsAdapter implements ExtractProjectCommitsPort {
     } else {
       if ((diff.getChangeType().equals(DiffEntry.ChangeType.ADD))) {
         filesToSave = new ArrayList<>(1);
-        Optional<File> existingWithSameHash =
-            existingFilesWithPath.stream()
-                .filter(file1 -> file1.getObjectHash().equals(file.getObjectHash()))
-                .findFirst();
-        if (existingWithSameHash.isPresent()) {
-          filesToSave.add(existingWithSameHash.get());
-        } else {
-          filesToSave.add(file);
-          existingFilesWithPath.add(file);
-          files.put(file.getPath(), existingFilesWithPath);
-        }
+        filesToSave.add(file);
+        existingFilesWithPath.add(file);
+        files.put(file.getPath(), existingFilesWithPath);
       } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.DELETE))) {
         filesToSave = new ArrayList<>(existingFilesWithPath);
       } else if ((diff.getChangeType().equals(DiffEntry.ChangeType.RENAME))) {

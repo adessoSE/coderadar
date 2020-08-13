@@ -78,12 +78,12 @@ export class ListViewComponent implements OnInit, OnChanges {
     });
   }
 
-  startAnalysis(id: number, branch: string) {
-    this.projectService.startAnalyzingJob(id, branch).then(() => {
+  startAnalysis(id: number) {
+    this.projectService.startAnalyzingJob(id).then(() => {
       this.openSnackBar('Analysis started!', '🞩');
     }).catch(error => {
       if (error.status && error.status === FORBIDDEN) {
-        this.userService.refresh(() => this.projectService.startAnalyzingJob(id, branch));
+        this.userService.refresh(() => this.projectService.startAnalyzingJob(id));
       } else if (error.status && error.status === UNPROCESSABLE_ENTITY) {
         if (error.error.errorMessage === 'Cannot analyze project without analyzers') {
           this.openSnackBar('Cannot analyze, no analyzers configured for this project!', '🞩');
@@ -217,20 +217,20 @@ export class ListViewComponent implements OnInit, OnChanges {
     this.showCommitsInRange();
     let selectedCommit1Id = null;
     if (this.selectedCommit1 !== null && this.selectedCommit1 !== undefined) {
-      selectedCommit1Id = this.selectedCommit1.name;
+      selectedCommit1Id = this.selectedCommit1.hash;
     }
     let selectedCommit2Id = null;
     if (this.selectedCommit2 !== null && this.selectedCommit2 !== undefined) {
-      selectedCommit2Id = this.selectedCommit2.name;
+      selectedCommit2Id = this.selectedCommit2.hash;
     }
     if (this.commitsAnalyzed > 0) {
       this.store.dispatch(loadAvailableMetrics());
     }
     if (selectedCommit1Id != null) {
-      this.selectedCommit1 = this.commitsFiltered.find(value => value.name === selectedCommit1Id);
-    }``
+      this.selectedCommit1 = this.commitsFiltered.find(value => value.hash === selectedCommit1Id);
+    }
     if (selectedCommit2Id != null) {
-      this.selectedCommit2 = this.commitsFiltered.find(value => value.name === selectedCommit2Id);
+      this.selectedCommit2 = this.commitsFiltered.find(value => value.hash === selectedCommit2Id);
     }
   }
 
@@ -254,5 +254,9 @@ export class ListViewComponent implements OnInit, OnChanges {
       this.commitsFiltered = [];
     }
     this.commitsAnalyzed = this.commitsFiltered.filter(value => value.analyzed).length;
+  }
+
+  hasTags() {
+    return this.branches !== undefined && this.branches.filter(b => b.isTag).length > 0;
   }
 }

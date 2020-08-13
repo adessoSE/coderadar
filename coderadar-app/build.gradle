@@ -49,9 +49,16 @@ processResources {
                 "coderadar.version": version
         ]
     }
-    from ('../coderadar-ui/dist/coderadar') {
-        into 'static'
-    }
+}
+
+task packageUI(type: Copy) {
+    outputs.upToDateWhen { false }
+    from file("../coderadar-ui/dist/coderadar")
+    into file("$buildDir/resources/main/static")
+}
+
+classes {
+    finalizedBy packageUI
 }
 
 dependencies {
@@ -72,6 +79,7 @@ dependencies {
     compile project(":coderadar-vcs")
     compile project(":coderadar-core")
     compile project(":coderadar-rest")
+    compile project(":coderadar-ui")
     compile project(":coderadar-dependency-map")
 
     compile "org.springframework.boot:spring-boot-starter-tomcat:${version_spring_boot}"

@@ -9,4 +9,5 @@ node {
   download = true
 }
 
+jar.dependsOn 'npm_rebuild_node-sass'
 jar.dependsOn 'npm_run_build'
