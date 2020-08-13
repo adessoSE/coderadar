@@ -64,7 +64,6 @@ export class ChangetypeSymbols{
     let loader = new GLTFLoader(DefaultLoadingManager);
     return new Promise((resolve, reject) => {
       let onLoad = function (gltf) {
-        console.log(gltf);
         gltf.scene.children.forEach(child => {
           let childMesh = <Mesh>child;
           if (child.name.includes('added')) {
@@ -80,7 +79,7 @@ export class ChangetypeSymbols{
         resolve();
       };
       let onProgress = function(xhr:ProgressEvent){
-        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+        
       }
       let onError = function (error) {
         console.error(error);

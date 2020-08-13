@@ -37,7 +37,6 @@ export class ScreenInteractionService {
     if(this.hoverHighlight == elementName)return;
     var isFile = elementName.includes(".");
     var exists = elementName != ScreenInteractionService.NOTHING;
-    var exists = elementName != ScreenInteractionService.NOTHING;
     if(exists){
       if(isFile){
         this.hoverHighlight = elementName;

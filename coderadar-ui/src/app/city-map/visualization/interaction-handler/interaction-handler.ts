@@ -89,15 +89,12 @@ export class InteractionHandler {
         }
         this.hoveredElementUuid = target.uuid;
       }
-      var tooltipPos: Vector2;
       const vCameraDistance: Vector3 = intersection.point.clone().sub(camera.position);
       const cameraDistance: number = vCameraDistance.length();
       var cursorScale = cameraDistance * 0.1;
       var cursorPosition = intersection.point.clone();
-      tooltipPos = this.worldPositionToScreenPosition(this.tooltipLine.position.clone().add(new Vector3(0,cursorScale,0)), camera);
       this.screenInteractionService.setCursorState(cursorPosition,true,cursorScale);
 
-      var other = this.screenInteractionService.getCounterpart(target);
       this.screenInteractionService.setMouseHighlight(target.name);
       this.tooltipService.show(null)
     } else {
